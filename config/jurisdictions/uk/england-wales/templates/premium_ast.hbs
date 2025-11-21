@@ -1,0 +1,557 @@
+{{! Premium Assured Shorthold Tenancy Agreement }}
+{{! Extended version with professional property management clauses }}
+
+# PREMIUM ASSURED SHORTHOLD TENANCY AGREEMENT
+
+**ENGLAND & WALES - PREMIUM EDITION**
+
+This Agreement is dated: **{{agreement_date}}**
+
+---
+
+## PARTIES
+
+**LANDLORD:**
+Name: {{landlord_full_name}}
+Address: {{landlord_address}}
+Email: {{landlord_email}}
+Phone: {{landlord_phone}}
+
+{{#if agent_name}}
+**LANDLORD'S AGENT:**
+Name: {{agent_name}}
+Address: {{agent_address}}
+Email: {{agent_email}}
+Phone: {{agent_phone}}
+{{/if}}
+
+**TENANT(S):**
+{{#each tenants}}
+{{add @index 1}}. Name: {{this.full_name}}
+   Date of Birth: {{this.dob}}
+   Email: {{this.email}}
+   Phone: {{this.phone}}
+   Current Address: {{this.current_address}}
+   Employment: {{this.employment}}
+{{/each}}
+
+{{#if guarantor}}
+**GUARANTOR:**
+Name: {{guarantor_name}}
+Address: {{guarantor_address}}
+Email: {{guarantor_email}}
+Phone: {{guarantor_phone}}
+{{/if}}
+
+---
+
+## THE PROPERTY
+
+**{{property_address}}**
+
+**Property Type:** {{property_type}}
+**Number of Bedrooms:** {{bedrooms}}
+**Furnished Status:** {{furnished_status}}
+**Council Tax Band:** {{council_tax_band}}
+**EPC Rating:** {{epc_rating}}
+
+**Included in Tenancy:**
+{{#each included_areas}}
+- {{this}}
+{{/each}}
+
+{{#if excluded_areas}}
+**Excluded from Tenancy:**
+{{#each excluded_areas}}
+- {{this}}
+{{/each}}
+{{/if}}
+
+{{#if parking}}
+**Parking:** {{parking_details}}
+Parking Space Number: {{parking_space}}
+{{/if}}
+
+{{#if communal_areas}}
+**Shared/Communal Areas:**
+{{#each communal_areas}}
+- {{this}}
+{{/each}}
+{{/if}}
+
+---
+
+## THE TERM
+
+**Start Date:** {{tenancy_start_date}} at {{tenancy_start_time}}
+
+{{#if is_fixed_term}}
+**End Date:** {{tenancy_end_date}} at 12:00 noon
+
+**Fixed Term Length:** {{term_length}}
+
+Upon expiry of the fixed term, unless either party serves notice, this tenancy will continue as a periodic tenancy on the same terms, except that the notice periods will change as set out in clause [XX].
+{{else}}
+This is a **monthly periodic** tenancy.
+{{/if}}
+
+{{#if break_clause}}
+**Break Clause:** Either party may terminate this agreement after {{break_clause_after}} by giving {{break_clause_notice}} written notice, subject to:
+- Tenant: Payment of all rent due and compliance with terms
+- Landlord: Payment of tenant's reasonable relocation costs if break exercised in first year
+{{/if}}
+
+---
+
+## THE RENT
+
+**Rent Amount:** £{{rent_amount}} per {{rent_period}}
+
+**Payment Due:** {{rent_due_day}} of each {{rent_period}} in advance
+
+**Payment Method:** Standing order/Direct debit to:
+- Account Name: {{landlord_account_name}}
+- Sort Code: {{sort_code}}
+- Account Number: {{account_number}}
+- Reference: {{payment_reference}}
+
+**First Payment:** £{{first_payment}} due on {{first_payment_date}}
+{{#if prorated}}(Pro-rated for partial period){{/if}}
+
+**Rent Includes:**
+{{#each rent_includes}}
+- {{this}}
+{{/each}}
+
+**Tenant Responsible For:**
+{{#each tenant_utilities}}
+- {{this}}
+{{/each}}
+
+### Rent Reviews
+
+{{#if rent_review_clause}}
+The rent may be reviewed annually on the anniversary of the tenancy start date. The Landlord will provide at least 1 month's notice of any rent increase. Any increase will not exceed:
+- Market rate for comparable properties, OR
+- {{rent_increase_cap}}% increase per year
+
+The Tenant may refer any rent increase to the First-tier Tribunal within 1 month of the notice.
+{{/if}}
+
+---
+
+## THE DEPOSIT
+
+**Deposit Amount:** £{{deposit_amount}} (equivalent to {{deposit_weeks}} weeks' rent)
+
+**Payment Date:** On or before {{tenancy_start_date}}
+
+**Protection:** The deposit will be protected within 30 days in:
+**{{deposit_scheme_name}}**
+
+**Prescribed Information:** The Tenant will receive prescribed information about the deposit protection within 30 days.
+
+**Deposit Purpose:** Security for:
+1. Unpaid rent and other charges
+2. Damage beyond fair wear and tear
+3. Loss of keys/access fobs
+4. Professional cleaning if property left unreasonably dirty
+5. Removal of unauthorized items/alterations
+6. Breach of tenancy obligations
+
+**Deposit Return:** Within 10 days of end of tenancy, provided:
+- All rent and charges paid
+- Property returned in same condition (fair wear excepted)
+- All keys returned
+- Meter readings taken
+- Forwarding address provided
+
+**Disputes:** Any deposit disputes will be resolved through the scheme's Alternative Dispute Resolution (ADR) service.
+
+---
+
+## INVENTORY AND CHECK-IN
+
+A detailed inventory with photographic evidence has been prepared by {{inventory_company}}.
+
+**Check-In Date:** {{check_in_date}}
+
+The Tenant must review the inventory and report any discrepancies within **7 days** of the tenancy start. Failure to do so means the Tenant accepts the inventory as accurate.
+
+A mid-term inspection will be conducted every {{inspection_frequency}} months.
+
+A check-out inspection will be conducted at the end of the tenancy in the Tenant's presence (if requested).
+
+---
+
+## TENANT'S COVENANTS
+
+The Tenant covenants with the Landlord:
+
+### 1. Rent Payment
+1.1 To pay the rent on the due date without deduction or set-off (except where legally entitled)
+1.2 To set up a standing order within 7 days of tenancy start
+1.3 To notify Landlord immediately if payment difficulties arise
+
+### 2. Utilities, Council Tax and Charges
+2.1 To pay all charges for utilities consumed during the tenancy
+2.2 To pay council tax (or notify council if exempt/eligible for discount)
+2.3 To pay TV license if watching/recording live TV
+2.4 To arrange utility contracts in Tenant's name within 7 days
+2.5 To provide final meter readings on departure
+2.6 {{#if service_charge}}To pay service charge of £{{service_charge}} per {{service_charge_period}}{{/if}}
+
+### 3. Use of Property
+3.1 To use the property as a private dwelling only
+3.2 Not to carry on any profession, trade or business from the property
+3.3 Not to use for any illegal, immoral or immoral purpose
+3.4 Not to receive paying guests or run Airbnb/short-term lets
+3.5 To occupy as the Tenant's only or principal home
+3.6 To notify Landlord of any absences exceeding 28 days
+
+### 4. Care and Condition
+4.1 To keep the property clean, tidy and in good decorative order
+4.2 To keep the property adequately heated (minimum 15°C) and ventilated
+4.3 To prevent and promptly treat any condensation or mould
+4.4 To report any defects, damage or disrepair within 48 hours
+4.5 To take action to prevent damage (e.g., turning off water if leaks occur)
+4.6 To keep gardens tidy, lawns cut, and hedges trimmed
+4.7 To remove snow and ice from paths in winter
+4.8 To take reasonable security precautions (locking doors/windows)
+
+### 5. Damage and Repairs
+5.1 To make good any damage caused by Tenant, household or visitors (fair wear excepted)
+5.2 Not to remove or damage Landlord's fixtures, fittings or furnishings
+5.3 To reimburse Landlord for repairs necessitated by Tenant's negligence
+5.4 To report all maintenance issues via {{maintenance_portal}} or email
+
+### 6. Alterations and Improvements
+6.1 Not to make any structural alterations
+6.2 Not to change locks without Landlord's consent
+6.3 Not to decorate or make alterations without written consent
+6.4 Not to install fixtures without consent
+6.5 To remove any approved alterations at end of tenancy and make good
+
+### 7. Pets and Animals
+{{#if pets_allowed}}
+7.1 Pets are permitted subject to:
+    - Written consent for each pet
+    - Additional pet deposit of £{{pet_deposit}} (if applicable)
+    - Professional cleaning at end of tenancy
+    - Repair of any pet damage
+7.2 Current approved pets: {{approved_pets}}
+7.3 To ensure pets do not cause nuisance, damage or hygiene issues
+7.4 To arrange professional flea treatment at end of tenancy
+{{else}}
+7.1 Not to keep any pets, birds or animals without Landlord's prior written consent
+7.2 Any request for pet must be in writing with pet CV and references
+{{/if}}
+
+### 8. Smoking and Vaping
+{{#if smoking_allowed}}
+8.1 Smoking permitted in designated outdoor areas only
+8.2 To ensure no damage or staining from smoke
+8.3 To arrange professional odour treatment if required at end
+{{else}}
+8.1 Not to smoke or vape inside the property
+8.2 Not to permit visitors to smoke or vape inside
+8.3 Smoking/vaping permitted in garden only (if applicable)
+{{/if}}
+
+### 9. Assignment, Subletting and Sharing
+9.1 Not to assign, sublet, part with possession or share occupation
+9.2 Not to take in lodgers or paying guests
+9.3 Not to allow anyone not named in this agreement to reside
+9.4 To notify Landlord of any overnight guests staying more than 14 consecutive days
+9.5 Any request to add occupiers must be in writing with Landlord's consent
+
+### 10. Access and Inspections
+10.1 To allow Landlord/agent access on 24 hours' written notice for:
+     - Routine inspections (maximum once per 3 months)
+     - Repairs and maintenance
+     - Gas safety inspection (annual)
+     - EICR (every 5 years)
+     - Viewings (final 2 months of tenancy if notice served)
+10.2 To allow emergency access without notice if necessary
+10.3 To be present for inspections or arrange keyholding
+10.4 To notify Landlord if unable to provide access
+
+### 11. Nuisance and Neighbourhood
+11.1 Not to cause nuisance or annoyance to neighbours or locality
+11.2 Not to play loud music between 11pm and 7am
+11.3 To control noise from TV, stereo, appliances at all times
+11.4 To ensure visitors do not cause nuisance
+11.5 To comply with any tenancy management rules for the building
+11.6 To park only in designated areas
+11.7 Not to work on vehicles at the property
+
+### 12. Waste and Recycling
+12.1 To dispose of all household waste properly
+12.2 To comply with local council recycling requirements
+12.3 To keep wheelie bins in designated storage area
+12.4 To put bins out for collection and return promptly
+12.5 Not to dispose of bulky items without proper council arrangements
+
+### 13. Safety and Compliance
+13.1 Not to tamper with smoke alarms or carbon monoxide alarms
+13.2 To test alarms monthly and report any faults
+13.3 Not to remove batteries from alarms
+13.4 To notify Landlord immediately of any safety hazards
+13.5 To comply with fire safety instructions (if flat/HMO)
+13.6 Not to block fire exits or communal areas
+13.7 Not to store flammable materials improperly
+
+### 14. Insurance
+14.1 To arrange contents insurance for Tenant's possessions
+14.2 To notify Landlord's insurers if any insured event occurs
+14.3 To take reasonable precautions to prevent insured events
+
+### 15. End of Tenancy
+15.1 To give proper written notice
+15.2 To return property clean to check-in standard
+15.3 To arrange professional cleaning if required
+15.4 To remove all belongings
+15.5 To return all keys, fobs and access devices
+15.6 To provide final meter readings
+15.7 To provide forwarding address
+15.8 To settle all utility and council tax accounts
+
+---
+
+## LANDLORD'S COVENANTS
+
+The Landlord covenants with the Tenant:
+
+### 1. Quiet Enjoyment
+To allow the Tenant peaceful occupation without unlawful interruption
+
+### 2. Repairs and Maintenance
+2.1 To keep in good repair:
+    - Structure and exterior (roof, walls, foundations)
+    - Installations for water, gas, electricity, sanitation
+    - Installations for heating and hot water
+    - Common parts (if applicable)
+
+2.2 To respond to repair requests:
+    - Emergency repairs: Within 24 hours
+    - Urgent repairs: Within 7 days
+    - Non-urgent repairs: Within 28 days
+
+2.3 To arrange annual gas safety inspection
+2.4 To arrange EICR every 5 years
+2.5 To maintain smoke and CO alarms
+
+### 3. Safety Compliance
+3.1 To ensure property meets legal safety standards
+3.2 To provide annual Gas Safety Certificate
+3.3 To provide EICR on request
+3.4 To ensure furniture/furnishings meet fire safety regulations
+3.5 To respond to safety hazards immediately
+
+### 4. Statutory Obligations
+4.1 To protect deposit in approved scheme
+4.2 To provide How to Rent guide
+4.3 To provide EPC
+4.4 To comply with Right to Rent requirements
+4.5 To comply with HMO licensing (if applicable)
+
+### 5. Property Management
+5.1 To arrange buildings insurance
+5.2 To manage any service charge fairly and transparently
+5.3 To provide 24-hour emergency contact
+5.4 To respond to communications within 3 working days
+
+---
+
+{{#if guarantor}}
+## GUARANTOR'S OBLIGATIONS
+
+The Guarantor covenants:
+
+1. To guarantee payment of all rent and other sums due
+2. To guarantee performance of Tenant's obligations
+3. To pay any arrears within 14 days of written demand
+4. To pay any damages caused by Tenant
+5. To pay legal costs if Guarantor fails to comply
+6. This guarantee continues if tenancy becomes periodic
+
+**Guarantor must seek independent legal advice before signing**
+
+---
+{{/if}}
+
+## INSURANCE
+
+**Landlord's Insurance:** Buildings and Landlord's contents
+
+**Tenant's Insurance:** Tenant must arrange contents insurance (minimum £{{minimum_contents_insurance}} cover recommended)
+
+**Rent Protection:** {{#if rent_protection}}Landlord has rent protection insurance{{/if}}
+
+---
+
+## NOTICE PERIODS
+
+### Tenant's Notice:
+{{#if is_fixed_term}}
+- During fixed term: Only by mutual agreement {{#if break_clause}}or break clause{{/if}}
+- After fixed term: {{tenant_notice_period}}written notice
+{{else}}
+- {{tenant_notice_period}} written notice ending on rent day
+{{/if}}
+
+### Landlord's Notice:
+- Section 21 notice: Minimum 2 months (cannot be served in first 4 months)
+- Section 8 notice: As prescribed for grounds cited
+- Both require court order for possession
+
+---
+
+## DISPUTE RESOLUTION
+
+Any disputes should be resolved through:
+1. Direct negotiation between parties
+2. Mediation (e.g., through Property Redress Scheme)
+3. Relevant ombudsman (if agent involved)
+4. Legal proceedings as last resort
+
+---
+
+## DATA PROTECTION (UK GDPR)
+
+Personal data will be processed lawfully for:
+- Tenancy management and rent collection
+- Property maintenance
+- Legal and regulatory compliance
+- Prevention of fraud and crime
+- Reference requests (with consent)
+
+Data will be shared only with: letting agent, deposit scheme, contractors (for repairs), legal representatives (if necessary), prospective landlords (with consent)
+
+Data retention: 6 years after tenancy ends
+
+Rights: Access, rectification, erasure, restriction, portability, objection
+
+Contact for data queries: {{data_controller_email}}
+
+---
+
+## SCHEDULES
+
+**Schedule 1:** Inventory and Condition Report (attached)
+**Schedule 2:** Appliance Instructions and Manuals
+**Schedule 3:** Energy Performance Certificate
+**Schedule 4:** Gas Safety Certificate
+**Schedule 5:** EICR (if applicable)
+{{#if additional_schedules}}
+**Schedule 6:** {{additional_schedules}}
+{{/if}}
+
+---
+
+## SPECIAL CONDITIONS
+
+{{#if special_conditions}}
+{{special_conditions}}
+{{/if}}
+
+---
+
+## ENTIRE AGREEMENT
+
+This agreement constitutes the entire agreement between the parties. Any prior representations or agreements are superseded by this document.
+
+No variation is valid unless in writing and signed by both parties.
+
+---
+
+## JURISDICTION
+
+This agreement is governed by {{#if england}}English{{/if}}{{#if wales}}Welsh{{/if}} law and subject to the exclusive jurisdiction of the {{#if england}}English{{/if}}{{#if wales}}Welsh{{/if}} courts.
+
+---
+
+## NOTICES
+
+Notices must be in writing and delivered:
+- By hand
+- By first class post
+- By email (with read receipt)
+
+To the addresses specified in this agreement.
+
+---
+
+## SEVERABILITY
+
+If any provision is found invalid or unenforceable, the remainder continues in full effect.
+
+---
+
+## SIGNATURES
+
+By signing below, the parties agree to be bound by the terms of this agreement.
+
+### Landlord:
+
+Signed: _________________________ Date: _____________
+
+Name: {{landlord_full_name}}
+
+{{#if agent_signs}}
+Signed on behalf of Landlord by:
+
+Signed: _________________________ Date: _____________
+
+Name: {{agent_name}}
+Position: {{agent_position}}
+{{/if}}
+
+### Tenant(s):
+
+{{#each tenants}}
+Signed: _________________________ Date: _____________
+
+Name: {{this.full_name}}
+
+{{/each}}
+
+{{#if guarantor}}
+### Guarantor:
+
+Signed: _________________________ Date: _____________
+
+Name: {{guarantor_name}}
+
+**I confirm I have received independent legal advice**
+
+Witnessed by:
+
+Signed: _________________________ Date: _____________
+
+Name: _________________________
+Address: _________________________
+Occupation: _________________________
+{{/if}}
+
+---
+
+## PRESCRIBED DOCUMENTS PROVIDED ✓
+
+☑ How to Rent Guide
+☑ Gas Safety Certificate
+☑ Energy Performance Certificate (EPC)
+☑ Electrical Installation Condition Report (EICR)
+☑ Deposit Protection Prescribed Information
+☑ Right to Rent Check Completed
+☑ Legionella Risk Assessment
+☑ Appliance Instructions
+
+---
+
+**Generated by Landlord Heaven - Premium Tenancy Service**
+**Document Reference:** {{document_id}}
+**Generated:** {{generation_timestamp}}
+**QA Score:** {{qa_score}}/100
+**Legal Review:** {{#if legal_reviewed}}✓ Reviewed by qualified solicitor{{/if}}
+

@@ -1,0 +1,318 @@
+{{! Letter Before Action - Pre-Court Warning Letter }}
+
+{{landlord_name}}
+{{landlord_address}}
+{{landlord_email}}
+{{landlord_phone}}
+
+{{tenant_name}}
+{{property_address}}
+
+Date: {{letter_date}}
+
+**SENT BY RECORDED DELIVERY AND EMAIL**
+
+Dear {{tenant_name}},
+
+# LETTER BEFORE ACTION - FORMAL WARNING
+
+## RE: {{property_address}}
+
+---
+
+## PURPOSE OF THIS LETTER
+
+This is a **formal letter before action** regarding your tenancy of the above property.
+
+We are writing to give you one final opportunity to remedy the breach(es) of your tenancy agreement before we commence court proceedings.
+
+**This is a serious matter. Please read this letter carefully and seek legal advice immediately.**
+
+---
+
+## THE PROBLEM
+
+{{#if rent_arrears}}
+### RENT ARREARS
+
+You are in breach of your tenancy agreement by failing to pay rent.
+
+**Current arrears:** £{{arrears_amount}} as of {{arrears_date}}
+
+**Breakdown:**
+{{#each arrears_breakdown}}
+- {{this.period}}: £{{this.amount_due}} due, £{{this.amount_paid}} paid, £{{this.shortfall}} arrears
+{{/each}}
+
+**Total owed:** £{{total_owed}}
+
+Despite previous reminders and demands, these arrears remain outstanding.
+{{/if}}
+
+{{#if breach_of_terms}}
+### BREACH OF TENANCY TERMS
+
+You are in breach of the following term(s) of your tenancy agreement:
+
+{{#each breaches}}
+**{{@index}}. {{this.clause}}**
+{{this.description}}
+{{this.evidence}}
+
+{{/each}}
+{{/if}}
+
+{{#if antisocial_behavior}}
+### ANTISOCIAL BEHAVIOUR
+
+We have received complaints about antisocial behaviour:
+
+{{#each asb_incidents}}
+**Incident {{@index}}:** {{this.date}}
+{{this.description}}
+Reported by: {{this.reporter}}
+
+{{/each}}
+{{/if}}
+
+---
+
+## PREVIOUS CORRESPONDENCE
+
+We have previously contacted you about this matter:
+
+{{#each previous_letters}}
+- {{this.date}}: {{this.type}} - {{this.summary}}
+{{/each}}
+
+Despite these communications, the problem has not been resolved.
+
+---
+
+## WHAT YOU MUST DO NOW
+
+{{#if rent_arrears}}
+### Pay the Arrears
+
+You must pay the full arrears of **£{{arrears_amount}}** by {{payment_deadline}}.
+
+**Payment details:**
+- Account Name: {{account_name}}
+- Sort Code: {{sort_code}}
+- Account Number: {{account_number}}
+- Reference: {{payment_reference}}
+
+{{#if payment_plan_offered}}
+**Alternative:** If you cannot pay in full, contact us immediately to discuss a payment plan. We may accept:
+- £{{payment_plan_amount}} per {{payment_plan_period}} for {{payment_plan_duration}}
+- Plus all current rent paid on time
+
+**You must contact us by {{payment_plan_deadline}} to arrange this.**
+{{/if}}
+{{/if}}
+
+{{#if breach_remedy}}
+### Remedy the Breach
+
+You must take the following action by {{remedy_deadline}}:
+
+{{#each remedy_actions}}
+{{@index}}. {{this.action}}
+{{/each}}
+{{/if}}
+
+{{#if asb_remedy}}
+### Stop the Antisocial Behaviour
+
+You must immediately:
+1. Stop the behaviour described above
+2. Ensure your household and visitors do not cause nuisance
+3. Provide written assurance this will not recur
+
+{{/if}}
+
+---
+
+## WHAT HAPPENS IF YOU DON'T COMPLY
+
+If you do not comply with the requirements above by {{final_deadline}}, we will take the following action **without further warning**:
+
+### 1. Court Proceedings for Possession
+
+We will issue court proceedings to seek:
+- A possession order (eviction)
+- {{#if rent_arrears}}A money judgment for arrears of £{{arrears_amount}}{{/if}}
+- Payment of ongoing rent (mesne profits)
+- Court costs and legal fees
+
+### 2. Costs
+
+If we have to go to court, you will be liable for:
+- **Court fee:** £355
+- **Legal costs:** £1,000-£3,000 (estimated)
+- **Bailiff costs:** £130 (if enforcement needed)
+- **Interest on arrears:** {{interest_rate}}% per annum
+- **Total estimated:** £{{estimated_total_costs}}
+
+These costs will be added to any rent arrears and claimed against you.
+
+### 3. Credit Rating
+
+A County Court Judgment (CCJ) will seriously damage your credit rating, making it difficult to:
+- Rent another property
+- Obtain credit or loans
+- Get a mortgage
+- Pass employment checks
+
+### 4. Eviction
+
+If the court grants possession, you will be evicted. You may be made homeless and the local council may decide you made yourself intentionally homeless, meaning they will not have a duty to rehouse you.
+
+### 5. Future References
+
+You will find it very difficult to rent another property with an eviction and CCJ on your record.
+
+---
+
+## PROTOCOL COMPLIANCE
+
+This letter complies with the Pre-Action Protocol for Possession Claims. The court will expect us to have:
+
+1. ✓ Clearly identified the problem
+2. ✓ Given you reasonable time to remedy
+3. ✓ Offered payment plan (if rent arrears)
+4. ✓ Signposted to advice services
+5. ✓ Warned of consequences
+
+If you dispute our claim, you should respond in writing within **14 days** setting out your position.
+
+---
+
+## GET ADVICE NOW
+
+**Do not ignore this letter.** Even if you dispute what we say, you must respond.
+
+Contact these free advice services immediately:
+
+**Shelter Housing Advice:** 0808 800 4444
+**Citizens Advice:** 0800 144 8848
+**StepChange Debt Charity:** 0800 138 1111
+
+You may be entitled to free legal advice through Legal Aid.
+
+{{#if housing_benefit}}
+**If you receive Housing Benefit or Universal Credit:**
+Contact your local council or DWP immediately. Tell them about this letter. There may be delays or errors in your benefit that can be resolved.
+{{/if}}
+
+---
+
+## HOW TO RESPOND
+
+You must respond to this letter by **{{response_deadline}}** by:
+
+**Email:** {{landlord_email}}
+**Post:** {{landlord_address}}
+**Phone:** {{landlord_phone}} (9am-5pm Monday-Friday)
+
+In your response, please:
+- Confirm you understand this letter
+- Set out your proposals to resolve the matter
+- Provide evidence supporting any dispute
+- Confirm when you will make payment (if arrears)
+
+{{#if payment_plan_offered}}
+**To arrange a payment plan:** Contact us immediately. We need:
+- Your income/expenditure details
+- Proof of income (payslips, benefit letters)
+- Proposed payment schedule
+- Commitment to pay current rent on time
+{{/if}}
+
+---
+
+## SUMMARY
+
+**What you owe:** £{{total_amount_owed}}
+
+**Deadline to pay/remedy:** {{final_deadline}}
+
+**If you don't:** Court proceedings will start on {{court_proceedings_date}}
+
+**What happens then:** Eviction, CCJ, costs of £{{estimated_costs}}+
+
+**What to do now:** 
+1. Get advice (Shelter: 0808 800 4444)
+2. Contact us to discuss
+3. Make payment or arrange payment plan
+4. Remedy any breaches
+
+---
+
+## OUR POSITION
+
+{{#if willing_to_negotiate}}
+We would prefer to resolve this matter without court proceedings. If you engage with us and make genuine efforts to remedy the situation, we may be able to avoid legal action.
+
+However, this is your final opportunity. If there is no satisfactory response by {{final_deadline}}, we will proceed to court without further notice.
+{{else}}
+We have exhausted all reasonable attempts to resolve this matter. Unless you comply fully with the requirements set out above, we will proceed to court on {{court_proceedings_date}}.
+{{/if}}
+
+---
+
+## IMPORTANT INFORMATION
+
+**Tenancy Type:** {{tenancy_type}}
+**Tenancy Start Date:** {{tenancy_start_date}}
+**Monthly Rent:** £{{monthly_rent}}
+
+{{#if section_8_warning}}
+**Notice:** If rent arrears reach {{ground_8_threshold}}, we may serve a Section 8 notice on Ground 8, which requires only 2 weeks' notice and is a mandatory ground for possession.
+{{/if}}
+
+{{#if section_21_warning}}
+**Notice:** We may also serve a Section 21 notice requiring possession. This does not require grounds and the court must grant possession if all requirements are met.
+{{/if}}
+
+---
+
+## DECLARATION
+
+I certify that the information in this letter is true and accurate.
+
+**Signed:** _________________________
+
+**Name:** {{landlord_name}}
+
+**Position:** {{#if agent}}Landlord's Agent{{else}}Landlord{{/if}}
+
+**Date:** {{letter_date}}
+
+---
+
+## ATTACHMENTS
+
+{{#if attachments}}
+The following documents are enclosed:
+{{#each attachments}}
+- {{this}}
+{{/each}}
+{{/if}}
+
+---
+
+**KEEP THIS LETTER SAFE - YOU WILL NEED IT IF COURT PROCEEDINGS START**
+
+This letter was generated by Landlord Heaven (www.landlordheaven.co.uk)
+Document Reference: {{document_id}}
+Generated: {{generation_timestamp}}
+
+---
+
+**LEGAL REFERENCES:**
+- Pre-Action Protocol for Possession Claims based on Rent Arrears
+- Civil Procedure Rules
+- Housing Act 1988
+
+**DISCLAIMER:** This letter is not legal advice. Seek independent legal advice immediately.
