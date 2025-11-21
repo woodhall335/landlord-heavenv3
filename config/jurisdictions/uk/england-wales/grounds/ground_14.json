@@ -1,0 +1,164 @@
+{
+  "ground": "14",
+  "type": "discretionary",
+  "category": "furniture_damage",
+  "name": "Nuisance or Annoyance to Neighbors",
+  "short_description": "Tenant or visitor causing nuisance/annoyance or convicted of using dwelling for immoral/illegal purposes",
+  "legal_basis": {
+    "act": "Housing Act 1988",
+    "section": "Schedule 2, Ground 14",
+    "statute_year": "1988"
+  },
+  "requirements": {
+    "nuisance_or_annoyance": {
+      "caused_by": ["Tenant", "Person residing with tenant", "Visitor to tenant"],
+      "victims": ["Occupiers of neighbouring properties", "Person visiting neighbouring properties"],
+      "conduct": "Causing or likely to cause nuisance or annoyance"
+    },
+    "conviction_based": {
+      "alternative": "Convicted of using dwelling or allowing use for immoral or illegal purpose",
+      "locality": "In locality of dwelling"
+    },
+    "arrest_for_breach": {
+      "alternative": "Arrested for breach of injunction under Housing Act 1996 s152 or 153"
+    }
+  },
+  "notice_period": {
+    "section_8_notice": "2 weeks if based on serious antisocial behavior",
+    "or": "2 months in other cases",
+    "court_proceedings": "Can be started after notice period"
+  },
+  "evidence_required": [
+    "Witness statements from neighbors",
+    "Noise recordings or logs with dates/times",
+    "Photographs or videos of behavior",
+    "Police reports or crime reference numbers",
+    "Council noise or environmental health reports",
+    "Warning letters sent to tenant",
+    "Pattern of incidents over time",
+    "Conviction records (if applicable)"
+  ],
+  "nuisance_examples": {
+    "strong_cases": [
+      "Drug dealing from property",
+      "Prostitution from property",
+      "Regular loud parties with police attendance",
+      "Threatening or violent behavior to neighbors",
+      "Criminal activity proven",
+      "Persistent noise nuisance",
+      "Racist or hate-based harassment"
+    ],
+    "moderate_cases": [
+      "Regular noise disturbances",
+      "Verbal abuse of neighbors",
+      "Accumulation of rubbish affecting neighbors",
+      "Antisocial visitors",
+      "Parking disputes becoming harassment"
+    ],
+    "weak_cases": [
+      "Single incident",
+      "Minor noise complaints",
+      "Personality clashes",
+      "Normal living noise",
+      "Unsubstantiated allegations"
+    ]
+  },
+  "success_factors": {
+    "high_probability": [
+      "Criminal conviction for illegal use of property",
+      "Multiple independent witness statements",
+      "Police/council reports supporting claims",
+      "Pattern of behavior over months",
+      "Serious incidents (violence, drug dealing)",
+      "Evidence from multiple neighbors",
+      "Tenant ignored warnings",
+      "Reasonable to grant possession"
+    ],
+    "medium_probability": [
+      "Some neighbor complaints",
+      "Pattern of nuisance but not severe",
+      "Some police/council involvement",
+      "Mixed evidence",
+      "Recent improvement but past pattern strong"
+    ],
+    "low_probability": [
+      "Single complaint or incident",
+      "Only one neighbor complaining",
+      "No independent evidence",
+      "Allegations unproven",
+      "Minor issues",
+      "No warnings given",
+      "Dispute between neighbors (both at fault)",
+      "Not reasonable to grant possession"
+    ]
+  },
+  "red_flags": [
+    "Single complainant with grudge",
+    "No independent evidence",
+    "No police or council reports",
+    "Allegations are vague or old",
+    "Tenant has evidence of good behavior",
+    "Complainant has history of complaints about multiple tenants",
+    "Racial or discriminatory motivation",
+    "Normal living noise described as nuisance"
+  ],
+  "typical_timeline": {
+    "notice_period": "2 weeks (serious ASB) or 2 months",
+    "court_proceedings": "4-8 months",
+    "total": "4.5-10 months"
+  },
+  "costs": {
+    "court_fee": 355,
+    "bailiff_fee": 130,
+    "legal_costs": "£2,000-£4,000 (multiple witnesses)",
+    "witness_expenses": "May need to cover neighbor attendance"
+  },
+  "tenant_defenses": [
+    "Allegations false or exaggerated",
+    "No evidence or weak evidence",
+    "Incidents caused by someone else",
+    "Normal living noise not nuisance",
+    "No complaints made to tenant",
+    "Tenant has taken steps to address issues",
+    "Complainant has ulterior motive",
+    "Not reasonable to grant possession",
+    "Human rights - possession disproportionate"
+  ],
+  "related_grounds": ["12", "15"],
+  "notes": "Ground 14 is DISCRETIONARY but powerful for antisocial behavior. Courts take ASB seriously but require strong evidence. Multiple independent witnesses crucial. Criminal conviction makes case very strong. Often used with injunctions.",
+  "case_law": [
+    "Northampton BC v Lovatt [1998] - Pattern of behavior needed",
+    "Manchester CC v Lawler [1999] - Evidence must be credible",
+    "Sheffield CC v Shaw [2007] - Serious ASB justifies swift action",
+    "Moat Housing v Rejmie [2012] - Single incident can suffice if serious"
+  ],
+  "court_considerations": [
+    "What is the nature and severity of conduct?",
+    "Is there credible evidence?",
+    "How many incidents over what period?",
+    "Is there a pattern?",
+    "Have warnings been given?",
+    "Has tenant tried to improve?",
+    "What is impact on neighbors?",
+    "Are there criminal convictions?",
+    "Is possession reasonable and proportionate?",
+    "Could injunction with suspended order work?"
+  ],
+  "immoral_or_illegal_use": {
+    "examples": [
+      "Drug dealing",
+      "Prostitution",
+      "Cannabis cultivation",
+      "Storage of stolen goods",
+      "Money laundering",
+      "Illegal gambling"
+    ],
+    "evidence": "Criminal conviction is strong proof but not essential",
+    "note": "Can be proven by balance of probabilities without conviction"
+  },
+  "injunctions": {
+    "power": "Can seek injunction alongside or before possession",
+    "benefit": "Prevents specific conduct, breach can support possession",
+    "types": ["Anti-social behaviour injunction", "Housing Act 1996 s152/153 injunction"]
+  }
+}

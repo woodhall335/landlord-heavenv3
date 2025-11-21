@@ -1,0 +1,109 @@
+{
+  "ground": "3",
+  "category": "antisocial_behavior",
+  "name": "Antisocial Behaviour",
+  "short_description": "Tenant or associate has behaved in antisocial manner",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 3",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "antisocial_behavior": {
+      "acting_in": "Antisocial manner",
+      "pursuing_course": "Pursuing course of antisocial conduct",
+      "persons": ["Tenant", "Person residing/lodging", "Subtenant", "Visitor"]
+    },
+    "victims": ["Landlord", "Agent", "Person in neighbourhood"],
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "28 days",
+      "specify_conduct": "Must specify antisocial behavior"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "28 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Witness statements from neighbors/victims",
+    "Police reports and crime reference numbers",
+    "Council antisocial behavior reports",
+    "Noise recordings/logs with dates",
+    "Photos or videos",
+    "Warnings to tenant",
+    "Pattern of incidents"
+  ],
+  "antisocial_behavior_examples": [
+    "Threatening or violent behavior",
+    "Drug dealing",
+    "Regular loud noise/parties",
+    "Harassment of neighbors",
+    "Criminal activity",
+    "Intimidation",
+    "Racist or discriminatory abuse",
+    "Vandalism"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Multiple independent witnesses",
+      "Police/council reports",
+      "Criminal convictions",
+      "Serious incidents",
+      "Pattern over time",
+      "Strong evidence"
+    ],
+    "medium_probability": [
+      "Some incidents proven",
+      "Mixed evidence",
+      "Moderate severity"
+    ],
+    "low_probability": [
+      "Single incident",
+      "Weak evidence",
+      "Dispute between neighbors",
+      "Minor complaints"
+    ]
+  },
+  "red_flags": [
+    "No independent evidence",
+    "Single complainant only",
+    "Normal living noise",
+    "Personality clash",
+    "No police involvement",
+    "Allegations unproven"
+  ],
+  "typical_timeline": {
+    "notice_period": "28 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "4-7 months"
+  },
+  "costs": {
+    "tribunal_fee": "Modest",
+    "sheriff_officer_fee": "£100-£150",
+    "legal_costs": "£2,000-£4,000"
+  },
+  "tenant_defenses": [
+    "Allegations false",
+    "Insufficient evidence",
+    "Normal living noise",
+    "Not antisocial behavior",
+    "Tenant taking corrective action",
+    "Not reasonable to evict"
+  ],
+  "related_grounds": [],
+  "notes": "Serious ground with 28 day notice. Tribunal takes ASB seriously but requires credible evidence. Criminal convictions strengthen case significantly.",
+  "case_law": [
+    "Glasgow City Council v Lockhart [2019] - Evidence standards for ASB",
+    "Scottish Borders Council v M [2020] - Pattern of behavior required"
+  ],
+  "tribunal_considerations": [
+    "Nature and severity of behavior?",
+    "Credible evidence?",
+    "How many incidents?",
+    "Impact on victims?",
+    "Warnings given?",
+    "Tenant's response?",
+    "Is eviction reasonable?"
+  ]
+}

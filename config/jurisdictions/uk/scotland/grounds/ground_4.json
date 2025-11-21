@@ -1,0 +1,93 @@
+{
+  "ground": "4",
+  "category": "landlord_intention",
+  "name": "Landlord Intends to Live in Property",
+  "short_description": "Landlord intends to live in property as only or principal home",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 4",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "intention": {
+      "who": ["Landlord", "Landlord's family member"],
+      "purpose": "To occupy as only or principal home",
+      "timing": "Genuine intention at time of tribunal hearing"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "84 days",
+      "specify_intention": "Must state intention to occupy"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "84 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Landlord's statement of intention",
+    "Evidence of need (selling current home, job relocation)",
+    "Family member's statement (if applicable)",
+    "No alternative accommodation available",
+    "Timeline for occupation"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Clear genuine intention",
+      "Immediate need demonstrated",
+      "No alternative accommodation",
+      "Selling current home",
+      "Job relocation"
+    ],
+    "medium_probability": [
+      "Intention genuine but not urgent",
+      "Some alternative options exist"
+    ],
+    "low_probability": [
+      "Speculative intention",
+      "Alternative accommodation available",
+      "Landlord has multiple properties",
+      "Not reasonable"
+    ]
+  },
+  "red_flags": [
+    "Landlord owns multiple properties",
+    "No immediate need",
+    "Intention not genuine",
+    "History of using ground without occupying",
+    "Retaliatory eviction"
+  ],
+  "typical_timeline": {
+    "notice_period": "84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "6-9 months"
+  },
+  "costs": {
+    "tribunal_fee": "Modest",
+    "sheriff_officer_fee": "£100-£150",
+    "legal_costs": "£1,000-£2,500"
+  },
+  "tenant_defenses": [
+    "Intention not genuine",
+    "Landlord has alternative accommodation",
+    "Not reasonable to grant",
+    "Retaliatory eviction",
+    "Landlord's past conduct suggests false intention"
+  ],
+  "notes": "Tribunal has full discretion. Must prove genuine intention at hearing. Cannot re-let within 3 months or face penalties.",
+  "re_letting_penalty": {
+    "prohibition": "Cannot market or let property within 3 months",
+    "exceptions": ["Sale of property", "Landlord sells to someone who occupies", "Unforeseen circumstances prevent occupation"],
+    "penalty": "Up to 6 months' rent payable to former tenant if breached"
+  },
+  "case_law": [
+    "Lothian and Borders Fire Board v Dundas [2019] - Genuine intention required"
+  ],
+  "tribunal_considerations": [
+    "Is intention genuine?",
+    "When will landlord occupy?",
+    "Why does landlord need this property?",
+    "Does landlord have alternatives?",
+    "Is eviction reasonable?"
+  ]
+}

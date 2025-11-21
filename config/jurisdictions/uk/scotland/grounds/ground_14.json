@@ -1,0 +1,38 @@
+{
+  "ground": "14",
+  "category": "religious_purpose",
+  "name": "Property for Religious Worker",
+  "short_description": "Property required for religious worker",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 14",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "religious_purpose": {
+      "ownership": "Property owned by religious body",
+      "requirement": "Required for person employed by religious body",
+      "occupation": "For better performance of religious duties"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "84 days"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "84 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Proof of religious body ownership",
+    "Employment details of religious worker",
+    "Need for accommodation",
+    "Religious body confirmation"
+  ],
+  "typical_timeline": {
+    "notice_period": "84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "6-9 months"
+  },
+  "notes": "Rarely used. Similar to England's Ground 5. Requires genuine religious purpose and need."
+}

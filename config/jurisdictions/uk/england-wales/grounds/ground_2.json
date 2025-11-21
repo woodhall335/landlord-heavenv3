@@ -1,0 +1,92 @@
+{
+  "ground": "2",
+  "type": "mandatory",
+  "category": "mortgagee_sale",
+  "name": "Mortgagee Requires Possession for Sale",
+  "short_description": "Mortgage lender requires possession to exercise power of sale",
+  "legal_basis": {
+    "act": "Housing Act 1988",
+    "section": "Schedule 2, Ground 2",
+    "statute_year": "1988"
+  },
+  "requirements": {
+    "notice_requirement": {
+      "type": "written_notice",
+      "timing": "Before or at start of tenancy",
+      "content": "Notice must state lender may recover possession under Ground 2",
+      "exception": "Court may dispense if just and equitable"
+    },
+    "mortgage_existence": {
+      "when": "Mortgage granted before tenancy began",
+      "proof": "Mortgage deed or lender confirmation"
+    },
+    "lender_requirement": {
+      "who": "Mortgagee (lender)",
+      "action": "Requires possession to exercise power of sale",
+      "reason": "Usually due to arrears or breach of mortgage terms"
+    }
+  },
+  "notice_period": {
+    "section_8_notice": "2 months minimum",
+    "court_proceedings": "Can be started after notice expires"
+  },
+  "evidence_required": [
+    "Mortgage deed showing date granted (before tenancy)",
+    "Written notice given at tenancy start",
+    "Tenancy agreement showing notice clause",
+    "Letter from mortgagee stating requirement for possession",
+    "Evidence of mortgage arrears or default (if applicable)",
+    "Mortgagee's intention to exercise power of sale"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Clear written notice at tenancy start",
+      "Mortgage granted before tenancy",
+      "Lender has formally demanded possession",
+      "Significant mortgage arrears",
+      "Lender has started or threatened possession proceedings against landlord"
+    ],
+    "medium_probability": [
+      "Notice given but informal",
+      "Court discretion on notice requirement",
+      "Lender requirement genuine but arrears being addressed"
+    ],
+    "low_probability": [
+      "No notice given and court refuses to dispense",
+      "Mortgage granted after tenancy began",
+      "Lender has not demanded possession",
+      "No mortgage arrears or default",
+      "Claim appears to be landlord using lender as excuse"
+    ]
+  },
+  "red_flags": [
+    "No written notice given at start",
+    "Mortgage granted after tenancy began",
+    "No evidence from mortgagee",
+    "No mortgage arrears",
+    "Landlord cannot produce mortgage deed",
+    "Lender denies requiring possession"
+  ],
+  "typical_timeline": {
+    "notice_period": "2 months",
+    "court_proceedings": "4-6 months",
+    "total": "6-8 months"
+  },
+  "costs": {
+    "court_fee": 355,
+    "bailiff_fee": 130,
+    "legal_costs": "£1,000-£2,500 (often lender pays)"
+  },
+  "tenant_defenses": [
+    "No notice given and no good reason to dispense",
+    "Mortgage granted after tenancy began",
+    "Mortgagee has not demanded possession",
+    "Landlord cannot prove mortgage exists or predates tenancy"
+  ],
+  "related_grounds": ["1"],
+  "notes": "Ground 2 is MANDATORY but rarely used as lenders usually seek possession directly against landlord. Often seen when landlord in financial difficulty.",
+  "case_law": [
+    "Britannia Building Society v Earl [1990] - Lender can seek possession under Ground 2",
+    "National & Provincial Building Society v Lloyd [1996] - Notice requirements strictly applied"
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "jurisdiction": "scotland",
+  "name": "Scotland",
+  "legal_system": "Separate Scottish legal system under Private Housing (Tenancies) (Scotland) Act 2016",
+  "tenancy_types": {
+    "private_residential_tenancy": {
+      "abbreviation": "PRT",
+      "introduced": "2017-12-01",
+      "replaces": "Assured and Short Assured Tenancies",
+      "default_type": true,
+      "open_ended": true,
+      "notice_procedures": ["Notice to Leave + First-tier Tribunal application"]
+    },
+    "legacy_tenancies": {
+      "assured_tenancy": "Pre-2017 tenancies",
+      "short_assured_tenancy": "Pre-2017 tenancies",
+      "note": "Still exist but no new PRTs created"
+    }
+  },
+  "possession_routes": {
+    "notice_to_leave": {
+      "name": "Notice to Leave",
+      "grounds_available": 18,
+      "minimum_notice_periods": {
+        "28_days": "Grounds 1 (rent arrears if arrears at notice), 3 (ASB), 9 (overcrowding), 11 (not occupying), 12 (criminal conviction), 13 (mortgage - if lender applying), 18 (false statement)",
+        "84_days": "Most other grounds including 4 (landlord to live), 5 (sell), 6 (refurbishment), 7 (HMO), 8 (non-residential), 10, 13 (mortgage - if landlord applying), 14 (religious), 15 (care), 16 (temporary employment), 17 (former employee)"
+      }
+    },
+    "first_tier_tribunal": {
+      "name": "Housing and Property Chamber",
+      "application": "After Notice to Leave period expires",
+      "discretion": "Full discretion on all grounds (no mandatory grounds)",
+      "pre_action_requirements": "Mandatory for rent arrears"
+    }
+  },
+  "grounds": {
+    "total": 18,
+    "all_discretionary": true,
+    "note": "No mandatory grounds - Tribunal has discretion on all",
+    "files": {
+      "ground_1": "grounds/ground_1.json",
+      "ground_2": "grounds/ground_2.json",
+      "ground_3": "grounds/ground_3.json",
+      "ground_4": "grounds/ground_4.json",
+      "ground_5": "grounds/ground_5.json",
+      "ground_6": "grounds/ground_6.json",
+      "ground_7": "grounds/ground_7.json",
+      "ground_8": "grounds/ground_8.json",
+      "ground_9": "grounds/ground_9.json",
+      "ground_10": "grounds/ground_10.json",
+      "ground_11": "grounds/ground_11.json",
+      "ground_12": "grounds/ground_12.json",
+      "ground_13": "grounds/ground_13.json",
+      "ground_14": "grounds/ground_14.json",
+      "ground_15": "grounds/ground_15.json",
+      "ground_16": "grounds/ground_16.json",
+      "ground_17": "grounds/ground_17.json",
+      "ground_18": "grounds/ground_18.json"
+    }
+  },
+  "tribunal_system": {
+    "tribunal": "First-tier Tribunal for Scotland (Housing and Property Chamber)",
+    "application_fee": "Free for tenants, modest fees for landlords",
+    "process": "Paper application, case management discussion, hearing if needed",
+    "eviction_order": "Issued by Tribunal, executed by sheriff officers"
+  },
+  "key_legislation": [
+    {
+      "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+      "key_sections": ["Part 3 (Private residential tenancies)", "Part 4 (Grounds for eviction)", "Schedule 3 (Eviction grounds)"]
+    },
+    {
+      "act": "Rent Pressure Zone (Scotland) Regulations 2017",
+      "key_sections": ["Rent caps in designated areas"]
+    },
+    {
+      "act": "Pre-Action Requirements Regulations 2020",
+      "key_sections": ["Mandatory steps before rent arrears eviction"]
+    },
+    {
+      "act": "Housing (Scotland) Act 2006",
+      "key_sections": ["Repairing standard"]
+    },
+    {
+      "act": "Antisocial Behaviour etc. (Scotland) Act 2004",
+      "key_sections": ["ASB definitions and procedures"]
+    }
+  ],
+  "deposit_protection": {
+    "required": true,
+    "schemes": ["SafeDeposits Scotland", "MyDeposits Scotland", "Letting Protection Service Scotland"],
+    "deadline": "30 working days from start of tenancy",
+    "cap": "No statutory cap (but must be reasonable)"
+  },
+  "landlord_registration": {
+    "required": true,
+    "authority": "Local council",
+    "criminal_offence": "Failure to register",
+    "penalty": "Cannot evict if not registered, potential prosecution"
+  },
+  "hmo_licensing": {
+    "mandatory_hmo": {
+      "trigger": "3+ unrelated persons sharing facilities"
+    },
+    "licensing_authority": "Local council",
+    "penalty": "Cannot let without license, prosecution risk"
+  },
+  "rent_controls": {
+    "rent_pressure_zones": {
+      "areas": "Designated by Scottish Government",
+      "cap": "Maximum 1% above inflation per year",
+      "current_zones": ["Parts of Edinburgh", "Parts of Glasgow", "Other designated areas"]
+    },
+    "notice_requirements": {
+      "rent_increase": "3 months' notice required",
+      "maximum_frequency": "Once every 12 months"
+    }
+  },
+  "eviction_ban": {
+    "note": "No evictions without Tribunal order",
+    "illegal_eviction": "Criminal offence",
+    "covid_provisions": "Extended protections during pandemic (now lifted)"
+  },
+  "tenant_protections": {
+    "open_ended_tenancy": "No fixed end date - security of tenure",
+    "grounds_only": "Can only evict on statutory grounds",
+    "tribunal_discretion": "All grounds discretionary",
+    "pre_action_requirements": "Mandatory for rent arrears",
+    "retaliatory_eviction": "Considerations at tribunal",
+    "rent_increases": "Regulated frequency and notice"
+  },
+  "penalties_for_misuse": {
+    "ground_4_penalty": "Up to 6 months' rent if re-let within 3 months of claiming landlord to occupy",
+    "ground_5_penalty": "Up to 6 months' rent if not marketed within 3 months of claiming intent to sell"
+  }
+}

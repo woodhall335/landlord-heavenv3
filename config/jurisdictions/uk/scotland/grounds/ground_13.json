@@ -1,0 +1,37 @@
+{
+  "ground": "13",
+  "category": "mortgage_repossession",
+  "name": "Mortgage Lender Repossessing",
+  "short_description": "Mortgage lender intending to exercise power of sale",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 13",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "mortgage": {
+      "existence": "Property subject to mortgage granted before tenancy",
+      "lender_action": "Lender intends to exercise power of sale"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "28 days or 84 days"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "28 days (if lender applying) OR 84 days (if landlord applying)",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Mortgage deed predating tenancy",
+    "Lender's notice of intention to sell",
+    "Evidence of arrears or default",
+    "Lender's power of sale documentation"
+  ],
+  "typical_timeline": {
+    "notice_period": "28 or 84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "4-8 months"
+  },
+  "notes": "Similar to England's Ground 2. Lender can apply directly (28 days) or landlord applies (84 days)."
+}

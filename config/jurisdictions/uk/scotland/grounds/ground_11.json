@@ -1,0 +1,54 @@
+{
+  "ground": "11",
+  "category": "tenant_failure",
+  "name": "Tenant No Longer Occupying",
+  "short_description": "Tenant not occupying property as their only or principal home",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 11",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "occupancy": {
+      "requirement": "Tenant not occupying as only or principal home",
+      "duration": "For at least 6 consecutive months"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "28 days"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "28 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Evidence tenant living elsewhere",
+    "Utility bills showing low usage",
+    "Neighbor statements",
+    "Surveillance evidence (if proportionate)",
+    "Council tax records"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Clear evidence of non-occupation for 6+ months",
+      "Tenant living elsewhere permanently",
+      "Property sublet or abandoned"
+    ],
+    "medium_probability": [
+      "Extended absence but some occupation",
+      "Temporary absence with intention to return"
+    ],
+    "low_probability": [
+      "Less than 6 months",
+      "Temporary absence with good reason",
+      "Tenant intends to return"
+    ]
+  },
+  "typical_timeline": {
+    "notice_period": "28 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "4-7 months"
+  },
+  "notes": "Must prove continuous 6 month non-occupation. Temporary absences (hospital, work, education) don't necessarily qualify."
+}

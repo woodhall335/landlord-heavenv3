@@ -1,0 +1,116 @@
+{
+  "ground": "6",
+  "type": "mandatory",
+  "category": "refurbishment",
+  "name": "Substantial Refurbishment or Reconstruction",
+  "short_description": "Landlord intends to demolish, reconstruct or carry out substantial works",
+  "legal_basis": {
+    "act": "Housing Act 1988",
+    "section": "Schedule 2, Ground 6",
+    "statute_year": "1988"
+  },
+  "requirements": {
+    "landlord_intention": {
+      "actions": ["demolish", "reconstruct", "carry out substantial works"],
+      "scope": "Cannot reasonably be carried out without tenant giving up possession",
+      "timing": "Intention must exist at time of court hearing"
+    },
+    "works_scope": {
+      "types": ["Structural alterations", "Major refurbishment", "Extension", "Demolition", "Reconstruction"],
+      "requirement": "Works must be substantial and require vacant possession"
+    },
+    "landlord_ownership": {
+      "requirement": "Landlord must have owned property for at least 2 years",
+      "exception": "Or property devolved under will or intestacy within 2 years"
+    }
+  },
+  "notice_period": {
+    "section_8_notice": "2 months minimum",
+    "court_proceedings": "Can be started after notice expires"
+  },
+  "evidence_required": [
+    "Detailed plans and specifications of proposed works",
+    "Architect or surveyor report confirming works are substantial",
+    "Building regulations approval or planning permission (if required)",
+    "Contractor quotes or estimates",
+    "Evidence works cannot be done with tenant in situ (surveyor report)",
+    "Proof of landlord ownership for 2+ years (Land Registry, title deeds)",
+    "Timeline for carrying out works",
+    "Proof of funding for works"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Detailed professional plans and specifications",
+      "Expert evidence that vacant possession is necessary",
+      "Planning permission or building regulations approved",
+      "Contractor quotes obtained",
+      "Landlord owned property for 2+ years",
+      "Genuine intention to carry out works promptly",
+      "Adequate funding secured",
+      "Works are genuinely substantial"
+    ],
+    "medium_probability": [
+      "Plans prepared but planning permission pending",
+      "Works substantial but some could be done with tenant in situ",
+      "Funding not fully secured but obtainable",
+      "Landlord ownership just over 2 years"
+    ],
+    "low_probability": [
+      "Vague or incomplete plans",
+      "No expert evidence",
+      "Works could be carried out with tenant remaining",
+      "No planning permission or building approval",
+      "Landlord owned less than 2 years",
+      "Insufficient funds to carry out works",
+      "Intention not genuine or works speculative",
+      "Minor decorative works described as 'substantial'"
+    ]
+  },
+  "red_flags": [
+    "Landlord owned property less than 2 years",
+    "No professional plans or specifications",
+    "Works described are minor (decorating, repairs)",
+    "No evidence works require vacant possession",
+    "No planning permission for major alterations",
+    "Insufficient funding",
+    "Landlord has history of using Ground 6 without carrying out works",
+    "Claim appears to be pretext for eviction"
+  ],
+  "typical_timeline": {
+    "notice_period": "2 months",
+    "court_proceedings": "4-8 months (longer due to evidence requirements)",
+    "total": "6-10 months"
+  },
+  "costs": {
+    "court_fee": 355,
+    "bailiff_fee": 130,
+    "legal_costs": "£2,000-£5,000 (higher due to expert evidence)",
+    "expert_reports": "£500-£2,000 (architect/surveyor)"
+  },
+  "tenant_defenses": [
+    "Works are not substantial",
+    "Works can be carried out with tenant in situ",
+    "No genuine intention to carry out works",
+    "Landlord has not owned property for 2 years",
+    "No planning permission or building approval",
+    "Insufficient funding to complete works",
+    "Landlord's previous Ground 6 claims did not result in works",
+    "Offer to vacate temporarily during works"
+  ],
+  "related_grounds": [],
+  "notes": "Ground 6 is MANDATORY but heavily scrutinized. Courts require strong evidence of genuine intention and necessity. Landlords often fail due to inadequate evidence or 2-year ownership rule. Works must actually be substantial - not just redecoration.",
+  "case_law": [
+    "Wansbeck District Council v Marley [1988] - Works must be substantial, not just repairs",
+    "Ibie v Trubshaw [2000] - Must prove works cannot be done with tenant in occupation",
+    "Heath v Drown [1973] - 'Substantial' means more than minor or trivial",
+    "Daejan Properties v Mahoney [1995] - Landlord must have genuine intention at time of hearing"
+  ],
+  "court_considerations": [
+    "Are the proposed works genuinely substantial?",
+    "Can the works reasonably be carried out with tenant remaining?",
+    "Does landlord have genuine intention (not just to get vacant possession)?",
+    "Has landlord owned property for 2+ years?",
+    "Is there evidence of funding and professional planning?",
+    "What is the tenant's situation and potential hardship?"
+  ]
+}

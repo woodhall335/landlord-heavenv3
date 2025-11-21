@@ -1,0 +1,45 @@
+{
+  "ground": "12",
+  "category": "criminal_conviction",
+  "name": "Tenant or Associate Convicted",
+  "short_description": "Tenant or associate convicted of serious offence in or near property",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 12",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "conviction": {
+      "persons": ["Tenant", "Person residing", "Lodger", "Subtenant", "Visitor"],
+      "offence_type": "Using property for immoral or illegal purposes, or in locality",
+      "sentence": "Imprisonment or detention"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "28 days"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "28 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Criminal conviction records",
+    "Court judgment/sentencing",
+    "Police reports",
+    "Evidence of connection to property"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Serious conviction with imprisonment",
+      "Crime committed at or from property",
+      "Drug dealing, violence, serious crime"
+    ]
+  },
+  "typical_timeline": {
+    "notice_period": "28 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "4-7 months"
+  },
+  "notes": "Powerful ground requiring criminal conviction with imprisonment/detention. Tribunal has discretion."
+}
