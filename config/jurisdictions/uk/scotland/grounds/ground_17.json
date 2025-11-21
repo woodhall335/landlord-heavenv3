@@ -1,0 +1,38 @@
+{
+  "ground": "17",
+  "category": "tied_accommodation",
+  "name": "Former Employee Accommodation",
+  "short_description": "Property let to employee and employment has ended",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 17",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "employment": {
+      "original_purpose": "Tenancy granted for better performance of duties",
+      "employer": "Landlord or former landlord was employer",
+      "cessation": "Employment has ended"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "84 days"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "84 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Employment contract linking accommodation to job",
+    "Tenancy agreement showing employment purpose",
+    "Evidence employment ended",
+    "Need for property for new employee"
+  ],
+  "typical_timeline": {
+    "notice_period": "84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "6-9 months"
+  },
+  "notes": "Similar to England's Ground 16. Common in agriculture, hospitality, education. Tribunal considers reasonableness."
+}

@@ -1,0 +1,54 @@
+{
+  "ground": "9",
+  "category": "overcrowding",
+  "name": "Overcrowding Statutory Offence",
+  "short_description": "Property overcrowded such that landlord committing offence",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 9",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "overcrowding": {
+      "test": "Property overcrowded under Housing (Scotland) Act 1987",
+      "offence": "Landlord committing or would commit criminal offence"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "28 days"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "28 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Floor space calculations",
+    "Number of occupants",
+    "Room usage assessment",
+    "Council environmental health report",
+    "Evidence of criminal offence liability"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Clear overcrowding statutory breach",
+      "Council notice served",
+      "Criminal liability established"
+    ],
+    "medium_probability": [
+      "Borderline overcrowding",
+      "Occupancy can be reduced"
+    ],
+    "low_probability": [
+      "No overcrowding",
+      "Tenant willing to reduce occupants",
+      "Not reasonable"
+    ]
+  },
+  "typical_timeline": {
+    "notice_period": "28 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "4-7 months"
+  },
+  "notes": "Serious ground with shorter notice. Landlord must show actual or imminent criminal liability for overcrowding."
+}

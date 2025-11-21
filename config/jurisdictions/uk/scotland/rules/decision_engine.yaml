@@ -1,0 +1,276 @@
+# Decision Engine Rules - Scotland
+# Maps collected facts to recommended grounds for Private Residential Tenancy evictions
+
+version: "1.0"
+jurisdiction: "scotland"
+last_updated: "2025-11-21"
+
+# Key Difference: ALL grounds are discretionary - Tribunal has full discretion
+discretionary_all: true
+tribunal: "First-tier Tribunal for Scotland (Housing and Property Chamber)"
+
+# Pre-action requirements MANDATORY for rent arrears
+pre_action_required:
+  grounds: [1]
+  regulations: "Pre-Action Requirements (Notice to Leave and Notice of Proceedings) (Scotland) Regulations 2020"
+
+rules:
+  # RENT ARREARS
+  - rule_id: "scot_rent_001"
+    name: "Rent Arrears 3+ Months - Ground 1"
+    priority: 1
+    conditions:
+      rent_arrears_months: ">= 3"
+      pre_action_requirements_met: true
+    recommended_grounds:
+      primary: [1]
+    notice_period: "28_days"
+    success_probability: "high"
+    reasoning: "Pre-action requirements MUST be followed. Tribunal has discretion but substantial arrears with pre-action compliance usually succeeds."
+
+  - rule_id: "scot_rent_002"
+    name: "Rent Arrears - Pre-Action Not Met"
+    priority: 1
+    conditions:
+      rent_arrears_months: ">= 3"
+      pre_action_requirements_met: false
+    recommended_grounds:
+      primary: []
+    success_probability: "none"
+    notice_period: null
+    action_required: "Must complete pre-action requirements before serving Notice to Leave"
+
+  # BREACH OF TENANCY
+  - rule_id: "scot_breach_001"
+    name: "Material Breach - Ground 2"
+    priority: 1
+    conditions:
+      breach_of_tenancy: true
+      breach_material: true
+      breach_continuing: true
+    recommended_grounds:
+      primary: [2]
+    notice_period: "28_days_or_84_days"
+    success_probability: "medium"
+    reasoning: "Tribunal considers materiality and whether breach continuing/likely to recur."
+
+  # ANTISOCIAL BEHAVIOUR
+  - rule_id: "scot_asb_001"
+    name: "Antisocial Behaviour - Ground 3"
+    priority: 1
+    conditions:
+      antisocial_behavior: true
+      evidence_available: true
+    recommended_grounds:
+      primary: [3]
+    notice_period: "28_days"
+    success_probability: "high"
+    reasoning: "Serious ASB with evidence usually succeeds. 28 day notice period for serious cases."
+
+  # LANDLORD INTENDS TO OCCUPY
+  - rule_id: "scot_landlord_001"
+    name: "Landlord to Live in Property - Ground 4"
+    priority: 1
+    conditions:
+      landlord_intends_to_occupy: true
+      genuine_intention: true
+      no_alternative_accommodation: true
+    recommended_grounds:
+      primary: [4]
+    notice_period: "84_days"
+    success_probability: "medium"
+    reasoning: "Must prove genuine intention. Cannot re-let within 3 months or face penalty (up to 6 months rent)."
+    penalty_warning: "If re-let within 3 months without good reason, tenant can claim up to 6 months rent."
+
+  # LANDLORD INTENDS TO SELL
+  - rule_id: "scot_sell_001"
+    name: "Landlord to Sell Property - Ground 5"
+    priority: 1
+    conditions:
+      landlord_intends_to_sell: true
+      sale_within_3_months: true
+      evidence_of_intention: true
+    recommended_grounds:
+      primary: [5]
+    notice_period: "84_days"
+    success_probability: "medium"
+    reasoning: "Must market property within 3 months of tenant leaving or face penalty."
+    penalty_warning: "If not marketed within 3 months, tenant can claim up to 6 months rent."
+
+  # REFURBISHMENT
+  - rule_id: "scot_works_001"
+    name: "Substantial Refurbishment - Ground 6"
+    priority: 1
+    conditions:
+      substantial_works_planned: true
+      vacant_possession_required: true
+      planning_obtained: true
+      funding_secured: true
+    recommended_grounds:
+      primary: [6]
+    notice_period: "84_days"
+    success_probability: "medium"
+    reasoning: "Must prove works substantial and require vacant possession."
+
+  # HMO LICENSING ISSUE
+  - rule_id: "scot_hmo_001"
+    name: "HMO Licensing Change - Ground 7"
+    priority: 1
+    conditions:
+      hmo_licensing_issue: true
+      cannot_comply_with_tenant: true
+    recommended_grounds:
+      primary: [7]
+    notice_period: "84_days"
+    success_probability: "medium"
+
+  # OVERCROWDING
+  - rule_id: "scot_overcrowd_001"
+    name: "Statutory Overcrowding - Ground 9"
+    priority: 1
+    conditions:
+      overcrowding: true
+      landlord_criminal_liability: true
+    recommended_grounds:
+      primary: [9]
+    notice_period: "28_days"
+    success_probability: "high"
+    reasoning: "Landlord facing criminal liability for overcrowding."
+
+  # NOT OCCUPYING
+  - rule_id: "scot_occupation_001"
+    name: "Not Occupying as Principal Home - Ground 11"
+    priority: 1
+    conditions:
+      not_occupying: true
+      duration_months: ">= 6"
+    recommended_grounds:
+      primary: [11]
+    notice_period: "28_days"
+    success_probability: "high"
+    reasoning: "Continuous 6 month non-occupation proven."
+
+  # CRIMINAL CONVICTION
+  - rule_id: "scot_criminal_001"
+    name: "Criminal Conviction - Ground 12"
+    priority: 1
+    conditions:
+      criminal_conviction: true
+      imprisonment: true
+      relates_to_property: true
+    recommended_grounds:
+      primary: [12]
+    notice_period: "28_days"
+    success_probability: "high"
+    reasoning: "Serious criminal conviction with imprisonment."
+
+  # MORTGAGE REPOSSESSION
+  - rule_id: "scot_mortgage_001"
+    name: "Mortgagee Requiring Possession - Ground 13"
+    priority: 1
+    conditions:
+      mortgage_predates_tenancy: true
+      lender_requiring_possession: true
+    recommended_grounds:
+      primary: [13]
+    notice_period: "28_days_or_84_days"
+    success_probability: "high"
+
+  # RELIGIOUS WORKER
+  - rule_id: "scot_religious_001"
+    name: "Religious Worker Accommodation - Ground 14"
+    priority: 2
+    conditions:
+      religious_purpose: true
+      worker_requires_accommodation: true
+    recommended_grounds:
+      primary: [14]
+    notice_period: "84_days"
+    success_probability: "medium"
+
+  # FORMER EMPLOYEE
+  - rule_id: "scot_employee_001"
+    name: "Former Employee - Ground 17"
+    priority: 2
+    conditions:
+      employment_ended: true
+      property_for_employment: true
+      new_employee_needs_accommodation: true
+    recommended_grounds:
+      primary: [17]
+    notice_period: "84_days"
+    success_probability: "medium"
+
+  # FALSE STATEMENT
+  - rule_id: "scot_false_001"
+    name: "False Statement - Ground 18"
+    priority: 2
+    conditions:
+      false_statement_made: true
+      material_to_tenancy: true
+      induced_tenancy_grant: true
+    recommended_grounds:
+      primary: [18]
+    notice_period: "28_days"
+    success_probability: "medium"
+    reasoning: "Must prove falsehood, materiality and inducement."
+
+# Notice Periods Summary
+notice_periods:
+  28_days:
+    - "Ground 1 (if arrears at notice date)"
+    - "Ground 3 (ASB)"
+    - "Ground 9 (overcrowding)"
+    - "Ground 11 (not occupying)"
+    - "Ground 12 (criminal conviction)"
+    - "Ground 13 (mortgage - if lender applying)"
+    - "Ground 18 (false statement)"
+
+  84_days:
+    - "Ground 1 (if no arrears at notice date)"
+    - "Ground 2 (breach)"
+    - "Ground 4 (landlord to occupy)"
+    - "Ground 5 (sell)"
+    - "Ground 6 (refurbishment)"
+    - "Ground 7 (HMO)"
+    - "Ground 8 (non-residential)"
+    - "Ground 10 (not registered)"
+    - "Ground 13 (mortgage - if landlord applying)"
+    - "Ground 14 (religious)"
+    - "Ground 15 (care)"
+    - "Ground 16 (employment seeking)"
+    - "Ground 17 (former employee)"
+
+# Key Differences from England & Wales
+key_differences:
+  - "ALL grounds are discretionary - Tribunal has full discretion on every ground"
+  - "No Section 21 equivalent - cannot evict without grounds"
+  - "Pre-action requirements mandatory for rent arrears"
+  - "Penalties for misuse of Grounds 4 and 5 (up to 6 months rent)"
+  - "First-tier Tribunal process not County Court"
+  - "Open-ended tenancies - no fixed term end"
+  - "Landlord must be registered"
+
+# Tribunal Considerations
+tribunal_factors:
+  all_grounds:
+    - "Is eviction reasonable in all circumstances?"
+    - "Tenant's personal situation?"
+    - "Alternative accommodation?"
+    - "Proportionality under human rights?"
+    - "Landlord's conduct?"
+    - "Strength of evidence?"
+
+# Timelines
+timelines:
+  notice_to_leave_28_days: "28 days"
+  notice_to_leave_84_days: "84 days"
+  tribunal_proceedings: "3-6 months"
+  total_28_day_grounds: "4-7 months"
+  total_84_day_grounds: "6-9 months"
+
+# Costs
+costs:
+  tribunal_application: "Modest fees (not free but lower than England)"
+  sheriff_officer: "100-150"
+  legal_costs: "1000-3000"

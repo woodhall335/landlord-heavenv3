@@ -1,0 +1,107 @@
+{
+  "ground": "2",
+  "category": "breach_of_tenancy",
+  "name": "Breach of Tenancy Obligation",
+  "short_description": "Tenant has breached a term of the tenancy",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 2",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "breach": {
+      "type": "Breach of any term of tenancy agreement",
+      "material": "Must be material breach",
+      "continuing_or_repeated": "Breach is continuing or likely to recur"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "28 days (serious breach) or 84 days",
+      "specify_breach": "Must specify which term was breached"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "28 days (serious breach) OR 84 days (other breaches)",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Tenancy agreement showing the term breached",
+    "Evidence of breach (photos, witnesses, reports)",
+    "Notice to Leave specifying breach",
+    "Warnings or correspondence about breach",
+    "Evidence breach is continuing or likely to recur"
+  ],
+  "common_breaches": [
+    "Unauthorized subletting",
+    "Keeping pets when prohibited",
+    "Running business from property",
+    "Damage to property",
+    "Causing nuisance to neighbors",
+    "Not allowing access for inspections/repairs",
+    "Unauthorized occupants"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Material breach clearly proven",
+      "Breach continuing despite warnings",
+      "Serious breach (subletting, major damage)",
+      "Strong evidence",
+      "Tribunal finds reasonable"
+    ],
+    "medium_probability": [
+      "Breach proven but remedied",
+      "Moderate severity",
+      "Some warnings given"
+    ],
+    "low_probability": [
+      "Minor breach",
+      "Breach remedied",
+      "Insufficient evidence",
+      "Ambiguous tenancy term",
+      "Tribunal finds unreasonable"
+    ]
+  },
+  "red_flags": [
+    "Minor or technical breach only",
+    "Breach already remedied",
+    "No warnings given",
+    "Weak evidence",
+    "Tenancy term unclear",
+    "Retaliatory eviction",
+    "Landlord also in breach"
+  ],
+  "typical_timeline": {
+    "notice_period": "28 or 84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "4-8 months"
+  },
+  "costs": {
+    "tribunal_fee": "Modest",
+    "sheriff_officer_fee": "£100-£150",
+    "legal_costs": "£1,500-£3,000"
+  },
+  "tenant_defenses": [
+    "No breach occurred",
+    "Breach not material",
+    "Breach remedied",
+    "Tenancy term doesn't prohibit action",
+    "Landlord gave permission",
+    "Landlord in breach (disrepair)",
+    "Not reasonable to grant eviction"
+  ],
+  "related_grounds": ["12", "13", "14"],
+  "notes": "Tribunal has discretion and considers materiality, whether breach remedied, warnings given, and overall reasonableness. Minor breaches rarely succeed.",
+  "case_law": [
+    "City of Edinburgh Council v P [2019] - Material breach required",
+    "Devine v Advocate General [2020] - Reasonableness essential"
+  ],
+  "tribunal_considerations": [
+    "Has breach been proven?",
+    "Is breach material?",
+    "Is breach continuing or likely to recur?",
+    "Were warnings given?",
+    "Has tenant tried to remedy?",
+    "What is severity of breach?",
+    "Is eviction reasonable?"
+  ]
+}

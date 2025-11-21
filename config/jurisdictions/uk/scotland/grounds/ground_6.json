@@ -1,0 +1,84 @@
+{
+  "ground": "6",
+  "category": "refurbishment",
+  "name": "Property to be Refurbished",
+  "short_description": "Landlord intends to carry out refurbishment requiring vacant possession",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 6",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "intention": {
+      "work_type": "Refurbishment or substantial works",
+      "requirement": "Cannot reasonably be carried out with tenant in occupation"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "84 days",
+      "specify_works": "Must describe refurbishment intended"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "84 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Detailed plans and specifications",
+    "Architect/surveyor report",
+    "Planning permission or building warrant (if required)",
+    "Contractor quotes",
+    "Expert evidence vacant possession necessary",
+    "Funding proof",
+    "Timeline for works"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Substantial works planned",
+      "Expert evidence vacant possession required",
+      "Planning/building warrant obtained",
+      "Funding secured",
+      "Professional plans prepared"
+    ],
+    "medium_probability": [
+      "Works substantial but some could be done occupied",
+      "Planning pending",
+      "Funding not fully secured"
+    ],
+    "low_probability": [
+      "Minor works",
+      "Can be done with tenant in situ",
+      "No professional plans",
+      "Insufficient funds",
+      "Not reasonable"
+    ]
+  },
+  "red_flags": [
+    "Works are minor (decoration/repairs)",
+    "No professional plans",
+    "No planning permission",
+    "Works can be done with tenant present",
+    "Insufficient funding",
+    "History of using ground without carrying out works"
+  ],
+  "typical_timeline": {
+    "notice_period": "84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "6-9 months"
+  },
+  "costs": {
+    "tribunal_fee": "Modest",
+    "sheriff_officer_fee": "£100-£150",
+    "legal_costs": "£2,000-£4,000",
+    "expert_reports": "£500-£1,500"
+  },
+  "tenant_defenses": [
+    "Works not substantial",
+    "Can be done with tenant in occupation",
+    "No genuine intention",
+    "Insufficient planning/funding",
+    "Not reasonable",
+    "Tenant offers to vacate temporarily"
+  ],
+  "notes": "Similar to England's Ground 6. Requires strong evidence works are substantial and require vacant possession. Tribunal scrutinizes carefully."
+}

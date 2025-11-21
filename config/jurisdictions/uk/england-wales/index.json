@@ -1,0 +1,127 @@
+{
+  "jurisdiction": "england-wales",
+  "name": "England and Wales",
+  "legal_system": "Unified jurisdiction under Housing Act 1988",
+  "tenancy_types": {
+    "assured_shorthold_tenancy": {
+      "abbreviation": "AST",
+      "created_after": "1997-02-28",
+      "default_type": true,
+      "notice_procedures": ["Section 8", "Section 21"]
+    },
+    "assured_tenancy": {
+      "created_before": "1997-02-28",
+      "default_type": false,
+      "notice_procedures": ["Section 8"]
+    }
+  },
+  "possession_routes": {
+    "section_8": {
+      "name": "Section 8 Notice (Grounds-Based)",
+      "grounds_available": 17,
+      "notice_form": "Form 3",
+      "grounds_categories": {
+        "mandatory": [1, 2, 3, 4, 5, 6, 8],
+        "discretionary": [7, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+      },
+      "minimum_notice_period": {
+        "standard": "2 months",
+        "rent_arrears_ground_8": "2 weeks",
+        "antisocial_behavior_ground_14": "2 weeks (if serious)"
+      }
+    },
+    "section_21": {
+      "name": "Section 21 Notice (No-Fault)",
+      "applies_to": "AST only",
+      "notice_form": "Form 6A",
+      "minimum_notice_period": "2 months",
+      "abolished": "Expected 2024-2025 (Renters Reform Bill)",
+      "requirements": [
+        "Deposit protected in approved scheme",
+        "How to Rent guide provided",
+        "Gas safety certificate provided",
+        "EPC provided",
+        "Not within first 4 months of tenancy",
+        "No retaliatory eviction (within 6 months of complaint)"
+      ]
+    }
+  },
+  "grounds": {
+    "total": 17,
+    "mandatory_count": 8,
+    "discretionary_count": 9,
+    "files": {
+      "ground_1": "grounds/ground_1.json",
+      "ground_2": "grounds/ground_2.json",
+      "ground_3": "grounds/ground_3.json",
+      "ground_4": "grounds/ground_4.json",
+      "ground_5": "grounds/ground_5.json",
+      "ground_6": "grounds/ground_6.json",
+      "ground_7": "grounds/ground_7.json",
+      "ground_8": "grounds/ground_8.json",
+      "ground_9": "grounds/ground_9.json",
+      "ground_10": "grounds/ground_10.json",
+      "ground_11": "grounds/ground_11.json",
+      "ground_12": "grounds/ground_12.json",
+      "ground_13": "grounds/ground_13.json",
+      "ground_14": "grounds/ground_14.json",
+      "ground_15": "grounds/ground_15.json",
+      "ground_16": "grounds/ground_16.json",
+      "ground_17": "grounds/ground_17.json"
+    }
+  },
+  "court_system": {
+    "court": "County Court",
+    "online_claims": "Possession Claims Online (for rent arrears)",
+    "forms": {
+      "claim_form": "N5 (possession claim)",
+      "particulars": "N119",
+      "defense": "N11"
+    },
+    "fees": {
+      "court_fee": 355,
+      "bailiff_warrant": 130
+    }
+  },
+  "key_legislation": [
+    {
+      "act": "Housing Act 1988",
+      "key_sections": ["Section 5 (security of tenure)", "Section 8 (notice seeking possession)", "Section 21 (recovery of possession on expiry)", "Schedule 2 (grounds for possession)"]
+    },
+    {
+      "act": "Housing Act 1996",
+      "key_sections": ["Updated Ground 14 (antisocial behaviour)"]
+    },
+    {
+      "act": "Deregulation Act 2015",
+      "key_sections": ["Retaliatory eviction protection"]
+    },
+    {
+      "act": "Tenant Fees Act 2019",
+      "key_sections": ["Deposit caps", "Prohibited payments"]
+    },
+    {
+      "act": "Homes (Fitness for Human Habitation) Act 2018",
+      "key_sections": ["Implied terms on fitness"]
+    }
+  ],
+  "deposit_protection": {
+    "required": true,
+    "schemes": ["DPS (Deposit Protection Service)", "MyDeposits", "TDS (Tenancy Deposit Scheme)"],
+    "types": ["Custodial", "Insured"],
+    "deadline": "30 days from receipt",
+    "maximum": "5 weeks' rent (up to £50k pa), 6 weeks (over £50k pa)"
+  },
+  "hmo_licensing": {
+    "mandatory_hmo": {
+      "trigger": "5+ persons in 2+ households sharing facilities",
+      "whole_building": "3+ stories"
+    },
+    "additional_licensing": "Council discretion for other HMOs",
+    "selective_licensing": "Council discretion for areas with ASB/poor management"
+  },
+  "eviction_ban": {
+    "note": "No evictions allowed without court order",
+    "illegal_eviction": "Criminal offense under Protection from Eviction Act 1977"
+  }
+}

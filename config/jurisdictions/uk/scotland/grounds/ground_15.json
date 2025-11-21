@@ -1,0 +1,37 @@
+{
+  "ground": "15",
+  "category": "home_carer",
+  "name": "Property for Home Carer",
+  "short_description": "Property required for person providing care services",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 15",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "care_purpose": {
+      "use": "Property used to provide care services to person in locality",
+      "requirement": "Person requires property to continue providing care"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "84 days"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "84 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Evidence of care provision",
+    "Need for accommodation",
+    "Care recipient details",
+    "Care arrangements"
+  ],
+  "typical_timeline": {
+    "notice_period": "84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "6-9 months"
+  },
+  "notes": "Specific to Scotland. Allows eviction where property needed for live-in carer."
+}

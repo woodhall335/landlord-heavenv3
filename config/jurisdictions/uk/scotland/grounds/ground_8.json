@@ -1,0 +1,56 @@
+{
+  "ground": "8",
+  "category": "property_condition",
+  "name": "Property to be Used for Non-Residential Purpose",
+  "short_description": "Landlord intends to use property for non-residential purpose",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 8",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "intention": {
+      "use": "Non-residential purpose",
+      "examples": ["Commercial use", "Office", "Storage", "Community facility"],
+      "timing": "Within reasonable time after tenant leaves"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "84 days"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "84 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Evidence of intended non-residential use",
+    "Planning permission for change of use",
+    "Business plans or commercial lease proposals",
+    "Timeline for conversion"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Clear non-residential purpose",
+      "Planning permission obtained",
+      "Commercial tenant identified",
+      "Genuine intention proven"
+    ],
+    "medium_probability": [
+      "Intention genuine but planning pending",
+      "Commercial use feasible but not confirmed"
+    ],
+    "low_probability": [
+      "No clear non-residential purpose",
+      "No planning permission",
+      "Intention not genuine",
+      "Not reasonable"
+    ]
+  },
+  "typical_timeline": {
+    "notice_period": "84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "6-9 months"
+  },
+  "notes": "Requires genuine intention and usually planning permission for change of use. Tribunal assesses reasonableness."
+}

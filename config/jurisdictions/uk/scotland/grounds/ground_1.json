@@ -1,0 +1,109 @@
+{
+  "ground": "1",
+  "category": "rent_arrears",
+  "name": "Rent Arrears",
+  "short_description": "Tenant has been in rent arrears for three consecutive months",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 1",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "arrears_duration": {
+      "minimum": "Arrears for three consecutive months",
+      "test": "Rent due but unpaid"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "28 days (if in arrears at notice date), or 84 days (if not in arrears)",
+      "tribunal_application": "Can apply to First-tier Tribunal after notice period expires"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "28 days (if rent arrears at notice date) OR 84 days (if not)",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Rent statement/ledger showing arrears",
+    "Tenancy agreement with rent amount and due dates",
+    "Notice to Leave correctly served",
+    "Proof of service",
+    "Current arrears position",
+    "Pre-action requirements met"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Clear three consecutive months of arrears",
+      "Pre-action requirements followed",
+      "Substantial arrears",
+      "No engagement from tenant",
+      "Reasonable for Tribunal to grant eviction"
+    ],
+    "medium_probability": [
+      "Arrears just over three months",
+      "Some tenant engagement",
+      "Pre-action partially followed"
+    ],
+    "low_probability": [
+      "Arrears below three months threshold",
+      "Strong pre-action defense",
+      "Tribunal finds unreasonable",
+      "Housing Benefit/UC delays"
+    ]
+  },
+  "red_flags": [
+    "Pre-action requirements not met",
+    "Arrears below three months",
+    "Tenant has valid counterclaim",
+    "Rent calculation disputed",
+    "Retaliatory eviction",
+    "Landlord registration issues"
+  ],
+  "typical_timeline": {
+    "notice_period": "28 or 84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "4-8 months"
+  },
+  "costs": {
+    "tribunal_fee": "Free for tenants, landlords pay modest fees",
+    "sheriff_officer_fee": "£100-£150 for eviction",
+    "legal_costs": "£1,000-£2,500 if represented"
+  },
+  "tenant_defenses": [
+    "Pre-action requirements not met",
+    "Arrears below three months",
+    "Housing Benefit/UC delays",
+    "Disrepair counterclaim",
+    "Not reasonable for tribunal to grant",
+    "Landlord not registered",
+    "Deposit not protected"
+  ],
+  "related_grounds": [],
+  "notes": "Scotland Ground 1 is similar to England's Ground 8 but no longer mandatory - Tribunal has discretion. Pre-action requirements (Pre-Action Requirements (Notice to Leave and Notice of Proceedings) (Scotland) Regulations 2020) are STRICT. Must show attempts to resolve arrears before eviction.",
+  "pre_action_requirements": {
+    "mandatory": true,
+    "steps": [
+      "Provide clear rent statement",
+      "Give information about rent arrears and consequences",
+      "Provide information on sources of advice and assistance",
+      "Give tenant reasonable time to pay or discuss",
+      "Consider payment arrangement proposals",
+      "Make reasonable attempts to agree payment plan"
+    ],
+    "evidence": "Must provide evidence to Tribunal that these were followed",
+    "failure": "Tribunal likely to refuse eviction if not followed"
+  },
+  "case_law": [
+    "Hunter v Tindale [2020] - Pre-action requirements must be followed",
+    "Aberdeen City Council v Lutz [2021] - Tribunal considers reasonableness"
+  ],
+  "tribunal_considerations": [
+    "Were pre-action requirements met?",
+    "Amount and duration of arrears?",
+    "Tenant's engagement and efforts?",
+    "Reasons for arrears?",
+    "Has payment plan been proposed or tried?",
+    "Tenant's personal circumstances?",
+    "Is eviction reasonable in all circumstances?"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "ground": "5",
+  "category": "selling_property",
+  "name": "Landlord Intends to Sell Property",
+  "short_description": "Landlord intends to sell property within 3 months",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 5",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "intention": {
+      "action": "Sell property on open market or to family member",
+      "timing": "Within 3 months of tenant leaving"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "84 days",
+      "specify_intention": "Must state intention to sell"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "84 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Evidence of intention to sell (estate agent instructions, valuation)",
+    "Financial circumstances requiring sale",
+    "Marketing materials prepared",
+    "Solicitor correspondence",
+    "Timeline for sale"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Estate agent instructed",
+      "Property valued",
+      "Financial need to sell",
+      "Marketing materials ready",
+      "Genuine intention proven"
+    ],
+    "medium_probability": [
+      "Intention genuine but preparation limited",
+      "Financial need less pressing"
+    ],
+    "low_probability": [
+      "No evidence of sale preparations",
+      "Landlord in good financial position",
+      "History of false sale intentions",
+      "Not reasonable"
+    ]
+  },
+  "red_flags": [
+    "No sale preparations",
+    "Property not valued",
+    "No estate agent involved",
+    "Landlord financially stable",
+    "History of using ground without selling",
+    "Re-lets property instead"
+  ],
+  "typical_timeline": {
+    "notice_period": "84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "6-9 months"
+  },
+  "costs": {
+    "tribunal_fee": "Modest",
+    "sheriff_officer_fee": "£100-£150",
+    "legal_costs": "£1,000-£2,500"
+  },
+  "tenant_defenses": [
+    "No genuine intention to sell",
+    "No evidence of preparations",
+    "Not reasonable",
+    "Retaliatory eviction",
+    "Property not marketed within 3 months"
+  ],
+  "notes": "Must actually market property within 3 months or face penalty. Cannot re-let instead.",
+  "marketing_penalty": {
+    "requirement": "Must put property on market within 3 months",
+    "penalty": "Up to 6 months' rent if not marketed",
+    "evidence": "Must show estate agent instructions, adverts"
+  }
+}

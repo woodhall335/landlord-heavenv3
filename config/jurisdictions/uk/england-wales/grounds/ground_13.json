@@ -1,0 +1,148 @@
+{
+  "ground": "13",
+  "type": "discretionary",
+  "category": "property_condition",
+  "name": "Deterioration of Dwelling",
+  "short_description": "Condition of dwelling deteriorated due to tenant waste or neglect",
+  "legal_basis": {
+    "act": "Housing Act 1988",
+    "section": "Schedule 2, Ground 13",
+    "statute_year": "1988"
+  },
+  "requirements": {
+    "deterioration": {
+      "cause": "Acts of waste by tenant or tenant's neglect/default",
+      "scope": "Condition of dwelling or common parts has deteriorated",
+      "comparison": "Worse than normal fair wear and tear"
+    },
+    "lodger_acts": {
+      "included": "Deterioration caused by lodger or subtenant",
+      "tenant_liability": "Tenant liable if they failed to remove lodger after notice"
+    }
+  },
+  "notice_period": {
+    "section_8_notice": "2 months minimum",
+    "court_proceedings": "Can be started after 2 months"
+  },
+  "evidence_required": [
+    "Check-in inventory and condition report",
+    "Current photos/videos showing deterioration",
+    "Check-out report or inspection report",
+    "Expert evidence (surveyor report)",
+    "Repair/cleaning quotes",
+    "Comparison photos (before and after)",
+    "Witness statements from inspections"
+  ],
+  "acts_of_waste": {
+    "definition": "Deliberate or negligent acts causing damage",
+    "examples": [
+      "Removing fixtures and fittings",
+      "Deliberate damage to property",
+      "Major alterations without consent",
+      "Allowing severe damp through failure to ventilate/heat",
+      "Not reporting leaks leading to major damage",
+      "Hoarding causing infestation or damage",
+      "Improper disposal of waste causing damage"
+    ]
+  },
+  "neglect_examples": [
+    "Failure to ventilate causing severe mold",
+    "Not heating property in winter causing frozen pipes",
+    "Not reporting leaks/issues allowing damage to worsen",
+    "Not maintaining cleanliness causing infestation",
+    "Allowing garden to become severely overgrown",
+    "Blocking drains through improper use"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Clear before/after evidence",
+      "Expert report showing significant deterioration",
+      "Deterioration beyond fair wear and tear",
+      "Tenant's acts or neglect clearly caused damage",
+      "Substantial repair costs (£thousands)",
+      "Tenant ignored warnings",
+      "Reasonable to grant possession"
+    ],
+    "medium_probability": [
+      "Moderate deterioration shown",
+      "Some evidence of tenant fault",
+      "Repair costs moderate",
+      "Mixture of tenant damage and fair wear"
+    ],
+    "low_probability": [
+      "Normal fair wear and tear",
+      "Insufficient evidence",
+      "Deterioration caused by property defects not tenant",
+      "Minor damage only",
+      "Landlord failed to maintain/repair",
+      "Not reasonable to grant possession"
+    ]
+  },
+  "red_flags": [
+    "No inventory or check-in photos",
+    "Deterioration is normal wear and tear",
+    "Damage caused by property defects (e.g., leaking roof)",
+    "Landlord failed to repair causing deterioration",
+    "Limited photographic evidence",
+    "No expert report on significant damage",
+    "Tenant reported issues landlord ignored",
+    "Retaliatory eviction context"
+  ],
+  "typical_timeline": {
+    "notice_period": "2 months",
+    "court_proceedings": "6-10 months",
+    "total": "8-12 months"
+  },
+  "costs": {
+    "court_fee": 355,
+    "bailiff_fee": 130,
+    "legal_costs": "£1,500-£3,500",
+    "expert_reports": "£400-£1,200 (surveyor)",
+    "repair_costs": "Claimable separately"
+  },
+  "tenant_defenses": [
+    "Damage is fair wear and tear",
+    "Deterioration caused by property defects",
+    "Landlord failed to maintain/repair",
+    "Tenant reported issues but landlord ignored",
+    "No proper inventory at start",
+    "Insufficient evidence of deterioration",
+    "Damage existed before tenancy",
+    "Not reasonable to grant possession",
+    "Counterclaim for disrepair"
+  ],
+  "related_grounds": ["12", "14"],
+  "notes": "Ground 13 is DISCRETIONARY - focuses on property condition. Requires strong evidence of deterioration beyond fair wear and tear caused by tenant. Often combined with Ground 12 (breach) or 14 (furniture damage). Inventory crucial.",
+  "case_law": [
+    "Holloway v Povey [1984] - Must distinguish waste/neglect from fair wear",
+    "Tormes Property Co v Landau [1971] - Evidence of deterioration required",
+    "Calabar Properties v Stitcher [1984] - Tenant's fault must be established"
+  ],
+  "court_considerations": [
+    "Is there clear evidence of deterioration?",
+    "Was deterioration caused by tenant's acts or neglect?",
+    "Is damage beyond fair wear and tear?",
+    "Was proper inventory conducted?",
+    "Did tenant report issues?",
+    "Did landlord maintain property?",
+    "How significant is the deterioration?",
+    "Is possession reasonable and proportionate?"
+  ],
+  "fair_wear_and_tear": {
+    "definition": "Reasonable deterioration from normal use over time",
+    "examples": [
+      "Carpet wearing in high traffic areas",
+      "Paint scuffing on walls",
+      "Minor scratches on woodwork",
+      "Slight fading of curtains",
+      "General aging of fixtures"
+    ],
+    "not_fair_wear": [
+      "Large holes in walls",
+      "Carpet heavily stained or burned",
+      "Broken fixtures",
+      "Severe mold from lack of ventilation",
+      "Major uncleanliness"
+    ]
+  }
+}

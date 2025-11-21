@@ -1,0 +1,37 @@
+{
+  "ground": "10",
+  "category": "landlord_hardship",
+  "name": "Landlord Not Registered",
+  "short_description": "Landlord not registered and Tribunal satisfied special circumstances",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 10",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "registration": {
+      "status": "Landlord not registered",
+      "special_circumstances": "Tribunal satisfied special circumstances justify eviction"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "84 days"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "84 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Registration status from local authority",
+    "Circumstances preventing registration",
+    "Efforts made to register",
+    "Reason for non-registration"
+  ],
+  "typical_timeline": {
+    "notice_period": "84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "6-9 months"
+  },
+  "notes": "Very rarely used. Tribunal unlikely to grant unless exceptional circumstances. Usually landlord should register rather than evict."
+}

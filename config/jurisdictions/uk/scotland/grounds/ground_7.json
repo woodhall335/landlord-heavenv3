@@ -1,0 +1,58 @@
+{
+  "ground": "7",
+  "category": "property_condition",
+  "name": "Property Subject to HMO Change",
+  "short_description": "Property subject to HMO licensing requirement change",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 7",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "hmo_status_change": {
+      "scenarios": [
+        "Property becomes HMO requiring license",
+        "HMO license revoked",
+        "Cannot comply with HMO license conditions with current tenant"
+      ]
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "84 days"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "84 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "HMO license application or refusal",
+    "Council correspondence about HMO status",
+    "Evidence property requires HMO license",
+    "License conditions that cannot be met",
+    "Expert evidence if needed"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Clear HMO licensing issue",
+      "Council requires changes",
+      "Cannot comply with tenant in occupation",
+      "Documented correspondence"
+    ],
+    "medium_probability": [
+      "HMO issue present but solutions possible",
+      "Some compliance achievable"
+    ],
+    "low_probability": [
+      "No genuine HMO issue",
+      "Can comply with tenant present",
+      "Not reasonable"
+    ]
+  },
+  "typical_timeline": {
+    "notice_period": "84 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "6-9 months"
+  },
+  "notes": "Specific to Scotland's HMO licensing regime. Must show genuine licensing issue that necessitates tenant leaving."
+}

@@ -1,0 +1,66 @@
+{
+  "ground": "18",
+  "category": "false_statement",
+  "name": "False Statement by Tenant",
+  "short_description": "Tenant made false statement causing landlord to grant tenancy",
+  "legal_basis": {
+    "act": "Private Housing (Tenancies) (Scotland) Act 2016",
+    "section": "Schedule 3, Ground 18",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "false_statement": {
+      "made_by": "Tenant or at tenant's instigation",
+      "recipient": "Landlord or landlord's agent",
+      "effect": "Induced landlord to grant tenancy or accept tenant as tenant",
+      "materiality": "False and material statement"
+    },
+    "notice_requirement": {
+      "notice_to_leave": "Must serve Notice to Leave",
+      "minimum_period": "28 days"
+    }
+  },
+  "notice_period": {
+    "notice_to_leave": "28 days",
+    "tribunal_application": "After notice period expires"
+  },
+  "evidence_required": [
+    "Application forms or correspondence with false statement",
+    "Evidence statement was false",
+    "Landlord's reliance on statement",
+    "Evidence would not have granted tenancy if truth known"
+  ],
+  "false_statement_examples": [
+    "False employment or income details",
+    "Forged references",
+    "Concealed previous evictions",
+    "False identity",
+    "Forged documents"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Serious falsehood proven",
+      "Clear reliance by landlord",
+      "Material to tenancy decision",
+      "Forged documents or false identity"
+    ],
+    "medium_probability": [
+      "Exaggerated information",
+      "Some reliance but other factors",
+      "Moderate falsity"
+    ],
+    "low_probability": [
+      "Minor inaccuracy",
+      "Honest mistake",
+      "Not material",
+      "No reliance",
+      "Long time since tenancy granted"
+    ]
+  },
+  "typical_timeline": {
+    "notice_period": "28 days",
+    "tribunal_proceedings": "3-6 months",
+    "total": "4-7 months"
+  },
+  "notes": "Similar to England's Ground 17. Must prove falsehood, materiality, and reliance. Tribunal considers reasonableness and time elapsed."
+}

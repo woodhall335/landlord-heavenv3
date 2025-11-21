@@ -1,0 +1,75 @@
+# Decision Engine Rules - Northern Ireland
+# Maps collected facts to recommended grounds
+
+version: "1.0"
+jurisdiction: "northern-ireland"
+last_updated: "2025-11-21"
+
+# Notice to Quit + County Court proceedings
+procedure: "Notice to Quit + County Court possession claim"
+minimum_notice: "28_days_periodic"
+
+rules:
+  - rule_id: "ni_rent_001"
+    name: "Rent Arrears"
+    priority: 1
+    conditions:
+      rent_arrears: "> 0"
+    recommended_ground: "rent_arrears"
+    notice_period: "28_days"
+    success_probability: "medium_to_high"
+    depends_on: "Amount and reason for arrears"
+
+  - rule_id: "ni_breach_001"
+    name: "Breach of Tenancy Terms"
+    priority: 1
+    conditions:
+      breach_of_tenancy: true
+    recommended_ground: "breach"
+    notice_period: "28_days"
+    success_probability: "medium"
+
+  - rule_id: "ni_asb_001"
+    name: "Antisocial Behaviour"
+    priority: 1
+    conditions:
+      antisocial_behavior: true
+    recommended_ground: "antisocial_behavior"
+    notice_period: "28_days"
+    success_probability: "medium_to_high"
+    depends_on: "Evidence quality"
+
+  - rule_id: "ni_landlord_001"
+    name: "Landlord Requires for Own Occupation"
+    priority: 2
+    conditions:
+      landlord_requires: true
+    recommended_ground: "landlord_occupation"
+    notice_period: "28_days"
+    success_probability: "medium"
+
+  - rule_id: "ni_sell_001"
+    name: "Landlord Intends to Sell"
+    priority: 2
+    conditions:
+      intends_to_sell: true
+    recommended_ground: "sale"
+    notice_period: "28_days"
+    success_probability: "medium"
+
+timelines:
+  notice_to_quit: "28_days"
+  court_proceedings: "4-8_months"
+  total: "5-9_months"
+
+costs:
+  civil_bill_fee: "150-200"
+  enforcement: "100-150"
+  legal_costs: "1500-3500"
+
+key_points:
+  - "Notice to Quit must be in writing"
+  - "Must end on rent payment day (periodic tenancies)"
+  - "Court order required for possession"
+  - "Deposit must be protected in TDS NI"
+  - "14 day protection deadline"

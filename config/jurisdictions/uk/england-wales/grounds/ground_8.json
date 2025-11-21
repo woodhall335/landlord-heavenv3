@@ -1,0 +1,125 @@
+{
+  "ground": "8",
+  "type": "mandatory_with_conditions",
+  "category": "rent_arrears",
+  "name": "Rent Arrears (Serious)",
+  "short_description": "Serious rent arrears at notice and hearing date",
+  "legal_basis": {
+    "act": "Housing Act 1988",
+    "section": "Schedule 2, Ground 8",
+    "statute_year": "1988"
+  },
+  "requirements": {
+    "arrears_at_notice": {
+      "weekly_rent": "At least 2 months' rent in arrears",
+      "monthly_rent": "At least 2 months' rent in arrears",
+      "quarterly_rent": "At least one quarter's rent in arrears (over 3 months)",
+      "yearly_rent": "At least 3 months' rent in arrears"
+    },
+    "arrears_at_hearing": {
+      "requirement": "Same level of arrears still outstanding",
+      "note": "If arrears reduced below threshold, Ground 8 cannot be used"
+    }
+  },
+  "notice_period": {
+    "section_8_notice": "2 weeks for Ground 8 only (instead of usual 2 months)",
+    "court_proceedings": "Can be started after 2 weeks",
+    "accelerated": "Shorter notice makes this fastest route"
+  },
+  "evidence_required": [
+    "Rent account/ledger showing arrears",
+    "Tenancy agreement with rent amount and due dates",
+    "Section 8 notice served correctly",
+    "Proof arrears exist at both notice and hearing dates",
+    "Breakdown of arrears calculation",
+    "Proof of service of Section 8 notice",
+    "Any payment history"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Substantial arrears (3+ months) at both notice and hearing",
+      "Clean rent account (no landlord errors)",
+      "Tenant has made no payments or proposals",
+      "Arrears increasing",
+      "No genuine dispute about arrears",
+      "Tenant not engaging with possession process"
+    ],
+    "medium_probability": [
+      "Arrears just over threshold",
+      "Tenant making some payments but insufficient",
+      "Some minor accounting issues but arrears clear",
+      "Tenant has made proposals to repay"
+    ],
+    "low_probability": [
+      "Arrears fallen below threshold by hearing date",
+      "Genuine dispute about arrears amount",
+      "Landlord errors in rent account",
+      "Tenant has cleared arrears by hearing",
+      "Counterclaim for disrepair reduces arrears below threshold",
+      "Housing Benefit delays caused arrears"
+    ]
+  },
+  "red_flags": [
+    "Arrears calculation incorrect",
+    "Arrears below threshold at hearing",
+    "Tenant has valid counterclaim (disrepair)",
+    "Housing Benefit administrative delays",
+    "Rent account shows landlord errors",
+    "Tenant can prove rent was paid",
+    "Discriminatory reason for serving notice",
+    "Retaliatory eviction (tenant complained about repairs)"
+  ],
+  "typical_timeline": {
+    "notice_period": "2 weeks (Ground 8 only)",
+    "court_proceedings": "4-6 months",
+    "total": "4.5-6.5 months (faster than other grounds)"
+  },
+  "costs": {
+    "court_fee": 355,
+    "bailiff_fee": 130,
+    "legal_costs": "£800-£2,000",
+    "recoverable_rent": "Can claim arrears plus ongoing rent (rent mesne profits)"
+  },
+  "tenant_defenses": [
+    "Arrears below threshold at hearing date",
+    "Dispute about arrears calculation",
+    "Housing Benefit delays (UC issues)",
+    "Landlord failed to register deposit (makes tenancy periodic)",
+    "Disrepair counterclaim offsets arrears",
+    "Rent not properly demanded",
+    "Tenant has cleared arrears by hearing",
+    "Retaliatory eviction defenses"
+  ],
+  "related_grounds": ["10", "11"],
+  "notes": "Ground 8 is MANDATORY if conditions met - court MUST grant possession if arrears at both notice and hearing. Most commonly used ground. Only 2 weeks notice required. However, strict threshold means many landlords use discretionary Grounds 10/11 as backup.",
+  "case_law": [
+    "Issa v Hackney LBC [1997] - Arrears must exist at both notice and hearing",
+    "Bird v Hildage [1948] - Rent account must be accurate",
+    "Hayman v Rowlands [1957] - Counterclaims can reduce arrears below threshold",
+    "North British Housing Association v Matthews [2004] - Housing Benefit delays considered"
+  ],
+  "court_considerations": [
+    "Are arrears at threshold at date of notice?",
+    "Are arrears still at threshold at date of hearing?",
+    "Is the rent account accurate?",
+    "Are there any valid counterclaims?",
+    "Is there a genuine dispute about the arrears?",
+    "Have Housing Benefit issues contributed?"
+  ],
+  "calculation_examples": {
+    "weekly_rent": {
+      "rent_amount": "£200 per week",
+      "threshold": "£400 (2 weeks)",
+      "notice_arrears": "£600",
+      "hearing_arrears": "£500",
+      "result": "Ground 8 proven (both over £400)"
+    },
+    "monthly_rent": {
+      "rent_amount": "£1,000 per month",
+      "threshold": "£2,000 (2 months)",
+      "notice_arrears": "£2,500",
+      "hearing_arrears": "£1,800",
+      "result": "Ground 8 fails (hearing arrears below £2,000)"
+    }
+  }
+}
