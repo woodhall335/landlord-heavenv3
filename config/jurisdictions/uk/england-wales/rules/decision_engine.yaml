@@ -1,0 +1,289 @@
+# Decision Engine Rules - England & Wales
+# Maps collected facts to recommended grounds for possession
+
+version: "1.0"
+jurisdiction: "england-wales"
+last_updated: "2025-11-21"
+
+# Rule evaluation order: mandatory grounds first, then discretionary
+evaluation_order:
+  - mandatory_grounds
+  - discretionary_grounds
+
+# Ground recommendation rules
+rules:
+
+  # RENT ARREARS SCENARIOS
+  - rule_id: "ew_rent_001"
+    name: "Serious Rent Arrears - Ground 8"
+    priority: 1
+    conditions:
+      rent_arrears: ">= 2_months"
+      arrears_at_notice: true
+      arrears_at_hearing_likely: true
+      rent_payment_period: ["weekly", "monthly", "quarterly", "yearly"]
+    recommended_grounds:
+      primary: [8]
+      backup: [10, 11]
+    success_probability: "high"
+    notice_period: "2_weeks"
+    reasoning: "Ground 8 is mandatory if arrears threshold met at both notice and hearing. Grounds 10/11 as backup if arrears reduce."
+
+  - rule_id: "ew_rent_002"
+    name: "Moderate Rent Arrears - Ground 10"
+    priority: 2
+    conditions:
+      rent_arrears: "< 2_months"
+      rent_arrears: "> 0"
+    recommended_grounds:
+      primary: [10]
+      backup: [11]
+    success_probability: "medium"
+    notice_period: "2_months"
+    reasoning: "Ground 10 discretionary - court considers reasonableness and amount."
+
+  - rule_id: "ew_rent_003"
+    name: "Persistent Late Payment - Ground 11"
+    priority: 3
+    conditions:
+      late_payments: ">= 6_months"
+      current_arrears: "<= 1_month"
+    recommended_grounds:
+      primary: [11]
+      backup: [10]
+    success_probability: "medium"
+    notice_period: "2_months"
+    reasoning: "Pattern of late payment even if eventually paid."
+
+  # LANDLORD OCCUPATION
+  - rule_id: "ew_landlord_001"
+    name: "Landlord Previously Lived There - Ground 1"
+    priority: 1
+    conditions:
+      landlord_prior_occupation: true
+      notice_given_at_start: true
+      landlord_needs_property: true
+    recommended_grounds:
+      primary: [1]
+    success_probability: "high"
+    notice_period: "2_months"
+    red_flags:
+      - no_written_notice: "Mandatory ground fails without notice (unless court dispenses)"
+      - cannot_prove_occupation: "Must prove prior occupation"
+
+  - rule_id: "ew_landlord_002"
+    name: "Landlord Wants to Live - No Prior Notice"
+    priority: 2
+    conditions:
+      landlord_wants_to_live: true
+      notice_given_at_start: false
+      landlord_prior_occupation: false
+    recommended_grounds:
+      primary: []
+      backup: []
+    success_probability: "none"
+    notice_period: null
+    reasoning: "Cannot use Ground 1 without prior notice. Consider Section 21 instead."
+
+  # MORTGAGEE POSSESSION
+  - rule_id: "ew_mortgage_001"
+    name: "Lender Requires Possession - Ground 2"
+    priority: 1
+    conditions:
+      mortgage_predates_tenancy: true
+      lender_requiring_possession: true
+      notice_given_at_start: true
+    recommended_grounds:
+      primary: [2]
+    success_probability: "high"
+    notice_period: "2_months"
+
+  # ANTISOCIAL BEHAVIOUR
+  - rule_id: "ew_asb_001"
+    name: "Serious Antisocial Behaviour - Ground 14"
+    priority: 1
+    conditions:
+      antisocial_behavior: true
+      severity: ["serious", "criminal"]
+      evidence_available: true
+    recommended_grounds:
+      primary: [14]
+      backup: [12]
+    success_probability: "high"
+    notice_period: "2_weeks"
+    reasoning: "Serious ASB qualifies for 2 week notice. Ground 12 backup if also breaches tenancy terms."
+
+  - rule_id: "ew_asb_002"
+    name: "Moderate Nuisance - Ground 14"
+    priority: 2
+    conditions:
+      antisocial_behavior: true
+      severity: "moderate"
+      multiple_incidents: true
+    recommended_grounds:
+      primary: [14]
+    success_probability: "medium"
+    notice_period: "2_months"
+    reasoning: "Discretionary - court considers severity and impact."
+
+  # BREACH OF TENANCY
+  - rule_id: "ew_breach_001"
+    name: "Material Breach - Ground 12"
+    priority: 1
+    conditions:
+      breach_of_tenancy: true
+      breach_type: ["unauthorized_subletting", "major_damage", "illegal_use"]
+      breach_continuing: true
+    recommended_grounds:
+      primary: [12]
+      backup: [13, 14]
+    success_probability: "high"
+    notice_period: "2_months"
+
+  - rule_id: "ew_breach_002"
+    name: "Unauthorized Pets - Ground 12"
+    priority: 2
+    conditions:
+      unauthorized_pets: true
+      tenancy_prohibits_pets: true
+      warnings_given: true
+    recommended_grounds:
+      primary: [12]
+    success_probability: "medium"
+    notice_period: "2_months"
+
+  # PROPERTY CONDITION
+  - rule_id: "ew_condition_001"
+    name: "Property Deterioration - Ground 13"
+    priority: 1
+    conditions:
+      property_deteriorated: true
+      caused_by_tenant: true
+      beyond_fair_wear: true
+      significant_damage: true
+    recommended_grounds:
+      primary: [13]
+      backup: [12]
+    success_probability: "high"
+    notice_period: "2_months"
+
+  - rule_id: "ew_furniture_001"
+    name: "Furniture Damage - Ground 15"
+    priority: 2
+    conditions:
+      furnished_tenancy: true
+      furniture_damaged: true
+      inventory_available: true
+    recommended_grounds:
+      primary: [15]
+      backup: [12, 13]
+    success_probability: "medium"
+    notice_period: "2_months"
+
+  # REFURBISHMENT
+  - rule_id: "ew_works_001"
+    name: "Substantial Works - Ground 6"
+    priority: 1
+    conditions:
+      substantial_works_planned: true
+      vacant_possession_required: true
+      landlord_owned_2_years: true
+      planning_permission: true
+      funding_secured: true
+    recommended_grounds:
+      primary: [6]
+    success_probability: "high"
+    notice_period: "2_months"
+    red_flags:
+      - owned_less_than_2_years: "Ground 6 fails - landlord must have owned 2+ years"
+      - works_not_substantial: "Minor works insufficient"
+      - can_do_with_tenant: "Must prove vacant possession necessary"
+
+  # SECTION 21 (NO FAULT)
+  - rule_id: "ew_s21_001"
+    name: "Section 21 - All Requirements Met"
+    priority: 1
+    conditions:
+      tenancy_type: "AST"
+      deposit_protected: true
+      how_to_rent_provided: true
+      gas_safety_provided: true
+      epc_provided: true
+      not_first_4_months: true
+      no_recent_complaint: true
+      properly_licensed: true
+    recommended_route: "section_21"
+    success_probability: "very_high"
+    notice_period: "2_months"
+    reasoning: "Section 21 provides quickest route if all requirements met."
+
+# Red Flag Detection
+red_flags:
+  deposit_not_protected:
+    blocks: ["section_21"]
+    action: "Must protect deposit before serving Section 21"
+
+  retaliatory_eviction:
+    blocks: ["section_21"]
+    conditions:
+      complaint_made: true
+      complaint_within_6_months: true
+      local_authority_notice: true
+    action: "Section 21 invalid due to retaliatory eviction protection"
+
+  landlord_breach:
+    affects: "all_discretionary_grounds"
+    conditions:
+      disrepair: true
+      tenant_complained: true
+      landlord_failed_to_repair: true
+    impact: "Weakens landlord's case - tenant may have counterclaim"
+
+  hmo_not_licensed:
+    blocks: ["section_21"]
+    affects: ["all_grounds"]
+    action: "Cannot evict from unlicensed HMO - must obtain license first"
+
+# Success Probability Factors
+success_factors:
+  high_probability:
+    - clear_evidence: true
+    - mandatory_ground: true
+    - strict_requirements_met: true
+    - no_tenant_defenses: true
+
+  medium_probability:
+    - discretionary_ground: true
+    - some_evidence: true
+    - reasonable_case: true
+
+  low_probability:
+    - weak_evidence: true
+    - strong_tenant_defenses: true
+    - unreasonable_to_grant: true
+
+# Timeline Estimates
+timelines:
+  ground_8_mandatory:
+    notice_period: "2_weeks"
+    court_proceedings: "4-6_months"
+    total: "4.5-6.5_months"
+
+  standard_section_8:
+    notice_period: "2_months"
+    court_proceedings: "6-10_months"
+    total: "8-12_months"
+
+  section_21:
+    notice_period: "2_months"
+    court_proceedings: "4-6_months"
+    total: "6-8_months"
+    accelerated: "Can use accelerated procedure if no defense filed"
+
+# Cost Estimates
+costs:
+  court_fee: 355
+  bailiff_fee: 130
+  legal_costs_simple: "800-2000"
+  legal_costs_complex: "2000-5000"
+  expert_reports: "300-1500"
