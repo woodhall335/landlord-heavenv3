@@ -1,0 +1,58 @@
+# Application
+NEXT_PUBLIC_APP_NAME="Landlord Heaven"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NODE_ENV="development"
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL="your-supabase-project-url"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-supabase-anon-key"
+SUPABASE_SERVICE_ROLE_KEY="your-supabase-service-role-key"
+
+# OpenAI (wizard, decision, doc drafting)
+OPENAI_API_KEY="your-openai-api-key"
+OPENAI_ORG_ID="your-openai-org-id"
+
+# Anthropic (QA, explanations)
+ANTHROPIC_API_KEY="your-anthropic-api-key"
+
+# Stripe core keys
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="your-stripe-publishable-key"
+STRIPE_SECRET_KEY="your-stripe-secret-key"
+STRIPE_WEBHOOK_SECRET="your-stripe-webhook-secret"
+
+# Stripe Product IDs (one-time products, core landlord flows)
+STRIPE_PRODUCT_NOTICE_ONLY="price_xxx"
+STRIPE_PRODUCT_EVICTION_PACK="price_xxx"
+STRIPE_PRODUCT_MONEY_CLAIM="price_xxx"
+STRIPE_PRODUCT_STANDARD_AST="price_xxx"
+STRIPE_PRODUCT_PREMIUM_AST="price_xxx"
+
+# Stripe Subscription (HMO Pro tiers)
+STRIPE_PRODUCT_HMO_PRO_1_5="price_xxx"
+STRIPE_PRODUCT_HMO_PRO_6_10="price_xxx"
+STRIPE_PRODUCT_HMO_PRO_11_15="price_xxx"
+STRIPE_PRODUCT_HMO_PRO_16_20="price_xxx"
+
+# Resend (Email)
+RESEND_API_KEY="re_QZ7CMDpx_12DonT5VxP2pMHB9wteNN2XV"
+RESEND_FROM_EMAIL="noreply@landlordheaven.com"
+
+# Analytics (optional)
+NEXT_PUBLIC_GA_MEASUREMENT_ID="G-XXXXXXXXXX"
+
+# Feature Flags
+NEXT_PUBLIC_ENABLE_HMO_PRO="true"
+NEXT_PUBLIC_ENABLE_MONEY_CLAIMS="true"
+
+# AI Model Configuration
+AI_MODEL_WIZARD="gpt-4.1-mini"
+AI_MODEL_DECISION="gpt-4.1-mini"
+AI_MODEL_GENERATION="gpt-4.1"          # or "gpt-4.1-turbo" etc
+AI_MODEL_QA="claude-3-5-sonnet-latest"
+
+# Rate Limiting (these are just strings; your code can interpret them or ignore)
+RATE_LIMIT_WIZARD="50 per 15 minutes"
+RATE_LIMIT_GENERATION="10 per hour"
+
+# Monitoring / Error Tracking (optional)
+SENTRY_DSN="your-sentry-dsn"
