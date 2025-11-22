@@ -11,18 +11,19 @@ import { getNextQuestion, trackTokenUsage } from '@/lib/ai';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
-const nextQuestionSchema = z.object({
-  case_id: z.string().uuid(),
-  case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']),
-  jurisdiction: z.enum(['england-wales', 'scotland', 'northern-ireland']),
-  collected_facts: z.record(z.any()),
-});
-
 export async function POST(request: Request) {
   try {
     // Allow anonymous access - user is optional
     const user = await getServerUser();
     const body = await request.json();
+
+    // Define schema inside function to avoid HMR issues
+    const nextQuestionSchema = z.object({
+      case_id: z.string().uuid(),
+      case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']),
+      jurisdiction: z.enum(['england-wales', 'scotland', 'northern-ireland']),
+      collected_facts: z.record(z.any()),
+    });
 
     // Validate input
     const validationResult = nextQuestionSchema.safeParse(body);
