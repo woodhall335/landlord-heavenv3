@@ -39,12 +39,14 @@ interface CollectedFact {
 interface WizardContainerProps {
   caseType: 'eviction' | 'money_claim' | 'tenancy_agreement';
   jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
+  editCaseId?: string; // Optional: Case ID to edit existing answers
   onComplete: (caseId: string, analysis: any) => void;
 }
 
 export const WizardContainer: React.FC<WizardContainerProps> = ({
   caseType,
   jurisdiction,
+  editCaseId,
   onComplete,
 }) => {
   // State management
@@ -79,28 +81,56 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     setIsLoading(true);
 
     try {
-      // Create case
-      const response = await fetch('/api/wizard/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ case_type: caseType, jurisdiction }),
-      });
+      // If editing, load existing case data
+      if (editCaseId) {
+        const caseResponse = await fetch(`/api/cases/${editCaseId}`);
+        if (caseResponse.ok) {
+          const caseData = await caseResponse.json();
+          setCaseId(editCaseId);
+          setCollectedFacts(caseData.case.collected_facts || {});
 
-      const data = await response.json();
-      if (data.success) {
-        setCaseId(data.case.id);
+          // Calculate progress based on existing facts
+          const factsCount = Object.keys(caseData.case.collected_facts || {}).length;
+          setProgress(Math.min((factsCount / 15) * 100, 95));
 
-        // Add welcome message
-        const welcomeMessage: Message = {
-          id: `msg-${Date.now()}`,
-          role: 'assistant',
-          content: getWelcomeMessage(caseType, jurisdiction),
-          timestamp: new Date(),
-        };
-        setMessages([welcomeMessage]);
+          // Add edit message
+          const editMessage: Message = {
+            id: `msg-${Date.now()}`,
+            role: 'assistant',
+            content: `✏️ **Editing Mode**\n\nI've loaded your previous answers. You can review and change any information. Let's continue from where you left off.`,
+            timestamp: new Date(),
+          };
+          setMessages([editMessage]);
 
-        // Get first question
-        await getNextQuestion(data.case.id, {});
+          // Get next question
+          await getNextQuestion(editCaseId, caseData.case.collected_facts || {});
+        } else {
+          throw new Error('Failed to load case for editing');
+        }
+      } else {
+        // Create new case
+        const response = await fetch('/api/wizard/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ case_type: caseType, jurisdiction }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          setCaseId(data.case.id);
+
+          // Add welcome message
+          const welcomeMessage: Message = {
+            id: `msg-${Date.now()}`,
+            role: 'assistant',
+            content: getWelcomeMessage(caseType, jurisdiction),
+            timestamp: new Date(),
+          };
+          setMessages([welcomeMessage]);
+
+          // Get first question
+          await getNextQuestion(data.case.id, {});
+        }
       }
     } catch (error: any) {
       console.error('Failed to start wizard:', error);

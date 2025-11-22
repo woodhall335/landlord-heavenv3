@@ -17,6 +17,7 @@ function WizardFlowContent() {
 
   const type = searchParams.get('type') as 'eviction' | 'money_claim' | 'tenancy_agreement' | null;
   const jurisdiction = searchParams.get('jurisdiction') as 'england-wales' | 'scotland' | 'northern-ireland' | null;
+  const editCaseId = searchParams.get('edit'); // Case ID to edit
 
   // Validate params
   if (!type || !jurisdiction) {
@@ -39,6 +40,7 @@ function WizardFlowContent() {
     <WizardContainer
       caseType={type}
       jurisdiction={jurisdiction}
+      editCaseId={editCaseId || undefined}
       onComplete={handleComplete}
     />
   );

@@ -270,6 +270,15 @@ export default function WizardPreviewPage() {
             Review your preview below. Purchase to download the final documents
             without watermarks.
           </p>
+          <div className="mt-6">
+            <Button
+              onClick={() => router.push(`/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&edit=${caseId}`)}
+              variant="secondary"
+              size="medium"
+            >
+              ✏️ Edit Answers
+            </Button>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
