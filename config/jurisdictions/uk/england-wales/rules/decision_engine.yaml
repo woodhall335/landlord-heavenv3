@@ -18,10 +18,9 @@ rules:
     name: "Serious Rent Arrears - Ground 8"
     priority: 1
     conditions:
-      rent_arrears: ">= 2_months"
+      rent_arrears_months: ">= 2"
       arrears_at_notice: true
       arrears_at_hearing_likely: true
-      rent_payment_period: ["weekly", "monthly", "quarterly", "yearly"]
     recommended_grounds:
       primary: [8]
       backup: [10, 11]
@@ -33,8 +32,7 @@ rules:
     name: "Moderate Rent Arrears - Ground 10"
     priority: 2
     conditions:
-      rent_arrears: "< 2_months"
-      rent_arrears: "> 0"
+      rent_arrears_months: ">= 0.5"
     recommended_grounds:
       primary: [10]
       backup: [11]
