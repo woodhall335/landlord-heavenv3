@@ -377,6 +377,20 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                         </option>
                       ))}
                     </select>
+                  ) : field.inputType === 'currency' ? (
+                    <div className="relative">
+                      <span className="absolute left-3 top-3 text-gray-500">£</span>
+                      <Input
+                        type="number"
+                        value={fieldValue}
+                        onChange={(e) => setAnswers({ ...answers, [field.id]: e.target.value })}
+                        placeholder={field.placeholder}
+                        className="pl-8 w-full"
+                        min={field.validation?.min}
+                        max={field.validation?.max}
+                        disabled={loading}
+                      />
+                    </div>
                   ) : (
                     <Input
                       type={field.inputType}
