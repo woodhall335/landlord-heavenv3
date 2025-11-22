@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Money Claim Pack - Recover Rent Arrears | Landlord Heaven",
   description:
-    "Claim unpaid rent arrears through UK courts. Money Claim Online forms, arrears schedule, interest calculator. £39.99 one-time payment.",
+    "Claim unpaid rent arrears through UK courts. Money Claim Online forms, arrears schedule, interest calculator. £129.99 one-time payment.",
 };
 
 export default function MoneyClaimPage() {
@@ -23,7 +23,7 @@ export default function MoneyClaimPage() {
               Claim Unpaid Rent Through UK Courts
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold">£39.99</span>
+              <span className="text-5xl md:text-6xl font-bold">£129.99</span>
               <span className="text-xl text-white/80">one-time</span>
             </div>
             <Link
@@ -347,7 +347,7 @@ export default function MoneyClaimPage() {
                 href="/wizard?product=money_claim"
                 className="inline-block bg-amber-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-600 transition-colors"
               >
-                Start Your Claim - £39.99 →
+                Start Your Claim - £129.99 →
               </Link>
             </div>
           </div>
@@ -382,7 +382,7 @@ export default function MoneyClaimPage() {
                 </ul>
                 <div className="mt-4">
                   <Link href="/products/complete-pack" className="text-primary hover:underline font-semibold">
-                    See Complete Pack (£79.99) →
+                    See Complete Pack (£149.99) →
                   </Link>
                 </div>
               </div>
@@ -535,10 +535,10 @@ export default function MoneyClaimPage() {
                   Should I use Money Claim Pack or Complete Pack?
                 </h3>
                 <p className="text-gray-700">
-                  Use <strong>Money Claim Pack (£39.99)</strong> if tenant has already left and you only want arrears.
+                  Use <strong>Money Claim Pack (£129.99)</strong> if tenant has already left and you only want arrears.
                   Use{" "}
                   <Link href="/products/complete-pack" className="text-primary hover:underline">
-                    Complete Pack (£79.99)
+                    Complete Pack (£149.99)
                   </Link>{" "}
                   if tenant is still in property - it includes eviction notice + possession claim + money claim.
                 </p>
@@ -560,7 +560,7 @@ export default function MoneyClaimPage() {
               href="/wizard?product=money_claim"
               className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
             >
-              Start Your Claim - £39.99 →
+              Start Your Claim - £129.99 →
             </Link>
             <p className="mt-4 text-sm text-white/80">30-day money-back guarantee • No subscription</p>
           </div>

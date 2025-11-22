@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Tenancy Agreements - AST, PRT, NI | Landlord Heaven",
   description:
-    "AI-generated tenancy agreements for UK landlords. Standard (£49.99) or Premium (£99.99) AST. Covers England & Wales, Scotland, Northern Ireland.",
+    "AI-generated tenancy agreements for UK landlords. Standard (£39.99) or Premium (£59.00) AST. Covers England & Wales, Scotland, Northern Ireland.",
 };
 
 export default function ASTPage() {
@@ -20,7 +20,7 @@ export default function ASTPage() {
               AI-Generated ASTs, PRTs & NI Tenancies - UK Compliant
             </p>
             <p className="text-lg text-white/80 mb-12 max-w-2xl mx-auto">
-              Choose between Standard (£49.99) or Premium (£99.99) depending on your property complexity and protection
+              Choose between Standard (£39.99) or Premium (£59.00) depending on your property complexity and protection
               needs
             </p>
           </div>
@@ -44,7 +44,7 @@ export default function ASTPage() {
                 <div className="bg-gray-100 p-6 text-center">
                   <h3 className="text-2xl font-bold text-charcoal mb-2">Standard AST</h3>
                   <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-4xl font-bold text-charcoal">£49.99</span>
+                    <span className="text-4xl font-bold text-charcoal">£39.99</span>
                   </div>
                   <p className="text-sm text-gray-600">Perfect for straightforward lettings</p>
                 </div>
@@ -126,7 +126,7 @@ export default function ASTPage() {
                     href="/wizard?product=ast_standard"
                     className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
                   >
-                    Get Standard AST - £49.99
+                    Get Standard AST - £39.99
                   </Link>
                 </div>
               </div>
@@ -139,7 +139,7 @@ export default function ASTPage() {
                 <div className="bg-gradient-to-br from-primary to-emerald-600 text-white p-6 text-center">
                   <h3 className="text-2xl font-bold mb-2">Premium AST</h3>
                   <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-4xl font-bold">£99.99</span>
+                    <span className="text-4xl font-bold">£59.00</span>
                   </div>
                   <p className="text-sm text-white/90">Maximum protection & customization</p>
                 </div>
@@ -270,7 +270,7 @@ export default function ASTPage() {
                     href="/wizard?product=ast_premium"
                     className="block w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-emerald-600 transition-colors"
                   >
-                    Get Premium AST - £99.99
+                    Get Premium AST - £59.00
                   </Link>
                 </div>
               </div>
@@ -526,7 +526,7 @@ export default function ASTPage() {
                   What's the difference between Standard and Premium?
                 </h3>
                 <p className="text-gray-700">
-                  Standard (£49.99) covers basic clauses for simple lettings. Premium (£99.99) adds 10+ advanced
+                  Standard (£39.99) covers basic clauses for simple lettings. Premium (£59.00) adds 10+ advanced
                   clauses: HMO provisions, guarantors, rent increases, detailed inventory, insurance requirements, and
                   stronger protections. See comparison table above.
                 </p>
@@ -579,13 +579,13 @@ export default function ASTPage() {
                 href="/wizard?product=ast_standard"
                 className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors"
               >
-                Standard - £49.99 →
+                Standard - £39.99 →
               </Link>
               <Link
                 href="/wizard?product=ast_premium"
                 className="inline-block bg-charcoal text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors"
               >
-                Premium - £99.99 →
+                Premium - £59.00 →
               </Link>
             </div>
             <p className="mt-4 text-sm text-white/80">30-day money-back guarantee on both</p>

@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Complete Eviction Pack - Notice to Court Claim | Landlord Heaven",
   description:
-    "Everything you need for a successful eviction. Notice + Court claim forms + Money claim for arrears. £79.99 one-time payment. Save £300+ vs solicitors.",
+    "Everything you need for a successful eviction. Notice + Court claim forms + Money claim for arrears. £149.99 one-time payment. Save £300+ vs solicitors.",
 };
 
 export default function CompletePackPage() {
@@ -23,8 +23,8 @@ export default function CompletePackPage() {
               Notice to Possession Order - Everything in One Package
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-2">
-              <span className="text-2xl text-white/60 line-through">£150</span>
-              <span className="text-5xl md:text-6xl font-bold">£79.99</span>
+              <span className="text-2xl text-white/60 line-through">£200</span>
+              <span className="text-5xl md:text-6xl font-bold">£149.99</span>
             </div>
             <p className="text-white/80 mb-8">One-time payment • No subscription</p>
             <Link
@@ -135,7 +135,7 @@ export default function CompletePackPage() {
                   <div className="flex-1">
                     <h3 className="text-2xl font-semibold text-charcoal mb-3">
                       Rent Arrears Money Claim{" "}
-                      <span className="text-primary text-lg">(Worth £39.99)</span>
+                      <span className="text-primary text-lg">(Worth £129.99)</span>
                     </h3>
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
@@ -187,9 +187,9 @@ export default function CompletePackPage() {
             </div>
 
             <div className="mt-8 bg-success/10 border-l-4 border-success p-6 rounded-r-lg">
-              <p className="text-charcoal font-semibold mb-2">💰 Total Value: £119.97 → You Pay: £79.99</p>
+              <p className="text-charcoal font-semibold mb-2">💰 Total Value: £208.97 → You Pay: £149.99</p>
               <p className="text-gray-700">
-                Save £40 by getting everything in one pack. Plus save £300+ vs solicitor fees.
+                Save £59 by getting everything in one pack. Plus save £350+ vs solicitor fees.
               </p>
             </div>
           </div>
@@ -280,7 +280,7 @@ export default function CompletePackPage() {
                 href="/wizard?product=complete_pack"
                 className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-emerald-600 transition-colors"
               >
-                Get Complete Pack - £79.99 →
+                Get Complete Pack - £149.99 →
               </Link>
             </div>
           </div>
@@ -296,17 +296,17 @@ export default function CompletePackPage() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="text-3xl mb-3">💰</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Save £300+ vs Solicitors</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Save £350+ vs Solicitors</h3>
                 <p className="text-gray-700 mb-2">
-                  Solicitors charge £400-600 for eviction proceedings. You pay £79.99 once.
+                  Solicitors charge £500-700 for eviction proceedings. You pay £149.99 once.
                 </p>
                 <div className="bg-gray-50 rounded p-3 text-sm">
                   <p className="text-gray-700">
-                    <span className="line-through">Solicitor: £500</span>
+                    <span className="line-through">Solicitor: £550</span>
                     <br />
-                    <span className="text-primary font-semibold">You: £79.99</span>
+                    <span className="text-primary font-semibold">You: £149.99</span>
                     <br />
-                    <span className="font-semibold">Savings: £420+</span>
+                    <span className="font-semibold">Savings: £400+</span>
                   </p>
                 </div>
               </div>
@@ -381,7 +381,7 @@ export default function CompletePackPage() {
                     <th className="text-center p-4 font-semibold text-primary">
                       Complete Pack
                       <br />
-                      <span className="text-sm font-normal">£79.99</span>
+                      <span className="text-sm font-normal">£149.99</span>
                     </th>
                   </tr>
                 </thead>
@@ -446,7 +446,7 @@ export default function CompletePackPage() {
                 href="/wizard?product=complete_pack"
                 className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-emerald-600 transition-colors"
               >
-                Get Complete Pack - £79.99 →
+                Get Complete Pack - £149.99 →
               </Link>
             </div>
           </div>
@@ -468,8 +468,8 @@ export default function CompletePackPage() {
                 </h3>
                 <p className="text-gray-700">
                   If you're confident your tenant will leave after receiving the notice, start with Notice Only
-                  (£29.99). But 70% of evictions require court action. Complete Pack (£79.99) covers the entire journey
-                  and saves you buying court forms separately later (£49.99 value).
+                  (£29.99). But 70% of evictions require court action. Complete Pack (£149.99) covers the entire journey
+                  and saves you buying documents separately later (£208+ value).
                 </p>
               </div>
 
@@ -479,14 +479,14 @@ export default function CompletePackPage() {
                 </h3>
                 <p className="text-gray-700">
                   Yes! If you've already purchased Notice Only and later need court forms, contact us at
-                  support@landlordheaven.co.uk. We'll credit your £29.99 and you pay the difference (£50).
+                  support@landlordheaven.co.uk. We'll credit your £29.99 and you pay the difference (£120).
                 </p>
               </div>
 
               <div className="border border-gray-200 rounded-lg p-6 bg-white">
                 <h3 className="text-lg font-semibold text-charcoal mb-2">Are court fees included?</h3>
                 <p className="text-gray-700">
-                  No, our £79.99 covers document generation only. Court fees are separate and paid directly to the
+                  No, our £149.99 covers document generation only. Court fees are separate and paid directly to the
                   court. Typical fees: £355 for possession claims, £35-£455 for money claims depending on amount. We
                   include a fee calculator.
                 </p>
@@ -536,13 +536,13 @@ export default function CompletePackPage() {
           <div className="max-w-3xl mx-auto text-center text-white">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Get Everything You Need</h2>
             <p className="text-xl mb-8 text-white/90">
-              Complete eviction journey from notice to possession order. Save £300+ vs solicitors.
+              Complete eviction journey from notice to possession order. Save £350+ vs solicitors.
             </p>
             <Link
               href="/wizard?product=complete_pack"
               className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-emerald-600 transition-colors shadow-lg"
             >
-              Get Complete Pack - £79.99 →
+              Get Complete Pack - £149.99 →
             </Link>
             <p className="mt-4 text-sm text-white/80">30-day money-back guarantee • Unlimited regenerations</p>
           </div>

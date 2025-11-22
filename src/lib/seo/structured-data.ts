@@ -243,8 +243,8 @@ export function softwareApplicationSchema() {
     "operatingSystem": "Web",
     "offers": {
       "@type": "AggregateOffer",
-      "lowPrice": "29.99",
-      "highPrice": "99.99",
+      "lowPrice": "19.99",
+      "highPrice": "149.99",
       "priceCurrency": "GBP"
     },
     "aggregateRating": {

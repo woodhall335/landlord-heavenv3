@@ -5,7 +5,7 @@ import { generateMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - Compare All Products",
-  description: "Compare Landlord Heaven pricing. Notice Only £29.99, Complete Pack £79.99, Money Claim £39.99, AST £49.99-£99.99, HMO Pro £29.99/month.",
+  description: "Compare Landlord Heaven pricing. Notice Only £29.99, Complete Pack £149.99, Money Claim £129.99, AST £39.99-£59.00, HMO Pro £19.99-£34.99/month.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",
@@ -46,27 +46,27 @@ export default function PricingPage() {
                     BEST VALUE
                   </div>
                   <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£79.99</div>
+                  <div className="text-3xl font-bold text-primary mb-1">£149.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6 w-1/6">
                   <div className="font-semibold text-charcoal mb-2">Money Claim</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£39.99</div>
+                  <div className="text-3xl font-bold text-primary mb-1">£129.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6 w-1/6">
                   <div className="font-semibold text-charcoal mb-2">Standard AST</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£49.99</div>
+                  <div className="text-3xl font-bold text-primary mb-1">£39.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6 w-1/6">
                   <div className="font-semibold text-charcoal mb-2">Premium AST</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£99.99</div>
+                  <div className="text-3xl font-bold text-primary mb-1">£59.00</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6 w-1/6">
                   <div className="font-semibold text-charcoal mb-2">HMO Pro</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£29.99</div>
+                  <div className="text-3xl font-bold text-primary mb-1">£19.99-£34.99</div>
                   <div className="text-sm text-gray-600">/month</div>
                 </th>
               </tr>
@@ -198,7 +198,7 @@ export default function PricingPage() {
                 <td className="text-center p-4">✅</td>
               </tr>
               <tr className="border-t bg-gray-50">
-                <td className="p-4 text-gray-700">Unlimited Properties</td>
+                <td className="p-4 text-gray-700">Tiered Pricing (1-20+ properties)</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4 bg-primary-subtle">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -349,7 +349,7 @@ export default function PricingPage() {
           <div className="bg-white rounded-lg border-2 border-primary p-6 relative">
             <div className="absolute top-4 right-4 bg-primary text-white text-xs px-2 py-1 rounded-full">BEST VALUE</div>
             <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£79.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£149.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Eviction Notice</li>
               <li>✅ Court Possession Claim</li>
@@ -368,7 +368,7 @@ export default function PricingPage() {
           {/* Money Claim */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Money Claim</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£39.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£129.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Money Claim Forms</li>
               <li>✅ Arrears Schedule</li>
@@ -386,7 +386,7 @@ export default function PricingPage() {
           {/* Standard AST */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Standard AST</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£49.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£39.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ AST/PRT/NI Agreement</li>
               <li>✅ Core Clauses</li>
@@ -404,7 +404,7 @@ export default function PricingPage() {
           {/* Premium AST */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Premium AST</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£99.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£59.00 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Everything in Standard</li>
               <li>✅ HMO Clauses</li>
@@ -423,9 +423,9 @@ export default function PricingPage() {
           {/* HMO Pro */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">HMO Pro</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£29.99 <span className="text-sm text-gray-600">/month</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£19.99-£34.99 <span className="text-sm text-gray-600">/month</span></div>
             <ul className="space-y-2 mb-6 text-sm">
-              <li>✅ Unlimited HMO Properties</li>
+              <li>✅ Tiered by Property Count</li>
               <li>✅ License Tracking</li>
               <li>✅ Certificate Reminders</li>
               <li>✅ 7-Day Free Trial</li>
@@ -475,7 +475,7 @@ export default function PricingPage() {
               </summary>
               <div className="px-6 pb-4 text-gray-700">
                 <p>
-                  The Complete Pack (£79.99) is already our bulk discount - it saves you £40 vs buying separately.
+                  The Complete Pack (£149.99) is already our bulk discount - it saves you £59 vs buying separately.
                   For portfolio landlords needing 10+ documents per month, contact sales@landlordheaven.co.uk for custom
                   pricing.
                 </p>
@@ -508,7 +508,7 @@ export default function PricingPage() {
               <div className="px-6 pb-4 text-gray-700">
                 <p>
                   Yes! If you've purchased Notice Only (£29.99) and later need court forms, contact
-                  support@landlordheaven.co.uk. We'll credit your £29.99 and charge the difference (£50) for the
+                  support@landlordheaven.co.uk. We'll credit your £29.99 and charge the difference (£120) for the
                   upgrade.
                 </p>
               </div>

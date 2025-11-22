@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "HMO Pro - HMO Compliance Management | Landlord Heaven",
   description:
-    "HMO compliance management subscription. License tracking, fire safety reminders, inspection schedules. £29.99/month with 7-day free trial.",
+    "HMO compliance management subscription. License tracking, fire safety reminders, inspection schedules. £19.99-£34.99/month tiered by property count with 7-day free trial.",
 };
 
 export default function HMOProPage() {
@@ -23,9 +23,10 @@ export default function HMOProPage() {
               HMO Compliance Management on Autopilot
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-2">
-              <span className="text-5xl md:text-6xl font-bold">£29.99</span>
+              <span className="text-5xl md:text-6xl font-bold">£19.99-£34.99</span>
               <span className="text-xl text-white/80">/month</span>
             </div>
+            <p className="text-white/80 mb-2">Tiered by property count</p>
             <p className="text-white/80 mb-8">7-day free trial • Cancel anytime</p>
             <Link
               href="/wizard?product=hmo_pro"
@@ -285,17 +286,52 @@ export default function HMOProPage() {
       {/* Pricing */}
       <section className="py-16 md:py-20 bg-white">
         <Container>
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">Simple Pricing</h2>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">Tiered Pricing</h2>
+            <p className="text-center text-gray-600 mb-12">Pay based on the number of HMO properties you manage</p>
+
+            {/* Pricing Tiers */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              {/* Tier 1 */}
+              <div className="bg-white rounded-lg border-2 border-purple-200 p-6 text-center">
+                <div className="text-purple-600 font-semibold mb-2">1-5 Properties</div>
+                <div className="text-4xl font-bold text-charcoal mb-1">£19.99</div>
+                <div className="text-sm text-gray-600">/month</div>
+              </div>
+
+              {/* Tier 2 */}
+              <div className="bg-white rounded-lg border-2 border-purple-200 p-6 text-center">
+                <div className="text-purple-600 font-semibold mb-2">6-10 Properties</div>
+                <div className="text-4xl font-bold text-charcoal mb-1">£24.99</div>
+                <div className="text-sm text-gray-600">/month</div>
+              </div>
+
+              {/* Tier 3 */}
+              <div className="bg-white rounded-lg border-2 border-purple-200 p-6 text-center">
+                <div className="text-purple-600 font-semibold mb-2">11-15 Properties</div>
+                <div className="text-4xl font-bold text-charcoal mb-1">£29.99</div>
+                <div className="text-sm text-gray-600">/month</div>
+              </div>
+
+              {/* Tier 4 */}
+              <div className="bg-white rounded-lg border-2 border-purple-200 p-6 text-center">
+                <div className="text-purple-600 font-semibold mb-2">16-20 Properties</div>
+                <div className="text-4xl font-bold text-charcoal mb-1">£34.99</div>
+                <div className="text-sm text-gray-600">/month</div>
+              </div>
+            </div>
+
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-6 mb-12 text-center">
+              <p className="text-charcoal font-semibold mb-2">21+ Properties?</p>
+              <p className="text-gray-700">
+                £34.99 base + £5 per additional 5 properties. For example, 25 properties = £39.99/month
+              </p>
+            </div>
 
             <div className="bg-gradient-to-br from-purple-600 to-indigo-700 text-white rounded-2xl p-8 md:p-12">
               <div className="text-center mb-8">
-                <h3 className="text-3xl font-bold mb-4">HMO Pro Membership</h3>
-                <div className="flex items-baseline justify-center gap-2 mb-2">
-                  <span className="text-5xl md:text-6xl font-bold">£29.99</span>
-                  <span className="text-2xl text-white/80">/month</span>
-                </div>
-                <p className="text-white/90 mb-6">Unlimited HMO properties • All features included</p>
+                <h3 className="text-3xl font-bold mb-4">All Tiers Include</h3>
+                <p className="text-white/90 mb-6">Full access to all HMO Pro features</p>
               </div>
 
               <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-8">
@@ -309,7 +345,7 @@ export default function HMOProPage() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span>Unlimited HMO properties</span>
+                    <span>Manage all your HMOs</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -386,8 +422,8 @@ export default function HMOProPage() {
 
             <div className="mt-8 text-center">
               <p className="text-gray-600 text-sm">
-                💡 <strong>Tip:</strong> £29.99/month = £359.88/year. One missed license renewal can cost £30,000. HMO
-                Pro pays for itself 83x over.
+                💡 <strong>Tip:</strong> Starting from just £19.99/month = £239.88/year. One missed license renewal can cost £30,000. HMO
+                Pro pays for itself 125x over.
               </p>
             </div>
           </div>
@@ -458,11 +494,11 @@ export default function HMOProPage() {
 
               <div className="border border-gray-200 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Is there a limit on properties?
+                  How does tiered pricing work?
                 </h3>
                 <p className="text-gray-700">
-                  No! £29.99/month covers unlimited HMO properties. Add 1 or 100 - same price. Perfect for growing
-                  portfolios.
+                  You pay based on how many HMO properties you manage. 1-5 HMOs = £19.99/month, 6-10 = £24.99, 11-15 = £29.99, 16-20 = £34.99.
+                  For 21+ properties, add £5 per additional 5 properties. Your tier updates automatically when you add/remove properties.
                 </p>
               </div>
 
@@ -524,7 +560,7 @@ export default function HMOProPage() {
               Start Free Trial - £0 Today →
             </Link>
             <p className="mt-4 text-sm text-white/80">
-              Then £29.99/month • Unlimited properties • Cancel anytime
+              Then £19.99-£34.99/month based on property count • Cancel anytime
             </p>
           </div>
         </Container>
