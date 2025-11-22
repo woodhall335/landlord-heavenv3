@@ -1,0 +1,284 @@
+# Northern Ireland Housing Law - Decision Rules
+# Based on Private Tenancies (Northern Ireland) Order 2006 & Rent (Northern Ireland) Order 1978
+# Updated: November 2024
+
+jurisdiction:
+  name: "Northern Ireland"
+  primary_law: "Private Tenancies (Northern Ireland) Order 2006"
+  rent_law: "Rent (Northern Ireland) Order 1978"
+  tenancy_type: "Private Tenancy"
+  court: "County Court Northern Ireland"
+
+# Northern Ireland uses similar grounds to England & Wales but with NI-specific provisions
+# Notice to Quit periods vary by tenancy length:
+# - Less than 1 year: 4 weeks
+# - 1 to 10 years: 8 weeks
+# - 10+ years: 12 weeks
+
+# EVICTION GROUNDS
+section_8_grounds:
+  # MANDATORY GROUNDS (Court must grant possession if proven)
+  mandatory:
+    ground_1:
+      title: "Landlord Previously Occupied as Only or Principal Home"
+      category: "landlord_previous_occupation"
+      court_type: "mandatory"
+      notice_period_days: 28
+      description: "Landlord previously lived in property as only or principal home"
+      statute: "Private Tenancies (NI) Order 2006, Ground 1"
+      required_facts:
+        - landlord_previously_occupied
+        - notice_given_before_tenancy
+      success_probability: 95
+
+    ground_2:
+      title: "Mortgage Lender Seeking Possession"
+      category: "mortgage_repossession"
+      court_type: "mandatory"
+      notice_period_days: 28
+      description: "Mortgage lender entitled to exercise power of sale"
+      statute: "Private Tenancies (NI) Order 2006, Ground 2"
+      required_facts:
+        - mortgage_granted_before_tenancy
+        - lender_requiring_possession
+      success_probability: 95
+
+    ground_5:
+      title: "Property Held for Minister of Religion"
+      category: "religious_purpose"
+      court_type: "mandatory"
+      notice_period_days: 28
+      description: "Property required as residence for minister of religion"
+      statute: "Private Tenancies (NI) Order 2006, Ground 5"
+      required_facts:
+        - property_for_minister
+        - minister_identified
+      success_probability: 90
+
+    ground_8:
+      title: "Serious Rent Arrears (8 Weeks/2 Months)"
+      category: "rent_arrears"
+      court_type: "mandatory"
+      notice_period_days: 28
+      description: "At least 8 weeks rent arrears (or 2 months if monthly tenancy)"
+      statute: "Private Tenancies (NI) Order 2006, Ground 8"
+      required_facts:
+        - rent_arrears_8_weeks
+        - arrears_at_notice_and_hearing
+      success_probability: 95
+
+  # DISCRETIONARY GROUNDS (Court has discretion)
+  discretionary:
+    ground_9:
+      title: "Suitable Alternative Accommodation Available"
+      category: "alternative_accommodation"
+      court_type: "discretionary"
+      notice_period_days: 28
+      description: "Suitable alternative accommodation available for tenant"
+      statute: "Private Tenancies (NI) Order 2006, Ground 9"
+      required_facts:
+        - alternative_accommodation_available
+        - suitable_for_tenant
+      success_probability: 50
+
+    ground_10:
+      title: "Rent Arrears (Any Amount)"
+      category: "rent_arrears"
+      court_type: "discretionary"
+      notice_period_days: 28
+      description: "Some rent lawfully due is unpaid"
+      statute: "Private Tenancies (NI) Order 2006, Ground 10"
+      required_facts:
+        - rent_arrears
+        - arrears_amount
+      success_probability: 60
+
+    ground_11:
+      title: "Persistent Delay in Paying Rent"
+      category: "rent_payment_issues"
+      court_type: "discretionary"
+      notice_period_days: 28
+      description: "Tenant persistently delayed paying rent"
+      statute: "Private Tenancies (NI) Order 2006, Ground 11"
+      required_facts:
+        - persistent_late_payment
+        - payment_history
+      success_probability: 55
+
+    ground_12:
+      title: "Breach of Tenancy Obligation"
+      category: "breach_of_tenancy"
+      court_type: "discretionary"
+      notice_period_days: 28
+      description: "Tenant has breached any obligation of the tenancy"
+      statute: "Private Tenancies (NI) Order 2006, Ground 12"
+      required_facts:
+        - breach_of_tenancy
+        - breach_description
+      success_probability: 60
+
+    ground_13:
+      title: "Waste, Neglect or Default Causing Property Deterioration"
+      category: "property_condition"
+      court_type: "discretionary"
+      notice_period_days: 28
+      description: "Property condition has deteriorated due to tenant's actions"
+      statute: "Private Tenancies (NI) Order 2006, Ground 13"
+      required_facts:
+        - property_deteriorated
+        - tenant_at_fault
+      success_probability: 65
+
+    ground_14:
+      title: "Nuisance or Annoyance to Neighbors"
+      category: "antisocial_behavior"
+      court_type: "discretionary"
+      notice_period_days: 28
+      description: "Tenant or associate caused nuisance or annoyance"
+      statute: "Private Tenancies (NI) Order 2006, Ground 14"
+      required_facts:
+        - nuisance_or_annoyance
+        - evidence_available
+      success_probability: 70
+
+    ground_15:
+      title: "Property Used for Immoral or Illegal Purposes"
+      category: "illegal_use"
+      court_type: "discretionary"
+      notice_period_days: 28
+      description: "Property has been used for immoral or illegal purposes"
+      statute: "Private Tenancies (NI) Order 2006, Ground 15"
+      required_facts:
+        - illegal_use
+        - evidence_available
+      success_probability: 75
+
+    ground_16:
+      title: "Tenant Gave Notice but Failed to Vacate"
+      category: "tenant_notice"
+      court_type: "discretionary"
+      notice_period_days: 28
+      description: "Tenant gave notice but failed to vacate"
+      statute: "Private Tenancies (NI) Order 2006, Ground 16"
+      required_facts:
+        - tenant_gave_notice
+        - failed_to_vacate
+      success_probability: 80
+
+    ground_17:
+      title: "False Statement Induced Grant of Tenancy"
+      category: "false_statement"
+      court_type: "discretionary"
+      notice_period_days: 28
+      description: "Tenant made false statement to obtain tenancy"
+      statute: "Private Tenancies (NI) Order 2006, Ground 17"
+      required_facts:
+        - false_statement
+        - induced_tenancy
+      success_probability: 75
+
+# NO SECTION 21 EQUIVALENT IN NORTHERN IRELAND
+# Northern Ireland does not have a "no-fault" eviction procedure
+section_21:
+  eligibility_requirements: {}
+  red_flags: []
+  notes: "Northern Ireland does not have a Section 21 equivalent. All evictions must be on grounds."
+
+# NOTICE TO QUIT REQUIREMENTS (NI-specific)
+notice_periods:
+  less_than_1_year: 28 # 4 weeks
+  one_to_ten_years: 56 # 8 weeks
+  ten_plus_years: 84 # 12 weeks
+  notes: "Notice period depends on length of tenancy, not ground used"
+
+# COMPLIANCE REQUIREMENTS
+compliance:
+  tenancy_deposit_scheme:
+    description: "Deposit must be protected in approved scheme"
+    schemes:
+      - "TDS Northern Ireland"
+      - "MyDeposits Northern Ireland"
+    deadline_days: 28
+    penalty: "Cannot recover possession if deposit not protected"
+
+  gas_safety:
+    description: "Annual Gas Safety Certificate"
+    required: true
+
+  epc:
+    description: "Energy Performance Certificate"
+    minimum_rating: "E"
+    required: true
+    from_date: "2025-04-01"
+
+  electrical_safety:
+    description: "Electrical Safety Report"
+    required: true
+    from_date: "2025-04-01"
+    notes: "Mandatory for all new tenancies from 1 April 2025"
+
+  rent_increase_restrictions:
+    description: "Rent increase restrictions from 1 April 2025"
+    minimum_period_months: 12
+    notice_period_months: 3
+    notes: "Cannot increase rent within 12 months of tenancy start or last increase"
+
+# COURT PROCEDURES
+court_procedures:
+  notice_to_quit:
+    description: "Must serve written Notice to Quit"
+    form: "Notice to Quit"
+    service_methods:
+      - "Personal service"
+      - "Registered post"
+      - "Ordinary post to last known address"
+
+  possession_proceedings:
+    description: "Apply to County Court for possession order"
+    court: "County Court Northern Ireland"
+    forms:
+      - "Summons for possession"
+    timeline: "4-8 weeks typically"
+
+  enforcement:
+    description: "Enforcement officer executes possession order"
+    timeline: "2-4 weeks after court order"
+
+# TYPICAL TIMELINES
+typical_timelines:
+  ground_8_rent_arrears:
+    notice_period: 28
+    court_proceedings: 56
+    enforcement: 21
+    total_days: 105
+
+  ground_10_rent_arrears:
+    notice_period: 28
+    court_proceedings: 84
+    enforcement: 21
+    total_days: 133
+
+  ground_12_breach:
+    notice_period: 28
+    court_proceedings: 84
+    enforcement: 21
+    total_days: 133
+
+  ground_14_asb:
+    notice_period: 28
+    court_proceedings: 56
+    enforcement: 21
+    total_days: 105
+
+# COST ESTIMATES
+costs:
+  court_fee: 165
+  legal_costs_simple: "800-1500"
+  legal_costs_complex: "1500-3500"
+  enforcement_fee: 100
+
+# HMO LICENSING (NI-specific)
+hmo_licensing:
+  required: true
+  authority: "Northern Ireland Housing Executive"
+  penalty: "Cannot evict if HMO not licensed"

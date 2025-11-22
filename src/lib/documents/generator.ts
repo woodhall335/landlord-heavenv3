@@ -1,0 +1,378 @@
+/**
+ * Document Generator
+ *
+ * Generates legal documents (Section 8 notices, ASTs, letters) from Handlebars templates.
+ * Converts to PDF using Puppeteer.
+ */
+
+import Handlebars from 'handlebars';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+import puppeteer from 'puppeteer';
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+export interface DocumentGenerationOptions {
+  templatePath: string;
+  data: Record<string, any>;
+  isPreview?: boolean;
+  outputFormat?: 'html' | 'pdf' | 'both';
+}
+
+export interface GeneratedDocument {
+  html: string;
+  pdf?: Buffer;
+  metadata: {
+    templateUsed: string;
+    generatedAt: string;
+    documentId: string;
+    isPreview: boolean;
+  };
+}
+
+// ============================================================================
+// HANDLEBARS HELPERS
+// ============================================================================
+
+/**
+ * Register custom Handlebars helpers
+ */
+function registerHandlebarsHelpers() {
+  // Equality check (supports both inline and block usage)
+  Handlebars.registerHelper('eq', function (a: any, b: any, options?: any) {
+    if (arguments.length === 3 && options && typeof options.fn === 'function') {
+      // Block helper: {{#eq a b}}...{{/eq}}
+      return a === b ? options.fn(this) : (options.inverse ? options.inverse(this) : '');
+    }
+    // Inline helper: {{eq a b}}
+    return a === b;
+  });
+
+  // Join array with separator
+  Handlebars.registerHelper('join', function (array, separator) {
+    return Array.isArray(array) ? array.join(separator) : '';
+  });
+
+  // Ordinal suffix (1st, 2nd, 3rd, etc.)
+  Handlebars.registerHelper('ordinal_suffix', function (num) {
+    const n = parseInt(num);
+    if (isNaN(n)) return '';
+    const s = ['th', 'st', 'nd', 'rd'];
+    const v = n % 100;
+    return s[(v - 20) % 10] || s[v] || s[0];
+  });
+
+  // Format currency
+  Handlebars.registerHelper('currency', function (amount) {
+    if (typeof amount !== 'number') return '£0.00';
+    return `£${amount.toFixed(2)}`;
+  });
+
+  // Format date
+  Handlebars.registerHelper('format_date', function (date, format) {
+    if (!date) return '';
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '';
+
+    if (format === 'DD/MM/YYYY') {
+      const day = String(d.getDate()).padStart(2, '0');
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const year = d.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+
+    return d.toLocaleDateString('en-GB');
+  });
+
+  // Conditional class
+  Handlebars.registerHelper('if_eq', function (a, b, options) {
+    return a === b ? options.fn(this) : options.inverse(this);
+  });
+
+  // Array contains
+  Handlebars.registerHelper('contains', function (array, value) {
+    return Array.isArray(array) && array.includes(value);
+  });
+
+  // Calculate days between dates
+  Handlebars.registerHelper('days_between', function (date1, date2) {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    const diff = Math.abs(d2.getTime() - d1.getTime());
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  });
+}
+
+// Register helpers once
+registerHandlebarsHelpers();
+
+// ============================================================================
+// TEMPLATE LOADER
+// ============================================================================
+
+/**
+ * Load a Handlebars template from the file system
+ */
+export function loadTemplate(templatePath: string): string {
+  const fullPath = join(process.cwd(), 'config', 'jurisdictions', templatePath);
+
+  try {
+    const templateContent = readFileSync(fullPath, 'utf-8');
+    return templateContent;
+  } catch (error: any) {
+    throw new Error(`Failed to load template ${templatePath}: ${error.message}`);
+  }
+}
+
+/**
+ * Compile a template with data
+ */
+export function compileTemplate(templateContent: string, data: Record<string, any>): string {
+  try {
+    // Add generation metadata
+    const enrichedData = {
+      ...data,
+      generation_date: new Date().toISOString().split('T')[0],
+      generation_timestamp: new Date().toISOString(),
+      document_id: generateDocumentId(),
+    };
+
+    const template = Handlebars.compile(templateContent);
+    const html = template(enrichedData);
+
+    return html;
+  } catch (error: any) {
+    throw new Error(`Failed to compile template: ${error.message}`);
+  }
+}
+
+// ============================================================================
+// HTML TO PDF CONVERTER
+// ============================================================================
+
+/**
+ * Convert HTML to PDF using Puppeteer
+ */
+export async function htmlToPdf(
+  html: string,
+  options?: {
+    watermark?: string;
+    pageSize?: 'A4' | 'Letter';
+    margins?: { top: string; right: string; bottom: string; left: string };
+  }
+): Promise<Buffer> {
+  let browser;
+
+  try {
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+
+    const page = await browser.newPage();
+
+    // Wrap in proper HTML structure with styling
+    const styledHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      line-height: 1.6;
+      color: #000;
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      font-size: 16pt;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px 0;
+    }
+    h2 {
+      font-size: 14pt;
+      font-weight: bold;
+      margin: 15px 0 10px 0;
+      border-bottom: 1px solid #000;
+      padding-bottom: 5px;
+    }
+    h3 {
+      font-size: 13pt;
+      font-weight: bold;
+      margin: 12px 0 8px 0;
+    }
+    h4 {
+      font-size: 12pt;
+      font-weight: bold;
+      margin: 10px 0 5px 0;
+    }
+    p {
+      margin: 8px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+    table, th, td {
+      border: 1px solid #000;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+    strong {
+      font-weight: bold;
+    }
+    ul, ol {
+      margin: 10px 0;
+      padding-left: 30px;
+    }
+    li {
+      margin: 5px 0;
+    }
+    hr {
+      border: none;
+      border-top: 2px solid #000;
+      margin: 20px 0;
+    }
+    .page-break {
+      page-break-after: always;
+    }
+    @page {
+      size: ${options?.pageSize || 'A4'};
+      margin: ${options?.margins?.top || '2cm'} ${options?.margins?.right || '2cm'} ${options?.margins?.bottom || '2cm'} ${options?.margins?.left || '2cm'};
+    }
+    @media print {
+      body {
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+${html}
+</body>
+</html>
+    `;
+
+    await page.setContent(styledHtml, { waitUntil: 'networkidle0' });
+
+    // Add watermark if specified
+    if (options?.watermark) {
+      await page.evaluate((watermarkText) => {
+        const watermark = document.createElement('div');
+        watermark.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%) rotate(-45deg);
+          font-size: 72px;
+          font-weight: bold;
+          color: rgba(0, 0, 0, 0.1);
+          pointer-events: none;
+          z-index: 9999;
+          white-space: nowrap;
+        `;
+        watermark.textContent = watermarkText;
+        document.body.appendChild(watermark);
+      }, options.watermark);
+    }
+
+    const pdf = await page.pdf({
+      format: options?.pageSize || 'A4',
+      printBackground: true,
+      preferCSSPageSize: false,
+    });
+
+    return Buffer.from(pdf);
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
+  }
+}
+
+// ============================================================================
+// DOCUMENT GENERATOR
+// ============================================================================
+
+/**
+ * Generate a document from a template
+ */
+export async function generateDocument(
+  options: DocumentGenerationOptions
+): Promise<GeneratedDocument> {
+  const { templatePath, data, isPreview = false, outputFormat = 'both' } = options;
+
+  // Load template
+  const templateContent = loadTemplate(templatePath);
+
+  // Add preview flag to data
+  const enrichedData = {
+    ...data,
+    is_preview: isPreview,
+  };
+
+  // Compile template
+  const html = compileTemplate(templateContent, enrichedData);
+
+  const metadata = {
+    templateUsed: templatePath,
+    generatedAt: new Date().toISOString(),
+    documentId: generateDocumentId(),
+    isPreview,
+  };
+
+  // Generate PDF if requested
+  let pdf: Buffer | undefined;
+  if (outputFormat === 'pdf' || outputFormat === 'both') {
+    try {
+      const watermark = isPreview ? 'PREVIEW - NOT FOR COURT USE' : undefined;
+      pdf = await htmlToPdf(html, { watermark });
+    } catch (error: any) {
+      console.warn(`⚠️  PDF generation skipped: ${error.message}`);
+      console.warn('   HTML output will still be generated.');
+      if (outputFormat === 'pdf') {
+        throw new Error(`PDF generation failed: ${error.message}`);
+      }
+    }
+  }
+
+  return {
+    html,
+    pdf,
+    metadata,
+  };
+}
+
+// ============================================================================
+// UTILITIES
+// ============================================================================
+
+/**
+ * Generate a unique document ID
+ */
+function generateDocumentId(): string {
+  const timestamp = Date.now().toString(36);
+  const random = Math.random().toString(36).substring(2, 8);
+  return `DOC-${timestamp}-${random}`.toUpperCase();
+}
+
+/**
+ * Save a PDF to file
+ */
+export async function savePdf(pdfBuffer: Buffer, outputPath: string): Promise<void> {
+  const fs = await import('fs/promises');
+  await fs.writeFile(outputPath, pdfBuffer);
+}

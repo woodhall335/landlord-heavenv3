@@ -1,0 +1,215 @@
+/**
+ * Documents API - Generate
+ *
+ * POST /api/documents/generate
+ * Generates a legal document from a case and stores it in Supabase Storage
+ */
+
+import { createServerSupabaseClient, requireServerAuth, createAdminClient } from '@/lib/supabase/server';
+import { generateDocument } from '@/lib/documents/generator';
+import { generateSection8Notice } from '@/lib/documents/section8-generator';
+import { generateAST } from '@/lib/documents/ast-generator';
+import { generateNoticeToLeave } from '@/lib/documents/scotland/notice-to-leave-generator';
+import { generatePRT } from '@/lib/documents/scotland/prt-generator';
+import { generateNoticeToQuit } from '@/lib/documents/northern-ireland/notice-to-quit-generator';
+import { generatePrivateTenancyAgreement } from '@/lib/documents/northern-ireland/private-tenancy-generator';
+import { NextResponse } from 'next/server';
+import { z } from 'zod';
+
+// Validation schema
+const generateDocumentSchema = z.object({
+  case_id: z.string().uuid(),
+  document_type: z.enum([
+    'section8_notice',
+    'section21_notice',
+    'ast_standard',
+    'ast_premium',
+    'notice_to_leave', // Scotland
+    'prt_agreement', // Scotland
+    'notice_to_quit', // Northern Ireland
+    'private_tenancy', // Northern Ireland
+  ]),
+  is_preview: z.boolean().optional().default(true),
+});
+
+export async function POST(request: Request) {
+  try {
+    const user = await requireServerAuth();
+    const body = await request.json();
+
+    // Validate input
+    const validationResult = generateDocumentSchema.safeParse(body);
+    if (!validationResult.success) {
+      return NextResponse.json(
+        {
+          error: 'Validation failed',
+          details: validationResult.error.format(),
+        },
+        { status: 400 }
+      );
+    }
+
+    const { case_id, document_type, is_preview } = validationResult.data;
+    const supabase = await createServerSupabaseClient();
+
+    // Fetch case with collected facts
+    const { data: caseData, error: caseError } = await supabase
+      .from('cases')
+      .select('*')
+      .eq('id', case_id)
+      .eq('user_id', user.id)
+      .single();
+
+    if (caseError || !caseData) {
+      console.error('Case not found:', caseError);
+      return NextResponse.json(
+        { error: 'Case not found' },
+        { status: 404 }
+      );
+    }
+
+    // Map document type to generator function and template
+    let generatedDoc: any;
+    let documentTitle = '';
+
+    const facts = caseData.collected_facts as any;
+    const jurisdiction = caseData.jurisdiction;
+
+    try {
+      switch (document_type) {
+        case 'section8_notice':
+          generatedDoc = await generateSection8Notice(facts);
+          documentTitle = 'Section 8 Notice - Notice Seeking Possession';
+          break;
+
+        case 'section21_notice':
+          // Use generic generator with Section 21 template
+          generatedDoc = await generateDocument({
+            templatePath: `${jurisdiction}/eviction/section21_form6a.hbs`,
+            data: facts,
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+          documentTitle = 'Section 21 Notice - Form 6A';
+          break;
+
+        case 'ast_standard':
+        case 'ast_premium':
+          generatedDoc = await generateAST(facts);
+          documentTitle = `Assured Shorthold Tenancy Agreement - ${document_type === 'ast_premium' ? 'Premium' : 'Standard'}`;
+          break;
+
+        case 'notice_to_leave':
+          generatedDoc = await generateNoticeToLeave(facts);
+          documentTitle = 'Notice to Leave - Scotland';
+          break;
+
+        case 'prt_agreement':
+          generatedDoc = await generatePRT(facts);
+          documentTitle = 'Private Residential Tenancy Agreement - Scotland';
+          break;
+
+        case 'notice_to_quit':
+          generatedDoc = await generateNoticeToQuit(facts);
+          documentTitle = 'Notice to Quit - Northern Ireland';
+          break;
+
+        case 'private_tenancy':
+          generatedDoc = await generatePrivateTenancyAgreement(facts);
+          documentTitle = 'Private Tenancy Agreement - Northern Ireland';
+          break;
+
+        default:
+          return NextResponse.json(
+            { error: 'Unsupported document type' },
+            { status: 400 }
+          );
+      }
+    } catch (genError: any) {
+      console.error('Document generation failed:', genError);
+      return NextResponse.json(
+        { error: `Document generation failed: ${genError.message}` },
+        { status: 500 }
+      );
+    }
+
+    // Upload PDF to Supabase Storage if generated
+    let pdfUrl: string | null = null;
+
+    if (generatedDoc.pdf) {
+      const adminClient = createAdminClient();
+      const fileName = `${user.id}/${case_id}/${document_type}_${Date.now()}.pdf`;
+
+      const { data: uploadData, error: uploadError } = await adminClient.storage
+        .from('documents')
+        .upload(fileName, generatedDoc.pdf, {
+          contentType: 'application/pdf',
+          upsert: false,
+        });
+
+      if (uploadError) {
+        console.error('Failed to upload PDF:', uploadError);
+        return NextResponse.json(
+          { error: 'Failed to upload document to storage' },
+          { status: 500 }
+        );
+      }
+
+      // Get public URL
+      const { data: publicUrlData } = adminClient.storage
+        .from('documents')
+        .getPublicUrl(fileName);
+
+      pdfUrl = publicUrlData.publicUrl;
+    }
+
+    // Save document record to database
+    const { data: documentRecord, error: dbError } = await supabase
+      .from('documents')
+      .insert({
+        user_id: user.id,
+        case_id,
+        document_type,
+        document_title: documentTitle,
+        jurisdiction: caseData.jurisdiction,
+        html_content: generatedDoc.html,
+        pdf_url: pdfUrl,
+        is_preview,
+        qa_passed: false, // Will be validated by AI pipeline later
+        qa_score: null,
+        qa_issues: [],
+      })
+      .select()
+      .single();
+
+    if (dbError) {
+      console.error('Failed to save document record:', dbError);
+      return NextResponse.json(
+        { error: 'Failed to save document' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        success: true,
+        document: documentRecord,
+        message: 'Document generated successfully',
+      },
+      { status: 201 }
+    );
+  } catch (error: any) {
+    if (error.message === 'Unauthorized - Please log in') {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    console.error('Generate document error:', error);
+    return NextResponse.json(
+      { error: error.message || 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}

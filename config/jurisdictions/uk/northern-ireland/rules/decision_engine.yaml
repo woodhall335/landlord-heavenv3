@@ -1,75 +1,65 @@
 # Decision Engine Rules - Northern Ireland
-# Maps collected facts to recommended grounds
+# Maps collected facts to recommended grounds for eviction
+# Private Tenancies (Northern Ireland) Order 2006
 
 version: "1.0"
 jurisdiction: "northern-ireland"
-last_updated: "2025-11-21"
+last_updated: "2025-11-22"
 
-# Notice to Quit + County Court proceedings
-procedure: "Notice to Quit + County Court possession claim"
-minimum_notice: "28_days_periodic"
+court: "County Court Northern Ireland"
 
 rules:
+  # RENT ARREARS - MANDATORY GROUND 8
   - rule_id: "ni_rent_001"
-    name: "Rent Arrears"
+    name: "Serious Rent Arrears - Ground 8 (Mandatory)"
     priority: 1
     conditions:
-      rent_arrears: "> 0"
-    recommended_ground: "rent_arrears"
+      rent_arrears_weeks: ">= 8"
+      rent_arrears_at_hearing: true
+    recommended_grounds:
+      primary: [8]
     notice_period: "28_days"
-    success_probability: "medium_to_high"
-    depends_on: "Amount and reason for arrears"
+    success_probability: "very_high"
+    reasoning: "Mandatory ground. Court must grant possession if 8+ weeks arrears at notice and hearing."
 
+  # RENT ARREARS - DISCRETIONARY GROUND 10
+  - rule_id: "ni_rent_002"
+    name: "Rent Arrears - Ground 10 (Discretionary)"
+    priority: 2
+    conditions:
+      rent_arrears_months: ">= 1"
+    recommended_grounds:
+      primary: [10]
+      backup: [11]
+    success_probability: "medium"
+    reasoning: "Discretionary ground. Court considers reasonableness and arrears amount."
+
+  # ANTISOCIAL BEHAVIOUR
+  - rule_id: "ni_asb_001"
+    name: "Nuisance/Annoyance - Ground 14"
+    priority: 1
+    conditions:
+      antisocial_behaviour: true
+      evidence_available: true
+    recommended_grounds:
+      primary: [14]
+    success_probability: "high"
+    reasoning: "Strong ground with good evidence."
+
+  # BREACH OF TENANCY
   - rule_id: "ni_breach_001"
-    name: "Breach of Tenancy Terms"
+    name: "Breach of Tenancy - Ground 12"
     priority: 1
     conditions:
       breach_of_tenancy: true
-    recommended_ground: "breach"
-    notice_period: "28_days"
+      breach_documented: true
+    recommended_grounds:
+      primary: [12]
     success_probability: "medium"
+    reasoning: "Must prove material breach."
 
-  - rule_id: "ni_asb_001"
-    name: "Antisocial Behaviour"
-    priority: 1
-    conditions:
-      antisocial_behavior: true
-    recommended_ground: "antisocial_behavior"
-    notice_period: "28_days"
-    success_probability: "medium_to_high"
-    depends_on: "Evidence quality"
-
-  - rule_id: "ni_landlord_001"
-    name: "Landlord Requires for Own Occupation"
-    priority: 2
-    conditions:
-      landlord_requires: true
-    recommended_ground: "landlord_occupation"
-    notice_period: "28_days"
-    success_probability: "medium"
-
-  - rule_id: "ni_sell_001"
-    name: "Landlord Intends to Sell"
-    priority: 2
-    conditions:
-      intends_to_sell: true
-    recommended_ground: "sale"
-    notice_period: "28_days"
-    success_probability: "medium"
-
-timelines:
-  notice_to_quit: "28_days"
-  court_proceedings: "4-8_months"
-  total: "5-9_months"
-
-costs:
-  civil_bill_fee: "150-200"
-  enforcement: "100-150"
-  legal_costs: "1500-3500"
-
-key_points:
-  - "Notice to Quit must be in writing"
-  - "Must end on rent payment day (periodic tenancies)"
-  - "Court order required for possession"
-  - "Deposit must be protected in TDS NI"
-  - "14 day protection deadline"
+red_flags: []
+timelines: {}
+costs: {}
+success_factors: {}
+compliance_checks: []

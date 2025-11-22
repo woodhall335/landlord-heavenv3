@@ -1,0 +1,434 @@
+{{! Private Tenancy Agreement - Northern Ireland }}
+{{! For use in Northern Ireland }}
+
+# PRIVATE TENANCY AGREEMENT
+
+**NORTHERN IRELAND**
+
+This Agreement is dated: **{{agreement_date}}**
+
+---
+
+## PARTIES
+
+**LANDLORD:**
+Name: {{landlord_full_name}}
+Address: {{landlord_address}}
+Email: {{landlord_email}}
+Phone: {{landlord_phone}}
+
+{{#if agent_name}}
+**LANDLORD'S AGENT:**
+Name: {{agent_name}}
+Address: {{agent_address}}
+Email: {{agent_email}}
+Phone: {{agent_phone}}
+{{/if}}
+
+**TENANT(S):**
+{{#each tenants}}
+{{@index}}. Name: {{this.full_name}}
+   Date of Birth: {{this.dob}}
+   Email: {{this.email}}
+   Phone: {{this.phone}}
+{{/each}}
+
+---
+
+## THE PROPERTY
+
+The property which is let is:
+
+**{{property_address}}**
+
+{{#if property_description}}
+Description: {{property_description}}
+{{/if}}
+
+{{#if included_areas}}
+**Including:** {{included_areas}}
+{{/if}}
+
+{{#if excluded_areas}}
+**Excluding:** {{excluded_areas}}
+{{/if}}
+
+{{#if parking}}
+**Parking:** {{parking_details}}
+{{/if}}
+
+{{#if furnished_status}}
+**Furnished Status:** {{furnished_status}}
+{{/if}}
+
+---
+
+## THE TERM
+
+**Start Date:** {{tenancy_start_date}}
+
+{{#if is_fixed_term}}
+**End Date:** {{tenancy_end_date}}
+
+This is a **fixed term** tenancy for **{{term_length}}**.
+
+After the fixed term ends, if neither party takes action to end the tenancy, it will continue as a periodic tenancy on the same terms.
+{{else}}
+This is a **periodic** tenancy running from {{rent_period}} to {{rent_period}}.
+{{/if}}
+
+---
+
+## THE RENT
+
+**Rent Amount:** £{{rent_amount}} per {{rent_period}}
+
+**Payment Due:** {{rent_due_day}} of each {{rent_period}}
+
+**Payment Method:** {{payment_method}}
+
+**Payment Details:** {{payment_details}}
+
+**First Payment:** £{{first_payment}} due on {{first_payment_date}}
+
+{{#if rent_includes}}
+**The rent includes:** {{rent_includes}}
+{{/if}}
+
+{{#if rent_excludes}}
+**The rent excludes:** {{rent_excludes}}
+(Tenant responsible for these costs)
+{{/if}}
+
+### Rent Increases (from 1 April 2025)
+
+From 1 April 2025, the landlord cannot increase rent:
+- Within 12 months of the start of the tenancy
+- Within 12 months of the last rent increase
+
+If the landlord wishes to increase rent, they must give at least **3 months' written notice**.
+
+---
+
+## THE DEPOSIT
+
+**Deposit Amount:** £{{deposit_amount}}
+
+The deposit must be paid on or before the start of the tenancy.
+
+**Deposit Protection:** Within 28 days of receiving the deposit, the Landlord will protect it in an approved tenancy deposit scheme and provide the Tenant with the prescribed information.
+
+**Approved Schemes:**
+- TDS Northern Ireland
+- MyDeposits Northern Ireland
+
+**Purpose:** The deposit is held as security for:
+- Damage to the property, fixtures, fittings or contents
+- Unpaid rent
+- Unpaid bills where tenant is responsible
+- Cleaning costs if property not left reasonably clean
+- Other breaches of this agreement
+
+**IMPORTANT:** If the deposit is not protected, the landlord may not be able to obtain a possession order.
+
+---
+
+## INVENTORY
+
+{{#if inventory_attached}}
+An inventory of the property's contents and condition is attached as Schedule 1.
+
+The Tenant agrees that the inventory is accurate unless written objections are provided within **7 days** of the start of the tenancy.
+{{else}}
+An inventory will be prepared and provided to the Tenant within 7 days of the start date.
+{{/if}}
+
+---
+
+## TENANT'S OBLIGATIONS
+
+The Tenant agrees to:
+
+### 1. Rent Payment
+Pay the rent on time without deduction or set-off (unless legally entitled).
+
+### 2. Utilities and Rates
+Pay all charges for gas, electricity, water, sewerage, telephone, internet, and rates (unless included in rent).
+
+### 3. Use of Property
+- Use the property as a private residence only
+- Not run any business from the property without written consent
+- Not use the property for any illegal or immoral purpose
+
+### 4. Care of Property
+- Keep the property clean and tidy
+- Keep the property adequately heated and ventilated to prevent condensation and mould
+- Report any defects or damage promptly to the Landlord
+- Not cause or allow damage to the property
+- Make good any damage caused by the Tenant or visitors (fair wear and tear excepted)
+
+### 5. Alterations
+Not make any alterations, additions or improvements without the Landlord's written consent.
+
+### 6. Decorations
+Not remove or alter any of the Landlord's decorations, fixtures, fittings or furnishings.
+
+### 7. Pets
+{{#if pets_allowed}}
+Keep pets only with the Landlord's prior written consent. Current approved pets: {{approved_pets}}
+{{else}}
+Not keep any pets, birds or animals at the property without the Landlord's prior written consent.
+{{/if}}
+
+### 8. Smoking
+{{#if smoking_allowed}}
+Smoking is permitted but the Tenant must ensure property is not damaged and odours are minimized.
+{{else}}
+Not smoke or permit smoking inside the property.
+{{/if}}
+
+### 9. Subletting and Assignment
+- Not sublet, assign, part with possession or share occupation of the property without written consent
+- Not take in lodgers without written consent
+
+### 10. Access
+Allow the Landlord or their agent access at reasonable times on 24 hours' written notice for:
+- Inspections (maximum once per quarter)
+- Repairs and maintenance
+- Viewings (if property being sold or re-let)
+- Emergency access (no notice required)
+
+### 11. Gardens
+{{#if has_garden}}
+- Keep gardens tidy and maintained
+- Cut grass regularly
+- Not remove or severely prune plants/trees without consent
+{{/if}}
+
+### 12. Waste Disposal
+- Dispose of all rubbish appropriately
+- Follow local council recycling guidelines
+- Keep wheelie bins in designated area
+
+### 13. Neighbourhood
+- Not cause nuisance or annoyance to neighbours
+- Not play loud music at unreasonable times
+- Ensure visitors do not cause nuisance
+
+### 14. Insurance
+Arrange contents insurance for the Tenant's own possessions.
+
+### 15. End of Tenancy
+- Give proper notice to end the tenancy
+- Return the property clean and tidy
+- Return all keys
+- Remove all belongings
+- Provide forwarding address
+
+---
+
+## LANDLORD'S OBLIGATIONS
+
+The Landlord agrees to:
+
+### 1. Quiet Enjoyment
+Allow the Tenant quiet enjoyment of the property without unlawful interruption.
+
+### 2. Repairs
+Keep in repair:
+- The structure and exterior of the property
+- Installations for gas, electricity, water and sanitation
+- Installations for heating and hot water
+- Common parts (if applicable)
+
+### 3. Safety
+
+**Gas Safety:**
+- Ensure gas appliances are safe
+- Provide annual Gas Safety Certificate
+
+**Electrical Safety (from 1 April 2025):**
+- For tenancies beginning on or after 1 April 2025, provide an Electrical Safety Report from a qualified professional
+- Ensure electrical installations are safe
+
+**Fire Safety:**
+- Provide smoke alarms on each floor
+- Ensure smoke alarms are in working order at start of tenancy
+- Ensure furniture and furnishings meet fire safety regulations
+
+### 4. Deposit Protection
+Protect the deposit in an approved scheme within 28 days and provide prescribed information.
+
+### 5. Information
+Provide:
+- Energy Performance Certificate (EPC)
+- Gas Safety Certificate
+- Electrical Safety Report (for tenancies from 1 April 2025)
+- Deposit protection information
+
+---
+
+## INSURANCE
+
+The Landlord will insure the property and contents owned by the Landlord.
+
+The Tenant must arrange contents insurance for their own possessions. The Landlord is not responsible for loss or damage to the Tenant's belongings.
+
+---
+
+## ENDING THE TENANCY
+
+### By the Tenant:
+
+The Tenant can end the tenancy by giving notice in writing.
+
+**Notice period required:**
+{{#if is_fixed_term}}
+- During fixed term: Only by mutual agreement (unless break clause below)
+- After fixed term: Notice period based on tenancy length
+{{else}}
+- Notice period based on tenancy length:
+  - Less than 1 year: 4 weeks
+  - 1 to 10 years: 8 weeks
+  - 10+ years: 12 weeks
+{{/if}}
+
+{{#if break_clause}}
+**Break Clause:** {{break_clause_terms}}
+{{/if}}
+
+### By the Landlord:
+
+The Landlord can only end the tenancy by:
+1. Serving a written **Notice to Quit**
+2. Applying to the **County Court** for a possession order
+3. Obtaining a court order
+4. Having the order enforced if necessary
+
+**Notice to Quit period required:**
+- Less than 1 year: 4 weeks (28 days)
+- 1 to 10 years: 8 weeks (56 days)
+- 10+ years: 12 weeks (84 days)
+
+The Landlord must apply to court on one of the eviction grounds specified in the Private Tenancies (Northern Ireland) Order 2006.
+
+---
+
+## DATA PROTECTION
+
+Personal data will be processed in accordance with UK GDPR and the Data Protection Act 2018.
+
+The Landlord will use the Tenant's data for:
+- Managing the tenancy
+- Rent collection
+- Property maintenance
+- Legal obligations (deposit protection)
+- Reference requests from future landlords (with consent)
+
+Data will be kept for 6 years after tenancy ends (for legal/tax purposes).
+
+---
+
+## JURISDICTION
+
+This agreement is governed by the law of **Northern Ireland**.
+
+Disputes will be heard in the **County Court of Northern Ireland**.
+
+---
+
+## TYPE OF TENANCY
+
+This is a **PRIVATE TENANCY** under the Private Tenancies (Northern Ireland) Order 2006.
+
+The Tenant has the right to occupy the property during the tenancy. The Landlord can only regain possession by following the correct legal procedures and obtaining a court order.
+
+---
+
+## ADDITIONAL TERMS
+
+{{#if additional_terms}}
+{{additional_terms}}
+{{/if}}
+
+---
+
+## SCHEDULES
+
+{{#if inventory_attached}}
+**Schedule 1:** Inventory and condition report (attached)
+{{/if}}
+
+{{#if additional_schedules}}
+{{additional_schedules}}
+{{/if}}
+
+---
+
+## SIGNATURES
+
+### Landlord:
+
+Signed: _________________________
+
+Name: {{landlord_full_name}}
+
+Date: _________________________
+
+{{#if agent_signs}}
+Signed on behalf of Landlord by Agent:
+
+Signed: _________________________
+
+Name: {{agent_name}}
+
+Date: _________________________
+{{/if}}
+
+### Tenant(s):
+
+{{#each tenants}}
+Signed: _________________________
+
+Name: {{this.full_name}}
+
+Date: _________________________
+
+{{/each}}
+
+---
+
+## INFORMATION PROVIDED
+
+☐ Gas Safety Certificate provided
+☐ Energy Performance Certificate (EPC) provided
+☐ Electrical Safety Report provided (if tenancy from 1 April 2025)
+☐ Deposit protection information provided
+☐ Inventory provided
+
+---
+
+**IMPORTANT NOTES:**
+
+1. **Keep this agreement safe** - you will need it throughout the tenancy
+2. **Read it carefully** - make sure you understand all terms
+3. **Seek advice** if anything is unclear
+4. **Check inventory** - report any discrepancies within 7 days
+5. **Pay rent on time** - set up standing order if possible
+6. **Report repairs promptly** - don't let small problems become big ones
+7. **Give proper notice** - when you want to leave
+
+---
+
+**This tenancy agreement was generated by Landlord Heaven (www.landlordheaven.co.uk)**
+
+**Document Reference:** {{document_id}}
+**Generated:** {{generation_timestamp}}
+
+---
+
+**LEGAL REFERENCES:**
+- Private Tenancies (Northern Ireland) Order 2006
+- Rent (Northern Ireland) Order 1978
+- Data Protection Act 2018
+- Landlord and Tenant Law Amendment Act (Ireland) 1860
