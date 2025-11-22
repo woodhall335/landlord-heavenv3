@@ -51,6 +51,47 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
   // Check if current answer is valid
   const isCurrentAnswerValid = (): boolean => {
+    // For grouped inputs, validate all fields
+    if (currentQuestion.inputType === 'group' && currentQuestion.fields) {
+      for (const field of currentQuestion.fields) {
+        const fieldValue = answers[field.id];
+
+        // Check required
+        if (field.validation?.required && !fieldValue) {
+          setError(`Please fill in ${field.label.toLowerCase()}`);
+          return false;
+        }
+
+        // Check pattern (e.g., postcode validation)
+        if (field.validation?.pattern && fieldValue) {
+          const regex = new RegExp(field.validation.pattern, 'i');
+          if (!regex.test(fieldValue)) {
+            setError(`Invalid format for ${field.label.toLowerCase()}`);
+            return false;
+          }
+        }
+
+        // Check number range
+        if (field.inputType === 'number' && fieldValue) {
+          const num = parseFloat(fieldValue);
+          if (isNaN(num)) {
+            setError(`${field.label} must be a valid number`);
+            return false;
+          }
+          if (field.validation?.min !== undefined && num < field.validation.min) {
+            setError(`${field.label} must be at least ${field.validation.min}`);
+            return false;
+          }
+          if (field.validation?.max !== undefined && num > field.validation.max) {
+            setError(`${field.label} must be at most ${field.validation.max}`);
+            return false;
+          }
+        }
+      }
+      return true;
+    }
+
+    // For single inputs
     const answer = answers[currentQuestion.id];
 
     if (currentQuestion.validation?.required && !answer) {
@@ -99,19 +140,37 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
     setError(null);
 
-    // Save answer to database
+    // Save answer(s) to database
     try {
       setLoading(true);
-      await fetch('/api/wizard/answer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          case_id: caseId,
-          question_id: currentQuestion.id,
-          question_text: currentQuestion.question,
-          answer: answers[currentQuestion.id],
-        }),
-      });
+
+      // For grouped inputs, save all field answers
+      if (currentQuestion.inputType === 'group' && currentQuestion.fields) {
+        for (const field of currentQuestion.fields) {
+          await fetch('/api/wizard/answer', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              case_id: caseId,
+              question_id: field.id,
+              question_text: `${currentQuestion.question} - ${field.label}`,
+              answer: answers[field.id],
+            }),
+          });
+        }
+      } else {
+        // For single inputs, save one answer
+        await fetch('/api/wizard/answer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            case_id: caseId,
+            question_id: currentQuestion.id,
+            question_text: currentQuestion.question,
+            answer: answers[currentQuestion.id],
+          }),
+        });
+      }
 
       if (currentQuestionIndex < visibleQuestions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -284,6 +343,54 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             max={currentQuestion.validation?.max}
             disabled={loading}
           />
+        );
+
+      case 'group':
+        // Render multiple fields in a grouped layout
+        if (!currentQuestion.fields) return null;
+
+        return (
+          <div className="flex flex-wrap gap-4">
+            {currentQuestion.fields.map((field) => {
+              const fieldValue = answers[field.id] || '';
+              const widthClass = field.width === 'full' ? 'w-full' :
+                                 field.width === 'half' ? 'w-full md:w-[calc(50%-0.5rem)]' :
+                                 'w-full md:w-[calc(33.333%-0.5rem)]';
+
+              return (
+                <div key={field.id} className={widthClass}>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {field.label}
+                    {field.validation?.required && <span className="text-red-500 ml-1">*</span>}
+                  </label>
+                  {field.inputType === 'select' ? (
+                    <select
+                      value={fieldValue}
+                      onChange={(e) => setAnswers({ ...answers, [field.id]: e.target.value })}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      disabled={loading}
+                    >
+                      <option value="">-- Select --</option>
+                      {field.options?.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <Input
+                      type={field.inputType}
+                      value={fieldValue}
+                      onChange={(e) => setAnswers({ ...answers, [field.id]: e.target.value })}
+                      placeholder={field.placeholder}
+                      disabled={loading}
+                      className="w-full"
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
         );
 
       default:

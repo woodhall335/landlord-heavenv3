@@ -15,6 +15,7 @@ import { z } from 'zod';
 // Validation schema
 const analyzeSchema = z.object({
   case_id: z.string().uuid(),
+  collected_facts: z.record(z.any()).optional(), // Optional facts to save
 });
 
 export async function POST(request: Request) {
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { case_id } = validationResult.data;
+    const { case_id, collected_facts } = validationResult.data;
     const supabase = await createServerSupabaseClient();
 
     // Fetch case (allow both logged-in users and anonymous)
@@ -61,11 +62,16 @@ export async function POST(request: Request) {
       );
     }
 
+    // Merge collected_facts if provided
+    const mergedFacts = collected_facts
+      ? { ...(caseData.collected_facts as object || {}), ...collected_facts }
+      : (caseData.collected_facts as object || {});
+
     // Prepare facts for decision engine
     const facts = {
       jurisdiction: caseData.jurisdiction,
       case_type: caseData.case_type,
-      ...(caseData.collected_facts as object),
+      ...mergedFacts,
     };
 
     // Run decision engine analysis
@@ -91,19 +97,26 @@ export async function POST(request: Request) {
       return mapping[prob] || null;
     };
 
-    // Update case with analysis results
+    // Update case with analysis results and collected_facts
+    const updateData: any = {
+      recommended_route: analysis.recommended_route,
+      recommended_grounds: analysis.primary_grounds?.map((g) => String(g.ground_number)) || [],
+      success_probability: convertSuccessProbability(analysis.primary_grounds?.[0]?.success_probability),
+      red_flags: analysis.red_flags as any,
+      compliance_issues: analysis.compliance_check as any,
+      wizard_completed_at: new Date().toISOString(),
+      wizard_progress: 100,
+      updated_at: new Date().toISOString(),
+    };
+
+    // Update collected_facts if provided
+    if (collected_facts) {
+      updateData.collected_facts = mergedFacts;
+    }
+
     const { data: updatedCase, error: updateError} = await supabase
       .from('cases')
-      .update({
-        recommended_route: analysis.recommended_route,
-        recommended_grounds: analysis.primary_grounds?.map((g) => String(g.ground_number)) || [],
-        success_probability: convertSuccessProbability(analysis.primary_grounds?.[0]?.success_probability),
-        red_flags: analysis.red_flags as any,
-        compliance_issues: analysis.compliance_check as any,
-        wizard_completed_at: new Date().toISOString(),
-        wizard_progress: 100,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updateData)
       .eq('id', case_id)
       .select()
       .single();

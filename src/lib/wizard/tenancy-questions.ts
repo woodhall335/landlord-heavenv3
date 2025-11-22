@@ -4,11 +4,26 @@
  * Structured, reliable question flow that guarantees all required fields are collected
  */
 
+export interface WizardField {
+  id: string;
+  label: string;
+  inputType: 'text' | 'email' | 'tel' | 'date' | 'select' | 'number';
+  placeholder?: string;
+  options?: string[];
+  validation?: {
+    required?: boolean;
+    min?: number;
+    max?: number;
+    pattern?: string;
+  };
+  width?: 'full' | 'half' | 'third';
+}
+
 export interface WizardQuestion {
   id: string;
   section: string;
   question: string;
-  inputType: 'text' | 'email' | 'tel' | 'date' | 'select' | 'number' | 'currency' | 'yes_no' | 'multi_select';
+  inputType: 'text' | 'email' | 'tel' | 'date' | 'select' | 'number' | 'currency' | 'yes_no' | 'multi_select' | 'group';
   placeholder?: string;
   helperText?: string;
   options?: string[];
@@ -22,6 +37,8 @@ export interface WizardQuestion {
     questionId: string;
     value: any;
   };
+  // For grouped inputs (multiple fields on one page)
+  fields?: WizardField[];
 }
 
 export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
@@ -29,31 +46,37 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
   // SECTION 1: PROPERTY DETAILS
   // ============================================================================
   {
-    id: 'property_address_line1',
+    id: 'property_address',
     section: 'Property Details',
-    question: 'Property address - Line 1',
-    inputType: 'text',
-    placeholder: 'Flat 2, 123 High Street',
-    helperText: 'House/flat number and street name',
-    validation: { required: true },
-  },
-  {
-    id: 'property_address_town',
-    section: 'Property Details',
-    question: 'Property address - Town/City',
-    inputType: 'text',
-    placeholder: 'London',
-    helperText: 'Town or city name',
-    validation: { required: true },
-  },
-  {
-    id: 'property_address_postcode',
-    section: 'Property Details',
-    question: 'Property address - Postcode',
-    inputType: 'text',
-    placeholder: 'SW1A 1AA',
-    helperText: 'UK postcode',
-    validation: { required: true, pattern: '^[A-Z]{1,2}\\d{1,2}[A-Z]?\\s?\\d[A-Z]{2}$' },
+    question: 'Property address',
+    inputType: 'group',
+    helperText: 'The full address of the rental property',
+    fields: [
+      {
+        id: 'property_address_line1',
+        label: 'Street address',
+        inputType: 'text',
+        placeholder: 'Flat 2, 123 High Street',
+        validation: { required: true },
+        width: 'full',
+      },
+      {
+        id: 'property_address_town',
+        label: 'Town/City',
+        inputType: 'text',
+        placeholder: 'London',
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'property_address_postcode',
+        label: 'Postcode',
+        inputType: 'text',
+        placeholder: 'SW1A 1AA',
+        validation: { required: true, pattern: '^[A-Z]{1,2}\\d{1,2}[A-Z]?\\s?\\d[A-Z]{2}$' },
+        width: 'half',
+      },
+    ],
   },
   {
     id: 'property_type',
@@ -84,53 +107,70 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
   // SECTION 2: LANDLORD DETAILS
   // ============================================================================
   {
-    id: 'landlord_full_name',
+    id: 'landlord_details',
     section: 'Landlord Details',
-    question: 'What is your full name (as landlord)?',
-    inputType: 'text',
-    placeholder: 'John Smith',
-    validation: { required: true },
+    question: 'Your details (as landlord)',
+    inputType: 'group',
+    helperText: 'Your full name and contact information',
+    fields: [
+      {
+        id: 'landlord_full_name',
+        label: 'Full name',
+        inputType: 'text',
+        placeholder: 'John Smith',
+        validation: { required: true },
+        width: 'full',
+      },
+      {
+        id: 'landlord_email',
+        label: 'Email address',
+        inputType: 'email',
+        placeholder: 'landlord@example.com',
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'landlord_phone',
+        label: 'Phone number',
+        inputType: 'tel',
+        placeholder: '07700 900000',
+        validation: { required: true },
+        width: 'half',
+      },
+    ],
   },
   {
-    id: 'landlord_address_line1',
+    id: 'landlord_address',
     section: 'Landlord Details',
-    question: 'Your address - Line 1',
-    inputType: 'text',
-    placeholder: '456 Park Avenue',
+    question: 'Your address',
+    inputType: 'group',
     helperText: 'Your personal or business address (not the rental property)',
-    validation: { required: true },
-  },
-  {
-    id: 'landlord_address_town',
-    section: 'Landlord Details',
-    question: 'Your address - Town/City',
-    inputType: 'text',
-    placeholder: 'London',
-    validation: { required: true },
-  },
-  {
-    id: 'landlord_address_postcode',
-    section: 'Landlord Details',
-    question: 'Your address - Postcode',
-    inputType: 'text',
-    placeholder: 'W1A 2BB',
-    validation: { required: true, pattern: '^[A-Z]{1,2}\\d{1,2}[A-Z]?\\s?\\d[A-Z]{2}$' },
-  },
-  {
-    id: 'landlord_email',
-    section: 'Landlord Details',
-    question: 'What is your email address?',
-    inputType: 'email',
-    placeholder: 'landlord@example.com',
-    validation: { required: true },
-  },
-  {
-    id: 'landlord_phone',
-    section: 'Landlord Details',
-    question: 'What is your phone number?',
-    inputType: 'tel',
-    placeholder: '07700 900000',
-    validation: { required: true },
+    fields: [
+      {
+        id: 'landlord_address_line1',
+        label: 'Street address',
+        inputType: 'text',
+        placeholder: '456 Park Avenue',
+        validation: { required: true },
+        width: 'full',
+      },
+      {
+        id: 'landlord_address_town',
+        label: 'Town/City',
+        inputType: 'text',
+        placeholder: 'London',
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'landlord_address_postcode',
+        label: 'Postcode',
+        inputType: 'text',
+        placeholder: 'W1A 2BB',
+        validation: { required: true, pattern: '^[A-Z]{1,2}\\d{1,2}[A-Z]?\\s?\\d[A-Z]{2}$' },
+        width: 'half',
+      },
+    ],
   },
 
   // ============================================================================

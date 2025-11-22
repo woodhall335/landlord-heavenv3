@@ -14,12 +14,24 @@
   --primary: #16A085; /* PandaDoc teal - vibrant */
   --primary-dark: #0E8A6D;
   --secondary: #8B7FD8; /* Lavender accent */
+  --secondary-dark: #6B5FC0;
   --secondary-light: #EBE9F7; /* Light lavender backgrounds */
 }
 
 @theme inline {
+  /* Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: #16A085;
+  --color-primary-dark: #0E8A6D;
+  --color-secondary: #8B7FD8;
+  --color-secondary-dark: #6B5FC0;
+  --color-secondary-light: #EBE9F7;
+  --color-white: #ffffff;
+  --color-error: #e84e4e;
+  --color-charcoal: #1A1A1A;
+
+  /* Fonts */
   --font-sans: var(--font-inter);
 }
 
