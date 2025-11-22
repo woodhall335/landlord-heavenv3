@@ -52,9 +52,24 @@ const config: Config = {
       // Minimum touch target size (44px)
       minHeight: {
         touch: "44px",
+        button: "40px", // PandaDoc standard button
+        "button-lg": "50px", // PandaDoc large button
       },
       minWidth: {
         touch: "44px",
+      },
+      // Border radius (PandaDoc-inspired)
+      borderRadius: {
+        sm: "4px", // PandaDoc standard
+        DEFAULT: "4px",
+        md: "8px", // PandaDoc medium
+        lg: "8px",
+        xl: "16px", // PandaDoc pill-shaped
+        "2xl": "16px",
+      },
+      // Transition duration (PandaDoc-inspired)
+      transitionDuration: {
+        DEFAULT: "250ms", // PandaDoc standard
       },
       // Spacing for generous whitespace
       spacing: {

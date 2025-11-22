@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary via-primary-dark to-charcoal text-white overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary via-primary-600 to-primary-dark text-white overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-10 right-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
@@ -28,22 +28,22 @@ export default function Home() {
         <Container size="large" className="py-20 sm:py-32 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6 border border-white/30">
-              <span className="text-sm font-medium">✅ Trusted by 10,000+ UK Landlords</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl mb-6 border border-white/30">
+              <span className="text-sm font-semibold">Trusted by 10,000+ UK Landlords</span>
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
               Court-Ready Legal Documents
               <br />
-              <span className="bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
                 In Minutes, Not Hours
               </span>
             </h1>
 
-            <p className="text-xl sm:text-2xl mb-8 text-white/90 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-xl sm:text-2xl mb-8 text-white leading-relaxed max-w-3xl mx-auto">
               AI-powered conversational wizard guides you through complex legal requirements.
               <br />
-              <span className="font-semibold bg-white/20 px-4 py-1 rounded-lg inline-block mt-3">
+              <span className="font-semibold bg-white/20 px-4 py-2 rounded-lg inline-block mt-4">
                 Plain English In → Professional Documents Out
               </span>
             </p>
@@ -53,7 +53,7 @@ export default function Home() {
                 <Button
                   size="large"
                   variant="secondary"
-                  className="bg-white text-primary hover:bg-gray-100 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+                  className="bg-white text-primary hover:bg-white/90 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all min-h-button-lg"
                 >
                   Start Free Analysis →
                 </Button>
@@ -63,24 +63,30 @@ export default function Home() {
                 <Button
                   size="large"
                   variant="outline"
-                  className="border-white text-white hover:bg-white/10"
+                  className="border-2 border-white text-white hover:bg-white/10 min-h-button-lg"
                 >
                   See All Products
                 </Button>
               </Link>
             </div>
 
-            <div className="mt-12 flex flex-wrap gap-6 justify-center text-sm text-white/80">
+            <div className="mt-12 flex flex-wrap gap-6 justify-center text-sm text-white">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">✅</span>
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
                 <span>Court-ready documents</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl">✅</span>
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
                 <span>All 3 UK jurisdictions</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-2xl">✅</span>
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
                 <span>30-day money-back guarantee</span>
               </div>
             </div>
@@ -89,9 +95,9 @@ export default function Home() {
       </section>
 
       {/* How It Works - Clear Funnel */}
-      <section className="py-16 bg-white border-b-4 border-primary/10">
+      <section className="py-20 bg-white border-b border-gray-200">
         <Container size="large">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-charcoal mb-4">
               How It Works
             </h2>
@@ -100,78 +106,78 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
             {/* Step 1 */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-4 shadow-lg">
+              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-6 shadow-lg">
                 1
               </div>
               <h3 className="text-xl font-semibold text-charcoal mb-3">
                 Tell Us Your Situation
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 leading-relaxed">
                 Answer simple questions in plain English. Our AI wizard asks only what's relevant to your case.
               </p>
             </div>
 
             {/* Step 2 */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-4 shadow-lg">
+              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-6 shadow-lg">
                 2
               </div>
               <h3 className="text-xl font-semibold text-charcoal mb-3">
                 AI Creates Your Documents
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 leading-relaxed">
                 Our legal AI analyzes your answers and generates court-ready documents tailored to your situation.
               </p>
             </div>
 
             {/* Step 3 */}
             <div className="text-center">
-              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-4 shadow-lg">
+              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-6 shadow-lg">
                 3
               </div>
               <h3 className="text-xl font-semibold text-charcoal mb-3">
                 Download & Use
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 leading-relaxed">
                 Instant download of professional PDFs ready for service to tenants or submission to court.
               </p>
             </div>
           </div>
 
           {/* CTA */}
-          <div className="text-center mt-12">
+          <div className="text-center mt-16">
             <Link href="/wizard">
-              <Button size="large" variant="primary" className="shadow-xl hover:shadow-2xl">
+              <Button size="large" variant="primary" className="shadow-lg hover:shadow-xl min-h-button-lg">
                 Start Your Free Analysis Now →
               </Button>
             </Link>
-            <p className="text-sm text-gray-500 mt-3">
-              ✨ No credit card required • Takes 5-10 minutes
+            <p className="text-sm text-gray-600 mt-4 font-medium">
+              No credit card required • Takes 5-10 minutes
             </p>
           </div>
         </Container>
       </section>
 
       {/* Products Section */}
-      <section className="py-20">
+      <section className="py-20 bg-gray-50">
         <Container size="large">
-          <div className="text-center mb-12">
+          <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-charcoal mb-4">
               Professional Legal Documents
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Choose the package that fits your needs. All documents are legally compliant,
               court-ready, and indistinguishable from solicitor-prepared documents.
             </p>
           </div>
 
           {/* Eviction Products */}
-          <div className="mb-12">
-            <h3 className="text-2xl font-semibold text-charcoal mb-6">Eviction Products</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="mb-16">
+            <h3 className="text-2xl font-semibold text-charcoal mb-8">Eviction Products</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Notice Only */}
               <Card hoverable variant="elevated" padding="large">
                 <CardHeader>
@@ -318,9 +324,9 @@ export default function Home() {
           </div>
 
           {/* Tenancy Products */}
-          <div className="mb-12">
-            <h3 className="text-2xl font-semibold text-charcoal mb-6">Tenancy Agreements</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="mb-16">
+            <h3 className="text-2xl font-semibold text-charcoal mb-8">Tenancy Agreements</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Standard AST */}
               <Card hoverable variant="elevated" padding="large">
                 <CardHeader>
@@ -513,28 +519,44 @@ export default function Home() {
       </section>
 
       {/* Trust Indicators */}
-      <section className="bg-white py-16 border-t border-gray-200">
+      <section className="bg-white py-20 border-t border-gray-200">
         <Container>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
             <div>
-              <div className="text-4xl mb-2">⚖️</div>
-              <h4 className="font-semibold text-charcoal mb-1">Legally Compliant</h4>
-              <p className="text-sm text-gray-600">Court-ready documents</p>
+              <div className="w-16 h-16 mx-auto mb-4 bg-primary-subtle rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <h4 className="font-semibold text-charcoal mb-2 text-lg">Legally Compliant</h4>
+              <p className="text-sm text-gray-600 leading-relaxed">Court-ready documents</p>
             </div>
             <div>
-              <div className="text-4xl mb-2">🔒</div>
-              <h4 className="font-semibold text-charcoal mb-1">Secure & Private</h4>
-              <p className="text-sm text-gray-600">Bank-level encryption</p>
+              <div className="w-16 h-16 mx-auto mb-4 bg-primary-subtle rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <h4 className="font-semibold text-charcoal mb-2 text-lg">Secure & Private</h4>
+              <p className="text-sm text-gray-600 leading-relaxed">Bank-level encryption</p>
             </div>
             <div>
-              <div className="text-4xl mb-2">⚡</div>
-              <h4 className="font-semibold text-charcoal mb-1">Instant Delivery</h4>
-              <p className="text-sm text-gray-600">Documents in minutes</p>
+              <div className="w-16 h-16 mx-auto mb-4 bg-primary-subtle rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <h4 className="font-semibold text-charcoal mb-2 text-lg">Instant Delivery</h4>
+              <p className="text-sm text-gray-600 leading-relaxed">Documents in minutes</p>
             </div>
             <div>
-              <div className="text-4xl mb-2">💯</div>
-              <h4 className="font-semibold text-charcoal mb-1">30-Day Guarantee</h4>
-              <p className="text-sm text-gray-600">Money back if not satisfied</p>
+              <div className="w-16 h-16 mx-auto mb-4 bg-primary-subtle rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <h4 className="font-semibold text-charcoal mb-2 text-lg">30-Day Guarantee</h4>
+              <p className="text-sm text-gray-600 leading-relaxed">Money back if not satisfied</p>
             </div>
           </div>
         </Container>

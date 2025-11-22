@@ -57,6 +57,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const [progress, setProgress] = useState(0);
   const [currentAnswer, setCurrentAnswer] = useState<any>(null);
   const [isComplete, setIsComplete] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -101,9 +102,21 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         // Get first question
         await getNextQuestion(data.case.id, {});
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to start wizard:', error);
-      addMessage('assistant', "Sorry, something went wrong. Please try again.");
+
+      // Show helpful error message based on error type
+      if (error.message?.includes('Supabase') || error.message?.includes('URL and Key')) {
+        setError('Database connection failed. Please configure Supabase credentials in .env.local');
+      } else if (error.message?.includes('Unauthorized')) {
+        setError('Please log in to use the wizard.');
+      } else if (error.message?.includes('OpenAI')) {
+        setError('AI service unavailable. Please check OPENAI_API_KEY in .env.local');
+      } else {
+        setError('Failed to start wizard. Please check your environment configuration.');
+      }
+
+      addMessage('assistant', "Sorry, something went wrong. Please check the error message above.");
     } finally {
       setIsLoading(false);
     }
@@ -409,6 +422,22 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
+        {/* Error Alert */}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div className="flex items-start gap-3">
+              <span className="text-red-600 text-2xl">⚠️</span>
+              <div className="flex-1">
+                <h3 className="text-red-900 font-semibold mb-1">Configuration Error</h3>
+                <p className="text-red-700 text-sm">{error}</p>
+                <p className="text-red-600 text-xs mt-2">
+                  Check the browser console for more details.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Progress Bar */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
