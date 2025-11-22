@@ -24,19 +24,17 @@ export async function POST(request: Request) {
     const user = await getServerUser();
     const body = await request.json();
 
-    // Validate input
-    const validationResult = analyzeSchema.safeParse(body);
-    if (!validationResult.success) {
+    // Extract case_id and collected_facts
+    const { case_id, collected_facts } = body;
+
+    // Basic validation
+    if (!case_id || typeof case_id !== 'string') {
       return NextResponse.json(
-        {
-          error: 'Validation failed',
-          details: validationResult.error.format(),
-        },
+        { error: 'case_id is required and must be a valid UUID' },
         { status: 400 }
       );
     }
 
-    const { case_id, collected_facts } = validationResult.data;
     const supabase = await createServerSupabaseClient();
 
     // Fetch case (allow both logged-in users and anonymous)
