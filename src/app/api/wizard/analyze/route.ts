@@ -7,6 +7,7 @@
 
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { analyzeCase } from '@/lib/decision-engine/engine';
+import { detectHMO, shouldShowHMOUpsell } from '@/lib/utils/hmo-detection';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -61,6 +62,10 @@ export async function POST(request: Request) {
     // Run decision engine analysis
     const analysis = await analyzeCase(facts);
 
+    // Detect if property is likely an HMO
+    const hmoDetection = detectHMO(caseData.collected_facts as Record<string, any>);
+    const showHMOUpsell = shouldShowHMOUpsell(hmoDetection);
+
     // Update case with analysis results
     const { data: updatedCase, error: updateError } = await supabase
       .from('cases')
@@ -102,6 +107,8 @@ export async function POST(request: Request) {
           overall_risk_level: analysis.overall_risk_level,
           recommended_actions: analysis.recommended_actions,
         },
+        hmo_detection: hmoDetection,
+        show_hmo_upsell: showHMOUpsell,
       },
       { status: 200 }
     );

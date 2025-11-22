@@ -62,5 +62,15 @@
     "api/**": {
       "maxDuration": 60
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/seo/cron/daily",
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/compliance-check",
+      "schedule": "0 8 * * *"
+    }
+  ]
 }

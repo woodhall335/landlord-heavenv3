@@ -8,6 +8,7 @@
 import { createAdminClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { sendPurchaseConfirmation, sendTrialReminderEmail } from '@/lib/email/resend';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-12-18.acacia',
@@ -57,6 +58,7 @@ export async function POST(request: Request) {
           // Handle one-time payment
           const userId = session.metadata?.user_id;
           const orderId = session.metadata?.order_id;
+          const caseId = session.metadata?.case_id;
 
           if (!userId || !orderId) {
             console.error('Missing metadata in checkout session');
@@ -75,6 +77,42 @@ export async function POST(request: Request) {
             .eq('id', orderId);
 
           console.log(`[Stripe] Payment successful for order: ${orderId}`);
+
+          // Send purchase confirmation email
+          try {
+            // Fetch order and user details
+            const { data: order } = await supabase
+              .from('orders')
+              .select('*, user_id')
+              .eq('id', orderId)
+              .single();
+
+            const { data: user } = await supabase
+              .from('users')
+              .select('email, full_name')
+              .eq('id', userId)
+              .single();
+
+            if (order && user?.email) {
+              const dashboardUrl = caseId
+                ? `${process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk'}/dashboard/cases/${caseId}`
+                : `${process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk'}/dashboard`;
+
+              await sendPurchaseConfirmation({
+                to: user.email,
+                customerName: user.full_name || 'there',
+                productName: order.product_name,
+                amount: Math.round(order.total_amount * 100),
+                orderNumber: order.id.substring(0, 8).toUpperCase(),
+                downloadUrl: dashboardUrl,
+              });
+
+              console.log(`[Email] Purchase confirmation sent to ${user.email}`);
+            }
+          } catch (emailError: any) {
+            console.error('[Email] Failed to send purchase confirmation:', emailError);
+            // Don't fail the webhook if email fails
+          }
         } else if (session.mode === 'subscription') {
           // Handle subscription checkout
           const userId = session.metadata?.user_id;

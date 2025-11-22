@@ -1,0 +1,308 @@
+{{!--
+  Scotland Property Inventory and Condition Report
+  Best practice for Private Residential Tenancies (PRT)
+  Essential for deposit deduction disputes
+--}}
+
+# PROPERTY INVENTORY AND CONDITION REPORT
+## Scotland - Private Residential Tenancy
+
+---
+
+## PROPERTY DETAILS
+
+**Address:** {{property_address}}
+
+**Inspection Date:** {{inspection_date}}
+**Inspection Time:** {{inspection_time}}
+**Inspection Type:** {{inspection_type}} {{!-- Check-in, Check-out, Mid-term --}}
+
+---
+
+## PARTIES PRESENT
+
+**Landlord/Agent:** {{landlord_representative}}
+**Tenant(s):** {{tenant_names}}
+{{#if independent_clerk}}**Independent Clerk:** {{clerk_name}}{{/if}}
+
+---
+
+## METER READINGS
+
+### Electricity
+**Meter Number:** {{electricity_meter_number}}
+**Reading:** {{electricity_reading}}
+**Date/Time:** {{electricity_reading_date}}
+
+### Gas
+**Meter Number:** {{gas_meter_number}}
+**Reading:** {{gas_reading}}
+**Date/Time:** {{gas_reading_date}}
+
+### Water (if metered)
+**Meter Number:** {{water_meter_number}}
+**Reading:** {{water_reading}}
+**Date/Time:** {{water_reading_date}}
+
+---
+
+## KEYS PROVIDED
+
+{{#each keys}}
+- {{description}}: {{quantity}} key(s) {{#if fob}}({{fob}}){{/if}}
+{{/each}}
+
+---
+
+## CONDITION RATING GUIDE
+
+**5 - Excellent:** New or as new condition
+**4 - Good:** Minor wear, well-maintained
+**3 - Fair:** Moderate wear, serviceable
+**2 - Poor:** Significant wear, needs attention
+**1 - Very Poor:** Severe wear, requires replacement
+
+---
+
+## ROOM-BY-ROOM INVENTORY
+
+{{#each rooms}}
+### {{room_name}}
+
+**Overall Condition:** {{overall_condition}}/5
+
+#### Walls, Ceiling & Flooring
+
+| Item | Condition | Notes | Photo Ref |
+|------|-----------|-------|-----------|
+| Walls (paint/wallpaper) | {{walls_condition}}/5 | {{walls_notes}} | {{walls_photo}} |
+| Ceiling | {{ceiling_condition}}/5 | {{ceiling_notes}} | {{ceiling_photo}} |
+| Flooring ({{flooring_type}}) | {{flooring_condition}}/5 | {{flooring_notes}} | {{flooring_photo}} |
+| Skirting boards | {{skirting_condition}}/5 | {{skirting_notes}} | {{skirting_photo}} |
+| Doors | {{doors_condition}}/5 | {{doors_notes}} | {{doors_photo}} |
+| Windows | {{windows_condition}}/5 | {{windows_notes}} | {{windows_photo}} |
+
+#### Fixtures & Fittings
+
+{{#each fixtures}}
+| {{fixture_name}} | {{condition}}/5 | {{notes}} | {{photo_ref}} |
+{{/each}}
+
+#### Furniture & Contents
+
+{{#each furniture}}
+| {{item_name}} | {{condition}}/5 | {{notes}} | {{photo_ref}} |
+{{/each}}
+
+#### Specific Issues
+
+{{#if issues}}
+{{#each issues}}
+- **{{issue_type}}:** {{description}} (Severity: {{severity}})
+{{/each}}
+{{else}}
+No specific issues noted.
+{{/if}}
+
+---
+
+{{/each}}
+
+## APPLIANCES & EQUIPMENT
+
+{{#each appliances}}
+### {{appliance_name}}
+
+**Make:** {{make}}
+**Model:** {{model}}
+**Condition:** {{condition}}/5
+**Working Order:** {{working_order}} {{!-- Yes/No/Not tested --}}
+**Notes:** {{notes}}
+**Photo Reference:** {{photo_ref}}
+
+{{#if safety_check}}
+**Last Safety Check:** {{safety_check_date}}
+**Next Check Due:** {{next_check_due}}
+{{/if}}
+
+---
+
+{{/each}}
+
+## SAFETY CERTIFICATES
+
+### Gas Safety Certificate
+**Date of Last Inspection:** {{gas_safety_date}}
+**Engineer Name:** {{gas_engineer_name}}
+**Engineer Registration:** {{gas_engineer_reg}}
+**Next Inspection Due:** {{gas_safety_next_due}}
+**Certificate Provided to Tenant:** {{gas_cert_provided}} {{!-- Yes/No --}}
+
+### Electrical Installation Condition Report (EICR)
+**Date of Last Inspection:** {{eicr_date}}
+**Electrician Name:** {{electrician_name}}
+**Next Inspection Due:** {{eicr_next_due}}
+**Certificate Provided to Tenant:** {{eicr_provided}} {{!-- Yes/No --}}
+
+### Energy Performance Certificate (EPC)
+**Rating:** {{epc_rating}}
+**Valid Until:** {{epc_expiry}}
+**Certificate Provided to Tenant:** {{epc_provided}} {{!-- Yes/No --}}
+
+### Smoke Alarms
+{{#each smoke_alarms}}
+- **Location:** {{location}}
+- **Type:** {{alarm_type}} {{!-- Mains/Battery/Interlinked --}}
+- **Tested:** {{tested}} {{!-- Yes/No --}}
+- **Working:** {{working}} {{!-- Yes/No --}}
+{{/each}}
+
+### Carbon Monoxide Alarms
+{{#each co_alarms}}
+- **Location:** {{location}}
+- **Type:** {{alarm_type}}
+- **Tested:** {{tested}}
+- **Working:** {{working}}
+{{/each}}
+
+---
+
+## CLEANLINESS ASSESSMENT
+
+| Area | Rating | Notes |
+|------|--------|-------|
+| Overall cleanliness | {{overall_cleanliness}}/5 | {{cleanliness_notes}} |
+| Kitchen | {{kitchen_cleanliness}}/5 | {{kitchen_clean_notes}} |
+| Bathroom(s) | {{bathroom_cleanliness}}/5 | {{bathroom_clean_notes}} |
+| Windows (inside) | {{windows_inside}}/5 | {{windows_inside_notes}} |
+| Windows (outside) | {{windows_outside}}/5 | {{windows_outside_notes}} |
+| Carpets/floors | {{floors_cleanliness}}/5 | {{floors_clean_notes}} |
+
+**Standard Expected:** {{expected_standard}}
+
+---
+
+## OUTDOOR AREAS
+
+{{#if outdoor_areas}}
+{{#each outdoor_areas}}
+### {{area_name}}
+
+**Condition:** {{condition}}/5
+**Notes:** {{notes}}
+**Photo Reference:** {{photo_ref}}
+
+{{#if maintenance_responsibility}}
+**Maintenance Responsibility:** {{maintenance_responsibility}} {{!-- Landlord/Tenant/Shared --}}
+{{/if}}
+
+{{/each}}
+{{else}}
+No outdoor areas applicable.
+{{/if}}
+
+---
+
+## ADDITIONAL NOTES
+
+{{#if additional_notes}}
+{{additional_notes}}
+{{else}}
+No additional notes.
+{{/if}}
+
+---
+
+## TENANT COMMENTS
+
+{{#if tenant_comments}}
+{{tenant_comments}}
+{{else}}
+No comments from tenant.
+{{/if}}
+
+---
+
+## PHOTOGRAPHS
+
+**Total photographs taken:** {{photo_count}}
+**Photos stored at:** {{photo_storage_location}}
+**Photo naming convention:** {{photo_naming}}
+
+{{#if photo_list}}
+### Photo Reference List
+{{#each photo_list}}
+{{photo_number}}. {{description}} - {{location}}
+{{/each}}
+{{/if}}
+
+---
+
+## REPAIRING STANDARD
+
+This inventory should be read in conjunction with the Scottish Government's Repairing Standard, which requires landlords to:
+
+1. Ensure the property is wind and watertight
+2. Keep the structure and exterior in reasonable repair
+3. Keep installations for water, gas, electricity, sanitation, and heating in reasonable repair and working order
+4. Ensure common areas are maintained to a reasonable standard
+5. Ensure the property is safe
+6. Provide smoke alarms and carbon monoxide detectors as required
+
+Any issues identified in this inventory that may affect the Repairing Standard should be addressed promptly.
+
+---
+
+## AGREEMENT
+
+### For Check-in Inventories:
+
+The undersigned confirm that this inventory is an accurate record of the property's condition at the start of the tenancy. The tenant acknowledges they have had the opportunity to review and comment on this report.
+
+**Important:** Tenants should report any discrepancies within **7 days** of the tenancy start date.
+
+### For Check-out Inventories:
+
+The undersigned confirm that this inventory is an accurate record of the property's condition at the end of the tenancy.
+
+---
+
+**Landlord/Agent Signature:** _________________________
+
+**Print Name:** {{landlord_name}}
+
+**Date:** {{signature_date}}
+
+---
+
+**Tenant Signature(s):** _________________________
+
+**Print Name:** {{tenant_names}}
+
+**Date:** {{signature_date}}
+
+**Tenant Comments/Reservations:**
+
+{{tenant_reservations}}
+
+---
+
+## LEGAL NOTICE
+
+This inventory may be used as evidence in:
+
+- Deposit deduction disputes with {{deposit_scheme}}
+- First-tier Tribunal for Scotland (Housing and Property Chamber) proceedings
+- Court proceedings
+
+Both parties should retain a copy of this document for their records.
+
+---
+
+**Next Inspection Due:** {{next_inspection_date}} {{!-- If mid-term inspections planned --}}
+
+---
+
+*Document generated on {{generation_date}} by Landlord Heaven - Legal Automation for UK Landlords*
+
+**Inventory Reference:** {{inventory_reference}}

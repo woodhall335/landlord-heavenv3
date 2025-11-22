@@ -144,6 +144,76 @@ Step-by-step instructions for building:
 
 ---
 
+### 🚀 Deployment & Operations (4 files)
+
+15. **DEPLOYMENT.md**
+    - Quick start deployment guide
+    - 5-step process
+    - Architecture diagram
+    - Cost estimates
+    - Testing checklist
+    - **Use:** Quick deployment reference
+
+16. **DEPLOYMENT_GUIDE.md**
+    - Complete 2000+ word guide
+    - Environment setup (all 6 services)
+    - Supabase configuration
+    - Stripe products & webhooks
+    - Vercel deployment steps
+    - Post-deployment verification
+    - Custom domain setup
+    - Monitoring & troubleshooting
+    - **Use:** Full deployment process
+
+17. **DEPLOYMENT_CHECKLIST.md**
+    - 120+ verification items
+    - Pre-deployment checklist
+    - Deployment steps
+    - Post-deployment testing
+    - Performance benchmarks
+    - Security review
+    - **Use:** Ensure nothing is missed
+
+18. **STRIPE_SETUP_GUIDE.md**
+    - Create 5 one-time products
+    - Create 4 HMO Pro subscription tiers
+    - Configure 7-day trial
+    - Webhook setup
+    - **Use:** Stripe configuration
+
+---
+
+### 📖 Technical Reference (3 files)
+
+19. **API_ROUTES.md**
+    - Complete API documentation
+    - 38+ endpoints
+    - Request/response formats
+    - Authentication
+    - Rate limiting
+    - Error handling
+    - **Use:** API integration reference
+
+20. **ARCHITECTURE.md**
+    - System architecture overview
+    - Technology stack
+    - Data flow diagrams
+    - Security architecture
+    - Scalability strategy
+    - Deployment architecture
+    - **Use:** Understanding the system
+
+21. **SEO_AUTOMATION_SPEC.md** 🤖
+    - Fully automated SEO machine
+    - Daily content generation
+    - Automated backlink acquisition
+    - Performance optimization
+    - Intelligence & reporting
+    - 4-week implementation plan
+    - **Use:** Phase 2 expansion
+
+---
+
 ## 🗺️ NAVIGATION BY ROLE
 
 ### 👤 If you're building the FRONTEND:
@@ -361,16 +431,28 @@ Step-by-step instructions for building:
 **Error solutions:**
 → TROUBLESHOOTING_GUIDE.md (use Ctrl+F to search)
 
+**Deployment steps:**
+→ DEPLOYMENT.md (quick start) or DEPLOYMENT_GUIDE.md (comprehensive)
+
+**API endpoint reference:**
+→ API_ROUTES.md (all 38+ endpoints with examples)
+
+**System architecture:**
+→ ARCHITECTURE.md (diagrams, data flow, security)
+
+**SEO automation:**
+→ SEO_AUTOMATION_SPEC.md (Phase 2 automated content & backlinks)
+
 ---
 
 ## 📊 PROJECT STATISTICS
 
-**Total Documentation:** 14 files  
-**Total Pages:** ~500 pages  
-**Total Code Examples:** 100+  
-**Total Agents:** 6  
-**Build Time:** 2 weeks  
-**Estimated Project Value:** £50,000+
+**Total Documentation:** 21 files
+**Total Pages:** ~800+ pages
+**Total Code Examples:** 150+
+**Total Agents:** 6
+**Build Time:** 2 weeks (core) + 4 weeks (SEO automation)
+**Estimated Project Value:** £100,000+
 
 ---
 

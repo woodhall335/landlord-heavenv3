@@ -1,0 +1,361 @@
+{{!--
+  Scotland Pre-Action Requirements Letter for Rent Arrears
+  MANDATORY before serving Notice to Leave for Ground 1 (Rent Arrears)
+  Required by: Pre-Action Requirements (Notices) (Scotland) Regulations 2020
+  Failure to comply = Tribunal cannot grant eviction order
+--}}
+
+# PRE-ACTION REQUIREMENTS NOTICE
+## Rent Arrears - Private Residential Tenancy (Scotland)
+
+**IMPORTANT:** This notice is required by law before your landlord can apply for eviction for rent arrears
+
+---
+
+**Date:** {{notice_date}}
+
+---
+
+## TO THE TENANT(S)
+
+**Name(s):** {{tenant_names}}
+**Address:** {{property_address}}
+
+---
+
+## FROM THE LANDLORD
+
+**Name:** {{landlord_name}}
+**Address:** {{landlord_address}}
+**Phone:** {{landlord_phone}}
+**Email:** {{landlord_email}}
+
+{{#if landlord_agent}}
+**Managing Agent:** {{agent_name}}
+**Agent Address:** {{agent_address}}
+**Agent Phone:** {{agent_phone}}
+**Agent Email:** {{agent_email}}
+{{/if}}
+
+---
+
+## PURPOSE OF THIS NOTICE
+
+This notice is being sent to you because you are in rent arrears. Your landlord is required by law to send you this notice before they can serve a Notice to Leave or apply to the First-tier Tribunal for an eviction order on the ground of rent arrears (Ground 1).
+
+**This is not a Notice to Leave.** This letter is to:
+
+1. Inform you of your rent arrears
+2. Provide information about support available to you
+3. Give you an opportunity to discuss the arrears and potential repayment arrangements
+4. Comply with legal pre-action requirements
+
+---
+
+## YOUR RENT ARREARS
+
+### Current Position
+
+**Monthly Rent:** £{{monthly_rent}}
+**Rent Due Date:** {{rent_due_date}} of each month
+
+**Total Arrears:** £{{total_arrears}}
+**Arrears as of:** {{arrears_calculation_date}}
+
+### Breakdown of Arrears
+
+| Month/Period | Rent Due (£) | Paid (£) | Arrears (£) | Cumulative (£) |
+|--------------|--------------|----------|-------------|----------------|
+{{#each arrears_breakdown}}
+| {{period}} | {{rent_due}} | {{paid}} | {{arrears}} | {{cumulative}} |
+{{/each}}
+
+**Total Outstanding:** £{{total_arrears}}
+
+### Recent Payment History
+
+{{#each recent_payments}}
+- {{date}}: £{{amount}} received {{#if payment_method}}({{payment_method}}){{/if}}
+{{/each}}
+
+{{#if no_recent_payments}}
+No payments have been received in the past {{months_without_payment}} months.
+{{/if}}
+
+---
+
+## RENT ACCOUNT DETAILS
+
+### How to Pay Your Rent
+
+**Bank Transfer (preferred):**
+- Account Name: {{bank_account_name}}
+- Sort Code: {{sort_code}}
+- Account Number: {{account_number}}
+- Reference: {{payment_reference}}
+
+{{#if standing_order_details}}
+**Standing Order:** Your standing order should be set up with the above details for £{{monthly_rent}} on the {{rent_due_date}} of each month.
+
+Current Standing Order Status: {{standing_order_status}}
+{{/if}}
+
+{{#if alternative_payment_methods}}
+**Alternative Payment Methods:**
+{{alternative_payment_methods}}
+{{/if}}
+
+---
+
+## FINANCIAL ASSISTANCE & SUPPORT
+
+### Housing Benefit / Universal Credit
+
+{{#if receiving_benefits}}
+You have informed us that you receive {{benefit_type}}.
+
+**Housing Cost Element:** £{{housing_benefit_amount}} per month
+**Shortfall:** £{{benefit_shortfall}} per month
+
+{{#if benefit_issues}}
+**Known Issues:**
+{{benefit_issues}}
+{{/if}}
+
+{{/if}}
+
+{{#unless receiving_benefits}}
+**You may be entitled to help with your rent through:**
+
+1. **Universal Credit (Housing Costs Element)**
+   - Apply online at: www.gov.uk/apply-universal-credit
+   - Phone: 0800 328 5644
+   - Includes support for rent if you're on a low income or out of work
+
+2. **Housing Benefit** (for people of pension age or in supported accommodation)
+   - Apply through your local council
+   - Contact: {{local_council_name}} Council
+   - Phone: {{council_housing_benefit_phone}}
+
+3. **Discretionary Housing Payment (DHP)**
+   - Extra help if benefits don't cover your full rent
+   - Apply through: {{local_council_name}} Council
+   - Phone: {{council_dhp_phone}}
+
+{{/unless}}
+
+### Switching to Direct Payment (Managed Payment)
+
+If you receive Universal Credit, you can request that the housing cost element is paid directly to your landlord. This is called a "Managed Payment" or "Alternative Payment Arrangement (APA)".
+
+**To arrange this:**
+- Contact your Universal Credit work coach
+- Call Universal Credit: 0800 328 5644
+- Request "Landlord Direct Payment" due to rent arrears
+
+**Landlord's Details for Direct Payment:**
+- Name: {{landlord_name}}
+- Address: {{landlord_address}}
+- Reference: {{landlord_payment_reference}}
+
+---
+
+## SOURCES OF ADVICE & SUPPORT
+
+### Free Debt Advice
+
+{{#each debt_advice_services}}
+**{{organization_name}}**
+- Phone: {{phone}}
+- Website: {{website}}
+- Service: {{description}}
+
+{{/each}}
+
+**Additional Services:**
+
+**StepChange Debt Charity**
+- Phone: 0800 138 1111
+- Website: www.stepchange.org
+- Free debt advice, budgeting support
+
+**Citizens Advice Scotland**
+- Phone: 0800 028 1456
+- Website: www.citizensadvice.org.uk/scotland
+- Free, impartial advice on debt, benefits, housing
+
+**Shelter Scotland**
+- Helpline: 0808 800 4444
+- Website: scotland.shelter.org.uk
+- Housing advice, preventing homelessness
+
+**Christians Against Poverty (CAP)**
+- Phone: 0800 328 0006
+- Website: www.capuk.org
+- Free debt help service
+
+### Housing Advice
+
+**{{local_council_name}} Council - Housing Options**
+- Phone: {{council_housing_phone}}
+- Email: {{council_housing_email}}
+- Can provide advice if you're at risk of homelessness
+
+---
+
+## LET'S DISCUSS YOUR SITUATION
+
+Your landlord wants to help you resolve this situation and avoid court action if possible.
+
+### Contact Us
+
+Please contact us as soon as possible to discuss:
+
+- Why the arrears have accumulated
+- Your current financial situation
+- Possible repayment arrangements
+- Support you might need
+
+**Primary Contact:**
+- Name: {{primary_contact_name}}
+- Phone: {{primary_contact_phone}}
+- Email: {{primary_contact_email}}
+- Available: {{contact_availability}}
+
+{{#if preferred_contact_times}}
+**Best times to reach us:** {{preferred_contact_times}}
+{{/if}}
+
+### Repayment Proposals
+
+If you cannot pay the full arrears immediately, we may be able to agree a repayment plan. Please contact us to discuss:
+
+- A realistic weekly or monthly repayment amount
+- How long it will take to clear the arrears
+- Your income and outgoings
+- Any changes in your circumstances
+
+**Example Repayment Options:**
+
+{{#each repayment_examples}}
+- Option {{@index}}: Current rent (£{{../monthly_rent}}) + £{{additional_payment}} per month = arrears cleared in {{months}} months
+{{/each}}
+
+{{#if flexible_approach}}
+We understand that everyone's situation is different and we're willing to work with you to find a solution that's affordable.
+{{/if}}
+
+---
+
+## WHAT HAPPENS NEXT
+
+### If We Can Agree a Repayment Plan
+
+1. We will put the agreement in writing
+2. You must keep up with:
+   - Your current rent (£{{monthly_rent}} per month)
+   - The agreed arrears payment
+3. As long as you stick to the agreement, no further action will be taken
+
+### If We Cannot Reach an Agreement
+
+If you:
+- Do not contact us within {{response_deadline}} days
+- Do not engage with us about the arrears
+- Cannot agree a realistic repayment plan
+- Agree a plan but do not keep to it
+
+Then your landlord may:
+
+1. **Serve a Notice to Leave** (Ground 1 - Rent Arrears)
+   - Minimum 28 days' notice if you owe more than one month's rent when the notice is given
+   - 84 days in all other rent arrears cases
+
+2. **Apply to the First-tier Tribunal for an Eviction Order**
+   - After the Notice to Leave period expires
+   - The Tribunal will consider whether it's reasonable to grant an eviction order
+   - You will have the opportunity to attend a hearing and present your case
+
+---
+
+## IMPORTANT LEGAL INFORMATION
+
+### Your Rights
+
+1. **This is NOT a Notice to Leave** - you do not have to leave your home at this stage
+2. **You have time to act** - use the contact information above to get help
+3. **Eviction requires a Tribunal order** - your landlord cannot force you to leave without a court order
+4. **You can defend** - if your landlord applies to the Tribunal, you can present your case
+
+### Pre-Action Requirements
+
+This notice fulfills your landlord's legal obligation under the Pre-Action Requirements (Notices) (Scotland) Regulations 2020. Before your landlord can apply for eviction for rent arrears, they must:
+
+✅ Send you this notice explaining the arrears
+✅ Provide information about financial assistance available
+✅ Give you information about debt and housing advice services
+✅ Give you a reasonable period to respond
+
+### Illegal Eviction
+
+It is a criminal offence for your landlord to:
+- Evict you without a Tribunal order
+- Harass you to make you leave
+- Change the locks
+- Deny you access to the property
+
+If this happens, contact the police immediately.
+
+---
+
+## RESPOND NOW
+
+**Please contact us by:** {{response_deadline_date}}
+
+The sooner you get in touch, the more options we can explore together.
+
+**Don't ignore this notice.** Free help is available - use the contact details above.
+
+---
+
+## DECLARATION
+
+This Pre-Action Requirements Notice has been sent in accordance with the Pre-Action Requirements (Notices) (Scotland) Regulations 2020.
+
+**Issued by:**
+
+{{landlord_name}}
+{{landlord_address}}
+
+**Date:** {{notice_date}}
+
+**Sent by:** {{delivery_method}} {{!-- Recorded Delivery, Email, etc. --}}
+
+---
+
+## RECEIPT ACKNOWLEDGMENT (Optional)
+
+I/We acknowledge receipt of this Pre-Action Requirements Notice.
+
+**Tenant Signature:** _________________________
+
+**Date:** _________________________
+
+---
+
+**Document Reference:** {{document_reference}}
+**Generated:** {{generation_date}}
+
+*This notice complies with the Pre-Action Requirements (Notices) (Scotland) Regulations 2020*
+
+---
+
+## KEEP THIS NOTICE
+
+Keep this notice safe. It contains important information about your rent arrears and sources of help.
+
+If your landlord later serves a Notice to Leave or applies to the Tribunal, you may need to refer to this notice.
+
+---
+
+*Generated by Landlord Heaven - Legal Automation for UK Landlords*

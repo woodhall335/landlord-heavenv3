@@ -1,0 +1,480 @@
+{{!--
+  Northern Ireland Property Inventory and Condition Report
+  Best practice for all private tenancies
+  Essential for deposit protection disputes
+--}}
+
+# PROPERTY INVENTORY AND CONDITION REPORT
+## Northern Ireland - Private Tenancy
+
+---
+
+## PROPERTY DETAILS
+
+**Address:** {{property_address}}
+**Postcode:** {{property_postcode}}
+
+**Inspection Date:** {{inspection_date}}
+**Inspection Time:** {{inspection_time}}
+**Inspection Type:** {{inspection_type}} {{!-- Check-in, Check-out, Mid-term --}}
+
+---
+
+## PARTIES PRESENT
+
+**Landlord/Agent:** {{landlord_representative}}
+**Tenant(s):** {{tenant_names}}
+{{#if independent_clerk}}**Independent Inventory Clerk:** {{clerk_name}} ({{clerk_company}}){{/if}}
+
+---
+
+## METER READINGS
+
+### Electricity
+**Supplier:** {{electricity_supplier}}
+**Meter Number:** {{electricity_meter_number}}
+**Reading:** {{electricity_reading}} units
+**Date/Time:** {{electricity_reading_date}}
+{{#if electricity_prepayment}}**Type:** Prepayment meter{{/if}}
+
+### Gas (if applicable)
+**Supplier:** {{gas_supplier}}
+**Meter Number:** {{gas_meter_number}}
+**Reading:** {{gas_reading}} units
+**Date/Time:** {{gas_reading_date}}
+{{#if gas_prepayment}}**Type:** Prepayment meter{{/if}}
+
+### Oil Heating (if applicable)
+**Tank Level:** {{oil_tank_level}} {{!-- e.g., 3/4 full, 400 litres --}}
+**Date:** {{oil_reading_date}}
+
+### Water (if metered)
+**Supplier:** Northern Ireland Water
+**Meter Number:** {{water_meter_number}}
+**Reading:** {{water_reading}} units
+**Date/Time:** {{water_reading_date}}
+
+---
+
+## KEYS & ACCESS
+
+{{#each keys}}
+- **{{description}}:** {{quantity}} key(s) {{#if key_type}}({{key_type}}){{/if}} {{#if fob}}+ {{fob}}{{/if}}
+{{/each}}
+
+**All keys accounted for:** {{#if all_keys_present}}Yes{{else}}No - see notes{{/if}}
+
+---
+
+## CONDITION RATING GUIDE
+
+**5 - Excellent:** New or as new, no wear
+**4 - Good:** Minimal wear, well-maintained
+**3 - Fair:** Moderate wear but serviceable
+**2 - Poor:** Significant wear, needs attention soon
+**1 - Very Poor:** Severe wear/damage, immediate action needed
+
+---
+
+## ROOM-BY-ROOM INVENTORY
+
+{{#each rooms}}
+### {{room_name}}
+
+**Overall Condition:** {{overall_condition}}/5
+**Dimensions (approx):** {{dimensions}}
+
+#### Structure & Decoration
+
+| Item | Condition | Description/Notes | Photo Ref |
+|------|-----------|-------------------|-----------|
+| Walls | {{walls_condition}}/5 | {{walls_description}} | {{walls_photo}} |
+| Ceiling | {{ceiling_condition}}/5 | {{ceiling_description}} | {{ceiling_photo}} |
+| Floor | {{floor_condition}}/5 | {{floor_description}} ({{floor_type}}) | {{floor_photo}} |
+| Skirting | {{skirting_condition}}/5 | {{skirting_description}} | {{skirting_photo}} |
+| Door(s) | {{doors_condition}}/5 | {{doors_description}} | {{doors_photo}} |
+| Window(s) | {{windows_condition}}/5 | {{windows_description}} | {{windows_photo}} |
+| Curtains/Blinds | {{curtains_condition}}/5 | {{curtains_description}} | {{curtains_photo}} |
+
+#### Fixtures & Fittings
+
+{{#each fixtures}}
+| {{name}} | {{condition}}/5 | {{description}} | {{photo_ref}} |
+{{/each}}
+
+#### Furniture & Contents
+
+{{#if furnished}}
+{{#each furniture_items}}
+| {{item}} | {{condition}}/5 | {{description}} | {{photo_ref}} |
+{{/each}}
+{{else}}
+*Unfurnished - no furniture provided*
+{{/if}}
+
+#### Specific Issues or Damage
+
+{{#if issues}}
+{{#each issues}}
+- **{{issue_type}}:** {{description}} (Severity: {{severity}}/5) {{#if photo_ref}}[Photo {{photo_ref}}]{{/if}}
+{{/each}}
+{{else}}
+No specific issues noted.
+{{/if}}
+
+---
+
+{{/each}}
+
+## KITCHEN APPLIANCES
+
+{{#each kitchen_appliances}}
+### {{appliance_name}}
+
+**Make:** {{make}}
+**Model:** {{model}}
+**Condition:** {{condition}}/5
+**Working:** {{#if working}}Yes{{else}}No - {{fault_description}}{{/if}}
+**Cleanliness:** {{cleanliness}}/5
+**Notes:** {{notes}}
+**Photo:** {{photo_ref}}
+
+{{/each}}
+
+---
+
+## WHITE GOODS & APPLIANCES
+
+{{#each appliances}}
+### {{appliance_type}}
+
+**Location:** {{location}}
+**Make/Model:** {{make}} {{model}}
+**Condition:** {{condition}}/5
+**Working Order:** {{#if tested}}{{#if working}}Yes - tested OK{{else}}No - {{fault}}{{/if}}{{else}}Not tested{{/if}}
+**Notes:** {{notes}}
+
+{{/each}}
+
+---
+
+## HEATING SYSTEM
+
+**Type:** {{heating_type}} {{!-- Gas central heating, Oil, Electric storage, etc. --}}
+
+{{#if central_heating}}
+**Boiler:**
+- Make/Model: {{boiler_make}} {{boiler_model}}
+- Location: {{boiler_location}}
+- Condition: {{boiler_condition}}/5
+- Working: {{boiler_working}}
+- Last Service: {{boiler_last_service}}
+
+**Radiators:**
+{{#each radiators}}
+- {{room}}: {{condition}}/5 - {{working_status}}
+{{/each}}
+
+{{/if}}
+
+**Controls:**
+- Thermostat: {{thermostat_condition}}/5 (Location: {{thermostat_location}})
+- Programmer: {{programmer_condition}}/5 (Location: {{programmer_location}})
+
+---
+
+## SAFETY COMPLIANCE
+
+### Electrical Installation
+
+{{#if electrical_certificate}}
+**Electrical Installation Condition Report (EICR):**
+- Date of Inspection: {{eicr_date}}
+- Result: {{eicr_result}}
+- Valid Until: {{eicr_expiry}}
+- Electrician: {{electrician_name}}
+- Certificate Provided to Tenant: {{eicr_provided}}
+{{else}}
+**EICR:** Not provided or not required
+{{/if}}
+
+### Gas Safety
+
+{{#if gas_appliances}}
+**Gas Safety Certificate:**
+- Date of Inspection: {{gas_safety_date}}
+- Result: All appliances safe: {{gas_all_safe}}
+- Engineer: {{gas_engineer_name}} (Gas Safe: {{gas_safe_number}})
+- Valid Until: {{gas_safety_expiry}}
+- Certificate Provided to Tenant: {{gas_cert_provided}}
+
+**Gas Appliances Checked:**
+{{#each gas_appliances_list}}
+- {{appliance}}: {{status}}
+{{/each}}
+{{else}}
+**No gas appliances** at the property
+{{/if}}
+
+### Smoke Alarms
+
+{{#each smoke_alarms}}
+**{{location}}:**
+- Type: {{type}} {{!-- Mains-powered, Battery, Interlinked --}}
+- Tested: {{tested}}
+- Working: {{working}}
+- Condition: {{condition}}/5
+{{/each}}
+
+### Carbon Monoxide Alarms
+
+{{#if co_alarms}}
+{{#each co_alarms}}
+**{{location}}:**
+- Type: {{type}}
+- Tested: {{tested}}
+- Working: {{working}}
+- Condition: {{condition}}/5
+{{/each}}
+{{else}}
+{{#if gas_appliances}}
+**⚠ WARNING:** Carbon monoxide alarm required with gas appliances
+{{else}}
+No carbon monoxide alarms required (no fossil fuel appliances)
+{{/if}}
+{{/if}}
+
+### Energy Performance Certificate (EPC)
+
+**EPC Rating:** {{epc_rating}} ({{epc_score}})
+**Valid Until:** {{epc_expiry}}
+**Certificate Provided to Tenant:** {{epc_provided}}
+
+---
+
+## CLEANLINESS ASSESSMENT
+
+| Area | Rating (1-5) | Notes |
+|------|--------------|-------|
+| Overall | {{overall_clean}}/5 | {{overall_clean_notes}} |
+| Kitchen | {{kitchen_clean}}/5 | {{kitchen_clean_notes}} |
+| Bathroom(s) | {{bathroom_clean}}/5 | {{bathroom_clean_notes}} |
+| Windows (inside) | {{windows_inside_clean}}/5 | {{windows_inside_notes}} |
+| Windows (outside) | {{windows_outside_clean}}/5 | {{windows_outside_notes}} |
+| Carpets/Floors | {{floors_clean}}/5 | {{floors_clean_notes}} |
+| Oven | {{oven_clean}}/5 | {{oven_clean_notes}} |
+
+**Expected Standard at Check-out:** {{expected_standard}}
+
+---
+
+## EXTERNAL AREAS
+
+{{#if garden}}
+### Garden/Yard
+
+**Type:** {{garden_type}} {{!-- Front garden, Rear garden, Shared, etc. --}}
+**Condition:** {{garden_condition}}/5
+**Description:** {{garden_description}}
+
+**Lawn:** {{lawn_condition}}/5 - {{lawn_description}}
+**Borders:** {{borders_condition}}/5 - {{borders_description}}
+**Fencing:** {{fencing_condition}}/5 - {{fencing_description}}
+
+**Maintenance Responsibility:** {{garden_maintenance}} {{!-- Landlord/Tenant as per tenancy agreement --}}
+
+{{/if}}
+
+{{#if parking}}
+### Parking
+
+**Type:** {{parking_type}} {{!-- Driveway, Garage, Allocated space, On-street --}}
+**Spaces:** {{parking_spaces}}
+**Condition:** {{parking_condition}}/5
+
+{{/if}}
+
+{{#if shed_outbuildings}}
+### Shed/Outbuildings
+
+{{#each outbuildings}}
+**{{building_type}}:**
+- Location: {{location}}
+- Condition: {{condition}}/5
+- Contents: {{contents}}
+- Photo: {{photo_ref}}
+
+{{/each}}
+{{/if}}
+
+---
+
+## ADDITIONAL NOTES
+
+{{#if landlord_notes}}
+### Landlord/Agent Notes
+
+{{landlord_notes}}
+{{/if}}
+
+{{#if tenant_comments}}
+### Tenant Comments
+
+{{tenant_comments}}
+{{/if}}
+
+{{#if pre_existing_issues}}
+### Pre-existing Issues (to be addressed)
+
+{{#each pre_existing_issues}}
+- {{description}} (Action: {{action_required}})
+{{/each}}
+{{/if}}
+
+---
+
+## PHOTOGRAPHIC EVIDENCE
+
+**Total Photographs Taken:** {{photo_count}}
+**Photo Storage:** {{photo_storage}} {{!-- e.g., Digital files, Cloud storage --}}
+**Photo File Naming:** {{photo_naming_convention}}
+
+{{#if photo_index}}
+### Photo Index
+
+{{#each photo_index}}
+{{photo_number}}. {{room}} - {{item}} ({{filename}})
+{{/each}}
+{{/if}}
+
+**Photos form part of this inventory and are referenced throughout.**
+
+---
+
+## FITNESS FOR HUMAN HABITATION
+
+This property {{#if habitable}}is{{else}}is not{{/if}} considered fit for human habitation in accordance with landlord's statutory duty.
+
+{{#unless habitable}}
+**Issues affecting habitability:**
+{{#each habitability_issues}}
+- {{description}}
+{{/each}}
+{{/unless}}
+
+---
+
+## TENANT'S OPPORTUNITY TO COMMENT
+
+**Tenant's Right to Dispute:**
+
+{{#if_eq inspection_type "Check-in"}}
+The tenant has **7 days** from the tenancy start date to notify the landlord of any discrepancies in this inventory.
+
+**Deadline for comments:** {{dispute_deadline}}
+
+Any items not disputed within 7 days will be deemed accurate.
+{{/if_eq}}
+
+{{#if_eq inspection_type "Check-out"}}
+The tenant should review this report and notify the landlord of any disagreements regarding:
+- Condition assessments
+- Claimed damage
+- Proposed deposit deductions
+
+Disputes can be resolved through TDS NI's Alternative Dispute Resolution service.
+{{/if_eq}}
+
+---
+
+## SIGNATURES & AGREEMENT
+
+{{#if_eq inspection_type "Check-in"}}
+### Check-in Agreement
+
+The parties confirm this inventory accurately records the property's condition at the start of the tenancy.
+
+**Important:** Tenants should note any disagreements within 7 days.
+
+{{/if_eq}}
+
+{{#if_eq inspection_type "Check-out"}}
+### Check-out Agreement
+
+The parties confirm this inventory accurately records the property's condition at the end of the tenancy.
+
+{{/if_eq}}
+
+**Landlord/Agent:**
+
+Signature: _________________________
+
+Name: {{landlord_name}}
+
+Date: {{signature_date}}
+
+---
+
+**Tenant(s):**
+
+Signature: _________________________
+
+Name: {{tenant_names}}
+
+Date: {{signature_date}}
+
+**Comments/Disputes:**
+
+{{tenant_disputes}}
+
+---
+
+## LEGAL STATUS
+
+This inventory forms part of the tenancy documentation and may be used as evidence in:
+
+- Deposit disputes (TDS NI Alternative Dispute Resolution)
+- County Court possession or damages proceedings
+- Housing Executive investigations
+
+**Both parties should retain a copy.**
+
+---
+
+## NEXT STEPS
+
+{{#if_eq inspection_type "Check-in"}}
+**For Tenants:**
+1. Review this inventory carefully
+2. Note any discrepancies and notify landlord within 7 days
+3. Keep a copy safe for the end of your tenancy
+
+**For Landlords:**
+1. Provide copy to tenant
+2. Keep original on file
+3. Schedule mid-term inspection if desired
+{{/if_eq}}
+
+{{#if_eq inspection_type "Check-out"}}
+**For Tenants:**
+1. Review the assessment
+2. If you disagree with proposed deductions, contact landlord to discuss
+3. If no agreement, use TDS NI dispute resolution (free service)
+
+**For Landlords:**
+1. Compare with check-in inventory
+2. Calculate fair deductions (fair wear and tear applies)
+3. Submit deposit deduction proposal to tenant within 10 days
+4. If dispute, engage TDS NI ADR
+{{/if_eq}}
+
+---
+
+**Document Reference:** {{document_reference}}
+**Generated:** {{generation_date}}
+
+*This inventory complies with Northern Ireland tenancy deposit protection requirements and best practice*
+
+---
+
+*Generated by Landlord Heaven - Legal Automation for UK Landlords*

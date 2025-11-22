@@ -1,0 +1,318 @@
+{{!--
+  Northern Ireland Deposit Protection Certificate
+  Required under: Private Tenancies (Northern Ireland) Order 2006
+  Scheme: Tenancy Deposit Scheme Northern Ireland (TDS NI)
+  Deadline: 14 days from receipt of deposit
+--}}
+
+# TENANCY DEPOSIT PROTECTION CERTIFICATE
+## Northern Ireland
+
+---
+
+**Deposit Protection Scheme:** Tenancy Deposit Scheme Northern Ireland (TDS NI)
+
+**Scheme Contact Details:**
+- Address: The Pavilions, Bridgwater Road, Bristol, BS99 6AA
+- Phone: 0300 037 1000
+- Email: deposits@tdsni.com
+- Website: www.tenancydepositscheme.com/northern-ireland
+
+---
+
+## LANDLORD DETAILS
+
+**Name:** {{landlord_name}}
+**Address:** {{landlord_address}}
+**Postcode:** {{landlord_postcode}}
+**Email:** {{landlord_email}}
+**Phone:** {{landlord_phone}}
+
+{{#if hmo_property}}
+**HMO Certificate Number:** {{hmo_certificate_number}}
+**Issued by:** Northern Ireland Housing Executive (NIHE)
+{{/if}}
+
+---
+
+## TENANT DETAILS
+
+**Name(s):** {{tenant_names}}
+**Email:** {{tenant_email}}
+**Phone:** {{tenant_phone}}
+
+---
+
+## PROPERTY DETAILS
+
+**Address:** {{property_address}}
+**Postcode:** {{property_postcode}}
+
+---
+
+## DEPOSIT DETAILS
+
+**Deposit Amount:** £{{deposit_amount}}
+**Date Received:** {{deposit_received_date}}
+**Date Protected:** {{deposit_protected_date}}
+**Deposit Reference Number:** {{deposit_reference}}
+**TDS Membership Number:** {{tds_membership_number}}
+
+**Protection Deadline:** {{protection_deadline}} (14 days from receipt)
+**Status:** {{#if protected_in_time}}✓ Protected within legal deadline{{else}}⚠ Protected late - see notes{{/if}}
+
+---
+
+## PROTECTION TYPE
+
+This deposit has been protected using a **{{protection_type}}** scheme:
+
+{{#if_eq protection_type "Custodial"}}
+### Custodial Scheme
+
+**How it works:**
+- The deposit is held by TDS NI for the duration of the tenancy
+- Neither the landlord nor the tenant holds the deposit
+- At the end of the tenancy:
+  - If both parties agree on deductions, TDS NI will release the deposit accordingly
+  - If there is a dispute, TDS NI will hold the disputed amount and use their Alternative Dispute Resolution (ADR) service
+- The deposit is protected in a government-backed scheme
+
+**Interest:** The scheme may pay interest on the deposit, which will be distributed at the end of the tenancy according to the allocation of the deposit.
+{{/if_eq}}
+
+{{#if_eq protection_type "Insured"}}
+### Insured Scheme
+
+**How it works:**
+- The landlord holds the deposit
+- The landlord has paid an insurance premium to TDS NI
+- The deposit is insured for its full value
+- At the end of the tenancy:
+  - The landlord must return the deposit (minus agreed deductions) within 10 days
+  - If there is a dispute, the landlord must hand over the disputed amount to TDS NI
+- The insurance guarantees that the tenant's deposit is protected even if the landlord fails to return it
+
+**Insurance:** Your deposit is insured for £{{deposit_amount}}.
+{{/if_eq}}
+
+---
+
+## TENANCY DETAILS
+
+**Tenancy Type:** Private Tenancy
+**Tenancy Start Date:** {{tenancy_start_date}}
+{{#if fixed_term}}**Fixed Term End Date:** {{tenancy_end_date}}{{/if}}
+**Monthly Rent:** £{{monthly_rent}}
+
+---
+
+## INFORMATION FOR TENANTS
+
+### Your Rights Under Northern Ireland Law
+
+Under the Private Tenancies (Northern Ireland) Order 2006, you have the following rights:
+
+1. **Protection Deadline:** Your deposit must be protected within **14 days** from when it was received by the landlord
+2. **Prescribed Information:** You must receive this certificate within **28 days** of the deposit being protected
+3. **Dispute Resolution:** If you disagree with deposit deductions at the end of the tenancy, you can use TDS NI's free Alternative Dispute Resolution (ADR) service
+4. **Penalties:** If your landlord fails to protect your deposit or provide this information, they cannot serve a Notice to Quit and may face financial penalties
+
+### How to Verify Your Deposit Protection
+
+You can check that your deposit is protected by contacting TDS NI:
+
+**Contact TDS NI:**
+- Phone: 0300 037 1000
+- Email: deposits@tdsni.com
+- Online: www.tenancydepositscheme.com/northern-ireland
+- Reference: {{deposit_reference}}
+
+### What Happens at the End of Your Tenancy
+
+**Step 1: Notice to End Tenancy**
+- Either you or your landlord serves proper notice
+- {{#if fixed_term}}For fixed-term: usually end of the fixed term{{/if}}
+- For periodic: minimum 28 days' notice
+
+**Step 2: Check-out Inspection**
+- The property is inspected
+- Compared against the check-in inventory
+
+**Step 3: Deposit Return Proposal**
+- Landlord proposes deductions (if any)
+- You have the right to challenge deductions
+
+**Step 4A: Agreement**
+- If you agree with the deductions, deposit is released as agreed
+- Usually within 10 working days
+
+**Step 4B: Dispute**
+- If you disagree, the matter goes to TDS NI's ADR service
+- Both parties submit evidence
+- An independent adjudicator makes a decision
+- The decision is binding on the landlord but not on you (you can still go to court)
+
+### Dispute Resolution Process
+
+If you cannot agree on deposit deductions:
+
+1. **Notify TDS NI** that there is a dispute
+2. **Evidence Submission:** Both parties submit:
+   - Check-in inventory and photos
+   - Check-out inventory and photos
+   - Receipts for cleaning/repairs
+   - Correspondence
+3. **Independent Review:** An adjudicator reviews all evidence
+4. **Decision:** Usually within 28 days
+5. **Release:** Deposit released according to the decision
+
+**Cost:** The ADR service is completely free to use.
+
+---
+
+## INFORMATION FOR LANDLORDS
+
+### Your Obligations
+
+1. **Protect Deposit:** Within 14 days of receipt
+2. **Provide Information:** Give this certificate to tenant within 28 days of protection
+3. **Return Deposit:** Promptly at end of tenancy (within 10 days if no dispute)
+4. **Evidence:** Keep detailed inventory, photos, and receipts to justify any deductions
+5. **Fair Deductions:** Only deduct for legitimate reasons
+
+### Permitted Deductions
+
+You may deduct from the deposit for:
+
+- **Rent arrears:** Unpaid rent
+- **Damage:** Beyond normal wear and tear
+- **Cleaning:** If property not returned in same cleanliness as check-in
+- **Missing items:** From the inventory
+- **Bills:** If specified in tenancy agreement and bills unpaid
+
+### Not Permitted
+
+You cannot deduct for:
+
+- Normal wear and tear
+- Damage that existed before the tenant moved in
+- Betterment (improvements beyond original condition)
+- Unreasonable cleaning costs
+- Items not listed on the inventory
+
+### Fair Wear and Tear
+
+Expected deterioration over time due to normal use. Examples:
+- Fading of curtains/carpets from sunlight
+- Minor scuffs on walls from daily living
+- Worn carpet in high-traffic areas (proportionate to tenancy length)
+
+---
+
+## DEPOSIT PROTECTION LEGISLATION
+
+### Private Tenancies (Northern Ireland) Order 2006
+
+**Article 1A** - Requirement to protect deposits
+**Article 1B** - Approved schemes
+**Article 1C** - Sanctions for non-compliance
+
+### Key Requirements:
+
+1. **14-day protection deadline** from receipt of deposit
+2. **Prescribed information** must be provided within 28 days of protection
+3. **Tenant cannot be evicted** (via Notice to Quit) if deposit not protected
+4. **Financial penalties** possible for non-compliance
+
+### Penalties for Non-Compliance
+
+If a landlord fails to protect a deposit:
+
+- Cannot serve a valid Notice to Quit
+- Tenant can apply to County Court for:
+  - Return of the deposit
+  - Compensation (up to 3 times the deposit amount)
+  - Court costs
+
+---
+
+## PRESCRIBED INFORMATION
+
+This certificate provides the prescribed information required under the Private Tenancies (Northern Ireland) Order 2006:
+
+✅ **Deposit amount:** £{{deposit_amount}}
+✅ **Deposit protection date:** {{deposit_protected_date}}
+✅ **Scheme name:** Tenancy Deposit Scheme Northern Ireland (TDS NI)
+✅ **Scheme contact details:** Provided above
+✅ **Deposit reference:** {{deposit_reference}}
+✅ **Protection type:** {{protection_type}}
+✅ **Tenancy details:** Provided above
+✅ **Landlord details:** Provided above
+✅ **Dispute resolution process:** Explained above
+
+---
+
+## CONFIRMATION
+
+This certificate confirms that:
+
+1. The tenant's deposit of £{{deposit_amount}} has been protected with TDS NI
+2. The deposit was received on {{deposit_received_date}}
+3. The deposit was protected on {{deposit_protected_date}}
+4. The deposit reference number is: {{deposit_reference}}
+5. The tenant has been provided with all prescribed information
+
+---
+
+**Landlord Signature:** _________________________
+
+**Print Name:** {{landlord_name}}
+
+**Date:** {{certificate_date}}
+
+---
+
+**Tenant Acknowledgment (optional but recommended):**
+
+I/We confirm receipt of this Deposit Protection Certificate and the prescribed information.
+
+**Tenant Signature(s):** _________________________
+
+**Date:** _________________________
+
+---
+
+## IMPORTANT - KEEP THIS CERTIFICATE SAFE
+
+You will need the deposit reference number and TDS NI contact details when your tenancy ends.
+
+If you have any concerns about your deposit, you can contact:
+
+- **TDS NI:** 0300 037 1000
+- **Housing Rights (NI):** 028 9024 5640
+- **Housing Executive:** 03448 920 900
+- **Advice NI:** 0800 915 4604
+
+---
+
+## QUERIES & COMPLAINTS
+
+If you have any questions about your deposit protection or this certificate:
+
+**Contact your landlord:**
+- Name: {{landlord_name}}
+- Phone: {{landlord_phone}}
+- Email: {{landlord_email}}
+
+**Contact TDS NI:**
+- Phone: 0300 037 1000
+- Email: deposits@tdsni.com
+- Website: www.tenancydepositscheme.com/northern-ireland
+
+---
+
+*This certificate complies with the Private Tenancies (Northern Ireland) Order 2006*
+
+**Document generated:** {{generation_date}}
+**Reference:** {{document_reference}}
