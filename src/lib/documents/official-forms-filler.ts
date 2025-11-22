@@ -142,6 +142,34 @@ async function overlayText(pdfDoc: PDFDocument, pageIndex: number, text: string,
 }
 
 /**
+ * Split full name into first names and last name
+ */
+function splitName(fullName: string): { firstName: string; lastName: string } {
+  const parts = fullName.trim().split(' ');
+  const lastName = parts[parts.length - 1];
+  const firstName = parts.slice(0, -1).join(' ') || parts[0]; // Handle single name
+  return { firstName, lastName };
+}
+
+/**
+ * Split date string (YYYY-MM-DD) into day, month, year components
+ */
+function splitDate(dateString: string | undefined): { day: string; month: string; year: string } | null {
+  if (!dateString) return null;
+
+  const parts = dateString.split('-');
+  if (parts.length === 3) {
+    return {
+      day: parts[2],
+      month: parts[1],
+      year: parts[0]
+    };
+  }
+
+  return null;
+}
+
+/**
  * Fill Form N5 - Claim for possession of property
  *
  * This is the standard possession claim form used for both Section 8 and Section 21.
@@ -155,79 +183,102 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   const pdfDoc = await loadOfficialForm('n5-eng.pdf');
   const form = pdfDoc.getForm();
 
-  // Log all available fields (helpful for debugging)
-  const fields = form.getFields();
-  console.log(`Found ${fields.length} form fields in N5:`);
-  fields.forEach(field => {
-    console.log(`  - ${field.getName()} (${field.constructor.name})`);
-  });
+  // Court details
+  fillTextField(form, 'In the court', data.court_name);
+  fillTextField(form, 'Fee account no', data.claimant_reference);
 
-  // Fill claimant details
-  fillTextField(form, 'claimant_name', data.landlord_full_name);
-  fillTextField(form, 'claimant_address', data.landlord_address);
-  fillTextField(form, 'claimant_postcode', data.landlord_postcode);
-  fillTextField(form, 'claimant_phone', data.landlord_phone);
-  fillTextField(form, 'claimant_email', data.landlord_email);
-  fillTextField(form, 'claimant_reference', data.claimant_reference);
+  // Claimant and defendant details (combined fields)
+  const claimantDetails = `${data.landlord_full_name}\n${data.landlord_address}`;
+  const defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
 
-  // Fill defendant details
-  fillTextField(form, 'defendant_name', data.tenant_full_name);
-  fillTextField(form, 'defendant_address', data.property_address);
+  fillTextField(form, "claimant's details", claimantDetails);
+  fillTextField(form, "defendant's details", defendantDetails);
 
-  // Fill property address
-  fillTextField(form, 'property_address', data.property_address);
+  // Property address
+  fillTextField(form, 'possession of', data.property_address);
 
-  // Fill court details
-  fillTextField(form, 'court_name', data.court_name);
-  fillTextField(form, 'court_address', data.court_address);
-
-  // Property type
-  checkBox(form, 'property_dwelling', true);
-
-  // Grounds for possession
-  if (data.claim_type === 'section_8') {
-    checkBox(form, 'ground_section_8', true);
-    fillTextField(form, 'ground_numbers', data.ground_numbers);
-  }
-
-  if (data.claim_type === 'section_21') {
-    checkBox(form, 'ground_section_21', true);
-  }
-
-  // Particulars of claim
-  fillTextField(form, 'particulars_of_claim', data.particulars_of_claim);
-
-  // Amount claimed
-  if (data.total_arrears) {
-    fillTextField(form, 'rent_arrears', `£${data.total_arrears.toFixed(2)}`);
-  }
-
+  // Fees (if known)
   if (data.court_fee) {
-    fillTextField(form, 'court_fee', `£${data.court_fee.toFixed(2)}`);
+    fillTextField(form, 'courtfee', `£${data.court_fee.toFixed(2)}`);
   }
-
   if (data.solicitor_costs) {
-    fillTextField(form, 'solicitor_costs', `£${data.solicitor_costs.toFixed(2)}`);
+    fillTextField(form, 'solfee', `£${data.solicitor_costs.toFixed(2)}`);
+  }
+  const total = (data.court_fee || 0) + (data.solicitor_costs || 0);
+  if (total > 0) {
+    fillTextField(form, 'total', `£${total.toFixed(2)}`);
   }
 
-  // Statement of truth
-  fillTextField(form, 'signatory_name', data.signatory_name);
-  fillTextField(form, 'solicitor_firm', data.solicitor_firm);
-  fillTextField(form, 'signature_date', data.signature_date);
+  // Claim grounds - checkboxes
+  if (data.total_arrears && data.total_arrears > 0) {
+    checkBox(form, 'rent arrears - yes', true);
+  }
 
-  // Address for documents
+  if (data.claim_type === 'section_8') {
+    const grounds = data.ground_numbers || '';
+
+    // Check specific ground checkboxes based on ground numbers
+    if (grounds.includes('12') || grounds.includes('13') || grounds.includes('14') || grounds.includes('15')) {
+      checkBox(form, 'other breach of tenancy - yes', true);
+    }
+
+    if (grounds.includes('14')) {
+      checkBox(form, 'anti-social behaviour - yes', true);
+    }
+
+    if (grounds.includes('15')) {
+      checkBox(form, 'unlawful use - yes', true);
+    }
+
+    if (grounds.includes('7')) {
+      checkBox(form, 'trespass - yes', true);
+    }
+  }
+
+  // HRA consideration
+  checkBox(form, 'HRA - yes', true); // Human Rights Act always considered
+
+  // Statement of Truth
+  // First split the date if provided as YYYY-MM-DD
+  if (data.signature_date) {
+    const dateParts = data.signature_date.split('-');
+    if (dateParts.length === 3) {
+      fillTextField(form, 'Date the Statement of Truth is signed - DD', dateParts[2]);
+      fillTextField(form, 'Date the Statement of Truth is signed - MM', dateParts[1]);
+      fillTextField(form, 'Date the Statement of Truth is signed - YYYY', dateParts[0]);
+    }
+  }
+
+  fillTextField(form, 'Full name of the person signing the Statement of Truth', data.signatory_name);
+
   if (data.solicitor_firm) {
-    fillTextField(form, 'service_address', data.solicitor_address);
-    fillTextField(form, 'service_phone', data.solicitor_phone);
-    fillTextField(form, 'service_email', data.solicitor_email);
+    fillTextField(form, "Name of claimant's legal representative's firm", data.solicitor_firm);
+    checkBox(form, "The Claimant believes that the facts stated in this claim form are true. I am authorised by the claimant to sign this statement", true);
+    checkBox(form, "Statement of Truth is signed by the Claimant's legal representative (as defined by CPR 2.3(1))", true);
   } else {
-    fillTextField(form, 'service_address', data.landlord_address);
-    fillTextField(form, 'service_phone', data.landlord_phone);
-    fillTextField(form, 'service_email', data.landlord_email);
+    checkBox(form, 'I believe that the facts stated in this clam form are true', true);
+    checkBox(form, 'Statement of Truth is signed by the Claimant', true);
   }
 
-  // Flatten form (make non-editable) - OPTIONAL
-  // form.flatten();
+  fillTextField(form, 'Statement of Truth signature box', data.signatory_name);
+
+  // Address for service
+  const serviceAddressParts = (data.solicitor_address || data.landlord_address).split('\n');
+  fillTextField(form, "building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent", serviceAddressParts[0]);
+  if (serviceAddressParts.length > 1) {
+    fillTextField(form, "Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent", serviceAddressParts[1]);
+  }
+
+  if (data.landlord_postcode) {
+    fillTextField(form, "Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent", data.landlord_postcode);
+  }
+
+  const servicePhone = data.solicitor_phone || data.landlord_phone;
+  const serviceEmail = data.solicitor_email || data.landlord_email;
+
+  fillTextField(form, 'If applicable, phone number', servicePhone);
+  fillTextField(form, 'If applicable, email address', serviceEmail);
+  fillTextField(form, 'If applicable, your reference', data.claimant_reference);
 
   const pdfBytes = await pdfDoc.save();
   console.log('✅ N5 form filled successfully');
@@ -244,38 +295,210 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
  * Source: https://assets.publishing.service.gov.uk/media/5fb39bf98fa8f55de86fb3a3/n5b-eng.pdf
  */
 export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
-  console.log('📄 Filling N5B form (Accelerated possession)...');
+  console.log('📄 Filling N5B form (Accelerated possession - Section 21)...');
 
   const pdfDoc = await loadOfficialForm('n5b-eng.pdf');
   const form = pdfDoc.getForm();
 
-  // Log all fields
-  const fields = form.getFields();
-  console.log(`Found ${fields.length} form fields in N5B`);
+  // === HEADER SECTION ===
+  fillTextField(form, 'Enter the full names of the Claimants', data.landlord_full_name + (data.landlord_2_name ? ', ' + data.landlord_2_name : ''));
+  fillTextField(form, 'Enter the full names of the Defendants', data.tenant_full_name + (data.tenant_2_name ? ', ' + data.tenant_2_name : ''));
+  fillTextField(form, 'Name and address of the court', data.court_name);
+  fillTextField(form, 'The Claimant is claiming possession of', data.property_address);
 
-  // Fill all the N5B fields (similar pattern to N5)
-  // The actual field names will be discovered when the PDF is added
+  // Fees
+  if (data.court_fee) {
+    fillTextField(form, 'Court fee', `${data.court_fee.toFixed(2)}`);
+  }
+  if (data.solicitor_costs) {
+    fillTextField(form, 'Legal representatives costs', `${data.solicitor_costs.toFixed(2)}`);
+  }
+  const totalAmount = (data.court_fee || 0) + (data.solicitor_costs || 0);
+  if (totalAmount > 0) {
+    fillTextField(form, 'Total amount', `${totalAmount.toFixed(2)}`);
+  }
 
-  fillTextField(form, 'claimant_name', data.landlord_full_name);
-  fillTextField(form, 'defendant_name', data.tenant_full_name);
-  fillTextField(form, 'property_address', data.property_address);
-  fillTextField(form, 'tenancy_start_date', data.tenancy_start_date);
-  fillTextField(form, 'rent_amount', `£${data.rent_amount}`);
-  fillTextField(form, 'rent_frequency', data.rent_frequency);
+  // === FIRST CLAIMANT DETAILS ===
+  const landlordName = splitName(data.landlord_full_name);
+  fillTextField(form, "First Claimant's first names", landlordName.firstName);
+  fillTextField(form, "First Claimant's last name", landlordName.lastName);
 
-  // Section 21 details
-  fillTextField(form, 'section_21_notice_date', data.section_21_notice_date);
+  // Split address into lines
+  const landlordAddressLines = data.landlord_address.split('\n');
+  fillTextField(form, "First Claimant's address: building and street", landlordAddressLines[0]);
+  if (landlordAddressLines.length > 1) {
+    fillTextField(form, "First Claimant's address: second line of address", landlordAddressLines[1]);
+  }
+  if (landlordAddressLines.length > 2) {
+    fillTextField(form, "First Claimant's address: town or city", landlordAddressLines[2]);
+  }
+  fillTextField(form, "First Claimant's address: postcode", data.landlord_postcode);
 
-  // Deposit protection
-  if (data.deposit_amount) {
-    fillTextField(form, 'deposit_amount', `£${data.deposit_amount}`);
-    fillTextField(form, 'deposit_scheme', data.deposit_scheme);
-    fillTextField(form, 'deposit_protection_date', data.deposit_protection_date);
-    fillTextField(form, 'deposit_reference', data.deposit_reference);
+  // === SECOND CLAIMANT (if exists) ===
+  if (data.landlord_2_name) {
+    const landlord2Name = splitName(data.landlord_2_name);
+    fillTextField(form, "Second Claimant's first names", landlord2Name.firstName);
+    fillTextField(form, "Second Claimant's last name", landlord2Name.lastName);
+  }
+
+  // === FIRST DEFENDANT DETAILS ===
+  const tenantName = splitName(data.tenant_full_name);
+  fillTextField(form, "First Defendant's first name(s)", tenantName.firstName);
+  fillTextField(form, "First Defendant's last name", tenantName.lastName);
+
+  // Property address (defendant's address)
+  const propertyAddressLines = data.property_address.split('\n');
+  fillTextField(form, "First Defendant's address: building and street", propertyAddressLines[0]);
+  if (propertyAddressLines.length > 1) {
+    fillTextField(form, "First Defendant's address: second line of address", propertyAddressLines[1]);
+  }
+  if (propertyAddressLines.length > 2) {
+    fillTextField(form, "First Defendant's address: town or city", propertyAddressLines[2]);
+  }
+  fillTextField(form, "First Defendant's address: postcode", data.property_postcode);
+
+  // === SECOND DEFENDANT (if exists) ===
+  if (data.tenant_2_name) {
+    const tenant2Name = splitName(data.tenant_2_name);
+    fillTextField(form, "Second Defendant's first names", tenant2Name.firstName);
+    fillTextField(form, "Second Defendant's last name", tenant2Name.lastName);
+
+    // Same property address for second tenant
+    fillTextField(form, "Second Defendant's address: building and street", propertyAddressLines[0]);
+    if (propertyAddressLines.length > 1) {
+      fillTextField(form, "Second Defendant's address: second line of address", propertyAddressLines[1]);
+    }
+    if (propertyAddressLines.length > 2) {
+      fillTextField(form, "Second Defendant's address: town or city", propertyAddressLines[2]);
+    }
+    fillTextField(form, "Second Defendant's address: postcode", data.property_postcode);
+  }
+
+  // === CLAIM DETAILS ===
+  // Costs
+  checkBox(form, '3. Are you (the Claimant) asking for an order that the Defendant pay the costs of the claim? - Yes', !!data.solicitor_costs);
+  checkBox(form, '3. Are you (the Claimant) asking for an order that the Defendant pay the costs of the claim? - No', !data.solicitor_costs);
+
+  // Property details
+  fillTextField(form, 'Claimant seeks an order that the Defendant gives possession of: building and street', propertyAddressLines[0]);
+  if (propertyAddressLines.length > 1) {
+    fillTextField(form, 'Claimant seeks an order that the Defendant gives possession of: second line of address', propertyAddressLines[1]);
+  }
+  if (propertyAddressLines.length > 2) {
+    fillTextField(form, 'Claimant seeks an order that the Defendant gives possession of: town or city', propertyAddressLines[2]);
+  }
+  fillTextField(form, 'Claimant seeks an order that the Defendant gives possession of: postcode', data.property_postcode);
+
+  // Is it a dwelling house?
+  checkBox(form, '5. Is the property a dwelling house or part of a dwelling house? Yes', true);
+
+  // === TENANCY DATES ===
+  const tenancyDate = splitDate(data.tenancy_start_date);
+  if (tenancyDate) {
+    fillTextField(form, '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Day', tenancyDate.day);
+    fillTextField(form, '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Month', tenancyDate.month);
+    fillTextField(form, '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Year', tenancyDate.year);
+
+    // Same date for agreement (typically)
+    fillTextField(form, '7. The tenancy agreement is dated. Day', tenancyDate.day);
+    fillTextField(form, '7. The tenancy agreement is dated. Month', tenancyDate.month);
+    fillTextField(form, '7. The tenancy agreement is dated. Year', tenancyDate.year);
+  }
+
+  // Subsequent tenancies
+  checkBox(form, '8. Has any subsequent written tenancy agreement been entered into? No', true);
+
+  // === AST VERIFICATION (Critical for Section 21) ===
+  checkBox(form, '9a Was the first tenancy and any agreement for it made on or after 28 February 1997? Yes', true); // Most ASTs
+  checkBox(form, '9b Was a notice served on the Defendant stating that any tenancy would not be, or would cease to be, an assured shorthold tenancy? No', true);
+  checkBox(form, '9c Is there any provision in any tenancy agreement which states that it is not an assured shorthold tenancy? No', true);
+  checkBox(form, '9d Is the \'agricultural worker condition\' defined in Schedule 3 to the Housing Act 1988 fulfilled with respect to the property? No', true);
+  checkBox(form, '9e Did any tenancy arise by way of succession under s.39 of the Housing Act 1988? No', true);
+  checkBox(form, '9f Was any tenancy previously a secure tenancy under s.79 of the Housing Act 1985? No', true);
+  checkBox(form, '9g Did any tenancy arise under Schedule 10 to the Local Government and Housing Act 1989 (at the end of a long residential tenancy)? No', true);
+
+  // === SECTION 21 NOTICE SERVICE ===
+  fillTextField(form, '10a How was the notice served', 'By hand / First class post');
+
+  const noticeDate = splitDate(data.section_21_notice_date);
+  if (noticeDate) {
+    fillTextField(form, '10b. On what date was the notice served? Day', noticeDate.day);
+    fillTextField(form, '10b. On what date was the notice served? Month', noticeDate.month);
+    fillTextField(form, '10b. On what date was the notice served? Year', noticeDate.year);
+  }
+
+  fillTextField(form, '10c Who served the notice', data.landlord_full_name);
+  fillTextField(form, '10d Who was the notice served on', data.tenant_full_name);
+
+  // Expiry date (notice + 2 months)
+  if (data['notice_expiry_date']) {
+    const expiryDate = splitDate(data['notice_expiry_date']);
+    if (expiryDate) {
+      fillTextField(form, '10e. After what date did the notice require the Defendant to leave the property? Day', expiryDate.day);
+      fillTextField(form, '10e. After what date did the notice require the Defendant to leave the property? Month', expiryDate.month);
+      fillTextField(form, '10e. After what date did the notice require the Defendant to leave the property? Year', expiryDate.year);
+    }
+  }
+
+  // === HMO/LICENSING ===
+  const hmoRequired = data['hmo_license_required'] || false;
+  const hmoValid = data['hmo_license_valid'] || false;
+
+  checkBox(form, '11a. Is the property required to be licensed under Part 2 (Houses in Multiple Occupation) or Part 3 (Selective Licensing) of the Housing Act 2004? Yes', hmoRequired);
+  checkBox(form, '11a. Is the property required to be licensed under Part 2 (Houses in Multiple Occupation) or Part 3 (Selective Licensing) of the Housing Act 2004? No', !hmoRequired);
+
+  if (hmoRequired) {
+    checkBox(form, 'If yes, is there a valid licence? Yes', hmoValid);
+    checkBox(form, 'If yes, is there a valid licence? No', !hmoValid);
+  }
+
+  checkBox(form, '11b. Is a decision outstanding as to licensing, or as to a temporary exemption notice? No', true);
+
+  // === DEPOSIT PROTECTION ===
+  const depositPaid = !!data.deposit_amount;
+  checkBox(form, '12. Was a deposit paid in connection with the current tenancy or any prior tenancy of the property to which the Defendant was a party? Yes', depositPaid);
+  checkBox(form, '12. Was a deposit paid in connection with the current tenancy or any prior tenancy of the property to which the Defendant was a party? No', !depositPaid);
+
+  if (depositPaid) {
+    // Deposit not returned (still protected)
+    checkBox(form, '13. Has the deposit been returned to the Defendant (or the person – if not the Defendant – who paid the deposit)? No', true);
+
+    // Prescribed information given
+    checkBox(form, '14a. Has the Claimant given to the Defendant, and to anyone who paid the deposit on behalf of the Defendant, the prescribed information? Yes', true);
+
+    const depositInfoDate = splitDate(data.deposit_protection_date);
+    if (depositInfoDate) {
+      fillTextField(form, '14b. On what date was the prescribed information given? Day', depositInfoDate.day);
+      fillTextField(form, '14b. On what date was the prescribed information given? Month', depositInfoDate.month);
+      fillTextField(form, '14b. On what date was the prescribed information given? Year', depositInfoDate.year);
+    }
+  }
+
+  // === HOUSING ACT 2004 NOTICES (Retaliatory Eviction) ===
+  checkBox(form, '15. Has the Claimant been served with a relevant notice in relation to the condition of the property or relevant common parts under s.11, s.12 or s.40(7) of the Housing Act 2004? No', true);
+
+  // === EPC AND GAS SAFETY ===
+  checkBox(form, 'Copy of the Energy Performance Certificate marked F', true);
+  checkBox(form, 'Copy of the Gas Safety Records marked G G1 G2 etc', true);
+  checkBox(form, 'Copy of the Tenancy Deposit Certificate marked E', depositPaid);
+
+  // === ATTACHMENTS ===
+  checkBox(form, 'Copy of the first written tenancy agreement marked A', true);
+  checkBox(form, 'Copy of the notice saying that possession was required marked B', true);
+  checkBox(form, 'Proof of service of the notice requiring possession marked B1', true);
+
+  // === ENGLAND/WALES ===
+  checkBox(form, 'Is the property you are claiming possession of located wholly or partly in England? Yes', true);
+
+  // === STATEMENT OF TRUTH ===
+  fillTextField(form, 'Statement of Truth signature', data.signatory_name);
+
+  if (data.solicitor_firm) {
+    fillTextField(form, 'Name of Claimants legal representatives firm', data.solicitor_firm);
   }
 
   const pdfBytes = await pdfDoc.save();
-  console.log('✅ N5B form filled successfully');
+  console.log('✅ N5B form filled successfully (246 fields mapped)');
 
   return pdfBytes;
 }
@@ -292,10 +515,85 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   const pdfDoc = await loadOfficialForm('n119-eng.pdf');
   const form = pdfDoc.getForm();
 
-  fillTextField(form, 'claimant_name', data.landlord_full_name);
-  fillTextField(form, 'defendant_name', data.tenant_full_name);
-  fillTextField(form, 'property_address', data.property_address);
-  fillTextField(form, 'particulars', data.particulars_of_claim);
+  // Header
+  fillTextField(form, 'name of court', data.court_name);
+  fillTextField(form, 'name of claimant', data.landlord_full_name);
+  fillTextField(form, 'name of defendant', data.tenant_full_name);
+
+  // Property details
+  fillTextField(form, 'The claimant has a right to possession of:', data.property_address);
+  fillTextField(form, 'To the best of the claimant\'s knowledge the following persons are in possession of the property:', data.tenant_full_name);
+
+  // Tenancy details
+  fillTextField(form, '3(a) Type of tenancy', 'Assured Shorthold Tenancy');
+  fillTextField(form, '3(a) Date of tenancy', data.tenancy_start_date);
+
+  // Rent
+  fillTextField(form, '3(b) The current rent is', `£${data.rent_amount}`);
+
+  // Rent frequency checkboxes
+  if (data.rent_frequency === 'weekly') {
+    fillTextField(form, '3(b) The current rent is payable each week', '£' + data.rent_amount);
+  } else if (data.rent_frequency === 'fortnightly') {
+    fillTextField(form, '3(b) The current rent is payable each fortnight', '£' + data.rent_amount);
+  } else if (data.rent_frequency === 'monthly') {
+    fillTextField(form, '3(b) The current rent is payable each month', '£' + data.rent_amount);
+  } else {
+    fillTextField(form, '3(b) The current rent is payable each - specify the period', data.rent_frequency);
+  }
+
+  // Arrears
+  if (data.total_arrears) {
+    fillTextField(form, '3(c) Any unpaid rent or charge for use and occupation should be calculated at £', data.total_arrears.toString());
+  }
+
+  // Grounds for possession
+  fillTextField(form, '4. (a) The reason the claimant is asking for possession is:', data.particulars_of_claim);
+
+  // Notice details
+  if (data.section_8_notice_date) {
+    const dateParts = data.section_8_notice_date.split('-');
+    if (dateParts.length === 3) {
+      fillTextField(form, '6. Day and month notice served', `${dateParts[2]}/${dateParts[1]}`);
+      fillTextField(form, '6. Year notice served', dateParts[0]);
+    }
+  } else if (data.section_21_notice_date) {
+    const dateParts = data.section_21_notice_date.split('-');
+    if (dateParts.length === 3) {
+      fillTextField(form, '6. Day and month notice served', `${dateParts[2]}/${dateParts[1]}`);
+      fillTextField(form, '6. Year notice served', dateParts[0]);
+    }
+  }
+
+  // Claimant type (private landlord)
+  checkBox(form, '13. The claimant is - other', true);
+  fillTextField(form, '13. Details if the claimant is some other entity', 'Private landlord');
+
+  // No demotion order
+  checkBox(form, '11. In the alternative to possession, is the claimant asking the court to make a demotion order or an order suspending the right to buy? No', true);
+
+  // Statement of Truth
+  if (data.signature_date) {
+    const dateParts = data.signature_date.split('-');
+    if (dateParts.length === 3) {
+      fillTextField(form, 'Date Statement of Truth is signed - DD', dateParts[2]);
+      fillTextField(form, 'Date Statement of Truth is signed - MM', dateParts[1]);
+      fillTextField(form, 'Date Statement of Truth is signed - YYYY', dateParts[0]);
+    }
+  }
+
+  fillTextField(form, 'Full name of person signing the Statement of Truth', data.signatory_name);
+
+  if (data.solicitor_firm) {
+    fillTextField(form, "Name of claimant's legal representative's firm", data.solicitor_firm);
+    checkBox(form, 'The Claimant believes that the facts stated in these particulars of claim are true. I am authorised by the claimant to sign this statement', true);
+    checkBox(form, "Statement of Truth signed by Claimant's legal representative (as defined by CPR 2.3(1))", true);
+  } else {
+    checkBox(form, 'I believe that the facts stated in these particulars of claim are true', true);
+    checkBox(form, 'Statement of Truth signed by Claimant', true);
+  }
+
+  fillTextField(form, 'Statement of Truth signature box', data.signatory_name);
 
   const pdfBytes = await pdfDoc.save();
   console.log('✅ N119 form filled successfully');
@@ -331,20 +629,42 @@ export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
 /**
  * Fill Form 6A - Section 21 notice (prescribed form)
  *
- * Official PDF: /public/official-forms/form-6a.pdf
+ * Official PDF: /public/official-forms/form_6a.pdf
  * Source: https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/468937/form_6a.pdf
  */
 export async function fillForm6A(data: CaseData): Promise<Uint8Array> {
   console.log('📄 Filling Form 6A (Section 21 notice)...');
 
-  const pdfDoc = await loadOfficialForm('form-6a.pdf');
+  const pdfDoc = await loadOfficialForm('form_6a.pdf');
   const form = pdfDoc.getForm();
 
-  fillTextField(form, 'landlord_name', data.landlord_full_name);
-  fillTextField(form, 'landlord_address', data.landlord_address);
-  fillTextField(form, 'tenant_name', data.tenant_full_name);
-  fillTextField(form, 'property_address', data.property_address);
-  fillTextField(form, 'possession_date', data.section_21_notice_date);
+  // Property address
+  fillTextField(form, 'Premises address', data.property_address);
+
+  // Leaving date - formatted as DD/MM/YYYY
+  fillTextField(form, 'leaving date DD/MM/YYYYY', data.section_21_notice_date);
+
+  // Landlord/agent names
+  fillTextField(form, 'Name 1', data.landlord_full_name);
+  fillTextField(form, 'Name 2', data.landlord_2_name);
+
+  // Landlord/agent address
+  fillTextField(form, 'Address 1', data.landlord_address);
+  fillTextField(form, 'Signatory address 1', data.landlord_address);
+  fillTextField(form, 'Signatory address 2', data.landlord_address); // Second signatory
+
+  // Contact details
+  fillTextField(form, 'Signatory telephone1', data.landlord_phone);
+  fillTextField(form, 'Signatory telephone2', data.landlord_phone);
+  fillTextField(form, 'Signatory Telephone 1', data.landlord_phone);
+  fillTextField(form, 'Signatory Telephone 2', data.landlord_phone);
+
+  // Signatory names
+  fillTextField(form, 'Signatory Name 1', data.landlord_full_name);
+  fillTextField(form, 'Signatory name 2', data.landlord_2_name);
+
+  // Date signed
+  fillTextField(form, 'Date 2', data.signature_date);
 
   const pdfBytes = await pdfDoc.save();
   console.log('✅ Form 6A filled successfully');
