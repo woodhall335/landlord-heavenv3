@@ -103,6 +103,11 @@ function registerHandlebarsHelpers() {
     const diff = Math.abs(d2.getTime() - d1.getTime());
     return Math.ceil(diff / (1000 * 60 * 60 * 24));
   });
+
+  // Add numbers (for array indexing, etc.)
+  Handlebars.registerHelper('add', function (a, b) {
+    return Number(a) + Number(b);
+  });
 }
 
 // Register helpers once

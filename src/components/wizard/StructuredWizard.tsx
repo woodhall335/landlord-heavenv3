@@ -218,6 +218,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   };
 
+  // Helper function to get applicable warnings for a field
+  const getFieldWarnings = (field: any, fieldValue: string) => {
+    if (!field.warnings || !fieldValue) return [];
+
+    return field.warnings.filter((warning: any) => {
+      if (Array.isArray(warning.value)) {
+        return warning.value.includes(fieldValue);
+      }
+      return warning.value === fieldValue;
+    });
+  };
+
   const renderInput = () => {
     const value = answers[currentQuestion.id] || '';
 
@@ -357,6 +369,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                                  field.width === 'half' ? 'w-full md:w-[calc(50%-0.5rem)]' :
                                  'w-full md:w-[calc(33.333%-0.5rem)]';
 
+              const fieldWarnings = getFieldWarnings(field, fieldValue);
+
               return (
                 <div key={field.id} className={widthClass}>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -400,6 +414,26 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       disabled={loading}
                       className="w-full"
                     />
+                  )}
+
+                  {/* Display warnings for this field */}
+                  {fieldWarnings.length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      {fieldWarnings.map((warning, idx) => (
+                        <div
+                          key={idx}
+                          className={`p-3 rounded-lg text-sm ${
+                            warning.severity === 'error'
+                              ? 'bg-red-50 border border-red-200 text-red-800'
+                              : warning.severity === 'warning'
+                              ? 'bg-yellow-50 border border-yellow-200 text-yellow-800'
+                              : 'bg-blue-50 border border-blue-200 text-blue-800'
+                          }`}
+                        >
+                          {warning.message}
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
               );
