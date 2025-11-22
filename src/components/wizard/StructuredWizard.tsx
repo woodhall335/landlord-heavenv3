@@ -339,12 +339,20 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
         {/* Navigation */}
         <div className="flex gap-4">
-          <Button onClick={handleBack} variant="secondary" disabled={currentQuestionIndex === 0 || loading}>
-            ← Back
-          </Button>
-          <Button onClick={handleNext} variant="primary" className="flex-1" disabled={loading}>
+          {currentQuestionIndex > 0 && (
+            <Button
+              onClick={handleBack}
+              variant="secondary"
+              size="large"
+              disabled={loading}
+              className="px-8"
+            >
+              ← Back
+            </Button>
+          )}
+          <Button onClick={handleNext} variant="primary" size="large" className="flex-1" disabled={loading}>
             {currentQuestionIndex === visibleQuestions.length - 1
-              ? 'Complete →'
+              ? '✓ Complete & Preview →'
               : 'Next →'}
           </Button>
         </div>
@@ -383,16 +391,26 @@ function transformAnswersToASTData(answers: Record<string, any>): any {
     });
   }
 
+  // Assemble full addresses from 3-line format
+  const property_address = `${answers.property_address_line1}\n${answers.property_address_town}\n${answers.property_address_postcode}`;
+  const landlord_address = `${answers.landlord_address_line1}\n${answers.landlord_address_town}\n${answers.landlord_address_postcode}`;
+
   return {
     // Property
-    property_address: answers.property_address,
+    property_address,
+    property_address_line1: answers.property_address_line1,
+    property_address_town: answers.property_address_town,
+    property_address_postcode: answers.property_address_postcode,
     property_type: answers.property_type,
     furnished_status: answers.furnished_status?.toLowerCase(),
     number_of_bedrooms: answers.number_of_bedrooms,
 
     // Landlord
     landlord_full_name: answers.landlord_full_name,
-    landlord_address: answers.landlord_address,
+    landlord_address,
+    landlord_address_line1: answers.landlord_address_line1,
+    landlord_address_town: answers.landlord_address_town,
+    landlord_address_postcode: answers.landlord_address_postcode,
     landlord_email: answers.landlord_email,
     landlord_phone: answers.landlord_phone,
 
@@ -410,9 +428,13 @@ function transformAnswersToASTData(answers: Record<string, any>): any {
     rent_due_day: answers.rent_due_day,
     payment_method: answers.payment_method,
     payment_details: `${answers.bank_account_name}\nSort Code: ${answers.bank_sort_code}\nAccount: ${answers.bank_account_number}`,
+    bank_account_name: answers.bank_account_name,
+    bank_sort_code: answers.bank_sort_code,
+    bank_account_number: answers.bank_account_number,
 
     // Deposit
     deposit_amount: parseFloat(answers.deposit_amount),
+    deposit_scheme: answers.deposit_scheme,
     deposit_scheme_name: answers.deposit_scheme?.split(' ')[0], // Extract 'DPS', 'MyDeposits', or 'TDS'
 
     // Bills
@@ -422,12 +444,57 @@ function transformAnswersToASTData(answers: Record<string, any>): any {
 
     // Property rules
     pets_allowed: answers.pets_allowed === 'yes',
-    approved_pets: answers.approved_pets?.join(', '),
+    approved_pets: Array.isArray(answers.approved_pets) ? answers.approved_pets.join(', ') : answers.approved_pets,
     smoking_allowed: answers.smoking_allowed === 'yes',
+    parking_available: answers.parking_available === 'yes',
     parking: answers.parking_available === 'yes',
     parking_details: answers.parking_details,
 
+    // Legal compliance & safety
+    gas_safety_certificate: answers.gas_safety_certificate === 'yes',
+    epc_rating: answers.epc_rating,
+    electrical_safety_certificate: answers.electrical_safety_certificate === 'yes',
+    smoke_alarms_fitted: answers.smoke_alarms_fitted === 'yes',
+    carbon_monoxide_alarms: answers.carbon_monoxide_alarms === 'yes',
+    how_to_rent_guide_provided: answers.how_to_rent_guide_provided === 'yes',
+
+    // Maintenance & repairs
+    landlord_maintenance_responsibilities: answers.landlord_maintenance_responsibilities,
+    garden_maintenance: answers.garden_maintenance,
+    repairs_reporting_method: answers.repairs_reporting_method,
+    emergency_contact: answers.emergency_contact,
+
+    // Property condition & inventory
+    inventory_provided: answers.inventory_provided === 'yes',
+    professional_cleaning_required: answers.professional_cleaning_required === 'yes',
+    decoration_condition: answers.decoration_condition,
+
+    // Tenancy terms & conditions
+    break_clause: answers.break_clause === 'yes',
+    break_clause_months: answers.break_clause_months,
+    break_clause_notice_period: answers.break_clause_notice_period,
+    subletting_allowed: answers.subletting_allowed,
+    rent_increase_clause: answers.rent_increase_clause === 'yes',
+    rent_increase_frequency: answers.rent_increase_frequency,
+
+    // Insurance & liability
+    landlord_insurance: answers.landlord_insurance === 'yes',
+    tenant_insurance_required: answers.tenant_insurance_required,
+
+    // Access & viewings
+    landlord_access_notice: answers.landlord_access_notice,
+    inspection_frequency: answers.inspection_frequency,
+    end_of_tenancy_viewings: answers.end_of_tenancy_viewings === 'yes',
+
+    // Additional terms
+    white_goods_included: Array.isArray(answers.white_goods_included) ? answers.white_goods_included : [],
+    communal_areas: answers.communal_areas === 'yes',
+    communal_cleaning: answers.communal_cleaning,
+    recycling_bins: answers.recycling_bins === 'yes',
+
     // Metadata
     agreement_date: new Date().toISOString().split('T')[0],
+    current_date: new Date().toLocaleDateString('en-GB'),
+    current_year: new Date().getFullYear(),
   };
 }

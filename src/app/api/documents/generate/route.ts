@@ -26,8 +26,10 @@ const generateDocumentSchema = z.object({
     'ast_premium',
     'notice_to_leave', // Scotland
     'prt_agreement', // Scotland
+    'prt_premium', // Scotland Premium
     'notice_to_quit', // Northern Ireland
     'private_tenancy', // Northern Ireland
+    'private_tenancy_premium', // Northern Ireland Premium
   ]),
   is_preview: z.boolean().optional().default(true),
 });
@@ -117,6 +119,12 @@ export async function POST(request: Request) {
           documentTitle = 'Private Residential Tenancy Agreement - Scotland';
           break;
 
+        case 'prt_premium':
+          const { generatePremiumPRT } = await import('@/lib/documents/scotland/prt-generator');
+          generatedDoc = await generatePremiumPRT(facts);
+          documentTitle = 'Premium Private Residential Tenancy Agreement - Scotland';
+          break;
+
         case 'notice_to_quit':
           generatedDoc = await generateNoticeToQuit(facts);
           documentTitle = 'Notice to Quit - Northern Ireland';
@@ -125,6 +133,12 @@ export async function POST(request: Request) {
         case 'private_tenancy':
           generatedDoc = await generatePrivateTenancyAgreement(facts);
           documentTitle = 'Private Tenancy Agreement - Northern Ireland';
+          break;
+
+        case 'private_tenancy_premium':
+          const { generatePremiumPrivateTenancy } = await import('@/lib/documents/northern-ireland/private-tenancy-generator');
+          generatedDoc = await generatePremiumPrivateTenancy(facts);
+          documentTitle = 'Premium Private Tenancy Agreement - Northern Ireland';
           break;
 
         default:
