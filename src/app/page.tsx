@@ -28,7 +28,7 @@ export default function Home() {
         actions={
           <div className="flex flex-wrap items-center gap-3">
             <Link href="/wizard">
-              <Button variant="secondary" size="large" className="bg-white text-[#009E9E] hover:bg-white/90">
+              <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90 shadow-lg">
                 Start free analysis
               </Button>
             </Link>
@@ -83,7 +83,7 @@ export default function Home() {
               <div key={label} className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-200">
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-semibold text-gray-900">{label}</div>
-                  <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-[#009E9E]">Step {idx + 1}</span>
+                  <span className="rounded-full bg-primary-subtle px-3 py-1 text-xs font-semibold text-primary">Step {idx + 1}</span>
                 </div>
                 <p className="mt-2 text-sm text-gray-600">
                   Guided prompts keep you compliant and capture the evidence you need.
@@ -183,7 +183,7 @@ export default function Home() {
               <div className="grid gap-3 sm:grid-cols-2">
                 {["Compliance timelines", "Evidence checklists", "Document history", "Secure storage", "Jurisdiction updates", "Live support"].map((item) => (
                   <div key={item} className="flex items-center gap-3 rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-gray-200">
-                    <span className="text-[#009E9E]">✓</span>
+                    <span className="text-primary font-bold">✓</span>
                     <span className="text-sm font-semibold text-gray-800">{item}</span>
                   </div>
                 ))}
@@ -194,15 +194,15 @@ export default function Home() {
       </section>
 
       <section className="bg-gray-50 py-16 md:py-20">
-        <div className="mx-auto max-w-5xl rounded-3xl bg-gradient-to-br from-[#009E9E] to-emerald-600 px-8 py-12 text-white shadow-lg">
+        <div className="mx-auto max-w-5xl rounded-3xl bg-gradient-to-br from-primary to-primary-dark px-8 py-12 text-white shadow-xl">
           <div className="grid gap-6 md:grid-cols-[2fr,1fr] md:items-center">
-            <div className="space-y-3">
-              <h3 className="text-3xl font-bold">Ready to feel confident about every notice?</h3>
-              <p className="text-lg text-white/90">Start the Eviction Route Checker and get a clean action plan in minutes.</p>
+            <div className="space-y-4">
+              <h3 className="text-3xl font-extrabold">Ready to feel confident about every notice?</h3>
+              <p className="text-lg text-white/90 font-medium">Start the Eviction Route Checker and get a clean action plan in minutes.</p>
             </div>
             <div className="flex flex-wrap gap-3 md:justify-end">
               <Link href="/wizard">
-                <Button variant="secondary" size="large" className="bg-white text-[#009E9E] hover:bg-white/90">
+                <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90 shadow-lg">
                   Launch the wizard
                 </Button>
               </Link>

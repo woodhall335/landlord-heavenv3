@@ -30,19 +30,19 @@ export function NavBar({ user }: NavBarProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-gray-200">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
         <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-[#009E9E] to-emerald-500 text-lg font-bold text-white shadow-lg shadow-emerald-200/60">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-lg font-extrabold text-white">
             LH
           </div>
           <div className="hidden md:flex flex-col leading-tight">
-            <span className="text-lg font-bold text-gray-900">Landlord Heaven</span>
-            <span className="text-sm text-gray-500">Legal-tech for landlords</span>
+            <span className="text-lg font-extrabold text-charcoal">Landlord Heaven</span>
+            <span className="text-xs text-gray-500">Legal-tech for landlords</span>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-8 lg:flex">
           {primaryLinks.map((item) => (
             <Link
               key={item.href}
@@ -50,8 +50,8 @@ export function NavBar({ user }: NavBarProps) {
               className={clsx(
                 "text-sm font-semibold transition-colors",
                 pathname === item.href
-                  ? "text-[#009E9E]"
-                  : "text-gray-700 hover:text-gray-900"
+                  ? "text-primary"
+                  : "text-charcoal hover:text-primary"
               )}
             >
               {item.label}
@@ -59,24 +59,24 @@ export function NavBar({ user }: NavBarProps) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-4 lg:flex">
           {user ? (
-            <div className="flex items-center gap-3 rounded-full bg-gray-100 px-3 py-2 text-sm text-gray-800">
-              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#009E9E] to-emerald-500 text-white font-semibold">
+            <div className="flex items-center gap-3 rounded-full bg-gray-100 px-4 py-2 text-sm text-charcoal">
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white font-bold">
                 {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
               </span>
               <span className="max-w-[140px] truncate font-semibold">{user.name || user.email}</span>
-              <Link href="/dashboard" className="text-[#009E9E] hover:text-emerald-600">
+              <Link href="/dashboard" className="text-primary hover:text-primary-dark font-semibold">
                 Dashboard
               </Link>
             </div>
           ) : (
             <>
-              <Link href="/auth/login" className="text-sm font-semibold text-gray-700 hover:text-gray-900">
+              <Link href="/auth/login" className="text-sm font-semibold text-charcoal hover:text-primary transition-colors">
                 Log in
               </Link>
               <Link href="/auth/signup">
-                <Button variant="primary" size="medium" className="min-h-button px-5">
+                <Button variant="primary" size="medium" className="px-6">
                   Get started
                 </Button>
               </Link>
@@ -98,14 +98,14 @@ export function NavBar({ user }: NavBarProps) {
 
       {open && (
         <div className="border-t border-gray-200 bg-white lg:hidden">
-          <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4">
+          <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4">
             {primaryLinks.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className={clsx(
-                  "text-sm font-semibold", 
-                  pathname === item.href ? "text-[#009E9E]" : "text-gray-700"
+                  "text-sm font-semibold",
+                  pathname === item.href ? "text-primary" : "text-charcoal"
                 )}
                 onClick={() => setOpen(false)}
               >
@@ -115,12 +115,12 @@ export function NavBar({ user }: NavBarProps) {
 
             <div className="flex items-center gap-3 pt-2">
               {user ? (
-                <Link href="/dashboard" className="text-sm font-semibold text-[#009E9E]">
+                <Link href="/dashboard" className="text-sm font-semibold text-primary">
                   Go to dashboard
                 </Link>
               ) : (
                 <>
-                  <Link href="/auth/login" className="text-sm font-semibold text-gray-700">
+                  <Link href="/auth/login" className="text-sm font-semibold text-charcoal">
                     Log in
                   </Link>
                   <Link href="/auth/signup" className="flex-1">

@@ -16,7 +16,7 @@ export function FeatureSplit({ title, subtitle, body, image, reverse = false, ey
       <div className="mx-auto flex max-w-6xl flex-col gap-12 px-6 lg:flex-row lg:items-center lg:gap-20">
         <div className={`flex-1 space-y-6 ${reverse ? "lg:order-2" : ""}`}>
           {eyebrow && (
-            <span className="inline-flex rounded-full bg-emerald-50 px-4 py-2 text-sm font-semibold text-[#009E9E]">
+            <span className="inline-flex rounded-full bg-emerald-50 px-4 py-2 text-sm font-semibold text-primary">
               {eyebrow}
             </span>
           )}

@@ -29,7 +29,7 @@ export function StepList({ title, subtitle, steps }: StepListProps) {
               key={step.title}
               className="flex gap-4 rounded-2xl bg-gray-50 p-6 ring-1 ring-gray-200"
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#009E9E] to-emerald-500 text-lg font-bold text-white">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-primary to-emerald-500 text-lg font-bold text-white">
                 {step.icon ?? index + 1}
               </div>
               <div className="space-y-2">
