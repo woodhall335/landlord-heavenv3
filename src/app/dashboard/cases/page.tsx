@@ -1,0 +1,309 @@
+/**
+ * Cases List Page
+ *
+ * Full list of all user cases with filtering and sorting
+ */
+
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Container } from '@/components/ui/Container';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
+
+interface Case {
+  id: string;
+  case_type: string;
+  jurisdiction: string;
+  status: string;
+  wizard_progress: number;
+  created_at: string;
+  updated_at: string;
+}
+
+type FilterStatus = 'all' | 'draft' | 'in_progress' | 'completed';
+type SortBy = 'newest' | 'oldest' | 'progress';
+
+export default function CasesListPage() {
+  const router = useRouter();
+  const [cases, setCases] = useState<Case[]>([]);
+  const [filteredCases, setFilteredCases] = useState<Case[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
+  const [sortBy, setSortBy] = useState<SortBy>('newest');
+
+  useEffect(() => {
+    fetchCases();
+  }, []);
+
+  useEffect(() => {
+    applyFiltersAndSort();
+  }, [cases, filterStatus, sortBy]);
+
+  const fetchCases = async () => {
+    try {
+      const response = await fetch('/api/cases');
+
+      if (response.ok) {
+        const data = await response.json();
+        setCases(data.cases || []);
+      }
+    } catch (error) {
+      console.error('Failed to fetch cases:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const applyFiltersAndSort = () => {
+    let filtered = [...cases];
+
+    // Apply status filter
+    if (filterStatus !== 'all') {
+      filtered = filtered.filter((c) => c.status === filterStatus);
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'newest':
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        case 'oldest':
+          return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        case 'progress':
+          return b.wizard_progress - a.wizard_progress;
+        default:
+          return 0;
+      }
+    });
+
+    setFilteredCases(filtered);
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+  };
+
+  const getCaseTypeLabel = (caseType: string): string => {
+    const labels: Record<string, string> = {
+      eviction: 'Eviction Notice',
+      money_claim: 'Money Claim',
+      tenancy_agreement: 'Tenancy Agreement',
+    };
+    return labels[caseType] || caseType;
+  };
+
+  const getJurisdictionLabel = (jurisdiction: string): string => {
+    const labels: Record<string, string> = {
+      'england-wales': 'England & Wales',
+      scotland: 'Scotland',
+      'northern-ireland': 'Northern Ireland',
+    };
+    return labels[jurisdiction] || jurisdiction;
+  };
+
+  const getStatusColor = (status: string): 'neutral' | 'warning' | 'success' => {
+    switch (status) {
+      case 'completed':
+        return 'success';
+      case 'in_progress':
+        return 'warning';
+      default:
+        return 'neutral';
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading cases...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-white border-b border-gray-200">
+        <Container size="large" className="py-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-extrabold text-charcoal">All Cases</h1>
+              <p className="text-gray-600 mt-1">
+                {filteredCases.length} {filteredCases.length === 1 ? 'case' : 'cases'} found
+              </p>
+            </div>
+            <Link href="/wizard">
+              <Button variant="primary" size="large">
+                + New Case
+              </Button>
+            </Link>
+          </div>
+        </Container>
+      </div>
+
+      <Container size="large" className="py-8">
+        {/* Filters and Sorting */}
+        <Card padding="medium" className="mb-6">
+          <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+            {/* Status Filter */}
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setFilterStatus('all')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filterStatus === 'all'
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                All Cases
+              </button>
+              <button
+                onClick={() => setFilterStatus('draft')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filterStatus === 'draft'
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Draft
+              </button>
+              <button
+                onClick={() => setFilterStatus('in_progress')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filterStatus === 'in_progress'
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                In Progress
+              </button>
+              <button
+                onClick={() => setFilterStatus('completed')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filterStatus === 'completed'
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Completed
+              </button>
+            </div>
+
+            {/* Sort Dropdown */}
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-medium text-gray-700">Sort by:</label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortBy)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+              >
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="progress">Progress</option>
+              </select>
+            </div>
+          </div>
+        </Card>
+
+        {/* Cases Grid */}
+        {filteredCases.length === 0 ? (
+          <Card padding="large">
+            <div className="text-center py-12">
+              <svg
+                className="w-16 h-16 text-gray-400 mx-auto mb-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              <h2 className="text-xl font-semibold text-charcoal mb-2">
+                No cases found
+              </h2>
+              <p className="text-gray-600 mb-6">
+                {filterStatus !== 'all'
+                  ? `You don't have any ${filterStatus.replace('_', ' ')} cases yet.`
+                  : "You haven't created any cases yet."}
+              </p>
+              <Link href="/wizard">
+                <Button variant="primary">Create Your First Case</Button>
+              </Link>
+            </div>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredCases.map((caseItem) => (
+              <Card
+                key={caseItem.id}
+                padding="large"
+                className="cursor-pointer hover:shadow-lg transition-shadow"
+                onClick={() => router.push(`/dashboard/cases/${caseItem.id}`)}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="text-lg font-semibold text-charcoal mb-1">
+                      {getCaseTypeLabel(caseItem.case_type)}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {getJurisdictionLabel(caseItem.jurisdiction)}
+                    </p>
+                  </div>
+                  <Badge variant={getStatusColor(caseItem.status)}>
+                    {caseItem.status.replace('_', ' ')}
+                  </Badge>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="mb-4">
+                  <div className="flex items-center justify-between text-sm mb-2">
+                    <span className="text-gray-600">Progress</span>
+                    <span className="font-medium text-charcoal">
+                      {caseItem.wizard_progress}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-primary h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${caseItem.wizard_progress}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* Dates */}
+                <div className="flex items-center gap-4 text-xs text-gray-500">
+                  <div className="flex items-center gap-1">
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    Created {formatDate(caseItem.created_at)}
+                  </div>
+                  <span>•</span>
+                  <div>Updated {formatDate(caseItem.updated_at)}</div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+      </Container>
+    </div>
+  );
+}
