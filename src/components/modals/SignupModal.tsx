@@ -8,7 +8,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, TextInput, Card } from '@/components/ui';
+import { Button, Input, Card } from '@/components/ui';
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -95,7 +95,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Email Address
             </label>
-            <TextInput
+            <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -109,7 +109,7 @@ export const SignupModal: React.FC<SignupModalProps> = ({
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Password
             </label>
-            <TextInput
+            <Input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
