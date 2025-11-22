@@ -3,9 +3,10 @@
  *
  * POST /api/wizard/next-question
  * Uses AI fact-finder to determine the next question to ask
+ * ALLOWS ANONYMOUS ACCESS
  */
 
-import { requireServerAuth, createServerSupabaseClient } from '@/lib/supabase/server';
+import { getServerUser, createServerSupabaseClient } from '@/lib/supabase/server';
 import { getNextQuestion, trackTokenUsage } from '@/lib/ai';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -19,7 +20,8 @@ const nextQuestionSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const user = await requireServerAuth();
+    // Allow anonymous access - user is optional
+    const user = await getServerUser();
     const body = await request.json();
 
     // Validate input
@@ -37,12 +39,12 @@ export async function POST(request: Request) {
     const { case_id, case_type, jurisdiction, collected_facts } = validationResult.data;
     const supabase = await createServerSupabaseClient();
 
-    // Verify case ownership
+    // Verify case ownership (allow both logged-in users and anonymous)
     const { data: caseData, error: caseError } = await supabase
       .from('cases')
       .select('id, user_id')
       .eq('id', case_id)
-      .eq('user_id', user.id)
+      .eq('user_id', user ? user.id : null)
       .single();
 
     if (caseError || !caseData) {
@@ -59,17 +61,19 @@ export async function POST(request: Request) {
       collected_facts,
     });
 
-    // Track AI token usage
-    await trackTokenUsage({
-      user_id: user.id,
-      model: 'gpt-4o-mini',
-      operation: 'fact_finding',
-      prompt_tokens: aiResponse.usage.prompt_tokens,
-      completion_tokens: aiResponse.usage.completion_tokens,
-      total_tokens: aiResponse.usage.total_tokens,
-      cost_usd: aiResponse.usage.cost_usd,
-      case_id,
-    });
+    // Track AI token usage (only if user is logged in)
+    if (user) {
+      await trackTokenUsage({
+        user_id: user.id,
+        model: 'gpt-4o-mini',
+        operation: 'fact_finding',
+        prompt_tokens: aiResponse.usage.prompt_tokens,
+        completion_tokens: aiResponse.usage.completion_tokens,
+        total_tokens: aiResponse.usage.total_tokens,
+        cost_usd: aiResponse.usage.cost_usd,
+        case_id,
+      });
+    }
 
     // Return next question or completion status
     return NextResponse.json({

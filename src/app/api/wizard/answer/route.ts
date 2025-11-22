@@ -3,9 +3,10 @@
  *
  * POST /api/wizard/answer
  * Saves user's answer to the wizard and updates case facts
+ * ALLOWS ANONYMOUS ACCESS
  */
 
-import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -19,7 +20,8 @@ const answerSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const user = await requireServerAuth();
+    // Allow anonymous access - user is optional
+    const user = await getServerUser();
     const body = await request.json();
 
     // Validate input
@@ -37,12 +39,12 @@ export async function POST(request: Request) {
     const { case_id, question_id, answer, progress } = validationResult.data;
     const supabase = await createServerSupabaseClient();
 
-    // Fetch current case
+    // Fetch current case (allow both logged-in users and anonymous)
     const { data: currentCase, error: fetchError } = await supabase
       .from('cases')
       .select('*')
       .eq('id', case_id)
-      .eq('user_id', user.id)
+      .eq('user_id', user ? user.id : null)
       .single();
 
     if (fetchError || !currentCase) {
@@ -89,13 +91,6 @@ export async function POST(request: Request) {
       { status: 200 }
     );
   } catch (error: any) {
-    if (error.message === 'Unauthorized - Please log in') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
     console.error('Save answer error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
