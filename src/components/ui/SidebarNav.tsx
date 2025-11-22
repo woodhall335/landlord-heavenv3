@@ -24,7 +24,7 @@ export function SidebarNav({ items, activePath }: SidebarNavProps) {
             href={item.href}
             className={clsx(
               "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition-colors",
-              active ? "bg-[#009E9E]/10 text-[#009E9E]" : "text-gray-700 hover:bg-gray-50"
+              active ? "bg-primary/10 text-primary" : "text-gray-700 hover:bg-gray-50"
             )}
           >
             {item.icon && <span className="text-lg">{item.icon}</span>}
