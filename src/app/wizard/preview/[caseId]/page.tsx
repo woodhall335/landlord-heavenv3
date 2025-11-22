@@ -11,6 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button, Card, Loading } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
+import { SignupModal } from '@/components/modals/SignupModal';
 
 interface CaseData {
   id: string;
@@ -42,6 +43,8 @@ export default function WizardPreviewPage() {
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showSignupModal, setShowSignupModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
   // Fetch case data and generate preview
   useEffect(() => {
@@ -192,6 +195,28 @@ export default function WizardPreviewPage() {
     try {
       setCheckoutLoading(true);
 
+      // Check if user is authenticated
+      const authCheckResponse = await fetch('/api/auth/me');
+
+      if (!authCheckResponse.ok) {
+        // User is anonymous - show signup modal
+        setSelectedProduct(productType);
+        setShowSignupModal(true);
+        setCheckoutLoading(false);
+        return;
+      }
+
+      // User is authenticated - proceed to checkout
+      await proceedToCheckout(productType);
+    } catch (err: any) {
+      console.error('Checkout error:', err);
+      showToast('Failed to start checkout. Please try again.', 'error');
+      setCheckoutLoading(false);
+    }
+  };
+
+  const proceedToCheckout = async (productType: string) => {
+    try {
       const response = await fetch('/api/checkout/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -219,6 +244,19 @@ export default function WizardPreviewPage() {
       console.error('Checkout error:', err);
       showToast('Failed to start checkout. Please try again.', 'error');
       setCheckoutLoading(false);
+    }
+  };
+
+  const handleSignupSuccess = async (userId: string) => {
+    // Close modal
+    setShowSignupModal(false);
+
+    // Show success message
+    showToast('Account created! Proceeding to checkout...', 'success');
+
+    // Proceed to checkout with selected product
+    if (selectedProduct) {
+      await proceedToCheckout(selectedProduct);
     }
   };
 
@@ -464,6 +502,14 @@ export default function WizardPreviewPage() {
           </div>
         </div>
       </div>
+
+      {/* Signup Modal */}
+      <SignupModal
+        isOpen={showSignupModal}
+        onClose={() => setShowSignupModal(false)}
+        onSuccess={handleSignupSuccess}
+        caseId={caseId}
+      />
     </div>
   );
 }
