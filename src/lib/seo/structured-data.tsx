@@ -4,6 +4,8 @@
  * Generate schema.org structured data for SEO
  */
 
+import React from 'react';
+
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://landlordheaven.co.uk";
 
 export interface Product {
