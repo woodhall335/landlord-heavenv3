@@ -34,7 +34,6 @@ const generateDocumentSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const user = await requireServerAuth();
     const body = await request.json();
 
     // Validate input
@@ -50,14 +49,19 @@ export async function POST(request: Request) {
     }
 
     const { case_id, document_type, is_preview } = validationResult.data;
+
+    // For final documents (not preview), require authentication
+    if (!is_preview) {
+      const user = await requireServerAuth();
+    }
+
     const supabase = await createServerSupabaseClient();
 
-    // Fetch case with collected facts
+    // Fetch case with collected facts (RLS will handle authorization)
     const { data: caseData, error: caseError } = await supabase
       .from('cases')
       .select('*')
       .eq('id', case_id)
-      .eq('user_id', user.id)
       .single();
 
     if (caseError || !caseData) {
@@ -142,7 +146,9 @@ export async function POST(request: Request) {
 
     if (generatedDoc.pdf) {
       const adminClient = createAdminClient();
-      const fileName = `${user.id}/${case_id}/${document_type}_${Date.now()}.pdf`;
+      // Use user_id if available, otherwise use anonymous_user_id or 'anonymous' as fallback
+      const userFolder = caseData.user_id || caseData.anonymous_user_id || 'anonymous';
+      const fileName = `${userFolder}/${case_id}/${document_type}_${Date.now()}.pdf`;
 
       const { data: uploadData, error: uploadError } = await adminClient.storage
         .from('documents')
@@ -171,7 +177,7 @@ export async function POST(request: Request) {
     const { data: documentRecord, error: dbError } = await supabase
       .from('documents')
       .insert({
-        user_id: user.id,
+        user_id: caseData.user_id,
         case_id,
         document_type,
         document_title: documentTitle,
