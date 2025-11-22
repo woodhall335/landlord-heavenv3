@@ -178,51 +178,60 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   };
 
   const handleAnswer = async (answer: any) => {
-    if (!currentQuestion || !caseId) return;
+    // Prevent duplicate submissions while loading
+    if (!currentQuestion || !caseId || isLoading) return;
 
-    // Add user's answer to messages
-    const answerText = formatAnswerForDisplay(answer, currentQuestion.input_type);
-    addMessage('user', answerText);
-
-    // Save answer
-    const newFacts = {
-      ...collectedFacts,
-      [currentQuestion.question_id]: answer,
-    };
-    setCollectedFacts(newFacts);
-
-    // Add to facts list for sidebar
-    setFactsList([
-      ...factsList,
-      {
-        question_id: currentQuestion.question_id,
-        question: currentQuestion.question_text,
-        answer,
-        timestamp: new Date(),
-      },
-    ]);
-
-    // Save to backend
     try {
-      await fetch('/api/wizard/answer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          case_id: caseId,
+      setIsLoading(true);
+
+      // Add user's answer to messages
+      const answerText = formatAnswerForDisplay(answer, currentQuestion.input_type);
+      addMessage('user', answerText);
+
+      // Save answer
+      const newFacts = {
+        ...collectedFacts,
+        [currentQuestion.question_id]: answer,
+      };
+      setCollectedFacts(newFacts);
+
+      // Add to facts list for sidebar
+      setFactsList([
+        ...factsList,
+        {
           question_id: currentQuestion.question_id,
+          question: currentQuestion.question_text,
           answer,
-          progress,
-        }),
-      });
+          timestamp: new Date(),
+        },
+      ]);
+
+      // Save to backend
+      try {
+        await fetch('/api/wizard/answer', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            case_id: caseId,
+            question_id: currentQuestion.question_id,
+            answer,
+            progress,
+          }),
+        });
+      } catch (error) {
+        console.error('Failed to save answer:', error);
+      }
+
+      // Clear current answer
+      setCurrentAnswer(null);
+
+      // Get next question (this will handle its own loading state)
+      setIsLoading(false);
+      await getNextQuestion(caseId, newFacts);
     } catch (error) {
-      console.error('Failed to save answer:', error);
+      console.error('Error handling answer:', error);
+      setIsLoading(false);
     }
-
-    // Clear current answer
-    setCurrentAnswer(null);
-
-    // Get next question
-    await getNextQuestion(caseId, newFacts);
   };
 
   const analyzeCase = async (currentCaseId: string) => {
