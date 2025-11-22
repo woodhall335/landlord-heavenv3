@@ -59,6 +59,7 @@ export async function POST(request: Request) {
           const userId = session.metadata?.user_id;
           const orderId = session.metadata?.order_id;
           const caseId = session.metadata?.case_id;
+          const productType = session.metadata?.product_type;
 
           if (!userId || !orderId) {
             console.error('Missing metadata in checkout session');
@@ -77,6 +78,129 @@ export async function POST(request: Request) {
             .eq('id', orderId);
 
           console.log(`[Stripe] Payment successful for order: ${orderId}`);
+
+          // Generate final documents (without watermark) if case_id exists
+          if (caseId && productType) {
+            try {
+              // Fetch case data
+              const { data: caseData, error: caseError } = await supabase
+                .from('cases')
+                .select('*')
+                .eq('id', caseId)
+                .single();
+
+              if (caseError || !caseData) {
+                console.error('[Fulfillment] Case not found:', caseError);
+              } else {
+                // Determine document type from product type
+                const documentTypeMap: Record<string, string> = {
+                  'notice_only': 'section8_notice',
+                  'complete_pack': 'section8_notice',
+                  'money_claim': 'money_claim',
+                  'ast_standard': 'ast_standard',
+                  'ast_premium': 'ast_premium',
+                };
+
+                const documentType = documentTypeMap[productType];
+
+                if (documentType) {
+                  // Generate final document by calling the generation API internally
+                  const { generateSection8Notice } = await import('@/lib/documents/section8-generator');
+                  const { generateStandardAST, generatePremiumAST } = await import('@/lib/documents/ast-generator');
+
+                  const facts = caseData.collected_facts as any;
+                  let generatedDoc: any;
+                  let documentTitle = '';
+
+                  // Generate document based on type
+                  switch (documentType) {
+                    case 'section8_notice':
+                      generatedDoc = await generateSection8Notice(facts);
+                      documentTitle = 'Section 8 Notice - Notice Seeking Possession';
+                      break;
+                    case 'ast_standard':
+                      generatedDoc = await generateStandardAST(facts);
+                      documentTitle = 'Assured Shorthold Tenancy Agreement - Standard';
+                      break;
+                    case 'ast_premium':
+                      generatedDoc = await generatePremiumAST(facts);
+                      documentTitle = 'Assured Shorthold Tenancy Agreement - Premium';
+                      break;
+                    default:
+                      console.error('[Fulfillment] Unsupported document type:', documentType);
+                  }
+
+                  if (generatedDoc) {
+                    // Upload PDF to storage
+                    let pdfUrl: string | null = null;
+                    if (generatedDoc.pdf) {
+                      const fileName = `${userId}/${caseId}/${documentType}_final_${Date.now()}.pdf`;
+                      const { data: uploadData, error: uploadError } = await supabase.storage
+                        .from('documents')
+                        .upload(fileName, generatedDoc.pdf, {
+                          contentType: 'application/pdf',
+                          upsert: false,
+                        });
+
+                      if (!uploadError) {
+                        const { data: publicUrlData } = supabase.storage
+                          .from('documents')
+                          .getPublicUrl(fileName);
+                        pdfUrl = publicUrlData.publicUrl;
+                      } else {
+                        console.error('[Fulfillment] Failed to upload PDF:', uploadError);
+                      }
+                    }
+
+                    // Save final document to database
+                    const { data: finalDoc, error: docError } = await supabase
+                      .from('documents')
+                      .insert({
+                        user_id: userId,
+                        case_id: caseId,
+                        document_type: documentType,
+                        document_title: documentTitle,
+                        jurisdiction: caseData.jurisdiction,
+                        html_content: generatedDoc.html,
+                        pdf_url: pdfUrl,
+                        is_preview: false, // FINAL DOCUMENT
+                        qa_passed: false,
+                        qa_score: null,
+                        qa_issues: [],
+                      })
+                      .select()
+                      .single();
+
+                    if (docError) {
+                      console.error('[Fulfillment] Failed to save final document:', docError);
+                    } else {
+                      console.log(`[Fulfillment] Final document generated: ${finalDoc.id}`);
+
+                      // Mark fulfillment as completed
+                      await supabase
+                        .from('orders')
+                        .update({
+                          fulfillment_status: 'completed',
+                          fulfilled_at: new Date().toISOString(),
+                        })
+                        .eq('id', orderId);
+
+                      console.log(`[Fulfillment] Order fulfilled: ${orderId}`);
+                    }
+                  }
+                }
+              }
+            } catch (fulfillmentError: any) {
+              console.error('[Fulfillment] Error generating documents:', fulfillmentError);
+              // Don't fail the webhook - mark as failed fulfillment
+              await supabase
+                .from('orders')
+                .update({
+                  fulfillment_status: 'failed',
+                })
+                .eq('id', orderId);
+            }
+          }
 
           // Send purchase confirmation email
           try {
