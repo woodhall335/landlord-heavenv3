@@ -106,9 +106,9 @@ export default function Home() {
             icon: "📄",
           },
           {
-            title: "Court Proceedings",
-            description: "Possession claims, witness statements and court filings—professionally formatted and court-ready.",
-            badge: "£49.99",
+            title: "Complete Eviction Pack",
+            description: "Full eviction bundle from notice to possession order—court forms, guidance, and evidence checklists.",
+            badge: "£149.99",
             icon: "⚖️",
           },
           {

@@ -16,11 +16,11 @@ interface NavBarProps {
 }
 
 const primaryLinks: NavItem[] = [
-  { href: "/products/ast", label: "Tenancy Agreements" },
-  { href: "/eviction", label: "Eviction Forms" },
-  { href: "/legal-proceedings", label: "Legal Proceedings" },
-  { href: "/products/notice-only", label: "Notices" },
+  { href: "/products/notice-only", label: "Notice Only" },
+  { href: "/products/complete-pack", label: "Eviction Pack" },
   { href: "/products/money-claim", label: "Money Claims" },
+  { href: "/products/ast", label: "Tenancy Agreements" },
+  { href: "/hmo-pro", label: "HMO Pro" },
   { href: "/pricing", label: "Pricing" },
   { href: "/help", label: "Help" },
 ];
