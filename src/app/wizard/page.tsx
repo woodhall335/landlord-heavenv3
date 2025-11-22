@@ -107,8 +107,15 @@ export default function WizardPage() {
 
   const handleStart = () => {
     if (selectedDocument && selectedJurisdiction) {
+      // Get product parameter to pass through
+      const productParam = searchParams.get('product');
+
       // Navigate to wizard flow with params
-      router.push(`/wizard/flow?type=${selectedDocument.type}&jurisdiction=${selectedJurisdiction.value}`);
+      const url = productParam
+        ? `/wizard/flow?type=${selectedDocument.type}&jurisdiction=${selectedJurisdiction.value}&product=${productParam}`
+        : `/wizard/flow?type=${selectedDocument.type}&jurisdiction=${selectedJurisdiction.value}`;
+
+      router.push(url);
     }
   };
 
