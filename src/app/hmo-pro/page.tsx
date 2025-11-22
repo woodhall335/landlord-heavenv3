@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Container } from "@/components/ui";
+import { Container, TealHero } from "@/components/ui";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -11,33 +11,11 @@ export const metadata: Metadata = {
 export default function HMOProPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-600 to-indigo-700 text-white py-16 md:py-24">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold">Subscription - Cancel Anytime</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">HMO Pro</h1>
-            <p className="text-xl md:text-2xl mb-6 text-white/90">
-              HMO Compliance Management on Autopilot
-            </p>
-            <div className="flex items-baseline justify-center gap-2 mb-2">
-              <span className="text-5xl md:text-6xl font-bold">£19.99-£34.99</span>
-              <span className="text-xl text-white/80">/month</span>
-            </div>
-            <p className="text-white/80 mb-2">Tiered by property count</p>
-            <p className="text-white/80 mb-8">7-day free trial • Cancel anytime</p>
-            <Link
-              href="/wizard?product=hmo_pro"
-              className="inline-block bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
-            >
-              Start 7-Day Free Trial →
-            </Link>
-            <p className="mt-4 text-sm text-white/80">No payment required for trial • Cancel before trial ends = £0</p>
-          </div>
-        </Container>
-      </section>
+      <TealHero
+        title="HMO Pro"
+        subtitle="Manage licences, inspections, and compliance timelines with a calm teal workspace."
+        eyebrow="HMO compliance"
+      />
 
       {/* What's Included */}
       <section className="py-16 md:py-20">

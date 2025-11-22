@@ -9,8 +9,7 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Container } from '@/components/ui/Container';
-import { Badge } from '@/components/ui/Badge';
+import { Badge, Button, Container, TealHero } from '@/components/ui';
 import { clsx } from 'clsx';
 
 interface DocumentOption {
@@ -82,20 +81,18 @@ export default function WizardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-subtle to-white">
-      <Container size="large" className="py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <Badge variant="success" size="large" className="mb-4">
-            ✨ AI-Powered Legal Documents
+    <div className="min-h-screen bg-gray-50">
+      <TealHero
+        title="Eviction Route Checker"
+        subtitle="A calm, guided workspace with guardrails for every UK jurisdiction."
+        eyebrow="Wizard"
+        actions={
+          <Badge variant="success" size="large" className="bg-white/15 text-white">
+            Conversational + compliant
           </Badge>
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-charcoal mb-4">
-            Plain English In → Legal Documents Out
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Tell me about your situation, and I'll create court-ready documents tailored to your case
-          </p>
-        </div>
+        }
+      />
+      <Container size="large" className="py-12">
 
         {/* Step Indicator */}
         <div className="max-w-md mx-auto mb-12">
@@ -225,12 +222,9 @@ export default function WizardPage() {
             {/* Start Button */}
             {selectedJurisdiction && (
               <div className="mt-8 text-center">
-                <button
-                  onClick={handleStart}
-                  className="px-8 py-4 bg-primary text-white font-semibold text-lg rounded-lg hover:bg-primary-dark shadow-lg hover:shadow-xl transition-all duration-200"
-                >
+                <Button variant="primary" size="large" onClick={handleStart}>
                   Start Wizard →
-                </button>
+                </Button>
                 <p className="text-sm text-gray-600 mt-3">
                   This will take about 5-10 minutes
                 </p>

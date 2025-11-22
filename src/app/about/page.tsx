@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Container } from "@/components/ui";
+import { Container, TealHero } from "@/components/ui";
 import Link from "next/link";
 import { generateMetadata } from "@/lib/seo";
 
@@ -12,17 +12,11 @@ export const metadata: Metadata = generateMetadata({
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary to-emerald-600 text-white py-16 md:py-24">
-        <Container>
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">Legal Documents Should Be Simple</h1>
-            <p className="text-xl md:text-2xl text-white/90">
-              We're on a mission to make UK landlord legal documents accessible, affordable, and accurate.
-            </p>
-          </div>
-        </Container>
-      </section>
+      <TealHero
+        title="Legal documents should be simple"
+        subtitle="We make professional-grade landlord paperwork accessible, affordable, and compliant across the UK."
+        eyebrow="About Landlord Heaven"
+      />
 
       {/* Mission */}
       <section className="py-16 md:py-20">

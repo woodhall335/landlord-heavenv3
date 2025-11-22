@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Container } from "@/components/ui";
+import { Container, TealHero } from "@/components/ui";
 import Link from "next/link";
 
 export const metadata: Metadata = {
@@ -9,8 +9,9 @@ export const metadata: Metadata = {
 
 export default function CookiesPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <Container size="medium">
+    <div className="min-h-screen bg-gray-50">
+      <TealHero title="Cookie Policy" subtitle="How we use cookies to provide the best experience." eyebrow="Compliance" />
+      <Container size="medium" className="py-12">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 md:p-12">
           <h1 className="text-4xl font-bold text-charcoal mb-2">Cookie Policy</h1>
           <p className="text-sm text-gray-500 mb-8">Last updated: November 22, 2025</p>
