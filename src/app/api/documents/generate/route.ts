@@ -8,9 +8,9 @@
 import { createServerSupabaseClient, requireServerAuth, createAdminClient } from '@/lib/supabase/server';
 import { generateDocument } from '@/lib/documents/generator';
 import { generateSection8Notice } from '@/lib/documents/section8-generator';
-import { generateAST } from '@/lib/documents/ast-generator';
+import { generateStandardAST, generatePremiumAST } from '@/lib/documents/ast-generator';
 import { generateNoticeToLeave } from '@/lib/documents/scotland/notice-to-leave-generator';
-import { generatePRT } from '@/lib/documents/scotland/prt-generator';
+import { generatePRTAgreement } from '@/lib/documents/scotland/prt-generator';
 import { generateNoticeToQuit } from '@/lib/documents/northern-ireland/notice-to-quit-generator';
 import { generatePrivateTenancyAgreement } from '@/lib/documents/northern-ireland/private-tenancy-generator';
 import { NextResponse } from 'next/server';
@@ -94,9 +94,13 @@ export async function POST(request: Request) {
           break;
 
         case 'ast_standard':
+          generatedDoc = await generateStandardAST(facts);
+          documentTitle = 'Assured Shorthold Tenancy Agreement - Standard';
+          break;
+
         case 'ast_premium':
-          generatedDoc = await generateAST(facts);
-          documentTitle = `Assured Shorthold Tenancy Agreement - ${document_type === 'ast_premium' ? 'Premium' : 'Standard'}`;
+          generatedDoc = await generatePremiumAST(facts);
+          documentTitle = 'Assured Shorthold Tenancy Agreement - Premium';
           break;
 
         case 'notice_to_leave':
@@ -105,7 +109,7 @@ export async function POST(request: Request) {
           break;
 
         case 'prt_agreement':
-          generatedDoc = await generatePRT(facts);
+          generatedDoc = await generatePRTAgreement(facts);
           documentTitle = 'Private Residential Tenancy Agreement - Scotland';
           break;
 

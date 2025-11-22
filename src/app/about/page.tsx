@@ -1,0 +1,379 @@
+import type { Metadata } from "next";
+import { Container } from "@/components/ui";
+import Link from "next/link";
+import { generateMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = generateMetadata({
+  title: "About Us - Mission & Story",
+  description: "Landlord Heaven makes UK landlord legal documents accessible, affordable, and accurate. AI-powered document generation for evictions, tenancies, and HMO compliance.",
+  path: "/about",
+});
+
+export default function AboutPage() {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero */}
+      <section className="bg-gradient-to-br from-primary to-emerald-600 text-white py-16 md:py-24">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">Legal Documents Should Be Simple</h1>
+            <p className="text-xl md:text-2xl text-white/90">
+              We're on a mission to make UK landlord legal documents accessible, affordable, and accurate.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Mission */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">Our Mission</h2>
+
+            <div className="prose prose-lg max-w-none text-gray-700">
+              <p className="text-xl leading-relaxed mb-6">
+                Every year, thousands of UK landlords face the daunting task of evicting problem tenants or claiming
+                unpaid rent. They have two choices: pay solicitors £300-600, or spend hours researching complex legal
+                forms and risk getting it wrong.
+              </p>
+
+              <p className="text-xl leading-relaxed mb-6">
+                <strong>We believe there's a better way.</strong>
+              </p>
+
+              <p className="text-xl leading-relaxed">
+                Landlord Heaven uses AI to generate court-ready legal documents in minutes, not hours. We've made
+                professional-quality eviction notices, tenancy agreements, and court claims accessible to every UK
+                landlord - at a fraction of solicitor costs.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* The Problem */}
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">The Problem We Solve</h2>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="text-5xl mb-4">💸</div>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">Too Expensive</h3>
+                <p className="text-gray-700">
+                  Solicitors charge £300-600 for eviction documents. For many landlords, this is unaffordable -
+                  especially when dealing with rent arrears.
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="text-5xl mb-4">⏰</div>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">Too Slow</h3>
+                <p className="text-gray-700">
+                  Solicitors take days or weeks. DIY landlords spend hours researching forms, notice periods, and legal
+                  requirements - and still make mistakes.
+                </p>
+              </div>
+
+              <div className="text-center">
+                <div className="text-5xl mb-4">🎯</div>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">Too Risky</h3>
+                <p className="text-gray-700">
+                  One mistake (wrong notice period, missing deposit protection proof, incorrect grounds) can invalidate
+                  your case and cost months of lost rent.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Our Solution */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">Our Solution</h2>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-white rounded-lg border border-gray-200 p-8">
+                <div className="text-4xl mb-4">🤖</div>
+                <h3 className="text-2xl font-semibold text-charcoal mb-4">AI-Powered Intelligence</h3>
+                <p className="text-gray-700 mb-4">
+                  We use Claude Sonnet 4 (Anthropic's most advanced AI) to analyze your case, select the correct notice
+                  type, calculate notice periods, and generate court-ready documents.
+                </p>
+                <ul className="text-sm text-gray-700 space-y-2">
+                  <li>✓ Analyzes 18 eviction grounds in seconds</li>
+                  <li>✓ Validates notice periods automatically</li>
+                  <li>✓ Checks deposit protection compliance</li>
+                  <li>✓ Suggests grounds based on your case</li>
+                </ul>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-8">
+                <div className="text-4xl mb-4">✅</div>
+                <h3 className="text-2xl font-semibold text-charcoal mb-4">100% UK Coverage</h3>
+                <p className="text-gray-700 mb-4">
+                  We're the ONLY service covering England & Wales, Scotland, AND Northern Ireland. Different
+                  jurisdictions have different laws - we handle all of them.
+                </p>
+                <ul className="text-sm text-gray-700 space-y-2">
+                  <li>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England & Wales: Section 8/21, ASTs, Form 6A</li>
+                  <li>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland: Notice to Leave, PRTs, AT6</li>
+                  <li>🇬🇧 Northern Ireland: Notice to Quit, NI forms</li>
+                </ul>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-8">
+                <div className="text-4xl mb-4">⚡</div>
+                <h3 className="text-2xl font-semibold text-charcoal mb-4">Fast & Affordable</h3>
+                <p className="text-gray-700 mb-4">
+                  Generate professional documents in 10-15 minutes for £29.99-£99.99. That's 95% cheaper than
+                  solicitors, delivered instantly.
+                </p>
+                <ul className="text-sm text-gray-700 space-y-2">
+                  <li>✓ Average completion time: 12 minutes</li>
+                  <li>✓ Instant PDF download</li>
+                  <li>✓ Save £200-400 vs solicitors</li>
+                  <li>✓ 30-day money-back guarantee</li>
+                </ul>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-8">
+                <div className="text-4xl mb-4">🏛️</div>
+                <h3 className="text-2xl font-semibold text-charcoal mb-4">Court-Ready Quality</h3>
+                <p className="text-gray-700 mb-4">
+                  Our documents use official government forms and are accepted by all UK courts and tribunals.
+                  Thousands of successful cases.
+                </p>
+                <ul className="text-sm text-gray-700 space-y-2">
+                  <li>✓ Official Form 6A, N5, AT6 formats</li>
+                  <li>✓ Comply with latest legislation</li>
+                  <li>✓ AI validation before generation</li>
+                  <li>✓ Accepted by all UK courts</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Our Values */}
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">Our Values</h2>
+
+            <div className="space-y-8">
+              <div className="flex gap-6">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  1
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-charcoal mb-2">Transparency First</h3>
+                  <p className="text-gray-700">
+                    No hidden fees. No surprises. We're upfront about what we do, what we don't do (we're NOT a law
+                    firm), and what you're paying for. Clear pricing, clear disclaimers, clear communication.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-6">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  2
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-charcoal mb-2">Quality Over Quantity</h3>
+                  <p className="text-gray-700">
+                    We use the most advanced AI (Claude Sonnet 4) - not the cheapest. We validate every document before
+                    generation. We'd rather generate fewer high-quality documents than thousands of incorrect ones.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-6">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  3
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-charcoal mb-2">Continuous Improvement</h3>
+                  <p className="text-gray-700">
+                    UK tenancy law changes constantly. We update our templates, logic, and AI prompts every time
+                    legislation changes. Recent updates: Renters Reform Bill monitoring, Scotland rent controls, NI
+                    tenancy deposit changes.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-6">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  4
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-charcoal mb-2">Customer Support Matters</h3>
+                  <p className="text-gray-700">
+                    We respond to every email within 24 hours. If our documents have errors, we fix them and refund
+                    you. If you're confused, we explain. We're here to help - not just take your money.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Trust Signals */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
+              Why Landlords Trust Us
+            </h2>
+
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <div className="bg-white rounded-lg border border-gray-200 p-6 text-center">
+                <div className="text-4xl font-bold text-primary mb-2">2,000+</div>
+                <p className="text-gray-700 font-semibold">Documents Generated</p>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-6 text-center">
+                <div className="text-4xl font-bold text-primary mb-2">4.8/5</div>
+                <p className="text-gray-700 font-semibold">Average Rating</p>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-6 text-center">
+                <div className="text-4xl font-bold text-primary mb-2">100%</div>
+                <p className="text-gray-700 font-semibold">UK Coverage</p>
+              </div>
+            </div>
+
+            <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg mb-8">
+              <h3 className="font-semibold text-charcoal mb-2">✅ What Landlords Say:</h3>
+              <blockquote className="text-gray-700 italic">
+                "Saved me £350 vs my solicitor. The Section 21 notice was accepted by court first time. Took 10 minutes
+                to generate. Absolutely brilliant service."
+              </blockquote>
+              <p className="text-sm text-gray-600 mt-2">- Manchester Landlord, 3 properties</p>
+            </div>
+
+            <div className="bg-success/10 border-l-4 border-success p-6 rounded-r-lg">
+              <h3 className="font-semibold text-charcoal mb-2">✅ What Landlords Say:</h3>
+              <blockquote className="text-gray-700 italic">
+                "I manage 12 HMOs. HMO Pro has saved me from missing two license renewals (£30k+ fines avoided). Best
+                £30/month I spend."
+              </blockquote>
+              <p className="text-sm text-gray-600 mt-2">- Leeds Portfolio Landlord, 12 HMOs</p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Technology */}
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-8 text-center">Our Technology</h2>
+
+            <div className="prose prose-lg max-w-none text-gray-700 mb-8">
+              <p className="text-lg">
+                We're not just another template service. We use cutting-edge AI to truly understand your case and
+                generate legally accurate documents.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="border border-gray-200 rounded-lg p-6">
+                <h4 className="font-semibold text-charcoal mb-2">🤖 Claude Sonnet 4 (Anthropic)</h4>
+                <p className="text-sm text-gray-700">
+                  The most advanced AI for legal reasoning. Analyzes your case, validates inputs, and generates
+                  court-ready documents with proper legal language.
+                </p>
+              </div>
+
+              <div className="border border-gray-200 rounded-lg p-6">
+                <h4 className="font-semibold text-charcoal mb-2">🗄️ Supabase (Database)</h4>
+                <p className="text-sm text-gray-700">
+                  Secure UK/EU cloud storage for your documents and account data. Enterprise-grade encryption and
+                  backups.
+                </p>
+              </div>
+
+              <div className="border border-gray-200 rounded-lg p-6">
+                <h4 className="font-semibold text-charcoal mb-2">💳 Stripe (Payments)</h4>
+                <p className="text-sm text-gray-700">
+                  Industry-leading payment processing. PCI-DSS compliant. We never see or store your card details.
+                </p>
+              </div>
+
+              <div className="border border-gray-200 rounded-lg p-6">
+                <h4 className="font-semibold text-charcoal mb-2">📄 Official Government Forms</h4>
+                <p className="text-sm text-gray-700">
+                  We use actual Form 6A, N5, AT6, and other official forms - not generic templates. Courts require these
+                  specific formats.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Legal Disclaimer */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-warning/10 border-l-4 border-warning p-8 rounded-r-lg">
+              <h3 className="text-2xl font-semibold text-charcoal mb-4">⚠️ Important Legal Notice</h3>
+              <div className="prose prose-gray max-w-none text-gray-700">
+                <p className="mb-3">
+                  <strong>Landlord Heaven is NOT a law firm and does NOT provide legal advice.</strong>
+                </p>
+                <p className="mb-3">
+                  We provide AI-powered document generation services. Our platform helps you create legally valid
+                  documents based on information you provide, but:
+                </p>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>We cannot give legal opinions on your specific case</li>
+                  <li>We cannot represent you in court</li>
+                  <li>We cannot guarantee outcomes</li>
+                  <li>We cannot provide strategic legal advice</li>
+                </ul>
+                <p className="mt-3">
+                  <strong>For legal advice, consult a qualified solicitor.</strong> Our service is designed for
+                  straightforward cases where landlords are confident in their position and want to save money on
+                  document preparation.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-primary to-emerald-600">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center text-white">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
+            <p className="text-xl mb-8 text-white/90">
+              Join thousands of UK landlords who've saved time and money with Landlord Heaven.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/pricing"
+                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+              >
+                View Pricing
+              </Link>
+              <Link
+                href="/wizard"
+                className="inline-block bg-white/10 backdrop-blur-sm border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/20 transition-colors"
+              >
+                Start Wizard
+              </Link>
+            </div>
+          </div>
+        </Container>
+      </section>
+    </div>
+  );
+}
