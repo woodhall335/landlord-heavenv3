@@ -12,7 +12,7 @@ interface DashboardCardProps {
 export function DashboardCard({ title, value, helper, icon, tone = "default" }: DashboardCardProps) {
   const toneClasses = {
     default: "bg-white text-gray-900 ring-gray-200",
-    teal: "bg-gradient-to-br from-[#009E9E] to-emerald-500 text-white ring-emerald-100",
+    teal: "bg-gradient-to-br from-primary to-emerald-500 text-white ring-emerald-100",
     warning: "bg-amber-50 text-amber-900 ring-amber-100",
     success: "bg-emerald-50 text-emerald-900 ring-emerald-100",
   };

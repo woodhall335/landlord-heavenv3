@@ -108,7 +108,7 @@ export default function DashboardPage() {
         eyebrow="Workspace"
         actions={
           <Link href="/wizard">
-            <Button variant="secondary" size="large" className="bg-white text-[#009E9E] hover:bg-white/90">
+            <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90">
               + New Document
             </Button>
           </Link>

@@ -34,6 +34,7 @@ const config: Config = {
         semibold: typography.fontWeight.semibold,
         bold: typography.fontWeight.bold,
         extrabold: typography.fontWeight.extrabold,
+        black: typography.fontWeight.black,
       },
       lineHeight: {
         tight: typography.lineHeight.tight,

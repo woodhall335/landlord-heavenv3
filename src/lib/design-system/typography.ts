@@ -13,15 +13,15 @@ export const typography = {
   },
 
   fontSize: {
-    // Display - Hero Headlines
-    "6xl": "3.75rem", // 60px - Hero
-    "5xl": "3rem", // 48px - Page hero
-    "4xl": "2.25rem", // 36px - Section headers
+    // Display - Hero Headlines (PandaDoc-style bold)
+    "6xl": "4rem", // 64px - Hero (larger, bolder)
+    "5xl": "3.5rem", // 56px - Page hero
+    "4xl": "2.5rem", // 40px - Section headers
 
-    // Headlines
-    "3xl": "1.875rem", // 30px - H1
-    "2xl": "1.5rem", // 24px - H2
-    xl: "1.25rem", // 20px - H3
+    // Headlines (increased for impact)
+    "3xl": "2rem", // 32px - H1
+    "2xl": "1.625rem", // 26px - H2
+    xl: "1.375rem", // 22px - H3
     lg: "1.125rem", // 18px - H4, Large body
 
     // Body
@@ -34,9 +34,10 @@ export const typography = {
     light: 300, // Rare use, large text only
     normal: 400, // Body text
     medium: 500, // Emphasis, buttons
-    semibold: 600, // Subheadings
-    bold: 700, // Headlines
-    extrabold: 800, // Hero text, major CTAs
+    semibold: 600, // Subheadings, navigation
+    bold: 700, // Headlines, strong emphasis
+    extrabold: 800, // Hero text, major CTAs (PandaDoc-style impact)
+    black: 900, // Extra bold for maximum impact
   },
 
   lineHeight: {
@@ -67,30 +68,30 @@ export const mobileTypography = {
 
 // Helper classes for common text styles
 export const textStyles = {
-  // Hero text
+  // Hero text (PandaDoc-style impact)
   hero: {
     fontSize: typography.fontSize["6xl"],
-    fontWeight: typography.fontWeight.extrabold,
+    fontWeight: typography.fontWeight.black,
     lineHeight: typography.lineHeight.tight,
     letterSpacing: typography.letterSpacing.tighter,
   },
 
-  // Page headings
+  // Page headings (stronger emphasis)
   h1: {
     fontSize: typography.fontSize["3xl"],
-    fontWeight: typography.fontWeight.bold,
+    fontWeight: typography.fontWeight.extrabold,
     lineHeight: typography.lineHeight.tight,
   },
 
   h2: {
     fontSize: typography.fontSize["2xl"],
-    fontWeight: typography.fontWeight.semibold,
+    fontWeight: typography.fontWeight.bold,
     lineHeight: typography.lineHeight.snug,
   },
 
   h3: {
     fontSize: typography.fontSize.xl,
-    fontWeight: typography.fontWeight.semibold,
+    fontWeight: typography.fontWeight.bold,
     lineHeight: typography.lineHeight.snug,
   },
 
@@ -115,11 +116,11 @@ export const textStyles = {
     lineHeight: typography.lineHeight.loose,
   },
 
-  // Buttons
+  // Buttons (PandaDoc-style bold)
   button: {
     fontSize: typography.fontSize.base,
-    fontWeight: typography.fontWeight.medium,
-    letterSpacing: typography.letterSpacing.wide,
+    fontWeight: typography.fontWeight.semibold,
+    letterSpacing: typography.letterSpacing.normal,
   },
 };
 
