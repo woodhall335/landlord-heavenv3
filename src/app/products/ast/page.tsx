@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Tenancy Agreements - AST, PRT, NI | Landlord Heaven",
   description:
-    "AI-generated tenancy agreements for UK landlords. Standard (£39.99) or Premium (£59.00) AST. Covers England & Wales, Scotland, Northern Ireland.",
+    "Legally compliant tenancy agreements for UK landlords. Curated by Landlord Heaven. Standard (£39.99) or Premium (£59.00). Covers England & Wales, Scotland, Northern Ireland.",
 };
 
 export default function ASTPage() {
@@ -17,7 +17,7 @@ export default function ASTPage() {
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Tenancy Agreements</h1>
             <p className="text-xl md:text-2xl mb-8 text-white/90">
-              AI-Generated ASTs, PRTs & NI Tenancies - UK Compliant
+              Curated by Landlord Heaven - Legally Compliant ASTs, PRTs & NI Tenancies
             </p>
             <p className="text-lg text-white/80 mb-12 max-w-2xl mx-auto">
               Choose between Standard (£39.99) or Premium (£59.00) depending on your property complexity and protection
@@ -123,10 +123,10 @@ export default function ASTPage() {
                   </ul>
 
                   <Link
-                    href="/wizard?product=ast_standard"
+                    href="/tenancy-agreements/england-wales"
                     className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
                   >
-                    Get Standard AST - £39.99
+                    Get Standard - £39.99
                   </Link>
                 </div>
               </div>
@@ -267,10 +267,10 @@ export default function ASTPage() {
                   </ul>
 
                   <Link
-                    href="/wizard?product=ast_premium"
+                    href="/tenancy-agreements/england-wales"
                     className="block w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-emerald-600 transition-colors"
                   >
-                    Get Premium AST - £59.00
+                    Get Premium - £59.00
                   </Link>
                 </div>
               </div>
@@ -284,7 +284,7 @@ export default function ASTPage() {
                 <br />• <strong>Scotland:</strong> Private Residential Tenancy (PRT)
                 <br />• <strong>Northern Ireland:</strong> Private Tenancy Agreement
                 <br />
-                AI automatically generates the correct format for your jurisdiction.
+                Our wizard automatically generates the correct format for your jurisdiction.
               </p>
             </div>
           </div>
@@ -313,9 +313,9 @@ export default function ASTPage() {
                 <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   2
                 </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">AI Generates Agreement</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">Agreement Generated</h3>
                 <p className="text-gray-600">
-                  Claude Sonnet 4 creates a jurisdiction-specific agreement with all clauses pre-filled. Review and
+                  We create a jurisdiction-specific agreement with all clauses pre-filled based on your answers. Review and
                   customize if needed.
                 </p>
               </div>
@@ -572,23 +572,23 @@ export default function ASTPage() {
           <div className="max-w-3xl mx-auto text-center text-white">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Create Your Tenancy Agreement?</h2>
             <p className="text-xl mb-8 text-white/90">
-              Choose Standard or Premium. AI generates your jurisdiction-specific agreement in 10 minutes.
+              Choose Standard or Premium. Get your jurisdiction-specific agreement in 10 minutes.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/wizard?product=ast_standard"
+                href="/tenancy-agreements/england-wales"
                 className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors"
               >
                 Standard - £39.99 →
               </Link>
               <Link
-                href="/wizard?product=ast_premium"
+                href="/tenancy-agreements/england-wales"
                 className="inline-block bg-charcoal text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors"
               >
                 Premium - £59.00 →
               </Link>
             </div>
-            <p className="mt-4 text-sm text-white/80">30-day money-back guarantee on both</p>
+            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • No subscription required</p>
           </div>
         </Container>
       </section>
