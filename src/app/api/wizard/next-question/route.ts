@@ -9,10 +9,10 @@
 import { getServerUser, createServerSupabaseClient } from '@/lib/supabase/server';
 import { getNextQuestion, trackTokenUsage } from '@/lib/ai';
 import { NextResponse } from 'next/server';
-import * as Zod from 'zod';
 
-// Disable HMR for this route to prevent Zod import corruption
+// Disable caching to prevent HMR issues
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 export async function POST(request: Request) {
   try {
@@ -20,27 +20,36 @@ export async function POST(request: Request) {
     const user = await getServerUser();
     const body = await request.json();
 
-    // Define schema inside function with namespace import to avoid HMR issues
-    const nextQuestionSchema = Zod.z.object({
-      case_id: Zod.z.string().uuid(),
-      case_type: Zod.z.enum(['eviction', 'money_claim', 'tenancy_agreement']),
-      jurisdiction: Zod.z.enum(['england-wales', 'scotland', 'northern-ireland']),
-      collected_facts: Zod.z.record(Zod.z.any()),
-    });
+    // Manual validation (avoiding Zod due to Webpack HMR corruption issues)
+    const { case_id, case_type, jurisdiction, collected_facts } = body;
 
-    // Validate input
-    const validationResult = nextQuestionSchema.safeParse(body);
-    if (!validationResult.success) {
+    if (!case_id || typeof case_id !== 'string') {
       return NextResponse.json(
-        {
-          error: 'Validation failed',
-          details: validationResult.error.format(),
-        },
+        { error: 'Invalid case_id' },
         { status: 400 }
       );
     }
 
-    const { case_id, case_type, jurisdiction, collected_facts } = validationResult.data;
+    if (!case_type || !['eviction', 'money_claim', 'tenancy_agreement'].includes(case_type)) {
+      return NextResponse.json(
+        { error: 'Invalid case_type' },
+        { status: 400 }
+      );
+    }
+
+    if (!jurisdiction || !['england-wales', 'scotland', 'northern-ireland'].includes(jurisdiction)) {
+      return NextResponse.json(
+        { error: 'Invalid jurisdiction' },
+        { status: 400 }
+      );
+    }
+
+    if (!collected_facts || typeof collected_facts !== 'object') {
+      return NextResponse.json(
+        { error: 'Invalid collected_facts' },
+        { status: 400 }
+      );
+    }
     const supabase = await createServerSupabaseClient();
 
     // Verify case ownership (allow both logged-in users and anonymous)
