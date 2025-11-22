@@ -17,6 +17,11 @@ export interface WizardField {
     pattern?: string;
   };
   width?: 'full' | 'half' | 'third';
+  warnings?: {
+    value: string | string[];
+    message: string;
+    severity: 'warning' | 'error' | 'info';
+  }[];
 }
 
 export interface WizardQuestion {
@@ -79,28 +84,36 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
     ],
   },
   {
-    id: 'property_type',
+    id: 'property_details',
     section: 'Property Details',
-    question: 'What type of property is it?',
-    inputType: 'select',
-    options: ['House', 'Flat', 'Studio', 'Room in shared house'],
-    validation: { required: true },
-  },
-  {
-    id: 'furnished_status',
-    section: 'Property Details',
-    question: 'Is the property furnished?',
-    inputType: 'select',
-    options: ['Furnished', 'Unfurnished', 'Part-furnished'],
-    helperText: 'Furnished = includes furniture. Unfurnished = no furniture. Part-furnished = some items included.',
-    validation: { required: true },
-  },
-  {
-    id: 'number_of_bedrooms',
-    section: 'Property Details',
-    question: 'How many bedrooms does the property have?',
-    inputType: 'number',
-    validation: { required: true, min: 0, max: 20 },
+    question: 'Property details',
+    inputType: 'group',
+    helperText: 'Additional property information',
+    fields: [
+      {
+        id: 'property_type',
+        label: 'Property type',
+        inputType: 'select',
+        options: ['House', 'Flat', 'Studio', 'Room in shared house'],
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'furnished_status',
+        label: 'Furnished status',
+        inputType: 'select',
+        options: ['Furnished', 'Unfurnished', 'Part-furnished'],
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'number_of_bedrooms',
+        label: 'Number of bedrooms',
+        inputType: 'number',
+        validation: { required: true, min: 0, max: 20 },
+        width: 'half',
+      },
+    ],
   },
 
   // ============================================================================
@@ -272,69 +285,90 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
   // SECTION 4: TENANCY TERM
   // ============================================================================
   {
-    id: 'tenancy_start_date',
+    id: 'tenancy_term',
     section: 'Tenancy Term',
-    question: 'When does the tenancy start?',
-    inputType: 'date',
-    helperText: 'The date when the tenant can move in',
-    validation: { required: true },
+    question: 'Tenancy term details',
+    inputType: 'group',
+    helperText: 'When the tenancy starts and how long it lasts',
+    fields: [
+      {
+        id: 'tenancy_start_date',
+        label: 'Start date',
+        inputType: 'date',
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'is_fixed_term',
+        label: 'Tenancy type',
+        inputType: 'select',
+        options: ['Fixed term (set end date)', 'Periodic (rolling monthly)'],
+        validation: { required: true },
+        width: 'half',
+      },
+    ],
   },
   {
-    id: 'is_fixed_term',
+    id: 'fixed_term_details',
     section: 'Tenancy Term',
-    question: 'Is this a fixed-term or periodic tenancy?',
-    inputType: 'select',
-    options: ['Fixed term (set end date)', 'Periodic (rolling monthly)'],
-    helperText: 'Fixed term = specific end date. Periodic = continues month-to-month.',
-    validation: { required: true },
-  },
-  {
-    id: 'term_length',
-    section: 'Tenancy Term',
-    question: 'How long is the fixed term?',
-    inputType: 'select',
-    options: ['6 months', '12 months', '18 months', '24 months', '36 months'],
-    validation: { required: true },
+    question: 'Fixed term details',
+    inputType: 'group',
+    helperText: 'Required for fixed-term tenancies',
     dependsOn: { questionId: 'is_fixed_term', value: 'Fixed term (set end date)' },
-  },
-  {
-    id: 'tenancy_end_date',
-    section: 'Tenancy Term',
-    question: 'When does the fixed term end?',
-    inputType: 'date',
-    helperText: 'The last day of the tenancy agreement',
-    validation: { required: true },
-    dependsOn: { questionId: 'is_fixed_term', value: 'Fixed term (set end date)' },
+    fields: [
+      {
+        id: 'term_length',
+        label: 'Term length',
+        inputType: 'select',
+        options: ['6 months', '12 months', '18 months', '24 months', '36 months'],
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'tenancy_end_date',
+        label: 'End date',
+        inputType: 'date',
+        validation: { required: true },
+        width: 'half',
+      },
+    ],
   },
 
   // ============================================================================
   // SECTION 5: RENT
   // ============================================================================
   {
-    id: 'rent_amount',
+    id: 'rent_details',
     section: 'Rent',
-    question: 'What is the monthly rent amount?',
-    inputType: 'currency',
-    placeholder: '1200',
-    helperText: 'Enter the amount in pounds (e.g., 1200 for £1,200)',
-    validation: { required: true, min: 1 },
-  },
-  {
-    id: 'rent_due_day',
-    section: 'Rent',
-    question: 'What day of the month is rent due?',
-    inputType: 'select',
-    options: Array.from({ length: 28 }, (_, i) => `${i + 1}${getOrdinalSuffix(i + 1)}`),
-    helperText: 'The day each month when rent must be paid',
-    validation: { required: true },
-  },
-  {
-    id: 'payment_method',
-    section: 'Rent',
-    question: 'How should rent be paid?',
-    inputType: 'select',
-    options: ['Standing Order', 'Bank Transfer', 'Direct Debit'],
-    validation: { required: true },
+    question: 'Rent payment details',
+    inputType: 'group',
+    helperText: 'Monthly rent amount and payment information',
+    fields: [
+      {
+        id: 'rent_amount',
+        label: 'Monthly rent',
+        inputType: 'currency',
+        placeholder: '1200',
+        validation: { required: true, min: 1 },
+        width: 'half',
+      },
+      {
+        id: 'rent_due_day',
+        label: 'Payment due date',
+        inputType: 'select',
+        options: Array.from({ length: 28 }, (_, i) => `${i + 1}${getOrdinalSuffix(i + 1)}`),
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'payment_method',
+        label: 'Payment method',
+        inputType: 'select',
+        options: ['Standing Order', 'Bank Transfer', 'Direct Debit'],
+        validation: { required: true },
+        width: 'half',
+      },
+    ],
   },
   {
     id: 'bank_details',
@@ -374,22 +408,29 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
   // SECTION 6: DEPOSIT (Jurisdiction-specific)
   // ============================================================================
   {
-    id: 'deposit_amount',
+    id: 'deposit_details',
     section: 'Deposit',
-    question: 'What is the deposit amount?',
-    inputType: 'currency',
-    placeholder: '1400',
-    helperText: 'England & Wales: Max 5 weeks rent. Scotland: Max 2 months rent. Northern Ireland: Max 2 months rent (recommended)',
-    validation: { required: true, min: 0 },
-  },
-  {
-    id: 'deposit_scheme',
-    section: 'Deposit',
-    question: 'Which deposit protection scheme will you use?',
-    inputType: 'select',
-    options: [], // Will be populated based on jurisdiction
-    helperText: 'Required by law to protect tenant deposits',
-    validation: { required: true },
+    question: 'Deposit details',
+    inputType: 'group',
+    helperText: 'Security deposit amount and protection scheme (required by law)',
+    fields: [
+      {
+        id: 'deposit_amount',
+        label: 'Deposit amount',
+        inputType: 'currency',
+        placeholder: '1400',
+        validation: { required: true, min: 0 },
+        width: 'half',
+      },
+      {
+        id: 'deposit_scheme',
+        label: 'Deposit protection scheme',
+        inputType: 'select',
+        options: [], // Will be populated based on jurisdiction
+        validation: { required: true },
+        width: 'half',
+      },
+    ],
   },
 
   // ============================================================================
@@ -433,11 +474,37 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
   // SECTION 8: PROPERTY RULES
   // ============================================================================
   {
-    id: 'pets_allowed',
+    id: 'property_rules',
     section: 'Property Rules',
-    question: 'Are pets allowed?',
-    inputType: 'yes_no',
-    validation: { required: true },
+    question: 'Property rules and restrictions',
+    inputType: 'group',
+    helperText: 'Rules regarding pets, smoking, and parking',
+    fields: [
+      {
+        id: 'pets_allowed',
+        label: 'Are pets allowed?',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'third',
+      },
+      {
+        id: 'smoking_allowed',
+        label: 'Is smoking allowed inside?',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'third',
+      },
+      {
+        id: 'parking_available',
+        label: 'Is parking included?',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'third',
+      },
+    ],
   },
   {
     id: 'approved_pets',
@@ -445,21 +512,7 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
     question: 'What pets are allowed?',
     inputType: 'multi_select',
     options: ['Cats', 'Dogs', 'Small caged animals (hamsters, etc.)', 'Fish'],
-    dependsOn: { questionId: 'pets_allowed', value: 'yes' },
-  },
-  {
-    id: 'smoking_allowed',
-    section: 'Property Rules',
-    question: 'Is smoking allowed inside the property?',
-    inputType: 'yes_no',
-    validation: { required: true },
-  },
-  {
-    id: 'parking_available',
-    section: 'Property Rules',
-    question: 'Is parking included?',
-    inputType: 'yes_no',
-    validation: { required: true },
+    dependsOn: { questionId: 'pets_allowed', value: 'Yes' },
   },
   {
     id: 'parking_details',
@@ -467,239 +520,331 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
     question: 'Parking details',
     inputType: 'text',
     placeholder: 'Space number 12, or street parking permit',
-    dependsOn: { questionId: 'parking_available', value: 'yes' },
+    dependsOn: { questionId: 'parking_available', value: 'Yes' },
   },
 
   // ============================================================================
   // SECTION 9: LEGAL COMPLIANCE & SAFETY
   // ============================================================================
   {
-    id: 'gas_safety_certificate',
+    id: 'legal_compliance',
     section: 'Legal Compliance',
-    question: 'Do you have a valid Gas Safety Certificate?',
-    inputType: 'yes_no',
-    helperText: 'Required by law if property has gas appliances. Must be renewed annually.',
-    validation: { required: true },
-  },
-  {
-    id: 'epc_rating',
-    section: 'Legal Compliance',
-    question: 'What is the Energy Performance Certificate (EPC) rating?',
-    inputType: 'select',
-    options: ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
-    helperText: 'Minimum rating E required for new tenancies. Must be valid and provided to tenant.',
-    validation: { required: true },
-  },
-  {
-    id: 'electrical_safety_certificate',
-    section: 'Legal Compliance',
-    question: 'Do you have an Electrical Installation Condition Report (EICR)?',
-    inputType: 'yes_no',
-    helperText: 'Required every 5 years for private rented properties (England from June 2020)',
-    validation: { required: true },
-  },
-  {
-    id: 'smoke_alarms_fitted',
-    section: 'Legal Compliance',
-    question: 'Are smoke alarms fitted on every floor?',
-    inputType: 'yes_no',
-    helperText: 'Legal requirement: smoke alarms on every storey',
-    validation: { required: true },
-  },
-  {
-    id: 'carbon_monoxide_alarms',
-    section: 'Legal Compliance',
-    question: 'Are carbon monoxide alarms fitted?',
-    inputType: 'yes_no',
-    helperText: 'Required in rooms with solid fuel appliances (e.g., coal fire, wood burner)',
-    validation: { required: true },
-  },
-  {
-    id: 'how_to_rent_guide_provided',
-    section: 'Legal Compliance',
-    question: 'Will you provide the "How to Rent" guide to tenants?',
-    inputType: 'yes_no',
-    helperText: 'England only: Must provide latest version before or at start of tenancy',
-    validation: { required: true },
+    question: 'Legal compliance & safety certificates',
+    inputType: 'group',
+    helperText: '⚠️ All required by UK law for residential tenancies',
+    fields: [
+      {
+        id: 'gas_safety_certificate',
+        label: 'Gas Safety Certificate (if applicable)',
+        inputType: 'select',
+        options: ['Yes', 'No', 'N/A - No gas appliances'],
+        validation: { required: true },
+        width: 'half',
+        warnings: [
+          {
+            value: 'No',
+            message: '⚠️ CRITICAL: Gas Safety Certificate is required by law if you have gas appliances. The tenancy agreement could be invalid without it.',
+            severity: 'error',
+          },
+        ],
+      },
+      {
+        id: 'epc_rating',
+        label: 'Energy Performance Certificate (EPC) rating',
+        inputType: 'select',
+        options: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'Not available'],
+        validation: { required: true },
+        width: 'half',
+        warnings: [
+          {
+            value: ['F', 'G', 'Not available'],
+            message: '⚠️ WARNING: Properties must have a minimum EPC rating of E to be legally let. Your tenancy agreement may be invalid.',
+            severity: 'error',
+          },
+        ],
+      },
+      {
+        id: 'electrical_safety_certificate',
+        label: 'Electrical Installation Condition Report (EICR)',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'half',
+        warnings: [
+          {
+            value: 'No',
+            message: '⚠️ WARNING: EICR is required every 5 years for private rentals (England). This is a legal requirement.',
+            severity: 'warning',
+          },
+        ],
+      },
+      {
+        id: 'smoke_alarms_fitted',
+        label: 'Smoke alarms on every floor',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'half',
+        warnings: [
+          {
+            value: 'No',
+            message: '⚠️ CRITICAL: Smoke alarms on every floor are a legal requirement. You must install them before letting the property.',
+            severity: 'error',
+          },
+        ],
+      },
+      {
+        id: 'carbon_monoxide_alarms',
+        label: 'Carbon monoxide alarms (if applicable)',
+        inputType: 'select',
+        options: ['Yes', 'No', 'N/A - No solid fuel appliances'],
+        validation: { required: true },
+        width: 'half',
+        warnings: [
+          {
+            value: 'No',
+            message: '⚠️ WARNING: Carbon monoxide alarms are required in rooms with solid fuel appliances. This is a legal requirement.',
+            severity: 'warning',
+          },
+        ],
+      },
+      {
+        id: 'how_to_rent_guide_provided',
+        label: 'Will provide "How to Rent" guide (England only)',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'half',
+        warnings: [
+          {
+            value: 'No',
+            message: '⚠️ WARNING: In England, you must provide the "How to Rent" guide before or at the start of the tenancy.',
+            severity: 'warning',
+          },
+        ],
+      },
+    ],
   },
 
   // ============================================================================
   // SECTION 10: MAINTENANCE & REPAIRS
   // ============================================================================
   {
-    id: 'landlord_maintenance_responsibilities',
+    id: 'maintenance_repairs',
     section: 'Maintenance & Repairs',
-    question: 'Who is responsible for repairs to the structure and exterior?',
-    inputType: 'select',
-    options: ['Landlord (standard)', 'Shared responsibility', 'Other arrangement'],
-    helperText: 'Usually landlord by law for structure, exterior, heating, water, sanitation',
-    validation: { required: true },
-  },
-  {
-    id: 'garden_maintenance',
-    section: 'Maintenance & Repairs',
-    question: 'Is there a garden? If yes, who maintains it?',
-    inputType: 'select',
-    options: ['No garden', 'Tenant maintains', 'Landlord maintains', 'Shared/professional gardener'],
-    helperText: 'Specify garden maintenance responsibilities',
-    validation: { required: true },
-  },
-  {
-    id: 'repairs_reporting_method',
-    section: 'Maintenance & Repairs',
-    question: 'How should tenants report repairs?',
-    inputType: 'select',
-    options: ['Email', 'Phone', 'Online portal', 'Via agent'],
-    helperText: 'Preferred method for repair requests',
-    validation: { required: true },
-  },
-  {
-    id: 'emergency_contact',
-    section: 'Maintenance & Repairs',
-    question: 'Emergency contact number (24/7)',
-    inputType: 'tel',
-    placeholder: '07700 900000',
-    helperText: 'For urgent repairs (e.g., burst pipes, no heating in winter)',
-    validation: { required: true },
+    question: 'Maintenance & repair responsibilities',
+    inputType: 'group',
+    helperText: 'Responsibilities and procedures for property maintenance',
+    fields: [
+      {
+        id: 'landlord_maintenance_responsibilities',
+        label: 'Structural repairs responsibility',
+        inputType: 'select',
+        options: ['Landlord (standard)', 'Shared responsibility', 'Other arrangement'],
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'garden_maintenance',
+        label: 'Garden maintenance',
+        inputType: 'select',
+        options: ['No garden', 'Tenant maintains', 'Landlord maintains', 'Shared/professional gardener'],
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'repairs_reporting_method',
+        label: 'How to report repairs',
+        inputType: 'select',
+        options: ['Email', 'Phone', 'Online portal', 'Via agent'],
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'emergency_contact',
+        label: 'Emergency contact number (24/7)',
+        inputType: 'tel',
+        placeholder: '07700 900000',
+        validation: { required: true },
+        width: 'half',
+      },
+    ],
   },
 
   // ============================================================================
   // SECTION 11: PROPERTY CONDITION & INVENTORY
   // ============================================================================
   {
-    id: 'inventory_provided',
+    id: 'property_condition',
     section: 'Property Condition',
-    question: 'Will a detailed inventory be provided?',
-    inputType: 'yes_no',
-    helperText: 'Recommended: detailed inventory with photos protects both parties',
-    validation: { required: true },
-  },
-  {
-    id: 'professional_cleaning_required',
-    section: 'Property Condition',
-    question: 'Is professional cleaning required at end of tenancy?',
-    inputType: 'yes_no',
-    helperText: 'If yes, tenant must return property to same cleanliness standard',
-    validation: { required: true },
-  },
-  {
-    id: 'decoration_condition',
-    section: 'Property Condition',
-    question: 'Are tenants allowed to decorate/make alterations?',
-    inputType: 'select',
-    options: ['No alterations allowed', 'With written permission only', 'Minor alterations allowed (e.g., picture hooks)'],
-    helperText: 'Specify decoration and alteration policy',
-    validation: { required: true },
+    question: 'Property condition & inventory',
+    inputType: 'group',
+    helperText: 'Inventory requirements and property standards',
+    fields: [
+      {
+        id: 'inventory_provided',
+        label: 'Detailed inventory provided?',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'third',
+      },
+      {
+        id: 'professional_cleaning_required',
+        label: 'Professional cleaning required at end?',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'third',
+      },
+      {
+        id: 'decoration_condition',
+        label: 'Decoration/alterations policy',
+        inputType: 'select',
+        options: ['No alterations allowed', 'With written permission only', 'Minor alterations allowed (e.g., picture hooks)'],
+        validation: { required: true },
+        width: 'third',
+      },
+    ],
   },
 
   // ============================================================================
   // SECTION 12: TENANCY TERMS & CONDITIONS
   // ============================================================================
   {
-    id: 'break_clause',
+    id: 'tenancy_terms',
     section: 'Tenancy Terms',
-    question: 'Is there a break clause?',
-    inputType: 'yes_no',
-    helperText: 'Break clause allows either party to end tenancy early',
-    validation: { required: true },
+    question: 'Additional tenancy terms',
+    inputType: 'group',
+    helperText: 'Break clause, subletting, and rent increase policies',
+    fields: [
+      {
+        id: 'break_clause',
+        label: 'Include break clause?',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'third',
+      },
+      {
+        id: 'subletting_allowed',
+        label: 'Subletting policy',
+        inputType: 'select',
+        options: ['Not allowed', 'With written permission only', 'Allowed'],
+        validation: { required: true },
+        width: 'third',
+      },
+      {
+        id: 'rent_increase_clause',
+        label: 'Rent increase clause?',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'third',
+      },
+    ],
   },
   {
-    id: 'break_clause_months',
+    id: 'break_clause_details',
     section: 'Tenancy Terms',
-    question: 'Break clause can be exercised after how many months?',
-    inputType: 'select',
-    options: ['6 months', '9 months', '12 months'],
-    helperText: 'When break clause becomes active',
-    validation: { required: true },
-    dependsOn: { questionId: 'break_clause', value: 'yes' },
+    question: 'Break clause details',
+    inputType: 'group',
+    helperText: 'When and how the break clause can be exercised',
+    dependsOn: { questionId: 'break_clause', value: 'Yes' },
+    fields: [
+      {
+        id: 'break_clause_months',
+        label: 'Can be exercised after',
+        inputType: 'select',
+        options: ['6 months', '9 months', '12 months'],
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'break_clause_notice_period',
+        label: 'Notice period required',
+        inputType: 'select',
+        options: ['1 month', '2 months', '3 months'],
+        validation: { required: true },
+        width: 'half',
+      },
+    ],
   },
   {
-    id: 'break_clause_notice_period',
+    id: 'rent_increase_details',
     section: 'Tenancy Terms',
-    question: 'How much notice for break clause?',
-    inputType: 'select',
-    options: ['1 month', '2 months', '3 months'],
-    helperText: 'Notice period required to activate break clause',
-    validation: { required: true },
-    dependsOn: { questionId: 'break_clause', value: 'yes' },
-  },
-  {
-    id: 'subletting_allowed',
-    section: 'Tenancy Terms',
-    question: 'Is subletting allowed?',
-    inputType: 'select',
-    options: ['Not allowed', 'With written permission only', 'Allowed'],
-    helperText: 'Can tenant rent rooms to others? Usually not allowed.',
-    validation: { required: true },
-  },
-  {
-    id: 'rent_increase_clause',
-    section: 'Tenancy Terms',
-    question: 'Is there a rent review/increase clause?',
-    inputType: 'yes_no',
-    helperText: 'Allow rent increases during tenancy (must follow legal procedures)',
-    validation: { required: true },
-  },
-  {
-    id: 'rent_increase_frequency',
-    section: 'Tenancy Terms',
-    question: 'How often can rent be reviewed?',
+    question: 'Rent increase frequency',
     inputType: 'select',
     options: ['Annually', 'Every 2 years', 'At landlord discretion (with notice)'],
-    helperText: 'Frequency of permitted rent reviews',
+    helperText: 'How often rent can be reviewed/increased',
     validation: { required: true },
-    dependsOn: { questionId: 'rent_increase_clause', value: 'yes' },
+    dependsOn: { questionId: 'rent_increase_clause', value: 'Yes' },
   },
 
   // ============================================================================
   // SECTION 13: INSURANCE & LIABILITY
   // ============================================================================
   {
-    id: 'landlord_insurance',
+    id: 'insurance',
     section: 'Insurance',
-    question: 'Do you have landlord insurance?',
-    inputType: 'yes_no',
-    helperText: 'Landlord insurance covers building, landlord liability',
-    validation: { required: true },
-  },
-  {
-    id: 'tenant_insurance_required',
-    section: 'Insurance',
-    question: 'Do you require tenants to have contents insurance?',
-    inputType: 'select',
-    options: ['Not required', 'Recommended', 'Required'],
-    helperText: 'Tenant contents insurance protects their belongings',
-    validation: { required: true },
+    question: 'Insurance requirements',
+    inputType: 'group',
+    helperText: 'Landlord and tenant insurance policies',
+    fields: [
+      {
+        id: 'landlord_insurance',
+        label: 'Do you have landlord insurance?',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'half',
+      },
+      {
+        id: 'tenant_insurance_required',
+        label: 'Tenant contents insurance',
+        inputType: 'select',
+        options: ['Not required', 'Recommended', 'Required'],
+        validation: { required: true },
+        width: 'half',
+      },
+    ],
   },
 
   // ============================================================================
   // SECTION 14: ACCESS & VIEWINGS
   // ============================================================================
   {
-    id: 'landlord_access_notice',
+    id: 'access_viewings',
     section: 'Access & Viewings',
-    question: 'How much notice for landlord access (inspections)?',
-    inputType: 'select',
-    options: ['24 hours', '48 hours', '1 week'],
-    helperText: 'Legally must give 24 hours notice except emergencies',
-    validation: { required: true },
-  },
-  {
-    id: 'inspection_frequency',
-    section: 'Access & Viewings',
-    question: 'How often will property inspections occur?',
-    inputType: 'select',
-    options: ['Monthly', 'Quarterly', 'Every 6 months', 'Annually', 'As needed'],
-    helperText: 'Regular inspections to check property condition',
-    validation: { required: true },
-  },
-  {
-    id: 'end_of_tenancy_viewings',
-    section: 'Access & Viewings',
-    question: 'Allow viewings for new tenants during final month?',
-    inputType: 'yes_no',
-    helperText: 'Can landlord show property to prospective tenants before current tenancy ends?',
-    validation: { required: true },
+    question: 'Property access & viewings policy',
+    inputType: 'group',
+    helperText: 'Landlord access rights and inspection schedule',
+    fields: [
+      {
+        id: 'landlord_access_notice',
+        label: 'Notice required for access',
+        inputType: 'select',
+        options: ['24 hours', '48 hours', '1 week'],
+        validation: { required: true },
+        width: 'third',
+      },
+      {
+        id: 'inspection_frequency',
+        label: 'Inspection frequency',
+        inputType: 'select',
+        options: ['Monthly', 'Quarterly', 'Every 6 months', 'Annually', 'As needed'],
+        validation: { required: true },
+        width: 'third',
+      },
+      {
+        id: 'end_of_tenancy_viewings',
+        label: 'Allow end-of-tenancy viewings?',
+        inputType: 'select',
+        options: ['Yes', 'No'],
+        validation: { required: true },
+        width: 'third',
+      },
+    ],
   },
 
   // ============================================================================
@@ -803,11 +948,19 @@ export function getMaxDeposit(jurisdiction: string, rentAmount: number): number 
 // Get jurisdiction-specific questions
 export function getJurisdictionQuestions(jurisdiction: string): WizardQuestion[] {
   return TENANCY_AGREEMENT_QUESTIONS.map(q => {
-    // Update deposit scheme options
-    if (q.id === 'deposit_scheme') {
+    // Update deposit scheme options in the grouped deposit_details field
+    if (q.id === 'deposit_details' && q.fields) {
       return {
         ...q,
-        options: getDepositSchemes(jurisdiction),
+        fields: q.fields.map(f => {
+          if (f.id === 'deposit_scheme') {
+            return {
+              ...f,
+              options: getDepositSchemes(jurisdiction),
+            };
+          }
+          return f;
+        }),
       };
     }
     return q;
