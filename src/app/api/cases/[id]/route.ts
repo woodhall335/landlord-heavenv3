@@ -18,16 +18,15 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await requireServerAuth();
-    const { id } = await params;
+    // Allow anonymous access - RLS policies will handle authorization
     const supabase = await createServerSupabaseClient();
+    const { id } = await params;
 
-    // Fetch case
+    // Fetch case - RLS will automatically filter based on user_id or anonymous_user_id
     const { data: caseData, error } = await supabase
       .from('cases')
       .select('*')
       .eq('id', id)
-      .eq('user_id', user.id)
       .single();
 
     if (error || !caseData) {
@@ -55,13 +54,6 @@ export async function GET(
       { status: 200 }
     );
   } catch (error: any) {
-    if (error.message === 'Unauthorized - Please log in') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
     console.error('Get case error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
