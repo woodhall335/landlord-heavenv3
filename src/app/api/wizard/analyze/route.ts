@@ -75,13 +75,29 @@ export async function POST(request: Request) {
     const hmoDetection = detectHMO(caseData.collected_facts as Record<string, any>);
     const showHMOUpsell = shouldShowHMOUpsell(hmoDetection);
 
+    // Convert success_probability string to number for database
+    const convertSuccessProbability = (prob: string | number | undefined): number | null => {
+      if (typeof prob === 'number') return prob;
+      if (!prob) return null;
+
+      const mapping: Record<string, number> = {
+        'very_high': 90,
+        'high': 75,
+        'medium': 50,
+        'low': 25,
+        'none': 0,
+      };
+
+      return mapping[prob] || null;
+    };
+
     // Update case with analysis results
-    const { data: updatedCase, error: updateError } = await supabase
+    const { data: updatedCase, error: updateError} = await supabase
       .from('cases')
       .update({
         recommended_route: analysis.recommended_route,
         recommended_grounds: analysis.primary_grounds?.map((g) => String(g.ground_number)) || [],
-        success_probability: analysis.primary_grounds?.[0]?.success_probability || null,
+        success_probability: convertSuccessProbability(analysis.primary_grounds?.[0]?.success_probability),
         red_flags: analysis.red_flags as any,
         compliance_issues: analysis.compliance_check as any,
         wizard_completed_at: new Date().toISOString(),
