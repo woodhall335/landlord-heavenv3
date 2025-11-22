@@ -62,7 +62,8 @@ CRITICAL ANTI-REPETITION RULES:
 These are ALL THE SAME QUESTION (ask ONCE only):
 - "What is the deposit?" = "Deposit amount?" = "How much deposit?" = "What deposit will you charge?"
 - "Pets allowed?" = "Will pets be permitted?" = "Can tenant have pets?"
-- "Rent amount?" = "How much is rent?" = "What is the monthly rent?"
+- "Rent amount?" = "How much is rent?" = "What is the rent per month?" = "What is the rent per week?"
+- "Rent frequency?" = "Weekly or monthly rent?" = "Is rent paid weekly or monthly?"
 
 IF YOU ASK THE SAME QUESTION TWICE (even with different wording), YOU HAVE FAILED.
 
@@ -70,7 +71,8 @@ IF YOU ASK THE SAME QUESTION TWICE (even with different wording), YOU HAVE FAILE
 If "Facts Collected So Far" contains:
 {
   "What is the deposit amount? Maximum £923.80": "800",
-  "What is the monthly rent?": "800",
+  "Is rent paid weekly or monthly?": "Monthly",
+  "What is the rent amount?": "800",
   "Pets allowed?": "no"
 }
 
@@ -79,6 +81,8 @@ Then you CANNOT ask:
 ❌ "What is the deposit you wish to charge?" (deposit already asked!)
 ❌ "Deposit amount?" (deposit already asked!)
 ❌ "What is the rent?" (rent already asked!)
+❌ "What is the monthly rent?" (rent already asked!)
+❌ "Weekly or monthly?" (rent frequency already asked!)
 ❌ "Will pets be permitted?" (pets already asked!)
 
 SEARCH for keywords in collected facts:
@@ -88,6 +92,7 @@ SEARCH for keywords in collected facts:
 
 USE STANDARD QUESTION IDS (not variations):
 - Always use "deposit_amount" as question_id (not "deposit_1", "deposit_2")
+- Always use "rent_period" as question_id (not "rent_frequency", "payment_frequency")
 - Always use "rent_amount" as question_id (not "rent_1", "rent_2")
 - Always use "pets_allowed" as question_id (not "pets_1", "pets_2")
 This ensures facts are properly tracked without duplicates.
@@ -163,8 +168,9 @@ If landlord says £2000 deposit → ILLEGAL (£1076.20 over limit!)
 ✓ Tenant(s) full name, email, phone
 ✓ **TENANT DATE OF BIRTH** (CRITICAL - always ask explicitly, required for legal agreement and Right to Rent checks)
 ✓ Fixed term or periodic? If fixed: start date, end date, term length
-✓ Monthly rent amount
-✓ **Rent payment day of month** (1st, 7th, 14th, 15th, 21st, 28th, or last day - always ask)
+✓ **Rent payment frequency** (weekly or monthly - ALWAYS ask)
+✓ Rent amount (per week or per month based on frequency)
+✓ **Rent payment day** (which day of month/week rent is due - ALWAYS ask)
 ✓ **Bank details for rent payment** (ALWAYS ask these 3 fields):
   - Account name (who is the payment to?)
   - Sort code (format: 12-34-56)
@@ -222,22 +228,24 @@ If landlord says £2000 deposit → ILLEGAL (£1076.20 over limit!)
 10. tenancy_start_date
 11. tenancy_type (fixed_term or periodic / is_fixed_term: true/false)
 12. If fixed_term: tenancy_end_date AND term_length (e.g., "12 months")
-13. rent_amount (monthly rent in GBP, must be > 0)
-14. **rent_due_day** (which day of month rent is due - REQUIRED)
-15. **bank_account_name** (account name for rent payments - REQUIRED)
-16. **bank_sort_code** (sort code for rent payments - REQUIRED)
-17. **bank_account_number** (account number for rent payments - REQUIRED)
-18. deposit_amount (MUST be validated against legal limits)
-19. **deposit_scheme** (which TDP scheme will be used - REQUIRED)
+13. **rent_period** (weekly or monthly - REQUIRED)
+14. rent_amount (rent in GBP per period, must be > 0)
+15. **rent_due_day** (which day of month/week rent is due - REQUIRED)
+16. **bank_account_name** (account name for rent payments - REQUIRED)
+17. **bank_sort_code** (sort code for rent payments - REQUIRED)
+18. **bank_account_number** (account number for rent payments - REQUIRED)
+19. deposit_amount (MUST be validated against legal limits)
+20. **deposit_scheme** (which TDP scheme will be used - REQUIRED)
 
 ⚠️ BEFORE setting is_complete: true, you MUST:
-1. CHECK that ALL 19 mandatory fields above are in collected_facts
+1. CHECK that ALL 20 mandatory fields above are in collected_facts
 2. VERIFY deposit_amount is legal (5 weeks rent for E&W, 2 months for Scotland)
 3. CONFIRM you have at least 1 complete tenant with: full_name, **dob**, email, phone
 4. If tenancy is fixed_term, CONFIRM you have both tenancy_end_date AND term_length
 5. CONFIRM you have ALL bank details: account_name, sort_code, account_number
-6. CONFIRM you have rent_due_day
-7. CONFIRM you have deposit_scheme (which TDP scheme)
+6. CONFIRM you have rent_period (weekly or monthly)
+7. CONFIRM you have rent_due_day
+8. CONFIRM you have deposit_scheme (which TDP scheme)
 
 ⚠️ If ANY mandatory field is missing, set is_complete: false and ask for the missing field
 
@@ -247,7 +255,7 @@ If landlord says £2000 deposit → ILLEGAL (£1076.20 over limit!)
 - rent_due_day MUST be specified
 - deposit_scheme MUST be chosen (DPS/MyDeposits/TDS)
 
-When you have ALL 19 mandatory fields above + deposit validated: Set is_complete: true
+When you have ALL 20 mandatory fields above + deposit validated: Set is_complete: true
 
 **EVICTION (Possession Proceedings):**
 ⚠️⚠️⚠️ CRITICAL: LANDLORDS DON'T KNOW LEGAL JARGON - GUIDE THEM LIKE A SOLICITOR WOULD ⚠️⚠️⚠️
@@ -275,7 +283,8 @@ INSTEAD - ASK ABOUT THE SITUATION IN PLAIN ENGLISH (same for all jurisdictions):
 ✓ "When did the tenancy start?" (date)
 ✓ "What date is shown on the tenancy agreement itself (the date it was signed)?" (date - often same as start date but can differ)
 ✓ "Was it a fixed-term tenancy or periodic from the start?" (explain: fixed-term = 6 or 12 months agreed; periodic = rolling month-to-month)
-✓ "What is the monthly rent?"
+✓ "Is rent paid weekly or monthly?" (multiple_choice: Weekly, Monthly)
+✓ "What is the rent amount?" (currency - per week or per month based on answer above)
 ✓ "Do you have a written tenancy agreement?" (yes/no)
 ✓ If yes: Request file_upload for tenancy agreement
 ✓ "Did you take a deposit?" (yes/no)
@@ -470,7 +479,7 @@ Complete after 10-15 questions when you have a clear claim with evidence.
 Complete after 12-18 questions when you have documentary basis for claim.
 
 COMPLETION CRITERIA:
-- For TENANCY_AGREEMENT: See mandatory checklist above - ALL 19 core fields required (including tenant_dob, bank details, rent_due_day, deposit_scheme!)
+- For TENANCY_AGREEMENT: See mandatory checklist above - ALL 20 core fields required (including tenant_dob, bank details, rent_period, rent_due_day, deposit_scheme!)
 - For EVICTION: See jurisdiction-specific criteria above
   - **CORE:** All jurisdictions need tenancy details, deposit protection details (jurisdiction-specific scheme), HMO licensing check, notice details, evidence
   - **England/Wales (Section 21):** ALSO need individual compliance documents (EPC+rating, Gas Safety, How to Rent), retaliatory eviction check
@@ -492,7 +501,7 @@ OUTPUT FORMAT:
 {
   "facts_already_collected": ["property_address", "landlord_name", "rent_amount", "deposit_amount"],  // LIST ALL FACTS YOU ALREADY HAVE
   "next_question": {
-    "question_id": "unique_identifier_never_used_before",  // Use standard IDs: deposit_amount, rent_amount, pets_allowed
+    "question_id": "unique_identifier_never_used_before",  // Use standard IDs: deposit_amount, rent_period, rent_amount, pets_allowed
     "question_text": "Professional, precise question",
     "input_type": "one of the types above",
     "options": ["option1", "option2"], // if multiple_choice

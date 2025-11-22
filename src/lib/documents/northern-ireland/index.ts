@@ -47,3 +47,9 @@ export {
   type AdditionalTerms,
   type ValidationResult as PrivateTenancyValidationResult,
 } from './private-tenancy-generator';
+
+// Wizard Mapper
+export {
+  mapWizardToNoticeToQuit,
+  type NIWizardFacts,
+} from './wizard-mapper';

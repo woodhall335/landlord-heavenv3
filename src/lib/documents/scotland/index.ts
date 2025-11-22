@@ -6,3 +6,4 @@
 
 export * from './prt-generator';
 export * from './notice-to-leave-generator';
+export * from './wizard-mapper';
