@@ -11,7 +11,12 @@
  * Run with: npx tsx scripts/seed-councils.ts
  */
 
+import { config } from 'dotenv';
+import { resolve } from 'path';
 import { createClient } from '@supabase/supabase-js';
+
+// Load environment variables from .env.local
+config({ path: resolve(process.cwd(), '.env.local') });
 import { LONDON_COUNCILS } from './councils-data';
 import { MAJOR_ENGLISH_CITIES } from './councils-data-england-major';
 import { ENGLISH_DISTRICT_COUNCILS } from './councils-data-england-districts';
