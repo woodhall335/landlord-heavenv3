@@ -1,0 +1,56 @@
+modules = ["nodejs-20", "web"]
+[agent]
+expertMode = true
+
+[nix]
+channel = "stable-25_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[userenv]
+
+[userenv.shared]
+NEXT_PUBLIC_APP_NAME = "Landlord Heaven"
+NEXT_PUBLIC_APP_URL = "https://13850d48-bbe1-4133-abb9-504eba079fd6-00-10bx65l0nqvr0.kirk.replit.dev"
+NODE_ENV = "development"
+NEXT_PUBLIC_ENABLE_HMO_PRO = "true"
+NEXT_PUBLIC_ENABLE_MONEY_CLAIMS = "true"
+NEXT_PUBLIC_ENABLE_SCOTLAND = "true"
+NEXT_PUBLIC_ENABLE_NORTHERN_IRELAND = "true"
+AI_MODEL_WIZARD = "gpt-4-1106-preview"
+AI_MODEL_DECISION = "gpt-4-1106-preview"
+AI_MODEL_GENERATION = "gpt-4"
+AI_MODEL_QA = "claude-sonnet-4-20250514"
+AI_TEMPERATURE_CONVERSATIONAL = "0.7"
+AI_TEMPERATURE_PRECISE = "0.3"
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["npm", "start"]
+build = ["npm", "run", "build"]
