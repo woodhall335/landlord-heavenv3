@@ -13,10 +13,20 @@
 
 import { config } from 'dotenv';
 import { resolve } from 'path';
+import { existsSync } from 'fs';
 import { createClient } from '@supabase/supabase-js';
 
 // Load environment variables from .env.local
-config({ path: resolve(process.cwd(), '.env.local') });
+const envPath = resolve(process.cwd(), '.env.local');
+console.log('📁 Looking for .env.local at:', envPath);
+console.log('📁 File exists:', existsSync(envPath) ? '✅' : '❌');
+
+const result = config({ path: envPath });
+if (result.error) {
+  console.error('❌ Error loading .env.local:', result.error);
+} else {
+  console.log('✅ .env.local loaded successfully');
+}
 import { LONDON_COUNCILS } from './councils-data';
 import { MAJOR_ENGLISH_CITIES } from './councils-data-england-major';
 import { ENGLISH_DISTRICT_COUNCILS } from './councils-data-england-districts';
@@ -30,10 +40,16 @@ import { ALL_ENGLISH_COUNCILS_COMPLETE, generateCouncilData } from './generate-a
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
+console.log('\n🔍 Environment variables:');
+console.log('   NEXT_PUBLIC_SUPABASE_URL:', supabaseUrl ? `✅ (${supabaseUrl.substring(0, 30)}...)` : '❌');
+console.log('   SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? `✅ (${supabaseServiceKey.substring(0, 20)}...)` : '❌');
+console.log();
+
 if (!supabaseUrl || !supabaseServiceKey) {
-  console.error('❌ Missing environment variables:');
-  console.error('   NEXT_PUBLIC_SUPABASE_URL:', supabaseUrl ? '✓' : '✗');
-  console.error('   SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? '✓' : '✗');
+  console.error('❌ Missing environment variables!');
+  console.error('\n💡 Make sure .env.local contains:');
+  console.error('   NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"');
+  console.error('   SUPABASE_SERVICE_ROLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."');
   process.exit(1);
 }
 
