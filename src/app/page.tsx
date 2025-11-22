@@ -2,564 +2,218 @@
 
 import Link from "next/link";
 import {
+  Badge,
   Button,
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
   Container,
-  Badge,
-  PriceBadge,
+  FeatureGrid,
+  FeatureSplit,
+  StepList,
+  TealHero,
+  TestimonialCard,
 } from "@/components/ui";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary via-primary-600 to-primary-dark text-white overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-10 right-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-          <div className="absolute bottom-10 left-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
-
-        <Container size="large" className="py-20 sm:py-32 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-xl mb-6 border border-white/30">
-              <span className="text-sm font-semibold">Trusted by 10,000+ UK Landlords</span>
-            </div>
-
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
-              Court-Ready Legal Documents
-              <br />
-              <span className="bg-gradient-to-r from-white to-white/80 bg-clip-text text-transparent">
-                In Minutes, Not Hours
-              </span>
-            </h1>
-
-            <p className="text-xl sm:text-2xl mb-8 text-white leading-relaxed max-w-3xl mx-auto">
-              AI-powered conversational wizard guides you through complex legal requirements.
-              <br />
-              <span className="font-semibold bg-white/20 px-4 py-2 rounded-lg inline-block mt-4">
-                Plain English In → Professional Documents Out
-              </span>
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/wizard">
-                <Button
-                  size="large"
-                  variant="secondary"
-                  className="bg-white text-primary hover:bg-white/90 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all min-h-button-lg"
-                >
-                  Start Free Analysis →
-                </Button>
-              </Link>
-
-              <Link href="/pricing">
-                <Button
-                  size="large"
-                  variant="outline"
-                  className="border-2 border-white text-white hover:bg-white/10 min-h-button-lg"
-                >
-                  See All Products
-                </Button>
-              </Link>
-            </div>
-
-            <div className="mt-12 flex flex-wrap gap-6 justify-center text-sm text-white">
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>Court-ready documents</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>All 3 UK jurisdictions</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>30-day money-back guarantee</span>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* How It Works - Clear Funnel */}
-      <section className="py-20 bg-white border-b border-gray-200">
-        <Container size="large">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-charcoal mb-4">
-              How It Works
-            </h2>
-            <p className="text-xl text-gray-600">
-              Get your legal documents in 3 simple steps
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
-            {/* Step 1 */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-6 shadow-lg">
-                1
-              </div>
-              <h3 className="text-xl font-semibold text-charcoal mb-3">
-                Tell Us Your Situation
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Answer simple questions in plain English. Our AI wizard asks only what's relevant to your case.
-              </p>
-            </div>
-
-            {/* Step 2 */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-6 shadow-lg">
-                2
-              </div>
-              <h3 className="text-xl font-semibold text-charcoal mb-3">
-                AI Creates Your Documents
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Our legal AI analyzes your answers and generates court-ready documents tailored to your situation.
-              </p>
-            </div>
-
-            {/* Step 3 */}
-            <div className="text-center">
-              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-6 shadow-lg">
-                3
-              </div>
-              <h3 className="text-xl font-semibold text-charcoal mb-3">
-                Download & Use
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                Instant download of professional PDFs ready for service to tenants or submission to court.
-              </p>
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div className="text-center mt-16">
+    <div className="bg-gray-50">
+      <TealHero
+        title="Legal-tech for confident landlords"
+        subtitle="Generate compliant notices, court-ready filings, and compliant HMO packs in minutes with a calm, modern workspace."
+        eyebrow="Landlord Heaven Platform"
+        actions={
+          <div className="flex flex-wrap items-center gap-3">
             <Link href="/wizard">
-              <Button size="large" variant="primary" className="shadow-lg hover:shadow-xl min-h-button-lg">
-                Start Your Free Analysis Now →
+              <Button variant="secondary" size="large" className="bg-white text-[#009E9E] hover:bg-white/90">
+                Start free analysis
               </Button>
             </Link>
-            <p className="text-sm text-gray-600 mt-4 font-medium">
-              No credit card required • Takes 5-10 minutes
-            </p>
+            <Link href="/pricing">
+              <Button variant="outline" size="large" className="border-white text-white hover:bg-white/10">
+                View pricing
+              </Button>
+            </Link>
           </div>
-        </Container>
-      </section>
+        }
+      />
 
-      {/* Products Section */}
-      <section className="py-20 bg-gray-50">
-        <Container size="large">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-charcoal mb-4">
-              Professional Legal Documents
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Choose the package that fits your needs. All documents are legally compliant,
-              court-ready, and indistinguishable from solicitor-prepared documents.
-            </p>
-          </div>
-
-          {/* Eviction Products */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-semibold text-charcoal mb-8">Eviction Products</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Notice Only */}
-              <Card hoverable variant="elevated" padding="large">
-                <CardHeader>
-                  <Badge variant="primary">Most Popular</Badge>
-                  <CardTitle>Notice Only</CardTitle>
-                  <div className="mt-2">
-                    <PriceBadge price={29.99} size="large" />
-                  </div>
-                </CardHeader>
-
-                <CardContent>
-                  <CardDescription className="mb-4">
-                    Quick start for landlords who just need the notice.
-                  </CardDescription>
-
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Section 8/21 or jurisdiction equivalent</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Plain-English guidance</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Service checklist</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>12-month cloud storage</span>
-                    </li>
-                  </ul>
-                </CardContent>
-
-                <CardFooter>
-                  <Link href="/wizard" className="block">
-                    <Button fullWidth variant="primary">
-                      Get Started →
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-
-              {/* Complete Eviction Pack */}
-              <Card hoverable variant="bordered" padding="large" className="border-primary">
-                <CardHeader>
-                  <Badge variant="success">Best Value</Badge>
-                  <CardTitle>Complete Eviction Pack</CardTitle>
-                  <div className="mt-2">
-                    <PriceBadge price={149.99} size="large" />
-                  </div>
-                </CardHeader>
-
-                <CardContent>
-                  <CardDescription className="mb-4">
-                    Full DIY eviction bundle from notice to possession order.
-                  </CardDescription>
-
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>All notices (Section 8, 21, PRT)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>All court forms (N5, N5B, N119)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Step-by-step eviction guide</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Evidence checklist</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Lifetime cloud storage</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Priority email support</span>
-                    </li>
-                  </ul>
-                </CardContent>
-
-                <CardFooter>
-                  <Link href="/wizard" className="block">
-                    <Button fullWidth variant="primary" size="large">
-                      Get Complete Pack →
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-
-              {/* Money Claim Pack */}
-              <Card hoverable variant="elevated" padding="large">
-                <CardHeader>
-                  <CardTitle>Money Claim Pack</CardTitle>
-                  <div className="mt-2">
-                    <PriceBadge price={129.99} size="large" />
-                  </div>
-                </CardHeader>
-
-                <CardContent>
-                  <CardDescription className="mb-4">
-                    Recover rent arrears, damages, and other losses.
-                  </CardDescription>
-
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>N1 claim form + MCOL guidance</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Plain-English summaries</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Evidence checklist</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Calculator integrations</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Lifetime storage</span>
-                    </li>
-                  </ul>
-                </CardContent>
-
-                <CardFooter>
-                  <Link href="/wizard" className="block">
-                    <Button fullWidth variant="primary">
-                      Start Claim →
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            </div>
-          </div>
-
-          {/* Tenancy Products */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-semibold text-charcoal mb-8">Tenancy Agreements</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {/* Standard AST */}
-              <Card hoverable variant="elevated" padding="large">
-                <CardHeader>
-                  <CardTitle>Standard AST</CardTitle>
-                  <div className="mt-2">
-                    <PriceBadge price={39.99} size="large" />
-                  </div>
-                </CardHeader>
-
-                <CardContent>
-                  <CardDescription className="mb-4">
-                    Basic tenancy agreement for occasional landlords.
-                  </CardDescription>
-
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Up-to-date AST for your jurisdiction</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>All mandatory clauses</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Basic guidance notes</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Basic e-sign</span>
-                    </li>
-                  </ul>
-                </CardContent>
-
-                <CardFooter>
-                  <Link href="/wizard" className="block">
-                    <Button fullWidth variant="primary">
-                      Create AST →
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-
-              {/* Premium AST */}
-              <Card hoverable variant="elevated" padding="large">
-                <CardHeader>
-                  <Badge variant="info">Professional</Badge>
-                  <CardTitle>Premium AST</CardTitle>
-                  <div className="mt-2">
-                    <PriceBadge price={59.00} size="large" />
-                  </div>
-                </CardHeader>
-
-                <CardContent>
-                  <CardDescription className="mb-4">
-                    Professional tenancy agreement with flexibility.
-                  </CardDescription>
-
-                  <ul className="space-y-2 text-sm text-gray-700">
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Everything in Standard AST</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Break clauses & guarantor clauses</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Pet permissions & advanced options</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Advanced e-sign with audit trail</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-primary mt-0.5">✓</span>
-                      <span>Priority support</span>
-                    </li>
-                  </ul>
-                </CardContent>
-
-                <CardFooter>
-                  <Link href="/wizard" className="block">
-                    <Button fullWidth variant="primary">
-                      Create Premium AST →
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            </div>
-          </div>
-
-          {/* HMO Pro - Feature Card */}
-          <div className="mt-16">
-            <Card variant="elevated" padding="large" className="bg-gradient-to-br from-secondary/5 to-primary/5 border-2 border-primary">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
-                  <Badge variant="hmo-pro" size="large" className="mb-4">
-                    🏢 HMO Pro Membership
-                  </Badge>
-
-                  <h3 className="text-3xl font-bold text-charcoal mb-4">
-                    Complete HMO Compliance Management
-                  </h3>
-
-                  <p className="text-lg text-gray-700 mb-6">
-                    From <strong>£19.99/month</strong> • 7-day free trial
-                  </p>
-
-                  <ul className="space-y-3 mb-6">
-                    <li className="flex items-start gap-3">
-                      <span className="text-2xl">📋</span>
-                      <div>
-                        <strong className="text-charcoal">Council-Specific Licensing</strong>
-                        <p className="text-sm text-gray-600">380+ UK councils in database</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-2xl">👥</span>
-                      <div>
-                        <strong className="text-charcoal">Unlimited Tenant Management</strong>
-                        <p className="text-sm text-gray-600">£0 extra per tenant change</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-2xl">⏰</span>
-                      <div>
-                        <strong className="text-charcoal">Automated Reminders</strong>
-                        <p className="text-sm text-gray-600">90/30/7-day advance warnings</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="text-2xl">📊</span>
-                      <div>
-                        <strong className="text-charcoal">Portfolio Dashboard</strong>
-                        <p className="text-sm text-gray-600">All HMOs in one place</p>
-                      </div>
-                    </li>
-                  </ul>
-
-                  <div className="flex gap-4">
-                    <Link href="/hmo-pro">
-                      <Button size="large" variant="primary">
-                        Start Free Trial →
-                      </Button>
-                    </Link>
-                    <Link href="/hmo-pro">
-                      <Button size="large" variant="outline">
-                        Learn More
-                      </Button>
-                    </Link>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-lg p-6 shadow-md">
-                  <h4 className="text-xl font-semibold text-charcoal mb-4">Pricing Tiers</h4>
-
-                  <div className="space-y-3">
-                    <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                      <span className="text-gray-700">1-5 HMOs</span>
-                      <PriceBadge price={19.99} />
-                      <span className="text-sm text-gray-500">£4/property</span>
-                    </div>
-                    <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                      <span className="text-gray-700">6-10 HMOs</span>
-                      <PriceBadge price={24.99} />
-                      <span className="text-sm text-gray-500">£2.50/property</span>
-                    </div>
-                    <div className="flex justify-between items-center pb-3 border-b border-gray-200">
-                      <span className="text-gray-700">11-15 HMOs</span>
-                      <PriceBadge price={29.99} />
-                      <span className="text-sm text-gray-500">£2/property</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-gray-700">16-20 HMOs</span>
-                      <PriceBadge price={34.99} />
-                      <span className="text-sm text-gray-500">£1.75/property</span>
-                    </div>
-                  </div>
-
-                  <p className="text-xs text-gray-500 mt-4">
-                    💡 Cancel anytime • No long-term commitment
-                  </p>
-                </div>
-              </div>
+      <section className="bg-white py-12">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 md:grid-cols-3">
+          {[
+            { title: "Trusted compliance", description: "Up-to-date workflows across England, Wales, Scotland, and Northern Ireland." },
+            { title: "Court-ready output", description: "Crystal-clear documents with tenant context, evidence, and route guidance." },
+            { title: "Money-back guarantee", description: "30-day guarantee on every pack with unlimited revisions." },
+          ].map((item) => (
+            <Card key={item.title} padding="large" className="shadow-sm ring-1 ring-gray-200">
+              <CardHeader>
+                <Badge variant="primary">Featured</Badge>
+                <CardTitle>{item.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-gray-600">{item.description}</CardDescription>
+              </CardContent>
             </Card>
-          </div>
-        </Container>
+          ))}
+        </div>
       </section>
 
-      {/* Trust Indicators */}
-      <section className="bg-white py-20 border-t border-gray-200">
-        <Container>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 text-center">
-            <div>
-              <div className="w-16 h-16 mx-auto mb-4 bg-primary-subtle rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
+      <FeatureSplit
+        eyebrow="Conversational wizard"
+        title="Eviction Route Checker"
+        subtitle="A calm two-column workspace that guides you from tenant details through to the right legal route and compliant paperwork."
+        body={
+          <ul className="space-y-2 text-gray-700">
+            <li>• Chat-style intake with legal guardrails</li>
+            <li>• Live compliance indicators per jurisdiction</li>
+            <li>• Instant notices, claims, and letters with explanations</li>
+          </ul>
+        }
+        actions={
+          <Link href="/wizard">
+            <Button variant="primary" size="large">Launch wizard</Button>
+          </Link>
+        }
+        image={
+          <div className="space-y-4">
+            {["Your tenant", "Grounds", "Deadline", "Documents"].map((label, idx) => (
+              <div key={label} className="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm font-semibold text-gray-900">{label}</div>
+                  <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-[#009E9E]">Step {idx + 1}</span>
+                </div>
+                <p className="mt-2 text-sm text-gray-600">
+                  Guided prompts keep you compliant and capture the evidence you need.
+                </p>
               </div>
-              <h4 className="font-semibold text-charcoal mb-2 text-lg">Legally Compliant</h4>
-              <p className="text-sm text-gray-600 leading-relaxed">Court-ready documents</p>
+            ))}
+          </div>
+        }
+      />
+
+      <FeatureGrid
+        eyebrow="Products"
+        title="Purpose-built for every landlord scenario"
+        subtitle="Curated packs with clean UI, clear outcomes, and confident compliance."
+        items={[
+          {
+            title: "Notice Only",
+            description: "Section 8/21 and devolved nation equivalents with service instructions and covering letters.",
+            badge: "£29.99",
+            icon: "📄",
+          },
+          {
+            title: "Complete Eviction Pack",
+            description: "Full journey from notice through witness statements and court filings—ready to download.",
+            badge: "£149.99",
+            icon: "⚖️",
+          },
+          {
+            title: "Money Claim Pack",
+            description: "Rent arrears claims with evidence checklists, POC templates, and guidance notes.",
+            badge: "£129.99",
+            icon: "💷",
+          },
+          {
+            title: "Tenancy Agreements",
+            description: "Modern ASTs and licence agreements with optional addenda and e-sign options.",
+            badge: "From £39.99",
+            icon: "📝",
+          },
+          {
+            title: "HMO Pro",
+            description: "Licensing tracker, inspections, and compliance tasks in one calm dashboard.",
+            badge: "Membership",
+            icon: "🏠",
+          },
+          {
+            title: "Template Library",
+            description: "Letters, addendums, and checklists ready to brand with your landlord details.",
+            badge: "Included",
+            icon: "📚",
+          },
+        ]}
+      />
+
+      <StepList
+        title="Three steps to compliant paperwork"
+        subtitle="From intake to download with enterprise-level clarity."
+        steps={[
+          {
+            title: "Describe your tenancy",
+            description: "Plain-language chat bubbles capture tenant info, arrears, and tenancy type without legal jargon.",
+          },
+          {
+            title: "We choose the route",
+            description: "Our engine maps jurisdiction, grounds, notice periods, and service rules to the right flow.",
+          },
+          {
+            title: "Download with confidence",
+            description: "Receive polished PDFs with timelines, next steps, and evidence checklists.",
+          },
+        ]}
+      />
+
+      <section className="bg-white py-16 md:py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="grid gap-10 lg:grid-cols-2">
+            <div className="space-y-4">
+              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Loved by professional landlords</h2>
+              <p className="text-lg text-gray-600">
+                Calm UI, trustworthy outputs, and fast time-to-document make Landlord Heaven feel like an in-house legal team.
+              </p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <TestimonialCard
+                  quote="The teal hero and wizard flow make something complex feel effortless."
+                  author="Hannah"
+                  role="Portfolio Landlord"
+                />
+                <TestimonialCard
+                  quote="I can brief my letting agents with links and timelines straight from the dashboard."
+                  author="Tom"
+                  role="HMO Owner"
+                />
+              </div>
             </div>
-            <div>
-              <div className="w-16 h-16 mx-auto mb-4 bg-primary-subtle rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                </svg>
+            <div className="rounded-3xl bg-gradient-to-br from-emerald-50 to-white p-8 shadow-inner ring-1 ring-emerald-100">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Included with every plan</h3>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {["Compliance timelines", "Evidence checklists", "Document history", "Secure storage", "Jurisdiction updates", "Live support"].map((item) => (
+                  <div key={item} className="flex items-center gap-3 rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-gray-200">
+                    <span className="text-[#009E9E]">✓</span>
+                    <span className="text-sm font-semibold text-gray-800">{item}</span>
+                  </div>
+                ))}
               </div>
-              <h4 className="font-semibold text-charcoal mb-2 text-lg">Secure & Private</h4>
-              <p className="text-sm text-gray-600 leading-relaxed">Bank-level encryption</p>
-            </div>
-            <div>
-              <div className="w-16 h-16 mx-auto mb-4 bg-primary-subtle rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <h4 className="font-semibold text-charcoal mb-2 text-lg">Instant Delivery</h4>
-              <p className="text-sm text-gray-600 leading-relaxed">Documents in minutes</p>
-            </div>
-            <div>
-              <div className="w-16 h-16 mx-auto mb-4 bg-primary-subtle rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-              </div>
-              <h4 className="font-semibold text-charcoal mb-2 text-lg">30-Day Guarantee</h4>
-              <p className="text-sm text-gray-600 leading-relaxed">Money back if not satisfied</p>
             </div>
           </div>
-        </Container>
+        </div>
+      </section>
+
+      <section className="bg-gray-50 py-16 md:py-20">
+        <div className="mx-auto max-w-5xl rounded-3xl bg-gradient-to-br from-[#009E9E] to-emerald-600 px-8 py-12 text-white shadow-lg">
+          <div className="grid gap-6 md:grid-cols-[2fr,1fr] md:items-center">
+            <div className="space-y-3">
+              <h3 className="text-3xl font-bold">Ready to feel confident about every notice?</h3>
+              <p className="text-lg text-white/90">Start the Eviction Route Checker and get a clean action plan in minutes.</p>
+            </div>
+            <div className="flex flex-wrap gap-3 md:justify-end">
+              <Link href="/wizard">
+                <Button variant="secondary" size="large" className="bg-white text-[#009E9E] hover:bg-white/90">
+                  Launch the wizard
+                </Button>
+              </Link>
+              <Link href="/help">
+                <Button variant="outline" size="large" className="border-white text-white hover:bg-white/10">
+                  Talk to us
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );

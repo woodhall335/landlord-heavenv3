@@ -13,6 +13,7 @@ import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { TealHero } from '@/components/ui';
 
 interface Case {
   id: string;
@@ -101,21 +102,19 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b border-gray-200">
-        <Container size="large" className="py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-extrabold text-charcoal">Dashboard</h1>
-              <p className="text-gray-600 mt-1">Manage your cases, documents, and subscriptions</p>
-            </div>
-            <Link href="/wizard">
-              <Button variant="primary" size="large">
-                + New Document
-              </Button>
-            </Link>
-          </div>
-        </Container>
-      </div>
+      <TealHero
+        title="Dashboard"
+        subtitle="Overview of your cases & activity"
+        eyebrow="Workspace"
+        actions={
+          <Link href="/wizard">
+            <Button variant="secondary" size="large" className="bg-white text-[#009E9E] hover:bg-white/90">
+              + New Document
+            </Button>
+          </Link>
+        }
+        align="left"
+      />
 
       <Container size="large" className="py-8">
         {/* Stats Overview */}
