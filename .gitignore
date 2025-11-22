@@ -47,6 +47,8 @@ next-env.d.ts
 # official court forms (large PDFs - not committed)
 public/official-forms/*.pdf
 
-# Sample/test PDFs (not to be committed)
+# Sample/test documents (not to be committed)
 sample-*.pdf
 test-*.pdf
+sample-*.html
+test-*.html
