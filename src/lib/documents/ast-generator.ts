@@ -136,15 +136,21 @@ export function validateASTData(data: ASTData): string[] {
     errors.push('deposit_amount is required');
   }
 
-  // Deposit should typically be 5 weeks' rent max (Tenant Fees Act 2019)
+  // Tenant Fees Act 2019 - Deposit Limits (England & Wales)
   if (data.deposit_amount > 0 && data.rent_amount > 0) {
     const monthlyRent = data.rent_amount;
+    const annualRent = monthlyRent * 12;
     const weeklyRent = monthlyRent / 4.33; // Average weeks per month
-    const maxDeposit = weeklyRent * 5;
 
-    if (data.deposit_amount > maxDeposit) {
+    // 6 weeks if annual rent > £50,000, otherwise 5 weeks
+    const maxWeeks = annualRent > 50000 ? 6 : 5;
+    const maxDeposit = weeklyRent * maxWeeks;
+
+    if (data.deposit_amount > maxDeposit + 0.01) { // Allow 1p rounding tolerance
       errors.push(
-        `Deposit (£${data.deposit_amount}) exceeds 5 weeks rent (£${maxDeposit.toFixed(2)}). This may violate the Tenant Fees Act 2019.`
+        `⚠️ ILLEGAL DEPOSIT: £${data.deposit_amount} exceeds ${maxWeeks} weeks rent (£${maxDeposit.toFixed(2)}). ` +
+        `This VIOLATES the Tenant Fees Act 2019. Maximum permitted: £${maxDeposit.toFixed(2)}. ` +
+        `Penalty: £5,000 fine + criminal prosecution for repeat offense.`
       );
     }
   }
