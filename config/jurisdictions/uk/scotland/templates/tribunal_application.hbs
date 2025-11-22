@@ -1,0 +1,369 @@
+{{!--
+  Scotland First-tier Tribunal Application for Eviction
+  Under: Private Housing (Tenancies) (Scotland) Act 2016
+  Tribunal: First-tier Tribunal for Scotland (Housing and Property Chamber)
+  Must follow Notice to Leave
+--}}
+
+# APPLICATION TO THE FIRST-TIER TRIBUNAL FOR SCOTLAND
+## (HOUSING AND PROPERTY CHAMBER)
+
+### Application for an Eviction Order
+**Rule 109 of the First-tier Tribunal for Scotland Housing and Property Chamber Rules of Procedure 2017**
+
+---
+
+## SECTION 1: LANDLORD DETAILS
+
+**Name:** {{landlord_name}}
+**Address:** {{landlord_address}}
+**Postcode:** {{landlord_postcode}}
+**Phone:** {{landlord_phone}}
+**Email:** {{landlord_email}}
+
+**Landlord Registration Number:** {{landlord_registration_number}}
+**Registered with:** {{council_name}} Council
+
+{{#if landlord_representative}}
+### Landlord's Representative
+
+**Name:** {{representative_name}}
+**Company:** {{representative_company}}
+**Address:** {{representative_address}}
+**Phone:** {{representative_phone}}
+**Email:** {{representative_email}}
+{{/if}}
+
+---
+
+## SECTION 2: TENANT DETAILS
+
+{{#each tenants}}
+### Tenant {{@index}}
+
+**Name:** {{name}}
+**Current Address (property address):** {{property_address}}
+**Phone:** {{phone}}
+**Email:** {{email}}
+
+{{/each}}
+
+---
+
+## SECTION 3: PROPERTY DETAILS
+
+**Property Address:** {{property_address}}
+**Postcode:** {{property_postcode}}
+
+**Type of Property:** {{property_type}} {{!-- Flat, House, Room in shared property --}}
+
+{{#if hmo_property}}
+**HMO Licensed:** Yes
+**License Number:** {{hmo_license_number}}
+**Licensing Authority:** {{hmo_authority}}
+{{/if}}
+
+---
+
+## SECTION 4: TENANCY DETAILS
+
+**Type of Tenancy:** Private Residential Tenancy (PRT)
+
+**Tenancy Start Date:** {{tenancy_start_date}}
+
+**Monthly Rent:** £{{monthly_rent}}
+
+**Deposit Amount:** £{{deposit_amount}}
+**Deposit Protected with:** {{deposit_scheme}}
+**Deposit Protected on:** {{deposit_protected_date}}
+
+---
+
+## SECTION 5: NOTICE TO LEAVE DETAILS
+
+**Notice to Leave Served on:** {{notice_served_date}}
+**Method of Service:** {{service_method}} {{!-- Hand delivery, Recorded delivery, Email, etc. --}}
+
+**Date Notice Expires:** {{notice_expiry_date}}
+
+**Notice Period Given:** {{notice_period}} days
+
+{{#if notice_copy_attached}}
+**Copy of Notice to Leave:** Attached as Exhibit A
+{{/if}}
+
+---
+
+## SECTION 6: GROUNDS FOR EVICTION
+
+The landlord is applying for an eviction order on the following ground(s):
+
+{{#each grounds}}
+### Ground {{ground_number}}: {{ground_name}}
+
+**Legal Basis:** {{ground_legal_basis}}
+
+**Details:**
+
+{{ground_details}}
+
+**Evidence:**
+
+{{#each ground_evidence}}
+- {{evidence_description}} {{#if exhibit_reference}}(Exhibit {{exhibit_reference}}){{/if}}
+{{/each}}
+
+**Why the Tribunal Should Grant the Order:**
+
+{{ground_justification}}
+
+{{#if additional_information}}
+**Additional Information:**
+
+{{additional_information}}
+{{/if}}
+
+---
+
+{{/each}}
+
+## SECTION 7: PRE-ACTION REQUIREMENTS (If applicable)
+
+{{#if rent_arrears_ground}}
+### Pre-Action Requirements for Rent Arrears (Ground 1)
+
+The landlord has complied with the Pre-Action Requirements (Notices) (Scotland) Regulations 2020:
+
+**Pre-Action Requirements Notice Served:** {{pre_action_date}}
+**Method of Service:** {{pre_action_method}}
+
+**Compliance Summary:**
+
+1. **Notice Served:** Written notice explaining the arrears sent on {{pre_action_date}}
+2. **Rent Arrears Information:** Details of arrears, rent payments, and housing costs included
+3. **Financial Assistance Information:** Information about benefits and financial assistance provided
+4. **Sources of Advice:** Information about debt and housing advice services provided
+5. **Response Period:** Tenant given opportunity to respond and discuss repayment
+
+**Copy of Pre-Action Requirements Notice:** Attached as Exhibit {{pre_action_exhibit}}
+
+{{/if}}
+
+---
+
+## SECTION 8: RENT ARREARS DETAILS (If Ground 1 applied)
+
+{{#if rent_arrears}}
+
+**Current Rent Arrears:** £{{current_arrears}}
+**As of Date:** {{arrears_calculation_date}}
+
+### Rent Account Summary
+
+| Date | Description | Debit (£) | Credit (£) | Balance (£) |
+|------|-------------|-----------|------------|-------------|
+{{#each rent_ledger}}
+| {{date}} | {{description}} | {{debit}} | {{credit}} | {{balance}} |
+{{/each}}
+
+**Arrears History:**
+
+{{#each arrears_history}}
+- {{month}}: £{{amount}} ({{status}})
+{{/each}}
+
+**Attempts to Recover Arrears:**
+
+{{#each recovery_attempts}}
+- {{date}}: {{method}} - {{outcome}}
+{{/each}}
+
+{{/if}}
+
+---
+
+## SECTION 9: REASONABLENESS
+
+The Tribunal must be satisfied that it is reasonable to grant an eviction order.
+
+**Why it is Reasonable to Grant this Order:**
+
+{{reasonableness_statement}}
+
+{{#if tenant_circumstances}}
+**Known Tenant Circumstances:**
+
+{{tenant_circumstances}}
+
+**Landlord's Response to Circumstances:**
+
+{{landlord_response}}
+{{/if}}
+
+**Attempts to Resolve Situation:**
+
+{{#each resolution_attempts}}
+- {{date}}: {{description}} - {{outcome}}
+{{/each}}
+
+---
+
+## SECTION 10: SUPPORTING DOCUMENTS
+
+The following documents are attached in support of this application:
+
+{{#each supporting_documents}}
+{{exhibit_reference}}. {{document_description}}
+{{/each}}
+
+**Required Documents:**
+
+- [{{#if tenancy_agreement_attached}}X{{else}} {{/if}}] Tenancy Agreement
+- [{{#if notice_to_leave_attached}}X{{else}} {{/if}}] Notice to Leave
+- [{{#if notice_service_evidence}}X{{else}} {{/if}}] Evidence of Service of Notice to Leave
+- [{{#if deposit_certificate}}X{{else}} {{/if}}] Deposit Protection Certificate
+- [{{#if landlord_registration}}X{{else}} {{/if}}] Landlord Registration Certificate
+- [{{#if rent_arrears_ground}}X{{else}} {{/if}}] Rent Account (if Ground 1)
+- [{{#if pre_action_notice}}X{{else}} {{/if}}] Pre-Action Requirements Notice (if Ground 1)
+{{#if hmo_property}}
+- [{{#if hmo_license}}X{{else}} {{/if}}] HMO License
+{{/if}}
+
+**Additional Evidence:**
+
+{{#each additional_exhibits}}
+- {{description}}
+{{/each}}
+
+---
+
+## SECTION 11: ORDERS SOUGHT
+
+The landlord seeks the following orders from the Tribunal:
+
+1. **Eviction Order** requiring the tenant(s) to vacate the property at {{property_address}}
+
+{{#if payment_order}}
+2. **Payment Order** for outstanding rent arrears of £{{arrears_amount}}
+{{/if}}
+
+{{#if other_orders}}
+3. {{other_orders_description}}
+{{/if}}
+
+---
+
+## SECTION 12: PROPOSED HEARING
+
+**Preferred Hearing Location:** {{preferred_hearing_location}}
+
+**Dates to Avoid (if any):** {{dates_to_avoid}}
+
+**Special Requirements:** {{special_requirements}} {{!-- e.g., wheelchair access, interpreter --}}
+
+---
+
+## SECTION 13: COMMUNICATION PREFERENCES
+
+**Preferred Method of Contact:** {{contact_preference}} {{!-- Email, Post, Phone --}}
+
+**Email for Tribunal Correspondence:** {{tribunal_email}}
+
+---
+
+## DECLARATION
+
+I/We declare that:
+
+1. The information provided in this application is true and accurate to the best of my/our knowledge
+2. I/We am/are the landlord(s) of the property or authorized to act on behalf of the landlord(s)
+3. I/We have served a valid Notice to Leave on the tenant(s)
+4. The Notice to Leave period has expired
+5. I/We have complied with all legal requirements including:
+   - Landlord registration with the local council
+   - Deposit protection (if applicable)
+   - Provision of required documentation to tenant(s)
+   {{#if rent_arrears_ground}}- Pre-Action Requirements (for rent arrears){{/if}}
+   {{#if hmo_property}}- HMO licensing{{/if}}
+6. I/We understand that providing false or misleading information may constitute contempt of the Tribunal
+
+---
+
+**Signature:** _________________________
+
+**Print Name:** {{applicant_name}}
+
+**Position:** {{applicant_position}} {{!-- Landlord, Agent, Representative --}}
+
+**Date:** {{application_date}}
+
+---
+
+## FOR TRIBUNAL USE ONLY
+
+**Application Reference:** _________________________
+
+**Date Received:** _________________________
+
+**Fee Paid:** £_________
+
+**Case Officer:** _________________________
+
+**Hearing Date:** _________________________
+
+---
+
+## IMPORTANT INFORMATION
+
+### Application Fee
+
+{{#if rent_arrears_only}}
+**Fee:** £187 (rent arrears ground only)
+{{else}}
+**Fee:** £187
+{{/if}}
+
+**Payment Method:** {{payment_method}}
+
+### Where to Send
+
+**First-tier Tribunal for Scotland (Housing and Property Chamber)**
+George House
+126 George Street
+Edinburgh
+EH2 4HH
+
+**Email:** HPCadmin@scotcourtstribunals.gov.uk
+**Phone:** 0141 302 5900
+
+### Service on Tenant
+
+You must serve a copy of this application on the tenant(s) by recorded delivery within 5 working days of submitting it to the Tribunal.
+
+**Date Copy Served on Tenant:** _________________________
+**Method of Service:** _________________________
+
+---
+
+## WHAT HAPPENS NEXT
+
+1. **Acknowledgment:** The Tribunal will acknowledge receipt of your application
+2. **Case Management Discussion (CMD):** The Tribunal may convene a CMD to discuss the case
+3. **Hearing:** A hearing will be scheduled (usually within 8-12 weeks)
+4. **Decision:** The Tribunal will issue a written decision
+5. **Eviction:** If granted, you must apply to sheriff officers to enforce the eviction order
+
+### Tenant's Right to Defend
+
+The tenant has the right to:
+- Submit a written response
+- Attend the hearing
+- Present evidence
+- Be represented
+
+---
+
+**Document generated:** {{generation_date}}
+**Reference:** {{document_reference}}
+
+*This application is formatted for submission to the First-tier Tribunal for Scotland (Housing and Property Chamber) under the Private Housing (Tenancies) (Scotland) Act 2016*

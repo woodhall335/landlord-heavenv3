@@ -1,0 +1,235 @@
+{{!--
+  Scotland Deposit Protection Certificate
+  Required under: Tenancy Deposit Schemes (Scotland) Regulations 2011
+  Deadline: 30 working days from tenancy start
+  Schemes: SafeDeposits Scotland, MyDeposits Scotland, LPS Scotland
+--}}
+
+# TENANCY DEPOSIT PROTECTION CERTIFICATE
+## Scotland
+
+---
+
+**Deposit Protection Scheme:** {{deposit_scheme}}
+**Scheme Contact:** {{scheme_contact}}
+**Scheme Address:** {{scheme_address}}
+**Scheme Phone:** {{scheme_phone}}
+**Scheme Email:** {{scheme_email}}
+
+---
+
+## LANDLORD DETAILS
+
+**Name:** {{landlord_name}}
+**Address:** {{landlord_address}}
+{{#if landlord_registration_number}}**Registration Number:** {{landlord_registration_number}}{{/if}}
+**Email:** {{landlord_email}}
+**Phone:** {{landlord_phone}}
+
+---
+
+## TENANT DETAILS
+
+**Name(s):** {{tenant_names}}
+**Email:** {{tenant_email}}
+**Phone:** {{tenant_phone}}
+
+---
+
+## PROPERTY DETAILS
+
+**Address:** {{property_address}}
+
+---
+
+## DEPOSIT DETAILS
+
+**Deposit Amount:** £{{deposit_amount}}
+**Date Received:** {{deposit_received_date}}
+**Date Protected:** {{deposit_protected_date}}
+**Deposit Reference:** {{deposit_reference}}
+**Scheme Membership Number:** {{scheme_membership_number}}
+
+---
+
+## PROTECTION TYPE
+
+This deposit has been protected using a **{{protection_type}}** scheme:
+
+{{#if_eq protection_type "Custodial"}}
+**Custodial Scheme:**
+- The deposit is held by {{deposit_scheme}}
+- Interest may be paid on the deposit
+- At the end of the tenancy, the scheme will release:
+  - Agreed deductions to the landlord
+  - The balance to the tenant
+- If there is a dispute, the scheme will hold the disputed amount until it is resolved
+{{/if_eq}}
+
+{{#if_eq protection_type "Insurance-backed"}}
+**Insurance-backed Scheme:**
+- The deposit is held by the landlord
+- The landlord has paid a premium to {{deposit_scheme}} to insure the deposit
+- At the end of the tenancy, the landlord must return:
+  - Agreed deductions can be retained
+  - The balance to the tenant
+- If there is a dispute, the landlord must pay the disputed amount to the scheme until it is resolved
+{{/if_eq}}
+
+---
+
+## TENANCY DETAILS
+
+**Tenancy Type:** Private Residential Tenancy (PRT)
+**Tenancy Start Date:** {{tenancy_start_date}}
+**Monthly Rent:** £{{monthly_rent}}
+
+---
+
+## INFORMATION FOR TENANTS
+
+### Your Rights
+
+Under the Tenancy Deposit Schemes (Scotland) Regulations 2011, you have the following rights:
+
+1. **Protection Deadline:** Your deposit must be protected within **30 working days** from the tenancy start date
+2. **Information:** You must receive this certificate and information about the scheme within **30 working days**
+3. **Dispute Resolution:** If you disagree with deductions at the end of tenancy, you can use the scheme's free dispute resolution service
+4. **Sanctions:** If your landlord fails to protect your deposit or provide this information, you may apply to the First-tier Tribunal for compensation of up to **3 times the deposit amount**
+
+### How to Check Your Deposit is Protected
+
+You can verify your deposit protection by contacting {{deposit_scheme}}:
+
+- **Phone:** {{scheme_phone}}
+- **Email:** {{scheme_email}}
+- **Online:** {{scheme_website}}
+- **Reference:** {{deposit_reference}}
+
+### At the End of Your Tenancy
+
+When your tenancy ends:
+
+1. **Inspection:** The property will be inspected
+2. **Proposed Deductions:** The landlord will propose any deductions (if applicable)
+3. **Agreement:** If you agree, the deposit will be released accordingly
+4. **Dispute:** If you disagree, the matter will be referred to {{deposit_scheme}} for independent adjudication
+
+The adjudication service is:
+- Free to use
+- Independent and impartial
+- Binding on the landlord
+- Usually completed within 28 days
+
+### Dispute Process
+
+If you cannot agree on deposit deductions:
+
+1. Notify {{deposit_scheme}} that there is a dispute
+2. Both parties submit evidence (photos, inventory, receipts, etc.)
+3. An independent adjudicator reviews the case
+4. A decision is made within approximately 28 days
+5. The decision is binding on the landlord but not on you (you can still go to court if unhappy)
+
+---
+
+## INFORMATION FOR LANDLORDS
+
+### Your Obligations
+
+1. **Protection:** Protect the deposit within 30 working days
+2. **Information:** Provide this certificate and scheme information within 30 working days
+3. **Return:** Return the deposit (minus agreed deductions) promptly at tenancy end
+4. **Evidence:** Keep detailed inventory, photos, and receipts for any deductions
+5. **Registration:** Ensure you are registered with your local council as a landlord
+
+### Permitted Deductions
+
+You may only deduct from the deposit for:
+
+- Unpaid rent
+- Unpaid bills (if agreed in tenancy agreement)
+- Damage beyond normal wear and tear
+- Cleaning costs (if property not left in same condition as check-in)
+- Missing items from inventory
+
+### Not Permitted
+
+You cannot deduct for:
+
+- Normal wear and tear
+- Damage existing before tenant moved in
+- Betterment (improving beyond original condition)
+- Unreasonable cleaning charges
+
+---
+
+## SCHEME INFORMATION
+
+### {{deposit_scheme}}
+
+{{#if_eq deposit_scheme "SafeDeposits Scotland"}}
+**Address:** Safedeposits Scotland, Lower Ground, 250 West George Street, Glasgow, G2 4QY
+**Phone:** 03333 213 136
+**Email:** info@safedepositsscotland.com
+**Website:** https://www.safedepositsscotland.com
+{{/if_eq}}
+
+{{#if_eq deposit_scheme "MyDeposits Scotland"}}
+**Address:** Premiere House, 1st Floor, Elstree Way, Borehamwood, WD6 1JH
+**Phone:** 0333 321 9401
+**Email:** info@mydepositsscotland.co.uk
+**Website:** https://www.mydepositsscotland.co.uk
+{{/if_eq}}
+
+{{#if_eq deposit_scheme "Letting Protection Service Scotland"}}
+**Address:** The Pavilions, Bridgwater Road, Bristol, BS99 6BN
+**Phone:** 0330 303 0031
+**Email:** mail@lettingprotectionscotland.com
+**Website:** https://www.lettingprotectionscotland.com
+{{/if_eq}}
+
+---
+
+## CONFIRMATION
+
+This certificate confirms that:
+
+1. The deposit of £{{deposit_amount}} received on {{deposit_received_date}} has been protected
+2. The deposit is protected with {{deposit_scheme}}
+3. The deposit reference is: {{deposit_reference}}
+4. The tenant(s) have been provided with the prescribed information
+
+---
+
+**Landlord Signature:** _________________________
+
+**Date:** {{certificate_date}}
+
+---
+
+**Tenant Acknowledgment (optional but recommended):**
+
+I/We confirm receipt of this Deposit Protection Certificate and understand the information provided.
+
+**Tenant Signature(s):** _________________________
+
+**Date:** _________________________
+
+---
+
+## IMPORTANT NOTICE
+
+**Keep this certificate safe.** You will need the deposit reference number and scheme contact details when your tenancy ends.
+
+If you have any concerns about your deposit protection, you can contact:
+
+- **Shelter Scotland:** 0808 800 4444
+- **Citizens Advice Scotland:** 0800 028 1456
+- **First-tier Tribunal for Scotland (Housing and Property Chamber):** 0141 302 5900
+
+---
+
+*This certificate complies with the Tenancy Deposit Schemes (Scotland) Regulations 2011*
+
+**Document generated:** {{generation_date}}
