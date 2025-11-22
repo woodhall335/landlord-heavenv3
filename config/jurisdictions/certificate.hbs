@@ -1,0 +1,271 @@
+{{!--
+  Certificate of Curation
+
+  Professional certificate to accompany all Landlord Heaven tenancy agreements
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Certificate of Curation - Landlord Heaven</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .certificate {
+      width: 210mm;
+      height: 297mm;
+      position: relative;
+      background: white;
+      box-shadow: 0 0 40px rgba(0,0,0,0.2);
+    }
+
+    .certificate-border {
+      position: absolute;
+      top: 15mm;
+      left: 15mm;
+      right: 15mm;
+      bottom: 15mm;
+      border: 3px solid #667eea;
+      border-radius: 8px;
+    }
+
+    .certificate-inner-border {
+      position: absolute;
+      top: 18mm;
+      left: 18mm;
+      right: 18mm;
+      bottom: 18mm;
+      border: 1px solid #667eea;
+      border-radius: 6px;
+    }
+
+    .certificate-content {
+      position: absolute;
+      top: 25mm;
+      left: 25mm;
+      right: 25mm;
+      bottom: 25mm;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 10mm;
+      letter-spacing: 2px;
+    }
+
+    .certificate-title {
+      font-size: 42px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8mm;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+    }
+
+    .certificate-subtitle {
+      font-size: 18px;
+      color: #666;
+      margin-bottom: 15mm;
+      font-style: italic;
+    }
+
+    .certificate-body {
+      font-size: 16px;
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 15mm;
+      text-align: center;
+    }
+
+    .property-address {
+      font-size: 20px;
+      font-weight: bold;
+      color: #667eea;
+      margin: 10mm 0;
+      padding: 5mm;
+      background: #f8f9ff;
+      border-radius: 4px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5mm;
+      margin: 15mm 0;
+      text-align: left;
+    }
+
+    .detail-item {
+      padding: 3mm;
+      background: #f8f9ff;
+      border-radius: 4px;
+    }
+
+    .detail-label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 2mm;
+    }
+
+    .detail-value {
+      font-size: 16px;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .certification-statement {
+      margin-top: 15mm;
+      padding: 8mm;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-radius: 6px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .signature-section {
+      margin-top: 15mm;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .signature-block {
+      text-align: center;
+    }
+
+    .signature-line {
+      width: 50mm;
+      height: 15mm;
+      border-bottom: 2px solid #333;
+      margin-bottom: 3mm;
+    }
+
+    .signature-label {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .certificate-footer {
+      position: absolute;
+      bottom: 5mm;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 10px;
+      color: #999;
+    }
+
+    .seal {
+      width: 60mm;
+      height: 60mm;
+      border: 3px solid #667eea;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #667eea;
+      font-weight: bold;
+      text-align: center;
+      margin: 10mm 0;
+      background: linear-gradient(135deg, rgba(102,126,234,0.1) 0%, rgba(118,75,162,0.1) 100%);
+    }
+  </style>
+</head>
+<body>
+  <div class="certificate">
+    <div class="certificate-border"></div>
+    <div class="certificate-inner-border"></div>
+
+    <div class="certificate-content">
+      <div class="logo">🏠 LANDLORD HEAVEN</div>
+
+      <div class="certificate-title">Certificate of Curation</div>
+      <div class="certificate-subtitle">Premium Tenancy Agreement Package</div>
+
+      <div class="certificate-body">
+        This certifies that a comprehensive tenancy agreement has been professionally curated by
+        <strong>Landlord Heaven</strong> for the following property:
+      </div>
+
+      <div class="property-address">
+        {{property_address}}
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <div class="detail-label">Agreement Type</div>
+          <div class="detail-value">{{agreement_type}}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Jurisdiction</div>
+          <div class="detail-value">{{jurisdiction_name}}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Tenancy Start Date</div>
+          <div class="detail-value">{{tenancy_start_date}}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Monthly Rent</div>
+          <div class="detail-value">£{{rent_amount}}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Deposit Amount</div>
+          <div class="detail-value">£{{deposit_amount}}</div>
+        </div>
+        <div class="detail-item">
+          <div class="detail-label">Certificate Date</div>
+          <div class="detail-value">{{certificate_date}}</div>
+        </div>
+      </div>
+
+      <div class="seal">
+        <div>
+          VERIFIED<br/>
+          COMPLIANT<br/>
+          {{current_year}}
+        </div>
+      </div>
+
+      <div class="certification-statement">
+        <strong>Landlord Heaven</strong> certifies that this tenancy agreement has been:
+        <ul style="list-style: none; padding: 0; margin: 5mm 0 0 0;">
+          <li>✓ Drafted in accordance with current {{jurisdiction_name}} legislation</li>
+          <li>✓ Validated against {{jurisdiction_name}} deposit protection requirements</li>
+          <li>✓ Formatted to professional legal standards</li>
+          <li>✓ Reviewed for completeness and legal compliance</li>
+        </ul>
+      </div>
+
+      <div class="signature-section">
+        <div class="signature-block">
+          <div class="signature-line"></div>
+          <div class="signature-label">LANDLORD HEAVEN</div>
+          <div class="signature-label" style="margin-top: 2mm;">Certificate ID: {{certificate_id}}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="certificate-footer">
+      © {{current_year}} Landlord Heaven | www.landlordheaven.co.uk | Professional Tenancy Agreement Service
+    </div>
+  </div>
+</body>
+</html>
