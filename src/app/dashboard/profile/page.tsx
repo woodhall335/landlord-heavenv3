@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Container } from "@/components/ui";
-import { supabase } from "@/lib/supabase/client";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 interface UserProfile {
@@ -33,6 +33,7 @@ export default function ProfilePage() {
   }, []);
 
   async function loadProfile() {
+    const supabase = getSupabaseBrowserClient();
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -65,6 +66,7 @@ export default function ProfilePage() {
   }
 
   async function handleUpdateProfile() {
+    const supabase = getSupabaseBrowserClient();
     setSaving(true);
     setMessage(null);
 
@@ -92,6 +94,7 @@ export default function ProfilePage() {
   }
 
   async function handleChangePassword() {
+    const supabase = getSupabaseBrowserClient();
     setSaving(true);
     setMessage(null);
 
@@ -126,6 +129,7 @@ export default function ProfilePage() {
   }
 
   async function handleDeleteAccount() {
+    const supabase = getSupabaseBrowserClient();
     if (!showDeleteConfirm) {
       setShowDeleteConfirm(true);
       return;

@@ -18,39 +18,56 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-primary to-primary-dark text-white">
-        <Container size="large" className="py-20 sm:py-32">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge variant="success" size="large" className="mb-6 bg-white/20 text-white">
-              🏴󠁧󠁢󠁥󠁮󠁧󠁿 100% UK Coverage • 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland • 🏴 Northern Ireland
-            </Badge>
+      <section className="relative bg-gradient-to-br from-primary via-primary-dark to-charcoal text-white overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 right-10 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+          <div className="absolute bottom-10 left-10 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        </div>
 
-            <h1 className="text-5xl sm:text-6xl font-extrabold mb-6 leading-tight">
-              Legal Documents for UK Landlords
+        <Container size="large" className="py-20 sm:py-32 relative z-10">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Trust Badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full mb-6 border border-white/30">
+              <span className="text-sm font-medium">✅ Trusted by 10,000+ UK Landlords</span>
+            </div>
+
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
+              Court-Ready Legal Documents
+              <br />
+              <span className="bg-gradient-to-r from-white to-gray-200 bg-clip-text text-transparent">
+                In Minutes, Not Hours
+              </span>
             </h1>
 
-            <p className="text-xl sm:text-2xl mb-8 text-white/90 leading-relaxed">
-              Court-ready eviction notices, tenancy agreements & legal documents in minutes.
+            <p className="text-xl sm:text-2xl mb-8 text-white/90 leading-relaxed max-w-3xl mx-auto">
+              AI-powered conversational wizard guides you through complex legal requirements.
               <br />
-              <span className="font-semibold">Plain English in → Legal documents out</span>
+              <span className="font-semibold bg-white/20 px-4 py-1 rounded-lg inline-block mt-3">
+                Plain English In → Professional Documents Out
+              </span>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button
-                size="large"
-                variant="secondary"
-                className="bg-white text-primary hover:bg-gray-100 shadow-lg hover:shadow-xl"
-              >
-                Start Free Analysis →
-              </Button>
+              <Link href="/wizard">
+                <Button
+                  size="large"
+                  variant="secondary"
+                  className="bg-white text-primary hover:bg-gray-100 shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+                >
+                  Start Free Analysis →
+                </Button>
+              </Link>
 
-              <Button
-                size="large"
-                variant="outline"
-                className="border-white text-white hover:bg-white/10"
-              >
-                See All Products
-              </Button>
+              <Link href="/pricing">
+                <Button
+                  size="large"
+                  variant="outline"
+                  className="border-white text-white hover:bg-white/10"
+                >
+                  See All Products
+                </Button>
+              </Link>
             </div>
 
             <div className="mt-12 flex flex-wrap gap-6 justify-center text-sm text-white/80">
@@ -67,6 +84,73 @@ export default function Home() {
                 <span>30-day money-back guarantee</span>
               </div>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* How It Works - Clear Funnel */}
+      <section className="py-16 bg-white border-b-4 border-primary/10">
+        <Container size="large">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-charcoal mb-4">
+              How It Works
+            </h2>
+            <p className="text-xl text-gray-600">
+              Get your legal documents in 3 simple steps
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {/* Step 1 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-4 shadow-lg">
+                1
+              </div>
+              <h3 className="text-xl font-semibold text-charcoal mb-3">
+                Tell Us Your Situation
+              </h3>
+              <p className="text-gray-600">
+                Answer simple questions in plain English. Our AI wizard asks only what's relevant to your case.
+              </p>
+            </div>
+
+            {/* Step 2 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-4 shadow-lg">
+                2
+              </div>
+              <h3 className="text-xl font-semibold text-charcoal mb-3">
+                AI Creates Your Documents
+              </h3>
+              <p className="text-gray-600">
+                Our legal AI analyzes your answers and generates court-ready documents tailored to your situation.
+              </p>
+            </div>
+
+            {/* Step 3 */}
+            <div className="text-center">
+              <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center text-3xl font-bold text-white mx-auto mb-4 shadow-lg">
+                3
+              </div>
+              <h3 className="text-xl font-semibold text-charcoal mb-3">
+                Download & Use
+              </h3>
+              <p className="text-gray-600">
+                Instant download of professional PDFs ready for service to tenants or submission to court.
+              </p>
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="text-center mt-12">
+            <Link href="/wizard">
+              <Button size="large" variant="primary" className="shadow-xl hover:shadow-2xl">
+                Start Your Free Analysis Now →
+              </Button>
+            </Link>
+            <p className="text-sm text-gray-500 mt-3">
+              ✨ No credit card required • Takes 5-10 minutes
+            </p>
           </div>
         </Container>
       </section>
@@ -124,9 +208,11 @@ export default function Home() {
                 </CardContent>
 
                 <CardFooter>
-                  <Button fullWidth variant="primary">
-                    Get Started →
-                  </Button>
+                  <Link href="/wizard" className="block">
+                    <Button fullWidth variant="primary">
+                      Get Started →
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
 
@@ -174,9 +260,11 @@ export default function Home() {
                 </CardContent>
 
                 <CardFooter>
-                  <Button fullWidth variant="primary" size="large">
-                    Get Complete Pack →
-                  </Button>
+                  <Link href="/wizard" className="block">
+                    <Button fullWidth variant="primary" size="large">
+                      Get Complete Pack →
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
 
@@ -219,9 +307,11 @@ export default function Home() {
                 </CardContent>
 
                 <CardFooter>
-                  <Button fullWidth variant="primary">
-                    Start Claim →
-                  </Button>
+                  <Link href="/wizard" className="block">
+                    <Button fullWidth variant="primary">
+                      Start Claim →
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             </div>
@@ -266,9 +356,11 @@ export default function Home() {
                 </CardContent>
 
                 <CardFooter>
-                  <Button fullWidth variant="primary">
-                    Create AST →
-                  </Button>
+                  <Link href="/wizard" className="block">
+                    <Button fullWidth variant="primary">
+                      Create AST →
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
 
@@ -312,9 +404,11 @@ export default function Home() {
                 </CardContent>
 
                 <CardFooter>
-                  <Button fullWidth variant="primary">
-                    Create Premium AST →
-                  </Button>
+                  <Link href="/wizard" className="block">
+                    <Button fullWidth variant="primary">
+                      Create Premium AST →
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             </div>
@@ -369,12 +463,16 @@ export default function Home() {
                   </ul>
 
                   <div className="flex gap-4">
-                    <Button size="large" variant="primary">
-                      Start Free Trial →
-                    </Button>
-                    <Button size="large" variant="outline">
-                      Learn More
-                    </Button>
+                    <Link href="/hmo-pro">
+                      <Button size="large" variant="primary">
+                        Start Free Trial →
+                      </Button>
+                    </Link>
+                    <Link href="/hmo-pro">
+                      <Button size="large" variant="outline">
+                        Learn More
+                      </Button>
+                    </Link>
                   </div>
                 </div>
 
