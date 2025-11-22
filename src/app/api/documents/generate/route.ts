@@ -11,8 +11,10 @@ import { generateSection8Notice } from '@/lib/documents/section8-generator';
 import { generateStandardAST, generatePremiumAST } from '@/lib/documents/ast-generator';
 import { generateNoticeToLeave } from '@/lib/documents/scotland/notice-to-leave-generator';
 import { generatePRTAgreement } from '@/lib/documents/scotland/prt-generator';
+import { mapWizardToNoticeToLeave } from '@/lib/documents/scotland/wizard-mapper';
 import { generateNoticeToQuit } from '@/lib/documents/northern-ireland/notice-to-quit-generator';
 import { generatePrivateTenancyAgreement } from '@/lib/documents/northern-ireland/private-tenancy-generator';
+import { mapWizardToNoticeToQuit } from '@/lib/documents/northern-ireland/wizard-mapper';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -110,7 +112,9 @@ export async function POST(request: Request) {
           break;
 
         case 'notice_to_leave':
-          generatedDoc = await generateNoticeToLeave(facts);
+          // Map wizard facts to NoticeToLeaveData format
+          const noticeToLeaveData = mapWizardToNoticeToLeave(facts);
+          generatedDoc = await generateNoticeToLeave(noticeToLeaveData);
           documentTitle = 'Notice to Leave - Scotland';
           break;
 
@@ -126,7 +130,9 @@ export async function POST(request: Request) {
           break;
 
         case 'notice_to_quit':
-          generatedDoc = await generateNoticeToQuit(facts);
+          // Map wizard facts to NoticeToQuitData format
+          const noticeToQuitData = mapWizardToNoticeToQuit(facts);
+          generatedDoc = await generateNoticeToQuit(noticeToQuitData);
           documentTitle = 'Notice to Quit - Northern Ireland';
           break;
 
