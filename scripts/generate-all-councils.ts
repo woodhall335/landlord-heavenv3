@@ -155,27 +155,9 @@ export const ALL_ENGLISH_COUNCILS_COMPLETE = [
   { code: 'E06000058', name: 'Bournemouth, Christchurch and Poole Council', region: 'South West', type: 'unitary_large', postcodes: ['BH1', 'BH2', 'BH3', 'BH4', 'BH5', 'BH6', 'BH7', 'BH8', 'BH9', 'BH10', 'BH11', 'BH12', 'BH13', 'BH14', 'BH15', 'BH16', 'BH17', 'BH18', 'BH19', 'BH20', 'BH21', 'BH22', 'BH23', 'BH24', 'BH25', 'BH31'] },
   { code: 'E06000059', name: 'Dorset Council', region: 'South West', type: 'unitary_large', postcodes: ['DT'] },
 
-  // NON-METROPOLITAN DISTRICTS (181 councils) - Key samples (full list would continue)
-  { code: 'E07000008', name: 'Cambridge City Council', region: 'East of England', type: 'district', postcodes: ['CB1', 'CB2', 'CB3', 'CB4', 'CB5'] },
-  { code: 'E07000010', name: 'Ipswich Borough Council', region: 'East of England', type: 'district', postcodes: ['IP1', 'IP2', 'IP3', 'IP4', 'IP5'] },
-  { code: 'E07000011', name: 'Norwich City Council', region: 'East of England', type: 'district', postcodes: ['NR1', 'NR2', 'NR3', 'NR4', 'NR5', 'NR6', 'NR7', 'NR8'] },
-  { code: 'E07000026', name: 'Allerdale Borough Council', region: 'North West', type: 'district', postcodes: ['CA7', 'CA12', 'CA13', 'CA14', 'CA15', 'CA28'] },
-  { code: 'E07000027', name: 'Barrow-in-Furness Borough Council', region: 'North West', type: 'district', postcodes: ['LA13', 'LA14', 'LA15', 'LA16', 'LA19'] },
-  { code: 'E07000028', name: 'Carlisle City Council', region: 'North West', type: 'district', postcodes: ['CA1', 'CA2', 'CA3', 'CA4', 'CA5', 'CA6', 'CA8'] },
-  { code: 'E07000029', name: 'Copeland Borough Council', region: 'North West', type: 'district', postcodes: ['CA18', 'CA19', 'CA20', 'CA21', 'CA22', 'CA23', 'CA24', 'CA25', 'CA26', 'CA27', 'CA28', 'LA18', 'LA19', 'LA20'] },
-  { code: 'E07000030', name: 'Eden District Council', region: 'North West', type: 'district', postcodes: ['CA9', 'CA10', 'CA11', 'CA12', 'CA16', 'CA17', 'DL12', 'LA8', 'LA9', 'LA10'] },
-  { code: 'E07000031', name: 'South Lakeland District Council', region: 'North West', type: 'district', postcodes: ['LA7', 'LA8', 'LA9', 'LA10', 'LA11', 'LA12', 'LA21', 'LA22', 'LA23'] },
-  { code: 'E07000032', name: 'Amber Valley Borough Council', region: 'East Midlands', type: 'district', postcodes: ['DE5', 'DE55', 'DE56', 'NG16'] },
-  { code: 'E07000033', name: 'Bolsover District Council', region: 'East Midlands', type: 'district', postcodes: ['S44', 'S80', 'NG19', 'NG20'] },
-  { code: 'E07000034', name: 'Chesterfield Borough Council', region: 'East Midlands', type: 'district', postcodes: ['S40', 'S41', 'S42', 'S43', 'S45', 'S49'] },
-  { code: 'E07000035', name: 'Derbyshire Dales District Council', region: 'East Midlands', type: 'district', postcodes: ['DE4', 'DE45', 'DE55', 'DE56', 'SK17', 'S32', 'S33'] },
-  { code: 'E07000036', name: 'Erewash Borough Council', region: 'East Midlands', type: 'district', postcodes: ['DE7', 'DE72', 'DE75', 'NG10', 'NG16'] },
-  { code: 'E07000037', name: 'High Peak Borough Council', region: 'East Midlands', type: 'district', postcodes: ['SK13', 'SK17', 'SK22', 'SK23'] },
-  { code: 'E07000038', name: 'North East Derbyshire District Council', region: 'East Midlands', type: 'district', postcodes: ['S18', 'S21', 'S42', 'S43', 'S45', 'DE55'] },
-  { code: 'E07000039', name: 'South Derbyshire District Council', region: 'East Midlands', type: 'district', postcodes: ['DE11', 'DE12', 'DE13', 'DE14', 'DE15', 'DE65', 'DE73', 'DE74'] }
-
-  // ... CONTINUED: Full dataset would include ALL remaining 181 district councils
-  // organized by region. Structure established for programmatic generation.
+  // NON-METROPOLITAN DISTRICTS (181 councils total)
+  // District councils are defined in councils-data-england-districts.ts with detailed HMO licensing data
+  // This generator provides smart defaults for any districts not yet manually defined
 ];
 
 // Function to generate complete council with defaults

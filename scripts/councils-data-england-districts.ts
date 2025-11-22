@@ -519,7 +519,7 @@ export const ENGLISH_DISTRICT_COUNCILS = [
 
   // Essex
   {
-    code: 'E07000061',
+    code: 'E07000066',
     name: 'Basildon Borough Council',
     jurisdiction: 'england' as const,
     region: 'East of England',
@@ -547,7 +547,7 @@ export const ENGLISH_DISTRICT_COUNCILS = [
     confidence: '✓✓' as const
   },
   {
-    code: 'E07000062',
+    code: 'E07000067',
     name: 'Braintree District Council',
     jurisdiction: 'england' as const,
     region: 'East of England',
@@ -575,7 +575,7 @@ export const ENGLISH_DISTRICT_COUNCILS = [
     confidence: '✓✓' as const
   },
   {
-    code: 'E07000063',
+    code: 'E07000068',
     name: 'Brentwood Borough Council',
     jurisdiction: 'england' as const,
     region: 'East of England',
@@ -603,7 +603,7 @@ export const ENGLISH_DISTRICT_COUNCILS = [
     confidence: '✓✓' as const
   },
   {
-    code: 'E07000064',
+    code: 'E07000069',
     name: 'Castle Point Borough Council',
     jurisdiction: 'england' as const,
     region: 'East of England',
@@ -631,7 +631,7 @@ export const ENGLISH_DISTRICT_COUNCILS = [
     confidence: '✓✓' as const
   },
   {
-    code: 'E07000065',
+    code: 'E07000070',
     name: 'Chelmsford City Council',
     jurisdiction: 'england' as const,
     region: 'East of England',
