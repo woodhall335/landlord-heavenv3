@@ -1,0 +1,970 @@
+{{!--
+  Premium Assured Shorthold Tenancy Agreement
+  England & Wales - Professional Edition
+
+  This template generates a beautifully formatted, legally comprehensive
+  tenancy agreement with proper styling and signature blocks.
+--}}
+
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Assured Shorthold Tenancy Agreement</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm 15mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a1a1a;
+      margin: 0;
+      padding: 0;
+    }
+
+    .document-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 30px 0;
+      border-bottom: 3px solid #2c5282;
+    }
+
+    .document-title {
+      font-size: 28pt;
+      font-weight: bold;
+      color: #2c5282;
+      margin: 0 0 10px 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .document-subtitle {
+      font-size: 14pt;
+      color: #4a5568;
+      margin: 5px 0;
+    }
+
+    .agreement-date {
+      font-size: 12pt;
+      color: #718096;
+      margin-top: 15px;
+      font-style: italic;
+    }
+
+    .section-header {
+      background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
+      color: white;
+      padding: 15px 20px;
+      margin: 40px 0 20px 0;
+      font-size: 16pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      page-break-after: avoid;
+    }
+
+    .section-number {
+      background: white;
+      color: #2c5282;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 16pt;
+      font-weight: bold;
+    }
+
+    .subsection {
+      margin: 25px 0;
+      page-break-inside: avoid;
+    }
+
+    .subsection-title {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #2c5282;
+      margin-bottom: 10px;
+      border-left: 4px solid #2c5282;
+      padding-left: 15px;
+    }
+
+    .clause {
+      margin: 15px 0;
+      padding-left: 30px;
+    }
+
+    .clause-number {
+      font-weight: bold;
+      color: #2c5282;
+      display: inline-block;
+      min-width: 40px;
+    }
+
+    .explainer-box {
+      background: #f7fafc;
+      border-left: 4px solid #4299e1;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 10pt;
+      color: #4a5568;
+      page-break-inside: avoid;
+    }
+
+    .explainer-title {
+      font-weight: bold;
+      color: #2c5282;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    .explainer-icon {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 14pt;
+    }
+
+    .warning-box {
+      background: #fff5f5;
+      border-left: 4px solid #f56565;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 10pt;
+      color: #742a2a;
+      page-break-inside: avoid;
+    }
+
+    .warning-title {
+      font-weight: bold;
+      color: #c53030;
+      margin-bottom: 8px;
+    }
+
+    .important-box {
+      background: #fffaf0;
+      border: 2px solid #ed8936;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+
+    .important-title {
+      font-weight: bold;
+      color: #c05621;
+      margin-bottom: 8px;
+      font-size: 11pt;
+    }
+
+    .party-details {
+      background: #f7fafc;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid #cbd5e0;
+    }
+
+    .party-label {
+      font-weight: bold;
+      color: #2c5282;
+      font-size: 12pt;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .party-info {
+      margin-left: 20px;
+      line-height: 1.8;
+    }
+
+    .property-highlight {
+      background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
+      color: white;
+      padding: 25px;
+      margin: 20px 0;
+      border-radius: 8px;
+      text-align: center;
+      page-break-inside: avoid;
+    }
+
+    .property-address {
+      font-size: 18pt;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .property-details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .property-detail-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .property-detail-label {
+      font-size: 9pt;
+      opacity: 0.8;
+      margin-bottom: 5px;
+    }
+
+    .property-detail-value {
+      font-size: 12pt;
+      font-weight: bold;
+    }
+
+    .financial-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .financial-table th {
+      background: #2c5282;
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 10pt;
+      letter-spacing: 1px;
+    }
+
+    .financial-table td {
+      padding: 15px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .financial-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .financial-table .label {
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    .financial-table .value {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #2c5282;
+    }
+
+    .signature-section {
+      margin-top: 60px;
+      page-break-before: always;
+      padding-top: 40px;
+    }
+
+    .signature-title {
+      font-size: 18pt;
+      font-weight: bold;
+      color: #2c5282;
+      text-align: center;
+      margin-bottom: 40px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .signature-blocks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin: 40px 0;
+    }
+
+    .signature-block {
+      border: 2px solid #2c5282;
+      padding: 30px;
+      border-radius: 8px;
+      background: #f7fafc;
+    }
+
+    .signature-party {
+      font-weight: bold;
+      color: #2c5282;
+      font-size: 12pt;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .signature-line {
+      border-bottom: 2px solid #2c5282;
+      margin: 30px 0 10px 0;
+      height: 50px;
+    }
+
+    .signature-label {
+      font-size: 9pt;
+      color: #718096;
+      margin-top: 5px;
+    }
+
+    .signature-date {
+      margin-top: 20px;
+    }
+
+    .signature-date-label {
+      font-size: 9pt;
+      color: #718096;
+      margin-bottom: 5px;
+    }
+
+    .signature-date-line {
+      border-bottom: 2px solid #2c5282;
+      width: 150px;
+      height: 30px;
+    }
+
+    .witness-section {
+      margin-top: 40px;
+      padding: 20px;
+      background: #fffaf0;
+      border: 1px solid #ed8936;
+      border-radius: 8px;
+    }
+
+    .witness-title {
+      font-weight: bold;
+      color: #c05621;
+      margin-bottom: 15px;
+    }
+
+    .legal-notice {
+      background: #f7fafc;
+      border: 2px solid #2c5282;
+      padding: 20px;
+      margin: 30px 0;
+      border-radius: 8px;
+      page-break-inside: avoid;
+    }
+
+    .legal-notice-title {
+      font-weight: bold;
+      color: #2c5282;
+      font-size: 12pt;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+    }
+
+    ul, ol {
+      margin: 10px 0;
+      padding-left: 30px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    .checklist {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .checklist li:before {
+      content: "✓ ";
+      color: #48bb78;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .footer-info {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #cbd5e0;
+      font-size: 9pt;
+      color: #718096;
+      text-align: center;
+    }
+
+    @media print {
+      .page-break {
+        page-break-before: always;
+      }
+
+      .section-header,
+      .subsection,
+      .explainer-box,
+      .warning-box,
+      .party-details {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DOCUMENT HEADER -->
+  <div class="document-header">
+    <div class="document-title">
+      Premium Assured Shorthold<br/>Tenancy Agreement
+    </div>
+    <div class="document-subtitle">
+      England & Wales &mdash; Professional Edition
+    </div>
+    <div class="agreement-date">
+      This Agreement is dated: <strong>{{agreement_date}}</strong>
+    </div>
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">
+      <span class="explainer-icon">ℹ️</span>
+      About This Agreement
+    </div>
+    <p>
+      This is a legally binding contract between the Landlord and Tenant(s) for the rental of a residential property.
+      It is governed by the Housing Act 1988 (as amended) and complies with all current England & Wales legislation
+      including the Tenant Fees Act 2019 and deposit protection requirements.
+    </p>
+  </div>
+
+  <!-- SECTION 1: THE PARTIES -->
+  <div class="section-header">
+    <span class="section-number">1</span>
+    The Parties
+  </div>
+
+  <div class="party-details">
+    <div class="party-label">🏠 Landlord</div>
+    <div class="party-info">
+      <strong>Name:</strong> {{landlord_full_name}}<br/>
+      <strong>Address:</strong> {{landlord_address}}<br/>
+      <strong>Email:</strong> {{landlord_email}}<br/>
+      <strong>Phone:</strong> {{landlord_phone}}
+    </div>
+  </div>
+
+  {{#if agent_name}}
+  <div class="party-details">
+    <div class="party-label">🏢 Landlord's Agent</div>
+    <div class="party-info">
+      <strong>Name:</strong> {{agent_name}}<br/>
+      <strong>Address:</strong> {{agent_address}}<br/>
+      <strong>Email:</strong> {{agent_email}}<br/>
+      <strong>Phone:</strong> {{agent_phone}}
+    </div>
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">
+      <span class="explainer-icon">ℹ️</span>
+      About the Agent
+    </div>
+    <p>
+      The Landlord has appointed {{agent_name}} to act on their behalf. All communications regarding this tenancy
+      should be directed to the Agent unless otherwise specified.
+    </p>
+  </div>
+  {{/if}}
+
+  <div class="party-details">
+    <div class="party-label">👤 Tenant(s)</div>
+    <div class="party-info">
+      {{#each tenants}}
+      <div style="margin-bottom: 15px;">
+        <strong>Tenant {{add @index 1}}:</strong> {{this.full_name}}<br/>
+        <strong>Date of Birth:</strong> {{this.dob}}<br/>
+        <strong>Email:</strong> {{this.email}}<br/>
+        <strong>Phone:</strong> {{this.phone}}
+      </div>
+      {{/each}}
+    </div>
+  </div>
+
+  {{#if tenants.length > 1}}
+  <div class="important-box">
+    <div class="important-title">⚠️ Joint and Several Liability</div>
+    <p>
+      Where there are multiple Tenants, each Tenant is jointly and severally liable for all obligations under this Agreement.
+      This means each Tenant is individually responsible for the full rent and all other obligations, not just their share.
+    </p>
+  </div>
+  {{/if}}
+
+  {{#if guarantor_name}}
+  <div class="party-details">
+    <div class="party-label">🛡️ Guarantor</div>
+    <div class="party-info">
+      <strong>Name:</strong> {{guarantor_name}}<br/>
+      <strong>Address:</strong> {{guarantor_address}}<br/>
+      <strong>Email:</strong> {{guarantor_email}}<br/>
+      <strong>Phone:</strong> {{guarantor_phone}}
+    </div>
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">
+      <span class="explainer-icon">ℹ️</span>
+      Guarantor's Role
+    </div>
+    <p>
+      The Guarantor agrees to be responsible for the Tenant's obligations under this Agreement. If the Tenant fails
+      to pay rent or breaches any term, the Guarantor must fulfill these obligations.
+    </p>
+  </div>
+  {{/if}}
+
+  <!-- PAGE BREAK -->
+  <div class="page-break"></div>
+
+  <!-- SECTION 2: THE PROPERTY -->
+  <div class="section-header">
+    <span class="section-number">2</span>
+    The Property
+  </div>
+
+  <div class="property-highlight">
+    <div class="property-address">
+      📍 {{property_address}}
+    </div>
+    <div class="property-details">
+      <div class="property-detail-item">
+        <div class="property-detail-label">Property Type</div>
+        <div class="property-detail-value">{{property_type}}</div>
+      </div>
+      <div class="property-detail-item">
+        <div class="property-detail-label">Bedrooms</div>
+        <div class="property-detail-value">{{number_of_bedrooms}}</div>
+      </div>
+      <div class="property-detail-item">
+        <div class="property-detail-label">Furnished Status</div>
+        <div class="property-detail-value">{{furnished_status}}</div>
+      </div>
+      <div class="property-detail-item">
+        <div class="property-detail-label">Council Tax Band</div>
+        <div class="property-detail-value">{{council_tax_band}}</div>
+      </div>
+      <div class="property-detail-item">
+        <div class="property-detail-label">EPC Rating</div>
+        <div class="property-detail-value">{{epc_rating}}</div>
+      </div>
+      <div class="property-detail-item">
+        <div class="property-detail-label">Parking</div>
+        <div class="property-detail-value">{{#if parking_available}}Yes{{else}}No{{/if}}</div>
+      </div>
+    </div>
+  </div>
+
+  {{#if parking_available}}
+  <div class="subsection">
+    <div class="subsection-title">🚗 Parking</div>
+    <div class="clause">
+      <span class="clause-number">2.1</span>
+      Parking is included: {{parking_details}}
+    </div>
+  </div>
+  {{/if}}
+
+  <!-- SECTION 3: THE TERM -->
+  <div class="section-header">
+    <span class="section-number">3</span>
+    The Term
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">📅 Tenancy Period</div>
+
+    <div class="clause">
+      <span class="clause-number">3.1</span>
+      <strong>Tenancy Start Date:</strong> {{tenancy_start_date}}
+    </div>
+
+    {{#if is_fixed_term}}
+    <div class="clause">
+      <span class="clause-number">3.2</span>
+      <strong>Tenancy End Date:</strong> {{tenancy_end_date}} at 12:00 noon
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">3.3</span>
+      <strong>Fixed Term Length:</strong> {{term_length}}
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">3.4</span>
+      Upon expiry of the fixed term, unless either party serves notice to end the tenancy, this agreement will
+      automatically continue as a periodic (rolling) tenancy on the same terms.
+    </div>
+    {{else}}
+    <div class="clause">
+      <span class="clause-number">3.2</span>
+      This is a <strong>periodic (monthly rolling) tenancy</strong> which will continue indefinitely until
+      terminated by either party serving the required notice.
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">
+      <span class="explainer-icon">ℹ️</span>
+      How Notice Periods Work
+    </div>
+    <ul>
+      <li><strong>During Fixed Term:</strong> Neither party can end the tenancy early unless there's a break clause or the Tenant breaches the agreement.</li>
+      <li><strong>After Fixed Term (Periodic):</strong> Landlord must give at least 2 months' notice using Form 6A (Section 21). Tenant must give at least 1 month's notice.</li>
+      <li><strong>For Breach:</strong> Landlord may serve Section 8 notice for specific grounds (e.g., rent arrears) with notice periods ranging from 2 weeks to 2 months depending on the ground.</li>
+    </ul>
+  </div>
+
+  <!-- PAGE BREAK -->
+  <div class="page-break"></div>
+
+  <!-- SECTION 4: RENT -->
+  <div class="section-header">
+    <span class="section-number">4</span>
+    Rent & Payments
+  </div>
+
+  <table class="financial-table">
+    <tr>
+      <th>Payment Item</th>
+      <th>Amount</th>
+      <th>Frequency</th>
+    </tr>
+    <tr>
+      <td class="label">Monthly Rent</td>
+      <td class="value">£{{rent_amount}}</td>
+      <td>Monthly</td>
+    </tr>
+    <tr>
+      <td class="label">Payment Due Date</td>
+      <td class="value">{{rent_due_day}} of each month</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <td class="label">Payment Method</td>
+      <td class="value">{{payment_method}}</td>
+      <td>-</td>
+    </tr>
+  </table>
+
+  <div class="subsection">
+    <div class="subsection-title">💳 Bank Account Details</div>
+
+    <div class="party-details">
+      <div class="party-info">
+        <strong>Account Name:</strong> {{bank_account_name}}<br/>
+        <strong>Sort Code:</strong> {{bank_sort_code}}<br/>
+        <strong>Account Number:</strong> {{bank_account_number}}
+      </div>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">4.1</span>
+      The Tenant must pay rent by {{payment_method}} to the bank account above.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">4.2</span>
+      Rent is due on the {{rent_due_day}} of each month in advance.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">4.3</span>
+      The first payment of £{{rent_amount}} is due on or before {{tenancy_start_date}}.
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-title">⚠️ Late Payment</div>
+    <p>
+      If rent is unpaid for 14 days or more after the due date, interest will accrue at 3% above the Bank of England
+      base rate per annum. Additionally, the Landlord may serve a Section 8 Notice seeking possession on Ground 8
+      (serious rent arrears - at least 2 months' arrears) or Grounds 10 & 11 (some rent arrears).
+    </p>
+  </div>
+
+  <!-- SECTION 5: DEPOSIT -->
+  <div class="section-header">
+    <span class="section-number">5</span>
+    Deposit
+  </div>
+
+  <table class="financial-table">
+    <tr>
+      <th>Deposit Details</th>
+      <th>Information</th>
+    </tr>
+    <tr>
+      <td class="label">Deposit Amount</td>
+      <td class="value">£{{deposit_amount}}</td>
+    </tr>
+    <tr>
+      <td class="label">Protection Scheme</td>
+      <td class="value">{{deposit_scheme_name}}</td>
+    </tr>
+    <tr>
+      <td class="label">Maximum Permitted (5 weeks)</td>
+      <td class="value">£{{max_legal_deposit}}</td>
+    </tr>
+  </table>
+
+  <div class="legal-notice">
+    <div class="legal-notice-title">✅ Tenant Fees Act 2019 Compliance</div>
+    <ul class="checklist">
+      <li>Deposit does not exceed 5 weeks' rent (as annual rent is {{#if high_value_property}}over{{else}}under{{/if}} £50,000)</li>
+      <li>Deposit will be protected within 30 days in an authorized scheme</li>
+      <li>Prescribed information will be provided within 30 days</li>
+      <li>No prohibited fees have been charged</li>
+    </ul>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🛡️ Deposit Protection</div>
+
+    <div class="clause">
+      <span class="clause-number">5.1</span>
+      The Landlord will protect the deposit in {{deposit_scheme_name}} within 30 calendar days of receipt.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">5.2</span>
+      The Landlord will provide the Tenant with the Prescribed Information within 30 calendar days, including:
+      <ul>
+        <li>Amount of deposit paid</li>
+        <li>Address of the property</li>
+        <li>Name and contact details of the deposit scheme</li>
+        <li>How the deposit will be protected</li>
+        <li>How to apply for release of the deposit</li>
+        <li>What to do if there is a dispute</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-title">⚠️ Failure to Protect Deposit</div>
+    <p>
+      <strong>Landlord:</strong> If you fail to protect the deposit or provide the Prescribed Information within 30 days,
+      you may be ordered to pay the Tenant 1-3 times the deposit amount in compensation. You will also be unable to
+      serve a valid Section 21 notice until the deposit is protected and information provided.
+    </p>
+  </div>
+
+  <!-- PAGE BREAK -->
+  <div class="page-break"></div>
+
+  <!-- SECTION 6: BILLS & UTILITIES -->
+  <div class="section-header">
+    <span class="section-number">6</span>
+    Bills & Utilities
+  </div>
+
+  <table class="financial-table">
+    <tr>
+      <th>Utility/Bill</th>
+      <th>Responsibility</th>
+    </tr>
+    <tr>
+      <td class="label">Council Tax</td>
+      <td class="value">{{council_tax_responsibility}}</td>
+    </tr>
+    <tr>
+      <td class="label">Gas, Electric, Water</td>
+      <td class="value">{{utilities_responsibility}}</td>
+    </tr>
+    <tr>
+      <td class="label">Internet/Broadband</td>
+      <td class="value">{{internet_responsibility}}</td>
+    </tr>
+  </table>
+
+  <div class="subsection">
+    <div class="subsection-title">📊 Utility Obligations</div>
+
+    <div class="clause">
+      <span class="clause-number">6.1</span>
+      The Tenant is responsible for paying the following utilities and services:
+      {{council_tax_responsibility}}, {{utilities_responsibility}}, {{internet_responsibility}}.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6.2</span>
+      The Tenant must take meter readings at the start and end of the tenancy.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6.3</span>
+      The Tenant must notify utility companies of their occupancy and ensure all bills are paid promptly.
+    </div>
+  </div>
+
+  <!-- SECTION 7: PROPERTY RULES -->
+  <div class="section-header">
+    <span class="section-number">7</span>
+    Property Rules & Restrictions
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🐾 Pets</div>
+
+    {{#if pets_allowed}}
+    <div class="clause">
+      <span class="clause-number">7.1</span>
+      <strong>Pets are PERMITTED</strong> with the following conditions:
+      <ul>
+        <li>Approved pets: {{approved_pets}}</li>
+        <li>Tenant remains responsible for any damage caused by pets</li>
+        <li>Tenant must ensure pets do not cause nuisance to neighbours</li>
+        <li>Property must be professionally cleaned at end of tenancy</li>
+      </ul>
+    </div>
+    {{else}}
+    <div class="clause">
+      <span class="clause-number">7.1</span>
+      <strong>NO PETS</strong> are permitted without the Landlord's prior written consent.
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🚭 Smoking</div>
+
+    {{#if smoking_allowed}}
+    <div class="clause">
+      <span class="clause-number">7.2</span>
+      Smoking and vaping <strong>ARE PERMITTED</strong> inside the property.
+    </div>
+    {{else}}
+    <div class="clause">
+      <span class="clause-number">7.2</span>
+      Smoking and vaping are <strong>STRICTLY PROHIBITED</strong> inside the property. The Tenant may smoke outside only.
+    </div>
+    {{/if}}
+  </div>
+
+  <!-- SIGNATURE SECTION -->
+  <div class="signature-section">
+    <div class="signature-title">
+      Signatures
+    </div>
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">✍️</span>
+        Signing This Agreement
+      </div>
+      <p>
+        By signing below, all parties confirm they have read, understood, and agree to be bound by all terms of this Agreement.
+        Each party should retain a signed copy for their records.
+      </p>
+    </div>
+
+    <div class="signature-blocks">
+      <!-- LANDLORD SIGNATURE -->
+      <div class="signature-block">
+        <div class="signature-party">Landlord</div>
+        <div style="margin-bottom: 20px;">
+          <strong>Name:</strong> {{landlord_full_name}}
+        </div>
+        <div class="signature-line"></div>
+        <div class="signature-label">Signature</div>
+        <div class="signature-date">
+          <div class="signature-date-label">Date:</div>
+          <div class="signature-date-line"></div>
+        </div>
+      </div>
+
+      <!-- AGENT SIGNATURE (if applicable) -->
+      {{#if agent_name}}
+      <div class="signature-block">
+        <div class="signature-party">Landlord's Agent</div>
+        <div style="margin-bottom: 20px;">
+          <strong>Name:</strong> {{agent_name}}
+        </div>
+        <div class="signature-line"></div>
+        <div class="signature-label">Signature</div>
+        <div class="signature-date">
+          <div class="signature-date-label">Date:</div>
+          <div class="signature-date-line"></div>
+        </div>
+      </div>
+      {{/if}}
+    </div>
+
+    <!-- TENANT SIGNATURES -->
+    {{#each tenants}}
+    <div class="signature-block" style="margin-top: 30px;">
+      <div class="signature-party">Tenant {{add @index 1}}</div>
+      <div style="margin-bottom: 20px;">
+        <strong>Name:</strong> {{this.full_name}}
+      </div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div class="signature-date">
+        <div class="signature-date-label">Date:</div>
+        <div class="signature-date-line"></div>
+      </div>
+    </div>
+    {{/each}}
+
+    <!-- GUARANTOR SIGNATURE (if applicable) -->
+    {{#if guarantor_name}}
+    <div class="signature-block" style="margin-top: 30px;">
+      <div class="signature-party">Guarantor</div>
+      <div style="margin-bottom: 20px;">
+        <strong>Name:</strong> {{guarantor_name}}
+      </div>
+      <div class="signature-line"></div>
+      <div class="signature-label">Signature</div>
+      <div class="signature-date">
+        <div class="signature-date-label">Date:</div>
+        <div class="signature-date-line"></div>
+      </div>
+    </div>
+    {{/if}}
+
+    <!-- WITNESS SECTION -->
+    <div class="witness-section">
+      <div class="witness-title">⚖️ Witness (Optional but Recommended)</div>
+      <p style="margin-bottom: 20px; font-size: 10pt;">
+        While not legally required for assured shorthold tenancies, having signatures witnessed adds an extra layer of
+        authenticity and can be useful if the agreement is ever disputed.
+      </p>
+
+      <div class="party-info">
+        <strong>Witness Name:</strong> _________________________________<br/><br/>
+        <strong>Witness Address:</strong> _________________________________<br/><br/>
+        <strong>Witness Signature:</strong> _________________________________<br/><br/>
+        <strong>Date:</strong> _________________________________
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-info">
+    <p>
+      <strong>Document Reference:</strong> AST-PREMIUM-{{case_id}}<br/>
+      <strong>Generated by:</strong> Landlord Heaven Professional Services<br/>
+      <strong>Date Generated:</strong> {{current_date}}<br/>
+      <br/>
+      This agreement complies with the Housing Act 1988 (as amended), Tenant Fees Act 2019,
+      and all applicable England & Wales residential tenancy legislation current as of {{current_date}}.
+    </p>
+  </div>
+
+</body>
+</html>
