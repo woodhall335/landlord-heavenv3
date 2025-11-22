@@ -14,12 +14,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-12-18.acacia',
 });
 
-// HMO Pro subscription tiers
+// HMO Pro subscription tiers (aligned with .env.example naming)
 const HMO_PRO_TIERS = {
-  starter: { price_id: process.env.STRIPE_HMO_STARTER_PRICE_ID!, amount: 1999, name: 'HMO Pro Starter', max_properties: 3 },
-  growth: { price_id: process.env.STRIPE_HMO_GROWTH_PRICE_ID!, amount: 2499, name: 'HMO Pro Growth', max_properties: 10 },
-  professional: { price_id: process.env.STRIPE_HMO_PROFESSIONAL_PRICE_ID!, amount: 2999, name: 'HMO Pro Professional', max_properties: 25 },
-  enterprise: { price_id: process.env.STRIPE_HMO_ENTERPRISE_PRICE_ID!, amount: 3499, name: 'HMO Pro Enterprise', max_properties: 999 },
+  starter: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_1_5!, amount: 1999, name: 'HMO Pro Starter (1-5 properties)', max_properties: 5 },
+  growth: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_6_10!, amount: 2499, name: 'HMO Pro Growth (6-10 properties)', max_properties: 10 },
+  professional: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_11_15!, amount: 2999, name: 'HMO Pro Professional (11-15 properties)', max_properties: 15 },
+  enterprise: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_16_20!, amount: 3499, name: 'HMO Pro Enterprise (16-20 properties)', max_properties: 20 },
 } as const;
 
 // Validation schema
