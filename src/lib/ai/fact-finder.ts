@@ -66,6 +66,32 @@ These are ALL THE SAME QUESTION (ask ONCE only):
 
 IF YOU ASK THE SAME QUESTION TWICE (even with different wording), YOU HAVE FAILED.
 
+⚠️ HOW TO CHECK COLLECTED FACTS - CONCRETE EXAMPLE:
+If "Facts Collected So Far" contains:
+{
+  "What is the deposit amount? Maximum £923.80": "800",
+  "What is the monthly rent?": "800",
+  "Pets allowed?": "no"
+}
+
+Then you CANNOT ask:
+❌ "What is the amount of the deposit?" (deposit already asked!)
+❌ "What is the deposit you wish to charge?" (deposit already asked!)
+❌ "Deposit amount?" (deposit already asked!)
+❌ "What is the rent?" (rent already asked!)
+❌ "Will pets be permitted?" (pets already asked!)
+
+SEARCH for keywords in collected facts:
+- To ask about deposit → Search for "deposit" in ANY key → If found, SKIP
+- To ask about rent → Search for "rent" in ANY key → If found, SKIP
+- To ask about pets → Search for "pet" in ANY key → If found, SKIP
+
+USE STANDARD QUESTION IDS (not variations):
+- Always use "deposit_amount" as question_id (not "deposit_1", "deposit_2")
+- Always use "rent_amount" as question_id (not "rent_1", "rent_2")
+- Always use "pets_allowed" as question_id (not "pets_1", "pets_2")
+This ensures facts are properly tracked without duplicates.
+
 PROFESSIONAL STANDARDS:
 1. NEVER ask about facts ALREADY obtained - review "Facts Collected So Far" meticulously
 2. NEVER repeat questions - each inquiry must advance the matter substantively
@@ -202,8 +228,9 @@ INPUT TYPES:
 
 OUTPUT FORMAT:
 {
+  "facts_already_collected": ["property_address", "landlord_name", "rent_amount", "deposit_amount"],  // LIST ALL FACTS YOU ALREADY HAVE
   "next_question": {
-    "question_id": "unique_identifier_never_used_before",
+    "question_id": "unique_identifier_never_used_before",  // Use standard IDs: deposit_amount, rent_amount, pets_allowed
     "question_text": "Professional, precise question",
     "input_type": "one of the types above",
     "options": ["option1", "option2"], // if multiple_choice
@@ -212,6 +239,30 @@ OUTPUT FORMAT:
   },
   "is_complete": false,
   "missing_critical_facts": ["fact1", "fact2"]
+}
+
+⚠️ CRITICAL: Before generating next_question, you MUST:
+1. List all facts you already have in "facts_already_collected" array
+2. Check if your next question keyword appears in facts_already_collected
+3. If YES → do NOT ask that question, ask about a different missing fact
+4. If NO → proceed with the question
+
+EXAMPLE - What NOT to do:
+{
+  "facts_already_collected": ["property_address", "landlord_name", "rent_amount", "deposit_amount"],
+  "next_question": {
+    "question_id": "deposit_amount_2",  ← WRONG! deposit_amount already in facts_already_collected!
+    "question_text": "What is the deposit?"  ← WRONG! This is a duplicate!
+  }
+}
+
+EXAMPLE - What TO do:
+{
+  "facts_already_collected": ["property_address", "landlord_name", "rent_amount", "deposit_amount"],
+  "next_question": {
+    "question_id": "deposit_scheme",  ← CORRECT! This is a NEW fact
+    "question_text": "Which deposit protection scheme will you use? (DPS, MyDeposits, TDS)"
+  }
 }
 
 Conclude fact-finding when you have obtained sufficient instructions to prepare court-ready documentation. Set "is_complete": true and "next_question": null.`;
