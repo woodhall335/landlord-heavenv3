@@ -39,12 +39,19 @@ export async function POST(request: Request) {
     const supabase = await createServerSupabaseClient();
 
     // Fetch case (allow both logged-in users and anonymous)
-    const { data: caseData, error: caseError } = await supabase
+    // Note: Must use .is() for null checks, not .eq()
+    let query = supabase
       .from('cases')
       .select('*')
-      .eq('id', case_id)
-      .eq('user_id', user ? user.id : null)
-      .single();
+      .eq('id', case_id);
+
+    if (user) {
+      query = query.eq('user_id', user.id);
+    } else {
+      query = query.is('user_id', null);
+    }
+
+    const { data: caseData, error: caseError } = await query.single();
 
     if (caseError || !caseData) {
       console.error('Case not found:', caseError);
