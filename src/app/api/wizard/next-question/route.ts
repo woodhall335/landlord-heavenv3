@@ -9,7 +9,10 @@
 import { getServerUser, createServerSupabaseClient } from '@/lib/supabase/server';
 import { getNextQuestion, trackTokenUsage } from '@/lib/ai';
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
+import * as Zod from 'zod';
+
+// Disable HMR for this route to prevent Zod import corruption
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
@@ -17,12 +20,12 @@ export async function POST(request: Request) {
     const user = await getServerUser();
     const body = await request.json();
 
-    // Define schema inside function to avoid HMR issues
-    const nextQuestionSchema = z.object({
-      case_id: z.string().uuid(),
-      case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']),
-      jurisdiction: z.enum(['england-wales', 'scotland', 'northern-ireland']),
-      collected_facts: z.record(z.any()),
+    // Define schema inside function with namespace import to avoid HMR issues
+    const nextQuestionSchema = Zod.z.object({
+      case_id: Zod.z.string().uuid(),
+      case_type: Zod.z.enum(['eviction', 'money_claim', 'tenancy_agreement']),
+      jurisdiction: Zod.z.enum(['england-wales', 'scotland', 'northern-ireland']),
+      collected_facts: Zod.z.record(Zod.z.any()),
     });
 
     // Validate input
