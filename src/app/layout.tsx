@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { Header, Footer } from "@/components/layout";
+import { getServerUser } from "@/lib/supabase/server";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,15 +26,19 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getServerUser();
+
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased`}>
-        {children}
+      <body className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}>
+        <Header user={user} />
+        <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );
