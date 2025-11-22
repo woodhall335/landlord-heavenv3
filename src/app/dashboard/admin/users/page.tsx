@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Container } from "@/components/ui";
-import { supabase } from "@/lib/supabase/client";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -42,6 +42,7 @@ export default function AdminUsersPage() {
   }, [searchTerm, filterTier, sortBy, currentPage]);
 
   async function checkAdminAccess() {
+    const supabase = getSupabaseBrowserClient();
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -64,6 +65,7 @@ export default function AdminUsersPage() {
   }
 
   async function loadUsers() {
+    const supabase = getSupabaseBrowserClient();
     try {
       let query = supabase
         .from("users")

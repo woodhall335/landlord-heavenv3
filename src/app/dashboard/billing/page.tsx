@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Container } from "@/components/ui";
-import { supabase } from "@/lib/supabase/client";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -41,6 +41,7 @@ export default function BillingPage() {
   }, []);
 
   async function loadBillingData() {
+    const supabase = getSupabaseBrowserClient();
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -79,6 +80,7 @@ export default function BillingPage() {
   }
 
   async function handleCancelSubscription() {
+    const supabase = getSupabaseBrowserClient();
     if (!subscription) return;
 
     const confirmed = confirm(
@@ -107,6 +109,7 @@ export default function BillingPage() {
   }
 
   async function handleReactivateSubscription() {
+    const supabase = getSupabaseBrowserClient();
     if (!subscription) return;
 
     try {
@@ -129,6 +132,7 @@ export default function BillingPage() {
   }
 
   async function handleManagePaymentMethod() {
+    const supabase = getSupabaseBrowserClient();
     try {
       const response = await fetch("/api/stripe/customer-portal", {
         method: "POST",
