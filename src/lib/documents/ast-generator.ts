@@ -20,10 +20,15 @@ export interface TenantInfo {
 export interface ASTData {
   // Agreement
   agreement_date: string;
+  current_date?: string;
+  current_year?: number;
 
   // Landlord
   landlord_full_name: string;
   landlord_address: string;
+  landlord_address_line1?: string;
+  landlord_address_town?: string;
+  landlord_address_postcode?: string;
   landlord_email: string;
   landlord_phone: string;
 
@@ -36,13 +41,20 @@ export interface ASTData {
 
   // Tenants
   tenants: TenantInfo[];
+  number_of_tenants?: number;
 
   // Property
   property_address: string;
+  property_address_line1?: string;
+  property_address_town?: string;
+  property_address_postcode?: string;
+  property_type?: string;
+  number_of_bedrooms?: string;
   property_description?: string;
   included_areas?: string;
   excluded_areas?: string;
   parking?: boolean;
+  parking_available?: boolean;
   parking_details?: string;
   furnished_status?: 'furnished' | 'unfurnished' | 'part-furnished';
 
@@ -58,29 +70,75 @@ export interface ASTData {
   rent_due_day: string; // e.g., "1st", "15th"
   payment_method: string; // e.g., "Standing Order", "Bank Transfer"
   payment_details: string; // Bank details
-  first_payment: number;
-  first_payment_date: string;
+  bank_account_name?: string;
+  bank_sort_code?: string;
+  bank_account_number?: string;
+  first_payment?: number;
+  first_payment_date?: string;
   rent_includes?: string; // What's included in rent
   rent_excludes?: string; // What tenant pays separately
 
   // Deposit
   deposit_amount: number;
+  deposit_scheme?: string;
   deposit_scheme_name: 'DPS' | 'MyDeposits' | 'TDS';
+
+  // Bills & Utilities
+  council_tax_responsibility?: string;
+  utilities_responsibility?: string;
+  internet_responsibility?: string;
 
   // Inventory
   inventory_attached?: boolean;
+  inventory_provided?: boolean;
+  professional_cleaning_required?: boolean;
+  decoration_condition?: string;
 
-  // Property features
+  // Property features & rules
   has_garden?: boolean;
+  garden_maintenance?: string;
   pets_allowed?: boolean;
   approved_pets?: string;
   smoking_allowed?: boolean;
 
-  // Clauses
+  // Legal Compliance & Safety
+  gas_safety_certificate?: boolean;
+  epc_rating?: string;
+  electrical_safety_certificate?: boolean;
+  smoke_alarms_fitted?: boolean;
+  carbon_monoxide_alarms?: boolean;
+  how_to_rent_guide_provided?: boolean;
+
+  // Maintenance & Repairs
+  landlord_maintenance_responsibilities?: string;
+  repairs_reporting_method?: string;
+  emergency_contact?: string;
+
+  // Tenancy Terms & Conditions
   break_clause?: boolean;
   break_clause_terms?: string;
+  break_clause_months?: string;
+  break_clause_notice_period?: string;
+  subletting_allowed?: string;
+  rent_increase_clause?: boolean;
+  rent_increase_frequency?: string;
   tenant_notice_period?: string; // e.g., "1 month"
   additional_terms?: string;
+
+  // Insurance & Liability
+  landlord_insurance?: boolean;
+  tenant_insurance_required?: string;
+
+  // Access & Viewings
+  landlord_access_notice?: string;
+  inspection_frequency?: string;
+  end_of_tenancy_viewings?: boolean;
+
+  // Additional Terms
+  white_goods_included?: string[];
+  communal_areas?: boolean;
+  communal_cleaning?: string;
+  recycling_bins?: boolean;
 
   // Jurisdiction
   jurisdiction_england?: boolean;
@@ -220,9 +278,9 @@ export async function generatePremiumAST(
     data.tenant_notice_period = '1 month';
   }
 
-  // Premium AST uses the same template but may have additional features
+  // Premium AST uses professionally formatted template with enhanced styling
   return generateDocument({
-    templatePath: 'uk/england-wales/templates/premium_ast.hbs',
+    templatePath: 'uk/england-wales/templates/premium_ast_formatted.hbs',
     data,
     isPreview,
     outputFormat: 'both',
