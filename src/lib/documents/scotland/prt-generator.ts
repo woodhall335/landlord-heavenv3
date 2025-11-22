@@ -22,11 +22,16 @@ export interface TenantInfo {
 export interface PRTData {
   // Agreement
   agreement_date: string;
+  current_date?: string;
+  current_year?: number;
 
   // Landlord
   landlord_full_name: string;
   landlord_2_name?: string; // Joint landlord
   landlord_address: string;
+  landlord_address_line1?: string;
+  landlord_address_town?: string;
+  landlord_address_postcode?: string;
   landlord_email: string;
   landlord_phone: string;
   landlord_reg_number?: string; // REQUIRED - Landlord registration
@@ -43,20 +48,28 @@ export interface PRTData {
 
   // Tenants
   tenants: TenantInfo[];
+  number_of_tenants?: number;
   multiple_tenants?: boolean;
 
   // Property
   property_address: string;
+  property_address_line1?: string;
+  property_address_town?: string;
+  property_address_postcode?: string;
+  property_type?: string;
+  number_of_bedrooms?: string;
   property_description?: string;
   included_areas?: string;
   excluded_areas?: string;
   parking?: boolean;
+  parking_available?: boolean;
   parking_details?: string;
   furnished_status?: 'furnished' | 'unfurnished' | 'part-furnished';
   council_tax_band?: string;
 
   // Term - PRTs have NO fixed end date
   tenancy_start_date: string;
+  is_fixed_term?: boolean; // Always false for PRTs
   // Note: No tenancy_end_date - PRTs are open-ended
 
   // Rent
@@ -65,33 +78,76 @@ export interface PRTData {
   rent_due_day: string; // e.g., "1st", "15th"
   payment_method: string; // e.g., "Standing Order", "Bank Transfer"
   payment_details: string; // Bank details
-  first_payment: number;
-  first_payment_date: string;
+  bank_account_name?: string;
+  bank_sort_code?: string;
+  bank_account_number?: string;
+  first_payment?: number;
+  first_payment_date?: string;
   rent_includes?: string; // What's included in rent
   rent_excludes?: string; // What tenant pays separately
 
   // Deposit - MUST be protected within 30 working days
   deposit_amount: number;
+  deposit_scheme?: string;
   deposit_scheme_name?: 'SafeDeposits Scotland' | 'MyDeposits Scotland' | 'Letting Protection Service Scotland';
+
+  // Bills & Utilities
+  council_tax_responsibility?: string;
+  utilities_responsibility?: string;
+  internet_responsibility?: string;
 
   // Inventory
   inventory_attached?: boolean;
+  inventory_provided?: boolean;
+  inventory_items?: string; // Comprehensive list of furnished items
+  professional_cleaning_required?: boolean;
+  decoration_condition?: string;
 
-  // Property features
+  // Property features & rules
   has_garden?: boolean;
+  garden_maintenance?: string;
   pets_allowed?: boolean;
   approved_pets?: string;
   smoking_allowed?: boolean;
 
-  // Energy Performance
+  // Legal Compliance & Safety
+  gas_safety_certificate?: boolean;
   epc_rating?: string; // e.g., "C", "D" (minimum E required)
   epc_expiry?: string;
+  electrical_safety_certificate?: boolean;
+  smoke_alarms_fitted?: boolean;
+  carbon_monoxide_alarms?: boolean;
+  repairing_standard_statement?: boolean; // Scotland-specific
+
+  // Maintenance & Repairs
+  landlord_maintenance_responsibilities?: string;
+  repairs_reporting_method?: string;
+  emergency_contact?: string;
+
+  // Tenancy Terms & Conditions
+  subletting_allowed?: string;
+  rent_increase_frequency?: string; // Must be 12+ months in Scotland
+  tenant_notice_period?: string;
+  additional_terms?: string;
+
+  // Insurance & Liability
+  landlord_insurance?: boolean;
+  tenant_insurance_required?: string;
+
+  // Access & Viewings
+  landlord_access_notice?: string;
+  inspection_frequency?: string;
+
+  // Additional Terms
+  white_goods_included?: string[];
+  communal_areas?: boolean;
+  communal_cleaning?: string;
+  recycling_bins?: boolean;
 
   // Notification
   absence_notification_days?: number; // Default 28 days
 
-  // Additional terms
-  additional_terms?: string;
+  // Additional schedules
   additional_schedules?: string;
 
   // Generation metadata
@@ -171,6 +227,7 @@ export async function generatePRTAgreement(
     multiple_tenants: data.tenants.length > 1,
     absence_notification_days: data.absence_notification_days || 28,
     rent_period: data.rent_period || 'month',
+    is_fixed_term: false, // PRTs are always open-ended
     document_id: data.document_id || `PRT-${Date.now()}`,
     generation_timestamp: data.generation_timestamp || new Date().toISOString(),
   };
@@ -178,6 +235,42 @@ export async function generatePRTAgreement(
   // Generate from template
   return generateDocument({
     templatePath: 'uk/scotland/templates/prt_agreement.hbs',
+    data: enrichedData,
+    isPreview,
+    outputFormat,
+  });
+}
+
+/**
+ * Generates a premium PRT agreement for Scotland with enhanced formatting
+ */
+export async function generatePremiumPRT(
+  data: PRTData,
+  isPreview = false,
+  outputFormat: 'html' | 'pdf' | 'both' = 'both'
+): Promise<GeneratedDocument> {
+  // Validate data
+  const validation = validatePRTData(data);
+  if (!validation.valid) {
+    throw new Error(`Premium PRT data validation failed:\n${validation.errors.join('\n')}`);
+  }
+
+  // Enrich data with defaults
+  const enrichedData: PRTData = {
+    ...data,
+    multiple_tenants: data.tenants.length > 1,
+    absence_notification_days: data.absence_notification_days || 28,
+    rent_period: data.rent_period || 'month',
+    is_fixed_term: false, // PRTs are always open-ended
+    current_date: data.current_date || new Date().toLocaleDateString('en-GB'),
+    current_year: data.current_year || new Date().getFullYear(),
+    document_id: data.document_id || `PRT-PREMIUM-${Date.now()}`,
+    generation_timestamp: data.generation_timestamp || new Date().toISOString(),
+  };
+
+  // Generate from premium formatted template
+  return generateDocument({
+    templatePath: 'uk/scotland/templates/prt_agreement_premium.hbs',
     data: enrichedData,
     isPreview,
     outputFormat,

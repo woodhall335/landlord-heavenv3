@@ -93,6 +93,11 @@ export interface AdditionalTerms {
 }
 
 export interface PrivateTenancyData {
+  // Agreement
+  agreement_date: string;
+  current_date?: string;
+  current_year?: number;
+
   // Parties
   landlord: LandlordDetails;
   agent?: AgentDetails;
@@ -102,20 +107,26 @@ export interface PrivateTenancyData {
   agent_phone?: string;
   agent_signs?: boolean;
   tenants: TenantDetails[];
+  number_of_tenants?: number;
   multiple_tenants?: boolean;
 
   // Property
   property_address: string;
+  property_address_line1?: string;
+  property_address_town?: string;
+  property_address_postcode?: string;
+  property_type?: string;
+  number_of_bedrooms?: string;
   property_description?: string;
   included_areas?: string;
   excluded_areas?: string;
   parking?: boolean;
+  parking_available?: boolean;
   parking_details?: string;
   furnished_status?: 'furnished' | 'part-furnished' | 'unfurnished';
   has_garden?: boolean;
 
   // Agreement details
-  agreement_date: string;
   tenancy_start_date: string;
   is_fixed_term: boolean;
   tenancy_end_date?: string;
@@ -127,33 +138,83 @@ export interface PrivateTenancyData {
   rent_due_day: string;
   payment_method: string;
   payment_details: string;
-  first_payment: number;
-  first_payment_date: string;
+  bank_account_name?: string;
+  bank_sort_code?: string;
+  bank_account_number?: string;
+  first_payment?: number;
+  first_payment_date?: string;
   rent_includes?: string;
   rent_excludes?: string;
 
   // Deposit
   deposit_amount: number;
-  deposit_scheme?: 'TDS Northern Ireland' | 'MyDeposits Northern Ireland';
+  deposit_scheme?: string | 'TDS Northern Ireland' | 'MyDeposits Northern Ireland';
+
+  // Bills & Utilities
+  council_tax_responsibility?: string;
+  utilities_responsibility?: string;
+  internet_responsibility?: string;
 
   // Inventory
   inventory_attached?: boolean;
+  inventory_provided?: boolean;
   inventory_description?: string;
+  inventory_items?: string; // Comprehensive list of furnished items
+  professional_cleaning_required?: boolean;
+  decoration_condition?: string;
 
-  // Additional terms
+  // Property features & rules
+  garden_maintenance?: string;
   pets_allowed?: boolean;
   approved_pets?: string;
   smoking_allowed?: boolean;
+
+  // Legal Compliance & Safety (NI 2025 updates)
+  gas_safety_certificate?: boolean;
+  epc_rating?: string;
+  electrical_safety_certificate?: boolean; // Mandatory from 1 April 2025
+  smoke_alarms_fitted?: boolean;
+  carbon_monoxide_alarms?: boolean;
+
+  // Maintenance & Repairs
+  landlord_maintenance_responsibilities?: string;
+  repairs_reporting_method?: string;
+  emergency_contact?: string;
+
+  // Tenancy Terms & Conditions
   break_clause?: boolean;
   break_clause_terms?: string;
+  break_clause_months?: string;
+  break_clause_notice_period?: string;
+  subletting_allowed?: string;
+  rent_increase_clause?: boolean;
+  rent_increase_frequency?: string; // Must be 12+ months, 3-month notice from 1 April 2025
+  tenant_notice_period?: string;
   additional_terms?: string;
+
+  // Insurance & Liability
+  landlord_insurance?: boolean;
+  tenant_insurance_required?: string;
+
+  // Access & Viewings
+  landlord_access_notice?: string;
+  inspection_frequency?: string;
+  end_of_tenancy_viewings?: boolean;
+
+  // Additional Terms
+  white_goods_included?: string[];
+  communal_areas?: boolean;
+  communal_cleaning?: string;
+  recycling_bins?: boolean;
+
+  // Additional schedules
   additional_schedules?: string;
 
   // Document metadata
   document_id?: string;
   generation_timestamp?: string;
 
-  // Helper fields
+  // Helper fields (flattened for templates)
   landlord_full_name?: string;
   landlord_address?: string;
   landlord_email?: string;
@@ -328,6 +389,7 @@ export async function generatePrivateTenancyAgreement(
 
     // Helper fields
     multiple_tenants: data.tenants.length > 1,
+    number_of_tenants: data.tenants.length,
     rent_period: data.rent_period || 'month',
 
     // Document metadata
@@ -338,6 +400,57 @@ export async function generatePrivateTenancyAgreement(
   // Generate document
   return generateDocument({
     templatePath: 'uk/northern-ireland/templates/private_tenancy_agreement.hbs',
+    data: enrichedData,
+    isPreview,
+    outputFormat,
+  });
+}
+
+/**
+ * Generate a Premium Private Tenancy Agreement for Northern Ireland
+ * with enhanced formatting, comprehensive clauses, and professional styling
+ */
+export async function generatePremiumPrivateTenancy(
+  data: PrivateTenancyData,
+  isPreview = false,
+  outputFormat: 'html' | 'pdf' | 'both' = 'both'
+): Promise<GeneratedDocument> {
+  // Validate data
+  const validation = validatePrivateTenancyData(data);
+  if (!validation.valid) {
+    throw new Error(`Premium Private Tenancy Agreement validation failed:\n${validation.errors.join('\n')}`);
+  }
+
+  // Log warnings if any
+  if (validation.warnings.length > 0) {
+    console.warn('Premium Private Tenancy Agreement warnings:');
+    validation.warnings.forEach((warning) => console.warn(`  - ${warning}`));
+  }
+
+  // Enrich data with computed fields and defaults
+  const enrichedData: PrivateTenancyData = {
+    ...data,
+    // Landlord details (flattened for template)
+    landlord_full_name: data.landlord.full_name,
+    landlord_address: data.landlord.address,
+    landlord_email: data.landlord.email,
+    landlord_phone: data.landlord.phone,
+
+    // Helper fields
+    multiple_tenants: data.tenants.length > 1,
+    number_of_tenants: data.tenants.length,
+    rent_period: data.rent_period || 'month',
+    current_date: data.current_date || new Date().toLocaleDateString('en-GB'),
+    current_year: data.current_year || new Date().getFullYear(),
+
+    // Document metadata
+    document_id: data.document_id || `NI-PTA-PREMIUM-${Date.now()}`,
+    generation_timestamp: data.generation_timestamp || new Date().toISOString(),
+  };
+
+  // Generate from premium formatted template
+  return generateDocument({
+    templatePath: 'uk/northern-ireland/templates/private_tenancy_premium.hbs',
     data: enrichedData,
     isPreview,
     outputFormat,
