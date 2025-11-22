@@ -22,6 +22,39 @@ import {
 } from './index';
 import type { WizardQuestion } from '@/lib/ai/fact-finder';
 
+// Helper function to get product display name
+function getDocumentTypeName(caseType: string, product?: string): string {
+  // If product parameter is provided, use it for specific naming
+  if (product) {
+    switch (product) {
+      case 'notice_only':
+        return 'Notice Only';
+      case 'complete_pack':
+        return 'Complete Eviction Pack';
+      case 'money_claim':
+        return 'Money Claim Pack';
+      case 'ast_standard':
+        return 'Standard AST';
+      case 'ast_premium':
+        return 'Premium AST';
+      default:
+        break;
+    }
+  }
+
+  // Fallback to case type if no product specified
+  switch (caseType) {
+    case 'eviction':
+      return 'Eviction Pack';
+    case 'money_claim':
+      return 'Money Claim';
+    case 'tenancy_agreement':
+      return 'Tenancy Agreement';
+    default:
+      return 'Document';
+  }
+}
+
 interface Message {
   id: string;
   role: 'assistant' | 'user';
@@ -39,6 +72,7 @@ interface CollectedFact {
 interface WizardContainerProps {
   caseType: 'eviction' | 'money_claim' | 'tenancy_agreement';
   jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
+  product?: string; // Specific product: notice_only, complete_pack, money_claim, ast_standard, ast_premium
   editCaseId?: string; // Optional: Case ID to edit existing answers
   onComplete: (caseId: string, analysis: any) => void;
 }
@@ -46,6 +80,7 @@ interface WizardContainerProps {
 export const WizardContainer: React.FC<WizardContainerProps> = ({
   caseType,
   jurisdiction,
+  product,
   editCaseId,
   onComplete,
 }) => {
@@ -597,7 +632,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                   <div className="flex-1">
                     <div className="text-sm font-medium text-charcoal">Document Type</div>
                     <div className="text-sm text-gray-600">
-                      {caseType === 'eviction' ? 'Eviction Notice' : caseType === 'money_claim' ? 'Money Claim' : 'Tenancy Agreement'}
+                      {getDocumentTypeName(caseType, product)}
                     </div>
                   </div>
                 </div>
