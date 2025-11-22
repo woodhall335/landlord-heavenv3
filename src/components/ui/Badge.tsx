@@ -38,13 +38,13 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
     );
 
     const variantStyles = {
-      primary: "bg-primary-subtle text-primary-dark",
-      success: "bg-success-bg text-success",
-      warning: "bg-warning-bg text-orange-800",
-      error: "bg-error-bg text-error",
-      info: "bg-info-bg text-info",
-      neutral: "bg-gray-100 text-gray-700",
-      "hmo-pro": "bg-gradient-to-r from-secondary to-primary text-white font-semibold shadow-md",
+      primary: "bg-primary-subtle text-primary-dark border border-primary-200",
+      success: "bg-success-bg text-primary-dark border border-primary-200",
+      warning: "bg-warning-bg text-orange-900 border border-orange-300",
+      error: "bg-error-bg text-error border border-red-300",
+      info: "bg-info-bg text-blue-700 border border-blue-300",
+      neutral: "bg-gray-100 text-gray-800 border border-gray-300",
+      "hmo-pro": "bg-gradient-to-r from-primary to-primary-dark text-white font-semibold shadow-md",
     };
 
     const sizeStyles = {

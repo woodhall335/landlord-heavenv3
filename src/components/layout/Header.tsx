@@ -30,16 +30,16 @@ export function Header({ user }: HeaderProps) {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <header className="sticky top-0 z-50 bg-primary shadow-md">
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
-            <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-primary-dark">
+            <Link href="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+              <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
                 <span className="text-white font-bold text-xl">LH</span>
               </div>
-              <span className="hidden sm:block text-xl font-bold text-charcoal">
+              <span className="hidden sm:block text-xl font-bold text-white">
                 Landlord Heaven
               </span>
             </Link>
@@ -55,10 +55,10 @@ export function Header({ user }: HeaderProps) {
             >
               <button
                 className={clsx(
-                  "flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                  "flex items-center gap-1 px-3 py-2 text-sm font-semibold rounded-md transition-all duration-250",
                   productsDropdownOpen || pathname.startsWith("/products") || pathname.startsWith("/hmo-pro")
-                    ? "text-primary bg-primary-subtle"
-                    : "text-gray-700 hover:text-charcoal hover:bg-gray-50"
+                    ? "text-white bg-white/20"
+                    : "text-white/90 hover:text-white hover:bg-white/10"
                 )}
               >
                 Products
@@ -106,10 +106,10 @@ export function Header({ user }: HeaderProps) {
             <Link
               href="/pricing"
               className={clsx(
-                "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                "px-3 py-2 text-sm font-semibold rounded-md transition-all duration-250",
                 isActive("/pricing")
-                  ? "text-primary bg-primary-subtle"
-                  : "text-gray-700 hover:text-charcoal hover:bg-gray-50"
+                  ? "text-white bg-white/20"
+                  : "text-white/90 hover:text-white hover:bg-white/10"
               )}
             >
               Pricing
@@ -118,10 +118,10 @@ export function Header({ user }: HeaderProps) {
             <Link
               href="/help"
               className={clsx(
-                "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                "px-3 py-2 text-sm font-semibold rounded-md transition-all duration-250",
                 isActive("/help")
-                  ? "text-primary bg-primary-subtle"
-                  : "text-gray-700 hover:text-charcoal hover:bg-gray-50"
+                  ? "text-white bg-white/20"
+                  : "text-white/90 hover:text-white hover:bg-white/10"
               )}
             >
               Help
@@ -130,10 +130,10 @@ export function Header({ user }: HeaderProps) {
             <Link
               href="/about"
               className={clsx(
-                "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                "px-3 py-2 text-sm font-semibold rounded-md transition-all duration-250",
                 isActive("/about")
-                  ? "text-primary bg-primary-subtle"
-                  : "text-gray-700 hover:text-charcoal hover:bg-gray-50"
+                  ? "text-white bg-white/20"
+                  : "text-white/90 hover:text-white hover:bg-white/10"
               )}
             >
               About
@@ -146,15 +146,15 @@ export function Header({ user }: HeaderProps) {
               <div className="relative">
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-gray-50 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-white/10 transition-all duration-250"
                 >
-                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-semibold text-sm">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-full bg-white text-primary font-semibold text-sm">
                     {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
                   </div>
-                  <span className="text-sm font-medium text-charcoal max-w-[120px] truncate">
+                  <span className="text-sm font-medium text-white max-w-[120px] truncate">
                     {user.name || user.email}
                   </span>
-                  <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
@@ -198,12 +198,12 @@ export function Header({ user }: HeaderProps) {
             ) : (
               <>
                 <Link href="/auth/login">
-                  <Button variant="outline" size="small">
+                  <Button variant="outline" size="small" className="border-white text-white hover:bg-white hover:text-primary">
                     Log In
                   </Button>
                 </Link>
                 <Link href="/auth/signup">
-                  <Button variant="primary" size="small">
+                  <Button variant="secondary" size="small" className="bg-white text-primary hover:bg-white/90 shadow-md">
                     Sign Up Free
                   </Button>
                 </Link>
@@ -214,7 +214,7 @@ export function Header({ user }: HeaderProps) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-md text-gray-700 hover:bg-gray-100 transition-colors"
+            className="md:hidden p-2 rounded-md text-white hover:bg-white/10 transition-all duration-250"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
@@ -231,44 +231,44 @@ export function Header({ user }: HeaderProps) {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-gray-200">
+          <div className="md:hidden py-4 border-t border-white/20 bg-primary-dark">
             <div className="space-y-1">
               {/* Products Section */}
-              <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              <div className="px-3 py-2 text-xs font-semibold text-white/60 uppercase tracking-wide">
                 Products
               </div>
               {productLinks.map((product) => (
                 <Link
                   key={product.href}
                   href={product.href}
-                  className="flex items-center justify-between px-3 py-2 rounded-md hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between px-3 py-2 rounded-md hover:bg-white/10 transition-all duration-250"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <span className="text-sm font-medium text-charcoal">{product.label}</span>
-                  <span className="text-xs text-gray-500">{product.price}</span>
+                  <span className="text-sm font-medium text-white">{product.label}</span>
+                  <span className="text-xs text-white/70">{product.price}</span>
                 </Link>
               ))}
 
-              <hr className="my-2 border-gray-200" />
+              <hr className="my-2 border-white/20" />
 
               {/* Main Links */}
               <Link
                 href="/pricing"
-                className="block px-3 py-2 rounded-md text-sm font-medium text-charcoal hover:bg-gray-50"
+                className="block px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/10"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Pricing
               </Link>
               <Link
                 href="/help"
-                className="block px-3 py-2 rounded-md text-sm font-medium text-charcoal hover:bg-gray-50"
+                className="block px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/10"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Help
               </Link>
               <Link
                 href="/about"
-                className="block px-3 py-2 rounded-md text-sm font-medium text-charcoal hover:bg-gray-50"
+                className="block px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/10"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 About
@@ -277,20 +277,20 @@ export function Header({ user }: HeaderProps) {
               {/* Auth Buttons */}
               {user ? (
                 <>
-                  <hr className="my-2 border-gray-200" />
-                  <div className="px-3 py-2 text-xs font-semibold text-gray-500">
+                  <hr className="my-2 border-white/20" />
+                  <div className="px-3 py-2 text-xs font-semibold text-white/70">
                     {user.email}
                   </div>
                   <Link
                     href="/dashboard"
-                    className="block px-3 py-2 rounded-md text-sm font-medium text-charcoal hover:bg-gray-50"
+                    className="block px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/10"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Dashboard
                   </Link>
                   <Link
                     href="/dashboard/settings"
-                    className="block px-3 py-2 rounded-md text-sm font-medium text-charcoal hover:bg-gray-50"
+                    className="block px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/10"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     Settings
@@ -298,7 +298,7 @@ export function Header({ user }: HeaderProps) {
                   <form action="/api/auth/logout" method="POST">
                     <button
                       type="submit"
-                      className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-charcoal hover:bg-gray-50"
+                      className="w-full text-left px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-white/10"
                     >
                       Log Out
                     </button>
@@ -307,12 +307,12 @@ export function Header({ user }: HeaderProps) {
               ) : (
                 <div className="px-3 py-4 space-y-2">
                   <Link href="/auth/login" className="block" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="outline" fullWidth>
+                    <Button variant="outline" fullWidth className="border-white text-white hover:bg-white hover:text-primary">
                       Log In
                     </Button>
                   </Link>
                   <Link href="/auth/signup" className="block" onClick={() => setMobileMenuOpen(false)}>
-                    <Button variant="primary" fullWidth>
+                    <Button variant="secondary" fullWidth className="bg-white text-primary hover:bg-white/90">
                       Sign Up Free
                     </Button>
                   </Link>

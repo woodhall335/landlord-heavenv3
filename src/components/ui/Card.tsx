@@ -33,13 +33,13 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ) => {
     const baseStyles = clsx(
       "bg-white rounded-lg",
-      "transition-all duration-200"
+      "transition-all"
     );
 
     const variantStyles = {
       default: "border border-gray-200",
       bordered: "border-2 border-gray-300",
-      elevated: "shadow-md",
+      elevated: "shadow-md border border-gray-100",
     };
 
     const paddingStyles = {
@@ -50,7 +50,7 @@ export const Card = React.forwardRef<HTMLDivElement, CardProps>(
     };
 
     const hoverStyles = hoverable
-      ? "hover:shadow-lg hover:border-primary hover:-translate-y-1 cursor-pointer"
+      ? "hover:shadow-xl hover:border-primary/30 hover:-translate-y-1 cursor-pointer"
       : "";
 
     return (
@@ -118,7 +118,7 @@ export const CardDescription = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <p
     ref={ref}
-    className={clsx("text-base text-gray-600", className)}
+    className={clsx("text-base text-gray-700 leading-relaxed", className)}
     {...props}
   >
     {children}
