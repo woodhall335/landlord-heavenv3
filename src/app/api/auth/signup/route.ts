@@ -8,6 +8,7 @@
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { sendWelcomeEmail } from '@/lib/email/resend';
 
 // Validation schema
 const signupSchema = z.object({
@@ -76,6 +77,18 @@ export async function POST(request: Request) {
     if (profileError) {
       console.error('Profile creation error:', profileError);
       // Don't fail - auth user created successfully
+    }
+
+    // Send welcome email
+    try {
+      await sendWelcomeEmail({
+        to: authData.user.email!,
+        name: full_name || authData.user.email!.split('@')[0],
+      });
+      console.log(`[Email] Welcome email sent to ${authData.user.email}`);
+    } catch (emailError: any) {
+      console.error('[Email] Failed to send welcome email:', emailError);
+      // Don't fail signup if email fails
     }
 
     return NextResponse.json(
