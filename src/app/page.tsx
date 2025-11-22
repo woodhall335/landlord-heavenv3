@@ -46,7 +46,7 @@ export default function Home() {
           {[
             { title: "Trusted compliance", description: "Up-to-date workflows across England, Wales, Scotland, and Northern Ireland." },
             { title: "Court-ready output", description: "Crystal-clear documents with tenant context, evidence, and route guidance." },
-            { title: "Money-back guarantee", description: "30-day guarantee on every pack with unlimited revisions." },
+            { title: "Instant download", description: "Professionally curated documents with unlimited regenerations before payment." },
           ].map((item) => (
             <Card key={item.title} padding="large" className="shadow-sm ring-1 ring-gray-200">
               <CardHeader>
@@ -97,22 +97,22 @@ export default function Home() {
       <FeatureGrid
         eyebrow="Products"
         title="Purpose-built for every landlord scenario"
-        subtitle="Curated packs with clean UI, clear outcomes, and confident compliance."
+        subtitle="Professionally curated documents with clean UI, clear outcomes, and confident compliance."
         items={[
           {
-            title: "Notice Only",
+            title: "Eviction Notices",
             description: "Section 8/21 and devolved nation equivalents with service instructions and covering letters.",
             badge: "£29.99",
             icon: "📄",
           },
           {
-            title: "Complete Eviction Pack",
-            description: "Full journey from notice through witness statements and court filings—ready to download.",
-            badge: "£149.99",
+            title: "Court Proceedings",
+            description: "Possession claims, witness statements and court filings—professionally formatted and court-ready.",
+            badge: "£49.99",
             icon: "⚖️",
           },
           {
-            title: "Money Claim Pack",
+            title: "Money Claims",
             description: "Rent arrears claims with evidence checklists, POC templates, and guidance notes.",
             badge: "£129.99",
             icon: "💷",
