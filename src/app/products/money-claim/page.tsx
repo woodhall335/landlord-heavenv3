@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Money Claim Pack - Recover Rent Arrears | Landlord Heaven",
   description:
-    "Claim unpaid rent arrears through UK courts. Money Claim Online forms, arrears schedule, interest calculator. £129.99 one-time payment.",
+    "Claim unpaid rent arrears through UK courts. Money Claim Online forms, arrears schedule, interest calculator. £129.99 one-time payment. Instant download.",
 };
 
 export default function MoneyClaimPage() {
@@ -32,7 +32,7 @@ export default function MoneyClaimPage() {
             >
               Start Your Claim Now →
             </Link>
-            <p className="mt-4 text-sm text-white/80">30-day money-back guarantee • No subscription</p>
+            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • No subscription</p>
           </div>
         </Container>
       </section>
@@ -562,7 +562,7 @@ export default function MoneyClaimPage() {
             >
               Start Your Claim - £129.99 →
             </Link>
-            <p className="mt-4 text-sm text-white/80">30-day money-back guarantee • No subscription</p>
+            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • No subscription</p>
           </div>
         </Container>
       </section>

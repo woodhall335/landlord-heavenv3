@@ -130,7 +130,7 @@ export default function AboutPage() {
                   <li>✓ Average completion time: 12 minutes</li>
                   <li>✓ Instant PDF download</li>
                   <li>✓ Save £200-400 vs solicitors</li>
-                  <li>✓ 30-day money-back guarantee</li>
+                  <li>✓ Professional documents</li>
                 </ul>
               </div>
 

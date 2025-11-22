@@ -416,19 +416,22 @@ export default function HelpPage() {
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
                   <p className="mb-3">
-                    <strong>30-day money-back guarantee on all one-time products.</strong>
+                    <strong>All products are instantly delivered digital documents.</strong>
                   </p>
                   <p className="mb-3">
-                    <strong>Eligible:</strong>
-                    <br />• Notice Only, Complete Pack, Money Claim, AST products
-                    <br />• Within 30 days of purchase
-                    <br />• Any reason (no questions asked)
+                    Due to the instant nature of our digital products, we cannot offer refunds once documents have been generated and delivered.
                   </p>
                   <p className="mb-3">
-                    <strong>Not eligible:</strong>
+                    <strong>Refunds only available for:</strong>
+                    <br />• Technical errors preventing document access
+                    <br />• Duplicate charges
+                    <br />• Unauthorized transactions
+                  </p>
+                  <p className="mb-3">
+                    <strong>Not eligible for refund:</strong>
+                    <br />• One-time products after download
                     <br />• HMO Pro (cancel anytime but no partial month refunds)
-                    <br />• After 30 days
-                    <br />• Fraudulent purchases
+                    <br />• User error in document generation
                   </p>
                   <p>
                     <Link href="/refunds" className="text-primary hover:underline">

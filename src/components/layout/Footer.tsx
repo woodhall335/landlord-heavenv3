@@ -31,30 +31,6 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/products/notice-only"
-                  className="text-sm text-gray-400 hover:text-white transition-colors"
-                >
-                  Notice Only
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products/complete-pack"
-                  className="text-sm text-gray-400 hover:text-white transition-colors"
-                >
-                  Complete Eviction Pack
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products/money-claim"
-                  className="text-sm text-gray-400 hover:text-white transition-colors"
-                >
-                  Money Claim Pack
-                </Link>
-              </li>
-              <li>
-                <Link
                   href="/products/ast"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
@@ -63,10 +39,34 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/hmo-pro"
+                  href="/eviction"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
-                  HMO Pro Membership
+                  Eviction Forms
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/legal-proceedings"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Legal Proceedings
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/products/notice-only"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Notices
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/products/money-claim"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Money Claims
                 </Link>
               </li>
             </ul>
@@ -161,9 +161,9 @@ export function Footer() {
             <div className="flex items-center gap-4 text-sm text-gray-400">
               <span>100% UK Coverage</span>
               <span>•</span>
-              <span>30-Day Guarantee</span>
-              <span>•</span>
               <span>Court-Ready Documents</span>
+              <span>•</span>
+              <span>Instant Delivery</span>
             </div>
           </div>
         </div>
