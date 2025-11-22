@@ -1,0 +1,423 @@
+{{! Form N5 - Claim for possession of property }}
+{{! This template replicates the exact structure of the official HMCTS Form N5 }}
+{{! Last updated format: October 2020 }}
+
+{{! Page styling - must match court form exactly }}
+{{#if pdf_generation}}
+<style>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    margin: 0;
+    padding: 20mm;
+    line-height: 1.3;
+  }
+  .form-header {
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+  .court-stamp {
+    float: right;
+    width: 60mm;
+    height: 40mm;
+    border: 1px solid black;
+    text-align: center;
+    padding-top: 15mm;
+    font-size: 9pt;
+  }
+  .section-heading {
+    background-color: #000000;
+    color: white;
+    padding: 5px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 5px;
+  }
+  .field-label {
+    font-weight: bold;
+    font-size: 9pt;
+  }
+  .checkbox {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 1px solid black;
+    margin-right: 5px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .checkbox.checked::before {
+    content: "✓";
+  }
+  .fill-box {
+    border-bottom: 1px solid black;
+    min-height: 20px;
+    margin-bottom: 5px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table, th, td {
+    border: 1px solid black;
+  }
+  th, td {
+    padding: 5px;
+    text-align: left;
+  }
+  .notes-box {
+    border: 1px solid black;
+    padding: 10px;
+    background-color: #f0f0f0;
+    font-size: 9pt;
+    margin: 10px 0;
+  }
+</style>
+{{/if}}
+
+<div class="form-header">
+  <div style="float: left; width: 60%;">
+    <div style="font-size: 18pt; font-weight: bold;">Claim form</div>
+    <div style="font-size: 12pt;">For possession of property</div>
+  </div>
+  <div class="court-stamp">
+    <div style="font-size: 8pt; margin-bottom: 5mm;">For court use only</div>
+    <div style="font-size: 8pt;">Claim No.</div>
+    <div style="border-top: 1px solid black; margin: 5mm 10mm; padding-top: 2mm;">
+      {{#if claim_number}}{{claim_number}}{{else}}&nbsp;{{/if}}
+    </div>
+    <div style="font-size: 8pt; margin-top: 5mm;">Issue date</div>
+  </div>
+  <div style="clear: both;"></div>
+</div>
+
+<div style="text-align: right; font-size: 18pt; font-weight: bold; margin-bottom: 10px;">N5</div>
+
+<!-- CLAIMANT AND DEFENDANT SECTION -->
+<table style="margin-bottom: 15px;">
+  <tr>
+    <td style="width: 50%; vertical-align: top;">
+      <div class="field-label">Claimant(s) name(s) and address(es)</div>
+      <div style="margin-top: 5px;">
+        {{landlord_full_name}}{{#if landlord_2_name}}<br>{{landlord_2_name}}{{/if}}
+        <br>{{landlord_address}}
+      </div>
+      {{#if landlord_phone}}
+      <div style="margin-top: 10px;">
+        <span class="field-label">Telephone:</span> {{landlord_phone}}
+      </div>
+      {{/if}}
+      {{#if landlord_email}}
+      <div>
+        <span class="field-label">Email:</span> {{landlord_email}}
+      </div>
+      {{/if}}
+      {{#if claimant_reference}}
+      <div style="margin-top: 5px;">
+        <span class="field-label">Claimant's ref:</span> {{claimant_reference}}
+      </div>
+      {{/if}}
+    </td>
+    <td style="width: 50%; vertical-align: top;">
+      <div class="field-label">Defendant(s) name and address</div>
+      <div style="margin-top: 5px;">
+        {{tenant_full_name}}{{#if tenant_2_name}}<br>{{tenant_2_name}}{{/if}}
+        <br>{{property_address}}
+      </div>
+      {{#if defendant_reference}}
+      <div style="margin-top: 10px;">
+        <span class="field-label">Defendant's ref:</span> {{defendant_reference}}
+      </div>
+      {{/if}}
+    </td>
+  </tr>
+</table>
+
+<!-- COURT DETAILS -->
+<div class="section-heading">Details of claim</div>
+
+<div style="margin: 10px 0;">
+  <span class="field-label">Name and full postal address of the court:</span>
+  <div class="fill-box">{{court_name}}</div>
+  <div class="fill-box">{{court_address}}</div>
+</div>
+
+<!-- CLAIM DETAILS -->
+<div style="margin: 15px 0;">
+  <div class="field-label">The claimant is claiming possession of:</div>
+  <div class="fill-box" style="min-height: 40px;">
+    {{property_address}}
+  </div>
+</div>
+
+<div style="margin: 15px 0;">
+  <div class="field-label">which is:</div>
+  <div style="margin-left: 20px;">
+    <div>
+      <span class="checkbox{{#if property_is_dwelling}} checked{{/if}}"></span>
+      a dwelling house
+    </div>
+    <div>
+      <span class="checkbox{{#if property_is_land}} checked{{/if}}"></span>
+      other land
+    </div>
+  </div>
+</div>
+
+<div style="margin: 15px 0;">
+  <div class="field-label">and that the defendant(s) is/are in possession or occupation of the property.</div>
+</div>
+
+<!-- GROUNDS FOR POSSESSION -->
+<div style="margin: 15px 0;">
+  <div class="field-label">The claimant is claiming possession under:</div>
+  <div style="margin-left: 20px; margin-top: 5px;">
+    <div>
+      <span class="checkbox{{#if ground_section_8}} checked{{/if}}"></span>
+      Ground(s) {{ground_numbers}} of Schedule 2 of the Housing Act 1988
+    </div>
+    <div style="margin-top: 5px;">
+      <span class="checkbox{{#if ground_section_21}} checked{{/if}}"></span>
+      Section 21 of the Housing Act 1988
+    </div>
+    <div style="margin-top: 5px;">
+      <span class="checkbox{{#if ground_other}} checked{{/if}}"></span>
+      Other (please specify below)
+      {{#if ground_other_details}}
+      <div class="fill-box">{{ground_other_details}}</div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<!-- PARTICULARS OF CLAIM -->
+<div class="section-heading">Particulars of claim</div>
+
+<div class="notes-box">
+  <strong>You must set out your claim in full here or attach it as a separate sheet.</strong> You should include all relevant information about:
+  <ul style="margin: 5px 0;">
+    <li>the tenancy agreement</li>
+    <li>the grounds on which you are claiming possession</li>
+    <li>the facts on which you rely in support of your claim</li>
+  </ul>
+  If you are claiming under the Housing Act 1988, you must also include details of:
+  <ul style="margin: 5px 0;">
+    <li>any notice served under section 8 or section 21</li>
+    <li>the date the notice was served</li>
+    <li>the date possession is required</li>
+  </ul>
+</div>
+
+<div style="border: 1px solid black; min-height: 200px; padding: 10px; margin: 10px 0;">
+{{particulars_of_claim}}
+
+{{#if tenancy_details}}
+<strong>1. THE TENANCY</strong>
+
+The Defendant is the tenant of the property known as {{property_address}} ("the Property") under an {{tenancy_type}} dated {{tenancy_start_date}}.
+
+The tenancy commenced on {{tenancy_start_date}}{{#if fixed_term}} for a fixed term {{#if fixed_term_expired}}which expired{{else}}expiring{{/if}} on {{fixed_term_end_date}}{{/if}}.
+
+The current rent is £{{rent_amount}} payable {{rent_frequency}}.
+{{/if}}
+
+{{#if ground_section_8}}
+<strong>2. SECTION 8 NOTICE</strong>
+
+A Notice seeking possession under Section 8 of the Housing Act 1988 was served on the Defendant on {{section_8_notice_date}}, requiring possession on or after {{section_8_possession_date}}.
+
+The Claimant relies on the following ground(s) for possession:
+
+{{#each grounds}}
+<strong>Ground {{this.code}}: {{this.title}}</strong>
+
+{{this.particulars}}
+
+{{/each}}
+{{/if}}
+
+{{#if ground_section_21}}
+<strong>{{#if ground_section_8}}3{{else}}2{{/if}}. SECTION 21 NOTICE</strong>
+
+A Notice requiring possession under Section 21 of the Housing Act 1988 (Form 6A) was served on the Defendant on {{section_21_notice_date}}, requiring possession on or after {{section_21_possession_date}}.
+
+All conditions for serving a valid Section 21 notice have been complied with, including:
+- The deposit was protected in {{deposit_scheme}} on {{deposit_protection_date}}
+- Prescribed information was provided on {{prescribed_info_date}}
+- A valid Gas Safety Certificate was provided{{#if gas_cert_date}} on {{gas_cert_date}}{{/if}}
+- A valid Energy Performance Certificate (rating {{epc_rating}}) was provided
+- The How to Rent guide was provided{{#if how_to_rent_date}} on {{how_to_rent_date}}{{/if}}
+{{#if property_licensed}}
+- The property is properly licensed
+{{/if}}
+{{/if}}
+
+{{#if rent_arrears}}
+<strong>{{#if ground_section_21}}{{#if ground_section_8}}4{{else}}3{{/if}}{{else}}{{#if ground_section_8}}3{{else}}2{{/if}}{{/if}}. RENT ARREARS</strong>
+
+As at the date of this claim, the Defendant owes £{{total_arrears}} in rent arrears, calculated as follows:
+
+{{arrears_calculation}}
+
+The Claimant reserves the right to update this figure at the hearing to reflect any further arrears accrued.
+{{/if}}
+
+{{additional_particulars}}
+</div>
+
+<div style="margin-top: 5px;">
+  <span class="checkbox{{#if particulars_attached}} checked{{/if}}"></span>
+  <span class="field-label">I attach the particulars of claim</span>
+</div>
+
+<!-- WHAT THE COURT WILL ORDER -->
+<div class="section-heading">What the court will order the defendant(s) to do</div>
+
+<div style="margin: 10px 0;">
+  <div class="field-label">The claimant asks the court to order that:</div>
+  <div style="margin-left: 20px; margin-top: 5px;">
+    <div>
+      <span class="checkbox checked"></span>
+      the defendant(s) give the claimant possession of the property
+    </div>
+    {{#if claiming_costs}}
+    <div style="margin-top: 5px;">
+      <span class="checkbox checked"></span>
+      the defendant(s) pay the costs of this claim
+    </div>
+    {{/if}}
+    {{#if claiming_rent_arrears}}
+    <div style="margin-top: 5px;">
+      <span class="checkbox checked"></span>
+      the defendant(s) pay the rent arrears and any rent due up to the date of possession
+    </div>
+    {{/if}}
+  </div>
+</div>
+
+<!-- AMOUNT CLAIMED -->
+{{#if claiming_rent_arrears}}
+<div class="section-heading">Amount claimed</div>
+
+<table style="margin: 10px 0;">
+  <tr>
+    <td><strong>Rent arrears</strong></td>
+    <td style="text-align: right;">£{{total_arrears}}</td>
+  </tr>
+  {{#if court_fee}}
+  <tr>
+    <td><strong>Court fee</strong></td>
+    <td style="text-align: right;">£{{court_fee}}</td>
+  </tr>
+  {{/if}}
+  {{#if solicitor_costs}}
+  <tr>
+    <td><strong>Solicitor's costs</strong></td>
+    <td style="text-align: right;">£{{solicitor_costs}}</td>
+  </tr>
+  {{/if}}
+  <tr style="font-weight: bold;">
+    <td><strong>Total amount</strong></td>
+    <td style="text-align: right;">£{{total_amount_claimed}}</td>
+  </tr>
+</table>
+{{/if}}
+
+<!-- STATEMENT OF TRUTH -->
+<div class="section-heading">Statement of Truth</div>
+
+<div class="notes-box">
+  <strong>*I believe / The claimant believes that the facts stated in these particulars of claim are true.</strong>
+  <div style="margin-top: 5px; font-size: 8pt;">
+    *I am duly authorised by the claimant to sign this statement
+  </div>
+  <div style="margin-top: 5px; font-size: 8pt;">
+    Delete as appropriate
+  </div>
+</div>
+
+<div style="margin: 15px 0;">
+  <table style="border: none;">
+    <tr>
+      <td style="border: none; width: 50%;">
+        <div class="field-label">Full name</div>
+        <div class="fill-box">{{signatory_name}}</div>
+      </td>
+      <td style="border: none; width: 50%;">
+        <div class="field-label">Name of claimant's solicitor's firm</div>
+        <div class="fill-box">{{solicitor_firm}}</div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div style="margin: 15px 0;">
+  <table style="border: none;">
+    <tr>
+      <td style="border: none; width: 70%;">
+        <div class="field-label">Signed</div>
+        <div style="margin-top: 20px; border-bottom: 1px solid black; min-height: 30px;">
+          {{#if signature_image}}
+          <img src="{{signature_image}}" style="max-height: 25px;" />
+          {{/if}}
+        </div>
+        <div style="font-size: 8pt; margin-top: 2px;">*(Claimant/Claimant's solicitor)</div>
+      </td>
+      <td style="border: none; width: 30%;">
+        <div class="field-label">Date</div>
+        <div class="fill-box">{{signature_date}}</div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- CLAIMANT'S OR CLAIMANT'S SOLICITOR'S ADDRESS -->
+<div class="section-heading">Claimant's or claimant's solicitor's address to which documents should be sent</div>
+
+<div style="margin: 10px 0;">
+  {{#if solicitor_firm}}
+  <div><strong>{{solicitor_firm}}</strong></div>
+  <div>{{solicitor_address}}</div>
+  {{#if solicitor_reference}}
+  <div style="margin-top: 5px;">
+    <span class="field-label">Ref:</span> {{solicitor_reference}}
+  </div>
+  {{/if}}
+  {{#if solicitor_phone}}
+  <div><span class="field-label">Tel:</span> {{solicitor_phone}}</div>
+  {{/if}}
+  {{#if solicitor_email}}
+  <div><span class="field-label">Email:</span> {{solicitor_email}}</div>
+  {{/if}}
+  {{#if solicitor_dx}}
+  <div><span class="field-label">DX:</span> {{solicitor_dx}}</div>
+  {{/if}}
+  {{else}}
+  <div>{{landlord_full_name}}</div>
+  <div>{{landlord_address}}</div>
+  {{#if landlord_phone}}
+  <div style="margin-top: 5px;"><span class="field-label">Tel:</span> {{landlord_phone}}</div>
+  {{/if}}
+  {{#if landlord_email}}
+  <div><span class="field-label">Email:</span> {{landlord_email}}</div>
+  {{/if}}
+  {{/if}}
+</div>
+
+<!-- FOOTER -->
+<div style="margin-top: 30px; border-top: 1px solid black; padding-top: 10px; font-size: 8pt; color: #666;">
+  <div style="float: left;">Form N5 Claim for possession of property (10.20)</div>
+  <div style="float: right;">© Crown copyright 2020</div>
+  <div style="clear: both;"></div>
+</div>
+
+{{#if is_preview}}
+<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 72pt; color: rgba(255, 0, 0, 0.1); font-weight: bold; z-index: 9999; pointer-events: none;">
+  PREVIEW
+</div>
+{{/if}}
