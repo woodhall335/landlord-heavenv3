@@ -1,0 +1,342 @@
+{
+  "jurisdiction": "England & Wales",
+  "statute": "Housing Act 1988, Schedule 2 (as amended)",
+  "last_updated": "2024-11-22",
+
+  "grounds": {
+    "ground_1": {
+      "code": "Ground 1",
+      "type": "mandatory",
+      "title": "Landlord Previously Occupied as Only or Principal Home",
+      "shortDescription": "The landlord who is seeking possession or, in the case of joint landlords, at least one of them occupied the dwelling-house as his only or principal home at some time before the beginning of the tenancy.",
+      "fullLegalText": "Not later than the beginning of the tenancy the landlord gave notice in writing to the tenant that possession might be recovered on this ground or the court is of the opinion that it is just and equitable to dispense with the requirement of notice and (in either case)—\n(a) at some time before the beginning of the tenancy, the landlord who is seeking possession or, in the case of joint landlords seeking possession, at least one of them occupied the dwelling-house as his only or principal home; or\n(b) the landlord who is seeking possession or, in the case of joint landlords seeking possession, at least one of them requires the dwelling-house as his or his spouse's only or principal home and neither the landlord (or, in the case of joint landlords, any one of them) nor any other person who, as landlord, derived title under the landlord who gave the notice mentioned above acquired the reversion on the tenancy for money or money's worth.",
+      "statute": "Housing Act 1988, Schedule 2, Part I, Ground 1",
+      "notice_required": "Yes - written notice before or at start of tenancy",
+      "notice_period_days": 14,
+      "court_decision": "Mandatory - court must grant possession if ground proven",
+      "required_evidence": [
+        "Written notice given to tenant before/at start of tenancy",
+        "Proof landlord lived in property before tenancy (utility bills, council tax, etc.)",
+        "OR proof landlord now requires property as only/principal home"
+      ],
+      "common_defences": [
+        "No written notice was given before tenancy started",
+        "Landlord did not actually live in property before tenancy",
+        "Landlord purchased property specifically for investment"
+      ],
+      "typical_success_rate": "90%",
+      "notes": "Notice requirement can be waived if court finds it 'just and equitable'. Commonly used when landlord had to relocate temporarily and wants to return."
+    },
+
+    "ground_2": {
+      "code": "Ground 2",
+      "type": "mandatory",
+      "title": "Mortgage Lender Requires Possession",
+      "shortDescription": "The dwelling-house is subject to a mortgage granted before the beginning of the tenancy and the mortgagee requires possession to dispose of the dwelling-house.",
+      "fullLegalText": "Not later than the beginning of the tenancy the landlord gave notice in writing to the tenant that possession might be recovered on this ground or the court is of the opinion that it is just and equitable to dispense with the requirement of notice and the dwelling-house is subject to a mortgage granted before the beginning of the tenancy and—\n(a) the mortgagee is entitled to exercise a power of sale conferred on him by the mortgage or by section 101 of the Law of Property Act 1925; and\n(b) the mortgagee requires possession of the dwelling-house for the purpose of disposing of it with vacant possession in exercise of that power; and\n(c) either notice was given as mentioned above or the court is satisfied that the mortgagee is likely to suffer financial hardship unless the court gives such directions.",
+      "statute": "Housing Act 1988, Schedule 2, Part I, Ground 2",
+      "notice_required": "Yes - written notice before or at start of tenancy",
+      "notice_period_days": 14,
+      "court_decision": "Mandatory",
+      "required_evidence": [
+        "Written notice given before/at start of tenancy",
+        "Mortgage agreement predating tenancy",
+        "Letter from lender requiring possession",
+        "Evidence lender entitled to exercise power of sale"
+      ],
+      "common_defences": [
+        "No written notice given",
+        "Mortgage granted after tenancy started",
+        "Lender not genuinely requiring possession"
+      ],
+      "typical_success_rate": "85%",
+      "notes": "Usually arises when landlord defaults on mortgage. Lender must prove entitlement to exercise power of sale."
+    },
+
+    "ground_8": {
+      "code": "Ground 8",
+      "type": "mandatory",
+      "title": "Serious Rent Arrears",
+      "shortDescription": "Both at the date of the service of the notice and at the date of the hearing at least 8 weeks' rent is unpaid (2 months for monthly tenancy).",
+      "fullLegalText": "Both at the date of the service of the notice under section 8 of this Act relating to the proceedings for possession and at the date of the hearing—\n(a) if rent is payable weekly or fortnightly, at least 8 weeks' rent is unpaid;\n(b) if rent is payable monthly, at least two months' rent is unpaid;\n(c) if rent is payable quarterly, at least one quarter's rent is more than three months in arrears; and\n(d) if rent is payable yearly, at least three months' rent is more than three months in arrears;\nand for the purpose of this ground 'rent' means rent lawfully due from the tenant.",
+      "statute": "Housing Act 1988, Schedule 2, Part I, Ground 8",
+      "notice_required": "Yes - Section 8 notice",
+      "notice_period_days": 14,
+      "court_decision": "Mandatory - court must grant possession if arrears proven",
+      "required_evidence": [
+        "Rent account showing arrears",
+        "Proof of rent amount and payment schedule",
+        "Calculation showing 8 weeks/2 months arrears at notice date",
+        "Calculation showing 8 weeks/2 months arrears at hearing date"
+      ],
+      "common_defences": [
+        "Arrears reduced below threshold before hearing",
+        "Rent not lawfully due (e.g., disrepair reduces rent owed)",
+        "Calculation incorrect",
+        "Counterclaim for disrepair"
+      ],
+      "typical_success_rate": "95%",
+      "notes": "Most powerful eviction ground for landlords. Arrears must meet threshold at BOTH notice and hearing dates. If arrears drop below threshold before hearing, ground fails."
+    },
+
+    "ground_10": {
+      "code": "Ground 10",
+      "type": "discretionary",
+      "title": "Some Rent Arrears",
+      "shortDescription": "Some rent lawfully due from the tenant is unpaid on the date on which proceedings for possession are begun and was in arrears at the date of service of the notice.",
+      "fullLegalText": "Some rent lawfully due from the tenant—\n(a) is unpaid on the date on which the proceedings for possession are begun; and\n(b) except where subsection (1)(b) of section 8 of this Act applies, was in arrears at the date of the service of the notice under that section relating to those proceedings.",
+      "statute": "Housing Act 1988, Schedule 2, Part II, Ground 10",
+      "notice_required": "Yes - Section 8 notice",
+      "notice_period_days": 14,
+      "court_decision": "Discretionary - court may grant possession if reasonable",
+      "required_evidence": [
+        "Rent account showing any amount unpaid",
+        "Proof arrears existed at notice date",
+        "Proof arrears still exist at hearing date"
+      ],
+      "common_defences": [
+        "Arrears paid in full before hearing",
+        "Small amount - not reasonable to evict",
+        "Tenant has reasonable excuse for non-payment",
+        "Landlord failed to maintain property (disrepair)",
+        "Tenant can afford to pay ongoing rent plus affordable arrears installments"
+      ],
+      "typical_success_rate": "70%",
+      "notes": "Court will consider reasonableness. Small arrears, payment plan in place, or tenant's personal circumstances may prevent possession. Often used with Ground 8 as backup."
+    },
+
+    "ground_11": {
+      "code": "Ground 11",
+      "type": "discretionary",
+      "title": "Persistent Delay in Paying Rent",
+      "shortDescription": "Whether or not any rent is in arrears on the date on which proceedings for possession are begun, the tenant has persistently delayed paying rent which has become lawfully due.",
+      "statute": "Housing Act 1988, Schedule 2, Part II, Ground 11",
+      "notice_required": "Yes - Section 8 notice",
+      "notice_period_days": 14,
+      "court_decision": "Discretionary",
+      "required_evidence": [
+        "Detailed rent account showing pattern of late payments",
+        "Evidence of multiple late payment instances over time",
+        "Communication with tenant about late payments"
+      ],
+      "common_defences": [
+        "Rent paid in full - no arrears",
+        "Late payments due to benefit payment dates",
+        "Landlord accepted late payments without complaint",
+        "Recent payment record improved"
+      ],
+      "typical_success_rate": "65%",
+      "notes": "Persistent means a repeated pattern, not isolated incidents. Can succeed even if no arrears at hearing. Court considers full circumstances."
+    },
+
+    "ground_12": {
+      "code": "Ground 12",
+      "type": "discretionary",
+      "title": "Breach of Tenancy Obligation",
+      "shortDescription": "Any obligation of the tenancy (other than one related to the payment of rent) has been broken or not performed.",
+      "fullLegalText": "Any obligation of the tenancy (other than one related to the payment of rent) has been broken or not performed.",
+      "statute": "Housing Act 1988, Schedule 2, Part II, Ground 12",
+      "notice_required": "Yes - Section 8 notice",
+      "notice_period_days": 14,
+      "court_decision": "Discretionary",
+      "required_evidence": [
+        "Copy of tenancy agreement showing obligation",
+        "Evidence of breach (photos, witness statements, etc.)",
+        "Communication with tenant about breach",
+        "Proof breach is ongoing or unremedied"
+      ],
+      "common_defences": [
+        "Breach remedied before hearing",
+        "Clause in tenancy is unfair/unenforceable",
+        "Minor breach - not reasonable to evict",
+        "Landlord waived breach by accepting it previously"
+      ],
+      "typical_success_rate": "70%",
+      "notes": "Common breaches: keeping pets, subletting, business use. Must be material breach. Court considers whether tenant remedied breach."
+    },
+
+    "ground_13": {
+      "code": "Ground 13",
+      "type": "discretionary",
+      "title": "Deterioration of Dwelling",
+      "shortDescription": "The condition of the dwelling-house or any of the common parts has deteriorated owing to acts of waste by, or the neglect or default of, the tenant or any other person residing in the dwelling-house.",
+      "fullLegalText": "The condition of the dwelling-house or any of the common parts has deteriorated owing to acts of waste by, or the neglect or default of, the tenant or any other person residing in the dwelling-house and, in the case of an act of waste by, or the neglect or default of, a person lodging with the tenant or a sub-tenant of his, the tenant has not taken such steps as he ought reasonably to have taken for the removal of the lodger or sub-tenant.",
+      "statute": "Housing Act 1988, Schedule 2, Part II, Ground 13",
+      "notice_required": "Yes - Section 8 notice",
+      "notice_period_days": 14,
+      "court_decision": "Discretionary",
+      "required_evidence": [
+        "Inventory and condition report from start of tenancy",
+        "Photographs of current condition",
+        "Expert report on damage/deterioration",
+        "Evidence linking damage to tenant/resident actions"
+      ],
+      "common_defences": [
+        "Damage is normal wear and tear",
+        "Deterioration due to landlord's failure to maintain/repair",
+        "Damage caused by third party not residing at property",
+        "Damage already existed at start of tenancy"
+      ],
+      "typical_success_rate": "75%",
+      "notes": "Must prove deterioration beyond normal wear and tear. If caused by lodger/subtenant, must show tenant failed to act reasonably to remove them."
+    },
+
+    "ground_14": {
+      "code": "Ground 14",
+      "type": "discretionary",
+      "title": "Nuisance or Annoyance",
+      "shortDescription": "The tenant or any other person residing in or visiting the dwelling-house has been guilty of conduct causing or likely to cause a nuisance or annoyance to a person residing, visiting or otherwise engaging in a lawful activity in the locality, or has been convicted of using the dwelling-house or allowing it to be used for immoral or illegal purposes, or an arrestable offence committed in, or in the locality of, the dwelling-house.",
+      "fullLegalText": "The tenant or a person residing in or visiting the dwelling-house—\n(a) has been guilty of conduct causing or likely to cause a nuisance or annoyance to a person residing, visiting or otherwise engaging in a lawful activity in the locality, or\n(b) has been convicted of—\n(i) using the dwelling-house or allowing it to be used for immoral or illegal purposes, or\n(ii) an arrestable offence committed in, or in the locality of, the dwelling-house.",
+      "statute": "Housing Act 1988, Schedule 2, Part II, Ground 14",
+      "notice_required": "Yes - Section 8 notice (can be immediate in serious cases)",
+      "notice_period_days": 14,
+      "court_decision": "Discretionary",
+      "required_evidence": [
+        "Witness statements from neighbors",
+        "Noise complaint reports",
+        "Police reports/crime numbers",
+        "Council noise monitoring records",
+        "Conviction records if applicable",
+        "Diary of incidents"
+      ],
+      "common_defences": [
+        "Allegations unproven",
+        "Isolated incident, not pattern of behavior",
+        "Nuisance has ceased",
+        "Complainants unreasonable",
+        "Criminal conviction was for minor matter"
+      ],
+      "typical_success_rate": "80%",
+      "notes": "Covers antisocial behavior, noise nuisance, criminal activity. Can use immediate notice procedure in serious cases. Strong evidence from multiple neighbors increases success rate."
+    },
+
+    "ground_14a": {
+      "code": "Ground 14A",
+      "type": "discretionary",
+      "title": "Domestic Violence",
+      "shortDescription": "The dwelling-house was occupied (whether alone or with others) by a married couple or a couple who are civil partners of each other and one or both of them is a tenant and one partner has left because of violence or threats of violence from the other.",
+      "fullLegalText": "The dwelling-house was occupied (whether alone or with others) by a married couple or a couple who are civil partners of each other and—\n(a) one or both of the partners is a tenant of the dwelling-house,\n(b) the landlord who is seeking possession is a registered social landlord or a charitable housing trust,\n(c) one partner has left the dwelling-house because of violence or threats of violence by the other towards—\n(i) that partner, or\n(ii) a member of the family of that partner who was residing with that partner immediately before the partner left, and\n(d) the court is satisfied that the partner who has left is unlikely to return.",
+      "statute": "Housing Act 1988, Schedule 2, Part II, Ground 14A",
+      "notice_required": "Yes - Section 8 notice",
+      "notice_period_days": 14,
+      "court_decision": "Discretionary",
+      "required_evidence": [
+        "Evidence of domestic violence (police reports, restraining orders, medical records)",
+        "Evidence partner has left property",
+        "Statement from victim confirming unlikely to return",
+        "Witness statements if available"
+      ],
+      "common_defences": [
+        "Reconciliation possible",
+        "Allegations of violence unproven",
+        "Partner willing to return"
+      ],
+      "typical_success_rate": "85%",
+      "notes": "Primarily for social landlords. Allows possession against perpetrator. Requires clear evidence of domestic violence and that victim is unlikely to return."
+    },
+
+    "ground_15": {
+      "code": "Ground 15",
+      "type": "discretionary",
+      "title": "Deterioration of Furniture",
+      "shortDescription": "The condition of any furniture provided for use under the tenancy has deteriorated owing to ill-treatment by the tenant or any other person residing in the dwelling-house.",
+      "fullLegalText": "The condition of any furniture provided for use under the tenancy has, in the opinion of the court, deteriorated owing to ill-treatment by the tenant or any other person residing in the dwelling-house and, in the case of ill-treatment by a person lodging with the tenant or by a sub-tenant of his, the tenant has not taken such steps as he ought reasonably to have taken for the removal of the lodger or sub-tenant.",
+      "statute": "Housing Act 1988, Schedule 2, Part II, Ground 15",
+      "notice_required": "Yes - Section 8 notice",
+      "notice_period_days": 14,
+      "court_decision": "Discretionary",
+      "required_evidence": [
+        "Furniture inventory from start of tenancy",
+        "Photographs of furniture condition",
+        "Expert assessment of damage",
+        "Evidence linking damage to ill-treatment vs. fair wear and tear"
+      ],
+      "common_defences": [
+        "Damage is fair wear and tear",
+        "Furniture was poor quality/second-hand",
+        "Damage existed before tenancy",
+        "Tenant has offered to repair/replace"
+      ],
+      "typical_success_rate": "70%",
+      "notes": "Rarely used alone - usually combined with other grounds. Must prove ill-treatment beyond normal wear and tear."
+    },
+
+    "ground_17": {
+      "code": "Ground 17",
+      "type": "discretionary",
+      "title": "False Statement",
+      "shortDescription": "The tenancy was induced by a false statement made knowingly or recklessly by the tenant or a person acting at the tenant's instigation.",
+      "fullLegalText": "The tenancy was induced by a false statement made knowingly or recklessly by—\n(a) the tenant, or\n(b) a person acting at the tenant's instigation.",
+      "statute": "Housing Act 1988, Schedule 2, Part II, Ground 17",
+      "notice_required": "Yes - Section 8 notice",
+      "notice_period_days": 14,
+      "court_decision": "Discretionary",
+      "required_evidence": [
+        "Copy of tenancy application/reference",
+        "Evidence showing statement was false",
+        "Proof tenant made statement knowingly or recklessly",
+        "Evidence statement influenced decision to grant tenancy"
+      ],
+      "common_defences": [
+        "Statement was true at time made",
+        "Honest mistake, not knowingly false",
+        "Statement not material to grant of tenancy",
+        "Landlord did not rely on statement"
+      ],
+      "typical_success_rate": "80%",
+      "notes": "Common examples: false employment details, fake references, concealing criminal record. Must prove statement was material and knowingly/recklessly false."
+    }
+  },
+
+  "section_21_grounds": {
+    "no_fault_possession": {
+      "title": "Section 21 - No Fault Possession",
+      "description": "Landlord seeking possession without needing to prove fault",
+      "form_required": "Form 6A",
+      "notice_period_days": 60,
+      "type": "no_fault",
+      "status": "Being phased out - Renters Reform Bill will abolish Section 21",
+      "compliance_requirements": {
+        "deposit_protection": {
+          "requirement": "Deposit protected in government-approved scheme within 30 days",
+          "schemes": ["DPS", "MyDeposits", "TDS"],
+          "consequence_if_fail": "Section 21 notice invalid + tenant can claim 1-3x deposit penalty"
+        },
+        "prescribed_information": {
+          "requirement": "Prescribed information given to tenant within 30 days of receiving deposit",
+          "consequence_if_fail": "Section 21 notice invalid"
+        },
+        "gas_safety": {
+          "requirement": "Gas Safety Certificate provided at start of tenancy and annually",
+          "consequence_if_fail": "Section 21 notice invalid"
+        },
+        "epc": {
+          "requirement": "Energy Performance Certificate provided, minimum rating E",
+          "consequence_if_fail": "Section 21 notice invalid + cannot legally let property"
+        },
+        "how_to_rent": {
+          "requirement": "How to Rent government booklet provided at start of tenancy",
+          "valid_version": "Must be most recent version at time of tenancy start",
+          "consequence_if_fail": "Section 21 notice invalid"
+        },
+        "licensing": {
+          "requirement": "Property must be properly licensed if HMO or selective licensing area",
+          "consequence_if_fail": "Section 21 notice invalid + criminal offence + rent repayment order"
+        },
+        "prohibited_fees": {
+          "requirement": "No prohibited fees charged under Tenant Fees Act 2019",
+          "consequence_if_fail": "Section 21 notice invalid until fees repaid"
+        },
+        "retaliatory_eviction": {
+          "requirement": "Not served within 6 months of tenant requesting repairs or complaining to local authority",
+          "consequence_if_fail": "Section 21 notice invalid for 6 months"
+        },
+        "timing": {
+          "requirement": "Cannot be served in first 4 months of tenancy",
+          "notice_period": "2 months (60 days)",
+          "consequence_if_fail": "Notice invalid"
+        }
+      }
+    }
+  }
+}
