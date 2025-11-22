@@ -2,8 +2,8 @@
  * Wizard Container
  *
  * Main conversational wizard - THE PRIMARY SALES FUNNEL
- * AI-powered fact-finding for all products (evictions, money claims, ASTs, HMO Pro)
- * "Claude for Evictions" - fully conversational, intelligent, complete
+ * Guided fact-finding for all products (evictions, money claims, ASTs, HMO Pro)
+ * Fully conversational, intelligent, complete
  */
 
 'use client';
@@ -141,7 +141,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       } else if (error.message?.includes('Unauthorized')) {
         setError('Please log in to use the wizard.');
       } else if (error.message?.includes('OpenAI')) {
-        setError('AI service unavailable. Please check OPENAI_API_KEY in .env.local');
+        setError('Service unavailable. Please check OPENAI_API_KEY in .env.local');
       } else {
         setError('Failed to start wizard. Please check your environment configuration.');
       }
@@ -171,7 +171,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     setIsLoading(true);
 
     try {
-      // Call AI fact-finder to get next question
+      // Call fact-finder to get next question
       const response = await fetch('/api/wizard/next-question', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

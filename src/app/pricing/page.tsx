@@ -5,7 +5,7 @@ import { generateMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - Compare All Products",
-  description: "Compare Landlord Heaven pricing. Notice Only £29.99, Complete Pack £149.99, Money Claim £129.99, AST £39.99-£59.00, HMO Pro £19.99-£34.99/month.",
+  description: "Compare Landlord Heaven pricing. Notices £29.99, Money Claims £129.99, Tenancy Agreements £39.99-£59.00, HMO Pro £19.99-£34.99/month.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",
@@ -35,22 +35,14 @@ export default function PricingPage() {
           <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-gray-100">
-                <th className="text-left p-6 font-semibold text-charcoal w-1/5">Feature</th>
+                <th className="text-left p-6 font-semibold text-charcoal w-1/4">Feature</th>
                 <th className="text-center p-6 w-1/6">
-                  <div className="font-semibold text-charcoal mb-2">Notice Only</div>
+                  <div className="font-semibold text-charcoal mb-2">Notices</div>
                   <div className="text-3xl font-bold text-primary mb-1">£29.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
-                <th className="text-center p-6 w-1/6 bg-primary-subtle">
-                  <div className="inline-block bg-primary text-white text-xs px-2 py-1 rounded-full mb-2">
-                    BEST VALUE
-                  </div>
-                  <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£149.99</div>
-                  <div className="text-sm text-gray-600">One-time</div>
-                </th>
                 <th className="text-center p-6 w-1/6">
-                  <div className="font-semibold text-charcoal mb-2">Money Claim</div>
+                  <div className="font-semibold text-charcoal mb-2">Money Claims</div>
                   <div className="text-3xl font-bold text-primary mb-1">£129.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
@@ -73,14 +65,13 @@ export default function PricingPage() {
             </thead>
             <tbody className="text-sm">
               <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={7}>
+                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
                   Eviction Documents
                 </td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Section 8/21 Notice</td>
                 <td className="text-center p-4">✅</td>
-                <td className="text-center p-4 bg-primary-subtle">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -89,7 +80,6 @@ export default function PricingPage() {
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Court Possession Claim (N5/N5B)</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -98,7 +88,6 @@ export default function PricingPage() {
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Witness Statement</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -107,7 +96,6 @@ export default function PricingPage() {
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Money Claim for Arrears</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -116,7 +104,6 @@ export default function PricingPage() {
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Rent Arrears Schedule</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -124,14 +111,13 @@ export default function PricingPage() {
               </tr>
 
               <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={7}>
+                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
                   Tenancy Agreements
                 </td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Assured Shorthold Tenancy (AST)</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
@@ -140,7 +126,6 @@ export default function PricingPage() {
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Scotland PRT / NI Agreement</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
@@ -149,7 +134,6 @@ export default function PricingPage() {
               <tr className="border-t">
                 <td className="p-4 text-gray-700">HMO Clauses & Guarantors</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
@@ -158,7 +142,6 @@ export default function PricingPage() {
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Rent Increase Provisions</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
@@ -166,14 +149,13 @@ export default function PricingPage() {
               </tr>
 
               <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={7}>
+                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
                   HMO Compliance
                 </td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">License Expiry Tracking</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -182,7 +164,6 @@ export default function PricingPage() {
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Fire Safety Reminders</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -191,7 +172,6 @@ export default function PricingPage() {
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Gas/EICR Certificate Tracking</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -200,7 +180,6 @@ export default function PricingPage() {
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Tiered Pricing (1-20+ properties)</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4 bg-primary-subtle">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -208,14 +187,13 @@ export default function PricingPage() {
               </tr>
 
               <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={7}>
+                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
                   Support & Features
                 </td>
               </tr>
               <tr className="border-t">
-                <td className="p-4 text-gray-700">AI Document Generation</td>
+                <td className="p-4 text-gray-700">Smart Document Generation</td>
                 <td className="text-center p-4">✅</td>
-                <td className="text-center p-4 bg-primary-subtle">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
@@ -224,16 +202,14 @@ export default function PricingPage() {
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Full UK Coverage (Eng/Wales/Scot/NI)</td>
                 <td className="text-center p-4">✅</td>
-                <td className="text-center p-4 bg-primary-subtle">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
               </tr>
               <tr className="border-t">
-                <td className="p-4 text-gray-700">30-Day Money-Back Guarantee</td>
+                <td className="p-4 text-gray-700">Instant Download</td>
                 <td className="text-center p-4">✅</td>
-                <td className="text-center p-4 bg-primary-subtle">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
@@ -242,7 +218,6 @@ export default function PricingPage() {
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Email Support</td>
                 <td className="text-center p-4">✅</td>
-                <td className="text-center p-4 bg-primary-subtle">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
@@ -251,7 +226,6 @@ export default function PricingPage() {
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Document Storage</td>
                 <td className="text-center p-4">12 months</td>
-                <td className="text-center p-4 bg-primary-subtle">Lifetime</td>
                 <td className="text-center p-4">12 months</td>
                 <td className="text-center p-4">Lifetime</td>
                 <td className="text-center p-4">Lifetime</td>
@@ -260,11 +234,8 @@ export default function PricingPage() {
 
               <tr className="border-t bg-gray-100">
                 <td className="p-6 font-semibold text-charcoal">Best For:</td>
-                <td className="text-center p-6 text-xs text-gray-700">Simple evictions</td>
-                <td className="text-center p-6 text-xs text-gray-700 bg-primary-subtle">
-                  <strong>Complete eviction + arrears</strong>
-                </td>
-                <td className="text-center p-6 text-xs text-gray-700">Arrears only</td>
+                <td className="text-center p-6 text-xs text-gray-700">Simple eviction notices</td>
+                <td className="text-center p-6 text-xs text-gray-700">Rent arrears claims</td>
                 <td className="text-center p-6 text-xs text-gray-700">Standard lettings</td>
                 <td className="text-center p-6 text-xs text-gray-700">HMOs & complex</td>
                 <td className="text-center p-6 text-xs text-gray-700">Multi-HMO landlords</td>
@@ -276,14 +247,6 @@ export default function PricingPage() {
                   <Link
                     href="/wizard?product=notice_only"
                     className="inline-block bg-gray-200 text-charcoal px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
-                  >
-                    Get Started
-                  </Link>
-                </td>
-                <td className="text-center p-6 bg-primary-subtle">
-                  <Link
-                    href="/wizard?product=complete_pack"
-                    className="inline-block bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-emerald-600 transition-colors text-sm"
                   >
                     Get Started
                   </Link>
@@ -327,14 +290,14 @@ export default function PricingPage() {
 
         {/* Mobile Cards */}
         <div className="lg:hidden space-y-6 mb-12">
-          {/* Notice Only */}
+          {/* Notices */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-            <h3 className="text-2xl font-bold text-charcoal mb-2">Notice Only</h3>
+            <h3 className="text-2xl font-bold text-charcoal mb-2">Notices</h3>
             <div className="text-3xl font-bold text-primary mb-4">£29.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Section 8/21 Notice</li>
               <li>✅ Full UK Coverage</li>
-              <li>✅ 30-Day Guarantee</li>
+              <li>✅ Instant Download</li>
               <li>✅ 12-Month Storage</li>
             </ul>
             <Link
@@ -345,29 +308,9 @@ export default function PricingPage() {
             </Link>
           </div>
 
-          {/* Complete Pack */}
-          <div className="bg-white rounded-lg border-2 border-primary p-6 relative">
-            <div className="absolute top-4 right-4 bg-primary text-white text-xs px-2 py-1 rounded-full">BEST VALUE</div>
-            <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£149.99 <span className="text-sm text-gray-600">one-time</span></div>
-            <ul className="space-y-2 mb-6 text-sm">
-              <li>✅ Eviction Notice</li>
-              <li>✅ Court Possession Claim</li>
-              <li>✅ Money Claim for Arrears</li>
-              <li>✅ Witness Statement</li>
-              <li>✅ Lifetime Storage</li>
-            </ul>
-            <Link
-              href="/wizard?product=complete_pack"
-              className="block w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-emerald-600 transition-colors"
-            >
-              Get Started
-            </Link>
-          </div>
-
-          {/* Money Claim */}
+          {/* Money Claims */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-            <h3 className="text-2xl font-bold text-charcoal mb-2">Money Claim</h3>
+            <h3 className="text-2xl font-bold text-charcoal mb-2">Money Claims</h3>
             <div className="text-3xl font-bold text-primary mb-4">£129.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Money Claim Forms</li>
@@ -458,13 +401,15 @@ export default function PricingPage() {
 
             <details className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:bg-gray-50">
-                Can I get a refund?
+                What is your refund policy?
               </summary>
               <div className="px-6 pb-4 text-gray-700">
                 <p>
-                  Yes! All one-time products (Notice Only, Complete Pack, Money Claim, ASTs) have a 30-day money-back
-                  guarantee. No questions asked. HMO Pro offers a 7-day free trial - cancel before trial ends and pay
-                  nothing.
+                  All products are instantly delivered digital documents. Due to the instant nature of our digital products, we cannot offer refunds once documents have been generated and delivered. Refunds are only available for technical errors, duplicate charges, or unauthorized transactions. HMO Pro offers a 7-day free trial - cancel before trial ends and pay nothing. See our{" "}
+                  <Link href="/refunds" className="text-primary hover:underline">
+                    full refund policy
+                  </Link>{" "}
+                  for details.
                 </p>
               </div>
             </details>
@@ -475,9 +420,8 @@ export default function PricingPage() {
               </summary>
               <div className="px-6 pb-4 text-gray-700">
                 <p>
-                  The Complete Pack (£149.99) is already our bulk discount - it saves you £59 vs buying separately.
-                  For portfolio landlords needing 10+ documents per month, contact sales@landlordheaven.co.uk for custom
-                  pricing.
+                  For portfolio landlords needing multiple documents per month, contact sales@landlordheaven.co.uk for custom
+                  pricing and volume discounts.
                 </p>
               </div>
             </details>
@@ -503,13 +447,13 @@ export default function PricingPage() {
 
             <details className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:bg-gray-50">
-                Can I upgrade from Notice Only to Complete Pack later?
+                Can I purchase additional products later?
               </summary>
               <div className="px-6 pb-4 text-gray-700">
                 <p>
-                  Yes! If you've purchased Notice Only (£29.99) and later need court forms, contact
-                  support@landlordheaven.co.uk. We'll credit your £29.99 and charge the difference (£120) for the
-                  upgrade.
+                  Yes! You can purchase any product at any time. Each product is independent and addresses different
+                  landlord needs. If you need assistance choosing the right products, contact
+                  support@landlordheaven.co.uk for guidance.
                 </p>
               </div>
             </details>

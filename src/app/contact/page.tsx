@@ -66,7 +66,7 @@ export default function ContactPage() {
             <div className="text-4xl mb-4">💰</div>
             <h2 className="text-2xl font-bold text-charcoal mb-3">Refunds</h2>
             <p className="text-gray-700 mb-6">
-              Request a refund on one-time products (30-day guarantee). Include your order number and email address.
+              Request a refund for technical errors, duplicate charges, or unauthorized transactions. Include your order number and email address.
             </p>
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">

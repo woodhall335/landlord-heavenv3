@@ -3,37 +3,50 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Complete Eviction Pack - Notice to Court Claim | Landlord Heaven",
+  title: "Complete Eviction Pack - Full DIY Eviction Bundle | Landlord Heaven",
   description:
-    "Everything you need for a successful eviction. Notice + Court claim forms + Money claim for arrears. £149.99 one-time payment. Save £300+ vs solicitors.",
+    "Complete DIY eviction solution from notice to possession order. Includes all court forms (N5, N5B, N119), step-by-step guidance, evidence checklists, and timeline. £149.99 one-time payment.",
+  keywords: [
+    "complete eviction pack",
+    "eviction bundle UK",
+    "possession order forms",
+    "Section 8 court forms",
+    "Section 21 court forms",
+    "N5 form",
+    "N5B form",
+    "N119 form",
+    "DIY eviction",
+    "landlord eviction kit",
+  ],
 };
 
-export default function CompletePackPage() {
+export default function CompleteEvictionPackPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-charcoal to-gray-800 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-br from-primary to-emerald-600 text-white py-16 md:py-24">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary-light">Best Value - Save £300+</span>
+            <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold">Complete Solution</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Complete Eviction Pack</h1>
             <p className="text-xl md:text-2xl mb-6 text-white/90">
-              Notice to Possession Order - Everything in One Package
+              Everything You Need from Notice to Possession Order
             </p>
-            <div className="flex items-baseline justify-center gap-2 mb-2">
-              <span className="text-2xl text-white/60 line-through">£200</span>
+            <div className="flex items-baseline justify-center gap-2 mb-8">
               <span className="text-5xl md:text-6xl font-bold">£149.99</span>
+              <span className="text-xl text-white/80">one-time</span>
             </div>
-            <p className="text-white/80 mb-8">One-time payment • No subscription</p>
             <Link
               href="/wizard?product=complete_pack"
-              className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-emerald-600 transition-colors shadow-lg"
+              className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
             >
-              Get Complete Pack Now →
+              Start Your Eviction Pack →
             </Link>
-            <p className="mt-4 text-sm text-white/80">30-day money-back guarantee</p>
+            <p className="mt-4 text-sm text-white/80">
+              Court-ready documents • Expert guidance • Lifetime storage
+            </p>
           </div>
         </Container>
       </section>
@@ -41,156 +54,318 @@ export default function CompletePackPage() {
       {/* What's Included */}
       <section className="py-16 md:py-20">
         <Container>
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
-              Complete Eviction Journey
-            </h2>
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">What's Included</h2>
             <p className="text-center text-gray-600 mb-12">
-              From first notice to court possession order - all documents included
+              Complete DIY eviction bundle adapted to your jurisdiction and grounds
             </p>
 
-            <div className="grid gap-6">
-              {/* Step 1: Notice */}
-              <div className="bg-white rounded-lg border-2 border-primary p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
-                    1
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-semibold text-charcoal mb-3">
-                      Eviction Notice{" "}
-                      <span className="text-primary text-lg">(Worth £29.99)</span>
-                    </h3>
-                    <div className="grid md:grid-cols-3 gap-4">
-                      <div>
-                        <p className="font-semibold text-charcoal mb-2">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England & Wales</p>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                          <li>• Section 8 Notice</li>
-                          <li>• Section 21 Notice</li>
-                          <li>• Official Form 6A</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-charcoal mb-2">🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland</p>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                          <li>• Notice to Leave</li>
-                          <li>• All 18 grounds</li>
-                          <li>• Tribunal format</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-charcoal mb-2">🇬🇧 Northern Ireland</p>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                          <li>• Notice to Quit</li>
-                          <li>• Statutory grounds</li>
-                          <li>• County court format</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {/* All Notices */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">📄</span>
+                  <h3 className="text-xl font-semibold text-charcoal">All Notices</h3>
                 </div>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Section 8 or Section 21 (E&W)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Notice to Leave (Scotland)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Notice to Quit (Northern Ireland)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Service instructions included</span>
+                  </li>
+                </ul>
               </div>
 
-              {/* Step 2: Court Claim */}
-              <div className="bg-white rounded-lg border-2 border-primary p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
-                    2
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-semibold text-charcoal mb-3">
-                      Possession Claim Forms{" "}
-                      <span className="text-primary text-lg">(Worth £49.99)</span>
-                    </h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <p className="font-semibold text-charcoal mb-2">Court Documents</p>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                          <li>✓ Claim Form N5/N5B (accelerated)</li>
-                          <li>✓ Particulars of Claim</li>
-                          <li>✓ Witness Statement</li>
-                          <li>✓ Evidence Bundle Checklist</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-charcoal mb-2">Supporting Docs</p>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                          <li>✓ Court Filing Instructions</li>
-                          <li>✓ Fee Calculator</li>
-                          <li>✓ Service Requirements Guide</li>
-                          <li>✓ Hearing Preparation Tips</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+              {/* Court Forms */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">⚖️</span>
+                  <h3 className="text-xl font-semibold text-charcoal">Court Forms</h3>
                 </div>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">
+                      <strong>N5</strong> - Claim for Possession
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">
+                      <strong>N5B</strong> - Accelerated Possession
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">
+                      <strong>N119</strong> - Particulars of Claim
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Scotland Tribunal forms</span>
+                  </li>
+                </ul>
               </div>
 
-              {/* Step 3: Money Claim */}
-              <div className="bg-white rounded-lg border-2 border-primary p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
-                    3
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-semibold text-charcoal mb-3">
-                      Rent Arrears Money Claim{" "}
-                      <span className="text-primary text-lg">(Worth £129.99)</span>
-                    </h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <p className="font-semibold text-charcoal mb-2">Claim Documents</p>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                          <li>✓ Money Claim Online (MCOL) Form</li>
-                          <li>✓ Rent Arrears Schedule</li>
-                          <li>✓ Interest Calculator</li>
-                          <li>✓ Costs Breakdown</li>
-                        </ul>
-                      </div>
-                      <div>
-                        <p className="font-semibold text-charcoal mb-2">Recovery Tools</p>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                          <li>✓ Default Judgment Application</li>
-                          <li>✓ Warrant of Control Request</li>
-                          <li>✓ Attachment of Earnings</li>
-                          <li>✓ Charging Order Guide</li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+              {/* Step-by-Step Guidance */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">📋</span>
+                  <h3 className="text-xl font-semibold text-charcoal">Expert Guidance</h3>
                 </div>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Step-by-step eviction guide</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Timeline expectations</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Evidence checklist</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Bailiff/sheriff guidance</span>
+                  </li>
+                </ul>
               </div>
 
-              {/* Bonus */}
+              {/* Grounds Coverage */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">🎯</span>
+                  <h3 className="text-xl font-semibold text-charcoal">All Grounds</h3>
+                </div>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Rent arrears (Ground 8/10)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Anti-social behaviour (Ground 14)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Breach of tenancy (Ground 12)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">All 17 grounds supported</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Evidence & Organization */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">📁</span>
+                  <h3 className="text-xl font-semibold text-charcoal">Evidence Tools</h3>
+                </div>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Evidence collection checklist</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Document organization tips</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">What to collect & when</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Proof of service templates</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Premium Features */}
               <div className="bg-primary-subtle rounded-lg border border-primary/20 p-6">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 text-3xl">🎁</div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-charcoal mb-3">Bonus: Case Management Tools</h3>
-                    <div className="grid md:grid-cols-3 gap-4 text-sm text-gray-700">
-                      <div>
-                        <p>✓ Timeline Generator</p>
-                        <p>✓ Evidence Checklist</p>
-                      </div>
-                      <div>
-                        <p>✓ Court Fee Calculator</p>
-                        <p>✓ Deadline Tracker</p>
-                      </div>
-                      <div>
-                        <p>✓ Serving Instructions</p>
-                        <p>✓ Template Letters</p>
-                      </div>
-                    </div>
-                  </div>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">✨</span>
+                  <h3 className="text-xl font-semibold text-charcoal">Premium Features</h3>
                 </div>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Lifetime cloud storage</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Priority email support</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Unlimited regenerations</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Guided case analysis</span>
+                  </li>
+                </ul>
               </div>
-            </div>
-
-            <div className="mt-8 bg-success/10 border-l-4 border-success p-6 rounded-r-lg">
-              <p className="text-charcoal font-semibold mb-2">💰 Total Value: £208.97 → You Pay: £149.99</p>
-              <p className="text-gray-700">
-                Save £59 by getting everything in one pack. Plus save £350+ vs solicitor fees.
-              </p>
             </div>
           </div>
         </Container>
@@ -202,76 +377,48 @@ export default function CompletePackPage() {
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">How It Works</h2>
 
-            <div className="space-y-8">
-              <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl">
+            <div className="grid md:grid-cols-4 gap-8">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   1
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-charcoal mb-2">Complete the Wizard Once</h3>
-                  <p className="text-gray-700">
-                    Answer questions about your case: tenant details, property, tenancy dates, grounds for eviction,
-                    rent arrears. Our AI analyzes everything.
-                  </p>
-                </div>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">Describe Your Case</h3>
+                <p className="text-gray-600">
+                  Tell us about your tenancy, the issue, arrears amount, and what's happened. Our wizard guides you through
+                  each step.
+                </p>
               </div>
 
-              <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   2
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-charcoal mb-2">AI Generates ALL Documents</h3>
-                  <p className="text-gray-700">
-                    Claude Sonnet 4 generates your eviction notice, court claim forms, witness statement, and money
-                    claim - all pre-filled with your case details. Everything is consistent and court-ready.
-                  </p>
-                </div>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">We Select Forms</h3>
+                <p className="text-gray-600">
+                  Our system determines the correct legal route, selects applicable grounds, and identifies which court forms
+                  you need.
+                </p>
               </div>
 
-              <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   3
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-charcoal mb-2">Follow the Eviction Journey</h3>
-                  <p className="text-gray-700 mb-3">We provide a step-by-step timeline:</p>
-                  <div className="bg-gray-50 rounded-lg p-4 space-y-2 text-sm">
-                    <p className="flex items-center gap-2">
-                      <span className="text-primary">→</span> <strong>Day 1:</strong> Serve eviction notice
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-primary">→</span> <strong>Day 14-60:</strong> Wait for notice period to
-                      expire
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-primary">→</span> <strong>Day 61:</strong> File possession claim with court
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-primary">→</span> <strong>Day 62:</strong> File money claim for arrears
-                      (optional)
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-primary">→</span> <strong>Day 90+:</strong> Attend court hearing
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <span className="text-primary">→</span> <strong>Day 120:</strong> Bailiff enforcement (if needed)
-                    </p>
-                  </div>
-                </div>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">Complete Pack Generated</h3>
+                <p className="text-gray-600">
+                  Your complete eviction bundle is generated with all forms filled, guidance tailored to your case, and
+                  next-step timelines.
+                </p>
               </div>
 
-              <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center font-bold text-xl">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   4
                 </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-charcoal mb-2">Download, File, Succeed</h3>
-                  <p className="text-gray-700">
-                    Download all documents as PDFs. We include instructions for serving, filing with court, and
-                    preparing for hearings. You're ready to go.
-                  </p>
-                </div>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">Follow Our Roadmap</h3>
+                <p className="text-gray-600">
+                  Use our step-by-step guide to serve notice, file with court, attend hearing, and request bailiff if needed.
+                </p>
               </div>
             </div>
 
@@ -280,79 +427,179 @@ export default function CompletePackPage() {
                 href="/wizard?product=complete_pack"
                 className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-emerald-600 transition-colors"
               >
-                Get Complete Pack - £149.99 →
+                Start Your Complete Pack →
               </Link>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* Why Complete Pack */}
+      {/* Eviction Timeline */}
       <section className="py-16 md:py-20">
         <Container>
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">Why Complete Pack?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
+              Typical Eviction Timeline
+            </h2>
+            <p className="text-center text-gray-600 mb-12">
+              Understand what to expect at each stage (timelines vary by jurisdiction and grounds)
+            </p>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💰</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Save £350+ vs Solicitors</h3>
-                <p className="text-gray-700 mb-2">
-                  Solicitors charge £500-700 for eviction proceedings. You pay £149.99 once.
-                </p>
-                <div className="bg-gray-50 rounded p-3 text-sm">
-                  <p className="text-gray-700">
-                    <span className="line-through">Solicitor: £550</span>
-                    <br />
-                    <span className="text-primary font-semibold">You: £149.99</span>
-                    <br />
-                    <span className="font-semibold">Savings: £400+</span>
+            <div className="space-y-6">
+              <div className="bg-white rounded-lg border border-gray-200 p-6 flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+                  1
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-charcoal mb-2">Serve Notice (Day 0)</h3>
+                  <p className="text-gray-600">
+                    Deliver Section 8/21 notice to tenant. Must be served correctly (by post, hand delivery, or email if
+                    agreed). Notice period: 2 weeks to 2 months depending on ground.
                   </p>
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">⏱️</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">All Documents in 15 Minutes</h3>
+              <div className="bg-white rounded-lg border border-gray-200 p-6 flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+                  2
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-charcoal mb-2">File with Court (After Notice Period)</h3>
+                  <p className="text-gray-600">
+                    Submit N5/N5B claim form to county court with fee (£325-£355). Court issues claim and sends to tenant.
+                    Tenant has 14 days to respond.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-6 flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+                  3
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-charcoal mb-2">Hearing (4-8 weeks later)</h3>
+                  <p className="text-gray-600">
+                    Attend possession hearing at county court. Bring all evidence: tenancy agreement, notice, arrears
+                    statement, photos. Judge reviews case and issues possession order.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-6 flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+                  4
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-charcoal mb-2">
+                    Possession Order (Immediate or 14-42 days)
+                  </h3>
+                  <p className="text-gray-600">
+                    Outright possession order: tenant must leave by date specified. Suspended order: tenant can stay if they
+                    meet conditions (e.g., pay arrears). Wait 14 days before requesting bailiff.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-lg border border-gray-200 p-6 flex items-start gap-4">
+                <div className="flex-shrink-0 w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+                  5
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-charcoal mb-2">Bailiff Eviction (2-6 weeks after order)</h3>
+                  <p className="text-gray-600">
+                    If tenant doesn't leave, apply for warrant of possession. Bailiff schedules eviction date, physically
+                    removes tenant and belongings. You regain possession of property.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 bg-amber-50 border border-amber-200 rounded-lg p-6">
+              <div className="flex items-start gap-3">
+                <svg className="w-6 h-6 text-amber-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fillRule="evenodd"
+                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <div>
+                  <h4 className="font-semibold text-charcoal mb-2">Total Timeline Estimate</h4>
+                  <p className="text-gray-700">
+                    <strong>England & Wales:</strong> 3-6 months total (Section 8 rent arrears: fastest; Section 21: 4-5
+                    months; contested cases: 6+ months)
+                    <br />
+                    <strong>Scotland:</strong> 4-8 months (First-tier Tribunal process is slower)
+                    <br />
+                    <strong>Northern Ireland:</strong> 3-6 months (similar to England & Wales)
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Why Choose Complete Pack */}
+      <section className="py-16 md:py-20 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
+              Why Choose the Complete Pack?
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                <div className="text-3xl mb-3">💰</div>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Save £1,000s vs Solicitors</h3>
                 <p className="text-gray-700">
-                  Don't spend hours researching forms, notice periods, and court procedures. Answer questions once, get
-                  everything instantly. Solicitors take weeks.
+                  Eviction solicitors charge £1,500-3,000+ for the same documents. Our Complete Pack gives you everything
+                  for £149.99 one-time.
                 </p>
               </div>
 
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                <div className="text-3xl mb-3">📦</div>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">All-in-One Solution</h3>
+                <p className="text-gray-700">
+                  No more piecing together forms from different sources. Get notice, court forms, guidance, evidence
+                  checklists, and timelines in one complete bundle.
+                </p>
+              </div>
+
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                <div className="text-3xl mb-3">⚖️</div>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Court-Ready Official Forms</h3>
+                <p className="text-gray-700">
+                  We use genuine HMCTS official forms (N5, N5B, N119, Form 6A) filled with your case details. Judges and
+                  courts accept these without question.
+                </p>
+              </div>
+
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
                 <div className="text-3xl mb-3">🎯</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Everything Matches</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Grounds-Aware Guidance</h3>
                 <p className="text-gray-700">
-                  All documents use the same case details (dates, amounts, grounds). No contradictions that could sink
-                  your case. AI ensures consistency across all forms.
+                  Your bundle adapts to your specific grounds (rent arrears, ASB, breach, etc.) with tailored evidence
+                  requirements, timelines, and court strategies.
                 </p>
               </div>
 
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">📋</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Complete Evidence Bundle</h3>
-                <p className="text-gray-700">
-                  Courts require specific evidence. We provide a checklist of what to include (tenancy agreement, rent
-                  statements, notice service proof) and how to organize it.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
                 <div className="text-3xl mb-3">🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁳󠁣󠁴󠁿🇬🇧</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">100% UK Coverage</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">All UK Jurisdictions</h3>
                 <p className="text-gray-700">
-                  Works in England & Wales (county court), Scotland (First-tier Tribunal), and Northern Ireland (county
-                  court). Only service with full UK coverage.
+                  England & Wales, Scotland, and Northern Ireland fully supported with jurisdiction-specific forms, laws, and
+                  timelines.
                 </p>
               </div>
 
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🔄</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">Unlimited Regenerations</h3>
+              <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
+                <div className="text-3xl mb-3">⏱️</div>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Instant Delivery</h3>
                 <p className="text-gray-700">
-                  Need to update arrears amount or add another ground? Regenerate documents unlimited times for the same
-                  case. No extra fees.
+                  Complete your case details (15-20 minutes), review your pack, pay, and download immediately. No waiting
+                  days for solicitor appointments.
                 </p>
               </div>
             </div>
@@ -360,93 +607,199 @@ export default function CompletePackPage() {
         </Container>
       </section>
 
-      {/* Comparison */}
-      <section className="py-16 md:py-20 bg-white">
+      {/* Comparison: Complete Pack vs Notice Only */}
+      <section className="py-16 md:py-20">
         <Container>
           <div className="max-w-5xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
+            <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4 text-center">
               Complete Pack vs Notice Only
             </h2>
+            <p className="text-center text-gray-600 mb-12">Which option is right for you?</p>
 
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="text-left p-4 font-semibold text-charcoal">What's Included</th>
-                    <th className="text-center p-4 font-semibold text-charcoal">
-                      Notice Only
-                      <br />
-                      <span className="text-sm font-normal text-gray-600">£29.99</span>
+              <table className="w-full bg-white rounded-lg border border-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-charcoal border-b border-gray-200">
+                      Feature
                     </th>
-                    <th className="text-center p-4 font-semibold text-primary">
-                      Complete Pack
-                      <br />
-                      <span className="text-sm font-normal">£149.99</span>
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-charcoal border-b border-gray-200">
+                      Notice Only<br />£29.99
+                    </th>
+                    <th className="px-6 py-4 text-center text-sm font-semibold text-primary border-b border-gray-200">
+                      Complete Pack<br />£149.99
                     </th>
                   </tr>
                 </thead>
-                <tbody className="text-sm">
-                  <tr className="border-t">
-                    <td className="p-4">Eviction Notice (Section 8/21/Notice to Leave)</td>
-                    <td className="text-center p-4">✅</td>
-                    <td className="text-center p-4 bg-primary-subtle">✅</td>
+                <tbody>
+                  <tr>
+                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">
+                      Eviction Notice (Section 8/21, etc.)
+                    </td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100">
+                      <svg className="w-5 h-5 text-success mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
+                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
                   </tr>
-                  <tr className="border-t bg-gray-50">
-                    <td className="p-4">Court Possession Claim Forms (N5/N5B)</td>
-                    <td className="text-center p-4">❌</td>
-                    <td className="text-center p-4 bg-primary-subtle">✅</td>
+                  <tr>
+                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Court Forms (N5, N5B, N119)</td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100">
+                      <svg className="w-5 h-5 text-gray-300 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
+                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
                   </tr>
-                  <tr className="border-t">
-                    <td className="p-4">Witness Statement</td>
-                    <td className="text-center p-4">❌</td>
-                    <td className="text-center p-4 bg-primary-subtle">✅</td>
+                  <tr>
+                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">
+                      Step-by-Step Eviction Guide
+                    </td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100">
+                      <span className="text-sm text-gray-500">Basic</span>
+                    </td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
+                      <span className="text-sm font-semibold text-primary">Comprehensive</span>
+                    </td>
                   </tr>
-                  <tr className="border-t bg-gray-50">
-                    <td className="p-4">Money Claim for Rent Arrears</td>
-                    <td className="text-center p-4">❌</td>
-                    <td className="text-center p-4 bg-primary-subtle">✅</td>
+                  <tr>
+                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Evidence Checklist</td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100">
+                      <svg className="w-5 h-5 text-gray-300 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
+                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
                   </tr>
-                  <tr className="border-t">
-                    <td className="p-4">Rent Arrears Schedule</td>
-                    <td className="text-center p-4">❌</td>
-                    <td className="text-center p-4 bg-primary-subtle">✅</td>
+                  <tr>
+                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Timeline Expectations</td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100">
+                      <svg className="w-5 h-5 text-gray-300 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
+                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
                   </tr>
-                  <tr className="border-t bg-gray-50">
-                    <td className="p-4">Court Filing Instructions</td>
-                    <td className="text-center p-4">❌</td>
-                    <td className="text-center p-4 bg-primary-subtle">✅</td>
+                  <tr>
+                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Bailiff/Sheriff Guidance</td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100">
+                      <svg className="w-5 h-5 text-gray-300 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
+                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
                   </tr>
-                  <tr className="border-t">
-                    <td className="p-4">Evidence Bundle Checklist</td>
-                    <td className="text-center p-4">❌</td>
-                    <td className="text-center p-4 bg-primary-subtle">✅</td>
+                  <tr>
+                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Cloud Storage</td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100">
+                      <span className="text-sm text-gray-500">12 months</span>
+                    </td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
+                      <span className="text-sm font-semibold text-primary">Lifetime</span>
+                    </td>
                   </tr>
-                  <tr className="border-t bg-gray-50">
-                    <td className="p-4">Unlimited Regenerations</td>
-                    <td className="text-center p-4">❌</td>
-                    <td className="text-center p-4 bg-primary-subtle">✅</td>
+                  <tr>
+                    <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Priority Support</td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100">
+                      <svg className="w-5 h-5 text-gray-300 mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
+                    <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
+                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </td>
                   </tr>
-                  <tr className="border-t">
-                    <td className="p-4 font-semibold">Best For:</td>
-                    <td className="text-center p-4 text-gray-600 text-xs">Simple cases, notice only needed</td>
-                    <td className="text-center p-4 bg-primary-subtle font-semibold text-primary text-xs">
-                      Complete eviction + arrears recovery
+                  <tr>
+                    <td className="px-6 py-4 text-sm font-semibold text-charcoal">Best For</td>
+                    <td className="px-6 py-4 text-center text-sm text-gray-600">
+                      Testing the waters, simple no-fault eviction (Section 21), want just the notice first
+                    </td>
+                    <td className="px-6 py-4 text-center text-sm font-semibold text-primary bg-primary-subtle">
+                      Committed to eviction, need court action, want complete DIY solution with guidance
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
-            <div className="mt-8 text-center">
-              <p className="text-gray-700 mb-4">
-                <strong>Not sure which to choose?</strong> If your tenant hasn't left after the notice period, you'll
-                need court forms anyway. Save money with Complete Pack.
-              </p>
+            <div className="mt-12 text-center">
+              <p className="text-gray-600 mb-6">Need the full solution to take your case to court?</p>
               <Link
                 href="/wizard?product=complete_pack"
                 className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-emerald-600 transition-colors"
               >
-                Get Complete Pack - £149.99 →
+                Get Complete Eviction Pack - £149.99 →
               </Link>
             </div>
           </div>
@@ -454,7 +807,7 @@ export default function CompletePackPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-16 md:py-20">
+      <section className="py-16 md:py-20 bg-white">
         <Container>
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-12 text-center">
@@ -462,89 +815,145 @@ export default function CompletePackPage() {
             </h2>
 
             <div className="space-y-6">
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Do I need Complete Pack or just Notice Only?
-                </h3>
-                <p className="text-gray-700">
-                  If you're confident your tenant will leave after receiving the notice, start with Notice Only
-                  (£29.99). But 70% of evictions require court action. Complete Pack (£149.99) covers the entire journey
-                  and saves you buying documents separately later (£208+ value).
-                </p>
-              </div>
+              <details className="bg-gray-50 rounded-lg border border-gray-200">
+                <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
+                  Do I get all the court forms I need?
+                </summary>
+                <div className="px-6 pb-4 text-gray-700">
+                  Yes. The Complete Pack includes all forms required from start to finish: eviction notice (Section 8/21/Notice
+                  to Leave), possession claim forms (N5, N5B, N119 for England & Wales; First-tier Tribunal forms for
+                  Scotland; Civil Bill for Northern Ireland), witness statement templates, and evidence bundling guides. If
+                  you later need bailiff forms, those are also covered.
+                </div>
+              </details>
 
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Can I upgrade from Notice Only to Complete Pack?
-                </h3>
-                <p className="text-gray-700">
-                  Yes! If you've already purchased Notice Only and later need court forms, contact us at
-                  support@landlordheaven.co.uk. We'll credit your £29.99 and you pay the difference (£120).
-                </p>
-              </div>
+              <details className="bg-gray-50 rounded-lg border border-gray-200">
+                <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
+                  Are these genuine official court forms?
+                </summary>
+                <div className="px-6 pb-4 text-gray-700">
+                  Absolutely. We use official HMCTS forms (Her Majesty's Courts & Tribunals Service) for England & Wales,
+                  Scottish Courts & Tribunals Service forms for Scotland, and NI Courts Service forms for Northern Ireland.
+                  These are the exact same forms you'd download from government websites, but pre-filled with your case
+                  details.
+                </div>
+              </details>
 
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">Are court fees included?</h3>
-                <p className="text-gray-700">
-                  No, our £149.99 covers document generation only. Court fees are separate and paid directly to the
-                  court. Typical fees: £355 for possession claims, £35-£455 for money claims depending on amount. We
-                  include a fee calculator.
-                </p>
-              </div>
+              <details className="bg-gray-50 rounded-lg border border-gray-200">
+                <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
+                  How long does the eviction process take?
+                </summary>
+                <div className="px-6 pb-4 text-gray-700">
+                  It varies by jurisdiction and grounds. Typical timelines:<br />
+                  <strong>England & Wales:</strong> 3-6 months (Section 8 rent arrears: 3-4 months; Section 21: 4-5 months;
+                  contested cases: 6+ months)<br />
+                  <strong>Scotland:</strong> 4-8 months (First-tier Tribunal process)<br />
+                  <strong>Northern Ireland:</strong> 3-6 months<br />
+                  Our Complete Pack includes detailed timelines for your specific case.
+                </div>
+              </details>
 
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Will this work in my jurisdiction?
-                </h3>
-                <p className="text-gray-700">
-                  Yes! Complete Pack works in:
-                  <br />• England & Wales (County Court)
-                  <br />• Scotland (First-tier Tribunal for Scotland Housing and Property Chamber)
-                  <br />• Northern Ireland (County Court)
-                  <br />
-                  We automatically generate the correct forms for your jurisdiction.
-                </p>
-              </div>
+              <details className="bg-gray-50 rounded-lg border border-gray-200">
+                <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
+                  What if my tenant contests the eviction?
+                </summary>
+                <div className="px-6 pb-4 text-gray-700">
+                  The Complete Pack includes guidance for contested cases. You'll get evidence checklists to strengthen your
+                  case, witness statement templates, and advice on attending the possession hearing. If the case becomes very
+                  complex (e.g., tenant has legal representation), you may want to consult a solicitor, but our pack gives you
+                  the foundation to represent yourself effectively.
+                </div>
+              </details>
 
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  What if I need to update the arrears amount?
-                </h3>
-                <p className="text-gray-700">
-                  Complete Pack includes unlimited regenerations. If arrears increase between serving notice and filing
-                  with court, just regenerate your documents with updated amounts. Everything stays consistent.
-                </p>
-              </div>
+              <details className="bg-gray-50 rounded-lg border border-gray-200">
+                <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
+                  Can I use this if I've already served a notice?
+                </summary>
+                <div className="px-6 pb-4 text-gray-700">
+                  Yes! If you've already served your Section 8/21 notice (or Notice to Leave, etc.) and now need the court
+                  forms, the Complete Pack is perfect. Just tell our wizard you've already served notice, provide the notice
+                  date and type, and we'll generate the court claim forms and guidance for the next steps.
+                </div>
+              </details>
 
-              <div className="border border-gray-200 rounded-lg p-6 bg-white">
-                <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Do you provide legal representation?
-                </h3>
-                <p className="text-gray-700">
-                  No. We provide court-ready documents but are NOT a law firm. You'll represent yourself (most landlords
-                  do - possession hearings are straightforward). For complex cases or legal advice, consult a solicitor.
-                </p>
-              </div>
+              <details className="bg-gray-50 rounded-lg border border-gray-200">
+                <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
+                  What grounds for eviction do you support?
+                </summary>
+                <div className="px-6 pb-4 text-gray-700">
+                  All of them. We support all 17 grounds under the Housing Act 1988 (England & Wales), all 18 grounds for
+                  eviction under the Private Housing (Tenancies) (Scotland) Act 2016, and all statutory grounds for Northern
+                  Ireland. Common grounds include:<br />
+                  • Ground 8/10: Rent arrears<br />
+                  • Ground 14: Anti-social behaviour<br />
+                  • Ground 12: Breach of tenancy<br />
+                  • Section 21: No-fault eviction (E&W)<br />
+                  Our wizard will ask about your situation and select the strongest applicable grounds.
+                </div>
+              </details>
+
+              <details className="bg-gray-50 rounded-lg border border-gray-200">
+                <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
+                  Is this cheaper than using a solicitor?
+                </summary>
+                <div className="px-6 pb-4 text-gray-700">
+                  Yes, significantly. Eviction solicitors typically charge £1,500-3,000+ for preparing notices, court forms,
+                  and representing you at hearings. The Complete Pack gives you all the documents and guidance for £149.99
+                  one-time. You save £1,300-2,800+ by doing it yourself with our step-by-step guidance.
+                </div>
+              </details>
+
+              <details className="bg-gray-50 rounded-lg border border-gray-200">
+                <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
+                  What if I make a mistake on the forms?
+                </summary>
+                <div className="px-6 pb-4 text-gray-700">
+                  Our system validates all your inputs to minimize errors (e.g., dates, arrears calculations, notice periods).
+                  You can preview all documents before paying. If you spot an error after purchase, you get unlimited
+                  regenerations - just update your case details and regenerate the pack at no extra cost.
+                </div>
+              </details>
+
+              <details className="bg-gray-50 rounded-lg border border-gray-200">
+                <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
+                  Do you provide legal advice?
+                </summary>
+                <div className="px-6 pb-4 text-gray-700">
+                  No. Landlord Heaven is a document generation service, not a law firm. We provide legally compliant forms and
+                  plain-English guidance on the eviction process, but we do not provide legal advice tailored to your specific
+                  circumstances. If you have complex legal questions, consult a solicitor.
+                </div>
+              </details>
             </div>
           </div>
         </Container>
       </section>
 
-      {/* CTA */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-charcoal to-gray-800">
+      {/* Final CTA */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-primary to-emerald-600 text-white">
         <Container>
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Get Everything You Need</h2>
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Your Eviction?</h2>
             <p className="text-xl mb-8 text-white/90">
-              Complete eviction journey from notice to possession order. Save £350+ vs solicitors.
+              Get your Complete Eviction Pack now and take control of your property with confidence.
             </p>
-            <Link
-              href="/wizard?product=complete_pack"
-              className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-emerald-600 transition-colors shadow-lg"
-            >
-              Get Complete Pack - £149.99 →
-            </Link>
-            <p className="mt-4 text-sm text-white/80">30-day money-back guarantee • Unlimited regenerations</p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+              <Link
+                href="/wizard?product=complete_pack"
+                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
+              >
+                Get Complete Pack - £149.99 →
+              </Link>
+              <Link
+                href="/products/notice-only"
+                className="inline-block bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/10 transition-colors"
+              >
+                Or Just Get Notice - £29.99
+              </Link>
+            </div>
+            <p className="text-sm text-white/80">
+              Instant download • Court-ready documents • Lifetime storage • Priority support
+            </p>
           </div>
         </Container>
       </section>

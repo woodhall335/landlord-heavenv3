@@ -34,7 +34,7 @@ export function organizationSchema() {
     "name": "Landlord Heaven",
     "url": SITE_URL,
     "logo": `${SITE_URL}/logo.png`,
-    "description": "AI-powered legal document generation for UK landlords. Court-ready eviction notices, tenancy agreements, and compliance management.",
+    "description": "Professional legal document generation for UK landlords. Court-ready eviction notices, tenancy agreements, and compliance management.",
     "address": {
       "@type": "PostalAddress",
       "addressCountry": "GB",

@@ -430,9 +430,9 @@ export default function AdminDashboardPage() {
               </div>
             </Card>
 
-            {/* AI Usage */}
+            {/* API Usage */}
             <Card padding="medium">
-              <h3 className="font-semibold text-charcoal mb-4">AI Usage</h3>
+              <h3 className="font-semibold text-charcoal mb-4">API Usage</h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-gray-600">Total Tokens</span>

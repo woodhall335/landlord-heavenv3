@@ -16,7 +16,7 @@ export function Footer() {
               <span className="text-lg font-bold">Landlord Heaven</span>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
-              Legal documents for UK landlords. Court-ready, AI-powered, instantly delivered.
+              Legal documents for UK landlords. Court-ready, professionally curated, instantly delivered.
             </p>
             <div className="mt-4 text-sm text-gray-400">
               🏴󠁧󠁢󠁥󠁮󠁧󠁿 England & Wales<br />
@@ -161,9 +161,9 @@ export function Footer() {
             <div className="flex items-center gap-4 text-sm text-gray-400">
               <span>100% UK Coverage</span>
               <span>•</span>
-              <span>30-Day Guarantee</span>
-              <span>•</span>
               <span>Court-Ready Documents</span>
+              <span>•</span>
+              <span>Instant Delivery</span>
             </div>
           </div>
         </div>

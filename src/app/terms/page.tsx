@@ -23,7 +23,7 @@ export default function TermsPage() {
 
             <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">2. Description of Services</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              Landlord Heaven provides AI-powered legal document generation services for UK landlords, including but not
+              Landlord Heaven provides legal document generation services for UK landlords, including but not
               limited to:
             </p>
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
@@ -66,7 +66,7 @@ export default function TermsPage() {
 
             <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">6. Refund Policy</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              We offer a 30-day money-back guarantee on all one-time products. See our{" "}
+              All products are instantly delivered digital documents. Refunds are only available for technical errors, duplicate charges, or unauthorized transactions. See our{" "}
               <a href="/refunds" className="text-primary hover:underline">
                 Refund Policy
               </a>{" "}

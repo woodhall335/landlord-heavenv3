@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Notice Only - Section 8 & 21 Eviction Notices | Landlord Heaven",
   description:
-    "Generate court-ready Section 8 and Section 21 eviction notices in minutes. £29.99 one-time payment. 30-day money-back guarantee. Covers England & Wales, Scotland, Northern Ireland.",
+    "Generate court-ready Section 8 and Section 21 eviction notices in minutes. £29.99 one-time payment. Instant download. Covers England & Wales, Scotland, Northern Ireland.",
 };
 
 export default function NoticeOnlyPage() {
@@ -32,7 +32,7 @@ export default function NoticeOnlyPage() {
             >
               Get Your Notice Now →
             </Link>
-            <p className="mt-4 text-sm text-white/80">30-day money-back guarantee • No subscription</p>
+            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • No subscription</p>
           </div>
         </Container>
       </section>
@@ -190,7 +190,7 @@ export default function NoticeOnlyPage() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span className="text-gray-700">AI-powered case analysis</span>
+                    <span className="text-gray-700">Professionally curated case analysis</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -232,7 +232,7 @@ export default function NoticeOnlyPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Answer Simple Questions</h3>
                 <p className="text-gray-600">
-                  Our AI-powered wizard asks about your case: tenant details, grounds for eviction, arrears amount,
+                  Our guided wizard asks about your case: tenant details, grounds for eviction, arrears amount,
                   tenancy dates.
                 </p>
               </div>
@@ -241,9 +241,9 @@ export default function NoticeOnlyPage() {
                 <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   2
                 </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-3">AI Generates Your Notice</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">We Generate Your Notice</h3>
                 <p className="text-gray-600">
-                  Claude Sonnet 4 analyzes your case, selects the correct notice type, and generates a court-ready
+                  Our system analyzes your case, selects the correct notice type, and generates a court-ready
                   document in seconds.
                 </p>
               </div>
@@ -310,9 +310,9 @@ export default function NoticeOnlyPage() {
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="text-3xl mb-3">🤖</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">AI-Powered Intelligence</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Smart Validation</h3>
                 <p className="text-gray-700">
-                  Claude Sonnet 4 validates your case, checks notice periods, suggests grounds, and ensures compliance
+                  Our system validates your case, checks notice periods, suggests grounds, and ensures compliance
                   with latest laws.
                 </p>
               </div>
@@ -328,9 +328,9 @@ export default function NoticeOnlyPage() {
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="text-3xl mb-3">🔒</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">30-Day Guarantee</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Professional Documents</h3>
                 <p className="text-gray-700">
-                  Not satisfied? Full refund within 30 days, no questions asked. We stand behind our service.
+                  Legally compliant documents generated instantly. Accepted by all UK courts and tribunals.
                 </p>
               </div>
             </div>
@@ -363,7 +363,7 @@ export default function NoticeOnlyPage() {
                   What if I choose the wrong notice type?
                 </h3>
                 <p className="text-gray-700">
-                  Our AI wizard analyzes your case and recommends the correct notice type based on your jurisdiction,
+                  Our wizard analyzes your case and recommends the correct notice type based on your jurisdiction,
                   tenancy type, and eviction grounds. You'll see a clear explanation of why each notice is recommended.
                 </p>
               </div>
@@ -387,21 +387,20 @@ export default function NoticeOnlyPage() {
                 <p className="text-gray-700">
                   After the notice period expires, if the tenant doesn't leave, you'll need to apply to court for a
                   possession order. Our{" "}
-                  <Link href="/products/complete-pack" className="text-primary hover:underline">
-                    Complete Eviction Pack (£79.99)
+                  <Link href="/legal-proceedings" className="text-primary hover:underline">
+                    Legal Proceedings products
                   </Link>{" "}
-                  includes court claim forms to continue the process.
+                  include court claim forms to continue the process.
                 </p>
               </div>
 
               <div className="border border-gray-200 rounded-lg p-6">
                 <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Do you offer refunds if the notice is rejected?
+                  What if my notice is rejected by court?
                 </h3>
                 <p className="text-gray-700">
-                  We offer a 30-day money-back guarantee for any reason. If your notice is rejected due to our error,
-                  we'll refund you AND regenerate a corrected notice for free. However, if it's rejected due to
-                  incorrect information you provided, we can't offer a refund but will help you fix it.
+                  If your notice is rejected due to an error in our document generation, we'll regenerate a corrected notice for free. However, if it's rejected due to
+                  incorrect information you provided or procedural issues (like missing deposit protection), we cannot offer a refund but will help you fix it. All products are digital and instantly delivered, so refunds are only available for technical errors on our end.
                 </p>
               </div>
 
@@ -410,12 +409,8 @@ export default function NoticeOnlyPage() {
                   Can I generate multiple notices?
                 </h3>
                 <p className="text-gray-700">
-                  £29.99 covers ONE notice for ONE property/tenant. Need multiple notices? You can purchase again, or
-                  save money with our{" "}
-                  <Link href="/products/complete-pack" className="text-primary hover:underline">
-                    Complete Eviction Pack
-                  </Link>{" "}
-                  which includes unlimited regenerations for one case.
+                  £29.99 covers ONE notice for ONE property/tenant. Need multiple notices? You can purchase additional
+                  notices as needed. Each purchase includes unlimited regenerations before final download for that specific case.
                 </p>
               </div>
             </div>
@@ -438,7 +433,7 @@ export default function NoticeOnlyPage() {
               Start Your Notice - £29.99 →
             </Link>
             <p className="mt-4 text-sm text-white/80">
-              30-day money-back guarantee • Instant download • No subscription
+              Instant download • Legally compliant • No subscription
             </p>
           </div>
         </Container>

@@ -2,7 +2,7 @@
  * Wizard Selection Page
  *
  * Entry point for the conversational wizard
- * Users select document type and jurisdiction, then start the AI-powered flow
+ * Users select document type and jurisdiction, then start the guided flow
  */
 
 'use client';

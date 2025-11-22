@@ -424,7 +424,7 @@ export default function WizardPreviewPage() {
                   </Button>
 
                   <p className="text-center text-xs text-gray-500 mt-3">
-                    Secure payment via Stripe • 30-day money-back guarantee
+                    Secure payment via Stripe • Instant download
                   </p>
                 </Card>
               ))}
