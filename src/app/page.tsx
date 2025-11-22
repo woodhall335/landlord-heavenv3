@@ -441,50 +441,6 @@ export default function Home() {
           </div>
         </Container>
       </section>
-
-      {/* Footer */}
-      <footer className="bg-charcoal text-white py-12">
-        <Container>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h5 className="font-semibold mb-4">Landlord Heaven</h5>
-              <p className="text-sm text-gray-400">
-                Legal documents for UK landlords. Court-ready, AI-powered, instantly delivered.
-              </p>
-            </div>
-            <div>
-              <h5 className="font-semibold mb-4">Products</h5>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/products/notice-only" className="hover:text-white">Notice Only</Link></li>
-                <li><Link href="/products/complete-pack" className="hover:text-white">Complete Eviction Pack</Link></li>
-                <li><Link href="/products/money-claim" className="hover:text-white">Money Claim Pack</Link></li>
-                <li><Link href="/products/ast" className="hover:text-white">Tenancy Agreements</Link></li>
-                <li><Link href="/hmo-pro" className="hover:text-white">HMO Pro</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="font-semibold mb-4">Legal</h5>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/terms" className="hover:text-white">Terms & Conditions</Link></li>
-                <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
-                <li><Link href="/refunds" className="hover:text-white">Refund Policy</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="font-semibold mb-4">Support</h5>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><Link href="/help" className="hover:text-white">Help Center</Link></li>
-                <li><Link href="/contact" className="hover:text-white">Contact Us</Link></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="mt-12 pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
-            <p>© 2025 Landlord Heaven. All rights reserved.</p>
-            <p className="mt-2">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England & Wales • 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland • 🏴 Northern Ireland - 100% UK Coverage</p>
-          </div>
-        </Container>
-      </footer>
     </div>
   );
 }

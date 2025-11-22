@@ -1,0 +1,75 @@
+{
+  "metadata": {
+    "jurisdiction": "England & Wales",
+    "totalCouncils": 338,
+    "lastUpdated": "2025-11-22",
+    "source": "Supabase Database",
+    "note": "This is a minimal placeholder. Real council data is stored in Supabase and should be fetched via API in production."
+  },
+  "councils": [
+    {
+      "code": "E09000001",
+      "name": "City of London",
+      "region": "London",
+      "jurisdiction": "england",
+      "website": "https://www.cityoflondon.gov.uk",
+      "postcode_areas": ["EC1", "EC2", "EC3", "EC4"]
+    },
+    {
+      "code": "E08000003",
+      "name": "Manchester City Council",
+      "region": "North West England",
+      "jurisdiction": "england",
+      "website": "https://www.manchester.gov.uk",
+      "postcode_areas": ["M1", "M2", "M3", "M4", "M11", "M12", "M13", "M14", "M15", "M16", "M17", "M18", "M19", "M20", "M21", "M22", "M23"]
+    },
+    {
+      "code": "E08000035",
+      "name": "Leeds City Council",
+      "region": "Yorkshire and the Humber",
+      "jurisdiction": "england",
+      "website": "https://www.leeds.gov.uk",
+      "postcode_areas": ["LS1", "LS2", "LS3", "LS4", "LS5", "LS6", "LS7", "LS8", "LS9", "LS10", "LS11", "LS12", "LS13", "LS14", "LS15", "LS16", "LS17", "LS18"]
+    },
+    {
+      "code": "E08000025",
+      "name": "Birmingham City Council",
+      "region": "West Midlands",
+      "jurisdiction": "england",
+      "website": "https://www.birmingham.gov.uk",
+      "postcode_areas": ["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12", "B13", "B14", "B15", "B16", "B17", "B18", "B19", "B20"]
+    },
+    {
+      "code": "E08000011",
+      "name": "Liverpool City Council",
+      "region": "North West England",
+      "jurisdiction": "england",
+      "website": "https://www.liverpool.gov.uk",
+      "postcode_areas": ["L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10", "L11", "L12", "L13", "L14", "L15", "L16", "L17", "L18"]
+    },
+    {
+      "code": "E06000015",
+      "name": "Bristol City Council",
+      "region": "South West England",
+      "jurisdiction": "england",
+      "website": "https://www.bristol.gov.uk",
+      "postcode_areas": ["BS1", "BS2", "BS3", "BS4", "BS5", "BS6", "BS7", "BS8", "BS9", "BS10", "BS11", "BS13", "BS14", "BS15", "BS16"]
+    },
+    {
+      "code": "W06000015",
+      "name": "Cardiff Council",
+      "region": "Wales",
+      "jurisdiction": "wales",
+      "website": "https://www.cardiff.gov.uk",
+      "postcode_areas": ["CF1", "CF2", "CF3", "CF5", "CF10", "CF11", "CF14", "CF15", "CF23", "CF24"]
+    },
+    {
+      "code": "W06000011",
+      "name": "Swansea Council",
+      "region": "Wales",
+      "jurisdiction": "wales",
+      "website": "https://www.swansea.gov.uk",
+      "postcode_areas": ["SA1", "SA2", "SA3", "SA4", "SA5", "SA6", "SA7", "SA8", "SA9"]
+    }
+  ]
+}

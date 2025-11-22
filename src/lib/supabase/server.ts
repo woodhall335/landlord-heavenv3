@@ -97,3 +97,8 @@ export async function requireServerAuth() {
 
   return user;
 }
+
+/**
+ * Alias for createServerSupabaseClient (for backwards compatibility)
+ */
+export const createClient = createServerSupabaseClient;
