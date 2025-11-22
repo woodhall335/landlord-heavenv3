@@ -1,0 +1,378 @@
+# Scotland Housing Law - Decision Rules
+# Based on Private Housing (Tenancies) (Scotland) Act 2016
+# Updated: November 2024
+
+jurisdiction:
+  name: "Scotland"
+  primary_law: "Private Housing (Tenancies) (Scotland) Act 2016"
+  tenancy_type: "Private Residential Tenancy (PRT)"
+  tribunal: "First-tier Tribunal for Scotland (Housing and Property Chamber)"
+
+# KEY DIFFERENCE: ALL GROUNDS ARE DISCRETIONARY
+# The Tribunal has discretion on ALL grounds - there are NO mandatory grounds in Scotland
+# Pre-action requirements are STRICT and must be followed for rent arrears cases
+
+# NOTICE TO LEAVE GROUNDS (18 total - all discretionary)
+grounds:
+
+  # RENT ARREARS (Most common)
+  ground_1:
+    name: "Rent Arrears"
+    category: "rent_arrears"
+    type: "discretionary"
+    notice_period_days: 28  # If in arrears at notice date, otherwise 84
+    description: "Tenant has been in rent arrears for three consecutive months"
+    legal_basis: "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 1"
+
+    requirements:
+      - "Rent arrears for three consecutive months"
+      - "Pre-action requirements met (MANDATORY)"
+      - "Tribunal considers reasonableness"
+
+    pre_action_requirements:
+      mandatory: true
+      steps:
+        - "Provide clear rent statement"
+        - "Give information about rent arrears and consequences"
+        - "Provide information on sources of advice and assistance"
+        - "Give tenant reasonable time to pay or discuss"
+        - "Consider payment arrangement proposals"
+        - "Make reasonable attempts to agree payment plan"
+      evidence: "Must provide evidence to Tribunal that these were followed"
+      failure: "Tribunal likely to refuse eviction if not followed"
+
+    required_facts:
+      - rent_arrears_months
+      - arrears_amount
+      - pre_action_requirements_met
+
+    success_probability: 70
+    typical_timeline:
+      notice_period: "28 or 84 days"
+      tribunal_proceedings: "3-6 months"
+      total: "4-8 months"
+
+  # BREACH OF TENANCY
+  ground_2:
+    name: "Breach of Tenancy Obligation"
+    category: "breach_of_tenancy"
+    type: "discretionary"
+    notice_period_days: 28
+    description: "Tenant has breached a term of the tenancy"
+    legal_basis: "Schedule 3, Ground 2"
+
+    required_facts:
+      - breach_type
+      - breach_description
+      - breach_evidence
+
+    success_probability: 65
+
+  # ANTISOCIAL BEHAVIOUR
+  ground_3:
+    name: "Antisocial Behaviour"
+    category: "antisocial_behavior"
+    type: "discretionary"
+    notice_period_days: 28
+    description: "Tenant or associate engaged in antisocial behaviour"
+    legal_basis: "Schedule 3, Ground 3"
+
+    required_facts:
+      - antisocial_behavior
+      - asb_evidence
+      - asb_severity
+
+    success_probability: 70
+
+  # LANDLORD INTENDS TO LIVE
+  ground_4:
+    name: "Landlord Intends to Live in Property"
+    category: "landlord_intention"
+    type: "discretionary"
+    notice_period_days: 84
+    description: "Landlord intends to occupy property as only or principal home"
+    legal_basis: "Schedule 3, Ground 4"
+
+    required_facts:
+      - landlord_intends_to_occupy
+      - landlord_owns_48_months  # Must have owned for 48 months
+
+    red_flags:
+      - "Landlord must have owned property for at least 48 months"
+      - "No rent increase in 12 months before notice served"
+
+    success_probability: 60
+
+  # LANDLORD INTENDS TO SELL
+  ground_5:
+    name: "Landlord Intends to Sell Property"
+    category: "selling_property"
+    type: "discretionary"
+    notice_period_days: 84
+    description: "Landlord intends to sell property"
+    legal_basis: "Schedule 3, Ground 5"
+
+    required_facts:
+      - landlord_intends_to_sell
+      - on_market_evidence
+
+    red_flags:
+      - "Must genuinely intend to sell"
+      - "Tribunal scrutinizes this ground heavily"
+
+    success_probability: 50
+
+  # REFURBISHMENT
+  ground_6:
+    name: "Property to be Refurbished"
+    category: "refurbishment"
+    type: "discretionary"
+    notice_period_days: 84
+    description: "Property to undergo refurbishment requiring vacant possession"
+    legal_basis: "Schedule 3, Ground 6"
+
+    required_facts:
+      - refurbishment_planned
+      - vacant_possession_required
+      - planning_permission
+
+    success_probability: 60
+
+  # HMO LICENSING CHANGE
+  ground_7:
+    name: "Property Subject to HMO Change"
+    category: "property_condition"
+    type: "discretionary"
+    notice_period_days: 84
+    description: "Property is or will be HMO and requires licensing change"
+    legal_basis: "Schedule 3, Ground 7"
+
+    required_facts:
+      - is_hmo
+      - licensing_change_required
+
+    success_probability: 55
+
+  # NON-RESIDENTIAL USE
+  ground_8:
+    name: "Property to be Used for Non-Residential Purpose"
+    category: "property_condition"
+    type: "discretionary"
+    notice_period_days: 84
+    description: "Landlord intends to use property for non-residential purpose"
+    legal_basis: "Schedule 3, Ground 8"
+
+    required_facts:
+      - non_residential_intention
+      - planning_permission
+
+    success_probability: 50
+
+  # OVERCROWDING
+  ground_9:
+    name: "Overcrowding Statutory Offence"
+    category: "overcrowding"
+    type: "discretionary"
+    notice_period_days: 28
+    description: "Property is overcrowded such that landlord or tenant commits offence"
+    legal_basis: "Schedule 3, Ground 9"
+
+    required_facts:
+      - overcrowded
+      - statutory_offence
+
+    success_probability: 75
+
+  # LANDLORD NOT REGISTERED
+  ground_10:
+    name: "Landlord Not Registered"
+    category: "landlord_hardship"
+    type: "discretionary"
+    notice_period_days: 28
+    description: "Landlord refused registration and would suffer hardship"
+    legal_basis: "Schedule 3, Ground 10"
+
+    notes: "Very rare - landlord must have been refused registration"
+    success_probability: 40
+
+  # TENANT NOT OCCUPYING
+  ground_11:
+    name: "Tenant No Longer Occupying"
+    category: "tenant_failure"
+    type: "discretionary"
+    notice_period_days: 28
+    description: "Tenant is not occupying property as their only or principal home"
+    legal_basis: "Schedule 3, Ground 11"
+
+    required_facts:
+      - tenant_not_occupying
+      - abandonment_evidence
+
+    success_probability: 70
+
+  # CRIMINAL CONVICTION
+  ground_12:
+    name: "Tenant or Associate Convicted"
+    category: "criminal_conviction"
+    type: "discretionary"
+    notice_period_days: 28
+    description: "Tenant or associate convicted of serious offence in or near property"
+    legal_basis: "Schedule 3, Ground 12"
+
+    required_facts:
+      - criminal_conviction
+      - imprisonment_sentence
+
+    success_probability: 80
+
+  # MORTGAGE REPOSSESSION
+  ground_13:
+    name: "Mortgage Lender Repossessing"
+    category: "mortgage_repossession"
+    type: "discretionary"
+    notice_period_days: 28
+    description: "Mortgage lender intends to sell property"
+    legal_basis: "Schedule 3, Ground 13"
+
+    required_facts:
+      - mortgage_exists
+      - lender_repossession_proceedings
+
+    success_probability: 75
+
+  # RELIGIOUS WORKER
+  ground_14:
+    name: "Property for Religious Worker"
+    category: "religious_purpose"
+    type: "discretionary"
+    notice_period_days: 84
+    description: "Property required for person employed by religious body"
+    legal_basis: "Schedule 3, Ground 14"
+
+    success_probability: 60
+
+  # HOME CARER
+  ground_15:
+    name: "Property for Home Carer"
+    category: "home_carer"
+    type: "discretionary"
+    notice_period_days: 84
+    description: "Property required for person needing special care"
+    legal_basis: "Schedule 3, Ground 15"
+
+    success_probability: 65
+
+  # TEMPORARY LET
+  ground_16:
+    name: "Temporary Let to Person Seeking Employment"
+    category: "temporary_let"
+    type: "discretionary"
+    notice_period_days: 84
+    description: "Property let to person seeking employment in area"
+    legal_basis: "Schedule 3, Ground 16"
+
+    success_probability: 55
+
+  # TIED ACCOMMODATION
+  ground_17:
+    name: "Former Employee Accommodation"
+    category: "tied_accommodation"
+    type: "discretionary"
+    notice_period_days: 84
+    description: "Property is tied accommodation and employment ended"
+    legal_basis: "Schedule 3, Ground 17"
+
+    success_probability: 70
+
+  # FALSE STATEMENT
+  ground_18:
+    name: "False Statement by Tenant"
+    category: "false_statement"
+    type: "discretionary"
+    notice_period_days: 28
+    description: "Tenant made false statement to obtain tenancy"
+    legal_basis: "Schedule 3, Ground 18"
+
+    required_facts:
+      - false_statement
+      - false_statement_evidence
+
+    success_probability: 75
+
+# COMPLIANCE REQUIREMENTS (Scotland-specific)
+compliance:
+  landlord_registration:
+    description: "Landlord must be registered with local authority"
+    statute: "Antisocial Behaviour etc. (Scotland) Act 2004"
+    penalty: "Cannot use Tribunal if not registered. Criminal offence."
+    critical: true
+
+  tenancy_deposit_scheme:
+    description: "Deposit must be in approved scheme within 30 days"
+    schemes:
+      - "SafeDeposits Scotland"
+      - "MyDeposits Scotland"
+      - "Letting Protection Service Scotland"
+    deadline_days: 30
+    penalty: "Cannot use Tribunal if deposit not protected"
+
+  eicr:
+    description: "Electrical Installation Condition Report"
+    frequency_years: 5
+    deadline: "From 1 December 2020"
+
+  gas_safety:
+    description: "Annual Gas Safety Certificate"
+    required: true
+
+  epc:
+    description: "Energy Performance Certificate"
+    minimum_rating: "E"
+    required: true
+
+  repairing_standard:
+    description: "Property must meet Repairing Standard"
+    required: true
+
+# TRIBUNAL PROCEDURES
+tribunal_procedures:
+  notice_to_leave:
+    description: "Must serve Notice to Leave before applying to Tribunal"
+    minimum_notice: "28 or 84 days depending on ground"
+    form: "Notice to Leave Form"
+
+  eviction_application:
+    description: "Application to First-tier Tribunal"
+    earliest: "After Notice to Leave period expires"
+    timeline: "3-6 months typically"
+    fee: "Free for tenants, modest fees for landlords"
+
+# TYPICAL TIMELINES
+typical_timelines:
+  ground_1_rent_arrears:
+    notice_period: 28
+    pre_action: 30  # Must allow time for pre-action
+    tribunal_proceedings: 120
+    total_days: 178
+
+  ground_3_asb:
+    notice_period: 28
+    tribunal_proceedings: 90
+    total_days: 118
+
+  ground_4_landlord_occupy:
+    notice_period: 84
+    tribunal_proceedings: 120
+    total_days: 204
+
+  ground_5_selling:
+    notice_period: 84
+    tribunal_proceedings: 150
+    total_days: 234
+
+# COST ESTIMATES
+costs:
+  tribunal_application_fee: 0  # Free for tenants, minimal for landlords
+  sheriff_officer_fee: 125
+  legal_costs_simple: "1000-2500"
+  legal_costs_complex: "2500-5000"
