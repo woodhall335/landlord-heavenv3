@@ -43,3 +43,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# official court forms (large PDFs - not committed)
+public/official-forms/*.pdf
