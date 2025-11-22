@@ -93,7 +93,7 @@ function WizardFlowContent() {
     );
   }
 
-  // Use conversational AI wizard for evictions and money claims
+  // Use conversational wizard for evictions and money claims
   return (
     <WizardContainer
       caseType={type}

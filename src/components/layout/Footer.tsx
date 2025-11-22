@@ -16,7 +16,7 @@ export function Footer() {
               <span className="text-lg font-bold">Landlord Heaven</span>
             </div>
             <p className="text-sm text-gray-400 leading-relaxed">
-              Legal documents for UK landlords. Court-ready, AI-powered, instantly delivered.
+              Legal documents for UK landlords. Court-ready, professionally curated, instantly delivered.
             </p>
             <div className="mt-4 text-sm text-gray-400">
               🏴󠁧󠁢󠁥󠁮󠁧󠁿 England & Wales<br />
@@ -31,6 +31,30 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <Link
+                  href="/products/notice-only"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Notice Only
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/products/complete-pack"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Complete Eviction Pack
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/products/money-claim"
+                  className="text-sm text-gray-400 hover:text-white transition-colors"
+                >
+                  Money Claim Pack
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/products/ast"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
@@ -39,34 +63,10 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/eviction"
+                  href="/hmo-pro"
                   className="text-sm text-gray-400 hover:text-white transition-colors"
                 >
-                  Eviction Forms
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/legal-proceedings"
-                  className="text-sm text-gray-400 hover:text-white transition-colors"
-                >
-                  Legal Proceedings
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products/notice-only"
-                  className="text-sm text-gray-400 hover:text-white transition-colors"
-                >
-                  Notices
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/products/money-claim"
-                  className="text-sm text-gray-400 hover:text-white transition-colors"
-                >
-                  Money Claims
+                  HMO Pro Membership
                 </Link>
               </li>
             </ul>

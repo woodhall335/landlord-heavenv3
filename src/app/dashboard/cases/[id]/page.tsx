@@ -478,11 +478,11 @@ export default function CaseDetailPage() {
               )}
             </Card>
 
-            {/* AI Analysis */}
+            {/* Case Analysis */}
             {caseDetails.ai_analysis && (
               <Card padding="large">
                 <h2 className="text-xl font-semibold text-charcoal mb-6">
-                  AI Analysis
+                  Case Analysis
                 </h2>
                 <div className="prose max-w-none">
                   <pre className="whitespace-pre-wrap text-sm text-gray-700 bg-gray-50 p-4 rounded-lg">

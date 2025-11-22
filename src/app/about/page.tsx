@@ -5,7 +5,7 @@ import { generateMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = generateMetadata({
   title: "About Us - Mission & Story",
-  description: "Landlord Heaven makes UK landlord legal documents accessible, affordable, and accurate. AI-powered document generation for evictions, tenancies, and HMO compliance.",
+  description: "Landlord Heaven makes UK landlord legal documents accessible, affordable, and accurate. Professionally curated document generation for evictions, tenancies, and HMO compliance.",
   path: "/about",
 });
 
@@ -36,7 +36,7 @@ export default function AboutPage() {
               </p>
 
               <p className="text-xl leading-relaxed">
-                Landlord Heaven uses AI to generate court-ready legal documents in minutes, not hours. We've made
+                Landlord Heaven generates court-ready legal documents in minutes, not hours. We've made
                 professional-quality eviction notices, tenancy agreements, and court claims accessible to every UK
                 landlord - at a fraction of solicitor costs.
               </p>
@@ -92,10 +92,10 @@ export default function AboutPage() {
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white rounded-lg border border-gray-200 p-8">
                 <div className="text-4xl mb-4">🤖</div>
-                <h3 className="text-2xl font-semibold text-charcoal mb-4">AI-Powered Intelligence</h3>
+                <h3 className="text-2xl font-semibold text-charcoal mb-4">Smart Document Generation</h3>
                 <p className="text-gray-700 mb-4">
-                  We use Claude Sonnet 4 (Anthropic's most advanced AI) to analyze your case, select the correct notice
-                  type, calculate notice periods, and generate court-ready documents.
+                  Our system analyzes your case, selects the correct notice type, calculates notice periods,
+                  and generates court-ready documents.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li>✓ Analyzes 18 eviction grounds in seconds</li>
@@ -130,7 +130,7 @@ export default function AboutPage() {
                   <li>✓ Average completion time: 12 minutes</li>
                   <li>✓ Instant PDF download</li>
                   <li>✓ Save £200-400 vs solicitors</li>
-                  <li>✓ Professional documents</li>
+                  <li>✓ Professionally curated documents</li>
                 </ul>
               </div>
 
@@ -144,7 +144,7 @@ export default function AboutPage() {
                 <ul className="text-sm text-gray-700 space-y-2">
                   <li>✓ Official Form 6A, N5, AT6 formats</li>
                   <li>✓ Comply with latest legislation</li>
-                  <li>✓ AI validation before generation</li>
+                  <li>✓ Smart validation before generation</li>
                   <li>✓ Accepted by all UK courts</li>
                 </ul>
               </div>
@@ -180,7 +180,7 @@ export default function AboutPage() {
                 <div>
                   <h3 className="text-xl font-semibold text-charcoal mb-2">Quality Over Quantity</h3>
                   <p className="text-gray-700">
-                    We use the most advanced AI (Claude Sonnet 4) - not the cheapest. We validate every document before
+                    We use advanced technology - not the cheapest. We validate every document before
                     generation. We'd rather generate fewer high-quality documents than thousands of incorrect ones.
                   </p>
                 </div>
@@ -193,7 +193,7 @@ export default function AboutPage() {
                 <div>
                   <h3 className="text-xl font-semibold text-charcoal mb-2">Continuous Improvement</h3>
                   <p className="text-gray-700">
-                    UK tenancy law changes constantly. We update our templates, logic, and AI prompts every time
+                    UK tenancy law changes constantly. We update our templates and logic every time
                     legislation changes. Recent updates: Renters Reform Bill monitoring, Scotland rent controls, NI
                     tenancy deposit changes.
                   </p>
@@ -271,16 +271,16 @@ export default function AboutPage() {
 
             <div className="prose prose-lg max-w-none text-gray-700 mb-8">
               <p className="text-lg">
-                We're not just another template service. We use cutting-edge AI to truly understand your case and
+                We're not just another template service. We use advanced technology to truly understand your case and
                 generate legally accurate documents.
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="border border-gray-200 rounded-lg p-6">
-                <h4 className="font-semibold text-charcoal mb-2">🤖 Claude Sonnet 4 (Anthropic)</h4>
+                <h4 className="font-semibold text-charcoal mb-2">🤖 Smart Document Generation</h4>
                 <p className="text-sm text-gray-700">
-                  The most advanced AI for legal reasoning. Analyzes your case, validates inputs, and generates
+                  Advanced technology for legal reasoning. Analyzes your case, validates inputs, and generates
                   court-ready documents with proper legal language.
                 </p>
               </div>
@@ -323,7 +323,7 @@ export default function AboutPage() {
                   <strong>Landlord Heaven is NOT a law firm and does NOT provide legal advice.</strong>
                 </p>
                 <p className="mb-3">
-                  We provide AI-powered document generation services. Our platform helps you create legally valid
+                  We provide document generation services. Our platform helps you create legally valid
                   documents based on information you provide, but:
                 </p>
                 <ul className="list-disc pl-5 space-y-2">

@@ -280,7 +280,7 @@ export default function MoneyClaimPage() {
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">Calculate Arrears</h3>
                 <p className="text-sm text-gray-600">
-                  Tell us rent amount, payment dates, and what's been paid. AI calculates total arrears + interest.
+                  Tell us rent amount, payment dates, and what's been paid. We calculate total arrears + interest.
                 </p>
               </div>
 
@@ -288,7 +288,7 @@ export default function MoneyClaimPage() {
                 <div className="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   2
                 </div>
-                <h3 className="text-lg font-semibold text-charcoal mb-2">AI Generates Claim</h3>
+                <h3 className="text-lg font-semibold text-charcoal mb-2">We Generate Claim</h3>
                 <p className="text-sm text-gray-600">
                   Claim forms pre-filled with your case details, arrears schedule, and witness statement ready.
                 </p>
@@ -373,18 +373,16 @@ export default function MoneyClaimPage() {
               </div>
 
               <div className="bg-warning/10 border-l-4 border-warning p-6 rounded-r-lg">
-                <h3 className="text-xl font-semibold text-charcoal mb-3">⚠️ Consider Complete Pack If:</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-3">⚠️ Need Multiple Products?</h3>
                 <ul className="space-y-2 text-gray-700">
-                  <li>• Tenant is still in the property</li>
-                  <li>• You need possession AND money claim</li>
-                  <li>• Eviction proceeding already started</li>
-                  <li>• You want everything in one package</li>
+                  <li>• Tenant is still in the property? Check our{" "}
+                    <Link href="/products/notice-only" className="text-primary hover:underline">Notices</Link>
+                  </li>
+                  <li>• Need possession claim? Check our{" "}
+                    <Link href="/legal-proceedings" className="text-primary hover:underline">Legal Proceedings</Link>
+                  </li>
+                  <li>• Each product is independent - buy what you need</li>
                 </ul>
-                <div className="mt-4">
-                  <Link href="/products/complete-pack" className="text-primary hover:underline font-semibold">
-                    See Complete Pack (£149.99) →
-                  </Link>
-                </div>
               </div>
             </div>
 
@@ -532,15 +530,15 @@ export default function MoneyClaimPage() {
 
               <div className="border border-gray-200 rounded-lg p-6 bg-white">
                 <h3 className="text-lg font-semibold text-charcoal mb-2">
-                  Should I use Money Claim Pack or Complete Pack?
+                  When should I use Money Claims?
                 </h3>
                 <p className="text-gray-700">
-                  Use <strong>Money Claim Pack (£129.99)</strong> if tenant has already left and you only want arrears.
-                  Use{" "}
-                  <Link href="/products/complete-pack" className="text-primary hover:underline">
-                    Complete Pack (£149.99)
-                  </Link>{" "}
-                  if tenant is still in property - it includes eviction notice + possession claim + money claim.
+                  Use <strong>Money Claims (£129.99)</strong> when you need to recover rent arrears through the county court.
+                  This product focuses specifically on the financial claim process. If your tenant is still in the property
+                  and you need to evict them first, start with our{" "}
+                  <Link href="/products/notice-only" className="text-primary hover:underline">
+                    Notices product
+                  </Link>.
                 </p>
               </div>
             </div>

@@ -54,7 +54,7 @@ export default function PrivacyPage() {
             <p className="text-gray-700 leading-relaxed mb-4">We use your data to:</p>
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
               <li><strong>Provide Services:</strong> Generate documents, manage your account, process payments</li>
-              <li><strong>AI Processing:</strong> Analyze your case information using OpenAI and Anthropic to generate accurate legal documents</li>
+              <li><strong>Document Processing:</strong> Analyze your case information to generate accurate legal documents</li>
               <li><strong>Communication:</strong> Send service emails, updates, and support responses</li>
               <li><strong>Improvement:</strong> Improve our services, fix bugs, develop new features</li>
               <li><strong>Legal Compliance:</strong> Comply with legal obligations, prevent fraud</li>
@@ -87,7 +87,7 @@ export default function PrivacyPage() {
               </div>
 
               <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold text-charcoal mb-2">🤖 OpenAI & Anthropic (AI)</h4>
+                <h4 className="font-semibold text-charcoal mb-2">🤖 Document Processing Services</h4>
                 <p className="text-sm text-gray-700">
                   Process your case information to generate legal documents. Data is anonymized where possible.
                 </p>
@@ -147,7 +147,7 @@ export default function PrivacyPage() {
 
             <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">9. International Transfers</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              Your data is primarily stored on UK/EU servers. If transferred outside the UK/EU (e.g., to AI providers),
+              Your data is primarily stored on UK/EU servers. If transferred outside the UK/EU (e.g., to service providers),
               we ensure adequate safeguards through:
             </p>
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">

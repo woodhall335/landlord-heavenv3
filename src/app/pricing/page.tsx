@@ -192,7 +192,7 @@ export default function PricingPage() {
                 </td>
               </tr>
               <tr className="border-t">
-                <td className="p-4 text-gray-700">AI Document Generation</td>
+                <td className="p-4 text-gray-700">Smart Document Generation</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
@@ -420,9 +420,8 @@ export default function PricingPage() {
               </summary>
               <div className="px-6 pb-4 text-gray-700">
                 <p>
-                  The Complete Pack (£149.99) is already our bulk discount - it saves you £59 vs buying separately.
-                  For portfolio landlords needing 10+ documents per month, contact sales@landlordheaven.co.uk for custom
-                  pricing.
+                  For portfolio landlords needing multiple documents per month, contact sales@landlordheaven.co.uk for custom
+                  pricing and volume discounts.
                 </p>
               </div>
             </details>
@@ -448,13 +447,13 @@ export default function PricingPage() {
 
             <details className="bg-white rounded-lg border border-gray-200 overflow-hidden">
               <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:bg-gray-50">
-                Can I upgrade from Notice Only to Complete Pack later?
+                Can I purchase additional products later?
               </summary>
               <div className="px-6 pb-4 text-gray-700">
                 <p>
-                  Yes! If you've purchased Notice Only (£29.99) and later need court forms, contact
-                  support@landlordheaven.co.uk. We'll credit your £29.99 and charge the difference (£120) for the
-                  upgrade.
+                  Yes! You can purchase any product at any time. Each product is independent and addresses different
+                  landlord needs. If you need assistance choosing the right products, contact
+                  support@landlordheaven.co.uk for guidance.
                 </p>
               </div>
             </details>

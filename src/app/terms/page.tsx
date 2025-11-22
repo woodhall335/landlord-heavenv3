@@ -23,7 +23,7 @@ export default function TermsPage() {
 
             <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">2. Description of Services</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
-              Landlord Heaven provides AI-powered legal document generation services for UK landlords, including but not
+              Landlord Heaven provides legal document generation services for UK landlords, including but not
               limited to:
             </p>
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">

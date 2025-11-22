@@ -67,10 +67,10 @@ export default function HelpPage() {
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
                   <ol className="list-decimal pl-5 space-y-2">
-                    <li>Choose your product (Notice Only, Complete Pack, etc.) or click "Start Wizard"</li>
+                    <li>Choose your product category (Notices, Money Claims, Tenancy Agreements, etc.) or click "Start Wizard"</li>
                     <li>Answer questions about your case (property, tenant, dates, grounds)</li>
-                    <li>Review the AI-generated document preview</li>
-                    <li>Complete payment (£29.99 - £99.99 depending on product)</li>
+                    <li>Review the generated document preview</li>
+                    <li>Complete payment (£29.99 - £129.99 depending on product)</li>
                     <li>Download your documents as PDF immediately</li>
                   </ol>
                   <p className="mt-3">The entire process takes 10-15 minutes.</p>
@@ -103,15 +103,11 @@ export default function HelpPage() {
                 <div className="px-6 pb-4 text-gray-700">
                   <ul className="space-y-3">
                     <li>
-                      <strong>Notice Only (£29.99):</strong> Just need an eviction notice (Section 8/21, Notice to
+                      <strong>Notices (£29.99):</strong> Just need an eviction notice (Section 8/21, Notice to
                       Leave). Tenant might leave voluntarily.
                     </li>
                     <li>
-                      <strong>Complete Pack (£79.99):</strong> Need notice + court claim forms + money claim. Tenant
-                      likely won't leave voluntarily. Best value.
-                    </li>
-                    <li>
-                      <strong>Money Claim (£39.99):</strong> Tenant already left but owes arrears. Just claiming money.
+                      <strong>Money Claims (£129.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
                     </li>
                     <li>
                       <strong>Standard AST (£49.99):</strong> Simple tenancy agreement for standard lettings.
@@ -148,7 +144,7 @@ export default function HelpPage() {
                     </li>
                   </ul>
                   <p className="mt-3">
-                    Our AI automatically detects your jurisdiction from the property address and generates the correct
+                    Our system automatically detects your jurisdiction from the property address and generates the correct
                     documents.
                   </p>
                 </div>
@@ -195,8 +191,8 @@ export default function HelpPage() {
                     ensure any changes comply with UK law.
                   </p>
                   <p className="mt-2">
-                    <strong>Complete Pack users:</strong> Regenerate unlimited times for the same case with updated
-                    information (arrears amounts, dates, etc.)
+                    <strong>All products:</strong> Regenerate unlimited times for the same case with updated
+                    information (arrears amounts, dates, etc.) before final download
                   </p>
                 </div>
               </details>
@@ -208,13 +204,10 @@ export default function HelpPage() {
                 <div className="px-6 pb-4 text-gray-700">
                   <ul className="space-y-2">
                     <li>
-                      <strong>Notice Only & Money Claim:</strong> 12 months from purchase
+                      <strong>Notices & Money Claims:</strong> 12 months from purchase
                     </li>
                     <li>
-                      <strong>Complete Pack:</strong> Lifetime access (as long as account is active)
-                    </li>
-                    <li>
-                      <strong>AST/PRT:</strong> Lifetime access
+                      <strong>Tenancy Agreements:</strong> Lifetime access (as long as account is active)
                     </li>
                     <li>
                       <strong>HMO Pro:</strong> While subscription active + 30 days after cancellation
@@ -272,11 +265,11 @@ export default function HelpPage() {
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
                   <p>
-                    <strong>No.</strong> Landlord Heaven is NOT a law firm. We provide document generation services
-                    using AI, not legal advice or representation.
+                    <strong>No.</strong> Landlord Heaven is NOT a law firm. We provide document generation services,
+                    not legal advice or representation.
                   </p>
                   <p className="mt-3">
-                    Our AI analyzes your inputs and generates appropriate documents, but it cannot:
+                    Our system analyzes your inputs and generates appropriate documents, but it cannot:
                     <br />• Give legal opinions on your specific case
                     <br />• Represent you in court
                     <br />• Guarantee outcomes
@@ -290,7 +283,7 @@ export default function HelpPage() {
 
               <details className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:bg-gray-50">
-                  Will courts accept AI-generated documents?
+                  Will courts accept these documents?
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
                   <p>
@@ -354,7 +347,7 @@ export default function HelpPage() {
                     requirements like deposit protection) - we can help regenerate but can't offer a refund.
                   </p>
                   <p className="mt-3">
-                    Our AI validates your inputs to minimize errors, but you're responsible for providing accurate
+                    Our system validates your inputs to minimize errors, but you're responsible for providing accurate
                     information.
                   </p>
                 </div>
@@ -376,7 +369,7 @@ export default function HelpPage() {
                     <li>✓ Dress professionally and speak clearly</li>
                   </ul>
                   <p className="mt-3">
-                    Our Complete Pack includes hearing preparation guides. For complex cases (tenant disputes facts,
+                    All our legal proceeding products include hearing preparation guides. For complex cases (tenant disputes facts,
                     counterclaims), consider a solicitor.
                   </p>
                 </div>
@@ -495,8 +488,8 @@ export default function HelpPage() {
                   </p>
                   <p className="mt-3">
                     <strong>Best value:</strong>
-                    <br />• Complete Pack (£79.99) saves £40 vs buying separately
-                    <br />• HMO Pro (£29.99/month) covers unlimited properties
+                    <br />• HMO Pro (from £19.99/month) covers unlimited compliance tracking
+                    <br />• Volume discounts available for portfolio landlords
                   </p>
                   <p className="mt-3 text-sm text-gray-600">
                     For portfolio landlords needing 10+ documents/month, contact us at sales@landlordheaven.co.uk for
