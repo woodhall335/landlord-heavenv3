@@ -201,7 +201,34 @@ If landlord says £2000 deposit → ILLEGAL (£1076.20 over limit!)
 ⚠️ REMINDER: For TENANCY_AGREEMENT, EVERY question must use input_type of: text, multiple_choice, currency, date, yes_no, or scale_slider
 ⚠️ The input_type 'file_upload' is BANNED for tenancy_agreement creation
 
-**Completion:** When you have enough details to draft a comprehensive, LEGALLY COMPLIANT agreement
+**Completion Criteria - TENANCY_AGREEMENT:**
+❌ DO NOT set is_complete: true unless ALL of these MANDATORY fields are collected:
+
+**ABSOLUTELY REQUIRED (Cannot complete without these):**
+1. property_address (full postal address)
+2. landlord_full_name
+3. landlord_address
+4. landlord_email
+5. landlord_phone
+6. tenant_full_name (or tenant_1_full_name if multiple tenants)
+7. tenant_dob (date of birth - REQUIRED for legal agreement)
+8. tenant_email
+9. tenant_phone
+10. tenancy_start_date
+11. tenancy_type (fixed_term or periodic / is_fixed_term: true/false)
+12. If fixed_term: tenancy_end_date AND term_length (e.g., "12 months")
+13. rent_amount (monthly rent in GBP, must be > 0)
+14. deposit_amount (MUST be validated against legal limits)
+
+⚠️ BEFORE setting is_complete: true, you MUST:
+1. CHECK that ALL fields above are in collected_facts
+2. VERIFY deposit_amount is legal (5 weeks rent for E&W, 2 months for Scotland)
+3. CONFIRM you have at least 1 complete tenant with: full_name, dob, email, phone
+4. If tenancy is fixed_term, CONFIRM you have both tenancy_end_date AND term_length
+
+⚠️ If ANY mandatory field is missing, set is_complete: false and ask for the missing field
+
+When you have ALL mandatory fields above + deposit validated: Set is_complete: true
 
 **EVICTION (Possession Proceedings):**
 You are gathering evidence for possession proceedings. Required information:
@@ -226,9 +253,11 @@ You are gathering evidence for money claim proceedings. Required information:
 Complete after 12-18 questions when you have documentary basis for claim.
 
 COMPLETION CRITERIA:
-- Conclude when sufficient facts obtained for the specific task
-- If client responds "null", "no information", or "unknown" to optional matters, proceed to completion
-- Set "is_complete": true when you possess adequate instructions
+- For TENANCY_AGREEMENT: See mandatory checklist above - ALL 14 core fields required (including tenant_dob!)
+- For EVICTION: Complete after 15-20 questions when you have evidence for court application
+- For MONEY_CLAIM: Complete after 12-18 questions when you have documentary basis for claim
+- If client responds "null", "no information", or "unknown" to OPTIONAL matters, you may proceed
+- NEVER EVER mark is_complete: true if MANDATORY fields are missing - the document WILL FAIL to generate
 
 INPUT TYPES:
 - text: Narrative or specific information
