@@ -7,8 +7,8 @@
 
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Badge, Button, Container, TealHero } from '@/components/ui';
 import { clsx } from 'clsx';
 
@@ -30,8 +30,8 @@ interface JurisdictionOption {
 const documentOptions: DocumentOption[] = [
   {
     type: 'eviction',
-    title: 'Eviction Notice',
-    description: 'Section 8, Section 21, or jurisdiction equivalent - get the right notice for your situation',
+    title: 'Eviction Pack',
+    description: 'Complete eviction bundle from notice to possession order',
     icon: '🏠',
     price: 'From £29.99',
     popular: true,
@@ -58,11 +58,43 @@ const jurisdictions: JurisdictionOption[] = [
   { value: 'northern-ireland', label: 'Northern Ireland', flag: '🇬🇧' },
 ];
 
+// Map product parameter to document type
+function mapProductToDocumentType(product: string): 'eviction' | 'money_claim' | 'tenancy_agreement' | null {
+  switch (product) {
+    case 'complete_pack':
+    case 'notice_only':
+      return 'eviction';
+    case 'money_claim':
+      return 'money_claim';
+    case 'ast_standard':
+    case 'ast_premium':
+      return 'tenancy_agreement';
+    default:
+      return null;
+  }
+}
+
 export default function WizardPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [selectedDocument, setSelectedDocument] = useState<DocumentOption | null>(null);
   const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionOption | null>(null);
   const [step, setStep] = useState<1 | 2>(1);
+
+  // Handle product parameter from URL
+  useEffect(() => {
+    const productParam = searchParams.get('product');
+    if (productParam) {
+      const docType = mapProductToDocumentType(productParam);
+      if (docType) {
+        const doc = documentOptions.find(d => d.type === docType);
+        if (doc) {
+          setSelectedDocument(doc);
+          setStep(2); // Skip to jurisdiction selection
+        }
+      }
+    }
+  }, [searchParams]);
 
   const handleDocumentSelect = (doc: DocumentOption) => {
     setSelectedDocument(doc);

@@ -123,7 +123,7 @@ export default function ASTPage() {
                   </ul>
 
                   <Link
-                    href="/tenancy-agreements/england-wales"
+                    href="/wizard?product=ast_standard"
                     className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
                   >
                     Get Standard - £39.99
@@ -267,7 +267,7 @@ export default function ASTPage() {
                   </ul>
 
                   <Link
-                    href="/tenancy-agreements/england-wales"
+                    href="/wizard?product=ast_premium"
                     className="block w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-emerald-600 transition-colors"
                   >
                     Get Premium - £59.00
@@ -576,13 +576,13 @@ export default function ASTPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/tenancy-agreements/england-wales"
+                href="/wizard?product=ast_standard"
                 className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors"
               >
                 Standard - £39.99 →
               </Link>
               <Link
-                href="/tenancy-agreements/england-wales"
+                href="/wizard?product=ast_premium"
                 className="inline-block bg-charcoal text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors"
               >
                 Premium - £59.00 →
