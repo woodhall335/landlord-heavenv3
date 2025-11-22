@@ -48,7 +48,14 @@ function WizardFlowContent() {
 
           if (response.ok) {
             const data = await response.json();
-            setCaseId(data.case_id);
+            if (data.success && data.case?.id) {
+              setCaseId(data.case.id);
+            } else {
+              console.error('Invalid response format:', data);
+              throw new Error('Failed to get case ID from response');
+            }
+          } else {
+            throw new Error(`Failed to start wizard: ${response.status} ${response.statusText}`);
           }
         } catch (err) {
           console.error('Failed to initialize case:', err);
