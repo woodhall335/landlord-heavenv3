@@ -16,7 +16,7 @@ export interface ScaleLevel {
 
 export interface ScaleSliderProps {
   value?: number;
-  onChange: (value: number);
+  onChange: (value: number) => void;
   min: number;
   max: number;
   step?: number;
