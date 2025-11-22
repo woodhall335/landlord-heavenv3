@@ -44,6 +44,11 @@ export default function CaseDetailPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editedFacts, setEditedFacts] = useState<Record<string, any>>({});
+  const [isSaving, setIsSaving] = useState(false);
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
     if (caseId) {
@@ -59,6 +64,7 @@ export default function CaseDetailPage() {
       if (response.ok) {
         const data = await response.json();
         setCaseDetails(data.case);
+        setEditedFacts(data.case.collected_facts || {});
       } else {
         setError('Case not found');
       }
@@ -121,6 +127,84 @@ export default function CaseDetailPage() {
     }
   };
 
+  const handleSaveChanges = async () => {
+    setIsSaving(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch(`/api/cases/${caseId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          collected_facts: editedFacts,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to save changes');
+      }
+
+      setMessage({ type: 'success', text: 'Changes saved successfully!' });
+      setIsEditMode(false);
+      fetchCaseDetails();
+    } catch (err: any) {
+      console.error('Error saving changes:', err);
+      setMessage({ type: 'error', text: err.message || 'Failed to save changes' });
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleRegenerateDocument = async () => {
+    if (!caseDetails) return;
+
+    const confirmed = confirm(
+      'This will regenerate the document with the current case data. Any unsaved changes will be lost. Continue?'
+    );
+
+    if (!confirmed) return;
+
+    setIsRegenerating(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/documents/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          case_id: caseId,
+          document_type: caseDetails.case_type,
+          is_preview: false,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to regenerate document');
+      }
+
+      setMessage({ type: 'success', text: 'Document regenerated successfully!' });
+      fetchCaseDocuments();
+    } catch (err: any) {
+      console.error('Error regenerating document:', err);
+      setMessage({ type: 'error', text: err.message || 'Failed to regenerate document' });
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
+
+  const handleFieldChange = (key: string, value: any) => {
+    setEditedFacts({
+      ...editedFacts,
+      [key]: value,
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setEditedFacts(caseDetails?.collected_facts || {});
+    setIsEditMode(false);
+    setMessage(null);
+  };
+
   const handleContinueWizard = () => {
     router.push(`/wizard/flow?type=${caseDetails?.case_type}&jurisdiction=${caseDetails?.jurisdiction}&case_id=${caseId}`);
   };
@@ -143,6 +227,70 @@ export default function CaseDetailPage() {
     } catch (err) {
       alert('Failed to delete case');
     }
+  };
+
+  const renderFieldValue = (key: string, value: any) => {
+    if (!isEditMode) {
+      // View mode - just display the value
+      return (
+        <div className="text-base text-charcoal font-medium">
+          {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
+        </div>
+      );
+    }
+
+    // Edit mode - render appropriate input
+    if (typeof value === 'boolean') {
+      return (
+        <select
+          value={value ? 'true' : 'false'}
+          onChange={(e) => handleFieldChange(key, e.target.value === 'true')}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+        >
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      );
+    }
+
+    if (typeof value === 'number') {
+      return (
+        <input
+          type="number"
+          value={value}
+          onChange={(e) => handleFieldChange(key, parseFloat(e.target.value) || 0)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+        />
+      );
+    }
+
+    if (typeof value === 'string' && value.length > 100) {
+      return (
+        <textarea
+          value={value}
+          onChange={(e) => handleFieldChange(key, e.target.value)}
+          rows={4}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+        />
+      );
+    }
+
+    if (typeof value === 'object' && value !== null) {
+      return (
+        <pre className="bg-gray-50 p-4 rounded-lg text-sm overflow-x-auto">
+          {JSON.stringify(value, null, 2)}
+        </pre>
+      );
+    }
+
+    return (
+      <input
+        type="text"
+        value={value || ''}
+        onChange={(e) => handleFieldChange(key, e.target.value)}
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+      />
+    );
   };
 
   if (isLoading) {
@@ -226,46 +374,104 @@ export default function CaseDetailPage() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
-            {caseDetails.wizard_progress < 100 && (
-              <Button variant="primary" onClick={handleContinueWizard}>
-                Continue Wizard
-              </Button>
+          <div className="flex flex-wrap gap-3">
+            {!isEditMode ? (
+              <>
+                <Button variant="primary" onClick={() => setIsEditMode(true)}>
+                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  </svg>
+                  Edit Case Details
+                </Button>
+                {caseDetails.wizard_progress < 100 && (
+                  <Button variant="secondary" onClick={handleContinueWizard}>
+                    Continue Wizard
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  onClick={handleRegenerateDocument}
+                  disabled={isRegenerating}
+                >
+                  {isRegenerating ? 'Regenerating...' : 'Regenerate Document'}
+                </Button>
+                {documents.length > 0 && (
+                  <Link href={`/wizard/preview/${caseId}`}>
+                    <Button variant="outline">View Preview</Button>
+                  </Link>
+                )}
+                <Button variant="outline" onClick={handleDeleteCase}>
+                  Delete Case
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  variant="primary"
+                  onClick={handleSaveChanges}
+                  disabled={isSaving}
+                >
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleCancelEdit}
+                  disabled={isSaving}
+                >
+                  Cancel
+                </Button>
+              </>
             )}
-            {documents.length > 0 && (
-              <Link href={`/wizard/preview/${caseId}`}>
-                <Button variant="secondary">View Documents</Button>
-              </Link>
-            )}
-            <Button variant="outline" onClick={handleDeleteCase}>
-              Delete Case
-            </Button>
           </div>
         </Container>
       </div>
 
       <Container size="large" className="py-8">
+        {/* Message Display */}
+        {message && (
+          <div
+            className={`mb-6 p-4 rounded-lg ${
+              message.type === 'success'
+                ? 'bg-success/10 text-success border border-success/20'
+                : 'bg-error/10 text-error border border-error/20'
+            }`}
+          >
+            {message.text}
+          </div>
+        )}
+
+        {/* Edit Mode Warning */}
+        {isEditMode && (
+          <div className="mb-6 p-4 bg-warning/10 border border-warning/20 rounded-lg">
+            <p className="text-warning font-semibold">Edit Mode Active</p>
+            <p className="text-sm text-gray-700">Make your changes and click "Save Changes" when done, or "Cancel" to discard changes.</p>
+          </div>
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column: Main Info */}
           <div className="lg:col-span-2 space-y-6">
             {/* Collected Facts */}
             <Card padding="large">
-              <h2 className="text-xl font-semibold text-charcoal mb-6">
-                Collected Information
-              </h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-semibold text-charcoal">
+                  Collected Information
+                </h2>
+                {isEditMode && (
+                  <span className="text-sm text-warning font-medium">Editing...</span>
+                )}
+              </div>
 
-              {Object.keys(caseDetails.collected_facts).length === 0 ? (
+              {Object.keys(editedFacts).length === 0 ? (
                 <p className="text-gray-600">No information collected yet.</p>
               ) : (
                 <div className="space-y-4">
-                  {Object.entries(caseDetails.collected_facts).map(([key, value]) => (
+                  {Object.entries(editedFacts).map(([key, value]) => (
                     <div key={key} className="pb-4 border-b border-gray-200 last:border-0">
-                      <div className="text-sm text-gray-600 mb-1 capitalize">
+                      <div className="text-sm text-gray-600 mb-2 capitalize font-medium">
                         {key.replace(/_/g, ' ')}
                       </div>
-                      <div className="text-base text-charcoal font-medium">
-                        {typeof value === 'object' ? JSON.stringify(value, null, 2) : String(value)}
-                      </div>
+                      {renderFieldValue(key, value)}
                     </div>
                   ))}
                 </div>
