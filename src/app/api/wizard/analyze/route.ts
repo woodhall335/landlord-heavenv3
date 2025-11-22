@@ -3,9 +3,10 @@
  *
  * POST /api/wizard/analyze
  * Analyzes the case using the decision engine and returns recommendations
+ * ALLOWS ANONYMOUS ACCESS
  */
 
-import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { analyzeCase } from '@/lib/decision-engine/engine';
 import { detectHMO, shouldShowHMOUpsell } from '@/lib/utils/hmo-detection';
 import { NextResponse } from 'next/server';
@@ -18,7 +19,8 @@ const analyzeSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const user = await requireServerAuth();
+    // Allow anonymous access - user is optional
+    const user = await getServerUser();
     const body = await request.json();
 
     // Validate input
@@ -36,12 +38,12 @@ export async function POST(request: Request) {
     const { case_id } = validationResult.data;
     const supabase = await createServerSupabaseClient();
 
-    // Fetch case
+    // Fetch case (allow both logged-in users and anonymous)
     const { data: caseData, error: caseError } = await supabase
       .from('cases')
       .select('*')
       .eq('id', case_id)
-      .eq('user_id', user.id)
+      .eq('user_id', user ? user.id : null)
       .single();
 
     if (caseError || !caseData) {
@@ -113,13 +115,6 @@ export async function POST(request: Request) {
       { status: 200 }
     );
   } catch (error: any) {
-    if (error.message === 'Unauthorized - Please log in') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
     console.error('Analyze case error:', error);
     return NextResponse.json(
       { error: error.message || 'Internal server error' },

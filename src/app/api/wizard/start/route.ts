@@ -3,9 +3,10 @@
  *
  * POST /api/wizard/start
  * Creates a new case and initiates the wizard flow
+ * ALLOWS ANONYMOUS ACCESS - Users can try wizard before signing up
  */
 
-import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -17,7 +18,8 @@ const startWizardSchema = z.object({
 
 export async function POST(request: Request) {
   try {
-    const user = await requireServerAuth();
+    // Get user if logged in (but don't require it)
+    const user = await getServerUser();
     const body = await request.json();
 
     // Validate input
@@ -35,11 +37,11 @@ export async function POST(request: Request) {
     const { case_type, jurisdiction } = validationResult.data;
     const supabase = await createServerSupabaseClient();
 
-    // Create new case
+    // Create new case (user_id can be null for anonymous users)
     const { data: newCase, error: caseError } = await supabase
       .from('cases')
       .insert({
-        user_id: user.id,
+        user_id: user?.id || null,
         case_type,
         jurisdiction,
         status: 'in_progress',
@@ -66,13 +68,6 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error: any) {
-    if (error.message === 'Unauthorized - Please log in') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
     console.error('Start wizard error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
