@@ -274,7 +274,7 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
   },
 
   // ============================================================================
-  // SECTION 6: DEPOSIT
+  // SECTION 6: DEPOSIT (Jurisdiction-specific)
   // ============================================================================
   {
     id: 'deposit_amount',
@@ -282,7 +282,7 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
     question: 'What is the deposit amount?',
     inputType: 'currency',
     placeholder: '1400',
-    helperText: 'Maximum: 5 weeks rent (calculated automatically)',
+    helperText: 'England & Wales: Max 5 weeks rent. Scotland: Max 2 months rent. Northern Ireland: Max 2 months rent (recommended)',
     validation: { required: true, min: 0 },
   },
   {
@@ -290,12 +290,8 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
     section: 'Deposit',
     question: 'Which deposit protection scheme will you use?',
     inputType: 'select',
-    options: [
-      'Deposit Protection Service (DPS)',
-      'MyDeposits',
-      'Tenancy Deposit Scheme (TDS)',
-    ],
-    helperText: 'Required by law in England & Wales',
+    options: [], // Will be populated based on jurisdiction
+    helperText: 'Required by law to protect tenant deposits',
     validation: { required: true },
   },
 
@@ -378,4 +374,65 @@ function getOrdinalSuffix(day: number): string {
     case 3: return 'rd';
     default: return 'th';
   }
+}
+
+// Get jurisdiction-specific deposit schemes
+export function getDepositSchemes(jurisdiction: string): string[] {
+  switch (jurisdiction) {
+    case 'england-wales':
+      return [
+        'Deposit Protection Service (DPS)',
+        'MyDeposits',
+        'Tenancy Deposit Scheme (TDS)',
+      ];
+    case 'scotland':
+      return [
+        'SafeDeposits Scotland',
+        'MyDeposits Scotland',
+        'Letting Protection Service Scotland',
+      ];
+    case 'northern-ireland':
+      return [
+        'TDS Northern Ireland',
+        'MyDeposits Northern Ireland',
+      ];
+    default:
+      return [];
+  }
+}
+
+// Get jurisdiction-specific max deposit
+export function getMaxDeposit(jurisdiction: string, rentAmount: number): number {
+  const monthlyRent = rentAmount;
+  const weeklyRent = monthlyRent / 4.33;
+
+  switch (jurisdiction) {
+    case 'england-wales':
+      // Tenant Fees Act 2019: 5 weeks (or 6 if annual rent > £50k)
+      const annualRent = monthlyRent * 12;
+      const maxWeeks = annualRent > 50000 ? 6 : 5;
+      return weeklyRent * maxWeeks;
+    case 'scotland':
+      // Scotland: Max 2 months rent
+      return monthlyRent * 2;
+    case 'northern-ireland':
+      // NI: Max 2 months rent (guidance)
+      return monthlyRent * 2;
+    default:
+      return 0;
+  }
+}
+
+// Get jurisdiction-specific questions
+export function getJurisdictionQuestions(jurisdiction: string): WizardQuestion[] {
+  return TENANCY_AGREEMENT_QUESTIONS.map(q => {
+    // Update deposit scheme options
+    if (q.id === 'deposit_scheme') {
+      return {
+        ...q,
+        options: getDepositSchemes(jurisdiction),
+      };
+    }
+    return q;
+  });
 }

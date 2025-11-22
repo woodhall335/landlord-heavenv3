@@ -8,7 +8,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button, Input, Card } from '@/components/ui';
-import { TENANCY_AGREEMENT_QUESTIONS, WizardQuestion } from '@/lib/wizard/tenancy-questions';
+import { getJurisdictionQuestions, getMaxDeposit, WizardQuestion } from '@/lib/wizard/tenancy-questions';
 
 interface StructuredWizardProps {
   caseId: string;
@@ -28,9 +28,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Get jurisdiction-specific questions
+  const allQuestions = getJurisdictionQuestions(jurisdiction);
+
   // Get all questions (filter out conditional questions that don't apply)
   const getVisibleQuestions = (): WizardQuestion[] => {
-    return TENANCY_AGREEMENT_QUESTIONS.filter((q) => {
+    return allQuestions.filter((q) => {
       if (!q.dependsOn) return true;
 
       const dependentValue = answers[q.dependsOn.questionId];
@@ -65,17 +68,19 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       }
     }
 
-    // Validate deposit amount against rent (Tenant Fees Act 2019)
+    // Validate deposit amount against rent (jurisdiction-specific)
     if (currentQuestion.id === 'deposit_amount') {
       const rentAmount = parseFloat(answers.rent_amount);
       const depositAmount = parseFloat(answer);
 
       if (rentAmount && depositAmount) {
-        const weeklyRent = rentAmount / 4.33;
-        const maxDeposit = weeklyRent * 5; // 5 weeks for England & Wales
+        const maxDeposit = getMaxDeposit(jurisdiction, rentAmount);
 
         if (depositAmount > maxDeposit + 0.01) {
-          setError(`❌ ILLEGAL DEPOSIT: £${depositAmount} exceeds legal maximum of £${maxDeposit.toFixed(2)} (5 weeks rent). Tenant Fees Act 2019 violation.`);
+          const jurisdictionName = jurisdiction === 'england-wales' ? 'England & Wales (Tenant Fees Act 2019)' :
+                                   jurisdiction === 'scotland' ? 'Scotland' :
+                                   'Northern Ireland';
+          setError(`❌ ILLEGAL DEPOSIT: £${depositAmount} exceeds legal maximum of £${maxDeposit.toFixed(2)}. This violates ${jurisdictionName} deposit protection laws.`);
           return false;
         }
       }
