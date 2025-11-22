@@ -1,0 +1,544 @@
+{{! Notice to Quit - Northern Ireland }}
+{{! Private Tenancies (Northern Ireland) Order 2006 }}
+{{! Generated: {{generation_date}} }}
+
+# NOTICE TO QUIT
+
+**Private Tenancies (Northern Ireland) Order 2006**
+
+---
+
+## TO THE TENANT(S)
+
+**Name:** {{tenant_full_name}}{{#if tenant_2_name}} and {{tenant_2_name}}{{/if}}
+
+**Address:** {{property_address}}
+
+---
+
+## FROM THE LANDLORD
+
+**Name:** {{landlord_full_name}}{{#if landlord_2_name}} and {{landlord_2_name}}{{/if}}
+
+**Address:** {{landlord_address}}
+
+{{#if landlord_email}}**Email:** {{landlord_email}}{{/if}}
+{{#if landlord_phone}}**Phone:** {{landlord_phone}}{{/if}}
+
+---
+
+## NOTICE TO QUIT THE PROPERTY
+
+I/We give you notice to quit and deliver up possession of the property specified above.
+
+**Date of this notice:** {{notice_date}}
+
+**Date you must vacate:** {{quit_date}}
+
+**Notice period given:** {{notice_period_weeks}} weeks ({{notice_period_days}} days)
+
+---
+
+## REASON FOR NOTICE TO QUIT
+
+I/we are giving you this notice because I/we intend to apply to the County Court for an order for possession of the property on the following ground(s):
+
+{{#each grounds}}
+### Ground {{this.number}}: {{this.title}}
+
+{{this.legal_basis}}
+
+**Particulars:**
+
+{{this.particulars}}
+
+{{#if this.supporting_evidence}}
+**Evidence:**
+
+{{this.supporting_evidence}}
+{{/if}}
+
+---
+{{/each}}
+
+{{! GROUND-SPECIFIC SECTIONS }}
+
+{{#if ground_8_claimed}}
+## PARTICULARS OF GROUND 8 - SERIOUS RENT ARREARS (MANDATORY)
+
+**Current rent:** £{{rent_amount}} per {{rent_period}}
+
+**Total arrears:** £{{total_arrears}} as of {{arrears_date}}
+
+**Duration of arrears:** {{arrears_duration_weeks}} weeks
+
+### Breakdown of Arrears:
+
+| Period | Rent Due | Rent Paid | Balance |
+|--------|----------|-----------|------------|
+{{#each arrears_breakdown}}
+| {{this.period}} | £{{this.amount_due}} | £{{this.amount_paid}} | £{{this.balance}} |
+{{/each}}
+
+**Total owed:** £{{total_arrears}}
+
+{{#if last_payment_date}}
+Last payment received: £{{last_payment_amount}} on {{last_payment_date}}
+{{/if}}
+
+**IMPORTANT:** Ground 8 is a mandatory ground. If you owe at least 8 weeks' rent both when this notice is served and at the court hearing, the court must grant a possession order.
+
+{{/if}}
+
+{{#if ground_10_claimed}}
+## PARTICULARS OF GROUND 10 - RENT ARREARS (DISCRETIONARY)
+
+**Current rent:** £{{rent_amount}} per {{rent_period}}
+
+**Total arrears:** £{{total_arrears}} as of {{arrears_date}}
+
+### Breakdown of Arrears:
+
+| Period | Rent Due | Rent Paid | Balance |
+|--------|----------|-----------|------------|
+{{#each arrears_breakdown}}
+| {{this.period}} | £{{this.amount_due}} | £{{this.amount_paid}} | £{{this.balance}} |
+{{/each}}
+
+**Total owed:** £{{total_arrears}}
+
+{{/if}}
+
+{{#if ground_11_claimed}}
+## PARTICULARS OF GROUND 11 - PERSISTENT LATE PAYMENT
+
+You have persistently delayed paying rent which was lawfully due.
+
+**Payment history:**
+
+{{#each payment_history}}
+- **{{this.date}}**: Rent due on {{this.due_date}}, paid on {{this.paid_date}} ({{this.days_late}} days late)
+{{/each}}
+
+{{/if}}
+
+{{#if ground_12_claimed}}
+## PARTICULARS OF GROUND 12 - BREACH OF TENANCY
+
+**Tenancy clause breached:** {{tenancy_clause}}
+
+**Nature of breach:** {{breach_type}}
+
+**Description:**
+
+{{breach_description}}
+
+{{#if breach_date}}**Date of breach:** {{breach_date}}{{/if}}
+
+{{#if warnings_given}}
+### Warnings Given:
+
+{{#each warnings_list}}
+- **{{this.date}}** - {{this.method}}: {{this.description}}
+{{/each}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_13_claimed}}
+## PARTICULARS OF GROUND 13 - PROPERTY DETERIORATION
+
+The condition of the property or any of the common parts has deteriorated owing to acts of waste by, or the neglect or default of, you or any person residing or lodging with you.
+
+**Description of deterioration:**
+
+{{property_deterioration_description}}
+
+{{#if deterioration_evidence}}
+**Evidence:** {{deterioration_evidence}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_14_claimed}}
+## PARTICULARS OF GROUND 14 - NUISANCE OR ANNOYANCE
+
+You or a person residing with you or visiting the property has been guilty of conduct which is a nuisance or annoyance to adjoining occupiers, or has been convicted of using the property or allowing it to be used for immoral or illegal purposes.
+
+**Type of nuisance/annoyance:** {{asb_type}}
+
+**Description:**
+
+{{asb_description}}
+
+### Incidents:
+
+{{#each asb_incidents}}
+**{{this.date}}{{#if this.time}} at {{this.time}}{{/if}}**
+
+{{this.description}}
+
+{{#if this.witnesses}}
+Witnesses: {{join this.witnesses ", "}}
+{{/if}}
+
+---
+{{/each}}
+
+{{#if police_involved}}
+**Police involvement:** The police have been called on {{police_call_count}} occasion(s).
+
+Crime Reference Numbers: {{join police_crime_numbers ", "}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_15_claimed}}
+## PARTICULARS OF GROUND 15 - ILLEGAL OR IMMORAL USE
+
+The property has been used for immoral or illegal purposes.
+
+**Description of illegal/immoral use:**
+
+{{illegal_use_description}}
+
+{{#if conviction}}
+**Criminal conviction:** {{conviction_details}}
+**Court:** {{court_name}}
+**Date:** {{conviction_date}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_16_claimed}}
+## PARTICULARS OF GROUND 16 - TENANT GAVE NOTICE BUT FAILED TO VACATE
+
+You gave notice to quit the property but failed to give up possession on the date specified in your notice.
+
+**Your notice to quit dated:** {{tenant_notice_date}}
+**Quit date specified:** {{tenant_quit_date}}
+**You failed to vacate on:** {{failed_to_vacate_date}}
+
+{{/if}}
+
+{{#if ground_17_claimed}}
+## PARTICULARS OF GROUND 17 - FALSE STATEMENT
+
+You made a false statement knowingly or recklessly which induced me/us to grant the tenancy.
+
+**False statement made:**
+
+{{false_statement}}
+
+**When/where made:** {{statement_context}}
+
+**True facts:**
+
+{{true_facts}}
+
+**How this was material:**
+
+{{materiality_explanation}}
+
+I/we would not have granted the tenancy had we known the true facts.
+
+{{/if}}
+
+{{#if ground_1_claimed}}
+## PARTICULARS OF GROUND 1 - LANDLORD PREVIOUSLY OCCUPIED (MANDATORY)
+
+I/we previously occupied the property as my/our only or principal home, and written notice was given to you before the tenancy commenced that possession might be recovered on this ground.
+
+**Notice given before tenancy:** {{notice_before_tenancy_date}}
+
+**IMPORTANT:** Ground 1 is a mandatory ground. If the requirements are met, the court must grant a possession order.
+
+{{/if}}
+
+{{#if ground_2_claimed}}
+## PARTICULARS OF GROUND 2 - MORTGAGE LENDER SEEKING POSSESSION (MANDATORY)
+
+The property is subject to a mortgage granted before the beginning of the tenancy and the mortgagee is entitled to exercise a power of sale.
+
+**Lender:** {{lender_name}}
+**Mortgage date:** {{mortgage_date}}
+**Tenancy start date:** {{tenancy_start_date}}
+
+{{#if lender_notice}}
+The lender has served notice requiring vacant possession.
+Date of lender's notice: {{lender_notice_date}}
+{{/if}}
+
+**IMPORTANT:** Ground 2 is a mandatory ground.
+
+{{/if}}
+
+---
+
+## WHAT THIS NOTICE MEANS
+
+This Notice to Quit means that I/we require you to leave the property and intend to apply to the County Court for an order for possession.
+
+**You do not have to leave the property when this notice expires.** I/we cannot make you leave without obtaining a court order.
+
+However, **you should take this notice seriously** and seek advice immediately.
+
+---
+
+## NEXT STEPS
+
+### If you do not leave voluntarily:
+
+1. I/we will apply to the **County Court** for a possession order
+2. You will receive a court summons with the hearing date
+3. You can defend the claim at the court hearing
+4. If the court grants possession, you must leave by the date specified
+5. If you still don't leave, the court may issue a warrant for enforcement officers to evict you
+
+---
+
+## WHAT YOU SHOULD DO NOW
+
+### 1. Get Advice Immediately
+
+**Do not ignore this notice.** Contact one or more of the following for free, confidential advice:
+
+**Housing Rights:**
+- Website: www.housingrights.org.uk
+- Phone: 028 9024 5640
+- Advice Line: Mon-Thurs 9:30am-1pm, 2pm-4pm
+
+**Housing Executive (NIHE):**
+- Website: www.nihe.gov.uk
+- Helpline: 03448 920 900
+
+**Citizens Advice:**
+- Website: www.citizensadvice.org.uk
+- Find your local bureau
+
+**Solicitor:**
+- You may be entitled to legal aid
+- Contact the Legal Services Agency NI: 028 9040 8888
+
+### 2. Check the Notice is Valid
+
+A Notice to Quit must:
+- Be in writing
+- Be properly served
+- Give the correct notice period based on your tenancy length
+- Specify the ground(s) for eviction
+
+If you think the notice is invalid, seek legal advice immediately.
+
+### 3. Respond to the Grounds
+
+{{#if ground_8_claimed}}
+**If this is about rent arrears (Ground 8 - Mandatory):**
+- Contact me/us immediately to discuss payment
+- Check if you're entitled to benefits (Universal Credit, Housing Benefit)
+- Even if you clear the arrears, I/we may still proceed to court
+- If you owe 8+ weeks rent at the hearing, the court must grant possession
+
+{{/if}}
+
+{{#if ground_10_claimed}}
+**If this is about rent arrears (Ground 10 - Discretionary):**
+- Pay off the arrears if possible
+- Contact me/us to discuss payment arrangements
+- The court will consider if it's reasonable to evict you
+- Clearing arrears improves your chances
+
+{{/if}}
+
+{{#if ground_12_claimed}}
+**If this is about a breach of tenancy:**
+- Stop the breach immediately
+- Remedy any damage or issues
+- Contact me/us to discuss
+- Keep evidence of steps you've taken
+
+{{/if}}
+
+{{#if ground_14_claimed}}
+**If this is about nuisance or antisocial behaviour:**
+- Stop the behaviour immediately
+- Apologize to affected neighbors
+- Seek support if needed
+- Engage with any agencies involved
+
+{{/if}}
+
+### 4. Consider Your Options
+
+- **Stay and defend:** You have the right to contest the application at court
+- **Negotiate:** Contact me/us to discuss possible solutions
+- **Leave voluntarily:** If you choose to leave, ensure this is agreed in writing
+
+---
+
+## COURT PROCESS
+
+If I/we apply to the County Court for possession:
+
+1. **You will receive a court summons** with the hearing date (usually 4-8 weeks)
+2. **You can submit a defense** explaining why possession should not be granted
+3. **You can attend the hearing** and present your case
+4. **You can be represented** by a solicitor
+5. **The judge will decide** whether to grant possession
+
+For **mandatory grounds** (1, 2, 5, 8), the court must grant possession if the ground is proven.
+
+For **discretionary grounds**, the court will consider:
+- Whether the ground is proven
+- Whether it is reasonable to grant possession
+- Your personal circumstances
+- Availability of alternative accommodation
+- My/our conduct as landlord
+
+---
+
+## HELP WITH RENT AND HOUSING COSTS
+
+{{#if ground_10_claimed}}
+If you're struggling with rent, you may be entitled to help:
+
+**Universal Credit:** Includes help with housing costs
+- Apply: www.nidirect.gov.uk/universal-credit
+- Phone: 0800 012 1573
+
+**Housing Benefit:** If not on Universal Credit
+- Apply through your local office
+- Phone: 0800 232 1271
+
+**Discretionary Support:** For emergency assistance
+- Contact local Health & Social Care Trust
+
+**Debt advice:**
+- Advice NI: 0800 915 4604
+- StepChange: 0800 138 1111
+
+{{/if}}
+
+---
+
+## YOUR DEPOSIT
+
+{{#if deposit_protected}}
+Your deposit of £{{deposit_amount}} is protected in the {{deposit_scheme}} scheme.
+
+**Scheme details:** {{deposit_scheme_details}}
+**Deposit reference:** {{deposit_reference}}
+{{else}}
+{{#if deposit_amount}}
+A deposit of £{{deposit_amount}} was paid at the start of the tenancy.
+{{/if}}
+{{/if}}
+
+At the end of the tenancy, any disputed deductions from your deposit will be resolved through the deposit scheme's dispute resolution service.
+
+**IMPORTANT:** If your deposit was not properly protected, this may affect the landlord's ability to obtain a possession order.
+
+---
+
+## IMPORTANT LEGAL INFORMATION
+
+### Illegal Eviction
+
+It is a **criminal offence** for me/us to evict you without a court order. I/we cannot:
+- Change the locks
+- Remove your belongings
+- Cut off utilities
+- Harass you to leave
+- Use violence or threats
+
+If you are illegally evicted, contact the police immediately.
+
+### Homelessness
+
+If you become homeless, the Northern Ireland Housing Executive has a duty to assess your situation and may have a duty to provide accommodation.
+
+**Apply as homeless before leaving the property** if you cannot find alternative accommodation.
+
+Contact: Housing Executive Homelessness Services
+- Phone: 03448 920 900
+- Website: www.nihe.gov.uk
+
+---
+
+## LANDLORD'S DECLARATION
+
+I/We declare that the information in this Notice to Quit is correct to the best of my/our knowledge and belief.
+
+{{#if ground_1_claimed}}
+I/We confirm that written notice was given to the tenant before the tenancy commenced that possession might be recovered on Ground 1.
+{{/if}}
+
+**Signed:** _________________________
+
+**Name:** {{landlord_full_name}}
+
+{{#if landlord_2_name}}
+**Signed:** _________________________
+
+**Name:** {{landlord_2_name}}
+{{/if}}
+
+**Date:** {{notice_date}}
+
+---
+
+## NOTES FOR LANDLORDS
+
+### Service of Notice
+
+This notice must be properly served on the tenant. Methods of service:
+1. **Personal service** - handed to the tenant
+2. **Registered post** - sent by registered post or recorded delivery
+3. **Ordinary post** - sent to the property address
+
+**Keep proof of service** - This will be required for any court application.
+
+### Notice Period Requirements
+
+The notice period depends on the **length of the tenancy**, not the ground:
+
+- **Less than 1 year:** 4 weeks (28 days)
+- **1 to 10 years:** 8 weeks (56 days)
+- **10+ years:** 12 weeks (84 days)
+
+Ensure you have given the correct notice period before applying to court.
+
+### Before Applying to Court
+
+- Ensure notice period has expired
+- Gather all evidence to prove the ground(s)
+- Check deposit has been properly protected
+- Ensure all compliance requirements met (gas safety, EPC, etc.)
+- Consider alternative dispute resolution
+
+### After Notice Expires
+
+If the tenant does not leave, you must apply to the County Court. You cannot evict without a court order.
+
+Application forms: Available from the County Court or online
+
+---
+
+**END OF NOTICE**
+
+---
+
+{{#if is_preview}}
+**PREVIEW DOCUMENT - NOT FOR LEGAL USE**
+
+This is a preview generated by Landlord Heaven. A final, legally binding version will be provided upon payment.
+{{else}}
+**Document generated by Landlord Heaven** (www.landlordheaven.co.uk)
+
+Generated: {{generation_timestamp}}
+Document ID: {{document_id}}
+{{/if}}
+
+---
+
+**LEGAL DISCLAIMER:** This notice has been generated based on the information provided. While every effort has been made to ensure accuracy and compliance with the Private Tenancies (Northern Ireland) Order 2006, this does not constitute legal advice. You should seek independent legal advice before serving this notice or taking any legal action. Landlord Heaven is not responsible for any consequences arising from the use of this document.
