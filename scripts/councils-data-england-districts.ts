@@ -659,7 +659,7 @@ export const ENGLISH_DISTRICT_COUNCILS = [
     confidence: '✓✓' as const
   },
   {
-    code: 'E07000066',
+    code: 'E07000073',
     name: 'Colchester Borough Council',
     jurisdiction: 'england' as const,
     region: 'East of England',
@@ -694,7 +694,7 @@ export const ENGLISH_DISTRICT_COUNCILS = [
     confidence: '✓✓✓' as const
   },
   {
-    code: 'E07000067',
+    code: 'E07000074',
     name: 'Epping Forest District Council',
     jurisdiction: 'england' as const,
     region: 'East of England',
@@ -722,7 +722,7 @@ export const ENGLISH_DISTRICT_COUNCILS = [
     confidence: '✓✓' as const
   },
   {
-    code: 'E07000068',
+    code: 'E07000075',
     name: 'Harlow District Council',
     jurisdiction: 'england' as const,
     region: 'East of England',
@@ -750,7 +750,7 @@ export const ENGLISH_DISTRICT_COUNCILS = [
     confidence: '✓✓' as const
   },
   {
-    code: 'E07000069',
+    code: 'E07000076',
     name: 'Maldon District Council',
     jurisdiction: 'england' as const,
     region: 'East of England',
@@ -778,7 +778,7 @@ export const ENGLISH_DISTRICT_COUNCILS = [
     confidence: '✓✓' as const
   },
   {
-    code: 'E07000070',
+    code: 'E07000077',
     name: 'Rochford District Council',
     jurisdiction: 'england' as const,
     region: 'East of England',
