@@ -396,28 +396,37 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
   // SECTION 7: BILLS & UTILITIES
   // ============================================================================
   {
-    id: 'council_tax_responsibility',
+    id: 'bills_utilities',
     section: 'Bills & Utilities',
-    question: 'Who pays council tax?',
-    inputType: 'select',
-    options: ['Tenant', 'Landlord', 'Included in rent'],
-    validation: { required: true },
-  },
-  {
-    id: 'utilities_responsibility',
-    section: 'Bills & Utilities',
-    question: 'Who pays utilities (gas, electric, water)?',
-    inputType: 'select',
-    options: ['Tenant', 'Landlord', 'Included in rent'],
-    validation: { required: true },
-  },
-  {
-    id: 'internet_responsibility',
-    section: 'Bills & Utilities',
-    question: 'Who pays for internet/broadband?',
-    inputType: 'select',
-    options: ['Tenant', 'Landlord', 'Included in rent'],
-    validation: { required: true },
+    question: 'Bills & utilities responsibility',
+    inputType: 'group',
+    helperText: 'Who is responsible for paying each utility',
+    fields: [
+      {
+        id: 'council_tax_responsibility',
+        label: 'Council tax',
+        inputType: 'select',
+        options: ['Tenant', 'Landlord', 'Included in rent'],
+        validation: { required: true },
+        width: 'third',
+      },
+      {
+        id: 'utilities_responsibility',
+        label: 'Utilities (gas, electric, water)',
+        inputType: 'select',
+        options: ['Tenant', 'Landlord', 'Included in rent'],
+        validation: { required: true },
+        width: 'third',
+      },
+      {
+        id: 'internet_responsibility',
+        label: 'Internet/broadband',
+        inputType: 'select',
+        options: ['Tenant', 'Landlord', 'Included in rent'],
+        validation: { required: true },
+        width: 'third',
+      },
+    ],
   },
 
   // ============================================================================

@@ -74,7 +74,11 @@ export default function WizardPreviewPage() {
         });
 
         if (!previewResponse.ok) {
-          throw new Error('Failed to generate preview document');
+          // Get the actual error message from the server
+          const errorData = await previewResponse.json().catch(() => ({}));
+          const errorMessage = errorData.error || 'Failed to generate preview document';
+          console.error('Preview generation error:', errorMessage);
+          throw new Error(errorMessage);
         }
 
         const previewResult = await previewResponse.json();
