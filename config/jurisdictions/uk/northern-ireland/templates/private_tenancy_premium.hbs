@@ -1,0 +1,1351 @@
+{{!--
+  Premium Private Tenancy Agreement
+  Northern Ireland - Professional Edition
+
+  This template generates a beautifully formatted, legally comprehensive
+  Private Tenancy agreement compliant with the Private Tenancies (Northern Ireland)
+  Order 2006 and updated for 2025 legal requirements.
+--}}
+
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium Private Tenancy Agreement - Northern Ireland</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm 15mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a1a1a;
+      margin: 0;
+      padding: 0;
+    }
+
+    .document-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 30px 0;
+      border-bottom: 3px solid #8b2635;
+    }
+
+    .document-title {
+      font-size: 28pt;
+      font-weight: bold;
+      color: #8b2635;
+      margin: 0 0 10px 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .document-subtitle {
+      font-size: 14pt;
+      color: #4a5568;
+      margin: 5px 0;
+    }
+
+    .ni-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #8b2635 0%, #2d3748 100%);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 10pt;
+      font-weight: bold;
+      margin-top: 15px;
+      letter-spacing: 1px;
+    }
+
+    .agreement-date {
+      font-size: 12pt;
+      color: #718096;
+      margin-top: 15px;
+      font-style: italic;
+    }
+
+    .section-header {
+      background: linear-gradient(135deg, #8b2635 0%, #2d3748 100%);
+      color: white;
+      padding: 15px 20px;
+      margin: 40px 0 20px 0;
+      font-size: 16pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      page-break-after: avoid;
+    }
+
+    .section-number {
+      background: white;
+      color: #8b2635;
+      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+      font-size: 16pt;
+      font-weight: bold;
+    }
+
+    .subsection {
+      margin: 25px 0;
+      page-break-inside: avoid;
+    }
+
+    .subsection-title {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #8b2635;
+      margin-bottom: 10px;
+      border-left: 4px solid #8b2635;
+      padding-left: 15px;
+    }
+
+    .clause {
+      margin: 15px 0;
+      padding-left: 30px;
+    }
+
+    .clause-number {
+      font-weight: bold;
+      color: #8b2635;
+      display: inline-block;
+      min-width: 40px;
+    }
+
+    .explainer-box {
+      background: #f7fafc;
+      border-left: 4px solid #4299e1;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 10pt;
+      color: #4a5568;
+      page-break-inside: avoid;
+    }
+
+    .explainer-title {
+      font-weight: bold;
+      color: #8b2635;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    .explainer-icon {
+      display: inline-block;
+      margin-right: 8px;
+      font-size: 14pt;
+    }
+
+    .ni-2025-box {
+      background: #f0f9ff;
+      border: 2px solid #8b2635;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+
+    .ni-2025-title {
+      font-weight: bold;
+      color: #8b2635;
+      margin-bottom: 8px;
+      font-size: 11pt;
+    }
+
+    .warning-box {
+      background: #fff5f5;
+      border-left: 4px solid #f56565;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 10pt;
+      color: #742a2a;
+      page-break-inside: avoid;
+    }
+
+    .warning-title {
+      font-weight: bold;
+      color: #c53030;
+      margin-bottom: 8px;
+    }
+
+    .important-box {
+      background: #fffaf0;
+      border: 2px solid #ed8936;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 10pt;
+      page-break-inside: avoid;
+    }
+
+    .important-title {
+      font-weight: bold;
+      color: #c05621;
+      margin-bottom: 8px;
+      font-size: 11pt;
+    }
+
+    .party-details {
+      background: #f7fafc;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 8px;
+      border: 1px solid #cbd5e0;
+    }
+
+    .party-label {
+      font-weight: bold;
+      color: #8b2635;
+      font-size: 12pt;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .party-info {
+      margin-left: 20px;
+      line-height: 1.8;
+    }
+
+    .property-highlight {
+      background: linear-gradient(135deg, #8b2635 0%, #2d3748 100%);
+      color: white;
+      padding: 25px;
+      margin: 20px 0;
+      border-radius: 8px;
+      text-align: center;
+      page-break-inside: avoid;
+    }
+
+    .property-address {
+      font-size: 18pt;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .property-details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .property-detail-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 4px;
+    }
+
+    .property-detail-label {
+      font-size: 9pt;
+      opacity: 0.8;
+      margin-bottom: 5px;
+    }
+
+    .property-detail-value {
+      font-size: 12pt;
+      font-weight: bold;
+    }
+
+    .financial-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .financial-table th {
+      background: #8b2635;
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 10pt;
+      letter-spacing: 1px;
+    }
+
+    .financial-table td {
+      padding: 15px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .financial-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .financial-table .label {
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    .financial-table .value {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #8b2635;
+    }
+
+    .inventory-section {
+      background: #f9fafb;
+      padding: 20px;
+      margin: 20px 0;
+      border: 1px solid #cbd5e0;
+      border-radius: 8px;
+      page-break-inside: avoid;
+    }
+
+    .inventory-title {
+      font-size: 14pt;
+      font-weight: bold;
+      color: #8b2635;
+      margin-bottom: 15px;
+    }
+
+    .inventory-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .inventory-item {
+      background: white;
+      padding: 10px;
+      border-left: 3px solid #8b2635;
+    }
+
+    .signature-section {
+      margin-top: 60px;
+      page-break-before: always;
+      padding-top: 40px;
+    }
+
+    .signature-title {
+      font-size: 18pt;
+      font-weight: bold;
+      color: #8b2635;
+      text-align: center;
+      margin-bottom: 40px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .signature-blocks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin: 40px 0;
+    }
+
+    .signature-block {
+      border: 2px solid #8b2635;
+      padding: 30px;
+      border-radius: 8px;
+      background: #f7fafc;
+    }
+
+    .signature-party {
+      font-weight: bold;
+      color: #8b2635;
+      font-size: 12pt;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .signature-name {
+      margin-bottom: 10px;
+    }
+
+    .signature-line {
+      border-bottom: 2px solid #8b2635;
+      margin: 30px 0 10px 0;
+      height: 50px;
+    }
+
+    .signature-label {
+      font-size: 9pt;
+      color: #718096;
+      margin-top: 5px;
+    }
+
+    .signature-date {
+      margin-top: 20px;
+    }
+
+    .signature-date-label {
+      font-size: 9pt;
+      color: #718096;
+      margin-bottom: 5px;
+    }
+
+    .signature-date-line {
+      border-bottom: 2px solid #8b2635;
+      width: 150px;
+      height: 30px;
+    }
+
+    ul {
+      margin: 10px 0;
+      padding-left: 30px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e2e8f0;
+      font-size: 9pt;
+      color: #718096;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- DOCUMENT HEADER -->
+  <div class="document-header">
+    <div class="document-title">Private Tenancy Agreement</div>
+    <div class="document-subtitle">Premium Professional Edition</div>
+    <div class="ni-badge">🇮🇪 NORTHERN IRELAND - Private Tenancies Order 2006 (Updated 2025)</div>
+    <div class="agreement-date">Agreement Date: {{agreement_date}}</div>
+  </div>
+
+  <div class="ni-2025-box">
+    <div class="ni-2025-title">📋 2025 Legal Updates</div>
+    <p>This agreement complies with Northern Ireland's updated tenancy regulations effective from <strong>1 April 2025</strong>:</p>
+    <ul>
+      <li>✓ <strong>Electrical Safety:</strong> Mandatory EICR certificates now required</li>
+      <li>✓ <strong>Rent Increases:</strong> 12-month minimum gap between increases</li>
+      <li>✓ <strong>Notice Requirements:</strong> 3-month notice required for rent increases</li>
+      <li>✓ <strong>Notice to Quit:</strong> Length-based notice periods (28/56/84 days)</li>
+    </ul>
+  </div>
+
+  <!-- SECTION 1: PARTIES -->
+  <div class="section-header">
+    <span class="section-number">1</span>
+    THE PARTIES TO THIS AGREEMENT
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">1.1 The Landlord</div>
+    <div class="party-details">
+      <div class="party-label">LANDLORD DETAILS</div>
+      <div class="party-info">
+        <strong>Name:</strong> {{landlord_full_name}}<br>
+        <strong>Address:</strong> {{landlord_address}}<br>
+        <strong>Email:</strong> {{landlord_email}}<br>
+        <strong>Phone:</strong> {{landlord_phone}}
+      </div>
+    </div>
+  </div>
+
+  {{#if agent_name}}
+  <div class="subsection">
+    <div class="subsection-title">1.2 The Letting Agent</div>
+    <div class="party-details">
+      <div class="party-label">AGENT DETAILS</div>
+      <div class="party-info">
+        <strong>Name:</strong> {{agent_name}}<br>
+        {{#if agent.company}}
+        <strong>Company:</strong> {{agent.company}}<br>
+        {{/if}}
+        <strong>Address:</strong> {{agent_address}}<br>
+        <strong>Email:</strong> {{agent_email}}<br>
+        <strong>Phone:</strong> {{agent_phone}}
+      </div>
+    </div>
+  </div>
+  {{/if}}
+
+  <div class="subsection">
+    <div class="subsection-title">1.3 The Tenant(s)</div>
+    {{#each tenants}}
+    <div class="party-details">
+      <div class="party-label">TENANT {{@index}}</div>
+      <div class="party-info">
+        <strong>Name:</strong> {{full_name}}<br>
+        {{#if dob}}
+        <strong>Date of Birth:</strong> {{dob}}<br>
+        {{/if}}
+        <strong>Email:</strong> {{email}}<br>
+        <strong>Phone:</strong> {{phone}}
+      </div>
+    </div>
+    {{/each}}
+
+    {{#if multiple_tenants}}
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">ℹ️</span>
+        Joint and Several Liability
+      </div>
+      <p>All tenants are jointly and severally liable for the rent and all obligations under this agreement. This means each tenant is individually responsible for the full rent amount and all terms, not just their share.</p>
+    </div>
+    {{/if}}
+  </div>
+
+  <!-- SECTION 2: PROPERTY -->
+  <div class="section-header">
+    <span class="section-number">2</span>
+    THE PROPERTY
+  </div>
+
+  <div class="property-highlight">
+    <div class="property-address">{{property_address}}</div>
+    <div class="property-details">
+      {{#if property_type}}
+      <div class="property-detail-item">
+        <div class="property-detail-label">Property Type</div>
+        <div class="property-detail-value">{{property_type}}</div>
+      </div>
+      {{/if}}
+      {{#if number_of_bedrooms}}
+      <div class="property-detail-item">
+        <div class="property-detail-label">Bedrooms</div>
+        <div class="property-detail-value">{{number_of_bedrooms}}</div>
+      </div>
+      {{/if}}
+      <div class="property-detail-item">
+        <div class="property-detail-label">Furnished Status</div>
+        <div class="property-detail-value">{{furnished_status}}</div>
+      </div>
+      {{#if is_fixed_term}}
+      <div class="property-detail-item">
+        <div class="property-detail-label">Tenancy Type</div>
+        <div class="property-detail-value">{{#if is_fixed_term}}Fixed Term{{else}}Periodic{{/if}}</div>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+
+  {{#if property_description}}
+  <div class="subsection">
+    <div class="subsection-title">2.1 Property Description</div>
+    <p>{{property_description}}</p>
+  </div>
+  {{/if}}
+
+  {{#if included_areas}}
+  <div class="subsection">
+    <div class="subsection-title">2.2 Included Areas</div>
+    <p>The following areas are included in the let property:</p>
+    <p>{{included_areas}}</p>
+  </div>
+  {{/if}}
+
+  {{#if excluded_areas}}
+  <div class="subsection">
+    <div class="subsection-title">2.3 Excluded Areas</div>
+    <div class="warning-box">
+      <div class="warning-title">Areas NOT Included</div>
+      <p>{{excluded_areas}}</p>
+    </div>
+  </div>
+  {{/if}}
+
+  {{#if parking}}
+  <div class="subsection">
+    <div class="subsection-title">2.4 Parking</div>
+    <p>Parking is included with this property.</p>
+    {{#if parking_details}}
+    <p><strong>Details:</strong> {{parking_details}}</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  {{#if has_garden}}
+  <div class="subsection">
+    <div class="subsection-title">2.5 Garden</div>
+    <p>The property includes a garden.</p>
+    {{#if garden_maintenance}}
+    <p><strong>Maintenance Responsibility:</strong> {{garden_maintenance}}</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  <!-- INVENTORY SECTION -->
+  {{#if inventory_provided}}
+  <div class="inventory-section">
+    <div class="inventory-title">📋 Property Inventory</div>
+    <div class="important-box">
+      <div class="important-title">Inventory Check-In Required</div>
+      <p>A comprehensive inventory has been provided. The tenant(s) must check all items within 7 days of moving in and report any discrepancies to the landlord.</p>
+    </div>
+
+    {{#if inventory_items}}
+    <p><strong>Items Included:</strong></p>
+    <div style="white-space: pre-wrap; margin: 15px 0; padding: 15px; background: white; border-left: 3px solid #8b2635;">{{inventory_items}}</div>
+    {{/if}}
+
+    {{#if white_goods_included}}
+    <div class="subsection-title" style="margin-top: 20px;">White Goods & Appliances</div>
+    <div class="inventory-grid">
+      {{#each white_goods_included}}
+      <div class="inventory-item">✓ {{this}}</div>
+      {{/each}}
+    </div>
+    {{/if}}
+
+    <div class="explainer-box" style="margin-top: 20px;">
+      <div class="explainer-title">
+        <span class="explainer-icon">💡</span>
+        Rights and Responsibilities
+      </div>
+      <p><strong>Tenant Rights:</strong></p>
+      <ul>
+        <li>Use all inventoried items in a reasonable manner</li>
+        <li>Report any damage or defects promptly</li>
+        <li>Receive replacement of broken items if not due to tenant negligence</li>
+      </ul>
+      <p><strong>Tenant Responsibilities:</strong></p>
+      <ul>
+        <li>Keep all items in good condition (fair wear and tear excepted)</li>
+        <li>Replace or pay for items damaged due to negligence</li>
+        <li>Return all items at end of tenancy</li>
+      </ul>
+      <p><strong>Right to Change:</strong> The landlord may replace or remove items during the tenancy with reasonable notice (normally 28 days), provided equivalent replacements are supplied for essential items. The tenant's quiet enjoyment must be respected.</p>
+    </div>
+
+    {{#if professional_cleaning_required}}
+    <div class="warning-box" style="margin-top: 15px;">
+      <div class="warning-title">Professional Cleaning Required</div>
+      <p>The property must be professionally cleaned at the end of the tenancy to the same standard as at the start. Receipts must be provided.</p>
+    </div>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  <!-- SECTION 3: TENANCY TERM -->
+  <div class="section-header">
+    <span class="section-number">3</span>
+    TENANCY TERM
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">3.1 Start Date</div>
+    <p>This tenancy begins on <strong>{{tenancy_start_date}}</strong>.</p>
+  </div>
+
+  {{#if is_fixed_term}}
+  <div class="subsection">
+    <div class="subsection-title">3.2 Fixed Term</div>
+    <p>This is a <strong>fixed term tenancy</strong> ending on <strong>{{tenancy_end_date}}</strong>.</p>
+    {{#if term_length}}
+    <p><strong>Term Length:</strong> {{term_length}}</p>
+    {{/if}}
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">📅</span>
+        What Happens When Fixed Term Ends
+      </div>
+      <p>When the fixed term expires:</p>
+      <ul>
+        <li>The tenancy automatically becomes a periodic (month-to-month) tenancy unless either party gives notice</li>
+        <li>All other terms remain the same</li>
+        <li>Either party can end the periodic tenancy by giving proper notice</li>
+      </ul>
+    </div>
+  </div>
+  {{else}}
+  <div class="subsection">
+    <div class="subsection-title">3.2 Periodic Tenancy</div>
+    <p>This is a <strong>periodic tenancy</strong> continuing on a {{rent_period}}-to-{{rent_period}} basis until ended by either party giving proper notice.</p>
+  </div>
+  {{/if}}
+
+  {{#if break_clause}}
+  <div class="subsection">
+    <div class="subsection-title">3.3 Break Clause</div>
+    <div class="important-box">
+      <div class="important-title">Break Clause Included</div>
+      {{#if break_clause_terms}}
+      <p>{{break_clause_terms}}</p>
+      {{else}}
+      <p>Either party may terminate this tenancy early by giving written notice as specified in the break clause terms.</p>
+      {{/if}}
+      {{#if break_clause_months}}
+      <p><strong>Available After:</strong> {{break_clause_months}} months</p>
+      {{/if}}
+      {{#if break_clause_notice_period}}
+      <p><strong>Notice Required:</strong> {{break_clause_notice_period}}</p>
+      {{/if}}
+    </div>
+  </div>
+  {{/if}}
+
+  <!-- SECTION 4: RENT -->
+  <div class="section-header">
+    <span class="section-number">4</span>
+    RENT
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">4.1 Rent Amount & Payment</div>
+
+    <table class="financial-table">
+      <thead>
+        <tr>
+          <th>Payment Term</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">Rent Amount</td>
+          <td class="value">£{{rent_amount}} per {{rent_period}}</td>
+        </tr>
+        <tr>
+          <td class="label">Payment Due</td>
+          <td class="value">{{rent_due_day}} of each {{rent_period}}</td>
+        </tr>
+        <tr>
+          <td class="label">Payment Method</td>
+          <td class="value">{{payment_method}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="subsection-title">4.2 Payment Details</div>
+    <div class="party-details">
+      <div class="party-label">BANK DETAILS FOR RENT PAYMENTS</div>
+      <div class="party-info">
+        {{#if bank_account_name}}
+        <strong>Account Name:</strong> {{bank_account_name}}<br>
+        {{/if}}
+        {{#if bank_sort_code}}
+        <strong>Sort Code:</strong> {{bank_sort_code}}<br>
+        {{/if}}
+        {{#if bank_account_number}}
+        <strong>Account Number:</strong> {{bank_account_number}}<br>
+        {{/if}}
+        {{#unless bank_account_name}}
+        {{payment_details}}
+        {{/unless}}
+      </div>
+    </div>
+  </div>
+
+  {{#if rent_includes}}
+  <div class="subsection">
+    <div class="subsection-title">4.3 What Rent Includes</div>
+    <p>{{rent_includes}}</p>
+  </div>
+  {{/if}}
+
+  {{#if rent_excludes}}
+  <div class="subsection">
+    <div class="subsection-title">4.4 What Tenant Pays Separately</div>
+    <p>{{rent_excludes}}</p>
+  </div>
+  {{/if}}
+
+  <div class="subsection">
+    <div class="subsection-title">4.5 Rent Increases (2025 Rules)</div>
+    <div class="ni-2025-box">
+      <div class="ni-2025-title">🇮🇪 Northern Ireland Rent Increase Rules (Updated 2025)</div>
+      <p>From <strong>1 April 2025</strong>, stricter rent increase rules apply:</p>
+      <ul>
+        <li>✓ <strong>12-month minimum gap</strong> between rent increases</li>
+        <li>✓ <strong>3 months' written notice</strong> required for any increase</li>
+        <li>✓ Notice must be in writing and specify the new rent amount</li>
+        <li>✓ Increases must be reasonable and reflect market rates</li>
+      </ul>
+      {{#if rent_increase_frequency}}
+      <p><strong>Agreement:</strong> {{rent_increase_frequency}}</p>
+      {{/if}}
+    </div>
+  </div>
+
+  <!-- SECTION 5: DEPOSIT -->
+  <div class="section-header">
+    <span class="section-number">5</span>
+    DEPOSIT
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">5.1 Deposit Amount</div>
+
+    <table class="financial-table">
+      <thead>
+        <tr>
+          <th>Deposit Term</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="label">Deposit Amount</td>
+          <td class="value">£{{deposit_amount}}</td>
+        </tr>
+        {{#if deposit_scheme}}
+        <tr>
+          <td class="label">Protection Scheme</td>
+          <td class="value">{{deposit_scheme}}</td>
+        </tr>
+        {{/if}}
+      </tbody>
+    </table>
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">🛡️</span>
+        Tenancy Deposit Scheme Northern Ireland
+      </div>
+      <p>The landlord should protect your deposit in an approved scheme:</p>
+      <ul>
+        <li>TDS Northern Ireland</li>
+        <li>MyDeposits Northern Ireland</li>
+      </ul>
+      <p>The scheme provides free dispute resolution if there is disagreement about deposit deductions at the end of the tenancy.</p>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">5.2 Deposit Return</div>
+    <p>The deposit will be returned within a reasonable time (normally 10-14 days) after the end of the tenancy, subject to any deductions for:</p>
+    <ul>
+      <li>Rent arrears</li>
+      <li>Damage beyond fair wear and tear</li>
+      <li>Cleaning costs (if property not left in original condition)</li>
+      <li>Replacement of missing inventory items</li>
+    </ul>
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">ℹ️</span>
+        Fair Wear and Tear
+      </div>
+      <p>"Fair wear and tear" means the reasonable deterioration of the property from normal use over time. You cannot be charged for this. Examples include:</p>
+      <ul>
+        <li>Minor scuff marks on walls from furniture</li>
+        <li>Faded curtains from sunlight</li>
+        <li>Worn carpet in high-traffic areas</li>
+        <li>Minor marks on worktops from normal use</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 6: BILLS & UTILITIES -->
+  <div class="section-header">
+    <span class="section-number">6</span>
+    BILLS & UTILITIES
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">6.1 Responsibility for Bills</div>
+
+    {{#if council_tax_responsibility}}
+    <div class="clause">
+      <span class="clause-number">6.1.1</span>
+      <strong>Rates (Council Tax equivalent in NI):</strong> {{council_tax_responsibility}}
+    </div>
+    {{/if}}
+
+    {{#if utilities_responsibility}}
+    <div class="clause">
+      <span class="clause-number">6.1.2</span>
+      <strong>Utilities (Gas, Electricity, Water):</strong> {{utilities_responsibility}}
+    </div>
+    {{/if}}
+
+    {{#if internet_responsibility}}
+    <div class="clause">
+      <span class="clause-number">6.1.3</span>
+      <strong>Internet/Broadband:</strong> {{internet_responsibility}}
+    </div>
+    {{/if}}
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">💡</span>
+        Setting Up Utilities in Northern Ireland
+      </div>
+      <p>The tenant is responsible for setting up accounts with:</p>
+      <ul>
+        <li><strong>Electricity:</strong> Power NI or other suppliers</li>
+        <li><strong>Gas:</strong> firmus energy or SSE Airtricity</li>
+        <li><strong>Water:</strong> NI Water (rates-based, included in rates bill)</li>
+      </ul>
+    </div>
+  </div>
+
+  {{#if communal_areas}}
+  <div class="subsection">
+    <div class="subsection-title">6.2 Communal Areas</div>
+    <p>This property includes access to communal areas.</p>
+    {{#if communal_cleaning}}
+    <p><strong>Cleaning Arrangements:</strong> {{communal_cleaning}}</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  <!-- SECTION 7: LEGAL COMPLIANCE & SAFETY -->
+  <div class="section-header">
+    <span class="section-number">7</span>
+    LEGAL COMPLIANCE & SAFETY
+  </div>
+
+  {{#if gas_safety_certificate}}
+  <div class="subsection">
+    <div class="subsection-title">7.1 Gas Safety</div>
+    <div class="important-box">
+      <div class="important-title">✓ Gas Safety Certificate Provided</div>
+      <p>A valid Gas Safety Certificate has been provided. The landlord will arrange annual gas safety checks by a Gas Safe registered engineer.</p>
+    </div>
+  </div>
+  {{/if}}
+
+  {{#if electrical_safety_certificate}}
+  <div class="subsection">
+    <div class="subsection-title">7.2 Electrical Safety (MANDATORY from 1 April 2025)</div>
+    <div class="ni-2025-box">
+      <div class="ni-2025-title">⚡ NEW: Electrical Safety Requirement (2025)</div>
+      <p>From <strong>1 April 2025</strong>, all private rented properties in Northern Ireland MUST have:</p>
+      <ul>
+        <li>✓ Valid Electrical Installation Condition Report (EICR)</li>
+        <li>✓ Inspection by a qualified electrician every 5 years</li>
+        <li>✓ All electrical faults remedied before letting</li>
+      </ul>
+      <p><strong>Status:</strong> ✓ Valid EICR has been provided for this property.</p>
+    </div>
+  </div>
+  {{else}}
+  <div class="subsection">
+    <div class="subsection-title">7.2 Electrical Safety (MANDATORY from 1 April 2025)</div>
+    <div class="warning-box">
+      <div class="warning-title">⚠️ Electrical Safety Certificate Required</div>
+      <p>From <strong>1 April 2025</strong>, a valid Electrical Installation Condition Report (EICR) is MANDATORY for all private rented properties in Northern Ireland. The landlord must arrange this before the tenancy commences.</p>
+    </div>
+  </div>
+  {{/if}}
+
+  {{#if epc_rating}}
+  <div class="subsection">
+    <div class="subsection-title">7.3 Energy Performance</div>
+    <p><strong>EPC Rating:</strong> {{epc_rating}}</p>
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">🔋</span>
+        Energy Performance Certificate
+      </div>
+      <p>The property has an Energy Performance Certificate (EPC) which shows how energy efficient it is. Ratings range from A (most efficient) to G (least efficient).</p>
+    </div>
+  </div>
+  {{/if}}
+
+  {{#if smoke_alarms_fitted}}
+  <div class="subsection">
+    <div class="subsection-title">7.4 Smoke Alarms</div>
+    <p>✓ Smoke alarms are fitted in accordance with Northern Ireland regulations.</p>
+  </div>
+  {{/if}}
+
+  {{#if carbon_monoxide_alarms}}
+  <div class="subsection">
+    <div class="subsection-title">7.5 Carbon Monoxide Alarms</div>
+    <p>✓ Carbon monoxide alarms are fitted where required.</p>
+  </div>
+  {{/if}}
+
+  <!-- SECTION 8: MAINTENANCE & REPAIRS -->
+  <div class="section-header">
+    <span class="section-number">8</span>
+    MAINTENANCE & REPAIRS
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">8.1 Landlord Responsibilities</div>
+    {{#if landlord_maintenance_responsibilities}}
+    <p>{{landlord_maintenance_responsibilities}}</p>
+    {{else}}
+    <p>The landlord is responsible for:</p>
+    <ul>
+      <li>Maintaining the structure and exterior of the property</li>
+      <li>Keeping installations for gas, electricity, water, and sanitation in working order</li>
+      <li>Keeping installations for space and water heating in working order</li>
+      <li>Ensuring the property is fit for human habitation</li>
+    </ul>
+    {{/if}}
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">8.2 Tenant Responsibilities</div>
+    <p>The tenant is responsible for:</p>
+    <ul>
+      <li>Keeping the property clean and in good condition</li>
+      <li>Reporting repairs promptly to the landlord</li>
+      <li>Allowing reasonable access for repairs and inspections</li>
+      <li>Not causing damage beyond fair wear and tear</li>
+      <li>Taking reasonable care to prevent damage from condensation, damp, or freezing pipes</li>
+    </ul>
+  </div>
+
+  {{#if repairs_reporting_method}}
+  <div class="subsection">
+    <div class="subsection-title">8.3 How to Report Repairs</div>
+    <p>{{repairs_reporting_method}}</p>
+  </div>
+  {{/if}}
+
+  {{#if emergency_contact}}
+  <div class="subsection">
+    <div class="subsection-title">8.4 Emergency Contact</div>
+    <div class="important-box">
+      <div class="important-title">24/7 Emergency Repairs</div>
+      <p><strong>Emergency Contact:</strong> {{emergency_contact}}</p>
+      <p><strong>Emergencies include:</strong> Gas leaks, burst pipes, total loss of heating in winter, total loss of electricity, serious roof damage.</p>
+    </div>
+  </div>
+  {{/if}}
+
+  <!-- SECTION 9: TENANT OBLIGATIONS -->
+  <div class="section-header">
+    <span class="section-number">9</span>
+    TENANT OBLIGATIONS
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">9.1 General Obligations</div>
+    <p>The tenant must:</p>
+    <ul>
+      <li>Pay rent on time and in full</li>
+      <li>Occupy the property as their main residence</li>
+      <li>Take reasonable care of the property</li>
+      <li>Not engage in antisocial behaviour</li>
+      <li>Allow the landlord reasonable access for inspections and repairs</li>
+      <li>Not make structural alterations without written consent</li>
+      <li>Comply with the terms of this agreement</li>
+    </ul>
+  </div>
+
+  {{#if subletting_allowed}}
+  <div class="subsection">
+    <div class="subsection-title">9.2 Subletting & Lodgers</div>
+    <p><strong>Policy:</strong> {{subletting_allowed}}</p>
+  </div>
+  {{/if}}
+
+  {{#if pets_allowed}}
+  <div class="subsection">
+    <div class="subsection-title">9.3 Pets</div>
+    <p>Pets are permitted under this tenancy.</p>
+    {{#if approved_pets}}
+    <p><strong>Approved Pets:</strong> {{approved_pets}}</p>
+    {{/if}}
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">🐕</span>
+        Pet Responsibilities
+      </div>
+      <p>The tenant must ensure that any pets:</p>
+      <ul>
+        <li>Do not cause damage to the property</li>
+        <li>Do not cause nuisance to neighbours</li>
+        <li>Are kept in a clean and hygienic manner</li>
+      </ul>
+    </div>
+  </div>
+  {{else}}
+  <div class="subsection">
+    <div class="subsection-title">9.3 Pets</div>
+    <p>No pets are allowed without the landlord's prior written consent.</p>
+  </div>
+  {{/if}}
+
+  {{#if smoking_allowed}}
+  <div class="subsection">
+    <div class="subsection-title">9.4 Smoking</div>
+    <p>Smoking is permitted in this property.</p>
+  </div>
+  {{else}}
+  <div class="subsection">
+    <div class="subsection-title">9.4 Smoking</div>
+    <p>Smoking is not permitted inside the property.</p>
+  </div>
+  {{/if}}
+
+  <!-- SECTION 10: LANDLORD OBLIGATIONS & ACCESS -->
+  <div class="section-header">
+    <span class="section-number">10</span>
+    LANDLORD OBLIGATIONS & ACCESS
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">10.1 Landlord's Right of Access</div>
+    {{#if landlord_access_notice}}
+    <p><strong>Notice Required:</strong> {{landlord_access_notice}}</p>
+    {{else}}
+    <p>The landlord may enter the property for inspections or repairs with <strong>reasonable notice</strong> (normally at least 24-48 hours).</p>
+    {{/if}}
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">🚪</span>
+        Your Right to Quiet Enjoyment
+      </div>
+      <p>The tenant has the right to "quiet enjoyment" of the property. This means:</p>
+      <ul>
+        <li>The landlord cannot enter without permission (except in genuine emergencies)</li>
+        <li>Access must be at reasonable times</li>
+        <li>The tenant can refuse entry if notice requirements are not met</li>
+      </ul>
+    </div>
+  </div>
+
+  {{#if inspection_frequency}}
+  <div class="subsection">
+    <div class="subsection-title">10.2 Property Inspections</div>
+    <p><strong>Frequency:</strong> {{inspection_frequency}}</p>
+    <p>The landlord may conduct routine inspections with proper notice to check the property condition.</p>
+  </div>
+  {{/if}}
+
+  {{#if end_of_tenancy_viewings}}
+  <div class="subsection">
+    <div class="subsection-title">10.3 End of Tenancy Viewings</div>
+    <p>The landlord may arrange viewings for prospective tenants during the final month of the tenancy, with reasonable notice.</p>
+  </div>
+  {{/if}}
+
+  <!-- SECTION 11: INSURANCE -->
+  <div class="section-header">
+    <span class="section-number">11</span>
+    INSURANCE
+  </div>
+
+  {{#if landlord_insurance}}
+  <div class="subsection">
+    <div class="subsection-title">11.1 Landlord's Insurance</div>
+    <p>✓ The landlord maintains insurance for the building and structure.</p>
+  </div>
+  {{/if}}
+
+  <div class="subsection">
+    <div class="subsection-title">11.2 Tenant's Insurance</div>
+    {{#if tenant_insurance_required}}
+    <p><strong>Requirement:</strong> {{tenant_insurance_required}}</p>
+    {{else}}
+    <p>The tenant is strongly advised to obtain contents insurance for their personal belongings.</p>
+    {{/if}}
+
+    <div class="important-box">
+      <div class="important-title">⚠️ Important: Landlord's Insurance Does Not Cover Tenant's Belongings</div>
+      <p>The landlord's insurance only covers the building and fixtures. It does NOT cover the tenant's furniture, personal possessions, or liability. Tenants should obtain their own contents and liability insurance.</p>
+    </div>
+  </div>
+
+  <!-- COMPREHENSIVE TERMS & CONDITIONS -->
+  <div class="section-header">
+    <span class="section-number">12</span>
+    COMPREHENSIVE TERMS & CONDITIONS
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">12.1 Assignment & Subletting</div>
+    <div class="clause">
+      <span class="clause-number">12.1.1</span>
+      The tenant shall not assign, sublet, or part with possession of the whole or any part of the property without the landlord's written consent.
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">12.2 Alterations & Improvements</div>
+    <div class="clause">
+      <span class="clause-number">12.2.1</span>
+      The tenant shall not make any alterations, additions, or improvements to the property without the landlord's prior written consent.
+    </div>
+    <div class="clause">
+      <span class="clause-number">12.2.2</span>
+      <strong>Right to Change:</strong> The landlord may make reasonable changes to the property, fixtures, or fittings during the tenancy, provided:
+      <ul>
+        <li>Reasonable notice is given (normally 28 days)</li>
+        <li>Changes do not substantially affect the tenant's enjoyment of the property</li>
+        <li>Essential items are replaced with equivalent or better quality items</li>
+        <li>The tenant's quiet enjoyment is respected</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">12.3 Use of Property</div>
+    <div class="clause">
+      <span class="clause-number">12.3.1</span>
+      The property must be used as a private dwelling only and not for any business or commercial purpose without the landlord's written consent.
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">12.4 Nuisance & Antisocial Behaviour</div>
+    <div class="clause">
+      <span class="clause-number">12.4.1</span>
+      The tenant shall not cause nuisance, annoyance, or disturbance to neighbours or other occupiers.
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">12.5 Refuse & Recycling</div>
+    <div class="clause">
+      <span class="clause-number">12.5.1</span>
+      The tenant must dispose of refuse in accordance with local council requirements.
+    </div>
+    {{#if recycling_bins}}
+    <div class="clause">
+      <span class="clause-number">12.5.2</span>
+      ✓ Recycling bins are provided and must be used in accordance with local guidelines.
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">12.6 End of Tenancy</div>
+    <div class="clause">
+      <span class="clause-number">12.6.1</span>
+      At the end of the tenancy, the tenant must:
+      <ul>
+        <li>Return the property in the same condition as at the start (fair wear and tear excepted)</li>
+        <li>Remove all personal belongings</li>
+        <li>Return all keys and access devices</li>
+        <li>Provide forwarding address for deposit return</li>
+        <li>Settle all outstanding bills</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">12.7 Notice to Quit (2025 Rules)</div>
+    <div class="ni-2025-box">
+      <div class="ni-2025-title">Notice Periods in Northern Ireland</div>
+      <p><strong>Notice periods depend on how long the tenancy has been in place:</strong></p>
+      <ul>
+        <li><strong>Less than 1 year:</strong> 28 days' notice</li>
+        <li><strong>1-10 years:</strong> 56 days' notice (8 weeks)</li>
+        <li><strong>More than 10 years:</strong> 84 days' notice (12 weeks)</li>
+      </ul>
+      <p>Notice must be in writing and served correctly. The landlord must have legal grounds to evict (e.g., rent arrears, breach of tenancy, wanting to sell).</p>
+    </div>
+  </div>
+
+  {{#if additional_terms}}
+  <div class="subsection">
+    <div class="subsection-title">12.8 Additional Terms</div>
+    <p>{{additional_terms}}</p>
+  </div>
+  {{/if}}
+
+  <!-- SECTION 13: DISPUTE RESOLUTION -->
+  <div class="section-header">
+    <span class="section-number">13</span>
+    DISPUTE RESOLUTION
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">13.1 Northern Ireland Courts & Tribunals</div>
+    <p>Disputes relating to this tenancy are resolved through:</p>
+    <ul>
+      <li><strong>County Court Northern Ireland</strong> - for possession claims</li>
+      <li><strong>Rent Assessment Panel</strong> - for rent disputes</li>
+      <li><strong>Small Claims Court</strong> - for deposit disputes under £3,000</li>
+    </ul>
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">⚖️</span>
+        Getting Help with Disputes
+      </div>
+      <p><strong>Advice Northern Ireland:</strong> Free, independent advice<br>
+      <strong>Housing Rights NI:</strong> Specialist housing advice<br>
+      <strong>Website:</strong> housingrights.org.uk</p>
+    </div>
+  </div>
+
+  <!-- SIGNATURE SECTION -->
+  <div class="signature-section">
+    <div class="signature-title">SIGNATURES</div>
+
+    <div class="important-box">
+      <div class="important-title">Declaration</div>
+      <p>By signing this agreement, all parties confirm that:</p>
+      <ul>
+        <li>They have read and understood this agreement</li>
+        <li>They agree to be bound by its terms</li>
+        <li>All information provided is true and accurate</li>
+        <li>They have received a copy of this agreement</li>
+      </ul>
+    </div>
+
+    <div class="signature-blocks">
+      <!-- Landlord Signature -->
+      <div class="signature-block">
+        <div class="signature-party">LANDLORD</div>
+        <div class="signature-name">{{landlord_full_name}}</div>
+        <div class="signature-line"></div>
+        <div class="signature-label">Signature</div>
+        <div class="signature-date">
+          <div class="signature-date-label">Date</div>
+          <div class="signature-date-line"></div>
+        </div>
+      </div>
+
+      {{#if agent_name}}
+      <!-- Agent Signature -->
+      <div class="signature-block">
+        <div class="signature-party">LETTING AGENT</div>
+        <div class="signature-name">{{agent_name}}</div>
+        <div class="signature-line"></div>
+        <div class="signature-label">Signature</div>
+        <div class="signature-date">
+          <div class="signature-date-label">Date</div>
+          <div class="signature-date-line"></div>
+        </div>
+      </div>
+      {{/if}}
+    </div>
+
+    <!-- Tenant Signatures -->
+    <div style="margin-top: 40px;">
+      <div class="subsection-title" style="text-align: center; font-size: 14pt;">TENANT SIGNATURES</div>
+      <div class="signature-blocks">
+        {{#each tenants}}
+        <div class="signature-block">
+          <div class="signature-party">TENANT {{@index}}</div>
+          <div class="signature-name">{{full_name}}</div>
+          <div class="signature-line"></div>
+          <div class="signature-label">Signature</div>
+          <div class="signature-date">
+            <div class="signature-date-label">Date</div>
+            <div class="signature-date-line"></div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p><strong>Private Tenancy Agreement - Northern Ireland</strong></p>
+    <p>Generated: {{generation_timestamp}} | Document ID: {{document_id}}</p>
+    <p>This agreement complies with the Private Tenancies (Northern Ireland) Order 2006 (Updated 2025)</p>
+    <p>© {{current_year}} - Professional Tenancy Agreement by Landlord Heaven</p>
+  </div>
+
+</body>
+</html>
