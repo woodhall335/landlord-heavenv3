@@ -29,13 +29,31 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
   // SECTION 1: PROPERTY DETAILS
   // ============================================================================
   {
-    id: 'property_address',
+    id: 'property_address_line1',
     section: 'Property Details',
-    question: 'What is the full address of the property?',
+    question: 'Property address - Line 1',
     inputType: 'text',
-    placeholder: '123 High Street, London, SW1A 1AA',
-    helperText: 'Include house/flat number, street, city, and postcode',
+    placeholder: 'Flat 2, 123 High Street',
+    helperText: 'House/flat number and street name',
     validation: { required: true },
+  },
+  {
+    id: 'property_address_town',
+    section: 'Property Details',
+    question: 'Property address - Town/City',
+    inputType: 'text',
+    placeholder: 'London',
+    helperText: 'Town or city name',
+    validation: { required: true },
+  },
+  {
+    id: 'property_address_postcode',
+    section: 'Property Details',
+    question: 'Property address - Postcode',
+    inputType: 'text',
+    placeholder: 'SW1A 1AA',
+    helperText: 'UK postcode',
+    validation: { required: true, pattern: '^[A-Z]{1,2}\\d{1,2}[A-Z]?\\s?\\d[A-Z]{2}$' },
   },
   {
     id: 'property_type',
@@ -74,13 +92,29 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
     validation: { required: true },
   },
   {
-    id: 'landlord_address',
+    id: 'landlord_address_line1',
     section: 'Landlord Details',
-    question: 'What is your address (landlord)?',
+    question: 'Your address - Line 1',
     inputType: 'text',
-    placeholder: '456 Park Avenue, London, W1A 2BB',
+    placeholder: '456 Park Avenue',
     helperText: 'Your personal or business address (not the rental property)',
     validation: { required: true },
+  },
+  {
+    id: 'landlord_address_town',
+    section: 'Landlord Details',
+    question: 'Your address - Town/City',
+    inputType: 'text',
+    placeholder: 'London',
+    validation: { required: true },
+  },
+  {
+    id: 'landlord_address_postcode',
+    section: 'Landlord Details',
+    question: 'Your address - Postcode',
+    inputType: 'text',
+    placeholder: 'W1A 2BB',
+    validation: { required: true, pattern: '^[A-Z]{1,2}\\d{1,2}[A-Z]?\\s?\\d[A-Z]{2}$' },
   },
   {
     id: 'landlord_email',
@@ -363,7 +397,278 @@ export const TENANCY_AGREEMENT_QUESTIONS: WizardQuestion[] = [
     placeholder: 'Space number 12, or street parking permit',
     dependsOn: { questionId: 'parking_available', value: 'yes' },
   },
+
+  // ============================================================================
+  // SECTION 9: LEGAL COMPLIANCE & SAFETY
+  // ============================================================================
+  {
+    id: 'gas_safety_certificate',
+    section: 'Legal Compliance',
+    question: 'Do you have a valid Gas Safety Certificate?',
+    inputType: 'yes_no',
+    helperText: 'Required by law if property has gas appliances. Must be renewed annually.',
+    validation: { required: true },
+  },
+  {
+    id: 'epc_rating',
+    section: 'Legal Compliance',
+    question: 'What is the Energy Performance Certificate (EPC) rating?',
+    inputType: 'select',
+    options: ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+    helperText: 'Minimum rating E required for new tenancies. Must be valid and provided to tenant.',
+    validation: { required: true },
+  },
+  {
+    id: 'electrical_safety_certificate',
+    section: 'Legal Compliance',
+    question: 'Do you have an Electrical Installation Condition Report (EICR)?',
+    inputType: 'yes_no',
+    helperText: 'Required every 5 years for private rented properties (England from June 2020)',
+    validation: { required: true },
+  },
+  {
+    id: 'smoke_alarms_fitted',
+    section: 'Legal Compliance',
+    question: 'Are smoke alarms fitted on every floor?',
+    inputType: 'yes_no',
+    helperText: 'Legal requirement: smoke alarms on every storey',
+    validation: { required: true },
+  },
+  {
+    id: 'carbon_monoxide_alarms',
+    section: 'Legal Compliance',
+    question: 'Are carbon monoxide alarms fitted?',
+    inputType: 'yes_no',
+    helperText: 'Required in rooms with solid fuel appliances (e.g., coal fire, wood burner)',
+    validation: { required: true },
+  },
+  {
+    id: 'how_to_rent_guide_provided',
+    section: 'Legal Compliance',
+    question: 'Will you provide the "How to Rent" guide to tenants?',
+    inputType: 'yes_no',
+    helperText: 'England only: Must provide latest version before or at start of tenancy',
+    validation: { required: true },
+  },
+
+  // ============================================================================
+  // SECTION 10: MAINTENANCE & REPAIRS
+  // ============================================================================
+  {
+    id: 'landlord_maintenance_responsibilities',
+    section: 'Maintenance & Repairs',
+    question: 'Who is responsible for repairs to the structure and exterior?',
+    inputType: 'select',
+    options: ['Landlord (standard)', 'Shared responsibility', 'Other arrangement'],
+    helperText: 'Usually landlord by law for structure, exterior, heating, water, sanitation',
+    validation: { required: true },
+  },
+  {
+    id: 'garden_maintenance',
+    section: 'Maintenance & Repairs',
+    question: 'Is there a garden? If yes, who maintains it?',
+    inputType: 'select',
+    options: ['No garden', 'Tenant maintains', 'Landlord maintains', 'Shared/professional gardener'],
+    helperText: 'Specify garden maintenance responsibilities',
+    validation: { required: true },
+  },
+  {
+    id: 'repairs_reporting_method',
+    section: 'Maintenance & Repairs',
+    question: 'How should tenants report repairs?',
+    inputType: 'select',
+    options: ['Email', 'Phone', 'Online portal', 'Via agent'],
+    helperText: 'Preferred method for repair requests',
+    validation: { required: true },
+  },
+  {
+    id: 'emergency_contact',
+    section: 'Maintenance & Repairs',
+    question: 'Emergency contact number (24/7)',
+    inputType: 'tel',
+    placeholder: '07700 900000',
+    helperText: 'For urgent repairs (e.g., burst pipes, no heating in winter)',
+    validation: { required: true },
+  },
+
+  // ============================================================================
+  // SECTION 11: PROPERTY CONDITION & INVENTORY
+  // ============================================================================
+  {
+    id: 'inventory_provided',
+    section: 'Property Condition',
+    question: 'Will a detailed inventory be provided?',
+    inputType: 'yes_no',
+    helperText: 'Recommended: detailed inventory with photos protects both parties',
+    validation: { required: true },
+  },
+  {
+    id: 'professional_cleaning_required',
+    section: 'Property Condition',
+    question: 'Is professional cleaning required at end of tenancy?',
+    inputType: 'yes_no',
+    helperText: 'If yes, tenant must return property to same cleanliness standard',
+    validation: { required: true },
+  },
+  {
+    id: 'decoration_condition',
+    section: 'Property Condition',
+    question: 'Are tenants allowed to decorate/make alterations?',
+    inputType: 'select',
+    options: ['No alterations allowed', 'With written permission only', 'Minor alterations allowed (e.g., picture hooks)'],
+    helperText: 'Specify decoration and alteration policy',
+    validation: { required: true },
+  },
+
+  // ============================================================================
+  // SECTION 12: TENANCY TERMS & CONDITIONS
+  // ============================================================================
+  {
+    id: 'break_clause',
+    section: 'Tenancy Terms',
+    question: 'Is there a break clause?',
+    inputType: 'yes_no',
+    helperText: 'Break clause allows either party to end tenancy early',
+    validation: { required: true },
+  },
+  {
+    id: 'break_clause_months',
+    section: 'Tenancy Terms',
+    question: 'Break clause can be exercised after how many months?',
+    inputType: 'select',
+    options: ['6 months', '9 months', '12 months'],
+    helperText: 'When break clause becomes active',
+    validation: { required: true },
+    dependsOn: { questionId: 'break_clause', value: 'yes' },
+  },
+  {
+    id: 'break_clause_notice_period',
+    section: 'Tenancy Terms',
+    question: 'How much notice for break clause?',
+    inputType: 'select',
+    options: ['1 month', '2 months', '3 months'],
+    helperText: 'Notice period required to activate break clause',
+    validation: { required: true },
+    dependsOn: { questionId: 'break_clause', value: 'yes' },
+  },
+  {
+    id: 'subletting_allowed',
+    section: 'Tenancy Terms',
+    question: 'Is subletting allowed?',
+    inputType: 'select',
+    options: ['Not allowed', 'With written permission only', 'Allowed'],
+    helperText: 'Can tenant rent rooms to others? Usually not allowed.',
+    validation: { required: true },
+  },
+  {
+    id: 'rent_increase_clause',
+    section: 'Tenancy Terms',
+    question: 'Is there a rent review/increase clause?',
+    inputType: 'yes_no',
+    helperText: 'Allow rent increases during tenancy (must follow legal procedures)',
+    validation: { required: true },
+  },
+  {
+    id: 'rent_increase_frequency',
+    section: 'Tenancy Terms',
+    question: 'How often can rent be reviewed?',
+    inputType: 'select',
+    options: ['Annually', 'Every 2 years', 'At landlord discretion (with notice)'],
+    helperText: 'Frequency of permitted rent reviews',
+    validation: { required: true },
+    dependsOn: { questionId: 'rent_increase_clause', value: 'yes' },
+  },
+
+  // ============================================================================
+  // SECTION 13: INSURANCE & LIABILITY
+  // ============================================================================
+  {
+    id: 'landlord_insurance',
+    section: 'Insurance',
+    question: 'Do you have landlord insurance?',
+    inputType: 'yes_no',
+    helperText: 'Landlord insurance covers building, landlord liability',
+    validation: { required: true },
+  },
+  {
+    id: 'tenant_insurance_required',
+    section: 'Insurance',
+    question: 'Do you require tenants to have contents insurance?',
+    inputType: 'select',
+    options: ['Not required', 'Recommended', 'Required'],
+    helperText: 'Tenant contents insurance protects their belongings',
+    validation: { required: true },
+  },
+
+  // ============================================================================
+  // SECTION 14: ACCESS & VIEWINGS
+  // ============================================================================
+  {
+    id: 'landlord_access_notice',
+    section: 'Access & Viewings',
+    question: 'How much notice for landlord access (inspections)?',
+    inputType: 'select',
+    options: ['24 hours', '48 hours', '1 week'],
+    helperText: 'Legally must give 24 hours notice except emergencies',
+    validation: { required: true },
+  },
+  {
+    id: 'inspection_frequency',
+    section: 'Access & Viewings',
+    question: 'How often will property inspections occur?',
+    inputType: 'select',
+    options: ['Monthly', 'Quarterly', 'Every 6 months', 'Annually', 'As needed'],
+    helperText: 'Regular inspections to check property condition',
+    validation: { required: true },
+  },
+  {
+    id: 'end_of_tenancy_viewings',
+    section: 'Access & Viewings',
+    question: 'Allow viewings for new tenants during final month?',
+    inputType: 'yes_no',
+    helperText: 'Can landlord show property to prospective tenants before current tenancy ends?',
+    validation: { required: true },
+  },
+
+  // ============================================================================
+  // SECTION 15: ADDITIONAL TERMS
+  // ============================================================================
+  {
+    id: 'white_goods_included',
+    section: 'Additional Terms',
+    question: 'What white goods/appliances are included?',
+    inputType: 'multi_select',
+    options: ['Washing machine', 'Dishwasher', 'Fridge/freezer', 'Oven/hob', 'Microwave', 'Tumble dryer'],
+    helperText: 'Select all appliances included in the property',
+  },
+  {
+    id: 'communal_areas',
+    section: 'Additional Terms',
+    question: 'Are there shared/communal areas?',
+    inputType: 'yes_no',
+    helperText: 'e.g., shared hallway, stairwell, garden (common in flats)',
+    validation: { required: true },
+  },
+  {
+    id: 'communal_cleaning',
+    section: 'Additional Terms',
+    question: 'Who cleans communal areas?',
+    inputType: 'select',
+    options: ['Professional cleaner', 'Tenants share', 'Landlord', 'Not applicable'],
+    helperText: 'Responsibility for maintaining shared spaces',
+    validation: { required: true },
+    dependsOn: { questionId: 'communal_areas', value: 'yes' },
+  },
+  {
+    id: 'recycling_bins',
+    section: 'Additional Terms',
+    question: 'Are recycling bins provided?',
+    inputType: 'yes_no',
+    helperText: 'Information about waste disposal arrangements',
+    validation: { required: true },
+  },
 ];
+
 
 // Helper function for ordinal suffixes
 function getOrdinalSuffix(day: number): string {
