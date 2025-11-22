@@ -380,6 +380,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         return (
           <TextInput
             {...props}
+            value={currentAnswer || ''}
             placeholder={currentQuestion.helper_text}
             required={currentQuestion.is_required}
           />
@@ -417,7 +418,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         );
 
       default:
-        return <TextInput {...props} />;
+        return <TextInput {...props} value={currentAnswer || ''} />;
     }
   };
 
