@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Container } from "@/components/ui";
-import { supabase } from "@/lib/supabase/client";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 interface Order {
@@ -40,6 +40,7 @@ export default function AdminOrdersPage() {
   }, [searchTerm, filterProduct, filterStatus, sortBy, currentPage]);
 
   async function checkAdminAccess() {
+    const supabase = getSupabaseBrowserClient();
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
@@ -62,6 +63,7 @@ export default function AdminOrdersPage() {
   }
 
   async function loadOrders() {
+    const supabase = getSupabaseBrowserClient();
     try {
       let query = supabase
         .from("orders")
@@ -124,6 +126,7 @@ export default function AdminOrdersPage() {
   }
 
   async function handleIssueRefund(orderId: string, amount: number) {
+    const supabase = getSupabaseBrowserClient();
     const confirmed = confirm(
       `Are you sure you want to issue a full refund of £${(amount / 100).toFixed(2)}? This action cannot be undone.`
     );
@@ -150,6 +153,7 @@ export default function AdminOrdersPage() {
   }
 
   async function handleResendEmail(orderId: string) {
+    const supabase = getSupabaseBrowserClient();
     try {
       const response = await fetch("/api/admin/orders/resend-email", {
         method: "POST",
