@@ -512,21 +512,154 @@
       <strong>Name:</strong> {{guarantor_name}}<br/>
       <strong>Address:</strong> {{guarantor_address}}<br/>
       <strong>Email:</strong> {{guarantor_email}}<br/>
-      <strong>Phone:</strong> {{guarantor_phone}}
+      <strong>Phone:</strong> {{guarantor_phone}}<br/>
+      <strong>Date of Birth:</strong> {{guarantor_dob}}<br/>
+      <strong>Relationship to Tenant:</strong> {{guarantor_relationship}}
+    </div>
+  </div>
+
+  <div class="legal-notice">
+    <div class="legal-notice-title">🛡️ Guarantor Agreement</div>
+    <p style="margin-bottom: 15px;">
+      <strong>The Guarantor hereby agrees to act as guarantor for the Tenant(s) named above and undertakes the following:</strong>
+    </p>
+
+    <div style="margin: 20px 0;">
+      <p style="margin: 10px 0;"><strong>1. Joint and Several Liability</strong></p>
+      <p style="margin-left: 20px;">
+        The Guarantor agrees to be jointly and severally liable with the Tenant for all obligations under this Agreement.
+        This means the Guarantor is fully responsible for the Tenant's obligations, not just guaranteeing them.
+      </p>
+
+      <p style="margin: 10px 0;"><strong>2. Rent Payment Guarantee</strong></p>
+      <p style="margin-left: 20px;">
+        If the Tenant fails to pay rent when due, the Guarantor must pay the outstanding rent within 14 days of
+        receiving written demand from the Landlord. This includes rent arrears, interest on late payments, and
+        any costs incurred in recovering the debt.
+      </p>
+
+      <p style="margin: 10px 0;"><strong>3. Damage and Dilapidation</strong></p>
+      <p style="margin-left: 20px;">
+        The Guarantor is liable for any damage to the Property beyond fair wear and tear, including cleaning costs,
+        repair costs, and replacement of fixtures and fittings damaged by the Tenant.
+      </p>
+
+      <p style="margin: 10px 0;"><strong>4. Breach of Agreement</strong></p>
+      <p style="margin-left: 20px;">
+        If the Tenant breaches any term of this Agreement, the Guarantor must remedy the breach or compensate the
+        Landlord for any losses suffered, including legal costs.
+      </p>
+
+      <p style="margin: 10px 0;"><strong>5. Continuing Guarantee</strong></p>
+      <p style="margin-left: 20px;">
+        This guarantee continues throughout the tenancy including any statutory periodic tenancy that arises after
+        the fixed term expires. The guarantee remains valid even if the tenancy terms are varied by agreement
+        between Landlord and Tenant.
+      </p>
+
+      <p style="margin: 10px 0;"><strong>6. Maximum Liability</strong></p>
+      <p style="margin-left: 20px;">
+        The Guarantor's liability is capped at: <strong>£{{multiply rent_amount 12}}</strong> (12 months' rent)
+        plus reasonable costs of enforcement. This cap does not apply to rent arrears accrued during the initial fixed term.
+      </p>
+
+      <p style="margin: 10px 0;"><strong>7. Independent Legal Advice</strong></p>
+      <p style="margin-left: 20px;">
+        The Guarantor confirms they have been advised to seek independent legal advice before signing this guarantee
+        and understands the full extent of their obligations.
+      </p>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-title">⚠️ Important Notice to Guarantor</div>
+    <p>
+      By signing this Agreement as Guarantor, you are making a serious financial commitment. You will be responsible
+      for paying the Tenant's rent and other obligations if they fail to do so. This could amount to thousands of pounds.
+      <strong>You should seek independent legal advice before signing.</strong>
+    </p>
+  </div>
+  {{/if}}
+
+  <!-- RIGHT TO RENT COMPLIANCE SECTION -->
+  <div class="section-header" style="margin-top: 40px;">
+    <span class="section-number">1A</span>
+    Right to Rent Compliance
+  </div>
+
+  <div class="legal-notice">
+    <div class="legal-notice-title">🆔 Immigration Act 2014 - Right to Rent Requirements</div>
+    <p>
+      Under the Immigration Act 2014, Landlords in England must check that all tenants aged 18 or over have the
+      right to rent property in the UK. This Agreement cannot commence until satisfactory Right to Rent checks
+      have been completed.
+    </p>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">📋 Document Verification</div>
+
+    <div class="clause">
+      <span class="clause-number">1A.1</span>
+      <strong>Landlord's Confirmation:</strong> The Landlord confirms that Right to Rent checks have been completed
+      for all Tenants named in this Agreement on <strong>{{right_to_rent_check_date}}</strong>.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">1A.2</span>
+      <strong>Documents Checked:</strong> The following original documents were inspected and copied:
+      <ul>
+        <li>British/Irish passport (current or expired within last 2 years), OR</li>
+        <li>Biometric Residence Permit showing indefinite leave to remain, OR</li>
+        <li>Valid visa with permission to rent (time-limited or indefinite), OR</li>
+        <li>Other acceptable documents as listed in the Home Office Right to Rent guidance</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">1A.3</span>
+      <strong>Record Keeping:</strong> The Landlord will retain copies of the immigration documents checked for the
+      duration of the tenancy plus 12 months after it ends, as required by law.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">1A.4</span>
+      <strong>Time-Limited Immigration Status:</strong> Where a Tenant has time-limited permission to rent, the
+      Landlord will conduct follow-up checks before the immigration permission expires. The Tenant must provide
+      updated documentation when requested.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">1A.5</span>
+      <strong>Tenant's Ongoing Obligations:</strong> The Tenant must immediately notify the Landlord of any changes
+      to their immigration status. Failure to maintain the right to rent may result in termination of this tenancy.
     </div>
   </div>
 
   <div class="explainer-box">
     <div class="explainer-title">
       <span class="explainer-icon">ℹ️</span>
-      Guarantor's Role
+      Why Right to Rent Checks Matter
     </div>
     <p>
-      The Guarantor agrees to be responsible for the Tenant's obligations under this Agreement. If the Tenant fails
-      to pay rent or breaches any term, the Guarantor must fulfill these obligations.
+      <strong>For Landlords:</strong> Failure to conduct Right to Rent checks can result in a civil penalty of up to
+      £3,000 per tenant, or criminal prosecution with unlimited fines and up to 5 years imprisonment for repeat offenses
+      or knowingly renting to illegal immigrants.
+    </p>
+    <p style="margin-top: 10px;">
+      <strong>For Tenants:</strong> You must have valid immigration permission to rent in England. Renting without
+      permission is a criminal offense and may affect future immigration applications.
     </p>
   </div>
-  {{/if}}
+
+  <div class="warning-box">
+    <div class="warning-title">⚠️ Data Protection Notice</div>
+    <p>
+      Personal data collected for Right to Rent checks (including copies of passports and immigration documents) will
+      be processed in accordance with UK GDPR. This data will only be used for immigration compliance purposes and
+      will be securely stored and destroyed 12 months after the tenancy ends.
+    </p>
+  </div>
 
   <!-- PAGE BREAK -->
   <div class="page-break"></div>
@@ -819,23 +952,174 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">🐾 Pets</div>
+    <div class="subsection-title">🐾 Pet Agreement</div>
 
     {{#if pets_allowed}}
+    <div class="legal-notice">
+      <div class="legal-notice-title">✅ Pets Are Permitted - Subject to Terms Below</div>
+      <p>
+        The Landlord permits the Tenant to keep pet(s) at the Property subject to the terms and conditions set out
+        in this Pet Agreement. This is a privilege that may be withdrawn if the terms are breached.
+      </p>
+    </div>
+
     <div class="clause">
       <span class="clause-number">7.1</span>
-      <strong>Pets are PERMITTED</strong> with the following conditions:
+      <strong>Approved Pets:</strong> The following pets are specifically approved under this Agreement:
+    </div>
+
+    <div class="party-details" style="margin: 15px 0;">
+      <div class="party-info">
+        <strong>Pet Details:</strong><br/>
+        {{#if pet_type}}Type/Species: {{pet_type}}<br/>{{/if}}
+        {{#if pet_breed}}Breed: {{pet_breed}}<br/>{{/if}}
+        {{#if pet_age}}Age: {{pet_age}}<br/>{{/if}}
+        {{#if pet_name}}Name: {{pet_name}}<br/>{{/if}}
+        {{#if pet_weight}}Weight: {{pet_weight}}<br/>{{/if}}
+        {{#unless pet_type}}General Approval: {{approved_pets}}{{/unless}}
+      </div>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.2</span>
+      <strong>Additional Pets:</strong> The Tenant must not keep any additional pets without the Landlord's prior
+      written consent. Any request for additional pets must be made in writing with full details of the proposed pet.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.3</span>
+      <strong>Pet Damage Liability:</strong> The Tenant accepts full liability for any damage, soiling, scratching,
+      or destruction caused by the pet(s) to the Property, fixtures, fittings, furnishings, carpets, flooring, doors,
+      walls, or garden. This includes but is not limited to:
       <ul>
-        <li>Approved pets: {{approved_pets}}</li>
-        <li>Tenant remains responsible for any damage caused by pets</li>
-        <li>Tenant must ensure pets do not cause nuisance to neighbours</li>
-        <li>Property must be professionally cleaned at end of tenancy</li>
+        <li>Scratched doors, door frames, and skirting boards</li>
+        <li>Damaged carpets, flooring, and upholstery</li>
+        <li>Chewed furniture, cables, or fixtures</li>
+        <li>Stained or soiled carpets and furnishings</li>
+        <li>Garden damage (digging, fouling, plant destruction)</li>
+        <li>Odor removal and specialist cleaning</li>
       </ul>
     </div>
+
+    {{#if pet_deposit_amount}}
+    <div class="clause">
+      <span class="clause-number">7.4</span>
+      <strong>Pet Deposit:</strong> In addition to the standard tenancy deposit, the Tenant has paid a pet deposit of
+      <strong>£{{pet_deposit_amount}}</strong>. This deposit will be protected in the same scheme as the tenancy deposit
+      and is specifically held against pet-related damage. The pet deposit does not limit the Tenant's liability for
+      pet damage exceeding this amount.
+    </div>
+    {{/if}}
+
+    <div class="clause">
+      <span class="clause-number">7.5</span>
+      <strong>Pet Insurance:</strong> The Tenant {{#if pet_insurance_required}}MUST{{else}}is strongly advised to{{/if}}
+      obtain and maintain third-party liability insurance covering damage caused by the pet to a minimum value of £1,000,000.
+      {{#if pet_insurance_required}}Proof of insurance must be provided to the Landlord within 14 days of the tenancy start
+      and upon renewal.{{/if}}
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.6</span>
+      <strong>Nuisance and Behavior:</strong> The Tenant must ensure that the pet(s):
+      <ul>
+        <li>Do not cause nuisance, annoyance, or disturbance to neighbors through noise, smell, or behavior</li>
+        <li>Are kept under proper control at all times</li>
+        <li>Do not foul communal areas or neighboring properties</li>
+        <li>Are not left alone for extended periods causing distress or noise</li>
+        <li>Comply with any building/estate rules regarding pets</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.7</span>
+      <strong>Flea and Pest Control:</strong> The Tenant must ensure the Property is treated for fleas and other
+      pet-related pests at least every {{#if flea_treatment_frequency}}{{flea_treatment_frequency}}{{else}}3 months{{/if}}.
+      Evidence of treatment must be provided upon request.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.8</span>
+      <strong>Professional Cleaning:</strong> At the end of the tenancy, the Tenant must arrange professional carpet
+      and upholstery cleaning by a recognized company to remove pet hair, odors, and stains. Receipts must be provided
+      to the Landlord. The cost of this cleaning cannot be deducted from the deposit without prior agreement.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.9</span>
+      <strong>Waste Disposal:</strong> The Tenant must dispose of all pet waste hygienically and promptly. This includes:
+      <ul>
+        <li>Daily removal of waste from the garden</li>
+        <li>Proper disposal of litter and waste in designated bins</li>
+        <li>Cleaning of any pet toilet areas regularly</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.10</span>
+      <strong>Dangerous Dogs:</strong> The Tenant confirms that no pet kept at the Property is a banned breed under the
+      Dangerous Dogs Act 1991 (Pit Bull Terrier, Japanese Tosa, Dogo Argentino, Fila Brasileiro). Keeping a banned breed
+      is a criminal offense and will result in immediate termination of this tenancy.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.11</span>
+      <strong>Vaccinations and Health:</strong> The Tenant must ensure all pets are:
+      <ul>
+        <li>Up to date with vaccinations and worming treatments</li>
+        <li>Microchipped (where legally required)</li>
+        <li>Licensed (where applicable, e.g., dog licenses in certain areas)</li>
+        <li>In good health and receive proper veterinary care</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.12</span>
+      <strong>Removal of Pet:</strong> If the pet causes significant damage, persistent nuisance, or the Tenant breaches
+      these pet terms, the Landlord may require removal of the pet from the Property. The Tenant has 14 days to rehome
+      the pet or this Agreement may be terminated.
+    </div>
+
+    <div class="warning-box">
+      <div class="warning-title">⚠️ Important Pet Responsibilities</div>
+      <p>
+        Keeping pets is a significant responsibility. Damage caused by pets is typically not covered by the Landlord's
+        insurance and may exceed the deposit. The Tenant may be liable for thousands of pounds in repair costs for
+        serious pet damage. Consider pet insurance carefully.
+      </p>
+    </div>
+
     {{else}}
     <div class="clause">
       <span class="clause-number">7.1</span>
-      <strong>NO PETS</strong> are permitted without the Landlord's prior written consent.
+      <strong>NO PETS:</strong> The Tenant must not keep any pets or animals at the Property without the Landlord's
+      prior written consent, which may be granted or refused at the Landlord's absolute discretion.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">7.2</span>
+      <strong>Request to Keep Pets:</strong> If the Tenant wishes to keep a pet during the tenancy, they must submit
+      a written request to the Landlord including:
+      <ul>
+        <li>Type and breed of pet</li>
+        <li>Age, weight, and temperament</li>
+        <li>Proof of pet insurance (third-party liability minimum £1,000,000)</li>
+        <li>Vaccination and microchip records</li>
+        <li>References from previous landlords regarding the pet</li>
+      </ul>
+      The Landlord is not obliged to grant permission and may impose additional conditions or require a pet deposit.
+    </div>
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">ℹ️</span>
+        Model Tenancy Agreement 2021
+      </div>
+      <p>
+        The government's Model Tenancy Agreement (2021) recommends that landlords consider reasonable requests for pets.
+        However, landlords retain the right to refuse permission where there are reasonable grounds, such as property
+        unsuitability, lease restrictions, or concerns about damage or nuisance.
+      </p>
     </div>
     {{/if}}
   </div>
@@ -854,6 +1138,101 @@
       Smoking and vaping are <strong>STRICTLY PROHIBITED</strong> inside the property. The Tenant may smoke outside only.
     </div>
     {{/if}}
+  </div>
+
+  <!-- PAGE BREAK -->
+  <div class="page-break"></div>
+
+  <!-- SECTION 8: LEGAL COMPLIANCE & TENANT INFORMATION -->
+  <div class="section-header">
+    <span class="section-number">8</span>
+    Legal Compliance & Tenant Information
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">📖 How to Rent Guide</div>
+
+    <div class="legal-notice">
+      <div class="legal-notice-title">✅ Mandatory Tenant Information</div>
+      <p>
+        Under the Deregulation Act 2015, the Landlord must provide the Tenant with the latest version of the
+        government's "How to Rent: The checklist for renting in England" guide before the tenancy begins.
+      </p>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">8.1</span>
+      <strong>Provision of Guide:</strong> The Landlord confirms that the latest version of the "How to Rent" guide
+      (dated {{how_to_rent_version}}) has been provided to the Tenant on {{how_to_rent_provision_date}}.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">8.2</span>
+      <strong>Access to Latest Version:</strong> The official "How to Rent" guide can always be accessed online at:
+      <br/><br/>
+      <strong>🔗 <a href="https://www.gov.uk/government/publications/how-to-rent">https://www.gov.uk/government/publications/how-to-rent</a></strong>
+      <br/><br/>
+      The Tenant is encouraged to read this guide thoroughly as it explains their rights and responsibilities,
+      including how to end a tenancy, what happens at the end of a fixed term, and how to resolve disputes.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">8.3</span>
+      <strong>Importance of Compliance:</strong> Failure to provide this guide may prevent the Landlord from serving
+      a valid Section 21 notice (no-fault eviction). The Tenant should keep their copy for reference throughout the tenancy.
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🏛️ Additional Legal Documents</div>
+
+    <div class="clause">
+      <span class="clause-number">8.4</span>
+      <strong>Documents Provided:</strong> The Landlord has provided or will provide the following mandatory documents:
+      <ul class="checklist">
+        <li>Energy Performance Certificate (EPC) - Current rating: {{epc_rating}}</li>
+        <li>Gas Safety Certificate (valid for 12 months from issue)</li>
+        <li>Electrical Installation Condition Report (EICR) - valid for 5 years</li>
+        <li>Deposit Protection Prescribed Information (within 30 days of receiving deposit)</li>
+        <li>How to Rent guide (latest version)</li>
+        {{#if inventory_provided}}<li>Property Inventory and Schedule of Condition</li>{{/if}}
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">8.5</span>
+      <strong>Right to Copies:</strong> The Tenant has the right to request copies of these documents at any time
+      during the tenancy. The Landlord must provide copies within 28 days of a written request.
+    </div>
+  </div>
+
+  <div class="explainer-box">
+    <div class="explainer-title">
+      <span class="explainer-icon">ℹ️</span>
+      Why These Documents Matter
+    </div>
+    <p>
+      These documents are legally required and protect both parties. The EPC shows energy efficiency (properties
+      must achieve minimum rating E). Gas and electrical certificates prove safety compliance. The deposit protection
+      information explains how your deposit is protected and how to get it back. The How to Rent guide explains your
+      rights throughout the tenancy.
+    </p>
+  </div>
+
+  <div class="warning-box">
+    <div class="warning-title">⚠️ Landlord Compliance Notice</div>
+    <p>
+      <strong>Landlord:</strong> Failure to provide these documents may result in:
+    </p>
+    <ul>
+      <li>Inability to serve valid Section 21 notice (no-fault eviction)</li>
+      <li>Civil penalties up to £5,000 for missing EPC</li>
+      <li>Criminal prosecution for missing Gas Safety Certificate</li>
+      <li>Compensation of 1-3x deposit for missing deposit protection information</li>
+    </ul>
+    <p style="margin-top: 10px;">
+      Ensure all documents are up to date and provided to tenants at the correct times.
+    </p>
   </div>
 
   <!-- SIGNATURE SECTION -->

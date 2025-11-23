@@ -101,6 +101,32 @@ export interface ASTData {
   approved_pets?: string;
   smoking_allowed?: boolean;
 
+  // Premium: Guarantor (optional)
+  guarantor_name?: string;
+  guarantor_address?: string;
+  guarantor_email?: string;
+  guarantor_phone?: string;
+  guarantor_dob?: string;
+  guarantor_relationship?: string;
+
+  // Premium: Enhanced Pet Agreement
+  pet_type?: string;
+  pet_breed?: string;
+  pet_age?: string;
+  pet_name?: string;
+  pet_weight?: string;
+  pet_deposit_amount?: number;
+  pet_insurance_required?: boolean;
+  flea_treatment_frequency?: string;
+
+  // Premium: Right to Rent Compliance
+  right_to_rent_check_date?: string;
+  right_to_rent_documents_checked?: string[];
+
+  // Premium: How to Rent Guide
+  how_to_rent_version?: string;
+  how_to_rent_provision_date?: string;
+
   // Legal Compliance & Safety
   gas_safety_certificate?: boolean;
   epc_rating?: string;

@@ -108,6 +108,11 @@ function registerHandlebarsHelpers() {
   Handlebars.registerHelper('add', function (a, b) {
     return Number(a) + Number(b);
   });
+
+  // Multiply numbers
+  Handlebars.registerHelper('multiply', function (a, b) {
+    return Number(a) * Number(b);
+  });
 }
 
 // Register helpers once
