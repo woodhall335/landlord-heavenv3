@@ -1,33 +1,63 @@
 {
   "jurisdiction": "northern-ireland",
   "last_updated": "2024-11-23",
-  "forms": {
-    "notice_to_quit.pdf": {
+  "form_system": "TEMPLATE_BASED",
+  "notes": "Northern Ireland does NOT have prescribed official PDF forms like Scotland or England & Wales. Documents are generated from templates that meet legal requirements.",
+  "reference_materials": {
+    "notice_seeking_possession.doc": {
+      "title": "Notice Seeking Possession (Reference Template)",
+      "version": "2015.07",
+      "effective_date": "2015-07-07",
+      "source_url": "https://www.communities-ni.gov.uk/sites/default/files/publications/dsd/hagcs-notice-seeking-possession.doc",
+      "last_verified": "2024-11-23",
+      "file_size": "84KB",
+      "pages": 4,
+      "notes": "Department for Communities reference template. Used as guidance for creating compliant notices. No prescribed mandatory form exists in NI law.",
+      "status": "DOWNLOADED"
+    }
+  },
+  "generated_documents": {
+    "notice_to_quit": {
       "title": "Notice to Quit",
-      "version": "2024.01",
-      "effective_date": "2024-01-01",
+      "legal_basis": "Common law notice to terminate tenancy",
+      "notice_period": "28 days minimum (4/8/12 weeks based on tenancy length)",
+      "requirements": [
+        "Must be in writing",
+        "Must specify termination date (end of rental period)",
+        "Must include property address",
+        "Must include landlord and tenant details",
+        "Can be delivered in person, by post, email or text"
+      ],
       "source_url": "https://www.nidirect.gov.uk/articles/ending-private-tenancy",
-      "last_verified": "2024-11-23",
-      "notes": "Common law notice to terminate tenancy. Must give minimum 4 weeks (28 days) notice for weekly/monthly tenancies. Must end on first or last day of tenancy period.",
-      "status": "TO_DOWNLOAD"
+      "status": "TEMPLATE_GENERATION"
     },
-    "notice_of_intention.pdf": {
+    "notice_of_intention": {
       "title": "Notice of Intention to Seek Possession",
-      "version": "2024.01",
-      "effective_date": "2024-01-01",
+      "legal_basis": "Private Tenancies (NI) Order 2006",
+      "notice_period": "28 days (or 14 days for Grounds 8, 14, 17)",
+      "requirements": [
+        "Must specify grounds for possession",
+        "Must include full particulars of each ground",
+        "Must be served after or with Notice to Quit",
+        "Must state landlord intends to apply to court",
+        "Must classify grounds as mandatory or discretionary"
+      ],
       "source_url": "https://www.nidirect.gov.uk/articles/eviction-private-tenancies",
-      "last_verified": "2024-11-23",
-      "notes": "Statutory notice under Private Tenancies (NI) Order 2006. Must specify grounds. Minimum 28 days notice (14 days for Grounds 8, 14, 17). Served after or with Notice to Quit.",
-      "status": "TO_DOWNLOAD"
+      "status": "TEMPLATE_GENERATION"
     },
-    "claim_for_possession.pdf": {
-      "title": "County Court Claim for Possession",
-      "version": "2024.01",
-      "effective_date": "2024-01-01",
-      "source_url": "https://www.justice-ni.gov.uk/topics/courts-and-tribunals/court-forms",
-      "last_verified": "2024-11-23",
-      "notes": "Official County Court claim form for possession proceedings in Northern Ireland. Must attach Notice to Quit, Notice of Intention, and all supporting evidence.",
-      "status": "TO_DOWNLOAD"
+    "claim_summary": {
+      "title": "County Court Claim Summary (Guidance Only)",
+      "legal_basis": "County Court proceedings - requires solicitor",
+      "notes": "Actual court claims ('ejectment civil bills') must be prepared by solicitors. We provide guidance and document summaries only.",
+      "requirements": [
+        "Must attach Notice to Quit",
+        "Must attach Notice of Intention",
+        "Must include all evidence supporting grounds",
+        "Must include particulars of claim",
+        "Professional legal representation recommended"
+      ],
+      "source_url": "https://www.justice-ni.gov.uk/topics/courts-and-tribunals/county-courts",
+      "status": "GUIDANCE_ONLY"
     }
   },
   "copyright": "Crown Copyright. Northern Ireland Courts and Tribunals Service. Used under Open Government Licence v3.0",

@@ -1,21 +1,27 @@
 /**
- * Northern Ireland Official Forms Filler
+ * Northern Ireland Eviction Documents Generator
  *
- * This utility fills official Northern Ireland court forms.
+ * IMPORTANT: Northern Ireland does NOT have prescribed official PDF forms like
+ * Scotland or England & Wales. Instead, we generate documents from templates
+ * that meet Northern Ireland legal requirements.
  *
- * CRITICAL: Northern Ireland Courts only accept their official forms.
+ * Legal Framework:
+ * - Private Tenancies (Northern Ireland) Order 2006
+ * - Common law Notice to Quit
+ * - County Court procedures (requires solicitor involvement)
  *
- * Official forms are stored in /public/official-forms/northern-ireland/
+ * Templates are stored in: /config/jurisdictions/uk/northern-ireland/templates/
  *
- * Forms handled:
- * - Notice to Quit (Common law notice)
+ * Documents generated:
+ * - Notice to Quit (common law notice)
  * - Notice of Intention to Seek Possession (PT(NI) Order 2006)
- * - County Court Claim for Possession
+ * - Civil Bill Possession (guidance document for solicitor)
  */
 
-import { PDFDocument, PDFForm, rgb, StandardFonts } from 'pdf-lib';
+import Handlebars from 'handlebars';
 import fs from 'fs/promises';
 import path from 'path';
+import { generatePDFFromMarkdown } from './pdf-generator';
 
 export interface NorthernIrelandCaseData {
   // Landlord details
@@ -80,309 +86,227 @@ export interface NorthernIrelandGround {
 }
 
 /**
- * Load an official PDF form
+ * Load a Handlebars template
  */
-async function loadOfficialForm(formName: string): Promise<PDFDocument> {
-  const formPath = path.join(process.cwd(), 'public', 'official-forms', 'northern-ireland', formName);
+async function loadTemplate(templateName: string): Promise<HandlebarsTemplateDelegate> {
+  const templatePath = path.join(
+    process.cwd(),
+    'config',
+    'jurisdictions',
+    'uk',
+    'northern-ireland',
+    'templates',
+    templateName
+  );
 
   try {
-    const pdfBytes = await fs.readFile(formPath);
-    const pdfDoc = await PDFDocument.load(pdfBytes);
-    return pdfDoc;
+    const templateContent = await fs.readFile(templatePath, 'utf-8');
+    return Handlebars.compile(templateContent);
   } catch (error) {
-    throw new Error(`Failed to load official form "${formName}". Make sure the PDF exists in /public/official-forms/northern-ireland/. Error: ${error}`);
+    throw new Error(
+      `Failed to load template "${templateName}". ` +
+      `Make sure it exists in /config/jurisdictions/uk/northern-ireland/templates/. ` +
+      `Error: ${error}`
+    );
   }
 }
 
 /**
- * Fill a PDF form field safely (handles missing fields)
+ * Format date for display (DD/MM/YYYY)
  */
-function fillTextField(form: PDFForm, fieldName: string, value: string | undefined): void {
-  if (!value) return;
+function formatDate(dateString: string | undefined): string {
+  if (!dateString) return '';
 
-  try {
-    const field = form.getTextField(fieldName);
-    field.setText(value);
-  } catch (error) {
-    console.warn(`Field "${fieldName}" not found in form, skipping`);
-  }
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
 }
 
 /**
- * Check a PDF checkbox safely (handles missing fields)
+ * Calculate notice period in weeks and days
  */
-function checkBox(form: PDFForm, fieldName: string, checked: boolean = true): void {
-  if (!checked) return;
+function calculateNoticePeriod(startDate: string, endDate: string): { weeks: number; days: number } {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const diffTime = Math.abs(end.getTime() - start.getTime());
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const weeks = Math.floor(diffDays / 7);
 
-  try {
-    const field = form.getCheckBox(fieldName);
-    field.check();
-  } catch (error) {
-    console.warn(`Checkbox "${fieldName}" not found in form, skipping`);
-  }
+  return { weeks, days: diffDays };
 }
 
 /**
- * Split date string (YYYY-MM-DD) into day, month, year components
+ * Classify grounds into mandatory and discretionary
  */
-function splitDate(dateString: string | undefined): { day: string; month: string; year: string } | null {
-  if (!dateString) return null;
+function classifyGrounds(grounds: NorthernIrelandGround[]): {
+  mandatory_grounds: NorthernIrelandGround[];
+  discretionary_grounds: NorthernIrelandGround[];
+  has_mandatory_grounds: boolean;
+  has_discretionary_grounds: boolean;
+} {
+  const mandatory = grounds.filter(g => g.type === 'mandatory');
+  const discretionary = grounds.filter(g => g.type === 'discretionary');
 
-  const parts = dateString.split('-');
-  if (parts.length === 3) {
-    return {
-      day: parts[2],
-      month: parts[1],
-      year: parts[0]
-    };
-  }
-
-  return null;
+  return {
+    mandatory_grounds: mandatory,
+    discretionary_grounds: discretionary,
+    has_mandatory_grounds: mandatory.length > 0,
+    has_discretionary_grounds: discretionary.length > 0
+  };
 }
 
 /**
- * Fill Notice to Quit
+ * Generate Notice to Quit
  *
  * Common law notice to terminate tenancy in Northern Ireland
  *
- * Official template: /public/official-forms/northern-ireland/notice_to_quit.pdf
+ * Template: /config/jurisdictions/uk/northern-ireland/templates/notice_to_quit.hbs
  */
-export async function fillNoticeToQuit(data: NorthernIrelandCaseData): Promise<Uint8Array> {
-  console.log('📄 Filling Notice to Quit (Northern Ireland)...');
+export async function generateNoticeToQuit(data: NorthernIrelandCaseData): Promise<Uint8Array> {
+  console.log('📄 Generating Notice to Quit (Northern Ireland)...');
 
-  const pdfDoc = await loadOfficialForm('notice_to_quit.pdf');
-  const form = pdfDoc.getForm();
+  const template = await loadTemplate('notice_to_quit.hbs');
 
-  // TO: Tenant details
-  fillTextField(form, 'Tenant Name', data.tenant_full_name);
-  if (data.tenant_2_name) {
-    fillTextField(form, 'Tenant 2 Name', data.tenant_2_name);
-  }
-  fillTextField(form, 'Tenant Address', data.property_address);
+  // Calculate notice period
+  const noticePeriod = calculateNoticePeriod(
+    data.notice_to_quit_date,
+    data.notice_to_quit_expiry_date
+  );
 
-  // FROM: Landlord details
-  fillTextField(form, 'Landlord Name', data.landlord_full_name);
-  fillTextField(form, 'Landlord Address', data.landlord_address);
+  // Prepare template data
+  const templateData = {
+    ...data,
+    generation_date: formatDate(new Date().toISOString()),
+    notice_date: formatDate(data.notice_to_quit_date),
+    quit_date: formatDate(data.notice_to_quit_expiry_date),
+    notice_period_weeks: noticePeriod.weeks,
+    notice_period_days: noticePeriod.days,
+    grounds: data.grounds.map((g, index) => ({
+      ...g,
+      number: index + 1,
+      legal_basis: g.particulars
+    }))
+  };
 
-  // Property address
-  fillTextField(form, 'Property Address', data.property_address);
+  // Render template to markdown
+  const markdown = template(templateData);
 
-  // Notice date
-  const noticeDate = splitDate(data.notice_to_quit_date);
-  if (noticeDate) {
-    fillTextField(form, 'Notice Date Day', noticeDate.day);
-    fillTextField(form, 'Notice Date Month', noticeDate.month);
-    fillTextField(form, 'Notice Date Year', noticeDate.year);
-  }
+  // Convert to PDF
+  const pdfBytes = await generatePDFFromMarkdown(markdown);
 
-  // Expiry date
-  const expiryDate = splitDate(data.notice_to_quit_expiry_date);
-  if (expiryDate) {
-    fillTextField(form, 'Expiry Date Day', expiryDate.day);
-    fillTextField(form, 'Expiry Date Month', expiryDate.month);
-    fillTextField(form, 'Expiry Date Year', expiryDate.year);
-  }
-
-  // Tenancy type
-  if (data.tenancy_type === 'weekly') {
-    checkBox(form, 'Weekly Tenancy', true);
-  } else if (data.tenancy_type === 'monthly') {
-    checkBox(form, 'Monthly Tenancy', true);
-  }
-
-  // Signature
-  fillTextField(form, 'Landlord Signature', data.signatory_name);
-
-  const signatureDate = splitDate(data.signature_date);
-  if (signatureDate) {
-    fillTextField(form, 'Signature Date', `${signatureDate.day}/${signatureDate.month}/${signatureDate.year}`);
-  }
-
-  const pdfBytes = await pdfDoc.save();
-  console.log('✅ Notice to Quit filled successfully');
-
+  console.log('✅ Notice to Quit generated successfully');
   return pdfBytes;
 }
 
 /**
- * Fill Notice of Intention to Seek Possession
+ * Generate Notice of Intention to Seek Possession
  *
  * Statutory notice under Private Tenancies (NI) Order 2006
  *
- * Official template: /public/official-forms/northern-ireland/notice_of_intention.pdf
+ * Template: /config/jurisdictions/uk/northern-ireland/templates/notice_of_intention.hbs
  */
-export async function fillNoticeOfIntention(data: NorthernIrelandCaseData): Promise<Uint8Array> {
-  console.log('📄 Filling Notice of Intention to Seek Possession (Northern Ireland)...');
+export async function generateNoticeOfIntention(data: NorthernIrelandCaseData): Promise<Uint8Array> {
+  console.log('📄 Generating Notice of Intention to Seek Possession (Northern Ireland)...');
 
-  const pdfDoc = await loadOfficialForm('notice_of_intention.pdf');
-  const form = pdfDoc.getForm();
+  const template = await loadTemplate('notice_of_intention.hbs');
 
-  // TO: Tenant details
-  fillTextField(form, 'Tenant Name', data.tenant_full_name);
-  if (data.tenant_2_name) {
-    fillTextField(form, 'Tenant 2 Name', data.tenant_2_name);
-  }
-  fillTextField(form, 'Property Address', data.property_address);
-
-  // FROM: Landlord details
-  fillTextField(form, 'Landlord Name', data.landlord_full_name);
-  fillTextField(form, 'Landlord Address', data.landlord_address);
-  fillTextField(form, 'Landlord Phone', data.landlord_phone);
-
-  // Notice date
-  const noticeDate = splitDate(data.notice_of_intention_date);
-  if (noticeDate) {
-    fillTextField(form, 'Notice Date', `${noticeDate.day}/${noticeDate.month}/${noticeDate.year}`);
-  }
-
-  // Grounds for possession
-  let hasMandatoryGround = false;
-  let hasDiscretionaryGround = false;
-
-  data.grounds.forEach((ground) => {
-    const groundNumber = ground.code.replace('Ground ', '');
-
-    // Check the ground checkbox
-    checkBox(form, `Ground ${groundNumber}`, true);
-
-    // Track mandatory vs discretionary
-    if (ground.type === 'mandatory') {
-      hasMandatoryGround = true;
-    } else {
-      hasDiscretionaryGround = true;
-    }
-
-    // Fill particulars
-    fillTextField(form, `Ground ${groundNumber} Particulars`, ground.particulars);
-  });
-
-  // Indicate type of grounds
-  if (hasMandatoryGround) {
-    checkBox(form, 'Mandatory Grounds Claimed', true);
-  }
-  if (hasDiscretionaryGround) {
-    checkBox(form, 'Discretionary Grounds Claimed', true);
-  }
-
-  // Notice period
+  // Determine notice period (14 or 28 days)
   const hasGroundRequiring14Days = data.grounds.some(g =>
     g.code === 'Ground 8' || g.code === 'Ground 14' || g.code === 'Ground 17'
   );
 
-  if (hasGroundRequiring14Days) {
-    fillTextField(form, 'Notice Period', '14 days');
-  } else {
-    fillTextField(form, 'Notice Period', '28 days');
-  }
+  const noticePeriodDays = hasGroundRequiring14Days ? 14 : 28;
 
-  // Signature
-  fillTextField(form, 'Landlord Signature', data.signatory_name);
+  // Calculate earliest court date
+  const noticeDate = new Date(data.notice_of_intention_date);
+  const earliestCourtDate = new Date(noticeDate);
+  earliestCourtDate.setDate(earliestCourtDate.getDate() + noticePeriodDays);
 
-  const signatureDate = splitDate(data.signature_date);
-  if (signatureDate) {
-    fillTextField(form, 'Signature Date', `${signatureDate.day}/${signatureDate.month}/${signatureDate.year}`);
-  }
+  // Classify grounds
+  const groundsClassification = classifyGrounds(data.grounds);
 
-  const pdfBytes = await pdfDoc.save();
-  console.log('✅ Notice of Intention filled successfully');
+  // Prepare grounds with evidence
+  const groundsWithEvidence = data.grounds.map(g => ({
+    ...g,
+    category: g.type === 'mandatory' ? 'Mandatory' : 'Discretionary',
+    legal_basis: `Private Tenancies (Northern Ireland) Order 2006, ${g.code}`,
+    evidence_required: g.evidence ? g.evidence.split('\n') : []
+  }));
 
+  // Prepare template data
+  const templateData = {
+    ...data,
+    generation_date: formatDate(new Date().toISOString()),
+    notice_date: formatDate(data.notice_of_intention_date),
+    notice_period_days: noticePeriodDays,
+    earliest_court_date: formatDate(earliestCourtDate.toISOString()),
+    grounds: groundsWithEvidence,
+    ...groundsClassification
+  };
+
+  // Render template to markdown
+  const markdown = template(templateData);
+
+  // Convert to PDF
+  const pdfBytes = await generatePDFFromMarkdown(markdown);
+
+  console.log('✅ Notice of Intention generated successfully');
   return pdfBytes;
 }
 
 /**
- * Fill County Court Claim for Possession
+ * Generate Civil Bill for Possession (Guidance Document)
  *
- * Official court claim form for Northern Ireland County Courts
+ * NOTE: Actual County Court claims ("ejectment civil bills") must be prepared
+ * by solicitors in Northern Ireland. This generates a guidance document only.
  *
- * Official form: /public/official-forms/northern-ireland/claim_for_possession.pdf
+ * Template: /config/jurisdictions/uk/northern-ireland/templates/civil_bill_possession.hbs
  */
-export async function fillClaimForPossession(data: NorthernIrelandCaseData): Promise<Uint8Array> {
-  console.log('📄 Filling County Court Claim for Possession (Northern Ireland)...');
+export async function generateCivilBillGuidance(data: NorthernIrelandCaseData): Promise<Uint8Array> {
+  console.log('📄 Generating Civil Bill Possession Guidance (Northern Ireland)...');
+  console.log('ℹ️  Note: Actual court claims must be prepared by a solicitor');
 
-  const pdfDoc = await loadOfficialForm('claim_for_possession.pdf');
-  const form = pdfDoc.getForm();
+  const template = await loadTemplate('civil_bill_possession.hbs');
 
-  // Court details
-  fillTextField(form, 'Court Name', data.court_name || 'County Court');
-  fillTextField(form, 'Court Address', data.court_address || '');
+  // Classify grounds
+  const groundsClassification = classifyGrounds(data.grounds);
 
-  // Claimant (Landlord) details
-  fillTextField(form, 'Claimant Name', data.landlord_full_name);
-  if (data.landlord_2_name) {
-    fillTextField(form, 'Claimant 2 Name', data.landlord_2_name);
-  }
-  fillTextField(form, 'Claimant Address', data.landlord_address);
-  fillTextField(form, 'Claimant Postcode', data.landlord_postcode);
-  fillTextField(form, 'Claimant Phone', data.landlord_phone);
-  fillTextField(form, 'Claimant Email', data.landlord_email);
+  // Prepare particulars of claim
+  const particularsOfClaim = data.grounds.map(g =>
+    `${g.code} - ${g.title}\n\n${g.particulars}\n\n${g.evidence ? `Evidence: ${g.evidence}` : ''}`
+  ).join('\n\n---\n\n');
 
-  // Defendant (Tenant) details
-  fillTextField(form, 'Defendant Name', data.tenant_full_name);
-  if (data.tenant_2_name) {
-    fillTextField(form, 'Defendant 2 Name', data.tenant_2_name);
-  }
-  fillTextField(form, 'Defendant Address', data.property_address);
-  fillTextField(form, 'Defendant Postcode', data.property_postcode);
+  // Calculate total arrears if applicable
+  const totalArrears = data.current_arrears || 0;
+  const arrearsSummary = data.arrears_breakdown?.map(a =>
+    `Period: ${a.period} - Due: £${a.amount_due.toFixed(2)}, Paid: £${a.amount_paid.toFixed(2)}, Balance: £${a.balance.toFixed(2)}`
+  ).join('\n') || 'Not applicable';
 
-  // Property details
-  fillTextField(form, 'Property Address', data.property_address);
+  // Prepare template data
+  const templateData = {
+    ...data,
+    generation_date: formatDate(new Date().toISOString()),
+    notice_to_quit_date_formatted: formatDate(data.notice_to_quit_date),
+    notice_of_intention_date_formatted: formatDate(data.notice_of_intention_date),
+    claim_for_arrears: totalArrears > 0,
+    total_arrears: totalArrears.toFixed(2),
+    arrears_summary: arrearsSummary,
+    particulars_of_claim: particularsOfClaim,
+    deposit_protected: !!data.deposit_amount,
+    deposit_amount_formatted: data.deposit_amount ? data.deposit_amount.toFixed(2) : '0.00',
+    ...groundsClassification
+  };
 
-  // Claim details
-  checkBox(form, 'Claim for Possession', true);
+  // Render template to markdown
+  const markdown = template(templateData);
 
-  if (data.current_arrears && data.current_arrears > 0) {
-    checkBox(form, 'Claim for Rent Arrears', true);
-    fillTextField(form, 'Arrears Amount', `£${data.current_arrears.toFixed(2)}`);
-  }
+  // Convert to PDF
+  const pdfBytes = await generatePDFFromMarkdown(markdown);
 
-  // Grounds
-  data.grounds.forEach((ground) => {
-    const groundNumber = ground.code.replace('Ground ', '');
-    checkBox(form, `Ground ${groundNumber} Claimed`, true);
-  });
-
-  // Notices served
-  const noticeToQuitDate = splitDate(data.notice_to_quit_date);
-  if (noticeToQuitDate) {
-    fillTextField(form, 'Notice to Quit Date', `${noticeToQuitDate.day}/${noticeToQuitDate.month}/${noticeToQuitDate.year}`);
-  }
-
-  const noticeOfIntentionDate = splitDate(data.notice_of_intention_date);
-  if (noticeOfIntentionDate) {
-    fillTextField(form, 'Notice of Intention Date', `${noticeOfIntentionDate.day}/${noticeOfIntentionDate.month}/${noticeOfIntentionDate.year}`);
-  }
-
-  checkBox(form, 'Notice to Quit served', true);
-  checkBox(form, 'Notice of Intention served', true);
-
-  // Particulars of Claim
-  const particulars = data.grounds.map(g =>
-    `${g.code} - ${g.title}\n${g.particulars}`
-  ).join('\n\n');
-
-  fillTextField(form, 'Particulars of Claim', particulars);
-
-  // Deposit protection
-  if (data.deposit_amount) {
-    checkBox(form, 'Deposit Protected', true);
-    fillTextField(form, 'Deposit Scheme', data.deposit_scheme || '');
-    fillTextField(form, 'Deposit Amount', `£${data.deposit_amount.toFixed(2)}`);
-  }
-
-  // Statement of Truth
-  checkBox(form, 'I believe the facts stated in this claim are true', true);
-  fillTextField(form, 'Statement of Truth Signature', data.signatory_name);
-
-  const signatureDate = splitDate(data.signature_date);
-  if (signatureDate) {
-    fillTextField(form, 'Statement Date Day', signatureDate.day);
-    fillTextField(form, 'Statement Date Month', signatureDate.month);
-    fillTextField(form, 'Statement Date Year', signatureDate.year);
-  }
-
-  const pdfBytes = await pdfDoc.save();
-  console.log('✅ County Court Claim for Possession filled successfully');
-
+  console.log('✅ Civil Bill Guidance generated successfully');
   return pdfBytes;
 }
 

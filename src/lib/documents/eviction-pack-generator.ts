@@ -2,14 +2,14 @@
  * Complete Eviction Pack Generator
  *
  * Generates region-specific complete eviction packs including:
- * - All notices (Section 8/21, Notice to Leave, Notice to Quit)
+ * - All notices (Section 8/21, Notice to Leave)
  * - All court forms (N5, N5B, N119, Tribunal forms)
  * - Expert guidance documents
  * - Grounds support and evidence checklists
  * - Premium features (lifetime storage, priority support)
  *
  * Pricing: £149.99 one-time payment
- * Regions: England & Wales, Scotland, Northern Ireland
+ * Regions: England & Wales, Scotland
  */
 
 import { generateDocument, GeneratedDocument, compileAndMergeTemplates } from './generator';
@@ -22,7 +22,7 @@ import path from 'path';
 // TYPES
 // ============================================================================
 
-export type Jurisdiction = 'england-wales' | 'scotland' | 'northern-ireland';
+export type Jurisdiction = 'england-wales' | 'scotland';
 
 export interface EvictionCase {
   // Jurisdiction
@@ -97,7 +97,7 @@ export interface EvictionCase {
   deposit_protected?: boolean;
   deposit_amount?: number;
   deposit_scheme?: string;
-  deposit_scheme_name?: 'DPS' | 'MyDeposits' | 'TDS' | 'SafeDeposits Scotland' | 'TDS NI';
+  deposit_scheme_name?: 'DPS' | 'MyDeposits' | 'TDS' | 'SafeDeposits Scotland';
   deposit_protection_date?: string;
   gas_safety_certificate?: boolean;
   epc_rating?: string;
@@ -197,8 +197,6 @@ async function generateEvictionRoadmap(
     templatePath = 'uk/england-wales/templates/eviction/eviction_roadmap.hbs';
   } else if (jurisdiction === 'scotland') {
     templatePath = 'uk/scotland/templates/eviction_roadmap.hbs';
-  } else if (jurisdiction === 'northern-ireland') {
-    templatePath = 'uk/northern-ireland/templates/eviction_roadmap.hbs';
   }
 
   const data = {
@@ -397,10 +395,6 @@ function calculateEstimatedTimeline(evictionCase: EvictionCase, groundsData: any
     noticeNoticePeriodDays = 84; // 12 weeks minimum
     courtProcessWeeks = 10; // Tribunal process
     bailiffWeeks = 4;
-  } else if (jurisdiction === 'northern-ireland') {
-    noticeNoticePeriodDays = 28; // Notice to Quit + Notice of Intention
-    courtProcessWeeks = hasMandatoryGround ? 6 : 10;
-    bailiffWeeks = 4;
   }
 
   const totalWeeks = Math.ceil(noticeNoticePeriodDays / 7) + courtProcessWeeks + bailiffWeeks;
@@ -592,104 +586,6 @@ async function generateScotlandEvictionPack(
   return documents;
 }
 
-/**
- * Generate Northern Ireland Eviction Pack
- */
-async function generateNorthernIrelandEvictionPack(
-  evictionCase: EvictionCase,
-  groundsData: any
-): Promise<EvictionPackDocument[]> {
-  const documents: EvictionPackDocument[] = [];
-
-  const { fillNorthernIrelandOfficialForm } = await import('./northern-ireland-forms-filler');
-
-  // Determine notice periods
-  const hasGroundRequiring14Days = evictionCase.grounds.some(g =>
-    g.code === 'Ground 8' || g.code === 'Ground 14' || g.code === 'Ground 17'
-  );
-  const noticeToQuitPeriod = 28; // 4 weeks minimum
-  const noticeOfIntentionPeriod = hasGroundRequiring14Days ? 14 : 28;
-
-  // Calculate dates
-  const today = new Date();
-  const noticeToQuitDate = today.toISOString().split('T')[0];
-  const noticeToQuitExpiry = new Date(today.getTime() + noticeToQuitPeriod * 24 * 60 * 60 * 1000);
-  const noticeOfIntentionDate = noticeToQuitExpiry.toISOString().split('T')[0];
-
-  // Prepare Northern Ireland case data
-  const niData = {
-    landlord_full_name: evictionCase.landlord_full_name,
-    landlord_2_name: evictionCase.landlord_2_name,
-    landlord_address: evictionCase.landlord_address,
-    landlord_postcode: evictionCase.landlord_address_postcode,
-    landlord_phone: evictionCase.landlord_phone,
-    landlord_email: evictionCase.landlord_email,
-    tenant_full_name: evictionCase.tenant_full_name,
-    tenant_2_name: evictionCase.tenant_2_name,
-    property_address: evictionCase.property_address,
-    property_postcode: evictionCase.property_address_postcode,
-    tenancy_start_date: evictionCase.tenancy_start_date,
-    tenancy_type: evictionCase.rent_frequency === 'weekly' ? 'weekly' as const : 'monthly' as const,
-    rent_amount: evictionCase.rent_amount,
-    rent_frequency: evictionCase.rent_frequency,
-    payment_day: evictionCase.payment_day,
-    notice_to_quit_date: noticeToQuitDate,
-    notice_to_quit_expiry_date: noticeToQuitExpiry.toISOString().split('T')[0],
-    notice_of_intention_date: noticeOfIntentionDate,
-    grounds: evictionCase.grounds.map(g => ({
-      code: g.code,
-      type: (g.mandatory ? 'mandatory' : 'discretionary') as 'mandatory' | 'discretionary',
-      title: g.title,
-      particulars: g.particulars,
-      evidence: g.evidence,
-    })),
-    current_arrears: evictionCase.current_arrears,
-    arrears_breakdown: evictionCase.arrears_breakdown,
-    deposit_amount: evictionCase.deposit_amount,
-    deposit_scheme: 'TDS NI' as const,
-    deposit_reference: evictionCase.deposit_reference,
-    court_name: evictionCase.court_name,
-    court_address: evictionCase.court_address,
-    signatory_name: evictionCase.landlord_full_name,
-    signature_date: today.toISOString().split('T')[0],
-  };
-
-  // 1. Notice to Quit (Official Form)
-  const noticeToQuitPdf = await fillNorthernIrelandOfficialForm('notice_to_quit', niData);
-
-  documents.push({
-    title: 'Notice to Quit',
-    description: 'Formal notice ending the tenancy under common law',
-    category: 'notice',
-    pdf: Buffer.from(noticeToQuitPdf),
-    file_name: 'notice_to_quit.pdf',
-  });
-
-  // 2. Notice of Intention to Seek Possession (Official Form)
-  const noticeOfIntentionPdf = await fillNorthernIrelandOfficialForm('notice_of_intention', niData);
-
-  documents.push({
-    title: 'Notice of Intention to Seek Possession',
-    description: 'Statutory notice specifying grounds under PT (NI) Order 2006',
-    category: 'notice',
-    pdf: Buffer.from(noticeOfIntentionPdf),
-    file_name: 'notice_of_intention.pdf',
-  });
-
-  // 3. County Court Claim for Possession (Official Form)
-  const courtClaimPdf = await fillNorthernIrelandOfficialForm('claim_for_possession', niData);
-
-  documents.push({
-    title: 'County Court Claim for Possession',
-    description: 'Formal claim to County Court for possession order',
-    category: 'court_form',
-    pdf: Buffer.from(courtClaimPdf),
-    file_name: 'court_claim_possession.pdf',
-  });
-
-  return documents;
-}
-
 // ============================================================================
 // MAIN GENERATOR
 // ============================================================================
@@ -726,8 +622,6 @@ export async function generateCompleteEvictionPack(
     regionDocs = await generateEnglandWalesEvictionPack(evictionCase, groundsData);
   } else if (evictionCase.jurisdiction === 'scotland') {
     regionDocs = await generateScotlandEvictionPack(evictionCase, groundsData);
-  } else if (evictionCase.jurisdiction === 'northern-ireland') {
-    regionDocs = await generateNorthernIrelandEvictionPack(evictionCase, groundsData);
   }
 
   documents.push(...regionDocs);
@@ -878,21 +772,6 @@ export async function generateNoticeOnlyPack(
       html: noticeDoc.html,
       pdf: noticeDoc.pdf,
       file_name: 'notice_to_leave.pdf',
-    });
-  } else if (evictionCase.jurisdiction === 'northern-ireland') {
-    const noticeDoc = await generateDocument({
-      templatePath: 'uk/northern-ireland/templates/notice_to_quit.hbs',
-      data: evictionCase,
-      isPreview: false,
-      outputFormat: 'both',
-    });
-    documents.push({
-      title: 'Notice to Quit',
-      description: 'Formal notice ending tenancy',
-      category: 'notice',
-      html: noticeDoc.html,
-      pdf: noticeDoc.pdf,
-      file_name: 'notice_to_quit.pdf',
     });
   }
 
