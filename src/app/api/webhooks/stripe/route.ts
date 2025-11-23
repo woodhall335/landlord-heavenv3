@@ -92,42 +92,99 @@ export async function POST(request: Request) {
               if (caseError || !caseData) {
                 console.error('[Fulfillment] Case not found:', caseError);
               } else {
-                // Determine document type from product type
-                const documentTypeMap: Record<string, string> = {
-                  'notice_only': 'section8_notice',
-                  'complete_pack': 'section8_notice',
-                  'money_claim': 'money_claim',
-                  'ast_standard': 'ast_standard',
-                  'ast_premium': 'ast_premium',
-                };
+                const facts = caseData.collected_facts as any;
 
-                const documentType = documentTypeMap[productType];
+                // Handle eviction packs (notice_only and complete_pack)
+                if (productType === 'notice_only' || productType === 'complete_pack') {
+                  const { generateNoticeOnlyPack, generateCompleteEvictionPack } = await import('@/lib/documents/eviction-pack-generator');
 
-                if (documentType) {
-                  // Generate final document by calling the generation API internally
+                  console.log(`[Fulfillment] Generating ${productType} for case ${caseId}...`);
+
+                  let evictionPack: any;
+                  if (productType === 'notice_only') {
+                    evictionPack = await generateNoticeOnlyPack(facts);
+                  } else {
+                    evictionPack = await generateCompleteEvictionPack(facts);
+                  }
+
+                  console.log(`[Fulfillment] Generated ${evictionPack.documents.length} documents in eviction pack`);
+
+                  // Upload all documents to storage and save to database
+                  for (const doc of evictionPack.documents) {
+                    if (doc.pdf) {
+                      const fileName = `${userId}/${caseId}/${doc.file_name}`;
+                      const { error: uploadError } = await supabase.storage
+                        .from('documents')
+                        .upload(fileName, doc.pdf, {
+                          contentType: 'application/pdf',
+                          upsert: false,
+                        });
+
+                      if (!uploadError) {
+                        const { data: publicUrlData } = supabase.storage
+                          .from('documents')
+                          .getPublicUrl(fileName);
+
+                        // Save document record
+                        await supabase.from('documents').insert({
+                          user_id: userId,
+                          case_id: caseId,
+                          document_type: doc.category,
+                          document_title: doc.title,
+                          jurisdiction: caseData.jurisdiction,
+                          html_content: doc.html || null,
+                          pdf_url: publicUrlData.publicUrl,
+                          is_preview: false,
+                          qa_passed: true,
+                          metadata: { description: doc.description, pack_type: productType },
+                        });
+
+                        console.log(`[Fulfillment] Uploaded document: ${doc.title}`);
+                      } else {
+                        console.error(`[Fulfillment] Failed to upload ${doc.title}:`, uploadError);
+                      }
+                    }
+                  }
+
+                  // Mark fulfillment as completed
+                  await supabase
+                    .from('orders')
+                    .update({
+                      fulfillment_status: 'completed',
+                      fulfilled_at: new Date().toISOString(),
+                      metadata: {
+                        total_documents: evictionPack.documents.length,
+                        pack_type: evictionPack.pack_type,
+                        jurisdiction: evictionPack.jurisdiction,
+                      },
+                    })
+                    .eq('id', orderId);
+
+                  console.log(`[Fulfillment] Eviction pack fulfilled: ${orderId}`);
+
+                } else {
+                  // Handle AST and other single document types
                   const { generateSection8Notice } = await import('@/lib/documents/section8-generator');
                   const { generateStandardAST, generatePremiumAST } = await import('@/lib/documents/ast-generator');
 
-                  const facts = caseData.collected_facts as any;
                   let generatedDoc: any;
                   let documentTitle = '';
+                  let documentType = '';
 
                   // Generate document based on type
-                  switch (documentType) {
-                    case 'section8_notice':
-                      generatedDoc = await generateSection8Notice(facts);
-                      documentTitle = 'Section 8 Notice - Notice Seeking Possession';
-                      break;
+                  switch (productType) {
                     case 'ast_standard':
                       generatedDoc = await generateStandardAST(facts);
                       documentTitle = 'Assured Shorthold Tenancy Agreement - Standard';
+                      documentType = 'ast_standard';
                       break;
                     case 'ast_premium':
                       generatedDoc = await generatePremiumAST(facts);
                       documentTitle = 'Assured Shorthold Tenancy Agreement - Premium';
+                      documentType = 'ast_premium';
                       break;
                     default:
-                      console.error('[Fulfillment] Unsupported document type:', documentType);
+                      console.error('[Fulfillment] Unsupported product type:', productType);
                   }
 
                   if (generatedDoc) {
@@ -135,7 +192,7 @@ export async function POST(request: Request) {
                     let pdfUrl: string | null = null;
                     if (generatedDoc.pdf) {
                       const fileName = `${userId}/${caseId}/${documentType}_final_${Date.now()}.pdf`;
-                      const { data: uploadData, error: uploadError } = await supabase.storage
+                      const { error: uploadError } = await supabase.storage
                         .from('documents')
                         .upload(fileName, generatedDoc.pdf, {
                           contentType: 'application/pdf',
@@ -163,7 +220,7 @@ export async function POST(request: Request) {
                         jurisdiction: caseData.jurisdiction,
                         html_content: generatedDoc.html,
                         pdf_url: pdfUrl,
-                        is_preview: false, // FINAL DOCUMENT
+                        is_preview: false,
                         qa_passed: false,
                         qa_score: null,
                         qa_issues: [],
