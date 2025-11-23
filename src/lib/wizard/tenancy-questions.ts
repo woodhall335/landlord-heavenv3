@@ -913,11 +913,6 @@ export function getDepositSchemes(jurisdiction: string): string[] {
         'MyDeposits Scotland',
         'Letting Protection Service Scotland',
       ];
-    case 'northern-ireland':
-      return [
-        'TDS Northern Ireland',
-        'MyDeposits Northern Ireland',
-      ];
     default:
       return [];
   }
@@ -936,9 +931,6 @@ export function getMaxDeposit(jurisdiction: string, rentAmount: number): number 
       return weeklyRent * maxWeeks;
     case 'scotland':
       // Scotland: Max 2 months rent
-      return monthlyRent * 2;
-    case 'northern-ireland':
-      // NI: Max 2 months rent (guidance)
       return monthlyRent * 2;
     default:
       return 0;
