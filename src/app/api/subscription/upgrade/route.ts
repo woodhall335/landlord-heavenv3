@@ -8,6 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server-auth';
 import { createClient } from '@/lib/supabase/server';
 import { z } from 'zod';
+import Stripe from 'stripe';
 
 const UpgradeSchema = z.object({
   newTier: z.enum(['hmo_pro_1_5', 'hmo_pro_6_10', 'hmo_pro_11_15', 'hmo_pro_16_20']),
@@ -77,8 +78,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Import Stripe dynamically
-    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+      apiVersion: '2022-11-15',
+    });
 
     // Get current subscription
     const subscription = await stripe.subscriptions.retrieve(

@@ -1,91 +1,36 @@
 {
   "jurisdiction": "northern-ireland",
   "name": "Northern Ireland",
-  "legal_system": "Separate Northern Ireland legal system under Private Tenancies (Northern Ireland) Order 2006",
+  "legal_system": "Private Tenancies (Northern Ireland) Order 2006",
+  "eviction_supported": false,
+  "supported_products": [
+    "private_tenancy_agreement_standard",
+    "private_tenancy_agreement_premium",
+    "deposit_protection_certificate",
+    "inventory_template"
+  ],
   "tenancy_types": {
     "private_tenancy": {
       "introduced": "2007-04-01",
       "replaces": "Controlled and regulated tenancies",
-      "notice_procedures": ["Notice to Quit + County Court possession"]
-    }
-  },
-  "possession_routes": {
-    "notice_to_quit": {
-      "name": "Notice to Quit",
-      "minimum_period": "28 days (periodic), or until end of fixed term",
-      "requirements": [
-        "In writing",
-        "Specify expiry date",
-        "Contain prescribed information",
-        "End on rent day (periodic tenancies)"
+      "notes": [
+        "Tenancy agreements must comply with the Private Tenancies (NI) Order 2006",
+        "Deposit protection within 14 days is mandatory"
       ]
-    },
-    "county_court": {
-      "name": "County Court Possession Proceedings",
-      "grounds": "Common law and statutory grounds",
-      "forms": ["Civil bill for possession"],
-      "process": "Originating application to County Court"
-    }
-  },
-  "common_grounds": {
-    "rent_arrears": {
-      "description": "Tenant in arrears with rent",
-      "notice_required": "28 days Notice to Quit",
-      "evidence": "Rent account, arrears calculation, payment history"
-    },
-    "breach_of_tenancy": {
-      "description": "Breach of terms of tenancy agreement",
-      "notice_required": "28 days Notice to Quit",
-      "evidence": "Tenancy agreement, evidence of breach"
-    },
-    "antisocial_behavior": {
-      "description": "Tenant or occupier engaging in antisocial behavior",
-      "notice_required": "28 days Notice to Quit",
-      "evidence": "Witness statements, police reports, council reports"
-    },
-    "landlord_requires_possession": {
-      "description": "Landlord requires property for own occupation or sale",
-      "notice_required": "28 days Notice to Quit (periodic) or end of fixed term",
-      "evidence": "Genuine intention, supporting documentation"
-    },
-    "property_required_for_refurbishment": {
-      "description": "Substantial works requiring vacant possession",
-      "notice_required": "28 days Notice to Quit",
-      "evidence": "Plans, specifications, building approval"
-    },
-    "suitable_alternative_accommodation": {
-      "description": "Suitable alternative accommodation available",
-      "notice_required": "28 days Notice to Quit",
-      "evidence": "Details of alternative accommodation, suitability assessment"
-    }
-  },
-  "court_system": {
-    "court": "County Court",
-    "jurisdiction": "11 County Court divisions across Northern Ireland",
-    "process": [
-      "Issue civil bill for possession",
-      "Serve on tenant",
-      "Court hearing",
-      "Possession order (if granted)",
-      "Enforcement by Enforcement of Judgments Office"
-    ],
-    "fees": {
-      "civil_bill": "Approximately £150-200",
-      "enforcement": "Additional fees for enforcement"
     }
   },
   "key_legislation": [
     {
       "act": "Private Tenancies (Northern Ireland) Order 2006",
-      "key_provisions": ["Definition of private tenancies", "Termination procedures", "Deposit protection"]
+      "key_provisions": ["Definition of private tenancies", "Deposit protection", "Fitness standard"]
     },
     {
       "act": "Rent (Northern Ireland) Order 1978",
-      "key_provisions": ["Rent regulation for certain tenancies"]
+      "key_provisions": ["Rent regulation for certain legacy tenancies"]
     },
     {
       "act": "Housing (Northern Ireland) Order 1983",
-      "key_provisions": ["HMO registration"]
+      "key_provisions": ["HMO registration requirements"]
     }
   ],
   "deposit_protection": {
@@ -97,7 +42,7 @@
   "landlord_registration": {
     "required": false,
     "note": "No general landlord registration (unlike Scotland)",
-    "exception": "HMO landlords must have certificate"
+    "exception": "HMO landlords must hold a certificate"
   },
   "hmo_licensing": {
     "mandatory_hmo": {
@@ -111,32 +56,17 @@
     "general": "No general rent controls",
     "regulated_tenancies": "Some legacy tenancies have rent controls"
   },
-  "eviction_ban": {
-    "note": "No evictions without court order",
-    "illegal_eviction": "Criminal offence under Protection from Eviction (NI) Order 1981"
-  },
   "tenant_protections": {
     "notice_period": "Minimum 28 days for periodic tenancies",
-    "court_order_required": "Must obtain possession order",
+    "court_order_required": "Must obtain possession order for eviction",
     "deposit_protection": "Mandatory scheme",
     "fitness_standard": "Landlord's statutory fitness duty"
-  },
-  "notices": {
-    "notice_to_quit": {
-      "minimum_period": "28 days (periodic) or until end of fixed term",
-      "requirements": [
-        "In writing",
-        "Give proper notice period",
-        "Expire on rent day (periodic)",
-        "Contain prescribed information about tenant rights"
-      ]
-    }
   },
   "key_differences": {
     "from_england_wales": [
       "Different deposit scheme (TDS NI only)",
       "Shorter deposit protection deadline (14 days vs 30)",
-      "No Section 8/21 notices (uses Notice to Quit)",
+      "No Section 8/21 notices in scope (only tenancy agreements)",
       "Different court system and procedures",
       "No landlord registration requirement"
     ],
@@ -146,7 +76,7 @@
       "No landlord registration",
       "Different HMO thresholds",
       "No rent caps or pressure zones",
-      "No penalties for misuse of grounds"
+      "No penalties for misuse of eviction grounds because eviction automation is unsupported"
     ]
   }
 }

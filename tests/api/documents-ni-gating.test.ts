@@ -1,0 +1,63 @@
+import { describe, expect, it, beforeEach, vi } from 'vitest';
+import { POST as generateDocument } from '@/app/api/documents/generate/route';
+
+const supabaseClientMock = {
+  from: vi.fn(),
+  insert: vi.fn(),
+  select: vi.fn(),
+  single: vi.fn(),
+  eq: vi.fn(),
+  is: vi.fn(),
+};
+
+supabaseClientMock.from.mockReturnValue(supabaseClientMock);
+supabaseClientMock.insert.mockReturnValue(supabaseClientMock);
+supabaseClientMock.select.mockReturnValue(supabaseClientMock);
+supabaseClientMock.eq.mockReturnValue(supabaseClientMock);
+supabaseClientMock.is.mockReturnValue(supabaseClientMock);
+
+vi.mock('@/lib/supabase/server', () => ({
+  createServerSupabaseClient: vi.fn(async () => supabaseClientMock),
+  requireServerAuth: vi.fn(async () => ({ id: 'user-1' })),
+  createAdminClient: vi.fn(() => ({
+    storage: {
+      from: () => ({
+        upload: vi.fn(),
+        getPublicUrl: vi.fn(() => ({ publicUrl: 'https://example.com/doc.pdf' })),
+      }),
+    },
+  })),
+}));
+
+describe('Document generation Northern Ireland gating', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    supabaseClientMock.single.mockResolvedValue({
+      data: {
+        id: 'case-123',
+        jurisdiction: 'northern-ireland',
+        case_type: 'eviction',
+        collected_facts: {},
+        user_id: null,
+      },
+      error: null,
+    });
+  });
+
+  it('rejects NI eviction document generation requests', async () => {
+    const response = await generateDocument(
+      new Request('http://localhost/api/documents/generate', {
+        method: 'POST',
+        body: JSON.stringify({
+          case_id: 'case-123',
+          document_type: 'section8_notice',
+        }),
+      })
+    );
+
+    const body = await response.json();
+    expect(response.status).toBe(400);
+    expect(body.error).toBe('Northern Ireland only supports tenancy agreement documents');
+    expect(supabaseClientMock.from).toHaveBeenCalledWith('cases');
+  });
+});

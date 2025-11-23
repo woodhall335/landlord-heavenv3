@@ -7,7 +7,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Badge, Button, Container, TealHero } from '@/components/ui';
 import { clsx } from 'clsx';
@@ -77,24 +77,28 @@ function mapProductToDocumentType(product: string): 'eviction' | 'money_claim' |
 export default function WizardPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [selectedDocument, setSelectedDocument] = useState<DocumentOption | null>(null);
-  const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionOption | null>(null);
-  const [step, setStep] = useState<1 | 2>(1);
+  const productParam = searchParams.get('product');
+  const preselectedDocument = useMemo(() => {
+    if (!productParam) return null;
 
-  // Handle product parameter from URL
-  useEffect(() => {
-    const productParam = searchParams.get('product');
-    if (productParam) {
-      const docType = mapProductToDocumentType(productParam);
-      if (docType) {
-        const doc = documentOptions.find(d => d.type === docType);
-        if (doc) {
-          setSelectedDocument(doc);
-          setStep(2); // Skip to jurisdiction selection
-        }
-      }
-    }
-  }, [searchParams]);
+    const docType = mapProductToDocumentType(productParam);
+    return docType ? documentOptions.find((d) => d.type === docType) ?? null : null;
+  }, [productParam]);
+
+  const [selectedDocument, setSelectedDocument] = useState<DocumentOption | null>(preselectedDocument);
+  const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionOption | null>(null);
+  const [step, setStep] = useState<1 | 2>(preselectedDocument ? 2 : 1);
+
+  const isJurisdictionSupported = (jur: JurisdictionOption) =>
+    !(
+      selectedDocument &&
+      selectedDocument.type !== 'tenancy_agreement' &&
+      jur.value === 'northern-ireland'
+    );
+
+  const selectedComboUnsupported =
+    selectedJurisdiction?.value === 'northern-ireland' &&
+    selectedDocument?.type !== 'tenancy_agreement';
 
   const handleDocumentSelect = (doc: DocumentOption) => {
     setSelectedDocument(doc);
@@ -107,6 +111,8 @@ export default function WizardPage() {
 
   const handleStart = () => {
     if (selectedDocument && selectedJurisdiction) {
+      if (selectedComboUnsupported) return;
+
       // Get product parameter to pass through
       const productParam = searchParams.get('product');
 
@@ -232,10 +238,12 @@ export default function WizardPage() {
               {jurisdictions.map((jur) => (
                 <button
                   key={jur.value}
-                  onClick={() => handleJurisdictionSelect(jur)}
+                  onClick={() => isJurisdictionSupported(jur) && handleJurisdictionSelect(jur)}
+                  disabled={!isJurisdictionSupported(jur)}
                   className={clsx(
                     'w-full p-6 rounded-xl border-2 transition-all duration-200 text-left',
                     'flex items-center gap-4',
+                    !isJurisdictionSupported(jur) && 'opacity-60 cursor-not-allowed',
                     selectedJurisdiction?.value === jur.value
                       ? 'border-primary bg-primary-subtle shadow-md'
                       : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
@@ -246,6 +254,11 @@ export default function WizardPage() {
                     <h3 className="text-lg font-semibold text-charcoal">
                       {jur.label}
                     </h3>
+                    {!isJurisdictionSupported(jur) && (
+                      <p className="text-sm text-red-600 mt-1">
+                        Eviction and money claim flows are unavailable here. Tenancy agreements only.
+                      </p>
+                    )}
                   </div>
                   {selectedJurisdiction?.value === jur.value && (
                     <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
@@ -261,9 +274,19 @@ export default function WizardPage() {
             {/* Start Button */}
             {selectedJurisdiction && (
               <div className="mt-8 text-center">
-                <Button variant="primary" size="large" onClick={handleStart}>
+                <Button
+                  variant="primary"
+                  size="large"
+                  onClick={handleStart}
+                  disabled={selectedComboUnsupported}
+                >
                   Start Wizard →
                 </Button>
+                {selectedComboUnsupported && (
+                  <p className="text-sm text-red-600 mt-3">
+                    Eviction and money claim workflows are not available in Northern Ireland. Choose tenancy agreements instead.
+                  </p>
+                )}
                 <p className="text-sm text-gray-600 mt-3">
                   This will take about 5-10 minutes
                 </p>

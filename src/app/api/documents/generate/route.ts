@@ -12,9 +12,7 @@ import { generateStandardAST, generatePremiumAST } from '@/lib/documents/ast-gen
 import { generateNoticeToLeave } from '@/lib/documents/scotland/notice-to-leave-generator';
 import { generatePRTAgreement } from '@/lib/documents/scotland/prt-generator';
 import { mapWizardToNoticeToLeave } from '@/lib/documents/scotland/wizard-mapper';
-import { generateNoticeToQuit } from '@/lib/documents/northern-ireland/notice-to-quit-generator';
 import { generatePrivateTenancyAgreement } from '@/lib/documents/northern-ireland/private-tenancy-generator';
-import { mapWizardToNoticeToQuit } from '@/lib/documents/northern-ireland/wizard-mapper';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -29,7 +27,6 @@ const generateDocumentSchema = z.object({
     'notice_to_leave', // Scotland
     'prt_agreement', // Scotland
     'prt_premium', // Scotland Premium
-    'notice_to_quit', // Northern Ireland
     'private_tenancy', // Northern Ireland
     'private_tenancy_premium', // Northern Ireland Premium
   ]),
@@ -83,6 +80,18 @@ export async function POST(request: Request) {
     const facts = caseData.collected_facts as any;
     const jurisdiction = caseData.jurisdiction;
 
+    if (
+      jurisdiction === 'northern-ireland' &&
+      !['private_tenancy', 'private_tenancy_premium'].includes(document_type)
+    ) {
+      return NextResponse.json(
+        {
+          error: 'Northern Ireland only supports tenancy agreement documents',
+        },
+        { status: 400 }
+      );
+    }
+
     try {
       switch (document_type) {
         case 'section8_notice':
@@ -127,13 +136,6 @@ export async function POST(request: Request) {
           const { generatePremiumPRT } = await import('@/lib/documents/scotland/prt-generator');
           generatedDoc = await generatePremiumPRT(facts);
           documentTitle = 'Premium Private Residential Tenancy Agreement - Scotland';
-          break;
-
-        case 'notice_to_quit':
-          // Map wizard facts to NoticeToQuitData format
-          const noticeToQuitData = mapWizardToNoticeToQuit(facts);
-          generatedDoc = await generateNoticeToQuit(noticeToQuitData);
-          documentTitle = 'Notice to Quit - Northern Ireland';
           break;
 
         case 'private_tenancy':

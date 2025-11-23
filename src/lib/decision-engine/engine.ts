@@ -35,6 +35,10 @@ import {
 export async function analyzeCase(facts: CaseFacts): Promise<DecisionResult> {
   const jurisdiction = normalizeJurisdiction(facts.jurisdiction);
 
+  if (jurisdiction === 'northern-ireland') {
+    throw new Error('Decision engine does not support Northern Ireland eviction or money claim analysis');
+  }
+
   // Load configuration
   const engineRules = loadDecisionEngine(jurisdiction);
   const groundDefs = getGroundDefinitions(jurisdiction);
@@ -778,6 +782,10 @@ function normalizeJurisdiction(jurisdiction: string): string {
 
   if (normalized.includes('scotland')) {
     return 'scotland';
+  }
+
+  if (normalized.includes('northern') && normalized.includes('ireland')) {
+    return 'northern-ireland';
   }
 
   // Default to England & Wales

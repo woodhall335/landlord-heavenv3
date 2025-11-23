@@ -7,6 +7,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server-auth';
 import { createClient } from '@/lib/supabase/server';
+import Stripe from 'stripe';
 
 // Cancel subscription at period end
 export async function POST(request: NextRequest) {
@@ -43,8 +44,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Import Stripe dynamically to avoid bundling it
-    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+      apiVersion: '2022-11-15',
+    });
 
     // Cancel subscription at period end (not immediately)
     const subscription = await stripe.subscriptions.update(

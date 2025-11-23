@@ -37,7 +37,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    const inputId = id || `input-${React.useId()}`;
+    const generatedId = React.useId();
+    const inputId = id ?? `input-${generatedId}`;
     const hasError = Boolean(error);
 
     const containerStyles = fullWidth ? "w-full" : "";
@@ -149,7 +150,8 @@ export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref
   ) => {
-    const inputId = id || `textarea-${React.useId()}`;
+    const generatedId = React.useId();
+    const inputId = id ?? `textarea-${generatedId}`;
     const hasError = Boolean(error);
 
     const containerStyles = fullWidth ? "w-full" : "";

@@ -35,6 +35,15 @@ export async function POST(request: Request) {
     }
 
     const { case_type, jurisdiction } = validationResult.data;
+
+    if (jurisdiction === 'northern-ireland' && case_type !== 'tenancy_agreement') {
+      return NextResponse.json(
+        {
+          error: 'Eviction and money claim workflows are not supported in Northern Ireland',
+        },
+        { status: 400 }
+      );
+    }
     const supabase = await createServerSupabaseClient();
 
     // Create new case (user_id can be null for anonymous users)
