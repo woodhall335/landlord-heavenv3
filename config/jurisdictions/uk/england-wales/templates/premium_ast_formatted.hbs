@@ -831,6 +831,87 @@
     </p>
   </div>
 
+  {{#if rent_increase_clause}}
+  <div class="subsection">
+    <div class="subsection-title">📈 Rent Increase Provisions (Premium)</div>
+
+    <div class="legal-notice">
+      <div class="legal-notice-title">📊 Annual Rent Review Clause</div>
+      <p>
+        This tenancy includes an annual rent review provision. Rent may be increased in accordance with the terms below.
+      </p>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">4.4</span>
+      <strong>Rent Increase Mechanism:</strong> The rent may be increased annually on the anniversary of the tenancy start date,
+      subject to the following conditions:
+      <ul>
+        <li><strong>Frequency:</strong> {{#if rent_increase_frequency}}{{rent_increase_frequency}}{{else}}Once per year{{/if}}</li>
+        <li><strong>Notice Period:</strong> The Landlord must give at least <strong>1 month's written notice</strong> before any rent increase takes effect</li>
+        <li><strong>During Fixed Term:</strong> Rent increases during the initial fixed term are only permitted if this clause is included</li>
+        <li><strong>After Fixed Term:</strong> During periodic tenancy, the Landlord may use Section 13 notice procedure OR this clause (whichever is applicable)</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">4.5</span>
+      <strong>Index-Linked Increase (RPI/CPI):</strong> Annual rent increases will be calculated based on the
+      <strong>Consumer Price Index (CPI)</strong> or <strong>Retail Price Index (RPI)</strong> as published by the
+      Office for National Statistics, capped at a maximum of <strong>5% per annum</strong>.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">4.6</span>
+      <strong>Calculation Formula:</strong> The new rent will be calculated as follows:
+      <ul>
+        <li>Current Rent × (1 + CPI/RPI percentage change) = New Rent</li>
+        <li>Example: If current rent is £1,000/month and CPI is 3.2%, new rent = £1,000 × 1.032 = £1,032/month</li>
+        <li>If index increase exceeds 5%, the increase is capped at 5%</li>
+        <li>If index is negative (deflation), rent will not decrease but remain at current level</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">4.7</span>
+      <strong>Market Rent Alternative:</strong> Alternatively, the Landlord may propose an increase to the prevailing market rent,
+      provided it is fair and reasonable. The Tenant may challenge any proposed increase they consider excessive by:
+      <ul>
+        <li>Negotiating directly with the Landlord</li>
+        <li>Referring the matter to a First-tier Tribunal (Property Chamber) for determination</li>
+        <li>The Tribunal will assess whether the proposed rent is reasonable compared to similar properties in the area</li>
+      </ul>
+    </div>
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">ℹ️</span>
+        Understanding Rent Increases
+      </div>
+      <p>
+        Rent increases linked to CPI/RPI are transparent and predictable, reflecting general inflation. This protects
+        both parties: landlords maintain rental income value, while tenants avoid arbitrary large increases. You can
+        check current CPI/RPI rates at <a href="https://www.ons.gov.uk">www.ons.gov.uk</a> (Office for National Statistics).
+      </p>
+    </div>
+
+    <div class="warning-box">
+      <div class="warning-title">⚠️ Tenant Rights on Rent Increases</div>
+      <p><strong>Important:</strong> You have the right to:</p>
+      <ul>
+        <li>Receive proper written notice (minimum 1 month) before any rent increase</li>
+        <li>Challenge unreasonable increases via First-tier Tribunal</li>
+        <li>End the tenancy if you don't wish to accept the increase (give proper notice as per Section 3)</li>
+        <li>Request evidence of CPI/RPI calculation</li>
+      </ul>
+      <p style="margin-top: 10px;">
+        The Landlord cannot increase rent more than once per year without your written agreement. During the initial
+        fixed term, rent can only increase if this clause is included in the Agreement.
+      </p>
+    </div>
+  </div>
+  {{/if}}
+
   <!-- SECTION 5: DEPOSIT -->
   <div class="section-header">
     <span class="section-number">5</span>
@@ -944,6 +1025,482 @@
       The Tenant must notify utility companies of their occupancy and ensure all bills are paid promptly.
     </div>
   </div>
+
+  <!-- PAGE BREAK -->
+  <div class="page-break"></div>
+
+  <!-- SECTION 6A: TENANT OBLIGATIONS -->
+  <div class="section-header">
+    <span class="section-number">6A</span>
+    Tenant Obligations
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🏠 Care of Property</div>
+
+    <div class="clause">
+      <span class="clause-number">6A.1</span>
+      <strong>Cleanliness & Maintenance:</strong> The Tenant must:
+      <ul>
+        <li>Keep the Property clean, tidy, and in good decorative order</li>
+        <li>Keep the Property adequately heated and ventilated to prevent condensation, dampness, and mould growth</li>
+        <li>Report any defects, damage, or disrepair to the Landlord promptly (within 48 hours of discovery)</li>
+        <li>Not cause or permit any damage to the Property, fixtures, fittings, or furnishings</li>
+        <li>Make good any damage caused by the Tenant, their family, or visitors (fair wear and tear excepted)</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.2</span>
+      <strong>Condensation Prevention:</strong> The Tenant must take reasonable steps to prevent condensation by:
+      <ul>
+        <li>Opening windows regularly to allow ventilation</li>
+        <li>Using extractor fans in bathrooms and kitchens during and after use</li>
+        <li>Keeping trickle vents open where fitted</li>
+        <li>Not blocking air vents or ventilation grilles</li>
+        <li>Wiping down surfaces prone to condensation</li>
+        <li>Reporting any signs of dampness or mould immediately</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🔨 Alterations & Decorations</div>
+
+    <div class="clause">
+      <span class="clause-number">6A.3</span>
+      <strong>Prohibition on Alterations:</strong> The Tenant must NOT:
+      <ul>
+        <li>Make any structural alterations, additions, or improvements to the Property</li>
+        <li>Remove, alter, or damage any of the Landlord's fixtures, fittings, or furnishings</li>
+        <li>Install or remove any appliances, heating systems, or built-in furniture</li>
+        <li>Change locks or add additional security devices without written consent</li>
+        <li>Install satellite dishes, aerials, or external signage</li>
+        <li>Make any permanent alterations without the Landlord's prior written consent</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.4</span>
+      <strong>Decorations:</strong> The Tenant must not:
+      <ul>
+        <li>Paint or redecorate the Property without written consent</li>
+        <li>Remove or alter existing decorations, wallpaper, or wall coverings</li>
+        <li>Affix anything to walls with nails, screws, or adhesives that cause permanent damage</li>
+        <li>Display external decorations visible from outside without consent</li>
+      </ul>
+      <p style="margin-top: 10px;">
+        <strong>Picture Hanging:</strong> The Tenant may use small picture hooks or 3M Command strips for hanging
+        lightweight pictures and mirrors. All holes must be filled and touched up at the end of the tenancy.
+      </p>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🚫 Subletting & Assignment (Premium Enhanced)</div>
+
+    <div class="legal-notice">
+      <div class="legal-notice-title">⚠️ STRICTLY PROHIBITED - Criminal Offense</div>
+      <p>
+        Subletting all or part of the Property without written consent is a serious breach of this Agreement and may
+        constitute a criminal offense under the Prevention of Social Housing Fraud Act 2013 (if applicable).
+        Unauthorized subletting can result in immediate eviction and criminal prosecution.
+      </p>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.5</span>
+      <strong>Absolute Prohibition:</strong> The Tenant must NOT:
+      <ul>
+        <li>Sublet the whole or any part of the Property</li>
+        <li>Assign or transfer the tenancy to another person</li>
+        <li>Part with possession or share occupation of the Property</li>
+        <li>Take in lodgers, paying guests, or subletting tenants</li>
+        <li>Allow any other person to occupy the Property as their main residence</li>
+      </ul>
+      <p style="margin-top: 10px;">Without the Landlord's prior written consent, which may be granted or refused at the Landlord's absolute discretion.</p>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.6</span>
+      <strong>Short-Term Letting STRICTLY PROHIBITED:</strong> The Tenant must NOT:
+      <ul>
+        <li>List the Property on <strong>Airbnb, Booking.com, VRBO,</strong> or any short-term letting platform</li>
+        <li>Advertise the Property for short-term holiday lets, serviced accommodation, or commercial stays</li>
+        <li>Use the Property for any form of commercial hospitality, guest house, or hotel-type operation</li>
+        <li>Rent out rooms or the entire Property on a short-term basis (less than 90 days)</li>
+        <li>Accept payment from guests, visitors, or temporary occupants in exchange for accommodation</li>
+      </ul>
+    </div>
+
+    <div class="warning-box">
+      <div class="warning-title">⚠️ Consequences of Breach</div>
+      <p><strong>If the Tenant breaches the subletting prohibition, the Landlord may:</strong></p>
+      <ul>
+        <li>Serve immediate Notice to Quit and seek possession under Ground 12 (breach of obligation)</li>
+        <li>Claim damages for loss of control, unauthorized profits, and increased insurance costs</li>
+        <li>Report the breach to Airbnb/platforms for account suspension</li>
+        <li>Report criminal fraud to police (if social housing or Right to Buy property)</li>
+        <li>Forfeit the entire tenancy deposit</li>
+      </ul>
+      <p style="margin-top: 10px;">
+        <strong>Tenant Financial Liability:</strong> The Tenant may be liable for ALL income earned from unauthorized
+        subletting, plus legal costs, plus damages. Courts have ordered subtenants to pay landlords £10,000+ in damages.
+      </p>
+    </div>
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">ℹ️</span>
+        Why Subletting is Prohibited
+      </div>
+      <p>
+        Subletting creates serious legal, financial, and safety risks: unknown occupants may damage the property,
+        increase insurance costs, violate planning/licensing laws, breach the Landlord's mortgage conditions, and
+        create liability for accidents. Airbnb/short-term lets are particularly problematic as they create constant
+        turnover of strangers, noise complaints from neighbors, and commercial use of residential property.
+      </p>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🔑 Access for Inspections & Repairs</div>
+
+    <div class="clause">
+      <span class="clause-number">6A.7</span>
+      <strong>Landlord's Right of Access:</strong> The Tenant must allow the Landlord or their agents reasonable access to the Property upon at least <strong>24 hours' written notice</strong> for the following purposes:
+      <ul>
+        <li><strong>Inspections:</strong> Routine property inspections (maximum once per quarter / every 3 months)</li>
+        <li><strong>Repairs & Maintenance:</strong> Carrying out repairs, maintenance, or improvements</li>
+        <li><strong>Viewings:</strong> Showing the Property to prospective tenants or purchasers (only in final 2 months of tenancy)</li>
+        <li><strong>Safety Checks:</strong> Gas safety checks, electrical inspections, EPC assessments, smoke alarm testing</li>
+        <li><strong>Valuations:</strong> Mortgage valuations or insurance assessments</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.8</span>
+      <strong>Emergency Access:</strong> In case of emergency (fire, flood, gas leak, burst pipes, structural danger),
+      the Landlord or emergency services may enter the Property immediately without prior notice. The Tenant must provide
+      emergency contact details and ensure keys are accessible to the Landlord for emergencies.
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.9</span>
+      <strong>Reasonable Access Times:</strong> Access will normally be between 9:00 AM and 6:00 PM Monday to Friday,
+      or at other times mutually agreed. The Tenant should not unreasonably refuse access when proper notice is given.
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">♻️ Waste Disposal & Recycling</div>
+
+    <div class="clause">
+      <span class="clause-number">6A.10</span>
+      <strong>Waste Management:</strong> The Tenant must:
+      <ul>
+        <li>Dispose of all household rubbish and waste appropriately in designated bins</li>
+        <li>Follow the local council's recycling guidelines and use recycling bins correctly</li>
+        <li>Place wheelie bins and recycling boxes out for collection on the correct days</li>
+        <li>Return bins to their designated storage area promptly after collection</li>
+        <li>Not allow rubbish to accumulate inside or outside the Property</li>
+        <li>Not dump large items, furniture, or bulky waste without arranging proper disposal</li>
+        <li>Pay for council bulky waste collection or use licensed waste disposal services</li>
+      </ul>
+    </div>
+
+    {{#if has_garden}}
+    <div class="clause">
+      <span class="clause-number">6A.11</span>
+      <strong>Garden Waste:</strong> The Tenant must dispose of garden waste responsibly using the council's garden waste
+      collection service (if provided) or composting. Do not burn garden waste or dump it in general waste bins.
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🤝 Neighbourhood & Nuisance Prevention</div>
+
+    <div class="clause">
+      <span class="clause-number">6A.12</span>
+      <strong>Nuisance Prohibition:</strong> The Tenant must NOT:
+      <ul>
+        <li>Cause nuisance, annoyance, or disturbance to neighbors or other occupants of nearby properties</li>
+        <li>Play loud music, television, or instruments between <strong>11:00 PM and 7:00 AM</strong></li>
+        <li>Hold parties or gatherings that cause excessive noise, parking problems, or antisocial behavior</li>
+        <li>Use the Property for illegal activities, drug use, or criminal purposes</li>
+        <li>Engage in threatening, abusive, or harassing behavior towards neighbors</li>
+        <li>Allow visitors, guests, or family members to cause nuisance</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.13</span>
+      <strong>Antisocial Behaviour:</strong> The Tenant must not engage in antisocial behavior as defined by the
+      Anti-social Behaviour, Crime and Policing Act 2014. This includes harassment, noise nuisance, threatening behavior,
+      vandalism, or any conduct causing alarm or distress to others. Breach may result in immediate eviction proceedings
+      under Ground 14 (nuisance or illegal use).
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.14</span>
+      <strong>Parking & Vehicles:</strong> {{#if parking_available}}The Tenant may use the designated parking space(s)
+      for {{parking_details}}. The Tenant must not park in unauthorized areas, block access, or cause obstruction.
+      {{else}}The Tenant must not park on the Property or surrounding areas without permission.{{/if}}
+      Abandoned, untaxed, or uninsured vehicles will be reported to the council for removal.
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🛡️ Contents Insurance Requirement (Premium)</div>
+
+    <div class="legal-notice">
+      <div class="legal-notice-title">✅ Mandatory Insurance Requirement</div>
+      <p>
+        As a condition of this Premium Tenancy Agreement, the Tenant <strong>MUST</strong> obtain and maintain
+        adequate contents insurance for the full duration of the tenancy.
+      </p>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.15</span>
+      <strong>Tenant Contents Insurance:</strong> The Tenant must:
+      <ul>
+        <li>Obtain comprehensive contents insurance covering personal belongings to their full replacement value</li>
+        <li>Ensure the policy includes <strong>third-party liability cover</strong> of at least <strong>£1,000,000</strong></li>
+        <li>Provide proof of insurance to the Landlord within <strong>14 days of tenancy start</strong></li>
+        <li>Maintain continuous insurance cover throughout the tenancy</li>
+        <li>Provide updated proof of insurance upon renewal</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.16</span>
+      <strong>Landlord's Insurance:</strong> The Landlord's buildings insurance does NOT cover the Tenant's personal
+      belongings, furniture, electronics, clothing, or other contents. The Tenant is solely responsible for insuring
+      their own possessions against theft, fire, flood, and accidental damage.
+    </div>
+
+    <div class="warning-box">
+      <div class="warning-title">⚠️ Why Contents Insurance is Mandatory</div>
+      <p>
+        Contents insurance protects YOU from financial loss if your belongings are damaged, stolen, or destroyed.
+        Without insurance, you could lose thousands of pounds worth of possessions. The third-party liability element
+        also protects you if you accidentally damage the Property (e.g., fire, flood, leaving taps running).
+      </p>
+    </div>
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">ℹ️</span>
+        Affordable Contents Insurance
+      </div>
+      <p>
+        Tenant contents insurance typically costs £5-15 per month for £20,000-30,000 of cover. Providers include:
+        Direct Line, Aviva, Admiral, Simply Business, and specialist tenant insurers like Urban Jungle and Homelet.
+        Some policies include accidental damage cover for the Landlord's property.
+      </p>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">🧹 End of Tenancy Obligations</div>
+
+    <div class="clause">
+      <span class="clause-number">6A.17</span>
+      <strong>Notice to Terminate:</strong> The Tenant must give the Landlord proper written notice to end the tenancy:
+      <ul>
+        <li><strong>During Fixed Term:</strong> Tenant cannot end early unless break clause exists (see Section 3)</li>
+        <li><strong>After Fixed Term (Periodic):</strong> At least <strong>{{tenant_notice_period}}</strong> notice in writing</li>
+        <li>Notice must expire on the last day of a rental period (e.g., if rent due 1st of month, notice expires on last day of month)</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.18</span>
+      <strong>Property Condition at End:</strong> At the end of the tenancy, the Tenant must:
+      <ul>
+        <li>Return the Property <strong>clean, tidy, and in the same condition</strong> as at the start (fair wear and tear excepted)</li>
+        <li>Arrange professional cleaning of carpets, upholstery, ovens, and kitchen appliances</li>
+        <li>Remove all personal belongings, furniture (if unfurnished tenancy), and rubbish</li>
+        <li>Repair or compensate for any damage beyond fair wear and tear</li>
+        <li>Return all keys, fobs, parking permits, and access devices to the Landlord</li>
+        <li>Ensure all utility final readings are taken and bills settled</li>
+        <li>Provide a forwarding address for return of deposit and correspondence</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.19</span>
+      <strong>Professional Cleaning:</strong> {{#if professional_cleaning_required}}The Tenant MUST arrange professional
+      cleaning by a recognized company at the end of the tenancy. Receipts must be provided to the Landlord.
+      {{else}}The Tenant is strongly advised to arrange professional cleaning to ensure the Property is returned in
+      acceptable condition and avoid deposit deductions.{{/if}}
+    </div>
+
+    <div class="warning-box">
+      <div class="warning-title">⚠️ Deposit Deductions</div>
+      <p>
+        Failure to return the Property in good condition will result in deposit deductions for:
+        cleaning (£100-300+), damage repair, missing items, key replacement (£100+ for lock changes), and
+        outstanding bills. Professional cleaning costs £80-200 depending on property size - much less than deposit deductions.
+      </p>
+    </div>
+  </div>
+
+  {{#if communal_areas}}
+  <div class="subsection">
+    <div class="subsection-title">🏘️ HMO & Shared Facilities (Premium)</div>
+
+    <div class="legal-notice">
+      <div class="legal-notice-title">🏠 House in Multiple Occupation (HMO) Provisions</div>
+      <p>
+        This Property {{#if is_hmo}}IS{{else}}includes{{/if}} shared facilities and communal areas. Additional terms apply
+        to ensure all occupants can enjoy the Property peacefully and safely.
+      </p>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.20</span>
+      <strong>Room License Agreement:</strong> {{#if is_hmo}}This Agreement grants the Tenant a license to occupy the
+      room(s) specified in Section 2, together with shared use of communal facilities. This is NOT an exclusive tenancy
+      of the entire Property.{{else}}This Agreement includes shared use of communal areas as specified below.{{/if}}
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.21</span>
+      <strong>Shared Facilities:</strong> The Tenant has shared access to the following communal areas and facilities:
+      <ul>
+        {{#if communal_areas}}
+        <li>{{communal_areas}}</li>
+        {{else}}
+        <li>Kitchen (cooking facilities, appliances, food storage)</li>
+        <li>Bathrooms/WC (shared with other occupants)</li>
+        <li>Common hallways, stairs, and entrance</li>
+        <li>Living room / common room (if applicable)</li>
+        <li>Garden / outdoor space (if applicable)</li>
+        <li>Laundry facilities (washing machine, dryer)</li>
+        {{/if}}
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.22</span>
+      <strong>Exclusive Use of Bedroom:</strong> The Tenant has exclusive use of their designated bedroom(s) as specified
+      in Section 2. No other occupant may enter the Tenant's bedroom without permission. The Landlord retains the right
+      to access for inspections, repairs, and emergencies (with proper notice).
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.23</span>
+      <strong>Communal Area Responsibilities:</strong> The Tenant must:
+      <ul>
+        <li><strong>Cleanliness:</strong> Keep shared areas clean and tidy after use</li>
+        <li><strong>Kitchen:</strong> Wash dishes immediately, clean surfaces, store food properly, label personal items</li>
+        <li><strong>Bathroom:</strong> Clean after use, remove hair from drains, use bathroom spray/ventilation</li>
+        <li><strong>Respect Others:</strong> Use shared facilities considerately, allowing fair access to all occupants</li>
+        <li><strong>Shared Items:</strong> Not remove or monopolize shared appliances, cookware, or furniture</li>
+        <li><strong>Noise:</strong> Keep noise to minimum in communal areas, especially after 10:00 PM</li>
+      </ul>
+    </div>
+
+    {{#if communal_cleaning}}
+    <div class="clause">
+      <span class="clause-number">6A.24</span>
+      <strong>Communal Cleaning Arrangements:</strong> {{communal_cleaning}}
+    </div>
+    {{else}}
+    <div class="clause">
+      <span class="clause-number">6A.24</span>
+      <strong>Cleaning Rota:</strong> All occupants are responsible for maintaining communal areas. The Landlord may implement
+      a cleaning rota or hire professional cleaners (costs shared among occupants). Failure to participate in cleaning may
+      result in professional cleaning charges deducted from the Tenant's deposit.
+    </div>
+    {{/if}}
+
+    <div class="clause">
+      <span class="clause-number">6A.25</span>
+      <strong>Guest Policy (HMO):</strong> The Tenant may have visitors, subject to these restrictions:
+      <ul>
+        <li>No overnight guests for more than <strong>2 consecutive nights</strong> without prior agreement</li>
+        <li>Maximum <strong>1 guest at a time</strong> in shared areas during peak times</li>
+        <li>Guests must not cause noise, nuisance, or inconvenience to other occupants</li>
+        <li>The Tenant remains responsible for guest behavior and any damage caused</li>
+        <li>No guests permitted to use the Property as their primary residence</li>
+      </ul>
+    </div>
+
+    <div class="clause">
+      <span class="clause-number">6A.26</span>
+      <strong>Fire Safety & Emergency Exits:</strong> The Tenant must:
+      <ul>
+        <li>Keep fire doors closed at all times (never prop open or obstruct)</li>
+        <li>Keep escape routes, hallways, and stairs clear of obstructions</li>
+        <li>Not store items in communal hallways or landings (fire hazard)</li>
+        <li>Test smoke alarms monthly and report any faults immediately</li>
+        <li>Familiarize themselves with fire escape routes and assembly points</li>
+        <li>Not tamper with fire extinguishers, smoke alarms, or fire safety equipment</li>
+      </ul>
+    </div>
+
+    {{#if is_hmo}}
+    <div class="clause">
+      <span class="clause-number">6A.27</span>
+      <strong>HMO Licensing:</strong> This Property is licensed as a House in Multiple Occupation under the Housing Act 2004.
+      The Landlord holds a valid HMO license (license number: _____________). The Property complies with HMO standards including:
+      <ul>
+        <li>Minimum room sizes (6.51m² for single occupancy, 10.22m² for double occupancy)</li>
+        <li>Adequate kitchen and bathroom facilities for the number of occupants</li>
+        <li>Fire safety measures (fire doors, smoke alarms, fire extinguishers, emergency lighting)</li>
+        <li>Gas and electrical safety certificates</li>
+        <li>Proper waste disposal facilities</li>
+      </ul>
+    </div>
+    {{/if}}
+
+    <div class="clause">
+      <span class="clause-number">6A.28</span>
+      <strong>Replacement Occupants:</strong> If a fellow occupant leaves and a new occupant moves in:
+      <ul>
+        <li>The Landlord will conduct appropriate referencing and Right to Rent checks</li>
+        <li>Existing occupants do not have a veto but may raise genuine concerns</li>
+        <li>The Landlord will introduce new occupants and provide contact details</li>
+        <li>This Agreement continues with the same terms regardless of changes to other occupants</li>
+      </ul>
+    </div>
+
+    <div class="warning-box">
+      <div class="warning-title">⚠️ HMO Rules - Serious Breaches</div>
+      <p><strong>Serious breaches that may result in immediate eviction:</strong></p>
+      <ul>
+        <li>Persistent failure to keep communal areas clean (health hazard)</li>
+        <li>Blocking fire exits or tampering with fire safety equipment</li>
+        <li>Causing serious nuisance to other occupants (harassment, noise, antisocial behavior)</li>
+        <li>Unauthorized occupants or subletting your room</li>
+        <li>Damage to communal facilities or other occupants' property</li>
+      </ul>
+    </div>
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">ℹ️</span>
+        Living in Shared Accommodation
+      </div>
+      <p>
+        HMOs and shared houses require cooperation, respect, and consideration. Communicate openly with fellow occupants
+        about issues before they escalate. Most problems (cleaning, noise, shared item use) can be resolved through
+        respectful discussion. If issues persist, raise them with the Landlord in writing.
+      </p>
+      <p style="margin-top: 10px;">
+        <strong>Your Rights:</strong> You have the right to quiet enjoyment of your bedroom, fair access to shared facilities,
+        a safe and well-maintained property, and protection from harassment by other occupants or the Landlord.
+      </p>
+    </div>
+  </div>
+  {{/if}}
+
+  <!-- PAGE BREAK -->
+  <div class="page-break"></div>
 
   <!-- SECTION 7: PROPERTY RULES -->
   <div class="section-header">
