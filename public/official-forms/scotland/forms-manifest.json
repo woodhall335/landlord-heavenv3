@@ -4,21 +4,24 @@
   "forms": {
     "notice_to_leave.pdf": {
       "title": "Notice to Leave",
-      "version": "2024.02",
-      "effective_date": "2024-02-01",
-      "source_url": "https://www.mygov.scot/downloads/housing-forms/private-residential-tenancy-notice-to-leave/",
+      "version": "2024.04",
+      "effective_date": "2024-04-01",
+      "source_url": "https://www.gov.scot/binaries/content/documents/govscot/publications/form/2017/11/private-residential-tenancy-prescribed-notices-forms/documents/notice-to-leave/7de8561a-c689-463e-b196-bdbe2dee347b/7de8561a-c689-463e-b196-bdbe2dee347b/govscot:document/Notice%2Bto%2BLeave%2Bfrom%2B1%2BApril%2B2024.pdf",
       "last_verified": "2024-11-23",
-      "notes": "Prescribed form under Private Housing (Tenancies) (Scotland) Act 2016. Must give minimum 84 days notice (12 weeks). Cannot be served within first 6 months of tenancy.",
-      "status": "TO_DOWNLOAD"
+      "notes": "Prescribed form under Private Housing (Tenancies) (Scotland) Act 2016. Must give minimum 84 days notice (12 weeks). Cannot be served within first 6 months of tenancy. Updated April 2024 version.",
+      "file_size": "230KB",
+      "pages": 3,
+      "status": "DOWNLOADED"
     },
     "form_e_eviction.pdf": {
       "title": "Form E - Application for Eviction Order",
-      "version": "2024.03",
-      "effective_date": "2024-03-01",
-      "source_url": "https://www.housingandpropertychamber.scot/apply-tribunal/eviction-order",
+      "version": "2022.11",
+      "effective_date": "2022-11-01",
+      "source_url": "https://housingandpropertychamber.scot/sites/default/files/hpc/Form%20E%20Eviction%20Applications%20%5BRevised%20November%202022%5D_2.pdf",
       "last_verified": "2024-11-23",
-      "notes": "First-tier Tribunal for Scotland (Housing and Property Chamber) application form. Fee: £100. Must attach Notice to Leave and proof of service.",
-      "status": "TO_DOWNLOAD"
+      "notes": "First-tier Tribunal for Scotland (Housing and Property Chamber) application form. Fee: £100. Must attach Notice to Leave and proof of service. Revised November 2022 version.",
+      "file_size": "320KB",
+      "status": "DOWNLOADED"
     }
   },
   "copyright": "Crown Copyright. Scottish Government. Used under Open Government Licence v3.0",
