@@ -24,11 +24,9 @@ export const Toast: React.FC<ToastProps> = ({
   duration = 5000,
   onClose,
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    setIsVisible(true);
-
     const timer = setTimeout(() => {
       setIsVisible(false);
       setTimeout(onClose, 300); // Wait for animation

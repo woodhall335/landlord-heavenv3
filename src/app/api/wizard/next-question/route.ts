@@ -44,6 +44,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (jurisdiction === 'northern-ireland' && case_type !== 'tenancy_agreement') {
+      return NextResponse.json(
+        { error: 'Eviction and money claim flows are not available in Northern Ireland' },
+        { status: 400 }
+      );
+    }
+
     if (!collected_facts || typeof collected_facts !== 'object') {
       return NextResponse.json(
         { error: 'Invalid collected_facts' },

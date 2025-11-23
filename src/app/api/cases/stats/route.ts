@@ -53,7 +53,6 @@ export async function GET(request: Request) {
       section8: evictionCases.filter((c) => c.recommended_route === 'section8').length,
       section21: evictionCases.filter((c) => c.recommended_route === 'section21').length,
       notice_to_leave: evictionCases.filter((c) => c.recommended_route === 'notice_to_leave').length,
-      notice_to_quit: evictionCases.filter((c) => c.recommended_route === 'notice_to_quit').length,
     };
 
     // Average success probability (for cases that have been analyzed)

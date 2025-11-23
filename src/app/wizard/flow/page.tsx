@@ -23,20 +23,21 @@ function WizardFlowContent() {
   const product = searchParams.get('product'); // Specific product (notice_only, complete_pack, etc.)
   const editCaseId = searchParams.get('edit'); // Case ID to edit
 
-  // Validate params
-  if (!type || !jurisdiction) {
-    router.push('/wizard');
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-gray-600">Invalid parameters. Redirecting...</p>
-        </div>
-      </div>
-    );
-  }
+  const hasRequiredParams = Boolean(type && jurisdiction);
+
+  useEffect(() => {
+    if (!hasRequiredParams) {
+      router.push('/wizard');
+    }
+  }, [hasRequiredParams, router]);
 
   // Initialize case for structured wizard
   useEffect(() => {
+    if (!hasRequiredParams) {
+      setLoading(false);
+      return;
+    }
+
     if (type === 'tenancy_agreement' && !editCaseId) {
       const initializeCase = async () => {
         try {
@@ -71,7 +72,18 @@ function WizardFlowContent() {
     } else {
       setLoading(false);
     }
-  }, [type, jurisdiction, editCaseId]);
+  }, [type, jurisdiction, editCaseId, hasRequiredParams]);
+
+  // Validate params
+  if (!hasRequiredParams) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">Invalid parameters. Redirecting...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleComplete = (completedCaseId: string) => {
     // Navigate to preview/checkout page

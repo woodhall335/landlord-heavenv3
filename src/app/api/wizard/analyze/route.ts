@@ -60,6 +60,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (caseData.jurisdiction === 'northern-ireland' && caseData.case_type !== 'tenancy_agreement') {
+      return NextResponse.json(
+        { error: 'Eviction and money claim analysis is not available for Northern Ireland' },
+        { status: 400 }
+      );
+    }
+
     // Merge collected_facts if provided
     const mergedFacts = collected_facts
       ? { ...(caseData.collected_facts as object || {}), ...collected_facts }
