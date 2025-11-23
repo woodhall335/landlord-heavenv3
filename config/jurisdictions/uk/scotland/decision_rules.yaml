@@ -347,3 +347,116 @@ costs:
   sheriff_officer_fee: 125
   legal_costs_simple: "1000-2500"
   legal_costs_complex: "2500-5000"
+
+# SIMPLE PROCEDURE (Money Claims)
+# Scotland's streamlined process for civil claims up to £5,000
+simple_procedure:
+  description: "Sheriff Court procedure for small claims"
+  claim_limit: 5000
+  statute: "Simple Procedure (Scotland) Regulations 2016"
+
+  eligibility:
+    requirements:
+      - "Claim value must not exceed £5,000"
+      - "Claim must be for a definite sum of money"
+      - "Attempts to resolve dispute must have been made"
+      - "Court fee must be paid on lodging"
+
+    suitable_claims:
+      - "Rent arrears recovery"
+      - "Property damage costs"
+      - "Unpaid utility bills"
+      - "Breach of contract damages"
+      - "Return of deposit disputes"
+
+    not_suitable:
+      - "Claims over £5,000"
+      - "Eviction proceedings (use Tribunal)"
+      - "Complex legal arguments"
+      - "Appeals from other courts"
+
+  court_fees:
+    up_to_300: 21
+    up_to_1500: 75
+    up_to_5000: 145
+
+  procedure:
+    lodging:
+      description: "Lodge Simple Procedure Claim Form (Form 3A) at Sheriff Court"
+      documents_required:
+        - "Completed Form 3A"
+        - "Particulars of claim"
+        - "Supporting evidence (tenancy agreement, rent schedule, photos, etc.)"
+        - "Evidence of attempts to resolve"
+        - "Court fee"
+
+    service:
+      description: "Court will serve claim on defender"
+      timeline_days: 14
+
+    response:
+      description: "Defender has time to respond"
+      timeline_days: 21
+      form: "Simple Procedure Response Form (Form 4A)"
+
+    hearing:
+      description: "Sheriff may hold informal hearing or case discussion"
+      timeline_months: "2-4"
+      informal: true
+      notes: "Designed to be accessible without lawyers"
+
+    decision:
+      description: "Sheriff grants decree or dismisses claim"
+      appealable: "Limited appeal rights"
+
+  required_facts:
+    - landlord_full_name
+    - landlord_address
+    - tenant_full_name
+    - property_address
+    - arrears_total or damages_total
+    - tenancy_start_date
+    - rent_amount
+    - attempts_to_resolve
+    - evidence_list
+
+  recommended_evidence:
+    - "Tenancy agreement"
+    - "Rent payment schedule showing arrears"
+    - "Bank statements or rent ledger"
+    - "Letters or emails demanding payment"
+    - "Photos of damage (if claiming damage costs)"
+    - "Repair quotes or invoices"
+    - "Deposit protection scheme certificate"
+
+  typical_timeline:
+    pre_claim_demands: 30
+    lodging_to_service: 14
+    response_period: 21
+    hearing_scheduling: 60
+    total_days: 125
+
+  success_factors:
+    high_probability:
+      - "Clear documentary evidence of debt"
+      - "Multiple payment demands sent"
+      - "Genuine attempts to resolve made"
+      - "Arrears schedule matches bank statements"
+
+    medium_probability:
+      - "Some gaps in evidence"
+      - "Defender may have counterclaim"
+      - "Dispute over tenancy terms"
+
+    low_probability:
+      - "Weak or missing evidence"
+      - "No attempts to resolve dispute"
+      - "Claim appears punitive or vexatious"
+      - "Landlord has compliance issues"
+
+  notes:
+    - "Sheriff has discretion on all Simple Procedure claims"
+    - "Must show attempts to resolve dispute before raising claim"
+    - "Claims over £5,000 must use Ordinary Cause procedure"
+    - "Interest can be claimed at statutory rate (8% typical)"
+    - "No legal aid for Simple Procedure - designed for self-representation"

@@ -45,10 +45,10 @@ export async function POST(request: Request) {
       );
     }
 
-    if (case_type === 'money_claim' && jurisdiction !== 'england-wales') {
+    if (case_type === 'money_claim' && jurisdiction === 'northern-ireland') {
       return NextResponse.json(
         {
-          error: 'Money claim workflows are only available in England & Wales. Scotland version is coming soon.',
+          error: 'Money claim workflows are not available in Northern Ireland.',
         },
         { status: 400 }
       );

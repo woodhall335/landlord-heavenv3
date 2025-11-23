@@ -1,0 +1,26 @@
+<h1>Interest Calculation</h1>
+
+<p><strong>Principal claimed:</strong> {{currency total_principal}}</p>
+<p><strong>Interest rate:</strong> {{interest_rate}}% per annum (statutory rate)</p>
+<p><strong>Accrued interest to {{generation_date}}:</strong> {{currency interest_to_date}}</p>
+<p><strong>Daily rate:</strong> {{currency daily_interest}} ({{interest_rate}}% / 365)</p>
+
+<h2>Working</h2>
+<p>
+  Daily rate calculation: ({{currency total_principal}} × {{interest_rate}}%) / 365 = {{currency daily_interest}}
+</p>
+<p>
+  Interest claimed to date of claim: {{currency daily_interest}} × {{days_accrued}} days = {{currency interest_to_date}}
+  {{#if interest_start_date}} starting from {{interest_start_date}}{{/if}}.
+</p>
+
+<h2>Legal basis</h2>
+<p>
+  Interest is claimed under the Late Payment of Commercial Debts (Interest) Act 1998 or at common law.
+  The Pursuer is entitled to interest on the principal debt from the date the debt became due until payment is made in full.
+</p>
+
+<p>
+  The daily rate continues to apply until decree is granted and payment is made. Update this calculation
+  if the claim is lodged after {{generation_date}}.
+</p>

@@ -1,0 +1,75 @@
+<h1>Statement of Claim (Particulars)</h1>
+
+<p><strong>Claimant (Pursuer):</strong> {{landlord_full_name}}</p>
+<p><strong>Respondent (Defender):</strong> {{tenant_full_name}}</p>
+<p><strong>Property:</strong> {{property_address}}</p>
+<p><strong>Sheriff Court:</strong> {{sheriffdom}}</p>
+
+<h2>Background to the claim</h2>
+<p>
+  The Defender occupies the above property under a private residential tenancy that commenced on
+  {{tenancy_start_date}}. The agreed rent is {{currency rent_amount}} per {{rent_frequency}}, payable in advance on
+  the {{payment_day}} of each period.
+</p>
+
+<h2>Rent arrears</h2>
+<p>
+  The Defender has failed to pay rent as it fell due under the tenancy agreement. As at {{generation_date}},
+  the outstanding arrears amount to {{currency arrears_total}}. A detailed schedule showing the arrears for each
+  rent period is attached and forms part of this claim (marked "Schedule of Rent Arrears").
+</p>
+
+<h2>Property damage and other sums</h2>
+{{#if damage_items.length}}
+<p>The Defender caused damage to the property beyond normal wear and tear. The Pursuer claims the following sums for repairs and reinstatement:</p>
+<ul>
+  {{#each damage_items}}
+  <li>{{description}} – {{currency amount}}</li>
+  {{/each}}
+</ul>
+{{/if}}
+
+{{#if other_charges.length}}
+<p>The Pursuer also claims the following additional sums which are reasonably due:</p>
+<ul>
+  {{#each other_charges}}
+  <li>{{description}} – {{currency amount}}</li>
+  {{/each}}
+</ul>
+{{/if}}
+
+<h2>Attempts to resolve the dispute</h2>
+<p>
+  {{#if attempts_to_resolve}}
+  {{attempts_to_resolve}}
+  {{else}}
+  The Pursuer has made reasonable attempts to resolve this matter with the Defender before raising court proceedings.
+  The Pursuer sent written demands for payment on {{demand_letter_date}} and {{second_demand_date}}, but the Defender
+  has failed to make payment or engage meaningfully to resolve the debt.
+  {{/if}}
+</p>
+
+<h2>Interest</h2>
+<p>
+  The Pursuer claims interest on the principal sum at the rate of {{interest_rate}}% per annum from {{interest_start_date}}
+  to {{generation_date}}, calculated at {{currency interest_to_date}}, and continuing to accrue at {{currency daily_interest}}
+  per day until payment is made in full.
+</p>
+
+<h2>Relief sought</h2>
+<p>The Pursuer respectfully asks the Sheriff Court to grant decree for:</p>
+<ol>
+  <li>Payment of arrears, damages and other sums totalling {{currency total_claim_amount}}</li>
+  <li>Court fee of {{currency court_fee}}</li>
+  {{#if solicitor_costs}}
+  <li>Legal expenses of {{currency solicitor_costs}}</li>
+  {{/if}}
+  <li>Interest as calculated above, continuing until payment</li>
+</ol>
+
+<h2>Statement of truth</h2>
+<p>
+  I confirm that the facts stated in this claim are true to the best of my knowledge and belief.
+</p>
+<p>Signed: {{signatory_name}}</p>
+<p>Dated: {{signature_date}}</p>
