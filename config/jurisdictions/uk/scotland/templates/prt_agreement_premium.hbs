@@ -835,10 +835,14 @@
         <li>✓ The increase is fair and reflects market rent</li>
       </ul>
       <p><strong>Tenant Rights:</strong> You can refer the rent increase to a Rent Officer if you believe it is unfair. You must do this within 21 days of receiving the notice.</p>
-      {{#if rent_increase_frequency}}
-      <p><strong>Agreement:</strong> {{rent_increase_frequency}}</p>
-      {{/if}}
     </div>
+
+    {{#if rent_increase_clause}}
+    <p style="margin: 15px 0;"><strong>4.5.1 Index-Linked Increases (Premium):</strong> The parties agree that annual rent increases may be calculated based on the <strong>Consumer Price Index (CPI)</strong> or <strong>Retail Price Index (RPI)</strong>, capped at a maximum of <strong>5% per annum</strong>. Formula: Current Rent × (1 + CPI/RPI percentage) = New Rent. This provides transparent, predictable increases reflecting inflation. You retain the right to challenge any increase via a Rent Officer if you consider it excessive.</p>
+    {{#if rent_increase_frequency}}
+    <p style="margin-top: 10px;"><strong>Frequency:</strong> {{rent_increase_frequency}}</p>
+    {{/if}}
+    {{/if}}
   </div>
 
   <!-- SECTION 5: DEPOSIT -->
@@ -1176,29 +1180,117 @@
   </div>
 
   <div class="subsection">
-    <div class="subsection-title">9.1 General Obligations</div>
-    <p>The tenant must:</p>
+    <div class="subsection-title">9.1 Care of Property</div>
+
+    <p><strong>9.1.1 Cleanliness & Maintenance:</strong> The Tenant must:</p>
     <ul>
+      <li>Keep the Property clean, tidy, and in good decorative order</li>
+      <li>Keep the Property adequately heated and ventilated to prevent condensation, dampness, and mould growth</li>
+      <li>Report any defects, damage, or disrepair to the Landlord promptly (within 48 hours of discovery)</li>
+      <li>Not cause or permit any damage to the Property, fixtures, fittings, or furnishings</li>
+      <li>Make good any damage caused by the Tenant, their family, or visitors (fair wear and tear excepted)</li>
       <li>Pay rent on time and in full</li>
       <li>Occupy the property as their only or principal home</li>
-      <li>Take reasonable care of the property</li>
-      <li>Not engage in antisocial behaviour</li>
-      <li>Allow the landlord reasonable access for inspections and repairs</li>
-      <li>Not make structural alterations without written consent</li>
-      <li>Comply with the terms of this agreement</li>
+    </ul>
+
+    <p style="margin-top: 15px;"><strong>9.1.2 Condensation Prevention:</strong> The Tenant must take reasonable steps to prevent condensation by:</p>
+    <ul>
+      <li>Opening windows regularly to allow ventilation</li>
+      <li>Using extractor fans in bathrooms and kitchens during and after use</li>
+      <li>Keeping trickle vents open where fitted</li>
+      <li>Not blocking air vents or ventilation grilles</li>
+      <li>Wiping down surfaces prone to condensation</li>
+      <li>Reporting any signs of dampness or mould immediately</li>
     </ul>
   </div>
 
-  {{#if subletting_allowed}}
   <div class="subsection">
-    <div class="subsection-title">9.2 Subletting & Lodgers</div>
-    <p><strong>Policy:</strong> {{subletting_allowed}}</p>
+    <div class="subsection-title">9.2 Alterations & Decorations</div>
+
+    <p><strong>9.2.1 Prohibition on Alterations:</strong> The Tenant must NOT:</p>
+    <ul>
+      <li>Make any structural alterations, additions, or improvements to the Property</li>
+      <li>Remove, alter, or damage any of the Landlord's fixtures, fittings, or furnishings</li>
+      <li>Install or remove any appliances, heating systems, or built-in furniture</li>
+      <li>Change locks or add additional security devices without written consent</li>
+      <li>Install satellite dishes, aerials, or external signage</li>
+      <li>Make any permanent alterations without the Landlord's prior written consent</li>
+    </ul>
+
+    <p style="margin-top: 15px;"><strong>9.2.2 Decorations:</strong> The Tenant must not paint, redecorate, or alter existing decorations without written consent. Small picture hooks or 3M Command strips may be used for hanging lightweight pictures. All holes must be filled at the end of the tenancy.</p>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">9.3 Subletting, Assignment & Short-Term Letting (Premium Enhanced)</div>
+
     <div class="scotland-legal-box">
-      <div class="scotland-legal-title">Right to Sublet in Scotland</div>
-      <p>Under Scottish law, tenants have a statutory right to request permission to sublet or take in a lodger. The landlord cannot unreasonably refuse permission, but they can refuse if there are reasonable grounds (e.g., overcrowding).</p>
+      <div class="scotland-legal-title">⚠️ Subletting Rights in Scotland</div>
+      <p>
+        Under the Private Housing (Tenancies) (Scotland) Act 2016, tenants have a <strong>statutory right to request permission</strong>
+        to sublet all or part of the Property or take in a lodger. The Landlord cannot unreasonably refuse such requests,
+        but may refuse on reasonable grounds including: overcrowding, breach of landlord's mortgage conditions, insurance
+        concerns, or property unsuitability.
+      </p>
+    </div>
+
+    <p style="margin: 15px 0;"><strong>9.3.1 Request to Sublet:</strong> Any request to sublet or take in a lodger must:</p>
+    <ul>
+      <li>Be made in writing with at least 28 days' notice</li>
+      <li>Include full details of the proposed subtenant/lodger (name, occupation, references)</li>
+      <li>Specify the nature and duration of the proposed subletting arrangement</li>
+      <li>Acknowledge that the Tenant remains fully liable for rent and property condition</li>
+    </ul>
+    <p>The Landlord will respond within 28 days. If permission is refused, the Landlord will provide written reasons.</p>
+
+    <div class="warning-box">
+      <div class="warning-title">🚫 SHORT-TERM LETTING STRICTLY PROHIBITED</div>
+      <p><strong>The following activities are ABSOLUTELY PROHIBITED without exception:</strong></p>
+    </div>
+
+    <p style="margin: 15px 0;"><strong>9.3.2 Airbnb & Holiday Letting Ban:</strong> The Tenant must NOT:</p>
+    <ul>
+      <li>List the Property on <strong>Airbnb, Booking.com, VRBO,</strong> or any short-term letting platform</li>
+      <li>Advertise the Property for short-term holiday lets, serviced accommodation, or commercial stays</li>
+      <li>Use the Property for any form of commercial hospitality or hotel-type operation</li>
+      <li>Rent out rooms or the entire Property on a short-term basis (less than 28 days per guest)</li>
+      <li>Accept payment from guests, visitors, or temporary occupants in exchange for accommodation</li>
+      <li>Operate the Property as a guest house, B&B, or holiday let</li>
+    </ul>
+
+    <div class="scotland-legal-box">
+      <div class="scotland-legal-title">📋 Scottish Short-Term Let Licensing (2022)</div>
+      <p>
+        Under the Civic Government (Scotland) Act 1982 (Licensing of Short-term Lets) Order 2022, operating short-term
+        lets (accommodation for less than 28 days) requires a license from the local council. <strong>Unlicensed short-term
+        letting is a criminal offense</strong> punishable by fines up to £2,500. This tenancy agreement does NOT permit
+        short-term letting and the Landlord has NOT obtained a short-term let license for this Property.
+      </p>
+    </div>
+
+    <p style="margin: 15px 0;"><strong>9.3.3 Consequences of Breach:</strong> If the Tenant engages in unauthorized short-term letting, the Landlord may:</p>
+    <ul>
+      <li>Serve immediate Notice to Leave under Ground 1 (breach of tenancy terms)</li>
+      <li>Report the illegal activity to the local council for criminal prosecution</li>
+      <li>Claim damages for all income earned plus loss of control and increased costs</li>
+      <li>Report the breach to Airbnb/platforms for account suspension</li>
+      <li>Recover all legal costs incurred in enforcement</li>
+    </ul>
+
+    <p style="margin: 15px 0;"><strong>9.3.4 Assignment Prohibition:</strong> The Tenant must not assign or transfer this tenancy to another person without the Landlord's prior written consent.</p>
+
+    <div class="explainer-box">
+      <div class="explainer-title">
+        <span class="explainer-icon">ℹ️</span>
+        Why Short-Term Letting is Prohibited
+      </div>
+      <p>
+        Short-term letting creates serious risks: constant turnover of strangers damages property, breaches insurance,
+        violates mortgage conditions, causes noise complaints, requires council licensing (criminal offense if unlicensed),
+        and creates commercial use of residential property. While you have the right to request permission for long-term
+        subtenants/lodgers, short-term holiday letting is categorically prohibited.
+      </p>
     </div>
   </div>
-  {{/if}}
 
   <div class="subsection">
     <div class="subsection-title">9.3 Pet Agreement</div>
@@ -1314,6 +1406,127 @@
     <div class="subsection-title">9.5 Absence from Property</div>
     <p>The tenant must notify the landlord if they will be absent from the property for more than {{absence_notification_days}} consecutive days.</p>
   </div>
+
+  <div class="subsection">
+    <div class="subsection-title">9.6 Waste Disposal & Recycling</div>
+
+    <p><strong>9.6.1 Waste Management:</strong> The Tenant must:</p>
+    <ul>
+      <li>Dispose of all household rubbish and waste appropriately in designated bins</li>
+      <li>Follow the local council's recycling guidelines and use recycling bins correctly</li>
+      <li>Place wheelie bins and recycling boxes out for collection on the correct days</li>
+      <li>Return bins to their designated storage area promptly after collection</li>
+      <li>Not allow rubbish to accumulate inside or outside the Property</li>
+      <li>Not dump large items, furniture, or bulky waste without arranging proper disposal</li>
+      <li>Pay for council bulky waste collection or use licensed waste disposal services</li>
+    </ul>
+
+    {{#if has_garden}}
+    <p style="margin-top: 15px;"><strong>9.6.2 Garden Waste:</strong> The Tenant must dispose of garden waste responsibly using the council's garden waste collection service (if provided) or composting. Do not burn garden waste or dump it in general waste bins.</p>
+    {{/if}}
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">9.7 Neighbourhood & Nuisance Prevention</div>
+
+    <p><strong>9.7.1 Nuisance Prohibition:</strong> The Tenant must NOT:</p>
+    <ul>
+      <li>Cause nuisance, annoyance, or disturbance to neighbors or other occupants of nearby properties</li>
+      <li>Play loud music, television, or instruments between <strong>11:00 PM and 7:00 AM</strong></li>
+      <li>Hold parties or gatherings that cause excessive noise, parking problems, or antisocial behavior</li>
+      <li>Use the Property for illegal activities, drug use, or criminal purposes</li>
+      <li>Engage in threatening, abusive, or harassing behavior towards neighbors</li>
+      <li>Allow visitors, guests, or family members to cause nuisance</li>
+    </ul>
+
+    <p style="margin-top: 15px;"><strong>9.7.2 Antisocial Behaviour:</strong> The Tenant must not engage in antisocial behavior as defined by the Antisocial Behaviour etc. (Scotland) Act 2004. This includes harassment, noise nuisance, threatening behavior, vandalism, or any conduct causing alarm or distress to others. Breach may result in eviction proceedings under Ground 2 (antisocial behavior).</p>
+
+    <p style="margin-top: 15px;"><strong>9.7.3 Parking & Vehicles:</strong> {{#if parking_available}}The Tenant may use the designated parking space(s) for {{parking_details}}. The Tenant must not park in unauthorized areas, block access, or cause obstruction.{{else}}The Tenant must not park on the Property or surrounding areas without permission.{{/if}} Abandoned, untaxed, or uninsured vehicles will be reported to the council for removal.</p>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">9.8 Contents Insurance Requirement (Premium)</div>
+
+    <div class="scotland-legal-box">
+      <div class="scotland-legal-title">✅ Mandatory Insurance Requirement</div>
+      <p>
+        As a condition of this Premium Tenancy Agreement, the Tenant <strong>MUST</strong> obtain and maintain
+        adequate contents insurance for the full duration of the tenancy.
+      </p>
+    </div>
+
+    <p style="margin: 15px 0;"><strong>9.8.1 Tenant Contents Insurance:</strong> The Tenant must:</p>
+    <ul>
+      <li>Obtain comprehensive contents insurance covering personal belongings to their full replacement value</li>
+      <li>Ensure the policy includes <strong>third-party liability cover</strong> of at least <strong>£1,000,000</strong></li>
+      <li>Provide proof of insurance to the Landlord within <strong>14 days of tenancy start</strong></li>
+      <li>Maintain continuous insurance cover throughout the tenancy</li>
+      <li>Provide updated proof of insurance upon renewal</li>
+    </ul>
+
+    <p style="margin: 15px 0;"><strong>9.8.2 Landlord's Insurance:</strong> The Landlord's buildings insurance does NOT cover the Tenant's personal belongings, furniture, electronics, clothing, or other contents. The Tenant is solely responsible for insuring their own possessions against theft, fire, flood, and accidental damage.</p>
+
+    <div class="warning-box">
+      <div class="warning-title">⚠️ Why Contents Insurance is Mandatory</div>
+      <p>
+        Contents insurance protects YOU from financial loss if your belongings are damaged, stolen, or destroyed.
+        Without insurance, you could lose thousands of pounds worth of possessions. The third-party liability element
+        also protects you if you accidentally damage the Property (e.g., fire, flood, leaving taps running).
+      </p>
+    </div>
+  </div>
+
+  <div class="subsection">
+    <div class="subsection-title">9.9 End of Tenancy Obligations</div>
+
+    <p><strong>9.9.1 Notice to Terminate:</strong> The Tenant must give the Landlord proper written notice to end the tenancy: at least <strong>28 days' notice in writing</strong>. Notice must be given in the prescribed Scottish Government form.</p>
+
+    <p style="margin: 15px 0;"><strong>9.9.2 Property Condition at End:</strong> At the end of the tenancy, the Tenant must:</p>
+    <ul>
+      <li>Return the Property <strong>clean, tidy, and in the same condition</strong> as at the start (fair wear and tear excepted)</li>
+      <li>Arrange professional cleaning of carpets, upholstery, ovens, and kitchen appliances</li>
+      <li>Remove all personal belongings, furniture (if unfurnished tenancy), and rubbish</li>
+      <li>Repair or compensate for any damage beyond fair wear and tear</li>
+      <li>Return all keys, fobs, parking permits, and access devices to the Landlord</li>
+      <li>Ensure all utility final readings are taken and bills settled</li>
+      <li>Provide a forwarding address for return of deposit and correspondence</li>
+    </ul>
+
+    <p style="margin: 15px 0;"><strong>9.9.3 Professional Cleaning:</strong> {{#if professional_cleaning_required}}The Tenant MUST arrange professional cleaning by a recognized company at the end of the tenancy. Receipts must be provided to the Landlord.{{else}}The Tenant is strongly advised to arrange professional cleaning to ensure the Property is returned in acceptable condition and avoid deposit deductions.{{/if}}</p>
+  </div>
+
+  {{#if communal_areas}}
+  <div class="subsection">
+    <div class="subsection-title">9.10 HMO & Shared Facilities (Premium)</div>
+
+    <div class="scotland-legal-box">
+      <div class="scotland-legal-title">🏠 House in Multiple Occupation (HMO) Provisions</div>
+      <p>
+        This Property {{#if is_hmo}}IS{{else}}includes{{/if}} shared facilities and communal areas. Additional terms apply
+        to ensure all occupants can enjoy the Property peacefully and safely.
+      </p>
+    </div>
+
+    <p style="margin: 15px 0;"><strong>9.10.1 Room License Agreement:</strong> {{#if is_hmo}}This Agreement grants the Tenant a license to occupy the room(s) specified in Section 2, together with shared use of communal facilities.{{else}}This Agreement includes shared use of communal areas as specified below.{{/if}}</p>
+
+    <p style="margin: 15px 0;"><strong>9.10.2 Shared Facilities:</strong> The Tenant has shared access to communal areas including: {{#if communal_areas}}{{communal_areas}}{{else}}kitchen, bathrooms, common hallways, stairs, entrance, living room (if applicable), garden (if applicable), and laundry facilities{{/if}}.</p>
+
+    <p style="margin: 15px 0;"><strong>9.10.3 Communal Area Responsibilities:</strong> The Tenant must:</p>
+    <ul>
+      <li>Keep shared areas clean and tidy after use</li>
+      <li>Wash dishes immediately, clean surfaces, store food properly, label personal items</li>
+      <li>Clean bathrooms after use, remove hair from drains</li>
+      <li>Use shared facilities considerately, allowing fair access to all occupants</li>
+      <li>Keep noise to minimum in communal areas, especially after 10:00 PM</li>
+    </ul>
+
+    {{#if is_hmo}}
+    <p style="margin: 15px 0;"><strong>9.10.4 HMO Licensing (Scotland):</strong> This Property is licensed as a House in Multiple Occupation under the Housing (Scotland) Act 2006. The Landlord holds a valid HMO license. The Property complies with Scottish HMO standards including minimum room sizes, adequate facilities, fire safety, and safety certificates.</p>
+    {{/if}}
+
+    <p style="margin: 15px 0;"><strong>9.10.5 Fire Safety:</strong> The Tenant must keep fire doors closed, keep escape routes clear, not obstruct hallways, test smoke alarms monthly, and not tamper with fire safety equipment.</p>
+  </div>
+  {{/if}}
 
   <!-- SECTION 10: LANDLORD OBLIGATIONS & ACCESS -->
   <div class="section-header">

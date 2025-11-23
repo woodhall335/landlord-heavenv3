@@ -162,8 +162,9 @@ export interface ASTData {
 
   // Additional Terms
   white_goods_included?: string[];
-  communal_areas?: boolean;
-  communal_cleaning?: string;
+  communal_areas?: string; // Description of communal areas (for HMOs)
+  is_hmo?: boolean; // Is this property a licensed HMO?
+  communal_cleaning?: string; // Cleaning arrangements for shared areas
   recycling_bins?: boolean;
 
   // Jurisdiction
