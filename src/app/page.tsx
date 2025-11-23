@@ -28,12 +28,12 @@ export default function Home() {
         actions={
           <div className="flex flex-wrap items-center gap-4">
             <Link href="/wizard">
-              <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90 shadow-xl font-bold px-10">
+              <Button variant="secondary" size="large" className="bg-secondary text-white hover:bg-secondary-dark shadow-xl font-bold px-10">
                 Start free wizard
               </Button>
             </Link>
             <Link href="/pricing">
-              <Button variant="outline" size="large" className="border-2 border-white text-white hover:bg-white/15 font-semibold px-10">
+              <Button variant="outline" size="large" className="border-2 border-gray-900 text-gray-900 hover:bg-gray-100 font-semibold px-10">
                 View pricing
               </Button>
             </Link>
@@ -199,10 +199,10 @@ export default function Home() {
 
       <section className="bg-white py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-6">
-          <div className="rounded-3xl bg-gradient-to-br from-primary via-primary-dark to-purple-900 px-10 py-16 md:py-20 text-white shadow-2xl relative overflow-hidden">
+          <div className="rounded-3xl bg-gray-900 px-10 py-16 md:py-20 text-white shadow-2xl relative overflow-hidden">
             <div className="absolute inset-0 opacity-10">
               <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-white/20 blur-3xl" />
-              <div className="absolute left-0 bottom-0 h-96 w-96 rounded-full bg-emerald-400/20 blur-3xl" />
+              <div className="absolute left-0 bottom-0 h-96 w-96 rounded-full bg-secondary/20 blur-3xl" />
             </div>
             <div className="relative grid gap-8 md:grid-cols-[2fr,1fr] md:items-center">
               <div className="space-y-5">
@@ -211,7 +211,7 @@ export default function Home() {
               </div>
               <div className="flex flex-col gap-4 md:items-end">
                 <Link href="/wizard" className="w-full md:w-auto">
-                  <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90 shadow-xl font-bold w-full md:w-auto px-10">
+                  <Button variant="secondary" size="large" className="bg-secondary text-white hover:bg-secondary-dark shadow-xl font-bold w-full md:w-auto px-10">
                     Start free wizard
                   </Button>
                 </Link>
