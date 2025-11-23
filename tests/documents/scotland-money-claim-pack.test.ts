@@ -14,6 +14,27 @@ vi.mock('@/lib/documents/scotland-forms-filler', async () => {
   };
 });
 
+// Mock the document generator to avoid Puppeteer issues in vitest
+vi.mock('@/lib/documents/generator', () => ({
+  generateDocument: vi.fn(async ({ templatePath, data }) => {
+    // Return mock HTML and PDF based on template path
+    const templateName = templatePath.split('/').pop()?.replace('.hbs', '') || 'unknown';
+    const html = `<h1>${templateName}</h1><p>Mock document for ${data.landlord_full_name || 'test'}</p><p>Attempts to resolve: ${data.attempts_to_resolve || 'none'}</p>`;
+    return {
+      html,
+      pdf: Buffer.from('mock-pdf-content'),
+    };
+  }),
+}));
+
+// Mock the official forms loader
+vi.mock('@/lib/documents/official-forms-filler', () => ({
+  assertOfficialFormExists: vi.fn(async () => {
+    // Mock successful assertion
+    return true;
+  }),
+}));
+
 const sampleCase = {
   jurisdiction: 'scotland' as const,
   case_id: 'case-sc-money-1',
