@@ -22,18 +22,18 @@ export default function Home() {
   return (
     <div className="bg-gray-50">
       <TealHero
-        title="Legal-tech for confident landlords"
-        subtitle="Generate compliant notices, court-ready filings, and compliant HMO packs in minutes with a calm, modern workspace."
-        eyebrow="Landlord Heaven Platform"
+        title="Create, send, and manage legal documents faster than ever"
+        subtitle="Professional legal documents for UK landlords. Generate compliant notices, tenancy agreements, and court-ready filings in minutes."
+        eyebrow="Landlord Heaven"
         actions={
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center gap-4">
             <Link href="/wizard">
-              <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90 shadow-lg">
-                Start free analysis
+              <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90 shadow-xl font-bold px-10">
+                Start free wizard
               </Button>
             </Link>
             <Link href="/pricing">
-              <Button variant="outline" size="large" className="border-white text-white hover:bg-white/10">
+              <Button variant="outline" size="large" className="border-2 border-white text-white hover:bg-white/15 font-semibold px-10">
                 View pricing
               </Button>
             </Link>
@@ -41,23 +41,27 @@ export default function Home() {
         }
       />
 
-      <section className="bg-white py-12">
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 md:grid-cols-3">
-          {[
-            { title: "Trusted compliance", description: "Up-to-date workflows across England, Wales, Scotland, and Northern Ireland." },
-            { title: "Court-ready output", description: "Crystal-clear documents with tenant context, evidence, and route guidance." },
-            { title: "Instant download", description: "Professionally curated documents with unlimited regenerations before payment." },
-          ].map((item) => (
-            <Card key={item.title} padding="large" className="shadow-sm ring-1 ring-gray-200">
-              <CardHeader>
-                <Badge variant="primary">Featured</Badge>
-                <CardTitle>{item.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="text-gray-600">{item.description}</CardDescription>
-              </CardContent>
-            </Card>
-          ))}
+      <section className="bg-gray-50 py-16">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="text-center mb-12">
+            <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-3">Trusted by landlords</p>
+            <h2 className="text-3xl font-black text-gray-900 mb-4">Why choose Landlord Heaven?</h2>
+          </div>
+          <div className="grid max-w-6xl mx-auto grid-cols-1 gap-8 md:grid-cols-3">
+            {[
+              { title: "Trusted compliance", description: "Up-to-date workflows across England, Wales, Scotland, and Northern Ireland.", icon: "✓" },
+              { title: "Court-ready output", description: "Crystal-clear documents with tenant context, evidence, and route guidance.", icon: "⚖️" },
+              { title: "Instant download", description: "Professionally curated documents with unlimited regenerations before payment.", icon: "⚡" },
+            ].map((item) => (
+              <div key={item.title} className="bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-shadow">
+                <div className="flex items-center justify-center w-14 h-14 rounded-xl bg-primary/10 text-2xl mb-5">
+                  {item.icon}
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{item.description}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -193,24 +197,30 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="bg-gray-50 py-16 md:py-20">
-        <div className="mx-auto max-w-5xl rounded-3xl bg-gradient-to-br from-primary to-primary-dark px-8 py-12 text-white shadow-xl">
-          <div className="grid gap-6 md:grid-cols-[2fr,1fr] md:items-center">
-            <div className="space-y-4">
-              <h3 className="text-3xl font-extrabold">Ready to feel confident about every notice?</h3>
-              <p className="text-lg text-white/90 font-medium">Start the Eviction Route Checker and get a clean action plan in minutes.</p>
+      <section className="bg-white py-20 md:py-24">
+        <div className="mx-auto max-w-6xl px-6">
+          <div className="rounded-3xl bg-gradient-to-br from-primary via-primary-dark to-purple-900 px-10 py-16 md:py-20 text-white shadow-2xl relative overflow-hidden">
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-white/20 blur-3xl" />
+              <div className="absolute left-0 bottom-0 h-96 w-96 rounded-full bg-emerald-400/20 blur-3xl" />
             </div>
-            <div className="flex flex-wrap gap-3 md:justify-end">
-              <Link href="/wizard">
-                <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90 shadow-lg">
-                  Launch the wizard
-                </Button>
-              </Link>
-              <Link href="/help">
-                <Button variant="outline" size="large" className="border-white text-white hover:bg-white/10">
-                  Talk to us
-                </Button>
-              </Link>
+            <div className="relative grid gap-8 md:grid-cols-[2fr,1fr] md:items-center">
+              <div className="space-y-5">
+                <h3 className="text-4xl md:text-5xl font-black leading-tight">Ready to create professional legal documents?</h3>
+                <p className="text-xl text-white/95 font-normal leading-relaxed">Start the wizard and get court-ready documents in minutes. No legal experience required.</p>
+              </div>
+              <div className="flex flex-col gap-4 md:items-end">
+                <Link href="/wizard" className="w-full md:w-auto">
+                  <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90 shadow-xl font-bold w-full md:w-auto px-10">
+                    Start free wizard
+                  </Button>
+                </Link>
+                <Link href="/help" className="w-full md:w-auto">
+                  <Button variant="outline" size="large" className="border-2 border-white text-white hover:bg-white/15 font-semibold w-full md:w-auto px-10">
+                    Contact support
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

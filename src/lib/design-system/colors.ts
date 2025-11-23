@@ -8,17 +8,17 @@
  */
 
 export const colors = {
-  // Primary - Professional Teal (PandaDoc-inspired)
+  // Primary - Purple (PandaDoc style)
   primary: {
-    DEFAULT: "#16A085", // PandaDoc teal - Professional, trustworthy, vibrant
-    dark: "#0E8A6D", // Darker teal - Hover states
-    light: "#2ECC71", // Lighter teal - Accents
-    subtle: "#E8F8F5", // Very light teal - Backgrounds
-    50: "#E8F8F5",
-    100: "#D1F2EB",
-    200: "#A3E4D7",
-    500: "#16A085",
-    600: "#0E8A6D",
+    DEFAULT: "#7C3AED", // PandaDoc purple - Modern, professional
+    dark: "#6D28D9", // Darker purple - Hover states
+    light: "#A78BFA", // Lighter purple - Accents
+    subtle: "#F5F3FF", // Very light purple - Backgrounds
+    50: "#F5F3FF",
+    100: "#EDE9FE",
+    200: "#DDD6FE",
+    500: "#7C3AED",
+    600: "#6D28D9",
   },
 
   // Charcoal - Headlines & Important Text (PandaDoc-style)
@@ -27,17 +27,17 @@ export const colors = {
     light: "#4A5568", // Medium gray - Body text
   },
 
-  // Secondary - Purple/Lavender Accents (PandaDoc-style)
+  // Secondary - Emerald Green (PandaDoc accent)
   secondary: {
-    DEFAULT: "#8B7FD8", // Lavender - Accent color
-    dark: "#6B5FC0", // Darker purple - Hover
-    light: "#B8B1E8", // Light lavender - Backgrounds
-    subtle: "#EBE9F7", // Very light lavender - Section backgrounds
-    50: "#F5F4FB",
-    100: "#EBE9F7",
-    200: "#D7D3EF",
-    500: "#8B7FD8",
-    600: "#6B5FC0",
+    DEFAULT: "#10B981", // Emerald green - Accent color
+    dark: "#059669", // Darker green - Hover
+    light: "#6EE7B7", // Light green - Backgrounds
+    subtle: "#D1FAE5", // Very light green - Section backgrounds
+    50: "#ECFDF5",
+    100: "#D1FAE5",
+    200: "#A7F3D0",
+    500: "#10B981",
+    600: "#059669",
   },
 
   // Warning - Amber for Attention
@@ -49,8 +49,8 @@ export const colors = {
 
   // Status Colors
   success: {
-    DEFAULT: "#16A085", // Teal - Same as primary
-    bg: "#E8F8F5", // Light teal
+    DEFAULT: "#10B981", // Emerald green
+    bg: "#D1FAE5", // Light green
   },
   error: {
     DEFAULT: "#e84e4e", // PandaDoc red - Errors, destructive

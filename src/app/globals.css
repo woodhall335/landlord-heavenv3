@@ -10,23 +10,23 @@
   --background: #ffffff;
   --foreground: #1A1A1A; /* Deep charcoal for better readability */
 
-  /* Brand colors */
-  --primary: #16A085; /* PandaDoc teal - vibrant */
-  --primary-dark: #0E8A6D;
-  --secondary: #8B7FD8; /* Lavender accent */
-  --secondary-dark: #6B5FC0;
-  --secondary-light: #EBE9F7; /* Light lavender backgrounds */
+  /* Brand colors - PandaDoc purple */
+  --primary: #7C3AED; /* PandaDoc purple - modern, professional */
+  --primary-dark: #6D28D9;
+  --secondary: #10B981; /* Emerald green accent */
+  --secondary-dark: #059669;
+  --secondary-light: #D1FAE5; /* Light green backgrounds */
 }
 
 @theme inline {
   /* Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: #16A085;
-  --color-primary-dark: #0E8A6D;
-  --color-secondary: #8B7FD8;
-  --color-secondary-dark: #6B5FC0;
-  --color-secondary-light: #EBE9F7;
+  --color-primary: #7C3AED;
+  --color-primary-dark: #6D28D9;
+  --color-secondary: #10B981;
+  --color-secondary-dark: #059669;
+  --color-secondary-light: #D1FAE5;
   --color-white: #ffffff;
   --color-error: #e84e4e;
   --color-charcoal: #1A1A1A;
@@ -59,12 +59,12 @@ p {
 }
 
 a {
-  color: #16A085;
+  color: #7C3AED;
   transition: color 0.25s ease;
 }
 
 a:hover {
-  color: #0E8A6D;
+  color: #6D28D9;
 }
 
 /* Ensure all text has sufficient contrast */
