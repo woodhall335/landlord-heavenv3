@@ -5,7 +5,7 @@
  * Generates a watermarked preview of a document
  */
 
-import { createServerSupabaseClient, requireServerAuth, createAdminClient } from '@/lib/supabase/server';
+import { createServerSupabaseClient, getServerUser, createAdminClient } from '@/lib/supabase/server';
 import { htmlToPdf } from '@/lib/documents/generator';
 import { NextResponse } from 'next/server';
 
@@ -14,17 +14,24 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await requireServerAuth();
+    const user = await getServerUser();
     const { id } = await params;
     const supabase = await createServerSupabaseClient();
 
-    // Fetch document
-    const { data: document, error } = await supabase
+    // Fetch document - support both authenticated and anonymous users
+    const query = supabase
       .from('documents')
       .select('*')
-      .eq('id', id)
-      .eq('user_id', user.id)
-      .single();
+      .eq('id', id);
+
+    // Filter by user_id if authenticated, or allow anonymous documents if not
+    if (user) {
+      query.eq('user_id', user.id);
+    } else {
+      query.is('user_id', null);
+    }
+
+    const { data: document, error } = await query.single();
 
     if (error || !document) {
       console.error('Document not found:', error);
@@ -76,7 +83,8 @@ export async function GET(
 
       // Upload preview PDF to storage
       const adminClient = createAdminClient();
-      const fileName = `${user.id}/${document.case_id}/preview_${document.document_type}_${Date.now()}.pdf`;
+      const userFolder = user?.id || 'anonymous';
+      const fileName = `${userFolder}/${document.case_id}/preview_${document.document_type}_${Date.now()}.pdf`;
 
       const { data: uploadData, error: uploadError } = await adminClient.storage
         .from('documents')
@@ -123,13 +131,6 @@ export async function GET(
       );
     }
   } catch (error: any) {
-    if (error.message === 'Unauthorized - Please log in') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
     console.error('Preview document error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
