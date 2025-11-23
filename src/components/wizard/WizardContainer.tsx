@@ -20,6 +20,7 @@ import {
   FileUpload,
   ScaleSlider,
 } from './index';
+import { GuidanceTips } from './GuidanceTips';
 import type { WizardQuestion } from '@/lib/ai/fact-finder';
 
 // Helper function to get product display name
@@ -584,6 +585,13 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
               {/* Input Area */}
               {!isComplete && currentQuestion && (
                 <div className="border-t border-gray-200 pt-6">
+                  {/* Guidance Tips */}
+                  <GuidanceTips
+                    questionId={currentQuestion.question_id}
+                    jurisdiction={jurisdiction}
+                    caseType={caseType}
+                  />
+
                   {renderInput()}
 
                   {/* Submit Button (for non-auto-submit inputs) */}
