@@ -8,6 +8,16 @@ Full-stack AI legal automation platform for UK landlords built with Next.js 16, 
 **Current State**: Development setup complete and running on Replit. Requires API keys and database configuration.
 
 ## Recent Changes
+- **2025-11-23**: Updated theme to match PandaDoc design
+  - Changed primary color from teal (#16A085) to purple (#7C3AED)
+  - Changed secondary color to emerald green (#10B981)
+  - Updated all buttons to have more rounded corners (lg = 12px)
+  - Updated hero section with larger, bolder typography (7xl font size)
+  - Redesigned navigation with cleaner spacing and hover effects
+  - Updated footer with better spacing and modern styling
+  - Enhanced card designs with rounded corners and better shadows
+  - Updated CTA sections with gradient backgrounds matching PandaDoc style
+
 - **2025-11-22**: Initial Replit environment setup
   - Configured Next.js to run on port 5000 with host 0.0.0.0
   - Added experimental serverActions with allowedOrigins: ["*"] for Replit proxy

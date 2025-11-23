@@ -59,14 +59,15 @@ const config: Config = {
       minWidth: {
         touch: "44px",
       },
-      // Border radius (PandaDoc-inspired)
+      // Border radius (PandaDoc-inspired - more rounded)
       borderRadius: {
-        sm: "4px", // PandaDoc standard
-        DEFAULT: "4px",
-        md: "8px", // PandaDoc medium
-        lg: "8px",
-        xl: "16px", // PandaDoc pill-shaped
-        "2xl": "16px",
+        sm: "6px", // PandaDoc standard
+        DEFAULT: "8px",
+        md: "10px", // PandaDoc medium
+        lg: "12px",
+        xl: "20px", // PandaDoc pill-shaped
+        "2xl": "24px",
+        "3xl": "32px",
       },
       // Transition duration (PandaDoc-inspired)
       transitionDuration: {

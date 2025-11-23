@@ -30,28 +30,28 @@ export function NavBar({ user }: NavBarProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-lg font-extrabold text-white">
+    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
+        <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-dark text-lg font-extrabold text-white shadow-md">
             LH
           </div>
           <div className="hidden md:flex flex-col leading-tight">
-            <span className="text-lg font-extrabold text-charcoal">Landlord Heaven</span>
-            <span className="text-xs text-gray-500">Legal-tech for landlords</span>
+            <span className="text-xl font-black text-charcoal tracking-tight">Landlord Heaven</span>
+            <span className="text-xs font-medium text-gray-500">Legal documents for landlords</span>
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav className="hidden items-center gap-9 lg:flex">
           {primaryLinks.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={clsx(
-                "text-sm font-semibold transition-colors",
+                "text-sm font-semibold transition-colors relative py-2",
                 pathname === item.href
-                  ? "text-primary"
-                  : "text-charcoal hover:text-primary"
+                  ? "text-primary after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary"
+                  : "text-gray-700 hover:text-primary"
               )}
             >
               {item.label}
@@ -76,8 +76,8 @@ export function NavBar({ user }: NavBarProps) {
                 Log in
               </Link>
               <Link href="/auth/signup">
-                <Button variant="primary" size="medium" className="px-6">
-                  Get started
+                <Button variant="primary" size="medium" className="px-7 shadow-md hover:shadow-lg">
+                  Get started free
                 </Button>
               </Link>
             </>
