@@ -6,7 +6,7 @@
  */
 
 import { createServerSupabaseClient, getServerUser, createAdminClient } from '@/lib/supabase/server';
-import { htmlToPdf } from '@/lib/documents/generator';
+import { htmlToPdf, preparePreviewHtml } from '@/lib/documents/generator';
 import { NextResponse } from 'next/server';
 
 export async function GET(
@@ -76,8 +76,11 @@ export async function GET(
     }
 
     try {
+      // Prepare HTML for preview (limit to 2 pages, add headers/footers)
+      const previewHtml = preparePreviewHtml(document.html_content, 2);
+
       // Generate watermarked PDF
-      const previewPdf = await htmlToPdf(document.html_content, {
+      const previewPdf = await htmlToPdf(previewHtml, {
         watermark: 'PREVIEW - NOT FOR COURT USE',
       });
 

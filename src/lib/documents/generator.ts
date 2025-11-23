@@ -158,6 +158,78 @@ export function compileTemplate(templateContent: string, data: Record<string, an
 // ============================================================================
 
 /**
+ * Prepare HTML for preview - limits content and adds preview notices
+ */
+export function preparePreviewHtml(html: string, maxPages: number = 2): string {
+  // Calculate approximate character limit for 2 pages
+  // A4 page is roughly 3000-3500 characters with normal formatting
+  const charsPerPage = 3500;
+  const maxChars = maxPages * charsPerPage;
+
+  // Truncate HTML intelligently (try to break at paragraph or section end)
+  let truncatedHtml = html;
+  if (html.length > maxChars) {
+    truncatedHtml = html.substring(0, maxChars);
+
+    // Try to end at a closing tag
+    const lastClosingTag = Math.max(
+      truncatedHtml.lastIndexOf('</p>'),
+      truncatedHtml.lastIndexOf('</div>'),
+      truncatedHtml.lastIndexOf('</section>'),
+      truncatedHtml.lastIndexOf('</h1>'),
+      truncatedHtml.lastIndexOf('</h2>'),
+      truncatedHtml.lastIndexOf('</h3>')
+    );
+
+    if (lastClosingTag > maxChars * 0.8) {
+      truncatedHtml = truncatedHtml.substring(0, lastClosingTag + 4); // Include closing tag
+    }
+  }
+
+  // Add preview header
+  const previewHeader = `
+    <div style="background-color: #ffebee; border: 3px solid #c62828; padding: 20px; margin-bottom: 30px; text-align: center;">
+      <h2 style="color: #c62828; margin: 0 0 10px 0; font-size: 24pt;">
+        🔒 PREVIEW ONLY - LIMITED VIEW
+      </h2>
+      <p style="margin: 0; font-size: 12pt; color: #333;">
+        This preview shows only the first ${maxPages} page${maxPages > 1 ? 's' : ''} of your complete document.<br/>
+        <strong>Purchase to unlock the full document plus bonus materials.</strong>
+      </p>
+    </div>
+  `;
+
+  // Add preview footer with bonus documents info
+  const previewFooter = `
+    <div class="page-break"></div>
+    <div style="background-color: #e3f2fd; border: 2px solid #1976d2; padding: 25px; margin-top: 30px;">
+      <h2 style="color: #1976d2; margin: 0 0 15px 0; font-size: 18pt; text-align: center;">
+        ✨ What You Get With Full Purchase
+      </h2>
+      <div style="font-size: 11pt; line-height: 1.8;">
+        <p style="margin: 10px 0;"><strong style="color: #1976d2;">✓</strong> Complete ${html.length > maxChars ? 'multi-page' : ''} tenancy agreement (not just ${maxPages} pages)</p>
+        <p style="margin: 10px 0;"><strong style="color: #1976d2;">✓</strong> Government model tenancy clauses (official template)</p>
+        <p style="margin: 10px 0;"><strong style="color: #1976d2;">✓</strong> Deposit protection certificate template</p>
+        <p style="margin: 10px 0;"><strong style="color: #1976d2;">✓</strong> Professional inventory template</p>
+        <p style="margin: 10px 0;"><strong style="color: #1976d2;">✓</strong> How-to-Rent booklet (government required)</p>
+        <p style="margin: 10px 0;"><strong style="color: #1976d2;">✓</strong> Unlimited revisions for 12 months</p>
+        <p style="margin: 10px 0;"><strong style="color: #1976d2;">✓</strong> Expert support from qualified legal professionals</p>
+      </div>
+      <div style="background-color: #fff; padding: 15px; margin-top: 20px; text-align: center; border-radius: 5px;">
+        <p style="margin: 0; font-size: 13pt; color: #c62828; font-weight: bold;">
+          🔒 This is a PREVIEW ONLY - Not valid for legal use
+        </p>
+        <p style="margin: 10px 0 0 0; font-size: 10pt; color: #666;">
+          Purchase required to receive court-ready documents
+        </p>
+      </div>
+    </div>
+  `;
+
+  return previewHeader + truncatedHtml + previewFooter;
+}
+
+/**
  * Convert HTML to PDF using Puppeteer
  */
 export async function htmlToPdf(
@@ -276,21 +348,43 @@ ${html}
     // Add watermark if specified
     if (options?.watermark) {
       await page.evaluate((watermarkText) => {
-        const watermark = document.createElement('div');
-        watermark.style.cssText = `
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%) rotate(-45deg);
-          font-size: 72px;
-          font-weight: bold;
-          color: rgba(0, 0, 0, 0.1);
-          pointer-events: none;
-          z-index: 9999;
-          white-space: nowrap;
+        // Create watermark style that appears on EVERY page
+        const style = document.createElement('style');
+        style.textContent = `
+          @media print {
+            body::before {
+              content: "${watermarkText}";
+              position: fixed;
+              top: 50%;
+              left: 50%;
+              transform: translate(-50%, -50%) rotate(-45deg);
+              font-size: 80px;
+              font-weight: bold;
+              color: rgba(255, 0, 0, 0.15);
+              pointer-events: none;
+              z-index: 9999;
+              white-space: nowrap;
+              text-transform: uppercase;
+              letter-spacing: 5px;
+            }
+          }
+          body::before {
+            content: "${watermarkText}";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 80px;
+            font-weight: bold;
+            color: rgba(255, 0, 0, 0.15);
+            pointer-events: none;
+            z-index: 9999;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+          }
         `;
-        watermark.textContent = watermarkText;
-        document.body.appendChild(watermark);
+        document.head.appendChild(style);
       }, options.watermark);
     }
 
