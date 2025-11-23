@@ -92,10 +92,12 @@ export default function WizardPage() {
   const isJurisdictionSupported = (jur: JurisdictionOption) => {
     if (!selectedDocument) return true;
 
-    if (selectedDocument.type === 'money_claim' && jur.value !== 'england-wales') {
+    // Money claims: Available in England & Wales and Scotland, NOT in Northern Ireland
+    if (selectedDocument.type === 'money_claim' && jur.value === 'northern-ireland') {
       return false;
     }
 
+    // Evictions: NOT available in Northern Ireland
     if (selectedDocument.type !== 'tenancy_agreement' && jur.value === 'northern-ireland') {
       return false;
     }
@@ -106,7 +108,7 @@ export default function WizardPage() {
   const selectedComboUnsupported =
     !!selectedDocument &&
     !!selectedJurisdiction &&
-    ((selectedDocument.type === 'money_claim' && selectedJurisdiction.value !== 'england-wales') ||
+    ((selectedDocument.type === 'money_claim' && selectedJurisdiction.value === 'northern-ireland') ||
       (selectedDocument.type !== 'tenancy_agreement' && selectedJurisdiction.value === 'northern-ireland'));
 
   const getUnsupportedCopy = (jur: JurisdictionOption) => {
