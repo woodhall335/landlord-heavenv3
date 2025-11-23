@@ -32,7 +32,7 @@ export default function MoneyClaimPage() {
             >
               Start Your Claim Now →
             </Link>
-            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • No subscription</p>
+            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • England &amp; Wales only (Scotland coming soon)</p>
           </div>
         </Container>
       </section>
@@ -61,7 +61,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Money Claim Online (MCOL) Form</strong> - Pre-filled claim for UK courts
+                      <strong>Official Form N1 (Dec 2024)</strong> - Pre-filled County Court claim form (PDF)
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -73,7 +73,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Particulars of Claim</strong> - Detailed breakdown of your claim
+                      <strong>Particulars of Claim</strong> - Staple-ready particulars with interest wording
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -85,7 +85,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Witness Statement</strong> - Supporting evidence for your claim
+                      <strong>Interest Calculation</strong> - Section 69 CCA daily rate and running total
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -97,7 +97,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Court Fee Calculator</strong> - Know exactly what you'll pay
+                      <strong>Evidence Index</strong> - Checklist for attachments behind your N1
                     </span>
                   </li>
                 </ul>

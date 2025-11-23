@@ -72,7 +72,7 @@ interface CollectedFact {
 
 interface WizardContainerProps {
   caseType: 'eviction' | 'money_claim' | 'tenancy_agreement';
-  jurisdiction: 'england-wales' | 'scotland';
+  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
   product?: string; // Specific product: notice_only, complete_pack, money_claim, ast_standard, ast_premium
   editCaseId?: string; // Optional: Case ID to edit existing answers
   onComplete: (caseId: string, analysis: any) => void;

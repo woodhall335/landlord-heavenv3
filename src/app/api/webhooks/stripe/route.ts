@@ -162,6 +162,65 @@ export async function POST(request: Request) {
 
                   console.log(`[Fulfillment] Eviction pack fulfilled: ${orderId}`);
 
+                } else if (productType === 'money_claim') {
+                  const { generateMoneyClaimPack } = await import('@/lib/documents/money-claim-pack-generator');
+
+                  console.log(`[Fulfillment] Generating money claim pack for case ${caseId}...`);
+                  const pack = await generateMoneyClaimPack({
+                    ...facts,
+                    jurisdiction: caseData.jurisdiction,
+                    case_id: caseId,
+                  });
+
+                  for (const doc of pack.documents) {
+                    if (!doc.pdf) continue;
+
+                    const fileName = `${userId}/${caseId}/${doc.file_name}`;
+                    const { error: uploadError } = await supabase.storage
+                      .from('documents')
+                      .upload(fileName, doc.pdf, {
+                        contentType: 'application/pdf',
+                        upsert: false,
+                      });
+
+                    if (uploadError) {
+                      console.error(`[Fulfillment] Failed to upload ${doc.title}:`, uploadError);
+                      continue;
+                    }
+
+                    const { data: publicUrlData } = supabase.storage
+                      .from('documents')
+                      .getPublicUrl(fileName);
+
+                    await supabase.from('documents').insert({
+                      user_id: userId,
+                      case_id: caseId,
+                      document_type: doc.category,
+                      document_title: doc.title,
+                      jurisdiction: caseData.jurisdiction,
+                      html_content: doc.html || null,
+                      pdf_url: publicUrlData.publicUrl,
+                      is_preview: false,
+                      qa_passed: true,
+                      metadata: { description: doc.description, pack_type: productType },
+                    });
+                  }
+
+                  await supabase
+                    .from('orders')
+                    .update({
+                      fulfillment_status: 'completed',
+                      fulfilled_at: new Date().toISOString(),
+                      metadata: {
+                        total_documents: pack.documents.length,
+                        pack_type: pack.pack_type,
+                        jurisdiction: pack.jurisdiction,
+                      },
+                    })
+                    .eq('id', orderId);
+
+                  console.log(`[Fulfillment] Money claim pack fulfilled: ${orderId}`);
+
                 } else {
                   // Handle AST and other single document types
                   const { generateSection8Notice } = await import('@/lib/documents/section8-generator');

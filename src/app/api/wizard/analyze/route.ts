@@ -67,6 +67,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (caseData.case_type === 'money_claim' && caseData.jurisdiction !== 'england-wales') {
+      return NextResponse.json(
+        { error: 'Money claim analysis is only available for England & Wales. Scotland support is planned next.' },
+        { status: 400 }
+      );
+    }
+
     // Merge collected_facts if provided
     const mergedFacts = collected_facts
       ? { ...(caseData.collected_facts as object || {}), ...collected_facts }

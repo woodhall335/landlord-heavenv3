@@ -20,6 +20,24 @@ import { PDFDocument, PDFForm, PDFTextField, PDFCheckBox, rgb, StandardFonts } f
 import fs from 'fs/promises';
 import path from 'path';
 
+const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms');
+
+/**
+ * Guard to ensure the referenced official PDF exists before attempting to load it.
+ */
+export async function assertOfficialFormExists(formName: string): Promise<string> {
+  const formPath = path.join(OFFICIAL_FORMS_ROOT, formName);
+
+  try {
+    await fs.access(formPath);
+    return formPath;
+  } catch (error) {
+    throw new Error(
+      `Official form "${formName}" is missing. Add the PDF under public/official-forms (jurisdiction subfolder allowed) or update the manifest.`
+    );
+  }
+}
+
 export interface CaseData {
   // Landlord details
   landlord_full_name: string;
@@ -85,14 +103,16 @@ export interface CaseData {
  * Load an official PDF form
  */
 async function loadOfficialForm(formName: string): Promise<PDFDocument> {
-  const formPath = path.join(process.cwd(), 'public', 'official-forms', formName);
+  const formPath = await assertOfficialFormExists(formName);
 
   try {
     const pdfBytes = await fs.readFile(formPath);
     const pdfDoc = await PDFDocument.load(pdfBytes);
     return pdfDoc;
   } catch (error) {
-    throw new Error(`Failed to load official form "${formName}". Make sure the PDF exists in /public/official-forms/. Error: ${error}`);
+    throw new Error(
+      `Failed to load official form "${formName}". Make sure the PDF exists in /public/official-forms/. Error: ${error}`
+    );
   }
 }
 

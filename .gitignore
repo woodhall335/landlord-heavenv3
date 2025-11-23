@@ -48,6 +48,8 @@ next-env.d.ts
 public/official-forms/**/*.pdf
 !public/official-forms/**/forms-manifest.json
 !public/official-forms/README.md
+!public/official-forms/scotland/notice_to_leave.pdf
+!public/official-forms/scotland/form_e_eviction.pdf
 
 # Sample/test documents (not to be committed)
 sample-*.pdf

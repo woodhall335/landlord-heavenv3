@@ -44,6 +44,15 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    if (case_type === 'money_claim' && jurisdiction !== 'england-wales') {
+      return NextResponse.json(
+        {
+          error: 'Money claim workflows are only available in England & Wales. Scotland version is coming soon.',
+        },
+        { status: 400 }
+      );
+    }
     const supabase = await createServerSupabaseClient();
 
     // Create new case (user_id can be null for anonymous users)
