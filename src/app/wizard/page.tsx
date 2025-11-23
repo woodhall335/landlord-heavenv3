@@ -89,16 +89,39 @@ export default function WizardPage() {
   const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionOption | null>(null);
   const [step, setStep] = useState<1 | 2>(preselectedDocument ? 2 : 1);
 
-  const isJurisdictionSupported = (jur: JurisdictionOption) =>
-    !(
-      selectedDocument &&
-      selectedDocument.type !== 'tenancy_agreement' &&
-      jur.value === 'northern-ireland'
-    );
+  const isJurisdictionSupported = (jur: JurisdictionOption) => {
+    if (!selectedDocument) return true;
+
+    if (selectedDocument.type === 'money_claim' && jur.value !== 'england-wales') {
+      return false;
+    }
+
+    if (selectedDocument.type !== 'tenancy_agreement' && jur.value === 'northern-ireland') {
+      return false;
+    }
+
+    return true;
+  };
 
   const selectedComboUnsupported =
-    selectedJurisdiction?.value === 'northern-ireland' &&
-    selectedDocument?.type !== 'tenancy_agreement';
+    !!selectedDocument &&
+    !!selectedJurisdiction &&
+    ((selectedDocument.type === 'money_claim' && selectedJurisdiction.value !== 'england-wales') ||
+      (selectedDocument.type !== 'tenancy_agreement' && selectedJurisdiction.value === 'northern-ireland'));
+
+  const getUnsupportedCopy = (jur: JurisdictionOption) => {
+    if (selectedDocument?.type === 'money_claim' && jur.value !== 'england-wales') {
+      return 'Money claims are available only in England & Wales. Scotland version is coming soon.';
+    }
+
+    if (selectedDocument && selectedDocument.type !== 'tenancy_agreement' && jur.value === 'northern-ireland') {
+      return 'Eviction and money claim flows are unavailable here. Tenancy agreements only.';
+    }
+
+    return '';
+  };
+
+  const selectedUnsupportedCopy = selectedJurisdiction ? getUnsupportedCopy(selectedJurisdiction) : '';
 
   const handleDocumentSelect = (doc: DocumentOption) => {
     setSelectedDocument(doc);
@@ -255,9 +278,7 @@ export default function WizardPage() {
                       {jur.label}
                     </h3>
                     {!isJurisdictionSupported(jur) && (
-                      <p className="text-sm text-red-600 mt-1">
-                        Eviction and money claim flows are unavailable here. Tenancy agreements only.
-                      </p>
+                      <p className="text-sm text-red-600 mt-1">{getUnsupportedCopy(jur)}</p>
                     )}
                   </div>
                   {selectedJurisdiction?.value === jur.value && (
@@ -284,7 +305,7 @@ export default function WizardPage() {
                 </Button>
                 {selectedComboUnsupported && (
                   <p className="text-sm text-red-600 mt-3">
-                    Eviction and money claim workflows are not available in Northern Ireland. Choose tenancy agreements instead.
+                    {selectedUnsupportedCopy}
                   </p>
                 )}
                 <p className="text-sm text-gray-600 mt-3">

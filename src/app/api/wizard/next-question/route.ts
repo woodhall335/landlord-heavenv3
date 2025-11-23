@@ -51,6 +51,13 @@ export async function POST(request: Request) {
       );
     }
 
+    if (case_type === 'money_claim' && jurisdiction !== 'england-wales') {
+      return NextResponse.json(
+        { error: 'Money claim flows are limited to England & Wales. Scotland is coming next.' },
+        { status: 400 }
+      );
+    }
+
     if (!collected_facts || typeof collected_facts !== 'object') {
       return NextResponse.json(
         { error: 'Invalid collected_facts' },

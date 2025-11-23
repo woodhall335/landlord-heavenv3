@@ -36,11 +36,11 @@ describe('Wizard selection UI Northern Ireland gating', () => {
     fireEvent.click(screen.getByRole('button', { name: /Money Claim/i }));
 
     const niOption = screen.getByRole('button', { name: /Northern Ireland/i });
+    const scotlandOption = screen.getByRole('button', { name: /Scotland/i });
     expect((niOption as HTMLButtonElement).disabled).toBe(true);
+    expect((scotlandOption as HTMLButtonElement).disabled).toBe(true);
     expect(
-      screen.getByText(
-        'Eviction and money claim flows are unavailable here. Tenancy agreements only.'
-      )
+      screen.getByText('Money claims are available only in England & Wales. Scotland version is coming soon.')
     ).toBeTruthy();
   });
 
