@@ -1,0 +1,45 @@
+{
+  "jurisdiction": "england-wales",
+  "last_updated": "2024-11-23",
+  "forms": {
+    "n5-eng.pdf": {
+      "title": "Form N5 - Claim for Possession",
+      "version": "2024.01",
+      "effective_date": "2024-01-15",
+      "source_url": "https://assets.publishing.service.gov.uk/media/601bc1858fa8f53fc3d799d9/n5-eng.pdf",
+      "last_verified": "2024-11-23",
+      "notes": "Current as of January 2024. Use for both Section 8 and Section 21 claims.",
+      "status": "TO_DOWNLOAD"
+    },
+    "n5b-eng.pdf": {
+      "title": "Form N5B - Claim for Possession (Accelerated Procedure)",
+      "version": "2024.01",
+      "effective_date": "2024-01-15",
+      "source_url": "https://assets.publishing.service.gov.uk/media/5fb39bf98fa8f55de86fb3a3/n5b-eng.pdf",
+      "last_verified": "2024-11-23",
+      "notes": "Section 21 ONLY - for no-fault evictions via accelerated procedure. Cannot be used with Section 8.",
+      "status": "TO_DOWNLOAD"
+    },
+    "n119-eng.pdf": {
+      "title": "Form N119 - Particulars of Claim for Possession",
+      "version": "2024.01",
+      "effective_date": "2024-01-15",
+      "source_url": "https://assets.publishing.service.gov.uk/media/601bc1f8e90e071292663ea8/n119-eng.pdf",
+      "last_verified": "2024-11-23",
+      "notes": "Detailed particulars supporting possession claim. Used with N5.",
+      "status": "TO_DOWNLOAD"
+    },
+    "form_6a.pdf": {
+      "title": "Form 6A - Section 21 Notice",
+      "version": "2019.10",
+      "effective_date": "2019-10-01",
+      "source_url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/468937/form_6a.pdf",
+      "last_verified": "2024-11-23",
+      "notes": "Prescribed form for Section 21 notices under Assured Shorthold Tenancy Housing and Planning Act 1988 (as amended by Deregulation Act 2015).",
+      "status": "TO_DOWNLOAD"
+    }
+  },
+  "copyright": "Crown Copyright. Used under Open Government Licence v3.0",
+  "license_url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+  "official_source": "https://www.gov.uk/government/collections/form-finder"
+}

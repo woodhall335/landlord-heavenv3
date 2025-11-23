@@ -1,0 +1,33 @@
+{
+  "jurisdiction": "scotland",
+  "last_updated": "2024-11-23",
+  "forms": {
+    "notice_to_leave.pdf": {
+      "title": "Notice to Leave",
+      "version": "2024.02",
+      "effective_date": "2024-02-01",
+      "source_url": "https://www.mygov.scot/downloads/housing-forms/private-residential-tenancy-notice-to-leave/",
+      "last_verified": "2024-11-23",
+      "notes": "Prescribed form under Private Housing (Tenancies) (Scotland) Act 2016. Must give minimum 84 days notice (12 weeks). Cannot be served within first 6 months of tenancy.",
+      "status": "TO_DOWNLOAD"
+    },
+    "form_e_eviction.pdf": {
+      "title": "Form E - Application for Eviction Order",
+      "version": "2024.03",
+      "effective_date": "2024-03-01",
+      "source_url": "https://www.housingandpropertychamber.scot/apply-tribunal/eviction-order",
+      "last_verified": "2024-11-23",
+      "notes": "First-tier Tribunal for Scotland (Housing and Property Chamber) application form. Fee: £100. Must attach Notice to Leave and proof of service.",
+      "status": "TO_DOWNLOAD"
+    }
+  },
+  "copyright": "Crown Copyright. Scottish Government. Used under Open Government Licence v3.0",
+  "license_url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+  "official_source": "https://www.housingandpropertychamber.scot/",
+  "tribunal_info": {
+    "name": "First-tier Tribunal for Scotland (Housing and Property Chamber)",
+    "website": "https://www.housingandpropertychamber.scot/",
+    "application_fee": "£100",
+    "payment_methods": ["Card", "Cheque", "Postal Order"]
+  }
+}

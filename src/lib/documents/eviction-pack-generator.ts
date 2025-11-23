@@ -362,6 +362,15 @@ async function generateTimelineExpectations(
 }
 
 /**
+ * Calculate leaving date based on notice period
+ */
+function calculateLeavingDate(evictionCase: EvictionCase, noticePeriodDays: number): string {
+  const today = new Date();
+  const leavingDate = new Date(today.getTime() + noticePeriodDays * 24 * 60 * 60 * 1000);
+  return leavingDate.toISOString().split('T')[0];
+}
+
+/**
  * Calculate estimated timeline based on jurisdiction and grounds
  */
 function calculateEstimatedTimeline(evictionCase: EvictionCase, groundsData: any): any {
@@ -527,37 +536,56 @@ async function generateScotlandEvictionPack(
 ): Promise<EvictionPackDocument[]> {
   const documents: EvictionPackDocument[] = [];
 
-  // 1. Notice to Leave
-  const noticeToLeaveDoc = await generateDocument({
-    templatePath: 'uk/scotland/templates/notice_to_leave.hbs',
-    data: evictionCase,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  const { fillScotlandOfficialForm } = await import('./scotland-forms-filler');
+
+  // Prepare Scotland case data
+  const scotlandData = {
+    landlord_full_name: evictionCase.landlord_full_name,
+    landlord_2_name: evictionCase.landlord_2_name,
+    landlord_address: evictionCase.landlord_address,
+    landlord_postcode: evictionCase.landlord_address_postcode,
+    landlord_phone: evictionCase.landlord_phone,
+    landlord_email: evictionCase.landlord_email,
+    landlord_registration_number: evictionCase.landlord_registration_number,
+    tenant_full_name: evictionCase.tenant_full_name,
+    tenant_2_name: evictionCase.tenant_2_name,
+    property_address: evictionCase.property_address,
+    property_postcode: evictionCase.property_address_postcode,
+    tenancy_start_date: evictionCase.tenancy_start_date,
+    rent_amount: evictionCase.rent_amount,
+    rent_frequency: evictionCase.rent_frequency,
+    notice_date: new Date().toISOString().split('T')[0],
+    leaving_date: calculateLeavingDate(evictionCase, 84), // 84 days notice in Scotland
+    grounds: evictionCase.grounds.map(g => ({
+      code: g.code,
+      title: g.title,
+      particulars: g.particulars,
+      evidence: g.evidence,
+    })),
+    deposit_amount: evictionCase.deposit_amount,
+    deposit_scheme: evictionCase.deposit_scheme_name,
+    deposit_reference: evictionCase.deposit_reference,
+  };
+
+  // 1. Notice to Leave (Official Form)
+  const noticeToLeavePdf = await fillScotlandOfficialForm('notice_to_leave', scotlandData);
 
   documents.push({
     title: 'Notice to Leave',
     description: 'Official notice under Private Housing (Tenancies) (Scotland) Act 2016',
     category: 'notice',
-    html: noticeToLeaveDoc.html,
-    pdf: noticeToLeaveDoc.pdf,
+    pdf: Buffer.from(noticeToLeavePdf),
     file_name: 'notice_to_leave.pdf',
   });
 
-  // 2. Tribunal Application Form E
-  const tribunalAppDoc = await generateDocument({
-    templatePath: 'uk/scotland/templates/tribunal_application.hbs',
-    data: evictionCase,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  // 2. Tribunal Application Form E (Official Form)
+  const formEPdf = await fillScotlandOfficialForm('form_e', scotlandData);
 
   documents.push({
     title: 'Form E - Tribunal Application for Eviction Order',
     description: 'Application to First-tier Tribunal for Scotland (Housing and Property Chamber)',
     category: 'court_form',
-    html: tribunalAppDoc.html,
-    pdf: tribunalAppDoc.pdf,
+    pdf: Buffer.from(formEPdf),
     file_name: 'tribunal_form_e_application.pdf',
   });
 
@@ -573,54 +601,89 @@ async function generateNorthernIrelandEvictionPack(
 ): Promise<EvictionPackDocument[]> {
   const documents: EvictionPackDocument[] = [];
 
-  // 1. Notice to Quit
-  const noticeToQuitDoc = await generateDocument({
-    templatePath: 'uk/northern-ireland/templates/notice_to_quit.hbs',
-    data: evictionCase,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  const { fillNorthernIrelandOfficialForm } = await import('./northern-ireland-forms-filler');
+
+  // Determine notice periods
+  const hasGroundRequiring14Days = evictionCase.grounds.some(g =>
+    g.code === 'Ground 8' || g.code === 'Ground 14' || g.code === 'Ground 17'
+  );
+  const noticeToQuitPeriod = 28; // 4 weeks minimum
+  const noticeOfIntentionPeriod = hasGroundRequiring14Days ? 14 : 28;
+
+  // Calculate dates
+  const today = new Date();
+  const noticeToQuitDate = today.toISOString().split('T')[0];
+  const noticeToQuitExpiry = new Date(today.getTime() + noticeToQuitPeriod * 24 * 60 * 60 * 1000);
+  const noticeOfIntentionDate = noticeToQuitExpiry.toISOString().split('T')[0];
+
+  // Prepare Northern Ireland case data
+  const niData = {
+    landlord_full_name: evictionCase.landlord_full_name,
+    landlord_2_name: evictionCase.landlord_2_name,
+    landlord_address: evictionCase.landlord_address,
+    landlord_postcode: evictionCase.landlord_address_postcode,
+    landlord_phone: evictionCase.landlord_phone,
+    landlord_email: evictionCase.landlord_email,
+    tenant_full_name: evictionCase.tenant_full_name,
+    tenant_2_name: evictionCase.tenant_2_name,
+    property_address: evictionCase.property_address,
+    property_postcode: evictionCase.property_address_postcode,
+    tenancy_start_date: evictionCase.tenancy_start_date,
+    tenancy_type: evictionCase.rent_frequency === 'weekly' ? 'weekly' as const : 'monthly' as const,
+    rent_amount: evictionCase.rent_amount,
+    rent_frequency: evictionCase.rent_frequency,
+    payment_day: evictionCase.payment_day,
+    notice_to_quit_date: noticeToQuitDate,
+    notice_to_quit_expiry_date: noticeToQuitExpiry.toISOString().split('T')[0],
+    notice_of_intention_date: noticeOfIntentionDate,
+    grounds: evictionCase.grounds.map(g => ({
+      code: g.code,
+      type: (g.mandatory ? 'mandatory' : 'discretionary') as 'mandatory' | 'discretionary',
+      title: g.title,
+      particulars: g.particulars,
+      evidence: g.evidence,
+    })),
+    current_arrears: evictionCase.current_arrears,
+    arrears_breakdown: evictionCase.arrears_breakdown,
+    deposit_amount: evictionCase.deposit_amount,
+    deposit_scheme: 'TDS NI' as const,
+    deposit_reference: evictionCase.deposit_reference,
+    court_name: evictionCase.court_name,
+    court_address: evictionCase.court_address,
+    signatory_name: evictionCase.landlord_full_name,
+    signature_date: today.toISOString().split('T')[0],
+  };
+
+  // 1. Notice to Quit (Official Form)
+  const noticeToQuitPdf = await fillNorthernIrelandOfficialForm('notice_to_quit', niData);
 
   documents.push({
     title: 'Notice to Quit',
     description: 'Formal notice ending the tenancy under common law',
     category: 'notice',
-    html: noticeToQuitDoc.html,
-    pdf: noticeToQuitDoc.pdf,
+    pdf: Buffer.from(noticeToQuitPdf),
     file_name: 'notice_to_quit.pdf',
   });
 
-  // 2. Notice of Intention to Seek Possession
-  const noticeOfIntentionDoc = await generateDocument({
-    templatePath: 'uk/northern-ireland/templates/notice_of_intention.hbs',
-    data: evictionCase,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  // 2. Notice of Intention to Seek Possession (Official Form)
+  const noticeOfIntentionPdf = await fillNorthernIrelandOfficialForm('notice_of_intention', niData);
 
   documents.push({
     title: 'Notice of Intention to Seek Possession',
     description: 'Statutory notice specifying grounds under PT (NI) Order 2006',
     category: 'notice',
-    html: noticeOfIntentionDoc.html,
-    pdf: noticeOfIntentionDoc.pdf,
+    pdf: Buffer.from(noticeOfIntentionPdf),
     file_name: 'notice_of_intention.pdf',
   });
 
-  // 3. County Court Claim for Possession
-  const courtClaimDoc = await generateDocument({
-    templatePath: 'uk/northern-ireland/templates/court_claim_possession.hbs',
-    data: evictionCase,
-    isPreview: false,
-    outputFormat: 'both',
-  });
+  // 3. County Court Claim for Possession (Official Form)
+  const courtClaimPdf = await fillNorthernIrelandOfficialForm('claim_for_possession', niData);
 
   documents.push({
     title: 'County Court Claim for Possession',
     description: 'Formal claim to County Court for possession order',
     category: 'court_form',
-    html: courtClaimDoc.html,
-    pdf: courtClaimDoc.pdf,
+    pdf: Buffer.from(courtClaimPdf),
     file_name: 'court_claim_possession.pdf',
   });
 

@@ -1,0 +1,50 @@
+{
+  "jurisdiction": "northern-ireland",
+  "last_updated": "2024-11-23",
+  "forms": {
+    "notice_to_quit.pdf": {
+      "title": "Notice to Quit",
+      "version": "2024.01",
+      "effective_date": "2024-01-01",
+      "source_url": "https://www.nidirect.gov.uk/articles/ending-private-tenancy",
+      "last_verified": "2024-11-23",
+      "notes": "Common law notice to terminate tenancy. Must give minimum 4 weeks (28 days) notice for weekly/monthly tenancies. Must end on first or last day of tenancy period.",
+      "status": "TO_DOWNLOAD"
+    },
+    "notice_of_intention.pdf": {
+      "title": "Notice of Intention to Seek Possession",
+      "version": "2024.01",
+      "effective_date": "2024-01-01",
+      "source_url": "https://www.nidirect.gov.uk/articles/eviction-private-tenancies",
+      "last_verified": "2024-11-23",
+      "notes": "Statutory notice under Private Tenancies (NI) Order 2006. Must specify grounds. Minimum 28 days notice (14 days for Grounds 8, 14, 17). Served after or with Notice to Quit.",
+      "status": "TO_DOWNLOAD"
+    },
+    "claim_for_possession.pdf": {
+      "title": "County Court Claim for Possession",
+      "version": "2024.01",
+      "effective_date": "2024-01-01",
+      "source_url": "https://www.justice-ni.gov.uk/topics/courts-and-tribunals/court-forms",
+      "last_verified": "2024-11-23",
+      "notes": "Official County Court claim form for possession proceedings in Northern Ireland. Must attach Notice to Quit, Notice of Intention, and all supporting evidence.",
+      "status": "TO_DOWNLOAD"
+    }
+  },
+  "copyright": "Crown Copyright. Northern Ireland Courts and Tribunals Service. Used under Open Government Licence v3.0",
+  "license_url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+  "official_source": "https://www.justice-ni.gov.uk/topics/courts-and-tribunals/court-forms",
+  "court_info": {
+    "name": "County Court (Northern Ireland)",
+    "website": "https://www.justice-ni.gov.uk/topics/courts-and-tribunals/county-courts",
+    "court_fees": "Variable - see NI Courts website",
+    "locations": [
+      "Belfast",
+      "Londonderry",
+      "Ards",
+      "Armagh",
+      "Craigavon",
+      "Fermanagh & Tyrone",
+      "Antrim"
+    ]
+  }
+}
