@@ -4,7 +4,7 @@
  * Generates standard and premium tenancy agreements for England & Wales.
  */
 
-import { generateDocument, GeneratedDocument } from './generator';
+import { generateDocument, GeneratedDocument, compileAndMergeTemplates, compileTemplate, loadTemplate, htmlToPdf } from './generator';
 
 // ============================================================================
 // TYPES
@@ -100,6 +100,32 @@ export interface ASTData {
   pets_allowed?: boolean;
   approved_pets?: string;
   smoking_allowed?: boolean;
+
+  // Premium: Guarantor (optional)
+  guarantor_name?: string;
+  guarantor_address?: string;
+  guarantor_email?: string;
+  guarantor_phone?: string;
+  guarantor_dob?: string;
+  guarantor_relationship?: string;
+
+  // Premium: Enhanced Pet Agreement
+  pet_type?: string;
+  pet_breed?: string;
+  pet_age?: string;
+  pet_name?: string;
+  pet_weight?: string;
+  pet_deposit_amount?: number;
+  pet_insurance_required?: boolean;
+  flea_treatment_frequency?: string;
+
+  // Premium: Right to Rent Compliance
+  right_to_rent_check_date?: string;
+  right_to_rent_documents_checked?: string[];
+
+  // Premium: How to Rent Guide
+  how_to_rent_version?: string;
+  how_to_rent_provision_date?: string;
 
   // Legal Compliance & Safety
   gas_safety_certificate?: boolean;
@@ -221,7 +247,7 @@ export function validateASTData(data: ASTData): string[] {
 // ============================================================================
 
 /**
- * Generate a standard AST
+ * Generate a standard AST with all bonus documents
  */
 export async function generateStandardAST(
   data: ASTData,
@@ -245,16 +271,43 @@ export async function generateStandardAST(
     data.tenant_notice_period = '1 month';
   }
 
-  return generateDocument({
-    templatePath: 'uk/england-wales/templates/standard_ast.hbs',
-    data,
-    isPreview,
-    outputFormat: 'both',
-  });
+  // Add metadata flags
+  const enrichedData = {
+    ...data,
+    premium: false,
+    jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
+  };
+
+  // List of all templates to merge (in order)
+  const templatePaths = [
+    'uk/england-wales/templates/standard_ast.hbs',
+    'shared/templates/terms_and_conditions.hbs',
+    'shared/templates/certificate_of_curation.hbs',
+    'uk/england-wales/templates/government_model_clauses.hbs',
+    'shared/templates/deposit_protection_certificate.hbs',
+    'shared/templates/inventory_template.hbs',
+  ];
+
+  // Compile and merge all templates
+  const mergedHtml = await compileAndMergeTemplates(templatePaths, enrichedData);
+
+  // Generate PDF from merged HTML
+  const pdf = await htmlToPdf(mergedHtml);
+
+  return {
+    html: mergedHtml,
+    pdf,
+    metadata: {
+      templateUsed: 'standard_ast_with_bonus_docs',
+      generatedAt: new Date().toISOString(),
+      documentId: `AST-STD-${Date.now()}`,
+      isPreview,
+    },
+  };
 }
 
 /**
- * Generate a premium AST (with additional clauses)
+ * Generate a premium AST with all bonus documents + enhanced clauses
  */
 export async function generatePremiumAST(
   data: ASTData,
@@ -278,13 +331,39 @@ export async function generatePremiumAST(
     data.tenant_notice_period = '1 month';
   }
 
-  // Premium AST uses professionally formatted template with enhanced styling
-  return generateDocument({
-    templatePath: 'uk/england-wales/templates/premium_ast_formatted.hbs',
-    data,
-    isPreview,
-    outputFormat: 'both',
-  });
+  // Add metadata flags for premium
+  const enrichedData = {
+    ...data,
+    premium: true,
+    jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
+  };
+
+  // Premium includes same bonus docs as standard, but uses enhanced AST template
+  const templatePaths = [
+    'uk/england-wales/templates/premium_ast_formatted.hbs',
+    'shared/templates/terms_and_conditions.hbs',
+    'shared/templates/certificate_of_curation.hbs',
+    'uk/england-wales/templates/government_model_clauses.hbs',
+    'shared/templates/deposit_protection_certificate.hbs',
+    'shared/templates/inventory_template.hbs',
+  ];
+
+  // Compile and merge all templates
+  const mergedHtml = await compileAndMergeTemplates(templatePaths, enrichedData);
+
+  // Generate PDF from merged HTML
+  const pdf = await htmlToPdf(mergedHtml);
+
+  return {
+    html: mergedHtml,
+    pdf,
+    metadata: {
+      templateUsed: 'premium_ast_with_bonus_docs',
+      generatedAt: new Date().toISOString(),
+      documentId: `AST-PREM-${Date.now()}`,
+      isPreview,
+    },
+  };
 }
 
 // ============================================================================

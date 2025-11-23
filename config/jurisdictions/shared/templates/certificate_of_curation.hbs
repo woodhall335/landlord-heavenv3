@@ -1,0 +1,109 @@
+<div style="page-break-before: always; padding: 60px 80px; border: 10px double #1976d2; margin: 40px;">
+  <div style="text-align: center;">
+    <h1 style="font-size: 32pt; color: #1976d2; margin: 0; font-family: 'Georgia', serif;">
+      🏛️ CERTIFICATE OF CURATION
+    </h1>
+    <div style="height: 3px; background: linear-gradient(to right, #1976d2, #42a5f5, #1976d2); margin: 20px auto; width: 60%;"></div>
+  </div>
+
+  <div style="margin: 60px 0;">
+    <p style="text-align: center; font-size: 14pt; line-height: 2;">
+      This is to certify that the attached tenancy agreement has been<br/>
+      <strong style="font-size: 16pt;">curated by</strong>
+    </p>
+
+    <p style="text-align: center; font-size: 20pt; color: #1976d2; font-weight: bold; margin: 30px 0; font-family: 'Georgia', serif;">
+      {{landlord_full_name}}
+    </p>
+
+    <p style="text-align: center; font-size: 14pt; line-height: 2;">
+      and generated using the <strong>Landlord Heaven</strong><br/>
+      professional document generation platform
+    </p>
+  </div>
+
+  <div style="background-color: #e3f2fd; border: 2px solid #1976d2; padding: 30px; margin: 40px 0;">
+    <h2 style="text-align: center; color: #1976d2; font-size: 16pt; margin: 0 0 20px 0;">
+      ✓ Legal Compliance Certification
+    </h2>
+
+    <p style="font-size: 12pt; text-align: center; line-height: 1.8;">
+      This tenancy agreement is <strong>legally compliant</strong> and <strong>court-ready</strong> for use in:
+    </p>
+
+    <p style="font-size: 18pt; text-align: center; color: #1976d2; font-weight: bold; margin: 20px 0;">
+      {{jurisdiction_name}}
+    </p>
+
+    <p style="font-size: 11pt; text-align: center; color: #555; line-height: 1.6;">
+      This document has been generated in accordance with:<br/>
+      {{#if_eq jurisdiction 'england-wales'}}
+      • Housing Act 1988 (as amended)<br/>
+      • Tenant Fees Act 2019<br/>
+      • Deregulation Act 2015<br/>
+      • The Assured Shorthold Tenancy Notices and Prescribed Requirements (England) Regulations 2015
+      {{else if_eq jurisdiction 'scotland'}}
+      • Private Housing (Tenancies) (Scotland) Act 2016<br/>
+      • Rent Pressure Zone Regulations<br/>
+      • Tenant Information Packs Requirements
+      {{else if_eq jurisdiction 'northern-ireland'}}
+      • Private Tenancies (Northern Ireland) Order 2006<br/>
+      • Tenancy Deposit Schemes Regulations (Northern Ireland) 2012
+      {{/if_eq}}
+    </p>
+  </div>
+
+  <div style="margin: 60px 0 40px 0;">
+    <table style="width: 100%; border: none;">
+      <tr>
+        <td style="width: 50%; border: none; vertical-align: top;">
+          <p style="font-size: 11pt; margin: 0;">
+            <strong>Document Type:</strong><br/>
+            {{#if premium}}Premium {{else}}Standard {{/if}}Assured Shorthold Tenancy Agreement
+          </p>
+          <p style="font-size: 11pt; margin: 10px 0 0 0;">
+            <strong>Property:</strong><br/>
+            {{property_address_line1}}<br/>
+            {{property_address_town}}, {{property_address_postcode}}
+          </p>
+        </td>
+        <td style="width: 50%; border: none; vertical-align: top;">
+          <p style="font-size: 11pt; margin: 0;">
+            <strong>Generated Date:</strong><br/>
+            {{format_date generation_timestamp 'DD/MM/YYYY'}}
+          </p>
+          <p style="font-size: 11pt; margin: 10px 0 0 0;">
+            <strong>Document ID:</strong><br/>
+            {{document_id}}
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="border-top: 2px solid #1976d2; padding-top: 30px; margin-top: 60px;">
+    <table style="width: 100%; border: none;">
+      <tr>
+        <td style="width: 50%; border: none; text-align: center;">
+          <div style="border-bottom: 2px solid #000; width: 60%; margin: 0 auto 10px auto; padding-bottom: 2px;"></div>
+          <p style="font-size: 10pt; margin: 0;"><strong>Digitally Verified</strong></p>
+          <p style="font-size: 9pt; margin: 5px 0 0 0; color: #666;">Landlord Heaven Platform</p>
+        </td>
+        <td style="width: 50%; border: none; text-align: center;">
+          <div style="border-bottom: 2px solid #000; width: 60%; margin: 0 auto 10px auto; padding-bottom: 2px;"></div>
+          <p style="font-size: 10pt; margin: 0;"><strong>Date of Issue</strong></p>
+          <p style="font-size: 9pt; margin: 5px 0 0 0; color: #666;">{{format_date generation_timestamp 'DD/MM/YYYY'}}</p>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="text-align: center; margin-top: 60px; padding: 20px; background-color: #f5f5f5; border-radius: 10px;">
+    <p style="font-size: 10pt; color: #666; margin: 0; line-height: 1.6;">
+      This certificate confirms that the tenancy agreement was generated using legally compliant templates<br/>
+      and contains all required clauses and notices as mandated by law.<br/>
+      <br/>
+      <strong>Landlord Heaven</strong> | Professional Legal Documents | <a href="https://landlordheaven.co.uk">landlordheaven.co.uk</a>
+    </p>
+  </div>
+</div>

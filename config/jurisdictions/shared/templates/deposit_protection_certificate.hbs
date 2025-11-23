@@ -1,0 +1,161 @@
+<div style="page-break-before: always; padding: 40px;">
+  <h1 style="text-align: center; color: #1976d2; border-bottom: 3px solid #1976d2; padding-bottom: 15px;">
+    Tenancy Deposit Protection Certificate
+  </h1>
+
+  <p style="text-align: center; font-size: 10pt; color: #666; margin: 20px 0;">
+    Prescribed Information Under Deposit Protection Regulations
+  </p>
+
+  <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 30px 0;">
+    <p style="margin: 0; font-weight: bold;">⚠️ Legal Requirement</p>
+    <p style="margin: 10px 0 0 0;">
+      This certificate must be provided to the tenant within 30 days of receiving the deposit.
+      Complete all sections and provide a signed copy to your tenant.
+    </p>
+  </div>
+
+  <h2>1. Property Details</h2>
+  <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; width: 40%; background-color: #f5f5f5;"><strong>Property Address:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px;">
+        {{property_address_line1}}<br/>
+        {{property_address_town}}, {{property_address_postcode}}
+      </td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; background-color: #f5f5f5;"><strong>Tenancy Start Date:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px;">{{format_date tenancy_start_date 'DD/MM/YYYY'}}</td>
+    </tr>
+  </table>
+
+  <h2>2. Landlord Details</h2>
+  <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; width: 40%; background-color: #f5f5f5;"><strong>Name:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px;">{{landlord_full_name}}</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; background-color: #f5f5f5;"><strong>Address:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px;">
+        {{landlord_address_line1}}, {{landlord_address_town}}, {{landlord_address_postcode}}
+      </td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; background-color: #f5f5f5;"><strong>Contact:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px;">
+        Email: {{landlord_email}}<br/>
+        Phone: {{landlord_phone}}
+      </td>
+    </tr>
+  </table>
+
+  <h2>3. Tenant Details</h2>
+  <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; width: 40%; background-color: #f5f5f5;"><strong>Tenant Name(s):</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px;">
+        {{tenant_1_full_name}}
+        {{#if tenant_2_full_name}}<br/>{{tenant_2_full_name}}{{/if}}
+      </td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; background-color: #f5f5f5;"><strong>Contact:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px;">
+        Email: {{tenant_1_email}}<br/>
+        Phone: {{tenant_1_phone}}
+      </td>
+    </tr>
+  </table>
+
+  <h2>4. Deposit Details</h2>
+  <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; width: 40%; background-color: #f5f5f5;"><strong>Deposit Amount:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px; font-size: 14pt; font-weight: bold;">£{{deposit_amount}}</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; background-color: #f5f5f5;"><strong>Date Paid:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px;">___________________</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; background-color: #f5f5f5;"><strong>Payment Method:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px;">___________________</td>
+    </tr>
+  </table>
+
+  <h2>5. Deposit Protection Scheme</h2>
+  <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; width: 40%; background-color: #f5f5f5;"><strong>Scheme Name:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px; font-weight: bold;">{{deposit_scheme}}</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; background-color: #f5f5f5;"><strong>Certificate Number:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px;">___________________</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #ddd; padding: 10px; background-color: #f5f5f5;"><strong>Date Protected:</strong></td>
+      <td style="border: 1px solid #ddd; padding: 10px;">___________________</td>
+    </tr>
+  </table>
+
+  <div style="background-color: #e3f2fd; border: 2px solid #1976d2; padding: 20px; margin: 30px 0;">
+    <h3 style="color: #1976d2; margin: 0 0 15px 0;">What Happens to Your Deposit</h3>
+    <p style="margin: 0; line-height: 1.8;">
+      Your deposit is protected in a government-approved scheme. At the end of the tenancy:
+    </p>
+    <ul style="margin: 10px 0 0 0; line-height: 1.8;">
+      <li>If there are no disputes, the deposit will be returned within 10 days</li>
+      <li>If there are deductions, we must provide evidence (photos, receipts, inventory reports)</li>
+      <li>If we cannot agree, the deposit scheme offers free Alternative Dispute Resolution (ADR)</li>
+      <li>The scheme holds the deposit until the dispute is resolved</li>
+    </ul>
+  </div>
+
+  <h2>6. How to Raise a Dispute</h2>
+  <p>If you disagree with any proposed deductions at the end of the tenancy:</p>
+  <ol>
+    <li>Contact the landlord/agent to discuss the deductions</li>
+    <li>If no agreement is reached, contact the deposit scheme directly</li>
+    <li>The scheme will offer free ADR to resolve the dispute</li>
+    <li>The ADR decision is binding on both parties</li>
+  </ol>
+
+  <h2>7. Scheme Contact Information</h2>
+  <div style="background-color: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 5px;">
+    <p style="margin: 0 0 10px 0;"><strong>{{deposit_scheme}}</strong></p>
+    <p style="margin: 0; font-size: 10pt; color: #666;">
+      For scheme contact details, certificate number, and dispute resolution, visit:<br/>
+      • Deposit Protection Service (DPS): www.depositprotection.com<br/>
+      • MyDeposits: www.mydeposits.co.uk<br/>
+      • Tenancy Deposit Scheme (TDS): www.tenancydepositscheme.com
+    </p>
+  </div>
+
+  <div style="margin-top: 60px; page-break-inside: avoid;">
+    <h2>8. Signatures</h2>
+    <table style="width: 100%; border: none; margin-top: 30px;">
+      <tr>
+        <td style="width: 50%; border: none; padding-right: 20px;">
+          <p style="margin: 0;"><strong>Landlord Signature:</strong></p>
+          <div style="border-bottom: 2px solid #000; margin: 40px 0 10px 0;"></div>
+          <p style="margin: 0; font-size: 10pt;">{{landlord_full_name}}</p>
+          <p style="margin: 5px 0; font-size: 10pt;">Date: _______________</p>
+        </td>
+        <td style="width: 50%; border: none; padding-left: 20px;">
+          <p style="margin: 0;"><strong>Tenant Signature:</strong></p>
+          <div style="border-bottom: 2px solid #000; margin: 40px 0 10px 0;"></div>
+          <p style="margin: 0; font-size: 10pt;">{{tenant_1_full_name}}</p>
+          <p style="margin: 5px 0; font-size: 10pt;">Date: _______________</p>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <p style="text-align: center; font-size: 9pt; color: #666; margin-top: 40px;">
+    Keep a signed copy of this certificate for your records<br/>
+    Generated by Landlord Heaven | Document ID: {{document_id}}
+  </p>
+</div>
