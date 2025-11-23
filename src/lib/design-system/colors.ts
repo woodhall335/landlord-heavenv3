@@ -27,17 +27,17 @@ export const colors = {
     light: "#4A5568", // Medium gray - Body text
   },
 
-  // Secondary - Emerald Green (PandaDoc accent)
+  // Secondary - Emerald Green (PandaDoc exact match)
   secondary: {
-    DEFAULT: "#10B981", // Emerald green - Accent color
-    dark: "#059669", // Darker green - Hover
+    DEFAULT: "#00A36C", // PandaDoc emerald green - Exact match
+    dark: "#008C5C", // Darker green - Hover
     light: "#6EE7B7", // Light green - Backgrounds
     subtle: "#D1FAE5", // Very light green - Section backgrounds
     50: "#ECFDF5",
     100: "#D1FAE5",
     200: "#A7F3D0",
-    500: "#10B981",
-    600: "#059669",
+    500: "#00A36C",
+    600: "#008C5C",
   },
 
   // Warning - Amber for Attention
@@ -49,7 +49,7 @@ export const colors = {
 
   // Status Colors
   success: {
-    DEFAULT: "#10B981", // Emerald green
+    DEFAULT: "#00A36C", // PandaDoc emerald green
     bg: "#D1FAE5", // Light green
   },
   error: {
