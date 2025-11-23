@@ -45,7 +45,9 @@ yarn-error.log*
 next-env.d.ts
 
 # official court forms (large PDFs - not committed)
-public/official-forms/*.pdf
+public/official-forms/**/*.pdf
+!public/official-forms/**/forms-manifest.json
+!public/official-forms/README.md
 
 # Sample/test documents (not to be committed)
 sample-*.pdf

@@ -1,0 +1,792 @@
+/**
+ * Complete Eviction Pack Generator
+ *
+ * Generates region-specific complete eviction packs including:
+ * - All notices (Section 8/21, Notice to Leave)
+ * - All court forms (N5, N5B, N119, Tribunal forms)
+ * - Expert guidance documents
+ * - Grounds support and evidence checklists
+ * - Premium features (lifetime storage, priority support)
+ *
+ * Pricing: £149.99 one-time payment
+ * Regions: England & Wales, Scotland
+ */
+
+import { generateDocument, GeneratedDocument, compileAndMergeTemplates } from './generator';
+import { generateSection8Notice, Section8NoticeData } from './section8-generator';
+import { fillN5Form, fillN5BForm, fillN119Form, CaseData } from './official-forms-filler';
+import fs from 'fs/promises';
+import path from 'path';
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+export type Jurisdiction = 'england-wales' | 'scotland';
+
+export interface EvictionCase {
+  // Jurisdiction
+  jurisdiction: Jurisdiction;
+
+  // Case details
+  case_id?: string;
+  case_type: 'rent_arrears' | 'antisocial' | 'breach' | 'no_fault' | 'landlord_needs' | 'other';
+  case_summary: string;
+
+  // Landlord
+  landlord_full_name: string;
+  landlord_2_name?: string;
+  landlord_address: string;
+  landlord_address_line1?: string;
+  landlord_address_town?: string;
+  landlord_address_postcode?: string;
+  landlord_email?: string;
+  landlord_phone?: string;
+
+  // Tenant
+  tenant_full_name: string;
+  tenant_2_name?: string;
+  property_address: string;
+  property_address_line1?: string;
+  property_address_town?: string;
+  property_address_postcode?: string;
+
+  // Tenancy
+  tenancy_start_date: string;
+  tenancy_type: 'fixed_term' | 'periodic' | 'assured_shorthold' | 'private_residential' | 'ast';
+  fixed_term?: boolean;
+  fixed_term_end_date?: string;
+  rent_amount: number;
+  rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
+  payment_day: number;
+
+  // Grounds for eviction
+  grounds: GroundClaim[];
+
+  // Arrears (if applicable)
+  current_arrears?: number;
+  arrears_at_notice_date?: number;
+  arrears_breakdown?: Array<{
+    period: string;
+    amount_due: number;
+    amount_paid: number;
+    balance: number;
+  }>;
+
+  // Incident log (for antisocial/nuisance)
+  incidents?: Array<{
+    date: string;
+    time?: string;
+    description: string;
+    witnesses?: string[];
+    police_involved?: boolean;
+    crime_number?: string;
+  }>;
+
+  // Breach details (if applicable)
+  breach_type?: string;
+  breach_description?: string;
+  breach_start_date?: string;
+  warnings_given?: Array<{
+    date: string;
+    method: string;
+    description: string;
+  }>;
+
+  // Compliance
+  deposit_protected?: boolean;
+  deposit_amount?: number;
+  deposit_scheme?: string;
+  deposit_scheme_name?: 'DPS' | 'MyDeposits' | 'TDS' | 'SafeDeposits Scotland';
+  deposit_protection_date?: string;
+  gas_safety_certificate?: boolean;
+  epc_rating?: string;
+  eicr_certificate?: boolean;
+  hmo_licensed?: boolean;
+  landlord_registered?: boolean; // Scotland
+
+  // Court details
+  court_name?: string;
+  court_address?: string;
+
+  // Additional data
+  [key: string]: any;
+}
+
+export interface GroundClaim {
+  code: string; // 'Ground 1', 'Ground 8', etc.
+  title: string;
+  particulars: string;
+  evidence?: string;
+  mandatory?: boolean;
+}
+
+export interface EvictionPackDocument {
+  title: string;
+  description: string;
+  category: 'notice' | 'court_form' | 'guidance' | 'evidence_tool' | 'bonus';
+  html?: string;
+  pdf?: Buffer;
+  file_name: string;
+}
+
+export interface CompleteEvictionPack {
+  case_id: string;
+  jurisdiction: Jurisdiction;
+  pack_type: 'complete_eviction_pack';
+  generated_at: string;
+  documents: EvictionPackDocument[];
+  metadata: {
+    total_documents: number;
+    includes_court_forms: boolean;
+    includes_expert_guidance: boolean;
+    includes_evidence_tools: boolean;
+    premium_features: string[];
+  };
+}
+
+// ============================================================================
+// GROUND DEFINITIONS LOADER
+// ============================================================================
+
+/**
+ * Load eviction grounds for jurisdiction
+ */
+export async function loadEvictionGrounds(jurisdiction: Jurisdiction): Promise<any> {
+  const groundsPath = path.join(
+    process.cwd(),
+    'config',
+    'jurisdictions',
+    'uk',
+    jurisdiction,
+    'eviction_grounds.json'
+  );
+
+  try {
+    const groundsData = await fs.readFile(groundsPath, 'utf-8');
+    return JSON.parse(groundsData);
+  } catch (error) {
+    console.error(`Failed to load eviction grounds for ${jurisdiction}:`, error);
+    throw new Error(`Eviction grounds not found for ${jurisdiction}`);
+  }
+}
+
+/**
+ * Get ground details by code
+ */
+export function getGroundDetails(grounds: any, groundCode: string): any {
+  const groundKey = `ground_${groundCode.replace('Ground ', '').toLowerCase()}`;
+  return grounds.grounds[groundKey];
+}
+
+// ============================================================================
+// DOCUMENT GENERATORS
+// ============================================================================
+
+/**
+ * Generate Step-by-Step Eviction Roadmap
+ */
+async function generateEvictionRoadmap(
+  evictionCase: EvictionCase,
+  groundsData: any
+): Promise<EvictionPackDocument> {
+  const jurisdiction = evictionCase.jurisdiction;
+
+  let templatePath = '';
+  if (jurisdiction === 'england-wales') {
+    templatePath = 'uk/england-wales/templates/eviction/eviction_roadmap.hbs';
+  } else if (jurisdiction === 'scotland') {
+    templatePath = 'uk/scotland/templates/eviction_roadmap.hbs';
+  }
+
+  const data = {
+    ...evictionCase,
+    grounds_data: groundsData,
+    current_date: new Date().toISOString().split('T')[0],
+  };
+
+  const doc = await generateDocument({
+    templatePath,
+    data,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  return {
+    title: 'Step-by-Step Eviction Roadmap',
+    description: 'Complete timeline and checklist for your eviction case',
+    category: 'guidance',
+    html: doc.html,
+    pdf: doc.pdf,
+    file_name: `eviction_roadmap_${jurisdiction}.pdf`,
+  };
+}
+
+/**
+ * Generate Evidence Collection Checklist
+ */
+async function generateEvidenceChecklist(
+  evictionCase: EvictionCase,
+  groundsData: any
+): Promise<EvictionPackDocument> {
+  const templatePath = 'shared/templates/evidence_collection_checklist.hbs';
+
+  const data = {
+    ...evictionCase,
+    grounds_data: groundsData,
+    required_evidence: evictionCase.grounds.map((g) => {
+      const groundDetails = getGroundDetails(groundsData, g.code);
+      return {
+        ground: g.code,
+        title: g.title,
+        evidence_items: groundDetails?.required_evidence || [],
+      };
+    }),
+  };
+
+  const doc = await generateDocument({
+    templatePath,
+    data,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  return {
+    title: 'Evidence Collection Checklist',
+    description: 'Detailed checklist of all evidence you need to gather',
+    category: 'evidence_tool',
+    html: doc.html,
+    pdf: doc.pdf,
+    file_name: 'evidence_collection_checklist.pdf',
+  };
+}
+
+/**
+ * Generate Proof of Service Templates
+ */
+async function generateProofOfService(
+  evictionCase: EvictionCase
+): Promise<EvictionPackDocument> {
+  const templatePath = 'shared/templates/proof_of_service.hbs';
+
+  const data = {
+    ...evictionCase,
+    service_date: '',
+    service_method: '',
+    served_by: '',
+  };
+
+  const doc = await generateDocument({
+    templatePath,
+    data,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  return {
+    title: 'Proof of Service Certificate',
+    description: 'Template for proving you served the notice correctly',
+    category: 'evidence_tool',
+    html: doc.html,
+    pdf: doc.pdf,
+    file_name: 'proof_of_service_template.pdf',
+  };
+}
+
+/**
+ * Generate Expert Guidance Document
+ */
+async function generateExpertGuidance(
+  evictionCase: EvictionCase,
+  groundsData: any
+): Promise<EvictionPackDocument> {
+  const jurisdiction = evictionCase.jurisdiction;
+  const templatePath = `uk/${jurisdiction}/templates/eviction/expert_guidance.hbs`;
+
+  const data = {
+    ...evictionCase,
+    grounds_data: groundsData,
+    common_mistakes: [],
+    best_practices: [],
+  };
+
+  const doc = await generateDocument({
+    templatePath,
+    data,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  return {
+    title: 'Expert Eviction Guidance',
+    description: 'Professional tips, common mistakes to avoid, and success strategies',
+    category: 'guidance',
+    html: doc.html,
+    pdf: doc.pdf,
+    file_name: 'expert_eviction_guidance.pdf',
+  };
+}
+
+/**
+ * Generate Timeline Expectations Document
+ */
+async function generateTimelineExpectations(
+  evictionCase: EvictionCase,
+  groundsData: any
+): Promise<EvictionPackDocument> {
+  const templatePath = 'shared/templates/eviction_timeline.hbs';
+
+  const data = {
+    ...evictionCase,
+    grounds_data: groundsData,
+    estimated_timeline: calculateEstimatedTimeline(evictionCase, groundsData),
+  };
+
+  const doc = await generateDocument({
+    templatePath,
+    data,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  return {
+    title: 'Eviction Timeline & Expectations',
+    description: 'Realistic timeline for each stage of your eviction case',
+    category: 'guidance',
+    html: doc.html,
+    pdf: doc.pdf,
+    file_name: 'eviction_timeline_expectations.pdf',
+  };
+}
+
+/**
+ * Calculate leaving date based on notice period
+ */
+function calculateLeavingDate(evictionCase: EvictionCase, noticePeriodDays: number): string {
+  const today = new Date();
+  const leavingDate = new Date(today.getTime() + noticePeriodDays * 24 * 60 * 60 * 1000);
+  return leavingDate.toISOString().split('T')[0];
+}
+
+/**
+ * Calculate estimated timeline based on jurisdiction and grounds
+ */
+function calculateEstimatedTimeline(evictionCase: EvictionCase, groundsData: any): any {
+  const jurisdiction = evictionCase.jurisdiction;
+  const hasMandatoryGround = evictionCase.grounds.some((g) => g.mandatory);
+
+  let noticeNoticePeriodDays = 0;
+  let courtProcessWeeks = 0;
+  let bailiffWeeks = 0;
+
+  if (jurisdiction === 'england-wales') {
+    // Determine notice period
+    if (evictionCase.grounds.some((g) => g.code === 'Ground 8' || g.code === 'Ground 14')) {
+      noticeNoticePeriodDays = 14; // 2 weeks for serious arrears/antisocial
+    } else if (hasMandatoryGround) {
+      noticeNoticePeriodDays = 14;
+    } else {
+      noticeNoticePeriodDays = 60; // 2 months for discretionary
+    }
+
+    courtProcessWeeks = hasMandatoryGround ? 6 : 10;
+    bailiffWeeks = 4;
+  } else if (jurisdiction === 'scotland') {
+    noticeNoticePeriodDays = 84; // 12 weeks minimum
+    courtProcessWeeks = 10; // Tribunal process
+    bailiffWeeks = 4;
+  }
+
+  const totalWeeks = Math.ceil(noticeNoticePeriodDays / 7) + courtProcessWeeks + bailiffWeeks;
+
+  return {
+    notice_period_days: noticeNoticePeriodDays,
+    notice_period_weeks: Math.ceil(noticeNoticePeriodDays / 7),
+    court_process_weeks: courtProcessWeeks,
+    bailiff_weeks: bailiffWeeks,
+    total_weeks: totalWeeks,
+    total_months: Math.ceil(totalWeeks / 4),
+    estimated_completion_date: new Date(
+      Date.now() + totalWeeks * 7 * 24 * 60 * 60 * 1000
+    ).toISOString().split('T')[0],
+  };
+}
+
+// ============================================================================
+// REGION-SPECIFIC GENERATORS
+// ============================================================================
+
+/**
+ * Generate England & Wales Eviction Pack
+ */
+async function generateEnglandWalesEvictionPack(
+  evictionCase: EvictionCase,
+  groundsData: any
+): Promise<EvictionPackDocument[]> {
+  const documents: EvictionPackDocument[] = [];
+
+  // 1. Section 8 Notice (if fault-based grounds)
+  if (evictionCase.grounds.length > 0) {
+    const section8Data: Section8NoticeData = {
+      landlord_full_name: evictionCase.landlord_full_name,
+      landlord_address: evictionCase.landlord_address,
+      tenant_full_name: evictionCase.tenant_full_name,
+      property_address: evictionCase.property_address,
+      tenancy_start_date: evictionCase.tenancy_start_date,
+      rent_amount: evictionCase.rent_amount,
+      rent_frequency: evictionCase.rent_frequency,
+      payment_date: evictionCase.payment_day,
+      grounds: evictionCase.grounds.map((g) => ({
+        code: parseInt(g.code.replace('Ground ', '')),
+        title: g.title,
+        legal_basis: getGroundDetails(groundsData, g.code)?.statute || '',
+        particulars: g.particulars,
+        supporting_evidence: g.evidence,
+        mandatory: g.mandatory || false,
+      })),
+      notice_period_days: 14, // Will be calculated
+      earliest_possession_date: '', // Will be calculated
+      any_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
+      any_discretionary_ground: evictionCase.grounds.some((g) => !g.mandatory),
+    };
+
+    const section8Doc = await generateSection8Notice(section8Data, false);
+
+    documents.push({
+      title: 'Section 8 Notice - Notice Seeking Possession',
+      description: 'Official notice to tenant citing grounds for possession',
+      category: 'notice',
+      html: section8Doc.html,
+      pdf: section8Doc.pdf,
+      file_name: 'section8_notice.pdf',
+    });
+  }
+
+  // 2. Section 21 Notice (if no-fault)
+  if (evictionCase.case_type === 'no_fault') {
+    const section21Doc = await generateDocument({
+      templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
+      data: evictionCase,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+
+    documents.push({
+      title: 'Section 21 Notice - Form 6A',
+      description: 'Official no-fault eviction notice (2 months)',
+      category: 'notice',
+      html: section21Doc.html,
+      pdf: section21Doc.pdf,
+      file_name: 'section21_form6a.pdf',
+    });
+  }
+
+  // 3. N5 Claim Form
+  const caseData: CaseData = {
+    landlord_full_name: evictionCase.landlord_full_name,
+    landlord_address: evictionCase.landlord_address,
+    landlord_postcode: evictionCase.landlord_address_postcode,
+    landlord_phone: evictionCase.landlord_phone,
+    landlord_email: evictionCase.landlord_email,
+    tenant_full_name: evictionCase.tenant_full_name,
+    property_address: evictionCase.property_address,
+    property_postcode: evictionCase.property_address_postcode,
+    tenancy_start_date: evictionCase.tenancy_start_date,
+    rent_amount: evictionCase.rent_amount,
+    rent_frequency: evictionCase.rent_frequency,
+    signatory_name: evictionCase.landlord_full_name,
+    signature_date: new Date().toISOString().split('T')[0],
+    court_name: evictionCase.court_name,
+  };
+
+  const n5Pdf = await fillN5Form(caseData);
+  documents.push({
+    title: 'Form N5 - Claim for Possession',
+    description: 'Official court claim form for possession proceedings',
+    category: 'court_form',
+    pdf: Buffer.from(n5Pdf),
+    file_name: 'n5_claim_for_possession.pdf',
+  });
+
+  // 4. N119 Particulars of Claim
+  const n119Pdf = await fillN119Form(caseData);
+  documents.push({
+    title: 'Form N119 - Particulars of Claim',
+    description: 'Detailed particulars supporting your possession claim',
+    category: 'court_form',
+    pdf: Buffer.from(n119Pdf),
+    file_name: 'n119_particulars_of_claim.pdf',
+  });
+
+  return documents;
+}
+
+/**
+ * Generate Scotland Eviction Pack
+ */
+async function generateScotlandEvictionPack(
+  evictionCase: EvictionCase,
+  groundsData: any
+): Promise<EvictionPackDocument[]> {
+  const documents: EvictionPackDocument[] = [];
+
+  const { fillScotlandOfficialForm } = await import('./scotland-forms-filler');
+
+  // Prepare Scotland case data
+  const scotlandData = {
+    landlord_full_name: evictionCase.landlord_full_name,
+    landlord_2_name: evictionCase.landlord_2_name,
+    landlord_address: evictionCase.landlord_address,
+    landlord_postcode: evictionCase.landlord_address_postcode,
+    landlord_phone: evictionCase.landlord_phone,
+    landlord_email: evictionCase.landlord_email,
+    landlord_registration_number: evictionCase.landlord_registration_number,
+    tenant_full_name: evictionCase.tenant_full_name,
+    tenant_2_name: evictionCase.tenant_2_name,
+    property_address: evictionCase.property_address,
+    property_postcode: evictionCase.property_address_postcode,
+    tenancy_start_date: evictionCase.tenancy_start_date,
+    rent_amount: evictionCase.rent_amount,
+    rent_frequency: evictionCase.rent_frequency,
+    notice_date: new Date().toISOString().split('T')[0],
+    leaving_date: calculateLeavingDate(evictionCase, 84), // 84 days notice in Scotland
+    grounds: evictionCase.grounds.map(g => ({
+      code: g.code,
+      title: g.title,
+      particulars: g.particulars,
+      evidence: g.evidence,
+    })),
+    deposit_amount: evictionCase.deposit_amount,
+    deposit_scheme: evictionCase.deposit_scheme_name,
+    deposit_reference: evictionCase.deposit_reference,
+  };
+
+  // 1. Notice to Leave (Official Form)
+  const noticeToLeavePdf = await fillScotlandOfficialForm('notice_to_leave', scotlandData);
+
+  documents.push({
+    title: 'Notice to Leave',
+    description: 'Official notice under Private Housing (Tenancies) (Scotland) Act 2016',
+    category: 'notice',
+    pdf: Buffer.from(noticeToLeavePdf),
+    file_name: 'notice_to_leave.pdf',
+  });
+
+  // 2. Tribunal Application Form E (Official Form)
+  const formEPdf = await fillScotlandOfficialForm('form_e', scotlandData);
+
+  documents.push({
+    title: 'Form E - Tribunal Application for Eviction Order',
+    description: 'Application to First-tier Tribunal for Scotland (Housing and Property Chamber)',
+    category: 'court_form',
+    pdf: Buffer.from(formEPdf),
+    file_name: 'tribunal_form_e_application.pdf',
+  });
+
+  return documents;
+}
+
+// ============================================================================
+// MAIN GENERATOR
+// ============================================================================
+
+/**
+ * Generate Complete Eviction Pack
+ *
+ * Includes everything a landlord needs from notice to possession order:
+ * - All region-specific notices
+ * - All court/tribunal forms
+ * - Expert guidance
+ * - Evidence collection tools
+ * - Timeline expectations
+ * - Proof of service templates
+ *
+ * Price: £149.99 one-time
+ */
+export async function generateCompleteEvictionPack(
+  evictionCase: EvictionCase
+): Promise<CompleteEvictionPack> {
+  console.log(`\n📦 Generating Complete Eviction Pack for ${evictionCase.jurisdiction}...`);
+  console.log('=' .repeat(80));
+
+  // Load jurisdiction-specific grounds
+  const groundsData = await loadEvictionGrounds(evictionCase.jurisdiction);
+
+  // Initialize documents array
+  const documents: EvictionPackDocument[] = [];
+
+  // 1. Generate region-specific notices and court forms
+  let regionDocs: EvictionPackDocument[] = [];
+
+  if (evictionCase.jurisdiction === 'england-wales') {
+    regionDocs = await generateEnglandWalesEvictionPack(evictionCase, groundsData);
+  } else if (evictionCase.jurisdiction === 'scotland') {
+    regionDocs = await generateScotlandEvictionPack(evictionCase, groundsData);
+  }
+
+  documents.push(...regionDocs);
+
+  // 2. Generate expert guidance documents
+  const roadmap = await generateEvictionRoadmap(evictionCase, groundsData);
+  documents.push(roadmap);
+
+  const guidance = await generateExpertGuidance(evictionCase, groundsData);
+  documents.push(guidance);
+
+  const timeline = await generateTimelineExpectations(evictionCase, groundsData);
+  documents.push(timeline);
+
+  // 3. Generate evidence tools
+  const evidenceChecklist = await generateEvidenceChecklist(evictionCase, groundsData);
+  documents.push(evidenceChecklist);
+
+  const proofOfService = await generateProofOfService(evictionCase);
+  documents.push(proofOfService);
+
+  // 4. Generate case summary document
+  const caseSummaryDoc = await generateDocument({
+    templatePath: 'shared/templates/eviction_case_summary.hbs',
+    data: {
+      ...evictionCase,
+      grounds_data: groundsData,
+      generated_at: new Date().toISOString(),
+    },
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Eviction Case Summary',
+    description: 'Complete summary of your eviction case and selected grounds',
+    category: 'guidance',
+    html: caseSummaryDoc.html,
+    pdf: caseSummaryDoc.pdf,
+    file_name: 'eviction_case_summary.pdf',
+  });
+
+  console.log(`✅ Generated ${documents.length} documents for complete eviction pack`);
+
+  return {
+    case_id: evictionCase.case_id || `EVICT-${Date.now()}`,
+    jurisdiction: evictionCase.jurisdiction,
+    pack_type: 'complete_eviction_pack',
+    generated_at: new Date().toISOString(),
+    documents,
+    metadata: {
+      total_documents: documents.length,
+      includes_court_forms: documents.some((d) => d.category === 'court_form'),
+      includes_expert_guidance: documents.some((d) => d.category === 'guidance'),
+      includes_evidence_tools: documents.some((d) => d.category === 'evidence_tool'),
+      premium_features: [
+        'Lifetime Cloud Storage',
+        'Priority Support',
+        'Unlimited Regenerations',
+        'Guided Case Analysis',
+        'All Grounds Support',
+        'Evidence Collection Tools',
+        'Step-by-Step Roadmap',
+        'Timeline Expectations',
+        'Expert Guidance',
+        'Proof of Service Templates',
+      ],
+    },
+  };
+}
+
+/**
+ * Generate Notice Only Pack (£29.99)
+ *
+ * Includes only the eviction notice (Section 8/21, Notice to Leave, or Notice to Quit)
+ */
+export async function generateNoticeOnlyPack(
+  evictionCase: EvictionCase
+): Promise<CompleteEvictionPack> {
+  console.log(`\n📄 Generating Notice Only Pack for ${evictionCase.jurisdiction}...`);
+
+  const groundsData = await loadEvictionGrounds(evictionCase.jurisdiction);
+  const documents: EvictionPackDocument[] = [];
+
+  if (evictionCase.jurisdiction === 'england-wales') {
+    // Section 8 or Section 21
+    if (evictionCase.case_type === 'no_fault') {
+      const section21Doc = await generateDocument({
+        templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
+        data: evictionCase,
+        isPreview: false,
+        outputFormat: 'both',
+      });
+      documents.push({
+        title: 'Section 21 Notice - Form 6A',
+        description: 'No-fault eviction notice',
+        category: 'notice',
+        html: section21Doc.html,
+        pdf: section21Doc.pdf,
+        file_name: 'section21_form6a.pdf',
+      });
+    } else {
+      const section8Doc = await generateSection8Notice(
+        {
+          landlord_full_name: evictionCase.landlord_full_name,
+          landlord_address: evictionCase.landlord_address,
+          tenant_full_name: evictionCase.tenant_full_name,
+          property_address: evictionCase.property_address,
+          tenancy_start_date: evictionCase.tenancy_start_date,
+          rent_amount: evictionCase.rent_amount,
+          rent_frequency: evictionCase.rent_frequency,
+          payment_date: evictionCase.payment_day,
+          grounds: evictionCase.grounds.map((g) => ({
+            code: parseInt(g.code.replace('Ground ', '')),
+            title: g.title,
+            legal_basis: getGroundDetails(groundsData, g.code)?.statute || '',
+            particulars: g.particulars,
+            supporting_evidence: g.evidence,
+            mandatory: g.mandatory || false,
+          })),
+          notice_period_days: 14,
+          earliest_possession_date: '',
+          any_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
+          any_discretionary_ground: evictionCase.grounds.some((g) => !g.mandatory),
+        },
+        false
+      );
+      documents.push({
+        title: 'Section 8 Notice',
+        description: 'Notice seeking possession',
+        category: 'notice',
+        html: section8Doc.html,
+        pdf: section8Doc.pdf,
+        file_name: 'section8_notice.pdf',
+      });
+    }
+  } else if (evictionCase.jurisdiction === 'scotland') {
+    const noticeDoc = await generateDocument({
+      templatePath: 'uk/scotland/templates/notice_to_leave.hbs',
+      data: evictionCase,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Notice to Leave',
+      description: 'Statutory eviction notice',
+      category: 'notice',
+      html: noticeDoc.html,
+      pdf: noticeDoc.pdf,
+      file_name: 'notice_to_leave.pdf',
+    });
+  }
+
+  return {
+    case_id: evictionCase.case_id || `EVICT-NOTICE-${Date.now()}`,
+    jurisdiction: evictionCase.jurisdiction,
+    pack_type: 'complete_eviction_pack',
+    generated_at: new Date().toISOString(),
+    documents,
+    metadata: {
+      total_documents: documents.length,
+      includes_court_forms: false,
+      includes_expert_guidance: false,
+      includes_evidence_tools: false,
+      premium_features: ['Single Notice Generation'],
+    },
+  };
+}

@@ -780,10 +780,6 @@ function normalizeJurisdiction(jurisdiction: string): string {
     return 'scotland';
   }
 
-  if (normalized.includes('northern') && normalized.includes('ireland')) {
-    return 'northern-ireland';
-  }
-
   // Default to England & Wales
   return 'england-wales';
 }

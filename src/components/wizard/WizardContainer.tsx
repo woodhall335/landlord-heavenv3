@@ -20,6 +20,7 @@ import {
   FileUpload,
   ScaleSlider,
 } from './index';
+import { GuidanceTips } from './GuidanceTips';
 import type { WizardQuestion } from '@/lib/ai/fact-finder';
 
 // Helper function to get product display name
@@ -71,7 +72,7 @@ interface CollectedFact {
 
 interface WizardContainerProps {
   caseType: 'eviction' | 'money_claim' | 'tenancy_agreement';
-  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
+  jurisdiction: 'england-wales' | 'scotland';
   product?: string; // Specific product: notice_only, complete_pack, money_claim, ast_standard, ast_premium
   editCaseId?: string; // Optional: Case ID to edit existing answers
   onComplete: (caseId: string, analysis: any) => void;
@@ -188,7 +189,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   };
 
   const getWelcomeMessage = (type: string, jur: string): string => {
-    const jurName = jur === 'england-wales' ? 'England & Wales' : jur === 'scotland' ? 'Scotland' : 'Northern Ireland';
+    const jurName = jur === 'england-wales' ? 'England & Wales' : 'Scotland';
 
     switch (type) {
       case 'eviction':
@@ -584,6 +585,13 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
               {/* Input Area */}
               {!isComplete && currentQuestion && (
                 <div className="border-t border-gray-200 pt-6">
+                  {/* Guidance Tips */}
+                  <GuidanceTips
+                    questionId={currentQuestion.question_id}
+                    jurisdiction={jurisdiction}
+                    caseType={caseType}
+                  />
+
                   {renderInput()}
 
                   {/* Submit Button (for non-auto-submit inputs) */}
@@ -621,7 +629,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                   <div className="flex-1">
                     <div className="text-sm font-medium text-charcoal">Location</div>
                     <div className="text-sm text-gray-600">
-                      {jurisdiction === 'england-wales' ? 'England & Wales' : jurisdiction === 'scotland' ? 'Scotland' : 'Northern Ireland'}
+                      {jurisdiction === 'england-wales' ? 'England & Wales' : 'Scotland'}
                     </div>
                   </div>
                 </div>

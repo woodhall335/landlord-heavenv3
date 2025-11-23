@@ -14,7 +14,7 @@
  */
 export interface CaseFacts {
   // Tenancy basics
-  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
+  jurisdiction: 'england-wales' | 'scotland';
   tenancy_type?: 'AST' | 'regulated' | 'excluded' | 'lodger';
   tenancy_start_date?: string;
   tenancy_end_date?: string; // For fixed term
