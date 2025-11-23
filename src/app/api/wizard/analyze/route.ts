@@ -67,9 +67,9 @@ export async function POST(request: Request) {
       );
     }
 
-    if (caseData.case_type === 'money_claim' && caseData.jurisdiction !== 'england-wales') {
+    if (caseData.case_type === 'money_claim' && caseData.jurisdiction === 'northern-ireland') {
       return NextResponse.json(
-        { error: 'Money claim analysis is only available for England & Wales. Scotland support is planned next.' },
+        { error: 'Money claim analysis is not available for Northern Ireland.' },
         { status: 400 }
       );
     }

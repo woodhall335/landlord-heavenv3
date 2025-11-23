@@ -22,6 +22,31 @@
       "notes": "First-tier Tribunal for Scotland (Housing and Property Chamber) application form. Placeholder PDF stored locally to keep generation paths intact while awaiting official download.",
       "file_size": "placeholder",
       "status": "PLACEHOLDER"
+    },
+    "simple_procedure_claim_form.pdf": {
+      "title": "Simple Procedure Claim Form (Form 3A)",
+      "version": "2024.03",
+      "effective_date": "2024-03-01",
+      "source_url": "https://www.scotcourts.gov.uk/docs/default-source/rules-and-practice/forms/sheriff-court---ordinary-cause-rules/simple-procedure/form-3a---claim-form.pdf",
+      "last_verified": "2025-02-01",
+      "notes": "Scottish Courts and Tribunals Service form for initiating Simple Procedure claims up to £5,000. Used for rent arrears, damages, and other civil monetary disputes. Placeholder PDF stored locally until automated downloader can fetch the latest official version.",
+      "file_size": "placeholder",
+      "pages": 4,
+      "status": "PLACEHOLDER",
+      "claim_limit": "£5,000",
+      "court_type": "Sheriff Court"
+    },
+    "simple_procedure_response_form.pdf": {
+      "title": "Simple Procedure Response Form (Form 4A)",
+      "version": "2024.03",
+      "effective_date": "2024-03-01",
+      "source_url": "https://www.scotcourts.gov.uk/docs/default-source/rules-and-practice/forms/sheriff-court---ordinary-cause-rules/simple-procedure/form-4a---response-form.pdf",
+      "last_verified": "2025-02-01",
+      "notes": "Response form for defendants in Simple Procedure cases. Included for completeness to help claimants understand the full procedure. Placeholder PDF stored locally until automated downloader can fetch the latest official version.",
+      "file_size": "placeholder",
+      "pages": 3,
+      "status": "PLACEHOLDER",
+      "court_type": "Sheriff Court"
     }
   },
   "copyright": "Crown Copyright. Scottish Government. Used under Open Government Licence v3.0",
@@ -32,5 +57,16 @@
     "website": "https://www.housingandpropertychamber.scot/",
     "application_fee": "£100",
     "payment_methods": ["Card", "Cheque", "Postal Order"]
+  },
+  "sheriff_court_info": {
+    "name": "Sheriff Court - Simple Procedure",
+    "website": "https://www.scotcourts.gov.uk/taking-action/simple-procedure",
+    "claim_limit": "£5,000",
+    "typical_fees": {
+      "up_to_300": "£21",
+      "301_to_1500": "£75",
+      "1501_to_5000": "£145"
+    },
+    "notes": "Simple Procedure is Scotland's streamlined process for civil claims up to £5,000. Replaced Small Claims in 2016."
   }
 }

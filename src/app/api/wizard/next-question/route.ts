@@ -51,9 +51,9 @@ export async function POST(request: Request) {
       );
     }
 
-    if (case_type === 'money_claim' && jurisdiction !== 'england-wales') {
+    if (case_type === 'money_claim' && jurisdiction === 'northern-ireland') {
       return NextResponse.json(
-        { error: 'Money claim flows are limited to England & Wales. Scotland is coming next.' },
+        { error: 'Money claim flows are not available in Northern Ireland.' },
         { status: 400 }
       );
     }
