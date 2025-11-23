@@ -154,6 +154,41 @@ export function compileTemplate(templateContent: string, data: Record<string, an
 }
 
 // ============================================================================
+// DOCUMENT MERGING
+// ============================================================================
+
+/**
+ * Merge multiple HTML documents into one
+ * Used to combine AST + bonus documents into a single PDF
+ */
+export function mergeHtmlDocuments(htmlDocuments: string[]): string {
+  return htmlDocuments.join('\n');
+}
+
+/**
+ * Compile multiple templates with the same data and merge them
+ */
+export async function compileAndMergeTemplates(
+  templatePaths: string[],
+  data: Record<string, any>
+): Promise<string> {
+  const htmlDocuments: string[] = [];
+
+  for (const templatePath of templatePaths) {
+    try {
+      const templateContent = loadTemplate(templatePath);
+      const html = compileTemplate(templateContent, data);
+      htmlDocuments.push(html);
+    } catch (error: any) {
+      console.error(`Failed to compile template ${templatePath}:`, error.message);
+      // Continue with other templates even if one fails
+    }
+  }
+
+  return mergeHtmlDocuments(htmlDocuments);
+}
+
+// ============================================================================
 // HTML TO PDF CONVERTER
 // ============================================================================
 
