@@ -8,8 +8,9 @@
       "effective_date": "2024-01-15",
       "source_url": "https://assets.publishing.service.gov.uk/media/601bc1858fa8f53fc3d799d9/n5-eng.pdf",
       "last_verified": "2024-11-23",
+      "file_size": "121KB",
       "notes": "Current as of January 2024. Use for both Section 8 and Section 21 claims.",
-      "status": "TO_DOWNLOAD"
+      "status": "DOWNLOADED"
     },
     "n5b-eng.pdf": {
       "title": "Form N5B - Claim for Possession (Accelerated Procedure)",
@@ -17,8 +18,9 @@
       "effective_date": "2024-01-15",
       "source_url": "https://assets.publishing.service.gov.uk/media/5fb39bf98fa8f55de86fb3a3/n5b-eng.pdf",
       "last_verified": "2024-11-23",
+      "file_size": "277KB",
       "notes": "Section 21 ONLY - for no-fault evictions via accelerated procedure. Cannot be used with Section 8.",
-      "status": "TO_DOWNLOAD"
+      "status": "DOWNLOADED"
     },
     "n119-eng.pdf": {
       "title": "Form N119 - Particulars of Claim for Possession",
@@ -26,17 +28,19 @@
       "effective_date": "2024-01-15",
       "source_url": "https://assets.publishing.service.gov.uk/media/601bc1f8e90e071292663ea8/n119-eng.pdf",
       "last_verified": "2024-11-23",
+      "file_size": "83KB",
       "notes": "Detailed particulars supporting possession claim. Used with N5.",
-      "status": "TO_DOWNLOAD"
+      "status": "DOWNLOADED"
     },
-    "form_6a.pdf": {
-      "title": "Form 6A - Section 21 Notice",
-      "version": "2019.10",
-      "effective_date": "2019-10-01",
-      "source_url": "https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/468937/form_6a.pdf",
+    "form_6a.odt": {
+      "title": "Form 6A - Section 21 Notice (OpenDocument)",
+      "version": "2021.10",
+      "effective_date": "2021-10-01",
+      "source_url": "https://assets.publishing.service.gov.uk/media/6155df94e90e07197f18fb61/Form_6A_1_Oct_2021.odt",
       "last_verified": "2024-11-23",
-      "notes": "Prescribed form for Section 21 notices under Assured Shorthold Tenancy Housing and Planning Act 1988 (as amended by Deregulation Act 2015).",
-      "status": "TO_DOWNLOAD"
+      "file_size": "15KB",
+      "notes": "Official prescribed form for Section 21 notices. GOV.UK provides this in .odt format only. We use template generation for Section 21 instead of form filling.",
+      "status": "REFERENCE_ONLY"
     }
   },
   "copyright": "Crown Copyright. Used under Open Government Licence v3.0",
