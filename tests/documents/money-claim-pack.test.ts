@@ -2,6 +2,35 @@ import { describe, expect, it, vi } from 'vitest';
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
 import * as forms from '@/lib/documents/official-forms-filler';
 
+// Mock the PDF filler to avoid pdf-lib issues in vitest
+vi.mock('@/lib/documents/official-forms-filler', async () => {
+  const actual = await vi.importActual('@/lib/documents/official-forms-filler');
+  return {
+    ...actual,
+    fillN1Form: vi.fn(async () => {
+      // Return a minimal valid PDF structure
+      return new Uint8Array([0x25, 0x50, 0x44, 0x46]); // "%PDF"
+    }),
+    assertOfficialFormExists: vi.fn(async () => {
+      // Mock successful assertion
+      return true;
+    }),
+  };
+});
+
+// Mock the document generator to avoid Puppeteer issues in vitest
+vi.mock('@/lib/documents/generator', () => ({
+  generateDocument: vi.fn(async ({ templatePath, data }) => {
+    // Return mock HTML and PDF based on template path
+    const templateName = templatePath.split('/').pop()?.replace('.hbs', '') || 'unknown';
+    const html = `<h1>${templateName}</h1><p>Mock document for ${data.landlord_full_name || 'test'}</p>`;
+    return {
+      html,
+      pdf: Buffer.from('mock-pdf-content'),
+    };
+  }),
+}));
+
 const sampleCase = {
   jurisdiction: 'england-wales' as const,
   case_id: 'case-money-1',

@@ -30,17 +30,21 @@ describe('Wizard selection UI Northern Ireland gating', () => {
     ).toBeTruthy();
   });
 
-  it('disables Northern Ireland selection for money claim flows and shows messaging', () => {
+  it('disables Northern Ireland selection for money claim flows (Scotland is now enabled)', () => {
     render(<WizardPage />);
 
     fireEvent.click(screen.getByRole('button', { name: /Money Claim/i }));
 
     const niOption = screen.getByRole('button', { name: /Northern Ireland/i });
     const scotlandOption = screen.getByRole('button', { name: /Scotland/i });
+
+    // Only Northern Ireland should be disabled - Scotland is now enabled for money claims
     expect((niOption as HTMLButtonElement).disabled).toBe(true);
-    expect((scotlandOption as HTMLButtonElement).disabled).toBe(true);
+    expect((scotlandOption as HTMLButtonElement).disabled).toBe(false);
+
+    // Check for Northern Ireland specific message
     expect(
-      screen.getByText('Money claims are available only in England & Wales. Scotland version is coming soon.')
+      screen.getByText(/Eviction and money claim flows are unavailable here/i)
     ).toBeTruthy();
   });
 

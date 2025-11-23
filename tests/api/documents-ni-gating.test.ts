@@ -1,6 +1,39 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { POST as generateDocument } from '@/app/api/documents/generate/route';
 
+// Mock document generators to avoid execution
+vi.mock('@/lib/documents/generator', () => ({
+  generateDocument: vi.fn(async () => ({
+    html: '<html>Mock</html>',
+    pdf: Buffer.from('mock-pdf'),
+  })),
+}));
+
+vi.mock('@/lib/documents/section8-generator', () => ({
+  generateSection8Notice: vi.fn(async () => ({ html: '<html>Mock Section 8</html>', pdf: Buffer.from('mock') })),
+}));
+
+vi.mock('@/lib/documents/ast-generator', () => ({
+  generateStandardAST: vi.fn(async () => ({ html: '<html>Mock AST</html>', pdf: Buffer.from('mock') })),
+  generatePremiumAST: vi.fn(async () => ({ html: '<html>Mock Premium AST</html>', pdf: Buffer.from('mock') })),
+}));
+
+vi.mock('@/lib/documents/scotland/notice-to-leave-generator', () => ({
+  generateNoticeToLeave: vi.fn(async () => ({ html: '<html>Mock</html>', pdf: Buffer.from('mock') })),
+}));
+
+vi.mock('@/lib/documents/scotland/prt-generator', () => ({
+  generatePRTAgreement: vi.fn(async () => ({ html: '<html>Mock</html>', pdf: Buffer.from('mock') })),
+}));
+
+vi.mock('@/lib/documents/scotland/wizard-mapper', () => ({
+  mapWizardToNoticeToLeave: vi.fn(() => ({})),
+}));
+
+vi.mock('@/lib/documents/northern-ireland/private-tenancy-generator', () => ({
+  generatePrivateTenancyAgreement: vi.fn(async () => ({ html: '<html>Mock</html>', pdf: Buffer.from('mock') })),
+}));
+
 const supabaseClientMock = {
   from: vi.fn(),
   insert: vi.fn(),
@@ -30,11 +63,13 @@ vi.mock('@/lib/supabase/server', () => ({
 }));
 
 describe('Document generation Northern Ireland gating', () => {
+  const validCaseId = '550e8400-e29b-41d4-a716-446655440000';
+
   beforeEach(() => {
     vi.clearAllMocks();
     supabaseClientMock.single.mockResolvedValue({
       data: {
-        id: 'case-123',
+        id: validCaseId,
         jurisdiction: 'northern-ireland',
         case_type: 'eviction',
         collected_facts: {},
@@ -49,7 +84,7 @@ describe('Document generation Northern Ireland gating', () => {
       new Request('http://localhost/api/documents/generate', {
         method: 'POST',
         body: JSON.stringify({
-          case_id: 'case-123',
+          case_id: validCaseId,
           document_type: 'section8_notice',
         }),
       })
