@@ -9,7 +9,7 @@
  */
 
 import { generateDocument, GeneratedDocument } from './generator';
-import { assertOfficialFormExists, fillN1Form, CaseData } from './official-forms-filler';
+import { assertOfficialFormExists, fillN1Form, CaseData } from '@/lib/documents/official-forms-filler';
 
 export type MoneyClaimJurisdiction = 'england-wales';
 

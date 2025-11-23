@@ -53,8 +53,8 @@ const documentOptions: DocumentOption[] = [
 ];
 
 const jurisdictions: JurisdictionOption[] = [
-  { value: 'england-wales', label: 'England & Wales', flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿' },
-  { value: 'scotland', label: 'Scotland', flag: '🏴󠁧󠁢󠁳󠁣󠁴󠁿' },
+  { value: 'england-wales', label: 'England & Wales', flag: '🏴' },
+  { value: 'scotland', label: 'Scotland', flag: '🏴' },
   { value: 'northern-ireland', label: 'Northern Ireland', flag: '🇬🇧' },
 ];
 
@@ -110,10 +110,18 @@ export default function WizardPage() {
       (selectedDocument.type !== 'tenancy_agreement' && selectedJurisdiction.value === 'northern-ireland'));
 
   const getUnsupportedCopy = (jur: JurisdictionOption) => {
-    if (selectedDocument?.type === 'money_claim' && jur.value !== 'england-wales') {
-      return 'Money claims are available only in England & Wales. Scotland version is coming soon.';
+    // Money claim: differentiate Scotland vs Northern Ireland
+    if (selectedDocument?.type === 'money_claim') {
+      if (jur.value === 'scotland') {
+        return 'Money claims are available only in England & Wales. Scotland version is coming soon.';
+      }
+
+      if (jur.value === 'northern-ireland') {
+        return 'Eviction and money claim flows are unavailable here. Tenancy agreements only.';
+      }
     }
 
+    // Non-tenancy flows in Northern Ireland (eviction etc.)
     if (selectedDocument && selectedDocument.type !== 'tenancy_agreement' && jur.value === 'northern-ireland') {
       return 'Eviction and money claim flows are unavailable here. Tenancy agreements only.';
     }
@@ -161,18 +169,21 @@ export default function WizardPage() {
         }
       />
       <Container size="large" className="py-12">
-
         {/* Step Indicator */}
         <div className="max-w-md mx-auto mb-12">
           <div className="flex items-center justify-center gap-4">
-            <div className={clsx(
-              'flex items-center gap-2',
-              step === 1 ? 'text-primary' : 'text-gray-400'
-            )}>
-              <div className={clsx(
-                'w-8 h-8 rounded-full flex items-center justify-center font-semibold',
-                step === 1 ? 'bg-primary text-white' : 'bg-gray-200'
-              )}>
+            <div
+              className={clsx(
+                'flex items-center gap-2',
+                step === 1 ? 'text-primary' : 'text-gray-400',
+              )}
+            >
+              <div
+                className={clsx(
+                  'w-8 h-8 rounded-full flex items-center justify-center font-semibold',
+                  step === 1 ? 'bg-primary text-white' : 'bg-gray-200',
+                )}
+              >
                 1
               </div>
               <span className="text-sm font-medium">Choose Document</span>
@@ -180,14 +191,18 @@ export default function WizardPage() {
 
             <div className="w-12 h-0.5 bg-gray-300" />
 
-            <div className={clsx(
-              'flex items-center gap-2',
-              step === 2 ? 'text-primary' : 'text-gray-400'
-            )}>
-              <div className={clsx(
-                'w-8 h-8 rounded-full flex items-center justify-center font-semibold',
-                step === 2 ? 'bg-primary text-white' : 'bg-gray-200'
-              )}>
+            <div
+              className={clsx(
+                'flex items-center gap-2',
+                step === 2 ? 'text-primary' : 'text-gray-400',
+              )}
+            >
+              <div
+                className={clsx(
+                  'w-8 h-8 rounded-full flex items-center justify-center font-semibold',
+                  step === 2 ? 'bg-primary text-white' : 'bg-gray-200',
+                )}
+              >
                 2
               </div>
               <span className="text-sm font-medium">Choose Location</span>
@@ -212,12 +227,14 @@ export default function WizardPage() {
                     'hover:shadow-lg hover:scale-105',
                     selectedDocument?.type === doc.type
                       ? 'border-primary bg-primary-subtle shadow-md'
-                      : 'border-gray-300 bg-white hover:border-primary'
+                      : 'border-gray-300 bg-white hover:border-primary',
                   )}
                 >
                   {doc.popular && (
                     <div className="absolute -top-3 right-4">
-                      <Badge variant="primary" size="small">Most Popular</Badge>
+                      <Badge variant="primary" size="small">
+                        Most Popular
+                      </Badge>
                     </div>
                   )}
 
@@ -228,9 +245,7 @@ export default function WizardPage() {
                   <p className="text-sm text-gray-600 mb-4 min-h-[3rem]">
                     {doc.description}
                   </p>
-                  <div className="text-primary font-semibold">
-                    {doc.price}
-                  </div>
+                  <div className="text-primary font-semibold">{doc.price}</div>
                 </button>
               ))}
             </div>
@@ -245,7 +260,12 @@ export default function WizardPage() {
               className="mb-6 text-gray-600 hover:text-primary transition-colors flex items-center gap-2"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
               Back to document selection
             </button>
@@ -269,14 +289,12 @@ export default function WizardPage() {
                     !isJurisdictionSupported(jur) && 'opacity-60 cursor-not-allowed',
                     selectedJurisdiction?.value === jur.value
                       ? 'border-primary bg-primary-subtle shadow-md'
-                      : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
+                      : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm',
                   )}
                 >
                   <div className="text-4xl">{jur.flag}</div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-charcoal">
-                      {jur.label}
-                    </h3>
+                    <h3 className="text-lg font-semibold text-charcoal">{jur.label}</h3>
                     {!isJurisdictionSupported(jur) && (
                       <p className="text-sm text-red-600 mt-1">{getUnsupportedCopy(jur)}</p>
                     )}
@@ -284,7 +302,11 @@ export default function WizardPage() {
                   {selectedJurisdiction?.value === jur.value && (
                     <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
                       <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     </div>
                   )}
@@ -304,13 +326,9 @@ export default function WizardPage() {
                   Start Wizard →
                 </Button>
                 {selectedComboUnsupported && (
-                  <p className="text-sm text-red-600 mt-3">
-                    {selectedUnsupportedCopy}
-                  </p>
+                  <p className="text-sm text-red-600 mt-3">{selectedUnsupportedCopy}</p>
                 )}
-                <p className="text-sm text-gray-600 mt-3">
-                  This will take about 5-10 minutes
-                </p>
+                <p className="text-sm text-gray-600 mt-3">This will take about 5-10 minutes</p>
               </div>
             )}
           </div>

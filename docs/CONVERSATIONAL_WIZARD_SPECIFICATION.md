@@ -1,620 +1,504 @@
-# 🎯 LANDLORD HEAVEN - CONVERSATIONAL WIZARD SPECIFICATION
-
-**Version:** 1.0  
-**Date:** November 2024  
-**Status:** Final Design - Ready for Implementation
+# Conversational Wizard Specification  
+### Landlord Heaven – Unified MQS + Ask Heaven Flow  
+_Last updated: November 2025_
 
 ---
 
-## 📋 EXECUTIVE SUMMARY
+# 1. Purpose
 
-Landlord Heaven uses a **conversational wizard with structured inputs** approach that combines:
+This document defines the **complete architecture, flow, behaviour, and requirements** for the Landlord Heaven Conversational Wizard.
 
-✅ **Natural conversation flow** (feels human, friendly, guiding)  
-✅ **Structured data capture** (reliable, court-ready, precise)  
-✅ **Intelligent branching** (only asks relevant questions)  
-✅ **Progressive disclosure** (not overwhelming)  
-✅ **Visual feedback** (progress, validation, context)
+The wizard serves as the **guided interface** which:
 
----
+- Collects all facts needed for notices, court forms, and document packs  
+- Validates user input  
+- Enhances answers with Ask Heaven  
+- Ensures legal accuracy through MQS (Master Question Sets)  
+- Supports evidence uploads  
+- Delivers a paywalled preview  
+- Triggers document generation  
 
-## 🎨 CORE DESIGN PRINCIPLE
+The wizard does **not** generate free-form questions.  
+All questions come from **deterministic MQS files** per jurisdiction and product.
 
-> "Plain English in → legally-structured, jurisdiction-specific documents out"
-
-### NOT THIS (Pure Chat):
-
-❌ "How much rent is owed?"  
-❌ User types: "like three grand maybe?"  
-❌ AI guesses: "£3,000?"  
-❌ **RESULT: MESSY, UNRELIABLE**
-
-### NOT THIS (Dead Form):
-
-❌ Giant 50-question form  
-❌ All questions visible at once  
-❌ Overwhelming  
-❌ **RESULT: HIGH ABANDONMENT**
-
-### YES THIS (Conversational + Structured):
-
-✅ Bot: "How much rent is currently owed?"  
-✅ UI: £ [____] input box + "Not sure" toggle  
-✅ Bot: "When did the tenancy start?"  
-✅ UI: [Date Picker] + "Approximately" option  
-✅ **RESULT: CLEAN, RELIABLE, CONVERSATIONAL**
+Ask Heaven assists, MQS controls.
 
 ---
 
-## 🎨 UI LAYOUT
+# 2. Core Components
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    LANDLORD HEAVEN                      │
-│  ┌───────────────────────────────────────────────────┐ │
-│  │  Conversation Panel (Left 60%)                    │ │
-│  │                                                    │ │
-│  │  🤖 Bot: What's the main issue with your tenant?  │ │
-│  │                                                    │ │
-│  │  ┌──────────────────────────────────────────────┐ │ │
-│  │  │  [💰 Not paying rent]                        │ │ │
-│  │  │  [📊 Noise / antisocial behaviour]          │ │ │
-│  │  │  [🏚️ Damaging the property]                  │ │ │
-│  │  │  [🚪 Won't leave after tenancy ended]       │ │ │
-│  │  │  [📝 Multiple issues]                        │ │ │
-│  │  └──────────────────────────────────────────────┘ │ │
-│  │                                                    │ │
-│  │  [Progress: ████░░░░░░ 4/10 questions]           │ │
-│  └───────────────────────────────────────────────────┘ │
-│                                                         │
-│  ┌───────────────────────────────────────────────────┐ │
-│  │  Context Panel (Right 40%)                        │ │
-│  │  ─────────────────────────────────────────────────│ │
-│  │  📋 What we know so far:                          │ │
-│  │                                                    │ │
-│  │  ✓ Location: England & Wales                      │ │
-│  │  ✓ Issue: Rent arrears                            │ │
-│  │  ✓ Amount owed: £2,400                            │ │
-│  │  ✓ Months overdue: 3 months                       │ │
-│  │  ⏳ Tenancy start date: [collecting...]          │ │
-│  │                                                    │ │
-│  │  💡 Why we ask:                                   │ │
-│  │  We need exact amounts and dates for              │ │
-│  │  your court documents. Don't worry -              │ │
-│  │  you can edit these later.                        │ │
-│  └───────────────────────────────────────────────────┘ │
-└─────────────────────────────────────────────────────────┘
-```
+The wizard is made of four interconnected systems:
+
+1. **Master Question Sets (MQS)** – the deterministic question engine  
+2. **Ask Heaven™** – the AI assistant offering suggestions  
+3. **Wizard API** – handles input/output, validation, persistence  
+4. **Case & Evidence Store** – persistent store in Supabase  
 
 ---
 
-## 🎯 INPUT TYPES & PATTERNS
+# 3. Wizard Flow (Universal Across All Products)
 
-### 1. MULTIPLE CHOICE (Big Buttons)
+This flow applies to:
+
+- Notice Only  
+- Complete Eviction Pack  
+- Money Claim Pack  
+- Tenancy Agreements  
+- HMO Pro onboarding  
+
+## **Step 1 — Product + Jurisdiction Selection**
+User either arrives via:
+
+- `/wizard?product=complete_pack`
+- `/wizard?product=notice_only`
+- `/wizard?product=money_claim`
+- `/wizard?product=ast_standard`, etc.
+
+Jurisdiction is selected with blocking logic:
+
+- NI cannot choose money-claim  
+- All can choose tenancy agreements  
+- Eviction flows apply jurisdiction-specific rules  
+
+---
+
+## **Step 2 — “Describe the situation”**
+This is the only free-text step.
+
+User writes:  
+
+> “My tenant hasn’t paid rent for 3 months, won’t respond, and the tenancy started in 2021.”
+
+Ask Heaven performs:
+
+- Summary  
+- Key missing facts  
+- Legal risks  
+- Timeline indication  
+- Reassurance  
+
+Nothing is stored except the raw text and AI summary.
+
+---
+
+## **Step 3 — Begin MQS**
+
+MQS files determine:
+
+- Order of questions  
+- Data types  
+- Validation  
+- Required vs optional logic  
+- Jurisdiction overrides  
+- Conditional logic (e.g., Ground 8 questions only appear when “rent arrears” selected)
+
+Each question is displayed with:
+
+- **The question text**  
+- **Input field** (text/date/upload/etc.)
+- **Ask Heaven suggestion box**  
+- **“Accept suggestion”** button  
+
+When user submits:
+
+- Validation runs  
+- Input is saved to `collected_facts`  
+- Decision engine may set flags (e.g. “ground_8_applicable: true”)  
+- Wizard progresses to next MQS question  
+
+The wizard automatically resumes where the user left off.
+
+---
+
+# 4. Master Question Set (MQS) Structure
+
+Each MQS is a YAML file stored under:
+
+/config/mqs/{product}/{jurisdiction}.yaml
+
+makefile
+Copy code
+
+Example:
+
+/config/mqs/eviction/england-wales.yaml
+/config/mqs/money_claim/scotland.yaml
+/config/mqs/notice_only/northern-ireland.yaml
+
+yaml
+Copy code
+
+## MQS Field Structure
 
 ```yaml
-Bot: "What's the main issue with your tenant?"
+- id: tenancy_start_date
+  question: "When did the tenancy begin?"
+  type: date
+  required: true
+  maps_to:
+    - "tenancy.start_date"
+    - "court_forms.N5.tenancy_start_date"
+  validation:
+    format: "YYYY-MM-DD"
+  suggestion_prompt: "Help the user provide the correct tenancy start date according to the tenancy agreement."
+  jurisdictions: ["england-wales"]
+  conditions:
+    depends_on: null
+Field types supported:
 
-UI:
-  [💰 Not paying rent]           ← Big button
-  [📊 Antisocial behaviour]
-  [🏚️ Damaging property]
-  [🚪 Won't leave]
-  [📝 Multiple issues]
+text
 
-Behavior:
-  - Immediately advances (no "Next" button)
-  - Highlights on hover
-  - Disabled states for invalid options
-```
+textarea
 
-**Use for:**
+date
 
-- Category selection
-- Binary choices
-- Tenancy type selection
-- Yes/No/Not sure questions
+currency
 
----
+number
 
-### 2. AMOUNT ENTRY (Currency Input)
+boolean
 
-```yaml
-Bot: "How much rent is currently owed?"
+multiple_choice
 
-UI: ┌─────────────────────────────────┐
-  │  £ [_2,400__]                   │  ← Currency input
-  │                                 │
-  │  [ ] I'm not sure of exact      │  ← Checkbox option
-  │      amount (we'll estimate)    │
-  └─────────────────────────────────┘
+upload (PDF, images, docs)
 
-  [Continue →]
+address
 
-Features:
-  - Auto-formats with commas (£2,400)
-  - Numeric only
-  - Minimum £0
-  - Optional "unsure" toggle
-  - Inline validation
-```
+5. Evidence Upload Flow
+At designated MQS points:
 
-**Use for:**
+nginx
+Copy code
+upload_bank_statements
+upload_tenancy_agreement
+upload_safety_certificates
+upload_rent_ledger
+User uploads files.
 
-- Rent amounts
-- Arrears totals
-- Deposit amounts
-- Damage costs
-- Claim amounts
+Ask Heaven:
 
----
+Extracts structured fields
 
-### 3. DATE ENTRY (Date Picker)
+Identifies missing evidence
 
-```yaml
-Bot: "When did the tenancy start?"
+Scans for compliance risks
 
-UI:
-  ┌─────────────────────────────────┐
-  │  [📅 DD/MM/YYYY]                │  ← Date picker
-  │                                 │
-  │  Quick options:                 │
-  │  [This month] [3 months ago]    │  ← Smart defaults
-  │  [6 months ago] [1 year ago]    │
-  │                                 │
-  │  [ ] I don't know the exact     │  ← Checkbox
-  │      date (approximate is OK)   │
-  └─────────────────────────────────┘
+Adds extracted data into collected_facts
 
-  [Continue →]
+All files are stored in:
 
-Features:
-  - Calendar popup
-  - Quick date buttons
-  - "Approximate" option
-  - Past dates only (for start dates)
-  - Future dates only (for end dates)
-  - Validates logical date ranges
-```
+bash
+Copy code
+/storage/cases/{case_id}/evidence/*
+6. Case Strength Score
+At the end of MQS:
 
-**Use for:**
+Decision engine reviews all facts
 
-- Tenancy start dates
-- Notice service dates
-- Payment due dates
-- Last payment dates
-- Incident dates
+Reviews evidence presence
 
----
+Scores on:
 
-### 4. YES/NO/UNSURE (Toggle + Follow-up)
+Legal compliance
 
-```yaml
-Bot: "Is the deposit protected in a government-approved scheme?"
+Notices viability
 
-UI: ┌────────────────────────────────────────┐
-  │  [●Yes] [○No] [○Not sure]              │  ← Radio buttons
-  │                                         │
-  │  💡 This is legally required for ASTs   │
-  │     If "No", Section 21 may not work    │
-  └────────────────────────────────────────┘
+Deposit protection correctness
 
-If "Yes" → Follow-up appears: ┌────────────────────────────────────────┐
-  │  Which scheme?                          │
-  │  [● DPS] [○ TDS] [○ MyDeposits]         │
-  └────────────────────────────────────────┘
+Document completeness
 
-  [Continue →]
+Evidence sufficiency
 
-Features:
-  - Clear visual states
-  - Inline help text
-  - Conditional follow-ups
-  - Legal warnings when needed
-```
+Jurisdiction pitfalls
 
-**Use for:**
+Output:
 
-- Compliance questions
-- Document possession
-- Condition checks
-- Permission questions
+makefile
+Copy code
+case_strength_score: 0–100
+case_risks: [array]
+recommendations: [array]
+Displayed before paywall.
 
----
+7. Paywalled Preview (2 Pages)
+Before checkout, user sees:
 
-### 5. TEXT ENTRY (Minimal Use)
+HTML preview of first 1–2 pages
 
-```yaml
-Bot: "What's the tenant's full name?"
+Non-downloadable
 
-UI:
-  ┌─────────────────────────────────┐
-  │  First name: [John________]     │  ← Text input
-  │  Last name:  [Smith_______]     │
-  │                                 │
-  │  [ ] Multiple tenants           │  ← Expands form
-  └─────────────────────────────────┘
+Watermarked
 
-  [Continue →]
+Locked after 2 page scroll
 
-Features:
-  - Auto-capitalization
-  - Character validation
-  - Required field indicators
-  - Multi-tenant expansion
-```
+Stripe checkout required to unlock full pack.
 
-**Use for:**
+8. Document Generation
+After Stripe success:
 
-- Names
-- Addresses
-- Property descriptions
-- Unique identifiers
+Wizard triggers document generator
 
----
+MQS → collected_facts → decision engine → route selection
 
-### 6. MULTIPLE SELECTION (Checkboxes)
+Each form generated:
 
-```yaml
-Bot: "Are there any other issues? (Select all that apply)"
+Official PDF forms (N1, N5, N5B, Form 3A, Form E)
 
-UI:
-  ┌────────────────────────────────────────┐
-  │  [ ] Damage to property                │  ← Checkboxes
-  │  [ ] Antisocial behaviour              │
-  │  [ ] Unauthorized occupants            │
-  │  [ ] Breach of tenancy terms           │
-  │  [✓] None - just the rent arrears      │
-  └────────────────────────────────────────┘
+HTML previews
 
-  [Continue →]
+Guidance docs
 
-Features:
-  - Multiple selections allowed
-  - "None" option disables others
-  - Each selection may trigger follow-ups
-  - Visual count of selections
-```
+Schedules (arrears, interest, evidence index)
 
-**Use for:**
+All stored in:
 
-- Multiple grounds selection
-- Additional issues
-- Document checklist
-- Compliance requirements
+swift
+Copy code
+/storage/documents/{user_id}/{case_id}/*
+9. Dashboard Behaviour
+User can:
 
----
+Resume wizard
 
-### 7. FILE UPLOAD (Optional)
+View/download documents
 
-```yaml
-Bot: "Do you have a copy of the tenancy agreement?"
+Upload more evidence
 
-UI:
-  ┌────────────────────────────────────────┐
-  │  [🔎 Upload file] or [Skip this step]  │
-  │                                         │
-  │  💡 This helps us check your rights     │
-  │     but isn't required to continue      │
-  │                                         │
-  │  Drag & drop or click to browse         │
-  │                                         │
-  │  Accepted: PDF, DOC, DOCX, JPG, PNG     │
-  │  Max size: 10MB                         │
-  └────────────────────────────────────────┘
+Regenerate documents
 
-Features:
-  - Drag & drop support
-  - File type validation
-  - Size limit enforcement
-  - Preview after upload
-  - Optional (never blocks progress)
-```
+View timeline steps
 
-**Use for:**
+Access Ask Heaven aftercare
 
-- Tenancy agreements
-- Evidence documents
-- Photos of damage
-- Correspondence
-- Previous notices
+10. Ask Heaven Integration Rules
+For every question:
+
+Ask Heaven receives:
+
+question text
+
+user’s raw answer
+
+jurisdiction
+
+product type
+
+collected_facts so far
+
+Ask Heaven must:
+
+Suggest improvements
+
+Flag missing facts
+
+Check legal risks
+
+Provide examples suitable for courts
+
+Never hallucinate
+
+Never choose legal strategy
+
+Never declare certainty
+
+Suggestions are optional. The wizard moves forward on user confirmation.
+
+11. API Endpoints (Overview)
+/api/wizard/start
+/api/wizard/next-question
+/api/wizard/answer
+/api/wizard/analyze
+/api/wizard/upload-evidence
+/api/wizard/complete
+
+All accept/return structured JSON.
+
+12. End of Specification
+This file governs all wizard logic, design, data flow, and question handling.
+It must remain consistent with the Master Blueprint and Ask Heaven system prompt.
+
+yaml
+Copy code
 
 ---
 
-### 8. SCALE/RANGE (For Severity)
+# ✅ **/docs/ASK_HEAVEN_SYSTEM_PROMPT.md**
 
-```yaml
-Bot: "How severe is the antisocial behaviour?"
-
-UI:
-  ┌────────────────────────────────────────┐
-  │  Minor          Moderate        Severe  │
-  │  ├────────●────────────────────────────┤  ← Slider
-  │                                         │
-  │  Selected: Moderate                     │
-  │                                         │
-  │  Examples at this level:                │
-  │  • Regular loud music                   │
-  │  • Frequent arguments                   │
-  │  • Complaint from 1-2 neighbors         │
-  └────────────────────────────────────────┘
-
-Features:
-  - Visual scale
-  - Context-specific examples
-  - Snap to discrete values
-  - Tooltip descriptions
-```
-
-**Use for:**
-
-- Severity assessment
-- Frequency ratings
-- Impact evaluation
-- Urgency levels
+```md
+# Ask Heaven System Prompt  
+### Landlord Heaven – AI Legal Co-Pilot  
+_Last updated: November 2025_
 
 ---
 
-## 📋 COMPLETE CONVERSATION FLOW EXAMPLE (Rent Arrears)
+# 1. Purpose
 
-### Step 1: Big Button Selection
+Ask Heaven is the AI assistant that:
 
-```yaml
-┌──────────────────────────────────────────┐
-│ 🤖 What brings you here today?          │
-│                                          │
-│ [💰 Tenant not paying rent]             │
-│ [🏠 Create tenancy agreement]           │
-│ [💸 Claim money owed]                   │
-└──────────────────────────────────────────┘
-```
+- Helps users answer MQS questions  
+- Improves clarity, accuracy, and court-readiness of their answers  
+- Provides context, examples, and warnings  
+- Never controls the wizard flow  
+- Never makes up facts  
+- Never gives unlawful eviction advice  
 
-### Step 2: Location
-
-```yaml
-┌──────────────────────────────────────────┐
-│ 🤖 Where is the property located?       │
-│                                          │
-│ [🏴󠁧󠁢󠁥󠁮󠁧󠁿 England & Wales]                   │
-│ [🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland]                           │
-│ [🇮🇪 Northern Ireland]                   │
-└──────────────────────────────────────────┘
-```
-
-### Step 3: Amount
-
-```yaml
-┌──────────────────────────────────────────┐
-│ 🤖 How much rent is owed in total?      │
-│                                          │
-│ £ [2,400_______]                         │
-│                                          │
-│ [ ] Not sure of exact amount            │
-│                                          │
-│ 💡 Enter the total unpaid rent          │
-│                                          │
-│ [Continue →]                             │
-└──────────────────────────────────────────┘
-```
-
-### Step 4: Duration
-
-```yaml
-┌──────────────────────────────────────────┐
-│ 🤖 How many months behind are they?     │
-│                                          │
-│ [1 month] [2 months] [3 months] [4+]    │
-│                                          │
-│ Or enter exactly: [3] months            │
-│                                          │
-│ 💡 3+ months = stronger legal grounds   │
-└──────────────────────────────────────────┘
-```
-
-### Step 5: HMO Detection & Upsell 🆕
-
-```yaml
-Bot detects: 3+ unrelated tenants
-
-┌──────────────────────────────────────────┐
-│ 🤖 This is an HMO property!              │
-│                                          │
-│ Managing HMOs? HMO Pro gives you:        │
-│                                          │
-│ ✅ Council-specific licensing            │
-│ ✅ Unlimited tenant updates (no fees!)   │
-│ ✅ Automated compliance reminders        │
-│ ✅ Portfolio dashboard                   │
-│                                          │
-│ From £19.99/month                        │
-│ Try free for 7 days                      │
-│                                          │
-│ [Start Free Trial] [Maybe Later]         │
-└──────────────────────────────────────────┘
-```
+Ask Heaven supports; MQS decides.
 
 ---
 
-## 📊 RIGHT PANEL: "WHAT WE KNOW SO FAR"
+# 2. System Persona
 
-Always visible context panel that updates in real-time:
+You are **Ask Heaven**, the legal co-pilot for UK landlords.
 
-```yaml
-┌───────────────────────────────────┐
-│ 📋 Your Case Summary              │
-│ ───────────────────────────────── │
-│                                   │
-│ ✅ Collected:                     │
-│ • Location: England & Wales       │
-│ • Issue: Rent arrears             │
-│ • Amount: £2,400                  │
-│ • Duration: 3 months              │
-│ • Start date: 15/06/2023          │
-│ • Type: Fixed term                │
-│ • Deposit: Protected (DPS)        │
-│                                   │
-│ ⏳ Still needed:                  │
-│ • Compliance documents status     │
-│ • Other issues check              │
-│                                   │
-│ 💡 Progress: 80%                  │
-│ ████████████░░░░                  │
-│                                   │
-│ [Edit answers] [Save & exit]      │
-└───────────────────────────────────┘
-```
+**Your persona:**
 
-**Features:**
-
-- Real-time updates as user answers
-- Green checkmarks for completed items
-- Hourglass for in-progress
-- Edit capability (click any item)
-- Save & exit (resume later)
-- Progress bar visualization
+- Senior UK housing solicitor (12+ years PQE)  
+- Calm, precise, and risk-focused  
+- Expert in:
+  - England & Wales Housing Act 1988  
+  - Scotland PRT 2016 Act  
+  - Northern Ireland tenancy legislation  
+  - Civil Procedure Rules  
+  - Simple Procedure Rules  
+  - Evidence standards  
+  - Arrears calculations  
+  - Deposit protection rules  
+- You speak in plain English  
+- You avoid fear, blame, or legal threats  
+- You never give legal advice outside factual information  
+- You never tell the user what to do next besides answering MQS  
 
 ---
 
-## 🎯 BRANCHING LOGIC RULES
+# 3. Output Requirements
 
-### Intelligent Question Flow:
+Ask Heaven produces:
 
-```yaml
-IF primary_issue = "rent_arrears":
-  → Ask: amount, duration, last_payment
-  → THEN branch:
-    IF duration >= 2 months:
-      → Ask: deposit_protection
-      → Ask: compliance_documents
-      → Route: Section 8 Ground 8
-    ELSE:
-      → Route: Section 8 Ground 10
+1. **Suggestion**  
+   - A clearer, more legally precise version of the user’s answer  
+   - Fit for use in a court form or notice  
+   - Structured, neutral, factual  
+   - No exaggeration, no assumptions  
 
-IF primary_issue = "antisocial":
-  → Ask: severity, frequency, evidence
-  → Ask: police_involved, complaints_received
-  → Route: Section 8 Ground 14
+2. **Warnings (when relevant)**  
+   - Only factual risks  
+   - Examples:
+     - “This ground requires at least 2 months of arrears on the notice date.”
+     - “Accelerated possession is only available if the deposit was protected correctly.”
 
-IF tenancy_type = "fixed_term" AND past_end_date = true:
-  → Offer: Section 21 option
-  → Ask: compliance_checklist
+3. **Missing Information**  
+   - Identify specific items missing  
+   - Never invent any  
+   - Never fill in unknown numbers, dates, names  
 
-IF deposit_protected = "no":
-  → Flag: Cannot use Section 21
-  → Suggest: Section 8 only
-  → Warn: May need to return 3x deposit
-
-IF tenant_count >= 3 AND shared_facilities = true:
-  → Detect: HMO property
-  → Show: HMO Pro upsell
-  → Offer: 7-day free trial
-```
+4. **Evidence Suggestions**  
+   - Suggest evidence types the user *may* upload  
+   - Never assert the user has evidence they have not mentioned  
 
 ---
 
-## 🎨 MOBILE OPTIMIZATION
+# 4. Hard Rules
 
-### Mobile Layout (< 768px):
+These MUST be followed:
 
-```yaml
-┌───────────────────────────┐
-│  [≡] Landlord Heaven      │
-│                           │
-│  🤖 Question here         │
-│                           │
-│  [Input/Buttons]          │
-│                           │
-│  ───────────────────────  │
-│  Progress: ████░░░ 40%    │
-│  ───────────────────────  │
-│                           │
-│  📋 Summary (collapsible) │
-│  [▼ Tap to expand]        │
-│                           │
-└───────────────────────────┘
-```
+### ❌ Never tell the user to “serve the notice” or “start court action”  
+You may explain what the fields mean or general process but **never instruct action**.
 
-**Mobile-Specific Features:**
+### ❌ Never guess dates, amounts, names, or tenancy terms  
+If unknown, say so.
 
-- Single column layout
-- Larger touch targets (min 44px)
-- Collapsible context panel
-- Swipe gestures for navigation
-- Auto-scroll to next question
-- Sticky progress bar
-- Bottom-sheet inputs for dates/amounts
+### ❌ Never state a user has “a strong case”  
+Instead:  
+“Based on the facts provided so far, this appears compliant with Ground 8 requirements.”
+
+### 📌 Always tailor to jurisdiction  
+- Scotland uses Pursuer/Defender  
+- NI uses Notice to Quit  
+- E&W uses Section 8, Section 21, N5, N5B  
+
+### 📌 Always reinforce evidence  
+If the user describes ASB without proof:  
+“You may wish to upload police reports, witness statements, or CCTV if available.”
 
 ---
 
-## 🔧 TECHNICAL SPECIFICATIONS
+# 5. Inputs Provided
 
-### Conversation State Machine:
+You will always receive:
 
-```typescript
-interface ConversationState {
-  // Progress tracking
-  step: number;
-  totalSteps: number;
-  progress: number; // 0-100
+- Jurisdiction  
+- Product type  
+- MQS question  
+- User’s raw answer  
+- Collected facts so far  
 
-  // Route context
-  route: "eviction" | "tenancy" | "money-claim";
-  jurisdiction: "uk-england-wales" | "uk-scotland" | "uk-ni";
-
-  // Data collection
-  collectedFacts: Record<string, any>;
-  missingFacts: string[];
-  validationErrors: string[];
-
-  // Current question
-  currentQuestion: {
-    id: string;
-    text: string;
-    inputType: InputType;
-    options?: Option[];
-    validation?: ValidationRule[];
-    helpText?: string;
-    required: boolean;
-    skipIf?: Condition;
-  };
-
-  // Navigation
-  history: string[]; // Question IDs visited
-  canGoBack: boolean;
-  canSkip: boolean;
-}
-```
+You must use these to produce helpful suggestions.
 
 ---
 
-## 🎯 SUCCESS METRICS
+# 6. Example Output
 
-### Conversion Funnel:
+### Example Question:
+“Describe the rent arrears situation.”
 
-```yaml
-Landing Page → Start Wizard: Target 15%
-  → Track: Click "Start Free Analysis"
+### Example User Input:
+“He hasn’t paid in months.”
 
-Start Wizard → Complete Questions: Target 50%
-  → Track: Reach "Analysis Complete"
-  → Metric: Average questions answered
-  → Metric: Drop-off points
+### Ask Heaven Output:
+Suggested Wording
+“The tenant has failed to pay rent for the months of June, July, and August 2025.
+The monthly rent is £950, and a total of £2,850 remains outstanding.”
 
-Complete Questions → View Results: Target 95%
-  → Track: View recommended route
+Missing Information
 
-View Results → Preview Documents: Target 80%
-  → Track: Click "See Documents"
+Exact dates rent was due
 
-Preview Documents → Purchase: Target 10%
-  → Track: Complete checkout
-  → Metric: Tier selection distribution
+Any partial payments received
 
-Overall Landing → Purchase: Target 1.2%
-```
+Evidence You May Upload
+
+Rent statements or bank screenshots
+
+Messages requesting payment (if available)
+
+yaml
+Copy code
 
 ---
 
-**END OF CONVERSATIONAL WIZARD SPECIFICATION**
+# 7. Response Format (Strict)
 
-This document is the definitive guide for building the Landlord Heaven conversational wizard. All development should adhere to these specifications to ensure consistency, reliability, and optimal user experience.
+Ask Heaven MUST respond using:
+
+Suggested Wording
+...
+
+Missing Information
+
+item
+
+item
+
+Evidence You May Upload
+
+item
+
+item
+
+kotlin
+Copy code
+
+If a section is empty, return:
+
+Missing Information
+None
+
+yaml
+Copy code
+
+---
+
+# 8. End of Prompt
+
+This system prompt defines the exact behaviour of Ask Heaven.  
+It must not be altered without approval and versioning.

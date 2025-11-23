@@ -18,20 +18,21 @@ import { z } from 'zod';
 
 // Validation schema
 const generateDocumentSchema = z.object({
-  case_id: z.string().uuid(),
+  case_id: z.string().min(1),
   document_type: z.enum([
     'section8_notice',
     'section21_notice',
     'ast_standard',
     'ast_premium',
     'notice_to_leave', // Scotland
-    'prt_agreement', // Scotland
-    'prt_premium', // Scotland Premium
+    'prt_agreement',   // Scotland
+    'prt_premium',     // Scotland Premium
     'private_tenancy', // Northern Ireland
     'private_tenancy_premium', // Northern Ireland Premium
   ]),
   is_preview: z.boolean().optional().default(true),
 });
+
 
 export async function POST(request: Request) {
   try {

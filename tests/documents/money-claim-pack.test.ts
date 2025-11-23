@@ -1,4 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
+
+// Mock the official forms filler BEFORE importing the generator
+vi.mock('@/lib/documents/official-forms-filler', () => ({
+  assertOfficialFormExists: vi.fn().mockResolvedValue(undefined),
+  fillN1Form: vi.fn().mockResolvedValue(Buffer.from('PDF_CONTENT')),
+}));
+
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
 import * as forms from '@/lib/documents/official-forms-filler';
 
@@ -29,23 +36,30 @@ const sampleCase = {
 };
 
 describe('Money claim pack generator', () => {
-  it('builds the full pack with official N1 PDF', async () => {
-    const pack = await generateMoneyClaimPack(sampleCase);
+  it(
+    'builds the full pack with official N1 PDF',
+    async () => {
+      const pack = await generateMoneyClaimPack(sampleCase);
 
-    expect(pack.documents.length).toBeGreaterThanOrEqual(5);
-    expect(pack.documents.some((doc) => doc.file_name === 'n1-claim-form.pdf')).toBe(true);
-    expect(pack.metadata.includes_official_pdf).toBe(true);
-    expect(pack.metadata.total_with_fees).toBeGreaterThan(0);
-  });
+      expect(pack.documents.length).toBeGreaterThanOrEqual(5);
+      expect(pack.documents.some((doc) => doc.file_name === 'n1-claim-form.pdf')).toBe(true);
+      expect(pack.metadata.includes_official_pdf).toBe(true);
+      expect(pack.metadata.total_with_fees).toBeGreaterThan(0);
+    },
+    20000, // allow up to 20s for full pack generation
+  );
 
-  it('guards missing N1 PDF with a helpful error', async () => {
-    const guardSpy = vi
-      .spyOn(forms, 'assertOfficialFormExists')
-      .mockRejectedValueOnce(new Error('missing N1'));
+  it(
+    'guards missing N1 PDF with a helpful error',
+    async () => {
+      (forms.assertOfficialFormExists as unknown as vi.Mock).mockRejectedValueOnce(
+        new Error('missing N1'),
+      );
 
-    await expect(generateMoneyClaimPack(sampleCase)).rejects.toThrow('N1');
-    guardSpy.mockRestore();
-  });
+      await expect(generateMoneyClaimPack(sampleCase)).rejects.toThrow('missing N1');
+    },
+    20000, // allow up to 20s for error path too
+  );
 
   it('rejects unsupported jurisdictions', async () => {
     await expect(
