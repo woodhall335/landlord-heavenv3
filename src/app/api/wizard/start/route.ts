@@ -12,8 +12,9 @@ import { z } from 'zod';
 
 // Validation schema
 const startWizardSchema = z.object({
-  case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']),
+  case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']).optional(),
   jurisdiction: z.enum(['england-wales', 'scotland', 'northern-ireland']),
+  product: z.enum(['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement']).optional(),
 });
 
 export async function POST(request: Request) {
@@ -21,9 +22,13 @@ export async function POST(request: Request) {
     // Get user if logged in (but don't require it)
     const user = await getServerUser();
     const body = await request.json();
+    const url = new URL(request.url);
 
     // Validate input
-    const validationResult = startWizardSchema.safeParse(body);
+    const validationResult = startWizardSchema.safeParse({
+      ...body,
+      product: body.product ?? url.searchParams.get('product') ?? undefined,
+    });
     if (!validationResult.success) {
       return NextResponse.json(
         {
@@ -34,9 +39,44 @@ export async function POST(request: Request) {
       );
     }
 
-    const { case_type, jurisdiction } = validationResult.data;
+    const { jurisdiction } = validationResult.data;
+    const requestedProduct = validationResult.data.product;
+    const productFromQuery = url.searchParams.get('product');
 
-    if (jurisdiction === 'northern-ireland' && case_type !== 'tenancy_agreement') {
+    const product = (requestedProduct || productFromQuery) as
+      | 'notice_only'
+      | 'complete_pack'
+      | 'money_claim'
+      | 'tenancy_agreement'
+      | null;
+
+    const resolvedProduct =
+      product && ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'].includes(product)
+        ? product
+        : null;
+
+    const resolvedCaseType = (() => {
+      switch (resolvedProduct) {
+        case 'notice_only':
+        case 'complete_pack':
+          return 'eviction' as const;
+        case 'money_claim':
+          return 'money_claim' as const;
+        case 'tenancy_agreement':
+          return 'tenancy_agreement' as const;
+        default:
+          return validationResult.data.case_type || null;
+      }
+    })();
+
+    if (!resolvedCaseType) {
+      return NextResponse.json(
+        { error: 'Invalid case_type or product' },
+        { status: 400 }
+      );
+    }
+
+    if (jurisdiction === 'northern-ireland' && resolvedCaseType !== 'tenancy_agreement') {
       return NextResponse.json(
         {
           error: 'Eviction and money claim workflows are not supported in Northern Ireland',
@@ -45,7 +85,7 @@ export async function POST(request: Request) {
       );
     }
 
-    if (case_type === 'money_claim' && jurisdiction === 'northern-ireland') {
+    if (resolvedCaseType === 'money_claim' && jurisdiction === 'northern-ireland') {
       return NextResponse.json(
         {
           error: 'Money claim workflows are not available in Northern Ireland.',
@@ -60,11 +100,16 @@ export async function POST(request: Request) {
       .from('cases')
       .insert({
         user_id: user?.id || null,
-        case_type,
+        case_type: resolvedCaseType,
         jurisdiction,
         status: 'in_progress',
         wizard_progress: 0,
-        collected_facts: {},
+        collected_facts: {
+          __meta: {
+            product: resolvedProduct ?? 'legacy',
+            mqs_version: null,
+          },
+        },
       })
       .select()
       .single();

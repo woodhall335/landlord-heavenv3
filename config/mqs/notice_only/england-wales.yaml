@@ -1,0 +1,88 @@
+id: notice_only_england_wales_v1
+product: notice_only
+jurisdiction: england-wales
+version: "1.0.0"
+questions:
+  - id: landlord_details
+    section: Landlord Details
+    question: Your details
+    inputType: group
+    helperText: "We need your details to complete the notice correctly."
+    fields:
+      - id: landlord_full_name
+        label: Full name
+        inputType: text
+        placeholder: "Jane Landlord"
+        validation:
+          required: true
+        width: full
+      - id: landlord_email
+        label: Email address
+        inputType: email
+        placeholder: "you@example.com"
+        validation:
+          required: true
+        width: half
+      - id: landlord_phone
+        label: Phone number
+        inputType: tel
+        placeholder: "07700 900000"
+        validation:
+          required: true
+        width: half
+
+  - id: property_details
+    section: Property
+    question: Property address
+    inputType: group
+    helperText: "The rented property this notice relates to."
+    fields:
+      - id: property_address_line1
+        label: Address line 1
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: property_address_town
+        label: Town or city
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: property_postcode
+        label: Postcode
+        inputType: text
+        validation:
+          required: true
+        width: half
+
+  - id: tenancy_start_date
+    section: Tenancy
+    question: "When did the tenancy start?"
+    inputType: date
+    helperText: "This appears on the notice and must match the agreement."
+    validation:
+      required: true
+
+  - id: notice_type
+    section: Notice Type
+    question: "Which notice do you need?"
+    inputType: select
+    helperText: "We will tailor the questions to your route."
+    options:
+      - "Section 8 - rent arrears / breach"
+      - "Section 21 - no-fault (AST)"
+    validation:
+      required: true
+
+  - id: arrears_total
+    section: Rent Arrears
+    question: "Roughly how much rent is currently owed?"
+    inputType: currency
+    helperText: "We will refine this later if needed."
+    validation:
+      required: true
+      min: 0
+    dependsOn:
+      questionId: notice_type
+      value: "Section 8 - rent arrears / breach"
