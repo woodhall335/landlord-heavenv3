@@ -7,7 +7,6 @@
  */
 
 import { NextResponse } from 'next/server';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { getNextMQSQuestion, loadMQS, type MasterQuestionSet, type ProductType } from '@/lib/wizard/mqs-loader';
 import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
@@ -70,7 +69,6 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createServerSupabaseClient();
-    const supabaseClient = supabase as unknown as SupabaseClient;
 
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
@@ -95,7 +93,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const facts = await getOrCreateCaseFacts(supabaseClient, case_id);
+    const facts = await getOrCreateCaseFacts(supabase, case_id);
     const nextQuestion = getNextMQSQuestion(mqs, facts);
 
     if (!nextQuestion) {

@@ -8,7 +8,7 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from '@/lib/supabase/types';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { createEmptyCaseFacts } from '@/lib/case-facts/schema';
 import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
@@ -60,9 +60,9 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createServerSupabaseClient();
-    const supabaseClient = supabase as unknown as SupabaseClient;
 
-    let caseRecord: any = null;
+    type CaseRow = Database['public']['Tables']['cases']['Row'];
+    let caseRecord: CaseRow | null = null;
 
     if (case_id) {
       let query = supabase.from('cases').select('*').eq('id', case_id);
@@ -108,7 +108,7 @@ export async function POST(request: Request) {
       caseRecord = data;
     }
 
-    const facts = await getOrCreateCaseFacts(supabaseClient, caseRecord.id);
+    const facts = await getOrCreateCaseFacts(supabase, caseRecord.id);
     const mqs = loadMQSOrError(product, jurisdiction);
 
     if (!mqs) {
