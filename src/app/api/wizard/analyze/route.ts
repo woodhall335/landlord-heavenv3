@@ -2,48 +2,73 @@
  * Wizard API - Analyze
  *
  * POST /api/wizard/analyze
- * Analyzes the case using the decision engine and returns recommendations
+ * Analyzes the case using deterministic rules and returns recommendations
  * ALLOWS ANONYMOUS ACCESS
  */
 
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
-import { analyzeCase } from '@/lib/decision-engine/engine';
-import { detectHMO, shouldShowHMOUpsell } from '@/lib/utils/hmo-detection';
 import { NextResponse } from 'next/server';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
+import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
+import type { CaseFacts } from '@/lib/case-facts/schema';
 
-// Validation schema
 const analyzeSchema = z.object({
   case_id: z.string().uuid(),
-  collected_facts: z.record(z.any()).optional(), // Optional facts to save
 });
+
+function computeRoute(facts: CaseFacts, jurisdiction: string, caseType: string): string {
+  if (caseType === 'money_claim') return 'money_claim';
+  if (jurisdiction === 'scotland') return 'notice_to_leave';
+  if (facts.notice.notice_type) return facts.notice.notice_type;
+  return 'standard_possession';
+}
+
+function computeStrength(facts: CaseFacts): { score: number; red_flags: string[]; compliance: string[] } {
+  const redFlags: string[] = [];
+  const compliance: string[] = [];
+  let score = 50;
+
+  if (facts.issues.rent_arrears.total_arrears && facts.issues.rent_arrears.total_arrears > 0) {
+    score += 10;
+  }
+
+  if (facts.notice.notice_date) {
+    score += 5;
+  } else {
+    redFlags.push('Notice has not been served');
+  }
+
+  if (facts.tenancy.deposit_protected === false) {
+    redFlags.push('Deposit not protected');
+    score -= 10;
+  }
+
+  if (facts.property.country === null) {
+    compliance.push('Property country not specified');
+  }
+
+  return { score: Math.min(100, Math.max(0, score)), red_flags: redFlags, compliance };
+}
 
 export async function POST(request: Request) {
   try {
-    // Allow anonymous access - user is optional
     const user = await getServerUser();
     const body = await request.json();
+    const validation = analyzeSchema.safeParse(body);
 
-    // Extract case_id and collected_facts
-    const { case_id, collected_facts } = body;
-
-    // Basic validation
-    if (!case_id || typeof case_id !== 'string') {
+    if (!validation.success) {
       return NextResponse.json(
         { error: 'case_id is required and must be a valid UUID' },
         { status: 400 }
       );
     }
 
+    const { case_id } = validation.data;
     const supabase = await createServerSupabaseClient();
+    const supabaseClient = supabase as unknown as SupabaseClient;
 
-    // Fetch case (allow both logged-in users and anonymous)
-    // Note: Must use .is() for null checks, not .eq()
-    let query = supabase
-      .from('cases')
-      .select('*')
-      .eq('id', case_id);
-
+    let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
       query = query.eq('user_id', user.id);
     } else {
@@ -54,119 +79,61 @@ export async function POST(request: Request) {
 
     if (caseError || !caseData) {
       console.error('Case not found:', caseError);
-      return NextResponse.json(
-        { error: 'Case not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    if (caseData.jurisdiction === 'northern-ireland' && caseData.case_type !== 'tenancy_agreement') {
-      return NextResponse.json(
-        { error: 'Eviction and money claim analysis is not available for Northern Ireland' },
-        { status: 400 }
-      );
-    }
+    const facts = await getOrCreateCaseFacts(supabaseClient, case_id);
+    const route = computeRoute(facts, caseData.jurisdiction, caseData.case_type);
+    const { score, red_flags, compliance } = computeStrength(facts);
 
-    if (caseData.case_type === 'money_claim' && caseData.jurisdiction === 'northern-ireland') {
-      return NextResponse.json(
-        { error: 'Money claim analysis is not available for Northern Ireland.' },
-        { status: 400 }
-      );
-    }
-
-    // Merge collected_facts if provided
-    const mergedFacts = collected_facts
-      ? { ...(caseData.collected_facts as object || {}), ...collected_facts }
-      : (caseData.collected_facts as object || {});
-
-    // Prepare facts for decision engine
-    const facts = {
-      jurisdiction: caseData.jurisdiction,
-      case_type: caseData.case_type,
-      ...mergedFacts,
-    };
-
-    // Run decision engine analysis
-    const analysis = await analyzeCase(facts);
-
-    // Detect if property is likely an HMO
-    const hmoDetection = detectHMO(caseData.collected_facts as Record<string, any>);
-    const showHMOUpsell = shouldShowHMOUpsell(hmoDetection);
-
-    // Convert success_probability string to number for database
-    const convertSuccessProbability = (prob: string | number | undefined): number | null => {
-      if (typeof prob === 'number') return prob;
-      if (!prob) return null;
-
-      const mapping: Record<string, number> = {
-        'very_high': 90,
-        'high': 75,
-        'medium': 50,
-        'low': 25,
-        'none': 0,
-      };
-
-      return mapping[prob] || null;
-    };
-
-    // Update case with analysis results and collected_facts
-    const updateData: any = {
-      recommended_route: analysis.recommended_route,
-      recommended_grounds: analysis.primary_grounds?.map((g) => String(g.ground_number)) || [],
-      success_probability: convertSuccessProbability(analysis.primary_grounds?.[0]?.success_probability),
-      red_flags: analysis.red_flags as any,
-      compliance_issues: analysis.compliance_check as any,
-      wizard_completed_at: new Date().toISOString(),
-      wizard_progress: 100,
-      updated_at: new Date().toISOString(),
-    };
-
-    // Update collected_facts if provided
-    if (collected_facts) {
-      updateData.collected_facts = mergedFacts;
-    }
-
-    const { data: updatedCase, error: updateError} = await supabase
+    await supabase
       .from('cases')
-      .update(updateData)
-      .eq('id', case_id)
-      .select()
-      .single();
+      .update({
+        recommended_route: route,
+        red_flags: red_flags as any,
+        compliance_issues: compliance as any,
+        success_probability: score,
+        wizard_progress: caseData.wizard_progress ?? 0,
+      })
+      .eq('id', case_id);
 
-    if (updateError) {
-      console.error('Failed to update case:', updateError);
-      return NextResponse.json(
-        { error: 'Failed to save analysis' },
-        { status: 500 }
-      );
+    const previewDocuments: { id: string; document_type: string; document_title: string }[] = [];
+
+    if (caseData.user_id) {
+      const htmlContent = `<h1>Preview - ${route}</h1><p>Case strength: ${score}%</p>`;
+      const { data: docRow, error: docError } = await supabase
+        .from('documents')
+        .insert({
+          user_id: caseData.user_id,
+          case_id,
+          document_type: route,
+          document_title: 'Preview document',
+          jurisdiction: caseData.jurisdiction,
+          html_content: htmlContent,
+          is_preview: true,
+        })
+        .select()
+        .single();
+
+      if (!docError && docRow) {
+        previewDocuments.push({
+          id: docRow.id,
+          document_type: docRow.document_type,
+          document_title: docRow.document_title,
+        });
+      }
     }
 
-    return NextResponse.json(
-      {
-        success: true,
-        case: updatedCase,
-        analysis: {
-          recommended_route: analysis.recommended_route,
-          primary_grounds: analysis.primary_grounds,
-          backup_grounds: analysis.backup_grounds,
-          success_probability: analysis.overall_success_probability,
-          timeline: analysis.timeline,
-          cost_estimate: analysis.cost_estimate,
-          red_flags: analysis.red_flags,
-          compliance_check: analysis.compliance_check,
-          overall_risk_level: analysis.overall_risk_level,
-          recommended_actions: analysis.recommended_actions,
-        },
-        hmo_detection: hmoDetection,
-        show_hmo_upsell: showHMOUpsell,
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({
+      case_id,
+      recommended_route: route,
+      case_strength_score: score,
+      red_flags,
+      compliance_issues: compliance,
+      preview_documents: previewDocuments,
+    });
   } catch (error: any) {
     console.error('Analyze case error:', error);
-    return NextResponse.json(
-      { error: error.message || 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
   }
 }

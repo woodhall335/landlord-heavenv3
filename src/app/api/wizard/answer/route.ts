@@ -6,142 +6,251 @@
  * ALLOWS ANONYMOUS ACCESS
  */
 
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
-import { loadMQS } from '@/lib/wizard/mqs-loader';
+import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { loadMQS, getNextMQSQuestion, type ProductType, type MasterQuestionSet } from '@/lib/wizard/mqs-loader';
+import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
+import { updateCaseFacts, getOrCreateCaseFacts } from '@/lib/case-facts/store';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
+import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
-// Validation schema
 const answerSchema = z.object({
   case_id: z.string().uuid(),
   question_id: z.string(),
-  answer: z.any(), // Can be any type (string, number, boolean, array, object)
-  progress: z.number().min(0).max(100).optional(),
+  answer: z.any(),
 });
+
+function deriveProduct(caseType: string, collectedFacts: Record<string, any>): ProductType {
+  const metaProduct = collectedFacts?.__meta?.product as ProductType | undefined;
+  if (metaProduct) return metaProduct;
+  if (caseType === 'money_claim') return 'money_claim';
+  if (caseType === 'tenancy_agreement') return 'tenancy_agreement';
+  return 'complete_pack';
+}
+
+function getValueAtPath(facts: Record<string, any>, path: string): unknown {
+  return path
+    .split('.')
+    .filter(Boolean)
+    .reduce((acc: any, key) => {
+      if (acc === undefined || acc === null) return undefined;
+      const resolvedKey = Number.isInteger(Number(key)) ? Number(key) : key;
+      return acc[resolvedKey as keyof typeof acc];
+    }, facts);
+}
+
+function isQuestionAnswered(question: ExtendedWizardQuestion, facts: Record<string, any>): boolean {
+  if (question.maps_to && question.maps_to.length > 0) {
+    return question.maps_to.every((path) => {
+      const value = getValueAtPath(facts, path);
+      if (value === null || value === undefined) return false;
+      if (typeof value === 'string') return value.trim().length > 0;
+      return true;
+    });
+  }
+
+  const fallbackValue = facts[question.id];
+  if (question.validation?.required) {
+    if (fallbackValue === null || fallbackValue === undefined) return false;
+    if (typeof fallbackValue === 'string') return fallbackValue.trim().length > 0;
+  }
+
+  return Boolean(fallbackValue);
+}
+
+function computeProgress(mqs: MasterQuestionSet, facts: Record<string, any>): number {
+  if (!mqs.questions.length) return 100;
+  const answeredCount = mqs.questions.filter((q) => isQuestionAnswered(q, facts)).length;
+  return Math.round((answeredCount / mqs.questions.length) * 100);
+}
+
+function normalizeAnswer(question: ExtendedWizardQuestion, answer: any) {
+  if (question.inputType === 'yes_no') {
+    if (typeof answer === 'string') {
+      return answer.toLowerCase().startsWith('y');
+    }
+    return Boolean(answer);
+  }
+
+  return answer;
+}
+
+function validateAnswer(question: ExtendedWizardQuestion, answer: any): boolean {
+  if (question.validation?.required) {
+    if (answer === null || answer === undefined || answer === '') return false;
+  }
+
+  if (question.inputType === 'group' && question.fields) {
+    return question.fields.every((field) => {
+      if (!field.validation?.required) return true;
+      const value = (answer || {})[field.id];
+      return value !== null && value !== undefined && value !== '';
+    });
+  }
+
+  return true;
+}
+
+function updateDerivedFacts(
+  questionId: string,
+  jurisdiction: string,
+  facts: Record<string, any>,
+  value: any
+): Record<string, any> {
+  let updatedFacts = { ...facts };
+
+  if (questionId === 'tenancy_type') {
+    if (typeof value === 'string' && value.toLowerCase().includes('prt')) {
+      updatedFacts = setFactPath(updatedFacts as any, 'tenancy.tenancy_type', 'prt');
+    }
+  }
+
+  if (questionId === 'property_details' && jurisdiction) {
+    updatedFacts = setFactPath(updatedFacts as any, 'property.country', jurisdiction);
+  }
+
+  if (questionId === 'arrears_total' || questionId === 'arrears_amount') {
+    const numericValue = typeof value === 'number' ? value : Number(value);
+    if (!Number.isNaN(numericValue)) {
+      updatedFacts = setFactPath(updatedFacts as any, 'issues.rent_arrears.has_arrears', numericValue > 0);
+    }
+  }
+
+  if (questionId === 'rent_arrears') {
+    updatedFacts = setFactPath(updatedFacts as any, 'issues.rent_arrears.has_arrears', Boolean(value));
+  }
+
+  return updatedFacts;
+}
 
 export async function POST(request: Request) {
   try {
-    // Allow anonymous access - user is optional
     const user = await getServerUser();
     const body = await request.json();
-
-    // Validate input
     const validationResult = answerSchema.safeParse(body);
+
     if (!validationResult.success) {
       return NextResponse.json(
-        {
-          error: 'Validation failed',
-          details: validationResult.error.format(),
-        },
+        { error: 'Validation failed', details: validationResult.error.format() },
         { status: 400 }
       );
     }
 
-    const { case_id, question_id, answer, progress } = validationResult.data;
+    const { case_id, question_id, answer } = validationResult.data;
     const supabase = await createServerSupabaseClient();
+    const supabaseClient = supabase as unknown as SupabaseClient;
 
-    // Fetch current case (allow both logged-in users and anonymous)
-    // Note: Must use .is() for null checks, not .eq()
-    let query = supabase
-      .from('cases')
-      .select('*')
-      .eq('id', case_id);
-
+    let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
       query = query.eq('user_id', user.id);
     } else {
       query = query.is('user_id', null);
     }
 
-    const { data: currentCase, error: fetchError } = await query.single();
+    const { data: caseData, error: fetchError } = await query.single();
 
-    if (fetchError || !currentCase) {
+    if (fetchError || !caseData) {
       console.error('Case not found:', fetchError);
+      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+    }
+
+    const collectedFacts = (caseData.collected_facts as Record<string, any>) || {};
+    const product = deriveProduct(caseData.case_type, collectedFacts);
+    const mqs = loadMQS(product, caseData.jurisdiction);
+
+    if (!mqs) {
       return NextResponse.json(
-        { error: 'Case not found' },
-        { status: 404 }
+        { error: 'MQS not implemented for this jurisdiction yet' },
+        { status: 400 }
       );
     }
 
-    // Merge new answer with existing facts
-    const currentFacts = (currentCase.collected_facts as any) || {};
-    const product = currentFacts.__meta?.product;
-    const isMQSFlow =
-      currentCase.jurisdiction === 'england-wales' &&
-      currentCase.case_type === 'eviction' &&
-      ['notice_only', 'complete_pack'].includes(product);
+    const question = mqs.questions.find((q) => q.id === question_id);
 
-    const updatedFacts: Record<string, any> = {
-      ...currentFacts,
-    };
-
-    let enhancedAnswerPayload: any = null;
-
-    if (isMQSFlow) {
-      const mqs = loadMQS(product, 'england-wales');
-      const questionDef = mqs?.questions.find((q) => q.id === question_id);
-
-      const rawAnswer = answer;
-
-      if (questionDef) {
-        const enhanced = await enhanceAnswer({
-          question: questionDef,
-          rawAnswer: typeof rawAnswer === 'string' ? rawAnswer : JSON.stringify(rawAnswer),
-          jurisdiction: currentCase.jurisdiction,
-          product: product as string,
-          caseType: currentCase.case_type,
-        });
-
-        enhancedAnswerPayload = {
-          raw: rawAnswer,
-          suggested: enhanced?.suggested_wording ?? rawAnswer,
-          missing_information: enhanced?.missing_information ?? [],
-          evidence_suggestions: enhanced?.evidence_suggestions ?? [],
-        };
-
-        updatedFacts[question_id] = enhancedAnswerPayload;
-      } else {
-        updatedFacts[question_id] = answer;
-      }
-    } else {
-      updatedFacts[question_id] = answer;
+    if (!question) {
+      return NextResponse.json({ error: 'Unknown question_id' }, { status: 400 });
     }
 
-    // Update case with new facts
-    const { data: updatedCase, error: updateError } = await supabase
+    const normalizedAnswer = normalizeAnswer(question, answer);
+
+    if (!validateAnswer(question, normalizedAnswer)) {
+      return NextResponse.json({ error: 'Answer failed validation' }, { status: 400 });
+    }
+
+    const currentFacts = await getOrCreateCaseFacts(supabaseClient, case_id);
+    let mergedFacts = applyMappedAnswers(currentFacts, question.maps_to, normalizedAnswer);
+
+    if (!question.maps_to || question.maps_to.length === 0) {
+      mergedFacts = setFactPath(mergedFacts as any, question_id, normalizedAnswer);
+    }
+
+    mergedFacts = updateDerivedFacts(question_id, caseData.jurisdiction, mergedFacts as any, normalizedAnswer) as any;
+
+    const newFacts = await updateCaseFacts(
+      supabaseClient,
+      case_id,
+      () => mergedFacts as any,
+      { meta: collectedFacts.__meta }
+    );
+
+    const rawAnswerText =
+      typeof normalizedAnswer === 'string' ? normalizedAnswer : JSON.stringify(normalizedAnswer);
+
+    await supabase.from('conversations').insert({
+      case_id,
+      role: 'user',
+      content: rawAnswerText,
+      question_id,
+      input_type: question.inputType,
+      user_input: normalizedAnswer,
+    });
+
+    const enhanced = await enhanceAnswer({
+      question,
+      rawAnswer: rawAnswerText,
+      jurisdiction: caseData.jurisdiction,
+      product,
+      caseType: caseData.case_type,
+    });
+
+    if (enhanced) {
+      await supabase.from('conversations').insert({
+        case_id,
+        role: 'assistant',
+        content: enhanced.suggested_wording,
+        question_id,
+        model: 'ask-heaven',
+        user_input: normalizedAnswer,
+      });
+    }
+
+    const nextQuestion = getNextMQSQuestion(mqs, newFacts as any);
+    const progress = computeProgress(mqs, newFacts as any);
+    const isComplete = !nextQuestion;
+
+    await supabase
       .from('cases')
       .update({
-        collected_facts: updatedFacts as any,
-        wizard_progress: progress !== undefined ? progress : currentCase.wizard_progress,
-        updated_at: new Date().toISOString(),
+        wizard_progress: isComplete ? 100 : progress,
+        wizard_completed_at: isComplete ? new Date().toISOString() : null,
       })
-      .eq('id', case_id)
-      .select()
-      .single();
+      .eq('id', case_id);
 
-    if (updateError) {
-      console.error('Failed to update case:', updateError);
-      return NextResponse.json(
-        { error: 'Failed to save answer' },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json(
-      {
-        success: true,
-        case: updatedCase,
-        message: 'Answer saved successfully',
-        enhanced_answer: enhancedAnswerPayload ?? updatedFacts[question_id],
-      },
-      { status: 200 }
-    );
+    return NextResponse.json({
+      case_id,
+      question_id,
+      answer_saved: true,
+      suggested_wording: enhanced?.suggested_wording ?? null,
+      missing_information: enhanced?.missing_information ?? [],
+      evidence_suggestions: enhanced?.evidence_suggestions ?? [],
+      next_question: nextQuestion ?? null,
+      is_complete: isComplete,
+      progress: isComplete ? 100 : progress,
+    });
   } catch (error: any) {
     console.error('Save answer error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

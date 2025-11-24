@@ -1,0 +1,299 @@
+id: notice_only_scotland_v1
+product: notice_only
+jurisdiction: scotland
+version: "1.0.0"
+
+questions:
+  - id: case_overview
+    section: Case Overview
+    question: "Briefly describe the situation and what you need"
+    inputType: textarea
+    helperText: "Include key dates, what has gone wrong, and what outcome you want from the tribunal."
+    validation:
+      required: true
+    suggestion_prompt: >
+      Rewrite the landlord's description into a clear, factual summary suitable for a Notice to Leave and tribunal forms.
+      Focus on dates, events, and amounts. Avoid speculation or emotional wording.
+    maps_to:
+      - issues.other_breaches.description
+
+  - id: tenancy_type
+    section: Tenancy Type
+    question: "Confirm this is a Private Residential Tenancy (PRT)"
+    inputType: select
+    options:
+      - "Private Residential Tenancy (PRT)"
+      - "Other / unsure"
+    validation:
+      required: true
+    maps_to:
+      - tenancy.tenancy_type
+
+  - id: tenancy_dates
+    section: Tenancy Details
+    question: "When did the tenancy start?"
+    inputType: date
+    helperText: "Use the date from the PRT agreement."
+    validation:
+      required: true
+    maps_to:
+      - tenancy.start_date
+
+  - id: rent_terms
+    section: Rent Terms
+    question: "Rent details"
+    inputType: group
+    helperText: "We need this for the rent arrears breakdown and tribunal paperwork."
+    fields:
+      - id: rent_amount
+        label: "Monthly rent amount"
+        inputType: currency
+        validation:
+          required: true
+      - id: rent_frequency
+        label: "Rent frequency"
+        inputType: select
+        options: ["weekly", "monthly", "yearly", "other"]
+        validation:
+          required: true
+      - id: rent_due_day
+        label: "Day of month rent is due"
+        inputType: number
+        validation:
+          required: true
+    maps_to:
+      - tenancy.rent_amount
+      - tenancy.rent_frequency
+      - tenancy.rent_due_day
+    suggestion_prompt: >
+      Check the rent amount, payment frequency, and due date against the tenancy agreement and bank records.
+      Highlight any inconsistencies to the landlord.
+
+  - id: rent_arrears
+    section: Rent Arrears
+    question: "Is the tenant in rent arrears?"
+    inputType: yes_no
+    validation:
+      required: true
+    maps_to:
+      - issues.rent_arrears.has_arrears
+    suggestion_prompt: >
+      Confirm whether arrears exist and remind the landlord that pre-action requirements apply before eviction based on rent arrears.
+
+  - id: arrears_amount
+    section: Rent Arrears
+    question: "Total arrears outstanding"
+    inputType: currency
+    helperText: "If none, enter 0."
+    validation:
+      required: true
+      min: 0
+    dependsOn:
+      questionId: rent_arrears
+      value: "Yes"
+    maps_to:
+      - issues.rent_arrears.total_arrears
+
+  - id: pre_action_contact
+    section: Rent Arrears
+    question: "Have you completed the pre-action requirements (contacting the tenant about arrears)?"
+    inputType: yes_no
+    validation:
+      required: true
+    dependsOn:
+      questionId: rent_arrears
+      value: "Yes"
+    maps_to:
+      - evidence.bank_statements_uploaded
+    suggestion_prompt: >
+      Ensure the landlord has attempted reasonable contact about arrears and signposted support before serving a Notice to Leave.
+
+  - id: deposit_protection
+    section: Deposit Protection
+    question: "Deposit details"
+    inputType: group
+    helperText: "Scotland deposits must be protected in an approved scheme."
+    fields:
+      - id: deposit_amount
+        label: "Deposit amount"
+        inputType: currency
+      - id: deposit_protected
+        label: "Is the deposit protected?"
+        inputType: yes_no
+      - id: deposit_scheme_name
+        label: "Which approved scheme?"
+        inputType: select
+        options:
+          - "SafeDeposits Scotland"
+          - "Letting Protection Service Scotland"
+          - "mydeposits Scotland"
+          - "Not protected / unsure"
+    maps_to:
+      - tenancy.deposit_amount
+      - tenancy.deposit_protected
+      - tenancy.deposit_scheme_name
+    suggestion_prompt: >
+      Remind the landlord to provide proof of deposit protection and prescribed information where applicable.
+
+  - id: safety_checks
+    section: Safety Checks
+    question: "Do you have up-to-date safety certificates (gas, electrical, smoke alarms)?"
+    inputType: yes_no
+    validation:
+      required: true
+    maps_to:
+      - evidence.safety_certificates_uploaded
+    suggestion_prompt: >
+      Highlight any missing safety documentation needed for tribunal compliance.
+
+  - id: asb_details
+    section: Antisocial Behaviour
+    question: "Has there been any antisocial behaviour?"
+    inputType: yes_no
+    maps_to:
+      - issues.asb.has_asb
+    suggestion_prompt: >
+      Capture any relevant ASB incidents for the Notice to Leave and tribunal evidence.
+
+  - id: asb_description
+    section: Antisocial Behaviour
+    question: "Describe the antisocial behaviour incidents"
+    inputType: textarea
+    dependsOn:
+      questionId: asb_details
+      value: "Yes"
+    maps_to:
+      - issues.asb.description
+      - issues.asb.incidents
+    suggestion_prompt: >
+      Summarise dates, witnesses, and any police or council involvement. Keep it factual.
+
+  - id: notice_service
+    section: Notice Service
+    question: "Notice details"
+    inputType: group
+    helperText: "We need these for the Notice to Leave."
+    fields:
+      - id: notice_date
+        label: "Date notice will be served"
+        inputType: date
+        validation:
+          required: true
+      - id: notice_expiry
+        label: "Date the notice should expire"
+        inputType: date
+        validation:
+          required: true
+      - id: service_method
+        label: "How will you serve the notice?"
+        inputType: select
+        options: ["Recorded delivery", "By hand", "Email (agreed)", "Other"]
+        validation:
+          required: true
+      - id: served_by
+        label: "Who will serve the notice?"
+        inputType: text
+    maps_to:
+      - notice.notice_date
+      - notice.expiry_date
+      - notice.service_method
+      - notice.served_by
+
+  - id: property_details
+    section: Property Details
+    question: "Property address"
+    inputType: group
+    helperText: "Address of the let property"
+    fields:
+      - id: address_line1
+        label: "Address line 1"
+        inputType: text
+        validation:
+          required: true
+      - id: address_line2
+        label: "Address line 2"
+        inputType: text
+      - id: city
+        label: "Town or city"
+        inputType: text
+        validation:
+          required: true
+      - id: postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+    maps_to:
+      - property.address_line1
+      - property.address_line2
+      - property.city
+      - property.postcode
+      - property.country
+    suggestion_prompt: >
+      Confirm the address exactly matches the tenancy agreement and utility bills.
+
+  - id: tenant_details
+    section: Tenant Details
+    question: "Main tenant details"
+    inputType: group
+    helperText: "For additional tenants, add them after creating the case."
+    fields:
+      - id: tenant_name
+        label: "Tenant full name"
+        inputType: text
+        validation:
+          required: true
+      - id: tenant_email
+        label: "Tenant email"
+        inputType: email
+      - id: tenant_phone
+        label: "Tenant phone"
+        inputType: tel
+    maps_to:
+      - parties.tenants.0.name
+      - parties.tenants.0.email
+      - parties.tenants.0.phone
+    suggestion_prompt: >
+      Ensure the tenant's contact details are correct for service and tribunal paperwork.
+
+  - id: service_contact
+    section: Service Contact
+    question: "Where should tribunal documents be served?"
+    inputType: group
+    helperText: "If you have a solicitor or agent, use their service details."
+    fields:
+      - id: service_name
+        label: "Service contact name"
+        inputType: text
+        validation:
+          required: true
+      - id: service_address_line1
+        label: "Service address line 1"
+        inputType: text
+        validation:
+          required: true
+      - id: service_city
+        label: "Service city"
+        inputType: text
+        validation:
+          required: true
+      - id: service_postcode
+        label: "Service postcode"
+        inputType: text
+        validation:
+          required: true
+      - id: service_email
+        label: "Service email"
+        inputType: email
+      - id: service_phone
+        label: "Service phone"
+        inputType: tel
+    maps_to:
+      - service_contact.service_name
+      - service_contact.service_address_line1
+      - service_contact.service_city
+      - service_contact.service_postcode
+      - service_contact.service_email
+      - service_contact.service_phone
+    suggestion_prompt: >
+      Confirm the tribunal can use these details to send correspondence and notices.

@@ -1,11 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
+import type { CaseFacts } from '@/lib/case-facts/schema';
 import type { ExtendedWizardQuestion } from './types';
 
 export type ProductType = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 
-interface MasterQuestionSet {
+export interface MasterQuestionSet {
   id: string; // e.g. "notice_only_england_wales"
   product: ProductType;
   jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
@@ -15,10 +16,6 @@ interface MasterQuestionSet {
 
 // Utility to load YAML MQS by product + jurisdiction
 export function loadMQS(product: ProductType, jurisdiction: string): MasterQuestionSet | null {
-  // For now we only support E&W eviction MQS via YAML
-  if (jurisdiction !== 'england-wales') return null;
-  if (product !== 'notice_only' && product !== 'complete_pack') return null;
-
   const basePath = path.join(process.cwd(), 'config', 'mqs', product, `${jurisdiction}.yaml`);
 
   if (!fs.existsSync(basePath)) {
@@ -31,41 +28,64 @@ export function loadMQS(product: ProductType, jurisdiction: string): MasterQuest
   return parsed;
 }
 
+function getValueAtPath(facts: Record<string, any>, path: string): unknown {
+  return path
+    .split('.')
+    .filter(Boolean)
+    .reduce((acc: any, key) => {
+      if (acc === undefined || acc === null) return undefined;
+      const resolvedKey = Number.isInteger(Number(key)) ? Number(key) : key;
+      return acc[resolvedKey as keyof typeof acc];
+    }, facts);
+}
+
+function isTruthyValue(value: unknown): boolean {
+  if (value === null || value === undefined) return false;
+  if (typeof value === 'string') return value.trim().length > 0;
+  return true;
+}
+
 // Determine the next question from an MQS definition and current facts
 export function getNextMQSQuestion(
   mqs: MasterQuestionSet,
-  collectedFacts: Record<string, any>,
+  collectedFacts: CaseFacts | Record<string, any>
 ): ExtendedWizardQuestion | null {
   const answered = collectedFacts || {};
 
+  const findDependentValue = (questionId: string) => {
+    const dependency = mqs.questions.find((q) => q.id === questionId);
+    if (dependency?.maps_to?.length) {
+      const mappedValue = dependency.maps_to
+        .map((path) => getValueAtPath(answered as Record<string, any>, path))
+        .find((v) => v !== undefined);
+      if (mappedValue !== undefined) return mappedValue;
+    }
+    return (answered as Record<string, any>)[questionId];
+  };
+
   for (const q of mqs.questions) {
-    // dependency check
-    if (q.dependsOn) {
-      const depValue = answered[q.dependsOn.questionId];
-      if (Array.isArray(q.dependsOn.value)) {
-        if (!q.dependsOn.value.includes(depValue)) continue;
-      } else if (depValue !== q.dependsOn.value) {
+    const dependsOn = (q as any).depends_on || q.dependsOn;
+    if (dependsOn?.questionId) {
+      const depValue = findDependentValue(dependsOn.questionId);
+      if (Array.isArray(dependsOn.value)) {
+        if (!dependsOn.value.includes(depValue)) continue;
+      } else if (depValue !== dependsOn.value) {
         continue;
       }
     }
 
-    // group questions: check all fields
-    if (q.inputType === 'group' && q.fields && q.fields.length > 0) {
-      const allFieldsAnswered = q.fields.every((f) => {
-        const value = answered[f.id];
-        if (f.validation?.required) {
-          return value !== undefined && value !== null && value !== '';
-        }
-        return true;
-      });
-
-      if (!allFieldsAnswered) return q;
-    } else {
-      // simple question
-      const value = answered[q.id];
-      if (q.validation?.required && (value === undefined || value === null || value === '')) {
+    const maps = q.maps_to;
+    if (maps && maps.length > 0) {
+      const allMapped = maps.every((path) => isTruthyValue(getValueAtPath(answered as Record<string, any>, path)));
+      if (!allMapped) {
         return q;
       }
+      continue;
+    }
+
+    const fallbackValue = (answered as Record<string, any>)[q.id];
+    if (q.validation?.required && !isTruthyValue(fallbackValue)) {
+      return q;
     }
   }
 
