@@ -61,18 +61,19 @@ function computeProgress(mqs: MasterQuestionSet, facts: Record<string, any>): nu
 
 export async function POST(request: Request) {
   try {
-    const user = await getServerUser();
+    const user = await getServerUser().catch(() => null);
     const { case_id } = await request.json();
 
     if (!case_id || typeof case_id !== 'string') {
       return NextResponse.json({ error: 'Invalid case_id' }, { status: 400 });
     }
 
-    const supabase = await createServerSupabaseClient();
+    // Loosen typing to avoid `never` errors from incomplete Supabase types
+    const supabase = (await createServerSupabaseClient()) as any;
 
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
-      query = query.eq('user_id', user.id);
+      query = query.eq('user_id', (user as any).id);
     } else {
       query = query.is('user_id', null);
     }
@@ -83,8 +84,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    const product = deriveProduct(caseData.case_type, (caseData.collected_facts as Record<string, any>) || {});
-    const mqs = loadMQS(product, caseData.jurisdiction);
+    const caseRow = caseData as any;
+
+    const product = deriveProduct(
+      caseRow.case_type as string,
+      (caseRow.collected_facts as Record<string, any>) || {}
+    );
+    const mqs = loadMQS(product, caseRow.jurisdiction as string);
 
     if (!mqs) {
       return NextResponse.json(
@@ -94,7 +100,7 @@ export async function POST(request: Request) {
     }
 
     const facts = await getOrCreateCaseFacts(supabase, case_id);
-    const nextQuestion = getNextMQSQuestion(mqs, facts);
+    const nextQuestion = getNextMQSQuestion(mqs, facts as any);
 
     if (!nextQuestion) {
       await supabase
@@ -109,9 +115,12 @@ export async function POST(request: Request) {
       });
     }
 
-    const progress = computeProgress(mqs, facts);
+    const progress = computeProgress(mqs, facts as any);
 
-    await supabase.from('cases').update({ wizard_progress: progress }).eq('id', case_id);
+    await supabase
+      .from('cases')
+      .update({ wizard_progress: progress })
+      .eq('id', case_id);
 
     return NextResponse.json({
       next_question: nextQuestion,
@@ -119,11 +128,11 @@ export async function POST(request: Request) {
       progress,
     });
   } catch (error: any) {
-    if (error.message === 'Unauthorized - Please log in') {
+    if (error?.message === 'Unauthorized - Please log in') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     console.error('Next question error:', error);
-    return NextResponse.json({ error: error.message || 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: error?.message || 'Internal server error' }, { status: 500 });
   }
 }

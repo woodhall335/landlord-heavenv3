@@ -15,6 +15,9 @@ import { updateCaseFacts, getOrCreateCaseFacts } from '@/lib/case-facts/store';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 const answerSchema = z.object({
   case_id: z.string().uuid(),
   question_id: z.string(),
@@ -113,12 +116,20 @@ function updateDerivedFacts(
   if (questionId === 'arrears_total' || questionId === 'arrears_amount') {
     const numericValue = typeof value === 'number' ? value : Number(value);
     if (!Number.isNaN(numericValue)) {
-      updatedFacts = setFactPath(updatedFacts as any, 'issues.rent_arrears.has_arrears', numericValue > 0);
+      updatedFacts = setFactPath(
+        updatedFacts as any,
+        'issues.rent_arrears.has_arrears',
+        numericValue > 0
+      );
     }
   }
 
   if (questionId === 'rent_arrears') {
-    updatedFacts = setFactPath(updatedFacts as any, 'issues.rent_arrears.has_arrears', Boolean(value));
+    updatedFacts = setFactPath(
+      updatedFacts as any,
+      'issues.rent_arrears.has_arrears',
+      Boolean(value)
+    );
   }
 
   return updatedFacts;
@@ -126,7 +137,7 @@ function updateDerivedFacts(
 
 export async function POST(request: Request) {
   try {
-    const user = await getServerUser();
+    const user = await getServerUser().catch(() => null);
     const body = await request.json();
     const validationResult = answerSchema.safeParse(body);
 
@@ -138,11 +149,16 @@ export async function POST(request: Request) {
     }
 
     const { case_id, question_id, answer } = validationResult.data;
-    const supabase = await createServerSupabaseClient();
 
+    // Loosen typing to avoid `never` issues from Supabase types
+    const supabase = (await createServerSupabaseClient()) as any;
+
+    // ---------------------------------------
+    // 1. Load case with RLS-respecting query
+    // ---------------------------------------
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
-      query = query.eq('user_id', user.id);
+      query = query.eq('user_id', (user as any).id);
     } else {
       query = query.is('user_id', null);
     }
@@ -154,9 +170,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    const collectedFacts = (caseData.collected_facts as Record<string, any>) || {};
-    const product = deriveProduct(caseData.case_type, collectedFacts);
-    const mqs = loadMQS(product, caseData.jurisdiction);
+    const caseRow = caseData as any;
+
+    const collectedFacts = (caseRow.collected_facts as Record<string, any>) || {};
+    const product = deriveProduct(caseRow.case_type as string, collectedFacts);
+    const mqs = loadMQS(product, caseRow.jurisdiction as string);
 
     if (!mqs) {
       return NextResponse.json(
@@ -177,14 +195,26 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Answer failed validation' }, { status: 400 });
     }
 
+    // ---------------------------------------
+    // 2. Merge into CaseFacts
+    // ---------------------------------------
     const currentFacts = await getOrCreateCaseFacts(supabase, case_id);
-    let mergedFacts = applyMappedAnswers(currentFacts, question.maps_to, normalizedAnswer);
+    let mergedFacts = applyMappedAnswers(
+      currentFacts as any,
+      question.maps_to,
+      normalizedAnswer
+    );
 
     if (!question.maps_to || question.maps_to.length === 0) {
       mergedFacts = setFactPath(mergedFacts as any, question_id, normalizedAnswer);
     }
 
-    mergedFacts = updateDerivedFacts(question_id, caseData.jurisdiction, mergedFacts as any, normalizedAnswer) as any;
+    mergedFacts = updateDerivedFacts(
+      question_id,
+      caseRow.jurisdiction as string,
+      mergedFacts as any,
+      normalizedAnswer
+    ) as any;
 
     const newFacts = await updateCaseFacts(
       supabase,
@@ -193,8 +223,13 @@ export async function POST(request: Request) {
       { meta: collectedFacts.__meta }
     );
 
+    // ---------------------------------------
+    // 3. Log conversation (user + assistant)
+    // ---------------------------------------
     const rawAnswerText =
-      typeof normalizedAnswer === 'string' ? normalizedAnswer : JSON.stringify(normalizedAnswer);
+      typeof normalizedAnswer === 'string'
+        ? normalizedAnswer
+        : JSON.stringify(normalizedAnswer);
 
     await supabase.from('conversations').insert({
       case_id,
@@ -208,9 +243,9 @@ export async function POST(request: Request) {
     const enhanced = await enhanceAnswer({
       question,
       rawAnswer: rawAnswerText,
-      jurisdiction: caseData.jurisdiction,
+      jurisdiction: caseRow.jurisdiction as string,
       product,
-      caseType: caseData.case_type,
+      caseType: caseRow.case_type as string,
     });
 
     if (enhanced) {
@@ -224,6 +259,9 @@ export async function POST(request: Request) {
       });
     }
 
+    // ---------------------------------------
+    // 4. Determine next question + progress
+    // ---------------------------------------
     const nextQuestion = getNextMQSQuestion(mqs, newFacts as any);
     const progress = computeProgress(mqs, newFacts as any);
     const isComplete = !nextQuestion;
