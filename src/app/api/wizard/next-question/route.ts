@@ -9,6 +9,7 @@
 import { getServerUser, createServerSupabaseClient } from '@/lib/supabase/server';
 import { getNextQuestion, trackTokenUsage } from '@/lib/ai';
 import { NextResponse } from 'next/server';
+import { getNextMQSQuestion, loadMQS } from '@/lib/wizard/mqs-loader';
 
 // Disable caching to prevent HMR issues
 export const dynamic = 'force-dynamic';
@@ -70,7 +71,7 @@ export async function POST(request: Request) {
     // Note: Must use .is() for null checks, not .eq()
     let query = supabase
       .from('cases')
-      .select('id, user_id')
+      .select('id, user_id, case_type, jurisdiction, collected_facts')
       .eq('id', case_id);
 
     if (user) {
@@ -86,6 +87,38 @@ export async function POST(request: Request) {
         { error: 'Case not found' },
         { status: 404 }
       );
+    }
+
+    const caseProduct = (caseData.collected_facts as any)?.__meta?.product;
+
+    if (
+      caseData.jurisdiction === 'england-wales' &&
+      caseData.case_type === 'eviction' &&
+      ['notice_only', 'complete_pack'].includes(caseProduct)
+    ) {
+      const mqs = loadMQS(caseProduct, 'england-wales');
+
+      if (mqs) {
+        const nextMQSQuestion = getNextMQSQuestion(mqs, caseData.collected_facts || {});
+
+        if (!nextMQSQuestion) {
+          return NextResponse.json({
+            success: true,
+            next_question: null,
+            is_complete: true,
+            missing_critical_facts: [],
+            ai_cost: 0,
+          });
+        }
+
+        return NextResponse.json({
+          success: true,
+          next_question: nextMQSQuestion,
+          is_complete: false,
+          missing_critical_facts: [],
+          ai_cost: 0,
+        });
+      }
     }
 
     // Call AI fact-finder to get next question

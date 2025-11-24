@@ -9,6 +9,8 @@
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { loadMQS } from '@/lib/wizard/mqs-loader';
+import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 
 // Validation schema
 const answerSchema = z.object({
@@ -64,10 +66,47 @@ export async function POST(request: Request) {
 
     // Merge new answer with existing facts
     const currentFacts = (currentCase.collected_facts as any) || {};
-    const updatedFacts = {
+    const product = currentFacts.__meta?.product;
+    const isMQSFlow =
+      currentCase.jurisdiction === 'england-wales' &&
+      currentCase.case_type === 'eviction' &&
+      ['notice_only', 'complete_pack'].includes(product);
+
+    const updatedFacts: Record<string, any> = {
       ...currentFacts,
-      [question_id]: answer,
     };
+
+    let enhancedAnswerPayload: any = null;
+
+    if (isMQSFlow) {
+      const mqs = loadMQS(product, 'england-wales');
+      const questionDef = mqs?.questions.find((q) => q.id === question_id);
+
+      const rawAnswer = answer;
+
+      if (questionDef) {
+        const enhanced = await enhanceAnswer({
+          question: questionDef,
+          rawAnswer: typeof rawAnswer === 'string' ? rawAnswer : JSON.stringify(rawAnswer),
+          jurisdiction: currentCase.jurisdiction,
+          product: product as string,
+          caseType: currentCase.case_type,
+        });
+
+        enhancedAnswerPayload = {
+          raw: rawAnswer,
+          suggested: enhanced?.suggested_wording ?? rawAnswer,
+          missing_information: enhanced?.missing_information ?? [],
+          evidence_suggestions: enhanced?.evidence_suggestions ?? [],
+        };
+
+        updatedFacts[question_id] = enhancedAnswerPayload;
+      } else {
+        updatedFacts[question_id] = answer;
+      }
+    } else {
+      updatedFacts[question_id] = answer;
+    }
 
     // Update case with new facts
     const { data: updatedCase, error: updateError } = await supabase
@@ -94,6 +133,7 @@ export async function POST(request: Request) {
         success: true,
         case: updatedCase,
         message: 'Answer saved successfully',
+        enhanced_answer: enhancedAnswerPayload ?? updatedFacts[question_id],
       },
       { status: 200 }
     );
