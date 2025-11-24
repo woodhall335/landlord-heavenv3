@@ -1,9 +1,10 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from '@/lib/supabase/types';
 import type { CaseFacts } from './schema';
 import { createEmptyCaseFacts } from './schema';
 
 export async function getOrCreateCaseFacts(
-  supabase: SupabaseClient,
+  supabase: SupabaseClient<Database>,
   caseId: string
 ): Promise<CaseFacts> {
   const { data, error } = await supabase
@@ -36,7 +37,7 @@ export async function getOrCreateCaseFacts(
 }
 
 export async function updateCaseFacts(
-  supabase: SupabaseClient,
+  supabase: SupabaseClient<Database>,
   caseId: string,
   updater: (current: CaseFacts) => CaseFacts,
   options?: { meta?: Record<string, unknown> }
