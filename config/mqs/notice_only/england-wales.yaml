@@ -30,6 +30,8 @@ questions:
         validation:
           required: true
         width: half
+    maps_to:
+      - parties.landlord
 
   - id: property_details
     section: Property
@@ -55,6 +57,8 @@ questions:
         validation:
           required: true
         width: half
+    maps_to:
+      - property
 
   - id: tenancy_start_date
     section: Tenancy
@@ -63,6 +67,8 @@ questions:
     helperText: "This appears on the notice and must match the agreement."
     validation:
       required: true
+    maps_to:
+      - tenancy.start_date
 
   - id: notice_type
     section: Notice Type
@@ -74,6 +80,8 @@ questions:
       - "Section 21 - no-fault (AST)"
     validation:
       required: true
+    maps_to:
+      - notice.notice_type
 
   - id: arrears_total
     section: Rent Arrears
@@ -86,3 +94,5 @@ questions:
     dependsOn:
       questionId: notice_type
       value: "Section 8 - rent arrears / breach"
+    maps_to:
+      - issues.rent_arrears.total_arrears
