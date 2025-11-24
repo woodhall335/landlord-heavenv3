@@ -57,7 +57,7 @@ export interface Database {
       cases: {
         Row: {
           id: string;
-          user_id: string;
+          user_id: string | null;
           case_type: string;
           jurisdiction: string;
           status: string;
@@ -75,7 +75,7 @@ export interface Database {
         };
         Insert: {
           id?: string;
-          user_id: string;
+          user_id?: string | null;
           case_type: string;
           jurisdiction: string;
           status?: string;
@@ -93,7 +93,7 @@ export interface Database {
         };
         Update: {
           id?: string;
-          user_id?: string;
+          user_id?: string | null;
           case_type?: string;
           jurisdiction?: string;
           status?: string;
@@ -113,7 +113,7 @@ export interface Database {
       documents: {
         Row: {
           id: string;
-          user_id: string;
+          user_id: string | null;
           case_id: string | null;
           document_type: string;
           document_title: string;
@@ -132,7 +132,7 @@ export interface Database {
         };
         Insert: {
           id?: string;
-          user_id: string;
+          user_id?: string | null;
           case_id?: string | null;
           document_type: string;
           document_title: string;
@@ -151,7 +151,7 @@ export interface Database {
         };
         Update: {
           id?: string;
-          user_id?: string;
+          user_id?: string | null;
           case_id?: string | null;
           document_type?: string;
           document_title?: string;
@@ -167,6 +167,41 @@ export interface Database {
           is_preview?: boolean;
           created_at?: string;
           updated_at?: string;
+        };
+      };
+      conversations: {
+        Row: {
+          id: string;
+          case_id: string;
+          role: string;
+          content: string;
+          question_id: string;
+          input_type: string | null;
+          model: string | null;
+          user_input: Json | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          case_id: string;
+          role: string;
+          content: string;
+          question_id: string;
+          input_type?: string | null;
+          model?: string | null;
+          user_input?: Json | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          case_id?: string;
+          role?: string;
+          content?: string;
+          question_id?: string;
+          input_type?: string | null;
+          model?: string | null;
+          user_input?: Json | null;
+          created_at?: string;
         };
       };
       orders: {
