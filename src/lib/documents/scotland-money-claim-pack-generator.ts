@@ -8,7 +8,7 @@
  * - Cover sheet describing what is inside the pack
  */
 
-import { generateDocument, GeneratedDocument } from './generator';
+import { generateDocument } from './generator';
 import { fillSimpleProcedureClaim, ScotlandMoneyClaimData } from './scotland-forms-filler';
 import { assertOfficialFormExists } from './official-forms-filler';
 

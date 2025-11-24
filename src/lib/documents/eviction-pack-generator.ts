@@ -12,9 +12,10 @@
  * Regions: England & Wales, Scotland
  */
 
-import { generateDocument, GeneratedDocument, compileAndMergeTemplates } from './generator';
+import { generateDocument } from './generator';
 import { generateSection8Notice, Section8NoticeData } from './section8-generator';
-import { fillN5Form, fillN5BForm, fillN119Form, CaseData } from './official-forms-filler';
+import { fillN5Form, fillN119Form, CaseData } from './official-forms-filler';
+import type { ScotlandCaseData } from './scotland-forms-filler';
 import { buildServiceContact } from '@/lib/documents/service-contact';
 import fs from 'fs/promises';
 import path from 'path';
@@ -340,7 +341,7 @@ async function generateTimelineExpectations(
   const data = {
     ...evictionCase,
     grounds_data: groundsData,
-    estimated_timeline: calculateEstimatedTimeline(evictionCase, groundsData),
+    estimated_timeline: calculateEstimatedTimeline(evictionCase),
   };
 
   const doc = await generateDocument({
@@ -372,7 +373,7 @@ function calculateLeavingDate(evictionCase: EvictionCase, noticePeriodDays: numb
 /**
  * Calculate estimated timeline based on jurisdiction and grounds
  */
-function calculateEstimatedTimeline(evictionCase: EvictionCase, groundsData: any): any {
+function calculateEstimatedTimeline(evictionCase: EvictionCase): any {
   const jurisdiction = evictionCase.jurisdiction;
   const hasMandatoryGround = evictionCase.grounds.some((g) => g.mandatory);
 
@@ -539,16 +540,13 @@ async function generateEnglandWalesEvictionPack(
 /**
  * Generate Scotland Eviction Pack
  */
-async function generateScotlandEvictionPack(
-  evictionCase: EvictionCase,
-  groundsData: any
-): Promise<EvictionPackDocument[]> {
+async function generateScotlandEvictionPack(evictionCase: EvictionCase): Promise<EvictionPackDocument[]> {
   const documents: EvictionPackDocument[] = [];
 
   const { fillScotlandOfficialForm } = await import('./scotland-forms-filler');
 
   // Prepare Scotland case data
-  const scotlandData = {
+  const scotlandData: ScotlandCaseData = {
     landlord_full_name: evictionCase.landlord_full_name,
     landlord_2_name: evictionCase.landlord_2_name,
     landlord_address: evictionCase.landlord_address,
@@ -636,7 +634,7 @@ export async function generateCompleteEvictionPack(
   if (evictionCase.jurisdiction === 'england-wales') {
     regionDocs = await generateEnglandWalesEvictionPack(evictionCase, groundsData);
   } else if (evictionCase.jurisdiction === 'scotland') {
-    regionDocs = await generateScotlandEvictionPack(evictionCase, groundsData);
+    regionDocs = await generateScotlandEvictionPack(evictionCase);
   }
 
   documents.push(...regionDocs);

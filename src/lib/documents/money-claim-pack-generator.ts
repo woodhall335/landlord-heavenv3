@@ -8,7 +8,7 @@
  * - Cover sheet describing what is inside the pack
  */
 
-import { generateDocument, GeneratedDocument } from './generator';
+import { generateDocument } from './generator';
 import { assertOfficialFormExists, fillN1Form, CaseData } from '@/lib/documents/official-forms-filler';
 import { buildServiceContact } from '@/lib/documents/service-contact';
 

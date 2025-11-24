@@ -39,7 +39,7 @@ export interface Section8NoticeData {
   fixed_term_expired?: boolean;
   fixed_term_end_date?: string;
   rent_amount: number;
-  rent_frequency: 'weekly' | 'monthly' | 'quarterly' | 'yearly';
+  rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
   payment_date: number; // Day of month/week
   rent_period_description?: string;
 
@@ -185,7 +185,7 @@ export interface Section8NoticeData {
 // GROUND DEFINITIONS
 // ============================================================================
 
-const GROUND_DEFINITIONS: Record<number, Omit<Section8Ground, 'particulars' | 'supporting_evidence'>> = {
+const GROUND_DEFINITIONS: Record<number | '14A', Omit<Section8Ground, 'particulars' | 'supporting_evidence'>> = {
   1: {
     code: 1,
     title: 'Landlord previously occupied as only or principal home',

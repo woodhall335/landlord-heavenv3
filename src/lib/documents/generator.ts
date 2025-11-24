@@ -41,7 +41,7 @@ export interface GeneratedDocument {
  */
 function registerHandlebarsHelpers() {
   // Equality check (supports both inline and block usage)
-  Handlebars.registerHelper('eq', function (a: any, b: any, options?: any) {
+  Handlebars.registerHelper('eq', function (this: any, a: any, b: any, options?: any) {
     if (arguments.length === 3 && options && typeof options.fn === 'function') {
       // Block helper: {{#eq a b}}...{{/eq}}
       return a === b ? options.fn(this) : (options.inverse ? options.inverse(this) : '');
@@ -87,7 +87,7 @@ function registerHandlebarsHelpers() {
   });
 
   // Conditional class
-  Handlebars.registerHelper('if_eq', function (a, b, options) {
+  Handlebars.registerHelper('if_eq', function (this: any, a, b, options) {
     return a === b ? options.fn(this) : options.inverse(this);
   });
 

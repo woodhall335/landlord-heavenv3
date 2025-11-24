@@ -13,7 +13,7 @@
  * - Simple Procedure Claim Form (Form 3A): Money claims up to £5,000
  */
 
-import { PDFDocument, PDFForm, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, PDFForm } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -35,7 +35,7 @@ export interface ScotlandCaseData {
   // Tenancy details
   tenancy_start_date: string;
   rent_amount: number;
-  rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly';
+  rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
   payment_day?: number;
 
   // Notice details
@@ -100,7 +100,7 @@ export interface ScotlandMoneyClaimData {
 
   // Tenancy details
   rent_amount?: number;
-  rent_frequency?: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly';
+  rent_frequency?: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
   payment_day?: number;
   tenancy_start_date?: string;
   tenancy_end_date?: string;
@@ -145,7 +145,7 @@ function fillTextField(form: PDFForm, fieldName: string, value: string | undefin
     const field = form.getTextField(fieldName);
     field.setText(value);
   } catch (error) {
-    console.warn(`Field "${fieldName}" not found in form, skipping`);
+    console.warn(`Field "${fieldName}" not found in form, skipping: ${error}`);
   }
 }
 
@@ -159,7 +159,7 @@ function checkBox(form: PDFForm, fieldName: string, checked: boolean = true): vo
     const field = form.getCheckBox(fieldName);
     field.check();
   } catch (error) {
-    console.warn(`Checkbox "${fieldName}" not found in form, skipping`);
+    console.warn(`Checkbox "${fieldName}" not found in form, skipping: ${error}`);
   }
 }
 
@@ -242,7 +242,7 @@ export async function fillNoticeToLeave(data: ScotlandCaseData): Promise<Uint8Ar
   }
 
   // Grounds for eviction
-  data.grounds.forEach((ground, index) => {
+  data.grounds.forEach((ground) => {
     const groundNumber = ground.code.replace('Ground ', '');
 
     // Check the ground checkbox

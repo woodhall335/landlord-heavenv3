@@ -16,7 +16,7 @@
  * - Form 6A: Section 21 notice (prescribed form)
  */
 
-import { PDFDocument, PDFForm, PDFTextField, PDFCheckBox, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument, PDFForm } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -33,7 +33,7 @@ export async function assertOfficialFormExists(formName: string): Promise<string
     return formPath;
   } catch (error) {
     throw new Error(
-      `Official form "${formName}" is missing. Add the PDF under public/official-forms (jurisdiction subfolder allowed) or update the manifest.`
+      `Official form "${formName}" is missing. Add the PDF under public/official-forms (jurisdiction subfolder allowed) or update the manifest. Error: ${error}`
     );
   }
 }
@@ -59,7 +59,7 @@ export interface CaseData {
   fixed_term?: boolean;
   fixed_term_end_date?: string;
   rent_amount: number;
-  rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly';
+  rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
 
   // Claim details
   claim_type?: 'section_8' | 'section_21' | 'money_claim';
@@ -136,7 +136,7 @@ function fillTextField(form: PDFForm, fieldName: string, value: string | undefin
     const field = form.getTextField(fieldName);
     field.setText(value);
   } catch (error) {
-    console.warn(`Field "${fieldName}" not found in form, skipping`);
+    console.warn(`Field "${fieldName}" not found in form, skipping: ${error}`);
   }
 }
 
@@ -150,25 +150,8 @@ function checkBox(form: PDFForm, fieldName: string, checked: boolean = true): vo
     const field = form.getCheckBox(fieldName);
     field.check();
   } catch (error) {
-    console.warn(`Checkbox "${fieldName}" not found in form, skipping`);
+    console.warn(`Checkbox "${fieldName}" not found in form, skipping: ${error}`);
   }
-}
-
-/**
- * Overlay text onto PDF at specific coordinates
- * (Use this when form fields don't exist - fallback method)
- */
-async function overlayText(pdfDoc: PDFDocument, pageIndex: number, text: string, x: number, y: number, size: number = 10): Promise<void> {
-  const page = pdfDoc.getPage(pageIndex);
-  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-
-  page.drawText(text, {
-    x,
-    y,
-    size,
-    font,
-    color: rgb(0, 0, 0),
-  });
 }
 
 /**
@@ -718,8 +701,8 @@ export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
     // Try to fill hearing centre (may conflict with total amount field)
     try {
       fillTextField(form, 'Text Field 28', data.court_name);
-    } catch (e) {
-      console.warn('Could not fill hearing centre due to field name conflict');
+    } catch (error) {
+      console.warn(`Could not fill hearing centre due to field name conflict: ${error}`);
     }
   }
 
