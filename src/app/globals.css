@@ -16,6 +16,16 @@
   --secondary: #00A36C; /* PandaDoc emerald green - exact match */
   --secondary-dark: #008C5C;
   --secondary-light: #D1FAE5; /* Light green backgrounds */
+
+  /* Section backgrounds - PandaDoc style */
+  --bg-lavender: #F3F1FF; /* Light purple hero sections */
+  --bg-cream: #F9F7F4; /* Beige alternating sections */
+  --bg-charcoal: #1F2937; /* Dark CTA sections */
+
+  /* Shadows - PandaDoc inspired */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-button: 0 4px 12px rgba(0, 163, 108, 0.2);
 }
 
 @theme inline {

@@ -75,6 +75,19 @@ export const colors = {
     900: "#111827", // Extra dark text
   },
 
+  // Backgrounds - PandaDoc section colors
+  lavender: {
+    DEFAULT: "#F3F1FF", // Light purple hero backgrounds
+    50: "#FDFCFF",
+    100: "#F3F1FF",
+    200: "#E9E5FF",
+  },
+  cream: {
+    DEFAULT: "#F9F7F4", // Beige/cream alternating sections
+    50: "#FDFCFA",
+    100: "#F9F7F4",
+  },
+
   // Pure
   white: "#ffffff",
   black: "#1A1A1A", // Deep charcoal for better consistency
