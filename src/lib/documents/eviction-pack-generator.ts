@@ -546,6 +546,21 @@ async function generateScotlandEvictionPack(evictionCase: EvictionCase): Promise
   const { fillScotlandOfficialForm } = await import('./scotland-forms-filler');
 
   // Prepare Scotland case data
+  const mapDepositSchemeToScotland = (
+    scheme?: EvictionCase['deposit_scheme_name']
+  ): ScotlandCaseData['deposit_scheme'] => {
+    switch (scheme) {
+      case 'SafeDeposits Scotland':
+        return 'SafeDeposits Scotland';
+      case 'DPS':
+        return 'Letting Protection Service Scotland';
+      case 'MyDeposits':
+        return 'MyDeposits Scotland';
+      default:
+        return undefined;
+    }
+  };
+
   const scotlandData: ScotlandCaseData = {
     landlord_full_name: evictionCase.landlord_full_name,
     landlord_2_name: evictionCase.landlord_2_name,
@@ -570,7 +585,7 @@ async function generateScotlandEvictionPack(evictionCase: EvictionCase): Promise
       evidence: g.evidence,
     })),
     deposit_amount: evictionCase.deposit_amount,
-    deposit_scheme: evictionCase.deposit_scheme_name,
+    deposit_scheme: mapDepositSchemeToScotland(evictionCase.deposit_scheme_name),
     deposit_reference: evictionCase.deposit_reference,
   };
 
