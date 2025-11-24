@@ -86,6 +86,16 @@ export interface CaseData {
   solicitor_reference?: string;
   solicitor_phone?: string;
   solicitor_email?: string;
+  dx_number?: string;
+
+  // Service contact (address for service)
+  service_address_line1?: string;
+  service_address_line2?: string;
+  service_address_town?: string;
+  service_address_county?: string;
+  service_postcode?: string;
+  service_phone?: string;
+  service_email?: string;
 
   // Court
   court_name?: string;
@@ -283,18 +293,36 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   fillTextField(form, 'Statement of Truth signature box', data.signatory_name);
 
   // Address for service
-  const serviceAddressParts = (data.solicitor_address || data.landlord_address).split('\n');
-  fillTextField(form, "building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent", serviceAddressParts[0]);
+  const serviceAddressParts = [
+    data.service_address_line1 || data.landlord_address,
+    data.service_address_line2,
+    data.service_address_town,
+    data.service_address_county,
+  ].filter((part): part is string => Boolean(part));
+
+  fillTextField(
+    form,
+    "building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+    serviceAddressParts[0]
+  );
   if (serviceAddressParts.length > 1) {
-    fillTextField(form, "Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent", serviceAddressParts[1]);
+    fillTextField(
+      form,
+      "Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+      serviceAddressParts[1]
+    );
   }
 
-  if (data.landlord_postcode) {
-    fillTextField(form, "Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent", data.landlord_postcode);
+  if (data.service_postcode || data.landlord_postcode) {
+    fillTextField(
+      form,
+      "Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+      data.service_postcode || data.landlord_postcode
+    );
   }
 
-  const servicePhone = data.solicitor_phone || data.landlord_phone;
-  const serviceEmail = data.solicitor_email || data.landlord_email;
+  const servicePhone = data.service_phone || data.solicitor_phone || data.landlord_phone;
+  const serviceEmail = data.service_email || data.solicitor_email || data.landlord_email;
 
   fillTextField(form, 'If applicable, phone number', servicePhone);
   fillTextField(form, 'If applicable, email address', serviceEmail);
@@ -750,9 +778,12 @@ export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
 
   // === PAGE 5 - Address for Service ===
 
-  // Use solicitor address if available, otherwise landlord address
-  const serviceAddress = data.solicitor_address || data.landlord_address;
-  const serviceAddressLines = serviceAddress.split('\n');
+  const serviceAddressLines = [
+    data.service_address_line1 || data.landlord_address,
+    data.service_address_line2,
+    data.service_address_town,
+    data.service_address_county,
+  ].filter((part): part is string => Boolean(part));
 
   fillTextField(form, 'Text Field 10', serviceAddressLines[0]); // Building and street
   if (serviceAddressLines.length > 1) {
@@ -766,12 +797,12 @@ export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
   }
 
   // Postcode (max 7 characters)
-  const postcode = data.landlord_postcode || '';
-  fillTextField(form, 'Text34', postcode.substring(0, 7));
+  const postcode = (data.service_postcode || data.landlord_postcode || '').substring(0, 7);
+  fillTextField(form, 'Text34', postcode);
 
   // Contact details
-  const servicePhone = data.solicitor_phone || data.landlord_phone;
-  const serviceEmail = data.solicitor_email || data.landlord_email;
+  const servicePhone = data.service_phone || data.solicitor_phone || data.landlord_phone;
+  const serviceEmail = data.service_email || data.solicitor_email || data.landlord_email;
 
   fillTextField(form, 'Text Field 6', servicePhone); // Phone number
   fillTextField(form, 'Text Field 4', data['dx_number']); // DX number (if applicable)
