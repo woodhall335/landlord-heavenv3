@@ -7,7 +7,6 @@
  */
 
 import { NextResponse } from 'next/server';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
@@ -66,7 +65,6 @@ export async function POST(request: Request) {
 
     const { case_id } = validation.data;
     const supabase = await createServerSupabaseClient();
-    const supabaseClient = supabase as unknown as SupabaseClient;
 
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
@@ -82,7 +80,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    const facts = await getOrCreateCaseFacts(supabaseClient, case_id);
+    const facts = await getOrCreateCaseFacts(supabase, case_id);
     const route = computeRoute(facts, caseData.jurisdiction, caseData.case_type);
     const { score, red_flags, compliance } = computeStrength(facts);
 

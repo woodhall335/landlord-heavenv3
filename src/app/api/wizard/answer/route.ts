@@ -7,7 +7,6 @@
  */
 
 import { NextResponse } from 'next/server';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { loadMQS, getNextMQSQuestion, type ProductType, type MasterQuestionSet } from '@/lib/wizard/mqs-loader';
@@ -140,7 +139,6 @@ export async function POST(request: Request) {
 
     const { case_id, question_id, answer } = validationResult.data;
     const supabase = await createServerSupabaseClient();
-    const supabaseClient = supabase as unknown as SupabaseClient;
 
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
@@ -179,7 +177,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Answer failed validation' }, { status: 400 });
     }
 
-    const currentFacts = await getOrCreateCaseFacts(supabaseClient, case_id);
+    const currentFacts = await getOrCreateCaseFacts(supabase, case_id);
     let mergedFacts = applyMappedAnswers(currentFacts, question.maps_to, normalizedAnswer);
 
     if (!question.maps_to || question.maps_to.length === 0) {
@@ -189,7 +187,7 @@ export async function POST(request: Request) {
     mergedFacts = updateDerivedFacts(question_id, caseData.jurisdiction, mergedFacts as any, normalizedAnswer) as any;
 
     const newFacts = await updateCaseFacts(
-      supabaseClient,
+      supabase,
       case_id,
       () => mergedFacts as any,
       { meta: collectedFacts.__meta }
