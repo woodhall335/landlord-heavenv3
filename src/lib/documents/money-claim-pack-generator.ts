@@ -10,6 +10,7 @@
 
 import { generateDocument, GeneratedDocument } from './generator';
 import { assertOfficialFormExists, fillN1Form, CaseData } from '@/lib/documents/official-forms-filler';
+import { buildServiceContact } from '@/lib/documents/service-contact';
 
 export type MoneyClaimJurisdiction = 'england-wales';
 
@@ -142,6 +143,8 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
 }
 
 function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseData {
+  const service = buildServiceContact(claim);
+
   return {
     landlord_full_name: claim.landlord_full_name,
     landlord_2_name: claim.landlord_2_name,
@@ -165,6 +168,13 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
     court_name: claim.court_name,
     signatory_name: claim.signatory_name || claim.landlord_full_name,
     signature_date: claim.signature_date || new Date().toISOString().split('T')[0],
+    service_address_line1: service.service_address_line1,
+    service_address_line2: service.service_address_line2,
+    service_address_town: service.service_address_town,
+    service_address_county: service.service_address_county,
+    service_postcode: service.service_postcode,
+    service_phone: service.service_phone,
+    service_email: service.service_email,
   };
 }
 

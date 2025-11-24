@@ -15,6 +15,7 @@
 import { generateDocument, GeneratedDocument, compileAndMergeTemplates } from './generator';
 import { generateSection8Notice, Section8NoticeData } from './section8-generator';
 import { fillN5Form, fillN5BForm, fillN119Form, CaseData } from './official-forms-filler';
+import { buildServiceContact } from '@/lib/documents/service-contact';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -482,12 +483,19 @@ async function generateEnglandWalesEvictionPack(
   }
 
   // 3. N5 Claim Form
+  const service = buildServiceContact(evictionCase);
+
   const caseData: CaseData = {
     landlord_full_name: evictionCase.landlord_full_name,
     landlord_address: evictionCase.landlord_address,
     landlord_postcode: evictionCase.landlord_address_postcode,
     landlord_phone: evictionCase.landlord_phone,
     landlord_email: evictionCase.landlord_email,
+    solicitor_firm: evictionCase.solicitor_firm,
+    solicitor_address: evictionCase.solicitor_address,
+    solicitor_phone: evictionCase.solicitor_phone,
+    solicitor_email: evictionCase.solicitor_email,
+    dx_number: evictionCase.dx_number,
     tenant_full_name: evictionCase.tenant_full_name,
     property_address: evictionCase.property_address,
     property_postcode: evictionCase.property_address_postcode,
@@ -497,6 +505,13 @@ async function generateEnglandWalesEvictionPack(
     signatory_name: evictionCase.landlord_full_name,
     signature_date: new Date().toISOString().split('T')[0],
     court_name: evictionCase.court_name,
+    service_address_line1: service.service_address_line1,
+    service_address_line2: service.service_address_line2,
+    service_address_town: service.service_address_town,
+    service_address_county: service.service_address_county,
+    service_postcode: service.service_postcode,
+    service_phone: service.service_phone,
+    service_email: service.service_email,
   };
 
   const n5Pdf = await fillN5Form(caseData);
