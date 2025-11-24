@@ -30,6 +30,8 @@ export interface ClaimLineItem {
 export interface MoneyClaimCase {
   jurisdiction: MoneyClaimJurisdiction;
   case_id?: string;
+
+  // Landlord / claimant
   landlord_full_name: string;
   landlord_2_name?: string;
   landlord_address: string;
@@ -38,30 +40,52 @@ export interface MoneyClaimCase {
   landlord_phone?: string;
   claimant_reference?: string;
 
+  // Defendant / tenant
   tenant_full_name: string;
   tenant_2_name?: string;
   property_address: string;
   property_postcode?: string;
 
+  // Tenancy / rent
   rent_amount: number;
   rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly';
   payment_day?: number;
   tenancy_start_date?: string;
   tenancy_end_date?: string;
 
+  // Arrears / money claim breakdown
   arrears_total?: number;
   arrears_schedule?: ArrearsEntry[];
   damage_items?: ClaimLineItem[];
   other_charges?: ClaimLineItem[];
 
+  // Interest
   interest_rate?: number;
   interest_start_date?: string;
   interest_to_date?: number;
   daily_interest?: number;
 
+  // Fees / costs
   court_fee?: number;
   solicitor_costs?: number;
 
+  // Representation (solicitor / agent)
+  solicitor_firm?: string;
+  solicitor_address?: string;
+  solicitor_phone?: string;
+  solicitor_email?: string;
+  dx_number?: string;
+
+  // Explicit address-for-service override (if collected in wizard)
+  service_address_line1?: string;
+  service_address_line2?: string;
+  service_address_town?: string;
+  service_address_county?: string;
+  service_postcode?: string;
+  service_phone?: string;
+  service_email?: string;
+
+  // Claim meta
   particulars_of_claim?: string;
   signatory_name?: string;
   signature_date?: string;
@@ -119,9 +143,12 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
 
   const basePrincipal = arrears_total + damages_total + other_total;
   const interest_rate = claim.interest_rate ?? 8;
-  const interest_to_date = claim.interest_to_date ?? Number((basePrincipal * (interest_rate / 100) * 0.25).toFixed(2));
+  const interest_to_date =
+    claim.interest_to_date ??
+    Number((basePrincipal * (interest_rate / 100) * 0.25).toFixed(2));
   const daily_interest =
-    claim.daily_interest ?? Number(((basePrincipal * (interest_rate / 100)) / 365).toFixed(2));
+    claim.daily_interest ??
+    Number(((basePrincipal * (interest_rate / 100)) / 365).toFixed(2));
 
   const court_fee = claim.court_fee ?? 355;
   const solicitor_costs = claim.solicitor_costs ?? 0;
@@ -146,19 +173,26 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
   const service = buildServiceContact(claim);
 
   return {
+    // Landlord / claimant core details
     landlord_full_name: claim.landlord_full_name,
     landlord_2_name: claim.landlord_2_name,
     landlord_address: claim.landlord_address,
     landlord_postcode: claim.landlord_postcode,
     landlord_phone: claim.landlord_phone,
     landlord_email: claim.landlord_email,
+
+    // Defendant
     tenant_full_name: claim.tenant_full_name,
     tenant_2_name: claim.tenant_2_name,
     property_address: claim.property_address,
     property_postcode: claim.property_postcode,
+
+    // Tenancy / rent
     tenancy_start_date: claim.tenancy_start_date || '',
     rent_amount: claim.rent_amount,
     rent_frequency: claim.rent_frequency,
+
+    // Claim meta
     claim_type: 'money_claim',
     particulars_of_claim: claim.particulars_of_claim,
     total_claim_amount: totals.total_claim_amount,
@@ -166,8 +200,19 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
     solicitor_costs: totals.solicitor_costs,
     claimant_reference: claim.claimant_reference,
     court_name: claim.court_name,
+
+    // Representation (passed through for N1 + fallbacks)
+    solicitor_firm: claim.solicitor_firm,
+    solicitor_address: claim.solicitor_address,
+    solicitor_phone: claim.solicitor_phone,
+    solicitor_email: claim.solicitor_email,
+    dx_number: claim.dx_number,
+
+    // Signature
     signatory_name: claim.signatory_name || claim.landlord_full_name,
     signature_date: claim.signature_date || new Date().toISOString().split('T')[0],
+
+    // Unified address for service (from helper)
     service_address_line1: service.service_address_line1,
     service_address_line2: service.service_address_line2,
     service_address_town: service.service_address_town,
@@ -178,7 +223,9 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
   };
 }
 
-async function generateEnglandWalesMoneyClaimPack(claim: MoneyClaimCase): Promise<MoneyClaimPack> {
+async function generateEnglandWalesMoneyClaimPack(
+  claim: MoneyClaimCase
+): Promise<MoneyClaimPack> {
   const totals = calculateTotals(claim);
   const generationDate = new Date().toISOString();
   const documents: MoneyClaimPackDocument[] = [];
@@ -301,11 +348,14 @@ async function generateEnglandWalesMoneyClaimPack(claim: MoneyClaimCase): Promis
   };
 }
 
-export async function generateMoneyClaimPack(claim: MoneyClaimCase): Promise<MoneyClaimPack> {
+export async function generateMoneyClaimPack(
+  claim: MoneyClaimCase
+): Promise<MoneyClaimPack> {
   if (claim.jurisdiction !== 'england-wales') {
-    throw new Error('Money claim pack generation is currently available only for England & Wales.');
+    throw new Error(
+      'Money claim pack generation is currently available only for England & Wales.'
+    );
   }
 
   return generateEnglandWalesMoneyClaimPack(claim);
 }
-
