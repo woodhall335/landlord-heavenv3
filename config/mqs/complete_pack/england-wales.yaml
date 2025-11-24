@@ -1,0 +1,855 @@
+id: complete_pack_england_wales_v1
+product: complete_pack
+jurisdiction: england-wales
+version: "1.0.0"
+
+questions:
+  # 1. Case overview (helps Ask Heaven + decision engine)
+  - id: case_overview
+    section: Case Overview
+    question: "Briefly describe what has gone wrong with this tenancy"
+    inputType: textarea
+    helperText: "Give a short overview: when the problems started, whether rent is owed, any anti-social behaviour, and what you want the court to do."
+    validation:
+      required: true
+    suggestion_prompt: >
+      Help the landlord turn their rough description into a clear, factual overview that a judge reading the court papers would understand easily.
+      Avoid emotional language and stick to dates, events, and amounts.
+    maps_to:
+      - particulars_of_claim
+
+  # 2. Landlord details
+  - id: landlord_details
+    section: Landlord Details
+    question: "Your details"
+    inputType: group
+    helperText: "We use these for the notices and all court claim forms. If there are joint landlords, include everyone."
+    fields:
+      - id: landlord_full_name
+        label: "Main landlord full name"
+        inputType: text
+        placeholder: "Jane Landlord"
+        validation:
+          required: true
+        width: full
+      - id: landlord_2_name
+        label: "Second landlord (if any)"
+        inputType: text
+        placeholder: "Second landlord full name"
+        width: full
+      - id: landlord_address
+        label: "Landlord service address"
+        inputType: textarea
+        placeholder: "Building and street\nTown/City\nPostcode"
+        validation:
+          required: true
+        width: full
+      - id: landlord_postcode
+        label: "Postcode"
+        inputType: text
+        placeholder: "AB1 2CD"
+        validation:
+          required: true
+        width: half
+      - id: landlord_email
+        label: "Email address"
+        inputType: email
+        placeholder: "you@example.com"
+        validation:
+          required: true
+        width: half
+      - id: landlord_phone
+        label: "Phone number"
+        inputType: tel
+        placeholder: "07700 900000"
+        validation:
+          required: true
+        width: half
+      - id: claimant_reference
+        label: "Your internal reference (optional)"
+        inputType: text
+        placeholder: "e.g. Flat 2A / Smith / Feb 2025"
+        width: half
+    suggestion_prompt: >
+      Check that all landlord names and addresses match what appears on the tenancy agreement and any previous correspondence.
+      If there are joint landlords, ensure everyone who should be on the claim is included.
+    maps_to:
+      - landlord_full_name
+      - landlord_2_name
+      - landlord_address
+      - landlord_postcode
+      - landlord_email
+      - landlord_phone
+      - claimant_reference
+
+  # 3. Solicitor / representative (optional)
+  - id: uses_solicitor
+    section: Representation
+    question: "Are you using a solicitor or authorised representative for this claim?"
+    inputType: yes_no
+    helperText: "If yes, we'll capture their details for the court forms. If no, everything will be in your name."
+    validation:
+      required: true
+
+  - id: solicitor_details
+    section: Representation
+    question: "Representative details"
+    inputType: group
+    helperText: "Only complete this if a solicitor or other representative is handling the claim."
+    dependsOn:
+      questionId: uses_solicitor
+      value: "Yes"
+    fields:
+      - id: solicitor_firm
+        label: "Firm / organisation name"
+        inputType: text
+        placeholder: "Example Solicitors LLP"
+        validation:
+          required: true
+        width: full
+      - id: solicitor_address
+        label: "Address for service"
+        inputType: textarea
+        placeholder: "Building and street\nTown/City\nPostcode"
+        validation:
+          required: true
+        width: full
+      - id: dx_number
+        label: "DX number (if any)"
+        inputType: text
+        placeholder: "DX 123456 (optional)"
+        width: half
+      - id: solicitor_phone
+        label: "Telephone"
+        inputType: tel
+        placeholder: "020 0000 0000"
+        width: half
+      - id: solicitor_email
+        label: "Email"
+        inputType: email
+        placeholder: "solicitor@example.com"
+        width: half
+    suggestion_prompt: >
+      Ensure the representative details match exactly what appears on your engagement letter or their letterhead.
+      Courts will send documents to this address, so accuracy is critical.
+    maps_to:
+      - solicitor_firm
+      - solicitor_address
+      - dx_number
+      - solicitor_phone
+      - solicitor_email
+
+  # 4. Tenant details
+  - id: tenant_details
+    section: Tenant Details
+    question: "Tenant details"
+    inputType: group
+    helperText: "These appear as Defendants on the court claim and on the notices."
+    fields:
+      - id: tenant_full_name
+        label: "Main tenant full name"
+        inputType: text
+        placeholder: "John Tenant"
+        validation:
+          required: true
+        width: full
+      - id: tenant_2_name
+        label: "Second tenant (if any)"
+        inputType: text
+        placeholder: "Second tenant full name"
+        width: full
+      - id: occupants_in_property
+        label: "Who is currently living in the property?"
+        inputType: textarea
+        placeholder: "List all adults and children living there, if known."
+        validation:
+          required: true
+        width: full
+    suggestion_prompt: >
+      Make sure all tenants named on the tenancy agreement are listed here.
+      If there are other adults living at the property, note them in the occupants box, even if they are not on the agreement.
+    maps_to:
+      - tenant_full_name
+      - tenant_2_name
+
+  # 5. Property details
+  - id: property_details
+    section: Property
+    question: "Property details"
+    inputType: group
+    helperText: "This is the property you are seeking possession of."
+    fields:
+      - id: property_address_line1
+        label: "Address line 1"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: property_address_line2
+        label: "Address line 2 (optional)"
+        inputType: text
+        width: full
+      - id: property_address_town
+        label: "Town or city"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: property_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: property_type
+        label: "Property type"
+        inputType: select
+        options:
+          - "Flat"
+          - "House"
+          - "HMO (shared house)"
+          - "Studio"
+          - "Other"
+        width: half
+      - id: number_of_bedrooms
+        label: "Number of bedrooms"
+        inputType: number
+        width: half
+    suggestion_prompt: >
+      Use the full, correct postal address as it appears on the tenancy agreement and council tax bills.
+      This address must match what you will write on the court claim forms.
+    maps_to:
+      - property_address
+
+  # 6. Tenancy details
+  - id: tenancy_details
+    section: Tenancy
+    question: "Tenancy details"
+    inputType: group
+    helperText: "We use this to decide which legal routes you can use and to complete the court forms."
+    fields:
+      - id: tenancy_start_date
+        label: "Date the current tenancy started"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: is_fixed_term
+        label: "Was this tenancy granted for a fixed term?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: fixed_term_end_date
+        label: "Fixed term end date (if any)"
+        inputType: date
+        width: half
+      - id: tenancy_in_writing
+        label: "Is there a written tenancy agreement?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: tenancy_renewals
+        label: "Has the tenancy been renewed or rolled over?"
+        inputType: textarea
+        placeholder: "Explain if there were renewals, rent changes, or if it became periodic."
+        width: full
+    suggestion_prompt: >
+      Make sure dates are accurate and consistent with the written agreement and any renewal documents.
+      Clarify if the tenancy is now periodic (rolling) and since when.
+    maps_to:
+      - tenancy_start_date
+      - fixed_term_end_date
+
+  # 7. Rent details
+  - id: rent_details
+    section: Rent
+    question: "Rent details"
+    inputType: group
+    helperText: "We use this to calculate arrears and check that Section 8 thresholds are met."
+    fields:
+      - id: rent_amount
+        label: "Current rent amount"
+        inputType: currency
+        placeholder: "950"
+        validation:
+          required: true
+          min: 0
+        width: half
+      - id: rent_frequency
+        label: "Rent frequency"
+        inputType: select
+        options:
+          - "weekly"
+          - "fortnightly"
+          - "monthly"
+          - "quarterly"
+        validation:
+          required: true
+        width: half
+      - id: payment_date
+        label: "Day rent is due"
+        inputType: number
+        placeholder: "e.g. 1 for 1st of the month"
+        validation:
+          required: true
+        width: half
+      - id: rent_period_description
+        label: "Rent period description (if unusual)"
+        inputType: text
+        placeholder: "Only needed if the rent period is not straightforward."
+        width: half
+    suggestion_prompt: >
+      Check the rent amount and frequency against the latest tenancy agreement or rent increase notice.
+      If the rent changed during the tenancy, mention when and from what amount to what amount.
+    maps_to:
+      - rent_amount
+      - rent_frequency
+      - payment_date
+
+  # 8. Deposit & compliance (Section 21 validity)
+  - id: deposit_and_compliance
+    section: Deposit & Compliance
+    question: "Deposit and compliance checklist"
+    inputType: group
+    helperText: "These answers determine whether you can safely use Section 21 and the accelerated N5B route."
+    fields:
+      - id: deposit_amount
+        label: "Was a deposit taken? If yes, how much?"
+        inputType: currency
+        placeholder: "0 if no deposit"
+        validation:
+          required: true
+          min: 0
+        width: half
+      - id: deposit_protected
+        label: "Is the deposit protected in an approved scheme?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: deposit_scheme
+        label: "Deposit scheme"
+        inputType: select
+        options:
+          - "Deposit Protection Service (DPS)"
+          - "Tenancy Deposit Scheme (TDS)"
+          - "MyDeposits"
+          - "Other / not sure"
+        width: half
+      - id: deposit_protection_date
+        label: "Date the deposit was protected"
+        inputType: date
+        width: half
+      - id: deposit_reference
+        label: "Deposit reference number (if known)"
+        inputType: text
+        width: half
+      - id: prescribed_info_given
+        label: "Was the scheme prescribed information given to the tenant within 30 days?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: gas_safety_cert_provided
+        label: "Gas safety certificate given to tenant BEFORE they moved in (if gas present)?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: epc_provided
+        label: "Energy Performance Certificate (EPC) given to tenant?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: epc_rating
+        label: "EPC rating (if known)"
+        inputType: text
+        placeholder: "e.g. C"
+        width: half
+      - id: how_to_rent_guide_provided
+        label: "Latest 'How to Rent' guide given at start of tenancy?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: hmo_license_required
+        label: "Is an HMO or selective licence required for this property?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: hmo_license_valid
+        label: "If a licence is required, is there a valid licence in place?"
+        inputType: yes_no
+        width: half
+      - id: no_prohibited_fees
+        label: "Have all banned fees/deposits under the Tenant Fees Act been repaid or not charged?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: not_retaliatory
+        label: "Is this NOT a response to the tenant complaining about disrepair to the council?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: tenancy_duration_months
+        label: "How many months has the tenancy been running (approximately)?"
+        inputType: number
+        validation:
+          required: true
+          min: 0
+        width: half
+    suggestion_prompt: >
+      Be brutally honest here. These answers determine whether Section 21 and the accelerated route are safe.
+      If anything is missing or late (deposit, prescribed information, gas, EPC, How to Rent, licence),
+      note it clearly so we can steer you away from routes that are likely to fail.
+    maps_to:
+      - deposit_amount
+      - deposit_protected
+      - deposit_scheme
+      - deposit_reference
+      - deposit_protection_date
+      - gas_safety_cert_provided
+      - epc_provided
+      - how_to_rent_guide_provided
+      - hmo_license_required
+      - hmo_license_valid
+      - no_prohibited_fees
+      - not_retaliatory
+      - tenancy_duration_months
+
+  # 9. Route selection – Section 8 / Section 21
+  - id: eviction_route
+    section: Legal Route
+    question: "Which route do you want to use?"
+    inputType: multi_select
+    helperText: "Choose all that apply. We will generate the correct notices and court forms based on your answers and compliance."
+    options:
+      - "Section 8 - rent arrears / breach"
+      - "Section 21 - no-fault (AST)"
+      - "Not sure – help me decide"
+    validation:
+      required: true
+    suggestion_prompt: >
+      Help the landlord choose between Section 8, Section 21, or both,
+      based on arrears, tenant behaviour, and the compliance answers above.
+      Explain briefly in plain English why each chosen route is appropriate.
+
+  # 10. Arrears & money (for Section 8 and rent claims)
+  - id: arrears_summary
+    section: Rent Arrears
+    question: "Rent arrears summary"
+    inputType: group
+    helperText: "We use this for Section 8, N5, and N119. You can upload a detailed rent schedule later."
+    fields:
+      - id: total_arrears
+        label: "Total rent arrears currently owed"
+        inputType: currency
+        placeholder: "e.g. 2400"
+        validation:
+          required: true
+          min: 0
+        width: half
+      - id: arrears_at_notice_date
+        label: "Arrears at the date you intend to serve (or served) the notice"
+        inputType: currency
+        placeholder: "Amount owed on notice date"
+        width: half
+      - id: arrears_duration_months
+        label: "How many months of rent are unpaid (or partly unpaid)?"
+        inputType: number
+        placeholder: "e.g. 3"
+        width: half
+      - id: last_payment_date
+        label: "Date of last rent payment"
+        inputType: date
+        width: half
+      - id: last_payment_amount
+        label: "Amount of last payment"
+        inputType: currency
+        width: half
+      - id: payment_history
+        label: "Payment history / pattern"
+        inputType: textarea
+        placeholder: "Describe any missed or late payments and how the arrears built up."
+        width: full
+    suggestion_prompt: >
+      Help the landlord express arrears clearly: amounts, dates, and patterns of non-payment.
+      Focus on facts: when rent was due, what was paid, what was missed.
+    maps_to:
+      - total_arrears
+      - arrears_at_notice_date
+      - arrears_duration_months
+      - last_payment_date
+      - last_payment_amount
+
+  # 11. Grounds & behaviour (Section 8)
+  - id: section8_grounds
+    section: Section 8 Grounds
+    question: "Which grounds under Section 8 apply?"
+    inputType: multi_select
+    helperText: "Select all grounds that match your situation. We will ask follow-up questions where needed."
+    options:
+      - "Ground 8 - serious rent arrears"
+      - "Ground 10 - some rent arrears"
+      - "Ground 11 - persistent late payment of rent"
+      - "Ground 12 - breach of tenancy (non-rent)"
+      - "Ground 13 - deterioration of property"
+      - "Ground 14 - nuisance / anti-social behaviour"
+      - "Ground 14A - domestic violence (social landlords)"
+      - "Ground 15 - damage to furniture"
+      - "Ground 17 - tenancy obtained by false statement"
+    suggestion_prompt: >
+      Help the landlord choose the correct Section 8 grounds based on their description of the case.
+      If multiple grounds apply (e.g. arrears + nuisance), explain why including more than one may strengthen the case.
+
+  # 12. Ground-specific details – arrears grounds 8/10/11
+  - id: section8_arrears_details
+    section: Section 8 – Arrears Grounds
+    question: "Details to support rent arrears grounds (8, 10, 11)"
+    inputType: group
+    helperText: "These details support any rent arrears grounds you selected."
+    dependsOn:
+      questionId: section8_grounds
+      value:
+        - "Ground 8 - serious rent arrears"
+        - "Ground 10 - some rent arrears"
+        - "Ground 11 - persistent late payment of rent"
+    fields:
+      - id: arrears_breakdown
+        label: "Arrears breakdown (if not uploading a schedule)"
+        inputType: textarea
+        placeholder: "Month-by-month amounts owed. You can also upload a spreadsheet later."
+        width: full
+      - id: tenant_receives_benefits
+        label: "Does the tenant receive housing benefit or Universal Credit towards rent?"
+        inputType: yes_no
+        width: half
+      - id: benefit_type
+        label: "Type of benefit (if any)"
+        inputType: text
+        placeholder: "e.g. Housing Benefit, UC housing element"
+        width: half
+      - id: arrears_include_benefit_period
+        label: "Are some arrears due to delays or issues with benefits?"
+        inputType: yes_no
+        width: half
+    suggestion_prompt: >
+      Help the landlord present arrears in a clear way: a short narrative plus any important context
+      (benefits delays, part-payments, promises broken). Keep it factual and chronological.
+    maps_to:
+      - arrears_breakdown
+      - tenant_receives_benefits
+      - benefit_type
+      - arrears_include_benefit_period
+
+  # 13. Ground 12 – breach of tenancy (non-rent)
+  - id: ground12_details
+    section: Section 8 – Ground 12 (Breach)
+    question: "Describe the breach of tenancy (Ground 12)"
+    inputType: textarea
+    helperText: "Only complete this if you selected Ground 12. Explain which clause was broken and what has happened."
+    dependsOn:
+      questionId: section8_grounds
+      value: "Ground 12 - breach of tenancy (non-rent)"
+    suggestion_prompt: >
+      Help the landlord identify the relevant clause number and describe the breach in a way a judge can follow.
+      Avoid emotion; focus on what the agreement says and what actually happened.
+    maps_to:
+      - tenancy_clause_breached
+      - breach_description
+
+  # 14. Ground 13 / 15 – damage / deterioration
+  - id: damage_details
+    section: Section 8 – Damage / Deterioration
+    question: "Describe any damage or deterioration to the property or furniture"
+    inputType: textarea
+    helperText: "For Grounds 13 and 15. Compare the condition at the start with now, and mention any quotes or photos."
+    dependsOn:
+      questionId: section8_grounds
+      value:
+        - "Ground 13 - deterioration of property"
+        - "Ground 15 - damage to furniture"
+    suggestion_prompt: >
+      Help the landlord clearly describe the difference between the move-in condition and the current condition,
+      and mention any inventories, photos, or quotes that back this up.
+    maps_to:
+      - property_condition_start
+      - property_condition_current
+      - deterioration_description
+      - damaged_items
+
+  # 15. Ground 14 / 14A – nuisance / ASB / domestic violence
+  - id: asb_details
+    section: Section 8 – Anti-Social Behaviour
+    question: "Describe the anti-social behaviour or nuisance (Ground 14 / 14A)"
+    inputType: textarea
+    helperText: "Describe incidents, dates, who was affected, and any police or council involvement."
+    dependsOn:
+      questionId: section8_grounds
+      value:
+        - "Ground 14 - nuisance / anti-social behaviour"
+        - "Ground 14A - domestic violence (social landlords)"
+    suggestion_prompt: >
+      Turn the landlord’s notes into a clear incident log: dates, times, what happened, who witnessed it,
+      and any police or council reference numbers. Emphasise seriousness without exaggeration.
+    maps_to:
+      - nuisance_description
+      - incident_log
+      - police_crime_numbers
+      - council_reference
+
+  # 16. Ground 17 – false statement
+  - id: ground17_details
+    section: Section 8 – False Statement
+    question: "Explain how the tenancy was obtained by a false statement (Ground 17)"
+    inputType: textarea
+    helperText: "Only complete if you selected Ground 17. Explain what was said, why it was false, and why it mattered."
+    dependsOn:
+      questionId: section8_grounds
+      value: "Ground 17 - tenancy obtained by false statement"
+    suggestion_prompt: >
+      Help the landlord identify exactly what was said, what the true facts are, and why this would have affected
+      their decision to grant the tenancy.
+    maps_to:
+      - false_statement_description
+      - true_facts
+      - statement_materiality
+
+  # 17. Attempts to resolve
+  - id: attempts_to_resolve
+    section: Attempts to Resolve
+    question: "What have you done to try and resolve this before court?"
+    inputType: textarea
+    helperText: "Courts expect you to have tried reasonable steps first: reminder letters, payment plans, warnings, mediation, etc."
+    validation:
+      required: true
+    suggestion_prompt: >
+      Help the landlord list all attempts to resolve matters: dates of emails, letters, texts, meetings,
+      payment plans offered, warnings given, and any mediation or help from the council or agents.
+    maps_to:
+      - attempts_to_resolve_summary
+
+  # 18. Court route & fees
+  - id: court_and_fees
+    section: Court & Fees
+    question: "Court route and fees"
+    inputType: group
+    helperText: "We use this to prepare N5/N119 and, where appropriate, N5B accelerated claims."
+    fields:
+      - id: court_name
+        label: "Preferred County Court hearing centre"
+        inputType: text
+        placeholder: "e.g. County Court at Birmingham"
+        width: full
+      - id: using_accelerated_route
+        label: "Do you want to use the accelerated possession route (N5B) if eligible?"
+        inputType: yes_no
+        width: half
+      - id: court_fee
+        label: "Court issue fee (if known)"
+        inputType: currency
+        placeholder: "We can help you calculate this."
+        width: half
+      - id: solicitor_costs
+        label: "Solicitor / representative costs you want to claim"
+        inputType: currency
+        placeholder: "0 if none"
+        width: half
+    suggestion_prompt: >
+      If the landlord is unsure about the court or fee, suggest how the appropriate hearing centre and fee band
+      are normally chosen based on property location and claim value.
+    maps_to:
+      - court_name
+      - court_fee
+      - solicitor_costs
+
+  # 19. Notice details – Section 8 and/or Section 21
+  - id: notice_details
+    section: Notices
+    question: "Notice details"
+    inputType: group
+    helperText: "We use these to generate the notices and to fill in the notice sections on the court forms."
+    fields:
+      - id: section_8_notice_date
+        label: "Date you intend to serve (or served) the Section 8 notice"
+        inputType: date
+        width: half
+      - id: section_21_notice_date
+        label: "Date you intend to serve (or served) the Section 21 notice"
+        inputType: date
+        width: half
+      - id: notice_expiry_date
+        label: "Date after which the tenant must leave (expiry on Section 21)"
+        inputType: date
+        width: half
+      - id: notice_service_method
+        label: "How will you serve the notices?"
+        inputType: select
+        options:
+          - "Hand-delivered through letterbox"
+          - "First class post"
+          - "Email (if tenancy allows)"
+          - "Process server"
+          - "Other"
+        width: half
+      - id: notice_served_by
+        label: "Who will serve (or served) the notice?"
+        inputType: text
+        placeholder: "Your name or process server name"
+        width: half
+      - id: notice_served_on
+        label: "Who will the notice be served on?"
+        inputType: text
+        placeholder: "Tenant name(s)"
+        width: half
+    suggestion_prompt: >
+      Help the landlord choose realistic service methods and make sure dates allow the correct statutory notice periods.
+      Remind them that they should keep evidence of service (proof of posting, photos, witness statements).
+    maps_to:
+      - section_8_notice_date
+      - section_21_notice_date
+      - notice_expiry_date
+
+  # 20. Particulars of claim (for N119 / N5B narrative)
+  - id: particulars_of_claim
+    section: Particulars of Claim
+    question: "Detailed particulars of your claim"
+    inputType: textarea
+    helperText: "This is the narrative that will appear on N119 / N5B. Describe the tenancy, arrears, grounds, and what order you want."
+    validation:
+      required: true
+    suggestion_prompt: >
+      Turn the landlord’s case into a court-ready Particulars of Claim:
+      1) Identify the parties and the tenancy,
+      2) set out arrears and any breaches with dates and amounts,
+      3) confirm notices served and compliance,
+      4) state clearly what orders the court is asked to make.
+    maps_to:
+      - particulars_of_claim
+
+  # 21. Evidence & uploads
+  - id: evidence_uploads
+    section: Evidence
+    question: "Upload key documents (optional but strongly recommended)"
+    inputType: group
+    helperText: "These won’t go on the court forms directly but will be listed in your evidence index."
+    fields:
+      - id: upload_tenancy_agreement
+        label: "Tenancy agreement"
+        inputType: file_upload
+        width: full
+      - id: upload_rent_schedule
+        label: "Rent schedule / rent account"
+        inputType: file_upload
+        width: full
+      - id: upload_correspondence
+        label: "Key correspondence (emails, letters, texts)"
+        inputType: file_upload
+        width: full
+      - id: upload_photos_damage
+        label: "Photos of damage or disrepair (if relevant)"
+        inputType: file_upload
+        width: full
+      - id: upload_council_police_letters
+        label: "Council or police letters (if any)"
+        inputType: file_upload
+        width: full
+    suggestion_prompt: >
+      Suggest which documents are most persuasive for this particular case:
+      tenancy agreement, rent schedule, warning letters, photos, council or police letters,
+      and any agreements the tenant has broken.
+
+  # 22. Service address & contact for court documents
+  - id: service_contact
+    section: Service & Contact
+    question: "Where should the court send documents and payments?"
+    inputType: group
+    helperText: "This appears in the service details on the claim forms."
+    fields:
+      - id: service_address_line1
+        label: "Address line 1"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: service_address_line2
+        label: "Address line 2"
+        inputType: text
+        width: full
+      - id: service_address_town
+        label: "Town or city"
+        inputType: text
+        width: half
+      - id: service_address_county
+        label: "County (optional)"
+        inputType: text
+        width: half
+      - id: service_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: service_phone
+        label: "Phone"
+        inputType: tel
+        width: half
+      - id: service_email
+        label: "Email"
+        inputType: email
+        width: half
+    suggestion_prompt: >
+      Help the landlord decide whether to use their own address or their agent/solicitor address for service,
+      bearing in mind privacy and reliability of post.
+    maps_to:
+      - service_address_line1
+      - service_address_line2
+      - service_address_town
+      - service_address_county
+      - service_postcode
+      - service_phone
+      - service_email
+
+  # 23. Statement of Truth & signature
+  - id: statement_of_truth
+    section: Statement of Truth
+    question: "Statement of Truth and signature details"
+    inputType: group
+    helperText: "These details appear in the Statement of Truth on N5, N119 and N5B."
+    fields:
+      - id: signatory_name
+        label: "Name of person signing on behalf of the claimant"
+        inputType: text
+        placeholder: "Usually you as landlord, or your solicitor."
+        validation:
+          required: true
+        width: full
+      - id: signatory_role
+        label: "Position or office (if signing on behalf of a company)"
+        inputType: text
+        placeholder: "e.g. Director, Property Manager"
+        width: full
+      - id: signature_date
+        label: "Date you will sign the court claim"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: statement_of_truth_confirmed
+        label: "I understand that I must tell the truth and that the court can penalise me if I do not."
+        inputType: yes_no
+        validation:
+          required: true
+        width: full
+    suggestion_prompt: >
+      Make sure the correct person is identified as signing the Statement of Truth, and that dates are realistic
+      (close to when the claim will actually be filed).
+    maps_to:
+      - signatory_name
+      - signature_date
