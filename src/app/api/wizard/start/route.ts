@@ -9,11 +9,13 @@
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import type { ProductType } from '@/lib/wizard/types';
 
 // Validation schema
 const startWizardSchema = z.object({
   case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']),
   jurisdiction: z.enum(['england-wales', 'scotland', 'northern-ireland']),
+  product: z.enum(['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement']).optional(),
 });
 
 export async function POST(request: Request) {
@@ -34,7 +36,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { case_type, jurisdiction } = validationResult.data;
+    const { case_type, jurisdiction, product } = validationResult.data;
 
     if (jurisdiction === 'northern-ireland' && case_type !== 'tenancy_agreement') {
       return NextResponse.json(
@@ -53,7 +55,17 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
     const supabase = await createServerSupabaseClient();
+
+    // Initialize collected_facts with __meta containing product information
+    const collected_facts: any = {
+      __meta: {
+        product: product || null,
+        mqs_version: null, // Will be set when MQS is loaded
+        question_set_id: null,
+      },
+    };
 
     // Create new case (user_id can be null for anonymous users)
     const { data: newCase, error: caseError } = await supabase
@@ -64,7 +76,7 @@ export async function POST(request: Request) {
         jurisdiction,
         status: 'in_progress',
         wizard_progress: 0,
-        collected_facts: {},
+        collected_facts,
       })
       .select()
       .single();

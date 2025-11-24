@@ -9,6 +9,8 @@
 import { getServerUser, createServerSupabaseClient } from '@/lib/supabase/server';
 import { getNextQuestion, trackTokenUsage } from '@/lib/ai';
 import { NextResponse } from 'next/server';
+import { loadMQS, getNextMQSQuestion } from '@/lib/wizard/mqs-loader';
+import type { ProductType } from '@/lib/wizard/types';
 
 // Disable caching to prevent HMR issues
 export const dynamic = 'force-dynamic';
@@ -88,7 +90,61 @@ export async function POST(request: Request) {
       );
     }
 
-    // Call AI fact-finder to get next question
+    // Check if we should use MQS (deterministic) or AI fact-finder
+    const product = collected_facts?.__meta?.product as ProductType | null;
+    const shouldUseMQS =
+      jurisdiction === 'england-wales' &&
+      case_type === 'eviction' &&
+      (product === 'notice_only' || product === 'complete_pack');
+
+    // Try MQS first for E&W eviction flows
+    if (shouldUseMQS && product) {
+      console.log(`[Next Question] Attempting MQS for product: ${product}, jurisdiction: ${jurisdiction}`);
+
+      const mqs = loadMQS(product, jurisdiction);
+
+      if (mqs) {
+        console.log(`[Next Question] Using MQS: ${mqs.id}`);
+
+        // Get next question from MQS
+        const nextQuestion = getNextMQSQuestion(mqs, collected_facts);
+
+        if (!nextQuestion) {
+          // All questions answered
+          console.log(`[Next Question] MQS complete - all questions answered`);
+          return NextResponse.json({
+            success: true,
+            next_question: null,
+            is_complete: true,
+            missing_critical_facts: [],
+            ai_cost: 0,
+            mqs_used: true,
+            mqs_id: mqs.id,
+          });
+        }
+
+        // Return MQS question
+        console.log(`[Next Question] Returning MQS question: ${nextQuestion.id}`);
+        return NextResponse.json({
+          success: true,
+          next_question: nextQuestion,
+          is_complete: false,
+          missing_critical_facts: [],
+          ai_cost: 0,
+          mqs_used: true,
+          mqs_id: mqs.id,
+        });
+      } else {
+        console.log(`[Next Question] No MQS found for ${product}/${jurisdiction}, falling back to AI`);
+      }
+    }
+
+    // Fall back to AI fact-finder for:
+    // - Non-eviction flows (money_claim, tenancy_agreement)
+    // - Scotland eviction (no MQS yet)
+    // - Cases without product metadata (legacy)
+    console.log(`[Next Question] Using AI fact-finder for ${case_type}/${jurisdiction}`);
+
     const aiResponse = await getNextQuestion({
       case_type,
       jurisdiction,
@@ -116,6 +172,7 @@ export async function POST(request: Request) {
       is_complete: aiResponse.is_complete,
       missing_critical_facts: aiResponse.missing_critical_facts,
       ai_cost: aiResponse.usage.cost_usd,
+      mqs_used: false,
     });
   } catch (error: any) {
     if (error.message === 'Unauthorized - Please log in') {

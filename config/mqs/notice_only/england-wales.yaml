@@ -1,0 +1,293 @@
+id: notice_only_england_wales_v1
+product: notice_only
+jurisdiction: england-wales
+version: "1.0.0"
+
+questions:
+  # =============================================================================
+  # LANDLORD DETAILS
+  # =============================================================================
+  - id: landlord_details
+    section: Landlord Details
+    question: Your details
+    inputType: group
+    helperText: "We need your details to complete the notice correctly."
+    fields:
+      - id: landlord_full_name
+        label: Full name
+        inputType: text
+        placeholder: "Jane Landlord"
+        validation:
+          required: true
+        width: full
+
+      - id: landlord_email
+        label: Email address
+        inputType: email
+        placeholder: "you@example.com"
+        validation:
+          required: true
+        width: half
+
+      - id: landlord_phone
+        label: Phone number
+        inputType: tel
+        placeholder: "07700 900000"
+        validation:
+          required: true
+        width: half
+
+  - id: landlord_address
+    section: Landlord Details
+    question: Your address
+    inputType: group
+    helperText: "Your personal or business address (not the rental property)."
+    fields:
+      - id: landlord_address_line1
+        label: Address line 1
+        inputType: text
+        placeholder: "123 Main Street"
+        validation:
+          required: true
+        width: full
+
+      - id: landlord_address_town
+        label: Town or city
+        inputType: text
+        placeholder: "London"
+        validation:
+          required: true
+        width: half
+
+      - id: landlord_address_postcode
+        label: Postcode
+        inputType: text
+        placeholder: "SW1A 1AA"
+        validation:
+          required: true
+          pattern: "^[A-Z]{1,2}\\d{1,2}[A-Z]?\\s?\\d[A-Z]{2}$"
+        width: half
+
+  # =============================================================================
+  # PROPERTY DETAILS
+  # =============================================================================
+  - id: property_details
+    section: Property
+    question: Property address
+    inputType: group
+    helperText: "The rented property this notice relates to."
+    fields:
+      - id: property_address_line1
+        label: Address line 1
+        inputType: text
+        placeholder: "Flat 2, 456 High Street"
+        validation:
+          required: true
+        width: full
+
+      - id: property_address_town
+        label: Town or city
+        inputType: text
+        placeholder: "Manchester"
+        validation:
+          required: true
+        width: half
+
+      - id: property_postcode
+        label: Postcode
+        inputType: text
+        placeholder: "M1 1AA"
+        validation:
+          required: true
+          pattern: "^[A-Z]{1,2}\\d{1,2}[A-Z]?\\s?\\d[A-Z]{2}$"
+        width: half
+
+  # =============================================================================
+  # TENANT DETAILS
+  # =============================================================================
+  - id: tenant_details
+    section: Tenant Details
+    question: Tenant details
+    inputType: group
+    helperText: "The tenant(s) you are serving notice on."
+    fields:
+      - id: tenant_full_name
+        label: Tenant full name
+        inputType: text
+        placeholder: "John Tenant"
+        validation:
+          required: true
+        width: full
+
+  # =============================================================================
+  # TENANCY DETAILS
+  # =============================================================================
+  - id: tenancy_start_date
+    section: Tenancy
+    question: "When did the tenancy start?"
+    inputType: date
+    helperText: "This appears on the notice and must match the tenancy agreement."
+    validation:
+      required: true
+
+  - id: rent_details
+    section: Tenancy
+    question: Rent details
+    inputType: group
+    helperText: "Monthly rent amount and payment information."
+    fields:
+      - id: rent_amount
+        label: Monthly rent
+        inputType: currency
+        placeholder: "1200"
+        validation:
+          required: true
+          min: 1
+        width: half
+
+      - id: rent_frequency
+        label: Rent payment frequency
+        inputType: select
+        options:
+          - Monthly
+          - Weekly
+          - Fortnightly
+        validation:
+          required: true
+        width: half
+
+  # =============================================================================
+  # NOTICE TYPE SELECTION
+  # =============================================================================
+  - id: notice_type
+    section: Notice Type
+    question: "Which notice do you need?"
+    inputType: select
+    helperText: "We will tailor the questions to your chosen route."
+    options:
+      - "Section 8 - rent arrears / breach"
+      - "Section 21 - no-fault (AST)"
+    validation:
+      required: true
+
+  # =============================================================================
+  # SECTION 8 QUESTIONS (conditional)
+  # =============================================================================
+  - id: arrears_total
+    section: Rent Arrears
+    question: "How much rent is currently owed?"
+    inputType: currency
+    placeholder: "2400"
+    helperText: "Enter the total amount of unpaid rent in pounds."
+    suggestion_prompt: "Help the landlord calculate and express the rent arrears clearly for court purposes. Ensure the amount is accurate and formatted correctly."
+    validation:
+      required: true
+      min: 0
+    dependsOn:
+      questionId: notice_type
+      value: "Section 8 - rent arrears / breach"
+
+  - id: arrears_period
+    section: Rent Arrears
+    question: "How many months of rent is owed?"
+    inputType: number
+    placeholder: "2"
+    helperText: "This helps determine which grounds apply (Ground 8 requires at least 2 months arrears)."
+    validation:
+      required: true
+      min: 0
+      max: 100
+    dependsOn:
+      questionId: notice_type
+      value: "Section 8 - rent arrears / breach"
+
+  # =============================================================================
+  # SECTION 21 QUESTIONS (conditional)
+  # =============================================================================
+  - id: deposit_protected
+    section: Deposit Protection
+    question: "Was the deposit protected in a government scheme?"
+    inputType: select
+    options:
+      - "Yes"
+      - "No"
+      - "No deposit taken"
+    helperText: "Section 21 cannot be used if deposit protection requirements were not met."
+    validation:
+      required: true
+    dependsOn:
+      questionId: notice_type
+      value: "Section 21 - no-fault (AST)"
+
+  - id: deposit_scheme_name
+    section: Deposit Protection
+    question: "Which deposit protection scheme was used?"
+    inputType: select
+    options:
+      - "Deposit Protection Service (DPS)"
+      - "MyDeposits"
+      - "Tenancy Deposit Scheme (TDS)"
+    validation:
+      required: true
+    dependsOn:
+      questionId: deposit_protected
+      value: "Yes"
+
+  - id: prescribed_info_given
+    section: Deposit Protection
+    question: "Was the prescribed information given to the tenant within 30 days?"
+    inputType: select
+    options:
+      - "Yes"
+      - "No"
+      - "Not sure"
+    helperText: "This is a legal requirement for Section 21 to be valid."
+    validation:
+      required: true
+    dependsOn:
+      questionId: deposit_protected
+      value: "Yes"
+
+  - id: gas_safety_certificate
+    section: Compliance Checks
+    question: "Do you have a valid Gas Safety Certificate?"
+    inputType: select
+    options:
+      - "Yes"
+      - "No"
+      - "N/A - No gas appliances"
+    helperText: "Required for Section 21 if the property has gas appliances."
+    validation:
+      required: true
+    dependsOn:
+      questionId: notice_type
+      value: "Section 21 - no-fault (AST)"
+
+  - id: epc_certificate
+    section: Compliance Checks
+    question: "Do you have a valid Energy Performance Certificate (EPC)?"
+    inputType: select
+    options:
+      - "Yes"
+      - "No"
+    helperText: "Required for Section 21. Property must have minimum EPC rating of E."
+    validation:
+      required: true
+    dependsOn:
+      questionId: notice_type
+      value: "Section 21 - no-fault (AST)"
+
+  - id: how_to_rent_guide
+    section: Compliance Checks
+    question: "Did you provide the 'How to Rent' guide at the start of the tenancy?"
+    inputType: select
+    options:
+      - "Yes"
+      - "No"
+      - "Not sure"
+    helperText: "Required for Section 21 notices in England."
+    validation:
+      required: true
+    dependsOn:
+      questionId: notice_type
+      value: "Section 21 - no-fault (AST)"

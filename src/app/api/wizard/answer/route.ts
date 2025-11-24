@@ -9,6 +9,9 @@
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { loadMQS, findQuestionById } from '@/lib/wizard/mqs-loader';
+import { enhanceAnswer } from '@/lib/ai/ask-heaven';
+import type { ProductType } from '@/lib/wizard/types';
 
 // Validation schema
 const answerSchema = z.object({
@@ -62,11 +65,61 @@ export async function POST(request: Request) {
       );
     }
 
-    // Merge new answer with existing facts
+    // Get current facts
     const currentFacts = (currentCase.collected_facts as any) || {};
+
+    // Check if we should use Ask Heaven (MQS-based flow)
+    const product = currentFacts?.__meta?.product as ProductType | null;
+    const shouldUseMQS =
+      currentCase.jurisdiction === 'england-wales' &&
+      currentCase.case_type === 'eviction' &&
+      (product === 'notice_only' || product === 'complete_pack');
+
+    let enhancedAnswer = null;
+    let answerValue = answer;
+
+    // Try Ask Heaven enhancement for MQS flows
+    if (shouldUseMQS && product) {
+      const mqs = loadMQS(product, currentCase.jurisdiction);
+
+      if (mqs) {
+        const question = findQuestionById(mqs, question_id);
+
+        if (question && question.suggestion_prompt) {
+          console.log(`[Answer] Calling Ask Heaven for question: ${question_id}`);
+
+          try {
+            enhancedAnswer = await enhanceAnswer({
+              question,
+              rawAnswer: typeof answer === 'string' ? answer : JSON.stringify(answer),
+              jurisdiction: currentCase.jurisdiction,
+              product,
+              caseType: currentCase.case_type,
+              collectedFacts: currentFacts,
+            });
+
+            if (enhancedAnswer) {
+              // Store as structured object with raw + suggested
+              answerValue = {
+                raw: answer,
+                suggested: enhancedAnswer.suggested_wording,
+                missing_information: enhancedAnswer.missing_information,
+                evidence_suggestions: enhancedAnswer.evidence_suggestions,
+              };
+              console.log(`[Answer] Ask Heaven enhanced answer for ${question_id}`);
+            }
+          } catch (error) {
+            console.error('[Answer] Ask Heaven failed:', error);
+            // Continue with raw answer if enhancement fails
+          }
+        }
+      }
+    }
+
+    // Merge new answer with existing facts
     const updatedFacts = {
       ...currentFacts,
-      [question_id]: answer,
+      [question_id]: answerValue,
     };
 
     // Update case with new facts
@@ -94,6 +147,7 @@ export async function POST(request: Request) {
         success: true,
         case: updatedCase,
         message: 'Answer saved successfully',
+        enhanced_answer: enhancedAnswer ? updatedFacts[question_id] : null,
       },
       { status: 200 }
     );
