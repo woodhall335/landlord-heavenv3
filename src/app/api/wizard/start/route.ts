@@ -138,3 +138,104 @@ export async function POST(request: Request) {
     );
   }
 }
+import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
+import { getOrCreateCaseFacts } from "@/lib/case-facts/store";
+import { loadMQSFor } from "@/lib/mqs/loader";
+import { getNextMQSQuestion } from "@/lib/mqs/engine";
+
+export async function POST(req: Request) {
+  try {
+    const supabase = createClient();
+    const body = await req.json();
+
+    const { product, jurisdiction, case_id } = body;
+
+    if (!product || !jurisdiction) {
+      return NextResponse.json(
+        { error: "product and jurisdiction are required" },
+        { status: 400 }
+      );
+    }
+
+    let caseRow;
+
+    // -----------------------------------------
+    // 1. Load or create the case
+    // -----------------------------------------
+
+    if (case_id) {
+      const { data, error } = await supabase
+        .from("cases")
+        .select("*")
+        .eq("id", case_id)
+        .single();
+
+      if (error || !data)
+        return NextResponse.json(
+          { error: "Case not found" },
+          { status: 404 }
+        );
+
+      caseRow = data;
+    } else {
+      const user = await supabase.auth.getUser();
+      const userId = user?.data?.user?.id ?? null;
+
+      const { data, error } = await supabase
+        .from("cases")
+        .insert({
+          user_id: userId,
+          case_type: "eviction", // TODO: derive from product
+          jurisdiction,
+          status: "in_progress",
+          wizard_progress: 0,
+        })
+        .select("*")
+        .single();
+
+      if (error)
+        return NextResponse.json(
+          { error: "Failed to create case", details: error },
+          { status: 400 }
+        );
+
+      caseRow = data;
+    }
+
+    // -----------------------------------------
+    // 2. Ensure case_facts row exists
+    // -----------------------------------------
+    const caseFacts = await getOrCreateCaseFacts(supabase, caseRow.id);
+
+    // -----------------------------------------
+    // 3. Load the correct MQS YAML
+    // -----------------------------------------
+    const mqs = await loadMQSFor(product, jurisdiction);
+    if (!mqs) {
+      return NextResponse.json(
+        { error: `MQS not implemented for ${product}/${jurisdiction}` },
+        { status: 400 }
+      );
+    }
+
+    // -----------------------------------------
+    // 4. Compute the first question
+    // -----------------------------------------
+    const nextQuestion = getNextMQSQuestion(mqs, caseFacts);
+
+    return NextResponse.json({
+      success: true,
+      case_id: caseRow.id,
+      case: caseRow,
+      next_question: nextQuestion || null,
+      is_complete: !nextQuestion,
+    });
+  } catch (err) {
+    console.error("Wizard start error", err);
+    return NextResponse.json(
+      { error: "Server error", details: err },
+      { status: 500 }
+    );
+  }
+}

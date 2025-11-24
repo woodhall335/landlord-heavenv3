@@ -53,19 +53,45 @@ async function runFlow({ product, jurisdiction, maxQuestions = 50 }) {
   console.log(`▶️  Starting flow: ${product} / ${jurisdiction}`);
   console.log(`==============================`);
 
-  // 1. Start wizard
+   // 1. Start wizard
   const startRes = await apiPost('/api/wizard/start', {
     product,
     jurisdiction,
   });
 
-  const caseId = startRes.case_id;
-  let nextQuestion = startRes.next_question ?? startRes.nextQuestion ?? null;
-  let progress = startRes.progress ?? 0;
-  let isComplete = startRes.is_complete ?? false;
+  console.log(`RAW /api/wizard/start response:`, startRes);
+
+  // Be tolerant about field names: case_id, caseId, id, nested case.id, etc.
+  const caseId =
+    startRes.case_id ||
+    startRes.caseId ||
+    startRes.id ||
+    (startRes.case && (startRes.case.case_id || startRes.case.id)) ||
+    null;
+
+  // Same for next question key naming
+  let nextQuestion =
+    startRes.next_question ||
+    startRes.nextQuestion ||
+    startRes.question ||
+    null;
+
+  let progress =
+    startRes.progress ??
+    startRes.wizard_progress ??
+    0;
+
+  let isComplete =
+    startRes.is_complete ??
+    startRes.complete ??
+    false;
 
   console.log(`✅ Started case: ${caseId}`);
-  console.log(`   First question:`, nextQuestion ? nextQuestion.id || nextQuestion.question : 'NONE');
+  console.log(
+    `   First question:`,
+    nextQuestion ? nextQuestion.id || nextQuestion.question : 'NONE'
+  );
+
 
   let questionsAnswered = 0;
 
