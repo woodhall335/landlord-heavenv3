@@ -8,11 +8,13 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import type { Database } from '@/lib/supabase/types';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { createEmptyCaseFacts } from '@/lib/case-facts/schema';
 import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
 import { getNextMQSQuestion, loadMQS, type MasterQuestionSet, type ProductType } from '@/lib/wizard/mqs-loader';
+
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 const startWizardSchema = z.object({
   product: z.enum(['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement']),
@@ -41,7 +43,7 @@ function loadMQSOrError(product: ProductType, jurisdiction: string): MasterQuest
 
 export async function POST(request: Request) {
   try {
-    const user = await getServerUser();
+    const user = await getServerUser().catch(() => null);
     const body = await request.json();
     const validationResult = startWizardSchema.safeParse(body);
 
@@ -53,21 +55,25 @@ export async function POST(request: Request) {
     }
 
     const { product, jurisdiction, case_id } = validationResult.data;
-    const resolvedCaseType = productToCaseType(product);
+    const productTyped = product as ProductType;
+    const resolvedCaseType = productToCaseType(productTyped);
 
     if (!resolvedCaseType) {
       return NextResponse.json({ error: 'Invalid product' }, { status: 400 });
     }
 
-    const supabase = await createServerSupabaseClient();
+    // IMPORTANT: loosen Supabase typing here to avoid `never` errors
+    const supabase = (await createServerSupabaseClient()) as any;
 
-    type CaseRow = Database['public']['Tables']['cases']['Row'];
-    let caseRecord: CaseRow | null = null;
+    let caseRecord: any = null;
 
+    // ------------------------------------------------
+    // 1. Resume existing case if case_id supplied
+    // ------------------------------------------------
     if (case_id) {
       let query = supabase.from('cases').select('*').eq('id', case_id);
       if (user) {
-        query = query.eq('user_id', user.id);
+        query = query.eq('user_id', (user as any).id);
       } else {
         query = query.is('user_id', null);
       }
@@ -86,16 +92,20 @@ export async function POST(request: Request) {
 
       caseRecord = data;
     } else {
+      // ------------------------------------------------
+      // 2. Create new case
+      // ------------------------------------------------
       const emptyFacts = createEmptyCaseFacts();
+
       const { data, error } = await supabase
         .from('cases')
         .insert({
-          user_id: user?.id ?? null,
+          user_id: user ? (user as any).id : null,
           case_type: resolvedCaseType,
           jurisdiction,
           status: 'in_progress',
           wizard_progress: 0,
-          collected_facts: { ...emptyFacts, __meta: { product } } as any,
+          collected_facts: { ...emptyFacts, __meta: { product: productTyped } },
         })
         .select()
         .single();
@@ -108,9 +118,15 @@ export async function POST(request: Request) {
       caseRecord = data;
     }
 
-    const facts = await getOrCreateCaseFacts(supabase, caseRecord.id);
-    const mqs = loadMQSOrError(product, jurisdiction);
+    // ------------------------------------------------
+    // 3. Ensure case_facts row exists and load facts
+    // ------------------------------------------------
+    const facts = await getOrCreateCaseFacts(supabase, caseRecord.id as string);
 
+    // ------------------------------------------------
+    // 4. Load MQS for this product/jurisdiction
+    // ------------------------------------------------
+    const mqs = loadMQSOrError(productTyped, jurisdiction);
     if (!mqs) {
       return NextResponse.json(
         { error: 'MQS not implemented for this jurisdiction yet' },
@@ -118,14 +134,17 @@ export async function POST(request: Request) {
       );
     }
 
-    const nextQuestion = getNextMQSQuestion(mqs, facts);
+    // ------------------------------------------------
+    // 5. Determine first question from MQS + facts
+    // ------------------------------------------------
+    const nextQuestion = getNextMQSQuestion(mqs, facts as any);
     const isComplete = !nextQuestion;
 
     return NextResponse.json({
       case_id: caseRecord.id,
       product,
       jurisdiction,
-      next_question: nextQuestion,
+      next_question: nextQuestion || null,
       is_complete: isComplete,
     });
   } catch (error: any) {
