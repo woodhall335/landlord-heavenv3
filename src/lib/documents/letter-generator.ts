@@ -297,9 +297,6 @@ export function calculateEstimatedCosts(claimAmount: number): {
   else if (claimAmount <= 10000) court_fee = 455;
   else court_fee = 480;
 
-  // Possession claim fee is typically £355
-  const possession_fee = 355;
-
   // Legal costs vary
   const legal_costs_min = 800;
   const legal_costs_max = 3000;
@@ -308,11 +305,11 @@ export function calculateEstimatedCosts(claimAmount: number): {
   const bailiff_fee = 130;
 
   return {
-    court_fee: possession_fee,
+    court_fee,
     legal_costs_min,
     legal_costs_max,
     bailiff_fee,
-    total_min: possession_fee + legal_costs_min + bailiff_fee,
-    total_max: possession_fee + legal_costs_max + bailiff_fee,
+    total_min: court_fee + legal_costs_min + bailiff_fee,
+    total_max: court_fee + legal_costs_max + bailiff_fee,
   };
 }

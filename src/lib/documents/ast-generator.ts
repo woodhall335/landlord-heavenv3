@@ -4,7 +4,7 @@
  * Generates standard and premium tenancy agreements for England & Wales.
  */
 
-import { generateDocument, GeneratedDocument, compileAndMergeTemplates, compileTemplate, loadTemplate, htmlToPdf } from './generator';
+import { htmlToPdf } from './generator';
 
 // ============================================================================
 // TYPES
