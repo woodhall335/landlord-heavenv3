@@ -45,6 +45,22 @@ export interface EvictionCase {
   landlord_email?: string;
   landlord_phone?: string;
 
+  // Representation (England & Wales)
+  solicitor_firm?: string;
+  solicitor_address?: string;
+  solicitor_phone?: string;
+  solicitor_email?: string;
+  dx_number?: string;
+
+  // Explicit address-for-service override (if collected separately)
+  service_address_line1?: string;
+  service_address_line2?: string;
+  service_address_town?: string;
+  service_address_county?: string;
+  service_postcode?: string;
+  service_phone?: string;
+  service_email?: string;
+
   // Tenant
   tenant_full_name: string;
   tenant_2_name?: string;
@@ -101,11 +117,13 @@ export interface EvictionCase {
   deposit_scheme?: string;
   deposit_scheme_name?: 'DPS' | 'MyDeposits' | 'TDS' | 'SafeDeposits Scotland';
   deposit_protection_date?: string;
+  deposit_reference?: string;
   gas_safety_certificate?: boolean;
   epc_rating?: string;
   eicr_certificate?: boolean;
   hmo_licensed?: boolean;
   landlord_registered?: boolean; // Scotland
+  landlord_registration_number?: string; // Scotland
 
   // Court details
   court_name?: string;
@@ -492,20 +510,30 @@ async function generateEnglandWalesEvictionPack(
     landlord_postcode: evictionCase.landlord_address_postcode,
     landlord_phone: evictionCase.landlord_phone,
     landlord_email: evictionCase.landlord_email,
+
+    // Solicitor / representative (if any)
     solicitor_firm: evictionCase.solicitor_firm,
     solicitor_address: evictionCase.solicitor_address,
     solicitor_phone: evictionCase.solicitor_phone,
     solicitor_email: evictionCase.solicitor_email,
     dx_number: evictionCase.dx_number,
+
+    // Tenant / property
     tenant_full_name: evictionCase.tenant_full_name,
     property_address: evictionCase.property_address,
     property_postcode: evictionCase.property_address_postcode,
+
+    // Tenancy
     tenancy_start_date: evictionCase.tenancy_start_date,
     rent_amount: evictionCase.rent_amount,
     rent_frequency: evictionCase.rent_frequency,
+
+    // Signature & court
     signatory_name: evictionCase.landlord_full_name,
     signature_date: new Date().toISOString().split('T')[0],
     court_name: evictionCase.court_name,
+
+    // Unified address for service
     service_address_line1: service.service_address_line1,
     service_address_line2: service.service_address_line2,
     service_address_town: service.service_address_town,
@@ -540,7 +568,9 @@ async function generateEnglandWalesEvictionPack(
 /**
  * Generate Scotland Eviction Pack
  */
-async function generateScotlandEvictionPack(evictionCase: EvictionCase): Promise<EvictionPackDocument[]> {
+async function generateScotlandEvictionPack(
+  evictionCase: EvictionCase
+): Promise<EvictionPackDocument[]> {
   const documents: EvictionPackDocument[] = [];
 
   const { fillScotlandOfficialForm } = await import('./scotland-forms-filler');
@@ -578,7 +608,7 @@ async function generateScotlandEvictionPack(evictionCase: EvictionCase): Promise
     rent_frequency: evictionCase.rent_frequency,
     notice_date: new Date().toISOString().split('T')[0],
     leaving_date: calculateLeavingDate(evictionCase, 84), // 84 days notice in Scotland
-    grounds: evictionCase.grounds.map(g => ({
+    grounds: evictionCase.grounds.map((g) => ({
       code: g.code,
       title: g.title,
       particulars: g.particulars,
@@ -635,7 +665,7 @@ export async function generateCompleteEvictionPack(
   evictionCase: EvictionCase
 ): Promise<CompleteEvictionPack> {
   console.log(`\n📦 Generating Complete Eviction Pack for ${evictionCase.jurisdiction}...`);
-  console.log('=' .repeat(80));
+  console.log('='.repeat(80));
 
   // Load jurisdiction-specific grounds
   const groundsData = await loadEvictionGrounds(evictionCase.jurisdiction);
