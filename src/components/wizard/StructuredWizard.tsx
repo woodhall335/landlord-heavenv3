@@ -1,18 +1,54 @@
 /**
- * Structured Wizard - Fixed Question Flow
+ * Structured Wizard - MQS-Powered
  *
- * Reliable, form-based wizard that guarantees all required fields are collected
+ * Form-based wizard using MQS backend for all products
+ * Now unified with the MQS system for consistency across all wizards
  */
 
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Button, Input, Card } from '@/components/ui';
-import { getJurisdictionQuestions, getMaxDeposit, WizardQuestion } from '@/lib/wizard/tenancy-questions';
+
+interface ExtendedWizardQuestion {
+  id: string;
+  section?: string;
+  question: string;
+  inputType: string;
+  helperText?: string;
+  suggestion_prompt?: string;
+  placeholder?: string;
+  options?: string[];
+  validation?: {
+    required?: boolean;
+    min?: number;
+    max?: number;
+    pattern?: string;
+  };
+  dependsOn?: {
+    questionId: string;
+    value: any;
+  };
+  fields?: Array<{
+    id: string;
+    label: string;
+    inputType: string;
+    placeholder?: string;
+    options?: string[];
+    validation?: {
+      required?: boolean;
+      min?: number;
+      max?: number;
+      pattern?: string;
+    };
+    width?: 'full' | 'half' | 'third';
+  }>;
+  maps_to?: string[];
+}
 
 interface StructuredWizardProps {
   caseId: string;
-  caseType: 'tenancy_agreement';
+  caseType: string;
   jurisdiction: string;
   onComplete: (caseId: string) => void;
 }
@@ -23,46 +59,69 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   jurisdiction,
   onComplete,
 }) => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [currentQuestion, setCurrentQuestion] = useState<ExtendedWizardQuestion | null>(null);
+  const [currentAnswer, setCurrentAnswer] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [isComplete, setIsComplete] = useState(false);
+  const [askHeavenSuggestion, setAskHeavenSuggestion] = useState<string | null>(null);
 
-  // Get jurisdiction-specific questions
-  const allQuestions = getJurisdictionQuestions(jurisdiction);
+  // Load first question on mount
+  useEffect(() => {
+    loadNextQuestion();
+  }, []);
 
-  // Get all questions (filter out conditional questions that don't apply)
-  const getVisibleQuestions = (): WizardQuestion[] => {
-    return allQuestions.filter((q) => {
-      if (!q.dependsOn) return true;
+  const loadNextQuestion = async () => {
+    setLoading(true);
+    setError(null);
+    setAskHeavenSuggestion(null);
 
-      const dependentValue = answers[q.dependsOn.questionId];
-      if (Array.isArray(q.dependsOn.value)) {
-        return q.dependsOn.value.includes(dependentValue);
+    try {
+      const response = await fetch('/api/wizard/next-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ case_id: caseId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to load question: ${response.status}`);
       }
-      return dependentValue === q.dependsOn.value;
-    });
+
+      const data = await response.json();
+
+      if (data.is_complete) {
+        setIsComplete(true);
+        await handleComplete();
+      } else if (data.next_question) {
+        setCurrentQuestion(data.next_question);
+        setCurrentAnswer(null); // Reset answer for new question
+        setProgress(data.progress || 0);
+      } else {
+        throw new Error('No question returned from API');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to load question');
+      console.error('Load question error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const visibleQuestions = getVisibleQuestions();
-  const currentQuestion = visibleQuestions[currentQuestionIndex];
-  const progress = ((currentQuestionIndex + 1) / visibleQuestions.length) * 100;
-  const currentSection = currentQuestion?.section || '';
-
-  // Check if current answer is valid
   const isCurrentAnswerValid = (): boolean => {
+    if (!currentQuestion) return false;
+
     // For grouped inputs, validate all fields
     if (currentQuestion.inputType === 'group' && currentQuestion.fields) {
       for (const field of currentQuestion.fields) {
-        const fieldValue = answers[field.id];
+        const fieldValue = currentAnswer?.[field.id];
 
-        // Check required
         if (field.validation?.required && !fieldValue) {
           setError(`Please fill in ${field.label.toLowerCase()}`);
           return false;
         }
 
-        // Check pattern (e.g., postcode validation)
+        // Validate pattern (e.g., postcode)
         if (field.validation?.pattern && fieldValue) {
           const regex = new RegExp(field.validation.pattern, 'i');
           if (!regex.test(fieldValue)) {
@@ -71,8 +130,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           }
         }
 
-        // Check number range
-        if (field.inputType === 'number' && fieldValue) {
+        // Validate number range
+        if ((field.inputType === 'number' || field.inputType === 'currency') && fieldValue) {
           const num = parseFloat(fieldValue);
           if (isNaN(num)) {
             setError(`${field.label} must be a valid number`);
@@ -92,38 +151,28 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
 
     // For single inputs
-    const answer = answers[currentQuestion.id];
-
-    if (currentQuestion.validation?.required && !answer) {
+    if (currentQuestion.validation?.required && !currentAnswer) {
+      setError('This field is required');
       return false;
     }
 
-    if (currentQuestion.inputType === 'currency' || currentQuestion.inputType === 'number') {
-      const num = parseFloat(answer);
-      if (isNaN(num)) return false;
+    // Validate numbers and currency
+    if (
+      (currentQuestion.inputType === 'currency' || currentQuestion.inputType === 'number') &&
+      currentAnswer
+    ) {
+      const num = parseFloat(currentAnswer);
+      if (isNaN(num)) {
+        setError('Please enter a valid number');
+        return false;
+      }
       if (currentQuestion.validation?.min !== undefined && num < currentQuestion.validation.min) {
+        setError(`Must be at least ${currentQuestion.validation.min}`);
         return false;
       }
       if (currentQuestion.validation?.max !== undefined && num > currentQuestion.validation.max) {
+        setError(`Must be at most ${currentQuestion.validation.max}`);
         return false;
-      }
-    }
-
-    // Validate deposit amount against rent (jurisdiction-specific)
-    if (currentQuestion.id === 'deposit_amount') {
-      const rentAmount = parseFloat(answers.rent_amount);
-      const depositAmount = parseFloat(answer);
-
-      if (rentAmount && depositAmount) {
-        const maxDeposit = getMaxDeposit(jurisdiction, rentAmount);
-
-        if (depositAmount > maxDeposit + 0.01) {
-          const jurisdictionName = jurisdiction === 'england-wales' ? 'England & Wales (Tenant Fees Act 2019)' :
-                                   jurisdiction === 'scotland' ? 'Scotland' :
-                                   'Northern Ireland';
-          setError(`❌ ILLEGAL DEPOSIT: £${depositAmount} exceeds legal maximum of £${maxDeposit.toFixed(2)}. This violates ${jurisdictionName} deposit protection laws.`);
-          return false;
-        }
       }
     }
 
@@ -139,56 +188,46 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
 
     setError(null);
+    setLoading(true);
 
-    // Save answer(s) to database
     try {
-      setLoading(true);
+      // Save answer to backend
+      const response = await fetch('/api/wizard/answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          case_id: caseId,
+          question_id: currentQuestion!.id,
+          answer: currentAnswer,
+        }),
+      });
 
-      // For grouped inputs, save all field answers
-      if (currentQuestion.inputType === 'group' && currentQuestion.fields) {
-        for (const field of currentQuestion.fields) {
-          await fetch('/api/wizard/answer', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              case_id: caseId,
-              question_id: field.id,
-              question_text: `${currentQuestion.question} - ${field.label}`,
-              answer: answers[field.id],
-            }),
-          });
-        }
-      } else {
-        // For single inputs, save one answer
-        await fetch('/api/wizard/answer', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            case_id: caseId,
-            question_id: currentQuestion.id,
-            question_text: currentQuestion.question,
-            answer: answers[currentQuestion.id],
-          }),
-        });
+      if (!response.ok) {
+        throw new Error(`Failed to save answer: ${response.status}`);
       }
 
-      if (currentQuestionIndex < visibleQuestions.length - 1) {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-      } else {
-        // All questions answered - mark as complete
+      const data = await response.json();
+
+      // Check for Ask Heaven suggestions
+      if (data.suggested_wording) {
+        setAskHeavenSuggestion(data.suggested_wording);
+      }
+
+      // Update progress
+      setProgress(data.progress || 0);
+
+      // Check if complete
+      if (data.is_complete) {
+        setIsComplete(true);
         await handleComplete();
+      } else {
+        // Load next question
+        await loadNextQuestion();
       }
     } catch (err: any) {
       setError(err.message || 'Failed to save answer');
-    } finally {
+      console.error('Save answer error:', err);
       setLoading(false);
-    }
-  };
-
-  const handleBack = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setError(null);
     }
   };
 
@@ -196,21 +235,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     try {
       setLoading(true);
 
-      // Transform answers into format expected by AST generator
-      const transformedData = transformAnswersToASTData(answers);
-
-      // Analyze the case
+      // Call analyze endpoint
       await fetch('/api/wizard/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           case_id: caseId,
-          case_type: caseType,
-          jurisdiction,
-          collected_facts: transformedData,
         }),
       });
 
+      // Navigate to completion
       onComplete(caseId);
     } catch (err: any) {
       setError(err.message || 'Failed to complete wizard');
@@ -218,27 +252,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   };
 
-  // Helper function to get applicable warnings for a field
-  const getFieldWarnings = (field: any, fieldValue: string) => {
-    if (!field.warnings || !fieldValue) return [];
-
-    return field.warnings.filter((warning: any) => {
-      if (Array.isArray(warning.value)) {
-        return warning.value.includes(fieldValue);
-      }
-      return warning.value === fieldValue;
-    });
-  };
-
   const renderInput = () => {
-    const value = answers[currentQuestion.id] || '';
+    if (!currentQuestion) return null;
+
+    const value = currentAnswer ?? '';
 
     switch (currentQuestion.inputType) {
       case 'select':
         return (
           <select
             value={value}
-            onChange={(e) => setAnswers({ ...answers, [currentQuestion.id]: e.target.value })}
+            onChange={(e) => setCurrentAnswer(e.target.value)}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
             disabled={loading}
           >
@@ -255,15 +279,15 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         return (
           <div className="flex gap-4">
             <Button
-              onClick={() => setAnswers({ ...answers, [currentQuestion.id]: 'yes' })}
-              variant={value === 'yes' ? 'primary' : 'secondary'}
+              onClick={() => setCurrentAnswer(true)}
+              variant={value === true ? 'primary' : 'secondary'}
               disabled={loading}
             >
               Yes
             </Button>
             <Button
-              onClick={() => setAnswers({ ...answers, [currentQuestion.id]: 'no' })}
-              variant={value === 'no' ? 'primary' : 'secondary'}
+              onClick={() => setCurrentAnswer(false)}
+              variant={value === false ? 'primary' : 'secondary'}
               disabled={loading}
             >
               No
@@ -283,8 +307,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   onChange={(e) => {
                     const newValues = e.target.checked
                       ? [...selectedValues, option]
-                      : selectedValues.filter((v) => v !== option);
-                    setAnswers({ ...answers, [currentQuestion.id]: newValues });
+                      : selectedValues.filter((v: string) => v !== option);
+                    setCurrentAnswer(newValues);
                   }}
                   className="w-4 h-4 text-primary"
                   disabled={loading}
@@ -302,7 +326,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             <Input
               type="number"
               value={value}
-              onChange={(e) => setAnswers({ ...answers, [currentQuestion.id]: e.target.value })}
+              onChange={(e) => setCurrentAnswer(e.target.value)}
               placeholder={currentQuestion.placeholder}
               className="pl-8"
               min={currentQuestion.validation?.min}
@@ -317,7 +341,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           <Input
             type="date"
             value={value}
-            onChange={(e) => setAnswers({ ...answers, [currentQuestion.id]: e.target.value })}
+            onChange={(e) => setCurrentAnswer(e.target.value)}
             disabled={loading}
           />
         );
@@ -327,7 +351,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           <Input
             type="email"
             value={value}
-            onChange={(e) => setAnswers({ ...answers, [currentQuestion.id]: e.target.value })}
+            onChange={(e) => setCurrentAnswer(e.target.value)}
             placeholder={currentQuestion.placeholder}
             disabled={loading}
           />
@@ -338,9 +362,21 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           <Input
             type="tel"
             value={value}
-            onChange={(e) => setAnswers({ ...answers, [currentQuestion.id]: e.target.value })}
+            onChange={(e) => setCurrentAnswer(e.target.value)}
             placeholder={currentQuestion.placeholder}
             disabled={loading}
+          />
+        );
+
+      case 'textarea':
+        return (
+          <textarea
+            value={value}
+            onChange={(e) => setCurrentAnswer(e.target.value)}
+            placeholder={currentQuestion.placeholder}
+            disabled={loading}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-[120px]"
+            rows={4}
           />
         );
 
@@ -349,7 +385,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           <Input
             type="number"
             value={value}
-            onChange={(e) => setAnswers({ ...answers, [currentQuestion.id]: e.target.value })}
+            onChange={(e) => setCurrentAnswer(e.target.value)}
             placeholder={currentQuestion.placeholder}
             min={currentQuestion.validation?.min}
             max={currentQuestion.validation?.max}
@@ -361,15 +397,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         // Render multiple fields in a grouped layout
         if (!currentQuestion.fields) return null;
 
+        const groupValue = currentAnswer || {};
+
         return (
           <div className="flex flex-wrap gap-4">
             {currentQuestion.fields.map((field) => {
-              const fieldValue = answers[field.id] || '';
-              const widthClass = field.width === 'full' ? 'w-full' :
-                                 field.width === 'half' ? 'w-full md:w-[calc(50%-0.5rem)]' :
-                                 'w-full md:w-[calc(33.333%-0.5rem)]';
-
-              const fieldWarnings = getFieldWarnings(field, fieldValue);
+              const fieldValue = groupValue[field.id] || '';
+              const widthClass =
+                field.width === 'full'
+                  ? 'w-full'
+                  : field.width === 'half'
+                  ? 'w-full md:w-[calc(50%-0.5rem)]'
+                  : 'w-full md:w-[calc(33.333%-0.5rem)]';
 
               return (
                 <div key={field.id} className={widthClass}>
@@ -380,7 +419,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   {field.inputType === 'select' ? (
                     <select
                       value={fieldValue}
-                      onChange={(e) => setAnswers({ ...answers, [field.id]: e.target.value })}
+                      onChange={(e) =>
+                        setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
+                      }
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                       disabled={loading}
                     >
@@ -397,7 +438,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       <Input
                         type="number"
                         value={fieldValue}
-                        onChange={(e) => setAnswers({ ...answers, [field.id]: e.target.value })}
+                        onChange={(e) =>
+                          setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
+                        }
                         placeholder={field.placeholder}
                         className="pl-8 w-full"
                         min={field.validation?.min}
@@ -405,35 +448,30 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                         disabled={loading}
                       />
                     </div>
+                  ) : field.inputType === 'textarea' ? (
+                    <textarea
+                      value={fieldValue}
+                      onChange={(e) =>
+                        setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
+                      }
+                      placeholder={field.placeholder}
+                      disabled={loading}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-[80px]"
+                      rows={3}
+                    />
                   ) : (
                     <Input
                       type={field.inputType}
                       value={fieldValue}
-                      onChange={(e) => setAnswers({ ...answers, [field.id]: e.target.value })}
+                      onChange={(e) =>
+                        setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
+                      }
                       placeholder={field.placeholder}
                       disabled={loading}
                       className="w-full"
+                      min={field.validation?.min}
+                      max={field.validation?.max}
                     />
-                  )}
-
-                  {/* Display warnings for this field */}
-                  {fieldWarnings.length > 0 && (
-                    <div className="mt-2 space-y-1">
-                      {fieldWarnings.map((warning, idx) => (
-                        <div
-                          key={idx}
-                          className={`p-3 rounded-lg text-sm ${
-                            warning.severity === 'error'
-                              ? 'bg-red-50 border border-red-200 text-red-800'
-                              : warning.severity === 'warning'
-                              ? 'bg-yellow-50 border border-yellow-200 text-yellow-800'
-                              : 'bg-blue-50 border border-blue-200 text-blue-800'
-                          }`}
-                        >
-                          {warning.message}
-                        </div>
-                      ))}
-                    </div>
                   )}
                 </div>
               );
@@ -446,7 +484,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           <Input
             type="text"
             value={value}
-            onChange={(e) => setAnswers({ ...answers, [currentQuestion.id]: e.target.value })}
+            onChange={(e) => setCurrentAnswer(e.target.value)}
             placeholder={currentQuestion.placeholder}
             disabled={loading}
           />
@@ -454,8 +492,25 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   };
 
+  if (isComplete) {
+    return (
+      <div className="max-w-3xl mx-auto p-6 text-center">
+        <div className="text-6xl mb-4">✓</div>
+        <h2 className="text-2xl font-bold mb-2">Wizard Complete!</h2>
+        <p className="text-gray-600">Redirecting to preview...</p>
+      </div>
+    );
+  }
+
   if (!currentQuestion) {
-    return <div>Loading...</div>;
+    return (
+      <div className="max-w-3xl mx-auto p-6 flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading question...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -463,10 +518,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       {/* Progress Bar */}
       <div className="mb-8">
         <div className="flex justify-between text-sm text-gray-600 mb-2">
-          <span>{currentSection}</span>
-          <span>
-            Question {currentQuestionIndex + 1} of {visibleQuestions.length}
-          </span>
+          <span>{currentQuestion.section || 'Question'}</span>
+          <span>{Math.round(progress)}% Complete</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div
@@ -486,6 +539,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
         <div className="mb-6">{renderInput()}</div>
 
+        {/* Ask Heaven Suggestion */}
+        {askHeavenSuggestion && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="flex items-start gap-2">
+              <div className="text-blue-600 text-sm font-semibold">💡 Suggestion:</div>
+              <p className="text-sm text-blue-800 flex-1">{askHeavenSuggestion}</p>
+            </div>
+          </div>
+        )}
+
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
             <p className="text-sm text-red-800">{error}</p>
@@ -494,162 +557,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
         {/* Navigation */}
         <div className="flex gap-4">
-          {currentQuestionIndex > 0 && (
-            <Button
-              onClick={handleBack}
-              variant="secondary"
-              size="large"
-              disabled={loading}
-              className="px-8"
-            >
-              ← Back
-            </Button>
-          )}
-          <Button onClick={handleNext} variant="primary" size="large" className="flex-1" disabled={loading}>
-            {currentQuestionIndex === visibleQuestions.length - 1
-              ? '✓ Complete & Preview →'
-              : 'Next →'}
+          <Button
+            onClick={handleNext}
+            variant="primary"
+            size="large"
+            className="flex-1"
+            disabled={loading || !currentAnswer}
+          >
+            {loading ? 'Saving...' : 'Next →'}
           </Button>
         </div>
       </Card>
-
-      {/* Summary Sidebar */}
-      <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-        <h3 className="font-semibold mb-2">Sections</h3>
-        <div className="space-y-1 text-sm">
-          {Array.from(new Set(visibleQuestions.map((q) => q.section))).map((section) => (
-            <div
-              key={section}
-              className={`${section === currentSection ? 'text-primary font-semibold' : 'text-gray-600'}`}
-            >
-              {section}
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };
-
-// Transform answers to AST data format
-function transformAnswersToASTData(answers: Record<string, any>): any {
-  // Build tenants array
-  const numberOfTenants = parseInt(answers.number_of_tenants) || 1;
-  const tenants = [];
-
-  for (let i = 1; i <= numberOfTenants; i++) {
-    tenants.push({
-      full_name: answers[`tenant_${i}_full_name`],
-      email: answers[`tenant_${i}_email`],
-      phone: answers[`tenant_${i}_phone`],
-      dob: answers[`tenant_${i}_dob`],
-    });
-  }
-
-  // Assemble full addresses from 3-line format
-  const property_address = `${answers.property_address_line1}\n${answers.property_address_town}\n${answers.property_address_postcode}`;
-  const landlord_address = `${answers.landlord_address_line1}\n${answers.landlord_address_town}\n${answers.landlord_address_postcode}`;
-
-  return {
-    // Property
-    property_address,
-    property_address_line1: answers.property_address_line1,
-    property_address_town: answers.property_address_town,
-    property_address_postcode: answers.property_address_postcode,
-    property_type: answers.property_type,
-    furnished_status: answers.furnished_status?.toLowerCase(),
-    number_of_bedrooms: answers.number_of_bedrooms,
-
-    // Landlord
-    landlord_full_name: answers.landlord_full_name,
-    landlord_address,
-    landlord_address_line1: answers.landlord_address_line1,
-    landlord_address_town: answers.landlord_address_town,
-    landlord_address_postcode: answers.landlord_address_postcode,
-    landlord_email: answers.landlord_email,
-    landlord_phone: answers.landlord_phone,
-
-    // Tenants
-    tenants,
-
-    // Term
-    tenancy_start_date: answers.tenancy_start_date,
-    is_fixed_term: answers.is_fixed_term === 'Fixed term (set end date)',
-    tenancy_end_date: answers.tenancy_end_date,
-    term_length: answers.term_length,
-
-    // Rent
-    rent_amount: parseFloat(answers.rent_amount),
-    rent_due_day: answers.rent_due_day,
-    payment_method: answers.payment_method,
-    payment_details: `${answers.bank_account_name}\nSort Code: ${answers.bank_sort_code}\nAccount: ${answers.bank_account_number}`,
-    bank_account_name: answers.bank_account_name,
-    bank_sort_code: answers.bank_sort_code,
-    bank_account_number: answers.bank_account_number,
-
-    // Deposit
-    deposit_amount: parseFloat(answers.deposit_amount),
-    deposit_scheme: answers.deposit_scheme,
-    deposit_scheme_name: answers.deposit_scheme?.split(' ')[0], // Extract 'DPS', 'MyDeposits', or 'TDS'
-
-    // Bills
-    council_tax_responsibility: answers.council_tax_responsibility,
-    utilities_responsibility: answers.utilities_responsibility,
-    internet_responsibility: answers.internet_responsibility,
-
-    // Property rules
-    pets_allowed: answers.pets_allowed === 'yes',
-    approved_pets: Array.isArray(answers.approved_pets) ? answers.approved_pets.join(', ') : answers.approved_pets,
-    smoking_allowed: answers.smoking_allowed === 'yes',
-    parking_available: answers.parking_available === 'yes',
-    parking: answers.parking_available === 'yes',
-    parking_details: answers.parking_details,
-
-    // Legal compliance & safety
-    gas_safety_certificate: answers.gas_safety_certificate === 'yes',
-    epc_rating: answers.epc_rating,
-    electrical_safety_certificate: answers.electrical_safety_certificate === 'yes',
-    smoke_alarms_fitted: answers.smoke_alarms_fitted === 'yes',
-    carbon_monoxide_alarms: answers.carbon_monoxide_alarms === 'yes',
-    how_to_rent_guide_provided: answers.how_to_rent_guide_provided === 'yes',
-
-    // Maintenance & repairs
-    landlord_maintenance_responsibilities: answers.landlord_maintenance_responsibilities,
-    garden_maintenance: answers.garden_maintenance,
-    repairs_reporting_method: answers.repairs_reporting_method,
-    emergency_contact: answers.emergency_contact,
-
-    // Property condition & inventory
-    inventory_provided: answers.inventory_provided === 'yes',
-    professional_cleaning_required: answers.professional_cleaning_required === 'yes',
-    decoration_condition: answers.decoration_condition,
-
-    // Tenancy terms & conditions
-    break_clause: answers.break_clause === 'yes',
-    break_clause_months: answers.break_clause_months,
-    break_clause_notice_period: answers.break_clause_notice_period,
-    subletting_allowed: answers.subletting_allowed,
-    rent_increase_clause: answers.rent_increase_clause === 'yes',
-    rent_increase_frequency: answers.rent_increase_frequency,
-
-    // Insurance & liability
-    landlord_insurance: answers.landlord_insurance === 'yes',
-    tenant_insurance_required: answers.tenant_insurance_required,
-
-    // Access & viewings
-    landlord_access_notice: answers.landlord_access_notice,
-    inspection_frequency: answers.inspection_frequency,
-    end_of_tenancy_viewings: answers.end_of_tenancy_viewings === 'yes',
-
-    // Additional terms
-    white_goods_included: Array.isArray(answers.white_goods_included) ? answers.white_goods_included : [],
-    communal_areas: answers.communal_areas === 'yes',
-    communal_cleaning: answers.communal_cleaning,
-    recycling_bins: answers.recycling_bins === 'yes',
-
-    // Metadata
-    agreement_date: new Date().toISOString().split('T')[0],
-    current_date: new Date().toLocaleDateString('en-GB'),
-    current_year: new Date().getFullYear(),
-  };
-}
