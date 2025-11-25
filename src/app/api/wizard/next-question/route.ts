@@ -36,13 +36,11 @@ function isQuestionAnswered(question: ExtendedWizardQuestion, facts: Record<stri
     });
   }
 
+  // For questions without maps_to, check if answered directly by question ID
   const fallbackValue = facts[question.id];
-  if (question.validation?.required) {
-    if (fallbackValue === null || fallbackValue === undefined) return false;
-    if (typeof fallbackValue === 'string') return fallbackValue.trim().length > 0;
-  }
-
-  return Boolean(fallbackValue);
+  if (fallbackValue === null || fallbackValue === undefined) return false;
+  if (typeof fallbackValue === 'string') return fallbackValue.trim().length > 0;
+  return true;
 }
 
 function deriveProduct(caseType: string, collectedFacts: Record<string, any>): ProductType {
