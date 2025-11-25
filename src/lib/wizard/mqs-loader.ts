@@ -68,7 +68,15 @@ export function getNextMQSQuestion(
     if (dependsOn?.questionId) {
       const depValue = findDependentValue(dependsOn.questionId);
       if (Array.isArray(dependsOn.value)) {
-        if (!dependsOn.value.includes(depValue)) continue;
+        // Handle when user's answer is also an array (multi_select questions)
+        if (Array.isArray(depValue)) {
+          // Check if arrays intersect (any value in depValue is in dependsOn.value)
+          const hasMatch = depValue.some(val => dependsOn.value.includes(val));
+          if (!hasMatch) continue;
+        } else {
+          // User's answer is scalar, check if it's in the dependency array
+          if (!dependsOn.value.includes(depValue)) continue;
+        }
       } else if (depValue !== dependsOn.value) {
         continue;
       }
