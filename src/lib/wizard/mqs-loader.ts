@@ -83,8 +83,9 @@ export function getNextMQSQuestion(
       continue;
     }
 
+    // For questions without maps_to, check if answered directly by question ID
     const fallbackValue = (answered as Record<string, any>)[q.id];
-    if (q.validation?.required && !isTruthyValue(fallbackValue)) {
+    if (!isTruthyValue(fallbackValue)) {
       return q;
     }
   }
