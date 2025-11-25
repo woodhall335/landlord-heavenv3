@@ -18,10 +18,15 @@ export interface TenantInfo {
 }
 
 export interface ASTData {
+  // Product metadata
+  product_tier?: string;
+
   // Agreement
   agreement_date: string;
   current_date?: string;
   current_year?: number;
+  generation_timestamp?: string;
+  document_id?: string;
 
   // Landlord
   landlord_full_name: string;
@@ -57,6 +62,9 @@ export interface ASTData {
   parking_available?: boolean;
   parking_details?: string;
   furnished_status?: 'furnished' | 'unfurnished' | 'part-furnished';
+  has_shared_facilities?: boolean;
+  number_of_sharers?: number;
+  hmo_licence_status?: string;
 
   // Term
   tenancy_start_date: string;
@@ -77,11 +85,14 @@ export interface ASTData {
   first_payment_date?: string;
   rent_includes?: string; // What's included in rent
   rent_excludes?: string; // What tenant pays separately
+  rent_increase_method?: string;
 
   // Deposit
   deposit_amount: number;
   deposit_scheme?: string;
   deposit_scheme_name: 'DPS' | 'MyDeposits' | 'TDS';
+  deposit_paid_date?: string;
+  deposit_protection_date?: string;
 
   // Bills & Utilities
   council_tax_responsibility?: string;
@@ -93,6 +104,7 @@ export interface ASTData {
   inventory_provided?: boolean;
   professional_cleaning_required?: boolean;
   decoration_condition?: string;
+  inventory_schedule_notes?: string;
 
   // Property features & rules
   has_garden?: boolean;
@@ -108,6 +120,7 @@ export interface ASTData {
   guarantor_phone?: string;
   guarantor_dob?: string;
   guarantor_relationship?: string;
+  guarantor_required?: boolean;
 
   // Premium: Enhanced Pet Agreement
   pet_type?: string;
@@ -148,6 +161,7 @@ export interface ASTData {
   subletting_allowed?: string;
   rent_increase_clause?: boolean;
   rent_increase_frequency?: string;
+  joint_and_several_liability?: boolean;
   tenant_notice_period?: string; // e.g., "1 month"
   additional_terms?: string;
 
@@ -272,10 +286,16 @@ export async function generateStandardAST(
     data.tenant_notice_period = '1 month';
   }
 
+  const generationTimestamp = new Date().toISOString();
+  const documentId = `AST-STD-${Date.now()}`;
+
   // Add metadata flags
   const enrichedData = {
     ...data,
     premium: false,
+    product_tier: data.product_tier || 'Standard AST',
+    generation_timestamp: data.generation_timestamp || generationTimestamp,
+    document_id: data.document_id || documentId,
     jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
   };
 
@@ -284,6 +304,7 @@ export async function generateStandardAST(
     'uk/england-wales/templates/standard_ast.hbs',
     'shared/templates/terms_and_conditions.hbs',
     'shared/templates/certificate_of_curation.hbs',
+    'uk/england-wales/templates/ast_legal_validity_summary.hbs',
     'uk/england-wales/templates/government_model_clauses.hbs',
     'shared/templates/deposit_protection_certificate.hbs',
     'shared/templates/inventory_template.hbs',
@@ -301,7 +322,7 @@ export async function generateStandardAST(
     metadata: {
       templateUsed: 'standard_ast_with_bonus_docs',
       generatedAt: new Date().toISOString(),
-      documentId: `AST-STD-${Date.now()}`,
+      documentId,
       isPreview,
     },
   };
@@ -332,10 +353,16 @@ export async function generatePremiumAST(
     data.tenant_notice_period = '1 month';
   }
 
+  const generationTimestamp = new Date().toISOString();
+  const documentId = `AST-PREM-${Date.now()}`;
+
   // Add metadata flags for premium
   const enrichedData = {
     ...data,
     premium: true,
+    product_tier: data.product_tier || 'Premium AST',
+    generation_timestamp: data.generation_timestamp || generationTimestamp,
+    document_id: data.document_id || documentId,
     jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
   };
 
@@ -344,6 +371,7 @@ export async function generatePremiumAST(
     'uk/england-wales/templates/premium_ast_formatted.hbs',
     'shared/templates/terms_and_conditions.hbs',
     'shared/templates/certificate_of_curation.hbs',
+    'uk/england-wales/templates/ast_legal_validity_summary.hbs',
     'uk/england-wales/templates/government_model_clauses.hbs',
     'shared/templates/deposit_protection_certificate.hbs',
     'shared/templates/inventory_template.hbs',
@@ -361,7 +389,7 @@ export async function generatePremiumAST(
     metadata: {
       templateUsed: 'premium_ast_with_bonus_docs',
       generatedAt: new Date().toISOString(),
-      documentId: `AST-PREM-${Date.now()}`,
+      documentId,
       isPreview,
     },
   };

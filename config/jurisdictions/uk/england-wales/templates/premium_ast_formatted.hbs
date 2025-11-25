@@ -495,7 +495,7 @@
     </div>
   </div>
 
-  {{#if tenants.[1]}}
+  {{#if joint_and_several_liability}}
   <div class="important-box">
     <div class="important-title">⚠️ Joint and Several Liability</div>
     <p>
@@ -847,6 +847,9 @@
       <strong>Rent Increase Mechanism:</strong> The rent may be increased annually on the anniversary of the tenancy start date,
       subject to the following conditions:
       <ul>
+        {{#if rent_increase_method}}
+        <li><strong>Method:</strong> {{rent_increase_method}}</li>
+        {{/if}}
         <li><strong>Frequency:</strong> {{#if rent_increase_frequency}}{{rent_increase_frequency}}{{else}}Once per year{{/if}}</li>
         <li><strong>Notice Period:</strong> The Landlord must give at least <strong>1 month's written notice</strong> before any rent increase takes effect</li>
         <li><strong>During Fixed Term:</strong> Rent increases during the initial fixed term are only permitted if this clause is included</li>
@@ -1348,7 +1351,7 @@
     </div>
   </div>
 
-  {{#if communal_areas}}
+  {{#if has_shared_facilities}}
   <div class="subsection">
     <div class="subsection-title">🏘️ HMO & Shared Facilities (Premium)</div>
 
