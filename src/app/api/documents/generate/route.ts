@@ -12,6 +12,7 @@ import { generateStandardAST, generatePremiumAST } from '@/lib/documents/ast-gen
 import { generateNoticeToLeave } from '@/lib/documents/scotland/notice-to-leave-generator';
 import { generatePRTAgreement } from '@/lib/documents/scotland/prt-generator';
 import { mapWizardToNoticeToLeave } from '@/lib/documents/scotland/wizard-mapper';
+import { mapWizardToASTData } from '@/lib/documents/ast-wizard-mapper';
 import { generatePrivateTenancyAgreement } from '@/lib/documents/northern-ireland/private-tenancy-generator';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -112,12 +113,12 @@ export async function POST(request: Request) {
           break;
 
         case 'ast_standard':
-          generatedDoc = await generateStandardAST(facts);
+          generatedDoc = await generateStandardAST(mapWizardToASTData(facts));
           documentTitle = 'Assured Shorthold Tenancy Agreement - Standard';
           break;
 
         case 'ast_premium':
-          generatedDoc = await generatePremiumAST(facts);
+          generatedDoc = await generatePremiumAST(mapWizardToASTData(facts));
           documentTitle = 'Assured Shorthold Tenancy Agreement - Premium';
           break;
 
