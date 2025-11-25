@@ -74,7 +74,9 @@ export async function POST(request: Request) {
       query = query.is('user_id', null);
     }
 
-    const { data: caseData, error: caseError } = await query.single();
+    const { data: caseData, error: caseError } = await query.single<
+      Database['public']['Tables']['cases']['Row']
+    >();
 
     if (caseError || !caseData) {
       console.error('Case not found:', caseError);
@@ -87,7 +89,7 @@ export async function POST(request: Request) {
 
     await supabase
       .from('cases')
-      .update({
+      .update<Database['public']['Tables']['cases']['Update']>({
         recommended_route: route,
         red_flags: red_flags as any,
         compliance_issues: compliance as any,
@@ -102,7 +104,7 @@ export async function POST(request: Request) {
       const htmlContent = `<h1>Preview - ${route}</h1><p>Case strength: ${score}%</p>`;
       const { data: docRow, error: docError } = await supabase
         .from('documents')
-        .insert({
+        .insert<Database['public']['Tables']['documents']['Insert']>({
           user_id: caseData.user_id,
           case_id,
           document_type: route,
@@ -112,7 +114,7 @@ export async function POST(request: Request) {
           is_preview: true,
         } satisfies Database['public']['Tables']['documents']['Insert'])
         .select()
-        .single();
+        .single<Database['public']['Tables']['documents']['Row']>();
 
       if (!docError && docRow) {
         previewDocuments.push({
