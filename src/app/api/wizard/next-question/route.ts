@@ -11,6 +11,7 @@ import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server
 import { getNextMQSQuestion, loadMQS, type MasterQuestionSet, type ProductType } from '@/lib/wizard/mqs-loader';
 import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
+import type { Database } from '@/lib/supabase/types';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -66,23 +67,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid case_id' }, { status: 400 });
     }
 
-    // Loosen typing to avoid `never` errors from incomplete Supabase types
-    const supabase = (await createServerSupabaseClient()) as any;
+    const supabase = await createServerSupabaseClient();
 
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
-      query = query.eq('user_id', (user as any).id);
+      query = query.eq('user_id', user.id);
     } else {
       query = query.is('user_id', null);
     }
 
-    const { data: caseData, error: caseError } = await query.single();
+    const { data: caseData, error: caseError } = await query.single<
+      Database['public']['Tables']['cases']['Row']
+    >();
 
     if (caseError || !caseData) {
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    const caseRow = caseData as any;
+    const caseRow = caseData;
 
     const product = deriveProduct(
       caseRow.case_type as string,
