@@ -1,13 +1,15 @@
+// src/lib/ai/openai-client.ts
 /**
- * OpenAI Client
+ * OpenAI Client (Safe Full Version)
  *
- * Wrapper for OpenAI API (GPT-4, GPT-4-mini)
- * Used for fact-finding wizard and document generation assistance
+ * - Keeps ALL existing features: cost tracking, usage, schemas.
+ * - Fixes json_object requirement by injecting system “json” message.
+ * - Keeps backwards compatibility with callers that expect usage/cost.
  */
 
 import OpenAI from 'openai';
 
-// Initialize OpenAI client
+// Initialise client
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
 });
@@ -37,43 +39,38 @@ export interface ChatCompletionResult {
   cost_usd: number;
 }
 
-// Pricing per 1M tokens (as of Jan 2025)
+// Pricing per 1M tokens (2025)
 const PRICING = {
-  'gpt-4': { input: 30.0, output: 60.0 },
-  'gpt-4-turbo': { input: 10.0, output: 30.0 },
-  'gpt-4o': { input: 2.5, output: 10.0 },
+  'gpt-4': { input: 30, output: 60 },
+  'gpt-4-turbo': { input: 10, output: 30 },
+  'gpt-4o': { input: 2.5, output: 10 },
   'gpt-4o-mini': { input: 0.15, output: 0.6 },
 } as const;
 
-/**
- * Calculate cost in USD based on token usage
- */
-function calculateCost(
-  model: string,
-  promptTokens: number,
-  completionTokens: number
-): number {
-  const pricing = PRICING[model as keyof typeof PRICING] || PRICING['gpt-4o'];
-  const inputCost = (promptTokens / 1_000_000) * pricing.input;
-  const outputCost = (completionTokens / 1_000_000) * pricing.output;
+function calculateCost(model: string, promptTokens: number, completionTokens: number) {
+  const p = PRICING[model as keyof typeof PRICING] ?? PRICING['gpt-4o'];
+  const inputCost = (promptTokens / 1_000_000) * p.input;
+  const outputCost = (completionTokens / 1_000_000) * p.output;
   return inputCost + outputCost;
 }
 
-/**
- * Generate chat completion using OpenAI
- */
+/* ----------------------------------------------------
+ * CHAT COMPLETION (unchanged, except safe messages handling)
+ * ---------------------------------------------------- */
 export async function chatCompletion(
-  messages: ChatMessage[],
+  messagesInput: ChatMessage[] | ChatMessage,
   options: ChatCompletionOptions = {}
 ): Promise<ChatCompletionResult> {
   const {
     model = 'gpt-4o-mini',
     temperature = 0.7,
     max_tokens = 2000,
-    top_p = 1.0,
-    frequency_penalty = 0.0,
-    presence_penalty = 0.0,
+    top_p = 1,
+    frequency_penalty = 0,
+    presence_penalty = 0,
   } = options;
+
+  const messages = Array.isArray(messagesInput) ? messagesInput : [messagesInput];
 
   try {
     const response = await openai.chat.completions.create({
@@ -86,11 +83,10 @@ export async function chatCompletion(
       presence_penalty,
     });
 
-    const choice = response.choices[0];
     const usage = response.usage!;
 
     return {
-      content: choice.message.content || '',
+      content: response.choices[0]?.message?.content ?? '',
       usage: {
         prompt_tokens: usage.prompt_tokens,
         completion_tokens: usage.completion_tokens,
@@ -99,17 +95,17 @@ export async function chatCompletion(
       model: response.model,
       cost_usd: calculateCost(response.model, usage.prompt_tokens, usage.completion_tokens),
     };
-  } catch (error: any) {
-    console.error('OpenAI API error:', error);
-    throw new Error(`OpenAI API error: ${error.message}`);
+  } catch (err: any) {
+    console.error('OpenAI API error:', err);
+    throw new Error(`OpenAI API error: ${err.message}`);
   }
 }
 
-/**
- * Generate JSON response using OpenAI with structured output
- */
+/* ----------------------------------------------------
+ * JSON COMPLETION (FIXED)
+ * ---------------------------------------------------- */
 export async function jsonCompletion<T = any>(
-  messages: ChatMessage[],
+  messagesInput: ChatMessage[] | ChatMessage,
   schema: Record<string, any>,
   options: ChatCompletionOptions = {}
 ): Promise<ChatCompletionResult & { json: T }> {
@@ -118,6 +114,21 @@ export async function jsonCompletion<T = any>(
     temperature = 0.7,
     max_tokens = 2000,
   } = options;
+
+  // Always normalise messages
+  const userMessages: ChatMessage[] = Array.isArray(messagesInput)
+    ? messagesInput
+    : [messagesInput];
+
+  // Inject required JSON system message
+  const messages: ChatMessage[] = [
+    {
+      role: 'system',
+      content:
+        'Always reply with a single valid JSON object. Do NOT include explanations or markdown. The word "json" is included here intentionally to satisfy the OpenAI API requirement.',
+    },
+    ...userMessages,
+  ];
 
   try {
     const response = await openai.chat.completions.create({
@@ -130,18 +141,19 @@ export async function jsonCompletion<T = any>(
 
     const choice = response.choices[0];
     const usage = response.usage!;
-    const content = choice.message.content || '{}';
+    const content = choice?.message?.content ?? '{}';
 
-    let json: T;
+    let parsed: T;
     try {
-      json = JSON.parse(content);
-    } catch (parseError) {
+      parsed = JSON.parse(content);
+    } catch {
+      console.error('Invalid JSON returned:', content);
       throw new Error('Failed to parse JSON response from OpenAI');
     }
 
     return {
       content,
-      json,
+      json: parsed,
       usage: {
         prompt_tokens: usage.prompt_tokens,
         completion_tokens: usage.completion_tokens,
@@ -150,24 +162,28 @@ export async function jsonCompletion<T = any>(
       model: response.model,
       cost_usd: calculateCost(response.model, usage.prompt_tokens, usage.completion_tokens),
     };
-  } catch (error: any) {
-    console.error('OpenAI JSON API error:', error);
-    throw new Error(`OpenAI JSON API error: ${error.message}`);
+  } catch (err: any) {
+    console.error('OpenAI JSON API error:', err);
+    throw new Error(`OpenAI JSON API error: ${err.message}`);
   }
 }
 
-/**
- * Stream chat completion (for real-time UI updates)
- */
+/* ----------------------------------------------------
+ * STREAM COMPLETION (kept as-is)
+ * ---------------------------------------------------- */
 export async function* streamChatCompletion(
-  messages: ChatMessage[],
+  messagesInput: ChatMessage[] | ChatMessage,
   options: ChatCompletionOptions = {}
-): AsyncGenerator<string, void, unknown> {
+) {
   const {
     model = 'gpt-4o-mini',
     temperature = 0.7,
     max_tokens = 2000,
   } = options;
+
+  const messages: ChatMessage[] = Array.isArray(messagesInput)
+    ? messagesInput
+    : [messagesInput];
 
   try {
     const stream = await openai.chat.completions.create({
@@ -179,14 +195,12 @@ export async function* streamChatCompletion(
     });
 
     for await (const chunk of stream) {
-      const content = chunk.choices[0]?.delta?.content || '';
-      if (content) {
-        yield content;
-      }
+      const text = chunk.choices[0]?.delta?.content || '';
+      if (text) yield text;
     }
-  } catch (error: any) {
-    console.error('OpenAI streaming error:', error);
-    throw new Error(`OpenAI streaming error: ${error.message}`);
+  } catch (err: any) {
+    console.error('OpenAI streaming error:', err);
+    throw new Error(`OpenAI streaming error: ${err.message}`);
   }
 }
 

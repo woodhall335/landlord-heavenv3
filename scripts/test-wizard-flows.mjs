@@ -27,26 +27,91 @@ async function apiPost(path, body) {
   return json;
 }
 
-// Very dumb answer generator – just to exercise the API.
-// We can refine based on what the server expects once we see the output.
+// Very dumb answer generator – just to exercise the API,
+// but now aware of inputType + group fields.
 function buildDummyAnswer(question) {
-  const qType = question.type || question.input_type || 'string';
+  const qType =
+    question.inputType ||
+    question.type ||
+    question.input_type ||
+    'string';
 
-  if (qType === 'number' || qType === 'integer') return 1000;
-  if (qType === 'boolean') return true;
-  if (qType === 'date') return '2024-01-01';
-  if (qType === 'money') return 500;
-  if (qType === 'choice' && Array.isArray(question.options) && question.options.length > 0) {
-    return question.options[0].value ?? question.options[0];
-  }
-  if (qType === 'multi_choice' && Array.isArray(question.options) && question.options.length > 0) {
-    const first = question.options[0].value ?? question.options[0];
-    return [first];
+  // Helper for single scalar answers
+  const scalarForType = (t) => {
+    switch (t) {
+      case 'date':
+        return '2024-01-01';
+      case 'email':
+        return 'test.landlord@example.com';
+      case 'tel':
+      case 'phone':
+        return '07123456789';
+      case 'number':
+      case 'integer':
+      case 'currency':
+      case 'money':
+        return 1000;
+      case 'textarea':
+      case 'text':
+        return 'Test answer from automated script (dummy text for automation)';
+      case 'yes_no':
+      case 'boolean':
+        return true;
+      default:
+        return 'Test answer from automated script';
+    }
+  };
+
+  // 1) Group questions -> build object with required fields filled
+  if (qType === 'group' && Array.isArray(question.fields)) {
+    const obj = {};
+    for (const field of question.fields) {
+      const fieldType =
+        field.inputType ||
+        field.type ||
+        field.input_type ||
+        'text';
+
+      // Always fill all fields – required or not – to avoid validation issues
+      obj[field.id] = scalarForType(fieldType);
+    }
+    return obj;
   }
 
-  // Default: text/string answer
-  return 'Test answer from automated script';
+  // 2) Single-choice / select questions
+  if (
+    (qType === 'select' ||
+      qType === 'single_select' ||
+      qType === 'choice') &&
+    Array.isArray(question.options) &&
+    question.options.length > 0
+  ) {
+    const first = question.options[0];
+    return typeof first === 'object' && first !== null
+      ? first.value ?? first.id ?? first.key ?? String(first.label ?? first)
+      : first;
+  }
+
+  // 3) Multi-select questions
+  if (
+    (qType === 'multi_select' ||
+      qType === 'multi_choice' ||
+      qType === 'checkboxes') &&
+    Array.isArray(question.options) &&
+    question.options.length > 0
+  ) {
+    const first = question.options[0];
+    const val =
+      typeof first === 'object' && first !== null
+        ? first.value ?? first.id ?? first.key ?? String(first.label ?? first)
+        : first;
+    return [val];
+  }
+
+  // 4) Dates, money, text, yes/no, etc
+  return scalarForType(qType);
 }
+
 
 async function runFlow({ product, jurisdiction, maxQuestions = 50 }) {
   console.log(`\n==============================`);
@@ -103,7 +168,7 @@ async function runFlow({ product, jurisdiction, maxQuestions = 50 }) {
     console.log(`\n📝 Answering question #${questionsAnswered + 1}`);
     console.log(`   ID:       ${questionId}`);
     console.log(`   Prompt:   ${nextQuestion.question || '(no question text)'}`);
-    console.log(`   Type:     ${nextQuestion.type || nextQuestion.input_type}`);
+    console.log(`   Type:     ${nextQuestion.inputType || nextQuestion.type || nextQuestion.input_type}`);
     console.log(`   Answer:  `, dummyAnswer);
 
     const answerRes = await apiPost('/api/wizard/answer', {

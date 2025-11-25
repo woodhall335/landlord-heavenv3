@@ -223,7 +223,7 @@ export async function POST(request: Request) {
       { meta: collectedFacts.__meta }
     );
 
-    // ---------------------------------------
+        // ---------------------------------------
     // 3. Log conversation (user + assistant)
     // ---------------------------------------
     const rawAnswerText =
@@ -231,33 +231,50 @@ export async function POST(request: Request) {
         ? normalizedAnswer
         : JSON.stringify(normalizedAnswer);
 
-    await supabase.from('conversations').insert({
-      case_id,
-      role: 'user',
-      content: rawAnswerText,
-      question_id,
-      input_type: question.inputType,
-      user_input: normalizedAnswer,
-    });
-
-    const enhanced = await enhanceAnswer({
-      question,
-      rawAnswer: rawAnswerText,
-      jurisdiction: caseRow.jurisdiction as string,
-      product,
-      caseType: caseRow.case_type as string,
-    });
-
-    if (enhanced) {
+    // Log the user message – DO NOT let failures here break the flow
+    try {
       await supabase.from('conversations').insert({
         case_id,
-        role: 'assistant',
-        content: enhanced.suggested_wording,
+        role: 'user',
+        content: rawAnswerText,
         question_id,
-        model: 'ask-heaven',
+        input_type: question.inputType,
         user_input: normalizedAnswer,
       });
+    } catch (convErr) {
+      console.error('Failed to insert user conversation row:', convErr);
     }
+
+    // Call Ask Heaven, but treat all errors as non-fatal
+    let enhanced: Awaited<ReturnType<typeof enhanceAnswer>> | null = null;
+    try {
+      enhanced = await enhanceAnswer({
+        question,
+        rawAnswer: rawAnswerText,
+        jurisdiction: caseRow.jurisdiction as string,
+        product,
+        caseType: caseRow.case_type as string,
+      });
+    } catch (enhErr) {
+      console.error('enhanceAnswer failed, proceeding without suggestions:', enhErr);
+      enhanced = null;
+    }
+
+    if (enhanced) {
+      try {
+        await supabase.from('conversations').insert({
+          case_id,
+          role: 'assistant',
+          content: enhanced.suggested_wording,
+          question_id,
+          model: 'ask-heaven',
+          user_input: normalizedAnswer,
+        });
+      } catch (convErr) {
+        console.error('Failed to insert assistant conversation row:', convErr);
+      }
+    }
+
 
     // ---------------------------------------
     // 4. Determine next question + progress

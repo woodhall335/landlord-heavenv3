@@ -1,3 +1,5 @@
+# config/mqs/complete_pack/england-wales.yaml 
+
 id: complete_pack_england_wales_v1
 product: complete_pack
 jurisdiction: england-wales
@@ -98,8 +100,15 @@ questions:
     helperText: "Only complete this if a solicitor or other representative is handling the claim."
     dependsOn:
       questionId: uses_solicitor
-      value: "Yes"
+      value: true
     fields:
+      - id: solicitor_name
+        label: "Name of person handling the claim"
+        inputType: text
+        placeholder: "Full name"
+        validation:
+          required: true
+        width: full
       - id: solicitor_firm
         label: "Firm / organisation name"
         inputType: text
@@ -133,6 +142,7 @@ questions:
       Ensure the representative details match exactly what appears on your engagement letter or their letterhead.
       Courts will send documents to this address, so accuracy is critical.
     maps_to:
+      - solicitor_name
       - solicitor_firm
       - solicitor_address
       - dx_number
@@ -488,6 +498,42 @@ questions:
       - last_payment_date
       - last_payment_amount
 
+  # 10b. Arrears schedule / narrative
+  - id: arrears_schedule
+    section: Rent Arrears
+    question: "Brief breakdown of the rent arrears"
+    inputType: group
+    helperText: "This helps build the particulars of claim and a simple rent schedule. Exact dates for every payment are not essential, but include enough detail for a judge to follow."
+    fields:
+      - id: arrears_start_date
+        label: "When did the arrears first start?"
+        inputType: date
+        validation:
+          required: false
+        width: half
+      - id: arrears_oldest_unpaid_period
+        label: "What is the oldest unpaid rent period?"
+        inputType: text
+        placeholder: "e.g. 'January 2024 rent', 'Rent due 1 March 2023'"
+        validation:
+          required: false
+        width: full
+      - id: arrears_notes
+        label: "Brief notes about how the arrears built up"
+        inputType: textarea
+        helperText: "For example: 'Tenant stopped paying in January 2024 and has only made one partial payment since then.'"
+        validation:
+          required: false
+        width: full
+    suggestion_prompt: >
+      Help the landlord give a short, clear narrative of how arrears built up:
+      when payments first started being missed, the oldest unpaid period, and any partial payments.
+      Keep it factual and chronological.
+    maps_to:
+      - arrears_start_date
+      - arrears_oldest_unpaid_period
+      - arrears_notes
+
   # 11. Grounds & behaviour (Section 8)
   - id: section8_grounds
     section: Section 8 Grounds
@@ -634,6 +680,48 @@ questions:
       payment plans offered, warnings given, and any mediation or help from the council or agents.
     maps_to:
       - attempts_to_resolve_summary
+
+  # 17b. Previous court action / agreements
+  - id: previous_proceedings
+    section: Previous claims and agreements
+    question: "Previous court claims or formal agreements"
+    inputType: group
+    helperText: "Some court forms ask whether there have been previous possession claims, suspended orders or repayment plans on this tenancy."
+    fields:
+      - id: has_previous_claim
+        label: "Have you previously started a possession claim for this tenancy?"
+        inputType: yes_no
+        validation:
+          required: false
+        width: half
+      - id: previous_claim_details
+        label: "Details of any previous claims or orders"
+        inputType: textarea
+        helperText: "Include claim number, court, dates of any suspended orders or possession orders, if known."
+        validation:
+          required: false
+        width: full
+      - id: has_repayment_plan
+        label: "Have you agreed a repayment plan with the tenant?"
+        inputType: yes_no
+        validation:
+          required: false
+        width: half
+      - id: repayment_plan_details
+        label: "Repayment plan details"
+        inputType: textarea
+        helperText: "For example: 'Agreed in writing on 1 May 2024 that tenant would pay an extra £100 per month towards arrears, but payments were not kept up.'"
+        validation:
+          required: false
+        width: full
+    suggestion_prompt: >
+      Help the landlord briefly describe any previous court claims, suspended orders or repayment plans,
+      including claim numbers and dates if known. Emphasise whether the tenant has broken any court orders or agreed plans.
+    maps_to:
+      - has_previous_claim
+      - previous_claim_details
+      - has_repayment_plan
+      - repayment_plan_details
 
   # 18. Court route & fees
   - id: court_and_fees
