@@ -9,6 +9,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { loadMQS, getNextMQSQuestion, type ProductType, type MasterQuestionSet } from '@/lib/wizard/mqs-loader';
 import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
 import { updateCaseFacts, getOrCreateCaseFacts } from '@/lib/case-facts/store';
@@ -149,7 +150,7 @@ export async function POST(request: Request) {
 
     const { case_id, question_id, answer } = validationResult.data;
 
-    const supabase = await createServerSupabaseClient();
+    const supabase: SupabaseClient<Database> = await createServerSupabaseClient();
 
     // ---------------------------------------
     // 1. Load case with RLS-respecting query
@@ -233,12 +234,12 @@ export async function POST(request: Request) {
 
     // Log the user message – DO NOT let failures here break the flow
     try {
-      await supabase.from('conversations').insert({
+      await supabase.from('conversations').insert<Database['public']['Tables']['conversations']['Insert']>({
         case_id,
         role: 'user',
         content: rawAnswerText,
         question_id,
-        input_type: question.inputType,
+        input_type: question.inputType ?? null,
         user_input: normalizedAnswer,
       });
     } catch (convErr) {
@@ -262,14 +263,16 @@ export async function POST(request: Request) {
 
     if (enhanced) {
       try {
-        await supabase.from('conversations').insert({
-          case_id,
-          role: 'assistant',
-          content: enhanced.suggested_wording,
-          question_id,
-          model: 'ask-heaven',
-          user_input: normalizedAnswer,
-        });
+        await supabase
+          .from('conversations')
+          .insert<Database['public']['Tables']['conversations']['Insert']>({
+            case_id,
+            role: 'assistant',
+            content: enhanced.suggested_wording,
+            question_id,
+            model: 'ask-heaven',
+            user_input: normalizedAnswer,
+          });
       } catch (convErr) {
         console.error('Failed to insert assistant conversation row:', convErr);
       }
@@ -285,7 +288,7 @@ export async function POST(request: Request) {
 
     await supabase
       .from('cases')
-      .update({
+      .update<Database['public']['Tables']['cases']['Update']>({
         wizard_progress: isComplete ? 100 : progress,
         wizard_completed_at: isComplete ? new Date().toISOString() : null,
       })

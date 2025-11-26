@@ -9,6 +9,7 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import type { Database } from '@/lib/supabase/types';
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
     }
 
     const { case_id } = validation.data;
-    const supabase = await createServerSupabaseClient();
+    const supabase: SupabaseClient<Database> = await createServerSupabaseClient();
 
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {

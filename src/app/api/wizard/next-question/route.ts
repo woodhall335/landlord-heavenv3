@@ -8,6 +8,7 @@
 
 import { NextResponse } from 'next/server';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { getNextMQSQuestion, loadMQS, type MasterQuestionSet, type ProductType } from '@/lib/wizard/mqs-loader';
 import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
@@ -67,7 +68,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid case_id' }, { status: 400 });
     }
 
-    const supabase = await createServerSupabaseClient();
+    const supabase: SupabaseClient<Database> = await createServerSupabaseClient();
 
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
@@ -105,7 +106,10 @@ export async function POST(request: Request) {
     if (!nextQuestion) {
       await supabase
         .from('cases')
-        .update({ wizard_progress: 100, wizard_completed_at: new Date().toISOString() })
+        .update<Database['public']['Tables']['cases']['Update']>({
+          wizard_progress: 100,
+          wizard_completed_at: new Date().toISOString(),
+        })
         .eq('id', case_id);
 
       return NextResponse.json({
@@ -119,7 +123,7 @@ export async function POST(request: Request) {
 
     await supabase
       .from('cases')
-      .update({ wizard_progress: progress })
+      .update<Database['public']['Tables']['cases']['Update']>({ wizard_progress: progress })
       .eq('id', case_id);
 
     return NextResponse.json({
