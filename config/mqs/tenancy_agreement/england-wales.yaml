@@ -27,13 +27,6 @@ questions:
     inputType: group
     helperText: "Exactly as it should appear in the tenancy agreement."
     fields:
-      - id: property_address
-        label: "Full address"
-        inputType: textarea
-        placeholder: "Flat 2, 123 High Street\nTown/City\nPostcode"
-        validation:
-          required: true
-        width: full
       - id: property_address_line1
         label: "Building and street"
         inputType: text
@@ -56,7 +49,6 @@ questions:
           required: true
         width: half
     maps_to:
-      - property_address
       - property_address_line1
       - property_address_town
       - property_address_postcode
@@ -184,13 +176,6 @@ questions:
     inputType: group
     helperText: "Where formal notices can be served (not the rental property)."
     fields:
-      - id: landlord_address
-        label: "Full address"
-        inputType: textarea
-        placeholder: "Building and street\nTown/City\nPostcode"
-        validation:
-          required: true
-        width: full
       - id: landlord_address_line1
         label: "Building and street"
         inputType: text
@@ -213,7 +198,6 @@ questions:
           required: true
         width: half
     maps_to:
-      - landlord_address
       - landlord_address_line1
       - landlord_address_town
       - landlord_address_postcode
@@ -225,6 +209,8 @@ questions:
     helperText: "If yes, their details can appear on the AST for rent collection and management."
     validation:
       required: true
+    maps_to:
+      - agent_usage
 
   - id: agent_details
     section: Landlord Details

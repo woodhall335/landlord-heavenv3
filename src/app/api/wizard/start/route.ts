@@ -155,7 +155,20 @@ export async function POST(request: Request) {
     // ------------------------------------------------
     // 3. Ensure case_facts row exists and load facts
     // ------------------------------------------------
-    const facts = await getOrCreateCaseFacts(supabase, caseRecord.id as string);
+    // For new cases, initialize case_facts with the same initial facts from collected_facts
+    let facts = await getOrCreateCaseFacts(supabase, caseRecord.id as string);
+
+    // If this is a newly created case with pre-populated tier, ensure case_facts also has it
+    if (!case_id && tier) {
+      const { error: updateError } = await supabase
+        .from('case_facts')
+        .update({ facts: { ...facts, product_tier: tier } as any })
+        .eq('case_id', caseRecord.id);
+
+      if (!updateError) {
+        facts = { ...facts, product_tier: tier } as any;
+      }
+    }
 
     // ------------------------------------------------
     // 4. Load MQS for this product/jurisdiction
