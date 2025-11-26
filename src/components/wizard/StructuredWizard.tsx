@@ -151,7 +151,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
 
     // For single inputs
-    if (currentQuestion.validation?.required && !currentAnswer) {
+    // Note: Must check for null/undefined specifically, not falsy values (false is valid for yes_no)
+    if (currentQuestion.validation?.required && (currentAnswer === null || currentAnswer === undefined)) {
       setError('This field is required');
       return false;
     }
@@ -562,7 +563,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             variant="primary"
             size="large"
             className="flex-1"
-            disabled={loading || !currentAnswer}
+            disabled={loading || currentAnswer === null || currentAnswer === undefined}
           >
             {loading ? 'Saving...' : 'Next →'}
           </Button>
