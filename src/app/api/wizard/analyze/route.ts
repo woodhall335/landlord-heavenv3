@@ -75,7 +75,9 @@ export async function POST(request: Request) {
       query = query.is('user_id', null);
     }
 
-    const { data: caseData, error: caseError } = await query.single();
+    const { data: caseData, error: caseError } = await query.single<
+      Database['public']['Tables']['cases']['Row']
+    >();
 
     if (caseError || !caseData) {
       console.error('Case not found:', caseError);
@@ -94,7 +96,7 @@ export async function POST(request: Request) {
         compliance_issues: compliance as any,
         success_probability: score,
         wizard_progress: caseData.wizard_progress ?? 0,
-      })
+      } satisfies Database['public']['Tables']['cases']['Update'])
       .eq('id', case_id);
 
     const previewDocuments: { id: string; document_type: string; document_title: string }[] = [];
@@ -111,9 +113,9 @@ export async function POST(request: Request) {
           jurisdiction: caseData.jurisdiction,
           html_content: htmlContent,
           is_preview: true,
-        })
+        } satisfies Database['public']['Tables']['documents']['Insert'])
         .select()
-        .single();
+        .single<Database['public']['Tables']['documents']['Row']>();
 
       if (!docError && docRow) {
         previewDocuments.push({

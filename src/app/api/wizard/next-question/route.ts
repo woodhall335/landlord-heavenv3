@@ -77,7 +77,9 @@ export async function POST(request: Request) {
       query = query.is('user_id', null);
     }
 
-    const { data: caseData, error: caseError } = await query.single();
+    const { data: caseData, error: caseError } = await query.single<
+      Database['public']['Tables']['cases']['Row']
+    >();
 
     if (caseError || !caseData) {
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
