@@ -104,7 +104,10 @@ export async function POST(request: Request) {
     if (!nextQuestion) {
       await supabase
         .from('cases')
-        .update({ wizard_progress: 100, wizard_completed_at: new Date().toISOString() })
+        .update<Database['public']['Tables']['cases']['Update']>({
+          wizard_progress: 100,
+          wizard_completed_at: new Date().toISOString(),
+        })
         .eq('id', case_id);
 
       return NextResponse.json({
@@ -118,7 +121,7 @@ export async function POST(request: Request) {
 
     await supabase
       .from('cases')
-      .update({ wizard_progress: progress })
+      .update<Database['public']['Tables']['cases']['Update']>({ wizard_progress: progress })
       .eq('id', case_id);
 
     return NextResponse.json({

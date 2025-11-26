@@ -88,13 +88,13 @@ export async function POST(request: Request) {
 
     await supabase
       .from('cases')
-      .update({
+      .update<Database['public']['Tables']['cases']['Update']>({
         recommended_route: route,
         red_flags: red_flags as any,
         compliance_issues: compliance as any,
         success_probability: score,
         wizard_progress: caseData.wizard_progress ?? 0,
-      } satisfies Database['public']['Tables']['cases']['Update'])
+      })
       .eq('id', case_id);
 
     const previewDocuments: { id: string; document_type: string; document_title: string }[] = [];
@@ -103,7 +103,7 @@ export async function POST(request: Request) {
       const htmlContent = `<h1>Preview - ${route}</h1><p>Case strength: ${score}%</p>`;
       const { data: docRow, error: docError } = await supabase
         .from('documents')
-        .insert({
+        .insert<Database['public']['Tables']['documents']['Insert']>({
           user_id: caseData.user_id,
           case_id,
           document_type: route,
@@ -111,7 +111,7 @@ export async function POST(request: Request) {
           jurisdiction: caseData.jurisdiction,
           html_content: htmlContent,
           is_preview: true,
-        } satisfies Database['public']['Tables']['documents']['Insert'])
+        })
         .select()
         .single();
 
