@@ -41,16 +41,23 @@ function WizardFlowContent() {
     if (type === 'tenancy_agreement' && !editCaseId) {
       const initializeCase = async () => {
         try {
+          // Map case_type to product for the API
+          // Default to 'tenancy_agreement' if no specific product param
+          const productParam = product || 'tenancy_agreement';
+
           const response = await fetch('/api/wizard/start', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ case_type: type, jurisdiction }),
+            body: JSON.stringify({ product: productParam, jurisdiction }),
           });
 
           if (response.ok) {
             const data = await response.json();
             if (data.success && data.case?.id) {
               setCaseId(data.case.id);
+            } else if (data.case_id) {
+              // Handle alternate response format
+              setCaseId(data.case_id);
             } else {
               console.error('Invalid response format:', data);
               throw new Error('Failed to get case ID from response');
@@ -72,7 +79,7 @@ function WizardFlowContent() {
     } else {
       setLoading(false);
     }
-  }, [type, jurisdiction, editCaseId, hasRequiredParams]);
+  }, [type, jurisdiction, product, editCaseId, hasRequiredParams]);
 
   // Validate params
   if (!hasRequiredParams) {

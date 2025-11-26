@@ -17,12 +17,12 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 const startWizardSchema = z.object({
-  product: z.enum(['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement']),
+  product: z.enum(['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement', 'ast_standard', 'ast_premium']),
   jurisdiction: z.enum(['england-wales', 'scotland', 'northern-ireland']),
   case_id: z.string().uuid().optional(),
 });
 
-const productToCaseType = (product: ProductType) => {
+const productToCaseType = (product: ProductType | 'ast_standard' | 'ast_premium') => {
   switch (product) {
     case 'notice_only':
     case 'complete_pack':
@@ -30,10 +30,32 @@ const productToCaseType = (product: ProductType) => {
     case 'money_claim':
       return 'money_claim';
     case 'tenancy_agreement':
+    case 'ast_standard':
+    case 'ast_premium':
       return 'tenancy_agreement';
     default:
       return null;
   }
+};
+
+// Map specific AST products to tier values
+const productToTier = (product: string): string | null => {
+  switch (product) {
+    case 'ast_standard':
+      return 'Standard AST';
+    case 'ast_premium':
+      return 'Premium AST';
+    default:
+      return null;
+  }
+};
+
+// Normalize product to MQS product type
+const normalizeProduct = (product: string): ProductType => {
+  if (product === 'ast_standard' || product === 'ast_premium') {
+    return 'tenancy_agreement';
+  }
+  return product as ProductType;
 };
 
 function loadMQSOrError(product: ProductType, jurisdiction: string): MasterQuestionSet | null {
@@ -55,8 +77,9 @@ export async function POST(request: Request) {
     }
 
     const { product, jurisdiction, case_id } = validationResult.data;
-    const productTyped = product as ProductType;
-    const resolvedCaseType = productToCaseType(productTyped);
+    const resolvedCaseType = productToCaseType(product);
+    const normalizedProduct = normalizeProduct(product);
+    const tier = productToTier(product);
 
     if (!resolvedCaseType) {
       return NextResponse.json({ error: 'Invalid product' }, { status: 400 });
@@ -97,6 +120,17 @@ export async function POST(request: Request) {
       // ------------------------------------------------
       const emptyFacts = createEmptyCaseFacts();
 
+      // Pre-populate tier if specified
+      const initialFacts = {
+        ...emptyFacts,
+        __meta: { product: normalizedProduct, original_product: product }
+      };
+
+      // If tier is specified (ast_standard or ast_premium), pre-populate it
+      if (tier) {
+        initialFacts.product_tier = tier;
+      }
+
       const { data, error } = await supabase
         .from('cases')
         .insert({
@@ -105,7 +139,7 @@ export async function POST(request: Request) {
           jurisdiction,
           status: 'in_progress',
           wizard_progress: 0,
-          collected_facts: { ...emptyFacts, __meta: { product: productTyped } },
+          collected_facts: initialFacts,
         })
         .select()
         .single();
@@ -126,7 +160,7 @@ export async function POST(request: Request) {
     // ------------------------------------------------
     // 4. Load MQS for this product/jurisdiction
     // ------------------------------------------------
-    const mqs = loadMQSOrError(productTyped, jurisdiction);
+    const mqs = loadMQSOrError(normalizedProduct, jurisdiction);
     if (!mqs) {
       return NextResponse.json(
         { error: 'MQS not implemented for this jurisdiction yet' },
