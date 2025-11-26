@@ -96,7 +96,20 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         await handleComplete();
       } else if (data.next_question) {
         setCurrentQuestion(data.next_question);
-        setCurrentAnswer(null); // Reset answer for new question
+
+        // Set default values for group fields
+        if (data.next_question.inputType === 'group' && data.next_question.fields) {
+          const defaults: Record<string, any> = {};
+          data.next_question.fields.forEach((field: any) => {
+            if (field.defaultValue !== undefined) {
+              defaults[field.id] = field.defaultValue;
+            }
+          });
+          setCurrentAnswer(Object.keys(defaults).length > 0 ? defaults : null);
+        } else {
+          setCurrentAnswer(null); // Reset answer for new question
+        }
+
         setProgress(data.progress || 0);
       } else {
         throw new Error('No question returned from API');
@@ -434,7 +447,25 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         return (
           <div className="flex flex-wrap gap-4">
             {currentQuestion.fields.map((field) => {
-              const fieldValue = groupValue[field.id] || '';
+              // Check conditional logic (dependsOn)
+              if ((field as any).dependsOn) {
+                const dep = (field as any).dependsOn;
+                const depValue = groupValue[dep.questionId];
+
+                // Handle array values (multi-select)
+                if (Array.isArray(dep.value)) {
+                  if (Array.isArray(depValue)) {
+                    const hasMatch = depValue.some((val: any) => dep.value.includes(val));
+                    if (!hasMatch) return null;
+                  } else if (!dep.value.includes(depValue)) {
+                    return null;
+                  }
+                } else if (depValue !== dep.value) {
+                  return null;
+                }
+              }
+
+              const fieldValue = groupValue[field.id] ?? '';
               const widthClass =
                 field.width === 'full'
                   ? 'w-full'
@@ -448,7 +479,33 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                     {field.label}
                     {field.validation?.required && <span className="text-red-500 ml-1">*</span>}
                   </label>
-                  {field.inputType === 'select' ? (
+                  {(field as any).helperText && (
+                    <p className="text-sm text-gray-600 mb-2">{(field as any).helperText}</p>
+                  )}
+                  {field.inputType === 'yes_no' ? (
+                    <div className="flex gap-4">
+                      <Button
+                        onClick={() =>
+                          setCurrentAnswer({ ...groupValue, [field.id]: true })
+                        }
+                        variant={fieldValue === true ? 'primary' : 'secondary'}
+                        disabled={loading}
+                        type="button"
+                      >
+                        Yes
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          setCurrentAnswer({ ...groupValue, [field.id]: false })
+                        }
+                        variant={fieldValue === false ? 'primary' : 'secondary'}
+                        disabled={loading}
+                        type="button"
+                      >
+                        No
+                      </Button>
+                    </div>
+                  ) : field.inputType === 'select' ? (
                     <select
                       value={fieldValue}
                       onChange={(e) =>
