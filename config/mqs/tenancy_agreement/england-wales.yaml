@@ -746,6 +746,7 @@ questions:
       - id: how_to_rent_guide_provided
         label: "Latest 'How to Rent' guide given?"
         inputType: yes_no
+        defaultValue: true
         helperText: "This is included in your tenancy pack and must be provided to tenants"
         validation:
           required: true

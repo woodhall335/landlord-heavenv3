@@ -314,7 +314,7 @@ export default function WizardPreviewPage() {
           </p>
           <div className="mt-6">
             <Button
-              onClick={() => router.push(`/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&edit=${caseId}`)}
+              onClick={() => router.push(`/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}`)}
               variant="secondary"
               size="medium"
             >
