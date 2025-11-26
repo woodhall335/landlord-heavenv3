@@ -66,6 +66,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [askHeavenSuggestion, setAskHeavenSuggestion] = useState<string | null>(null);
+  const [questionHistory, setQuestionHistory] = useState<Array<{ question: ExtendedWizardQuestion; answer: any }>>([]);
 
   // Load first question on mount
   useEffect(() => {
@@ -204,10 +205,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to save answer: ${response.status}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Failed to save answer: ${response.status}`);
       }
 
       const data = await response.json();
+
+      // Check for validation errors from AST generator
+      if (data.error && data.error.includes('validation failed')) {
+        setError(data.error);
+        setLoading(false);
+        return;
+      }
 
       // Check for Ask Heaven suggestions
       if (data.suggested_wording) {
@@ -216,6 +225,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
       // Update progress
       setProgress(data.progress || 0);
+
+      // Save to history before moving forward
+      if (currentQuestion) {
+        setQuestionHistory(prev => [...prev, { question: currentQuestion, answer: currentAnswer }]);
+      }
 
       // Check if complete
       if (data.is_complete) {
@@ -230,6 +244,23 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       console.error('Save answer error:', err);
       setLoading(false);
     }
+  };
+
+  const handleBack = () => {
+    if (questionHistory.length === 0) return;
+
+    // Pop the last question from history
+    const previousEntry = questionHistory[questionHistory.length - 1];
+    setQuestionHistory(prev => prev.slice(0, -1));
+
+    // Restore the previous question and answer
+    setCurrentQuestion(previousEntry.question);
+    setCurrentAnswer(previousEntry.answer);
+    setError(null);
+    setAskHeavenSuggestion(null);
+
+    // Decrease progress (approximate)
+    setProgress(prev => Math.max(0, prev - 5));
   };
 
   const handleComplete = async () => {
@@ -558,6 +589,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
         {/* Navigation */}
         <div className="flex gap-4">
+          {questionHistory.length > 0 && (
+            <Button
+              onClick={handleBack}
+              variant="secondary"
+              size="large"
+              disabled={loading}
+            >
+              ← Back
+            </Button>
+          )}
           <Button
             onClick={handleNext}
             variant="primary"
