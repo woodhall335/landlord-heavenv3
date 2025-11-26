@@ -540,11 +540,35 @@ questions:
         inputType: select
         options:
           - "1st"
+          - "2nd"
+          - "3rd"
+          - "4th"
           - "5th"
+          - "6th"
+          - "7th"
+          - "8th"
+          - "9th"
           - "10th"
+          - "11th"
+          - "12th"
+          - "13th"
+          - "14th"
           - "15th"
+          - "16th"
+          - "17th"
+          - "18th"
+          - "19th"
           - "20th"
+          - "21st"
+          - "22nd"
+          - "23rd"
+          - "24th"
           - "25th"
+          - "26th"
+          - "27th"
+          - "28th"
+          - "29th"
+          - "30th"
           - "Last day of month"
         validation:
           required: true
@@ -555,14 +579,14 @@ questions:
         options:
           - "Standing Order"
           - "Bank Transfer"
-          - "Direct Debit"
+          - "Cash"
         validation:
           required: true
         width: half
       - id: payment_details
         label: "Payment details"
         inputType: textarea
-        placeholder: "Sort code / account or payment reference"
+        placeholder: "Payment reference"
         validation:
           required: true
         width: full
@@ -601,6 +625,7 @@ questions:
         label: "Deposit amount"
         inputType: currency
         placeholder: "1400"
+        helperText: "Maximum 5 weeks rent (Tenant Fees Act 2019). Will be validated against rent amount."
         validation:
           required: true
           min: 0
@@ -612,6 +637,7 @@ questions:
           - "DPS"
           - "MyDeposits"
           - "TDS"
+          - "Other"
         validation:
           required: true
         width: half
@@ -701,6 +727,7 @@ questions:
           - "E"
           - "F"
           - "G"
+        helperText: "⚠️ F and G ratings are illegal for new tenancies (with limited exceptions)"
         validation:
           required: true
         width: third
@@ -719,6 +746,7 @@ questions:
       - id: how_to_rent_guide_provided
         label: "Latest 'How to Rent' guide given?"
         inputType: yes_no
+        helperText: "This is included in your tenancy pack and must be provided to tenants"
         validation:
           required: true
         width: half
@@ -868,7 +896,11 @@ questions:
         width: full
       - id: smoking_allowed
         label: "Smoking allowed inside?"
-        inputType: yes_no
+        inputType: select
+        options:
+          - "No"
+          - "Yes"
+          - "Vaping only"
         validation:
           required: true
         width: third
