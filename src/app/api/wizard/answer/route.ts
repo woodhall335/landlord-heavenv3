@@ -9,11 +9,13 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { loadMQS, getNextMQSQuestion, type ProductType, type MasterQuestionSet } from '@/lib/wizard/mqs-loader';
 import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
 import { updateCaseFacts, getOrCreateCaseFacts } from '@/lib/case-facts/store';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
+import type { Database } from '@/lib/supabase/types';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -148,27 +150,28 @@ export async function POST(request: Request) {
 
     const { case_id, question_id, answer } = validationResult.data;
 
-    // Loosen typing to avoid `never` issues from Supabase types
-    const supabase = (await createServerSupabaseClient()) as any;
+    const supabase: SupabaseClient<Database> = await createServerSupabaseClient();
 
     // ---------------------------------------
     // 1. Load case with RLS-respecting query
     // ---------------------------------------
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
-      query = query.eq('user_id', (user as any).id);
+      query = query.eq('user_id', user.id);
     } else {
       query = query.is('user_id', null);
     }
 
-    const { data: caseData, error: fetchError } = await query.single();
+    const { data: caseData, error: fetchError } = await query.single<
+      Database['public']['Tables']['cases']['Row']
+    >();
 
     if (fetchError || !caseData) {
       console.error('Case not found:', fetchError);
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    const caseRow = caseData as any;
+    const caseRow = caseData;
 
     const collectedFacts = (caseRow.collected_facts as Record<string, any>) || {};
     const product = deriveProduct(caseRow.case_type as string, collectedFacts);

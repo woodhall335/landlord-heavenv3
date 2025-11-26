@@ -6,10 +6,11 @@
  */
 
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import type { Database } from './types';
 
-export async function createServerSupabaseClient() {
+export async function createServerSupabaseClient(): Promise<SupabaseClient<Database>> {
   const cookieStore = await cookies();
 
   return createServerClient<Database>(
@@ -46,7 +47,7 @@ export async function createServerSupabaseClient() {
  * Use ONLY for admin operations and background jobs
  * NEVER expose to client-side code
  */
-export function createAdminClient() {
+export function createAdminClient(): SupabaseClient<Database> {
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set');
   }
