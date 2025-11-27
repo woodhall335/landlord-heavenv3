@@ -1,16 +1,16 @@
-id: tenancy_agreement_northern_ireland_v1
+id: tenancy_agreement_scotland_prt_v1
 product: tenancy_agreement
-jurisdiction: northern-ireland
+jurisdiction: scotland
 version: 1.0.1
 questions:
   - id: tenancy_tier
     section: "Product & Tier"
-    question: "Which version of the Northern Ireland tenancy agreement do you want to generate?"
+    question: "Which version of the Scottish Private Residential Tenancy do you want to generate?"
     inputType: select
     helperText: "Standard covers core lawful terms. Premium adds guarantor support, enhanced house rules, detailed inventory and extra protections."
     options:
-      - "Standard NI Private Tenancy"
-      - "Premium NI Private Tenancy"
+      - "Standard PRT"
+      - "Premium PRT"
     validation:
       required: true
     maps_to:
@@ -145,9 +145,15 @@ questions:
         validation:
           required: false
       - id: landlord_registration_number
-        label: "Landlord registration number (if applicable)"
+        label: "Scottish landlord registration number"
         inputType: text
-        helperText: "If landlord registration is required and already obtained, enter the registration number here."
+        helperText: "All landlords in Scotland must be registered. Enter your registration number and the local authority that issued it."
+        validation:
+          required: false
+      - id: landlord_registration_authority
+        label: "Registering local authority"
+        inputType: text
+        helperText: "e.g., City of Edinburgh Council, Glasgow City Council"
         validation:
           required: false
     validation:
@@ -159,6 +165,7 @@ questions:
       - "landlord.email"
       - "landlord.phone"
       - "landlord.registration_number"
+      - "landlord.registration_authority"
 
   - id: agent_usage
     section: "Letting Agent"
@@ -172,7 +179,7 @@ questions:
 
   - id: agent_details
     section: "Letting Agent"
-    question: "Provide the letting / managing agent’s details."
+    question: "Provide the letting / managing agent's details."
     inputType: group
     dependsOn:
       questionId: "agent_usage"
@@ -440,37 +447,15 @@ questions:
 
   - id: tenancy_type_and_dates
     section: "Tenancy Structure"
-    question: "What type of tenancy is this and what are the key dates?"
+    question: "What are the key tenancy dates?"
     inputType: group
+    helperText: "Scottish PRTs are open-ended by law. Enter the tenancy start date."
     fields:
-      - id: tenancy_type
-        label: "Tenancy type"
-        inputType: select
-        helperText: "Choose the basic structure of the tenancy for Northern Ireland."
-        options:
-          - "Fixed term"
-          - "Periodic (rolling)"
-        validation:
-          required: true
       - id: start_date
         label: "Tenancy start date"
         inputType: date
         validation:
           required: true
-      - id: fixed_term_end_date
-        label: "Fixed term end date"
-        inputType: date
-        helperText: "Only required for fixed term tenancies."
-        validation:
-          required: false
-      - id: intended_initial_term_months
-        label: "Intended initial term (months)"
-        inputType: number
-        helperText: "For example, 12 for a one-year fixed term."
-        validation:
-          required: false
-          min: 1
-          max: 60
       - id: exclusive_occupation
         label: "Will the tenant(s) have exclusive occupation of the property?"
         inputType: yes_no
@@ -479,10 +464,7 @@ questions:
     validation:
       required: true
     maps_to:
-      - "tenancy.type"
       - "tenancy.start_date"
-      - "tenancy.end_date"
-      - "tenancy.initial_term_months"
       - "tenancy.exclusive_occupation"
 
   - id: rent_details
@@ -571,11 +553,12 @@ questions:
           required: false
           min: 0
       - id: deposit_scheme
-        label: "Which NI tenancy deposit protection scheme will be used?"
+        label: "Which Scottish tenancy deposit protection scheme will be used?"
         inputType: select
         options:
-          - "Tenancy Deposit Scheme Northern Ireland (TDS NI)"
-          - "MyDeposits Northern Ireland"
+          - "SafeDeposits Scotland"
+          - "MyDeposits Scotland"
+          - "Letting Protection Service Scotland"
           - "Not yet decided"
         validation:
           required: false
@@ -598,8 +581,8 @@ questions:
     question: "Who will be responsible for paying which bills?"
     inputType: group
     fields:
-      - id: rates_payer
-        label: "Who pays domestic rates (if applicable)?"
+      - id: council_tax_payer
+        label: "Who pays council tax?"
         inputType: select
         options:
           - "Tenant"
@@ -633,7 +616,7 @@ questions:
     validation:
       required: true
     maps_to:
-      - "bills.rates_payer"
+      - "bills.council_tax_payer"
       - "bills.utilities_payer"
       - "bills.broadband_and_tv"
       - "bills.notes"
@@ -775,6 +758,7 @@ questions:
     section: "Rent Increases & Reviews"
     question: "How will rent increases and reviews be handled?"
     inputType: group
+    helperText: "In Scotland, rent can only be increased once per 12 months using the proper legal procedure."
     fields:
       - id: intends_rent_increases
         label: "Do you plan for rent to be reviewed or increased during the tenancy?"
@@ -886,7 +870,7 @@ questions:
     section: "Additional Terms"
     question: "Do you want to include any additional, reasonable terms?"
     inputType: textarea
-    helperText: "Only include terms that are fair, lawful, and consistent with the tenant’s statutory rights in Northern Ireland."
+    helperText: "Only include terms that are fair, lawful, and consistent with the tenant's statutory rights in Scotland."
     validation:
       required: false
       maxLength: 4000
@@ -901,7 +885,7 @@ questions:
     inputType: yes_no
     dependsOn:
       questionId: "tenancy_tier"
-      value: "Premium NI Private Tenancy"
+      value: "Premium PRT"
     validation:
       required: true
     maps_to:
@@ -956,7 +940,7 @@ questions:
     inputType: yes_no
     dependsOn:
       questionId: "tenancy_tier"
-      value: "Premium NI Private Tenancy"
+      value: "Premium PRT"
     helperText: "This means each tenant can be held responsible for the full rent and any breach, not just a share."
     validation:
       required: true
@@ -969,7 +953,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: "tenancy_tier"
-      value: "Premium NI Private Tenancy"
+      value: "Premium PRT"
     helperText: "Define regular maintenance responsibilities and schedule."
     fields:
       - id: boiler_service_frequency
@@ -1028,8 +1012,8 @@ questions:
     inputType: group
     dependsOn:
       questionId: "tenancy_tier"
-      value: "Premium NI Private Tenancy"
-    helperText: "For licensable HMOs in Northern Ireland."
+      value: "Premium PRT"
+    helperText: "For licensable HMOs in Scotland."
     fields:
       - id: is_hmo
         label: "Is this a licensable HMO?"
@@ -1045,9 +1029,9 @@ questions:
           max: 20
         width: half
       - id: council_name
-        label: "Local council name"
+        label: "Local authority name"
         inputType: text
-        placeholder: "e.g., Belfast City Council"
+        placeholder: "e.g., City of Edinburgh Council"
         width: half
       - id: hmo_licence_number
         label: "HMO licence number (if applicable)"
@@ -1087,7 +1071,7 @@ questions:
     inputType: group
     dependsOn:
       questionId: "tenancy_tier"
-      value: "Premium NI Private Tenancy"
+      value: "Premium PRT"
     helperText: "Expectations around tenant contents insurance."
     fields:
       - id: tenant_insurance_required
@@ -1158,13 +1142,13 @@ questions:
         placeholder: "e.g., Garage remote, bike shed key, storage locker..."
         width: full
     maps_to:
-      - number_of_front_door_keys
-      - number_of_back_door_keys
-      - number_of_window_keys
-      - number_of_mailbox_keys
-      - access_cards_fobs
-      - key_replacement_cost
-      - other_keys_notes
+      - "number_of_front_door_keys"
+      - "number_of_back_door_keys"
+      - "number_of_window_keys"
+      - "number_of_mailbox_keys"
+      - "access_cards_fobs"
+      - "key_replacement_cost"
+      - "other_keys_notes"
 
   - id: emergency_procedures
     section: "Premium Enhanced Features"
@@ -1224,14 +1208,14 @@ questions:
           required: true
         width: half
     maps_to:
-      - emergency_landlord_phone
-      - emergency_plumber_phone
-      - emergency_electrician_phone
-      - emergency_gas_engineer_phone
-      - emergency_locksmith_phone
-      - water_shutoff_location
-      - electricity_fuse_box_location
-      - gas_shutoff_location
+      - "emergency_landlord_phone"
+      - "emergency_plumber_phone"
+      - "emergency_electrician_phone"
+      - "emergency_gas_engineer_phone"
+      - "emergency_locksmith_phone"
+      - "water_shutoff_location"
+      - "electricity_fuse_box_location"
+      - "gas_shutoff_location"
 
   - id: garden_maintenance_schedule
     section: "Premium Enhanced Features"
@@ -1284,11 +1268,11 @@ questions:
         placeholder: "e.g., Garden table and chairs, shed contents, tools provided..."
         width: full
     maps_to:
-      - lawn_mowing_frequency
-      - lawn_mowing_responsibility
-      - hedge_trimming_responsibility
-      - weed_control_responsibility
-      - outdoor_furniture_notes
+      - "lawn_mowing_frequency"
+      - "lawn_mowing_responsibility"
+      - "hedge_trimming_responsibility"
+      - "weed_control_responsibility"
+      - "outdoor_furniture_notes"
 
   - id: move_in_procedures
     section: "Premium Enhanced Features"
@@ -1344,12 +1328,12 @@ questions:
           required: true
         width: half
     maps_to:
-      - pre_tenancy_meeting_required
-      - move_in_inspection_required
-      - photographic_inventory_provided
-      - tenant_handbook_provided
-      - utility_accounts_transfer_deadline
-      - council_tax_registration_deadline
+      - "pre_tenancy_meeting_required"
+      - "move_in_inspection_required"
+      - "photographic_inventory_provided"
+      - "tenant_handbook_provided"
+      - "utility_accounts_transfer_deadline"
+      - "council_tax_registration_deadline"
 
   - id: move_out_procedures
     section: "Premium Enhanced Features"
@@ -1421,14 +1405,14 @@ questions:
           required: true
         width: half
     maps_to:
-      - checkout_inspection_required
-      - professional_cleaning_standard
-      - carpet_cleaning_required
-      - oven_cleaning_required
-      - garden_condition_required
-      - key_return_deadline
-      - forwarding_address_required
-      - deposit_return_timeline
+      - "checkout_inspection_required"
+      - "professional_cleaning_standard"
+      - "carpet_cleaning_required"
+      - "oven_cleaning_required"
+      - "garden_condition_required"
+      - "key_return_deadline"
+      - "forwarding_address_required"
+      - "deposit_return_timeline"
 
   - id: cleaning_standards
     section: "Premium Enhanced Features"
@@ -1471,10 +1455,10 @@ questions:
         helperText: "For tenant's reference if they choose professional cleaning"
         width: half
     maps_to:
-      - regular_cleaning_expectations
-      - deep_cleaning_areas
-      - cleaning_checklist_provided
-      - cleaning_cost_estimates
+      - "regular_cleaning_expectations"
+      - "deep_cleaning_areas"
+      - "cleaning_checklist_provided"
+      - "cleaning_cost_estimates"
 
   - id: detailed_inventory
     section: "Detailed Inventory (Premium Only)"
@@ -1482,7 +1466,7 @@ questions:
     inputType: textarea
     dependsOn:
       questionId: "tenancy_tier"
-      value: "Premium NI Private Tenancy"
+      value: "Premium PRT"
     helperText: "You can upload a separate, detailed inventory in the evidence section; this field is for key points you want reflected in the agreement."
     validation:
       required: false
