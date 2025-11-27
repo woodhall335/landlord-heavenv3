@@ -704,18 +704,6 @@ questions:
     inputType: group
     helperText: "These drive the legal validity summary."
     fields:
-      - id: gas_safety_certificate
-        label: "Current gas safety certificate provided?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
-      - id: electrical_safety_certificate
-        label: "Electrical safety (EICR) provided?"
-        inputType: yes_no
-        validation:
-          required: true
-        width: half
       - id: epc_rating
         label: "EPC rating"
         inputType: select
@@ -730,19 +718,35 @@ questions:
         helperText: "⚠️ F and G ratings are illegal for new tenancies (with limited exceptions)"
         validation:
           required: true
-        width: third
+        width: half
+      - id: right_to_rent_check_date
+        label: "Date right-to-rent checks completed"
+        inputType: date
+        width: half
+      - id: gas_safety_certificate
+        label: "Current gas safety certificate provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: electrical_safety_certificate
+        label: "Electrical safety (EICR) provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
       - id: smoke_alarms_fitted
         label: "Smoke alarms fitted and tested?"
         inputType: yes_no
         validation:
           required: true
-        width: third
+        width: half
       - id: carbon_monoxide_alarms
         label: "CO alarms where required?"
         inputType: yes_no
         validation:
           required: true
-        width: third
+        width: half
       - id: how_to_rent_guide_provided
         label: "Latest 'How to Rent' guide given?"
         inputType: yes_no
@@ -750,10 +754,6 @@ questions:
         helperText: "This is included in your tenancy pack and must be provided to tenants"
         validation:
           required: true
-        width: half
-      - id: right_to_rent_check_date
-        label: "Date right-to-rent checks completed"
-        inputType: date
         width: half
     maps_to:
       - gas_safety_certificate
