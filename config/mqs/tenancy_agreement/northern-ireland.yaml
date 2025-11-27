@@ -1006,6 +1006,373 @@ questions:
       - tenant_insurance_required
       - tenant_insurance_notes
 
+  - id: key_schedule
+    section: "Premium Enhanced Features"
+    question: "Keys and access cards schedule"
+    inputType: group
+    dependsOn:
+      questionId: "tenancy_tier"
+      value: "Premium NI Private Tenancy"
+    helperText: "Record all keys and access cards provided to tenant."
+    fields:
+      - id: number_of_front_door_keys
+        label: "Front door keys (quantity)"
+        inputType: number
+        placeholder: "e.g., 2"
+        validation:
+          required: true
+        width: half
+      - id: number_of_back_door_keys
+        label: "Back door keys (quantity)"
+        inputType: number
+        placeholder: "e.g., 1"
+        width: half
+      - id: number_of_window_keys
+        label: "Window keys (quantity)"
+        inputType: number
+        placeholder: "e.g., 4"
+        width: half
+      - id: number_of_mailbox_keys
+        label: "Mailbox keys (quantity)"
+        inputType: number
+        placeholder: "e.g., 2"
+        width: half
+      - id: access_cards_fobs
+        label: "Access cards/fobs (quantity)"
+        inputType: number
+        placeholder: "e.g., 2"
+        width: half
+      - id: key_replacement_cost
+        label: "Key replacement cost (£ per key)"
+        inputType: number
+        placeholder: "e.g., 25"
+        validation:
+          required: true
+        width: half
+      - id: other_keys_notes
+        label: "Other keys/access devices"
+        inputType: textarea
+        placeholder: "e.g., Garage remote, bike shed key, storage locker..."
+        width: full
+    maps_to:
+      - number_of_front_door_keys
+      - number_of_back_door_keys
+      - number_of_window_keys
+      - number_of_mailbox_keys
+      - access_cards_fobs
+      - key_replacement_cost
+      - other_keys_notes
+
+  - id: emergency_procedures
+    section: "Premium Enhanced Features"
+    question: "Emergency procedures and contacts"
+    inputType: group
+    dependsOn:
+      questionId: "tenancy_tier"
+      value: "Premium NI Private Tenancy"
+    helperText: "Essential emergency contact information and procedures."
+    fields:
+      - id: emergency_landlord_phone
+        label: "Emergency landlord contact number"
+        inputType: text
+        placeholder: "e.g., 07700 900 123"
+        validation:
+          required: true
+        width: half
+      - id: emergency_plumber_phone
+        label: "Emergency plumber contact"
+        inputType: text
+        placeholder: "e.g., 0800 123 456"
+        width: half
+      - id: emergency_electrician_phone
+        label: "Emergency electrician contact"
+        inputType: text
+        placeholder: "e.g., 0800 234 567"
+        width: half
+      - id: emergency_gas_engineer_phone
+        label: "Emergency gas engineer contact"
+        inputType: text
+        placeholder: "e.g., 0800 345 678"
+        width: half
+      - id: emergency_locksmith_phone
+        label: "Emergency locksmith contact"
+        inputType: text
+        placeholder: "e.g., 0800 456 789"
+        width: half
+      - id: water_shutoff_location
+        label: "Water main shutoff valve location"
+        inputType: text
+        placeholder: "e.g., Under kitchen sink"
+        validation:
+          required: true
+        width: half
+      - id: electricity_fuse_box_location
+        label: "Electricity fuse box location"
+        inputType: text
+        placeholder: "e.g., Hallway cupboard"
+        validation:
+          required: true
+        width: half
+      - id: gas_shutoff_location
+        label: "Gas meter/shutoff location"
+        inputType: text
+        placeholder: "e.g., Outside front of property"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - emergency_landlord_phone
+      - emergency_plumber_phone
+      - emergency_electrician_phone
+      - emergency_gas_engineer_phone
+      - emergency_locksmith_phone
+      - water_shutoff_location
+      - electricity_fuse_box_location
+      - gas_shutoff_location
+
+  - id: garden_maintenance_schedule
+    section: "Premium Enhanced Features"
+    question: "Garden and outdoor maintenance"
+    inputType: group
+    dependsOn:
+      questionId: "tenancy_tier"
+      value: "Premium NI Private Tenancy"
+    helperText: "Define garden maintenance responsibilities (if applicable)."
+    fields:
+      - id: lawn_mowing_frequency
+        label: "Lawn mowing frequency"
+        inputType: select
+        options:
+          - "Weekly in growing season"
+          - "Fortnightly in growing season"
+          - "Monthly"
+          - "Tenant discretion"
+          - "N/A - No lawn"
+        width: half
+      - id: lawn_mowing_responsibility
+        label: "Who maintains lawn?"
+        inputType: select
+        options:
+          - "Landlord"
+          - "Tenant"
+          - "Professional gardener (landlord pays)"
+          - "Professional gardener (tenant pays)"
+        width: half
+      - id: hedge_trimming_responsibility
+        label: "Hedge/shrub trimming responsibility"
+        inputType: select
+        options:
+          - "Landlord"
+          - "Tenant"
+          - "Shared"
+          - "N/A"
+        width: half
+      - id: weed_control_responsibility
+        label: "Weed control responsibility"
+        inputType: select
+        options:
+          - "Landlord"
+          - "Tenant"
+          - "N/A"
+        width: half
+      - id: outdoor_furniture_notes
+        label: "Outdoor furniture and storage"
+        inputType: textarea
+        placeholder: "e.g., Garden table and chairs, shed contents, tools provided..."
+        width: full
+    maps_to:
+      - lawn_mowing_frequency
+      - lawn_mowing_responsibility
+      - hedge_trimming_responsibility
+      - weed_control_responsibility
+      - outdoor_furniture_notes
+
+  - id: move_in_procedures
+    section: "Premium Enhanced Features"
+    question: "Move-in procedures and checklist"
+    inputType: group
+    dependsOn:
+      questionId: "tenancy_tier"
+      value: "Premium NI Private Tenancy"
+    helperText: "Define pre-tenancy and move-in requirements."
+    fields:
+      - id: pre_tenancy_meeting_required
+        label: "Pre-tenancy property viewing required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: move_in_inspection_required
+        label: "Joint move-in inspection required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: photographic_inventory_provided
+        label: "Photographic inventory provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: tenant_handbook_provided
+        label: "Tenant handbook provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: utility_accounts_transfer_deadline
+        label: "Utility transfer deadline"
+        inputType: select
+        options:
+          - "Day 1 of tenancy"
+          - "Within 7 days"
+          - "Within 14 days"
+        validation:
+          required: true
+        width: half
+      - id: rates_registration_deadline
+        label: "Domestic rates registration deadline"
+        inputType: select
+        options:
+          - "Day 1 of tenancy"
+          - "Within 7 days"
+          - "Within 14 days"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - pre_tenancy_meeting_required
+      - move_in_inspection_required
+      - photographic_inventory_provided
+      - tenant_handbook_provided
+      - utility_accounts_transfer_deadline
+      - rates_registration_deadline
+
+  - id: move_out_procedures
+    section: "Premium Enhanced Features"
+    question: "Move-out and checkout procedures"
+    inputType: group
+    dependsOn:
+      questionId: "tenancy_tier"
+      value: "Premium NI Private Tenancy"
+    helperText: "Define end-of-tenancy requirements and procedures."
+    fields:
+      - id: checkout_inspection_required
+        label: "Joint checkout inspection required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: professional_cleaning_standard
+        label: "Professional cleaning standard required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: carpet_cleaning_required
+        label: "Professional carpet cleaning required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: oven_cleaning_required
+        label: "Professional oven cleaning required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: garden_condition_required
+        label: "Garden return condition"
+        inputType: select
+        options:
+          - "Same as move-in"
+          - "Lawn mowed and weeded"
+          - "Reasonable condition"
+          - "N/A"
+        width: half
+      - id: key_return_deadline
+        label: "Key return deadline"
+        inputType: select
+        options:
+          - "Last day of tenancy by noon"
+          - "Last day of tenancy by 5pm"
+          - "Within 24 hours of tenancy end"
+          - "Within 48 hours of tenancy end"
+        validation:
+          required: true
+        width: half
+      - id: forwarding_address_required
+        label: "Forwarding address required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: deposit_return_timeline
+        label: "Deposit return timeline"
+        inputType: select
+        options:
+          - "Within 10 days (if no disputes)"
+          - "Within 14 days (if no disputes)"
+          - "Within 30 days (if no disputes)"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - checkout_inspection_required
+      - professional_cleaning_standard
+      - carpet_cleaning_required
+      - oven_cleaning_required
+      - garden_condition_required
+      - key_return_deadline
+      - forwarding_address_required
+      - deposit_return_timeline
+
+  - id: cleaning_standards
+    section: "Premium Enhanced Features"
+    question: "Cleaning standards and expectations"
+    inputType: group
+    dependsOn:
+      questionId: "tenancy_tier"
+      value: "Premium NI Private Tenancy"
+    helperText: "Define expected cleaning standards during and at end of tenancy."
+    fields:
+      - id: regular_cleaning_expectations
+        label: "Regular cleaning expectations"
+        inputType: textarea
+        placeholder: "e.g., Keep property in clean and habitable condition, regular vacuuming, bathroom cleaning..."
+        validation:
+          required: true
+        width: full
+      - id: deep_cleaning_areas
+        label: "Areas requiring deep cleaning at checkout"
+        inputType: multiselect
+        options:
+          - "Kitchen appliances (oven, hob, extractor)"
+          - "Bathrooms (tiles, grout, fixtures)"
+          - "Windows (inside and out)"
+          - "Carpets (professional clean)"
+          - "Hard floors (professional clean)"
+          - "Curtains/blinds"
+          - "Skirting boards and doors"
+        width: full
+      - id: cleaning_checklist_provided
+        label: "Detailed cleaning checklist provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: cleaning_cost_estimates
+        label: "Estimated professional cleaning costs (£)"
+        inputType: number
+        placeholder: "e.g., 250"
+        helperText: "For tenant's reference if they choose professional cleaning"
+        width: half
+    maps_to:
+      - regular_cleaning_expectations
+      - deep_cleaning_areas
+      - cleaning_checklist_provided
+      - cleaning_cost_estimates
+
   - id: detailed_inventory
     section: "Detailed Inventory (Premium Only)"
     question: "Add any specific notes about the condition of the property and items at the start of the tenancy."
