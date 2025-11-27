@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tenant Welcome Pack</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a202c;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #2c5282;
+    }
+
+    .document-title {
+      font-size: 24pt;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      font-size: 12pt;
+      color: #4a5568;
+      margin-top: 8px;
+    }
+
+    .welcome-message {
+      background: linear-gradient(135deg, #e6f2ff 0%, #cce5ff 100%);
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid #2c5282;
+    }
+
+    .section {
+      margin: 25px 0;
+      page-break-inside: avoid;
+    }
+
+    .section-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #e6f2ff 0%, #cce5ff 100%);
+      border-left: 4px solid #2c5282;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+      margin-bottom: 15px;
+    }
+
+    .info-item {
+      padding: 8px 0;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: #2d3748;
+      display: block;
+      margin-bottom: 3px;
+      font-size: 10pt;
+    }
+
+    .info-value {
+      color: #1a202c;
+      display: block;
+      font-size: 11pt;
+    }
+
+    .emergency-box {
+      background: #fff5f5;
+      border: 2px solid #e53e3e;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .emergency-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #c53030;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .contact-box {
+      background: #f7fafc;
+      border: 1px solid #cbd5e0;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 10px 0;
+    }
+
+    .checklist {
+      list-style: none;
+      margin: 15px 0;
+    }
+
+    .checklist li {
+      padding: 8px 0;
+      padding-left: 30px;
+      position: relative;
+    }
+
+    .checklist li:before {
+      content: "□";
+      position: absolute;
+      left: 0;
+      font-size: 14pt;
+      color: #2c5282;
+    }
+
+    .info-box {
+      background: #f0fff4;
+      border-left: 4px solid #38a169;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e2e8f0;
+      font-size: 9pt;
+      color: #718096;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+
+    th {
+      background: #2c5282;
+      color: white;
+      padding: 10px;
+      text-align: left;
+      font-size: 10pt;
+    }
+
+    td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f7fafc;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="document-title">
+      Tenant Welcome Pack
+    </div>
+    <div class="subtitle">Your Complete Move-In Guide</div>
+    <div class="subtitle">{{property_address}}</div>
+  </div>
+
+  <div class="welcome-message">
+    <h2 style="color: #2c5282; margin-bottom: 10px;">Welcome to Your New Home!</h2>
+    <p>
+      We're delighted to welcome you to {{property_address}}. This comprehensive guide contains everything you need to know about your new home, including essential contacts, property information, and important procedures.
+    </p>
+    <p style="margin-top: 10px;">
+      Please keep this pack in a safe place for reference throughout your tenancy.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">📞 Emergency Contacts</div>
+
+    <div class="emergency-box">
+      <div class="emergency-title">🚨 IN CASE OF EMERGENCY</div>
+
+      <div class="contact-box">
+        <div class="info-label">Emergency Landlord Contact</div>
+        <div class="info-value" style="font-size: 14pt; font-weight: 700; color: #c53030;">
+          {{emergency_landlord_phone}}
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+        {{#if emergency_plumber_phone}}
+        <div class="contact-box">
+          <div class="info-label">Emergency Plumber</div>
+          <div class="info-value">{{emergency_plumber_phone}}</div>
+        </div>
+        {{/if}}
+
+        {{#if emergency_electrician_phone}}
+        <div class="contact-box">
+          <div class="info-label">Emergency Electrician</div>
+          <div class="info-value">{{emergency_electrician_phone}}</div>
+        </div>
+        {{/if}}
+
+        {{#if emergency_gas_engineer_phone}}
+        <div class="contact-box">
+          <div class="info-label">Emergency Gas Engineer</div>
+          <div class="info-value">{{emergency_gas_engineer_phone}}</div>
+        </div>
+        {{/if}}
+
+        {{#if emergency_locksmith_phone}}
+        <div class="contact-box">
+          <div class="info-label">Emergency Locksmith</div>
+          <div class="info-value">{{emergency_locksmith_phone}}</div>
+        </div>
+        {{/if}}
+      </div>
+
+      <div class="info-box" style="margin-top: 15px;">
+        <strong>National Emergency Numbers:</strong><br/>
+        • Gas Leak: 0800 111 999 (National Grid)<br/>
+        • Electricity Failure: 105 (Power Cut Helpline)<br/>
+        • Water Leak: Contact your water supplier<br/>
+        • Emergency Services: 999 or 112
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">🔧 Essential Property Information</div>
+
+    <h3 style="color: #2c5282; margin: 20px 0 10px 0;">Utility Shutoff Locations</h3>
+    <div class="info-grid">
+      {{#if water_shutoff_location}}
+      <div class="info-item">
+        <span class="info-label">💧 Water Main Shutoff:</span>
+        <span class="info-value">{{water_shutoff_location}}</span>
+      </div>
+      {{/if}}
+
+      {{#if electricity_fuse_box_location}}
+      <div class="info-item">
+        <span class="info-label">⚡ Electricity Fuse Box:</span>
+        <span class="info-value">{{electricity_fuse_box_location}}</span>
+      </div>
+      {{/if}}
+
+      {{#if gas_shutoff_location}}
+      <div class="info-item">
+        <span class="info-label">🔥 Gas Meter/Shutoff:</span>
+        <span class="info-value">{{gas_shutoff_location}}</span>
+      </div>
+      {{/if}}
+    </div>
+
+    {{#if meter_reading_gas}}
+    <h3 style="color: #2c5282; margin: 20px 0 10px 0;">Starting Meter Readings</h3>
+    <table>
+      <tr>
+        <th>Utility</th>
+        <th>Start Reading</th>
+        <th>Date</th>
+      </tr>
+      {{#if meter_reading_gas}}
+      <tr>
+        <td><strong>Gas</strong></td>
+        <td>{{meter_reading_gas}}</td>
+        <td>{{format_date tenancy_start_date}}</td>
+      </tr>
+      {{/if}}
+      {{#if meter_reading_electric}}
+      <tr>
+        <td><strong>Electricity</strong></td>
+        <td>{{meter_reading_electric}}</td>
+        <td>{{format_date tenancy_start_date}}</td>
+      </tr>
+      {{/if}}
+      {{#if meter_reading_water}}
+      <tr>
+        <td><strong>Water</strong></td>
+        <td>{{meter_reading_water}}</td>
+        <td>{{format_date tenancy_start_date}}</td>
+      </tr>
+      {{/if}}
+    </table>
+    {{/if}}
+  </div>
+
+  <div class="section">
+    <div class="section-title">✅ Move-In Checklist</div>
+
+    <p style="margin-bottom: 15px;">Please complete these tasks within your first week:</p>
+
+    <ul class="checklist">
+      <li>Register with utility companies ({{utility_transfer_responsibility}} responsible)</li>
+      <li>Register for council tax by: {{council_tax_registration_deadline}}</li>
+      <li>Update your address with GP, dentist, and employer</li>
+      <li>Set up standing order for rent payments</li>
+      <li>Read through your tenancy agreement carefully</li>
+      {{#if photographic_inventory_provided}}
+      <li>Review photographic inventory and report any discrepancies within 7 days</li>
+      {{/if}}
+      {{#if tenant_handbook_provided}}
+      <li>Read the tenant handbook for appliance instructions</li>
+      {{/if}}
+      <li>Test all smoke and CO alarms</li>
+      <li>Locate water/gas/electric shutoffs</li>
+      <li>Save emergency contact numbers in your phone</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">💰 Rent Payment Details</div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Monthly Rent:</span>
+        <span class="info-value">£{{rent_amount}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Due Date:</span>
+        <span class="info-value">{{rent_due_day}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Payment Method:</span>
+        <span class="info-value">{{payment_method}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Account Name:</span>
+        <span class="info-value">{{bank_account_name}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Sort Code:</span>
+        <span class="info-value">{{bank_sort_code}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Account Number:</span>
+        <span class="info-value">{{bank_account_number}}</span>
+      </div>
+    </div>
+
+    {{#if grace_period_days}}
+    <div class="info-box">
+      <strong>Late Payment Terms:</strong><br/>
+      Grace period: {{grace_period_days}} days<br/>
+      {{#if late_payment_interest_rate}}
+      Interest rate on late payments: {{late_payment_interest_rate}}%<br/>
+      {{/if}}
+      {{#if late_payment_admin_fee}}
+      Administrative fee for late payment: £{{late_payment_admin_fee}}
+      {{/if}}
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="section">
+    <div class="section-title">🏠 Property Maintenance</div>
+
+    <h3 style="color: #2c5282; margin: 20px 0 10px 0;">Maintenance Schedule</h3>
+
+    <table>
+      <tr>
+        <th>Service</th>
+        <th>Frequency</th>
+        <th>Arranged By</th>
+      </tr>
+      {{#if boiler_service_frequency}}
+      <tr>
+        <td>Boiler/Heating Service</td>
+        <td>{{boiler_service_frequency}}</td>
+        <td>{{boiler_service_responsibility}}</td>
+      </tr>
+      {{/if}}
+      {{#if gutter_cleaning_frequency}}
+      <tr>
+        <td>Gutter Cleaning</td>
+        <td>{{gutter_cleaning_frequency}}</td>
+        <td>{{gutter_cleaning_responsibility}}</td>
+      </tr>
+      {{/if}}
+      {{#if window_cleaning_frequency}}
+      <tr>
+        <td>Window Cleaning</td>
+        <td>{{window_cleaning_frequency}}</td>
+        <td>Tenant</td>
+      </tr>
+      {{/if}}
+    </table>
+
+    {{#if appliance_maintenance_notes}}
+    <div class="info-item" style="margin-top: 15px;">
+      <span class="info-label">Appliance Maintenance Notes:</span>
+      <span class="info-value">{{appliance_maintenance_notes}}</span>
+    </div>
+    {{/if}}
+
+    <h3 style="color: #2c5282; margin: 20px 0 10px 0;">Reporting Repairs</h3>
+    <div class="info-box">
+      <strong>Non-Emergency Repairs:</strong> Contact {{landlord_full_name}} on {{landlord_phone}}<br/>
+      <strong>Notice Period:</strong> {{contractor_access_notice_period}}<br/>
+      <strong>Access Hours:</strong> {{contractor_access_hours}}
+    </div>
+  </div>
+
+  {{#if has_garden}}
+  <div class="section">
+    <div class="section-title">🌳 Garden Maintenance</div>
+
+    <div class="info-grid">
+      {{#if lawn_mowing_frequency}}
+      <div class="info-item">
+        <span class="info-label">Lawn Mowing:</span>
+        <span class="info-value">{{lawn_mowing_frequency}} - {{lawn_mowing_responsibility}}</span>
+      </div>
+      {{/if}}
+      {{#if hedge_trimming_responsibility}}
+      <div class="info-item">
+        <span class="info-label">Hedge/Shrub Trimming:</span>
+        <span class="info-value">{{hedge_trimming_responsibility}}</span>
+      </div>
+      {{/if}}
+      {{#if weed_control_responsibility}}
+      <div class="info-item">
+        <span class="info-label">Weed Control:</span>
+        <span class="info-value">{{weed_control_responsibility}}</span>
+      </div>
+      {{/if}}
+    </div>
+
+    {{#if outdoor_furniture_notes}}
+    <div class="info-item" style="margin-top: 15px;">
+      <span class="info-label">Outdoor Equipment & Furniture:</span>
+      <span class="info-value">{{outdoor_furniture_notes}}</span>
+    </div>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  <div class="section">
+    <div class="section-title">📋 House Rules & Responsibilities</div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Council Tax:</span>
+        <span class="info-value">{{council_tax_responsibility}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Utilities:</span>
+        <span class="info-value">{{utilities_responsibility}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Pets:</span>
+        <span class="info-value">{{#if pets_allowed}}Allowed: {{approved_pets}}{{else}}Not permitted{{/if}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Smoking:</span>
+        <span class="info-value">{{#if smoking_allowed}}Permitted{{else}}Not permitted{{/if}}</span>
+      </div>
+    </div>
+
+    {{#if tenant_insurance_required}}
+    <div class="info-box" style="background: #fff5f5; border-color: #e53e3e;">
+      <strong>⚠️ Contents Insurance Required</strong><br/>
+      You must maintain valid contents insurance throughout your tenancy.
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="footer">
+    <p><strong>Questions or Concerns?</strong></p>
+    <p>Contact: {{landlord_full_name}} | Phone: {{landlord_phone}} | Email: {{landlord_email}}</p>
+    <p style="margin-top: 10px;">This Welcome Pack forms part of your Premium AST tenancy</p>
+    <p>Tenancy Start Date: {{format_date tenancy_start_date}}</p>
+  </div>
+</body>
+</html>
