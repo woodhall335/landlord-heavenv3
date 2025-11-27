@@ -20,7 +20,46 @@ questions:
     maps_to:
       - product_tier
 
-  # 1. Property details
+  # 1. AST Suitability Check
+  - id: ast_suitability
+    section: "Tenancy Type Check"
+    question: "AST suitability check"
+    inputType: group
+    helperText: "Basic checks to ensure this is a valid AST. For validation/warnings only."
+    fields:
+      - id: tenant_is_individual
+        label: "Is the tenant an individual (not a company)?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: main_home
+        label: "Will this be the tenant's main home?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: landlord_lives_at_property
+        label: "Does the landlord live at the property?"
+        inputType: yes_no
+        helperText: "If yes, this may not be an AST"
+        validation:
+          required: true
+        width: half
+      - id: holiday_or_licence
+        label: "Is this a holiday let or licence arrangement?"
+        inputType: yes_no
+        helperText: "If yes, an AST may not be appropriate"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - tenancy.ast_suitability.tenant_is_individual
+      - tenancy.ast_suitability.main_home
+      - tenancy.ast_suitability.landlord_lives_at_property
+      - tenancy.ast_suitability.holiday_or_licence
+
+  # 2. Property details
   - id: property_address
     section: Property Details
     question: "Rental property address"
@@ -648,11 +687,32 @@ questions:
         label: "Date you will protect the deposit"
         inputType: date
         width: half
+      - id: deposit_already_protected
+        label: "Is the deposit already protected?"
+        inputType: yes_no
+        width: half
+      - id: deposit_reference_number
+        label: "Deposit protection reference number (if already protected)"
+        inputType: text
+        placeholder: "Reference from scheme"
+        width: half
     maps_to:
       - deposit_amount
       - deposit_scheme_name
       - deposit_paid_date
       - deposit_protection_date
+      - deposit.already_protected
+      - deposit.reference_number
+
+  - id: prescribed_information_served
+    section: Deposit
+    question: "Prescribed information compliance"
+    inputType: yes_no
+    helperText: "Will the deposit prescribed information be (or has it been) served within 30 days of receipt? Used for risk scoring (e.g. S21 compatibility)."
+    validation:
+      required: true
+    maps_to:
+      - deposit.prescribed_information_served
 
   # 7. Bills & utilities
   - id: bills_utilities
@@ -1150,6 +1210,15 @@ questions:
           - "Currently licensed"
           - "Applied/awaiting"
         width: half
+      - id: hmo_licence_number
+        label: "HMO licence number (if licensed)"
+        inputType: text
+        placeholder: "Licence reference number"
+        width: half
+      - id: hmo_licence_expiry
+        label: "HMO licence expiry date (if licensed)"
+        inputType: date
+        width: half
       - id: communal_cleaning
         label: "Who cleans communal areas?"
         inputType: select
@@ -1164,6 +1233,8 @@ questions:
       - number_of_sharers
       - communal_areas
       - hmo_licence_status
+      - hmo_licence_number
+      - hmo_licence_expiry
       - communal_cleaning
 
   - id: insurance_expectations
