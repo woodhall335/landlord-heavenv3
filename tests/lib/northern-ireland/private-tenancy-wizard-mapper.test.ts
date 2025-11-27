@@ -1,4 +1,4 @@
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect } from 'vitest';
 import { mapWizardToPrivateTenancyData } from '@/lib/documents/northern-ireland/private-tenancy-wizard-mapper';
 
 describe('Private Tenancy Wizard Mapper - Northern Ireland', () => {
