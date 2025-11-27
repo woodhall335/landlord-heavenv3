@@ -625,7 +625,6 @@ questions:
         label: "Deposit amount"
         inputType: currency
         placeholder: "1400"
-        helperText: "Maximum 5 weeks rent (Tenant Fees Act 2019). Will be validated against rent amount."
         validation:
           required: true
           min: 0
@@ -715,7 +714,6 @@ questions:
           - "E"
           - "F"
           - "G"
-        helperText: "⚠️ F and G ratings are illegal for new tenancies (with limited exceptions)"
         validation:
           required: true
         width: half
@@ -751,7 +749,6 @@ questions:
         label: "Latest 'How to Rent' guide given?"
         inputType: yes_no
         defaultValue: true
-        helperText: "This is included in your tenancy pack and must be provided to tenants"
         validation:
           required: true
         width: half

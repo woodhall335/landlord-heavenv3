@@ -126,7 +126,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
   // Auto-calculate end date based on start date + term length
   useEffect(() => {
-    if (currentQuestion?.id === 'tenancy_start_and_term' && currentAnswer) {
+    if (currentQuestion?.id === 'tenancy_type_and_dates' && currentAnswer) {
       const startDate = currentAnswer.tenancy_start_date;
       const termLength = currentAnswer.term_length;
       const isFixedTerm = currentAnswer.is_fixed_term;
