@@ -301,7 +301,7 @@ export async function generateStandardAST(
 
   // List of all templates to merge (in order)
   const templatePaths = [
-    'uk/england-wales/templates/standard_ast.hbs',
+    'uk/england-wales/templates/standard_ast_formatted.hbs',
     'shared/templates/terms_and_conditions.hbs',
     'shared/templates/certificate_of_curation.hbs',
     'uk/england-wales/templates/ast_legal_validity_summary.hbs',
