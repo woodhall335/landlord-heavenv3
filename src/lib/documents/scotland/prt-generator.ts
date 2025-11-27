@@ -150,7 +150,91 @@ export interface PRTData {
   // Additional schedules
   additional_schedules?: string;
 
+  // Premium Enhanced Features - HMO
+  is_hmo?: boolean;
+  hmo_licence_status?: string;
+  hmo_licence_number?: string;
+  hmo_licence_expiry?: string;
+  number_of_sharers?: number;
+
+  // Premium Enhanced Features - Meter Readings
+  meter_reading_gas?: string;
+  meter_reading_electric?: string;
+  meter_reading_water?: string;
+  utility_transfer_responsibility?: string;
+
+  // Premium Enhanced Features - Late Payment Interest
+  late_payment_interest_applicable?: boolean;
+  late_payment_interest_rate?: number;
+  grace_period_days?: number;
+  late_payment_admin_fee?: number;
+
+  // Premium Enhanced Features - Key Schedule
+  number_of_front_door_keys?: number;
+  number_of_back_door_keys?: number;
+  number_of_window_keys?: number;
+  number_of_mailbox_keys?: number;
+  access_cards_fobs?: number;
+  key_replacement_cost?: number;
+  other_keys_notes?: string;
+
+  // Premium Enhanced Features - Contractor Access
+  contractor_access_notice_period?: string;
+  emergency_access_allowed?: boolean;
+  contractor_access_hours?: string;
+  tenant_presence_required?: boolean;
+
+  // Premium Enhanced Features - Emergency Procedures
+  emergency_landlord_phone?: string;
+  emergency_plumber_phone?: string;
+  emergency_electrician_phone?: string;
+  emergency_gas_engineer_phone?: string;
+  emergency_locksmith_phone?: string;
+  water_shutoff_location?: string;
+  electricity_fuse_box_location?: string;
+  gas_shutoff_location?: string;
+
+  // Premium Enhanced Features - Maintenance Schedule
+  boiler_service_frequency?: string;
+  boiler_service_responsibility?: string;
+  gutter_cleaning_frequency?: string;
+  gutter_cleaning_responsibility?: string;
+  window_cleaning_frequency?: string;
+  appliance_maintenance_notes?: string;
+
+  // Premium Enhanced Features - Garden Maintenance
+  lawn_mowing_frequency?: string;
+  lawn_mowing_responsibility?: string;
+  hedge_trimming_responsibility?: string;
+  weed_control_responsibility?: string;
+  outdoor_furniture_notes?: string;
+
+  // Premium Enhanced Features - Move-In Procedures
+  pre_tenancy_meeting_required?: boolean;
+  move_in_inspection_required?: boolean;
+  photographic_inventory_provided?: boolean;
+  tenant_handbook_provided?: boolean;
+  utility_accounts_transfer_deadline?: string;
+  council_tax_registration_deadline?: string;
+
+  // Premium Enhanced Features - Move-Out Procedures
+  checkout_inspection_required?: boolean;
+  professional_cleaning_standard?: boolean;
+  carpet_cleaning_required?: boolean;
+  oven_cleaning_required?: boolean;
+  garden_condition_required?: string;
+  key_return_deadline?: string;
+  forwarding_address_required?: boolean;
+  deposit_return_timeline?: string;
+
+  // Premium Enhanced Features - Cleaning Standards
+  regular_cleaning_expectations?: string;
+  deep_cleaning_areas?: string[];
+  cleaning_checklist_provided?: boolean;
+  cleaning_cost_estimates?: number;
+
   // Generation metadata
+  product_tier?: string;
   document_id?: string;
   generation_timestamp?: string;
 }
