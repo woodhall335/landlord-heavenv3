@@ -696,6 +696,43 @@ questions:
       - utilities_responsibility
       - internet_responsibility
 
+  - id: meter_readings
+    section: Bills & Utilities
+    question: "Meter readings and utility accounts"
+    inputType: group
+    helperText: "Record start readings and transfer arrangements."
+    fields:
+      - id: meter_reading_gas
+        label: "Gas meter reading (start)"
+        inputType: text
+        placeholder: "e.g., 12345"
+        width: half
+      - id: meter_reading_electric
+        label: "Electric meter reading (start)"
+        inputType: text
+        placeholder: "e.g., 67890"
+        width: half
+      - id: meter_reading_water
+        label: "Water meter reading (start, if applicable)"
+        inputType: text
+        placeholder: "e.g., 11223"
+        width: half
+      - id: utility_transfer_responsibility
+        label: "Who arranges utility account transfers?"
+        inputType: select
+        options:
+          - "Tenant"
+          - "Landlord"
+          - "Agent"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - meter_reading_gas
+      - meter_reading_electric
+      - meter_reading_water
+      - utility_transfer_responsibility
+
   # 8. Safety & legal compliance
   - id: safety_compliance
     section: Safety & Compliance
@@ -1154,3 +1191,537 @@ questions:
     helperText: "Describe any detailed inventory or schedule you will attach."
     maps_to:
       - inventory_schedule_notes
+
+  # ============================================================
+  # PREMIUM ENHANCED FEATURES
+  # ============================================================
+
+  - id: late_payment_interest
+    section: Premium Enhanced Features
+    question: "Late payment interest and charges"
+    inputType: group
+    dependsOn:
+      questionId: ast_tier
+      value: "Premium AST"
+    helperText: "Set terms for late rent payments (must comply with statutory limits)."
+    fields:
+      - id: late_payment_interest_applicable
+        label: "Apply interest on late payments?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: late_payment_interest_rate
+        label: "Interest rate (%)"
+        inputType: number
+        placeholder: "e.g., 3"
+        helperText: "Statutory interest is typically 3% above Bank of England base rate"
+        dependsOn:
+          questionId: late_payment_interest_applicable
+          value: true
+        width: half
+      - id: grace_period_days
+        label: "Grace period (days)"
+        inputType: number
+        placeholder: "e.g., 14"
+        helperText: "Number of days before interest applies"
+        dependsOn:
+          questionId: late_payment_interest_applicable
+          value: true
+        width: half
+      - id: late_payment_admin_fee
+        label: "Administrative fee (£)"
+        inputType: number
+        placeholder: "e.g., 50"
+        helperText: "Fee for processing late payment (must be reasonable)"
+        dependsOn:
+          questionId: late_payment_interest_applicable
+          value: true
+        width: half
+    maps_to:
+      - late_payment_interest_applicable
+      - late_payment_interest_rate
+      - grace_period_days
+      - late_payment_admin_fee
+
+  - id: key_schedule
+    section: Premium Enhanced Features
+    question: "Keys and access cards schedule"
+    inputType: group
+    dependsOn:
+      questionId: ast_tier
+      value: "Premium AST"
+    helperText: "Record all keys and access cards provided to tenant."
+    fields:
+      - id: number_of_front_door_keys
+        label: "Front door keys (quantity)"
+        inputType: number
+        placeholder: "e.g., 2"
+        validation:
+          required: true
+        width: half
+      - id: number_of_back_door_keys
+        label: "Back door keys (quantity)"
+        inputType: number
+        placeholder: "e.g., 1"
+        width: half
+      - id: number_of_window_keys
+        label: "Window keys (quantity)"
+        inputType: number
+        placeholder: "e.g., 4"
+        width: half
+      - id: number_of_mailbox_keys
+        label: "Mailbox keys (quantity)"
+        inputType: number
+        placeholder: "e.g., 2"
+        width: half
+      - id: access_cards_fobs
+        label: "Access cards/fobs (quantity)"
+        inputType: number
+        placeholder: "e.g., 2"
+        width: half
+      - id: key_replacement_cost
+        label: "Key replacement cost (£ per key)"
+        inputType: number
+        placeholder: "e.g., 25"
+        validation:
+          required: true
+        width: half
+      - id: other_keys_notes
+        label: "Other keys/access devices"
+        inputType: textarea
+        placeholder: "e.g., Garage remote, bike shed key, storage locker..."
+        width: full
+    maps_to:
+      - number_of_front_door_keys
+      - number_of_back_door_keys
+      - number_of_window_keys
+      - number_of_mailbox_keys
+      - access_cards_fobs
+      - key_replacement_cost
+      - other_keys_notes
+
+  - id: contractor_access
+    section: Premium Enhanced Features
+    question: "Contractor and tradesperson access"
+    inputType: group
+    dependsOn:
+      questionId: ast_tier
+      value: "Premium AST"
+    helperText: "Define terms for contractors accessing property for repairs."
+    fields:
+      - id: contractor_access_notice_period
+        label: "Notice period for contractor access"
+        inputType: select
+        options:
+          - "24 hours"
+          - "48 hours"
+          - "72 hours"
+        validation:
+          required: true
+        width: half
+      - id: emergency_access_allowed
+        label: "Allow emergency access without notice?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: contractor_access_hours
+        label: "Permitted access hours"
+        inputType: text
+        placeholder: "e.g., 9am-5pm weekdays"
+        validation:
+          required: true
+        width: half
+      - id: tenant_presence_required
+        label: "Must tenant be present?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - contractor_access_notice_period
+      - emergency_access_allowed
+      - contractor_access_hours
+      - tenant_presence_required
+
+  - id: emergency_procedures
+    section: Premium Enhanced Features
+    question: "Emergency procedures and contacts"
+    inputType: group
+    dependsOn:
+      questionId: ast_tier
+      value: "Premium AST"
+    helperText: "Essential emergency contact information and procedures."
+    fields:
+      - id: emergency_landlord_phone
+        label: "Emergency landlord contact number"
+        inputType: text
+        placeholder: "e.g., 07700 900 123"
+        validation:
+          required: true
+        width: half
+      - id: emergency_plumber_phone
+        label: "Emergency plumber contact"
+        inputType: text
+        placeholder: "e.g., 0800 123 456"
+        width: half
+      - id: emergency_electrician_phone
+        label: "Emergency electrician contact"
+        inputType: text
+        placeholder: "e.g., 0800 234 567"
+        width: half
+      - id: emergency_gas_engineer_phone
+        label: "Emergency gas engineer contact"
+        inputType: text
+        placeholder: "e.g., 0800 345 678"
+        width: half
+      - id: emergency_locksmith_phone
+        label: "Emergency locksmith contact"
+        inputType: text
+        placeholder: "e.g., 0800 456 789"
+        width: half
+      - id: water_shutoff_location
+        label: "Water main shutoff valve location"
+        inputType: text
+        placeholder: "e.g., Under kitchen sink"
+        validation:
+          required: true
+        width: half
+      - id: electricity_fuse_box_location
+        label: "Electricity fuse box location"
+        inputType: text
+        placeholder: "e.g., Hallway cupboard"
+        validation:
+          required: true
+        width: half
+      - id: gas_shutoff_location
+        label: "Gas meter/shutoff location"
+        inputType: text
+        placeholder: "e.g., Outside front of property"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - emergency_landlord_phone
+      - emergency_plumber_phone
+      - emergency_electrician_phone
+      - emergency_gas_engineer_phone
+      - emergency_locksmith_phone
+      - water_shutoff_location
+      - electricity_fuse_box_location
+      - gas_shutoff_location
+
+  - id: maintenance_schedule
+    section: Premium Enhanced Features
+    question: "Property maintenance schedule"
+    inputType: group
+    dependsOn:
+      questionId: ast_tier
+      value: "Premium AST"
+    helperText: "Define regular maintenance responsibilities and schedule."
+    fields:
+      - id: boiler_service_frequency
+        label: "Boiler/heating service frequency"
+        inputType: select
+        options:
+          - "Annual"
+          - "Bi-annual"
+          - "As required"
+        validation:
+          required: true
+        width: half
+      - id: boiler_service_responsibility
+        label: "Who arranges boiler service?"
+        inputType: select
+        options:
+          - "Landlord"
+          - "Tenant"
+          - "Agent"
+        validation:
+          required: true
+        width: half
+      - id: gutter_cleaning_frequency
+        label: "Gutter cleaning frequency"
+        inputType: select
+        options:
+          - "Annual"
+          - "Bi-annual"
+          - "As required"
+        validation:
+          required: true
+        width: half
+      - id: gutter_cleaning_responsibility
+        label: "Who arranges gutter cleaning?"
+        inputType: select
+        options:
+          - "Landlord"
+          - "Tenant"
+          - "Agent"
+        validation:
+          required: true
+        width: half
+      - id: window_cleaning_frequency
+        label: "Window cleaning frequency"
+        inputType: select
+        options:
+          - "Monthly"
+          - "Quarterly"
+          - "Bi-annual"
+          - "Tenant responsibility"
+        width: half
+      - id: appliance_maintenance_notes
+        label: "Appliance maintenance notes"
+        inputType: textarea
+        placeholder: "e.g., Washing machine filter cleaning, dishwasher salt refills..."
+        width: full
+    maps_to:
+      - boiler_service_frequency
+      - boiler_service_responsibility
+      - gutter_cleaning_frequency
+      - gutter_cleaning_responsibility
+      - window_cleaning_frequency
+      - appliance_maintenance_notes
+
+  - id: garden_maintenance_schedule
+    section: Premium Enhanced Features
+    question: "Garden and outdoor maintenance"
+    inputType: group
+    dependsOn:
+      questionId: ast_tier
+      value: "Premium AST"
+    helperText: "Define garden maintenance responsibilities (if applicable)."
+    fields:
+      - id: lawn_mowing_frequency
+        label: "Lawn mowing frequency"
+        inputType: select
+        options:
+          - "Weekly in growing season"
+          - "Fortnightly in growing season"
+          - "Monthly"
+          - "Tenant discretion"
+          - "N/A - No lawn"
+        width: half
+      - id: lawn_mowing_responsibility
+        label: "Who maintains lawn?"
+        inputType: select
+        options:
+          - "Landlord"
+          - "Tenant"
+          - "Professional gardener (landlord pays)"
+          - "Professional gardener (tenant pays)"
+        width: half
+      - id: hedge_trimming_responsibility
+        label: "Hedge/shrub trimming responsibility"
+        inputType: select
+        options:
+          - "Landlord"
+          - "Tenant"
+          - "Shared"
+          - "N/A"
+        width: half
+      - id: weed_control_responsibility
+        label: "Weed control responsibility"
+        inputType: select
+        options:
+          - "Landlord"
+          - "Tenant"
+          - "N/A"
+        width: half
+      - id: outdoor_furniture_notes
+        label: "Outdoor furniture and storage"
+        inputType: textarea
+        placeholder: "e.g., Garden table and chairs, shed contents, tools provided..."
+        width: full
+    maps_to:
+      - lawn_mowing_frequency
+      - lawn_mowing_responsibility
+      - hedge_trimming_responsibility
+      - weed_control_responsibility
+      - outdoor_furniture_notes
+
+  - id: move_in_procedures
+    section: Premium Enhanced Features
+    question: "Move-in procedures and checklist"
+    inputType: group
+    dependsOn:
+      questionId: ast_tier
+      value: "Premium AST"
+    helperText: "Define pre-tenancy and move-in requirements."
+    fields:
+      - id: pre_tenancy_meeting_required
+        label: "Pre-tenancy property viewing required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: move_in_inspection_required
+        label: "Joint move-in inspection required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: photographic_inventory_provided
+        label: "Photographic inventory provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: tenant_handbook_provided
+        label: "Tenant handbook provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: utility_accounts_transfer_deadline
+        label: "Utility transfer deadline"
+        inputType: select
+        options:
+          - "Day 1 of tenancy"
+          - "Within 7 days"
+          - "Within 14 days"
+        validation:
+          required: true
+        width: half
+      - id: council_tax_registration_deadline
+        label: "Council tax registration deadline"
+        inputType: select
+        options:
+          - "Day 1 of tenancy"
+          - "Within 7 days"
+          - "Within 14 days"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - pre_tenancy_meeting_required
+      - move_in_inspection_required
+      - photographic_inventory_provided
+      - tenant_handbook_provided
+      - utility_accounts_transfer_deadline
+      - council_tax_registration_deadline
+
+  - id: move_out_procedures
+    section: Premium Enhanced Features
+    question: "Move-out and checkout procedures"
+    inputType: group
+    dependsOn:
+      questionId: ast_tier
+      value: "Premium AST"
+    helperText: "Define end-of-tenancy requirements and procedures."
+    fields:
+      - id: checkout_inspection_required
+        label: "Joint checkout inspection required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: professional_cleaning_standard
+        label: "Professional cleaning standard required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: carpet_cleaning_required
+        label: "Professional carpet cleaning required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: oven_cleaning_required
+        label: "Professional oven cleaning required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: garden_condition_required
+        label: "Garden return condition"
+        inputType: select
+        options:
+          - "Same as move-in"
+          - "Lawn mowed and weeded"
+          - "Reasonable condition"
+          - "N/A"
+        width: half
+      - id: key_return_deadline
+        label: "Key return deadline"
+        inputType: select
+        options:
+          - "Last day of tenancy by noon"
+          - "Last day of tenancy by 5pm"
+          - "Within 24 hours of tenancy end"
+          - "Within 48 hours of tenancy end"
+        validation:
+          required: true
+        width: half
+      - id: forwarding_address_required
+        label: "Forwarding address required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: deposit_return_timeline
+        label: "Deposit return timeline"
+        inputType: select
+        options:
+          - "Within 10 days (if no disputes)"
+          - "Within 14 days (if no disputes)"
+          - "Within 30 days (if no disputes)"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - checkout_inspection_required
+      - professional_cleaning_standard
+      - carpet_cleaning_required
+      - oven_cleaning_required
+      - garden_condition_required
+      - key_return_deadline
+      - forwarding_address_required
+      - deposit_return_timeline
+
+  - id: cleaning_standards
+    section: Premium Enhanced Features
+    question: "Cleaning standards and expectations"
+    inputType: group
+    dependsOn:
+      questionId: ast_tier
+      value: "Premium AST"
+    helperText: "Define expected cleaning standards during and at end of tenancy."
+    fields:
+      - id: regular_cleaning_expectations
+        label: "Regular cleaning expectations"
+        inputType: textarea
+        placeholder: "e.g., Keep property in clean and habitable condition, regular vacuuming, bathroom cleaning..."
+        validation:
+          required: true
+        width: full
+      - id: deep_cleaning_areas
+        label: "Areas requiring deep cleaning at checkout"
+        inputType: multiselect
+        options:
+          - "Kitchen appliances (oven, hob, extractor)"
+          - "Bathrooms (tiles, grout, fixtures)"
+          - "Windows (inside and out)"
+          - "Carpets (professional clean)"
+          - "Hard floors (professional clean)"
+          - "Curtains/blinds"
+          - "Skirting boards and doors"
+        width: full
+      - id: cleaning_checklist_provided
+        label: "Detailed cleaning checklist provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: cleaning_cost_estimates
+        label: "Estimated professional cleaning costs (£)"
+        inputType: number
+        placeholder: "e.g., 250"
+        helperText: "For tenant's reference if they choose professional cleaning"
+        width: half
+    maps_to:
+      - regular_cleaning_expectations
+      - deep_cleaning_areas
+      - cleaning_checklist_provided
+      - cleaning_cost_estimates

@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Move-In Condition Report</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.6;
+      color: #1a202c;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 3px solid #2c5282;
+    }
+
+    .document-title {
+      font-size: 24pt;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+
+    .subtitle {
+      font-size: 12pt;
+      color: #4a5568;
+      margin-top: 8px;
+    }
+
+    .section {
+      margin: 25px 0;
+      page-break-inside: avoid;
+    }
+
+    .section-title {
+      font-size: 14pt;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 15px;
+      padding: 10px 15px;
+      background: linear-gradient(135deg, #e6f2ff 0%, #cce5ff 100%);
+      border-left: 4px solid #2c5282;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+      margin-bottom: 15px;
+    }
+
+    .info-item {
+      padding: 8px 0;
+    }
+
+    .info-label {
+      font-weight: 600;
+      color: #2d3748;
+      display: block;
+      margin-bottom: 3px;
+      font-size: 10pt;
+    }
+
+    .info-value {
+      color: #1a202c;
+      display: block;
+      font-size: 11pt;
+    }
+
+    .room-section {
+      border: 2px solid #cbd5e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      background: #f7fafc;
+      page-break-inside: avoid;
+    }
+
+    .room-title {
+      font-size: 13pt;
+      font-weight: 700;
+      color: #2c5282;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #cbd5e0;
+    }
+
+    .condition-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+
+    .condition-table th {
+      background: #e6f2ff;
+      padding: 8px;
+      text-align: left;
+      font-size: 10pt;
+      border-bottom: 2px solid #2c5282;
+    }
+
+    .condition-table td {
+      padding: 8px;
+      border-bottom: 1px solid #cbd5e0;
+      vertical-align: top;
+    }
+
+    .condition-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .notes-box {
+      background: white;
+      border: 1px solid #cbd5e0;
+      border-radius: 4px;
+      padding: 10px;
+      min-height: 60px;
+      margin: 5px 0;
+    }
+
+    .rating-scale {
+      background: white;
+      border: 1px solid #cbd5e0;
+      border-radius: 4px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+
+    .rating-options {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .rating-option {
+      text-align: center;
+      padding: 5px;
+    }
+
+    .signature-section {
+      margin-top: 40px;
+      page-break-inside: avoid;
+    }
+
+    .signature-box {
+      border: 2px solid #cbd5e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      background: white;
+    }
+
+    .signature-line {
+      border-bottom: 2px solid #2c5282;
+      margin: 30px 0 10px 0;
+      min-height: 50px;
+    }
+
+    .info-box {
+      background: #f0fff4;
+      border-left: 4px solid #38a169;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+
+    .warning-box {
+      background: #fff5f5;
+      border-left: 4px solid #e53e3e;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e2e8f0;
+      font-size: 9pt;
+      color: #718096;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="document-title">
+      Move-In Condition Report
+    </div>
+    <div class="subtitle">Room-by-Room Property Condition Documentation</div>
+    <div class="subtitle">{{property_address}}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Property & Inspection Details</div>
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Property Address:</span>
+        <span class="info-value">{{property_address}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Inspection Date:</span>
+        <span class="info-value">{{format_date tenancy_start_date}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Landlord:</span>
+        <span class="info-value">{{landlord_full_name}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Tenant(s):</span>
+        <span class="info-value">
+          {{#each tenants}}
+            {{full_name}}{{#unless @last}}, {{/unless}}
+          {{/each}}
+        </span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Property Type:</span>
+        <span class="info-value">{{property_type}}</span>
+      </div>
+      <div class="info-item">
+        <span class="info-label">Furnished Status:</span>
+        <span class="info-value">{{furnished_status}}</span>
+      </div>
+    </div>
+
+    <div class="rating-scale">
+      <strong>Condition Rating Scale:</strong>
+      <div class="rating-options">
+        <div class="rating-option">
+          <strong>Excellent</strong><br/>
+          <small>Like new, pristine</small>
+        </div>
+        <div class="rating-option">
+          <strong>Good</strong><br/>
+          <small>Well maintained</small>
+        </div>
+        <div class="rating-option">
+          <strong>Fair</strong><br/>
+          <small>Some wear and tear</small>
+        </div>
+        <div class="rating-option">
+          <strong>Poor</strong><br/>
+          <small>Needs repair/attention</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="warning-box">
+    <strong>⚠️ Important Instructions:</strong>
+    <ul style="margin-top: 10px; margin-left: 20px; line-height: 1.8;">
+      <li>Complete this report during your move-in inspection</li>
+      <li>Tick the appropriate condition box for each item</li>
+      <li>Add detailed notes about any damage, marks, or defects</li>
+      <li>Take photographs to supplement this report</li>
+      <li>Both parties must sign and date the completed report</li>
+      <li>Return signed copy to landlord within 7 days</li>
+      <li>Keep a copy for your records</li>
+    </ul>
+  </div>
+
+  <!-- ENTRANCE HALL -->
+  <div class="room-section">
+    <div class="room-title">📍 Entrance Hall / Hallway</div>
+    <table class="condition-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Item</th>
+          <th style="width: 50%;">Condition (tick one)</th>
+          <th style="width: 20%;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Walls & Decoration</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Flooring / Carpet</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Ceiling</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Doors</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Light Fittings</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Sockets & Switches</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- LIVING ROOM -->
+  <div class="room-section">
+    <div class="room-title">🛋️ Living Room / Lounge</div>
+    <table class="condition-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Item</th>
+          <th style="width: 50%;">Condition (tick one)</th>
+          <th style="width: 20%;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Walls & Decoration</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Flooring / Carpet</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Ceiling</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Windows & Frames</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Curtains / Blinds</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Doors</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Light Fittings</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Radiators</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Furniture (if furnished)</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- KITCHEN -->
+  <div class="room-section">
+    <div class="room-title">🍳 Kitchen</div>
+    <table class="condition-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Item</th>
+          <th style="width: 50%;">Condition (tick one)</th>
+          <th style="width: 20%;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Walls & Decoration</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Flooring</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Worktops</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Cupboards & Drawers</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Sink & Taps</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Oven & Hob</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Extractor Fan</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Fridge/Freezer</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Washing Machine</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Dishwasher</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Boiler (if in kitchen)</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BATHROOM -->
+  <div class="room-section">
+    <div class="room-title">🚿 Bathroom</div>
+    <table class="condition-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Item</th>
+          <th style="width: 50%;">Condition (tick one)</th>
+          <th style="width: 20%;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Walls & Tiles</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Flooring</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Ceiling</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Bath</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Shower & Screen/Curtain</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Toilet</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Sink & Taps</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Cabinets & Mirror</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Extractor Fan</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BEDROOM 1 -->
+  <div class="room-section">
+    <div class="room-title">🛏️ Bedroom 1 (Master)</div>
+    <table class="condition-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Item</th>
+          <th style="width: 50%;">Condition (tick one)</th>
+          <th style="width: 20%;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Walls & Decoration</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Flooring / Carpet</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Ceiling</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Windows & Frames</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Curtains / Blinds</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Doors & Handles</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Built-in Wardrobes</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Furniture (if furnished)</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  {{#if_gte number_of_bedrooms 2}}
+  <!-- BEDROOM 2 -->
+  <div class="room-section">
+    <div class="room-title">🛏️ Bedroom 2</div>
+    <table class="condition-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Item</th>
+          <th style="width: 50%;">Condition (tick one)</th>
+          <th style="width: 20%;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Walls & Decoration</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Flooring / Carpet</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Ceiling</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Windows & Frames</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Curtains / Blinds</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Doors & Handles</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Built-in Wardrobes</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Furniture (if furnished)</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {{/if_gte}}
+
+  <!-- EXTERIOR -->
+  {{#if has_garden}}
+  <div class="room-section">
+    <div class="room-title">🌳 Garden / Outdoor Areas</div>
+    <table class="condition-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Item</th>
+          <th style="width: 50%;">Condition (tick one)</th>
+          <th style="width: 20%;">Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Lawn</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Plants & Borders</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Fencing</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Patio / Decking</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Shed / Outbuildings</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+        <tr>
+          <td>Garden Furniture</td>
+          <td>□ Excellent  □ Good  □ Fair  □ Poor</td>
+          <td><div class="notes-box"></div></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {{/if}}
+
+  <div class="signature-section">
+    <div class="section-title">Signatures & Agreement</div>
+
+    <div class="info-box">
+      <strong>Declaration:</strong><br/>
+      We confirm that this report accurately reflects the condition of the property at the start of the tenancy. Any items not mentioned are deemed to be in good/satisfactory condition. This report will be used as the benchmark for the end-of-tenancy inspection.
+    </div>
+
+    {{#each tenants}}
+    <div class="signature-box">
+      <div class="info-label">Tenant {{add @index 1}}: {{full_name}}</div>
+      <div class="signature-line"></div>
+      <div class="info-grid" style="margin-top: 15px;">
+        <div class="info-item">
+          <span class="info-label">Signature</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Date</span>
+        </div>
+      </div>
+    </div>
+    {{/each}}
+
+    <div class="signature-box">
+      <div class="info-label">Landlord: {{../landlord_full_name}}</div>
+      <div class="signature-line"></div>
+      <div class="info-grid" style="margin-top: 15px;">
+        <div class="info-item">
+          <span class="info-label">Signature</span>
+        </div>
+        <div class="info-item">
+          <span class="info-label">Date</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>This Move-In Condition Report forms part of the Premium Assured Shorthold Tenancy Agreement</p>
+    <p>Please return signed copy to landlord within 7 days of move-in</p>
+  </div>
+</body>
+</html>

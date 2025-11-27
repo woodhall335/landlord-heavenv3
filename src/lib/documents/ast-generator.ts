@@ -188,6 +188,82 @@ export interface ASTData {
   // Additional schedules
   additional_schedules?: string;
 
+  // Meter Readings (both Standard and Premium)
+  meter_reading_gas?: string;
+  meter_reading_electric?: string;
+  meter_reading_water?: string;
+  utility_transfer_responsibility?: string;
+
+  // Premium Enhanced Features - Late Payment Interest
+  late_payment_interest_applicable?: boolean;
+  late_payment_interest_rate?: number;
+  grace_period_days?: number;
+  late_payment_admin_fee?: number;
+
+  // Premium Enhanced Features - Key Schedule
+  number_of_front_door_keys?: number;
+  number_of_back_door_keys?: number;
+  number_of_window_keys?: number;
+  number_of_mailbox_keys?: number;
+  access_cards_fobs?: number;
+  key_replacement_cost?: number;
+  other_keys_notes?: string;
+
+  // Premium Enhanced Features - Contractor Access
+  contractor_access_notice_period?: string;
+  emergency_access_allowed?: boolean;
+  contractor_access_hours?: string;
+  tenant_presence_required?: boolean;
+
+  // Premium Enhanced Features - Emergency Procedures
+  emergency_landlord_phone?: string;
+  emergency_plumber_phone?: string;
+  emergency_electrician_phone?: string;
+  emergency_gas_engineer_phone?: string;
+  emergency_locksmith_phone?: string;
+  water_shutoff_location?: string;
+  electricity_fuse_box_location?: string;
+  gas_shutoff_location?: string;
+
+  // Premium Enhanced Features - Maintenance Schedule
+  boiler_service_frequency?: string;
+  boiler_service_responsibility?: string;
+  gutter_cleaning_frequency?: string;
+  gutter_cleaning_responsibility?: string;
+  window_cleaning_frequency?: string;
+  appliance_maintenance_notes?: string;
+
+  // Premium Enhanced Features - Garden Maintenance
+  lawn_mowing_frequency?: string;
+  lawn_mowing_responsibility?: string;
+  hedge_trimming_responsibility?: string;
+  weed_control_responsibility?: string;
+  outdoor_furniture_notes?: string;
+
+  // Premium Enhanced Features - Move-In Procedures
+  pre_tenancy_meeting_required?: boolean;
+  move_in_inspection_required?: boolean;
+  photographic_inventory_provided?: boolean;
+  tenant_handbook_provided?: boolean;
+  utility_accounts_transfer_deadline?: string;
+  council_tax_registration_deadline?: string;
+
+  // Premium Enhanced Features - Move-Out Procedures
+  checkout_inspection_required?: boolean;
+  professional_cleaning_standard?: boolean;
+  carpet_cleaning_required?: boolean;
+  oven_cleaning_required?: boolean;
+  garden_condition_required?: string;
+  key_return_deadline?: string;
+  forwarding_address_required?: boolean;
+  deposit_return_timeline?: string;
+
+  // Premium Enhanced Features - Cleaning Standards
+  regular_cleaning_expectations?: string;
+  deep_cleaning_areas?: string[];
+  cleaning_checklist_provided?: boolean;
+  cleaning_cost_estimates?: number;
+
   // QA metadata
   qa_score?: number;
 }
@@ -366,7 +442,7 @@ export async function generatePremiumAST(
     jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
   };
 
-  // Premium includes same bonus docs as standard, but uses enhanced AST template
+  // Premium includes all standard docs PLUS exclusive premium documents
   const templatePaths = [
     'uk/england-wales/templates/premium_ast_formatted.hbs',
     'shared/templates/terms_and_conditions.hbs',
@@ -375,6 +451,12 @@ export async function generatePremiumAST(
     'uk/england-wales/templates/government_model_clauses.hbs',
     'shared/templates/deposit_protection_certificate.hbs',
     'shared/templates/inventory_template.hbs',
+    // Premium-exclusive documents (Option 2 enhancement)
+    'uk/england-wales/templates/premium/key_schedule.hbs',
+    'uk/england-wales/templates/premium/tenant_welcome_pack.hbs',
+    'uk/england-wales/templates/premium/property_maintenance_guide.hbs',
+    'uk/england-wales/templates/premium/move_in_condition_report.hbs',
+    'uk/england-wales/templates/premium/checkout_procedure.hbs',
   ];
 
   // Compile and merge all templates
