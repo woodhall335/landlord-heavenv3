@@ -1,4 +1,4 @@
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect } from 'vitest';
 import { mapWizardToPRTData } from '@/lib/documents/scotland/prt-wizard-mapper';
 
 describe('PRT Wizard Mapper - Scotland', () => {

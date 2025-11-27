@@ -1,4 +1,4 @@
-import { describe, test, expect } from '@jest/globals';
+import { describe, test, expect, beforeAll } from 'vitest';
 import { loadMQS, getNextMQSQuestion } from '@/lib/wizard/mqs-loader';
 import type { MasterQuestionSet, ExtendedWizardQuestion } from '@/lib/wizard/types';
 
