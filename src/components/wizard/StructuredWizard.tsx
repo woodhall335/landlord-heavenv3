@@ -131,7 +131,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       const termLength = currentAnswer.term_length;
       const isFixedTerm = currentAnswer.is_fixed_term;
 
-      if (isFixedTerm && startDate && termLength && !currentAnswer.tenancy_end_date) {
+      if (isFixedTerm === true && startDate && termLength) {
         const start = new Date(startDate);
         let endDate = new Date(start);
 
@@ -143,14 +143,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           endDate.setDate(endDate.getDate() - 1); // Subtract 1 day
 
           const endDateStr = endDate.toISOString().split('T')[0];
-          setCurrentAnswer({
-            ...currentAnswer,
-            tenancy_end_date: endDateStr,
-          });
+
+          // Only update if different from current value
+          if (currentAnswer.tenancy_end_date !== endDateStr) {
+            setCurrentAnswer({
+              ...currentAnswer,
+              tenancy_end_date: endDateStr,
+            });
+          }
         }
       }
     }
-  }, [currentAnswer?.tenancy_start_date, currentAnswer?.term_length, currentAnswer?.is_fixed_term]);
+  }, [currentAnswer, currentQuestion]);
 
   const loadNextQuestion = async () => {
     setLoading(true);
@@ -209,7 +213,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       for (const field of currentQuestion.fields) {
         const fieldValue = currentAnswer?.[field.id];
 
-        if (field.validation?.required && !fieldValue) {
+        // Check for required fields - must handle boolean false as valid
+        if (field.validation?.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
           setError(`Please fill in ${field.label.toLowerCase()}`);
           return false;
         }
