@@ -12,8 +12,10 @@ import { generateStandardAST, generatePremiumAST } from '@/lib/documents/ast-gen
 import { generateNoticeToLeave } from '@/lib/documents/scotland/notice-to-leave-generator';
 import { generatePRTAgreement } from '@/lib/documents/scotland/prt-generator';
 import { mapWizardToNoticeToLeave } from '@/lib/documents/scotland/wizard-mapper';
+import { mapWizardToPRTData } from '@/lib/documents/scotland/prt-wizard-mapper';
 import { mapWizardToASTData } from '@/lib/documents/ast-wizard-mapper';
 import { generatePrivateTenancyAgreement } from '@/lib/documents/northern-ireland/private-tenancy-generator';
+import { mapWizardToPrivateTenancyData } from '@/lib/documents/northern-ireland/private-tenancy-wizard-mapper';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -130,24 +132,32 @@ export async function POST(request: Request) {
           break;
 
         case 'prt_agreement':
-          generatedDoc = await generatePRTAgreement(facts);
+          // Map wizard facts to PRTData format
+          const prtData = mapWizardToPRTData(facts);
+          generatedDoc = await generatePRTAgreement(prtData);
           documentTitle = 'Private Residential Tenancy Agreement - Scotland';
           break;
 
         case 'prt_premium':
           const { generatePremiumPRT } = await import('@/lib/documents/scotland/prt-generator');
-          generatedDoc = await generatePremiumPRT(facts);
+          // Map wizard facts to PRTData format
+          const prtPremiumData = mapWizardToPRTData(facts);
+          generatedDoc = await generatePremiumPRT(prtPremiumData);
           documentTitle = 'Premium Private Residential Tenancy Agreement - Scotland';
           break;
 
         case 'private_tenancy':
-          generatedDoc = await generatePrivateTenancyAgreement(facts);
+          // Map wizard facts to PrivateTenancyData format
+          const privateTenancyData = mapWizardToPrivateTenancyData(facts);
+          generatedDoc = await generatePrivateTenancyAgreement(privateTenancyData);
           documentTitle = 'Private Tenancy Agreement - Northern Ireland';
           break;
 
         case 'private_tenancy_premium':
           const { generatePremiumPrivateTenancy } = await import('@/lib/documents/northern-ireland/private-tenancy-generator');
-          generatedDoc = await generatePremiumPrivateTenancy(facts);
+          // Map wizard facts to PrivateTenancyData format
+          const privateTenancyPremiumData = mapWizardToPrivateTenancyData(facts);
+          generatedDoc = await generatePremiumPrivateTenancy(privateTenancyPremiumData);
           documentTitle = 'Premium Private Tenancy Agreement - Northern Ireland';
           break;
 

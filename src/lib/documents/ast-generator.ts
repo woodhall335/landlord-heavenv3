@@ -21,6 +21,12 @@ export interface ASTData {
   // Product metadata
   product_tier?: string;
 
+  // AST Suitability Check (Premium)
+  tenant_is_individual?: boolean;
+  main_home?: boolean;
+  landlord_lives_at_property?: boolean;
+  holiday_or_licence?: boolean;
+
   // Agreement
   agreement_date: string;
   current_date?: string;
@@ -65,6 +71,8 @@ export interface ASTData {
   has_shared_facilities?: boolean;
   number_of_sharers?: number;
   hmo_licence_status?: string;
+  hmo_licence_number?: string;
+  hmo_licence_expiry?: string;
 
   // Term
   tenancy_start_date: string;
@@ -93,6 +101,9 @@ export interface ASTData {
   deposit_scheme_name: 'DPS' | 'MyDeposits' | 'TDS';
   deposit_paid_date?: string;
   deposit_protection_date?: string;
+  deposit_already_protected?: boolean;
+  deposit_reference_number?: string;
+  prescribed_information_served?: boolean;
 
   // Bills & Utilities
   council_tax_responsibility?: string;
