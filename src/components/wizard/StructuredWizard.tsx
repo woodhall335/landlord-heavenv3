@@ -67,11 +67,90 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [isComplete, setIsComplete] = useState(false);
   const [askHeavenSuggestion, setAskHeavenSuggestion] = useState<string | null>(null);
   const [questionHistory, setQuestionHistory] = useState<Array<{ question: ExtendedWizardQuestion; answer: any }>>([]);
+  const [depositWarning, setDepositWarning] = useState<string | null>(null);
+  const [caseFacts, setCaseFacts] = useState<Record<string, any>>({});
 
   // Load first question on mount
   useEffect(() => {
     loadNextQuestion();
   }, []);
+
+  // Fetch case facts when question changes (for validation)
+  useEffect(() => {
+    const fetchCaseFacts = async () => {
+      try {
+        const response = await fetch(`/api/cases/${caseId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setCaseFacts(data.case?.collected_facts || {});
+        }
+      } catch (err) {
+        console.error('Failed to fetch case facts:', err);
+      }
+    };
+
+    if (currentQuestion && caseId) {
+      fetchCaseFacts();
+    }
+  }, [currentQuestion, caseId]);
+
+  // Inline deposit validation
+  useEffect(() => {
+    if (currentQuestion?.id === 'deposit_details' && currentAnswer?.deposit_amount) {
+      const depositAmount = parseFloat(currentAnswer.deposit_amount);
+      const rentAmount = parseFloat(caseFacts.rent_amount || 0);
+      const rentPeriod = caseFacts.rent_period || 'month';
+
+      if (rentAmount > 0 && depositAmount > 0) {
+        // Calculate 5 weeks rent
+        let weeklyRent = rentAmount;
+        if (rentPeriod === 'month') weeklyRent = (rentAmount * 12) / 52;
+        else if (rentPeriod === 'quarter') weeklyRent = (rentAmount * 4) / 52;
+        else if (rentPeriod === 'year') weeklyRent = rentAmount / 52;
+
+        const maxDeposit = weeklyRent * 5;
+
+        if (depositAmount > maxDeposit) {
+          setDepositWarning(
+            `⚠️ ILLEGAL DEPOSIT: £${depositAmount.toFixed(2)} exceeds 5 weeks rent (£${maxDeposit.toFixed(2)}). ` +
+            `This VIOLATES the Tenant Fees Act 2019. Maximum permitted: £${maxDeposit.toFixed(2)}.`
+          );
+        } else {
+          setDepositWarning(null);
+        }
+      }
+    } else {
+      setDepositWarning(null);
+    }
+  }, [currentAnswer, currentQuestion, caseFacts]);
+
+  // Auto-calculate end date based on start date + term length
+  useEffect(() => {
+    if (currentQuestion?.id === 'tenancy_start_and_term' && currentAnswer) {
+      const startDate = currentAnswer.tenancy_start_date;
+      const termLength = currentAnswer.term_length;
+      const isFixedTerm = currentAnswer.is_fixed_term;
+
+      if (isFixedTerm && startDate && termLength && !currentAnswer.tenancy_end_date) {
+        const start = new Date(startDate);
+        let endDate = new Date(start);
+
+        // Parse term length (e.g., "12 months", "6 months")
+        const months = parseInt(termLength.match(/\d+/)?.[0] || '0');
+
+        if (months > 0) {
+          endDate.setMonth(endDate.getMonth() + months);
+          endDate.setDate(endDate.getDate() - 1); // Subtract 1 day
+
+          const endDateStr = endDate.toISOString().split('T')[0];
+          setCurrentAnswer({
+            ...currentAnswer,
+            tenancy_end_date: endDateStr,
+          });
+        }
+      }
+    }
+  }, [currentAnswer?.tenancy_start_date, currentAnswer?.term_length, currentAnswer?.is_fixed_term]);
 
   const loadNextQuestion = async () => {
     setLoading(true);
@@ -199,6 +278,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       if (!error) {
         setError('Please provide a valid answer to continue');
       }
+      return;
+    }
+
+    // Block progression if deposit warning exists
+    if (depositWarning) {
+      setError('Please reduce the deposit amount to comply with the Tenant Fees Act 2019 before continuing.');
       return;
     }
 
@@ -641,6 +726,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
             <p className="text-sm text-red-800">{error}</p>
+          </div>
+        )}
+
+        {depositWarning && (
+          <div className="bg-orange-50 border border-orange-300 rounded-lg p-4 mb-6">
+            <p className="text-sm text-orange-900 font-medium">{depositWarning}</p>
           </div>
         )}
 

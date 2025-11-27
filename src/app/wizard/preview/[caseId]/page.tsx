@@ -68,7 +68,7 @@ export default function WizardPreviewPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             case_id: caseId,
-            document_type: getDocumentType(caseResult.case.case_type),
+            document_type: getDocumentType(caseResult.case.case_type, caseResult.case),
             is_preview: true,
           }),
         });
@@ -109,11 +109,27 @@ export default function WizardPreviewPage() {
   }, [caseId, showToast]);
 
   // Map case type to document type
-  const getDocumentType = (caseType: string): string => {
+  const getDocumentType = (caseType: string, caseData?: CaseData): string => {
+    // For tenancy agreements, check the product tier
+    if (caseType === 'tenancy_agreement' && caseData?.collected_facts) {
+      const originalProduct = caseData.collected_facts.__meta?.original_product;
+      const productTier = caseData.collected_facts.product_tier;
+
+      // Check original product first
+      if (originalProduct === 'ast_standard') return 'ast_standard';
+      if (originalProduct === 'ast_premium') return 'ast_premium';
+
+      // Fallback to product_tier
+      if (productTier === 'Standard AST') return 'ast_standard';
+      if (productTier === 'Premium AST') return 'ast_premium';
+
+      // Default to premium if no tier specified
+      return 'ast_premium';
+    }
+
     const mapping: Record<string, string> = {
       eviction: 'section8_notice',
       money_claim: 'money_claim',
-      tenancy_agreement: 'ast_premium',
     };
     return mapping[caseType] || 'section8_notice';
   };
