@@ -133,7 +133,7 @@ export async function claudeJsonCompletion<T = any>(
     let json: T;
     try {
       json = JSON.parse(textContent);
-    } catch (parseError) {
+    } catch (_parseError) {
       throw new Error('Failed to parse JSON response from Claude');
     }
 

@@ -267,7 +267,7 @@ export default function WizardPreviewPage() {
     }
   };
 
-  const handleSignupSuccess = async (userId: string) => {
+  const handleSignupSuccess = async (_userId: string) => {
     // Close modal
     setShowSignupModal(false);
 

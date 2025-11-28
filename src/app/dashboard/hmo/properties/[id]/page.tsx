@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
@@ -49,14 +49,7 @@ export default function PropertyDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (propertyId) {
-      fetchPropertyDetails();
-      fetchPropertyTenants();
-    }
-  }, [propertyId]);
-
-  const fetchPropertyDetails = async () => {
+  const fetchPropertyDetails = useCallback(async () => {
     try {
       const response = await fetch(`/api/hmo/properties/${propertyId}`);
 
@@ -66,14 +59,14 @@ export default function PropertyDetailPage() {
       } else {
         setError('Property not found');
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Failed to load property details');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [propertyId]);
 
-  const fetchPropertyTenants = async () => {
+  const fetchPropertyTenants = useCallback(async () => {
     try {
       const response = await fetch(`/api/hmo/tenants?property_id=${propertyId}`);
 
@@ -81,10 +74,17 @@ export default function PropertyDetailPage() {
         const data = await response.json();
         setTenants(data.tenants || []);
       }
-    } catch (err) {
-      console.error('Failed to fetch tenants:', err);
+    } catch (_err) {
+      console.error('Failed to fetch tenants:', _err);
     }
-  };
+  }, [propertyId]);
+
+  useEffect(() => {
+    if (propertyId) {
+      fetchPropertyDetails();
+      fetchPropertyTenants();
+    }
+  }, [propertyId, fetchPropertyDetails, fetchPropertyTenants]);
 
   const handleDeleteProperty = async () => {
     if (tenants.length > 0) {

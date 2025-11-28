@@ -1,17 +1,5 @@
 import type { WizardFacts } from './schema';
 
-function cloneValue<T>(value: T): T {
-  if (Array.isArray(value)) {
-    return [...value] as T;
-  }
-
-  if (value && typeof value === 'object') {
-    return { ...(value as Record<string, unknown>) } as T;
-  }
-
-  return value;
-}
-
 /**
  * Sets a value in WizardFacts (flat format) at the given dot-notation path.
  * This works with flat keys like "property_address_line1" or "tenants.0.full_name".

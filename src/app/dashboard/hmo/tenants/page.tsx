@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
@@ -41,9 +41,19 @@ export default function TenantsPage() {
     fetchTenants();
   }, []);
 
+  const applyFilters = useCallback(() => {
+    let filtered = [...tenants];
+
+    if (filterStatus !== 'all') {
+      filtered = filtered.filter((t) => t.status === filterStatus);
+    }
+
+    setFilteredTenants(filtered);
+  }, [tenants, filterStatus]);
+
   useEffect(() => {
     applyFilters();
-  }, [tenants, filterStatus]);
+  }, [applyFilters]);
 
   const fetchTenants = async () => {
     try {
@@ -58,16 +68,6 @@ export default function TenantsPage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const applyFilters = () => {
-    let filtered = [...tenants];
-
-    if (filterStatus !== 'all') {
-      filtered = filtered.filter((t) => t.status === filterStatus);
-    }
-
-    setFilteredTenants(filtered);
   };
 
   const formatDate = (dateString: string) => {

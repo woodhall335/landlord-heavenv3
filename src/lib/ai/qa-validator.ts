@@ -136,7 +136,7 @@ Provide a detailed assessment with specific issues and suggestions for improveme
 
     try {
       parsedResponse = JSON.parse(response.content);
-    } catch (parseError) {
+    } catch (_parseError) {
       // Fallback: Extract JSON from response
       const jsonMatch = response.content.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
