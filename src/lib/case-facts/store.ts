@@ -1,12 +1,16 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/lib/supabase/types';
-import type { CaseFacts } from './schema';
-import { createEmptyCaseFacts } from './schema';
+import type { WizardFacts } from './schema';
+import { createEmptyWizardFacts } from './schema';
 
-export async function getOrCreateCaseFacts(
+/**
+ * Loads or creates WizardFacts (flat DB format) for a case.
+ * Use wizardFactsToCaseFacts() from normalize.ts to convert to nested domain model.
+ */
+export async function getOrCreateWizardFacts(
   supabase: SupabaseClient<Database>,
   caseId: string
-): Promise<CaseFacts> {
+): Promise<WizardFacts> {
   const { data, error } = await supabase
     .from('case_facts')
     .select('facts')
@@ -19,10 +23,10 @@ export async function getOrCreateCaseFacts(
   }
 
   if (data?.facts) {
-    return data.facts as CaseFacts;
+    return data.facts as WizardFacts;
   }
 
-  const emptyFacts = createEmptyCaseFacts();
+  const emptyFacts = createEmptyWizardFacts();
   const { error: insertError } = await supabase.from('case_facts').insert({
     case_id: caseId,
     facts: emptyFacts,
@@ -36,13 +40,17 @@ export async function getOrCreateCaseFacts(
   return emptyFacts;
 }
 
-export async function updateCaseFacts(
+/**
+ * Updates WizardFacts (flat DB format) for a case.
+ * The updater function receives and returns WizardFacts in flat format.
+ */
+export async function updateWizardFacts(
   supabase: SupabaseClient<Database>,
   caseId: string,
-  updater: (current: CaseFacts) => CaseFacts,
+  updater: (current: WizardFacts) => WizardFacts,
   options?: { meta?: Record<string, unknown> }
-): Promise<CaseFacts> {
-  const currentFacts = await getOrCreateCaseFacts(supabase, caseId);
+): Promise<WizardFacts> {
+  const currentFacts = await getOrCreateWizardFacts(supabase, caseId);
   const newFacts = updater(currentFacts);
   const timestamp = new Date().toISOString();
 
@@ -86,3 +94,7 @@ export async function updateCaseFacts(
 
   return newFacts;
 }
+
+// Legacy aliases for backward compatibility - will be removed in future
+export const getOrCreateCaseFacts = getOrCreateWizardFacts;
+export const updateCaseFacts = updateWizardFacts;

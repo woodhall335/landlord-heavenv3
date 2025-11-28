@@ -11,7 +11,7 @@ import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { loadMQS, getNextMQSQuestion, type ProductType, type MasterQuestionSet } from '@/lib/wizard/mqs-loader';
 import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
-import { updateCaseFacts, getOrCreateCaseFacts } from '@/lib/case-facts/store';
+import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
@@ -194,9 +194,9 @@ export async function POST(request: Request) {
     }
 
     // ---------------------------------------
-    // 2. Merge into CaseFacts
+    // 2. Merge into WizardFacts (flat DB format)
     // ---------------------------------------
-    const currentFacts = await getOrCreateCaseFacts(supabase, case_id);
+    const currentFacts = await getOrCreateWizardFacts(supabase, case_id);
     let mergedFacts = applyMappedAnswers(
       currentFacts as any,
       question.maps_to,
@@ -214,7 +214,7 @@ export async function POST(request: Request) {
       normalizedAnswer
     ) as any;
 
-    const newFacts = await updateCaseFacts(
+    const newFacts = await updateWizardFacts(
       supabase,
       case_id,
       () => mergedFacts as any,
