@@ -64,12 +64,12 @@ describe('Wizard API Northern Ireland gating', () => {
     supabaseClientMock.single.mockResolvedValue({ data: null, error: null });
   });
 
-  it('rejects NI eviction cases at /api/wizard/start', async () => {
+  it('rejects NI eviction (notice_only) at /api/wizard/start', async () => {
     const response = await startWizard(
       new Request('http://localhost/api/wizard/start', {
         method: 'POST',
         body: JSON.stringify({
-          case_type: 'eviction',
+          product: 'notice_only',
           jurisdiction: 'northern-ireland',
         }),
       })
@@ -78,28 +78,101 @@ describe('Wizard API Northern Ireland gating', () => {
     const body = await response.json();
     expect(response.status).toBe(400);
     expect(body.error).toBe(
-      'Eviction and money claim workflows are not supported in Northern Ireland'
+      'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.'
     );
     expect(supabaseClientMock.insert).not.toHaveBeenCalled();
   });
 
-  it('rejects NI money claim cases at /api/wizard/next-question', async () => {
-    const response = await nextQuestion(
-      new Request('http://localhost/api/wizard/next-question', {
+  it('rejects NI eviction (complete_pack) at /api/wizard/start', async () => {
+    const response = await startWizard(
+      new Request('http://localhost/api/wizard/start', {
         method: 'POST',
         body: JSON.stringify({
-          case_id: 'case-123',
-          case_type: 'money_claim',
+          product: 'complete_pack',
           jurisdiction: 'northern-ireland',
-          collected_facts: {},
         }),
       })
     );
 
     const body = await response.json();
     expect(response.status).toBe(400);
-    expect(body.error).toBe('Eviction and money claim flows are not available in Northern Ireland');
-    expect(supabaseClientMock.from).not.toHaveBeenCalledWith('cases');
+    expect(body.error).toBe(
+      'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.'
+    );
+    expect(supabaseClientMock.insert).not.toHaveBeenCalled();
+  });
+
+  it('rejects NI money claim at /api/wizard/start', async () => {
+    const response = await startWizard(
+      new Request('http://localhost/api/wizard/start', {
+        method: 'POST',
+        body: JSON.stringify({
+          product: 'money_claim',
+          jurisdiction: 'northern-ireland',
+        }),
+      })
+    );
+
+    const body = await response.json();
+    expect(response.status).toBe(400);
+    expect(body.error).toBe(
+      'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.'
+    );
+    expect(supabaseClientMock.insert).not.toHaveBeenCalled();
+  });
+
+  it('allows NI tenancy agreements at /api/wizard/start', async () => {
+    supabaseClientMock.single.mockResolvedValue({
+      data: {
+        id: 'case-123',
+        user_id: null,
+        case_type: 'tenancy_agreement',
+        jurisdiction: 'northern-ireland',
+        status: 'in_progress',
+        collected_facts: {},
+      },
+      error: null,
+    });
+
+    const response = await startWizard(
+      new Request('http://localhost/api/wizard/start', {
+        method: 'POST',
+        body: JSON.stringify({
+          product: 'tenancy_agreement',
+          jurisdiction: 'northern-ireland',
+        }),
+      })
+    );
+
+    const body = await response.json();
+    expect(response.status).toBe(200);
+    expect(body.case_id).toBeDefined();
+    expect(supabaseClientMock.insert).toHaveBeenCalled();
+  });
+
+  it('rejects NI money claim cases at /api/wizard/next-question', async () => {
+    const niCase = {
+      id: 'case-123',
+      case_type: 'money_claim',
+      jurisdiction: 'northern-ireland',
+      collected_facts: {},
+      user_id: null,
+    };
+
+    supabaseClientMock.single.mockResolvedValue({ data: niCase, error: null });
+
+    const response = await nextQuestion(
+      new Request('http://localhost/api/wizard/next-question', {
+        method: 'POST',
+        body: JSON.stringify({
+          case_id: 'case-123',
+        }),
+      })
+    );
+
+    const body = await response.json();
+    expect(response.status).toBe(400);
+    expect(body.error).toBe('Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.');
   });
 
   it('rejects NI eviction analysis at /api/wizard/analyze', async () => {
@@ -118,14 +191,13 @@ describe('Wizard API Northern Ireland gating', () => {
         method: 'POST',
         body: JSON.stringify({
           case_id: niCase.id,
-          collected_facts: {},
         }),
       })
     );
 
     const body = await response.json();
     expect(response.status).toBe(400);
-    expect(body.error).toBe('Eviction and money claim analysis is not available for Northern Ireland');
+    expect(body.error).toBe('Only tenancy agreements are available for Northern Ireland. Eviction and money claim analysis is not currently supported.');
     expect((decisionEngine.analyzeCase as unknown as vi.Mock)).not.toHaveBeenCalled();
   });
 });
