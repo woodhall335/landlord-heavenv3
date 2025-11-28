@@ -178,6 +178,7 @@ export async function POST(request: Request) {
           product_tier: tier as string | null
         }
       };
+      // @ts-expect-error - Supabase RLS types incorrectly infer never for update
       const { error: updateError } = await supabase
         .from('case_facts')
         .update({ facts: updatedFacts as any } as any) // Supabase types facts as Json

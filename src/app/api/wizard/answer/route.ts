@@ -378,6 +378,7 @@ export async function POST(request: Request) {
     const progress = computeProgress(mqs, newFacts);
     const isComplete = !nextQuestion;
 
+    // @ts-expect-error - Supabase RLS types incorrectly infer never for update
     await supabase
       .from('cases')
       .update({
