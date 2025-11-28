@@ -8,7 +8,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
@@ -62,7 +61,7 @@ interface RecentUser {
 }
 
 export default function AdminDashboardPage() {
-  const router = useRouter();
+  // const router = useRouter();
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [recentOrders, setRecentOrders] = useState<RecentOrder[]>([]);
   const [recentUsers, setRecentUsers] = useState<RecentUser[]>([]);
@@ -114,7 +113,7 @@ export default function AdminDashboardPage() {
         const usersData = await usersRes.json();
         setRecentUsers(usersData.users || []);
       }
-    } catch (err) {
+    } catch {
       setError('Failed to load admin dashboard');
     } finally {
       setIsLoading(false);
