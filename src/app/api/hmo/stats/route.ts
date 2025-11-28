@@ -7,8 +7,13 @@
 
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import type { Database } from '@/lib/supabase/types';
 
-export async function GET(request: Request) {
+type HMOProperty = Database['public']['Tables']['hmo_properties']['Row'];
+type HMOTenant = Database['public']['Tables']['hmo_tenants']['Row'];
+type User = Database['public']['Tables']['users']['Row'];
+
+export async function GET() {
   try {
     const user = await requireServerAuth();
     const supabase = await createServerSupabaseClient();
@@ -18,7 +23,7 @@ export async function GET(request: Request) {
       .from('users')
       .select('hmo_pro_active, hmo_pro_tier')
       .eq('id', user.id)
-      .single();
+      .single() as { data: Pick<User, 'hmo_pro_active' | 'hmo_pro_tier'> | null };
 
     if (!userData?.hmo_pro_active) {
       return NextResponse.json(
@@ -31,7 +36,7 @@ export async function GET(request: Request) {
     const { data: properties, error: propertiesError } = await supabase
       .from('hmo_properties')
       .select('*')
-      .eq('user_id', user.id);
+      .eq('user_id', user.id) as { data: HMOProperty[] | null; error: any };
 
     if (propertiesError) {
       console.error('Failed to fetch properties:', propertiesError);
@@ -45,7 +50,7 @@ export async function GET(request: Request) {
     const { data: tenants, error: tenantsError } = await supabase
       .from('hmo_tenants')
       .select('*')
-      .eq('user_id', user.id);
+      .eq('user_id', user.id) as { data: HMOTenant[] | null; error: any };
 
     if (tenantsError) {
       console.error('Failed to fetch tenants:', tenantsError);
