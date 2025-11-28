@@ -102,7 +102,7 @@ export async function POST(request: Request) {
 
     await supabase
       .from('cases')
-      // @ts-ignore - Supabase RLS types incorrectly infer never for update
+      // @ts-expect-error - Supabase RLS types incorrectly infer never for update
       .update({
         recommended_route: route,
         red_flags: red_flags as any, // Supabase types red_flags as Json
@@ -118,7 +118,7 @@ export async function POST(request: Request) {
       const htmlContent = `<h1>Preview - ${route}</h1><p>Case strength: ${score}%</p>`;
       const { data, error: docError} = await supabase
         .from('documents')
-        // @ts-ignore - Supabase RLS types incorrectly infer never for insert
+        // @ts-expect-error - Supabase RLS types incorrectly infer never for insert
         .insert({
           user_id: caseData.user_id,
           case_id,

@@ -180,7 +180,7 @@ export async function POST(request: Request) {
       };
       const { error: updateError } = await supabase
         .from('case_facts')
-        // @ts-ignore - Supabase RLS types incorrectly infer never for update
+        // @ts-expect-error - Supabase RLS types incorrectly infer never for update
         .update({ facts: updatedFacts as any } as any) // Supabase types facts as Json
         .eq('case_id', caseRecord.id);
 
