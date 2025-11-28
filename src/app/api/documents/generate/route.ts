@@ -16,6 +16,7 @@ import { mapWizardToPRTData } from '@/lib/documents/scotland/prt-wizard-mapper';
 import { mapWizardToASTData } from '@/lib/documents/ast-wizard-mapper';
 import { generatePrivateTenancyAgreement } from '@/lib/documents/northern-ireland/private-tenancy-generator';
 import { mapWizardToPrivateTenancyData } from '@/lib/documents/northern-ireland/private-tenancy-wizard-mapper';
+import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -62,14 +63,14 @@ export async function POST(request: Request) {
 
     const supabase = await createServerSupabaseClient();
 
-    // Fetch case with collected facts (RLS will handle authorization)
-    const { data: caseData, error: caseError } = await supabase
+    // Fetch case metadata (RLS will handle authorization)
+    const { data, error: caseError } = await supabase
       .from('cases')
-      .select('*')
+      .select('id, jurisdiction, user_id, anonymous_user_id')
       .eq('id', case_id)
       .single();
 
-    if (caseError || !caseData) {
+    if (caseError || !data) {
       console.error('Case not found:', caseError);
       return NextResponse.json(
         { error: 'Case not found' },
@@ -77,12 +78,16 @@ export async function POST(request: Request) {
       );
     }
 
+    // Type assertion: we know data exists after the null check
+    const caseData = data as { id: string; jurisdiction: string; user_id: string | null; anonymous_user_id: string | null };
+
+    // Load WizardFacts from case_facts.facts (source of truth)
+    const facts = await getOrCreateWizardFacts(supabase, case_id);
+    const jurisdiction = caseData.jurisdiction;
+
     // Map document type to generator function and template
     let generatedDoc: any;
     let documentTitle = '';
-
-    const facts = caseData.collected_facts as any;
-    const jurisdiction = caseData.jurisdiction;
 
     if (
       jurisdiction === 'northern-ireland' &&
@@ -99,7 +104,7 @@ export async function POST(request: Request) {
     try {
       switch (document_type) {
         case 'section8_notice':
-          generatedDoc = await generateSection8Notice(facts);
+          generatedDoc = await generateSection8Notice(facts as any);
           documentTitle = 'Section 8 Notice - Notice Seeking Possession';
           break;
 
@@ -107,7 +112,7 @@ export async function POST(request: Request) {
           // Use generic generator with Section 21 template
           generatedDoc = await generateDocument({
             templatePath: `${jurisdiction}/eviction/section21_form6a.hbs`,
-            data: facts,
+            data: facts as any,
             isPreview: is_preview,
             outputFormat: 'both',
           });
@@ -126,14 +131,14 @@ export async function POST(request: Request) {
 
         case 'notice_to_leave':
           // Map wizard facts to NoticeToLeaveData format
-          const noticeToLeaveData = mapWizardToNoticeToLeave(facts);
+          const noticeToLeaveData = mapWizardToNoticeToLeave(facts as any);
           generatedDoc = await generateNoticeToLeave(noticeToLeaveData);
           documentTitle = 'Notice to Leave - Scotland';
           break;
 
         case 'prt_agreement':
           // Map wizard facts to PRTData format
-          const prtData = mapWizardToPRTData(facts);
+          const prtData = mapWizardToPRTData(facts as any);
           generatedDoc = await generatePRTAgreement(prtData);
           documentTitle = 'Private Residential Tenancy Agreement - Scotland';
           break;
@@ -141,14 +146,14 @@ export async function POST(request: Request) {
         case 'prt_premium':
           const { generatePremiumPRT } = await import('@/lib/documents/scotland/prt-generator');
           // Map wizard facts to PRTData format
-          const prtPremiumData = mapWizardToPRTData(facts);
+          const prtPremiumData = mapWizardToPRTData(facts as any);
           generatedDoc = await generatePremiumPRT(prtPremiumData);
           documentTitle = 'Premium Private Residential Tenancy Agreement - Scotland';
           break;
 
         case 'private_tenancy':
           // Map wizard facts to PrivateTenancyData format
-          const privateTenancyData = mapWizardToPrivateTenancyData(facts);
+          const privateTenancyData = mapWizardToPrivateTenancyData(facts as any);
           generatedDoc = await generatePrivateTenancyAgreement(privateTenancyData);
           documentTitle = 'Private Tenancy Agreement - Northern Ireland';
           break;
@@ -156,7 +161,7 @@ export async function POST(request: Request) {
         case 'private_tenancy_premium':
           const { generatePremiumPrivateTenancy } = await import('@/lib/documents/northern-ireland/private-tenancy-generator');
           // Map wizard facts to PrivateTenancyData format
-          const privateTenancyPremiumData = mapWizardToPrivateTenancyData(facts);
+          const privateTenancyPremiumData = mapWizardToPrivateTenancyData(facts as any);
           generatedDoc = await generatePremiumPrivateTenancy(privateTenancyPremiumData);
           documentTitle = 'Premium Private Tenancy Agreement - Northern Ireland';
           break;
@@ -222,7 +227,7 @@ export async function POST(request: Request) {
         qa_passed: false, // Will be validated by AI pipeline later
         qa_score: null,
         qa_issues: [],
-      })
+      } as any)
       .select()
       .single();
 
