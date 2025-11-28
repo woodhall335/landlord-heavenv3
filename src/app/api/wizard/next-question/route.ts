@@ -110,9 +110,9 @@ export async function POST(request: Request) {
     const nextQuestion = getNextMQSQuestion(mqs, facts);
 
     if (!nextQuestion) {
-      // @ts-expect-error - Supabase RLS types incorrectly infer never for update
       await supabase
         .from('cases')
+        // @ts-ignore - Supabase RLS types incorrectly infer never for update
         .update({
           wizard_progress: 100,
           wizard_completed_at: new Date().toISOString(),
@@ -128,9 +128,9 @@ export async function POST(request: Request) {
 
     const progress = computeProgress(mqs, facts);
 
-    // @ts-expect-error - Supabase RLS types incorrectly infer never for update
     await supabase
       .from('cases')
+      // @ts-ignore - Supabase RLS types incorrectly infer never for update
       .update({ wizard_progress: progress } as any)
       .eq('id', case_id);
 
