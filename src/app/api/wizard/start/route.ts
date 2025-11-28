@@ -131,13 +131,12 @@ export async function POST(request: Request) {
       // Pre-populate tier if specified
       const initialFacts = {
         ...emptyFacts,
-        __meta: { product: normalizedProduct, original_product: product }
+        __meta: {
+          product: normalizedProduct,
+          original_product: product,
+          ...(tier ? { product_tier: tier } : {})
+        }
       };
-
-      // If tier is specified (ast_standard or ast_premium), pre-populate it
-      if (tier) {
-        initialFacts.product_tier = tier;
-      }
 
       const { data, error } = await supabase
         .from('cases')
@@ -168,13 +167,20 @@ export async function POST(request: Request) {
 
     // If this is a newly created case with pre-populated tier, ensure case_facts also has it
     if (!case_id && tier) {
+      const updatedFacts = {
+        ...facts,
+        __meta: {
+          ...(facts as any).__meta,
+          product_tier: tier
+        }
+      };
       const { error: updateError } = await supabase
         .from('case_facts')
-        .update({ facts: { ...facts, product_tier: tier } as any })
+        .update({ facts: updatedFacts as any })
         .eq('case_id', caseRecord.id);
 
       if (!updateError) {
-        facts = { ...facts, product_tier: tier } as any;
+        facts = updatedFacts as any;
       }
     }
 
