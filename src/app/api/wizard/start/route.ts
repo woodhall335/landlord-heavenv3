@@ -114,14 +114,17 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Case not found' }, { status: 404 });
       }
 
-      if (data.case_type !== resolvedCaseType || data.jurisdiction !== jurisdiction) {
+      // Type assertion: we know data exists after the null check
+      const caseData = data as { id: string; case_type: string; jurisdiction: string };
+
+      if (caseData.case_type !== resolvedCaseType || caseData.jurisdiction !== jurisdiction) {
         return NextResponse.json(
           { error: 'Case does not match requested product or jurisdiction' },
           { status: 400 }
         );
       }
 
-      caseRecord = data;
+      caseRecord = caseData;
     } else {
       // ------------------------------------------------
       // 2. Create new case
@@ -132,9 +135,9 @@ export async function POST(request: Request) {
       const initialFacts = {
         ...emptyFacts,
         __meta: {
-          product: normalizedProduct,
-          original_product: product,
-          ...(tier ? { product_tier: tier } : {})
+          product: normalizedProduct as string | null,
+          original_product: product as string | null,
+          ...(tier ? { product_tier: tier as string | null } : {})
         }
       };
 
@@ -147,7 +150,7 @@ export async function POST(request: Request) {
           status: 'in_progress',
           wizard_progress: 0,
           collected_facts: initialFacts as any, // Supabase types collected_facts as Json
-        })
+        } as any)
         .select()
         .single();
 
@@ -170,13 +173,14 @@ export async function POST(request: Request) {
       const updatedFacts = {
         ...facts,
         __meta: {
-          ...facts.__meta,
-          product_tier: tier
+          product: facts.__meta?.product ?? null,
+          original_product: facts.__meta?.original_product ?? null,
+          product_tier: tier as string | null
         }
       };
       const { error: updateError } = await supabase
         .from('case_facts')
-        .update({ facts: updatedFacts as any }) // Supabase types facts as Json
+        .update({ facts: updatedFacts as any } as any) // Supabase types facts as Json
         .eq('case_id', caseRecord.id);
 
       if (!updateError) {

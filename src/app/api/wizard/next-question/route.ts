@@ -76,13 +76,14 @@ export async function POST(request: Request) {
       query = query.is('user_id', null);
     }
 
-    const { data: caseData, error: caseError } = await query.single();
+    const { data, error: caseError } = await query.single();
 
-    if (caseError || !caseData) {
+    if (caseError || !data) {
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    const caseRow = caseData;
+    // Type assertion: we know data exists after the null check
+    const caseRow = data as { id: string; jurisdiction: string; case_type: string; collected_facts: any };
 
     // Northern Ireland gating: only tenancy agreements are supported
     if (caseRow.jurisdiction === 'northern-ireland' && caseRow.case_type !== 'tenancy_agreement') {
@@ -114,7 +115,7 @@ export async function POST(request: Request) {
         .update({
           wizard_progress: 100,
           wizard_completed_at: new Date().toISOString(),
-        })
+        } as any)
         .eq('id', case_id);
 
       return NextResponse.json({
@@ -128,7 +129,7 @@ export async function POST(request: Request) {
 
     await supabase
       .from('cases')
-      .update({ wizard_progress: progress })
+      .update({ wizard_progress: progress } as any)
       .eq('id', case_id);
 
     return NextResponse.json({
