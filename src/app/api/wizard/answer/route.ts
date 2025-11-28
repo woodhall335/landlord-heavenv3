@@ -24,6 +24,87 @@ const answerSchema = z.object({
   answer: z.any(),
 });
 
+// ============================================================================
+// Runtime Validation for Critical WizardFacts Fields
+// ============================================================================
+
+/**
+ * Validates critical answers using Zod schemas per question ID.
+ * Protects essential data like dates, money, and product configuration.
+ */
+function validateCriticalAnswer(questionId: string, answer: unknown): { ok: true } | { ok: false; errors: string[] } {
+  try {
+    // Critical field: AST tier (product selection)
+    if (questionId === 'ast_tier') {
+      const schema = z.enum(['Standard AST', 'Premium AST'], {
+        errorMap: () => ({ message: 'AST tier must be "Standard AST" or "Premium AST"' })
+      });
+      schema.parse(answer);
+      return { ok: true };
+    }
+
+    // Critical field: Tenancy start date (part of tenancy_type_and_dates group)
+    if (questionId === 'tenancy_type_and_dates') {
+      const groupSchema = z.object({
+        tenancy_start_date: z.string()
+          .min(1, 'Tenancy start date is required')
+          .regex(/^\d{4}-\d{2}-\d{2}$/, 'Tenancy start date must be in YYYY-MM-DD format'),
+      }).passthrough(); // Allow other fields in the group
+
+      groupSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // Critical field: Rent amount (part of rent_details group)
+    if (questionId === 'rent_details') {
+      const groupSchema = z.object({
+        rent_amount: z.union([
+          z.number().positive('Rent amount must be positive'),
+          z.string()
+            .min(1, 'Rent amount is required')
+            .refine(
+              (val) => !isNaN(Number(val)) && Number(val) > 0,
+              'Rent amount must be a positive number'
+            )
+        ]),
+      }).passthrough(); // Allow other fields in the group
+
+      groupSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // Critical field: Property address line 1 (part of property_address group)
+    if (questionId === 'property_address') {
+      const groupSchema = z.object({
+        property_address_line1: z.string()
+          .min(1, 'Property address line 1 is required')
+          .max(200, 'Property address line 1 is too long'),
+      }).passthrough(); // Allow other fields in the group
+
+      groupSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // Not a critical field - validation passes
+    return { ok: true };
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return {
+        ok: false,
+        errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+      };
+    }
+    return {
+      ok: false,
+      errors: ['Validation failed for this answer']
+    };
+  }
+}
+
+// ============================================================================
+// Helper Functions
+// ============================================================================
+
 function deriveProduct(caseType: string, collectedFacts: Record<string, any>): ProductType {
   const metaProduct = collectedFacts?.__meta?.product as ProductType | undefined;
   if (metaProduct) return metaProduct;
@@ -133,6 +214,10 @@ function updateDerivedFacts(
   return updatedFacts;
 }
 
+// ============================================================================
+// Main Handler
+// ============================================================================
+
 export async function POST(request: Request) {
   try {
     const user = await getServerUser().catch(() => null);
@@ -147,6 +232,15 @@ export async function POST(request: Request) {
     }
 
     const { case_id, question_id, answer } = validationResult.data;
+
+    // Runtime validation for critical WizardFacts fields
+    const criticalValidation = validateCriticalAnswer(question_id, answer);
+    if (!criticalValidation.ok) {
+      return NextResponse.json(
+        { error: 'Invalid answer for this question', details: criticalValidation.errors },
+        { status: 400 }
+      );
+    }
 
     // Create properly typed Supabase client
     const supabase = await createServerSupabaseClient();
