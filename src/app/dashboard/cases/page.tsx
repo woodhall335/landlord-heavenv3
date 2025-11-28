@@ -41,6 +41,7 @@ export default function CasesListPage() {
 
   useEffect(() => {
     applyFiltersAndSort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cases, filterStatus, sortBy]);
 
   const fetchCases = async () => {

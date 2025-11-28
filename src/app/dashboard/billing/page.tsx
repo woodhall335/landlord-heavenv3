@@ -38,6 +38,7 @@ export default function BillingPage() {
 
   useEffect(() => {
     loadBillingData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function loadBillingData() {
@@ -80,7 +81,6 @@ export default function BillingPage() {
   }
 
   async function handleCancelSubscription() {
-    const supabase = getSupabaseBrowserClient();
     if (!subscription) return;
 
     const confirmed = confirm(
@@ -109,7 +109,6 @@ export default function BillingPage() {
   }
 
   async function handleReactivateSubscription() {
-    const supabase = getSupabaseBrowserClient();
     if (!subscription) return;
 
     try {
@@ -132,7 +131,6 @@ export default function BillingPage() {
   }
 
   async function handleManagePaymentMethod() {
-    const supabase = getSupabaseBrowserClient();
     try {
       const response = await fetch("/api/stripe/customer-portal", {
         method: "POST",

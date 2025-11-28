@@ -38,7 +38,7 @@ export default function ForgotPasswordPage() {
       } else {
         setError(data.error || 'Failed to send reset email');
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
@@ -89,7 +89,7 @@ export default function ForgotPasswordPage() {
                 label="Email address"
                 type="email"
                 value={email}
-                onChange={setEmail}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
                 autoComplete="email"

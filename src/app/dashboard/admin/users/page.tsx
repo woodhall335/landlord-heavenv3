@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Container } from "@/components/ui";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -32,16 +32,7 @@ export default function AdminUsersPage() {
   const [totalPages, setTotalPages] = useState(1);
   const usersPerPage = 20;
 
-  useEffect(() => {
-    checkAdminAccess();
-  }, []);
-
-  useEffect(() => {
-    if (loading) return;
-    loadUsers();
-  }, [searchTerm, filterTier, sortBy, currentPage]);
-
-  async function checkAdminAccess() {
+  const checkAdminAccess = useCallback(async () => {
     const supabase = getSupabaseBrowserClient();
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -62,9 +53,9 @@ export default function AdminUsersPage() {
       console.error("Error checking admin access:", error);
       router.push("/dashboard");
     }
-  }
+  }, [router]);
 
-  async function loadUsers() {
+  const loadUsers = useCallback(async () => {
     const supabase = getSupabaseBrowserClient();
     try {
       let query = supabase
@@ -90,7 +81,7 @@ export default function AdminUsersPage() {
 
       // Load subscription info and revenue for each user
       const usersWithStats: UserWithStats[] = await Promise.all(
-        (data || []).map(async (user) => {
+        (data || []).map(async (user: User) => {
           // Get subscription
           const { data: subData } = await supabase
             .from("hmo_subscriptions")
@@ -107,11 +98,11 @@ export default function AdminUsersPage() {
             .eq("status", "succeeded");
 
           const orderCount = ordersData?.length || 0;
-          const totalRevenue = ordersData?.reduce((sum, order) => sum + order.amount, 0) || 0;
+          const totalRevenue = (ordersData as { amount: number }[] | null)?.reduce((sum, order) => sum + order.amount, 0) || 0;
 
           return {
             ...user,
-            subscription_tier: subData?.tier,
+            subscription_tier: (subData as { tier: string } | null)?.tier,
             order_count: orderCount,
             total_revenue: totalRevenue,
           };
@@ -138,7 +129,16 @@ export default function AdminUsersPage() {
     } catch (error) {
       console.error("Error loading users:", error);
     }
-  }
+  }, [searchTerm, filterTier, sortBy, currentPage, usersPerPage]);
+
+  useEffect(() => {
+    checkAdminAccess();
+  }, [checkAdminAccess]);
+
+  useEffect(() => {
+    if (loading) return;
+    loadUsers();
+  }, [loading, loadUsers]);
 
   async function handleBanUser(userId: string, isBanned: boolean) {
     const confirmed = confirm(

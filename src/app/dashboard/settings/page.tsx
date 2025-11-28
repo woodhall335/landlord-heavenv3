@@ -59,7 +59,7 @@ export default function SettingsPage() {
       } else {
         setError('Failed to load profile');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to load profile');
     } finally {
       setIsLoading(false);
@@ -90,7 +90,7 @@ export default function SettingsPage() {
       } else {
         setError(data.error || 'Failed to update profile');
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong');
     } finally {
       setIsSaving(false);
@@ -134,7 +134,7 @@ export default function SettingsPage() {
       } else {
         setError(data.error || 'Failed to change password');
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong');
     } finally {
       setIsSaving(false);
@@ -161,7 +161,7 @@ export default function SettingsPage() {
       } else {
         alert('Failed to cancel subscription');
       }
-    } catch (err) {
+    } catch {
       alert('Failed to cancel subscription');
     }
   };
@@ -269,7 +269,7 @@ export default function SettingsPage() {
                 label="Full name"
                 type="text"
                 value={fullName}
-                onChange={setFullName}
+                onChange={(e) => setFullName(e.target.value)}
                 placeholder="John Smith"
               />
 
@@ -277,7 +277,7 @@ export default function SettingsPage() {
                 label="Phone number"
                 type="tel"
                 value={phone}
-                onChange={setPhone}
+                onChange={(e) => setPhone(e.target.value)}
                 placeholder="+44 7700 900000"
               />
 
@@ -303,7 +303,7 @@ export default function SettingsPage() {
                 label="Current password"
                 type="password"
                 value={currentPassword}
-                onChange={setCurrentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
                 placeholder="Enter current password"
                 required
               />
@@ -312,7 +312,7 @@ export default function SettingsPage() {
                 label="New password"
                 type="password"
                 value={newPassword}
-                onChange={setNewPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="At least 8 characters"
                 required
               />
@@ -321,7 +321,7 @@ export default function SettingsPage() {
                 label="Confirm new password"
                 type="password"
                 value={confirmPassword}
-                onChange={setConfirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Re-enter new password"
                 required
               />

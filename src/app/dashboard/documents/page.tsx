@@ -41,6 +41,7 @@ export default function DocumentsPage() {
 
   useEffect(() => {
     applyFiltersAndSort();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [documents, filterType, sortBy, showPreviewOnly]);
 
   const fetchDocuments = async () => {
