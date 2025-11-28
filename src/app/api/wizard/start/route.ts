@@ -85,6 +85,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid product' }, { status: 400 });
     }
 
+    // Northern Ireland gating: only tenancy agreements are supported
+    if (jurisdiction === 'northern-ireland' && resolvedCaseType !== 'tenancy_agreement') {
+      return NextResponse.json(
+        { error: 'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.' },
+        { status: 400 }
+      );
+    }
+
     // IMPORTANT: loosen Supabase typing here to avoid `never` errors
     const supabase = (await createServerSupabaseClient()) as any;
 

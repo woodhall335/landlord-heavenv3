@@ -1,7 +1,5 @@
 import { describe, expect, it, beforeEach, vi } from 'vitest';
 import { POST as startWizard } from '@/app/api/wizard/start/route';
-import { POST as nextQuestion } from '@/app/api/wizard/next-question/route';
-import { POST as analyzeWizard } from '@/app/api/wizard/analyze/route';
 
 const supabaseClientMock = {
   from: vi.fn(),
@@ -52,6 +50,8 @@ describe('Money claim access controls', () => {
         case_type: 'money_claim',
         jurisdiction: 'scotland',
         status: 'in_progress',
+        collected_facts: {},
+        user_id: null,
       },
       error: null,
     });
@@ -59,13 +59,13 @@ describe('Money claim access controls', () => {
     const response = await startWizard(
       new Request('http://localhost/api/wizard/start', {
         method: 'POST',
-        body: JSON.stringify({ case_type: 'money_claim', jurisdiction: 'scotland' }),
+        body: JSON.stringify({ product: 'money_claim', jurisdiction: 'scotland' }),
       }),
     );
 
     const body = await response.json();
-    expect(response.status).toBe(201);
-    expect(body.success).toBe(true);
+    expect(response.status).toBe(200);
+    expect(body.case_id).toBeDefined();
     expect(supabaseClientMock.insert).toHaveBeenCalled();
   });
 
@@ -76,6 +76,8 @@ describe('Money claim access controls', () => {
         case_type: 'money_claim',
         jurisdiction: 'england-wales',
         status: 'in_progress',
+        collected_facts: {},
+        user_id: null,
       },
       error: null,
     });
@@ -83,20 +85,21 @@ describe('Money claim access controls', () => {
     const response = await startWizard(
       new Request('http://localhost/api/wizard/start', {
         method: 'POST',
-        body: JSON.stringify({ case_type: 'money_claim', jurisdiction: 'england-wales' }),
+        body: JSON.stringify({ product: 'money_claim', jurisdiction: 'england-wales' }),
       }),
     );
 
     const body = await response.json();
-    expect(response.status).toBe(201);
-    expect(body.success).toBe(true);
+    expect(response.status).toBe(200);
+    expect(body.case_id).toBeDefined();
+    expect(supabaseClientMock.insert).toHaveBeenCalled();
   });
 
   it('blocks Northern Ireland money claim cases at /api/wizard/start', async () => {
     const response = await startWizard(
       new Request('http://localhost/api/wizard/start', {
         method: 'POST',
-        body: JSON.stringify({ case_type: 'money_claim', jurisdiction: 'northern-ireland' }),
+        body: JSON.stringify({ product: 'money_claim', jurisdiction: 'northern-ireland' }),
       }),
     );
 

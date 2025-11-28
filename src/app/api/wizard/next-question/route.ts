@@ -87,6 +87,14 @@ export async function POST(request: Request) {
 
     const caseRow = caseData;
 
+    // Northern Ireland gating: only tenancy agreements are supported
+    if (caseRow.jurisdiction === 'northern-ireland' && caseRow.case_type !== 'tenancy_agreement') {
+      return NextResponse.json(
+        { error: 'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.' },
+        { status: 400 }
+      );
+    }
+
     const product = deriveProduct(
       caseRow.case_type as string,
       (caseRow.collected_facts as Record<string, any>) || {}

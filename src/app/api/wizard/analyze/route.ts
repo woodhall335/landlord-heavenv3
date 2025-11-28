@@ -84,6 +84,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
+    // Northern Ireland gating: only tenancy agreements are supported
+    if (caseData.jurisdiction === 'northern-ireland' && caseData.case_type !== 'tenancy_agreement') {
+      return NextResponse.json(
+        { error: 'Only tenancy agreements are available for Northern Ireland. Eviction and money claim analysis is not currently supported.' },
+        { status: 400 }
+      );
+    }
+
     const facts = await getOrCreateCaseFacts(supabase, case_id);
     const route = computeRoute(facts, caseData.jurisdiction, caseData.case_type);
     const { score, red_flags, compliance } = computeStrength(facts);
