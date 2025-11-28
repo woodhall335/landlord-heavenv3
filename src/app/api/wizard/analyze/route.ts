@@ -65,8 +65,9 @@ export async function POST(request: Request) {
     }
 
     const { case_id } = validation.data;
-    // Cast to any to avoid TypeScript inference issues with Supabase generics
-    const supabase = (await createServerSupabaseClient()) as any;
+
+    // Create properly typed Supabase client
+    const supabase = await createServerSupabaseClient();
 
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
@@ -100,8 +101,8 @@ export async function POST(request: Request) {
       .from('cases')
       .update({
         recommended_route: route,
-        red_flags: red_flags as any,
-        compliance_issues: compliance as any,
+        red_flags: red_flags as any, // Supabase types red_flags as Json
+        compliance_issues: compliance as any, // Supabase types compliance_issues as Json
         success_probability: score,
         wizard_progress: caseData.wizard_progress ?? 0,
       })

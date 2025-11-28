@@ -103,19 +103,19 @@ function updateDerivedFacts(
 
   if (questionId === 'tenancy_type') {
     if (typeof value === 'string' && value.toLowerCase().includes('prt')) {
-      updatedFacts = setFactPath(updatedFacts as any, 'tenancy.tenancy_type', 'prt');
+      updatedFacts = setFactPath(updatedFacts, 'tenancy.tenancy_type', 'prt');
     }
   }
 
   if (questionId === 'property_details' && jurisdiction) {
-    updatedFacts = setFactPath(updatedFacts as any, 'property.country', jurisdiction);
+    updatedFacts = setFactPath(updatedFacts, 'property.country', jurisdiction);
   }
 
   if (questionId === 'arrears_total' || questionId === 'arrears_amount') {
     const numericValue = typeof value === 'number' ? value : Number(value);
     if (!Number.isNaN(numericValue)) {
       updatedFacts = setFactPath(
-        updatedFacts as any,
+        updatedFacts,
         'issues.rent_arrears.has_arrears',
         numericValue > 0
       );
@@ -124,7 +124,7 @@ function updateDerivedFacts(
 
   if (questionId === 'rent_arrears') {
     updatedFacts = setFactPath(
-      updatedFacts as any,
+      updatedFacts,
       'issues.rent_arrears.has_arrears',
       Boolean(value)
     );
@@ -148,8 +148,8 @@ export async function POST(request: Request) {
 
     const { case_id, question_id, answer } = validationResult.data;
 
-    // Cast to any to avoid TypeScript inference issues with Supabase generics
-    const supabase = (await createServerSupabaseClient()) as any;
+    // Create properly typed Supabase client
+    const supabase = await createServerSupabaseClient();
 
     // ---------------------------------------
     // 1. Load case with RLS-respecting query
@@ -171,8 +171,8 @@ export async function POST(request: Request) {
     const caseRow = caseData;
 
     const collectedFacts = (caseRow.collected_facts as Record<string, any>) || {};
-    const product = deriveProduct(caseRow.case_type as string, collectedFacts);
-    const mqs = loadMQS(product, caseRow.jurisdiction as string);
+    const product = deriveProduct(caseRow.case_type, collectedFacts);
+    const mqs = loadMQS(product, caseRow.jurisdiction);
 
     if (!mqs) {
       return NextResponse.json(
@@ -198,30 +198,30 @@ export async function POST(request: Request) {
     // ---------------------------------------
     const currentFacts = await getOrCreateWizardFacts(supabase, case_id);
     let mergedFacts = applyMappedAnswers(
-      currentFacts as any,
+      currentFacts,
       question.maps_to,
       normalizedAnswer
     );
 
     if (!question.maps_to || question.maps_to.length === 0) {
-      mergedFacts = setFactPath(mergedFacts as any, question_id, normalizedAnswer);
+      mergedFacts = setFactPath(mergedFacts, question_id, normalizedAnswer);
     }
 
     mergedFacts = updateDerivedFacts(
       question_id,
-      caseRow.jurisdiction as string,
-      mergedFacts as any,
+      caseRow.jurisdiction,
+      mergedFacts,
       normalizedAnswer
-    ) as any;
+    );
 
     const newFacts = await updateWizardFacts(
       supabase,
       case_id,
-      () => mergedFacts as any,
+      () => mergedFacts,
       { meta: collectedFacts.__meta }
     );
 
-        // ---------------------------------------
+    // ---------------------------------------
     // 3. Log conversation (user + assistant)
     // ---------------------------------------
     const rawAnswerText =
@@ -237,7 +237,7 @@ export async function POST(request: Request) {
         content: rawAnswerText,
         question_id,
         input_type: question.inputType ?? null,
-        user_input: normalizedAnswer,
+        user_input: normalizedAnswer as any, // Supabase types user_input as Json
       });
     } catch (convErr) {
       console.error('Failed to insert user conversation row:', convErr);
@@ -249,9 +249,9 @@ export async function POST(request: Request) {
       enhanced = await enhanceAnswer({
         question,
         rawAnswer: rawAnswerText,
-        jurisdiction: caseRow.jurisdiction as string,
+        jurisdiction: caseRow.jurisdiction,
         product,
-        caseType: caseRow.case_type as string,
+        caseType: caseRow.case_type,
       });
     } catch (enhErr) {
       console.error('enhanceAnswer failed, proceeding without suggestions:', enhErr);
@@ -268,7 +268,7 @@ export async function POST(request: Request) {
             content: enhanced.suggested_wording,
             question_id,
             model: 'ask-heaven',
-            user_input: normalizedAnswer,
+            user_input: normalizedAnswer as any, // Supabase types user_input as Json
           });
       } catch (convErr) {
         console.error('Failed to insert assistant conversation row:', convErr);
@@ -279,8 +279,8 @@ export async function POST(request: Request) {
     // ---------------------------------------
     // 4. Determine next question + progress
     // ---------------------------------------
-    const nextQuestion = getNextMQSQuestion(mqs, newFacts as any);
-    const progress = computeProgress(mqs, newFacts as any);
+    const nextQuestion = getNextMQSQuestion(mqs, newFacts);
+    const progress = computeProgress(mqs, newFacts);
     const isComplete = !nextQuestion;
 
     await supabase

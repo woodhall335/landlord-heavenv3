@@ -10,6 +10,12 @@ import type { SupabaseClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import type { Database } from './types';
 
+/**
+ * Creates a fully-typed Supabase client for server-side use.
+ * The client is typed against the Database schema from supabase_schema.md.
+ *
+ * @returns SupabaseClient<Database> - Fully typed client with schema inference
+ */
 export async function createServerSupabaseClient(): Promise<SupabaseClient<Database>> {
   const cookieStore = await cookies();
 
