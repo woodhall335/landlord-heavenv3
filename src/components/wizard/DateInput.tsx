@@ -21,7 +21,6 @@ export const DateInput: React.FC<DateInputProps> = ({
   value,
   onChange,
   allowApproximate = false,
-  allowFuture = false,
   allowPast = true,
   helperText,
   disabled = false,

@@ -7,8 +7,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
@@ -47,18 +46,13 @@ interface UserProfile {
 }
 
 export default function HMOProDashboardPage() {
-  const router = useRouter();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [properties, setProperties] = useState<HMOProperty[]>([]);
   const [tenants, setTenants] = useState<HMOTenant[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasAccess, setHasAccess] = useState(false);
 
-  useEffect(() => {
-    checkAccess();
-  }, []);
-
-  const checkAccess = async () => {
+  const checkAccess = useCallback(async () => {
     try {
       // Check user profile for subscription
       const profileRes = await fetch('/api/users/me');
@@ -83,7 +77,11 @@ export default function HMOProDashboardPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    checkAccess();
+  }, [checkAccess]);
 
   const fetchDashboardData = async () => {
     try {

@@ -44,7 +44,6 @@ export default function DashboardPage() {
   const router = useRouter();
   const [cases, setCases] = useState<Case[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
-  const [orders, setOrders] = useState<Order[]>([]);
   const [stats, setStats] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
 

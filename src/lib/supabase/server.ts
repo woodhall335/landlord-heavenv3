@@ -30,7 +30,7 @@ export async function createServerSupabaseClient(): Promise<SupabaseClient<Datab
         set(name: string, value: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value, ...options });
-          } catch (error) {
+          } catch (_error) {
             // Server component - can't set cookies
             // This is expected in some contexts
           }
@@ -38,7 +38,7 @@ export async function createServerSupabaseClient(): Promise<SupabaseClient<Datab
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: '', ...options });
-          } catch (error) {
+          } catch (_error) {
             // Server component - can't remove cookies
             // This is expected in some contexts
           }

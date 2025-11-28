@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
@@ -40,9 +40,19 @@ export default function HMOPropertiesPage() {
     fetchProperties();
   }, []);
 
+  const applyFilters = useCallback(() => {
+    let filtered = [...properties];
+
+    if (filterCompliance !== 'all') {
+      filtered = filtered.filter((p) => p.compliance_status === filterCompliance);
+    }
+
+    setFilteredProperties(filtered);
+  }, [properties, filterCompliance]);
+
   useEffect(() => {
     applyFilters();
-  }, [properties, filterCompliance]);
+  }, [applyFilters]);
 
   const fetchProperties = async () => {
     try {
@@ -57,16 +67,6 @@ export default function HMOPropertiesPage() {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const applyFilters = () => {
-    let filtered = [...properties];
-
-    if (filterCompliance !== 'all') {
-      filtered = filtered.filter((p) => p.compliance_status === filterCompliance);
-    }
-
-    setFilteredProperties(filtered);
   };
 
   const formatDate = (dateString: string) => {

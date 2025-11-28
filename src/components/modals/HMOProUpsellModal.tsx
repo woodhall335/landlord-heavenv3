@@ -8,7 +8,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Modal, Button, Loading } from '@/components/ui';
 
 interface HMOProUpsellModalProps {
@@ -24,7 +23,6 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
   tenantCount = 3,
   propertyAddress,
 }) => {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const handleStartTrial = async () => {
