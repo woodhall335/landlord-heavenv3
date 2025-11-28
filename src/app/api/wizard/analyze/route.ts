@@ -118,7 +118,6 @@ export async function POST(request: Request) {
       const htmlContent = `<h1>Preview - ${route}</h1><p>Case strength: ${score}%</p>`;
       const { data, error: docError} = await supabase
         .from('documents')
-        // @ts-expect-error - Supabase RLS types incorrectly infer never for insert
         .insert({
           user_id: caseData.user_id,
           case_id,
