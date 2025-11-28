@@ -76,12 +76,15 @@ export async function POST(request: Request) {
       query = query.is('user_id', null);
     }
 
-    const { data: caseData, error: caseError } = await query.single();
+    const { data, error: caseError } = await query.single();
 
-    if (caseError || !caseData) {
+    if (caseError || !data) {
       console.error('Case not found:', caseError);
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
+
+    // Type assertion: we know data exists after the null check
+    const caseData = data as { id: string; jurisdiction: string; case_type: string; user_id: string | null; wizard_progress: number | null };
 
     // Northern Ireland gating: only tenancy agreements are supported
     if (caseData.jurisdiction === 'northern-ireland' && caseData.case_type !== 'tenancy_agreement') {
@@ -99,21 +102,23 @@ export async function POST(request: Request) {
 
     await supabase
       .from('cases')
+      // @ts-ignore - Supabase RLS types incorrectly infer never for update
       .update({
         recommended_route: route,
         red_flags: red_flags as any, // Supabase types red_flags as Json
         compliance_issues: compliance as any, // Supabase types compliance_issues as Json
         success_probability: score,
         wizard_progress: caseData.wizard_progress ?? 0,
-      })
+      } as any)
       .eq('id', case_id);
 
     const previewDocuments: { id: string; document_type: string; document_title: string }[] = [];
 
     if (caseData.user_id) {
       const htmlContent = `<h1>Preview - ${route}</h1><p>Case strength: ${score}%</p>`;
-      const { data: docRow, error: docError } = await supabase
+      const { data, error: docError} = await supabase
         .from('documents')
+        // @ts-ignore - Supabase RLS types incorrectly infer never for insert
         .insert({
           user_id: caseData.user_id,
           case_id,
@@ -122,11 +127,12 @@ export async function POST(request: Request) {
           jurisdiction: caseData.jurisdiction,
           html_content: htmlContent,
           is_preview: true,
-        })
+        } as any)
         .select()
         .single();
 
-      if (!docError && docRow) {
+      if (!docError && data) {
+        const docRow = data as { id: string; document_type: string; document_title: string };
         previewDocuments.push({
           id: docRow.id,
           document_type: docRow.document_type,

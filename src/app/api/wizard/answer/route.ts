@@ -37,7 +37,7 @@ function validateCriticalAnswer(questionId: string, answer: unknown): { ok: true
     // Critical field: AST tier (product selection)
     if (questionId === 'ast_tier') {
       const schema = z.enum(['Standard AST', 'Premium AST'], {
-        errorMap: () => ({ message: 'AST tier must be "Standard AST" or "Premium AST"' })
+        message: 'AST tier must be "Standard AST" or "Premium AST"'
       });
       schema.parse(answer);
       return { ok: true };
@@ -91,7 +91,7 @@ function validateCriticalAnswer(questionId: string, answer: unknown): { ok: true
     if (error instanceof z.ZodError) {
       return {
         ok: false,
-        errors: error.errors.map(e => `${e.path.join('.')}: ${e.message}`)
+        errors: error.issues.map((e: z.ZodIssue) => `${e.path.join('.')}: ${e.message}`)
       };
     }
     return {
@@ -255,14 +255,15 @@ export async function POST(request: Request) {
       query = query.is('user_id', null);
     }
 
-    const { data: caseData, error: fetchError } = await query.single();
+    const { data, error: fetchError } = await query.single();
 
-    if (fetchError || !caseData) {
+    if (fetchError || !data) {
       console.error('Case not found:', fetchError);
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    const caseRow = caseData;
+    // Type assertion: we know data exists after the null check
+    const caseRow = data as { id: string; jurisdiction: string; case_type: string; collected_facts: any };
 
     const collectedFacts = (caseRow.collected_facts as Record<string, any>) || {};
     const product = deriveProduct(caseRow.case_type, collectedFacts);
@@ -332,7 +333,7 @@ export async function POST(request: Request) {
         question_id,
         input_type: question.inputType ?? null,
         user_input: normalizedAnswer as any, // Supabase types user_input as Json
-      });
+      } as any);
     } catch (convErr) {
       console.error('Failed to insert user conversation row:', convErr);
     }
@@ -363,7 +364,7 @@ export async function POST(request: Request) {
             question_id,
             model: 'ask-heaven',
             user_input: normalizedAnswer as any, // Supabase types user_input as Json
-          });
+          } as any);
       } catch (convErr) {
         console.error('Failed to insert assistant conversation row:', convErr);
       }
@@ -379,10 +380,11 @@ export async function POST(request: Request) {
 
     await supabase
       .from('cases')
+      // @ts-ignore - Supabase RLS types incorrectly infer never for update
       .update({
         wizard_progress: isComplete ? 100 : progress,
         wizard_completed_at: isComplete ? new Date().toISOString() : null,
-      })
+      } as any)
       .eq('id', case_id);
 
     return NextResponse.json({
