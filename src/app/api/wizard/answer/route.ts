@@ -241,7 +241,7 @@ export async function POST(request: Request) {
         question_id,
         input_type: question.inputType ?? null,
         user_input: normalizedAnswer,
-      } satisfies Database['public']['Tables']['conversations']['Insert']);
+      });
     } catch (convErr) {
       console.error('Failed to insert user conversation row:', convErr);
     }
@@ -272,7 +272,7 @@ export async function POST(request: Request) {
             question_id,
             model: 'ask-heaven',
             user_input: normalizedAnswer,
-          } satisfies Database['public']['Tables']['conversations']['Insert']);
+          });
       } catch (convErr) {
         console.error('Failed to insert assistant conversation row:', convErr);
       }
@@ -291,7 +291,7 @@ export async function POST(request: Request) {
       .update({
         wizard_progress: isComplete ? 100 : progress,
         wizard_completed_at: isComplete ? new Date().toISOString() : null,
-      } satisfies Database['public']['Tables']['cases']['Update'])
+      })
       .eq('id', case_id);
 
     return NextResponse.json({
