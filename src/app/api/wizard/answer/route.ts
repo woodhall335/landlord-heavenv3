@@ -9,13 +9,11 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { loadMQS, getNextMQSQuestion, type ProductType, type MasterQuestionSet } from '@/lib/wizard/mqs-loader';
 import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
 import { updateCaseFacts, getOrCreateCaseFacts } from '@/lib/case-facts/store';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
-import type { Database } from '@/lib/supabase/types';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -150,7 +148,8 @@ export async function POST(request: Request) {
 
     const { case_id, question_id, answer } = validationResult.data;
 
-    const supabase: SupabaseClient<Database> = await createServerSupabaseClient();
+    // Cast to any to avoid TypeScript inference issues with Supabase generics
+    const supabase = (await createServerSupabaseClient()) as any;
 
     // ---------------------------------------
     // 1. Load case with RLS-respecting query
@@ -162,9 +161,7 @@ export async function POST(request: Request) {
       query = query.is('user_id', null);
     }
 
-    const { data: caseData, error: fetchError } = await query.single<
-      Database['public']['Tables']['cases']['Row']
-    >();
+    const { data: caseData, error: fetchError } = await query.single();
 
     if (fetchError || !caseData) {
       console.error('Case not found:', fetchError);

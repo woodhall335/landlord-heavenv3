@@ -9,10 +9,8 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
 import type { CaseFacts } from '@/lib/case-facts/schema';
-import type { Database } from '@/lib/supabase/types';
 
 const analyzeSchema = z.object({
   case_id: z.string().uuid(),
@@ -66,7 +64,8 @@ export async function POST(request: Request) {
     }
 
     const { case_id } = validation.data;
-    const supabase: SupabaseClient<Database> = await createServerSupabaseClient();
+    // Cast to any to avoid TypeScript inference issues with Supabase generics
+    const supabase = (await createServerSupabaseClient()) as any;
 
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
@@ -75,9 +74,7 @@ export async function POST(request: Request) {
       query = query.is('user_id', null);
     }
 
-    const { data: caseData, error: caseError } = await query.single<
-      Database['public']['Tables']['cases']['Row']
-    >();
+    const { data: caseData, error: caseError } = await query.single();
 
     if (caseError || !caseData) {
       console.error('Case not found:', caseError);
@@ -123,7 +120,7 @@ export async function POST(request: Request) {
           is_preview: true,
         })
         .select()
-        .single<Database['public']['Tables']['documents']['Row']>();
+        .single();
 
       if (!docError && docRow) {
         previewDocuments.push({
