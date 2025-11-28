@@ -41,7 +41,7 @@ export default function LoginPage() {
       } else {
         setError(data.error || 'Invalid email or password');
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
@@ -72,7 +72,7 @@ export default function LoginPage() {
               label="Email address"
               type="email"
               value={email}
-              onChange={setEmail}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
               required
               autoComplete="email"
@@ -82,7 +82,7 @@ export default function LoginPage() {
               label="Password"
               type="password"
               value={password}
-              onChange={setPassword}
+              onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               required
               autoComplete="current-password"

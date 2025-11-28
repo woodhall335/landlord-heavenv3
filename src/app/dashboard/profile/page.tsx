@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Container } from "@/components/ui";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -28,11 +28,7 @@ export default function ProfilePage() {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  useEffect(() => {
-    loadProfile();
-  }, []);
-
-  async function loadProfile() {
+  const loadProfile = useCallback(async () => {
     const supabase = getSupabaseBrowserClient();
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -49,10 +45,11 @@ export default function ProfilePage() {
 
       if (error) throw error;
 
-      setProfile(data);
+      const profileData = data as UserProfile;
+      setProfile(profileData);
       setFormData({
-        fullName: data.full_name || "",
-        email: data.email,
+        fullName: profileData.full_name || "",
+        email: profileData.email,
         currentPassword: "",
         newPassword: "",
         confirmPassword: "",
@@ -63,7 +60,11 @@ export default function ProfilePage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [router]);
+
+  useEffect(() => {
+    loadProfile();
+  }, [loadProfile]);
 
   async function handleUpdateProfile() {
     const supabase = getSupabaseBrowserClient();

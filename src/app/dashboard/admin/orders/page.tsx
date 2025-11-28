@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Container } from "@/components/ui";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
@@ -30,16 +30,7 @@ export default function AdminOrdersPage() {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const ordersPerPage = 20;
 
-  useEffect(() => {
-    checkAdminAccess();
-  }, []);
-
-  useEffect(() => {
-    if (loading) return;
-    loadOrders();
-  }, [searchTerm, filterProduct, filterStatus, sortBy, currentPage]);
-
-  async function checkAdminAccess() {
+  const checkAdminAccess = useCallback(async () => {
     const supabase = getSupabaseBrowserClient();
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -60,9 +51,9 @@ export default function AdminOrdersPage() {
       console.error("Error checking admin access:", error);
       router.push("/dashboard");
     }
-  }
+  }, [router]);
 
-  async function loadOrders() {
+  const loadOrders = useCallback(async () => {
     const supabase = getSupabaseBrowserClient();
     try {
       let query = supabase
@@ -93,7 +84,7 @@ export default function AdminOrdersPage() {
 
       // Load user info for each order
       const ordersWithUsers: Order[] = await Promise.all(
-        (data || []).map(async (order) => {
+        (data || []).map(async (order: { id: string; user_id: string; product_type: string; amount: number; status: string; stripe_payment_intent_id: string | null; created_at: string }) => {
           const { data: userData } = await supabase
             .from("users")
             .select("email, full_name")
@@ -102,8 +93,8 @@ export default function AdminOrdersPage() {
 
           return {
             ...order,
-            user_email: userData?.email,
-            user_name: userData?.full_name,
+            user_email: userData?.email || undefined,
+            user_name: userData?.full_name || undefined,
           };
         })
       );
@@ -123,10 +114,18 @@ export default function AdminOrdersPage() {
     } catch (error) {
       console.error("Error loading orders:", error);
     }
-  }
+  }, [searchTerm, filterProduct, filterStatus, sortBy, currentPage, ordersPerPage]);
+
+  useEffect(() => {
+    checkAdminAccess();
+  }, [checkAdminAccess]);
+
+  useEffect(() => {
+    if (loading) return;
+    loadOrders();
+  }, [loading, loadOrders]);
 
   async function handleIssueRefund(orderId: string, amount: number) {
-    const supabase = getSupabaseBrowserClient();
     const confirmed = confirm(
       `Are you sure you want to issue a full refund of £${(amount / 100).toFixed(2)}? This action cannot be undone.`
     );
@@ -153,7 +152,6 @@ export default function AdminOrdersPage() {
   }
 
   async function handleResendEmail(orderId: string) {
-    const supabase = getSupabaseBrowserClient();
     try {
       const response = await fetch("/api/admin/orders/resend-email", {
         method: "POST",

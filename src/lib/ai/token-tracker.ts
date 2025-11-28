@@ -88,11 +88,14 @@ export async function getUserTokenStats(
     };
   }
 
-  const totalTokens = usages.reduce((sum, u) => sum + u.total_tokens, 0);
-  const totalCost = usages.reduce((sum, u) => sum + parseFloat(String(u.cost_usd)), 0);
+  type UsageRow = { total_tokens: number; cost_usd: number; operation: string; model: string };
+  const typedUsages = usages as UsageRow[];
+
+  const totalTokens = typedUsages.reduce((sum, u) => sum + u.total_tokens, 0);
+  const totalCost = typedUsages.reduce((sum, u) => sum + parseFloat(String(u.cost_usd)), 0);
 
   // Group by operation
-  const byOperation = usages.reduce((acc, u) => {
+  const byOperation = typedUsages.reduce((acc, u) => {
     if (!acc[u.operation]) {
       acc[u.operation] = { tokens: 0, cost: 0 };
     }
@@ -102,7 +105,7 @@ export async function getUserTokenStats(
   }, {} as Record<string, { tokens: number; cost: number }>);
 
   // Group by model
-  const byModel = usages.reduce((acc, u) => {
+  const byModel = typedUsages.reduce((acc, u) => {
     if (!acc[u.model]) {
       acc[u.model] = { tokens: 0, cost: 0 };
     }
@@ -158,12 +161,15 @@ export async function getPlatformTokenStats(
     };
   }
 
-  const totalTokens = usages.reduce((sum, u) => sum + u.total_tokens, 0);
-  const totalCost = usages.reduce((sum, u) => sum + parseFloat(String(u.cost_usd)), 0);
-  const uniqueUsers = new Set(usages.map((u) => u.user_id)).size;
+  type UsageRow = { total_tokens: number; cost_usd: number; operation: string; model: string; user_id: string };
+  const typedUsages = usages as UsageRow[];
+
+  const totalTokens = typedUsages.reduce((sum, u) => sum + u.total_tokens, 0);
+  const totalCost = typedUsages.reduce((sum, u) => sum + parseFloat(String(u.cost_usd)), 0);
+  const uniqueUsers = new Set(typedUsages.map((u) => u.user_id)).size;
 
   // Group by operation
-  const byOperation = usages.reduce((acc, u) => {
+  const byOperation = typedUsages.reduce((acc, u) => {
     if (!acc[u.operation]) {
       acc[u.operation] = { tokens: 0, cost: 0, count: 0 };
     }
@@ -174,7 +180,7 @@ export async function getPlatformTokenStats(
   }, {} as Record<string, { tokens: number; cost: number; count: number }>);
 
   // Group by model
-  const byModel = usages.reduce((acc, u) => {
+  const byModel = typedUsages.reduce((acc, u) => {
     if (!acc[u.model]) {
       acc[u.model] = { tokens: 0, cost: 0, count: 0 };
     }
@@ -185,7 +191,7 @@ export async function getPlatformTokenStats(
   }, {} as Record<string, { tokens: number; cost: number; count: number }>);
 
   // Top users
-  const userStats = usages.reduce((acc, u) => {
+  const userStats = typedUsages.reduce((acc, u) => {
     if (!acc[u.user_id]) {
       acc[u.user_id] = { tokens: 0, cost: 0 };
     }

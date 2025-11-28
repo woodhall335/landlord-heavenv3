@@ -586,7 +586,7 @@ Please determine the next question to ask, or indicate if fact-finding is comple
 
     try {
       parsedResponse = JSON.parse(response.content);
-    } catch (parseError) {
+    } catch {
       // Fallback: Extract JSON from response if not pure JSON
       const jsonMatch = response.content.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
@@ -597,9 +597,9 @@ Please determine the next question to ask, or indicate if fact-finding is comple
     }
 
     // Update conversation history
-    const updatedHistory = [
+    const updatedHistory: ChatMessage[] = [
       ...messages,
-      { role: 'assistant', content: response.content },
+      { role: 'assistant' as const, content: response.content },
     ];
 
     return {

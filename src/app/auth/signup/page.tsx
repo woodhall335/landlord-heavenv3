@@ -74,7 +74,7 @@ export default function SignupPage() {
       } else {
         setError(data.error || 'Failed to create account');
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong. Please try again.');
     } finally {
       setIsLoading(false);
@@ -105,7 +105,7 @@ export default function SignupPage() {
               label="Full name"
               type="text"
               value={formData.fullName}
-              onChange={(val) => handleChange('fullName', val)}
+              onChange={(e) => handleChange('fullName', e.target.value)}
               placeholder="John Smith"
               autoComplete="name"
             />
@@ -114,7 +114,7 @@ export default function SignupPage() {
               label="Email address"
               type="email"
               value={formData.email}
-              onChange={(val) => handleChange('email', val)}
+              onChange={(e) => handleChange('email', e.target.value)}
               placeholder="you@example.com"
               required
               autoComplete="email"
@@ -124,7 +124,7 @@ export default function SignupPage() {
               label="Phone number (optional)"
               type="tel"
               value={formData.phone}
-              onChange={(val) => handleChange('phone', val)}
+              onChange={(e) => handleChange('phone', e.target.value)}
               placeholder="+44 7700 900000"
               autoComplete="tel"
               helperText="We'll only use this for important account notifications"
@@ -134,7 +134,7 @@ export default function SignupPage() {
               label="Password"
               type="password"
               value={formData.password}
-              onChange={(val) => handleChange('password', val)}
+              onChange={(e) => handleChange('password', e.target.value)}
               placeholder="••••••••"
               required
               autoComplete="new-password"
@@ -145,7 +145,7 @@ export default function SignupPage() {
               label="Confirm password"
               type="password"
               value={formData.confirmPassword}
-              onChange={(val) => handleChange('confirmPassword', val)}
+              onChange={(e) => handleChange('confirmPassword', e.target.value)}
               placeholder="••••••••"
               required
               autoComplete="new-password"

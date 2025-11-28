@@ -86,7 +86,7 @@ export default function NewTenantPage() {
       } else {
         setError(data.error || 'Failed to add tenant');
       }
-    } catch (err) {
+    } catch {
       setError('Something went wrong');
     } finally {
       setIsLoading(false);
@@ -153,7 +153,7 @@ export default function NewTenantPage() {
                   label="Full Name"
                   type="text"
                   value={fullName}
-                  onChange={setFullName}
+                  onChange={(e) => setFullName(e.target.value)}
                   placeholder="John Smith"
                   required
                 />
@@ -163,7 +163,7 @@ export default function NewTenantPage() {
                     label="Email Address"
                     type="email"
                     value={email}
-                    onChange={setEmail}
+                    onChange={(e) => setEmail(e.target.value)}
                     placeholder="john.smith@example.com"
                     required
                   />
@@ -172,7 +172,7 @@ export default function NewTenantPage() {
                     label="Phone Number"
                     type="tel"
                     value={phone}
-                    onChange={setPhone}
+                    onChange={(e) => setPhone(e.target.value)}
                     placeholder="+44 7700 900000"
                     helperText="Optional"
                   />
@@ -189,7 +189,7 @@ export default function NewTenantPage() {
                   label="Room Number"
                   type="text"
                   value={roomNumber}
-                  onChange={setRoomNumber}
+                  onChange={(e) => setRoomNumber(e.target.value)}
                   placeholder="1A"
                   required
                 />
@@ -199,7 +199,7 @@ export default function NewTenantPage() {
                     label="Monthly Rent (£)"
                     type="number"
                     value={rentAmount}
-                    onChange={setRentAmount}
+                    onChange={(e) => setRentAmount(e.target.value)}
                     placeholder="500"
                     min={0}
                     step="0.01"
@@ -210,7 +210,7 @@ export default function NewTenantPage() {
                     label="Deposit Amount (£)"
                     type="number"
                     value={depositAmount}
-                    onChange={setDepositAmount}
+                    onChange={(e) => setDepositAmount(e.target.value)}
                     placeholder="500"
                     min={0}
                     step="0.01"
@@ -224,7 +224,7 @@ export default function NewTenantPage() {
                     label="Lease Start Date"
                     type="date"
                     value={leaseStart}
-                    onChange={setLeaseStart}
+                    onChange={(e) => setLeaseStart(e.target.value)}
                     required
                   />
 
@@ -232,7 +232,7 @@ export default function NewTenantPage() {
                     label="Lease End Date"
                     type="date"
                     value={leaseEnd}
-                    onChange={setLeaseEnd}
+                    onChange={(e) => setLeaseEnd(e.target.value)}
                     required
                   />
                 </div>
