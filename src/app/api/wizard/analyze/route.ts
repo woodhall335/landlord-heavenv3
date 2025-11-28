@@ -9,7 +9,8 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
-import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
+import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
+import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 
 const analyzeSchema = z.object({
@@ -89,7 +90,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const facts = await getOrCreateCaseFacts(supabase, case_id);
+    // Load flat WizardFacts from DB and convert to nested CaseFacts for analysis
+    const wizardFacts = await getOrCreateWizardFacts(supabase, case_id);
+    const facts = wizardFactsToCaseFacts(wizardFacts);
     const route = computeRoute(facts, caseData.jurisdiction, caseData.case_type);
     const { score, red_flags, compliance } = computeStrength(facts);
 

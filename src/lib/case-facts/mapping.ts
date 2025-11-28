@@ -1,4 +1,4 @@
-import type { CaseFacts } from './schema';
+import type { WizardFacts } from './schema';
 
 function cloneValue<T>(value: T): T {
   if (Array.isArray(value)) {
@@ -12,41 +12,44 @@ function cloneValue<T>(value: T): T {
   return value;
 }
 
+/**
+ * Sets a value in WizardFacts (flat format) at the given dot-notation path.
+ * This works with flat keys like "property_address_line1" or "tenants.0.full_name".
+ */
 export function setFactPath(
-  facts: CaseFacts,
+  facts: WizardFacts,
   path: string,
   value: unknown
-): CaseFacts {
+): WizardFacts {
   const segments = path.split('.').filter(Boolean);
   if (segments.length === 0) return facts;
 
-  const updated: any = cloneValue(facts);
-  let cursor: any = updated;
+  // For flat facts, we just set the key directly
+  // The path IS the key (e.g., "property_address_line1" or "tenants.0.full_name")
+  const updated: any = { ...facts };
 
-  segments.forEach((segment, index) => {
-    const isLast = index === segments.length - 1;
-    const key: string | number = Number.isInteger(Number(segment)) ? Number(segment) : segment;
-    const existing = cursor[key as keyof typeof cursor];
+  // Handle simple case: single-segment path (most common for flat structure)
+  if (segments.length === 1) {
+    updated[path] = value;
+    return updated as WizardFacts;
+  }
 
-    if (isLast) {
-      cursor[key] = value;
-      return;
-    }
+  // Handle nested paths by setting the full path as the key
+  // This maintains the flat structure: wizard["tenants.0.full_name"] = value
+  updated[path] = value;
 
-    const nextValue = existing !== undefined ? existing : {};
-    const clonedNext = cloneValue(nextValue) ?? {};
-    cursor[key] = clonedNext;
-    cursor = clonedNext;
-  });
-
-  return updated as CaseFacts;
+  return updated as WizardFacts;
 }
 
+/**
+ * Applies mapped answers from MQS questions to WizardFacts (flat format).
+ * Each maps_to path becomes a flat key in the WizardFacts object.
+ */
 export function applyMappedAnswers(
-  facts: CaseFacts,
+  facts: WizardFacts,
   mapsTo: string[] | undefined,
   value: unknown
-): CaseFacts {
+): WizardFacts {
   if (!mapsTo || mapsTo.length === 0) {
     return facts;
   }

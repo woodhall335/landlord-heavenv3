@@ -9,7 +9,7 @@
 import { NextResponse } from 'next/server';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { getNextMQSQuestion, loadMQS, type MasterQuestionSet, type ProductType } from '@/lib/wizard/mqs-loader';
-import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
+import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
 export const dynamic = 'force-dynamic';
@@ -105,7 +105,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const facts = await getOrCreateCaseFacts(supabase, case_id);
+    const facts = await getOrCreateWizardFacts(supabase, case_id);
     const nextQuestion = getNextMQSQuestion(mqs, facts as any);
 
     if (!nextQuestion) {

@@ -9,8 +9,8 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
-import { createEmptyCaseFacts } from '@/lib/case-facts/schema';
-import { getOrCreateCaseFacts } from '@/lib/case-facts/store';
+import { createEmptyWizardFacts } from '@/lib/case-facts/schema';
+import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { getNextMQSQuestion, loadMQS, type MasterQuestionSet, type ProductType } from '@/lib/wizard/mqs-loader';
 
 export const dynamic = 'force-dynamic';
@@ -126,7 +126,7 @@ export async function POST(request: Request) {
       // ------------------------------------------------
       // 2. Create new case
       // ------------------------------------------------
-      const emptyFacts = createEmptyCaseFacts();
+      const emptyFacts = createEmptyWizardFacts();
 
       // Pre-populate tier if specified
       const initialFacts = {
@@ -163,7 +163,7 @@ export async function POST(request: Request) {
     // 3. Ensure case_facts row exists and load facts
     // ------------------------------------------------
     // For new cases, initialize case_facts with the same initial facts from collected_facts
-    let facts = await getOrCreateCaseFacts(supabase, caseRecord.id as string);
+    let facts = await getOrCreateWizardFacts(supabase, caseRecord.id as string);
 
     // If this is a newly created case with pre-populated tier, ensure case_facts also has it
     if (!case_id && tier) {

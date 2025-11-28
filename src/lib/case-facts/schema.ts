@@ -1,3 +1,28 @@
+// =============================================================================
+// WIZARD FACTS (DB Storage Format)
+// =============================================================================
+// This is the FLAT structure stored in case_facts.facts column.
+// - Keys are MQS question IDs or flat paths like "property_address_line1"
+// - Array items use dot notation: "tenants.0.full_name"
+// - Special __meta field tracks product/tier information
+
+export interface WizardFactsMeta {
+  product: string | null;
+  original_product: string | null;
+  product_tier?: string | null;
+}
+
+export interface WizardFacts {
+  __meta?: WizardFactsMeta;
+  [key: string]: any; // Flat MQS keys like property_address_line1, tenants.0.full_name, etc.
+}
+
+// =============================================================================
+// CASE FACTS (Domain Model)
+// =============================================================================
+// This is the NESTED structure used by document generators and analysis.
+// Use wizardFactsToCaseFacts() from normalize.ts to convert DB data to this format.
+
 export interface TenancyFacts {
   tenancy_type: 'ast' | 'prt' | 'ni_private' | 'unknown';
   start_date: string | null;
@@ -104,6 +129,12 @@ export interface ServiceContactFacts {
   service_phone: string | null;
 }
 
+export interface MetaFacts {
+  product: string | null;
+  original_product: string | null;
+  product_tier?: string | null;
+}
+
 export interface CaseFacts {
   tenancy: TenancyFacts;
   property: PropertyFacts;
@@ -113,8 +144,29 @@ export interface CaseFacts {
   court: CourtFacts;
   evidence: EvidenceFacts;
   service_contact: ServiceContactFacts;
+  meta: MetaFacts;
 }
 
+// =============================================================================
+// Factory Functions
+// =============================================================================
+
+/**
+ * Creates an empty WizardFacts object (flat DB format).
+ * Use this when initializing case_facts.facts.
+ */
+export const createEmptyWizardFacts = (): WizardFacts => ({
+  __meta: {
+    product: null,
+    original_product: null,
+    product_tier: null,
+  },
+});
+
+/**
+ * Creates an empty CaseFacts object (nested domain model).
+ * Use this when you need a clean slate for document generation or analysis.
+ */
 export const createEmptyCaseFacts = (): CaseFacts => ({
   tenancy: {
     tenancy_type: 'unknown',
@@ -185,5 +237,10 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     service_postcode: null,
     service_email: null,
     service_phone: null,
+  },
+  meta: {
+    product: null,
+    original_product: null,
+    product_tier: null,
   },
 });
