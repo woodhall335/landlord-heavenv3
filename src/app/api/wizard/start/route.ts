@@ -93,8 +93,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // IMPORTANT: loosen Supabase typing here to avoid `never` errors
-    const supabase = (await createServerSupabaseClient()) as any;
+    // Create properly typed Supabase client
+    const supabase = await createServerSupabaseClient();
 
     let caseRecord: any = null;
 
@@ -104,7 +104,7 @@ export async function POST(request: Request) {
     if (case_id) {
       let query = supabase.from('cases').select('*').eq('id', case_id);
       if (user) {
-        query = query.eq('user_id', (user as any).id);
+        query = query.eq('user_id', user.id);
       } else {
         query = query.is('user_id', null);
       }
@@ -141,12 +141,12 @@ export async function POST(request: Request) {
       const { data, error } = await supabase
         .from('cases')
         .insert({
-          user_id: user ? (user as any).id : null,
+          user_id: user ? user.id : null,
           case_type: resolvedCaseType,
           jurisdiction,
           status: 'in_progress',
           wizard_progress: 0,
-          collected_facts: initialFacts,
+          collected_facts: initialFacts as any, // Supabase types collected_facts as Json
         })
         .select()
         .single();
@@ -163,24 +163,24 @@ export async function POST(request: Request) {
     // 3. Ensure case_facts row exists and load facts
     // ------------------------------------------------
     // For new cases, initialize case_facts with the same initial facts from collected_facts
-    let facts = await getOrCreateWizardFacts(supabase, caseRecord.id as string);
+    let facts = await getOrCreateWizardFacts(supabase, caseRecord.id);
 
     // If this is a newly created case with pre-populated tier, ensure case_facts also has it
     if (!case_id && tier) {
       const updatedFacts = {
         ...facts,
         __meta: {
-          ...(facts as any).__meta,
+          ...facts.__meta,
           product_tier: tier
         }
       };
       const { error: updateError } = await supabase
         .from('case_facts')
-        .update({ facts: updatedFacts as any })
+        .update({ facts: updatedFacts as any }) // Supabase types facts as Json
         .eq('case_id', caseRecord.id);
 
       if (!updateError) {
-        facts = updatedFacts as any;
+        facts = updatedFacts;
       }
     }
 
@@ -198,7 +198,7 @@ export async function POST(request: Request) {
     // ------------------------------------------------
     // 5. Determine first question from MQS + facts
     // ------------------------------------------------
-    const nextQuestion = getNextMQSQuestion(mqs, facts as any);
+    const nextQuestion = getNextMQSQuestion(mqs, facts);
     const isComplete = !nextQuestion;
 
     return NextResponse.json({

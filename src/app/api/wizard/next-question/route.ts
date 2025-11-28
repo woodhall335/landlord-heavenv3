@@ -66,8 +66,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid case_id' }, { status: 400 });
     }
 
-    // Cast to any to avoid TypeScript inference issues with Supabase generics
-    const supabase = (await createServerSupabaseClient()) as any;
+    // Create properly typed Supabase client
+    const supabase = await createServerSupabaseClient();
 
     let query = supabase.from('cases').select('*').eq('id', case_id);
     if (user) {
@@ -93,10 +93,10 @@ export async function POST(request: Request) {
     }
 
     const product = deriveProduct(
-      caseRow.case_type as string,
+      caseRow.case_type,
       (caseRow.collected_facts as Record<string, any>) || {}
     );
-    const mqs = loadMQS(product, caseRow.jurisdiction as string);
+    const mqs = loadMQS(product, caseRow.jurisdiction);
 
     if (!mqs) {
       return NextResponse.json(
@@ -106,7 +106,7 @@ export async function POST(request: Request) {
     }
 
     const facts = await getOrCreateWizardFacts(supabase, case_id);
-    const nextQuestion = getNextMQSQuestion(mqs, facts as any);
+    const nextQuestion = getNextMQSQuestion(mqs, facts);
 
     if (!nextQuestion) {
       await supabase
@@ -124,7 +124,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const progress = computeProgress(mqs, facts as any);
+    const progress = computeProgress(mqs, facts);
 
     await supabase
       .from('cases')
