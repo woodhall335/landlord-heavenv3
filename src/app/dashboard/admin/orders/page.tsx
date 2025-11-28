@@ -89,7 +89,7 @@ export default function AdminOrdersPage() {
             .from("users")
             .select("email, full_name")
             .eq("id", order.user_id)
-            .single();
+            .single<{ email: string; full_name: string | null }>();
 
           return {
             ...order,

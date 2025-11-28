@@ -32,14 +32,6 @@ interface Document {
   created_at: string;
 }
 
-interface Order {
-  id: string;
-  product_name: string;
-  total_amount: number;
-  payment_status: string;
-  created_at: string;
-}
-
 export default function DashboardPage() {
   const router = useRouter();
   const [cases, setCases] = useState<Case[]>([]);

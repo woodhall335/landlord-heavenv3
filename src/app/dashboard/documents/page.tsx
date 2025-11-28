@@ -139,7 +139,7 @@ export default function DocumentsPage() {
       } else {
         alert('Failed to delete document');
       }
-    } catch (error) {
+    } catch {
       alert('Failed to delete document');
     }
   };

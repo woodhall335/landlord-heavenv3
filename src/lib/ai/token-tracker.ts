@@ -40,7 +40,7 @@ export async function trackTokenUsage(usage: TokenUsage): Promise<void> {
       document_id: usage.document_id || null,
       metadata: usage.metadata || {},
       created_at: new Date().toISOString(),
-    });
+    } as any);
 
     console.log(`✅ Tracked ${usage.total_tokens} tokens for ${usage.operation} (${usage.model}) - $${usage.cost_usd.toFixed(6)}`);
   } catch (error) {

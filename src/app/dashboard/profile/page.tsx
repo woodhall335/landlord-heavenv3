@@ -79,7 +79,7 @@ export default function ProfilePage() {
         .from("users")
         .update({
           full_name: formData.fullName,
-        })
+        } as { full_name: string })
         .eq("id", profile.id);
 
       if (profileError) throw profileError;
