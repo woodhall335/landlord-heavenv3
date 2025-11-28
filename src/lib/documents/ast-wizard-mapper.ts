@@ -1,4 +1,17 @@
+/**
+ * AST Wizard Mapper
+ *
+ * Maps WizardFacts (flat DB format) to ASTData (document generator format).
+ *
+ * Flow:
+ * 1. Accepts WizardFacts at the boundary (from case_facts.facts or collected_facts)
+ * 2. Converts to nested CaseFacts using wizardFactsToCaseFacts()
+ * 3. Maps CaseFacts domain model to ASTData for document generation
+ */
+
 import { ASTData, TenantInfo } from './ast-generator';
+import type { WizardFacts, CaseFacts } from '@/lib/case-facts/schema';
+import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 
 type AnyRecord = Record<string, any>;
 
@@ -25,7 +38,21 @@ function coerceBoolean(value: any): boolean | undefined {
   return Boolean(value);
 }
 
-function normalizeTenants(rawTenants: any): TenantInfo[] {
+function normalizeTenants(caseFacts: CaseFacts, wizardFacts: WizardFacts): TenantInfo[] {
+  // Try nested CaseFacts first
+  if (caseFacts.parties.tenants && caseFacts.parties.tenants.length > 0) {
+    return caseFacts.parties.tenants
+      .filter((t) => t && (t.name || t.email || t.phone))
+      .map((t) => ({
+        full_name: t.name || '',
+        dob: getValueAtPath(wizardFacts, 'tenants.0.dob') || '', // DOB not in CaseFacts yet
+        email: t.email || '',
+        phone: t.phone || '',
+      }));
+  }
+
+  // Fallback: extract from flat WizardFacts for fields not yet in CaseFacts
+  const rawTenants = getValueAtPath(wizardFacts, 'tenants');
   if (!rawTenants) return [];
 
   if (Array.isArray(rawTenants)) {
@@ -55,10 +82,10 @@ function normalizeTenants(rawTenants: any): TenantInfo[] {
 }
 
 function buildAddress(
-  primary: string | undefined,
-  line1?: string,
-  town?: string,
-  postcode?: string
+  primary: string | null,
+  line1?: string | null,
+  town?: string | null,
+  postcode?: string | null
 ): string {
   if (primary && primary.trim().length > 0) return primary.trim();
 
@@ -66,7 +93,7 @@ function buildAddress(
   return parts.join(', ');
 }
 
-function mapRentPeriod(value: string | undefined): ASTData['rent_period'] {
+function mapRentPeriod(value: string | null): ASTData['rent_period'] {
   if (!value) return undefined;
   const normalized = value.toLowerCase();
   if (normalized.includes('month')) return 'month';
@@ -76,7 +103,7 @@ function mapRentPeriod(value: string | undefined): ASTData['rent_period'] {
   return value as ASTData['rent_period'];
 }
 
-function normalizeDepositScheme(value: string | undefined): ASTData['deposit_scheme_name'] | undefined {
+function normalizeDepositScheme(value: string | null): ASTData['deposit_scheme_name'] | undefined {
   if (!value) return undefined;
   if (value.toLowerCase().includes('dps')) return 'DPS';
   if (value.toLowerCase().includes('mydeposits')) return 'MyDeposits';
@@ -90,232 +117,268 @@ function normalizeApprovedPets(value: any): string | undefined {
   return undefined;
 }
 
-export function mapWizardToASTData(facts: AnyRecord): ASTData {
-  const tenants = normalizeTenants(getValueAtPath(facts, 'tenants'));
-  const number_of_tenants = Number(getValueAtPath(facts, 'number_of_tenants') ?? tenants.length ?? 0);
+/**
+ * Maps WizardFacts (flat DB format) to ASTData (document generator format).
+ *
+ * @param wizardFacts - Flat facts from case_facts.facts or collected_facts
+ * @returns ASTData ready for AST document generation
+ */
+export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
+  // Convert flat WizardFacts to nested CaseFacts domain model
+  const caseFacts = wizardFactsToCaseFacts(wizardFacts);
 
+  // Extract tenants (hybrid approach for fields not yet in CaseFacts)
+  const tenants = normalizeTenants(caseFacts, wizardFacts);
+  const number_of_tenants = Number(getValueAtPath(wizardFacts, 'number_of_tenants') ?? tenants.length ?? 0);
+
+  // Build addresses from CaseFacts
   const property_address = buildAddress(
-    getValueAtPath(facts, 'property_address'),
-    getValueAtPath(facts, 'property_address_line1'),
-    getValueAtPath(facts, 'property_address_town'),
-    getValueAtPath(facts, 'property_address_postcode')
+    caseFacts.property.address_line1,
+    caseFacts.property.address_line1,
+    caseFacts.property.city,
+    caseFacts.property.postcode
   );
 
   const landlord_address = buildAddress(
-    getValueAtPath(facts, 'landlord_address'),
-    getValueAtPath(facts, 'landlord_address_line1'),
-    getValueAtPath(facts, 'landlord_address_town'),
-    getValueAtPath(facts, 'landlord_address_postcode')
+    caseFacts.parties.landlord.address_line1,
+    caseFacts.parties.landlord.address_line1,
+    caseFacts.parties.landlord.city,
+    caseFacts.parties.landlord.postcode
   );
 
-  const jointLiability = coerceBoolean(getValueAtPath(facts, 'joint_and_several_liability'));
+  const jointLiability = coerceBoolean(getValueAtPath(wizardFacts, 'joint_and_several_liability'));
 
   const data: ASTData = {
-    // AST Suitability Check
-    tenant_is_individual: coerceBoolean(getValueAtPath(facts, 'tenancy.ast_suitability.tenant_is_individual')),
-    main_home: coerceBoolean(getValueAtPath(facts, 'tenancy.ast_suitability.main_home')),
-    landlord_lives_at_property: coerceBoolean(getValueAtPath(facts, 'tenancy.ast_suitability.landlord_lives_at_property')),
-    holiday_or_licence: coerceBoolean(getValueAtPath(facts, 'tenancy.ast_suitability.holiday_or_licence')),
+    // AST Suitability Check (not in CaseFacts yet - use WizardFacts)
+    tenant_is_individual: coerceBoolean(getValueAtPath(wizardFacts, 'tenancy.ast_suitability.tenant_is_individual')),
+    main_home: coerceBoolean(getValueAtPath(wizardFacts, 'tenancy.ast_suitability.main_home')),
+    landlord_lives_at_property: coerceBoolean(getValueAtPath(wizardFacts, 'tenancy.ast_suitability.landlord_lives_at_property')),
+    holiday_or_licence: coerceBoolean(getValueAtPath(wizardFacts, 'tenancy.ast_suitability.holiday_or_licence')),
 
-    agreement_date: getValueAtPath(facts, 'agreement_date') || getValueAtPath(facts, 'tenancy_start_date') || '',
-    landlord_full_name: getValueAtPath(facts, 'landlord_full_name') || '',
+    // Dates - use CaseFacts
+    agreement_date: getValueAtPath(wizardFacts, 'agreement_date') || caseFacts.tenancy.start_date || '',
+    landlord_full_name: caseFacts.parties.landlord.name || '',
     landlord_address,
-    landlord_address_line1: getValueAtPath(facts, 'landlord_address_line1'),
-    landlord_address_town: getValueAtPath(facts, 'landlord_address_town'),
-    landlord_address_postcode: getValueAtPath(facts, 'landlord_address_postcode'),
-    landlord_email: getValueAtPath(facts, 'landlord_email') || '',
-    landlord_phone: getValueAtPath(facts, 'landlord_phone') || '',
+    landlord_address_line1: caseFacts.parties.landlord.address_line1,
+    landlord_address_town: caseFacts.parties.landlord.city,
+    landlord_address_postcode: caseFacts.parties.landlord.postcode,
+    landlord_email: caseFacts.parties.landlord.email || '',
+    landlord_phone: caseFacts.parties.landlord.phone || '',
 
-    agent_name: getValueAtPath(facts, 'agent_name'),
-    agent_address: getValueAtPath(facts, 'agent_address'),
-    agent_email: getValueAtPath(facts, 'agent_email'),
-    agent_phone: getValueAtPath(facts, 'agent_phone'),
-    agent_signs: coerceBoolean(getValueAtPath(facts, 'agent_signs')),
+    // Agent - use CaseFacts
+    agent_name: caseFacts.parties.agent.name,
+    agent_address: buildAddress(
+      caseFacts.parties.agent.address_line1,
+      caseFacts.parties.agent.address_line1,
+      caseFacts.parties.agent.city,
+      caseFacts.parties.agent.postcode
+    ),
+    agent_email: caseFacts.parties.agent.email,
+    agent_phone: caseFacts.parties.agent.phone,
+    agent_signs: coerceBoolean(getValueAtPath(wizardFacts, 'agent_signs')),
 
+    // Tenants
     tenants,
     number_of_tenants,
 
+    // Property - use CaseFacts
     property_address,
-    property_address_line1: getValueAtPath(facts, 'property_address_line1'),
-    property_address_town: getValueAtPath(facts, 'property_address_town'),
-    property_address_postcode: getValueAtPath(facts, 'property_address_postcode'),
-    property_type: getValueAtPath(facts, 'property_type'),
-    number_of_bedrooms: getValueAtPath(facts, 'number_of_bedrooms')?.toString(),
-    furnished_status: getValueAtPath(facts, 'furnished_status'),
-    property_description: getValueAtPath(facts, 'property_description'),
-    parking_available: coerceBoolean(getValueAtPath(facts, 'parking_available')),
-    parking_details: getValueAtPath(facts, 'parking_details'),
-    has_garden: coerceBoolean(getValueAtPath(facts, 'has_garden')),
-    garden_maintenance: getValueAtPath(facts, 'garden_maintenance'),
+    property_address_line1: caseFacts.property.address_line1,
+    property_address_town: caseFacts.property.city,
+    property_address_postcode: caseFacts.property.postcode,
+    property_type: getValueAtPath(wizardFacts, 'property_type'),
+    number_of_bedrooms: getValueAtPath(wizardFacts, 'number_of_bedrooms')?.toString(),
+    furnished_status: getValueAtPath(wizardFacts, 'furnished_status'),
+    property_description: getValueAtPath(wizardFacts, 'property_description'),
+    parking_available: coerceBoolean(getValueAtPath(wizardFacts, 'parking_available')),
+    parking_details: getValueAtPath(wizardFacts, 'parking_details'),
+    has_garden: coerceBoolean(getValueAtPath(wizardFacts, 'has_garden')),
+    garden_maintenance: getValueAtPath(wizardFacts, 'garden_maintenance'),
 
-    tenancy_start_date: getValueAtPath(facts, 'tenancy_start_date') || '',
-    is_fixed_term: coerceBoolean(getValueAtPath(facts, 'is_fixed_term')) ?? false,
-    tenancy_end_date: getValueAtPath(facts, 'tenancy_end_date'),
-    term_length: getValueAtPath(facts, 'term_length'),
+    // Tenancy - use CaseFacts where available
+    tenancy_start_date: caseFacts.tenancy.start_date || '',
+    is_fixed_term: caseFacts.tenancy.fixed_term ?? false,
+    tenancy_end_date: caseFacts.tenancy.end_date,
+    term_length: getValueAtPath(wizardFacts, 'term_length'),
 
-    rent_amount: Number(getValueAtPath(facts, 'rent_amount') ?? 0),
-    rent_period: mapRentPeriod(getValueAtPath(facts, 'rent_period')),
-    rent_due_day: getValueAtPath(facts, 'rent_due_day'),
-    payment_method: getValueAtPath(facts, 'payment_method') || '',
-    payment_details: getValueAtPath(facts, 'payment_details') || '',
-    bank_account_name: getValueAtPath(facts, 'bank_account_name'),
-    bank_sort_code: getValueAtPath(facts, 'bank_sort_code'),
-    bank_account_number: getValueAtPath(facts, 'bank_account_number'),
+    // Rent - use CaseFacts
+    rent_amount: caseFacts.tenancy.rent_amount ?? 0,
+    rent_period: mapRentPeriod(caseFacts.tenancy.rent_frequency),
+    rent_due_day: caseFacts.tenancy.rent_due_day,
+    payment_method: getValueAtPath(wizardFacts, 'payment_method') || '',
+    payment_details: getValueAtPath(wizardFacts, 'payment_details') || '',
+    bank_account_name: getValueAtPath(wizardFacts, 'bank_account_name'),
+    bank_sort_code: getValueAtPath(wizardFacts, 'bank_sort_code'),
+    bank_account_number: getValueAtPath(wizardFacts, 'bank_account_number'),
 
-    deposit_amount: Number(getValueAtPath(facts, 'deposit_amount') ?? 0),
-    deposit_scheme_name: normalizeDepositScheme(getValueAtPath(facts, 'deposit_scheme_name')) as any,
-    deposit_paid_date: getValueAtPath(facts, 'deposit_paid_date'),
-    deposit_protection_date: getValueAtPath(facts, 'deposit_protection_date'),
-    deposit_already_protected: coerceBoolean(getValueAtPath(facts, 'deposit.already_protected')),
-    deposit_reference_number: getValueAtPath(facts, 'deposit.reference_number'),
-    prescribed_information_served: coerceBoolean(getValueAtPath(facts, 'deposit.prescribed_information_served')),
+    // Deposit - use CaseFacts
+    deposit_amount: caseFacts.tenancy.deposit_amount ?? 0,
+    deposit_scheme_name: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name) as any,
+    deposit_paid_date: getValueAtPath(wizardFacts, 'deposit_paid_date'),
+    deposit_protection_date: caseFacts.tenancy.deposit_protection_date,
+    deposit_already_protected: caseFacts.tenancy.deposit_protected,
+    deposit_reference_number: getValueAtPath(wizardFacts, 'deposit.reference_number'),
+    prescribed_information_served: coerceBoolean(getValueAtPath(wizardFacts, 'deposit.prescribed_information_served')),
 
-    council_tax_responsibility: getValueAtPath(facts, 'council_tax_responsibility'),
-    utilities_responsibility: getValueAtPath(facts, 'utilities_responsibility'),
-    internet_responsibility: getValueAtPath(facts, 'internet_responsibility'),
+    // Utilities (not in CaseFacts yet)
+    council_tax_responsibility: getValueAtPath(wizardFacts, 'council_tax_responsibility'),
+    utilities_responsibility: getValueAtPath(wizardFacts, 'utilities_responsibility'),
+    internet_responsibility: getValueAtPath(wizardFacts, 'internet_responsibility'),
 
-    inventory_attached: coerceBoolean(getValueAtPath(facts, 'inventory_attached')),
-    professional_cleaning_required: coerceBoolean(getValueAtPath(facts, 'professional_cleaning_required')),
-    decoration_condition: getValueAtPath(facts, 'decoration_condition'),
-    inventory_schedule_notes: getValueAtPath(facts, 'inventory_schedule_notes'),
+    // Inventory
+    inventory_attached: coerceBoolean(getValueAtPath(wizardFacts, 'inventory_attached')),
+    professional_cleaning_required: coerceBoolean(getValueAtPath(wizardFacts, 'professional_cleaning_required')),
+    decoration_condition: getValueAtPath(wizardFacts, 'decoration_condition'),
+    inventory_schedule_notes: getValueAtPath(wizardFacts, 'inventory_schedule_notes'),
 
-    pets_allowed: coerceBoolean(getValueAtPath(facts, 'pets_allowed')),
-    approved_pets: normalizeApprovedPets(getValueAtPath(facts, 'approved_pets')),
-    smoking_allowed: coerceBoolean(getValueAtPath(facts, 'smoking_allowed')),
+    // Pets and Smoking
+    pets_allowed: coerceBoolean(getValueAtPath(wizardFacts, 'pets_allowed')),
+    approved_pets: normalizeApprovedPets(getValueAtPath(wizardFacts, 'approved_pets')),
+    smoking_allowed: coerceBoolean(getValueAtPath(wizardFacts, 'smoking_allowed')),
 
-    guarantor_name: getValueAtPath(facts, 'guarantor_name'),
-    guarantor_address: getValueAtPath(facts, 'guarantor_address'),
-    guarantor_email: getValueAtPath(facts, 'guarantor_email'),
-    guarantor_phone: getValueAtPath(facts, 'guarantor_phone'),
-    guarantor_dob: getValueAtPath(facts, 'guarantor_dob'),
-    guarantor_relationship: getValueAtPath(facts, 'guarantor_relationship'),
-    guarantor_required: coerceBoolean(getValueAtPath(facts, 'guarantor_required')),
+    // Guarantor
+    guarantor_name: getValueAtPath(wizardFacts, 'guarantor_name'),
+    guarantor_address: getValueAtPath(wizardFacts, 'guarantor_address'),
+    guarantor_email: getValueAtPath(wizardFacts, 'guarantor_email'),
+    guarantor_phone: getValueAtPath(wizardFacts, 'guarantor_phone'),
+    guarantor_dob: getValueAtPath(wizardFacts, 'guarantor_dob'),
+    guarantor_relationship: getValueAtPath(wizardFacts, 'guarantor_relationship'),
+    guarantor_required: coerceBoolean(getValueAtPath(wizardFacts, 'guarantor_required')),
 
-    right_to_rent_check_date: getValueAtPath(facts, 'right_to_rent_check_date'),
-    how_to_rent_provision_date: getValueAtPath(facts, 'how_to_rent_provision_date'),
-    how_to_rent_guide_provided: coerceBoolean(getValueAtPath(facts, 'how_to_rent_guide_provided')),
+    // Compliance Documents
+    right_to_rent_check_date: getValueAtPath(wizardFacts, 'right_to_rent_check_date'),
+    how_to_rent_provision_date: getValueAtPath(wizardFacts, 'how_to_rent_provision_date'),
+    how_to_rent_guide_provided: coerceBoolean(getValueAtPath(wizardFacts, 'how_to_rent_guide_provided')),
 
-    gas_safety_certificate: coerceBoolean(getValueAtPath(facts, 'gas_safety_certificate')),
-    epc_rating: getValueAtPath(facts, 'epc_rating'),
-    electrical_safety_certificate: coerceBoolean(getValueAtPath(facts, 'electrical_safety_certificate')),
-    smoke_alarms_fitted: coerceBoolean(getValueAtPath(facts, 'smoke_alarms_fitted')),
-    carbon_monoxide_alarms: coerceBoolean(getValueAtPath(facts, 'carbon_monoxide_alarms')),
+    // Safety Certificates
+    gas_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'gas_safety_certificate')),
+    epc_rating: getValueAtPath(wizardFacts, 'epc_rating'),
+    electrical_safety_certificate: coerceBoolean(getValueAtPath(wizardFacts, 'electrical_safety_certificate')),
+    smoke_alarms_fitted: coerceBoolean(getValueAtPath(wizardFacts, 'smoke_alarms_fitted')),
+    carbon_monoxide_alarms: coerceBoolean(getValueAtPath(wizardFacts, 'carbon_monoxide_alarms')),
 
-    landlord_maintenance_responsibilities: getValueAtPath(facts, 'landlord_maintenance_responsibilities'),
-    repairs_reporting_method: getValueAtPath(facts, 'repairs_reporting_method'),
-    emergency_contact: getValueAtPath(facts, 'emergency_contact'),
+    // Maintenance
+    landlord_maintenance_responsibilities: getValueAtPath(wizardFacts, 'landlord_maintenance_responsibilities'),
+    repairs_reporting_method: getValueAtPath(wizardFacts, 'repairs_reporting_method'),
+    emergency_contact: getValueAtPath(wizardFacts, 'emergency_contact'),
 
-    break_clause: coerceBoolean(getValueAtPath(facts, 'break_clause')),
-    break_clause_months: getValueAtPath(facts, 'break_clause_months'),
-    break_clause_notice_period: getValueAtPath(facts, 'break_clause_notice_period'),
-    subletting_allowed: getValueAtPath(facts, 'subletting_allowed'),
-    rent_increase_clause: coerceBoolean(getValueAtPath(facts, 'rent_increase_clause')),
-    rent_increase_method: getValueAtPath(facts, 'rent_increase_method'),
-    rent_increase_frequency: getValueAtPath(facts, 'rent_increase_frequency'),
-    tenant_notice_period: getValueAtPath(facts, 'tenant_notice_period'),
-    additional_terms: getValueAtPath(facts, 'additional_terms'),
+    // Clauses
+    break_clause: coerceBoolean(getValueAtPath(wizardFacts, 'break_clause')),
+    break_clause_months: getValueAtPath(wizardFacts, 'break_clause_months'),
+    break_clause_notice_period: getValueAtPath(wizardFacts, 'break_clause_notice_period'),
+    subletting_allowed: getValueAtPath(wizardFacts, 'subletting_allowed'),
+    rent_increase_clause: coerceBoolean(getValueAtPath(wizardFacts, 'rent_increase_clause')),
+    rent_increase_method: getValueAtPath(wizardFacts, 'rent_increase_method'),
+    rent_increase_frequency: getValueAtPath(wizardFacts, 'rent_increase_frequency'),
+    tenant_notice_period: getValueAtPath(wizardFacts, 'tenant_notice_period'),
+    additional_terms: getValueAtPath(wizardFacts, 'additional_terms'),
 
-    landlord_insurance: coerceBoolean(getValueAtPath(facts, 'landlord_insurance')),
-    tenant_insurance_required: getValueAtPath(facts, 'tenant_insurance_required'),
+    // Insurance
+    landlord_insurance: coerceBoolean(getValueAtPath(wizardFacts, 'landlord_insurance')),
+    tenant_insurance_required: getValueAtPath(wizardFacts, 'tenant_insurance_required'),
 
-    landlord_access_notice: getValueAtPath(facts, 'landlord_access_notice'),
-    inspection_frequency: getValueAtPath(facts, 'inspection_frequency'),
-    end_of_tenancy_viewings: coerceBoolean(getValueAtPath(facts, 'end_of_tenancy_viewings')),
+    // Access
+    landlord_access_notice: getValueAtPath(wizardFacts, 'landlord_access_notice'),
+    inspection_frequency: getValueAtPath(wizardFacts, 'inspection_frequency'),
+    end_of_tenancy_viewings: coerceBoolean(getValueAtPath(wizardFacts, 'end_of_tenancy_viewings')),
 
-    communal_areas: getValueAtPath(facts, 'communal_areas'),
-    is_hmo: coerceBoolean(getValueAtPath(facts, 'is_hmo')),
-    communal_cleaning: getValueAtPath(facts, 'communal_cleaning'),
-    number_of_sharers: getValueAtPath(facts, 'number_of_sharers'),
-    hmo_licence_status: getValueAtPath(facts, 'hmo_licence_status'),
-    hmo_licence_number: getValueAtPath(facts, 'hmo_licence_number'),
-    hmo_licence_expiry: getValueAtPath(facts, 'hmo_licence_expiry'),
-    recycling_bins: coerceBoolean(getValueAtPath(facts, 'recycling_bins')),
+    // HMO - use CaseFacts
+    communal_areas: getValueAtPath(wizardFacts, 'communal_areas'),
+    is_hmo: caseFacts.property.is_hmo,
+    communal_cleaning: getValueAtPath(wizardFacts, 'communal_cleaning'),
+    number_of_sharers: getValueAtPath(wizardFacts, 'number_of_sharers'),
+    hmo_licence_status: getValueAtPath(wizardFacts, 'hmo_licence_status'),
+    hmo_licence_number: getValueAtPath(wizardFacts, 'hmo_licence_number'),
+    hmo_licence_expiry: getValueAtPath(wizardFacts, 'hmo_licence_expiry'),
+    recycling_bins: coerceBoolean(getValueAtPath(wizardFacts, 'recycling_bins')),
 
     // Premium Enhanced Features - Meter Readings
-    meter_reading_gas: getValueAtPath(facts, 'meter_reading_gas'),
-    meter_reading_electric: getValueAtPath(facts, 'meter_reading_electric'),
-    meter_reading_water: getValueAtPath(facts, 'meter_reading_water'),
-    utility_transfer_responsibility: getValueAtPath(facts, 'utility_transfer_responsibility'),
+    meter_reading_gas: getValueAtPath(wizardFacts, 'meter_reading_gas'),
+    meter_reading_electric: getValueAtPath(wizardFacts, 'meter_reading_electric'),
+    meter_reading_water: getValueAtPath(wizardFacts, 'meter_reading_water'),
+    utility_transfer_responsibility: getValueAtPath(wizardFacts, 'utility_transfer_responsibility'),
 
     // Premium Enhanced Features - Late Payment Interest
-    late_payment_interest_applicable: coerceBoolean(getValueAtPath(facts, 'late_payment_interest_applicable')),
-    late_payment_interest_rate: Number(getValueAtPath(facts, 'late_payment_interest_rate')),
-    grace_period_days: Number(getValueAtPath(facts, 'grace_period_days')),
-    late_payment_admin_fee: Number(getValueAtPath(facts, 'late_payment_admin_fee')),
+    late_payment_interest_applicable: coerceBoolean(getValueAtPath(wizardFacts, 'late_payment_interest_applicable')),
+    late_payment_interest_rate: Number(getValueAtPath(wizardFacts, 'late_payment_interest_rate')),
+    grace_period_days: Number(getValueAtPath(wizardFacts, 'grace_period_days')),
+    late_payment_admin_fee: Number(getValueAtPath(wizardFacts, 'late_payment_admin_fee')),
 
     // Premium Enhanced Features - Key Schedule
-    number_of_front_door_keys: Number(getValueAtPath(facts, 'number_of_front_door_keys')),
-    number_of_back_door_keys: Number(getValueAtPath(facts, 'number_of_back_door_keys')),
-    number_of_window_keys: Number(getValueAtPath(facts, 'number_of_window_keys')),
-    number_of_mailbox_keys: Number(getValueAtPath(facts, 'number_of_mailbox_keys')),
-    access_cards_fobs: Number(getValueAtPath(facts, 'access_cards_fobs')),
-    key_replacement_cost: Number(getValueAtPath(facts, 'key_replacement_cost')),
-    other_keys_notes: getValueAtPath(facts, 'other_keys_notes'),
+    number_of_front_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_front_door_keys')),
+    number_of_back_door_keys: Number(getValueAtPath(wizardFacts, 'number_of_back_door_keys')),
+    number_of_window_keys: Number(getValueAtPath(wizardFacts, 'number_of_window_keys')),
+    number_of_mailbox_keys: Number(getValueAtPath(wizardFacts, 'number_of_mailbox_keys')),
+    access_cards_fobs: Number(getValueAtPath(wizardFacts, 'access_cards_fobs')),
+    key_replacement_cost: Number(getValueAtPath(wizardFacts, 'key_replacement_cost')),
+    other_keys_notes: getValueAtPath(wizardFacts, 'other_keys_notes'),
 
     // Premium Enhanced Features - Contractor Access
-    contractor_access_notice_period: getValueAtPath(facts, 'contractor_access_notice_period'),
-    emergency_access_allowed: coerceBoolean(getValueAtPath(facts, 'emergency_access_allowed')),
-    contractor_access_hours: getValueAtPath(facts, 'contractor_access_hours'),
-    tenant_presence_required: coerceBoolean(getValueAtPath(facts, 'tenant_presence_required')),
+    contractor_access_notice_period: getValueAtPath(wizardFacts, 'contractor_access_notice_period'),
+    emergency_access_allowed: coerceBoolean(getValueAtPath(wizardFacts, 'emergency_access_allowed')),
+    contractor_access_hours: getValueAtPath(wizardFacts, 'contractor_access_hours'),
+    tenant_presence_required: coerceBoolean(getValueAtPath(wizardFacts, 'tenant_presence_required')),
 
     // Premium Enhanced Features - Emergency Procedures
-    emergency_landlord_phone: getValueAtPath(facts, 'emergency_landlord_phone'),
-    emergency_plumber_phone: getValueAtPath(facts, 'emergency_plumber_phone'),
-    emergency_electrician_phone: getValueAtPath(facts, 'emergency_electrician_phone'),
-    emergency_gas_engineer_phone: getValueAtPath(facts, 'emergency_gas_engineer_phone'),
-    emergency_locksmith_phone: getValueAtPath(facts, 'emergency_locksmith_phone'),
-    water_shutoff_location: getValueAtPath(facts, 'water_shutoff_location'),
-    electricity_fuse_box_location: getValueAtPath(facts, 'electricity_fuse_box_location'),
-    gas_shutoff_location: getValueAtPath(facts, 'gas_shutoff_location'),
+    emergency_landlord_phone: getValueAtPath(wizardFacts, 'emergency_landlord_phone'),
+    emergency_plumber_phone: getValueAtPath(wizardFacts, 'emergency_plumber_phone'),
+    emergency_electrician_phone: getValueAtPath(wizardFacts, 'emergency_electrician_phone'),
+    emergency_gas_engineer_phone: getValueAtPath(wizardFacts, 'emergency_gas_engineer_phone'),
+    emergency_locksmith_phone: getValueAtPath(wizardFacts, 'emergency_locksmith_phone'),
+    water_shutoff_location: getValueAtPath(wizardFacts, 'water_shutoff_location'),
+    electricity_fuse_box_location: getValueAtPath(wizardFacts, 'electricity_fuse_box_location'),
+    gas_shutoff_location: getValueAtPath(wizardFacts, 'gas_shutoff_location'),
 
     // Premium Enhanced Features - Maintenance Schedule
-    boiler_service_frequency: getValueAtPath(facts, 'boiler_service_frequency'),
-    boiler_service_responsibility: getValueAtPath(facts, 'boiler_service_responsibility'),
-    gutter_cleaning_frequency: getValueAtPath(facts, 'gutter_cleaning_frequency'),
-    gutter_cleaning_responsibility: getValueAtPath(facts, 'gutter_cleaning_responsibility'),
-    window_cleaning_frequency: getValueAtPath(facts, 'window_cleaning_frequency'),
-    appliance_maintenance_notes: getValueAtPath(facts, 'appliance_maintenance_notes'),
+    boiler_service_frequency: getValueAtPath(wizardFacts, 'boiler_service_frequency'),
+    boiler_service_responsibility: getValueAtPath(wizardFacts, 'boiler_service_responsibility'),
+    gutter_cleaning_frequency: getValueAtPath(wizardFacts, 'gutter_cleaning_frequency'),
+    gutter_cleaning_responsibility: getValueAtPath(wizardFacts, 'gutter_cleaning_responsibility'),
+    window_cleaning_frequency: getValueAtPath(wizardFacts, 'window_cleaning_frequency'),
+    appliance_maintenance_notes: getValueAtPath(wizardFacts, 'appliance_maintenance_notes'),
 
     // Premium Enhanced Features - Garden Maintenance
-    lawn_mowing_frequency: getValueAtPath(facts, 'lawn_mowing_frequency'),
-    lawn_mowing_responsibility: getValueAtPath(facts, 'lawn_mowing_responsibility'),
-    hedge_trimming_responsibility: getValueAtPath(facts, 'hedge_trimming_responsibility'),
-    weed_control_responsibility: getValueAtPath(facts, 'weed_control_responsibility'),
-    outdoor_furniture_notes: getValueAtPath(facts, 'outdoor_furniture_notes'),
+    lawn_mowing_frequency: getValueAtPath(wizardFacts, 'lawn_mowing_frequency'),
+    lawn_mowing_responsibility: getValueAtPath(wizardFacts, 'lawn_mowing_responsibility'),
+    hedge_trimming_responsibility: getValueAtPath(wizardFacts, 'hedge_trimming_responsibility'),
+    weed_control_responsibility: getValueAtPath(wizardFacts, 'weed_control_responsibility'),
+    outdoor_furniture_notes: getValueAtPath(wizardFacts, 'outdoor_furniture_notes'),
 
     // Premium Enhanced Features - Move-In Procedures
-    pre_tenancy_meeting_required: coerceBoolean(getValueAtPath(facts, 'pre_tenancy_meeting_required')),
-    move_in_inspection_required: coerceBoolean(getValueAtPath(facts, 'move_in_inspection_required')),
-    photographic_inventory_provided: coerceBoolean(getValueAtPath(facts, 'photographic_inventory_provided')),
-    tenant_handbook_provided: coerceBoolean(getValueAtPath(facts, 'tenant_handbook_provided')),
-    utility_accounts_transfer_deadline: getValueAtPath(facts, 'utility_accounts_transfer_deadline'),
-    council_tax_registration_deadline: getValueAtPath(facts, 'council_tax_registration_deadline'),
+    pre_tenancy_meeting_required: coerceBoolean(getValueAtPath(wizardFacts, 'pre_tenancy_meeting_required')),
+    move_in_inspection_required: coerceBoolean(getValueAtPath(wizardFacts, 'move_in_inspection_required')),
+    photographic_inventory_provided: coerceBoolean(getValueAtPath(wizardFacts, 'photographic_inventory_provided')),
+    tenant_handbook_provided: coerceBoolean(getValueAtPath(wizardFacts, 'tenant_handbook_provided')),
+    utility_accounts_transfer_deadline: getValueAtPath(wizardFacts, 'utility_accounts_transfer_deadline'),
+    council_tax_registration_deadline: getValueAtPath(wizardFacts, 'council_tax_registration_deadline'),
 
     // Premium Enhanced Features - Move-Out Procedures
-    checkout_inspection_required: coerceBoolean(getValueAtPath(facts, 'checkout_inspection_required')),
-    professional_cleaning_standard: coerceBoolean(getValueAtPath(facts, 'professional_cleaning_standard')),
-    carpet_cleaning_required: coerceBoolean(getValueAtPath(facts, 'carpet_cleaning_required')),
-    oven_cleaning_required: coerceBoolean(getValueAtPath(facts, 'oven_cleaning_required')),
-    garden_condition_required: getValueAtPath(facts, 'garden_condition_required'),
-    key_return_deadline: getValueAtPath(facts, 'key_return_deadline'),
-    forwarding_address_required: coerceBoolean(getValueAtPath(facts, 'forwarding_address_required')),
-    deposit_return_timeline: getValueAtPath(facts, 'deposit_return_timeline'),
+    checkout_inspection_required: coerceBoolean(getValueAtPath(wizardFacts, 'checkout_inspection_required')),
+    professional_cleaning_standard: coerceBoolean(getValueAtPath(wizardFacts, 'professional_cleaning_standard')),
+    carpet_cleaning_required: coerceBoolean(getValueAtPath(wizardFacts, 'carpet_cleaning_required')),
+    oven_cleaning_required: coerceBoolean(getValueAtPath(wizardFacts, 'oven_cleaning_required')),
+    garden_condition_required: getValueAtPath(wizardFacts, 'garden_condition_required'),
+    key_return_deadline: getValueAtPath(wizardFacts, 'key_return_deadline'),
+    forwarding_address_required: coerceBoolean(getValueAtPath(wizardFacts, 'forwarding_address_required')),
+    deposit_return_timeline: getValueAtPath(wizardFacts, 'deposit_return_timeline'),
 
     // Premium Enhanced Features - Cleaning Standards
-    regular_cleaning_expectations: getValueAtPath(facts, 'regular_cleaning_expectations'),
-    deep_cleaning_areas: getValueAtPath(facts, 'deep_cleaning_areas'),
-    cleaning_checklist_provided: coerceBoolean(getValueAtPath(facts, 'cleaning_checklist_provided')),
-    cleaning_cost_estimates: Number(getValueAtPath(facts, 'cleaning_cost_estimates')),
+    regular_cleaning_expectations: getValueAtPath(wizardFacts, 'regular_cleaning_expectations'),
+    deep_cleaning_areas: getValueAtPath(wizardFacts, 'deep_cleaning_areas'),
+    cleaning_checklist_provided: coerceBoolean(getValueAtPath(wizardFacts, 'cleaning_checklist_provided')),
+    cleaning_cost_estimates: Number(getValueAtPath(wizardFacts, 'cleaning_cost_estimates')),
 
+    // Jurisdiction
     jurisdiction_england: true,
     jurisdiction_wales: false,
 
+    // Meta
     joint_and_several_liability: jointLiability ?? tenants.length > 1,
-    product_tier: getValueAtPath(facts, 'product_tier') || getValueAtPath(facts, 'ast_tier'),
+    product_tier: caseFacts.meta.product_tier || getValueAtPath(wizardFacts, 'ast_tier'),
     has_shared_facilities: Boolean(
-      coerceBoolean(getValueAtPath(facts, 'is_hmo')) ||
-      getValueAtPath(facts, 'communal_areas') ||
-      getValueAtPath(facts, 'number_of_sharers')
+      caseFacts.property.is_hmo ||
+      getValueAtPath(wizardFacts, 'communal_areas') ||
+      getValueAtPath(wizardFacts, 'number_of_sharers')
     ),
   };
 
