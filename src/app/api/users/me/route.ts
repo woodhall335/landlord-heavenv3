@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   try {
     const user = await requireServerAuth();
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Get full user profile from database
     const { data: profile, error } = await supabase
@@ -76,7 +76,7 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { data: updatedUser, error } = await supabase
       .from('users')
@@ -121,7 +121,7 @@ export async function DELETE(request: NextRequest) {
   try {
     const user = await requireServerAuth();
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Soft delete: mark account as deleted
     const { error } = await supabase

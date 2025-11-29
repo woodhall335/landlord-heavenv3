@@ -8,16 +8,16 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
-// A very permissive table type so TS never collapses to `never`
-// Using `any` keeps Supabase query results flexible and avoids
-// narrowing to `{}` which was causing property-access errors across
-// the API route handlers.
-export type GenericRow = any;
+// A permissive table type so TS never collapses to `never` while still
+// allowing straightforward property access (e.g. `row.status`). Using a
+// string index signature keeps intellisense permissive without forcing
+// callers to add manual casts everywhere.
+export type GenericRow = Record<string, any>;
 
 export interface GenericTable {
-  Row: any;
-  Insert: any;
-  Update: any;
+  Row: GenericRow;
+  Insert: GenericRow;
+  Update: GenericRow;
   Relationships: never[];
 }
 

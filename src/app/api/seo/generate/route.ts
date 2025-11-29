@@ -22,7 +22,7 @@ const GenerateSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     // Check admin access
-    const supabase = createClient();
+    const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
