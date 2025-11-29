@@ -16,7 +16,8 @@ export interface SEOMetadataConfig {
   description: string;
   path: string;
   image?: string;
-  type?: 'website' | 'article' | 'product';
+  // Limited to OpenGraph types supported by Next.js metadata typing
+  type?: 'website' | 'article';
   noindex?: boolean;
   keywords?: string[];
 }
