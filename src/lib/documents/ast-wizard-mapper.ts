@@ -159,22 +159,22 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     agreement_date: getValueAtPath(wizardFacts, 'agreement_date') || caseFacts.tenancy.start_date || '',
     landlord_full_name: caseFacts.parties.landlord.name || '',
     landlord_address,
-    landlord_address_line1: caseFacts.parties.landlord.address_line1,
-    landlord_address_town: caseFacts.parties.landlord.city,
-    landlord_address_postcode: caseFacts.parties.landlord.postcode,
+    landlord_address_line1: caseFacts.parties.landlord.address_line1 ?? undefined,
+    landlord_address_town: caseFacts.parties.landlord.city ?? undefined,
+    landlord_address_postcode: caseFacts.parties.landlord.postcode ?? undefined,
     landlord_email: caseFacts.parties.landlord.email || '',
     landlord_phone: caseFacts.parties.landlord.phone || '',
 
     // Agent - use CaseFacts
-    agent_name: caseFacts.parties.agent.name,
+    agent_name: caseFacts.parties.agent.name ?? undefined,
     agent_address: buildAddress(
       caseFacts.parties.agent.address_line1,
       caseFacts.parties.agent.address_line1,
       caseFacts.parties.agent.city,
       caseFacts.parties.agent.postcode
     ),
-    agent_email: caseFacts.parties.agent.email,
-    agent_phone: caseFacts.parties.agent.phone,
+    agent_email: caseFacts.parties.agent.email ?? undefined,
+    agent_phone: caseFacts.parties.agent.phone ?? undefined,
     agent_signs: coerceBoolean(getValueAtPath(wizardFacts, 'agent_signs')),
 
     // Tenants
@@ -183,9 +183,9 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
 
     // Property - use CaseFacts
     property_address,
-    property_address_line1: caseFacts.property.address_line1,
-    property_address_town: caseFacts.property.city,
-    property_address_postcode: caseFacts.property.postcode,
+    property_address_line1: caseFacts.property.address_line1 ?? undefined,
+    property_address_town: caseFacts.property.city ?? undefined,
+    property_address_postcode: caseFacts.property.postcode ?? undefined,
     property_type: getValueAtPath(wizardFacts, 'property_type'),
     number_of_bedrooms: getValueAtPath(wizardFacts, 'number_of_bedrooms')?.toString(),
     furnished_status: getValueAtPath(wizardFacts, 'furnished_status'),
@@ -198,13 +198,13 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     // Tenancy - use CaseFacts where available
     tenancy_start_date: caseFacts.tenancy.start_date || '',
     is_fixed_term: caseFacts.tenancy.fixed_term ?? false,
-    tenancy_end_date: caseFacts.tenancy.end_date,
+    tenancy_end_date: caseFacts.tenancy.end_date ?? undefined,
     term_length: getValueAtPath(wizardFacts, 'term_length'),
 
     // Rent - use CaseFacts
     rent_amount: caseFacts.tenancy.rent_amount ?? 0,
     rent_period: mapRentPeriod(caseFacts.tenancy.rent_frequency),
-    rent_due_day: caseFacts.tenancy.rent_due_day,
+    rent_due_day: caseFacts.tenancy.rent_due_day != null ? String(caseFacts.tenancy.rent_due_day) : '',
     payment_method: getValueAtPath(wizardFacts, 'payment_method') || '',
     payment_details: getValueAtPath(wizardFacts, 'payment_details') || '',
     bank_account_name: getValueAtPath(wizardFacts, 'bank_account_name'),
@@ -215,8 +215,8 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     deposit_amount: caseFacts.tenancy.deposit_amount ?? 0,
     deposit_scheme_name: normalizeDepositScheme(caseFacts.tenancy.deposit_scheme_name) as any,
     deposit_paid_date: getValueAtPath(wizardFacts, 'deposit_paid_date'),
-    deposit_protection_date: caseFacts.tenancy.deposit_protection_date,
-    deposit_already_protected: caseFacts.tenancy.deposit_protected,
+    deposit_protection_date: caseFacts.tenancy.deposit_protection_date ?? undefined,
+    deposit_already_protected: caseFacts.tenancy.deposit_protected ?? undefined,
     deposit_reference_number: getValueAtPath(wizardFacts, 'deposit.reference_number'),
     prescribed_information_served: coerceBoolean(getValueAtPath(wizardFacts, 'deposit.prescribed_information_served')),
 
@@ -284,7 +284,7 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
 
     // HMO - use CaseFacts
     communal_areas: getValueAtPath(wizardFacts, 'communal_areas'),
-    is_hmo: caseFacts.property.is_hmo,
+    is_hmo: caseFacts.property.is_hmo ?? undefined,
     communal_cleaning: getValueAtPath(wizardFacts, 'communal_cleaning'),
     number_of_sharers: getValueAtPath(wizardFacts, 'number_of_sharers'),
     hmo_licence_status: getValueAtPath(wizardFacts, 'hmo_licence_status'),
