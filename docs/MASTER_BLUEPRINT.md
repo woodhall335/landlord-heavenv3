@@ -1,79 +1,91 @@
-# Landlord Heaven — Master Blueprint (2025–2026)
-Version 7.0 — Definitive Product, Legal, and Technical Specification
+🏛️ Landlord Heaven — Master Blueprint (2025–2026)
 
-Last updated: November 2025
+Version 8.0 — Definitive Product, Legal, and Technical Specification
+Updated: December 2025
 
-1. Overview
+1. OVERVIEW
 
-Landlord Heaven is the UK’s first multi-jurisdictional eviction, money-claim, tenancy agreement, and HMO compliance platform with:
+Landlord Heaven is the UK’s first end-to-end landlord legal automation platform covering:
 
-Official court form generation
+🧾 Evictions (Section 8, Section 21, Tribunal)
 
-Guided legal workflows
+💰 Money claims (rent arrears, damages)
 
-Ask Heaven™ — AI Legal Co-Pilot
+🏘️ Tenancy agreements (AST, PRT, NI Private Tenancies)
 
-Master Question Sets (MQS)
+🏢 HMO licensing (instant council-ready packs)
 
-Dynamic law updates
+📂 Evidence & document storage
 
-Cloud document storage
+🔍 AI compliance checks (Ask Heaven)
 
-Landlord portfolio management
+⚙️ Automated legal workflows using MQS
 
-The platform delivers solicitor-grade outputs at a fraction of the cost and powers the entire lifecycle of a tenancy:
+The platform replaces 70–80% of what high-street solicitors and agents do, delivering:
 
-Start a tenancy (agreements)
+Official court forms
 
-Manage a tenancy (HMO Pro)
+Automated legal reasoning
 
-End a tenancy (eviction)
+Complete document bundles
 
-Recover losses (money claim)
+Real-time compliance validation
 
-Store evidence (dashboard)
+Council- and jurisdiction-specific rules
 
-Auto-update compliance (scrapers)
+Unlimited document regeneration
 
-The system is designed to be legally accurate, jurisdiction aware, and evidence driven, replacing 70–80% of what high-street solicitors do for landlords.
+One unified system for every legal stage of a tenancy:
 
-2. Mission & Positioning
+Start the tenancy → Agreements
+
+Manage the tenancy → HMO Pro Membership
+
+End the tenancy → Eviction
+
+Recover losses → Money Claim Pack
+
+Store evidence forever → Document vault
+
+2. MISSION & POSITIONING
 Mission Statement
 
-“To give every UK landlord the power to resolve legal issues faster, cheaper, and with greater confidence — without needing a solicitor.”
+“To give every UK landlord the power to resolve legal issues faster, cheaper, and with greater confidence — without needing a solicitor or agent.”
 
 Market Position
 
 Landlord Heaven sits between:
 
-DIY template websites (too basic, often wrong)
+❌ DIY template sites (cheap but inaccurate)
 
-Solicitors (expensive, slow)
+❌ Solicitors (£600–£2,500 per case)
 
-Paralegal services (inconsistent quality)
+❌ Paralegals (inconsistent, unregulated)
 
-Government forms (confusing, fragmented)
+❌ Government forms (confusing, fragmented)
 
 We offer:
 
-solicitor-level accuracy
+✔ Solicitor-level accuracy
 
-instant document generation
+✔ Official forms, not replicas
 
-conversational support
+✔ AI-guided drafting & validation
 
-predictable pricing
+✔ Instant documents
 
-multi-jurisdiction coverage
+✔ Predictable fixed prices
 
-automated updates
+✔ Multi-jurisdiction support (E&W, Scotland, NI)
 
-This is the first truly unified platform across E&W, Scotland, and NI.
+✔ Auto-updated legal logic
 
-3. Product Catalogue (with Pricing)
-3.1 Notice Only (19.99)
+This is the UK’s first full-stack landlord legal system.
 
-Fastest-selling, top-of-funnel product.
+3. PRODUCT CATALOGUE (2025 PRICING, UPDATED)
+3.1 Notice Only — £19.99
+
+The top-of-funnel product.
 
 Includes:
 
@@ -83,23 +95,21 @@ Section 21 (Form 6A)
 
 Notice to Leave (Scotland)
 
-Notice to Quit (Northern Ireland)
+Notice to Quit (NI)
 
-Expiry calculations
+Expiry calculation
 
-Legal ground selection
+Ground selection
 
-Ask Heaven guided drafting
+Legal guidance (Ask Heaven)
 
 Service instructions
 
-Proof-of-service template
+Proof-of-service templates
 
-This is the “starter” legal action landlords need before progressing to court.
+3.2 Complete Eviction Pack — £199
 
-3.2 Complete Eviction Pack £199
-
-Everything required from notice → possession order.
+Everything from notice → possession order.
 
 England & Wales
 
@@ -107,23 +117,21 @@ Section 8
 
 Section 21
 
-N5 Claim Form
+N5 (claim form)
 
-N5B Accelerated Possession Form
+N5B (accelerated possession)
 
-N119 Particulars of Claim
+N119 (particulars of claim)
 
 Evidence index
 
-Rent arrears schedule
+Arrears schedule
 
-Anti-social behaviour particulars
+ASB particulars
 
-Breach particulars
+Hearing guidance
 
-Hearing preparation
-
-Bailiff/HCEO guidance
+Bailiff route
 
 Case-strength scoring
 
@@ -133,9 +141,7 @@ Notice to Leave
 
 Form E
 
-Tribunal lodging guidance
-
-Evidence requirements
+Tribunal pack
 
 Rent schedule
 
@@ -145,135 +151,168 @@ Northern Ireland
 
 Notice to Quit
 
-Court pathway guidance
+Court guidance
 
-Evidence checklist
+Evidence schedule
 
-3.3 Money Claim Pack (£179)
+3.3 Money Claim Pack — £179
 
-Recover rent arrears + damages.
+Recover rent arrears/damages.
 
 England & Wales
 
-Official N1 Claim Form (Dec 2024)
+Official N1 (Dec 2024) filled
 
 Particulars of claim
 
 Rent arrears schedule
 
-Section 69 interest statement
+Section 69 interest
 
 Evidence index
 
-Filing instructions (MCOL + paper)
+Filing steps (MCOL & paper)
 
 Default judgment guidance
 
-Enforcement tools
+Enforcement pathways
 
-Scotland (Simple Procedure)
+Scotland
 
-Form 3A Claim Form
+Form 3A (Simple Procedure)
 
 Statement of claim
 
 Arrears/damage schedule
 
-Sheriffdom selection
+Sheriffdom routing
 
 Court fee calculation
 
-Evidence index
-
-Lodging instructions
-
 Northern Ireland
 
-❌ Not legally supported
+🚫 Not supported.
 
-3.4 Tenancy Agreements
+3.4 Tenancy Agreements (Updated 2025 Pricing)
 Product	Price	Jurisdiction
 AST Standard	£19.99	E&W
 AST Premium	£29.99	E&W
 PRT Standard	£19.99	Scotland
 PRT Premium	£29.99	Scotland
-NI Private Tenancy Standard	£19.99	NI
-NI Private Tenancy Premium	£29.99	NI
+NI Standard	£19.99	NI
+NI Premium	£29.99	NI
 
-Includes Ask Heaven guidance for custom clauses, safety compliance checks, deposit protection, HMO rules, and document storage.
+Includes:
 
-3.5 HMO Pro (Recurring £19–£49/mo)
+Custom clauses
 
-The long-term revenue engine.
+Safety compliance checks
 
-Features:
+Deposit protection guidance
 
-Council-by-council licence rules
+HMO integration
 
-Renewal reminders
+Unlimited regeneration
 
-Evidence pack generation
+3.5 HMO Licensing Suite (Updated)
+⭐ HMO Standard Pack — £129.99
 
-Safety certificate logs
+Council-specific application
 
-Portfolio management
+Fit & Proper declaration
 
-Fire risk templates
+Amenity standards checklist
 
-Auto-scraped regulation updates
+Management arrangements
 
-Document uploads
+Level 1–2 AI QC
 
-AI evidence analysis
+Evidence checklist
 
-4. Ask Heaven™ — AI Legal Co-Pilot
+Submission instructions
 
-Ask Heaven is NOT the wizard.
-It is the assistant that improves answers, warns of legal risks, and ensures clarity.
+⭐ HMO Premium Pack — £199.99
 
-Ask Heaven responsibilities:
+Everything in Standard, plus:
+
+Auto-generated floor plan (PDF)
+
+Fire safety self-assessment pack
+
+Escape route diagram
+
+Occupancy matrix
+
+Evidence bundle ZIP
+
+Level 3 AI QC
+
+Multi-floor support
+
+➕ HMO Pro Membership (light add-on) — £9.99/mo
+
+Unlimited tenancy agreement regeneration
+
+90/30/7-day reminders (gas, EICR, licence expiry)
+
+Compliance dashboard
+
+Tenant/room management
+
+Document vault
+
+First month £1
+
+This replaces the old £19–£49 subscription.
+Membership is now a lightweight upsell, not a core product.
+
+4. ASK HEAVEN™ — AI LEGAL CO-PILOT
+
+Ask Heaven enhances answers, improves clarity, and prevents user mistakes.
+
+Responsibilities
 
 Summarise user statements
 
-Highlight red flags
+Suggest improved, court-ready answers
 
-Suggest improved answers
+Flag risks
 
-Provide legal context
+Identify missing information
+
+Check compliance
+
+Provide examples
+
+Never give actionable legal advice
 
 Never hallucinate
 
-Never guess legal facts
+Never pick legal strategies
 
-Suggest what evidence should be uploaded
+Persona
 
-Pre-fill complex fields (e.g., “Describe ASB incidents”)
+Senior housing solicitor (E&W + Scotland + NI)
 
-Improve language for court suitability
+Evidence-focused
 
-Ask Heaven persona:
+Cautious, neutral, factual
 
-Senior UK housing solicitor
+Non-advisory
 
-Neutral, factual, risk-aware
+Jurisdiction aware
 
-Legally cautious
+5. MASTER QUESTION SETS (MQS)
 
-Evidence-driven
-
-Jurisdiction specific
-
-5. MQS — Master Question Sets
-
-MQS replaces unpredictable AI-led wizards.
-
-It is the single source of truth for all fields required to generate:
+MQS is now the single source of truth for:
 
 Notices
 
 Court forms
 
-Particulars
+Tenancy agreements
+
+HMO licensing
 
 Evidence packs
 
@@ -281,326 +320,241 @@ Schedules
 
 Case-strength scoring
 
-Jurisdiction routing
+Decision routing
 
-Each product + jurisdiction has its own MQS file, for example:
+Each product/jurisdiction has its own .yaml file.
 
-Example: /config/mqs/eviction/england-wales.yaml
-
-Includes:
-
-case_overview
-tenancy_type
-tenancy_dates
-rent_terms
-rent_arrears
-deposit_protection
-safety_checks
-HMO_checks
-breach_evidence
-asb_details
-witnesses
-notice_service
-tenant_details
-property_details
-attempts_to_resolve
-hearing_preferences
-statement_of_truth
-
-MQS Question definition:
-
-Each question includes:
-
+MQS Question Definition
 id: unique_field_name
-question: what the user sees
-type: text | date | currency | boolean | multi | upload
-required: true | false
-validation: regex | zod rule
+question: displayed text
+type: text|date|currency|boolean|multi|upload
+required: true|false
+validation: regex|zod|council_rule
 suggestion: Ask Heaven prompt
-maps_to: fields in documents
+maps_to: [...]
 jurisdictions: [...]
+conditions: [...]
 
 
-This ensures no missing fields ever again.
+Removes all guesswork.
+Prevents missing fields permanently.
 
-6. Unified Conversational Flow
-1. Product selection
+6. UNIFIED CONVERSATIONAL FLOW
 
-From /products/*.
+User selects product
 
-2. Jurisdiction selection
+Jurisdiction chosen / validated
 
-Blocks NI money-claim automatically.
+User describes situation (only free-text step)
 
-3. “Tell us what’s going on”
+Ask Heaven summarises & highlights missing facts
 
-Ask Heaven summarises + identifies missing info.
-
-4. MQS question engine
-
-Each question flows:
-
-Display question
-
-User answers
+MQS begins
 
 Ask Heaven suggests improvements
 
-User accepts/edits
+Real-time validation
 
-Save to collected_facts
+Evidence upload
 
-5. Evidence upload
+Case-strength or compliance score
 
-User can upload:
+Paywalled 2–3 page preview
 
-bank statements
+Stripe checkout
 
-tenancy agreements
+Document bundle generation
 
-rent ledgers
+Dashboard delivery & timeline
 
-safety certs
+7. DECISION ENGINE
 
-crime reports
-
-photos
-
-Ask Heaven:
-
-extracts structured fields
-
-warns of missing evidence
-
-updates case-strength score
-
-6. Case-strength Score
-
-Using decision engine + evidence.
-
-7. Paywalled Preview
-
-2-page preview behind Stripe.
-
-8. Checkout
-
-Different SKUs per jurisdiction.
-
-9. Document Generation
-
-Official PDFs filled:
-
-N5, N5B, N119
-
-N1
-
-Form 3A
-
-Form E
-
-Section 21 Form 6A
-
-Section 8
-
-Notice to Leave
-
-Notice to Quit
-
-10. User Dashboard storage
-
-Documents, evidence, timelines, next steps.
-
-7. Decision Engine
-
-The decision engine is responsible for:
-
-Jurisdiction validation
+Responsible for:
 
 Tenancy type inference
 
-Selecting correct notice
+Correct route selection
 
-Selecting correct court route
+Correct notice (s8/s21/n2L/NTQ)
 
-Selecting grounds
+Accelerated vs standard route (E&W)
 
-Calculating expiry periods
+Court path (MCOL, N5/N5B, Tribunal, NI)
 
-Assessing evidence completeness
+Deposit protection checks
 
-Generating case-strength score
+HMO licence type (mandatory/additional/selective)
+
+Compliance scoring
 
 Rules stored in:
+/config/jurisdictions/<region>/decision_rules.yaml
 
-/config/jurisdictions/*/decision_rules.yaml
+8. DOCUMENT ENGINE
 
-8. Document Engine
+Outputs:
 
-The engine produces must-have outputs:
+Official PDFs (N1, N5, N5B, N119, Form E, Form 3A, Form 6A)
 
-Official PDF form fills
+HMO PDFs (council-specific)
 
-HTML previews
+Signature-ready documents
 
-Evidence schedules
+Watermarked previews
 
-Interest calculations
+Evidence index
 
-Rent schedules
+Rent/interest schedules
 
-Guidance documents
+Court-ready particulars
 
-Official forms stored in:
+Uses:
 
-/public/official-forms/**
+pdf-lib
 
+Handlebars
 
-Mapped via:
+Official form templates stored under /public/official-forms/**
 
-official-forms-filler.ts
-scotland-forms-filler.ts
-northern-ireland-forms-filler.ts
+9. USER DASHBOARD
 
-9. User Dashboard Specification
-
-User can:
+Users can:
 
 View cases
 
-View all generated documents
+View generated documents
 
-Download PDFs
+Resume wizards
 
-Preview HTML
+Re-upload evidence
 
-Upload additional evidence
+Regenerate packs
 
-Resume MQS
+View compliance timelines
 
-Regenerate documents
+Manage HMO properties
 
-View case-strength score
+Manage tenants
 
-Access timeline guidance
+Download ZIP bundles
 
-See expiry warnings
+Manage subscription
 
-Manage subscription (HMO Pro)
+10. ADMIN PORTAL
 
-10. Admin Portal Specification
-
-Admin capabilities:
+Admins can:
 
 View all cases
 
-View all users
+View all documents
 
-View all generated documents
-
-Override documents
+QA forms
 
 Restart generation
 
-View AI logs
-
-Adjust prices
-
-Enable/disable regions
+Manage pricing
 
 Manage templates
 
-View revenue
+Update council/HMO rules
+
+Override forms
+
+View revenue breakdown
 
 Manage discount codes
 
-Manage HMO Pro rules
+Review AI logs
 
-Manage law-scraper schedules
+Trigger law scraper updates
 
-11. Technical Architecture
+11. TECHNICAL ARCHITECTURE
 
 Frontend: Next.js 14
 
-Backend: Next.js Server Actions / API Routes
+Backend: Next.js Server Actions + API Routes
 
 Database: Supabase (Postgres)
 
 Auth: Supabase Auth
 
-Storage: Supabase storage
+Storage: Supabase Storage
 
-AI: Ask Heaven (GPT-4 mini for suggestions, GPT-4o for complex tasks)
+AI: GPT-4o + GPT-4o-mini (depending on task)
 
-Payments: Stripe
+Billing: Stripe
 
-File generation: pdf-lib, Handlebars
+PDF Generation: pdf-lib + council templates
 
-Legal scrapers: CRON scripts running Node
+Task Scheduling: CRON (Node)
 
 Logging: Supabase Functions
 
-Test suite: Vitest & Playwright
+Testing: Vitest + Playwright
 
-12. Legal Compliance
+12. LEGAL COMPLIANCE
 
-The blueprint ensures:
+The system ensures:
 
-Notices follow statutory requirements
+All notices comply with statutory forms
 
-Court forms use official PDFs
+Court forms are official PDFs, never replicas
 
-Evidence requirements enforced
+Evidence requirements are enforced
 
-No advice outside legal information boundaries
+Advice boundaries respected
 
-Jurisdiction boundaries respected
+Tenancy deposit rules validated
 
 NI money claims blocked
 
-Ask Heaven prevents unlawful eviction steps
+No strategy-level legal advice given
 
-13. Commercial Strategy
-Phase 1 (0–30 days)
+Ask Heaven suggestions are factual, not advisory
+
+13. COMMERCIAL STRATEGY (UPDATED)
+Phase 1 — 0–30 Days
 
 Launch Notice Only
 
 Launch Eviction Pack
 
-Begin Paid Traffic
+Launch SEO for councils
 
-Organic TikTok + YouTube
+TikTok / YouTube organic
 
-Phase 2 (30–90 days)
+Run small paid campaigns
 
-Money Claim Pack (E&W + Scotland)
+Phase 2 — 30–90 Days
 
-Price uplift
+Launch Money Claim Pack (E&W + Scotland)
 
-Bundle upsells
+Tenancy agreements upsell
 
-Phase 3 (3–12 months)
+Begin affiliate partnerships
 
-HMO Pro
+Phase 3 — 3–12 Months
+
+Launch HMO Standard + Premium
+
+Launch HMO Pro Membership
 
 Council advertising
 
-Landlord insurance affiliate partnerships
+Landlord insurance partnerships
 
-14. Growth Forecast (Corrected)
+Letting agent white-label
 
-Based on real market reality:
+14. GROWTH FORECAST (UPDATED FOR 2025–26)
+Scenario	Revenue (Year 1)
+Conservative	£260k–£340k
+Realistic	£350k–£500k
+Strong	£600k–£800k
+⭐ With HMO Suite	£1.0M–£1.6M
+HMO Pro Membership (Year 3)	£1.2M–£2.5M ARR
+15. FUTURE WORK
 
-Conservative: £260k–£340k
-
-Realistic: £350k–£500k
-
-Stretch: £600k–£800k
-
-HMO Pro scaling: £1.2M–£2.5M ARR by Year 3
-
-15. Future Work
-
-Auto-law updates (scrapers)
+Auto-law updates (via scrapers)
 
 AI-driven evidence validation
 
@@ -608,12 +562,12 @@ Tenant communication templates
 
 Smart timelines
 
-VOICE-enabled Ask Heaven
+Voice-enabled Ask Heaven
 
 API for letting agents
 
-White-label version
+White-label B2B version
 
-End of Master Blueprint
+END OF MASTER BLUEPRINT
 
-This file is the central source of truth for all product, legal, technical, and operational decisions.
+This is now the authoritative source of truth for all product, legal, technical, and commercial decisions across Landlord Heaven.
