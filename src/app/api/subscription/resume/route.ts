@@ -4,13 +4,13 @@
  * POST /api/subscription/resume - Resume a subscription that was set to cancel
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server-auth';
 import { createClient } from '@/lib/supabase/server';
 import Stripe from 'stripe';
 
 // Resume a canceled subscription (before period end)
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
     const user = await requireServerAuth();
 
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       subscription: {
         id: subscription.id,
         status: subscription.status,
-        currentPeriodEnd: new Date(subscription.current_period_end * 1000).toISOString(),
+        currentPeriodEnd: new Date((subscription as any).current_period_end * 1000).toISOString(),
       },
     });
   } catch (error: any) {

@@ -8,7 +8,7 @@
 import { createAdminClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { sendPurchaseConfirmation, sendTrialReminderEmail } from '@/lib/email/resend';
+import { sendPurchaseConfirmation } from '@/lib/email/resend';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-11-17.clover',
@@ -131,7 +131,7 @@ export async function POST(request: Request) {
                           case_id: caseId,
                           document_type: doc.category,
                           document_title: doc.title,
-                          jurisdiction: caseData.jurisdiction,
+                          jurisdiction: (caseData as any).jurisdiction,
                           html_content: doc.html || null,
                           pdf_url: publicUrlData.publicUrl,
                           is_preview: false,
@@ -168,7 +168,7 @@ export async function POST(request: Request) {
                   console.log(`[Fulfillment] Generating money claim pack for case ${caseId}...`);
                   const pack = await generateMoneyClaimPack({
                     ...facts,
-                    jurisdiction: caseData.jurisdiction,
+                    jurisdiction: (caseData as any).jurisdiction,
                     case_id: caseId,
                   });
 
@@ -197,7 +197,7 @@ export async function POST(request: Request) {
                       case_id: caseId,
                       document_type: doc.category,
                       document_title: doc.title,
-                      jurisdiction: caseData.jurisdiction,
+                      jurisdiction: (caseData as any).jurisdiction,
                       html_content: doc.html || null,
                       pdf_url: publicUrlData.publicUrl,
                       is_preview: false,
@@ -223,7 +223,6 @@ export async function POST(request: Request) {
 
                 } else {
                   // Handle AST and other single document types
-                  const { generateSection8Notice } = await import('@/lib/documents/section8-generator');
                   const { generateStandardAST, generatePremiumAST } = await import('@/lib/documents/ast-generator');
 
                   let generatedDoc: any;
@@ -276,7 +275,7 @@ export async function POST(request: Request) {
                         case_id: caseId,
                         document_type: documentType,
                         document_title: documentTitle,
-                        jurisdiction: caseData.jurisdiction,
+                        jurisdiction: (caseData as any).jurisdiction,
                         html_content: generatedDoc.html,
                         pdf_url: pdfUrl,
                         is_preview: false,
@@ -290,7 +289,7 @@ export async function POST(request: Request) {
                     if (docError) {
                       console.error('[Fulfillment] Failed to save final document:', docError);
                     } else {
-                      console.log(`[Fulfillment] Final document generated: ${finalDoc.id}`);
+                      console.log(`[Fulfillment] Final document generated: ${(finalDoc as any).id}`);
 
                       // Mark fulfillment as completed
                       await supabase
@@ -341,9 +340,9 @@ export async function POST(request: Request) {
               await sendPurchaseConfirmation({
                 to: user.email,
                 customerName: user.full_name || 'there',
-                productName: order.product_name,
-                amount: Math.round(order.total_amount * 100),
-                orderNumber: order.id.substring(0, 8).toUpperCase(),
+                productName: (order as any).product_name,
+                amount: Math.round((order as any).total_amount * 100),
+                orderNumber: (order as any).id.substring(0, 8).toUpperCase(),
                 downloadUrl: dashboardUrl,
               });
 
@@ -443,8 +442,8 @@ export async function POST(request: Request) {
 
         // Calculate subscription end date
         let subscriptionEndsAt = null;
-        if (subscription.current_period_end) {
-          subscriptionEndsAt = new Date(subscription.current_period_end * 1000).toISOString();
+        if ((subscription as any).current_period_end) {
+          subscriptionEndsAt = new Date((subscription as any).current_period_end * 1000).toISOString();
         }
 
         await supabase
@@ -481,7 +480,7 @@ export async function POST(request: Request) {
 
       case 'invoice.paid': {
         const invoice = event.data.object as Stripe.Invoice;
-        const subscriptionId = invoice.subscription as string;
+        const subscriptionId = (invoice as any).subscription as string;
 
         if (subscriptionId) {
           // Retrieve subscription to get user_id
@@ -504,7 +503,7 @@ export async function POST(request: Request) {
 
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice;
-        const subscriptionId = invoice.subscription as string;
+        const subscriptionId = (invoice as any).subscription as string;
 
         if (subscriptionId) {
           // Retrieve subscription to get user_id

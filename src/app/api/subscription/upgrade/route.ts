@@ -131,8 +131,8 @@ export async function POST(request: NextRequest) {
         tier: newTier,
         propertyLimit: tierInfo.max,
         price: tierInfo.price,
-        currentPeriodEnd: updatedSubscription.current_period_end
-          ? new Date((updatedSubscription.current_period_end as number) * 1000).toISOString()
+        currentPeriodEnd: (updatedSubscription as any).current_period_end
+          ? new Date(((updatedSubscription as any).current_period_end as number) * 1000).toISOString()
           : null,
       },
     });

@@ -36,11 +36,11 @@ export async function GET(
     // Generate signed URL for PDF if available
     let signedUrl: string | null = null;
 
-    if (document.pdf_url) {
+    if ((document as any).pdf_url) {
       const adminClient = createAdminClient();
 
       // Extract file path from public URL
-      const urlParts = document.pdf_url.split('/documents/');
+      const urlParts = (document as any).pdf_url.split('/documents/');
       if (urlParts.length === 2) {
         const filePath = urlParts[1];
 
@@ -113,9 +113,9 @@ export async function DELETE(
     }
 
     // Delete file from storage if exists
-    if (document.pdf_url) {
+    if ((document as any).pdf_url) {
       const adminClient = createAdminClient();
-      const urlParts = document.pdf_url.split('/documents/');
+      const urlParts = (document as any).pdf_url.split('/documents/');
 
       if (urlParts.length === 2) {
         const filePath = urlParts[1];

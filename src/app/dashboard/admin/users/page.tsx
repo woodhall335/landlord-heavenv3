@@ -81,7 +81,7 @@ export default function AdminUsersPage() {
 
       // Load subscription info and revenue for each user
       const usersWithStats: UserWithStats[] = await Promise.all(
-        (data || []).map(async (user: User) => {
+        (data || []).map(async (user: any) => {
           // Get subscription
           const { data: subData } = await supabase
             .from("hmo_subscriptions")
@@ -140,6 +140,7 @@ export default function AdminUsersPage() {
     loadUsers();
   }, [loading, loadUsers]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async function _handleBanUser(userId: string, isBanned: boolean) {
     const confirmed = confirm(
       isBanned ? "Are you sure you want to unban this user?" : "Are you sure you want to ban this user?"

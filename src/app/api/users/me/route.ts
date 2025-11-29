@@ -12,7 +12,7 @@ import { createClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 
 // Get current user profile
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const user = await requireServerAuth();
 
@@ -34,14 +34,14 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       user: {
-        id: profile.id,
-        email: profile.email,
-        full_name: profile.full_name,
-        phone: profile.phone,
-        subscription_tier: profile.subscription_tier,
-        subscription_status: profile.subscription_status,
-        trial_ends_at: profile.trial_ends_at,
-        created_at: profile.created_at,
+        id: (profile as any).id,
+        email: (profile as any).email,
+        full_name: (profile as any).full_name,
+        phone: (profile as any).phone,
+        subscription_tier: (profile as any).subscription_tier,
+        subscription_status: (profile as any).subscription_status,
+        trial_ends_at: (profile as any).trial_ends_at,
+        created_at: (profile as any).created_at,
       },
     });
   } catch (error: any) {
@@ -98,10 +98,10 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({
       user: {
-        id: updatedUser.id,
-        email: updatedUser.email,
-        full_name: updatedUser.full_name,
-        phone: updatedUser.phone,
+        id: (updatedUser as any).id,
+        email: (updatedUser as any).email,
+        full_name: (updatedUser as any).full_name,
+        phone: (updatedUser as any).phone,
       },
     });
   } catch (error: any) {
@@ -117,7 +117,7 @@ export async function PUT(request: NextRequest) {
 }
 
 // Delete user account (soft delete)
-export async function DELETE(request: NextRequest) {
+export async function DELETE() {
   try {
     const user = await requireServerAuth();
 

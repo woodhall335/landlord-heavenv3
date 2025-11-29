@@ -45,7 +45,7 @@ export default function ProfilePage() {
 
       if (error) throw error;
 
-      const profileData = data as UserProfile;
+      const profileData = data as any as UserProfile;
       setProfile(profileData);
       setFormData({
         fullName: profileData.full_name || "",

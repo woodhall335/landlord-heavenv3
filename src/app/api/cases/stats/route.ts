@@ -8,7 +8,7 @@
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const user = await requireServerAuth();
     const supabase = await createServerSupabaseClient();
@@ -29,54 +29,54 @@ export async function GET(request: Request) {
 
     // Calculate statistics
     const totalCases = cases?.length || 0;
-    const inProgress = cases?.filter((c) => c.status === 'in_progress').length || 0;
-    const completed = cases?.filter((c) => c.status === 'completed').length || 0;
-    const archived = cases?.filter((c) => c.status === 'archived').length || 0;
+    const inProgress = cases?.filter((c) => (c as any).status === 'in_progress').length || 0;
+    const completed = cases?.filter((c) => (c as any).status === 'completed').length || 0;
+    const archived = cases?.filter((c) => (c as any).status === 'archived').length || 0;
 
     // Case type breakdown
     const caseTypeBreakdown = {
-      eviction: cases?.filter((c) => c.case_type === 'eviction').length || 0,
-      money_claim: cases?.filter((c) => c.case_type === 'money_claim').length || 0,
-      tenancy_agreement: cases?.filter((c) => c.case_type === 'tenancy_agreement').length || 0,
+      eviction: cases?.filter((c) => (c as any).case_type === 'eviction').length || 0,
+      money_claim: cases?.filter((c) => (c as any).case_type === 'money_claim').length || 0,
+      tenancy_agreement: cases?.filter((c) => (c as any).case_type === 'tenancy_agreement').length || 0,
     };
 
     // Jurisdiction breakdown
     const jurisdictionBreakdown = {
-      'england-wales': cases?.filter((c) => c.jurisdiction === 'england-wales').length || 0,
-      scotland: cases?.filter((c) => c.jurisdiction === 'scotland').length || 0,
-      'northern-ireland': cases?.filter((c) => c.jurisdiction === 'northern-ireland').length || 0,
+      'england-wales': cases?.filter((c) => (c as any).jurisdiction === 'england-wales').length || 0,
+      scotland: cases?.filter((c) => (c as any).jurisdiction === 'scotland').length || 0,
+      'northern-ireland': cases?.filter((c) => (c as any).jurisdiction === 'northern-ireland').length || 0,
     };
 
     // Recommended routes (for eviction cases)
-    const evictionCases = cases?.filter((c) => c.case_type === 'eviction' && c.recommended_route) || [];
+    const evictionCases = cases?.filter((c) => (c as any).case_type === 'eviction' && (c as any).recommended_route) || [];
     const recommendedRoutes = {
-      section8: evictionCases.filter((c) => c.recommended_route === 'section8').length,
-      section21: evictionCases.filter((c) => c.recommended_route === 'section21').length,
-      notice_to_leave: evictionCases.filter((c) => c.recommended_route === 'notice_to_leave').length,
+      section8: evictionCases.filter((c) => (c as any).recommended_route === 'section8').length,
+      section21: evictionCases.filter((c) => (c as any).recommended_route === 'section21').length,
+      notice_to_leave: evictionCases.filter((c) => (c as any).recommended_route === 'notice_to_leave').length,
     };
 
     // Average success probability (for cases that have been analyzed)
-    const casesWithProbability = cases?.filter((c) => c.success_probability !== null) || [];
+    const casesWithProbability = cases?.filter((c) => (c as any).success_probability !== null) || [];
     const avgSuccessProbability = casesWithProbability.length > 0
-      ? casesWithProbability.reduce((sum, c) => sum + (c.success_probability || 0), 0) / casesWithProbability.length
+      ? casesWithProbability.reduce((sum, c) => sum + ((c as any).success_probability || 0), 0) / casesWithProbability.length
       : null;
 
     // Recent activity
     const recentCases = cases
-      ?.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+      ?.sort((a, b) => new Date((b as any).updated_at).getTime() - new Date((a as any).updated_at).getTime())
       .slice(0, 5)
       .map((c) => ({
-        id: c.id,
-        case_type: c.case_type,
-        jurisdiction: c.jurisdiction,
-        status: c.status,
-        wizard_progress: c.wizard_progress,
-        updated_at: c.updated_at,
+        id: (c as any).id,
+        case_type: (c as any).case_type,
+        jurisdiction: (c as any).jurisdiction,
+        status: (c as any).status,
+        wizard_progress: (c as any).wizard_progress,
+        updated_at: (c as any).updated_at,
       }));
 
     // Red flags count
     const totalRedFlags = cases?.reduce((sum, c) => {
-      const redFlags = c.red_flags as any;
+      const redFlags = (c as any).red_flags as any;
       return sum + (Array.isArray(redFlags) ? redFlags.length : 0);
     }, 0) || 0;
 

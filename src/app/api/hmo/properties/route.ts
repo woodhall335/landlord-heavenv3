@@ -62,7 +62,7 @@ export async function GET(request: Request) {
         const { count } = await supabase
           .from('hmo_tenants')
           .select('*', { count: 'exact', head: true })
-          .eq('property_id', property.id)
+          .eq('property_id', (property as any).id)
           .eq('tenancy_status', 'active');
 
         return {

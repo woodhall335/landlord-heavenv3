@@ -42,9 +42,9 @@ export async function GET(
     }
 
     // If document is already a preview (watermarked), return existing URL
-    if (document.is_preview && document.pdf_url) {
+    if ((document as any).is_preview && (document as any).pdf_url) {
       const adminClient = createAdminClient();
-      const urlParts = document.pdf_url.split('/documents/');
+      const urlParts = (document as any).pdf_url.split('/documents/');
 
       if (urlParts.length === 2) {
         const filePath = urlParts[1];
@@ -68,7 +68,7 @@ export async function GET(
     }
 
     // If document is NOT a preview, generate a watermarked version
-    if (!document.html_content) {
+    if (!(document as any).html_content) {
       return NextResponse.json(
         { error: 'No HTML content available for preview generation' },
         { status: 404 }
@@ -77,7 +77,7 @@ export async function GET(
 
     try {
       // Prepare HTML for preview (limit to 2 pages, add headers/footers)
-      const previewHtml = preparePreviewHtml(document.html_content, 2);
+      const previewHtml = preparePreviewHtml((document as any).html_content, 2);
 
       // Generate watermarked PDF
       const previewPdf = await htmlToPdf(previewHtml, {
@@ -87,9 +87,9 @@ export async function GET(
       // Upload preview PDF to storage
       const adminClient = createAdminClient();
       const userFolder = user?.id || 'anonymous';
-      const fileName = `${userFolder}/${document.case_id}/preview_${document.document_type}_${Date.now()}.pdf`;
+      const fileName = `${userFolder}/${(document as any).case_id}/preview_${(document as any).document_type}_${Date.now()}.pdf`;
 
-      const { data: uploadData, error: uploadError } = await adminClient.storage
+      const { error: uploadError } = await adminClient.storage
         .from('documents')
         .upload(fileName, previewPdf, {
           contentType: 'application/pdf',

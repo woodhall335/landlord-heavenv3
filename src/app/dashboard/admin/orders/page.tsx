@@ -84,7 +84,7 @@ export default function AdminOrdersPage() {
 
       // Load user info for each order
       const ordersWithUsers: Order[] = await Promise.all(
-        (data || []).map(async (order: { id: string; user_id: string; product_type: string; amount: number; status: string; stripe_payment_intent_id: string | null; created_at: string }) => {
+        (data || []).map(async (order: any) => {
           const { data: userData } = await supabase
             .from("users")
             .select("email, full_name")

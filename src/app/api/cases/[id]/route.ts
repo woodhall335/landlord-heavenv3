@@ -65,7 +65,7 @@ export async function GET(
 // Validation schema for case updates
 const updateCaseSchema = z.object({
   status: z.enum(['in_progress', 'completed', 'archived']).optional(),
-  collected_facts: z.record(z.any()).optional(),
+  collected_facts: z.record(z.string(), z.any()).optional(),
   wizard_progress: z.number().min(0).max(100).optional(),
   recommended_route: z.string().optional(),
   recommended_grounds: z.array(z.string()).optional(),

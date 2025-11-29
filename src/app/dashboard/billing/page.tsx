@@ -59,7 +59,7 @@ export default function BillingPage() {
         .single();
 
       if (subData) {
-        setSubscription(subData);
+        setSubscription(subData as any);
       }
 
       // Load orders
@@ -71,7 +71,7 @@ export default function BillingPage() {
         .limit(10);
 
       if (ordersData) {
-        setOrders(ordersData);
+        setOrders(ordersData as any);
       }
     } catch (error) {
       console.error("Error loading billing data:", error);

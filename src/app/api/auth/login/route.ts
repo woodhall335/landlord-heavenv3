@@ -86,9 +86,9 @@ export async function POST(request: Request) {
         user: {
           id: authData.user.id,
           email: authData.user.email,
-          full_name: profile?.full_name || null,
-          phone: profile?.phone || null,
-          hmo_pro_active: profile?.hmo_pro_active || false,
+          full_name: (profile as any)?.full_name || null,
+          phone: (profile as any)?.phone || null,
+          hmo_pro_active: (profile as any)?.hmo_pro_active || false,
         },
         session: authData.session,
       },
