@@ -121,8 +121,8 @@ export function mapWizardToPrivateTenancyData(wizardFacts: WizardFacts): Private
       // TODO: agent_company not yet in CaseFacts
       company: getValueAtPath(wizardFacts, 'agent_company'),
       address: agent_address_built || '',
-      email: caseFacts.parties.agent.email,
-      phone: caseFacts.parties.agent.phone,
+      email: caseFacts.parties.agent.email ?? undefined,
+      phone: caseFacts.parties.agent.phone ?? undefined,
       // TODO: agent_signs not yet in CaseFacts
       signs: coerceBoolean(getValueAtPath(wizardFacts, 'agent_signs')),
     };
@@ -172,7 +172,7 @@ export function mapWizardToPrivateTenancyData(wizardFacts: WizardFacts): Private
     // Term - use CaseFacts for core fields
     tenancy_start_date: caseFacts.tenancy.start_date || '',
     is_fixed_term: caseFacts.tenancy.fixed_term ?? false,
-    tenancy_end_date: caseFacts.tenancy.end_date,
+    tenancy_end_date: caseFacts.tenancy.end_date ?? undefined,
     // TODO: term_length not yet in CaseFacts
     term_length: getValueAtPath(wizardFacts, 'term_length'),
     rent_period: mapRentPeriod(caseFacts.tenancy.rent_frequency),
