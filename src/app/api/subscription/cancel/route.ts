@@ -10,7 +10,7 @@ import { createClient } from '@/lib/supabase/server';
 import Stripe from 'stripe';
 
 // Cancel subscription at period end
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
     const user = await requireServerAuth();
 

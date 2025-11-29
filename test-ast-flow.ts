@@ -197,15 +197,15 @@ async function testStandardAST() {
       expectedDocs.push('inventory_template');
     }
 
-    const missingDocs = expectedDocs.filter(doc => !pack.documents.some(d => d.filename.includes(doc)));
+    const missingDocs = expectedDocs.filter(doc => !pack.documents?.some(d => d.filename.includes(doc)));
 
     if (missingDocs.length > 0) {
       console.log('✗ Missing documents:', missingDocs);
       return false;
     }
 
-    console.log(`✓ All ${pack.documents.length} expected documents present:`);
-    pack.documents.forEach(doc => {
+    console.log(`✓ All ${pack.documents?.length ?? 0} expected documents present:`);
+    pack.documents?.forEach(doc => {
       console.log(`   - ${doc.filename}`);
     });
 
@@ -270,15 +270,15 @@ async function testPremiumAST() {
       expectedDocs.push('inventory_template');
     }
 
-    const missingDocs = expectedDocs.filter(doc => !pack.documents.some(d => d.filename.includes(doc)));
+    const missingDocs = expectedDocs.filter(doc => !pack.documents?.some(d => d.filename.includes(doc)));
 
     if (missingDocs.length > 0) {
       console.log('✗ Missing documents:', missingDocs);
       return false;
     }
 
-    console.log(`✓ All ${pack.documents.length} expected documents present:`);
-    pack.documents.forEach(doc => {
+    console.log(`✓ All ${pack.documents?.length ?? 0} expected documents present:`);
+    pack.documents?.forEach(doc => {
       console.log(`   - ${doc.filename}`);
     });
 
