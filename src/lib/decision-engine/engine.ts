@@ -86,7 +86,7 @@ export async function analyzeCase(facts: CaseFacts): Promise<DecisionResult> {
   const overallRiskLevel = calculateRiskLevel(redFlags, complianceChecks);
 
   // Estimate timeline
-  const timeline = estimateTimeline(recommendedRoute, primaryGrounds, section21, jurisdiction);
+  const timeline = estimateTimeline(recommendedRoute, primaryGrounds, section21);
 
   // Estimate costs
   const costs = estimateCosts(facts, jurisdiction);
@@ -237,7 +237,7 @@ function mapSuccessProbability(prob: string | number): SuccessProbability {
 /**
  * Get required evidence for a ground
  */
-function getRequiredEvidence(groundNumber: number, facts: CaseFacts): string[] {
+function getRequiredEvidence(groundNumber: number, _facts: CaseFacts): string[] {
   const evidence: string[] = [];
 
   switch (groundNumber) {
@@ -320,7 +320,7 @@ function detectGroundSpecificRedFlags(groundNumber: number, facts: CaseFacts): R
 /**
  * Check Section 21 eligibility
  */
-function checkSection21Eligibility(facts: CaseFacts, jurisdiction: string): Section21Recommendation {
+function checkSection21Eligibility(facts: CaseFacts, _jurisdiction: string): Section21Recommendation {
   const complianceChecks: ComplianceCheck[] = [];
   const redFlags: RedFlag[] = [];
 
@@ -658,7 +658,7 @@ function estimateCosts(facts: CaseFacts, jurisdiction: string): CostEstimate {
 function generateSummary(
   route: string,
   grounds: GroundRecommendation[],
-  section21: Section21Recommendation
+  _section21: Section21Recommendation
 ): string {
   if (route === 'none') {
     return 'No valid eviction route available due to compliance issues. Address red flags before proceeding.';

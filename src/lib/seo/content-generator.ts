@@ -423,7 +423,7 @@ export async function refreshContent(
   existingContent: string,
   params: ContentGenerationParams
 ): Promise<GeneratedContent> {
-  const prompt = `You are refreshing existing SEO content for Landlord Heaven. Update the content below with:
+  const _prompt = `You are refreshing existing SEO content for Landlord Heaven. Update the content below with:
 1. Latest legal information and updates
 2. Improved SEO optimization
 3. Better structure and readability

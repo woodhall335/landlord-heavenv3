@@ -12,7 +12,7 @@ import { z } from 'zod';
 /**
  * GET - Fetch current user profile
  */
-export async function GET(request: Request) {
+export async function GET(_request: Request) {
   try {
     const user = await requireServerAuth();
     const supabase = await createServerSupabaseClient();

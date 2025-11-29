@@ -92,7 +92,7 @@ export async function POST(request: Request) {
               if (caseError || !caseData) {
                 console.error('[Fulfillment] Case not found:', caseError);
               } else {
-                const facts = caseData.collected_facts as any;
+                const facts = (caseData as any).collected_facts;
 
                 // Handle eviction packs (notice_only and complete_pack)
                 if (productType === 'notice_only' || productType === 'complete_pack') {
