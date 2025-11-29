@@ -48,7 +48,7 @@ const documentOptions: DocumentOption[] = [
     title: 'Money Claim',
     description: 'Recover rent arrears or damages - complete claim pack with all forms',
     icon: '💰',
-    price: '£129.99',
+    price: '£179.99',
   },
 ];
 
