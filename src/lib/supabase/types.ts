@@ -9,15 +9,16 @@ export type Json =
   | Json[];
 
 // A permissive table type so TS never collapses to `never` while still
-// allowing straightforward property access (e.g. `row.status`). Using a
-// string index signature keeps intellisense permissive without forcing
-// callers to add manual casts everywhere.
-export type GenericRow = Record<string, any>;
+// allowing straightforward property access (e.g. `row.status`). We loosen
+// the typing to `any` to avoid the `{}` inference issues that were causing
+// dozens of "property does not exist on type '{}'" errors throughout the
+// codebase when consuming Supabase query results.
+export type GenericRow = any;
 
 export interface GenericTable {
-  Row: GenericRow;
-  Insert: GenericRow;
-  Update: GenericRow;
+  Row: any;
+  Insert: any;
+  Update: any;
   Relationships: never[];
 }
 

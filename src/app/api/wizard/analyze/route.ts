@@ -102,7 +102,6 @@ export async function POST(request: Request) {
 
     await supabase
       .from('cases')
-      // @ts-expect-error - Supabase RLS types incorrectly infer never for update
       .update({
         recommended_route: route,
         red_flags: red_flags as any, // Supabase types red_flags as Json
