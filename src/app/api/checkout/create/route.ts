@@ -162,7 +162,7 @@ export async function POST(request: Request) {
       ],
       metadata: {
         user_id: user.id,
-        order_id: order.id,
+        order_id: (order as any).id,
         product_type,
         case_id: case_id || '',
       },
@@ -174,14 +174,14 @@ export async function POST(request: Request) {
     await supabase
       .from('orders')
       .update({ stripe_session_id: session.id })
-      .eq('id', order.id);
+      .eq('id', (order as any).id);
 
     return NextResponse.json(
       {
         success: true,
         session_id: session.id,
         session_url: session.url,
-        order_id: order.id,
+        order_id: (order as any).id,
       },
       { status: 200 }
     );

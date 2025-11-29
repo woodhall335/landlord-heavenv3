@@ -17,6 +17,6 @@ export {
   localBusinessSchema,
   softwareApplicationSchema,
   StructuredData,
-} from './structured-data.tsx';
+} from './structured-data';
 
-export type { Product, FAQItem } from './structured-data.tsx';
+export type { Product, FAQItem } from './structured-data';

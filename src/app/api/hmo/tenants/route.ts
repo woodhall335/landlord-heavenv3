@@ -64,12 +64,12 @@ export async function GET(request: Request) {
     // Calculate statistics
     const stats = {
       total: tenants?.length || 0,
-      active: tenants?.filter((t) => t.tenancy_status === 'active').length || 0,
-      notice_given: tenants?.filter((t) => t.tenancy_status === 'notice_given').length || 0,
-      ended: tenants?.filter((t) => t.tenancy_status === 'ended').length || 0,
+      active: tenants?.filter((t) => (t as any).tenancy_status === 'active').length || 0,
+      notice_given: tenants?.filter((t) => (t as any).tenancy_status === 'notice_given').length || 0,
+      ended: tenants?.filter((t) => (t as any).tenancy_status === 'ended').length || 0,
       total_monthly_rent: tenants
-        ?.filter((t) => t.tenancy_status === 'active')
-        .reduce((sum, t) => sum + parseFloat(String(t.monthly_rent || 0)), 0) || 0,
+        ?.filter((t) => (t as any).tenancy_status === 'active')
+        .reduce((sum, t) => sum + parseFloat(String((t as any).monthly_rent || 0)), 0) || 0,
     };
 
     return NextResponse.json(

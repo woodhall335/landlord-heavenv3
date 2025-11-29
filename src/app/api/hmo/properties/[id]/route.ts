@@ -58,7 +58,7 @@ export async function GET(
       .select('*', { count: 'exact' })
       .eq('property_id', id);
 
-    const activeTenants = tenants?.filter((t) => t.tenancy_status === 'active').length || 0;
+    const activeTenants = tenants?.filter((t) => (t as any).tenancy_status === 'active').length || 0;
 
     return NextResponse.json(
       {

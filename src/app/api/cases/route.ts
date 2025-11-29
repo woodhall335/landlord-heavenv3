@@ -57,9 +57,9 @@ export async function GET(request: Request) {
     // Calculate statistics
     const stats = {
       total: cases?.length || 0,
-      in_progress: cases?.filter((c) => c.status === 'in_progress').length || 0,
-      completed: cases?.filter((c) => c.status === 'completed').length || 0,
-      archived: cases?.filter((c) => c.status === 'archived').length || 0,
+      in_progress: cases?.filter((c) => (c as any).status === 'in_progress').length || 0,
+      completed: cases?.filter((c) => (c as any).status === 'completed').length || 0,
+      archived: cases?.filter((c) => (c as any).status === 'archived').length || 0,
     };
 
     return NextResponse.json(

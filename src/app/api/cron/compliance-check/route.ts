@@ -102,7 +102,7 @@ export async function POST(request: NextRequest) {
       const items7Days: any[] = [];
 
       for (const item of complianceItems) {
-        const expiryDate = new Date(item.expiry_date);
+        const expiryDate = new Date((item as any).expiry_date);
         expiryDate.setHours(0, 0, 0, 0);
 
         // Check if expiry date matches 90/30/7 day thresholds
