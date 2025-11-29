@@ -44,12 +44,20 @@ function validateCriticalAnswer(questionId: string, answer: unknown): { ok: true
     }
 
     // Critical field: Tenancy start date (part of tenancy_type_and_dates group)
+    // Handles both AST (tenancy_start_date) and Scotland/NI (start_date) field names
     if (questionId === 'tenancy_type_and_dates') {
+      const dateValidation = z.string()
+        .min(1, 'Tenancy start date is required')
+        .regex(/^\d{4}-\d{2}-\d{2}$/, 'Tenancy start date must be in YYYY-MM-DD format');
+
       const groupSchema = z.object({
-        tenancy_start_date: z.string()
-          .min(1, 'Tenancy start date is required')
-          .regex(/^\d{4}-\d{2}-\d{2}$/, 'Tenancy start date must be in YYYY-MM-DD format'),
-      }).passthrough(); // Allow other fields in the group
+        tenancy_start_date: dateValidation.optional(),
+        start_date: dateValidation.optional(),
+      }).passthrough() // Allow other fields in the group
+        .refine(
+          (data) => data.tenancy_start_date || data.start_date,
+          'Either tenancy_start_date or start_date is required'
+        );
 
       groupSchema.parse(answer);
       return { ok: true };
@@ -79,6 +87,155 @@ function validateCriticalAnswer(questionId: string, answer: unknown): { ok: true
         property_address_line1: z.string()
           .min(1, 'Property address line 1 is required')
           .max(200, 'Property address line 1 is too long'),
+      }).passthrough(); // Allow other fields in the group
+
+      groupSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // ============================================================================
+    // Scotland-specific validations
+    // ============================================================================
+
+    // Critical field: Scotland landlord registration details
+    if (questionId === 'landlord_details') {
+      const groupSchema = z.object({
+        landlord_registration_number: z.union([
+          z.string().min(1, 'Landlord registration number should not be empty if provided').optional(),
+          z.literal('').optional(),
+          z.undefined()
+        ]),
+        landlord_registration_authority: z.union([
+          z.string().min(1, 'Registration authority should not be empty if provided').optional(),
+          z.literal('').optional(),
+          z.undefined()
+        ])
+      }).passthrough(); // Allow other fields in the group
+
+      groupSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // Critical field: Scotland tenancy dates (Notice to Leave)
+    if (questionId === 'tenancy_dates') {
+      const dateSchema = z.string()
+        .min(1, 'Tenancy start date is required')
+        .regex(/^\d{4}-\d{2}-\d{2}$/, 'Tenancy start date must be in YYYY-MM-DD format');
+
+      dateSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // Critical field: Scotland rent terms (Notice to Leave)
+    if (questionId === 'rent_terms') {
+      const groupSchema = z.object({
+        rent_amount: z.union([
+          z.number().positive('Rent amount must be positive'),
+          z.string()
+            .min(1, 'Rent amount is required')
+            .refine(
+              (val) => !isNaN(Number(val)) && Number(val) > 0,
+              'Rent amount must be a positive number'
+            )
+        ]),
+      }).passthrough(); // Allow other fields in the group
+
+      groupSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // Critical field: Scotland deposit protection (Notice to Leave)
+    if (questionId === 'deposit_protection') {
+      const groupSchema = z.object({
+        deposit_amount: z.union([
+          z.number().nonnegative('Deposit amount must be zero or positive'),
+          z.string()
+            .refine(
+              (val) => val === '' || (!isNaN(Number(val)) && Number(val) >= 0),
+              'Deposit amount must be zero or a positive number'
+            )
+        ]).optional(),
+      }).passthrough(); // Allow other fields in the group
+
+      groupSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // Critical field: Scotland deposit details (PRT Agreement)
+    if (questionId === 'deposit_details') {
+      const groupSchema = z.object({
+        deposit_amount: z.union([
+          z.number().nonnegative('Deposit amount must be zero or positive'),
+          z.string()
+            .refine(
+              (val) => val === '' || (!isNaN(Number(val)) && Number(val) >= 0),
+              'Deposit amount must be zero or a positive number'
+            )
+        ]).optional(),
+      }).passthrough(); // Allow other fields in the group
+
+      groupSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // Critical field: Scotland/NI property details with postcode
+    if (questionId === 'property_details') {
+      const groupSchema = z.object({
+        postcode: z.union([
+          z.string()
+            .min(1, 'Postcode is required')
+            .max(10, 'Postcode is too long'),
+          z.undefined()
+        ]).optional(),
+      }).passthrough(); // Allow other fields in the group
+
+      groupSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // Critical field: Scotland notice service dates (Notice to Leave)
+    if (questionId === 'notice_service') {
+      const groupSchema = z.object({
+        notice_date: z.string()
+          .min(1, 'Notice date is required')
+          .regex(/^\d{4}-\d{2}-\d{2}$/, 'Notice date must be in YYYY-MM-DD format'),
+        notice_expiry: z.string()
+          .min(1, 'Notice expiry date is required')
+          .regex(/^\d{4}-\d{2}-\d{2}$/, 'Notice expiry date must be in YYYY-MM-DD format'),
+      }).passthrough(); // Allow other fields in the group
+
+      groupSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // Critical field: Scotland arrears amount (Notice to Leave)
+    if (questionId === 'arrears_amount') {
+      const amountSchema = z.union([
+        z.number().nonnegative('Arrears amount must be zero or positive'),
+        z.string()
+          .min(1, 'Arrears amount is required')
+          .refine(
+            (val) => !isNaN(Number(val)) && Number(val) >= 0,
+            'Arrears amount must be zero or a positive number'
+          )
+      ]);
+
+      amountSchema.parse(answer);
+      return { ok: true };
+    }
+
+    // ============================================================================
+    // Northern Ireland-specific validations
+    // ============================================================================
+
+    // Critical field: NI HMO details with council name
+    if (questionId === 'hmo_details') {
+      const groupSchema = z.object({
+        council_name: z.union([
+          z.string().min(1, 'Council name should not be empty if provided').optional(),
+          z.literal('').optional(),
+          z.undefined()
+        ])
       }).passthrough(); // Allow other fields in the group
 
       groupSchema.parse(answer);
