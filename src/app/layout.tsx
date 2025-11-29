@@ -26,6 +26,11 @@ export default async function RootLayout({
 }>) {
   const user = await getServerUser();
 
+  // Map user to Header props format
+  const headerUser = user?.email
+    ? { email: user.email, name: user.user_metadata?.full_name }
+    : null;
+
   return (
     <html lang="en">
       <head>
@@ -48,7 +53,7 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}>
-        <Header user={user} />
+        <Header user={headerUser} />
         <main className="flex-1">{children}</main>
         <Footer />
       </body>

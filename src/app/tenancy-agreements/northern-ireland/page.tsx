@@ -85,7 +85,7 @@ export default function NorthernIrelandTenancyPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-red-50">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 to-red-50">
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 py-4">
           <nav className="text-sm text-gray-600">
@@ -121,7 +121,7 @@ export default function NorthernIrelandTenancyPage() {
               </Link>
               <Link
                 href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy_premium"
-                className="bg-gradient-to-r from-red-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-red-700 hover:to-purple-700 transition-colors text-lg"
+                className="bg-linear-to-r from-red-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-red-700 hover:to-purple-700 transition-colors text-lg"
               >
                 Create Premium - £59.00
               </Link>
@@ -131,7 +131,7 @@ export default function NorthernIrelandTenancyPage() {
 
         {/* 2025 Legal Updates Highlight */}
         <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl shadow-lg p-8">
+          <div className="max-w-4xl mx-auto bg-linear-to-r from-red-600 to-orange-600 text-white rounded-xl shadow-lg p-8">
             <h2 className="text-3xl font-bold mb-4">🆕 2025 Legal Updates for Northern Ireland</h2>
             <p className="text-lg mb-6">
               Important changes came into effect on <strong>1 April 2025</strong> affecting all private tenancies in Northern Ireland:
@@ -403,7 +403,7 @@ export default function NorthernIrelandTenancyPage() {
         </section>
 
         {/* Benefits Section */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-red-50 to-orange-50">
+        <section className="container mx-auto px-4 py-12 bg-linear-to-br from-red-50 to-orange-50">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Benefits of a Written Tenancy Agreement</h2>
 
@@ -466,7 +466,7 @@ export default function NorthernIrelandTenancyPage() {
 
             <div className="space-y-8">
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-3xl">
                   🏠
                 </div>
                 <div>
@@ -478,7 +478,7 @@ export default function NorthernIrelandTenancyPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">
                   🏢
                 </div>
                 <div>
@@ -490,7 +490,7 @@ export default function NorthernIrelandTenancyPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-3xl">
                   🔑
                 </div>
                 <div>
@@ -502,7 +502,7 @@ export default function NorthernIrelandTenancyPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-3xl">
                   💼
                 </div>
                 <div>
@@ -543,7 +543,7 @@ export default function NorthernIrelandTenancyPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">2025 EICR Certificate</h4>
                       <p className="text-sm text-gray-600">Confirmation that you have a valid Electrical Installation Condition Report (mandatory from 1 April 2025)</p>
@@ -551,7 +551,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Property Details</h4>
                       <p className="text-sm text-gray-600">Full address, property type, bedrooms, furnished status, white goods included</p>
@@ -559,7 +559,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Deposit Information</h4>
                       <p className="text-sm text-gray-600">Deposit amount (max 2 months' rent), chosen scheme (TDS NI or MyDeposits NI)</p>
@@ -567,7 +567,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Tenancy Period</h4>
                       <p className="text-sm text-gray-600">Fixed-term or periodic, start date, end date (if fixed), break clause options</p>
@@ -575,7 +575,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">5</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">5</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Rent Details</h4>
                       <p className="text-sm text-gray-600">Rent amount, payment frequency, first payment date, rent increase clause (once per year, 12-month gap)</p>
@@ -583,7 +583,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">6</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">6</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Safety Certificates</h4>
                       <p className="text-sm text-gray-600">Gas safety (CP12), EICR, EPC rating, smoke alarms, CO detectors</p>
@@ -591,7 +591,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">7</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">7</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Utilities & Services</h4>
                       <p className="text-sm text-gray-600">Who pays rates, utilities, water, TV licence, internet</p>
@@ -601,7 +601,7 @@ export default function NorthernIrelandTenancyPage() {
 
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">8</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">8</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Landlord & Tenant Details</h4>
                       <p className="text-sm text-gray-600">Full names, addresses, contact details (supports multiple tenants for joint tenancies)</p>
@@ -609,7 +609,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">9</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">9</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Permitted Occupants</h4>
                       <p className="text-sm text-gray-600">Pets allowed, maximum occupants, children, overnight guests policy</p>
@@ -617,7 +617,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">10</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">10</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Maintenance & Repairs</h4>
                       <p className="text-sm text-gray-600">Landlord responsibilities, garden maintenance, repairs reporting, emergency contacts</p>
@@ -625,7 +625,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">11</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">11</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Property Condition</h4>
                       <p className="text-sm text-gray-600">Inventory provided, professional cleaning requirements, decoration condition</p>
@@ -633,7 +633,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">12</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">12</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Additional Terms</h4>
                       <p className="text-sm text-gray-600">Subletting policy, insurance requirements, communal areas, parking</p>
@@ -641,7 +641,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">13</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">13</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Access & Inspections</h4>
                       <p className="text-sm text-gray-600">Notice period for landlord access, inspection frequency, end-of-tenancy viewings</p>
@@ -649,7 +649,7 @@ export default function NorthernIrelandTenancyPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">14</div>
+                    <div className="shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">14</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Notice Periods</h4>
                       <p className="text-sm text-gray-600">Length-based notice (28/56/84 days), tenant notice period, break clause details</p>
@@ -659,7 +659,7 @@ export default function NorthernIrelandTenancyPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-xl shadow-lg p-8">
+            <div className="bg-linear-to-r from-red-600 to-purple-600 text-white rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-semibold mb-4">Two Options to Suit Your Needs</h3>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -827,7 +827,7 @@ export default function NorthernIrelandTenancyPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-red-600 to-orange-600 text-white rounded-xl shadow-lg p-8">
+            <div className="bg-linear-to-r from-red-600 to-orange-600 text-white rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-semibold mb-4">Rent Increases: 2025 Rules</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
@@ -897,7 +897,7 @@ export default function NorthernIrelandTenancyPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-red-50 to-orange-50">
+        <section className="container mx-auto px-4 py-12 bg-linear-to-br from-red-50 to-orange-50">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
 
@@ -1014,7 +1014,7 @@ export default function NorthernIrelandTenancyPage() {
 
         {/* Final CTA Section */}
         <section className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto bg-gradient-to-r from-red-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-center text-white">
+          <div className="max-w-4xl mx-auto bg-linear-to-r from-red-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-center text-white">
             <h2 className="text-4xl font-bold mb-4">Ready to Create Your Tenancy Agreement?</h2>
             <p className="text-xl mb-8 opacity-90">
               Join Northern Ireland landlords who trust Landlord Heaven for 2025-compliant, professional tenancy agreements.

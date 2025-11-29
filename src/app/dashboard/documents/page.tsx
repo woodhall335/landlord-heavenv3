@@ -295,7 +295,7 @@ export default function DocumentsPage() {
                 <div className="flex items-start justify-between gap-4">
                   {/* Document Info */}
                   <div className="flex items-start gap-4 flex-1 min-w-0">
-                    <div className="w-12 h-12 bg-primary-subtle rounded-lg flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-primary-subtle rounded-lg flex items-center justify-center shrink-0">
                       <svg
                         className="w-6 h-6 text-primary"
                         fill="currentColor"
@@ -330,7 +330,7 @@ export default function DocumentsPage() {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex items-center gap-2 flex-shrink-0">
+                  <div className="flex items-center gap-2 shrink-0">
                     {doc.case_id && (
                       <Link href={`/dashboard/cases/${doc.case_id}`}>
                         <Button variant="outline" size="small">

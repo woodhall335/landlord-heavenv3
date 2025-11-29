@@ -119,7 +119,7 @@ export default function HMOProPage() {
 
             <div className="space-y-8">
               <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                <div className="shrink-0 w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
                   1
                 </div>
                 <div>
@@ -141,7 +141,7 @@ export default function HMOProPage() {
               </div>
 
               <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                <div className="shrink-0 w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
                   2
                 </div>
                 <div>
@@ -153,7 +153,7 @@ export default function HMOProPage() {
               </div>
 
               <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                <div className="shrink-0 w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
                   3
                 </div>
                 <div>
@@ -173,7 +173,7 @@ export default function HMOProPage() {
               </div>
 
               <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
+                <div className="shrink-0 w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center font-bold text-xl">
                   4
                 </div>
                 <div>
@@ -306,7 +306,7 @@ export default function HMOProPage() {
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-600 to-indigo-700 text-white rounded-2xl p-8 md:p-12">
+            <div className="bg-linear-to-br from-purple-600 to-indigo-700 text-white rounded-2xl p-8 md:p-12">
               <div className="text-center mb-8">
                 <h3 className="text-3xl font-bold mb-4">All Tiers Include</h3>
                 <p className="text-white/90 mb-6">Full access to all HMO Pro features</p>
@@ -524,7 +524,7 @@ export default function HMOProPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-600 to-indigo-700">
+      <section className="py-16 md:py-20 bg-linear-to-br from-purple-600 to-indigo-700">
         <Container>
           <div className="max-w-3xl mx-auto text-center text-white">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Start Your Free Trial Today</h2>

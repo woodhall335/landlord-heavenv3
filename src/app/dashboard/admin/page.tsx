@@ -219,7 +219,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+      <div className="bg-linear-to-r from-purple-600 to-indigo-600 text-white">
         <Container size="large" className="py-6">
           <div>
             <Link

@@ -461,7 +461,7 @@ export default function PricingPage() {
         </div>
 
         {/* CTA */}
-        <div className="mt-16 bg-gradient-to-br from-primary to-emerald-600 text-white rounded-2xl p-8 md:p-12 text-center">
+        <div className="mt-16 bg-linear-to-br from-primary to-emerald-600 text-white rounded-2xl p-8 md:p-12 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Still Have Questions?</h2>
           <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
             Not sure which product is right for you? Our support team is here to help.

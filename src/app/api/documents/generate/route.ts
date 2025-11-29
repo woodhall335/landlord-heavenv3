@@ -58,7 +58,7 @@ export async function POST(request: Request) {
 
     // For final documents (not preview), require authentication
     if (!is_preview) {
-      const user = await requireServerAuth();
+      await requireServerAuth();
     }
 
     const supabase = await createServerSupabaseClient();
@@ -189,7 +189,7 @@ export async function POST(request: Request) {
       const userFolder = caseData.user_id || caseData.anonymous_user_id || 'anonymous';
       const fileName = `${userFolder}/${case_id}/${document_type}_${Date.now()}.pdf`;
 
-      const { data: uploadData, error: uploadError } = await adminClient.storage
+      const { error: uploadError } = await adminClient.storage
         .from('documents')
         .upload(fileName, generatedDoc.pdf, {
           contentType: 'application/pdf',

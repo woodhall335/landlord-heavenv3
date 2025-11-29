@@ -44,7 +44,7 @@ export default function Home() {
         }
         mediaSlot={
           <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-white p-6 border border-gray-200">
-            <div className="aspect-video bg-gradient-to-br from-lavender-100 to-purple-100 rounded-2xl flex items-center justify-center">
+            <div className="aspect-video bg-linear-to-br from-lavender-100 to-purple-100 rounded-2xl flex items-center justify-center">
               <div className="text-center space-y-4">
                 <div className="text-6xl">📄</div>
                 <div className="text-gray-700 font-semibold">Document Preview</div>

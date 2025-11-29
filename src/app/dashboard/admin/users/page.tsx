@@ -140,7 +140,7 @@ export default function AdminUsersPage() {
     loadUsers();
   }, [loading, loadUsers]);
 
-  async function handleBanUser(userId: string, isBanned: boolean) {
+  async function _handleBanUser(userId: string, isBanned: boolean) {
     const confirmed = confirm(
       isBanned ? "Are you sure you want to unban this user?" : "Are you sure you want to ban this user?"
     );

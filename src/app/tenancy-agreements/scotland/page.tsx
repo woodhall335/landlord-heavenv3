@@ -101,7 +101,7 @@ export default function ScotlandPRTPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 py-4">
           <nav className="text-sm text-gray-600">
@@ -132,7 +132,7 @@ export default function ScotlandPRTPage() {
               </Link>
               <Link
                 href="/wizard?jurisdiction=scotland&document_type=prt_premium"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-colors text-lg"
+                className="bg-linear-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-colors text-lg"
               >
                 Create Premium PRT - £59.00
               </Link>
@@ -369,7 +369,7 @@ export default function ScotlandPRTPage() {
         </section>
 
         {/* Benefits of PRT Agreements */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <section className="container mx-auto px-4 py-12 bg-linear-to-br from-blue-50 to-indigo-50">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Benefits of a Written PRT Agreement</h2>
 
@@ -432,7 +432,7 @@ export default function ScotlandPRTPage() {
 
             <div className="space-y-8">
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl">
                   🏠
                 </div>
                 <div>
@@ -444,7 +444,7 @@ export default function ScotlandPRTPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">
                   🏢
                 </div>
                 <div>
@@ -456,7 +456,7 @@ export default function ScotlandPRTPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-3xl">
                   🔑
                 </div>
                 <div>
@@ -468,7 +468,7 @@ export default function ScotlandPRTPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-3xl">
                   💼
                 </div>
                 <div>
@@ -522,7 +522,7 @@ export default function ScotlandPRTPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Landlord Registration</h4>
                       <p className="text-sm text-gray-600">Your landlord registration number from your local council (mandatory in Scotland)</p>
@@ -530,7 +530,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Property Details</h4>
                       <p className="text-sm text-gray-600">Full address, property type, bedrooms, furnished status, HMO licence (if applicable)</p>
@@ -538,7 +538,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Deposit Information</h4>
                       <p className="text-sm text-gray-600">Deposit amount (max 2 months' rent), chosen deposit scheme (SafeDeposits, MyDeposits, LPS Scotland)</p>
@@ -546,7 +546,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Rent Details</h4>
                       <p className="text-sm text-gray-600">Rent amount, payment frequency, first payment date, rent increase notice (if applicable)</p>
@@ -554,7 +554,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">5</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">5</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Repairing Standard Compliance</h4>
                       <p className="text-sm text-gray-600">Confirmation of structural soundness, weather-tight, safe installations, gas/electrical certificates</p>
@@ -562,7 +562,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">6</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">6</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Tenancy Start Date</h4>
                       <p className="text-sm text-gray-600">When the open-ended tenancy begins (no end date required for PRTs)</p>
@@ -570,7 +570,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">7</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">7</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Utilities & Services</h4>
                       <p className="text-sm text-gray-600">Who pays council tax, utilities, water charges, TV licence, internet</p>
@@ -580,7 +580,7 @@ export default function ScotlandPRTPage() {
 
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">8</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">8</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Landlord & Tenant Details</h4>
                       <p className="text-sm text-gray-600">Full names, addresses, contact details for all parties (supports multiple tenants)</p>
@@ -588,7 +588,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">9</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">9</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Safety Certificates</h4>
                       <p className="text-sm text-gray-600">Gas safety (CP12), EICR (electrical), EPC rating, smoke/heat/CO alarm confirmation</p>
@@ -596,7 +596,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">10</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">10</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Permitted Occupants</h4>
                       <p className="text-sm text-gray-600">Pets policy, maximum occupants, children, overnight guests</p>
@@ -604,7 +604,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">11</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">11</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Maintenance Responsibilities</h4>
                       <p className="text-sm text-gray-600">Landlord's Repairing Standard duties, tenant's care obligations, garden maintenance, repairs process</p>
@@ -612,7 +612,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">12</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">12</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Inventory & Condition</h4>
                       <p className="text-sm text-gray-600">Property inventory, white goods included, decoration condition, professional cleaning</p>
@@ -620,7 +620,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">13</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">13</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Insurance & Access</h4>
                       <p className="text-sm text-gray-600">Landlord insurance, tenant insurance requirements, access notice periods, inspection frequency</p>
@@ -628,7 +628,7 @@ export default function ScotlandPRTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">14</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">14</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Additional Terms</h4>
                       <p className="text-sm text-gray-600">Subletting policy, communal areas, parking, recycling arrangements</p>
@@ -638,7 +638,7 @@ export default function ScotlandPRTPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl shadow-lg p-8">
+            <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-semibold mb-4">Two Options to Suit Your Needs</h3>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -844,7 +844,7 @@ export default function ScotlandPRTPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl shadow-lg p-8">
+            <div className="bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-semibold mb-4">Making Changes to a PRT</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -924,7 +924,7 @@ export default function ScotlandPRTPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-blue-50 to-purple-50">
+        <section className="container mx-auto px-4 py-12 bg-linear-to-br from-blue-50 to-purple-50">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
 
@@ -1055,7 +1055,7 @@ export default function ScotlandPRTPage() {
 
         {/* Final CTA Section */}
         <section className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-center text-white">
+          <div className="max-w-4xl mx-auto bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-center text-white">
             <h2 className="text-4xl font-bold mb-4">Ready to Create Your PRT Agreement?</h2>
             <p className="text-xl mb-8 opacity-90">
               Join Scottish landlords who trust Landlord Heaven for legally compliant, professional tenancy agreements.

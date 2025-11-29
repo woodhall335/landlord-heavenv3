@@ -113,8 +113,8 @@ function WizardFlowContent() {
     return (
       <StructuredWizard
         caseId={caseId}
-        caseType={type}
-        jurisdiction={jurisdiction}
+        caseType={type!}
+        jurisdiction={jurisdiction!}
         onComplete={handleComplete}
       />
     );
@@ -123,8 +123,8 @@ function WizardFlowContent() {
   // Use conversational wizard for evictions and money claims
   return (
     <WizardContainer
-      caseType={type}
-      jurisdiction={jurisdiction}
+      caseType={type!}
+      jurisdiction={jurisdiction!}
       product={product || undefined}
       editCaseId={editCaseId || undefined}
       onComplete={handleComplete}

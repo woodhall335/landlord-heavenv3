@@ -205,7 +205,7 @@ export default function DashboardPage() {
                       className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary transition-colors"
                     >
                       <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <svg className="w-8 h-8 text-primary flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <svg className="w-8 h-8 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20">
                           <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
                         </svg>
                         <div className="flex-1 min-w-0">
@@ -235,7 +235,7 @@ export default function DashboardPage() {
                   </button>
                 </Link>
                 <Link href="/dashboard/hmo">
-                  <button className="w-full px-4 py-3 bg-gradient-to-r from-secondary to-primary text-white rounded-lg hover:opacity-90 transition-opacity text-left font-medium">
+                  <button className="w-full px-4 py-3 bg-linear-to-r from-secondary to-primary text-white rounded-lg hover:opacity-90 transition-opacity text-left font-medium">
                     🏘️ HMO Pro Dashboard
                   </button>
                 </Link>

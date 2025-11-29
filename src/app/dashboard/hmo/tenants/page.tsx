@@ -246,7 +246,7 @@ export default function TenantsPage() {
                 <div className="flex items-start justify-between gap-4">
                   {/* Tenant Info */}
                   <div className="flex items-start gap-4 flex-1 min-w-0">
-                    <div className="w-12 h-12 bg-primary-subtle rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-primary-subtle rounded-full flex items-center justify-center shrink-0">
                       <svg
                         className="w-6 h-6 text-primary"
                         fill="currentColor"

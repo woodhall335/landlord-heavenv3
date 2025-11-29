@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     const { newTier } = validationResult.data;
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Get user's current subscription data
     const { data: profile, error: profileError } = await supabase
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
     }
 
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-      apiVersion: '2022-11-15',
+      apiVersion: '2025-11-17.clover',
     });
 
     // Get current subscription
@@ -131,7 +131,9 @@ export async function POST(request: NextRequest) {
         tier: newTier,
         propertyLimit: tierInfo.max,
         price: tierInfo.price,
-        currentPeriodEnd: new Date(updatedSubscription.current_period_end * 1000).toISOString(),
+        currentPeriodEnd: updatedSubscription.current_period_end
+          ? new Date((updatedSubscription.current_period_end as number) * 1000).toISOString()
+          : null,
       },
     });
   } catch (error: any) {

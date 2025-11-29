@@ -21,7 +21,7 @@ export function TealHero({
   const alignment = align === "center" ? "text-center items-center" : "text-left items-start";
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 text-gray-900">
+    <section className="relative overflow-hidden bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 text-gray-900">
       <div className="absolute inset-0 opacity-20">
         <div className="absolute -left-20 top-0 h-96 w-96 rounded-full bg-purple-200/50 blur-3xl" />
         <div className="absolute right-0 bottom-0 h-[500px] w-[500px] rounded-full bg-purple-300/40 blur-3xl" />
@@ -44,7 +44,7 @@ export function TealHero({
         </div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-16 bg-linear-to-t from-white to-transparent" />
     </section>
   );
 }

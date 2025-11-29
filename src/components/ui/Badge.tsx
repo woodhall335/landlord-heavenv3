@@ -44,7 +44,7 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
       error: "bg-error-bg text-error border border-red-300",
       info: "bg-info-bg text-blue-700 border border-blue-300",
       neutral: "bg-gray-100 text-gray-800 border border-gray-300",
-      "hmo-pro": "bg-gradient-to-r from-primary to-primary-dark text-white font-semibold shadow-md",
+      "hmo-pro": "bg-linear-to-r from-primary to-primary-dark text-white font-semibold shadow-md",
     };
 
     const sizeStyles = {
@@ -64,7 +64,7 @@ export const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
         )}
         {...props}
       >
-        {icon && <span className="flex-shrink-0">{icon}</span>}
+        {icon && <span className="shrink-0">{icon}</span>}
         {children}
       </span>
     );
