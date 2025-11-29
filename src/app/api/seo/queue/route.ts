@@ -22,7 +22,7 @@ const QueueSchema = z.object({
 // Add to queue
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
 // Get queue
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const {
       data: { user },
     } = await supabase.auth.getUser();

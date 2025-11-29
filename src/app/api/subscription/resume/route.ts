@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   try {
     const user = await requireServerAuth();
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Get user's subscription data
     const { data: profile, error: profileError } = await supabase
