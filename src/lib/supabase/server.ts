@@ -16,8 +16,8 @@ import type { Database } from './types';
  *
  * @returns SupabaseClient<Database> - Fully typed client with schema inference
  */
-export function createServerSupabaseClient(): SupabaseClient<Database> {
-  const cookieStore = cookies();
+export async function createServerSupabaseClient(): Promise<SupabaseClient<Database>> {
+  const cookieStore = await cookies();
 
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -81,7 +81,7 @@ export function createAdminClient(): SupabaseClient<Database> {
  * Returns null if not authenticated
  */
 export async function getServerUser() {
-  const supabase = createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient();
 
   const {
     data: { user },
