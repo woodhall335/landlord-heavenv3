@@ -117,7 +117,7 @@ export default function EnglandWalesASTPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 py-4">
           <nav className="text-sm text-gray-600">
@@ -148,7 +148,7 @@ export default function EnglandWalesASTPage() {
               </Link>
               <Link
                 href="/wizard?jurisdiction=england-wales&document_type=ast_premium"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-colors text-lg"
+                className="bg-linear-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-colors text-lg"
               >
                 Create Premium AST - £59.00
               </Link>
@@ -360,7 +360,7 @@ export default function EnglandWalesASTPage() {
         </section>
 
         {/* Benefits of AST Agreements */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <section className="container mx-auto px-4 py-12 bg-linear-to-br from-blue-50 to-indigo-50">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Benefits of a Written Tenancy Agreement</h2>
 
@@ -423,7 +423,7 @@ export default function EnglandWalesASTPage() {
 
             <div className="space-y-8">
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center text-3xl">
                   🏠
                 </div>
                 <div>
@@ -435,7 +435,7 @@ export default function EnglandWalesASTPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-3xl">
                   🏢
                 </div>
                 <div>
@@ -447,7 +447,7 @@ export default function EnglandWalesASTPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center text-3xl">
                   💼
                 </div>
                 <div>
@@ -459,7 +459,7 @@ export default function EnglandWalesASTPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center text-3xl">
                   🔑
                 </div>
                 <div>
@@ -471,7 +471,7 @@ export default function EnglandWalesASTPage() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-3xl">
+                <div className="shrink-0 w-16 h-16 bg-red-100 rounded-full flex items-center justify-center text-3xl">
                   🏘️
                 </div>
                 <div>
@@ -513,7 +513,7 @@ export default function EnglandWalesASTPage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Property Details</h4>
                       <p className="text-sm text-gray-600">Full address, property type, number of bedrooms, furnished/unfurnished status, white goods included</p>
@@ -521,7 +521,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Landlord Information</h4>
                       <p className="text-sm text-gray-600">Full name, address, contact details, whether using a managing agent</p>
@@ -529,7 +529,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Tenant Information</h4>
                       <p className="text-sm text-gray-600">All tenant names, contact details, emergency contacts (supports multiple tenants for joint tenancies)</p>
@@ -537,7 +537,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">4</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Financial Terms</h4>
                       <p className="text-sm text-gray-600">Rent amount, payment frequency, payment method, first rent payment date</p>
@@ -545,7 +545,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">5</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">5</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Deposit Details</h4>
                       <p className="text-sm text-gray-600">Deposit amount (validated against Tenant Fees Act limits), chosen deposit protection scheme</p>
@@ -553,7 +553,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">6</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">6</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Tenancy Period</h4>
                       <p className="text-sm text-gray-600">Start date, fixed-term duration (or periodic tenancy), break clause options</p>
@@ -561,7 +561,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">7</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">7</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Utilities & Services</h4>
                       <p className="text-sm text-gray-600">Who pays council tax, utilities, water charges, TV licence, internet</p>
@@ -571,7 +571,7 @@ export default function EnglandWalesASTPage() {
 
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">8</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">8</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Permitted Occupants</h4>
                       <p className="text-sm text-gray-600">Pets allowed, maximum occupants, children, overnight guests policy</p>
@@ -579,7 +579,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">9</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">9</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Legal Compliance & Safety</h4>
                       <p className="text-sm text-gray-600">Gas safety certificate, EPC rating, electrical safety certificate, smoke/CO alarms, How to Rent guide</p>
@@ -587,7 +587,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">10</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">10</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Maintenance & Repairs</h4>
                       <p className="text-sm text-gray-600">Landlord maintenance responsibilities, garden maintenance, repairs reporting, emergency contacts</p>
@@ -595,7 +595,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">11</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">11</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Property Condition</h4>
                       <p className="text-sm text-gray-600">Inventory provided, professional cleaning requirements, decoration condition</p>
@@ -603,7 +603,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">12</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">12</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Additional Terms</h4>
                       <p className="text-sm text-gray-600">Subletting policy, rent increase clause, insurance requirements</p>
@@ -611,7 +611,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">13</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">13</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Access & Inspections</h4>
                       <p className="text-sm text-gray-600">Notice period for landlord access, inspection frequency, end-of-tenancy viewings</p>
@@ -619,7 +619,7 @@ export default function EnglandWalesASTPage() {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">14</div>
+                    <div className="shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">14</div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Parking & Outside Space</h4>
                       <p className="text-sm text-gray-600">Parking availability, allocated spaces, garden/balcony access, communal areas</p>
@@ -629,7 +629,7 @@ export default function EnglandWalesASTPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl shadow-lg p-8">
+            <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-semibold mb-4">Two Options to Suit Your Needs</h3>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -844,7 +844,7 @@ export default function EnglandWalesASTPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-xl shadow-lg p-8">
+            <div className="bg-linear-to-r from-purple-600 to-blue-600 text-white rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-semibold mb-4">Break Clauses: Built-In Flexibility</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -926,7 +926,7 @@ export default function EnglandWalesASTPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-blue-50 to-purple-50">
+        <section className="container mx-auto px-4 py-12 bg-linear-to-br from-blue-50 to-purple-50">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
 
@@ -1067,7 +1067,7 @@ export default function EnglandWalesASTPage() {
 
         {/* Final CTA Section */}
         <section className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-center text-white">
+          <div className="max-w-4xl mx-auto bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-center text-white">
             <h2 className="text-4xl font-bold mb-4">Ready to Create Your AST Agreement?</h2>
             <p className="text-xl mb-8 opacity-90">
               Join thousands of landlords who trust Landlord Heaven for legally compliant, professional tenancy agreements.

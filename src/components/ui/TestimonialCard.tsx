@@ -21,8 +21,8 @@ export function TestimonialCard({
   return (
     <div className={clsx("bg-cream rounded-2xl p-8 md:p-10 space-y-6", className)}>
       <div className="flex items-start gap-6">
-        <div className="relative flex-shrink-0">
-          <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-secondary/20 to-secondary/40 border-4 border-secondary/30">
+        <div className="relative shrink-0">
+          <div className="w-20 h-20 rounded-2xl overflow-hidden bg-linear-to-br from-secondary/20 to-secondary/40 border-4 border-secondary/30">
             {avatar ? (
               <img
                 src={avatar}

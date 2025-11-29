@@ -507,7 +507,7 @@ export default function CaseDetailPage() {
                     >
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <svg
-                          className="w-8 h-8 text-primary flex-shrink-0"
+                          className="w-8 h-8 text-primary shrink-0"
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >

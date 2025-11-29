@@ -244,7 +244,7 @@ export default function WizardPage() {
                   <h3 className="text-xl font-semibold text-charcoal mb-2">
                     {doc.title}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-4 min-h-[3rem]">
+                  <p className="text-sm text-gray-600 mb-4 min-h-12">
                     {doc.description}
                   </p>
                   <div className="text-primary font-semibold">{doc.price}</div>

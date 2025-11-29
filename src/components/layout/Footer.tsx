@@ -10,7 +10,7 @@ export function Footer() {
           {/* Column 1: About */}
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary-dark shadow-lg">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-linear-to-br from-primary to-primary-dark shadow-lg">
                 <span className="text-white font-bold text-xl">LH</span>
               </div>
               <span className="text-xl font-bold">Landlord Heaven</span>

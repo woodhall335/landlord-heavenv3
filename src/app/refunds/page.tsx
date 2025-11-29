@@ -73,7 +73,7 @@ export default function RefundsPage() {
 
               <div className="space-y-4">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm">
+                  <div className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm">
                     1
                   </div>
                   <div>
@@ -88,7 +88,7 @@ export default function RefundsPage() {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm">
+                  <div className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm">
                     2
                   </div>
                   <div>
@@ -105,7 +105,7 @@ export default function RefundsPage() {
                 </div>
 
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm">
+                  <div className="shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white font-bold text-sm">
                     3
                   </div>
                   <div>

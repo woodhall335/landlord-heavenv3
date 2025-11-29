@@ -79,7 +79,7 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
         {/* HMO Warning */}
         <div className="bg-amber-50 border-l-4 border-amber-400 p-4 mb-6">
           <div className="flex items-start">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <span className="text-2xl">⚠️</span>
             </div>
             <div className="ml-3">
@@ -112,7 +112,7 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
 
           <div className="grid md:grid-cols-2 gap-4 mb-4">
             <div className="flex items-start space-x-3">
-              <span className="text-green-600 text-xl flex-shrink-0">✓</span>
+              <span className="text-green-600 text-xl shrink-0">✓</span>
               <div>
                 <p className="font-semibold text-gray-900">Automated Reminders</p>
                 <p className="text-sm text-gray-600">
@@ -122,7 +122,7 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
             </div>
 
             <div className="flex items-start space-x-3">
-              <span className="text-green-600 text-xl flex-shrink-0">✓</span>
+              <span className="text-green-600 text-xl shrink-0">✓</span>
               <div>
                 <p className="font-semibold text-gray-900">Council-Specific Applications</p>
                 <p className="text-sm text-gray-600">
@@ -132,7 +132,7 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
             </div>
 
             <div className="flex items-start space-x-3">
-              <span className="text-green-600 text-xl flex-shrink-0">✓</span>
+              <span className="text-green-600 text-xl shrink-0">✓</span>
               <div>
                 <p className="font-semibold text-gray-900">Multi-Property Dashboard</p>
                 <p className="text-sm text-gray-600">Manage up to 20 HMO properties in one place</p>
@@ -140,7 +140,7 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
             </div>
 
             <div className="flex items-start space-x-3">
-              <span className="text-green-600 text-xl flex-shrink-0">✓</span>
+              <span className="text-green-600 text-xl shrink-0">✓</span>
               <div>
                 <p className="font-semibold text-gray-900">Tenant Document Portal</p>
                 <p className="text-sm text-gray-600">
@@ -150,7 +150,7 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
             </div>
 
             <div className="flex items-start space-x-3">
-              <span className="text-green-600 text-xl flex-shrink-0">✓</span>
+              <span className="text-green-600 text-xl shrink-0">✓</span>
               <div>
                 <p className="font-semibold text-gray-900">Priority Support</p>
                 <p className="text-sm text-gray-600">Direct access to our compliance team</p>
@@ -158,7 +158,7 @@ export const HMOProUpsellModal: React.FC<HMOProUpsellModalProps> = ({
             </div>
 
             <div className="flex items-start space-x-3">
-              <span className="text-green-600 text-xl flex-shrink-0">✓</span>
+              <span className="text-green-600 text-xl shrink-0">✓</span>
               <div>
                 <p className="font-semibold text-gray-900">Renewal Tracking</p>
                 <p className="text-sm text-gray-600">Never miss a critical compliance deadline</p>

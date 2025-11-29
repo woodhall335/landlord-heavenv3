@@ -88,7 +88,7 @@ export const MultipleSelection: React.FC<MultipleSelectionProps> = ({
               checked={isChecked}
               onChange={() => handleToggle(option.value)}
               disabled={disabled || isDisabledByNone}
-              className="w-5 h-5 mt-0.5 rounded border-gray-300 text-primary focus:ring-primary flex-shrink-0"
+              className="w-5 h-5 mt-0.5 rounded border-gray-300 text-primary focus:ring-primary shrink-0"
             />
             <div className="flex-1">
               <div className={clsx(

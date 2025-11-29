@@ -161,7 +161,7 @@ export default function AboutPage() {
 
             <div className="space-y-8">
               <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                <div className="shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
                   1
                 </div>
                 <div>
@@ -174,7 +174,7 @@ export default function AboutPage() {
               </div>
 
               <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                <div className="shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
                   2
                 </div>
                 <div>
@@ -187,7 +187,7 @@ export default function AboutPage() {
               </div>
 
               <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                <div className="shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
                   3
                 </div>
                 <div>
@@ -201,7 +201,7 @@ export default function AboutPage() {
               </div>
 
               <div className="flex gap-6">
-                <div className="flex-shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
+                <div className="shrink-0 w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-xl font-bold">
                   4
                 </div>
                 <div>
@@ -344,7 +344,7 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-primary to-emerald-600">
+      <section className="py-16 md:py-20 bg-linear-to-br from-primary to-emerald-600">
         <Container>
           <div className="max-w-3xl mx-auto text-center text-white">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
