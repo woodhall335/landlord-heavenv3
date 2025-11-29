@@ -14,14 +14,10 @@ import {
   TimelineEstimate,
   CostEstimate,
   SuccessProbability,
-  Severity,
 } from './types';
 import {
   loadDecisionEngine,
   getGroundDefinitions,
-  getSection21Requirements,
-  getSection21RedFlags,
-  getTypicalTimelines,
   getCostEstimates,
 } from './config-loader';
 
@@ -52,7 +48,7 @@ export async function analyzeCase(facts: CaseFacts): Promise<DecisionResult> {
 
   matchedRules.forEach((rule) => {
     if (rule.recommended_grounds?.primary) {
-      rule.recommended_grounds.primary.forEach((groundNum) => {
+      rule.recommended_grounds.primary.forEach((groundNum: number) => {
         const def = groundDefs.get(groundNum);
         if (def) {
           primaryGrounds.push(buildGroundRecommendation(groundNum, def, facts, rule));
@@ -61,7 +57,7 @@ export async function analyzeCase(facts: CaseFacts): Promise<DecisionResult> {
     }
 
     if (rule.recommended_grounds?.backup) {
-      rule.recommended_grounds.backup.forEach((groundNum) => {
+      rule.recommended_grounds.backup.forEach((groundNum: number) => {
         const def = groundDefs.get(groundNum);
         if (def && !primaryGrounds.find((g) => g.ground_number === groundNum)) {
           backupGrounds.push(buildGroundRecommendation(groundNum, def, facts, rule));
@@ -74,17 +70,16 @@ export async function analyzeCase(facts: CaseFacts): Promise<DecisionResult> {
   const section21 = checkSection21Eligibility(facts, jurisdiction);
 
   // Detect red flags
-  const redFlags = detectRedFlags(facts, jurisdiction);
+  const redFlags = detectRedFlags(facts);
 
   // Run compliance checks
-  const complianceChecks = runComplianceChecks(facts, jurisdiction);
+  const complianceChecks = runComplianceChecks();
 
   // Determine recommended route
   const recommendedRoute = determineRecommendedRoute(
     primaryGrounds,
     section21,
-    redFlags,
-    facts
+    redFlags
   );
 
   // Calculate risk level
@@ -97,8 +92,8 @@ export async function analyzeCase(facts: CaseFacts): Promise<DecisionResult> {
   const costs = estimateCosts(facts, jurisdiction);
 
   // Generate summary and next steps
-  const summary = generateSummary(recommendedRoute, primaryGrounds, section21, facts);
-  const nextSteps = generateNextSteps(recommendedRoute, primaryGrounds, section21, redFlags, facts);
+  const summary = generateSummary(recommendedRoute, primaryGrounds, section21);
+  const nextSteps = generateNextSteps(recommendedRoute, primaryGrounds, redFlags);
   const warnings = generateWarnings(redFlags, complianceChecks);
 
   return {
@@ -326,9 +321,6 @@ function detectGroundSpecificRedFlags(groundNumber: number, facts: CaseFacts): R
  * Check Section 21 eligibility
  */
 function checkSection21Eligibility(facts: CaseFacts, jurisdiction: string): Section21Recommendation {
-  const requirements = getSection21Requirements(jurisdiction);
-  const redFlagDefs = getSection21RedFlags(jurisdiction);
-
   const complianceChecks: ComplianceCheck[] = [];
   const redFlags: RedFlag[] = [];
 
@@ -448,7 +440,7 @@ function checkSection21Eligibility(facts: CaseFacts, jurisdiction: string): Sect
 /**
  * Detect red flags across all aspects of the case
  */
-function detectRedFlags(facts: CaseFacts, jurisdiction: string): RedFlag[] {
+function detectRedFlags(facts: CaseFacts): RedFlag[] {
   const flags: RedFlag[] = [];
 
   // Unlicensed HMO
@@ -497,7 +489,7 @@ function detectRedFlags(facts: CaseFacts, jurisdiction: string): RedFlag[] {
 /**
  * Run all compliance checks
  */
-function runComplianceChecks(facts: CaseFacts, jurisdiction: string): ComplianceCheck[] {
+function runComplianceChecks(): ComplianceCheck[] {
   const checks: ComplianceCheck[] = [];
 
   // Right to Rent
@@ -531,8 +523,7 @@ function runComplianceChecks(facts: CaseFacts, jurisdiction: string): Compliance
 function determineRecommendedRoute(
   primaryGrounds: GroundRecommendation[],
   section21: Section21Recommendation,
-  redFlags: RedFlag[],
-  facts: CaseFacts
+  redFlags: RedFlag[]
 ): 'section_8' | 'section_21' | 'both' | 'none' {
   const hasSection8 = primaryGrounds.length > 0;
   const hasSection21 = section21.available;
@@ -592,11 +583,8 @@ function calculateRiskLevel(
 function estimateTimeline(
   route: string,
   grounds: GroundRecommendation[],
-  section21: Section21Recommendation,
-  jurisdiction: string
+  section21: Section21Recommendation
 ): TimelineEstimate {
-  const timelines = getTypicalTimelines(jurisdiction);
-
   if (route === 'section_8' && grounds.some((g) => g.ground_number === 8)) {
     return {
       route: 'Section 8 - Ground 8 (Mandatory)',
@@ -670,8 +658,7 @@ function estimateCosts(facts: CaseFacts, jurisdiction: string): CostEstimate {
 function generateSummary(
   route: string,
   grounds: GroundRecommendation[],
-  section21: Section21Recommendation,
-  facts: CaseFacts
+  section21: Section21Recommendation
 ): string {
   if (route === 'none') {
     return 'No valid eviction route available due to compliance issues. Address red flags before proceeding.';
@@ -702,9 +689,7 @@ function generateSummary(
 function generateNextSteps(
   route: string,
   grounds: GroundRecommendation[],
-  section21: Section21Recommendation,
-  redFlags: RedFlag[],
-  facts: CaseFacts
+  redFlags: RedFlag[]
 ): string[] {
   const steps: string[] = [];
 
