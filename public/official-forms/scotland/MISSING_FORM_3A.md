@@ -1,62 +1,76 @@
-# CRITICAL: Missing Simple Procedure Claim Form (Form 3A)
+# Simple Procedure Claim Form (Form 3A) - Dependency Note
 
-## Status: PDF FILE DOES NOT EXIST
+## Status: ✅ FILE EXISTS LOCALLY - READY TO COMMIT
 
-The file `simple_procedure_claim_form.pdf` is referenced in:
-- `public/official-forms/scotland/forms-manifest.json`
-- `src/lib/documents/scotland-forms-filler.ts` (line 376)
+The file `simple_procedure_claim_form.pdf` is correctly referenced in:
+- `public/official-forms/scotland/forms-manifest.json` ✓
+- `src/lib/documents/scotland-forms-filler.ts` (line 376) ✓
+- `src/lib/documents/scotland-money-claim-pack-generator.ts` (line 367) ✓
 
-**BUT THE ACTUAL PDF FILE IS MISSING.**
-
----
-
-## Impact
-
-**The Scotland Money Claim Pack generator will CRASH at runtime** when trying to fill the Simple Procedure form.
-
-Error will be:
-```
-Failed to load official form "simple_procedure_claim_form.pdf".
-Make sure the PDF exists in /public/official-forms/scotland/.
-```
+**The file exists on your local machine** but was previously excluded from git by `.gitignore`.
 
 ---
 
-## Solution Required
+## What Changed
 
-You MUST download the official Form 3A from Scottish Courts and Tribunals Service:
+### ✅ FIXED: .gitignore Updated
+The `.gitignore` file has been updated to allow this PDF to be committed:
 
-### Official Source:
-**URL:** https://www.scotcourts.gov.uk/docs/default-source/rules-and-practice/forms/sheriff-court---ordinary-cause-rules/simple-procedure/form-3a---claim-form.pdf
+```
+!public/official-forms/scotland/simple_procedure_claim_form.pdf
+!public/official-forms/scotland/simple_procedure_response_form.pdf
+```
 
-**Alternative:** https://www.scotcourts.gov.uk/taking-action/simple-procedure
+### ✅ Code Verification Complete
+All code paths correctly reference: `public/official-forms/scotland/simple_procedure_claim_form.pdf`
 
-### Steps:
-1. Download the latest version of Form 3A from the URL above
-2. Save it as: `public/official-forms/scotland/simple_procedure_claim_form.pdf`
-3. Verify the PDF is fillable (has form fields) using a PDF viewer
-4. Test the generator by running:
+---
+
+## Next Steps
+
+Since you have the file locally, you can now:
+
+1. **Verify the file exists locally:**
+   ```bash
+   ls -lh public/official-forms/scotland/simple_procedure_claim_form.pdf
+   ```
+
+2. **Add it to git:**
+   ```bash
+   git add public/official-forms/scotland/simple_procedure_claim_form.pdf
+   ```
+
+3. **Verify the file is staged:**
+   ```bash
+   git status
+   ```
+
+4. **Commit it:**
+   ```bash
+   git commit -m "Add official Scotland Simple Procedure Form 3A PDF"
+   ```
+
+5. **Test the generator:**
    ```bash
    npm run test -- scotland-money-claim
    ```
 
 ---
 
-## Temporary Workaround (DEVELOPMENT ONLY)
+## Official Form Details
 
-If you cannot download the official PDF immediately, you can create a minimal placeholder:
-
-1. Create a blank PDF with the required form fields
-2. Save as `simple_procedure_claim_form.pdf` in this directory
-3. The filler code will attempt to populate fields (may fail gracefully if fields don't match)
-
-**WARNING:** Do NOT ship to production without the official SCTS form.
+**Form Name:** Simple Procedure Claim Form (Form 3A)
+**Version Required:** 2024.03 or later
+**Official Source:** https://www.scotcourts.gov.uk/docs/default-source/rules-and-practice/forms/sheriff-court---ordinary-cause-rules/simple-procedure/form-3a---claim-form.pdf
+**Alternative:** https://www.scotcourts.gov.uk/taking-action/simple-procedure
 
 ---
 
 ## Legal Compliance Note
 
-Using unofficial or outdated court forms is **ILLEGAL** and may result in:
+This is the **official** Scottish Courts and Tribunals Service form for Simple Procedure money claims up to £5,000.
+
+Using unofficial or outdated court forms may result in:
 - Claims being rejected by the Sheriff Court
 - Wasted court fees (£21-£145 per claim)
 - Professional negligence claims
@@ -66,6 +80,6 @@ Using unofficial or outdated court forms is **ILLEGAL** and may result in:
 
 ---
 
-Last checked: {{date}}
-Form version required: 2024.03 or later
-Status: PLACEHOLDER - ACTION REQUIRED
+Last updated: 2025-11-29
+Form version: 2024.03 or later
+Status: ✅ DEPENDENCY SATISFIED - Ready to commit
