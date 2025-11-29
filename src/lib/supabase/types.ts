@@ -9,12 +9,15 @@ export type Json =
   | Json[];
 
 // A very permissive table type so TS never collapses to `never`
-export type GenericRow = Record<string, any>;
+// Using `any` keeps Supabase query results flexible and avoids
+// narrowing to `{}` which was causing property-access errors across
+// the API route handlers.
+export type GenericRow = any;
 
 export interface GenericTable {
-  Row: GenericRow;
-  Insert: GenericRow;
-  Update: GenericRow;
+  Row: any;
+  Insert: any;
+  Update: any;
   Relationships: never[];
 }
 
