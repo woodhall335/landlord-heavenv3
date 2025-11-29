@@ -1,0 +1,370 @@
+<h1>Pre-Action Letter (Scotland)</h1>
+<p><em>Formal demand for payment before raising Simple Procedure proceedings</em></p>
+
+<hr>
+
+<p><strong>Date:</strong> {{generation_date}}</p>
+
+<p>
+<strong>To:</strong><br>
+{{tenant_full_name}}<br>
+{{#if tenant_2_name}}{{tenant_2_name}}<br>{{/if}}
+{{property_address}}<br>
+{{property_postcode}}
+</p>
+
+<p>
+<strong>From:</strong><br>
+{{landlord_full_name}}<br>
+{{#if landlord_2_name}}{{landlord_2_name}}<br>{{/if}}
+{{landlord_address}}<br>
+{{landlord_postcode}}
+</p>
+
+{{#if solicitor_firm}}
+<p>
+<strong>Via:</strong><br>
+{{solicitor_firm}}<br>
+{{solicitor_address}}<br>
+Reference: {{claimant_reference}}
+</p>
+{{/if}}
+
+<hr>
+
+<h2>FORMAL DEMAND FOR PAYMENT OF RENT ARREARS</h2>
+
+<p>Dear {{tenant_full_name}},</p>
+
+<h3>Re: Property at {{property_address}}</h3>
+
+<p>
+I am writing to you about the money you owe me in respect of rent and other sums relating to the above property.
+</p>
+
+<p>
+<strong>This is a final demand for payment before I raise court proceedings against you.</strong> You should read this letter carefully and seek advice if you are unsure what to do.
+</p>
+
+<hr>
+
+<h2>1. Summary of What You Owe</h2>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+  <tr>
+    <td><strong>Rent arrears:</strong></td>
+    <td align="right">{{currency arrears_total}}</td>
+  </tr>
+  {{#if damages_total}}
+  <tr>
+    <td><strong>Property damage / other costs:</strong></td>
+    <td align="right">{{currency damages_total}}</td>
+  </tr>
+  {{/if}}
+  {{#if other_total}}
+  <tr>
+    <td><strong>Other charges:</strong></td>
+    <td align="right">{{currency other_total}}</td>
+  </tr>
+  {{/if}}
+  <tr>
+    <td><strong>Interest to date ({{interest_rate}}% per annum):</strong></td>
+    <td align="right">{{currency interest_to_date}}</td>
+  </tr>
+  <tr style="background-color: #f0f0f0;">
+    <td><strong>TOTAL AMOUNT OWED:</strong></td>
+    <td align="right"><strong>{{currency total_claim_amount}}</strong></td>
+  </tr>
+</table>
+
+<p><em>Interest continues to accrue at {{currency daily_interest}} per day until the debt is paid in full.</em></p>
+
+<hr>
+
+<h2>2. Background to the Debt</h2>
+
+<h3>The Tenancy</h3>
+<p>
+You occupy (or occupied) the above property under a private residential tenancy that commenced on {{tenancy_start_date}}. The agreed rent was {{currency rent_amount}} per {{rent_frequency}}, payable in advance{{#if payment_day}} on day {{payment_day}} of each period{{/if}}.
+</p>
+
+{{#if tenancy_end_date}}
+<p>The tenancy ended on {{tenancy_end_date}}.</p>
+{{else}}
+<p>The tenancy is ongoing.</p>
+{{/if}}
+
+<h3>Rent Arrears</h3>
+<p>
+You have failed to pay rent as it fell due under the tenancy agreement. The arrears have accumulated over multiple rent periods.
+</p>
+
+<p>
+A detailed schedule showing each rent period, the amount due, what you paid, and the outstanding balance is attached as <strong>Appendix 1: Schedule of Rent Arrears</strong>.
+</p>
+
+<p>
+As at {{generation_date}}, the total rent arrears amount to <strong>{{currency arrears_total}}</strong>.
+</p>
+
+{{#if damage_items.length}}
+<h3>Property Damage and Other Costs</h3>
+<p>In addition to rent arrears, you are liable for the following costs:</p>
+<ul>
+  {{#each damage_items}}
+  <li>{{description}} — {{currency amount}}</li>
+  {{/each}}
+</ul>
+<p>
+These costs relate to damage you caused to the property beyond normal wear and tear, or other sums you owe under the tenancy agreement.
+</p>
+{{/if}}
+
+{{#if other_charges.length}}
+<h3>Other Recoverable Charges</h3>
+<ul>
+  {{#each other_charges}}
+  <li>{{description}} — {{currency amount}}</li>
+  {{/each}}
+</ul>
+{{/if}}
+
+<h3>Interest</h3>
+<p>
+I am entitled to claim interest on the outstanding arrears and costs. Interest is calculated at {{interest_rate}}% per annum from {{interest_start_date}} and continues to accrue at {{currency daily_interest}} per day until payment is made in full.
+</p>
+
+<p>
+The interest calculated to {{generation_date}} is {{currency interest_to_date}}. The full calculation is attached as <strong>Appendix 2: Interest Calculation</strong>.
+</p>
+
+<hr>
+
+<h2>3. Previous Attempts to Resolve This Matter</h2>
+
+<p>
+{{#if attempts_to_resolve}}
+{{attempts_to_resolve}}
+{{else}}
+I have previously contacted you to request payment of the arrears. Specifically:
+</p>
+
+<ul>
+  <li>I sent you a written demand for payment on {{demand_letter_date}} requesting full payment within 14 days. You did not respond or pay.</li>
+  <li>I sent you a further demand on {{second_demand_date}} offering you the opportunity to arrange a payment plan. Again, you did not respond.</li>
+  <li>I have attempted to contact you by telephone and email but you have not engaged with me to resolve this matter.</li>
+</ul>
+
+<p>
+{{/if}}
+</p>
+
+<p>
+Despite my efforts to resolve this matter without court proceedings, you have failed to pay the arrears or make acceptable arrangements to clear the debt.
+</p>
+
+<hr>
+
+<h2>4. What You Must Do Now</h2>
+
+<p>
+You have <strong>14 days from the date of this letter</strong> (i.e., until {{response_deadline}}) to do ONE of the following:
+</p>
+
+<ol>
+  <li><strong>Pay the full amount owed</strong> ({{currency total_claim_amount}}) to avoid court proceedings.</li>
+  <li><strong>Contact me immediately</strong> to discuss a realistic payment arrangement.</li>
+  <li><strong>Provide a written explanation</strong> if you dispute the debt, along with supporting evidence.</li>
+</ol>
+
+<h3>How to Pay</h3>
+
+<p>If you wish to pay the debt in full, please arrange payment by bank transfer to:</p>
+
+<ul>
+  <li>Account name: {{landlord_full_name}}</li>
+  <li>Sort code: [INSERT SORT CODE]</li>
+  <li>Account number: [INSERT ACCOUNT NUMBER]</li>
+  <li>Payment reference: {{property_postcode}} ARREARS</li>
+</ul>
+
+<p>Alternatively, contact me at:</p>
+
+<ul>
+  <li>Telephone: {{landlord_phone}}</li>
+  <li>Email: {{landlord_email}}</li>
+</ul>
+
+<h3>Payment Plans</h3>
+
+<p>
+If you cannot pay the full amount immediately but can make regular payments, I may be willing to accept a payment arrangement. However, any payment plan must:
+</p>
+
+<ul>
+  <li>Clear the arrears within a reasonable period (typically 6-12 months);</li>
+  <li>Include ongoing rent payments in full (if you still occupy the property);</li>
+  <li>Be realistic based on your financial circumstances;</li>
+  <li>Be confirmed in writing.</li>
+</ul>
+
+<p>
+You must contact me within 14 days to propose a payment plan, supported by details of your income and expenditure.
+</p>
+
+<hr>
+
+<h2>5. Sources of Free Debt Advice</h2>
+
+<p>
+If you need help dealing with this debt or understanding your options, you can get free, confidential advice from:
+</p>
+
+<ul>
+  <li><strong>Citizens Advice Scotland:</strong> 0800 028 1456 or <a href="https://www.cas.org.uk">www.cas.org.uk</a></li>
+  <li><strong>StepChange Scotland:</strong> 0800 138 1111 or <a href="https://www.stepchange.org">www.stepchange.org</a></li>
+  <li><strong>Money Advice Scotland:</strong> <a href="https://www.moneyadvicescotland.org.uk">www.moneyadvicescotland.org.uk</a></li>
+  <li><strong>National Debtline:</strong> 0808 808 4000 or <a href="https://www.nationaldebtline.org">www.nationaldebtline.org</a></li>
+</ul>
+
+<p>
+These services are completely free and can help you understand your rights, work out what you can afford to pay, and negotiate with me on your behalf.
+</p>
+
+<hr>
+
+<h2>6. What Happens If You Do Not Respond or Pay</h2>
+
+<p>
+If you do not pay the debt or contact me within 14 days to make acceptable arrangements, I will have no choice but to raise Simple Procedure proceedings against you in the Sheriff Court <strong>without further warning</strong>.
+</p>
+
+<h3>If I Raise Court Proceedings:</h3>
+
+<ul>
+  <li>The claim will be for the full amount owed ({{currency total_claim_amount}}) <strong>plus court expenses</strong>.</li>
+  <li>The Sheriff Court will send you a Simple Procedure Claim Form by recorded delivery.</li>
+  <li>You will have to respond within the deadline set by the court (usually 21 days).</li>
+  <li>If you do not respond or defend the claim, the sheriff will grant decree (judgment) against you in my favour.</li>
+  <li>You will be ordered to pay:
+    <ul>
+      <li>The full debt ({{currency total_claim_amount}})</li>
+      <li>Court fee ({{currency court_fee}})</li>
+      <li>My legal expenses (if I instruct a solicitor)</li>
+      <li>Interest continuing to accrue at {{currency daily_interest}} per day</li>
+    </ul>
+  </li>
+  <li>A court decree will damage your credit rating for six years, making it difficult to get loans, mortgages, or credit.</li>
+  <li>I can enforce the decree by:
+    <ul>
+      <li>Instructing sheriff officers to seize and sell your belongings</li>
+      <li>Applying for an earnings arrestment to deduct money from your wages</li>
+      <li>Freezing your bank account through a bank arrestment</li>
+      <li>Placing an inhibition on any property you own</li>
+    </ul>
+  </li>
+</ul>
+
+<p>
+<strong>Court proceedings will be expensive and stressful for you. It is in your best interests to resolve this matter now.</strong>
+</p>
+
+<hr>
+
+<h2>7. Particulars of Sheriffdom</h2>
+
+<p>
+If I raise court proceedings, the claim will be raised in the <strong>{{sheriffdom}}</strong>, as this is the appropriate court based on your address.
+</p>
+
+<hr>
+
+<h2>8. Documents Enclosed</h2>
+
+<p>The following documents are enclosed with this letter:</p>
+
+<ol>
+  <li>Appendix 1: Schedule of Rent Arrears</li>
+  <li>Appendix 2: Interest Calculation</li>
+</ol>
+
+<hr>
+
+<h2>9. Your Rights</h2>
+
+<p>You have the right to:</p>
+
+<ul>
+  <li>Seek free debt advice from the organisations listed above;</li>
+  <li>Dispute the debt if you believe it is wrong (you must provide evidence);</li>
+  <li>Request a breakdown of the arrears if the schedule is unclear;</li>
+  <li>Propose a payment plan if you cannot pay in full;</li>
+  <li>Defend any court proceedings if you have a valid legal defence.</li>
+</ul>
+
+<p>
+<strong>However, ignoring this letter will not make the problem go away.</strong> I urge you to take action within 14 days to avoid court proceedings.
+</p>
+
+<hr>
+
+<h2>10. Next Steps</h2>
+
+<p>
+To summarise, you must <strong>within 14 days</strong> (by {{response_deadline}}):
+</p>
+
+<ol>
+  <li>Pay the full amount owed ({{currency total_claim_amount}}); OR</li>
+  <li>Contact me to arrange a payment plan; OR</li>
+  <li>Provide a written explanation if you dispute the debt.</li>
+</ol>
+
+<p>
+If you do not respond or make payment, I will raise Simple Procedure proceedings without further notice.
+</p>
+
+<hr>
+
+<p>Yours sincerely,</p>
+
+<p>
+{{signatory_name}}<br>
+{{#if solicitor_firm}}{{solicitor_firm}}<br>{{/if}}
+Date: {{signature_date}}
+</p>
+
+<hr>
+
+<p><em><strong>IMPORTANT:</strong> This is a formal pre-action letter sent to comply with Simple Procedure requirements. You must respond within 14 days. If you do not respond or pay, court proceedings will be raised without further warning.</em></p>
+
+<hr>
+
+<h3>Contact Details</h3>
+
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+  <tr>
+    <td width="30%"><strong>Telephone:</strong></td>
+    <td width="70%">{{landlord_phone}}</td>
+  </tr>
+  <tr>
+    <td><strong>Email:</strong></td>
+    <td>{{landlord_email}}</td>
+  </tr>
+  {{#if solicitor_firm}}
+  <tr>
+    <td><strong>Solicitor:</strong></td>
+    <td>{{solicitor_firm}}</td>
+  </tr>
+  <tr>
+    <td><strong>Solicitor reference:</strong></td>
+    <td>{{claimant_reference}}</td>
+  </tr>
+  {{/if}}
+</table>
+
+<hr>
+
+<p style="font-size: 10pt;"><em>
+This letter is sent in accordance with Simple Procedure Rule 3.1, which requires parties to attempt to resolve disputes before raising court proceedings. A copy of this letter and evidence of service will be lodged with the Sheriff Court if proceedings are raised.
+</em></p>

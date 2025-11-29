@@ -320,6 +320,49 @@ async function generateScotlandMoneyClaimPack(claim: ScotlandMoneyClaimCase): Pr
     file_name: 'evidence-index.pdf',
   });
 
+  // PRE-ACTION DOCUMENTS (Required by Simple Procedure Rule 3.1)
+  const responseDeadline = new Date();
+  responseDeadline.setDate(responseDeadline.getDate() + 14);
+  const extendedData = {
+    ...baseTemplateData,
+    response_deadline: responseDeadline.toISOString().split('T')[0],
+    demand_letter_date: claim['demand_letter_date'] || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    second_demand_date: claim['second_demand_date'] || new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+  };
+
+  const preActionLetter = await generateDocument({
+    templatePath: 'uk/scotland/templates/money_claims/pre_action_letter.hbs',
+    data: extendedData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Pre-Action Letter',
+    description: 'Formal demand for payment before raising Simple Procedure proceedings.',
+    category: 'guidance',
+    html: preActionLetter.html,
+    pdf: preActionLetter.pdf,
+    file_name: 'pre-action-letter.pdf',
+  });
+
+  // FILING GUIDE
+  const filingGuide = await generateDocument({
+    templatePath: 'uk/scotland/templates/money_claims/filing_guide_scotland.hbs',
+    data: extendedData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Simple Procedure Filing Guide',
+    description: 'Step-by-step instructions for lodging your claim at the Sheriff Court.',
+    category: 'guidance',
+    html: filingGuide.html,
+    pdf: filingGuide.pdf,
+    file_name: 'filing-guide-scotland.pdf',
+  });
+
   // 6. Official Simple Procedure claim form
   await assertOfficialFormExists('scotland/simple_procedure_claim_form.pdf');
   const simpleProcedurePdf = await fillSimpleProcedureClaim(buildSimpleProcedurePayload(claim, totals));

@@ -1,0 +1,385 @@
+<h1>Money Claims Filing Guide</h1>
+<p><em>Step-by-step instructions for filing your rent arrears claim in England & Wales</em></p>
+
+<hr>
+
+<h2>Overview of Your Claim</h2>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+  <tr>
+    <td width="40%"><strong>Claim type:</strong></td>
+    <td width="60%">Money claim (rent arrears and damages)</td>
+  </tr>
+  <tr>
+    <td><strong>Claim amount:</strong></td>
+    <td>{{currency total_claim_amount}}</td>
+  </tr>
+  <tr>
+    <td><strong>Court fee:</strong></td>
+    <td>{{currency court_fee}}</td>
+  </tr>
+  <tr>
+    <td><strong>Total (claim + fee):</strong></td>
+    <td>{{currency total_with_fees}}</td>
+  </tr>
+</table>
+
+<hr>
+
+<h2>Before You File</h2>
+
+<h3>✅ Checklist: Have you completed these steps?</h3>
+
+<ul>
+  <li>☐ <strong>Sent a Letter Before Claim</strong> to the defendant at least 30 days ago</li>
+  <li>☐ <strong>Enclosed the Information Sheet and Reply Form</strong> with the Letter Before Claim</li>
+  <li>☐ <strong>Waited 30 days</strong> for the defendant to respond or pay</li>
+  <li>☐ <strong>Considered any response or payment offer</strong> from the defendant</li>
+  <li>☐ <strong>Gathered all supporting evidence</strong> (tenancy agreement, rent ledger, bank statements, photos)</li>
+  <li>☐ <strong>Calculated interest correctly</strong> (see Interest Calculation sheet)</li>
+</ul>
+
+<p>
+<strong>⚠️ IMPORTANT:</strong> If you have not sent a Letter Before Claim and waited 30 days, you <strong>must do this first</strong>. The court may penalize you in costs if you do not follow the Pre-Action Protocol.
+</p>
+
+<hr>
+
+<h2>How to File Your Claim</h2>
+
+<p>You have <strong>TWO options</strong> for filing a money claim in England & Wales:</p>
+
+<ol>
+  <li><strong>Online via Money Claim Online (MCOL)</strong> — Faster, cheaper, available 24/7</li>
+  <li><strong>By post to the County Court Money Claims Centre</strong> — Traditional paper method</li>
+</ol>
+
+<hr>
+
+<h2>Option 1: File Online (Money Claim Online — MCOL)</h2>
+
+<h3>Advantages of MCOL:</h3>
+<ul>
+  <li>✅ <strong>Lower court fee:</strong> £25 cheaper than paper filing for most claims</li>
+  <li>✅ <strong>Faster processing:</strong> Issued within 24 hours</li>
+  <li>✅ <strong>Track your claim online:</strong> Real-time updates</li>
+  <li>✅ <strong>Request judgment and enforcement online:</strong> No need to send forms by post</li>
+  <li>✅ <strong>Available 24/7:</strong> File at any time</li>
+</ul>
+
+<h3>Step-by-Step: Filing via MCOL</h3>
+
+<h4>Step 1: Create an account</h4>
+<ol>
+  <li>Go to <a href="https://www.moneyclaim.gov.uk">www.moneyclaim.gov.uk</a></li>
+  <li>Click <strong>"Register"</strong></li>
+  <li>You will need:
+    <ul>
+      <li>An email address</li>
+      <li>A debit or credit card to pay the court fee</li>
+    </ul>
+  </li>
+  <li>Set up a username and password</li>
+</ol>
+
+<h4>Step 2: Start a new claim</h4>
+<ol>
+  <li>Log in to MCOL</li>
+  <li>Click <strong>"Make a new money claim"</strong></li>
+  <li>Select <strong>"I am claiming as an individual"</strong> (or "as a business" if you are a company landlord)</li>
+</ol>
+
+<h4>Step 3: Enter claimant details</h4>
+<p>Enter your details exactly as shown below:</p>
+
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+  <tr>
+    <td width="40%"><strong>Claimant name:</strong></td>
+    <td width="60%">{{landlord_full_name}}</td>
+  </tr>
+  <tr>
+    <td><strong>Address:</strong></td>
+    <td>{{landlord_address}}</td>
+  </tr>
+  <tr>
+    <td><strong>Postcode:</strong></td>
+    <td>{{landlord_postcode}}</td>
+  </tr>
+  <tr>
+    <td><strong>Email (optional):</strong></td>
+    <td>{{landlord_email}}</td>
+  </tr>
+  <tr>
+    <td><strong>Telephone (optional):</strong></td>
+    <td>{{landlord_phone}}</td>
+  </tr>
+</table>
+
+<h4>Step 4: Enter defendant details</h4>
+
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+  <tr>
+    <td width="40%"><strong>Defendant name:</strong></td>
+    <td width="60%">{{tenant_full_name}}</td>
+  </tr>
+  <tr>
+    <td><strong>Address:</strong></td>
+    <td>{{property_address}}</td>
+  </tr>
+  <tr>
+    <td><strong>Postcode:</strong></td>
+    <td>{{property_postcode}}</td>
+  </tr>
+</table>
+
+<h4>Step 5: Enter claim amount</h4>
+
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+  <tr>
+    <td width="40%"><strong>Claim amount:</strong></td>
+    <td width="60%">{{total_claim_amount}}</td>
+  </tr>
+  <tr>
+    <td><strong>Court fee (paid online):</strong></td>
+    <td>{{court_fee}}</td>
+  </tr>
+  {{#if solicitor_costs}}
+  <tr>
+    <td><strong>Legal representative costs:</strong></td>
+    <td>{{solicitor_costs}}</td>
+  </tr>
+  {{/if}}
+</table>
+
+<h4>Step 6: Enter brief details of claim</h4>
+
+<p>In the "Brief details of claim" box, enter a short summary (maximum 1,080 characters):</p>
+
+<blockquote style="background-color: #f9f9f9; padding: 10px; border-left: 4px solid #ccc;">
+<p>
+Claim for unpaid rent and property damage relating to tenancy at {{property_address}}. The defendant occupied the property under an assured shorthold tenancy commencing {{tenancy_start_date}}. Rent was {{currency rent_amount}} per {{rent_frequency}}. The defendant failed to pay rent as it fell due, resulting in arrears of {{currency arrears_total}}.{{#if damages_total}} The defendant also caused damage beyond fair wear and tear, totaling {{currency damages_total}}.{{/if}} Interest is claimed under section 69 County Courts Act 1984 at {{interest_rate}}% per annum. Full particulars are attached.
+</p>
+</blockquote>
+
+<h4>Step 7: Upload Particulars of Claim</h4>
+
+<ol>
+  <li>Click <strong>"Attach particulars of claim"</strong></li>
+  <li>Upload the <strong>Particulars of Claim PDF</strong> from this pack</li>
+  <li>Also attach:
+    <ul>
+      <li>Schedule of Arrears</li>
+      <li>Interest Calculation</li>
+      <li>Evidence Index</li>
+    </ul>
+  </li>
+</ol>
+
+<p><strong>Note:</strong> MCOL allows up to 10 attachments, each up to 5MB. Combine documents into a single PDF if needed.</p>
+
+<h4>Step 8: Choose preferred court</h4>
+
+<p>
+Select the County Court Money Claims Centre (this is the default for all MCOL claims). You do <strong>not</strong> need to choose a local court.
+</p>
+
+<h4>Step 9: Statement of Truth</h4>
+
+<p>Tick the box to confirm:</p>
+
+<blockquote>
+"I believe that the facts stated in this claim are true. I am authorised by the claimant to sign this statement."
+</blockquote>
+
+<h4>Step 10: Pay the court fee</h4>
+
+<ol>
+  <li>Review the claim summary</li>
+  <li>Click <strong>"Pay and submit"</strong></li>
+  <li>Pay the court fee ({{currency court_fee}}) by debit or credit card</li>
+</ol>
+
+<h4>Step 11: Claim is issued</h4>
+
+<p>
+✅ Your claim will be issued within 24 hours. You will receive:
+</p>
+<ul>
+  <li>A <strong>claim number</strong> (format: A12BC345)</li>
+  <li>An email confirmation</li>
+  <li>A copy of the sealed claim form (PDF)</li>
+</ul>
+
+<p>
+The court will serve the claim on the defendant by post.
+</p>
+
+<hr>
+
+<h2>Option 2: File by Post (Paper Form N1)</h2>
+
+<h3>When to use paper filing:</h3>
+<ul>
+  <li>If you do not have internet access</li>
+  <li>If you prefer to file by post</li>
+  <li>If the claim is over £100,000 (MCOL limit)</li>
+</ul>
+
+<h3>Step-by-Step: Filing by Post</h3>
+
+<h4>Step 1: Print the N1 form</h4>
+<ol>
+  <li>Print the completed <strong>Form N1 (official PDF)</strong> from this pack</li>
+  <li>Print <strong>two copies</strong> (one for the court, one for your records)</li>
+  <li>Do <strong>not</strong> alter the form layout or add extra pages</li>
+</ol>
+
+<h4>Step 2: Print supporting documents</h4>
+<p>Print and attach the following in this order:</p>
+<ol>
+  <li>Particulars of Claim</li>
+  <li>Schedule of Arrears</li>
+  <li>Interest Calculation</li>
+  <li>Evidence Index</li>
+  <li>Copy of tenancy agreement</li>
+  <li>Rent ledger / bank statements</li>
+  <li>Photos of damage (if claiming for damage)</li>
+</ol>
+
+<p><strong>Tip:</strong> Use a stapler (top left corner) or treasury tag. Do not use paperclips.</p>
+
+<h4>Step 3: Calculate the court fee</h4>
+
+<p>Your claim amount is <strong>{{currency total_claim_amount}}</strong>, so the court fee is <strong>{{currency court_fee}}</strong>.</p>
+
+<p>Court fees are based on claim value:</p>
+
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+  <tr style="background-color: #f0f0f0;">
+    <th>Claim Amount</th>
+    <th>Court Fee (Online)</th>
+    <th>Court Fee (Paper)</th>
+  </tr>
+  <tr><td>Up to £300</td><td>£35</td><td>£35</td></tr>
+  <tr><td>£300.01 to £500</td><td>£50</td><td>£50</td></tr>
+  <tr><td>£500.01 to £1,000</td><td>£70</td><td>£80</td></tr>
+  <tr><td>£1,000.01 to £1,500</td><td>£80</td><td>£115</td></tr>
+  <tr><td>£1,500.01 to £3,000</td><td>£115</td><td>£205</td></tr>
+  <tr><td>£3,000.01 to £5,000</td><td>£205</td><td>£455</td></tr>
+  <tr><td>£5,000.01 to £10,000</td><td>£455</td><td>£680</td></tr>
+  <tr><td>£10,000.01 to £200,000</td><td>5% of claim value</td><td>5% of claim value</td></tr>
+</table>
+
+<h4>Step 4: Pay the court fee</h4>
+
+<p>You can pay by:</p>
+<ul>
+  <li><strong>Cheque</strong> — Make payable to "HM Courts & Tribunals Service"</li>
+  <li><strong>Postal order</strong> — Payable to "HM Courts & Tribunals Service"</li>
+</ul>
+
+<p><strong>Do NOT send cash.</strong></p>
+
+<h4>Step 5: Send to the court</h4>
+
+<p>Send your claim pack to:</p>
+
+<blockquote style="background-color: #f9f9f9; padding: 10px;">
+<strong>County Court Money Claims Centre</strong><br>
+PO Box 527<br>
+Salford<br>
+M5 0BY
+</blockquote>
+
+<p>
+Send by <strong>recorded delivery</strong> or <strong>special delivery</strong> to prove posting date.
+</p>
+
+<h4>Step 6: Wait for the claim to be issued</h4>
+
+<p>
+The court will:
+</p>
+<ol>
+  <li>Check your claim form (allow 7-10 working days)</li>
+  <li>Issue the claim and give it a claim number</li>
+  <li>Serve the claim on the defendant by first class post</li>
+  <li>Send you a <strong>Notice of Issue</strong> by post</li>
+</ol>
+
+<hr>
+
+<h2>What Happens Next?</h2>
+
+<h3>Timeline after claim is issued:</h3>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+  <tr style="background-color: #f0f0f0;">
+    <th width="30%">Day</th>
+    <th width="70%">What Happens</th>
+  </tr>
+  <tr>
+    <td><strong>Day 0</strong></td>
+    <td>Claim is issued and served on the defendant</td>
+  </tr>
+  <tr>
+    <td><strong>Day 14</strong></td>
+    <td>Defendant's deadline to respond (admit, defend, or acknowledge)</td>
+  </tr>
+  <tr>
+    <td><strong>Day 15+</strong></td>
+    <td>If defendant does not respond, you can request <strong>default judgment</strong></td>
+  </tr>
+  <tr>
+    <td><strong>Day 28</strong></td>
+    <td>If defendant acknowledges service, they have until Day 28 to file a defence</td>
+  </tr>
+</table>
+
+<h3>Possible outcomes:</h3>
+
+<ol>
+  <li><strong>Defendant pays in full</strong> — Claim is satisfied, no further action needed</li>
+  <li><strong>Defendant does not respond</strong> — You can request default judgment (see "Request for Judgment" guide)</li>
+  <li><strong>Defendant admits the claim but asks to pay by installments</strong> — You can accept or ask the court to decide</li>
+  <li><strong>Defendant defends the claim</strong> — The court will allocate the case to a track (small claims, fast track, or multi-track) and set directions for trial</li>
+</ol>
+
+<hr>
+
+<h2>After Judgment: Enforcement Options</h2>
+
+<p>
+If you obtain judgment but the defendant does not pay, you can enforce the judgment using:
+</p>
+
+<ul>
+  <li><strong>Warrant of Control (N323)</strong> — Bailiffs collect the debt</li>
+  <li><strong>Attachment of Earnings (N337)</strong> — Money deducted from defendant's wages</li>
+  <li><strong>Third Party Debt Order (N379)</strong> — Freeze defendant's bank account</li>
+  <li><strong>Charging Order (N380)</strong> — Secure the debt against defendant's property</li>
+</ul>
+
+<p>
+See the <strong>Enforcement Guide</strong> (included in this pack) for details.
+</p>
+
+<hr>
+
+<h2>Help and Support</h2>
+
+<ul>
+  <li><strong>MCOL Help:</strong> 0300 123 1057 (Monday to Friday, 8:30am to 5pm)</li>
+  <li><strong>County Court Money Claims Centre:</strong> 0300 123 1372</li>
+  <li><strong>HMCTS Guidance:</strong> <a href="https://www.gov.uk/make-money-claim">www.gov.uk/make-money-claim</a></li>
+</ul>
+
+<hr>
+
+<p><em>
+This guide is for information only and does not constitute legal advice. If you need legal advice, contact a solicitor.
+</em></p>
+
+<p><em>
+Generated on {{generation_date}} • Document reference: {{claimant_reference}}
+</em></p>

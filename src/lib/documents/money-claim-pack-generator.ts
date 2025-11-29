@@ -320,6 +320,95 @@ async function generateEnglandWalesMoneyClaimPack(
     file_name: 'evidence-index.pdf',
   });
 
+  // PRE-ACTION PROTOCOL DOCUMENTS (Legally Required)
+  const responseDeadline = new Date();
+  responseDeadline.setDate(responseDeadline.getDate() + 30);
+  const extendedData = {
+    ...baseTemplateData,
+    response_deadline: responseDeadline.toISOString().split('T')[0],
+  };
+
+  const letterBeforeClaim = await generateDocument({
+    templatePath: 'uk/england-wales/templates/money_claims/letter_before_claim.hbs',
+    data: extendedData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Letter Before Claim (PAP-DEBT)',
+    description: 'Pre-Action Protocol letter required before issuing proceedings.',
+    category: 'guidance',
+    html: letterBeforeClaim.html,
+    pdf: letterBeforeClaim.pdf,
+    file_name: 'letter-before-claim.pdf',
+  });
+
+  const infoSheet = await generateDocument({
+    templatePath: 'uk/england-wales/templates/money_claims/information_sheet_for_defendants.hbs',
+    data: extendedData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Information Sheet for Defendants',
+    description: 'Explains defendant rights and options (enclose with Letter Before Claim).',
+    category: 'guidance',
+    html: infoSheet.html,
+    pdf: infoSheet.pdf,
+    file_name: 'information-sheet-for-defendants.pdf',
+  });
+
+  const replyForm = await generateDocument({
+    templatePath: 'uk/england-wales/templates/money_claims/reply_form.hbs',
+    data: extendedData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Reply Form',
+    description: 'Form for defendant to respond to Letter Before Claim.',
+    category: 'guidance',
+    html: replyForm.html,
+    pdf: replyForm.pdf,
+    file_name: 'reply-form.pdf',
+  });
+
+  const financialStatement = await generateDocument({
+    templatePath: 'uk/england-wales/templates/money_claims/financial_statement_form.hbs',
+    data: extendedData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Financial Statement Form',
+    description: 'Form for defendant to disclose income/expenditure for payment plan.',
+    category: 'guidance',
+    html: financialStatement.html,
+    pdf: financialStatement.pdf,
+    file_name: 'financial-statement-form.pdf',
+  });
+
+  // FILING GUIDE
+  const filingGuide = await generateDocument({
+    templatePath: 'uk/england-wales/templates/money_claims/filing_guide.hbs',
+    data: extendedData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Money Claims Filing Guide',
+    description: 'Step-by-step instructions for filing via MCOL or paper.',
+    category: 'guidance',
+    html: filingGuide.html,
+    pdf: filingGuide.pdf,
+    file_name: 'filing-guide.pdf',
+  });
+
   await assertOfficialFormExists('N1_1224.pdf');
   const n1Pdf = await fillN1Form(buildN1Payload(claim, totals));
 

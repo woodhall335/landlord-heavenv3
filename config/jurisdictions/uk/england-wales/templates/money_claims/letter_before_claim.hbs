@@ -1,0 +1,240 @@
+<h1>Letter Before Claim</h1>
+<p><em>This letter must be sent to the defendant before issuing court proceedings, in accordance with the Practice Direction on Pre-Action Conduct and the Pre-Action Protocol for Debt Claims.</em></p>
+
+<hr>
+
+<p><strong>Date:</strong> {{generation_date}}</p>
+
+<p>
+<strong>To:</strong><br>
+{{tenant_full_name}}<br>
+{{#if tenant_2_name}}{{tenant_2_name}}<br>{{/if}}
+{{property_address}}<br>
+{{property_postcode}}
+</p>
+
+<p>
+<strong>From:</strong><br>
+{{landlord_full_name}}<br>
+{{#if landlord_2_name}}{{landlord_2_name}}<br>{{/if}}
+{{landlord_address}}<br>
+{{landlord_postcode}}
+</p>
+
+{{#if solicitor_firm}}
+<p>
+<strong>Via:</strong><br>
+{{solicitor_firm}}<br>
+{{solicitor_address}}<br>
+Reference: {{claimant_reference}}
+</p>
+{{/if}}
+
+<hr>
+
+<h2>LETTER OF CLAIM — UNPAID RENT AND ARREARS</h2>
+
+<p>Dear {{tenant_full_name}},</p>
+
+<h3>Re: Property at {{property_address}}</h3>
+
+<p>
+I am writing to you about the money you owe me in respect of the above property. This letter is sent in accordance with the <strong>Pre-Action Protocol for Debt Claims</strong>. You should read this letter carefully as it explains:
+</p>
+
+<ul>
+  <li>How much you owe;</li>
+  <li>What the debt is for;</li>
+  <li>How I have calculated the amount;</li>
+  <li>What you should do next;</li>
+  <li>What will happen if you do not pay or respond.</li>
+</ul>
+
+<h3>1. Summary of the Debt</h3>
+
+<table border="1" cellpadding="8" cellspacing="0" width="100%">
+  <tr>
+    <td><strong>Rent arrears:</strong></td>
+    <td align="right">{{currency arrears_total}}</td>
+  </tr>
+  {{#if damages_total}}
+  <tr>
+    <td><strong>Property damage / other costs:</strong></td>
+    <td align="right">{{currency damages_total}}</td>
+  </tr>
+  {{/if}}
+  {{#if other_total}}
+  <tr>
+    <td><strong>Other charges:</strong></td>
+    <td align="right">{{currency other_total}}</td>
+  </tr>
+  {{/if}}
+  <tr>
+    <td><strong>Interest to date ({{interest_rate}}% per annum):</strong></td>
+    <td align="right">{{currency interest_to_date}}</td>
+  </tr>
+  <tr style="background-color: #f0f0f0;">
+    <td><strong>TOTAL AMOUNT OWED:</strong></td>
+    <td align="right"><strong>{{currency total_claim_amount}}</strong></td>
+  </tr>
+</table>
+
+<p><em>Interest continues to accrue at {{currency daily_interest}} per day until the debt is paid in full.</em></p>
+
+<h3>2. Breakdown of the Debt</h3>
+
+<h4>Rent Arrears</h4>
+<p>
+You occupy the property under an assured shorthold tenancy that commenced on {{tenancy_start_date}}. The agreed rent is {{currency rent_amount}} per {{rent_frequency}}, payable in advance.
+</p>
+
+<p>
+You have failed to pay rent as it fell due. The arrears have accumulated over multiple rent periods. A detailed schedule showing each period, the amount due, what you paid, and the balance is attached as <strong>Appendix 1</strong>.
+</p>
+
+{{#if damage_items.length}}
+<h4>Property Damage and Other Costs</h4>
+<p>In addition to rent arrears, you are liable for the following:</p>
+<ul>
+  {{#each damage_items}}
+  <li>{{description}} — {{currency amount}}</li>
+  {{/each}}
+</ul>
+{{/if}}
+
+{{#if other_charges.length}}
+<h4>Other Recoverable Charges</h4>
+<ul>
+  {{#each other_charges}}
+  <li>{{description}} — {{currency amount}}</li>
+  {{/each}}
+</ul>
+{{/if}}
+
+<h4>Interest</h4>
+<p>
+I am entitled to claim interest on the outstanding rent and costs pursuant to <strong>section 69 of the County Courts Act 1984</strong>. Interest is calculated at {{interest_rate}}% per annum from {{interest_start_date}} and continues to accrue at {{currency daily_interest}} per day until payment.
+</p>
+
+<p>
+The interest calculation to {{generation_date}} is {{currency interest_to_date}}. The full working is attached as <strong>Appendix 2</strong>.
+</p>
+
+<h3>3. What You Must Do Now</h3>
+
+<p>
+You have <strong>30 days from the date of this letter</strong> (i.e., until {{response_deadline}}) to do ONE of the following:
+</p>
+
+<ol>
+  <li><strong>Pay the full amount owed</strong> ({{currency total_claim_amount}}) to avoid court proceedings.</li>
+  <li><strong>Contact me to discuss a payment arrangement</strong> if you cannot pay in full.</li>
+  <li><strong>Complete the enclosed Reply Form</strong> if you dispute the debt or need time to seek advice.</li>
+</ol>
+
+<h4>Payment Methods</h4>
+<p>
+If you wish to pay the debt in full, please arrange payment by bank transfer to:
+</p>
+<ul>
+  <li>Account name: {{landlord_full_name}}</li>
+  <li>Sort code: [INSERT SORT CODE]</li>
+  <li>Account number: [INSERT ACCOUNT NUMBER]</li>
+  <li>Payment reference: {{property_postcode}} ARREARS</li>
+</ul>
+
+<p>
+Alternatively, contact me at {{landlord_phone}} or {{landlord_email}} to discuss payment.
+</p>
+
+<h4>Payment Plans</h4>
+<p>
+If you cannot pay the full amount but can make regular payments, I may be willing to accept a payment arrangement. You must contact me within 30 days to propose a realistic payment plan. Any offer must:
+</p>
+<ul>
+  <li>Clear the arrears within a reasonable time (typically 6-12 months);</li>
+  <li>Include ongoing rent payments in full;</li>
+  <li>Be supported by evidence of your income and expenditure.</li>
+</ul>
+
+<p>
+Please complete the enclosed <strong>Financial Statement Form</strong> if you wish to propose a payment plan.
+</p>
+
+<h3>4. Sources of Free Debt Advice</h3>
+
+<p>
+If you are unsure what to do, you can get free, independent debt advice from:
+</p>
+
+<ul>
+  <li><strong>Citizens Advice:</strong> 0800 144 8848 or <a href="https://www.citizensadvice.org.uk">www.citizensadvice.org.uk</a></li>
+  <li><strong>StepChange Debt Charity:</strong> 0800 138 1111 or <a href="https://www.stepchange.org">www.stepchange.org</a></li>
+  <li><strong>National Debtline:</strong> 0808 808 4000 or <a href="https://www.nationaldebtline.org">www.nationaldebtline.org</a></li>
+  <li><strong>MoneyHelper:</strong> 0800 138 7777 or <a href="https://www.moneyhelper.org.uk">www.moneyhelper.org.uk</a></li>
+</ul>
+
+<p><em>These services are free and confidential. They can help you understand your options and communicate with me on your behalf.</em></p>
+
+<h3>5. What Happens If You Do Not Respond or Pay</h3>
+
+<p>
+If you do not respond to this letter within 30 days, or if you do not make acceptable arrangements to pay, I will have no choice but to issue court proceedings against you without further warning.
+</p>
+
+<p><strong>If I issue a court claim:</strong></p>
+<ul>
+  <li>The claim will be for the full amount owed ({{currency total_claim_amount}}) <strong>plus court fees and legal costs</strong>.</li>
+  <li>You will have to pay a court fee of approximately {{currency court_fee}}.</li>
+  <li>If I instruct solicitors, you may also be liable for legal costs of {{currency solicitor_costs}} or more.</li>
+  <li>Interest will continue to accrue at {{currency daily_interest}} per day.</li>
+  <li>If judgment is entered against you, it will damage your credit rating for six years.</li>
+  <li>I may enforce the judgment by sending bailiffs, applying for an attachment of earnings order, or placing a charging order on any property you own.</li>
+</ul>
+
+<p>
+<strong>It is in your best interests to contact me now to resolve this matter.</strong>
+</p>
+
+<h3>6. Documents Enclosed</h3>
+
+<p>The following documents are enclosed with this letter:</p>
+
+<ol>
+  <li>Information Sheet for Defendants</li>
+  <li>Reply Form</li>
+  <li>Financial Statement Form</li>
+  <li>Appendix 1: Schedule of Rent Arrears</li>
+  <li>Appendix 2: Interest Calculation</li>
+</ol>
+
+<h3>7. Your Rights</h3>
+
+<p>
+You have the right to:
+</p>
+<ul>
+  <li>Seek free debt advice from the organisations listed above;</li>
+  <li>Dispute the debt if you believe it is wrong;</li>
+  <li>Ask for more information or documents;</li>
+  <li>Propose a payment plan if you cannot pay in full;</li>
+  <li>Defend any court claim if you have a valid legal defence.</li>
+</ul>
+
+<p>
+<strong>However, ignoring this letter will not make the problem go away.</strong> I urge you to contact me within 30 days.
+</p>
+
+<hr>
+
+<p>Yours sincerely,</p>
+
+<p>
+{{signatory_name}}<br>
+{{#if solicitor_firm}}{{solicitor_firm}}<br>{{/if}}
+Date: {{signature_date}}
+</p>
+
+<hr>
+
+<p><em><strong>IMPORTANT:</strong> This is a formal Letter Before Claim sent in accordance with the Pre-Action Protocol for Debt Claims. You must respond within 30 days. If you do not respond or pay, court proceedings will be issued without further notice.</em></p>
