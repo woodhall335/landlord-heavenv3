@@ -5,7 +5,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Money Claim Pack - Recover Rent Arrears | Landlord Heaven",
   description:
-    "Claim unpaid rent arrears through UK courts. Money Claim Online forms, arrears schedule, interest calculator. £129.99 one-time payment. Instant download.",
+    "Claim unpaid rent arrears through UK courts. PAP-DEBT compliance, N1 claim form, arrears schedule, interest calculator. £179.99 one-time payment. England & Wales + Scotland.",
 };
 
 export default function MoneyClaimPage() {
@@ -23,7 +23,7 @@ export default function MoneyClaimPage() {
               Claim Unpaid Rent Through UK Courts
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold">£129.99</span>
+              <span className="text-5xl md:text-6xl font-bold">£179.99</span>
               <span className="text-xl text-white/80">one-time</span>
             </div>
             <Link
@@ -32,7 +32,7 @@ export default function MoneyClaimPage() {
             >
               Start Your Claim Now →
             </Link>
-            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • England &amp; Wales only (Scotland coming soon)</p>
+            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • England &amp; Wales + Scotland</p>
           </div>
         </Container>
       </section>
@@ -61,7 +61,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Official Form N1 (Dec 2024)</strong> - Pre-filled County Court claim form (PDF)
+                      <strong>England & Wales:</strong> Form N1 (Dec 2024) - Pre-filled PDF
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -73,7 +73,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Particulars of Claim</strong> - Staple-ready particulars with interest wording
+                      <strong>Scotland:</strong> Simple Procedure Form 3A - Pre-filled PDF
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -85,7 +85,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Interest Calculation</strong> - Section 69 CCA daily rate and running total
+                      <strong>Particulars of Claim</strong> - Detailed statement with interest wording
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -97,16 +97,16 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Evidence Index</strong> - Checklist for attachments behind your N1
+                      <strong>Evidence Index</strong> - Checklist for supporting documents
                     </span>
                   </li>
                 </ul>
               </div>
 
-              {/* Arrears Documentation */}
+              {/* Pre-Action Compliance */}
               <div className="bg-white rounded-lg border-2 border-amber-500 p-6">
-                <div className="text-3xl mb-3">📊</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-4">Arrears Documentation</h3>
+                <div className="text-3xl mb-3">✉️</div>
+                <h3 className="text-xl font-semibold text-charcoal mb-4">Pre-Action Compliance</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -117,7 +117,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Rent Arrears Schedule</strong> - Month-by-month breakdown
+                      <strong>England & Wales:</strong> PAP-DEBT Letter Before Claim
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -129,7 +129,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Interest Calculator</strong> - 8% statutory interest on arrears
+                      <strong>Information Sheet</strong> for defendants (enclose with letter)
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -141,7 +141,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Legal Costs Breakdown</strong> - Court fees + solicitor costs (if applicable)
+                      <strong>Reply Form</strong> + Financial Statement Form
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -153,16 +153,16 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Payment History Log</strong> - Track all payments and missed amounts
+                      <strong>Scotland:</strong> Pre-action demand letter
                     </span>
                   </li>
                 </ul>
               </div>
 
-              {/* Recovery Tools */}
+              {/* Arrears & Interest */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">⚖️</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-4">Enforcement Tools</h3>
+                <div className="text-3xl mb-3">📊</div>
+                <h3 className="text-xl font-semibold text-charcoal mb-4">Arrears & Interest Documentation</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -173,7 +173,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Default Judgment Application</strong> - If tenant doesn't respond
+                      <strong>Schedule of Arrears</strong> - Period-by-period breakdown
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -185,7 +185,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Warrant of Control Request</strong> - Send bailiffs to collect
+                      <strong>Interest Calculation</strong> - 8% statutory rate with daily accrual
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -197,7 +197,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Attachment of Earnings Order</strong> - Deduct from tenant's wages
+                      <strong>Damages & Other Charges</strong> - Line itemization of costs
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -209,16 +209,16 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Charging Order Guide</strong> - Secure debt against tenant's property
+                      <strong>Court Fee Calculator</strong> - Accurate fee based on claim value
                     </span>
                   </li>
                 </ul>
               </div>
 
-              {/* Bonus */}
+              {/* Filing Guides & Strategy */}
               <div className="bg-amber-50 rounded-lg border border-amber-200 p-6">
-                <div className="text-3xl mb-3">✨</div>
-                <h3 className="text-xl font-semibold text-charcoal mb-4">Bonus Features</h3>
+                <div className="text-3xl mb-3">📚</div>
+                <h3 className="text-xl font-semibold text-charcoal mb-4">Filing Guides & Strategy</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -228,7 +228,9 @@ export default function MoneyClaimPage() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span className="text-gray-700">Filing instructions (MCOL online + paper)</span>
+                    <span className="text-gray-700">
+                      <strong>England & Wales:</strong> MCOL + paper filing instructions
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -238,7 +240,9 @@ export default function MoneyClaimPage() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span className="text-gray-700">Timeline: What happens after filing</span>
+                    <span className="text-gray-700">
+                      <strong>Scotland:</strong> Sheriff Court lodging guide
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -248,7 +252,9 @@ export default function MoneyClaimPage() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span className="text-gray-700">Defense scenarios and responses</span>
+                    <span className="text-gray-700">
+                      <strong>Timeline Guide</strong> - What happens after you file
+                    </span>
                   </li>
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -258,7 +264,9 @@ export default function MoneyClaimPage() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span className="text-gray-700">Negotiation letter templates</span>
+                    <span className="text-gray-700">
+                      <strong>Enforcement Guidance</strong> - Bailiffs, wage attachment, charging orders
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -347,7 +355,7 @@ export default function MoneyClaimPage() {
                 href="/wizard?product=money_claim"
                 className="inline-block bg-amber-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-600 transition-colors"
               >
-                Start Your Claim - £129.99 →
+                Start Your Claim - £179.99 →
               </Link>
             </div>
           </div>
@@ -533,7 +541,7 @@ export default function MoneyClaimPage() {
                   When should I use Money Claims?
                 </h3>
                 <p className="text-gray-700">
-                  Use <strong>Money Claims (£129.99)</strong> when you need to recover rent arrears through the county court.
+                  Use <strong>Money Claims (£179.99)</strong> when you need to recover rent arrears through the county court.
                   This product focuses specifically on the financial claim process. If your tenant is still in the property
                   and you need to evict them first, start with our{" "}
                   <Link href="/products/notice-only" className="text-primary hover:underline">
@@ -558,7 +566,7 @@ export default function MoneyClaimPage() {
               href="/wizard?product=money_claim"
               className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
             >
-              Start Your Claim - £129.99 →
+              Start Your Claim - £179.99 →
             </Link>
             <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • No subscription</p>
           </div>

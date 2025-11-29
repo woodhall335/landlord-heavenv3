@@ -149,7 +149,7 @@ export default function Home() {
             {
               title: "Money Claims",
               description: "Rent arrears claims with evidence checklists and POC templates",
-              price: "£129.99",
+              price: "£179.99",
               icon: "💷",
             },
             {

@@ -11,7 +11,7 @@ export const PRICING = {
   // Eviction Products (One-Time)
   NOTICE_ONLY: 29.99,
   COMPLETE_EVICTION_PACK: 149.99,
-  MONEY_CLAIM_PACK: 129.99,
+  MONEY_CLAIM_PACK: 179.99,
 
   // Tenancy Products (One-Time)
   STANDARD_AST: 39.99,

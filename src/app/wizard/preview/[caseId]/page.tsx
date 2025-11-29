@@ -160,7 +160,7 @@ export default function WizardPreviewPage() {
           {
             productType: 'money_claim',
             name: 'Money Claim Pack',
-            price: '£129.99',
+            price: '£179.99',
             description: 'Recover rent arrears and damages',
             features: [
               'Money claim form (N1)',
