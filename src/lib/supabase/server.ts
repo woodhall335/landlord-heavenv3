@@ -16,8 +16,8 @@ import type { Database } from './types';
  *
  * @returns SupabaseClient<Database> - Fully typed client with schema inference
  */
-export async function createServerSupabaseClient(): Promise<SupabaseClient<Database>> {
-  const cookieStore = await cookies();
+export function createServerSupabaseClient(): SupabaseClient<Database> {
+  const cookieStore = cookies();
 
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -31,16 +31,15 @@ export async function createServerSupabaseClient(): Promise<SupabaseClient<Datab
           try {
             cookieStore.set({ name, value, ...options });
           } catch (_error) {
-            // Server component - can't set cookies
-            // This is expected in some contexts
+            // In some server contexts (e.g. certain Server Components),
+            // setting cookies isn't allowed. Silently ignore in those cases.
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: '', ...options });
           } catch (_error) {
-            // Server component - can't remove cookies
-            // This is expected in some contexts
+            // Same as above – safe no-op when cookies can't be mutated
           }
         },
       },
@@ -66,8 +65,12 @@ export function createAdminClient(): SupabaseClient<Database> {
         get() {
           return undefined;
         },
-        set() {},
-        remove() {},
+        set() {
+          // no-op for admin client
+        },
+        remove() {
+          // no-op for admin client
+        },
       },
     }
   );
@@ -78,7 +81,8 @@ export function createAdminClient(): SupabaseClient<Database> {
  * Returns null if not authenticated
  */
 export async function getServerUser() {
-  const supabase = await createServerSupabaseClient();
+  const supabase = createServerSupabaseClient();
+
   const {
     data: { user },
     error,
