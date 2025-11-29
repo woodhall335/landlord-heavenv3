@@ -24,6 +24,15 @@ export interface DocumentGenerationOptions {
 export interface GeneratedDocument {
   html: string;
   pdf?: Buffer;
+  /**
+   * Additional generated artifacts (e.g. multiple PDFs within a pack).
+   * These are kept permissive to accommodate the various generators.
+   */
+  documents?: Array<Record<string, any>>;
+  /**
+   * Optional validation errors collected during generation.
+   */
+  validation_errors?: string[];
   metadata: {
     templateUsed: string;
     generatedAt: string;

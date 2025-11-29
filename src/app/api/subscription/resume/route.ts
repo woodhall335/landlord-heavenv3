@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-      apiVersion: '2022-11-15',
+      apiVersion: '2025-11-17.clover',
     });
 
     // Resume subscription by removing cancel_at_period_end flag
