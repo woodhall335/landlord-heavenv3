@@ -71,7 +71,7 @@ automated updates
 This is the first truly unified platform across E&W, Scotland, and NI.
 
 3. Product Catalogue (with Pricing)
-3.1 Notice Only (£39)
+3.1 Notice Only (19.99)
 
 Fastest-selling, top-of-funnel product.
 
@@ -193,12 +193,12 @@ Northern Ireland
 
 3.4 Tenancy Agreements
 Product	Price	Jurisdiction
-AST Standard	£39	E&W
-AST Premium	£59	E&W
-PRT Standard	£39	Scotland
-PRT Premium	£59	Scotland
-NI Private Tenancy Standard	£39	NI
-NI Private Tenancy Premium	£59	NI
+AST Standard	£19.99	E&W
+AST Premium	£29.99	E&W
+PRT Standard	£19.99	Scotland
+PRT Premium	£29.99	Scotland
+NI Private Tenancy Standard	£19.99	NI
+NI Private Tenancy Premium	£29.99	NI
 
 Includes Ask Heaven guidance for custom clauses, safety compliance checks, deposit protection, HMO rules, and document storage.
 
