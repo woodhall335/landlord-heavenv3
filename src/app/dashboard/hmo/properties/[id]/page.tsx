@@ -110,7 +110,7 @@ export default function PropertyDetailPage() {
       } else {
         alert('Failed to delete property');
       }
-    } catch (err) {
+    } catch (_err) {
       alert('Failed to delete property');
     }
   };

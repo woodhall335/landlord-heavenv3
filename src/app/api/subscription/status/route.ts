@@ -9,11 +9,11 @@ import { requireServerAuth } from '@/lib/supabase/server-auth';
 import { createClient } from '@/lib/supabase/server';
 
 // Get current subscription status
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const user = await requireServerAuth();
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     // Get user's subscription data
     const { data: profile, error } = await supabase

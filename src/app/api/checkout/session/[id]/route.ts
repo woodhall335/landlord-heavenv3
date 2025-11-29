@@ -5,7 +5,7 @@
  * Retrieves the status of a Stripe checkout session
  */
 
-import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
