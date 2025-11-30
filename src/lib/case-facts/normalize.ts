@@ -103,9 +103,9 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
       }));
   }
 
-  const partiesTenants = (wizard as any).parties?.tenants;
-  if (Array.isArray(partiesTenants)) {
-    return partiesTenants
+  const partiesTenantsList = (wizard as any).parties?.tenants;
+  if (Array.isArray(partiesTenantsList)) {
+    return partiesTenantsList
       .filter((t) => t)
       .map((t: any) => ({
         name: t.full_name || t.name || '',
@@ -524,6 +524,11 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   const interestRate = getFirstValue(wizard, ['case_facts.money_claim.interest_rate', 'interest_rate']);
   if (interestRate !== null && interestRate !== undefined) {
     base.money_claim.interest_rate = typeof interestRate === 'string' ? Number(interestRate) || null : (interestRate as any);
+  }
+  const solicitorCosts = getFirstValue(wizard, ['case_facts.money_claim.solicitor_costs', 'solicitor_costs']);
+  if (solicitorCosts !== null && solicitorCosts !== undefined) {
+    base.money_claim.solicitor_costs =
+      typeof solicitorCosts === 'string' ? Number(solicitorCosts) || null : (solicitorCosts as any);
   }
   base.money_claim.attempts_to_resolve ??= getFirstValue(wizard, ['case_facts.money_claim.attempts_to_resolve', 'payment_attempts']);
   base.money_claim.lba_sent ??= getFirstValue(wizard, ['case_facts.money_claim.lba_sent', 'lba_sent']);

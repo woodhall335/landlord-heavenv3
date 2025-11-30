@@ -63,7 +63,7 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     interest_start_date: facts.money_claim.interest_start_date || undefined,
 
     court_fee: facts.court.claim_amount_costs || undefined,
-    solicitor_costs: facts.court.claim_amount_costs || undefined,
+    solicitor_costs: facts.money_claim.solicitor_costs || undefined,
 
     court_name: facts.court.court_name || undefined,
 
@@ -126,7 +126,7 @@ export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): Scotland
     interest_start_date: facts.money_claim.interest_start_date || undefined,
 
     court_fee: facts.court.claim_amount_costs || undefined,
-    solicitor_costs: facts.court.claim_amount_costs || undefined,
+    solicitor_costs: facts.money_claim.solicitor_costs || undefined,
 
     basis_of_claim: facts.money_claim.basis_of_claim || 'rent_arrears',
     attempts_to_resolve: facts.money_claim.attempts_to_resolve || undefined,

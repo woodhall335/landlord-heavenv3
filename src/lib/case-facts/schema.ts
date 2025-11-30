@@ -142,6 +142,7 @@ export interface MoneyClaimFacts {
   charge_interest: boolean | null;
   interest_start_date: string | null;
   interest_rate: number | null;
+  solicitor_costs: number | null;
   attempts_to_resolve: string | null;
   lba_sent?: boolean | null;
   lba_date?: string | null;
@@ -279,6 +280,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     charge_interest: null,
     interest_start_date: null,
     interest_rate: null,
+    solicitor_costs: null,
     attempts_to_resolve: null,
     lba_sent: null,
     lba_date: null,
