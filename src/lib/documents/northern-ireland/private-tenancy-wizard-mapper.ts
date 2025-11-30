@@ -52,9 +52,12 @@ function buildAddress(
   return parts.join(', ');
 }
 
-function mapRentPeriod(value: 'weekly' | 'monthly' | 'yearly' | 'other' | null | undefined): PrivateTenancyData['rent_period'] {
+function mapRentPeriod(
+  value: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly' | 'other' | null | undefined,
+): PrivateTenancyData['rent_period'] {
   if (!value) return 'month';
   if (value === 'weekly') return 'week';
+  if (value === 'fortnightly') return 'week';
   if (value === 'monthly') return 'month';
   return 'month';
 }

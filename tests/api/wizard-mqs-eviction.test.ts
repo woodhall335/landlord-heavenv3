@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 // Mock AI clients BEFORE importing any modules that use them
 vi.mock('@/lib/ai/openai-client', () => ({
@@ -174,7 +174,7 @@ describe('MQS eviction flow (England & Wales)', () => {
     const body = await response.json();
     expect(response.status).toBe(200);
     expect(body.next_question.id).toBe('ai_q1');
-    expect((aiModule.getNextQuestion as unknown as vi.Mock)).toHaveBeenCalled();
+      expect((aiModule.getNextQuestion as unknown as Mock)).toHaveBeenCalled();
   });
 
   it('starts Scotland complete-pack cases with MQS first question', async () => {
@@ -226,7 +226,7 @@ describe('MQS eviction flow (England & Wales)', () => {
       wizard_progress: 0,
     };
 
-    (mqsLoader.loadMQS as unknown as vi.Mock).mockReturnValueOnce({
+    (mqsLoader.loadMQS as unknown as Mock).mockReturnValueOnce({
       id: 'custom',
       product: 'notice_only',
       jurisdiction: 'england-wales',
@@ -243,7 +243,7 @@ describe('MQS eviction flow (England & Wales)', () => {
       ],
     });
 
-    (enhanceAnswer as unknown as vi.Mock).mockResolvedValue({
+    (enhanceAnswer as unknown as Mock).mockResolvedValue({
       suggested_wording: 'Better answer',
       missing_information: ['More detail'],
       evidence_suggestions: ['Tenancy agreement'],
@@ -267,7 +267,7 @@ describe('MQS eviction flow (England & Wales)', () => {
 
     const body = await response.json();
     expect(response.status).toBe(200);
-    expect((enhanceAnswer as unknown as vi.Mock)).toHaveBeenCalled();
+    expect((enhanceAnswer as unknown as Mock)).toHaveBeenCalled();
     expect(body.enhanced_answer).toEqual({
       raw: 'original answer',
       suggested: 'Better answer',

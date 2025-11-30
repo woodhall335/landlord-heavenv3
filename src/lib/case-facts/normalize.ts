@@ -89,9 +89,11 @@ function setNestedValue(target: Record<string, any>, path: string, value: any) {
  * Looks for keys like "tenants.0.full_name", "tenants.0.email", etc.
  */
 function extractTenants(wizard: WizardFacts): PartyDetails[] {
+  const isTruthy = <T>(value: T | null | undefined | false): value is T => Boolean(value);
+
   if (Array.isArray((wizard as any).tenants)) {
     return (wizard as any).tenants
-      .filter((t) => t)
+      .filter(isTruthy)
       .map((t: any) => ({
         name: t.full_name || t.name || '',
         email: t.email,
@@ -106,7 +108,7 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
   const partiesTenantsList = (wizard as any).parties?.tenants;
   if (Array.isArray(partiesTenantsList)) {
     return partiesTenantsList
-      .filter((t) => t)
+      .filter(isTruthy)
       .map((t: any) => ({
         name: t.full_name || t.name || '',
         email: t.email,
@@ -173,7 +175,7 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
 
   if (Array.isArray((wizard as any).tenants)) {
     const list = (wizard as any).tenants
-      .filter((t) => t)
+      .filter(isTruthy)
       .map((t: any) => ({
         name: t.full_name || t.name || '',
         email: t.email,
@@ -189,7 +191,7 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
   const partiesTenants = (wizard as any).parties?.tenants;
   if (Array.isArray(partiesTenants)) {
     return partiesTenants
-      .filter((t) => t)
+      .filter(isTruthy)
       .map((t: any) => ({
         name: t.full_name || t.name || '',
         email: t.email,
