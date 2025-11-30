@@ -66,6 +66,74 @@ interface ExtendedWizardQuestion {
   const [depositWarning, setDepositWarning] = useState<string | null>(null);
   const [caseFacts, setCaseFacts] = useState<Record<string, any>>({});
 
+  const handleComplete = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      await fetch('/api/wizard/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          case_id: caseId,
+        }),
+      });
+
+      onComplete(caseId);
+    } catch (err: any) {
+      setError(err.message || 'Failed to complete wizard');
+      setLoading(false);
+    }
+  }, [caseId, onComplete]);
+
+  const loadNextQuestion = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    setAskHeavenSuggestion(null);
+
+    try {
+      const response = await fetch('/api/wizard/next-question', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ case_id: caseId }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to load question: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.is_complete) {
+        setIsComplete(true);
+        await handleComplete();
+      } else if (data.next_question) {
+        setCurrentQuestion(data.next_question);
+
+        // Set default values for group fields
+        if (data.next_question.inputType === 'group' && data.next_question.fields) {
+          const defaults: Record<string, any> = {};
+          data.next_question.fields.forEach((field: any) => {
+            if (field.defaultValue !== undefined) {
+              defaults[field.id] = field.defaultValue;
+            }
+          });
+          setCurrentAnswer(Object.keys(defaults).length > 0 ? defaults : null);
+        } else {
+          setCurrentAnswer(null); // Reset answer for new question
+        }
+
+        setProgress(data.progress || 0);
+      } else {
+        throw new Error('No question returned from API');
+      }
+    } catch (err: any) {
+        setError(err.message || 'Failed to load question');
+        console.error('Load question error:', err);
+      } finally {
+        setLoading(false);
+      }
+  }, [caseId, handleComplete]);
+
   // Load first question on mount
   useEffect(() => {
     loadNextQuestion();
@@ -151,74 +219,6 @@ interface ExtendedWizardQuestion {
       }
     }
   }, [currentAnswer, currentQuestion]);
-
-  const handleComplete = useCallback(async () => {
-    try {
-      setLoading(true);
-
-      await fetch('/api/wizard/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          case_id: caseId,
-        }),
-      });
-
-      onComplete(caseId);
-    } catch (err: any) {
-      setError(err.message || 'Failed to complete wizard');
-      setLoading(false);
-    }
-  }, [caseId, onComplete]);
-
-  const loadNextQuestion = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    setAskHeavenSuggestion(null);
-
-    try {
-      const response = await fetch('/api/wizard/next-question', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ case_id: caseId }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to load question: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (data.is_complete) {
-        setIsComplete(true);
-        await handleComplete();
-      } else if (data.next_question) {
-        setCurrentQuestion(data.next_question);
-
-        // Set default values for group fields
-        if (data.next_question.inputType === 'group' && data.next_question.fields) {
-          const defaults: Record<string, any> = {};
-          data.next_question.fields.forEach((field: any) => {
-            if (field.defaultValue !== undefined) {
-              defaults[field.id] = field.defaultValue;
-            }
-          });
-          setCurrentAnswer(Object.keys(defaults).length > 0 ? defaults : null);
-        } else {
-          setCurrentAnswer(null); // Reset answer for new question
-        }
-
-        setProgress(data.progress || 0);
-      } else {
-        throw new Error('No question returned from API');
-      }
-    } catch (err: any) {
-        setError(err.message || 'Failed to load question');
-        console.error('Load question error:', err);
-      } finally {
-        setLoading(false);
-      }
-  }, [caseId, handleComplete]);
 
   const isCurrentAnswerValid = (): boolean => {
     if (!currentQuestion) return false;
