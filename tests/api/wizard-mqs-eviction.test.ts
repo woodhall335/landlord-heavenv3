@@ -17,9 +17,11 @@ vi.mock('@/lib/ai/claude-client', () => ({
 
 import { POST as nextQuestion } from '@/app/api/wizard/next-question/route';
 import { POST as saveAnswer } from '@/app/api/wizard/answer/route';
+import { POST as startWizard } from '@/app/api/wizard/start/route';
 import * as mqsLoader from '@/lib/wizard/mqs-loader';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import * as aiModule from '@/lib/ai';
+import { createEmptyWizardFacts } from '@/lib/case-facts/schema';
 
 const supabaseClientMock = {
   from: vi.fn(),
@@ -173,6 +175,45 @@ describe('MQS eviction flow (England & Wales)', () => {
     expect(response.status).toBe(200);
     expect(body.next_question.id).toBe('ai_q1');
     expect((aiModule.getNextQuestion as unknown as vi.Mock)).toHaveBeenCalled();
+  });
+
+  it('starts Scotland complete-pack cases with MQS first question', async () => {
+    const existingFacts = createEmptyWizardFacts();
+    existingFacts.__meta = { product: 'complete_pack', mqs_version: null } as any;
+
+    supabaseClientMock.single
+      .mockResolvedValueOnce({
+        data: {
+          id: '123e4567-e89b-12d3-a456-426614174000',
+          case_type: 'eviction',
+          jurisdiction: 'scotland',
+          status: 'in_progress',
+          collected_facts: existingFacts,
+          user_id: null,
+        },
+        error: null,
+      })
+      .mockResolvedValueOnce({ data: { facts: existingFacts }, error: null });
+
+    const response = await startWizard(
+      new Request('http://localhost/api/wizard/start', {
+        method: 'POST',
+        body: JSON.stringify({
+          product: 'complete_pack',
+          jurisdiction: 'scotland',
+          case_id: '123e4567-e89b-12d3-a456-426614174000',
+        }),
+      })
+    );
+
+    const body = await response.json();
+    if (response.status !== 200) {
+      throw new Error(`Start wizard error: ${JSON.stringify(body)}`);
+    }
+    expect(response.status).toBe(200);
+    expect(body.product).toBe('complete_pack');
+    expect(body.jurisdiction).toBe('scotland');
+    expect(body.next_question?.id).toBe('case_overview');
   });
 
   it('enhanceAnswer is called for MQS questions with suggestion_prompt', async () => {

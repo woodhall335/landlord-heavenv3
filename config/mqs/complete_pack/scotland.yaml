@@ -11,59 +11,70 @@ questions:
     section: Case Overview
     question: "Briefly describe what has gone wrong with this tenancy"
     inputType: textarea
-    helperText: "Summarise the issues for the tribunal. Include when problems started, arrears position, and any behaviour concerns."
+    helperText: "Summarise the issue for the Notice to Leave and tribunal application. Include key dates, arrears position, and any behaviour concerns."
     validation:
       required: true
     suggestion_prompt: >
-      Produce a short factual overview suitable for a First-tier Tribunal application.
-      Keep dates, amounts, and events clear and neutral.
+      Turn the landlord's description into a clear, factual summary suitable for a tribunal application.
+      Keep dates, amounts, and events neutral.
     maps_to:
+      - case_overview
+      - case_summary
       - particulars_of_claim
+    conditions: []
 
-  # 2. Landlord details
+  # 2. Landlord / claimant details
   - id: landlord_details
     section: Landlord Details
     question: "Your details"
     inputType: group
-    helperText: "Used on the Notice to Leave and tribunal forms. Include all joint landlords."
+    helperText: "These appear on the Notice to Leave and tribunal forms. Include all joint landlords."
     fields:
-      - id: landlord_full_name
+      - id: landlord_name
         label: "Main landlord full name"
         inputType: text
-        placeholder: "Jane Landlord"
         validation:
           required: true
         width: full
       - id: landlord_2_name
         label: "Second landlord (if any)"
         inputType: text
-        placeholder: "Second landlord full name"
         width: full
-      - id: landlord_address
-        label: "Landlord service address"
-        inputType: textarea
-        placeholder: "Building and street\nTown/City\nPostcode"
-        validation:
-          required: true
-        width: full
-      - id: landlord_postcode
-        label: "Postcode"
+      - id: landlord_registration_number
+        label: "Landlord registration number (if registered)"
         inputType: text
-        placeholder: "EH1 1AA"
-        validation:
-          required: true
         width: half
       - id: landlord_email
         label: "Email address"
         inputType: email
-        placeholder: "you@example.com"
         validation:
           required: true
         width: half
       - id: landlord_phone
         label: "Phone number"
         inputType: tel
-        placeholder: "07000 900000"
+        validation:
+          required: true
+        width: half
+      - id: landlord_address_line1
+        label: "Address line 1"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_line2
+        label: "Address line 2 (optional)"
+        inputType: text
+        width: full
+      - id: landlord_city
+        label: "Town/City"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: landlord_postcode
+        label: "Postcode"
+        inputType: text
         validation:
           required: true
         width: half
@@ -73,121 +84,61 @@ questions:
         placeholder: "e.g. Flat 2A / Smith / Feb 2025"
         width: half
     suggestion_prompt: >
-      Ensure names and addresses match the tenancy agreement and any previous correspondence to avoid service issues.
+      Check that landlord names and addresses match the tenancy agreement and any prior correspondence to avoid service issues.
     maps_to:
+      - landlord_name
       - landlord_full_name
       - landlord_2_name
+      - landlord_registration_number
+      - landlord_email
+      - landlord_phone
       - landlord_address_line1
       - landlord_address_line2
       - landlord_city
       - landlord_postcode
-      - landlord_email
-      - landlord_phone
       - claimant_reference
+    conditions: []
 
-  # 3. Representative (optional)
-  - id: uses_solicitor
-    section: Representation
-    question: "Are you using a solicitor or authorised representative?"
-    inputType: yes_no
-    helperText: "If yes, we'll collect their details for tribunal correspondence."
-    validation:
-      required: true
-
-  - id: solicitor_details
-    section: Representation
-    question: "Representative details"
-    inputType: group
-    helperText: "Complete only if a solicitor or representative is handling the case."
-    dependsOn:
-      questionId: uses_solicitor
-      value: true
-    fields:
-      - id: solicitor_name
-        label: "Name"
-        inputType: text
-        placeholder: "Full name"
-        validation:
-          required: true
-        width: full
-      - id: solicitor_firm
-        label: "Firm / organisation"
-        inputType: text
-        placeholder: "Example Solicitors LLP"
-        validation:
-          required: true
-        width: full
-      - id: solicitor_address
-        label: "Address for service"
-        inputType: textarea
-        placeholder: "Building and street\nTown/City\nPostcode"
-        validation:
-          required: true
-        width: full
-      - id: solicitor_email
-        label: "Email"
-        inputType: email
-        placeholder: "solicitor@example.com"
-        validation:
-          required: true
-        width: half
-      - id: solicitor_phone
-        label: "Phone"
-        inputType: tel
-        placeholder: "0131 000 0000"
-        validation:
-          required: true
-        width: half
-    suggestion_prompt: >
-      Use the representative's main contact details for tribunal notices and case management discussions.
-    maps_to:
-      - solicitor_name
-      - solicitor_firm
-      - solicitor_address
-      - solicitor_email
-      - solicitor_phone
-
-  # 4. Tenant details
+  # 3. Tenant / respondent details
   - id: tenant_details
     section: Tenant Details
-    question: "Who are the tenants?"
+    question: "Who are the tenants or respondents?"
     inputType: group
-    helperText: "List all tenants/respondents so the Notice to Leave and tribunal claim are correctly addressed."
+    helperText: "List all tenants so the Notice to Leave and tribunal claim are correctly addressed."
     fields:
-      - id: tenant1_name
+      - id: tenant_1_name
         label: "Tenant 1 full name"
         inputType: text
-        placeholder: "Tenant name"
         validation:
           required: true
         width: full
-      - id: tenant1_email
+      - id: tenant_1_email
         label: "Tenant 1 email (optional)"
         inputType: email
-        placeholder: "tenant@example.com"
         width: half
-      - id: tenant1_phone
+      - id: tenant_1_phone
         label: "Tenant 1 phone (optional)"
         inputType: tel
-        placeholder: "07..."
         width: half
-      - id: tenant2_name
+      - id: tenant_2_name
         label: "Tenant 2 full name (if joint)"
         inputType: text
-        placeholder: "Joint tenant name"
         width: full
-      - id: tenant2_email
-        label: "Tenant 2 email"
+      - id: tenant_2_email
+        label: "Tenant 2 email (optional)"
         inputType: email
-        placeholder: "tenant2@example.com"
         width: half
-      - id: tenant2_phone
-        label: "Tenant 2 phone"
+      - id: tenant_2_phone
+        label: "Tenant 2 phone (optional)"
         inputType: tel
-        placeholder: "07..."
         width: half
+      - id: occupants_in_property
+        label: "Who is currently living in the property?"
+        inputType: textarea
+        helperText: "List all adults and children if known."
+        width: full
     suggestion_prompt: >
-      Match names to the tenancy agreement. If you only have one contact method, include it in the relevant email or phone box.
+      Match names to the tenancy agreement. If other adults live there, note them in occupants.
     maps_to:
       - tenant1_name
       - tenant1_email
@@ -195,37 +146,81 @@ questions:
       - tenant2_name
       - tenant2_email
       - tenant2_phone
+      - occupants_in_property
+    conditions: []
 
-  # 5. Property details
+  # 4. Property details
   - id: property_details
     section: Property
     question: "Rental property address"
-    inputType: address
-    helperText: "Full address of the let property"
-    validation:
-      required: true
+    inputType: group
+    helperText: "Full address of the let property."
+    fields:
+      - id: property_address_line1
+        label: "Address line 1"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: property_address_line2
+        label: "Address line 2 (optional)"
+        inputType: text
+        width: full
+      - id: property_city
+        label: "Town/City"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: property_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: property_type
+        label: "Property type"
+        inputType: select
+        options:
+          - flat_apartment
+          - house
+          - HMO
+          - other
+        width: half
     maps_to:
       - property_address_line1
       - property_address_line2
       - property_city
       - property_postcode
-      - property_country
+      - property_type
+    conditions: []
 
-  # 6. Tenancy details
+  # 5. Tenancy details
   - id: tenancy_details
     section: Tenancy
     question: "Tenancy details"
     inputType: group
-    helperText: "Key lease facts for the tribunal application."
+    helperText: "Key tenancy facts for the Notice to Leave and Form E."
     fields:
+      - id: tenancy_type
+        label: "What type of tenancy is this?"
+        inputType: select
+        options:
+          - Private Residential Tenancy (PRT)
+          - Assured Tenancy
+          - Short Assured Tenancy
+          - Other / unsure
+        validation:
+          required: true
+        width: full
       - id: tenancy_start_date
-        label: "Start date"
+        label: "Tenancy start date"
         inputType: date
         validation:
           required: true
         width: half
       - id: tenancy_end_date
-        label: "End date (if ended)"
+        label: "End date (if tenancy already ended)"
         inputType: date
         width: half
       - id: rent_amount
@@ -235,168 +230,354 @@ questions:
           required: true
         width: half
       - id: rent_frequency
-        label: "Rent frequency"
+        label: "Rent payment frequency"
         inputType: select
         options:
           - weekly
           - fortnightly
           - monthly
           - quarterly
+          - yearly
         validation:
           required: true
         width: half
       - id: rent_due_day
         label: "Usual rent due day"
-        inputType: text
-        placeholder: "e.g. 1st of month"
+        inputType: number
+        helperText: "e.g. 1 for 1st of the month"
         width: half
+      - id: rent_payment_method
+        label: "How is rent usually paid?"
+        inputType: select
+        options:
+          - bank_transfer
+          - standing_order
+          - cash
+          - other
+        width: half
+    suggestion_prompt: >
+      Confirm the tenancy type and rent terms against the written agreement and any variations.
     maps_to:
+      - tenancy_type
       - tenancy_start_date
       - tenancy_end_date
       - rent_amount
       - rent_frequency
       - rent_due_day
+      - rent_payment_method
+    conditions: []
 
-  # 7. Arrears and payment attempts
-  - id: arrears_summary
-    section: Arrears
-    question: "Rent arrears summary"
+  # 6. Rent arrears schedule
+  - id: arrears_status
+    section: Rent Arrears
+    question: "Is the tenant in rent arrears?"
+    inputType: yes_no
+    validation:
+      required: true
+    maps_to:
+      - has_arrears
+      - rent_arrears_has_arrears
+    conditions: []
+
+  - id: arrears_details
+    section: Rent Arrears
+    question: "Rent arrears details"
     inputType: group
-    helperText: "We use this for the rent statement and claim amount."
+    dependsOn:
+      questionId: arrears_status
+      value: "Yes"
+    helperText: "Provide totals and a short schedule so we can build the arrears statement."
     fields:
       - id: arrears_total
-        label: "Total arrears"
+        label: "Total arrears outstanding"
         inputType: currency
         validation:
           required: true
         width: half
+      - id: arrears_at_notice_date
+        label: "Arrears at the date of any Notice to Leave"
+        inputType: currency
+        width: half
+      - id: arrears_items
+        label: "Arrears schedule (periods, amounts due, payments made)"
+        inputType: textarea
+        helperText: "List each period, amount due, amount paid, and running balance."
+        width: full
       - id: arrears_schedule_upload
         label: "Upload rent schedule / ledger"
         inputType: upload
-        helperText: "Attach the ledger so we can build the arrears schedule."
-        validation:
-          required: true
+        helperText: "Attach ledger or bank export to support the schedule."
         width: full
       - id: payment_attempts
         label: "Payment history and attempts to resolve"
         inputType: textarea
-        helperText: "Describe reminders sent, payment plans offered, or any discussions with tenants."
+        helperText: "Describe reminders sent, payment plans offered, or any discussions."
+        width: full
+    suggestion_prompt: >
+      Present arrears clearly with dates and amounts. Note any part-payments or agreed plans that were missed.
+    maps_to:
+      - arrears_total
+      - arrears_at_notice_date
+      - arrears_items
+      - rent_schedule_uploaded
+      - payment_attempts
+    conditions: []
+
+  # 7. Grounds / reasons for eviction
+  - id: scotland_ground_codes
+    section: Grounds
+    question: "Which statutory grounds are you relying on?"
+    inputType: multiselect
+    options:
+      - "Ground 1 - Landlord intends to sell (mandatory)"
+      - "Ground 2 - Property to be sold by lender (mandatory)"
+      - "Ground 3 - Landlord intends to refurbish (discretionary)"
+      - "Ground 4 - Change of use (discretionary)"
+      - "Ground 6 - Not an employee (mandatory)"
+      - "Ground 7 - No longer providing care (mandatory)"
+      - "Ground 8 - Not occupying let property (mandatory)"
+      - "Ground 10 - Tenant in rent arrears (mandatory/discretionary)"
+      - "Ground 11 - Tenant in breach of tenancy agreement (discretionary)"
+      - "Ground 12 - Tenant engaged in relevant criminal or antisocial behaviour (mandatory/discretionary)"
+      - "Ground 13 - Landlord/agent registration revoked (mandatory)"
+      - "Ground 15 - HMO licence revoked (mandatory)"
+      - "Ground 17 - Ceasing to be charity (discretionary)"
+      - "Ground 18 - Family member to move in (mandatory)"
+      - "Ground 19 - Tenancy linked to employment (mandatory)"
+      - "Ground 20 - Local authority compulsory purchase (mandatory)"
+      - "Ground 21 - Temporary social housing (mandatory)"
+      - "Ground 22 - Property part of agricultural holding (mandatory)"
+      - "Ground 23 - Property used for student accommodation (mandatory)"
+      - "Ground 24 - Property used for supported accommodation (mandatory)"
+    validation:
+      required: true
+    maps_to:
+      - scotland_ground_codes
+    conditions: []
+
+  - id: scotland_ground_explanation
+    section: Grounds
+    question: "Explain how each ground applies"
+    inputType: textarea
+    helperText: "Link facts and evidence to each ground. Note whether grounds are mandatory or discretionary."
+    validation:
+      required: true
+    suggestion_prompt: >
+      Draft clear particulars for each selected ground with dates, amounts, and behaviour references.
+    maps_to:
+      - scotland_ground_explanation
+      - notice_reason
+    conditions: []
+
+  # 8. Pre-action / attempts to resolve
+  - id: pre_action_steps
+    section: Pre-action steps
+    question: "What have you done to resolve issues before applying?"
+    inputType: group
+    helperText: "Tribunal expects reasonable contact attempts, especially for rent arrears."
+    fields:
+      - id: pre_action_letters_sent
+        label: "Have you sent warning letters or emails?"
+        inputType: yes_no
+        width: half
+      - id: pre_action_meetings
+        label: "Have you discussed issues with the tenant?"
+        inputType: yes_no
+        width: half
+      - id: payment_plan_offered
+        label: "Was a payment plan offered?"
+        inputType: yes_no
+        width: half
+      - id: attempts_to_resolve_summary
+        label: "Summary of steps taken"
+        inputType: textarea
+        helperText: "Outline contact attempts, support signposting, and any agreements."
         validation:
           required: true
         width: full
+    suggestion_prompt: >
+      Capture specific dates and outcomes of letters, calls, meetings, and any payment plans proposed.
     maps_to:
-      - arrears_total
-      - rent_schedule_uploaded
-      - arrears_items
-      - payment_attempts
+      - pre_action_letters_sent
+      - pre_action_meetings
+      - payment_plan_offered
+      - attempts_to_resolve_summary
+    conditions: []
 
-  # 8. Notice to Leave / pre-action
-  - id: notice_served
-    section: Notice
-    question: "Have you served a Notice to Leave?"
-    inputType: yes_no
-    helperText: "If yes, we will capture dates and service method."
-    validation:
-      required: true
-
-  - id: notice_details
-    section: Notice
-    question: "Notice details"
+  # 9. Tribunal application details
+  - id: tribunal_details
+    section: Tribunal
+    question: "Tribunal preferences"
     inputType: group
-    dependsOn:
-      questionId: notice_served
-      value: true
+    helperText: "Information needed for Form E and tribunal scheduling."
     fields:
-      - id: notice_date
-        label: "Date served"
-        inputType: date
+      - id: court_name
+        label: "Preferred hearing centre / Sheriffdom"
+        inputType: text
         validation:
           required: true
-        width: half
-      - id: notice_expiry_date
-        label: "Notice expiry date"
-        inputType: date
-        validation:
-          required: true
-        width: half
-      - id: service_method
-        label: "How was it served?"
+        width: full
+      - id: tribunal_preferred_hearing_type
+        label: "Preferred hearing type"
         inputType: select
         options:
-          - email
-          - post
-          - hand_delivered
-        validation:
-          required: true
+          - in_person
+          - video
+          - telephone
+          - no_preference
         width: half
+      - id: tribunal_special_arrangements
+        label: "Any special arrangements needed?"
+        inputType: textarea
+        helperText: "E.g. interpreter, accessibility adjustments."
+        width: full
     maps_to:
-      - notice_date
-      - notice_expiry_date
-      - service_method
-
-  # 9. Tribunal details
-  - id: sheriffdom
-    section: Tribunal
-    question: "Which Sheriffdom / FTT hearing centre should hear the case?"
-    inputType: text
-    helperText: "Name the local Sheriff Court or First-tier Tribunal hearing centre."
-    validation:
-      required: true
-    maps_to:
-      - sheriffdom
       - court_name
+      - sheriffdom
+      - tribunal_preferred_hearing_type
+      - tribunal_special_arrangements
+    conditions: []
 
-  # 10. Grounds and behaviour
-  - id: grounds_summary
-    section: Grounds
-    question: "Grounds for eviction"
-    inputType: textarea
-    helperText: "Explain the grounds relied on (e.g., rent arrears under Ground 12, antisocial behaviour)."
+  # 10. Previous proceedings
+  - id: previous_proceedings
+    section: Previous Proceedings
+    question: "Have there been any previous tribunal or court proceedings about this tenancy?"
+    inputType: yes_no
     validation:
       required: true
     maps_to:
-      - notice_reason
-      - asb_description
+      - previous_proceedings
+    conditions: []
 
-  # 11. Evidence uploads
+  - id: previous_proceedings_details
+    section: Previous Proceedings
+    question: "Provide details of any previous proceedings"
+    inputType: textarea
+    dependsOn:
+      questionId: previous_proceedings
+      value: "Yes"
+    helperText: "Include dates, references, and outcomes."
+    maps_to:
+      - previous_proceedings_details
+    conditions: []
+
+  # 11. Evidence summary and uploads
+  - id: evidence_summary
+    section: Evidence
+    question: "Evidence you will rely on"
+    inputType: textarea
+    helperText: "List key documents: tenancy agreement, arrears schedule, correspondence, photos, inspection reports."
+    validation:
+      required: true
+    maps_to:
+      - evidence_summary
+    conditions: []
+
   - id: evidence_uploads
     section: Evidence
     question: "Upload supporting evidence"
     inputType: group
     fields:
-      - id: upload_tenancy_agreement
+      - id: scotland_evidence_tenancy_uploaded
         label: "Signed tenancy agreement"
         inputType: upload
         validation:
           required: true
         width: full
-      - id: upload_bank_statements
-        label: "Bank statements (optional)"
+      - id: scotland_evidence_rent_schedule_uploaded
+        label: "Rent schedule / ledger"
+        inputType: upload
+        validation:
+          required: false
+        width: full
+      - id: scotland_evidence_messages_uploaded
+        label: "Messages or letters to tenant"
         inputType: upload
         width: full
-      - id: upload_other_evidence
-        label: "Other evidence (photos, letters, inspection reports)"
+      - id: scotland_evidence_other_uploaded
+        label: "Other evidence (photos, inspection reports, bank statements)"
         inputType: upload
         width: full
     maps_to:
-      - tenancy_agreement_uploaded
-      - bank_statements_uploaded
-      - other_evidence_uploaded
+      - scotland_evidence_tenancy_uploaded
+      - scotland_evidence_rent_schedule_uploaded
+      - scotland_evidence_messages_uploaded
+      - scotland_evidence_other_uploaded
+    conditions: []
 
-  # 12. Statement of truth
-  - id: signatory_name
+  # 12. Service / contact details
+  - id: service_contact
+    section: Service & Contact
+    question: "Service and contact preferences"
+    inputType: group
+    helperText: "Tell us how notices and tribunal correspondence should be served."
+    fields:
+      - id: service_name
+        label: "Service contact name"
+        inputType: text
+        width: full
+      - id: service_address_line1
+        label: "Service address line 1"
+        inputType: text
+        width: full
+      - id: service_address_line2
+        label: "Service address line 2 (optional)"
+        inputType: text
+        width: full
+      - id: service_city
+        label: "Service town/city"
+        inputType: text
+        width: half
+      - id: service_postcode
+        label: "Service postcode"
+        inputType: text
+        width: half
+      - id: service_method_preference
+        label: "Preferred service method"
+        inputType: select
+        options:
+          - recorded_delivery
+          - by_hand
+          - email_if_agreed
+          - other
+        width: half
+      - id: service_email
+        label: "Service email (if applicable)"
+        inputType: email
+        width: half
+      - id: service_phone
+        label: "Service phone"
+        inputType: tel
+        width: half
+    maps_to:
+      - service_name
+      - service_address_line1
+      - service_address_line2
+      - service_city
+      - service_postcode
+      - service_method_preference
+      - service_email
+      - service_phone
+    conditions: []
+
+  # 13. Statement of truth / declaration
+  - id: scotland_signatory_name
     section: Statement of Truth
-    question: "Who will sign the application and statement of truth?"
+    question: "Who will sign the application?"
     inputType: text
     validation:
       required: true
     maps_to:
+      - scotland_signatory_name
       - signatory_name
+    conditions: []
 
-  - id: signature_date
+  - id: scotland_signature_date
     section: Statement of Truth
     question: "Signature date"
     inputType: date
-    helperText: "Leave blank to auto-fill today's date."
+    helperText: "Leave blank to default to today's date."
     maps_to:
+      - scotland_signature_date
       - signature_date
+    conditions: []
