@@ -118,7 +118,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     setMessages((prev) => [...prev, message]);
   }, []);
 
-  const getWelcomeMessage = (type: string, jur: string): string => {
+  const getWelcomeMessage = useCallback((type: string, jur: string): string => {
     const jurName = jur === 'england-wales' ? 'England & Wales' : 'Scotland';
 
     switch (type) {
@@ -131,7 +131,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       default:
         return "👋 Hi! Let's get started...";
     }
-  };
+  }, []);
 
 
   const handleAnswer = async (answer: any) => {
@@ -297,6 +297,8 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     [addMessage, analyzeCase, caseType, jurisdiction],
   );
 
+  const hasStartedRef = useRef(false);
+
   const startWizard = useCallback(async () => {
     setIsLoading(true);
 
@@ -343,24 +345,39 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         const response = await fetch('/api/wizard/start', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ product: derivedProduct, jurisdiction, case_type: caseType }),
+          body: JSON.stringify({ product: derivedProduct, jurisdiction }),
         });
 
         const data = await response.json();
-        if (data.success) {
-          setCaseId(data.case.id);
+        if (!response.ok) {
+          throw new Error('Failed to start wizard');
+        }
 
-          // Add welcome message
-          const welcomeMessage: Message = {
-            id: `msg-${Date.now()}`,
-            role: 'assistant',
-            content: getWelcomeMessage(caseType, jurisdiction),
-            timestamp: new Date(),
-          };
-          setMessages([welcomeMessage]);
+        const newCaseId = data.case_id || data.case?.id;
 
-          // Get first question
-          await getNextQuestion(data.case.id, {});
+        if (!newCaseId) {
+          throw new Error('Missing case identifier from start response');
+        }
+
+        setCaseId(newCaseId);
+
+        // Add welcome message
+        const welcomeMessage: Message = {
+          id: `msg-${Date.now()}`,
+          role: 'assistant',
+          content: getWelcomeMessage(caseType, jurisdiction),
+          timestamp: new Date(),
+        };
+        setMessages([welcomeMessage]);
+
+        const firstQuestion = data.next_question || data.current_question;
+
+        if (firstQuestion) {
+          setCurrentQuestion(firstQuestion);
+          addMessage('assistant', firstQuestion.question_text);
+          setProgress(0);
+        } else {
+          await getNextQuestion(newCaseId, {});
         }
       }
     } catch (error: any) {
@@ -385,7 +402,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   // Initialize wizard
   useEffect(() => {
-    startWizard();
+    if (hasStartedRef.current) return;
+    hasStartedRef.current = true;
+    void startWizard();
   }, [startWizard]);
 
   const formatAnswerForDisplay = (answer: any, inputType: string): string => {
