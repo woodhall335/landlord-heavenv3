@@ -17,17 +17,35 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 const startWizardSchema = z.object({
-  product: z.enum(['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement', 'ast_standard', 'ast_premium']),
+  product: z.enum([
+    'notice_only',
+    'complete_pack',
+    'money_claim',
+    'money_claim_england_wales',
+    'money_claim_scotland',
+    'tenancy_agreement',
+    'ast_standard',
+    'ast_premium',
+  ]),
   jurisdiction: z.enum(['england-wales', 'scotland', 'northern-ireland']),
   case_id: z.string().uuid().optional(),
 });
 
-const productToCaseType = (product: ProductType | 'ast_standard' | 'ast_premium') => {
+type StartProduct =
+  | ProductType
+  | 'ast_standard'
+  | 'ast_premium'
+  | 'money_claim_england_wales'
+  | 'money_claim_scotland';
+
+const productToCaseType = (product: StartProduct) => {
   switch (product) {
     case 'notice_only':
     case 'complete_pack':
       return 'eviction';
     case 'money_claim':
+    case 'money_claim_england_wales':
+    case 'money_claim_scotland':
       return 'money_claim';
     case 'tenancy_agreement':
     case 'ast_standard':
@@ -51,12 +69,21 @@ const productToTier = (product: string): string | null => {
 };
 
 // Normalize product to MQS product type
-const normalizeProduct = (product: string): ProductType => {
+const normalizeProduct = (product: StartProduct): ProductType => {
   if (product === 'ast_standard' || product === 'ast_premium') {
     return 'tenancy_agreement';
   }
+  if (product === 'money_claim_england_wales' || product === 'money_claim_scotland') {
+    return 'money_claim';
+  }
   return product as ProductType;
 };
+
+function resolveJurisdiction(product: StartProduct, requested: string): string {
+  if (product === 'money_claim_england_wales') return 'england-wales';
+  if (product === 'money_claim_scotland') return 'scotland';
+  return requested;
+}
 
 function loadMQSOrError(product: ProductType, jurisdiction: string): MasterQuestionSet | null {
   const mqs = loadMQS(product, jurisdiction);
@@ -77,16 +104,17 @@ export async function POST(request: Request) {
     }
 
     const { product, jurisdiction, case_id } = validationResult.data;
-    const resolvedCaseType = productToCaseType(product);
-    const normalizedProduct = normalizeProduct(product);
+    const resolvedCaseType = productToCaseType(product as StartProduct);
+    const normalizedProduct = normalizeProduct(product as StartProduct);
     const tier = productToTier(product);
+    const effectiveJurisdiction = resolveJurisdiction(product as StartProduct, jurisdiction);
 
     if (!resolvedCaseType) {
       return NextResponse.json({ error: 'Invalid product' }, { status: 400 });
     }
 
     // Northern Ireland gating: only tenancy agreements are supported
-    if (jurisdiction === 'northern-ireland' && resolvedCaseType !== 'tenancy_agreement') {
+    if (effectiveJurisdiction === 'northern-ireland' && resolvedCaseType !== 'tenancy_agreement') {
       return NextResponse.json(
         { error: 'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.' },
         { status: 400 }
@@ -117,7 +145,7 @@ export async function POST(request: Request) {
       // Type assertion: we know data exists after the null check
       const caseData = data as { id: string; case_type: string; jurisdiction: string };
 
-      if (caseData.case_type !== resolvedCaseType || caseData.jurisdiction !== jurisdiction) {
+      if (caseData.case_type !== resolvedCaseType || caseData.jurisdiction !== effectiveJurisdiction) {
         return NextResponse.json(
           { error: 'Case does not match requested product or jurisdiction' },
           { status: 400 }
@@ -146,7 +174,7 @@ export async function POST(request: Request) {
         .insert({
           user_id: user ? user.id : null,
           case_type: resolvedCaseType,
-          jurisdiction,
+          jurisdiction: effectiveJurisdiction,
           status: 'in_progress',
           wizard_progress: 0,
           collected_facts: initialFacts as any, // Supabase types collected_facts as Json
@@ -191,7 +219,7 @@ export async function POST(request: Request) {
     // ------------------------------------------------
     // 4. Load MQS for this product/jurisdiction
     // ------------------------------------------------
-    const mqs = loadMQSOrError(normalizedProduct, jurisdiction);
+    const mqs = loadMQSOrError(normalizedProduct, effectiveJurisdiction);
     if (!mqs) {
       return NextResponse.json(
         { error: 'MQS not implemented for this jurisdiction yet' },
@@ -208,7 +236,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       case_id: caseRecord.id,
       product,
-      jurisdiction,
+      jurisdiction: effectiveJurisdiction,
       next_question: nextQuestion || null,
       is_complete: isComplete,
     });
