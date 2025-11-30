@@ -87,6 +87,20 @@ function mapProductToJurisdiction(product: string): JurisdictionOption['value'] 
   }
 }
 
+function normalizeProductForWizard(
+  product: string | null,
+  documentType: DocumentOption['type']
+): string | null {
+  if (documentType === 'money_claim') {
+    if (product === 'money_claim_england_wales' || product === 'money_claim_scotland') {
+      return 'money_claim';
+    }
+    return product ?? 'money_claim';
+  }
+
+  return product;
+}
+
 export default function WizardPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -161,11 +175,27 @@ export default function WizardPage() {
 
       // Get product parameter to pass through
       const productParam = searchParams.get('product');
+      const normalizedProduct = normalizeProductForWizard(productParam, selectedDocument.type);
 
-      // Navigate to wizard flow with params
-      const url = productParam
-        ? `/wizard/flow?type=${selectedDocument.type}&jurisdiction=${selectedJurisdiction.value}&product=${productParam}`
-        : `/wizard/flow?type=${selectedDocument.type}&jurisdiction=${selectedJurisdiction.value}`;
+      const urlParams = new URLSearchParams({
+        type: selectedDocument.type,
+        jurisdiction: selectedJurisdiction.value,
+      });
+
+      if (normalizedProduct) {
+        urlParams.set('product', normalizedProduct);
+      }
+
+      if (
+        selectedDocument.type === 'money_claim' &&
+        productParam &&
+        (productParam === 'money_claim_england_wales' || productParam === 'money_claim_scotland') &&
+        normalizedProduct !== productParam
+      ) {
+        urlParams.set('product_variant', productParam);
+      }
+
+      const url = `/wizard/flow?${urlParams.toString()}`;
 
       router.push(url);
     }

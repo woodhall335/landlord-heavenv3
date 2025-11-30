@@ -66,6 +66,7 @@ describe('Money claim access controls', () => {
     const body = await response.json();
     expect(response.status).toBe(200);
     expect(body.case_id).toBeDefined();
+    expect(body.next_question?.id).toBe('pursuer_full_name');
     expect(supabaseClientMock.insert).toHaveBeenCalled();
   });
 
@@ -92,6 +93,7 @@ describe('Money claim access controls', () => {
     const body = await response.json();
     expect(response.status).toBe(200);
     expect(body.case_id).toBeDefined();
+    expect(body.next_question?.id).toBe('claimant_full_name');
     expect(supabaseClientMock.insert).toHaveBeenCalled();
   });
 

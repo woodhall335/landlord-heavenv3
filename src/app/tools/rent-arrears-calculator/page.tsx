@@ -102,13 +102,13 @@ export default function RentArrearsCalculator() {
           </p>
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
-              href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim_england_wales"
+              href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
               className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold shadow hover:bg-gray-50 transition"
             >
               Upgrade to Money Claim Pack (£179.99)
             </Link>
             <Link
-              href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim_scotland"
+              href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
               className="bg-white/15 text-white px-6 py-3 rounded-lg font-semibold border border-white/40 hover:bg-white/25 transition"
             >
               Scotland Simple Procedure Pack
@@ -267,13 +267,13 @@ export default function RentArrearsCalculator() {
                 </p>
                 <div className="mt-3 flex flex-col sm:flex-row gap-2">
                   <Link
-                    href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim_england_wales"
+                    href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
                     className="flex-1 text-center bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary/90 transition"
                   >
                     Start Money Claim (E&W)
                   </Link>
                   <Link
-                    href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim_scotland"
+                    href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
                     className="flex-1 text-center bg-white text-primary border border-primary px-4 py-2 rounded-lg font-semibold hover:bg-primary/5 transition"
                   >
                     Start Simple Procedure (Scotland)

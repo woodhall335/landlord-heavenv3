@@ -329,8 +329,12 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         }
       } else {
         // Create new case
+        const normalizedProduct =
+          product === 'money_claim_england_wales' || product === 'money_claim_scotland'
+            ? 'money_claim'
+            : product;
         const derivedProduct =
-          product ||
+          normalizedProduct ||
           (caseType === 'eviction'
             ? 'complete_pack'
             : caseType === 'money_claim'
