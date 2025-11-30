@@ -560,11 +560,6 @@ export default function CaseDetailPage() {
                         <li key={idx}>{step}</li>
                       ))}
                     </ol>
-                    <div className="mt-4">
-                      <Link href="#ask-heaven">
-                        <Button variant="secondary">Ask Heaven about this case</Button>
-                      </Link>
-                    </div>
                   </div>
                 </div>
               </div>

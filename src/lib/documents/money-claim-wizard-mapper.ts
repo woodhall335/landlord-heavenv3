@@ -21,25 +21,6 @@ function normaliseFrequency(freq: CaseFacts['tenancy']['rent_frequency']): Money
   return 'monthly';
 }
 
-function normaliseBasisOfClaim(value: CaseFacts['money_claim']['basis_of_claim']):
-  | 'rent_arrears'
-  | 'damages'
-  | 'both' {
-  if (Array.isArray(value)) {
-    const hasArrears = value.includes('rent_arrears');
-    const hasDamage = value.some((item) => item === 'damages' || item === 'property_damage' || item === 'other_costs');
-    if (hasArrears && hasDamage) return 'both';
-    if (hasDamage) return 'damages';
-    return 'rent_arrears';
-  }
-
-  if (value === 'both') return 'both';
-  if (value === 'damages' || value === 'property_damage' || value === 'other_costs') return 'damages';
-  if (value === 'rent_arrears') return 'rent_arrears';
-
-  return 'rent_arrears';
-}
-
 export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
   const landlordAddress = buildAddress(
     facts.parties.landlord.address_line1,
@@ -147,7 +128,7 @@ export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): Scotland
     court_fee: facts.court.claim_amount_costs || undefined,
     solicitor_costs: facts.court.claim_amount_costs || undefined,
 
-    basis_of_claim: normaliseBasisOfClaim(facts.money_claim.basis_of_claim),
+    basis_of_claim: facts.money_claim.basis_of_claim || 'rent_arrears',
     attempts_to_resolve: facts.money_claim.attempts_to_resolve || undefined,
     evidence_summary: facts.money_claim.evidence_summary || undefined,
     particulars_of_claim: facts.court.particulars_of_claim || undefined,

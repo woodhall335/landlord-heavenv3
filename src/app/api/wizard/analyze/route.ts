@@ -15,7 +15,6 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 
 const analyzeSchema = z.object({
   case_id: z.string().min(1),
-  question: z.string().trim().max(1200).optional(),
 });
 
 function computeRoute(facts: CaseFacts, jurisdiction: string, caseType: string): string {

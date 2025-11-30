@@ -89,6 +89,35 @@ function setNestedValue(target: Record<string, any>, path: string, value: any) {
  * Looks for keys like "tenants.0.full_name", "tenants.0.email", etc.
  */
 function extractTenants(wizard: WizardFacts): PartyDetails[] {
+  if (Array.isArray((wizard as any).tenants)) {
+    return (wizard as any).tenants
+      .filter((t) => t)
+      .map((t: any) => ({
+        name: t.full_name || t.name || '',
+        email: t.email,
+        phone: t.phone || t.phone_number,
+        address_line1: t.address_line1,
+        address_line2: t.address_line2,
+        city: t.city,
+        postcode: t.postcode,
+      }));
+  }
+
+  const partiesTenants = (wizard as any).parties?.tenants;
+  if (Array.isArray(partiesTenants)) {
+    return partiesTenants
+      .filter((t) => t)
+      .map((t: any) => ({
+        name: t.full_name || t.name || '',
+        email: t.email,
+        phone: t.phone || t.phone_number,
+        address_line1: t.address_line1,
+        address_line2: t.address_line2,
+        city: t.city,
+        postcode: t.postcode,
+      }));
+  }
+
   const tenants: PartyDetails[] = [];
 
   const explicitPrimaryName =
@@ -372,7 +401,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'rent_arrears.total_arrears',
   ]);
   if (!base.issues.rent_arrears.arrears_items.length) {
-    const arrearsItems = getFirstValue(wizard, ['case_facts.issues.rent_arrears.arrears_items', 'arrears_items']);
+    const arrearsItems = getFirstValue(wizard, ['case_facts.issues.rent_arrears.arrears_items']);
     if (Array.isArray(arrearsItems)) {
       base.issues.rent_arrears.arrears_items = arrearsItems as any;
     }
@@ -473,11 +502,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   base.money_claim.damage_claim ??= getFirstValue(wizard, ['case_facts.money_claim.damage_claim', 'claim_damages']);
 
   if (!base.money_claim.damage_items.length) {
-    const damageItems = getFirstValue(wizard, [
-      'case_facts.money_claim.damage_items',
-      'damage_items',
-      'damage_items_description',
-    ]);
+    const damageItems = getFirstValue(wizard, ['case_facts.money_claim.damage_items', 'damage_items_description']);
     if (Array.isArray(damageItems)) {
       base.money_claim.damage_items = damageItems as any;
     } else if (typeof damageItems === 'string' && damageItems.trim()) {
@@ -500,11 +525,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   if (interestRate !== null && interestRate !== undefined) {
     base.money_claim.interest_rate = typeof interestRate === 'string' ? Number(interestRate) || null : (interestRate as any);
   }
-  base.money_claim.attempts_to_resolve ??= getFirstValue(wizard, [
-    'case_facts.money_claim.attempts_to_resolve',
-    'attempts_to_resolve',
-    'payment_attempts',
-  ]);
+  base.money_claim.attempts_to_resolve ??= getFirstValue(wizard, ['case_facts.money_claim.attempts_to_resolve', 'payment_attempts']);
   base.money_claim.lba_sent ??= getFirstValue(wizard, ['case_facts.money_claim.lba_sent', 'lba_sent']);
   base.money_claim.lba_date ??= getFirstValue(wizard, ['case_facts.money_claim.lba_date', 'lba_date']);
   base.money_claim.lba_method ??= getFirstValue(wizard, ['case_facts.money_claim.lba_method', 'lba_method']);
