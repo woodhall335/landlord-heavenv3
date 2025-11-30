@@ -119,6 +119,83 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
   }
 
   const tenants: PartyDetails[] = [];
+
+  const explicitPrimaryName =
+    getWizardValue(wizard, 'tenant1_name') ||
+    getWizardValue(wizard, 'defendant_full_name') ||
+    getWizardValue(wizard, 'defender_full_name');
+
+  if (explicitPrimaryName) {
+    tenants.push({
+      name: explicitPrimaryName,
+      email:
+        getWizardValue(wizard, 'tenant1_email') ||
+        getWizardValue(wizard, 'defendant_email') ||
+        getWizardValue(wizard, 'defender_email'),
+      phone:
+        getWizardValue(wizard, 'tenant1_phone') ||
+        getWizardValue(wizard, 'defendant_phone') ||
+        getWizardValue(wizard, 'defender_phone'),
+      address_line1: getWizardValue(wizard, 'tenant1_address_line1'),
+      address_line2: getWizardValue(wizard, 'tenant1_address_line2'),
+      city: getWizardValue(wizard, 'tenant1_city'),
+      postcode: getWizardValue(wizard, 'tenant1_postcode'),
+    });
+  }
+
+  const explicitSecondaryName =
+    getWizardValue(wizard, 'tenant2_name') ||
+    getWizardValue(wizard, 'defendant_secondary_name') ||
+    getWizardValue(wizard, 'defender_secondary_name');
+
+  if (explicitSecondaryName) {
+    tenants.push({
+      name: explicitSecondaryName,
+      email:
+        getWizardValue(wizard, 'tenant2_email') ||
+        getWizardValue(wizard, 'defendant_secondary_email') ||
+        getWizardValue(wizard, 'defender_secondary_email'),
+      phone:
+        getWizardValue(wizard, 'tenant2_phone') ||
+        getWizardValue(wizard, 'defendant_secondary_phone') ||
+        getWizardValue(wizard, 'defender_secondary_phone'),
+      address_line1: getWizardValue(wizard, 'tenant2_address_line1'),
+      address_line2: getWizardValue(wizard, 'tenant2_address_line2'),
+      city: getWizardValue(wizard, 'tenant2_city'),
+      postcode: getWizardValue(wizard, 'tenant2_postcode'),
+    });
+  }
+
+  if (Array.isArray((wizard as any).tenants)) {
+    const list = (wizard as any).tenants
+      .filter((t) => t)
+      .map((t: any) => ({
+        name: t.full_name || t.name || '',
+        email: t.email,
+        phone: t.phone || t.phone_number,
+        address_line1: t.address_line1,
+        address_line2: t.address_line2,
+        city: t.city,
+        postcode: t.postcode,
+      }));
+    return tenants.length ? tenants.concat(list) : list;
+  }
+
+  const partiesTenants = (wizard as any).parties?.tenants;
+  if (Array.isArray(partiesTenants)) {
+    return partiesTenants
+      .filter((t) => t)
+      .map((t: any) => ({
+        name: t.full_name || t.name || '',
+        email: t.email,
+        phone: t.phone || t.phone_number,
+        address_line1: t.address_line1,
+        address_line2: t.address_line2,
+        city: t.city,
+        postcode: t.postcode,
+      }));
+  }
+
   const tenantIndices = new Set<number>();
 
   // Find all tenant indices by scanning keys
