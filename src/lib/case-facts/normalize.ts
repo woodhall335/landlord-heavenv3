@@ -122,6 +122,7 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
 
   const explicitPrimaryName =
     getWizardValue(wizard, 'tenant1_name') ||
+    getWizardValue(wizard, 'defendant_name_1') ||
     getWizardValue(wizard, 'defendant_full_name') ||
     getWizardValue(wizard, 'defender_full_name') ||
     getWizardValue(wizard, 'defendant_name');
@@ -148,6 +149,7 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
 
   const explicitSecondaryName =
     getWizardValue(wizard, 'tenant2_name') ||
+    getWizardValue(wizard, 'defendant_name_2') ||
     getWizardValue(wizard, 'defendant_secondary_name') ||
     getWizardValue(wizard, 'defender_secondary_name');
 
@@ -449,8 +451,18 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // COURT - Claim amounts and form requirements
   // TODO: Add mappings for court details
   // =============================================================================
-  base.court.route ??= getFirstValue(wizard, ['case_facts.court.route', 'court_route', 'claim_type']);
-  base.court.claim_amount_rent ??= getFirstValue(wizard, ['case_facts.court.claim_amount_rent', 'claim_amount_rent', 'arrears_total']);
+  base.court.route ??= getFirstValue(wizard, [
+    'money_claim_route',
+    'case_facts.court.route',
+    'court_route',
+    'claim_type',
+  ]);
+  base.court.claim_amount_rent ??= getFirstValue(wizard, [
+    'case_facts.court.claim_amount_rent',
+    'claim_amount_rent',
+    'total_arrears',
+    'arrears_total',
+  ]);
   base.court.claim_amount_costs ??= getFirstValue(wizard, ['case_facts.court.claim_amount_costs', 'claim_amount_costs']);
   base.court.claim_amount_other ??= getFirstValue(wizard, ['case_facts.court.claim_amount_other', 'claim_amount_other']);
   base.court.total_claim_amount ??= getFirstValue(wizard, ['case_facts.court.total_claim_amount', 'total_claim_amount']);
@@ -512,11 +524,23 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // =============================================================================
   // MONEY CLAIM - Claim breakdown, interest, pre-action
   // =============================================================================
-  base.money_claim.payment_day ??= getFirstValue(wizard, ['case_facts.money_claim.payment_day', 'payment_day']);
-  base.money_claim.damage_claim ??= getFirstValue(wizard, ['case_facts.money_claim.damage_claim', 'claim_damages']);
+  const paymentDay = getFirstValue(wizard, [
+    'money_claim_payment_day',
+    'payment_day',
+    'tenancy_payment_day',
+    'rent_due_day',
+    'case_facts.money_claim.payment_day',
+  ]);
+  if (paymentDay !== null && paymentDay !== undefined) {
+    base.money_claim.payment_day = typeof paymentDay === 'string' ? Number(paymentDay) || paymentDay : (paymentDay as any);
+  }
+  const damageClaim = getFirstValue(wizard, ['damage_claim', 'case_facts.money_claim.damage_claim', 'claim_damages']);
+  if (damageClaim !== null && damageClaim !== undefined) {
+    base.money_claim.damage_claim = coerceBoolean(damageClaim);
+  }
 
   if (!base.money_claim.damage_items.length) {
-    const damageItems = getFirstValue(wizard, ['case_facts.money_claim.damage_items', 'damage_items_description']);
+    const damageItems = getFirstValue(wizard, ['damage_items', 'case_facts.money_claim.damage_items', 'damage_items_description']);
     if (Array.isArray(damageItems)) {
       base.money_claim.damage_items = damageItems as any;
     } else if (typeof damageItems === 'string' && damageItems.trim()) {
@@ -525,7 +549,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   }
 
   if (!base.money_claim.other_charges.length) {
-    const otherCharges = getFirstValue(wizard, ['case_facts.money_claim.other_charges', 'other_charges']);
+    const otherCharges = getFirstValue(wizard, ['other_charges', 'case_facts.money_claim.other_charges']);
     if (Array.isArray(otherCharges)) {
       base.money_claim.other_charges = otherCharges as any;
     } else if (typeof otherCharges === 'string' && otherCharges.trim()) {
@@ -533,34 +557,62 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     }
   }
 
-  base.money_claim.charge_interest ??= getFirstValue(wizard, ['case_facts.money_claim.charge_interest', 'charge_interest']);
-  base.money_claim.interest_start_date ??= getFirstValue(wizard, ['case_facts.money_claim.interest_start_date', 'interest_start_date']);
-  const interestRate = getFirstValue(wizard, ['case_facts.money_claim.interest_rate', 'interest_rate']);
+  const chargeInterest = getFirstValue(wizard, ['charge_interest', 'case_facts.money_claim.charge_interest']);
+  if (chargeInterest !== null && chargeInterest !== undefined) {
+    base.money_claim.charge_interest = coerceBoolean(chargeInterest);
+  }
+  base.money_claim.interest_start_date ??= getFirstValue(wizard, [
+    'interest_start_date',
+    'case_facts.money_claim.interest_start_date',
+  ]);
+  const interestRate = getFirstValue(wizard, ['interest_rate', 'case_facts.money_claim.interest_rate']);
   if (interestRate !== null && interestRate !== undefined) {
     base.money_claim.interest_rate = typeof interestRate === 'string' ? Number(interestRate) || null : (interestRate as any);
   }
-  const solicitorCosts = getFirstValue(wizard, ['case_facts.money_claim.solicitor_costs', 'solicitor_costs']);
+  const solicitorCosts = getFirstValue(wizard, ['solicitor_costs', 'case_facts.money_claim.solicitor_costs']);
   if (solicitorCosts !== null && solicitorCosts !== undefined) {
     base.money_claim.solicitor_costs =
       typeof solicitorCosts === 'string' ? Number(solicitorCosts) || null : (solicitorCosts as any);
   }
-  base.money_claim.attempts_to_resolve ??= getFirstValue(wizard, ['case_facts.money_claim.attempts_to_resolve', 'payment_attempts', 'attempts_to_resolve']);
-  base.money_claim.lba_sent ??= getFirstValue(wizard, ['case_facts.money_claim.lba_sent', 'lba_sent']);
-  base.money_claim.lba_date ??= getFirstValue(wizard, ['case_facts.money_claim.lba_date', 'lba_date']);
-  base.money_claim.lba_method ??= getFirstValue(wizard, ['case_facts.money_claim.lba_method', 'lba_method']);
-  base.money_claim.lba_response_deadline ??= getFirstValue(wizard, ['case_facts.money_claim.lba_response_deadline', 'lba_response_deadline']);
-  base.money_claim.tenant_responded ??= getFirstValue(wizard, ['case_facts.money_claim.tenant_responded', 'defendant_response']);
-  base.money_claim.signatory_name ??= getFirstValue(wizard, ['case_facts.money_claim.signatory_name', 'signatory_name']);
-  base.money_claim.signature_date ??= getFirstValue(wizard, ['case_facts.money_claim.signature_date', 'signature_date']);
-  base.money_claim.sheriffdom ??= getFirstValue(wizard, ['case_facts.money_claim.sheriffdom', 'sheriffdom']);
-  base.money_claim.demand_letter_date ??= getFirstValue(wizard, ['case_facts.money_claim.demand_letter_date', 'demand_letter_date']);
-  base.money_claim.second_demand_date ??= getFirstValue(wizard, ['case_facts.money_claim.second_demand_date', 'second_demand_date']);
-  base.money_claim.evidence_summary ??= getFirstValue(wizard, ['case_facts.money_claim.evidence_summary', 'evidence_summary']);
-  const basisOfClaim = getFirstValue(wizard, ['case_facts.money_claim.basis_of_claim', 'basis_of_claim']);
+  base.money_claim.attempts_to_resolve ??= getFirstValue(wizard, [
+    'attempts_to_resolve',
+    'payment_attempts',
+    'case_facts.money_claim.attempts_to_resolve',
+  ]);
+  const lbaSent = getFirstValue(wizard, ['lba_sent', 'case_facts.money_claim.lba_sent']);
+  if (lbaSent !== null && lbaSent !== undefined) {
+    base.money_claim.lba_sent = coerceBoolean(lbaSent);
+  }
+  base.money_claim.lba_date ??= getFirstValue(wizard, ['lba_date', 'case_facts.money_claim.lba_date']);
+  base.money_claim.lba_method ??= getFirstValue(wizard, ['lba_method', 'case_facts.money_claim.lba_method']);
+  base.money_claim.lba_response_deadline ??= getFirstValue(wizard, [
+    'lba_response_deadline',
+    'case_facts.money_claim.lba_response_deadline',
+  ]);
+  const tenantResponded = getFirstValue(wizard, [
+    'tenant_responded',
+    'defendant_response',
+    'case_facts.money_claim.tenant_responded',
+  ]);
+  if (tenantResponded !== null && tenantResponded !== undefined) {
+    base.money_claim.tenant_responded = coerceBoolean(tenantResponded);
+  }
+  base.money_claim.signatory_name ??= getFirstValue(wizard, ['signatory_name', 'case_facts.money_claim.signatory_name']);
+  base.money_claim.signature_date ??= getFirstValue(wizard, ['signature_date', 'case_facts.money_claim.signature_date']);
+  base.money_claim.sheriffdom ??= getFirstValue(wizard, ['sheriffdom', 'case_facts.money_claim.sheriffdom']);
+  base.money_claim.demand_letter_date ??= getFirstValue(wizard, ['demand_letter_date', 'case_facts.money_claim.demand_letter_date']);
+  base.money_claim.second_demand_date ??= getFirstValue(wizard, ['second_demand_date', 'case_facts.money_claim.second_demand_date']);
+  base.money_claim.evidence_summary ??= getFirstValue(wizard, ['evidence_summary', 'case_facts.money_claim.evidence_summary']);
+  const basisOfClaim = getFirstValue(wizard, ['basis_of_claim', 'case_facts.money_claim.basis_of_claim']);
   if (Array.isArray(basisOfClaim)) {
-    base.money_claim.basis_of_claim = (basisOfClaim[0] as any) ?? null;
+    const hasRent = basisOfClaim.includes('rent_arrears');
+    const hasDamage = basisOfClaim.includes('property_damage');
+    if (hasRent && hasDamage) base.money_claim.basis_of_claim = 'both' as any;
+    else if (hasDamage) base.money_claim.basis_of_claim = 'damages' as any;
+    else if (hasRent) base.money_claim.basis_of_claim = 'rent_arrears' as any;
   } else if (basisOfClaim !== null && basisOfClaim !== undefined) {
-    base.money_claim.basis_of_claim = basisOfClaim as any;
+    if (basisOfClaim === 'property_damage') base.money_claim.basis_of_claim = 'damages' as any;
+    else base.money_claim.basis_of_claim = basisOfClaim as any;
   }
 
   return base;

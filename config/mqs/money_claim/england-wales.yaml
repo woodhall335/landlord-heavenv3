@@ -76,7 +76,7 @@ questions:
     required: true
     suggestion_prompt: "Match the tenant's legal name on the tenancy agreement."
     maps_to:
-      - defendant_full_name
+      - defendant_name_1
     conditions: []
 
   - id: defendant_secondary_name
@@ -86,7 +86,7 @@ questions:
     required: false
     suggestion_prompt: "Include any joint tenant who owes the rent."
     maps_to:
-      - defendant_secondary_name
+      - defendant_name_2
     conditions: []
 
   - id: defendant_email
@@ -186,7 +186,7 @@ questions:
     required: false
     suggestion_prompt: "If rent is weekly/fortnightly, add the weekday the tenant normally pays."
     maps_to:
-      - payment_day
+      - money_claim_payment_day
     conditions: []
 
   # Claim type selection
@@ -201,7 +201,7 @@ questions:
       - other_costs
     suggestion_prompt: "Choose every head of loss to include in the Particulars and N1 form."
     maps_to:
-      - claim_type
+      - basis_of_claim
     conditions: []
 
   # Rent arrears
@@ -212,7 +212,7 @@ questions:
     required: true
     suggestion_prompt: "Provide the sum of unpaid rent to today; we will auto-calc interest."
     maps_to:
-      - arrears_total
+      - total_arrears
       - claim_amount_rent
     conditions: []
 
@@ -235,7 +235,7 @@ questions:
     required: true
     suggestion_prompt: "Include repairs, cleaning, or replacement costs beyond fair wear."
     maps_to:
-      - claim_damages
+      - damage_claim
     conditions: []
 
   - id: damage_items_description
@@ -245,7 +245,7 @@ questions:
     required: false
     suggestion_prompt: "Provide item-by-item breakdown (e.g., door repair £180, repaint £240)."
     maps_to:
-      - damage_items_description
+      - damage_items
     conditions:
       - depends_on: claim_damages
         value: yes
@@ -362,7 +362,7 @@ questions:
     required: true
     suggestion_prompt: "Note reminder dates, agreements offered, and any partial payments to show reasonableness."
     maps_to:
-      - payment_attempts
+      - attempts_to_resolve
     conditions: []
 
   # Pre-action protocol
@@ -423,7 +423,7 @@ questions:
     required: false
     suggestion_prompt: "State if any reply form or payment proposal was received."
     maps_to:
-      - defendant_response
+      - tenant_responded
     conditions:
       - depends_on: lba_sent
         value: yes

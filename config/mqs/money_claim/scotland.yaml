@@ -76,7 +76,7 @@ questions:
     required: true
     suggestion_prompt: "Use the tenant's legal name from the tenancy agreement."
     maps_to:
-      - defender_full_name
+      - defendant_name_1
     conditions: []
 
   - id: defender_secondary_name
@@ -86,7 +86,7 @@ questions:
     required: false
     suggestion_prompt: "Include any joint tenant liable for the arrears."
     maps_to:
-      - defender_secondary_name
+      - defendant_name_2
     conditions: []
 
   - id: defender_contact
@@ -96,7 +96,8 @@ questions:
     required: false
     suggestion_prompt: "Add any contact details used during payment discussions."
     maps_to:
-      - defender_contact
+      - defendant_email
+      - defendant_phone
     conditions: []
 
   - id: property_address
@@ -176,7 +177,7 @@ questions:
     required: false
     suggestion_prompt: "If rent is weekly/fortnightly, add the weekday the tenant normally pays."
     maps_to:
-      - payment_day
+      - money_claim_payment_day
     conditions: []
 
   # Jurisdiction and court selection
@@ -203,7 +204,7 @@ questions:
       - other_costs
     suggestion_prompt: "Choose every head of claim to include in the Simple Procedure particulars."
     maps_to:
-      - claim_type
+      - basis_of_claim
     conditions: []
 
   - id: arrears_total
@@ -213,7 +214,7 @@ questions:
     required: true
     suggestion_prompt: "Total unpaid rent up to today; used for interest and fee band."
     maps_to:
-      - arrears_total
+      - total_arrears
       - claim_amount_rent
     conditions: []
 
@@ -236,7 +237,7 @@ questions:
     required: true
     suggestion_prompt: "Include any repair or replacement costs beyond fair wear."
     maps_to:
-      - claim_damages
+      - damage_claim
     conditions: []
 
   - id: damage_items_description
@@ -246,7 +247,7 @@ questions:
     required: false
     suggestion_prompt: "List each item (e.g., broken door £180, repaint £240) to show in the particulars."
     maps_to:
-      - damage_items_description
+      - damage_items
     conditions:
       - depends_on: claim_damages
         value: yes
