@@ -132,10 +132,10 @@ export async function claudeJsonCompletion<T = any>(
 
     let json: T;
     try {
-      json = JSON.parse(textContent);
-    } catch (_parseError) {
-      throw new Error('Failed to parse JSON response from Claude');
-    }
+    json = JSON.parse(textContent);
+  } catch {
+    throw new Error('Failed to parse JSON response from Claude');
+  }
 
     return {
       content: textContent,

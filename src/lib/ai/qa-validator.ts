@@ -134,12 +134,12 @@ Provide a detailed assessment with specific issues and suggestions for improveme
       summary: string;
     };
 
-    try {
-      parsedResponse = JSON.parse(response.content);
-    } catch (_parseError) {
-      // Fallback: Extract JSON from response
-      const jsonMatch = response.content.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
+      try {
+        parsedResponse = JSON.parse(response.content);
+      } catch {
+        // Fallback: Extract JSON from response
+        const jsonMatch = response.content.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
         parsedResponse = JSON.parse(jsonMatch[0]);
       } else {
         throw new Error('Failed to parse QA validation response');

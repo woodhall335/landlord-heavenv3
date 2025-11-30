@@ -59,7 +59,7 @@ export default function PropertyDetailPage() {
       } else {
         setError('Property not found');
       }
-    } catch (_err) {
+    } catch {
       setError('Failed to load property details');
     } finally {
       setIsLoading(false);
@@ -74,8 +74,8 @@ export default function PropertyDetailPage() {
         const data = await response.json();
         setTenants(data.tenants || []);
       }
-    } catch (_err) {
-      console.error('Failed to fetch tenants:', _err);
+    } catch (error) {
+      console.error('Failed to fetch tenants:', error);
     }
   }, [propertyId]);
 
@@ -110,7 +110,7 @@ export default function PropertyDetailPage() {
       } else {
         alert('Failed to delete property');
       }
-    } catch (_err) {
+    } catch {
       alert('Failed to delete property');
     }
   };
