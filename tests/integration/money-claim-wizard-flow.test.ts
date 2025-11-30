@@ -222,6 +222,15 @@ describe('Money claim wizard integration', () => {
     console.log('caseFacts keys', Array.from(mockDb.case_facts.keys()));
     const wizardFacts = (wizardFactsRecord as any)?.facts || wizardFactsRecord;
     const caseFacts = wizardFactsToCaseFacts(wizardFacts as any);
+
+    expect(caseFacts.parties.landlord.name).toBe('Alice Landlord');
+    expect(caseFacts.parties.tenants[0]?.name).toBe('Tom Tenant');
+    expect(caseFacts.issues.rent_arrears.total_arrears).toBe(1200);
+    expect(caseFacts.court.claim_amount_rent).toBe(1200);
+    expect(caseFacts.money_claim.attempts_to_resolve).toBe('Chased via email and SMS.');
+    expect(caseFacts.money_claim.lba_sent).toBe(true);
+    expect(caseFacts.money_claim.lba_method).toEqual(['email']);
+
     const claimInput = mapCaseFactsToMoneyClaimCase(caseFacts);
     claimInput.case_id = caseId;
 
@@ -293,6 +302,16 @@ describe('Money claim wizard integration', () => {
     const wizardFactsRecord = mockDb.case_facts.get(caseId);
     const wizardFacts = (wizardFactsRecord as any)?.facts || wizardFactsRecord;
     const caseFacts = wizardFactsToCaseFacts(wizardFacts as any);
+
+    expect(caseFacts.parties.landlord.name).toBe('Sarah Landlord');
+    expect(caseFacts.parties.tenants[0]?.name).toBe('Rob Renter');
+    expect(caseFacts.money_claim.basis_of_claim).toBe('rent_arrears');
+    expect(caseFacts.money_claim.interest_rate).toBe(8);
+    expect(caseFacts.money_claim.attempts_to_resolve).toBe('Two reminder letters sent.');
+    expect(caseFacts.money_claim.demand_letter_date).toBe('2024-03-01');
+    expect(caseFacts.money_claim.second_demand_date).toBe('2024-03-15');
+    expect(caseFacts.money_claim.sheriffdom).toBe('Lothian and Borders at Edinburgh');
+
     const claimInput = mapCaseFactsToScotlandMoneyClaimCase(caseFacts);
     claimInput.case_id = caseId;
 
