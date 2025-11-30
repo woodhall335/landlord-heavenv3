@@ -19,7 +19,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 const answerSchema = z.object({
-  case_id: z.string().uuid(),
+  case_id: z.string().min(1),
   question_id: z.string(),
   answer: z.any(),
 });
@@ -82,16 +82,24 @@ function validateCriticalAnswer(questionId: string, answer: unknown): { ok: true
     }
 
     // Critical field: Property address line 1 (part of property_address group)
-    if (questionId === 'property_address') {
-      const groupSchema = z.object({
-        property_address_line1: z.string()
-          .min(1, 'Property address line 1 is required')
-          .max(200, 'Property address line 1 is too long'),
-      }).passthrough(); // Allow other fields in the group
+  if (questionId === 'property_address') {
+    const groupSchema = z.object({
+      property_address_line1: z.string()
+        .min(1, 'Property address line 1 is required')
+        .max(200, 'Property address line 1 is too long')
+        .optional(),
+      address_line1: z.string()
+        .min(1, 'Property address line 1 is required')
+        .max(200, 'Property address line 1 is too long')
+        .optional(),
+    }).passthrough(); // Allow other fields in the group
 
-      groupSchema.parse(answer);
-      return { ok: true };
+    const parsed = groupSchema.parse(answer);
+    if (!parsed.property_address_line1 && !parsed.address_line1) {
+      throw new Error('Property address line 1 is required');
     }
+    return { ok: true };
+  }
 
     // ============================================================================
     // Scotland-specific validations
@@ -550,6 +558,14 @@ export async function POST(request: Request) {
       suggested_wording: enhanced?.suggested_wording ?? null,
       missing_information: enhanced?.missing_information ?? [],
       evidence_suggestions: enhanced?.evidence_suggestions ?? [],
+      enhanced_answer: enhanced
+        ? {
+            raw: rawAnswerText,
+            suggested: enhanced.suggested_wording,
+            missing_information: enhanced.missing_information,
+            evidence_suggestions: enhanced.evidence_suggestions,
+          }
+        : undefined,
       next_question: nextQuestion ?? null,
       is_complete: isComplete,
       progress: isComplete ? 100 : progress,

@@ -25,7 +25,7 @@ interface CaseData {
 }
 
 interface PricingOption {
-  productType: 'notice_only' | 'complete_pack' | 'money_claim' | 'ast_standard' | 'ast_premium';
+  productType: 'notice_only' | 'complete_pack' | 'money_claim' | 'sc_money_claim' | 'ast_standard' | 'ast_premium';
   name: string;
   price: string;
   description: string;
@@ -135,7 +135,7 @@ export default function WizardPreviewPage() {
   };
 
   // Get pricing options based on case type
-  const getPricingOptions = (caseType: string): PricingOption[] => {
+  const getPricingOptions = (caseType: string, jurisdiction?: string): PricingOption[] => {
     switch (caseType) {
       case 'eviction':
         return [
@@ -158,16 +158,19 @@ export default function WizardPreviewPage() {
       case 'money_claim':
         return [
           {
-            productType: 'money_claim',
-            name: 'Money Claim Pack',
+            productType: jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim',
+            name: jurisdiction === 'scotland' ? 'Simple Procedure Pack' : 'Money Claim Pack',
             price: '£179.99',
-            description: 'Recover rent arrears and damages',
+            description:
+              jurisdiction === 'scotland'
+                ? 'Simple Procedure money claim bundle with Form 3A and pre-action letter'
+                : 'Recover rent arrears and damages in England & Wales',
             features: [
-              'Money claim form (N1)',
+              jurisdiction === 'scotland' ? 'Simple Procedure Form 3A' : 'Money claim form (N1)',
               'Rent arrears calculation',
               'Deposit deduction breakdown',
-              'Letter before action',
-              'Filing guide for Money Claim Online',
+              jurisdiction === 'scotland' ? 'Pre-action demand letter' : 'Letter before action',
+              jurisdiction === 'scotland' ? 'Sheriff Court filing guide' : 'Filing guide for Money Claim Online',
               'Lifetime access to documents',
             ],
           },
@@ -314,7 +317,7 @@ export default function WizardPreviewPage() {
     );
   }
 
-  const pricingOptions = getPricingOptions(caseData.case_type);
+  const pricingOptions = getPricingOptions(caseData.case_type, caseData.jurisdiction);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">

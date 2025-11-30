@@ -65,10 +65,23 @@ function mapProductToDocumentType(product: string): 'eviction' | 'money_claim' |
     case 'notice_only':
       return 'eviction';
     case 'money_claim':
+    case 'money_claim_england_wales':
+    case 'money_claim_scotland':
       return 'money_claim';
     case 'ast_standard':
     case 'ast_premium':
       return 'tenancy_agreement';
+    default:
+      return null;
+  }
+}
+
+function mapProductToJurisdiction(product: string): JurisdictionOption['value'] | null {
+  switch (product) {
+    case 'money_claim_england_wales':
+      return 'england-wales';
+    case 'money_claim_scotland':
+      return 'scotland';
     default:
       return null;
   }
@@ -85,8 +98,14 @@ export default function WizardPage() {
     return docType ? documentOptions.find((d) => d.type === docType) ?? null : null;
   }, [productParam]);
 
+  const preselectedJurisdiction = useMemo(() => {
+    if (!productParam) return null;
+    const mapped = mapProductToJurisdiction(productParam);
+    return mapped ? jurisdictions.find((j) => j.value === mapped) ?? null : null;
+  }, [productParam]);
+
   const [selectedDocument, setSelectedDocument] = useState<DocumentOption | null>(preselectedDocument);
-  const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionOption | null>(null);
+  const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionOption | null>(preselectedJurisdiction);
   const [step, setStep] = useState<1 | 2>(preselectedDocument ? 2 : 1);
 
   const isJurisdictionSupported = (jur: JurisdictionOption) => {
@@ -113,14 +132,8 @@ export default function WizardPage() {
 
   const getUnsupportedCopy = (jur: JurisdictionOption) => {
     // Money claim: differentiate Scotland vs Northern Ireland
-    if (selectedDocument?.type === 'money_claim') {
-      if (jur.value === 'scotland') {
-        return 'Money claims are available only in England & Wales. Scotland version is coming soon.';
-      }
-
-      if (jur.value === 'northern-ireland') {
-        return 'Eviction and money claim flows are unavailable here. Tenancy agreements only.';
-      }
+    if (selectedDocument?.type === 'money_claim' && jur.value === 'northern-ireland') {
+      return 'Eviction and money claim flows are unavailable here. Tenancy agreements only.';
     }
 
     // Non-tenancy flows in Northern Ireland (eviction etc.)
