@@ -820,4 +820,24 @@ describe('wizardFactsToCaseFacts', () => {
       expect(result.service_contact.service_email).toBe('service@legal.com');
     });
   });
+
+  describe('Money Claim Mapping', () => {
+    test('should map solicitor costs from wizard', () => {
+      const wizard: WizardFacts = {
+        'case_facts.money_claim.solicitor_costs': 175,
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.money_claim.solicitor_costs).toBe(175);
+    });
+
+    test('should default solicitor costs to null when missing', () => {
+      const wizard: WizardFacts = {};
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      expect(result.money_claim.solicitor_costs).toBeNull();
+    });
+  });
 });
