@@ -145,10 +145,17 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         }
       } else {
         // Create new case
+        const derivedProduct =
+          product ||
+          (caseType === 'eviction'
+            ? 'complete_pack'
+            : caseType === 'money_claim'
+            ? 'money_claim'
+            : 'tenancy_agreement');
         const response = await fetch('/api/wizard/start', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ case_type: caseType, jurisdiction }),
+          body: JSON.stringify({ product: derivedProduct, jurisdiction, case_type: caseType }),
         });
 
         const data = await response.json();

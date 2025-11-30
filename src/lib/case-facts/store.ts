@@ -22,11 +22,12 @@ export async function getOrCreateWizardFacts(
   supabase: SupabaseClient<Database>,
   caseId: string
 ): Promise<WizardFacts> {
-  const { data, error } = await supabase
+  const query = supabase
     .from('case_facts')
     .select('facts')
-    .eq('case_id', caseId)
-    .maybeSingle();
+    .eq('case_id', caseId);
+
+  const { data, error } = query.maybeSingle ? await query.maybeSingle() : await query.single();
 
   if (error) {
     console.error('Failed to load case facts', error);
@@ -70,11 +71,14 @@ export async function updateWizardFacts(
   const newFacts = updater(currentFacts);
   const timestamp = new Date().toISOString();
 
-  const { data: versionRow, error: versionError } = await supabase
+  const versionQuery = supabase
     .from('case_facts')
     .select('version')
-    .eq('case_id', caseId)
-    .maybeSingle();
+    .eq('case_id', caseId);
+
+  const { data: versionRow, error: versionError } = versionQuery.maybeSingle
+    ? await versionQuery.maybeSingle()
+    : await versionQuery.single();
 
   if (versionError) {
     console.error('Failed to read case facts version', versionError);

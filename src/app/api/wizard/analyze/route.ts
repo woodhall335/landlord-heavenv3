@@ -14,7 +14,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 
 const analyzeSchema = z.object({
-  case_id: z.string().uuid(),
+  case_id: z.string().min(1),
 });
 
 function computeRoute(facts: CaseFacts, jurisdiction: string, caseType: string): string {
