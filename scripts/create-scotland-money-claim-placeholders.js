@@ -3,17 +3,28 @@
  * These are minimal PDFs that allow the system to load and test while awaiting official forms
  */
 
-const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
-const fs = require('fs');
-const path = require('path');
+async function loadDependencies() {
+  const { PDFDocument, StandardFonts, rgb } = await import('pdf-lib');
+  const fs = await import('node:fs');
+  const path = await import('node:path');
 
-async function createPlaceholderPDF(filename, title, description) {
+  return {
+    PDFDocument,
+    StandardFonts,
+    rgb,
+    fs,
+    path,
+  };
+}
+
+async function createPlaceholderPDF(dependencies, filename, title, description) {
+  const { PDFDocument, StandardFonts, rgb, fs, path } = dependencies;
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([595, 842]); // A4 size
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
   const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-  const { width, height } = page.getSize();
+  const { height } = page.getSize();
 
   // Title
   page.drawText(title, {
@@ -64,15 +75,18 @@ async function createPlaceholderPDF(filename, title, description) {
 }
 
 async function main() {
+  const dependencies = await loadDependencies();
   console.log('Creating Scottish Simple Procedure placeholder PDFs...\n');
 
   await createPlaceholderPDF(
+    dependencies,
     'simple_procedure_claim_form.pdf',
     'Simple Procedure Claim Form (Form 3A)',
     'Official Scottish Courts and Tribunals Service form for initiating Simple Procedure claims (up to £5,000). This form is used for claims including rent arrears, damages, and other civil monetary disputes in the Sheriff Court.'
   );
 
   await createPlaceholderPDF(
+    dependencies,
     'simple_procedure_response_form.pdf',
     'Simple Procedure Response Form (Form 4A)',
     'Official form for respondents to admit or dispute Simple Procedure claims. While primarily for defendants, having this form helps provide complete pack context for claimants.'
