@@ -21,6 +21,11 @@ function WizardFlowContent() {
   const type = searchParams.get('type') as 'eviction' | 'money_claim' | 'tenancy_agreement' | null;
   const jurisdiction = searchParams.get('jurisdiction') as 'england-wales' | 'scotland' | 'northern-ireland' | null;
   const product = searchParams.get('product'); // Specific product (notice_only, complete_pack, etc.)
+  const normalizedProduct =
+    type === 'money_claim' &&
+    (product === 'money_claim_england_wales' || product === 'money_claim_scotland')
+      ? 'money_claim'
+      : product;
   const editCaseId = searchParams.get('case_id'); // Case ID to edit
 
   const hasRequiredParams = Boolean(type && jurisdiction);
@@ -123,7 +128,7 @@ function WizardFlowContent() {
     <WizardContainer
       caseType={type!}
       jurisdiction={jurisdiction!}
-      product={product || undefined}
+      product={normalizedProduct || undefined}
       editCaseId={editCaseId || undefined}
       onComplete={handleComplete}
     />

@@ -28,13 +28,13 @@ export default function MoneyClaimPage() {
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim_england_wales"
+                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
                 className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
               >
                 England &amp; Wales Claim →
               </Link>
               <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim_scotland"
+                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
                 className="inline-block bg-white/20 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/30 transition-colors border border-white/40"
               >
                 Scotland Simple Procedure →
@@ -360,13 +360,13 @@ export default function MoneyClaimPage() {
 
             <div className="mt-8 text-center flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim_england_wales"
+                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
                 className="inline-block bg-amber-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-600 transition-colors"
               >
                 England &amp; Wales Claim - £179.99 →
               </Link>
               <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim_scotland"
+                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
                 className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors border border-amber-200"
               >
                 Scotland Claim - £179.99 →
@@ -578,13 +578,13 @@ export default function MoneyClaimPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim_england_wales"
+                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
                 className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
               >
                 England &amp; Wales Claim - £179.99 →
               </Link>
               <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim_scotland"
+                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
                 className="inline-block bg-white/20 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/30 transition-colors border border-white/40"
               >
                 Scotland Claim - £179.99 →

@@ -160,7 +160,7 @@ describe('Money claim wizard integration', () => {
       new Request('http://localhost/api/wizard/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product: 'money_claim_england_wales', jurisdiction: 'england-wales' }),
+        body: JSON.stringify({ product: 'money_claim', jurisdiction: 'england-wales' }),
       })
     );
 
@@ -246,7 +246,7 @@ describe('Money claim wizard integration', () => {
       new Request('http://localhost/api/wizard/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product: 'money_claim_scotland', jurisdiction: 'scotland' }),
+        body: JSON.stringify({ product: 'money_claim', jurisdiction: 'scotland' }),
       })
     );
 
