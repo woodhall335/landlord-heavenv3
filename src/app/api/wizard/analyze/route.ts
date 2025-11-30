@@ -15,6 +15,8 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 
 const analyzeSchema = z.object({
   case_id: z.string().min(1),
+  // Optional Ask Heaven question for Q&A-style analysis
+  question: z.string().optional(),
 });
 
 function computeRoute(facts: CaseFacts, jurisdiction: string, caseType: string): string {
@@ -86,8 +88,10 @@ function craftAskHeavenAnswer(question: string | undefined, facts: CaseFacts, ju
     hasOther ? 'Other charges are listed.' : 'No other charges recorded.',
   ].join(' ');
 
-  return `${baseSummary} We use a simple ${interestRate}% per annum interest line with a daily rate in the particulars where permitted. ` +
-    'If you need to update amounts, continue the wizard or edit the case facts, then regenerate your documents. This response is informational — it is not legal advice.';
+  return (
+    `${baseSummary} We use a simple ${interestRate}% per annum interest line with a daily rate in the particulars where permitted. ` +
+    'If you need to update amounts, continue the wizard or edit the case facts, then regenerate your documents. This response is informational — it is not legal advice.'
+  );
 }
 
 export async function POST(request: Request) {
@@ -123,12 +127,21 @@ export async function POST(request: Request) {
     }
 
     // Type assertion: we know data exists after the null check
-    const caseData = data as { id: string; jurisdiction: string; case_type: string; user_id: string | null; wizard_progress: number | null };
+    const caseData = data as {
+      id: string;
+      jurisdiction: string;
+      case_type: string;
+      user_id: string | null;
+      wizard_progress: number | null;
+    };
 
     // Northern Ireland gating: only tenancy agreements are supported
     if (caseData.jurisdiction === 'northern-ireland' && caseData.case_type !== 'tenancy_agreement') {
       return NextResponse.json(
-        { error: 'Only tenancy agreements are available for Northern Ireland. Eviction and money claim analysis is not currently supported.' },
+        {
+          error:
+            'Only tenancy agreements are available for Northern Ireland. Eviction and money claim analysis is not currently supported.',
+        },
         { status: 400 }
       );
     }
@@ -156,7 +169,7 @@ export async function POST(request: Request) {
 
     if (caseData.user_id) {
       const htmlContent = `<h1>Preview - ${route}</h1><p>Case strength: ${score}%</p>`;
-      const { data, error: docError} = await supabase
+      const { data: docData, error: docError } = await supabase
         .from('documents')
         .insert({
           user_id: caseData.user_id,
@@ -170,8 +183,8 @@ export async function POST(request: Request) {
         .select()
         .single();
 
-      if (!docError && data) {
-        const docRow = data as { id: string; document_type: string; document_title: string };
+      if (!docError && docData) {
+        const docRow = docData as { id: string; document_type: string; document_title: string };
         previewDocuments.push({
           id: docRow.id,
           document_type: docRow.document_type,
