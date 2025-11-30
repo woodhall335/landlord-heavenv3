@@ -7,7 +7,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input, Card } from '@/components/ui';
 
 interface ExtendedWizardQuestion {
@@ -46,19 +46,15 @@ interface ExtendedWizardQuestion {
   maps_to?: string[];
 }
 
-interface StructuredWizardProps {
-  caseId: string;
-  caseType: string;
-  jurisdiction: string;
-  onComplete: (caseId: string) => void;
-}
+  interface StructuredWizardProps {
+    caseId: string;
+    onComplete: (caseId: string) => void;
+  }
 
-export const StructuredWizard: React.FC<StructuredWizardProps> = ({
-  caseId,
-  caseType,
-  jurisdiction,
-  onComplete,
-}) => {
+  export const StructuredWizard: React.FC<StructuredWizardProps> = ({
+    caseId,
+    onComplete,
+  }) => {
   const [currentQuestion, setCurrentQuestion] = useState<ExtendedWizardQuestion | null>(null);
   const [currentAnswer, setCurrentAnswer] = useState<any>(null);
   const [loading, setLoading] = useState(false);
@@ -73,7 +69,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // Load first question on mount
   useEffect(() => {
     loadNextQuestion();
-  }, []);
+  }, [loadNextQuestion]);
 
   // Fetch case facts when question changes (for validation)
   useEffect(() => {
@@ -156,7 +152,26 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   }, [currentAnswer, currentQuestion]);
 
-  const loadNextQuestion = async () => {
+  const handleComplete = useCallback(async () => {
+    try {
+      setLoading(true);
+
+      await fetch('/api/wizard/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          case_id: caseId,
+        }),
+      });
+
+      onComplete(caseId);
+    } catch (err: any) {
+      setError(err.message || 'Failed to complete wizard');
+      setLoading(false);
+    }
+  }, [caseId, onComplete]);
+
+  const loadNextQuestion = useCallback(async () => {
     setLoading(true);
     setError(null);
     setAskHeavenSuggestion(null);
@@ -198,12 +213,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         throw new Error('No question returned from API');
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to load question');
-      console.error('Load question error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+        setError(err.message || 'Failed to load question');
+        console.error('Load question error:', err);
+      } finally {
+        setLoading(false);
+      }
+  }, [caseId, handleComplete]);
 
   const isCurrentAnswerValid = (): boolean => {
     if (!currentQuestion) return false;
@@ -364,27 +379,6 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
     // Decrease progress (approximate)
     setProgress(prev => Math.max(0, prev - 5));
-  };
-
-  const handleComplete = async () => {
-    try {
-      setLoading(true);
-
-      // Call analyze endpoint
-      await fetch('/api/wizard/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          case_id: caseId,
-        }),
-      });
-
-      // Navigate to completion
-      onComplete(caseId);
-    } catch (err: any) {
-      setError(err.message || 'Failed to complete wizard');
-      setLoading(false);
-    }
   };
 
   const renderInput = () => {

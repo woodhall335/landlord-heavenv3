@@ -8,7 +8,7 @@
 
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { clsx } from 'clsx';
 import {
   MultipleChoice,
@@ -108,12 +108,22 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     scrollToBottom();
   }, [messages]);
 
+  const addMessage = useCallback((role: 'assistant' | 'user', content: string) => {
+    const message: Message = {
+      id: `msg-${Date.now()}-${Math.random()}`,
+      role,
+      content,
+      timestamp: new Date(),
+    };
+    setMessages((prev) => [...prev, message]);
+  }, []);
+
   // Initialize wizard
   useEffect(() => {
     startWizard();
-  }, []);
+  }, [startWizard]);
 
-  const startWizard = async () => {
+  const startWizard = useCallback(async () => {
     setIsLoading(true);
 
     try {
@@ -193,7 +203,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [addMessage, editCaseId, getNextQuestion, jurisdiction, caseType, product]);
 
   const getWelcomeMessage = (type: string, jur: string): string => {
     const jurName = jur === 'england-wales' ? 'England & Wales' : 'Scotland';
@@ -210,7 +220,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     }
   };
 
-  const getNextQuestion = async (currentCaseId: string, facts: Record<string, any>) => {
+  const getNextQuestion = useCallback(async (currentCaseId: string, facts: Record<string, any>) => {
     setIsLoading(true);
 
     try {
@@ -248,7 +258,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [addMessage, analyzeCase, caseType, jurisdiction]);
 
   const handleAnswer = async (answer: any) => {
     // Prevent duplicate submissions while loading
@@ -307,62 +317,68 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     }
   };
 
-  const analyzeCase = async (currentCaseId: string) => {
-    setIsLoading(true);
+  const formatAnalysisResults = useCallback(
+    (analysis: any): string => {
+      let message = "✅ **Analysis Complete!**\n\n";
 
-    try {
-      const response = await fetch('/api/wizard/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ case_id: currentCaseId }),
-      });
+      if (caseType === 'eviction') {
+        message += `**Recommended Route:** ${analysis.recommended_route}\n\n`;
 
-      const data = await response.json();
+        if (analysis.primary_grounds && analysis.primary_grounds.length > 0) {
+          message += "**Strongest Grounds:**\n";
+          analysis.primary_grounds.forEach((ground: any) => {
+            message += `• Ground ${ground.ground_number}: ${ground.name} (${ground.success_probability}% success probability)\n`;
+          });
+        }
 
-      if (data.success) {
-        setProgress(100);
-
-        // Show analysis results
-        const resultsMessage = formatAnalysisResults(data.analysis);
-        addMessage('assistant', resultsMessage);
-
-        // Complete wizard
-        setTimeout(() => {
-          onComplete(currentCaseId, data.analysis);
-        }, 2000);
+        if (analysis.red_flags && analysis.red_flags.length > 0) {
+          message += "\n⚠️ **Important Warnings:**\n";
+          analysis.red_flags.forEach((flag: string) => {
+            message += `• ${flag}\n`;
+          });
+        }
       }
-    } catch (error) {
-      console.error('Analysis failed:', error);
-      addMessage('assistant', "I encountered an issue analyzing your case. Please contact support.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
-  const formatAnalysisResults = (analysis: any): string => {
-    let message = "✅ **Analysis Complete!**\n\n";
+      message += "\n🎉 **Ready to generate your documents!**\n\nClick below to preview and purchase.";
+      return message;
+    },
+    [caseType],
+  );
 
-    if (caseType === 'eviction') {
-      message += `**Recommended Route:** ${analysis.recommended_route}\n\n`;
+  const analyzeCase = useCallback(
+    async (currentCaseId: string) => {
+      setIsLoading(true);
 
-      if (analysis.primary_grounds && analysis.primary_grounds.length > 0) {
-        message += "**Strongest Grounds:**\n";
-        analysis.primary_grounds.forEach((ground: any) => {
-          message += `• Ground ${ground.ground_number}: ${ground.name} (${ground.success_probability}% success probability)\n`;
+      try {
+        const response = await fetch('/api/wizard/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ case_id: currentCaseId }),
         });
-      }
 
-      if (analysis.red_flags && analysis.red_flags.length > 0) {
-        message += "\n⚠️ **Important Warnings:**\n";
-        analysis.red_flags.forEach((flag: string) => {
-          message += `• ${flag}\n`;
-        });
-      }
-    }
+        const data = await response.json();
 
-    message += "\n🎉 **Ready to generate your documents!**\n\nClick below to preview and purchase.";
-    return message;
-  };
+        if (data.success) {
+          setProgress(100);
+
+          // Show analysis results
+          const resultsMessage = formatAnalysisResults(data.analysis);
+          addMessage('assistant', resultsMessage);
+
+          // Complete wizard
+          setTimeout(() => {
+            onComplete(currentCaseId, data.analysis);
+          }, 2000);
+        }
+      } catch (error) {
+        console.error('Analysis failed:', error);
+        addMessage('assistant', "I encountered an issue analyzing your case. Please contact support.");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [addMessage, formatAnalysisResults, onComplete],
+  );
 
   const formatAnswerForDisplay = (answer: any, inputType: string): string => {
     switch (inputType) {
@@ -383,16 +399,6 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       default:
         return String(answer);
     }
-  };
-
-  const addMessage = (role: 'assistant' | 'user', content: string) => {
-    const message: Message = {
-      id: `msg-${Date.now()}-${Math.random()}`,
-      role,
-      content,
-      timestamp: new Date(),
-    };
-    setMessages((prev) => [...prev, message]);
   };
 
   const renderInput = () => {

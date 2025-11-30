@@ -77,10 +77,10 @@ export default function NewPropertyPage() {
       } else {
         setError(data.error || 'Failed to add property');
       }
-    } catch (err) {
-      setError('Something went wrong');
-    } finally {
-      setIsLoading(false);
+      } catch {
+        setError('Something went wrong');
+      } finally {
+        setIsLoading(false);
     }
   };
 

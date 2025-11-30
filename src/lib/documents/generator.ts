@@ -100,6 +100,17 @@ function registerHandlebarsHelpers() {
     return a === b ? options.fn(this) : options.inverse(this);
   });
 
+  Handlebars.registerHelper('if_gte', function (this: any, a: any, b: any, options: Handlebars.HelperOptions) {
+    const left = Number(a);
+    const right = Number(b);
+
+    if (!Number.isNaN(left) && !Number.isNaN(right) && left >= right) {
+      return options.fn(this);
+    }
+
+    return options.inverse(this);
+  });
+
   // Array contains
   Handlebars.registerHelper('contains', function (array, value) {
     return Array.isArray(array) && array.includes(value);

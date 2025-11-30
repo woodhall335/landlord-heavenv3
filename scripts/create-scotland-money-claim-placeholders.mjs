@@ -3,22 +3,15 @@
  * These are minimal PDFs that allow the system to load and test while awaiting official forms
  */
 
-async function loadDependencies() {
-  const { PDFDocument, StandardFonts, rgb } = await import('pdf-lib');
-  const fs = await import('node:fs');
-  const path = await import('node:path');
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
-  return {
-    PDFDocument,
-    StandardFonts,
-    rgb,
-    fs,
-    path,
-  };
-}
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-async function createPlaceholderPDF(dependencies, filename, title, description) {
-  const { PDFDocument, StandardFonts, rgb, fs, path } = dependencies;
+async function createPlaceholderPDF(filename, title, description) {
   const pdfDoc = await PDFDocument.create();
   const page = pdfDoc.addPage([595, 842]); // A4 size
   const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
@@ -48,7 +41,7 @@ async function createPlaceholderPDF(dependencies, filename, title, description) 
   const descriptionLines = description.match(/.{1,80}/g) || [description];
   let yPosition = height - 180;
 
-  descriptionLines.forEach(line => {
+  descriptionLines.forEach((line) => {
     page.drawText(line, {
       x: 50,
       y: yPosition,
@@ -75,18 +68,15 @@ async function createPlaceholderPDF(dependencies, filename, title, description) 
 }
 
 async function main() {
-  const dependencies = await loadDependencies();
   console.log('Creating Scottish Simple Procedure placeholder PDFs...\n');
 
   await createPlaceholderPDF(
-    dependencies,
     'simple_procedure_claim_form.pdf',
     'Simple Procedure Claim Form (Form 3A)',
     'Official Scottish Courts and Tribunals Service form for initiating Simple Procedure claims (up to £5,000). This form is used for claims including rent arrears, damages, and other civil monetary disputes in the Sheriff Court.'
   );
 
   await createPlaceholderPDF(
-    dependencies,
     'simple_procedure_response_form.pdf',
     'Simple Procedure Response Form (Form 4A)',
     'Official form for respondents to admit or dispute Simple Procedure claims. While primarily for defendants, having this form helps provide complete pack context for claimants.'
@@ -95,7 +85,7 @@ async function main() {
   console.log('\n✓ All Scottish Simple Procedure placeholder PDFs created successfully!');
 }
 
-main().catch(err => {
+main().catch((err) => {
   console.error('Error creating placeholder PDFs:', err);
   process.exit(1);
 });
