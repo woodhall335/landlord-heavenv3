@@ -81,6 +81,10 @@ export interface ScotlandMoneyClaimCase {
   signatory_name?: string;
   signature_date?: string;
   notes?: string;
+
+  // Pre-action demand details
+  demand_letter_date?: string;
+  second_demand_date?: string;
 }
 
 export interface ScotlandMoneyClaimPackDocument {

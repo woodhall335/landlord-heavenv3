@@ -629,7 +629,7 @@ interface ExtendedWizardQuestion {
                       }
                       placeholder={field.placeholder}
                       disabled={loading}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-[80px]"
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-20"
                       rows={3}
                     />
                   ) : (
