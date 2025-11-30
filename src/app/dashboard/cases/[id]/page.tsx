@@ -7,7 +7,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
@@ -38,7 +38,10 @@ interface Document {
 export default function CaseDetailPage() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const caseId = params.id as string;
+  const paymentStatus = searchParams.get('payment');
+  const paymentSuccess = paymentStatus === 'success';
 
   const [caseDetails, setCaseDetails] = useState<CaseDetails | null>(null);
   const [documents, setDocuments] = useState<Document[]>([]);
@@ -125,6 +128,32 @@ export default function CaseDetailPage() {
       default:
         return 'neutral';
     }
+  };
+
+  const getNextSteps = () => {
+    if (!caseDetails) return [] as string[];
+
+    if (caseDetails.case_type === 'money_claim') {
+      if (caseDetails.jurisdiction === 'scotland') {
+        return [
+          'Review Simple Procedure Form 3A and particulars for accuracy before printing.',
+          'Serve the Form 3A pack on the respondent using the Sheriff Clerk guidance.',
+          'File your completed bundle with the Sheriff Court and keep proof of service.',
+        ];
+      }
+
+      return [
+        'Print and sign the N1 claim form and particulars of claim.',
+        'Include the pre-action letter and information sheet when serving the defendant.',
+        'File the claim via Money Claim Online or your local court and retain proof of service.',
+      ];
+    }
+
+    return [
+      'Download and review your documents.',
+      'Follow the included filing or service instructions.',
+      'Contact support if you need any help completing the process.',
+    ];
   };
 
   const handleSaveChanges = async () => {
@@ -437,6 +466,57 @@ export default function CaseDetailPage() {
             }`}
           >
             {message.text}
+          </div>
+        )}
+
+        {/* Payment Success Summary */}
+        {paymentSuccess && (
+          <div className="mb-6 p-6 rounded-lg border border-success/20 bg-success/5">
+            <div className="flex items-start gap-3">
+              <div className="text-success text-2xl">✔</div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-charcoal">Payment received — your documents are ready</h3>
+                <p className="text-gray-700 mt-1">
+                  Download your bundle and follow the steps below to file your claim.
+                </p>
+
+                <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-white rounded-lg border border-gray-200 p-4">
+                    <h4 className="font-semibold text-charcoal mb-3">Documents in your pack</h4>
+                    {documents.length === 0 ? (
+                      <p className="text-gray-600 text-sm">Generating your documents...</p>
+                    ) : (
+                      <ul className="space-y-2 text-sm text-gray-800">
+                        {documents.map((doc) => (
+                          <li key={doc.id} className="flex items-center justify-between gap-2">
+                            <span className="truncate">{doc.document_title}</span>
+                            {doc.file_path && (
+                              <a
+                                href={doc.file_path}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-primary hover:text-primary-dark font-semibold"
+                              >
+                                Download
+                              </a>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  <div className="bg-white rounded-lg border border-gray-200 p-4">
+                    <h4 className="font-semibold text-charcoal mb-3">Next steps</h4>
+                    <ol className="list-decimal list-inside space-y-2 text-sm text-gray-800">
+                      {getNextSteps().map((step, idx) => (
+                        <li key={idx}>{step}</li>
+                      ))}
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
