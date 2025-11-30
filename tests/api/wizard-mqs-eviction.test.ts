@@ -116,6 +116,35 @@ describe('MQS eviction flow (England & Wales)', () => {
     expect(body.next_question.id).toBe('landlord_details');
   });
 
+  it('loads Scotland complete-pack MQS and returns first question', async () => {
+    const mockCase = {
+      id: 'case-scot',
+      case_type: 'eviction',
+      jurisdiction: 'scotland',
+      collected_facts: { __meta: { product: 'complete_pack', mqs_version: null } },
+      user_id: null,
+      wizard_progress: 0,
+    };
+
+    supabaseClientMock.single.mockResolvedValue({ data: mockCase, error: null });
+
+    const response = await nextQuestion(
+      new Request('http://localhost/api/wizard/next-question', {
+        method: 'POST',
+        body: JSON.stringify({
+          case_id: mockCase.id,
+          case_type: mockCase.case_type,
+          jurisdiction: mockCase.jurisdiction,
+          collected_facts: mockCase.collected_facts,
+        }),
+      })
+    );
+
+    const body = await response.json();
+    expect(response.status).toBe(200);
+    expect(body.next_question.id).toBe('case_overview');
+  });
+
   it('falls back to AI fact-finder when MQS is missing', async () => {
     const mockCase = {
       id: 'case-2',

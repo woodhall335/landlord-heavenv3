@@ -12,7 +12,7 @@ questions:
     required: true
     suggestion_prompt: "Ensure the legal name matches the tenancy agreement and bank details."
     maps_to:
-      - case_facts.parties.landlord.name
+      - landlord_name
     conditions: []
 
   - id: claimant_secondary_name
@@ -22,7 +22,7 @@ questions:
     required: false
     suggestion_prompt: "Add any joint landlord who will be named on the N1 form."
     maps_to:
-      - case_facts.parties.landlord.co_claimant
+      - landlord_co_claimant
     conditions: []
 
   - id: claimant_email
@@ -32,7 +32,7 @@ questions:
     required: true
     suggestion_prompt: "Provide an email you check regularly for court updates or settlement offers."
     maps_to:
-      - case_facts.parties.landlord.email
+      - landlord_email
     conditions: []
 
   - id: claimant_phone
@@ -42,7 +42,7 @@ questions:
     required: true
     suggestion_prompt: "Use a number where the court or defendant can reach you during business hours."
     maps_to:
-      - case_facts.parties.landlord.phone
+      - landlord_phone
     conditions: []
 
   - id: claimant_address
@@ -52,10 +52,10 @@ questions:
     required: true
     suggestion_prompt: "Use the address you want on the N1 form and pre-action letters."
     maps_to:
-      - case_facts.parties.landlord.address_line1
-      - case_facts.parties.landlord.address_line2
-      - case_facts.parties.landlord.city
-      - case_facts.parties.landlord.postcode
+      - landlord_address_line1
+      - landlord_address_line2
+      - landlord_city
+      - landlord_postcode
     conditions: []
 
   - id: claimant_reference
@@ -65,7 +65,7 @@ questions:
     required: false
     suggestion_prompt: "Add an internal account reference to display on the claim form header."
     maps_to:
-      - case_facts.court.claimant_reference
+      - claimant_reference
     conditions: []
 
   # Defendant / respondent
@@ -76,7 +76,7 @@ questions:
     required: true
     suggestion_prompt: "Match the tenant's legal name on the tenancy agreement."
     maps_to:
-      - case_facts.parties.tenants[0].name
+      - defendant_full_name
     conditions: []
 
   - id: defendant_secondary_name
@@ -86,7 +86,7 @@ questions:
     required: false
     suggestion_prompt: "Include any joint tenant who owes the rent."
     maps_to:
-      - case_facts.parties.tenants[1].name
+      - defendant_secondary_name
     conditions: []
 
   - id: defendant_email
@@ -96,7 +96,7 @@ questions:
     required: false
     suggestion_prompt: "Include email used for service or correspondence if available."
     maps_to:
-      - case_facts.parties.tenants[0].email
+      - defendant_email
     conditions: []
 
   - id: defendant_phone
@@ -106,7 +106,7 @@ questions:
     required: false
     suggestion_prompt: "Provide a phone number that might appear on arrears discussions or tenancy forms."
     maps_to:
-      - case_facts.parties.tenants[0].phone
+      - defendant_phone
     conditions: []
 
   - id: property_address
@@ -116,11 +116,11 @@ questions:
     required: true
     suggestion_prompt: "Enter the full address of the let property for the N1 and particulars."
     maps_to:
-      - case_facts.property.address_line1
-      - case_facts.property.address_line2
-      - case_facts.property.city
-      - case_facts.property.postcode
-      - case_facts.property.country
+      - property_address_line1
+      - property_address_line2
+      - property_city
+      - property_postcode
+      - property_country
     conditions: []
 
   # Tenancy details
@@ -131,7 +131,7 @@ questions:
     required: true
     suggestion_prompt: "Use the start date on the signed tenancy agreement."
     maps_to:
-      - case_facts.tenancy.start_date
+      - tenancy_start_date
     conditions: []
 
   - id: tenancy_end_date
@@ -141,7 +141,7 @@ questions:
     required: false
     suggestion_prompt: "Add the fixed term end date if applicable; leave blank for ongoing periodic tenancies."
     maps_to:
-      - case_facts.tenancy.end_date
+      - tenancy_end_date
     conditions: []
 
   - id: rent_amount
@@ -151,7 +151,7 @@ questions:
     required: true
     suggestion_prompt: "Confirm the contractual rent for one period (weekly or monthly)."
     maps_to:
-      - case_facts.tenancy.rent_amount
+      - rent_amount
     conditions: []
 
   - id: rent_frequency
@@ -166,7 +166,7 @@ questions:
       - quarterly
     suggestion_prompt: "Select how often rent falls due under the agreement."
     maps_to:
-      - case_facts.tenancy.rent_frequency
+      - rent_frequency
     conditions: []
 
   - id: rent_due_day
@@ -176,7 +176,7 @@ questions:
     required: false
     suggestion_prompt: "Provide the calendar day (e.g., 1st of each month) for payment day."
     maps_to:
-      - case_facts.tenancy.rent_due_day
+      - rent_due_day
     conditions: []
 
   - id: payment_day
@@ -186,7 +186,7 @@ questions:
     required: false
     suggestion_prompt: "If rent is weekly/fortnightly, add the weekday the tenant normally pays."
     maps_to:
-      - case_facts.money_claim.payment_day
+      - payment_day
     conditions: []
 
   # Claim type selection
@@ -201,7 +201,7 @@ questions:
       - other_costs
     suggestion_prompt: "Choose every head of loss to include in the Particulars and N1 form."
     maps_to:
-      - case_facts.court.route
+      - claim_type
     conditions: []
 
   # Rent arrears
@@ -212,8 +212,8 @@ questions:
     required: true
     suggestion_prompt: "Provide the sum of unpaid rent to today; we will auto-calc interest."
     maps_to:
-      - case_facts.issues.rent_arrears.total_arrears
-      - case_facts.court.claim_amount_rent
+      - arrears_total
+      - claim_amount_rent
     conditions: []
 
   - id: arrears_schedule_upload
@@ -223,8 +223,8 @@ questions:
     required: true
     suggestion_prompt: "Upload the rent ledger or spreadsheet so we can build the arrears schedule."
     maps_to:
-      - case_facts.evidence.rent_schedule_uploaded
-      - case_facts.issues.rent_arrears.arrears_items
+      - rent_schedule_uploaded
+      - arrears_items
     conditions: []
 
   # Damages
@@ -235,7 +235,7 @@ questions:
     required: true
     suggestion_prompt: "Include repairs, cleaning, or replacement costs beyond fair wear."
     maps_to:
-      - case_facts.money_claim.damage_claim
+      - claim_damages
     conditions: []
 
   - id: damage_items_description
@@ -245,7 +245,7 @@ questions:
     required: false
     suggestion_prompt: "Provide item-by-item breakdown (e.g., door repair £180, repaint £240)."
     maps_to:
-      - case_facts.money_claim.damage_items
+      - damage_items_description
     conditions:
       - depends_on: claim_damages
         value: yes
@@ -257,7 +257,7 @@ questions:
     required: false
     suggestion_prompt: "Sum of all repair/replacement invoices you intend to claim."
     maps_to:
-      - case_facts.court.claim_amount_other
+      - claim_amount_other
     conditions:
       - depends_on: claim_damages
         value: yes
@@ -270,7 +270,7 @@ questions:
     required: false
     suggestion_prompt: "List any other sums owed with amounts so they appear in the particulars."
     maps_to:
-      - case_facts.money_claim.other_charges
+      - other_charges
     conditions: []
 
   # Interest
@@ -281,7 +281,7 @@ questions:
     required: true
     suggestion_prompt: "Most claims use 8% simple interest from the arrears start date."
     maps_to:
-      - case_facts.money_claim.charge_interest
+      - charge_interest
     conditions: []
 
   - id: interest_start_date
@@ -291,7 +291,7 @@ questions:
     required: false
     suggestion_prompt: "Usually the first missed rent date; we use this to calculate accrued interest."
     maps_to:
-      - case_facts.money_claim.interest_start_date
+      - interest_start_date
     conditions:
       - depends_on: charge_interest
         value: yes
@@ -303,7 +303,7 @@ questions:
     required: false
     suggestion_prompt: "Confirm the percentage rate to apply under s.69 CCA 1984."
     maps_to:
-      - case_facts.money_claim.interest_rate
+      - interest_rate
     conditions:
       - depends_on: charge_interest
         value: yes
@@ -316,7 +316,7 @@ questions:
     required: true
     suggestion_prompt: "Name the County Court closest to the property for hearings."
     maps_to:
-      - case_facts.court.court_name
+      - court_name
     conditions: []
 
   - id: service_address_override
@@ -326,7 +326,7 @@ questions:
     required: true
     suggestion_prompt: "Choose yes if you want court papers sent somewhere other than the property."
     maps_to:
-      - case_facts.service_contact.has_override
+      - service_address_override
     conditions: []
 
   - id: service_address
@@ -336,10 +336,10 @@ questions:
     required: false
     suggestion_prompt: "Provide the service address for the defendant if different from the property."
     maps_to:
-      - case_facts.service_contact.service_address_line1
-      - case_facts.service_contact.service_address_line2
-      - case_facts.service_contact.service_city
-      - case_facts.service_contact.service_postcode
+      - service_address_line1
+      - service_address_line2
+      - service_city
+      - service_postcode
     conditions:
       - depends_on: service_address_override
         value: yes
@@ -352,7 +352,7 @@ questions:
     required: true
     suggestion_prompt: "Draft a concise chronology covering tenancy start, rent terms, missed payments, chasers, and current balance."
     maps_to:
-      - case_facts.court.particulars_of_claim
+      - particulars_of_claim
     conditions: []
 
   - id: payment_attempts
@@ -362,7 +362,7 @@ questions:
     required: true
     suggestion_prompt: "Note reminder dates, agreements offered, and any partial payments to show reasonableness."
     maps_to:
-      - case_facts.money_claim.attempts_to_resolve
+      - payment_attempts
     conditions: []
 
   # Pre-action protocol
@@ -373,7 +373,7 @@ questions:
     required: true
     suggestion_prompt: "Answer yes only if you sent the full pre-action pack with reply forms."
     maps_to:
-      - case_facts.money_claim.lba_sent
+      - lba_sent
     conditions: []
 
   - id: lba_date
@@ -383,7 +383,7 @@ questions:
     required: false
     suggestion_prompt: "Provide the posting/email date to calculate the 30-day response window."
     maps_to:
-      - case_facts.money_claim.lba_date
+      - lba_date
     conditions:
       - depends_on: lba_sent
         value: yes
@@ -399,7 +399,7 @@ questions:
       - hand_delivered
     suggestion_prompt: "Choose every method you used to send the pre-action pack."
     maps_to:
-      - case_facts.money_claim.lba_method
+      - lba_method
     conditions:
       - depends_on: lba_sent
         value: yes
@@ -411,7 +411,7 @@ questions:
     required: false
     suggestion_prompt: "Typically 30 days from sending; confirm the exact date offered."
     maps_to:
-      - case_facts.money_claim.lba_response_deadline
+      - lba_response_deadline
     conditions:
       - depends_on: lba_sent
         value: yes
@@ -423,7 +423,7 @@ questions:
     required: false
     suggestion_prompt: "State if any reply form or payment proposal was received."
     maps_to:
-      - case_facts.money_claim.tenant_responded
+      - defendant_response
     conditions:
       - depends_on: lba_sent
         value: yes
@@ -436,7 +436,7 @@ questions:
     required: true
     suggestion_prompt: "Upload the full signed agreement to evidence the contractual rent."
     maps_to:
-      - case_facts.evidence.tenancy_agreement_uploaded
+      - tenancy_agreement_uploaded
     conditions: []
 
   - id: upload_bank_statements
@@ -446,7 +446,7 @@ questions:
     required: false
     suggestion_prompt: "Attach statements or screenshots showing missed rent credits."
     maps_to:
-      - case_facts.evidence.bank_statements_uploaded
+      - bank_statements_uploaded
     conditions: []
 
   - id: upload_damage_evidence
@@ -456,7 +456,7 @@ questions:
     required: false
     suggestion_prompt: "Include photos, inventory check-out, and contractor quotes to justify damage sums."
     maps_to:
-      - case_facts.evidence.other_evidence_uploaded
+      - other_evidence_uploaded
     conditions:
       - depends_on: claim_damages
         value: yes
@@ -468,7 +468,7 @@ questions:
     required: true
     suggestion_prompt: "Use the name that will sign the N1 and particulars (landlord or solicitor)."
     maps_to:
-      - case_facts.money_claim.signatory_name
+      - signatory_name
     conditions: []
 
   - id: signature_date
@@ -478,5 +478,5 @@ questions:
     required: false
     suggestion_prompt: "Leave blank to auto-fill today, or set a date for future filing."
     maps_to:
-      - case_facts.money_claim.signature_date
+      - signature_date
     conditions: []
