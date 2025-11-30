@@ -46,14 +46,16 @@ export function applyMappedAnswers(
     const key = path.split('.').pop();
     let valueForPath = value as any;
 
-    if (
-      value &&
-      typeof value === 'object' &&
-      !Array.isArray(value) &&
-      key &&
-      Object.prototype.hasOwnProperty.call(value as object, key)
-    ) {
-      valueForPath = (value as Record<string, unknown>)[key];
+    if (value && typeof value === 'object' && !Array.isArray(value) && key) {
+      if (Object.prototype.hasOwnProperty.call(value as object, key)) {
+        valueForPath = (value as Record<string, unknown>)[key];
+      } else {
+        const addressKeys = ['address_line1', 'address_line2', 'city', 'postcode', 'country'];
+        const matchedAddressKey = addressKeys.find((addressKey) => key.includes(addressKey));
+        if (matchedAddressKey && Object.prototype.hasOwnProperty.call(value as object, matchedAddressKey)) {
+          valueForPath = (value as Record<string, unknown>)[matchedAddressKey];
+        }
+      }
     }
 
     return setFactPath(currentFacts, path, valueForPath);

@@ -26,13 +26,21 @@ export default function MoneyClaimPage() {
               <span className="text-5xl md:text-6xl font-bold">£179.99</span>
               <span className="text-xl text-white/80">one-time</span>
             </div>
-            <Link
-              href="/wizard?product=money_claim"
-              className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
-            >
-              Start Your Claim Now →
-            </Link>
-            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • England &amp; Wales + Scotland</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim_england_wales"
+                className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
+              >
+                England &amp; Wales Claim →
+              </Link>
+              <Link
+                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim_scotland"
+                className="inline-block bg-white/20 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/30 transition-colors border border-white/40"
+              >
+                Scotland Simple Procedure →
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • England &amp; Wales or Scotland</p>
           </div>
         </Container>
       </section>
@@ -350,12 +358,18 @@ export default function MoneyClaimPage() {
               </div>
             </div>
 
-            <div className="mt-8 text-center">
+            <div className="mt-8 text-center flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard?product=money_claim"
+                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim_england_wales"
                 className="inline-block bg-amber-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-600 transition-colors"
               >
-                Start Your Claim - £179.99 →
+                England &amp; Wales Claim - £179.99 →
+              </Link>
+              <Link
+                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim_scotland"
+                className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors border border-amber-200"
+              >
+                Scotland Claim - £179.99 →
               </Link>
             </div>
           </div>
@@ -562,12 +576,20 @@ export default function MoneyClaimPage() {
             <p className="text-xl mb-8 text-white/90">
               Court-ready money claim documents in 10 minutes. Recover what you're owed.
             </p>
-            <Link
-              href="/wizard?product=money_claim"
-              className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
-            >
-              Start Your Claim - £179.99 →
-            </Link>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim_england_wales"
+                className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
+              >
+                England &amp; Wales Claim - £179.99 →
+              </Link>
+              <Link
+                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim_scotland"
+                className="inline-block bg-white/20 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/30 transition-colors border border-white/40"
+              >
+                Scotland Claim - £179.99 →
+              </Link>
+            </div>
             <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • No subscription</p>
           </div>
         </Container>

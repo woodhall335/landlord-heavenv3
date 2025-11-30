@@ -118,6 +118,20 @@ const { mockSupabase, mockDb } = vi.hoisted(() => {
   return { mockSupabase: client, mockDb: db };
 });
 
+vi.mock('@/lib/ai/openai-client', () => ({
+  chatCompletion: vi.fn(),
+  jsonCompletion: vi.fn(),
+  streamChatCompletion: vi.fn(),
+  openai: {},
+}));
+
+vi.mock('@/lib/ai/claude-client', () => ({
+  claudeCompletion: vi.fn(),
+  claudeJsonCompletion: vi.fn(),
+  streamClaudeCompletion: vi.fn(),
+  anthropic: {},
+}));
+
 // Mock Supabase before importing route handlers
 vi.mock('@/lib/supabase/server', () => ({
   createServerSupabaseClient: async () => mockSupabase,

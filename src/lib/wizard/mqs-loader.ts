@@ -29,6 +29,9 @@ export function loadMQS(product: ProductType, jurisdiction: string): MasterQuest
 }
 
 function getValueAtPath(facts: Record<string, any>, path: string): unknown {
+  if (Object.prototype.hasOwnProperty.call(facts, path)) {
+    return (facts as Record<string, any>)[path];
+  }
   return path
     .split('.')
     .filter(Boolean)
