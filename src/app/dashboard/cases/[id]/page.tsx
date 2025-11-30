@@ -52,11 +52,18 @@ export default function CaseDetailPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [analysis, setAnalysis] = useState<any>(null);
+  const [askInput, setAskInput] = useState('');
+  const [askHistory, setAskHistory] = useState<
+    { role: 'user' | 'assistant'; content: string; timestamp: number }[]
+  >([]);
+  const [askLoading, setAskLoading] = useState(false);
 
   useEffect(() => {
     if (caseId) {
       fetchCaseDetails();
       fetchCaseDocuments();
+      runAskHeaven();
     }
   }, [caseId]);
 
@@ -88,6 +95,46 @@ export default function CaseDetailPage() {
       }
     } catch (err) {
       console.error('Failed to fetch documents:', err);
+    }
+  };
+
+  const runAskHeaven = async (question?: string) => {
+    if (!caseId) return;
+
+    setAskLoading(!!question);
+
+    try {
+      const response = await fetch('/api/wizard/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ case_id: caseId, ...(question ? { question } : {}) }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to run Ask Heaven analysis');
+      }
+
+      const data = await response.json();
+      setAnalysis(data);
+
+      if (question) {
+        setAskHistory((prev) => [
+          ...prev,
+          { role: 'user', content: question, timestamp: Date.now() },
+          {
+            role: 'assistant',
+            content:
+              data.ask_heaven_answer ||
+              'We generated your summary above. For detailed advice, continue the wizard or contact support.',
+            timestamp: Date.now(),
+          },
+        ]);
+      }
+    } catch (err) {
+      console.error(err);
+      setMessage({ type: 'error', text: (err as Error).message || 'Ask Heaven is unavailable right now.' });
+    } finally {
+      setAskLoading(false);
     }
   };
 
@@ -554,6 +601,94 @@ export default function CaseDetailPage() {
                       {renderFieldValue(key, value)}
                     </div>
                   ))}
+                </div>
+              )}
+            </Card>
+
+            {/* Ask Heaven Case Q&A */}
+            <Card padding="large" id="ask-heaven">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+                <div>
+                  <h2 className="text-xl font-semibold text-charcoal">Ask Heaven — Case Q&A</h2>
+                  <p className="text-sm text-gray-600">
+                    Quick answers generated from your case facts. For binding advice, speak to a solicitor.
+                  </p>
+                </div>
+                <Button variant="outline" onClick={() => runAskHeaven()} disabled={askLoading}>
+                  Refresh summary
+                </Button>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4 mb-4">
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                  <p className="text-sm text-gray-600">Jurisdiction</p>
+                  <p className="text-lg font-semibold text-charcoal">
+                    {analysis?.case_summary?.jurisdiction || caseDetails?.jurisdiction || '—'}
+                  </p>
+                  <p className="text-sm text-gray-600 mt-2">Route</p>
+                  <p className="text-base text-charcoal capitalize">
+                    {analysis?.case_summary?.route?.replace('_', ' ') || analysis?.recommended_route || 'money claim'}
+                  </p>
+                </div>
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-1">
+                  <p className="text-sm text-gray-600">Arrears & charges</p>
+                  <p className="text-base text-charcoal">
+                    Arrears: {analysis?.case_summary?.total_arrears != null ? `£${analysis.case_summary.total_arrears}` : '—'}
+                  </p>
+                  <p className="text-base text-charcoal">Damages: £{analysis?.case_summary?.damages ?? 0}</p>
+                  <p className="text-base text-charcoal">Other charges: £{analysis?.case_summary?.other_charges ?? 0}</p>
+                  <p className="text-sm text-gray-600">
+                    Interest: {analysis?.case_summary?.interest_rate ?? 8}%{analysis?.case_summary?.interest_start_date
+                      ? ` from ${analysis.case_summary.interest_start_date}`
+                      : ''}
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-3 mb-4 text-sm text-gray-700">
+                <p>
+                  {analysis?.ask_heaven_answer ||
+                    'Ask a question below to get a quick summary based on your current wizard answers.'}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-2">
+                  <input
+                    value={askInput}
+                    onChange={(e) => setAskInput(e.target.value)}
+                    placeholder="e.g. Do I need to send another demand before filing?"
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      if (!askInput.trim()) return;
+                      runAskHeaven(askInput.trim());
+                      setAskInput('');
+                    }}
+                    disabled={askLoading}
+                  >
+                    {askLoading ? 'Working...' : 'Ask Heaven'}
+                  </Button>
+                </div>
+              </div>
+
+              {askHistory.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="font-semibold text-charcoal">Conversation</h3>
+                  <div className="space-y-2 text-sm">
+                    {askHistory.map((entry, idx) => (
+                      <div
+                        key={`${entry.timestamp}-${idx}`}
+                        className={`p-3 rounded-lg border ${
+                          entry.role === 'user'
+                            ? 'bg-white border-gray-200'
+                            : 'bg-primary/5 border-primary/20 text-primary-darker'
+                        }`}
+                      >
+                        <p className="font-semibold capitalize">{entry.role}</p>
+                        <p className="whitespace-pre-wrap">{entry.content}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </Card>
