@@ -113,8 +113,6 @@ function WizardFlowContent() {
     return (
       <StructuredWizard
         caseId={caseId}
-        caseType={type!}
-        jurisdiction={jurisdiction!}
         onComplete={handleComplete}
       />
     );

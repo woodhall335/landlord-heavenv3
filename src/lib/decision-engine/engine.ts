@@ -67,7 +67,7 @@ export async function analyzeCase(facts: CaseFacts): Promise<DecisionResult> {
   });
 
   // Check Section 21 eligibility
-  const section21 = checkSection21Eligibility(facts, jurisdiction);
+  const section21 = checkSection21Eligibility(facts);
 
   // Detect red flags
   const redFlags = detectRedFlags(facts);
@@ -92,7 +92,7 @@ export async function analyzeCase(facts: CaseFacts): Promise<DecisionResult> {
   const costs = estimateCosts(facts, jurisdiction);
 
   // Generate summary and next steps
-  const summary = generateSummary(recommendedRoute, primaryGrounds, section21);
+  const summary = generateSummary(recommendedRoute, primaryGrounds);
   const nextSteps = generateNextSteps(recommendedRoute, primaryGrounds, redFlags);
   const warnings = generateWarnings(redFlags, complianceChecks);
 
@@ -209,7 +209,7 @@ function buildGroundRecommendation(
     success_probability: successProb,
     notice_period_days: definition.notice_period_days,
     reasoning: rule.reasoning || `Based on case facts, Ground ${groundNumber} applies.`,
-    required_evidence: getRequiredEvidence(groundNumber, facts),
+    required_evidence: getRequiredEvidence(groundNumber),
     statute: definition.statute,
     red_flags: detectGroundSpecificRedFlags(groundNumber, facts),
   };
@@ -237,7 +237,7 @@ function mapSuccessProbability(prob: string | number): SuccessProbability {
 /**
  * Get required evidence for a ground
  */
-function getRequiredEvidence(groundNumber: number, _facts: CaseFacts): string[] {
+function getRequiredEvidence(groundNumber: number): string[] {
   const evidence: string[] = [];
 
   switch (groundNumber) {
@@ -320,7 +320,7 @@ function detectGroundSpecificRedFlags(groundNumber: number, facts: CaseFacts): R
 /**
  * Check Section 21 eligibility
  */
-function checkSection21Eligibility(facts: CaseFacts, _jurisdiction: string): Section21Recommendation {
+function checkSection21Eligibility(facts: CaseFacts): Section21Recommendation {
   const complianceChecks: ComplianceCheck[] = [];
   const redFlags: RedFlag[] = [];
 
@@ -655,11 +655,7 @@ function estimateCosts(facts: CaseFacts, jurisdiction: string): CostEstimate {
 /**
  * Generate a summary of the analysis
  */
-function generateSummary(
-  route: string,
-  grounds: GroundRecommendation[],
-  _section21: Section21Recommendation
-): string {
+function generateSummary(route: string, grounds: GroundRecommendation[]): string {
   if (route === 'none') {
     return 'No valid eviction route available due to compliance issues. Address red flags before proceeding.';
   }

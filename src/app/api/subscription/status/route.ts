@@ -4,12 +4,12 @@
  * GET /api/subscription/status - Get user's current subscription status
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server-auth';
 import { createClient } from '@/lib/supabase/server';
 
 // Get current subscription status
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     const user = await requireServerAuth();
 

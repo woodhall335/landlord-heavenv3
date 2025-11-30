@@ -4,13 +4,13 @@
  * POST /api/subscription/cancel - Cancel user's subscription
  */
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server-auth';
 import { createClient } from '@/lib/supabase/server';
 import Stripe from 'stripe';
 
 // Cancel subscription at period end
-export async function POST(_request: NextRequest) {
+export async function POST() {
   try {
     const user = await requireServerAuth();
 

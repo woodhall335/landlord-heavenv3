@@ -27,21 +27,21 @@ export async function createServerSupabaseClient(): Promise<SupabaseClient<Datab
         get(name: string) {
           return cookieStore.get(name)?.value;
         },
-        set(name: string, value: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value, ...options });
-          } catch (_error) {
-            // In some server contexts (e.g. certain Server Components),
-            // setting cookies isn't allowed. Silently ignore in those cases.
-          }
-        },
-        remove(name: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value: '', ...options });
-          } catch (_error) {
-            // Same as above – safe no-op when cookies can't be mutated
-          }
-        },
+          set(name: string, value: string, options: CookieOptions) {
+            try {
+              cookieStore.set({ name, value, ...options });
+            } catch {
+              // In some server contexts (e.g. certain Server Components),
+              // setting cookies isn't allowed. Silently ignore in those cases.
+            }
+          },
+          remove(name: string, options: CookieOptions) {
+            try {
+              cookieStore.set({ name, value: '', ...options });
+            } catch {
+              // Same as above – safe no-op when cookies can't be mutated
+            }
+          },
       },
     }
   );

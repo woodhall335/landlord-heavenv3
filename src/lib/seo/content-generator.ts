@@ -423,23 +423,5 @@ export async function refreshContent(
   existingContent: string,
   params: ContentGenerationParams
 ): Promise<GeneratedContent> {
-  const _prompt = `You are refreshing existing SEO content for Landlord Heaven. Update the content below with:
-1. Latest legal information and updates
-2. Improved SEO optimization
-3. Better structure and readability
-4. Current year references
-
-EXISTING CONTENT:
-${existingContent}
-
-TARGET KEYWORD: ${params.targetKeyword}
-${params.location ? `LOCATION: ${params.location}` : ''}
-
-Provide the refreshed content in the same format:
----TITLE---
----META---
----H1---
----CONTENT---`;
-
   return generateSEOContent({ ...params, model: 'gpt-4o-mini' });
 }

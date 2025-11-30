@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
@@ -59,15 +59,7 @@ export default function CaseDetailPage() {
   >([]);
   const [askLoading, setAskLoading] = useState(false);
 
-  useEffect(() => {
-    if (caseId) {
-      fetchCaseDetails();
-      fetchCaseDocuments();
-      runAskHeaven();
-    }
-  }, [caseId]);
-
-  const fetchCaseDetails = async () => {
+  const fetchCaseDetails = useCallback(async () => {
     try {
       const response = await fetch(`/api/cases/${caseId}`);
 
@@ -78,14 +70,14 @@ export default function CaseDetailPage() {
       } else {
         setError('Case not found');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to load case details');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [caseId]);
 
-  const fetchCaseDocuments = async () => {
+  const fetchCaseDocuments = useCallback(async () => {
     try {
       const response = await fetch(`/api/documents?case_id=${caseId}`);
 
@@ -96,12 +88,13 @@ export default function CaseDetailPage() {
     } catch (err) {
       console.error('Failed to fetch documents:', err);
     }
-  };
+  }, [caseId]);
 
-  const runAskHeaven = async (question?: string) => {
-    if (!caseId) return;
+  const runAskHeaven = useCallback(
+    async (question?: string) => {
+      if (!caseId) return;
 
-    setAskLoading(!!question);
+      setAskLoading(!!question);
 
     try {
       const response = await fetch('/api/wizard/analyze', {
@@ -136,7 +129,17 @@ export default function CaseDetailPage() {
     } finally {
       setAskLoading(false);
     }
-  };
+  },
+    [caseId],
+  );
+
+  useEffect(() => {
+    if (!caseId) return;
+
+    fetchCaseDetails();
+    fetchCaseDocuments();
+    runAskHeaven();
+  }, [caseId, fetchCaseDetails, fetchCaseDocuments, runAskHeaven]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {
@@ -300,7 +303,7 @@ export default function CaseDetailPage() {
       } else {
         alert('Failed to delete case');
       }
-    } catch (err) {
+    } catch {
       alert('Failed to delete case');
     }
   };
