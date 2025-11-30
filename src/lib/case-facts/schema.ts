@@ -30,7 +30,7 @@ export interface TenancyFacts {
   fixed_term: boolean | null;
   fixed_term_months: number | null;
   rent_amount: number | null;
-  rent_frequency: 'weekly' | 'monthly' | 'yearly' | 'other' | null;
+  rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly' | 'other' | null;
   rent_due_day: number | null;
   deposit_amount: number | null;
   deposit_protected: boolean | null;
@@ -49,6 +49,7 @@ export interface PropertyFacts {
 
 export interface PartyDetails {
   name: string | null;
+  co_claimant?: string | null;
   email: string | null;
   phone: string | null;
   address_line1: string | null;
@@ -102,6 +103,9 @@ export interface CourtFacts {
   claim_amount_costs: number | null;
   claim_amount_other: number | null;
   total_claim_amount: number | null;
+  claimant_reference?: string | null;
+  court_name?: string | null;
+  particulars_of_claim?: string | null;
   n5_required: boolean | null;
   n119_required: boolean | null;
   n1_required: boolean | null;
@@ -120,6 +124,7 @@ export interface EvidenceFacts {
 }
 
 export interface ServiceContactFacts {
+  has_override?: boolean | null;
   service_name: string | null;
   service_address_line1: string | null;
   service_address_line2: string | null;
@@ -127,6 +132,29 @@ export interface ServiceContactFacts {
   service_postcode: string | null;
   service_email: string | null;
   service_phone: string | null;
+}
+
+export interface MoneyClaimFacts {
+  payment_day: number | null;
+  damage_claim: boolean | null;
+  damage_items: Array<{ description?: string; amount?: number; evidence?: string }>;
+  other_charges: Array<{ description?: string; amount?: number }>;
+  charge_interest: boolean | null;
+  interest_start_date: string | null;
+  interest_rate: number | null;
+  attempts_to_resolve: string | null;
+  lba_sent?: boolean | null;
+  lba_date?: string | null;
+  lba_method?: string[] | null;
+  lba_response_deadline?: string | null;
+  tenant_responded?: boolean | null;
+  signatory_name?: string | null;
+  signature_date?: string | null;
+  sheriffdom?: string | null;
+  demand_letter_date?: string | null;
+  second_demand_date?: string | null;
+  evidence_summary?: string | null;
+  basis_of_claim?: string | null;
 }
 
 export interface MetaFacts {
@@ -144,6 +172,7 @@ export interface CaseFacts {
   court: CourtFacts;
   evidence: EvidenceFacts;
   service_contact: ServiceContactFacts;
+  money_claim: MoneyClaimFacts;
   meta: MetaFacts;
 }
 
@@ -214,6 +243,9 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     claim_amount_costs: null,
     claim_amount_other: null,
     total_claim_amount: null,
+    claimant_reference: null,
+    court_name: null,
+    particulars_of_claim: null,
     n5_required: null,
     n119_required: null,
     n1_required: null,
@@ -230,6 +262,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     missing_evidence_notes: [],
   },
   service_contact: {
+    has_override: null,
     service_name: null,
     service_address_line1: null,
     service_address_line2: null,
@@ -237,6 +270,28 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     service_postcode: null,
     service_email: null,
     service_phone: null,
+  },
+  money_claim: {
+    payment_day: null,
+    damage_claim: null,
+    damage_items: [],
+    other_charges: [],
+    charge_interest: null,
+    interest_start_date: null,
+    interest_rate: null,
+    attempts_to_resolve: null,
+    lba_sent: null,
+    lba_date: null,
+    lba_method: null,
+    lba_response_deadline: null,
+    tenant_responded: null,
+    signatory_name: null,
+    signature_date: null,
+    sheriffdom: null,
+    demand_letter_date: null,
+    second_demand_date: null,
+    evidence_summary: null,
+    basis_of_claim: null,
   },
   meta: {
     product: null,

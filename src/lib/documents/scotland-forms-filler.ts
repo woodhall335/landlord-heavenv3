@@ -128,7 +128,8 @@ async function loadOfficialForm(formName: string): Promise<PDFDocument> {
 
   try {
     const pdfBytes = await fs.readFile(formPath);
-    const pdfDoc = await PDFDocument.load(pdfBytes);
+    const byteSource = pdfBytes instanceof Uint8Array ? pdfBytes : new Uint8Array(pdfBytes as any);
+    const pdfDoc = await PDFDocument.load(byteSource);
     return pdfDoc;
   } catch (error) {
     throw new Error(`Failed to load official form "${formName}". Make sure the PDF exists in /public/official-forms/scotland/. Error: ${error}`);

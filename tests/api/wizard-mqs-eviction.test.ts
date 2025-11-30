@@ -1,11 +1,18 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Mock OpenAI client BEFORE importing any modules that use it
+// Mock AI clients BEFORE importing any modules that use them
 vi.mock('@/lib/ai/openai-client', () => ({
   chatCompletion: vi.fn(),
   jsonCompletion: vi.fn(),
   streamChatCompletion: vi.fn(),
   openai: {},
+}));
+
+vi.mock('@/lib/ai/claude-client', () => ({
+  claudeCompletion: vi.fn(),
+  claudeJsonCompletion: vi.fn(),
+  streamClaudeCompletion: vi.fn(),
+  anthropic: {},
 }));
 
 import { POST as nextQuestion } from '@/app/api/wizard/next-question/route';

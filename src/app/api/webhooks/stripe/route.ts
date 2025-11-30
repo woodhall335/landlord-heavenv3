@@ -9,6 +9,11 @@ import { createAdminClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { sendPurchaseConfirmation } from '@/lib/email/resend';
+import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import {
+  mapCaseFactsToMoneyClaimCase,
+  mapCaseFactsToScotlandMoneyClaimCase,
+} from '@/lib/documents/money-claim-wizard-mapper';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-11-17.clover',
@@ -92,7 +97,8 @@ export async function POST(request: Request) {
               if (caseError || !caseData) {
                 console.error('[Fulfillment] Case not found:', caseError);
               } else {
-                const facts = (caseData as any).collected_facts;
+                const wizardFacts = (caseData as any).collected_facts;
+                const caseFacts = wizardFactsToCaseFacts(wizardFacts as any);
 
                 // Handle eviction packs (notice_only and complete_pack)
                 if (productType === 'notice_only' || productType === 'complete_pack') {
@@ -102,9 +108,9 @@ export async function POST(request: Request) {
 
                   let evictionPack: any;
                   if (productType === 'notice_only') {
-                    evictionPack = await generateNoticeOnlyPack(facts);
+                    evictionPack = await generateNoticeOnlyPack(wizardFacts);
                   } else {
-                    evictionPack = await generateCompleteEvictionPack(facts);
+                    evictionPack = await generateCompleteEvictionPack(wizardFacts);
                   }
 
                   console.log(`[Fulfillment] Generated ${evictionPack.documents.length} documents in eviction pack`);
@@ -167,8 +173,7 @@ export async function POST(request: Request) {
 
                   console.log(`[Fulfillment] Generating money claim pack for case ${caseId}...`);
                   const pack = await generateMoneyClaimPack({
-                    ...facts,
-                    jurisdiction: (caseData as any).jurisdiction,
+                    ...mapCaseFactsToMoneyClaimCase(caseFacts),
                     case_id: caseId,
                   });
 
@@ -221,6 +226,64 @@ export async function POST(request: Request) {
 
                   console.log(`[Fulfillment] Money claim pack fulfilled: ${orderId}`);
 
+                } else if (productType === 'sc_money_claim') {
+                  const { generateScotlandMoneyClaim } = await import('@/lib/documents/scotland-money-claim-pack-generator');
+
+                  console.log(`[Fulfillment] Generating Scotland money claim pack for case ${caseId}...`);
+                  const pack = await generateScotlandMoneyClaim({
+                    ...mapCaseFactsToScotlandMoneyClaimCase(caseFacts),
+                    case_id: caseId,
+                  });
+
+                  for (const doc of pack.documents) {
+                    if (!doc.pdf) continue;
+
+                    const fileName = `${userId}/${caseId}/${doc.file_name}`;
+                    const { error: uploadError } = await supabase.storage
+                      .from('documents')
+                      .upload(fileName, doc.pdf, {
+                        contentType: 'application/pdf',
+                        upsert: false,
+                      });
+
+                    if (uploadError) {
+                      console.error(`[Fulfillment] Failed to upload ${doc.title}:`, uploadError);
+                      continue;
+                    }
+
+                    const { data: publicUrlData } = supabase.storage
+                      .from('documents')
+                      .getPublicUrl(fileName);
+
+                    await supabase.from('documents').insert({
+                      user_id: userId,
+                      case_id: caseId,
+                      document_type: doc.category,
+                      document_title: doc.title,
+                      jurisdiction: (caseData as any).jurisdiction,
+                      html_content: doc.html || null,
+                      pdf_url: publicUrlData.publicUrl,
+                      is_preview: false,
+                      qa_passed: true,
+                      metadata: { description: doc.description, pack_type: productType },
+                    });
+                  }
+
+                  await supabase
+                    .from('orders')
+                    .update({
+                      fulfillment_status: 'completed',
+                      fulfilled_at: new Date().toISOString(),
+                      metadata: {
+                        total_documents: pack.documents.length,
+                        pack_type: pack.pack_type,
+                        jurisdiction: pack.jurisdiction,
+                      },
+                    })
+                    .eq('id', orderId);
+
+                  console.log(`[Fulfillment] Scotland money claim pack fulfilled: ${orderId}`);
+
                 } else {
                   // Handle AST and other single document types
                   const { generateStandardAST, generatePremiumAST } = await import('@/lib/documents/ast-generator');
@@ -232,12 +295,12 @@ export async function POST(request: Request) {
                   // Generate document based on type
                   switch (productType) {
                     case 'ast_standard':
-                      generatedDoc = await generateStandardAST(facts);
+                      generatedDoc = await generateStandardAST(wizardFacts);
                       documentTitle = 'Assured Shorthold Tenancy Agreement - Standard';
                       documentType = 'ast_standard';
                       break;
                     case 'ast_premium':
-                      generatedDoc = await generatePremiumAST(facts);
+                      generatedDoc = await generatePremiumAST(wizardFacts);
                       documentTitle = 'Assured Shorthold Tenancy Agreement - Premium';
                       documentType = 'ast_premium';
                       break;

@@ -11,6 +11,7 @@ import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server
 import { getNextMQSQuestion, loadMQS, type MasterQuestionSet, type ProductType } from '@/lib/wizard/mqs-loader';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
+import { getNextQuestion as getAiNextQuestion } from '@/lib/ai';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -97,13 +98,25 @@ export async function POST(request: Request) {
       caseRow.case_type,
       (caseRow.collected_facts as Record<string, any>) || {}
     );
-    const mqs = loadMQS(product, caseRow.jurisdiction);
+    let mqs = loadMQS(product, caseRow.jurisdiction);
+
+    if (caseRow.case_type === 'eviction' && product === 'money_claim') {
+      mqs = undefined;
+    }
 
     if (!mqs) {
-      return NextResponse.json(
-        { error: 'MQS not implemented for this jurisdiction yet' },
-        { status: 400 }
-      );
+      const aiResult = await getAiNextQuestion({
+        case_type: caseRow.case_type,
+        jurisdiction: caseRow.jurisdiction,
+        collected_facts: (caseRow.collected_facts as Record<string, any>) || {},
+      });
+
+      return NextResponse.json({
+        next_question: aiResult.next_question,
+        is_complete: aiResult.is_complete,
+        missing_critical_facts: aiResult.missing_critical_facts,
+        usage: aiResult.usage,
+      });
     }
 
     const facts = await getOrCreateWizardFacts(supabase, case_id);
