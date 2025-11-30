@@ -118,93 +118,6 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     setMessages((prev) => [...prev, message]);
   }, []);
 
-  // Initialize wizard
-  useEffect(() => {
-    startWizard();
-  }, [startWizard]);
-
-  const startWizard = useCallback(async () => {
-    setIsLoading(true);
-
-    try {
-      // If editing, load existing case data
-      if (editCaseId) {
-        const caseResponse = await fetch(`/api/cases/${editCaseId}`);
-        if (caseResponse.ok) {
-          const caseData = await caseResponse.json();
-          setCaseId(editCaseId);
-          setCollectedFacts(caseData.case.collected_facts || {});
-
-          // Calculate progress based on existing facts
-          const factsCount = Object.keys(caseData.case.collected_facts || {}).length;
-          setProgress(Math.min((factsCount / 15) * 100, 95));
-
-          // Add edit message
-          const editMessage: Message = {
-            id: `msg-${Date.now()}`,
-            role: 'assistant',
-            content: `✏️ **Editing Mode**\n\nI've loaded your previous answers. You can review and change any information. Let's continue from where you left off.`,
-            timestamp: new Date(),
-          };
-          setMessages([editMessage]);
-
-          // Get next question
-          await getNextQuestion(editCaseId, caseData.case.collected_facts || {});
-        } else {
-          throw new Error('Failed to load case for editing');
-        }
-      } else {
-        // Create new case
-        const derivedProduct =
-          product ||
-          (caseType === 'eviction'
-            ? 'complete_pack'
-            : caseType === 'money_claim'
-            ? 'money_claim'
-            : 'tenancy_agreement');
-        const response = await fetch('/api/wizard/start', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ product: derivedProduct, jurisdiction, case_type: caseType }),
-        });
-
-        const data = await response.json();
-        if (data.success) {
-          setCaseId(data.case.id);
-
-          // Add welcome message
-          const welcomeMessage: Message = {
-            id: `msg-${Date.now()}`,
-            role: 'assistant',
-            content: getWelcomeMessage(caseType, jurisdiction),
-            timestamp: new Date(),
-          };
-          setMessages([welcomeMessage]);
-
-          // Get first question
-          await getNextQuestion(data.case.id, {});
-        }
-      }
-    } catch (error: any) {
-      console.error('Failed to start wizard:', error);
-
-      // Show helpful error message based on error type
-      if (error.message?.includes('Supabase') || error.message?.includes('URL and Key')) {
-        setError('Database connection failed. Please configure Supabase credentials in .env.local');
-      } else if (error.message?.includes('Unauthorized')) {
-        setError('Please log in to use the wizard.');
-      } else if (error.message?.includes('OpenAI')) {
-        setError('Service unavailable. Please check OPENAI_API_KEY in .env.local');
-      } else {
-        setError('Failed to start wizard. Please check your environment configuration.');
-      }
-
-      addMessage('assistant', "Sorry, something went wrong. Please check the error message above.");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [addMessage, editCaseId, getNextQuestion, jurisdiction, caseType, product]);
-
   const getWelcomeMessage = (type: string, jur: string): string => {
     const jurName = jur === 'england-wales' ? 'England & Wales' : 'Scotland';
 
@@ -220,45 +133,6 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     }
   };
 
-  const getNextQuestion = useCallback(async (currentCaseId: string, facts: Record<string, any>) => {
-    setIsLoading(true);
-
-    try {
-      // Call fact-finder to get next question
-      const response = await fetch('/api/wizard/next-question', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          case_id: currentCaseId,
-          case_type: caseType,
-          jurisdiction,
-          collected_facts: facts,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.is_complete) {
-        // Wizard complete - analyze case
-        setIsComplete(true);
-        addMessage('assistant', "Perfect! I have everything I need. Let me analyze your case...");
-        await analyzeCase(currentCaseId);
-      } else if (data.next_question) {
-        setCurrentQuestion(data.next_question);
-        addMessage('assistant', data.next_question.question_text);
-
-        // Update progress
-        const totalQuestions = 10; // Estimate
-        const answered = Object.keys(facts).length;
-        setProgress(Math.min((answered / totalQuestions) * 100, 95));
-      }
-    } catch (error) {
-      console.error('Failed to get next question:', error);
-      addMessage('assistant', "Sorry, I encountered an error. Let me try again...");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [addMessage, analyzeCase, caseType, jurisdiction]);
 
   const handleAnswer = async (answer: any) => {
     // Prevent duplicate submissions while loading
@@ -379,6 +253,136 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     },
     [addMessage, formatAnalysisResults, onComplete],
   );
+
+  const getNextQuestion = useCallback(
+    async (currentCaseId: string, facts: Record<string, any>) => {
+      setIsLoading(true);
+
+      try {
+        // Call fact-finder to get next question
+        const response = await fetch('/api/wizard/next-question', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            case_id: currentCaseId,
+            case_type: caseType,
+            jurisdiction,
+            collected_facts: facts,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (data.is_complete) {
+          // Wizard complete - analyze case
+          setIsComplete(true);
+          addMessage('assistant', "Perfect! I have everything I need. Let me analyze your case...");
+          await analyzeCase(currentCaseId);
+        } else if (data.next_question) {
+          setCurrentQuestion(data.next_question);
+          addMessage('assistant', data.next_question.question_text);
+
+          // Update progress
+          const totalQuestions = 10; // Estimate
+          const answered = Object.keys(facts).length;
+          setProgress(Math.min((answered / totalQuestions) * 100, 95));
+        }
+      } catch (error) {
+        console.error('Failed to get next question:', error);
+        addMessage('assistant', "Sorry, I encountered an error. Let me try again...");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [addMessage, analyzeCase, caseType, jurisdiction],
+  );
+
+  const startWizard = useCallback(async () => {
+    setIsLoading(true);
+
+    try {
+      // If editing, load existing case data
+      if (editCaseId) {
+        const caseResponse = await fetch(`/api/cases/${editCaseId}`);
+        if (caseResponse.ok) {
+          const caseData = await caseResponse.json();
+          setCaseId(editCaseId);
+          setCollectedFacts(caseData.case.collected_facts || {});
+
+          // Calculate progress based on existing facts
+          const factsCount = Object.keys(caseData.case.collected_facts || {}).length;
+          setProgress(Math.min((factsCount / 15) * 100, 95));
+
+          // Add edit message
+          const editMessage: Message = {
+            id: `msg-${Date.now()}`,
+            role: 'assistant',
+            content: `✏️ **Editing Mode**\n\nI've loaded your previous answers. You can review and change any information. Let's continue from where you left off.`,
+            timestamp: new Date(),
+          };
+          setMessages([editMessage]);
+
+          // Get next question
+          await getNextQuestion(editCaseId, caseData.case.collected_facts || {});
+        } else {
+          throw new Error('Failed to load case for editing');
+        }
+      } else {
+        // Create new case
+        const derivedProduct =
+          product ||
+          (caseType === 'eviction'
+            ? 'complete_pack'
+            : caseType === 'money_claim'
+            ? 'money_claim'
+            : 'tenancy_agreement');
+        const response = await fetch('/api/wizard/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ product: derivedProduct, jurisdiction, case_type: caseType }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          setCaseId(data.case.id);
+
+          // Add welcome message
+          const welcomeMessage: Message = {
+            id: `msg-${Date.now()}`,
+            role: 'assistant',
+            content: getWelcomeMessage(caseType, jurisdiction),
+            timestamp: new Date(),
+          };
+          setMessages([welcomeMessage]);
+
+          // Get first question
+          await getNextQuestion(data.case.id, {});
+        }
+      }
+    } catch (error: any) {
+      console.error('Failed to start wizard:', error);
+
+      // Show helpful error message based on error type
+      if (error.message?.includes('Supabase') || error.message?.includes('URL and Key')) {
+        setError('Database connection failed. Please configure Supabase credentials in .env.local');
+      } else if (error.message?.includes('Unauthorized')) {
+        setError('Please log in to use the wizard.');
+      } else if (error.message?.includes('OpenAI')) {
+        setError('Service unavailable. Please check OPENAI_API_KEY in .env.local');
+      } else {
+        setError('Failed to start wizard. Please check your environment configuration.');
+      }
+
+      addMessage('assistant', "Sorry, something went wrong. Please check the error message above.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [addMessage, caseType, editCaseId, getNextQuestion, getWelcomeMessage, jurisdiction, product]);
+
+  // Initialize wizard
+  useEffect(() => {
+    startWizard();
+  }, [startWizard]);
 
   const formatAnswerForDisplay = (answer: any, inputType: string): string => {
     switch (inputType) {
