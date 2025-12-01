@@ -225,7 +225,8 @@ function buildPreActionSummary(claim: MoneyClaimCase): string {
     segments.push(responseText);
   }
   if (claim.pap_documents_served) {
-    const methods = (claim.pap_service_method || []).length ? claim.pap_service_method.join(', ') : 'unspecified method';
+    const papMethods = claim.pap_service_method ?? [];
+    const methods = papMethods.length ? papMethods.join(', ') : 'unspecified method';
     segments.push(`Pre-action pack served (${methods}).`);
   }
   if (claim.pap_service_proof) {

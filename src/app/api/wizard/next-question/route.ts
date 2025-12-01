@@ -8,13 +8,29 @@
 
 import { NextResponse } from 'next/server';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
-import { getNextMQSQuestion, loadMQS, type MasterQuestionSet, type ProductType } from '@/lib/wizard/mqs-loader';
+import {
+  getNextMQSQuestion,
+  loadMQS,
+  type MasterQuestionSet,
+  type ProductType,
+} from '@/lib/wizard/mqs-loader';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { getNextQuestion as getNextAIQuestion } from '@/lib/ai';
+import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import type { CaseFacts } from '@/lib/case-facts/schema';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
+
+type CaseRow = {
+  id: string;
+  jurisdiction: string;
+  case_type: string;
+  collected_facts: any;
+  wizard_progress: number | null;
+  wizard_completed_at: string | null;
+};
 
 function getValueAtPath(facts: Record<string, any>, path: string): unknown {
   return path
@@ -27,7 +43,10 @@ function getValueAtPath(facts: Record<string, any>, path: string): unknown {
     }, facts);
 }
 
-function isQuestionAnswered(question: ExtendedWizardQuestion, facts: Record<string, any>): boolean {
+function isQuestionAnswered(
+  question: ExtendedWizardQuestion,
+  facts: Record<string, any>
+): boolean {
   if (question.maps_to && question.maps_to.length > 0) {
     return question.maps_to.every((path) => {
       const value = getValueAtPath(facts, path);
@@ -44,10 +63,14 @@ function isQuestionAnswered(question: ExtendedWizardQuestion, facts: Record<stri
   return true;
 }
 
-function deriveProduct(caseType: string, collectedFacts: Record<string, any>): ProductType | null {
+function deriveProduct(
+  caseType: string,
+  collectedFacts: Record<string, any>
+): ProductType | null {
   const metaProduct = collectedFacts?.__meta?.product as ProductType | undefined;
   const isMetaCompatible =
-    (caseType === 'eviction' && (metaProduct === 'notice_only' || metaProduct === 'complete_pack')) ||
+    (caseType === 'eviction' &&
+      (metaProduct === 'notice_only' || metaProduct === 'complete_pack')) ||
     (caseType === 'money_claim' && metaProduct === 'money_claim') ||
     (caseType === 'tenancy_agreement' && metaProduct === 'tenancy_agreement');
 
@@ -73,7 +96,10 @@ function hasArrayValue(value: unknown): boolean {
   return Array.isArray(value) && value.length > 0;
 }
 
-function getMoneyClaimMissingEssentials(facts: CaseFacts, jurisdiction: string): string[] {
+function getMoneyClaimMissingEssentials(
+  facts: CaseFacts,
+  jurisdiction: string
+): string[] {
   const missing: string[] = [];
 
   if (!hasStringValue(facts.parties.landlord?.name)) missing.push('landlord_name');
@@ -90,23 +116,36 @@ function getMoneyClaimMissingEssentials(facts: CaseFacts, jurisdiction: string):
     (facts.money_claim.other_charges || []).length > 0;
   if (!hasBreakdown) missing.push('claim_breakdown');
 
-  if (!facts.money_claim.lba_date && !facts.money_claim.demand_letter_date) missing.push('pre_action_letter_date');
-  if (!facts.money_claim.lba_response_deadline) missing.push('pre_action_response_deadline');
-  if (!hasArrayValue(facts.money_claim.lba_method)) missing.push('pre_action_service_method');
+  if (!facts.money_claim.lba_date && !facts.money_claim.demand_letter_date) {
+    missing.push('pre_action_letter_date');
+  }
+  if (!facts.money_claim.lba_response_deadline) {
+    missing.push('pre_action_response_deadline');
+  }
+  if (!hasArrayValue(facts.money_claim.lba_method)) {
+    missing.push('pre_action_service_method');
+  }
   if (jurisdiction === 'england-wales' && !hasArrayValue(facts.money_claim.pap_documents_sent)) {
     missing.push('pap_documents_sent');
   }
   if (jurisdiction === 'scotland' && facts.money_claim.pre_action_deadline_confirmation === null) {
     missing.push('rule_3_1_response_window');
   }
-  if (facts.money_claim.pap_documents_served !== true) missing.push('service_confirmation');
+  if (facts.money_claim.pap_documents_served !== true) {
+    missing.push('service_confirmation');
+  }
 
   const hasArrearsEvidence =
-    facts.money_claim.arrears_schedule_confirmed === true || facts.evidence.rent_schedule_uploaded === true;
+    facts.money_claim.arrears_schedule_confirmed === true ||
+    facts.evidence.rent_schedule_uploaded === true;
   if (!hasArrearsEvidence) missing.push('arrears_schedule_or_ledger');
 
-  if (!hasStringValue(facts.money_claim.attempts_to_resolve)) missing.push('attempts_to_resolve');
-  if (facts.money_claim.charge_interest === null) missing.push('interest_choice');
+  if (!hasStringValue(facts.money_claim.attempts_to_resolve)) {
+    missing.push('attempts_to_resolve');
+  }
+  if (facts.money_claim.charge_interest === null) {
+    missing.push('interest_choice');
+  }
 
   const hasEvidenceFlags =
     hasArrayValue(facts.money_claim.evidence_types_available) ||
@@ -115,7 +154,9 @@ function getMoneyClaimMissingEssentials(facts: CaseFacts, jurisdiction: string):
     facts.money_claim.arrears_schedule_confirmed === true;
   if (!hasEvidenceFlags) missing.push('evidence_flags');
 
-  if (!hasArrayValue(facts.money_claim.enforcement_preferences)) missing.push('enforcement_preferences');
+  if (!hasArrayValue(facts.money_claim.enforcement_preferences)) {
+    missing.push('enforcement_preferences');
+  }
 
   return missing;
 }
@@ -145,18 +186,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    // Type assertion: we know data exists after the null check
-    const caseRow = data as { id: string; jurisdiction: string; case_type: string; collected_facts: any };
+    const caseRow = data as CaseRow;
 
     // Northern Ireland gating: only tenancy agreements are supported
     if (caseRow.jurisdiction === 'northern-ireland' && caseRow.case_type !== 'tenancy_agreement') {
       return NextResponse.json(
-        { error: 'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.' },
+        {
+          error:
+            'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.',
+        },
         { status: 400 }
       );
     }
 
-    const product = deriveProduct(caseRow.case_type, (caseRow.collected_facts as Record<string, any>) || {});
+    const product = deriveProduct(
+      caseRow.case_type,
+      (caseRow.collected_facts as Record<string, any>) || {}
+    );
     const mqs = product ? loadMQS(product, caseRow.jurisdiction) : null;
 
     const facts = await getOrCreateWizardFacts(supabase, case_id);
@@ -179,12 +225,19 @@ export async function POST(request: Request) {
     const progress = computeProgress(mqs, facts);
 
     if (!nextQuestion) {
+      // MQS thinks we're done – for money claim, sanity-check essentials first
       if (caseRow.case_type === 'money_claim') {
         const caseFacts = wizardFactsToCaseFacts(facts as any);
-        const missingEssentials = getMoneyClaimMissingEssentials(caseFacts, caseRow.jurisdiction);
+        const missingEssentials = getMoneyClaimMissingEssentials(
+          caseFacts,
+          caseRow.jurisdiction
+        );
 
         if (missingEssentials.length) {
-          await supabase.from('cases').update({ wizard_progress: progress } as any).eq('id', case_id);
+          await supabase
+            .from('cases')
+            .update({ wizard_progress: progress } as any)
+            .eq('id', case_id);
 
           const aiResponse = await getNextAIQuestion({
             case_type: caseRow.case_type as any,
@@ -232,6 +285,9 @@ export async function POST(request: Request) {
     }
 
     console.error('Next question error:', error);
-    return NextResponse.json({ error: error?.message || 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: error?.message || 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

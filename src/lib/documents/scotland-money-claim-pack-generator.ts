@@ -171,11 +171,14 @@ function calculateTotals(claim: ScotlandMoneyClaimCase): CalculatedTotals {
 
   // Validate Simple Procedure limit (£5,000)
   if (basePrincipal > 5000) {
-    console.warn(`Claim amount £${basePrincipal} exceeds Simple Procedure limit of £5,000. This may need to be raised as an Ordinary Cause instead.`);
+    console.warn(
+      `Claim amount £${basePrincipal} exceeds Simple Procedure limit of £5,000. This may need to be raised as an Ordinary Cause instead.`
+    );
   }
 
   const interest_rate = claim.interest_rate ?? 8;
-  const interest_to_date = claim.interest_to_date ?? Number((basePrincipal * (interest_rate / 100) * 0.25).toFixed(2));
+  const interest_to_date =
+    claim.interest_to_date ?? Number((basePrincipal * (interest_rate / 100) * 0.25).toFixed(2));
   const daily_interest =
     claim.daily_interest ?? Number(((basePrincipal * (interest_rate / 100)) / 365).toFixed(2));
 
@@ -212,7 +215,9 @@ function buildScotlandPreActionSummary(claim: ScotlandMoneyClaimCase): string {
     steps.push(`Included reply/financial forms: ${claim.pap_documents_sent.join(', ')}.`);
   }
   if (claim.second_demand_date) {
-    const methods = (claim.lba_second_method || []).length ? ` via ${(claim.lba_second_method || []).join(', ')}` : '';
+    const methods = (claim.lba_second_method || []).length
+      ? ` via ${(claim.lba_second_method || []).join(', ')}`
+      : '';
     steps.push(`Follow-up demand on ${claim.second_demand_date}${methods}.`);
   }
   if (claim.lba_second_response_deadline) {
@@ -226,7 +231,8 @@ function buildScotlandPreActionSummary(claim: ScotlandMoneyClaimCase): string {
     );
   }
   if (claim.pap_documents_served) {
-    const methods = (claim.pap_service_method || []).length ? claim.pap_service_method.join(', ') : 'unspecified method';
+    const papMethods = claim.pap_service_method ?? [];
+    const methods = papMethods.length ? papMethods.join(', ') : 'unspecified method';
     steps.push(`Pre-action letter served (${methods}).`);
   }
   if (claim.pap_service_proof) {
@@ -286,7 +292,9 @@ function buildSimpleProcedurePayload(
   };
 }
 
-async function generateScotlandMoneyClaimPack(claim: ScotlandMoneyClaimCase): Promise<ScotlandMoneyClaimPack> {
+async function generateScotlandMoneyClaimPack(
+  claim: ScotlandMoneyClaimCase
+): Promise<ScotlandMoneyClaimPack> {
   const totals = calculateTotals(claim);
   const generationDate = new Date().toISOString();
   const documents: ScotlandMoneyClaimPackDocument[] = [];
@@ -407,8 +415,12 @@ async function generateScotlandMoneyClaimPack(claim: ScotlandMoneyClaimCase): Pr
   const extendedData = {
     ...baseTemplateData,
     response_deadline: responseDeadline.toISOString().split('T')[0],
-    demand_letter_date: claim['demand_letter_date'] || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-    second_demand_date: claim['second_demand_date'] || new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    demand_letter_date:
+      claim['demand_letter_date'] ||
+      new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+    second_demand_date:
+      claim['second_demand_date'] ||
+      new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
   };
 
   const preActionLetter = await generateDocument({
@@ -446,7 +458,9 @@ async function generateScotlandMoneyClaimPack(claim: ScotlandMoneyClaimCase): Pr
 
   // 6. Official Simple Procedure claim form
   await assertOfficialFormExists('scotland/simple_procedure_claim_form.pdf');
-  const simpleProcedurePdf = await fillSimpleProcedureClaim(buildSimpleProcedurePayload(claim, totals));
+  const simpleProcedurePdf = await fillSimpleProcedureClaim(
+    buildSimpleProcedurePayload(claim, totals)
+  );
 
   documents.push({
     title: 'Simple Procedure Claim Form (Form 3A) - Official PDF',
@@ -474,7 +488,9 @@ async function generateScotlandMoneyClaimPack(claim: ScotlandMoneyClaimCase): Pr
   };
 }
 
-export async function generateScotlandMoneyClaim(claim: ScotlandMoneyClaimCase): Promise<ScotlandMoneyClaimPack> {
+export async function generateScotlandMoneyClaim(
+  claim: ScotlandMoneyClaimCase
+): Promise<ScotlandMoneyClaimPack> {
   if (claim.jurisdiction !== 'scotland') {
     throw new Error('This generator is for Scotland Simple Procedure claims only.');
   }
