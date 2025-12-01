@@ -11,6 +11,7 @@ import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server
 import { getNextMQSQuestion, loadMQS, type MasterQuestionSet, type ProductType } from '@/lib/wizard/mqs-loader';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
+import { getNextQuestion as getNextAIQuestion } from '@/lib/ai';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -43,12 +44,19 @@ function isQuestionAnswered(question: ExtendedWizardQuestion, facts: Record<stri
   return true;
 }
 
-function deriveProduct(caseType: string, collectedFacts: Record<string, any>): ProductType {
+function deriveProduct(caseType: string, collectedFacts: Record<string, any>): ProductType | null {
   const metaProduct = collectedFacts?.__meta?.product as ProductType | undefined;
-  if (metaProduct) return metaProduct;
+  const isMetaCompatible =
+    (caseType === 'eviction' && (metaProduct === 'notice_only' || metaProduct === 'complete_pack')) ||
+    (caseType === 'money_claim' && metaProduct === 'money_claim') ||
+    (caseType === 'tenancy_agreement' && metaProduct === 'tenancy_agreement');
+
+  if (metaProduct && isMetaCompatible) return metaProduct;
+  if (metaProduct && !isMetaCompatible) return null;
   if (caseType === 'money_claim') return 'money_claim';
   if (caseType === 'tenancy_agreement') return 'tenancy_agreement';
-  return 'complete_pack';
+  if (caseType === 'eviction') return 'complete_pack';
+  return null;
 }
 
 function computeProgress(mqs: MasterQuestionSet, facts: Record<string, any>): number {
@@ -93,20 +101,25 @@ export async function POST(request: Request) {
       );
     }
 
-    const product = deriveProduct(
-      caseRow.case_type,
-      (caseRow.collected_facts as Record<string, any>) || {}
-    );
-    const mqs = loadMQS(product, caseRow.jurisdiction);
-
-    if (!mqs) {
-      return NextResponse.json(
-        { error: 'MQS not implemented for this jurisdiction yet' },
-        { status: 400 }
-      );
-    }
+    const product = deriveProduct(caseRow.case_type, (caseRow.collected_facts as Record<string, any>) || {});
+    const mqs = product ? loadMQS(product, caseRow.jurisdiction) : null;
 
     const facts = await getOrCreateWizardFacts(supabase, case_id);
+
+    if (!mqs) {
+      const aiResponse = await getNextAIQuestion({
+        case_type: caseRow.case_type as any,
+        jurisdiction: caseRow.jurisdiction as any,
+        collected_facts: facts,
+      });
+
+      return NextResponse.json({
+        next_question: aiResponse.next_question,
+        is_complete: aiResponse.is_complete,
+        progress: aiResponse.is_complete ? 100 : caseRow.wizard_progress || 0,
+      });
+    }
+
     const nextQuestion = getNextMQSQuestion(mqs, facts);
 
     if (!nextQuestion) {

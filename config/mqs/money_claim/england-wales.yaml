@@ -416,6 +416,74 @@ questions:
       - depends_on: lba_sent
         value: yes
 
+  - id: lba_documents_sent
+    section: pre_action
+    question: "Which PAP-DEBT documents did you include?"
+    type: multi-select
+    required: false
+    options:
+      - information_sheet
+      - reply_form
+      - financial_statement
+    suggestion_prompt: "Confirm the information sheet, reply form, and financial statement were enclosed."
+    maps_to:
+      - pap_documents_sent
+    conditions:
+      - depends_on: lba_sent
+        value: yes
+
+  - id: lba_second_sent
+    section: pre_action
+    question: "Did you send a follow-up Letter Before Claim?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Confirm if you sent a second chaser when no response was received."
+    maps_to:
+      - lba_second_sent
+    conditions:
+      - depends_on: lba_sent
+        value: yes
+
+  - id: lba_second_date
+    section: pre_action
+    question: "Date the follow-up Letter Before Claim was sent"
+    type: date
+    required: false
+    suggestion_prompt: "Provide the date of any second/follow-up PAP-DEBT letter."
+    maps_to:
+      - lba_second_date
+    conditions:
+      - depends_on: lba_second_sent
+        value: yes
+
+  - id: lba_second_method
+    section: pre_action
+    question: "How was the follow-up Letter Before Claim served?"
+    type: multi-select
+    required: false
+    options:
+      - email
+      - post
+      - hand_delivered
+    suggestion_prompt: "Choose every method used for the follow-up pre-action letter."
+    maps_to:
+      - lba_second_method
+    conditions:
+      - depends_on: lba_second_sent
+        value: yes
+
+  - id: lba_second_response_deadline
+    section: pre_action
+    question: "Response deadline on the follow-up letter"
+    type: date
+    required: false
+    suggestion_prompt: "Confirm the deadline you offered on the second letter."
+    maps_to:
+      - lba_second_response_deadline
+    conditions:
+      - depends_on: lba_second_sent
+        value: yes
+
   - id: defendant_response
     section: pre_action
     question: "Did the defendant respond to the Letter Before Claim?"
@@ -426,6 +494,18 @@ questions:
       - tenant_responded
     conditions:
       - depends_on: lba_sent
+        value: yes
+
+  - id: defendant_response_details
+    section: pre_action
+    question: "What did the defendant say in response?"
+    type: text
+    required: false
+    suggestion_prompt: "Summarise any reply form, payment proposal, or dispute raised."
+    maps_to:
+      - tenant_response_details
+    conditions:
+      - depends_on: defendant_response
         value: yes
 
   # Evidence uploads
@@ -460,6 +540,144 @@ questions:
     conditions:
       - depends_on: claim_damages
         value: yes
+
+  - id: arrears_schedule_confirm
+    section: evidence
+    question: "Do you have a rent schedule or arrears breakdown ready?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Confirm you can provide a clear rent ledger or schedule."
+    maps_to:
+      - arrears_schedule_confirmed
+    conditions: []
+
+  - id: evidence_types_available
+    section: evidence
+    question: "Which supporting evidence can you provide?"
+    type: multi-select
+    required: false
+    options:
+      - tenancy_agreement
+      - arrears_ledger
+      - checkout_report
+      - photos_or_videos
+      - invoices_or_receipts
+      - correspondence
+    suggestion_prompt: "Select all evidence you can include with the claim pack."
+    maps_to:
+      - evidence_types_available
+    conditions: []
+
+  - id: pap_documents_served
+    section: evidence
+    question: "Did you serve the PAP-DEBT documents?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Confirm the pre-action pack was delivered to the defendant."
+    maps_to:
+      - pap_documents_served
+    conditions:
+      - depends_on: lba_sent
+        value: yes
+
+  - id: pap_service_method
+    section: evidence
+    question: "How were the PAP-DEBT documents served?"
+    type: multi-select
+    required: false
+    options:
+      - email
+      - post
+      - hand_delivered
+    suggestion_prompt: "Select each method used to serve the PAP-DEBT pack."
+    maps_to:
+      - pap_service_method
+    conditions:
+      - depends_on: pap_documents_served
+        value: yes
+
+  - id: pap_service_proof
+    section: evidence
+    question: "What proof of service do you have?"
+    type: text
+    required: false
+    suggestion_prompt: "E.g., certificate of posting, email read receipt, hand delivery note."
+    maps_to:
+      - pap_service_proof
+    conditions:
+      - depends_on: pap_documents_served
+        value: yes
+
+  # Court route and fees
+  - id: court_issue_route
+    section: court_selection
+    question: "How do you plan to issue the claim?"
+    type: single-select
+    required: true
+    options:
+      - mcol
+      - county_court_n1
+    suggestion_prompt: "Choose Money Claim Online (MCOL) or paper N1 via County Court."
+    maps_to:
+      - preferred_issue_route
+    conditions: []
+
+  - id: claim_value_band
+    section: court_selection
+    question: "Estimated claim value (for court fee)"
+    type: single-select
+    required: true
+    options:
+      - up_to_300
+      - between_300_and_500
+      - between_500_and_1000
+      - between_1000_and_1500
+      - between_1500_and_3000
+      - between_3000_and_5000
+      - between_5000_and_10000
+      - between_10000_and_200000
+      - over_200000
+    suggestion_prompt: "Select the band that matches the total claim to estimate the fee."
+    maps_to:
+      - claim_value_band
+    conditions: []
+
+  - id: help_with_fees_needed
+    section: court_selection
+    question: "Do you need help with court fees?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Choose yes if you want guidance on Help with Fees (EX160)."
+    maps_to:
+      - help_with_fees_needed
+    conditions: []
+
+  # Enforcement intent (for guidance)
+  - id: enforcement_preferences
+    section: enforcement
+    question: "If judgment is granted, how do you plan to enforce it?"
+    type: multi-select
+    required: false
+    options:
+      - warrant_of_control
+      - attachment_of_earnings
+      - third_party_debt_order
+      - charging_order
+      - not_sure
+    suggestion_prompt: "Select any enforcement routes you want guidance on after judgment."
+    maps_to:
+      - enforcement_preferences
+    conditions: []
+
+  - id: enforcement_notes
+    section: enforcement
+    question: "Anything else about enforcement preferences?"
+    type: text
+    required: false
+    suggestion_prompt: "Add context like employer details or known assets for enforcement."
+    maps_to:
+      - enforcement_notes
+    conditions: []
 
   - id: signatory_name
     section: particulars
