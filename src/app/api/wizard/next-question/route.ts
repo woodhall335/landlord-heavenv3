@@ -12,8 +12,6 @@ import { getNextMQSQuestion, loadMQS, type MasterQuestionSet, type ProductType }
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { getNextQuestion as getNextAIQuestion } from '@/lib/ai';
-import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
-import type { CaseFacts } from '@/lib/case-facts/schema';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
