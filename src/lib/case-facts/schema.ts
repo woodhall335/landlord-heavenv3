@@ -148,14 +148,33 @@ export interface MoneyClaimFacts {
   lba_date?: string | null;
   lba_method?: string[] | null;
   lba_response_deadline?: string | null;
+  pap_documents_sent?: string[] | null;
   tenant_responded?: boolean | null;
+  tenant_response_details?: string | null;
+  lba_second_sent?: boolean | null;
+  lba_second_date?: string | null;
+  lba_second_method?: string[] | null;
+  lba_second_response_deadline?: string | null;
+  pre_action_deadline_confirmation?: boolean | null;
   signatory_name?: string | null;
   signature_date?: string | null;
   sheriffdom?: string | null;
+  court_jurisdiction_confirmed?: boolean | null;
+  lodging_method?: string | null;
   demand_letter_date?: string | null;
   second_demand_date?: string | null;
   evidence_summary?: string | null;
   basis_of_claim?: string | null;
+  arrears_schedule_confirmed?: boolean | null;
+  evidence_types_available?: string[] | null;
+  pap_documents_served?: boolean | null;
+  pap_service_method?: string[] | null;
+  pap_service_proof?: string | null;
+  preferred_issue_route?: string | null;
+  claim_value_band?: string | null;
+  help_with_fees_needed?: boolean | null;
+  enforcement_preferences?: string[] | null;
+  enforcement_notes?: string | null;
 }
 
 export interface MetaFacts {
@@ -286,14 +305,33 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     lba_date: null,
     lba_method: null,
     lba_response_deadline: null,
+    pap_documents_sent: null,
     tenant_responded: null,
+    tenant_response_details: null,
+    lba_second_sent: null,
+    lba_second_date: null,
+    lba_second_method: null,
+    lba_second_response_deadline: null,
+    pre_action_deadline_confirmation: null,
     signatory_name: null,
     signature_date: null,
     sheriffdom: null,
+    court_jurisdiction_confirmed: null,
+    lodging_method: null,
     demand_letter_date: null,
     second_demand_date: null,
     evidence_summary: null,
     basis_of_claim: null,
+    arrears_schedule_confirmed: null,
+    evidence_types_available: null,
+    pap_documents_served: null,
+    pap_service_method: null,
+    pap_service_proof: null,
+    preferred_issue_route: null,
+    claim_value_band: null,
+    help_with_fees_needed: null,
+    enforcement_preferences: null,
+    enforcement_notes: null,
   },
   meta: {
     product: null,

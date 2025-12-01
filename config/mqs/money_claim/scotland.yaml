@@ -192,6 +192,26 @@ questions:
       - sheriffdom
     conditions: []
 
+  - id: sheriff_court
+    section: court_selection
+    question: "Which specific Sheriff Court will you use?"
+    type: text
+    required: false
+    suggestion_prompt: "Confirm the exact Sheriff Court location for lodging (e.g., Edinburgh Sheriff Court)."
+    maps_to:
+      - court_name
+    conditions: []
+
+  - id: court_jurisdiction_confirmed
+    section: court_selection
+    question: "Is the property within this court's area?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Confirm jurisdiction so we can flag any venue issues."
+    maps_to:
+      - court_jurisdiction_confirmed
+    conditions: []
+
   # Claim scope
   - id: basis_of_claim
     section: arrears
@@ -340,6 +360,90 @@ questions:
       - second_demand_date
     conditions: []
 
+  - id: pre_action_first_method
+    section: pre_action
+    question: "How was the first demand served?"
+    type: multi-select
+    required: false
+    options:
+      - email
+      - post
+      - hand_delivered
+    suggestion_prompt: "Confirm the service method for the first demand letter."
+    maps_to:
+      - lba_method
+    conditions: []
+
+  - id: pre_action_response_deadline
+    section: pre_action
+    question: "What response deadline did you give?"
+    type: date
+    required: false
+    suggestion_prompt: "Simple Procedure pre-action letters usually allow at least 14 days."
+    maps_to:
+      - lba_response_deadline
+    conditions: []
+
+  - id: pre_action_docs_sent
+    section: pre_action
+    question: "Did you include any reply/financial forms?"
+    type: multi-select
+    required: false
+    options:
+      - reply_form
+      - financial_statement
+      - information_sheet
+    suggestion_prompt: "Confirm if you enclosed the Simple Procedure style reply or income details form."
+    maps_to:
+      - pap_documents_sent
+    conditions: []
+
+  - id: pre_action_second_method
+    section: pre_action
+    question: "How was the follow-up demand served?"
+    type: multi-select
+    required: false
+    options:
+      - email
+      - post
+      - hand_delivered
+    suggestion_prompt: "Confirm the service method for any follow-up demand."
+    maps_to:
+      - lba_second_method
+    conditions: []
+
+  - id: pre_action_reply_received
+    section: pre_action
+    question: "Did the defender reply to the demands?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "State if any response or payment proposal was received."
+    maps_to:
+      - tenant_responded
+    conditions: []
+
+  - id: pre_action_reply_details
+    section: pre_action
+    question: "What was the reply or outcome?"
+    type: text
+    required: false
+    suggestion_prompt: "Summarise any reply form, payment plan, or dispute raised by the defender."
+    maps_to:
+      - tenant_response_details
+    conditions:
+      - depends_on: pre_action_reply_received
+        value: yes
+
+  - id: pre_action_letter_14day
+    section: pre_action
+    question: "Did your pre-action letter give at least 14 days to respond?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Confirm compliance with Simple Procedure Rule 3.1 on response time."
+    maps_to:
+      - pre_action_deadline_confirmation
+    conditions: []
+
   # Particulars / statement of claim
   - id: particulars_of_claim
     section: particulars
@@ -403,6 +507,122 @@ questions:
     conditions:
       - depends_on: claim_damages
         value: yes
+
+  - id: arrears_schedule_confirm
+    section: evidence
+    question: "Do you have a rent schedule or arrears breakdown ready?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Confirm you can provide a clear rent ledger or schedule."
+    maps_to:
+      - arrears_schedule_confirmed
+    conditions: []
+
+  - id: evidence_types_available
+    section: evidence
+    question: "Which supporting evidence can you provide?"
+    type: multi-select
+    required: false
+    options:
+      - tenancy_agreement
+      - arrears_ledger
+      - inspection_report
+      - photos_or_videos
+      - invoices_or_receipts
+      - correspondence
+    suggestion_prompt: "Select all evidence you can include with the claim pack."
+    maps_to:
+      - evidence_types_available
+    conditions: []
+
+  - id: pre_action_letter_served
+    section: evidence
+    question: "Did you serve the pre-action letter and forms?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Confirm the pre-action pack was delivered to the defender."
+    maps_to:
+      - pap_documents_served
+    conditions: []
+
+  - id: pre_action_service_method
+    section: evidence
+    question: "How were the pre-action documents served?"
+    type: multi-select
+    required: false
+    options:
+      - email
+      - post
+      - hand_delivered
+    suggestion_prompt: "Select each method used to serve the pre-action pack."
+    maps_to:
+      - pap_service_method
+    conditions:
+      - depends_on: pre_action_letter_served
+        value: yes
+
+  - id: pre_action_service_proof
+    section: evidence
+    question: "What proof of service do you have?"
+    type: text
+    required: false
+    suggestion_prompt: "E.g., certificate of posting, email read receipt, hand delivery note."
+    maps_to:
+      - pap_service_proof
+    conditions:
+      - depends_on: pre_action_letter_served
+        value: yes
+
+  # Lodging and fees
+  - id: lodging_method
+    section: court_selection
+    question: "How will you lodge the Simple Procedure claim?"
+    type: single-select
+    required: false
+    options:
+      - civil_online
+      - paper_form
+    suggestion_prompt: "Choose Civil Online or paper Form 3A for lodging."
+    maps_to:
+      - lodging_method
+    conditions: []
+
+  - id: help_with_fees_needed
+    section: court_selection
+    question: "Do you need help with the court fee?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Select yes if you might be eligible for fee remission or exemption."
+    maps_to:
+      - help_with_fees_needed
+    conditions: []
+
+  # Enforcement intent (for guidance)
+  - id: enforcement_preferences
+    section: enforcement
+    question: "If decree is granted, how do you plan to enforce it?"
+    type: multi-select
+    required: false
+    options:
+      - earnings_arrestment
+      - bank_arrestment
+      - attachment
+      - inhibition
+      - not_sure
+    suggestion_prompt: "Select any enforcement routes you want guidance on after decree."
+    maps_to:
+      - enforcement_preferences
+    conditions: []
+
+  - id: enforcement_notes
+    section: enforcement
+    question: "Anything else about enforcement preferences?"
+    type: text
+    required: false
+    suggestion_prompt: "Add context like employer details or known assets for enforcement."
+    maps_to:
+      - enforcement_notes
+    conditions: []
 
   # Statement of truth
   - id: signatory_name
