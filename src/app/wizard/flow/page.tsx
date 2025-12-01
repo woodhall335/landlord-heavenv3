@@ -7,16 +7,19 @@
 
 'use client';
 
-import React, { Suspense, useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { WizardContainer } from '@/components/wizard/WizardContainer';
 import { StructuredWizard } from '@/components/wizard/StructuredWizard';
+import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
 function WizardFlowContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [caseId, setCaseId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [initialQuestion, setInitialQuestion] = useState<ExtendedWizardQuestion | null>(null);
+  const hasStartedRef = useRef(false);
 
   const type = searchParams.get('type') as 'eviction' | 'money_claim' | 'tenancy_agreement' | null;
   const jurisdiction = searchParams.get('jurisdiction') as 'england-wales' | 'scotland' | 'northern-ireland' | null;
@@ -37,54 +40,62 @@ function WizardFlowContent() {
   }, [hasRequiredParams, router]);
 
   // Initialize case for structured wizard
+  const startStructuredWizard = useCallback(async () => {
+    if (hasStartedRef.current) return;
+    hasStartedRef.current = true;
+
+    if (!type || !jurisdiction) return;
+
+    setLoading(true);
+
+    try {
+      if (editCaseId) {
+        setCaseId(editCaseId);
+        return;
+      }
+
+      const productParam = normalizedProduct || product || type || 'tenancy_agreement';
+      const response = await fetch('/api/wizard/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ product: productParam, jurisdiction }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(`Failed to start wizard: ${response.status}`);
+      }
+
+      const newCaseId = data.case_id ?? data.case?.id;
+      if (!newCaseId) {
+        throw new Error('Missing case_id from start response');
+      }
+
+      setCaseId(newCaseId);
+      setInitialQuestion(data.next_question ?? null);
+    } catch (err) {
+      console.error('Failed to initialize case:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [editCaseId, jurisdiction, normalizedProduct, product, type]);
+
   useEffect(() => {
     if (!hasRequiredParams) {
       setLoading(false);
       return;
     }
 
-    if (type === 'tenancy_agreement' && !editCaseId) {
-      const initializeCase = async () => {
-        try {
-          // Map case_type to product for the API
-          // Default to 'tenancy_agreement' if no specific product param
-          const productParam = product || 'tenancy_agreement';
-
-          const response = await fetch('/api/wizard/start', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ product: productParam, jurisdiction }),
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.success && data.case?.id) {
-              setCaseId(data.case.id);
-            } else if (data.case_id) {
-              // Handle alternate response format
-              setCaseId(data.case_id);
-            } else {
-              console.error('Invalid response format:', data);
-              throw new Error('Failed to get case ID from response');
-            }
-          } else {
-            throw new Error(`Failed to start wizard: ${response.status} ${response.statusText}`);
-          }
-        } catch (err) {
-          console.error('Failed to initialize case:', err);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      initializeCase();
+    if (type === 'tenancy_agreement' || type === 'money_claim') {
+      void startStructuredWizard();
     } else if (editCaseId) {
       setCaseId(editCaseId);
       setLoading(false);
     } else {
       setLoading(false);
     }
-  }, [type, jurisdiction, product, editCaseId, hasRequiredParams]);
+  }, [editCaseId, hasRequiredParams, startStructuredWizard, type]);
 
   // Validate params
   if (!hasRequiredParams) {
@@ -102,8 +113,8 @@ function WizardFlowContent() {
     router.push(`/wizard/preview/${completedCaseId}`);
   };
 
-  // Use structured wizard for tenancy agreements
-  if (type === 'tenancy_agreement') {
+  // Use structured wizard for tenancy agreements and money claims
+  if (type === 'tenancy_agreement' || type === 'money_claim') {
     if (loading || !caseId) {
       return (
         <div className="min-h-screen flex items-center justify-center">
@@ -118,12 +129,15 @@ function WizardFlowContent() {
     return (
       <StructuredWizard
         caseId={caseId}
+        caseType={type}
+        jurisdiction={jurisdiction}
+        initialQuestion={initialQuestion ?? undefined}
         onComplete={handleComplete}
       />
     );
   }
 
-  // Use conversational wizard for evictions and money claims
+  // Use conversational wizard for evictions
   return (
     <WizardContainer
       caseType={type!}

@@ -9,53 +9,24 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input, Card } from '@/components/ui';
+import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
-interface ExtendedWizardQuestion {
-  id: string;
-  section?: string;
-  question: string;
-  inputType: string;
-  helperText?: string;
-  suggestion_prompt?: string;
-  placeholder?: string;
-  options?: string[];
-  validation?: {
-    required?: boolean;
-    min?: number;
-    max?: number;
-    pattern?: string;
-  };
-  dependsOn?: {
-    questionId: string;
-    value: any;
-  };
-  fields?: Array<{
-    id: string;
-    label: string;
-    inputType: string;
-    placeholder?: string;
-    options?: string[];
-    validation?: {
-      required?: boolean;
-      min?: number;
-      max?: number;
-      pattern?: string;
-    };
-    width?: 'full' | 'half' | 'third';
-  }>;
-  maps_to?: string[];
+interface StructuredWizardProps {
+  caseId: string;
+  caseType: 'eviction' | 'money_claim' | 'tenancy_agreement';
+  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland' | null;
+  initialQuestion?: ExtendedWizardQuestion | null;
+  onComplete: (caseId: string) => void;
 }
 
-  interface StructuredWizardProps {
-    caseId: string;
-    onComplete: (caseId: string) => void;
-  }
-
-  export const StructuredWizard: React.FC<StructuredWizardProps> = ({
-    caseId,
-    onComplete,
-  }) => {
-  const [currentQuestion, setCurrentQuestion] = useState<ExtendedWizardQuestion | null>(null);
+export const StructuredWizard: React.FC<StructuredWizardProps> = ({
+  caseId,
+  caseType,
+  jurisdiction,
+  initialQuestion,
+  onComplete,
+}) => {
+  const [currentQuestion, setCurrentQuestion] = useState<ExtendedWizardQuestion | null>(initialQuestion ?? null);
   const [currentAnswer, setCurrentAnswer] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,6 +36,38 @@ interface ExtendedWizardQuestion {
   const [questionHistory, setQuestionHistory] = useState<Array<{ question: ExtendedWizardQuestion; answer: any }>>([]);
   const [depositWarning, setDepositWarning] = useState<string | null>(null);
   const [caseFacts, setCaseFacts] = useState<Record<string, any>>({});
+  const [showIntro, setShowIntro] = useState(caseType === 'money_claim');
+
+  const initializeQuestion = useCallback((question: ExtendedWizardQuestion) => {
+    setCurrentQuestion(question);
+
+    if (question.inputType === 'group' && question.fields) {
+      const defaults: Record<string, any> = {};
+      question.fields.forEach((field: any) => {
+        if (field.defaultValue !== undefined) {
+          defaults[field.id] = field.defaultValue;
+        }
+      });
+      setCurrentAnswer(Object.keys(defaults).length > 0 ? defaults : null);
+    } else {
+      setCurrentAnswer(null);
+    }
+  }, []);
+
+  const handleIntroContinue = () => {
+    setShowIntro(false);
+
+    if (!currentQuestion) {
+      void loadNextQuestion();
+    }
+  };
+
+  const getJurisdictionName = () => {
+    if (jurisdiction === 'england-wales') return 'England & Wales';
+    if (jurisdiction === 'scotland') return 'Scotland';
+    if (jurisdiction === 'northern-ireland') return 'Northern Ireland';
+    return 'your area';
+  };
 
   const handleComplete = useCallback(async () => {
     try {
@@ -86,6 +89,8 @@ interface ExtendedWizardQuestion {
   }, [caseId, onComplete]);
 
   const loadNextQuestion = useCallback(async () => {
+    if (!caseId) return;
+
     setLoading(true);
     setError(null);
     setAskHeavenSuggestion(null);
@@ -107,37 +112,31 @@ interface ExtendedWizardQuestion {
         setIsComplete(true);
         await handleComplete();
       } else if (data.next_question) {
-        setCurrentQuestion(data.next_question);
-
-        // Set default values for group fields
-        if (data.next_question.inputType === 'group' && data.next_question.fields) {
-          const defaults: Record<string, any> = {};
-          data.next_question.fields.forEach((field: any) => {
-            if (field.defaultValue !== undefined) {
-              defaults[field.id] = field.defaultValue;
-            }
-          });
-          setCurrentAnswer(Object.keys(defaults).length > 0 ? defaults : null);
-        } else {
-          setCurrentAnswer(null); // Reset answer for new question
-        }
+        initializeQuestion(data.next_question);
 
         setProgress(data.progress || 0);
       } else {
         throw new Error('No question returned from API');
       }
     } catch (err: any) {
-        setError(err.message || 'Failed to load question');
-        console.error('Load question error:', err);
-      } finally {
-        setLoading(false);
-      }
-  }, [caseId, handleComplete]);
+      setError(err.message || 'Failed to load question');
+      console.error('Load question error:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [caseId, handleComplete, initializeQuestion]);
 
-  // Load first question on mount
+  // Load first question after intro or when no initial question was provided
   useEffect(() => {
-    loadNextQuestion();
-  }, [loadNextQuestion]);
+    if (initialQuestion && !currentQuestion) {
+      initializeQuestion(initialQuestion);
+      return;
+    }
+
+    if (!showIntro && !currentQuestion) {
+      void loadNextQuestion();
+    }
+  }, [currentQuestion, initialQuestion, initializeQuestion, loadNextQuestion, showIntro]);
 
   // Fetch case facts when question changes (for validation)
   useEffect(() => {
@@ -294,6 +293,11 @@ interface ExtendedWizardQuestion {
   };
 
   const handleNext = async () => {
+    if (!caseId || !currentQuestion) {
+      console.warn('No caseId or currentQuestion; skipping save');
+      return;
+    }
+
     if (!isCurrentAnswerValid()) {
       if (!error) {
         setError('Please provide a valid answer to continue');
@@ -315,11 +319,11 @@ interface ExtendedWizardQuestion {
       const response = await fetch('/api/wizard/answer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          case_id: caseId,
-          question_id: currentQuestion!.id,
-          answer: currentAnswer,
-        }),
+          body: JSON.stringify({
+            case_id: caseId,
+            question_id: currentQuestion!.id,
+            answer: currentAnswer,
+          }),
       });
 
       if (!response.ok) {
@@ -664,6 +668,26 @@ interface ExtendedWizardQuestion {
         );
     }
   };
+
+  if (showIntro) {
+    return (
+      <div className="max-w-3xl mx-auto p-6">
+        <Card className="p-8">
+          <p className="text-sm uppercase tracking-wide text-primary font-semibold mb-2">Welcome</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+            Hi! I'm here to help you recover money owed by creating a money claim pack for {getJurisdictionName()}.
+          </h2>
+          <p className="text-gray-700 leading-relaxed mb-6">
+            I'll gather the details of what you're owed, then prepare all the forms and guidance you need. When you're ready,
+            continue below and we'll start with the first question.
+          </p>
+          <Button onClick={handleIntroContinue} variant="primary" size="large" className="w-full md:w-auto">
+            Continue →
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   if (isComplete) {
     return (
