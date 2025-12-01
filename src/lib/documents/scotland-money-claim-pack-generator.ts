@@ -215,9 +215,7 @@ function buildScotlandPreActionSummary(claim: ScotlandMoneyClaimCase): string {
     steps.push(`Included reply/financial forms: ${claim.pap_documents_sent.join(', ')}.`);
   }
   if (claim.second_demand_date) {
-    const methods = (claim.lba_second_method || []).length
-      ? ` via ${(claim.lba_second_method || []).join(', ')}`
-      : '';
+    const methods = (claim.lba_second_method || []).length ? ` via ${(claim.lba_second_method || []).join(', ')}` : '';
     steps.push(`Follow-up demand on ${claim.second_demand_date}${methods}.`);
   }
   if (claim.lba_second_response_deadline) {
@@ -231,8 +229,7 @@ function buildScotlandPreActionSummary(claim: ScotlandMoneyClaimCase): string {
     );
   }
   if (claim.pap_documents_served) {
-    const papMethods = claim.pap_service_method ?? [];
-    const methods = papMethods.length ? papMethods.join(', ') : 'unspecified method';
+    const methods = (claim.pap_service_method || []).length ? claim.pap_service_method.join(', ') : 'unspecified method';
     steps.push(`Pre-action letter served (${methods}).`);
   }
   if (claim.pap_service_proof) {
@@ -407,6 +404,24 @@ async function generateScotlandMoneyClaimPack(
     html: evidence.html,
     pdf: evidence.pdf,
     file_name: 'evidence-index.pdf',
+  });
+
+  // 5b. Court Hearing Preparation Sheet (NEW)
+  const hearingPrep = await generateDocument({
+    templatePath: 'uk/scotland/templates/money_claims/hearing_prep_sheet.hbs',
+    data: baseTemplateData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Court Hearing Preparation Sheet',
+    description:
+      'Structured guidance on what to say, what to bring, and how to present your Simple Procedure case if the claim is defended.',
+    category: 'guidance',
+    html: hearingPrep.html,
+    pdf: hearingPrep.pdf,
+    file_name: 'hearing-prep-sheet-scotland.pdf',
   });
 
   // PRE-ACTION DOCUMENTS (Required by Simple Procedure Rule 3.1)

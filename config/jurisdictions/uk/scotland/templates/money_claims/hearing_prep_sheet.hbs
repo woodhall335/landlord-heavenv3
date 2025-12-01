@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Court Hearing Preparation Sheet – Simple Procedure (Scotland)</title>
+    <style>
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-size: 12px;
+        line-height: 1.5;
+        color: #222;
+      }
+      h1, h2, h3 {
+        margin: 0 0 6px 0;
+        padding: 0;
+      }
+      h1 {
+        font-size: 18px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      h2 {
+        font-size: 14px;
+        margin-top: 14px;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 3px;
+      }
+      h3 {
+        font-size: 13px;
+        margin-top: 10px;
+      }
+      p {
+        margin: 4px 0;
+      }
+      ul {
+        margin: 4px 0 4px 16px;
+        padding: 0;
+      }
+      li {
+        margin: 2px 0;
+      }
+      .muted {
+        color: #666;
+        font-size: 11px;
+      }
+      .box {
+        border: 1px solid #ccc;
+        padding: 8px;
+        margin: 8px 0;
+      }
+      .tagline {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: #555;
+      }
+      .grid {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 4px;
+      }
+      .grid-row {
+        display: table-row;
+      }
+      .grid-cell {
+        display: table-cell;
+        padding: 2px 4px;
+        vertical-align: top;
+      }
+      .grid-label {
+        width: 32%;
+        font-weight: 600;
+      }
+      .small {
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Court Hearing Preparation Sheet</h1>
+    <div class="tagline">
+      Simple Procedure – Rent Arrears / Money Claim (Scotland)
+    </div>
+    <p class="muted">
+      Generated on {{generation_date}} • For guidance only – not legal advice.
+    </p>
+
+    <h2>1. Case Overview</h2>
+    <div class="grid box">
+      <div class="grid-row">
+        <div class="grid-cell grid-label">Pursuer (Landlord)</div>
+        <div class="grid-cell">
+          {{landlord_full_name}}
+          {{#if landlord_2_name}} &amp; {{landlord_2_name}}{{/if}}
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-cell grid-label">Defender (Tenant)</div>
+        <div class="grid-cell">
+          {{tenant_full_name}}
+          {{#if tenant_2_name}} &amp; {{tenant_2_name}}{{/if}}
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-cell grid-label">Let Property</div>
+        <div class="grid-cell">
+          {{property_address}}
+          {{#if property_postcode}}, {{property_postcode}}{{/if}}
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-cell grid-label">Sheriffdom / Court</div>
+        <div class="grid-cell">
+          {{#if sheriffdom}}{{sheriffdom}}{{else}}Local Sheriff Court{{/if}}
+          {{#if court_name}} – {{court_name}}{{/if}}
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-cell grid-label">Procedure / Form</div>
+        <div class="grid-cell">
+          Simple Procedure – Claim form (Form 3A)
+        </div>
+      </div>
+      <div class="grid-row">
+        <div class="grid-cell grid-label">Claim Reference</div>
+        <div class="grid-cell">
+          {{#if claimant_reference}}{{claimant_reference}}{{else}}(to be allocated by court){{/if}}
+        </div>
+      </div>
+    </div>
+
+    <h2>2. Money Claimed</h2>
+    <div class="box">
+      <p><strong>Breakdown of amounts claimed</strong></p>
+      <ul>
+        <li>
+          Rent arrears:
+          {{#if arrears_total}}
+            approximately £{{arrears_total}}
+          {{else}}
+            (fill in arrears total from your rent schedule)
+          {{/if}}
+        </li>
+        <li>
+          Damages / repairs:
+          {{#if damages_total}}
+            approximately £{{damages_total}}
+          {{else}}
+            £0 (or insert if you have damage items)
+          {{/if}}
+        </li>
+        <li>
+          Other charges (fees, utilities, etc.):
+          {{#if other_total}}
+            approximately £{{other_total}}
+          {{else}}
+            £0 (or insert if applicable)
+          {{/if}}
+        </li>
+        <li>
+          Interest:
+          {{#if interest_to_date}}
+            approximately £{{interest_to_date}} up to claim date
+          {{else}}
+            calculated in your claim form and supporting documents
+          {{/if}}
+          {{#if interest_rate}}
+            (at around {{interest_rate}}% per year)
+          {{/if}}
+        </li>
+        <li>
+          Court fee:
+          {{#if court_fee}}
+            £{{court_fee}}
+          {{else}}
+            based on the Simple Procedure fee scale
+          {{/if}}
+        </li>
+        <li>
+          Solicitor / professional costs:
+          {{#if solicitor_costs}}
+            £{{solicitor_costs}}
+          {{else}}
+            £0 (unless you are claiming expenses)
+          {{/if}}
+        </li>
+      </ul>
+
+      <p>
+        <strong>Total principal (excluding fees):</strong>
+        {{#if total_principal}}
+          about £{{total_principal}}
+        {{else}}
+          see arrears schedule
+        {{/if}}
+      </p>
+      <p>
+        <strong>Total claim including interest &amp; fees:</strong>
+        {{#if total_with_fees}}
+          about £{{total_with_fees}}
+        {{else}}
+          principal + court fee (+ any expenses)
+        {{/if}}
+      </p>
+      <p class="muted small">
+        The Sheriff will make their own assessment of figures; these amounts are for your reference.
+      </p>
+    </div>
+
+    <h2>3. Documents to Bring to the Case Management Discussion / Hearing</h2>
+    <div class="box">
+      <p>Have at least one printed copy of each of the following:</p>
+      <ul>
+        <li>Tenancy agreement / Private Residential Tenancy (and any variations).</li>
+        <li>Rent schedule / arrears breakdown (period-by-period).</li>
+        <li>Pre-action letters and reminders sent under Rule 3.1 (first and second letters).</li>
+        <li>Any payment proposals or correspondence from the defender.</li>
+        <li>Evidence of payments received (bank statements or rent ledger extracts).</li>
+        <li>Any repair / disrepair correspondence relevant to the arrears dispute.</li>
+        {{#if arrears_schedule_confirmed}}
+          <li>Signed confirmation that your arrears schedule matches your rent records.</li>
+        {{/if}}
+        {{#if evidence_types_available}}
+          <li>Other evidence you told us you have:
+            <ul>
+              {{#each evidence_types_available}}
+                <li>{{this}}</li>
+              {{/each}}
+            </ul>
+          </li>
+        {{/if}}
+      </ul>
+      <p class="muted small">
+        Make sure anything lodged with the court is also provided to the defender, unless the rules say otherwise.
+      </p>
+    </div>
+
+    <h2>4. Your Story in 60 Seconds</h2>
+    <div class="box">
+      <p><strong>Use this as a structure when the Sheriff asks you to explain the case:</strong></p>
+      <ol>
+        <li>
+          <strong>Who you are &amp; what this is:</strong><br />
+          “I am the landlord of {{property_address}}{{#if property_postcode}}, {{property_postcode}}{{/if}}.
+          This is a Simple Procedure claim for unpaid rent{{#if damages_total}} and related damages{{/if}}.”
+        </li>
+        <li>
+          <strong>The tenancy &amp; rent:</strong><br />
+          Briefly state when the tenancy started, the rent amount and how often it was due
+          (for example, £{{rent_amount}} {{rent_frequency}}).
+        </li>
+        <li>
+          <strong>What went wrong:</strong><br />
+          Explain when the arrears started and how they built up. Refer to your arrears schedule.
+        </li>
+        <li>
+          <strong>Pre-action steps under Rule 3.1:</strong><br />
+          Say when you first wrote to the defender, any reminders, and how long you gave them to respond.
+          {{#if pre_action_summary}}
+            <br />Summary of steps recorded in your pack: {{pre_action_summary}}
+          {{/if}}
+        </li>
+        <li>
+          <strong>What you are asking the court for:</strong><br />
+          A decision (decree) for the total arrears, any proven damages/charges, interest and expenses.
+        </li>
+      </ol>
+    </div>
+
+    <h2>5. Likely Questions from the Sheriff</h2>
+    <div class="box">
+      <p><strong>Common questions:</strong></p>
+      <ul>
+        <li>“Please take me to the tenancy agreement – what are the key terms on rent and payment?”</li>
+        <li>“How have you calculated the arrears figure shown in your claim?”</li>
+        <li>“What steps did you take to comply with the pre-action requirements?”</li>
+        <li>“Have there been any discussions about a repayment plan?”</li>
+        <li>“Are there any issues of disrepair that might affect rent liability?”</li>
+      </ul>
+      <p>
+        Answer clearly and briefly, and always refer back to documents (tenancy, rent schedule,
+        pre-action letters and correspondence).
+      </p>
+    </div>
+
+    <h2>6. Risks &amp; Red Flags to Be Aware Of</h2>
+    <div class="box">
+      <p>
+        The Sheriff will look at the whole history of the tenancy and your pre-action steps.
+        Your claim may be weakened if:
+      </p>
+      <ul>
+        <li>Your arrears schedule is inconsistent with payments shown in bank statements.</li>
+        <li>You did not give the defender a fair chance to respond before raising proceedings.</li>
+        <li>There are ongoing disrepair allegations you have not addressed.</li>
+        <li>You have included charges that are not permitted under the tenancy terms or law.</li>
+      </ul>
+      <p class="muted small">
+        Be ready to explain any areas of concern calmly and honestly. This sheet is generated
+        automatically from your answers and is for preparation only. It is not legal advice and
+        does not guarantee that you will win.
+      </p>
+    </div>
+
+    <h2>7. On the Day of the Case</h2>
+    <div class="box">
+      <ul>
+        <li>Arrive early and bring at least two copies of your bundle (one for you, one spare).</li>
+        <li>Have your tenancy agreement and arrears schedule at the front of the bundle.</li>
+        <li>Make notes of key dates: tenancy start, arrears start, dates of pre-action letters, claim raised date.</li>
+        <li>Address the Sheriff respectfully and speak slowly.</li>
+        <li>Answer questions directly; if you do not know something, say so honestly.</li>
+      </ul>
+    </div>
+
+    <p class="muted small">
+      Landlord Heaven provides document automation and guidance. We are not a law firm and do not
+      provide legal advice. If you are unsure about your position, consider taking independent
+      legal advice before the hearing.
+    </p>
+  </body>
+</html>

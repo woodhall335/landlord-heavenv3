@@ -183,6 +183,19 @@ export interface MetaFacts {
   product_tier?: string | null;
 }
 
+// -----------------------------------------------------------------------------
+// Case health / risk scoring
+// -----------------------------------------------------------------------------
+
+export type CaseRiskLevel = 'low' | 'medium' | 'high';
+
+export interface CaseHealth {
+  contradictions: string[];
+  missing_evidence: string[];
+  compliance_warnings: string[];
+  risk_level: CaseRiskLevel;
+}
+
 export interface CaseFacts {
   tenancy: TenancyFacts;
   property: PropertyFacts;
@@ -194,10 +207,11 @@ export interface CaseFacts {
   service_contact: ServiceContactFacts;
   money_claim: MoneyClaimFacts;
   meta: MetaFacts;
+  case_health: CaseHealth;
 }
 
 // =============================================================================
-// Factory Functions
+/** Factory Functions */
 // =============================================================================
 
 /**
@@ -337,5 +351,11 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     product: null,
     original_product: null,
     product_tier: null,
+  },
+  case_health: {
+    contradictions: [],
+    missing_evidence: [],
+    compliance_warnings: [],
+    risk_level: 'low',
   },
 });

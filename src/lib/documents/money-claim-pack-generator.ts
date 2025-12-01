@@ -225,8 +225,7 @@ function buildPreActionSummary(claim: MoneyClaimCase): string {
     segments.push(responseText);
   }
   if (claim.pap_documents_served) {
-    const papMethods = claim.pap_service_method ?? [];
-    const methods = papMethods.length ? papMethods.join(', ') : 'unspecified method';
+    const methods = (claim.pap_service_method || []).length ? claim.pap_service_method.join(', ') : 'unspecified method';
     segments.push(`Pre-action pack served (${methods}).`);
   }
   if (claim.pap_service_proof) {
@@ -312,6 +311,7 @@ async function generateEnglandWalesMoneyClaimPack(
     arrears_schedule_confirmed: claim.arrears_schedule_confirmed,
   };
 
+  // PACK COVER
   const packCover = await generateDocument({
     templatePath: 'uk/england-wales/templates/money_claims/pack_cover.hbs',
     data: baseTemplateData,
@@ -328,6 +328,7 @@ async function generateEnglandWalesMoneyClaimPack(
     file_name: 'money-claim-pack-summary.pdf',
   });
 
+  // PARTICULARS OF CLAIM
   const particulars = await generateDocument({
     templatePath: 'uk/england-wales/templates/money_claims/particulars_of_claim.hbs',
     data: baseTemplateData,
@@ -344,6 +345,7 @@ async function generateEnglandWalesMoneyClaimPack(
     file_name: 'particulars-of-claim.pdf',
   });
 
+  // SCHEDULE OF ARREARS
   const arrears = await generateDocument({
     templatePath: 'uk/england-wales/templates/money_claims/schedule_of_arrears.hbs',
     data: baseTemplateData,
@@ -360,6 +362,7 @@ async function generateEnglandWalesMoneyClaimPack(
     file_name: 'schedule-of-arrears.pdf',
   });
 
+  // INTEREST CALCULATION
   const interest = await generateDocument({
     templatePath: 'uk/england-wales/templates/money_claims/interest_workings.hbs',
     data: baseTemplateData,
@@ -376,6 +379,7 @@ async function generateEnglandWalesMoneyClaimPack(
     file_name: 'interest-calculation.pdf',
   });
 
+  // EVIDENCE INDEX
   const evidence = await generateDocument({
     templatePath: 'uk/england-wales/templates/money_claims/evidence_index.hbs',
     data: baseTemplateData,
@@ -390,6 +394,23 @@ async function generateEnglandWalesMoneyClaimPack(
     html: evidence.html,
     pdf: evidence.pdf,
     file_name: 'evidence-index.pdf',
+  });
+
+  // COURT HEARING PREPARATION SHEET (NEW)
+  const hearingPrep = await generateDocument({
+    templatePath: 'uk/england-wales/templates/money_claims/hearing_prep_sheet.hbs',
+    data: baseTemplateData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Court Hearing Preparation Sheet',
+    description: 'Structured guidance on what to say, what to bring, and how to present your case if the claim is defended.',
+    category: 'guidance',
+    html: hearingPrep.html,
+    pdf: hearingPrep.pdf,
+    file_name: 'hearing-prep-sheet.pdf',
   });
 
   // PRE-ACTION PROTOCOL DOCUMENTS (Legally Required)
@@ -481,6 +502,7 @@ async function generateEnglandWalesMoneyClaimPack(
     file_name: 'filing-guide.pdf',
   });
 
+  // OFFICIAL N1 FORM
   await assertOfficialFormExists('N1_1224.pdf');
   const n1Pdf = await fillN1Form(buildN1Payload(claim, totals));
 

@@ -233,6 +233,126 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
   return tenants;
 }
 
+// -----------------------------------------------------------------------------
+// CASE HEALTH - compute contradictions, missing evidence, compliance warnings
+// -----------------------------------------------------------------------------
+
+function computeCaseHealth(base: CaseFacts, wizard: WizardFacts): CaseFacts['case_health'] {
+  const contradictions: string[] = [];
+  const missing_evidence: string[] = [];
+  const compliance_warnings: string[] = [];
+
+  const isMoneyClaim =
+    base.meta.product === 'money_claim' ||
+    base.court.route === 'money_claim';
+
+  if (!isMoneyClaim) {
+    return {
+      contradictions,
+      missing_evidence,
+      compliance_warnings,
+      risk_level: 'low',
+    };
+  }
+
+  const hasString = (value: unknown | null | undefined): boolean =>
+    typeof value === 'string' && value.trim().length > 0;
+  const hasArray = (value: unknown | null | undefined): boolean =>
+    Array.isArray(value) && value.length > 0;
+  const isTrue = (value: unknown | null | undefined): boolean => value === true;
+
+  // Parties / identity basics
+  if (!hasString(base.parties.landlord.name)) {
+    missing_evidence.push('Missing landlord/claimant name.');
+  }
+  if (!base.parties.tenants.length || !hasString(base.parties.tenants[0]?.name)) {
+    missing_evidence.push('Missing tenant/defendant name.');
+  }
+
+  // Property
+  if (!hasString(base.property.address_line1) || !hasString(base.property.postcode)) {
+    missing_evidence.push('Missing property address or postcode.');
+  }
+
+  // Money claim basics
+  if (base.tenancy.rent_amount === null) {
+    missing_evidence.push('Missing rent amount for calculating arrears.');
+  }
+  if (base.issues.rent_arrears.total_arrears === null) {
+    missing_evidence.push('Missing total rent arrears figure.');
+  }
+
+  // Arrears evidence
+  const hasArrearsSchedule =
+    base.issues.rent_arrears.arrears_items.length > 0 ||
+    base.money_claim.arrears_schedule_confirmed === true ||
+    base.evidence.rent_schedule_uploaded === true;
+
+  if (!hasArrearsSchedule) {
+    missing_evidence.push('No arrears schedule or rent ledger confirmed.');
+  }
+
+  // Attempts to resolve
+  if (!hasString(base.money_claim.attempts_to_resolve)) {
+    compliance_warnings.push('Attempts to resolve the dispute not described.');
+  }
+
+  // PAP-DEBT / pre-action steps
+  if (!hasString(base.money_claim.lba_date)) {
+    compliance_warnings.push('Letter Before Claim date not provided.');
+  }
+  if (!hasString(base.money_claim.lba_response_deadline)) {
+    compliance_warnings.push('Response deadline for Letter Before Claim not provided.');
+  }
+  if (!isTrue(base.money_claim.pap_documents_served)) {
+    compliance_warnings.push('PAP-DEBT documents not marked as served on the tenant.');
+  }
+  if (!hasArray(base.money_claim.pap_service_method)) {
+    compliance_warnings.push('Service method for PAP-DEBT pack not recorded.');
+  }
+
+  // Evidence flags
+  const hasAnyEvidenceFlag =
+    hasArray(base.money_claim.evidence_types_available) ||
+    base.evidence.tenancy_agreement_uploaded ||
+    base.evidence.rent_schedule_uploaded ||
+    base.evidence.bank_statements_uploaded ||
+    base.evidence.other_evidence_uploaded;
+
+  if (!hasAnyEvidenceFlag) {
+    compliance_warnings.push('No supporting evidence flagged (tenancy agreement, statements, or other evidence).');
+  }
+
+  // Contradictions (simple heuristics)
+  if (base.issues.rent_arrears.has_arrears === false && (base.issues.rent_arrears.total_arrears ?? 0) > 0) {
+    contradictions.push('Marked as having no rent arrears but a positive arrears total was provided.');
+  }
+
+  if (base.money_claim.tenant_responded === true && !hasString(base.money_claim.tenant_response_details)) {
+    contradictions.push('Tenant is marked as having responded, but no response details were provided.');
+  }
+
+  if ((base.issues.rent_arrears.total_arrears ?? 0) === 0 && base.money_claim.basis_of_claim === 'rent_arrears') {
+    contradictions.push('Basis of claim is rent arrears but total arrears is recorded as £0.');
+  }
+
+  // Risk level heuristic
+  let risk_level: 'low' | 'medium' | 'high' = 'low';
+
+  if (contradictions.length > 0 || missing_evidence.length >= 4) {
+    risk_level = 'high';
+  } else if (missing_evidence.length > 0 || compliance_warnings.length > 0) {
+    risk_level = 'medium';
+  }
+
+  return {
+    contradictions,
+    missing_evidence,
+    compliance_warnings,
+    risk_level,
+  };
+}
+
 /**
  * Converts flat WizardFacts (DB storage) to nested CaseFacts (domain model).
  *
@@ -494,7 +614,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
       base.evidence.bank_statements_uploaded
   );
   base.evidence.safety_certificates_uploaded = Boolean(
-    getFirstValue(wizard, ['case_facts.evidence.safety_certificates_uploaded', 'evidence.safety_certificates_uploaded']) ??
+    getFirstValue(wizard, ['case_facts.evidence.safety_certificates_uploaded', 'evidence.safety_certificates_uploaded', 'safety_certificates_uploaded']) ??
       base.evidence.safety_certificates_uploaded
   );
   base.evidence.asb_evidence_uploaded = Boolean(
@@ -738,6 +858,11 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'enforcement_notes',
     'case_facts.money_claim.enforcement_notes',
   ]);
+
+  // ---------------------------------------------------------------------------
+  // CASE HEALTH - compute contradictions, missing evidence, compliance warnings
+  // ---------------------------------------------------------------------------
+  base.case_health = computeCaseHealth(base, wizard);
 
   return base;
 }
