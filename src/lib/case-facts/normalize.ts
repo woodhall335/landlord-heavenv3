@@ -591,17 +591,71 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'lba_response_deadline',
     'case_facts.money_claim.lba_response_deadline',
   ]);
+  const papDocumentsSent = getFirstValue(wizard, [
+    'pap_documents_sent',
+    'lba_documents_sent',
+    'pre_action_docs_sent',
+    'case_facts.money_claim.pap_documents_sent',
+  ]);
+  if (papDocumentsSent !== null && papDocumentsSent !== undefined) {
+    base.money_claim.pap_documents_sent = Array.isArray(papDocumentsSent)
+      ? (papDocumentsSent as string[])
+      : [papDocumentsSent as any];
+  }
   const tenantResponded = getFirstValue(wizard, [
     'tenant_responded',
     'defendant_response',
     'case_facts.money_claim.tenant_responded',
+    'pre_action_reply_received',
   ]);
   if (tenantResponded !== null && tenantResponded !== undefined) {
     base.money_claim.tenant_responded = coerceBoolean(tenantResponded);
   }
+  base.money_claim.tenant_response_details ??= getFirstValue(wizard, [
+    'tenant_response_details',
+    'pre_action_reply_details',
+    'case_facts.money_claim.tenant_response_details',
+  ]);
+  const lbaSecondSent = getFirstValue(wizard, ['lba_second_sent', 'case_facts.money_claim.lba_second_sent']);
+  if (lbaSecondSent !== null && lbaSecondSent !== undefined) {
+    base.money_claim.lba_second_sent = coerceBoolean(lbaSecondSent);
+  }
+  base.money_claim.lba_second_date ??= getFirstValue(wizard, [
+    'lba_second_date',
+    'case_facts.money_claim.lba_second_date',
+    'pre_action_second_date',
+  ]);
+  base.money_claim.lba_second_method ??= getFirstValue(wizard, [
+    'lba_second_method',
+    'case_facts.money_claim.lba_second_method',
+    'pre_action_second_method',
+  ]);
+  base.money_claim.lba_second_response_deadline ??= getFirstValue(wizard, [
+    'lba_second_response_deadline',
+    'case_facts.money_claim.lba_second_response_deadline',
+  ]);
+  const preActionDeadlineConfirm = getFirstValue(wizard, [
+    'pre_action_deadline_confirmation',
+    'pre_action_letter_14day',
+    'case_facts.money_claim.pre_action_deadline_confirmation',
+  ]);
+  if (preActionDeadlineConfirm !== null && preActionDeadlineConfirm !== undefined) {
+    base.money_claim.pre_action_deadline_confirmation = coerceBoolean(preActionDeadlineConfirm);
+  }
   base.money_claim.signatory_name ??= getFirstValue(wizard, ['signatory_name', 'case_facts.money_claim.signatory_name']);
   base.money_claim.signature_date ??= getFirstValue(wizard, ['signature_date', 'case_facts.money_claim.signature_date']);
   base.money_claim.sheriffdom ??= getFirstValue(wizard, ['sheriffdom', 'case_facts.money_claim.sheriffdom']);
+  const courtJurisdictionConfirmed = getFirstValue(wizard, [
+    'court_jurisdiction_confirmed',
+    'case_facts.money_claim.court_jurisdiction_confirmed',
+  ]);
+  if (courtJurisdictionConfirmed !== null && courtJurisdictionConfirmed !== undefined) {
+    base.money_claim.court_jurisdiction_confirmed = coerceBoolean(courtJurisdictionConfirmed);
+  }
+  base.money_claim.lodging_method ??= getFirstValue(wizard, [
+    'lodging_method',
+    'case_facts.money_claim.lodging_method',
+  ]);
   base.money_claim.demand_letter_date ??= getFirstValue(wizard, ['demand_letter_date', 'case_facts.money_claim.demand_letter_date']);
   base.money_claim.second_demand_date ??= getFirstValue(wizard, ['second_demand_date', 'case_facts.money_claim.second_demand_date']);
   base.money_claim.evidence_summary ??= getFirstValue(wizard, ['evidence_summary', 'case_facts.money_claim.evidence_summary']);
@@ -616,6 +670,74 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     if (basisOfClaim === 'property_damage') base.money_claim.basis_of_claim = 'damages' as any;
     else base.money_claim.basis_of_claim = basisOfClaim as any;
   }
+
+  const arrearsScheduleConfirmed = getFirstValue(wizard, [
+    'arrears_schedule_confirmed',
+    'arrears_schedule_confirm',
+    'case_facts.money_claim.arrears_schedule_confirmed',
+  ]);
+  if (arrearsScheduleConfirmed !== null && arrearsScheduleConfirmed !== undefined) {
+    base.money_claim.arrears_schedule_confirmed = coerceBoolean(arrearsScheduleConfirmed);
+  }
+
+  const evidenceTypesAvailable = getFirstValue(wizard, [
+    'evidence_types_available',
+    'case_facts.money_claim.evidence_types_available',
+  ]);
+  if (evidenceTypesAvailable !== null && evidenceTypesAvailable !== undefined) {
+    base.money_claim.evidence_types_available = Array.isArray(evidenceTypesAvailable)
+      ? (evidenceTypesAvailable as string[])
+      : [evidenceTypesAvailable as any];
+  }
+
+  const papDocumentsServed = getFirstValue(wizard, [
+    'pap_documents_served',
+    'pre_action_letter_served',
+    'case_facts.money_claim.pap_documents_served',
+  ]);
+  if (papDocumentsServed !== null && papDocumentsServed !== undefined) {
+    base.money_claim.pap_documents_served = coerceBoolean(papDocumentsServed);
+  }
+  base.money_claim.pap_service_method ??= getFirstValue(wizard, [
+    'pap_service_method',
+    'pre_action_service_method',
+    'case_facts.money_claim.pap_service_method',
+  ]);
+  base.money_claim.pap_service_proof ??= getFirstValue(wizard, [
+    'pap_service_proof',
+    'pre_action_service_proof',
+    'case_facts.money_claim.pap_service_proof',
+  ]);
+
+  base.money_claim.preferred_issue_route ??= getFirstValue(wizard, [
+    'preferred_issue_route',
+    'court_issue_route',
+    'case_facts.money_claim.preferred_issue_route',
+  ]);
+  base.money_claim.claim_value_band ??= getFirstValue(wizard, [
+    'claim_value_band',
+    'case_facts.money_claim.claim_value_band',
+  ]);
+  const helpWithFees = getFirstValue(wizard, [
+    'help_with_fees_needed',
+    'case_facts.money_claim.help_with_fees_needed',
+  ]);
+  if (helpWithFees !== null && helpWithFees !== undefined) {
+    base.money_claim.help_with_fees_needed = coerceBoolean(helpWithFees);
+  }
+  const enforcementPreferences = getFirstValue(wizard, [
+    'enforcement_preferences',
+    'case_facts.money_claim.enforcement_preferences',
+  ]);
+  if (enforcementPreferences !== null && enforcementPreferences !== undefined) {
+    base.money_claim.enforcement_preferences = Array.isArray(enforcementPreferences)
+      ? (enforcementPreferences as string[])
+      : [enforcementPreferences as any];
+  }
+  base.money_claim.enforcement_notes ??= getFirstValue(wizard, [
+    'enforcement_notes',
+    'case_facts.money_claim.enforcement_notes',
+  ]);
 
   return base;
 }

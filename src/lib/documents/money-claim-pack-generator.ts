@@ -76,6 +76,33 @@ export interface MoneyClaimCase {
   solicitor_email?: string;
   dx_number?: string;
 
+  // Pre-action and PAP-DEBT
+  lba_date?: string;
+  lba_response_deadline?: string;
+  pap_documents_sent?: string[];
+  lba_method?: string[];
+  lba_second_date?: string;
+  lba_second_method?: string[];
+  lba_second_response_deadline?: string;
+  pap_documents_served?: boolean;
+  pap_service_method?: string[];
+  pap_service_proof?: string;
+  tenant_responded?: boolean;
+  tenant_response_details?: string;
+
+  // Court route and fees
+  preferred_issue_route?: 'mcol' | 'county_court_n1';
+  claim_value_band?: string;
+  help_with_fees_needed?: boolean;
+
+  // Enforcement guidance
+  enforcement_preferences?: string[];
+  enforcement_notes?: string;
+
+  // Evidence flags
+  arrears_schedule_confirmed?: boolean;
+  evidence_types_available?: string[];
+
   // Explicit address-for-service override (if collected in wizard)
   service_address_line1?: string;
   service_address_line2?: string;
@@ -169,6 +196,45 @@ function calculateTotals(claim: MoneyClaimCase): CalculatedTotals {
   };
 }
 
+function buildPreActionSummary(claim: MoneyClaimCase): string {
+  const segments: string[] = [];
+
+  if (claim.lba_date) {
+    const methods = (claim.lba_method || []).length ? ` via ${(claim.lba_method || []).join(', ')}` : '';
+    segments.push(`Initial demand sent on ${claim.lba_date}${methods}.`);
+  }
+  if (claim.lba_response_deadline) {
+    segments.push(`Response deadline given: ${claim.lba_response_deadline}.`);
+  }
+  if (claim.pap_documents_sent && claim.pap_documents_sent.length) {
+    segments.push(`Included PAP/defence forms: ${claim.pap_documents_sent.join(', ')}.`);
+  }
+  if (claim.lba_second_date) {
+    const followUpMethods = (claim.lba_second_method || []).length
+      ? ` via ${(claim.lba_second_method || []).join(', ')}`
+      : '';
+    segments.push(`Follow-up demand sent on ${claim.lba_second_date}${followUpMethods}.`);
+  }
+  if (claim.lba_second_response_deadline) {
+    segments.push(`Follow-up response deadline: ${claim.lba_second_response_deadline}.`);
+  }
+  if (claim.tenant_responded !== undefined && claim.tenant_responded !== null) {
+    const responseText = claim.tenant_responded
+      ? `Tenant responded${claim.tenant_response_details ? `: ${claim.tenant_response_details}` : ''}.`
+      : 'No reply received to demands.';
+    segments.push(responseText);
+  }
+  if (claim.pap_documents_served) {
+    const methods = (claim.pap_service_method || []).length ? claim.pap_service_method.join(', ') : 'unspecified method';
+    segments.push(`Pre-action pack served (${methods}).`);
+  }
+  if (claim.pap_service_proof) {
+    segments.push(`Proof of service noted: ${claim.pap_service_proof}.`);
+  }
+
+  return segments.join(' ');
+}
+
 function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseData {
   const service = buildServiceContact(claim);
 
@@ -238,6 +304,11 @@ async function generateEnglandWalesMoneyClaimPack(
     arrears_schedule: claim.arrears_schedule || [],
     damage_items: claim.damage_items || [],
     other_charges: claim.other_charges || [],
+    pre_action_summary: buildPreActionSummary(claim),
+    enforcement_preferences: claim.enforcement_preferences || [],
+    enforcement_notes: claim.enforcement_notes,
+    evidence_types_available: claim.evidence_types_available || [],
+    arrears_schedule_confirmed: claim.arrears_schedule_confirmed,
   };
 
   const packCover = await generateDocument({

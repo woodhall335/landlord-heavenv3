@@ -65,6 +65,61 @@ function computeProgress(mqs: MasterQuestionSet, facts: Record<string, any>): nu
   return Math.round((answeredCount / mqs.questions.length) * 100);
 }
 
+function hasStringValue(value: unknown): boolean {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function hasArrayValue(value: unknown): boolean {
+  return Array.isArray(value) && value.length > 0;
+}
+
+function getMoneyClaimMissingEssentials(facts: CaseFacts, jurisdiction: string): string[] {
+  const missing: string[] = [];
+
+  if (!hasStringValue(facts.parties.landlord?.name)) missing.push('landlord_name');
+  if (!facts.parties.tenants?.length || !hasStringValue(facts.parties.tenants[0]?.name)) {
+    missing.push('tenant_name');
+  }
+  if (!hasStringValue(facts.property.address_line1)) missing.push('property_address');
+  if (facts.tenancy.rent_amount === null) missing.push('rent_amount');
+  if (!hasStringValue(facts.money_claim?.basis_of_claim)) missing.push('basis_of_claim');
+
+  const hasBreakdown =
+    (facts.issues.rent_arrears.total_arrears ?? 0) > 0 ||
+    (facts.money_claim.damage_items || []).length > 0 ||
+    (facts.money_claim.other_charges || []).length > 0;
+  if (!hasBreakdown) missing.push('claim_breakdown');
+
+  if (!facts.money_claim.lba_date && !facts.money_claim.demand_letter_date) missing.push('pre_action_letter_date');
+  if (!facts.money_claim.lba_response_deadline) missing.push('pre_action_response_deadline');
+  if (!hasArrayValue(facts.money_claim.lba_method)) missing.push('pre_action_service_method');
+  if (jurisdiction === 'england-wales' && !hasArrayValue(facts.money_claim.pap_documents_sent)) {
+    missing.push('pap_documents_sent');
+  }
+  if (jurisdiction === 'scotland' && facts.money_claim.pre_action_deadline_confirmation === null) {
+    missing.push('rule_3_1_response_window');
+  }
+  if (facts.money_claim.pap_documents_served !== true) missing.push('service_confirmation');
+
+  const hasArrearsEvidence =
+    facts.money_claim.arrears_schedule_confirmed === true || facts.evidence.rent_schedule_uploaded === true;
+  if (!hasArrearsEvidence) missing.push('arrears_schedule_or_ledger');
+
+  if (!hasStringValue(facts.money_claim.attempts_to_resolve)) missing.push('attempts_to_resolve');
+  if (facts.money_claim.charge_interest === null) missing.push('interest_choice');
+
+  const hasEvidenceFlags =
+    hasArrayValue(facts.money_claim.evidence_types_available) ||
+    facts.evidence.tenancy_agreement_uploaded ||
+    facts.evidence.rent_schedule_uploaded ||
+    facts.money_claim.arrears_schedule_confirmed === true;
+  if (!hasEvidenceFlags) missing.push('evidence_flags');
+
+  if (!hasArrayValue(facts.money_claim.enforcement_preferences)) missing.push('enforcement_preferences');
+
+  return missing;
+}
+
 export async function POST(request: Request) {
   try {
     const user = await getServerUser().catch(() => null);
@@ -121,8 +176,31 @@ export async function POST(request: Request) {
     }
 
     const nextQuestion = getNextMQSQuestion(mqs, facts);
+    const progress = computeProgress(mqs, facts);
 
     if (!nextQuestion) {
+      if (caseRow.case_type === 'money_claim') {
+        const caseFacts = wizardFactsToCaseFacts(facts as any);
+        const missingEssentials = getMoneyClaimMissingEssentials(caseFacts, caseRow.jurisdiction);
+
+        if (missingEssentials.length) {
+          await supabase.from('cases').update({ wizard_progress: progress } as any).eq('id', case_id);
+
+          const aiResponse = await getNextAIQuestion({
+            case_type: caseRow.case_type as any,
+            jurisdiction: caseRow.jurisdiction as any,
+            collected_facts: facts,
+          });
+
+          return NextResponse.json({
+            next_question: aiResponse.next_question,
+            is_complete: false,
+            progress,
+            missing_essentials: missingEssentials,
+          });
+        }
+      }
+
       await supabase
         .from('cases')
         .update({
@@ -137,8 +215,6 @@ export async function POST(request: Request) {
         progress: 100,
       });
     }
-
-    const progress = computeProgress(mqs, facts);
 
     await supabase
       .from('cases')

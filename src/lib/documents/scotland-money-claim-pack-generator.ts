@@ -85,6 +85,30 @@ export interface ScotlandMoneyClaimCase {
   // Pre-action demand details
   demand_letter_date?: string;
   second_demand_date?: string;
+  lba_method?: string[];
+  lba_second_method?: string[];
+  lba_response_deadline?: string;
+  lba_second_response_deadline?: string;
+  pap_documents_sent?: string[];
+  pap_documents_served?: boolean;
+  pap_service_method?: string[];
+  pap_service_proof?: string;
+  tenant_responded?: boolean;
+  tenant_response_details?: string;
+  pre_action_deadline_confirmation?: boolean;
+
+  // Court and lodging
+  lodging_method?: 'civil_online' | 'paper_form';
+  help_with_fees_needed?: boolean;
+  court_jurisdiction_confirmed?: boolean;
+
+  // Enforcement
+  enforcement_preferences?: string[];
+  enforcement_notes?: string;
+
+  // Evidence flags
+  arrears_schedule_confirmed?: boolean;
+  evidence_types_available?: string[];
 }
 
 export interface ScotlandMoneyClaimPackDocument {
@@ -174,6 +198,51 @@ function calculateTotals(claim: ScotlandMoneyClaimCase): CalculatedTotals {
   };
 }
 
+function buildScotlandPreActionSummary(claim: ScotlandMoneyClaimCase): string {
+  const steps: string[] = [];
+
+  if (claim.demand_letter_date) {
+    const methods = (claim.lba_method || []).length ? ` via ${(claim.lba_method || []).join(', ')}` : '';
+    steps.push(`First demand sent on ${claim.demand_letter_date}${methods}.`);
+  }
+  if (claim.lba_response_deadline) {
+    steps.push(`Response deadline offered: ${claim.lba_response_deadline}.`);
+  }
+  if (claim.pap_documents_sent && claim.pap_documents_sent.length) {
+    steps.push(`Included reply/financial forms: ${claim.pap_documents_sent.join(', ')}.`);
+  }
+  if (claim.second_demand_date) {
+    const methods = (claim.lba_second_method || []).length ? ` via ${(claim.lba_second_method || []).join(', ')}` : '';
+    steps.push(`Follow-up demand on ${claim.second_demand_date}${methods}.`);
+  }
+  if (claim.lba_second_response_deadline) {
+    steps.push(`Follow-up response deadline: ${claim.lba_second_response_deadline}.`);
+  }
+  if (claim.pre_action_deadline_confirmation !== null && claim.pre_action_deadline_confirmation !== undefined) {
+    steps.push(
+      claim.pre_action_deadline_confirmation
+        ? 'Confirmed 14+ days given to respond in line with Rule 3.1.'
+        : '14-day response window not confirmed; highlight for review.'
+    );
+  }
+  if (claim.pap_documents_served) {
+    const methods = (claim.pap_service_method || []).length ? claim.pap_service_method.join(', ') : 'unspecified method';
+    steps.push(`Pre-action letter served (${methods}).`);
+  }
+  if (claim.pap_service_proof) {
+    steps.push(`Proof of service: ${claim.pap_service_proof}.`);
+  }
+  if (claim.tenant_responded !== null && claim.tenant_responded !== undefined) {
+    steps.push(
+      claim.tenant_responded
+        ? `Defender replied${claim.tenant_response_details ? `: ${claim.tenant_response_details}` : ''}.`
+        : 'No defender response received.'
+    );
+  }
+
+  return steps.join(' ');
+}
+
 function buildSimpleProcedurePayload(
   claim: ScotlandMoneyClaimCase,
   totals: CalculatedTotals
@@ -233,6 +302,14 @@ async function generateScotlandMoneyClaimPack(claim: ScotlandMoneyClaimCase): Pr
     sheriffdom: claim.sheriffdom || 'Edinburgh Sheriff Court',
     document_id: claim.case_id || `SC-MONEY-${Date.now()}`,
     days_accrued: 90, // Default for template
+    pre_action_summary: buildScotlandPreActionSummary(claim),
+    enforcement_preferences: claim.enforcement_preferences || [],
+    enforcement_notes: claim.enforcement_notes,
+    evidence_types_available: claim.evidence_types_available || [],
+    arrears_schedule_confirmed: claim.arrears_schedule_confirmed,
+    help_with_fees_needed: claim.help_with_fees_needed,
+    lodging_method: claim.lodging_method,
+    court_jurisdiction_confirmed: claim.court_jurisdiction_confirmed,
   };
 
   // 1. Pack cover
