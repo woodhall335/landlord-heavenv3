@@ -9,8 +9,10 @@ const supabaseClientMock = {
   insert: vi.fn(),
   select: vi.fn(),
   single: vi.fn(),
+  maybeSingle: vi.fn(),
   eq: vi.fn(),
   is: vi.fn(),
+  update: vi.fn(),
 };
 
 supabaseClientMock.from.mockReturnValue(supabaseClientMock);
@@ -18,6 +20,8 @@ supabaseClientMock.insert.mockReturnValue(supabaseClientMock);
 supabaseClientMock.select.mockReturnValue(supabaseClientMock);
 supabaseClientMock.eq.mockReturnValue(supabaseClientMock);
 supabaseClientMock.is.mockReturnValue(supabaseClientMock);
+supabaseClientMock.update.mockReturnValue(supabaseClientMock);
+supabaseClientMock.maybeSingle.mockResolvedValue({ data: null, error: null });
 
 vi.mock('@/lib/supabase/server', () => ({
   createServerSupabaseClient: vi.fn(async () => supabaseClientMock),

@@ -66,7 +66,7 @@ export async function POST(request: Request) {
     // Fetch case metadata (RLS will handle authorization)
     const { data, error: caseError } = await supabase
       .from('cases')
-      .select('id, jurisdiction, user_id, anonymous_user_id')
+      .select('id, jurisdiction, user_id')
       .eq('id', case_id)
       .single();
 
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
     }
 
     // Type assertion: we know data exists after the null check
-    const caseData = data as { id: string; jurisdiction: string; user_id: string | null; anonymous_user_id: string | null };
+    const caseData = data as { id: string; jurisdiction: string; user_id: string | null };
 
     // Load WizardFacts from case_facts.facts (source of truth)
     const facts = await getOrCreateWizardFacts(supabase, case_id);
@@ -185,8 +185,8 @@ export async function POST(request: Request) {
 
     if (generatedDoc.pdf) {
       const adminClient = createAdminClient();
-      // Use user_id if available, otherwise use anonymous_user_id or 'anonymous' as fallback
-      const userFolder = caseData.user_id || caseData.anonymous_user_id || 'anonymous';
+      // Use user_id if available, otherwise use 'anonymous' as fallback for anonymous users
+      const userFolder = caseData.user_id || 'anonymous';
       const fileName = `${userFolder}/${case_id}/${document_type}_${Date.now()}.pdf`;
 
       const { error: uploadError } = await adminClient.storage
