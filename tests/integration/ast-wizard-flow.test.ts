@@ -211,13 +211,37 @@ describe('AST Wizard Flow - Integration Tests', () => {
       expect(firstQuestion.id).toBeDefined();
 
       // Answer the first question (typically ast_tier for Standard AST)
+      // Generate appropriate answer based on question type
+      let answer: any;
+      if (firstQuestion.inputType === 'select') {
+        answer = firstQuestion.options?.[0] || 'Standard AST';
+      } else if (firstQuestion.inputType === 'group' && firstQuestion.fields) {
+        // For group questions, provide valid field values
+        answer = {};
+        for (const field of firstQuestion.fields) {
+          if (field.inputType === 'yes_no') {
+            answer[field.id] = true;
+          } else if (field.inputType === 'select' && field.options) {
+            answer[field.id] = field.options[0];
+          } else if (field.inputType === 'number') {
+            answer[field.id] = 1;
+          } else if (field.inputType === 'date') {
+            answer[field.id] = '2024-01-01';
+          } else {
+            answer[field.id] = 'test value';
+          }
+        }
+      } else {
+        answer = 'test value';
+      }
+
       const answerRequest = new Request('http://localhost/api/wizard/answer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           case_id: caseId,
           question_id: firstQuestion.id,
-          answer: firstQuestion.inputType === 'select' ? (firstQuestion.options?.[0] || 'Standard AST') : 'test value',
+          answer,
         }),
       });
 
@@ -293,13 +317,37 @@ describe('AST Wizard Flow - Integration Tests', () => {
       // ------------------------------------------------
       const firstQuestion = startData.next_question;
 
+      // Generate appropriate answer based on question type
+      let answer: any;
+      if (firstQuestion.inputType === 'select') {
+        answer = firstQuestion.options?.[0] || 'Premium AST';
+      } else if (firstQuestion.inputType === 'group' && firstQuestion.fields) {
+        // For group questions, provide valid field values
+        answer = {};
+        for (const field of firstQuestion.fields) {
+          if (field.inputType === 'yes_no') {
+            answer[field.id] = true;
+          } else if (field.inputType === 'select' && field.options) {
+            answer[field.id] = field.options[0];
+          } else if (field.inputType === 'number') {
+            answer[field.id] = 1;
+          } else if (field.inputType === 'date') {
+            answer[field.id] = '2024-01-01';
+          } else {
+            answer[field.id] = 'test value';
+          }
+        }
+      } else {
+        answer = 'test value';
+      }
+
       const answerRequest = new Request('http://localhost/api/wizard/answer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           case_id: caseId,
           question_id: firstQuestion.id,
-          answer: firstQuestion.inputType === 'select' ? (firstQuestion.options?.[0] || 'Premium AST') : 'test value',
+          answer,
         }),
       });
 
