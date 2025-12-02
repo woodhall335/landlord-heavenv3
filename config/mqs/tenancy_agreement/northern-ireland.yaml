@@ -1,217 +1,324 @@
-id: tenancy_agreement_northern_ireland_v1
+# config/mqs/tenancy_agreement/northern-ireland.yaml
+
+id: tenancy_agreement_northern_ireland_v2
 product: tenancy_agreement
 jurisdiction: northern-ireland
-version: 1.0.1
+version: "2.0.0"
+
 questions:
-  - id: tenancy_tier
-    section: "Product & Tier"
-    question: "Which version of the Northern Ireland tenancy agreement do you want to generate?"
+  # 0. Product selection
+  - id: ni_tier
+    section: Product
+    question: "Which tenancy agreement do you need?"
     inputType: select
-    helperText: "Standard covers core lawful terms. Premium adds guarantor support, enhanced house rules, detailed inventory and extra protections."
     options:
       - "Standard NI Private Tenancy"
       - "Premium NI Private Tenancy"
+    helperText: "Standard covers simple lets. Premium adds guarantor, HMO, detailed maintenance schedules and tighter controls."
     validation:
       required: true
     maps_to:
-      - "product_tier"
+      - product_tier
 
-  - id: property_details
-    section: "Property Details"
-    question: "What are the full property details for the let?"
+  # 1. NI Tenancy Suitability Check
+  - id: ni_suitability
+    section: "Tenancy Type Check"
+    question: "NI tenancy suitability check"
     inputType: group
+    helperText: "Basic checks to ensure this is a valid private tenancy. For validation/warnings only."
     fields:
-      - id: property_address
-        label: "Full property address"
-        inputType: textarea
-        helperText: "Include flat number (if any), building, street, town, and postcode exactly as it should appear in the tenancy agreement."
+      - id: tenant_is_individual
+        label: "Is the tenant an individual (not a company)?"
+        inputType: yes_no
         validation:
           required: true
-          minLength: 10
+        width: half
+      - id: main_home
+        label: "Will this be the tenant's main home?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: landlord_lives_at_property
+        label: "Does the landlord live at the property?"
+        inputType: yes_no
+        helperText: "If yes, this may affect tenancy rights"
+        validation:
+          required: true
+        width: half
+      - id: holiday_or_licence
+        label: "Is this a holiday let or licence arrangement?"
+        inputType: yes_no
+        helperText: "If yes, a private tenancy may not be appropriate"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - tenancy.ni_suitability.tenant_is_individual
+      - tenancy.ni_suitability.main_home
+      - tenancy.ni_suitability.landlord_lives_at_property
+      - tenancy.ni_suitability.holiday_or_licence
+
+  # 2. Property details
+  - id: property_address
+    section: Property Details
+    question: "Rental property address"
+    inputType: group
+    helperText: "Exactly as it should appear in the tenancy agreement."
+    fields:
+      - id: property_address_line1
+        label: "Building and street"
+        inputType: text
+        placeholder: "123 High Street"
+        validation:
+          required: true
+        width: full
+      - id: property_address_town
+        label: "Town / City"
+        inputType: text
+        placeholder: "Belfast"
+        validation:
+          required: true
+        width: half
+      - id: property_address_postcode
+        label: "Postcode"
+        inputType: text
+        placeholder: "BT1 1AA"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - property_address_line1
+      - property_address_town
+      - property_address_postcode
+
+  - id: property_overview
+    section: Property Details
+    question: "Property overview"
+    inputType: group
+    helperText: "Type, bedrooms and whether it's furnished."
+    fields:
       - id: property_type
         label: "Property type"
         inputType: select
         options:
-          - "flat"
           - "house"
-          - "hmo"
+          - "flat"
+          - "maisonette"
+          - "bungalow"
           - "studio"
-          - "other"
         validation:
           required: true
+        width: half
       - id: number_of_bedrooms
         label: "Number of bedrooms"
         inputType: number
         validation:
           required: true
-          min: 1
+          min: 0
           max: 20
+        width: half
       - id: furnished_status
-        label: "Is the property furnished?"
+        label: "Furnishing"
         inputType: select
         options:
-          - "unfurnished"
-          - "part-furnished"
           - "furnished"
+          - "part-furnished"
+          - "unfurnished"
         validation:
           required: true
-    validation:
-      required: true
+        width: half
+      - id: parking_available
+        label: "Is parking included?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: parking_details
+        label: "Parking details"
+        inputType: text
+        placeholder: "Allocated bay, permit required, on-street, etc."
+        dependsOn:
+          questionId: parking_available
+          value: true
+        width: full
     maps_to:
-      - "property.address"
-      - "property.type"
-      - "property.bedrooms"
-      - "property.furnished_status"
+      - property_type
+      - number_of_bedrooms
+      - furnished_status
+      - parking_available
+      - parking_details
 
-  - id: property_overview
-    section: "Property Details"
-    question: "Give a brief description of the property and any outside space."
+  - id: outdoor_space
+    section: Property Details
+    question: "Outdoor space"
     inputType: group
+    helperText: "Garden and maintenance arrangements"
     fields:
-      - id: property_description
-        label: "Short description of the property"
-        inputType: textarea
-        helperText: "For example: 'Three-bedroom semi-detached house with kitchen, living room and rear garden.'"
+      - id: has_garden
+        label: "Is there a garden or outdoor space?"
+        inputType: yes_no
         validation:
-          required: false
-      - id: outdoor_space
-        label: "Outdoor space"
+          required: true
+        width: half
+      - id: garden_maintenance
+        label: "Who maintains the garden?"
         inputType: select
         options:
-          - "No outdoor space"
-          - "Shared yard/garden"
-          - "Private garden"
-          - "Balcony/terrace"
-          - "Other"
-        validation:
-          required: false
-      - id: parking
-        label: "Parking arrangements"
-        inputType: select
-        options:
-          - "No parking"
-          - "On-street parking"
-          - "Allocated parking space"
-          - "Driveway/garage"
-          - "Other"
-        validation:
-          required: false
-      - id: meter_information
-        label: "Utility meter information"
-        inputType: textarea
-        helperText: "Optional: prepayment meters, smart meters, key cards, etc."
-        validation:
-          required: false
+          - "Tenant"
+          - "Landlord"
+          - "Shared responsibility"
+        dependsOn:
+          questionId: has_garden
+          value: true
+        width: half
     maps_to:
-      - "property.description"
-      - "property.outdoor_space"
-      - "property.parking"
-      - "property.meter_information"
+      - has_garden
+      - garden_maintenance
 
+  # 2. Landlord details
   - id: landlord_details
-    section: "Landlord Details"
-    question: "Who is the landlord for this tenancy?"
+    section: Landlord Details
+    question: "Landlord contact details"
     inputType: group
+    helperText: "Used on the tenancy agreement, certificates and notices."
     fields:
-      - id: landlord_type
-        label: "Is the landlord an individual or a company?"
-        inputType: select
-        options:
-          - "individual"
-          - "company"
-        validation:
-          required: true
-      - id: landlord_name
-        label: "Landlord full name or company name"
+      - id: landlord_full_name
+        label: "Full name"
         inputType: text
+        placeholder: "Jane Landlord"
         validation:
           required: true
-          minLength: 3
-      - id: landlord_contact_address
-        label: "Landlord contact address for formal notices"
-        inputType: textarea
-        helperText: "This must be a valid address where the landlord can receive legal notices, which may be different from the let property."
-        validation:
-          required: true
-          minLength: 10
+        width: full
       - id: landlord_email
-        label: "Landlord email"
+        label: "Email"
         inputType: email
+        placeholder: "you@example.com"
         validation:
-          required: false
+          required: true
+        width: half
       - id: landlord_phone
-        label: "Landlord phone"
+        label: "Phone"
         inputType: tel
+        placeholder: "028 9012 3456"
         validation:
-          required: false
-      - id: landlord_registration_number
-        label: "Landlord registration number (if applicable)"
-        inputType: text
-        helperText: "If landlord registration is required and already obtained, enter the registration number here."
-        validation:
-          required: false
-    validation:
-      required: true
+          required: true
+        width: half
     maps_to:
-      - "landlord.type"
-      - "landlord.name"
-      - "landlord.service_address"
-      - "landlord.email"
-      - "landlord.phone"
-      - "landlord.registration_number"
+      - landlord_full_name
+      - landlord_email
+      - landlord_phone
+
+  - id: landlord_address
+    section: Landlord Details
+    question: "Landlord service address"
+    inputType: group
+    helperText: "Where formal notices can be served (not the rental property)."
+    fields:
+      - id: landlord_address_line1
+        label: "Building and street"
+        inputType: text
+        placeholder: "456 Park Avenue"
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_town
+        label: "Town / City"
+        inputType: text
+        placeholder: "Belfast"
+        validation:
+          required: true
+        width: half
+      - id: landlord_address_postcode
+        label: "Postcode"
+        inputType: text
+        placeholder: "BT2 2BB"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - landlord_address_line1
+      - landlord_address_town
+      - landlord_address_postcode
+
+  - id: landlord_registration
+    section: Landlord Details
+    question: "Landlord registration (if applicable)"
+    inputType: group
+    helperText: "If landlord registration is required and already obtained."
+    fields:
+      - id: landlord_registration_number
+        label: "Registration number"
+        inputType: text
+        placeholder: "Registration reference (if applicable)"
+        width: full
+    maps_to:
+      - landlord_registration_number
 
   - id: agent_usage
-    section: "Letting Agent"
-    question: "Is a letting or managing agent involved in this tenancy?"
+    section: Landlord Details
+    question: "Are you using a letting agent?"
     inputType: yes_no
-    helperText: "If an agent is managing any part of the tenancy, their details should be recorded."
+    helperText: "If yes, their details can appear on the agreement for rent collection and management."
     validation:
       required: true
     maps_to:
-      - "agent.is_used"
+      - agent_usage
 
   - id: agent_details
-    section: "Letting Agent"
-    question: "Provide the letting / managing agent's details."
+    section: Landlord Details
+    question: "Agent details"
     inputType: group
     dependsOn:
-      questionId: "agent_usage"
+      questionId: agent_usage
       value: true
     fields:
       - id: agent_name
         label: "Agent name"
         inputType: text
+        placeholder: "Acme Lettings"
         validation:
           required: true
+        width: full
       - id: agent_address
-        label: "Agent contact address"
+        label: "Agent address"
         inputType: textarea
+        placeholder: "Building and street\nTown/City\nPostcode"
         validation:
           required: true
-          minLength: 10
+        width: full
       - id: agent_email
         label: "Agent email"
         inputType: email
+        placeholder: "agent@example.com"
         validation:
-          required: false
+          required: true
+        width: half
       - id: agent_phone
         label: "Agent phone"
         inputType: tel
+        placeholder: "028 9012 3456"
         validation:
-          required: false
-    validation:
-      required: true
+          required: true
+        width: half
+      - id: agent_signs
+        label: "Should the agent sign on your behalf?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
     maps_to:
-      - "agent.name"
-      - "agent.address"
-      - "agent.email"
-      - "agent.phone"
+      - agent_name
+      - agent_address
+      - agent_email
+      - agent_phone
+      - agent_signs
 
+  # 3. Tenants
   - id: number_of_tenants
-    section: "Tenants"
-    question: "How many tenants will be named on the tenancy agreement?"
+    section: Tenants
+    question: "How many tenants are on the agreement?"
     inputType: select
-    helperText: "Do not include permitted occupiers or children here – only tenants who will sign the agreement."
     options:
       - "1"
       - "2"
@@ -221,385 +328,414 @@ questions:
     validation:
       required: true
     maps_to:
-      - "tenants.count"
+      - number_of_tenants
 
   - id: tenant_1
-    section: "Tenants"
-    question: "Tenant 1 details"
+    section: Tenants
+    question: "Lead tenant"
     inputType: group
+    helperText: "Primary tenant who will receive notices"
     fields:
       - id: full_name
         label: "Full name"
         inputType: text
         validation:
           required: true
+        width: full
       - id: dob
         label: "Date of birth"
         inputType: date
         validation:
-          required: false
+          required: true
+        width: half
       - id: email
-        label: "Email address"
+        label: "Email"
         inputType: email
         validation:
-          required: false
+          required: true
+        width: half
       - id: phone
-        label: "Phone number"
+        label: "Phone"
         inputType: tel
         validation:
-          required: false
-    validation:
-      required: true
+          required: true
+        width: half
     maps_to:
-      - "tenants.0.full_name"
-      - "tenants.0.dob"
-      - "tenants.0.email"
-      - "tenants.0.phone"
+      - tenants.0.full_name
+      - tenants.0.dob
+      - tenants.0.email
+      - tenants.0.phone
 
   - id: tenant_2
-    section: "Tenants"
-    question: "Tenant 2 details"
+    section: Tenants
+    question: "Tenant 2"
     inputType: group
     dependsOn:
-      questionId: "number_of_tenants"
-      value:
-        - "2"
-        - "3"
-        - "4"
-        - "5"
+      questionId: number_of_tenants
+      value: ["2", "3", "4", "5"]
     fields:
       - id: full_name
         label: "Full name"
         inputType: text
         validation:
           required: true
+        width: full
       - id: dob
         label: "Date of birth"
         inputType: date
         validation:
-          required: false
+          required: true
+        width: half
       - id: email
-        label: "Email address"
+        label: "Email"
         inputType: email
         validation:
-          required: false
+          required: true
+        width: half
       - id: phone
-        label: "Phone number"
+        label: "Phone"
         inputType: tel
         validation:
-          required: false
-    validation:
-      required: true
+          required: true
+        width: half
     maps_to:
-      - "tenants.1.full_name"
-      - "tenants.1.dob"
-      - "tenants.1.email"
-      - "tenants.1.phone"
+      - tenants.1.full_name
+      - tenants.1.dob
+      - tenants.1.email
+      - tenants.1.phone
 
   - id: tenant_3
-    section: "Tenants"
-    question: "Tenant 3 details"
+    section: Tenants
+    question: "Tenant 3"
     inputType: group
     dependsOn:
-      questionId: "number_of_tenants"
-      value:
-        - "3"
-        - "4"
-        - "5"
+      questionId: number_of_tenants
+      value: ["3", "4", "5"]
     fields:
       - id: full_name
         label: "Full name"
         inputType: text
         validation:
           required: true
+        width: full
       - id: dob
         label: "Date of birth"
         inputType: date
         validation:
-          required: false
+          required: true
+        width: half
       - id: email
-        label: "Email address"
+        label: "Email"
         inputType: email
         validation:
-          required: false
+          required: true
+        width: half
       - id: phone
-        label: "Phone number"
+        label: "Phone"
         inputType: tel
         validation:
-          required: false
-    validation:
-      required: true
+          required: true
+        width: half
     maps_to:
-      - "tenants.2.full_name"
-      - "tenants.2.dob"
-      - "tenants.2.email"
-      - "tenants.2.phone"
+      - tenants.2.full_name
+      - tenants.2.dob
+      - tenants.2.email
+      - tenants.2.phone
 
   - id: tenant_4
-    section: "Tenants"
-    question: "Tenant 4 details"
+    section: Tenants
+    question: "Tenant 4"
     inputType: group
     dependsOn:
-      questionId: "number_of_tenants"
-      value:
-        - "4"
-        - "5"
+      questionId: number_of_tenants
+      value: ["4", "5"]
     fields:
       - id: full_name
         label: "Full name"
         inputType: text
         validation:
           required: true
+        width: full
       - id: dob
         label: "Date of birth"
         inputType: date
         validation:
-          required: false
+          required: true
+        width: half
       - id: email
-        label: "Email address"
+        label: "Email"
         inputType: email
         validation:
-          required: false
+          required: true
+        width: half
       - id: phone
-        label: "Phone number"
+        label: "Phone"
         inputType: tel
         validation:
-          required: false
-    validation:
-      required: true
+          required: true
+        width: half
     maps_to:
-      - "tenants.3.full_name"
-      - "tenants.3.dob"
-      - "tenants.3.email"
-      - "tenants.3.phone"
+      - tenants.3.full_name
+      - tenants.3.dob
+      - tenants.3.email
+      - tenants.3.phone
 
   - id: tenant_5
-    section: "Tenants"
-    question: "Tenant 5 details"
+    section: Tenants
+    question: "Tenant 5"
     inputType: group
     dependsOn:
-      questionId: "number_of_tenants"
-      value:
-        - "5"
+      questionId: number_of_tenants
+      value: ["5"]
     fields:
       - id: full_name
         label: "Full name"
         inputType: text
         validation:
           required: true
+        width: full
       - id: dob
         label: "Date of birth"
         inputType: date
         validation:
-          required: false
+          required: true
+        width: half
       - id: email
-        label: "Email address"
+        label: "Email"
         inputType: email
         validation:
-          required: false
+          required: true
+        width: half
       - id: phone
-        label: "Phone number"
+        label: "Phone"
         inputType: tel
         validation:
-          required: false
-    validation:
-      required: true
+          required: true
+        width: half
     maps_to:
-      - "tenants.4.full_name"
-      - "tenants.4.dob"
-      - "tenants.4.email"
-      - "tenants.4.phone"
+      - tenants.4.full_name
+      - tenants.4.dob
+      - tenants.4.email
+      - tenants.4.phone
 
-  - id: occupancy_details
-    section: "Occupancy & Household"
-    question: "Household and occupancy details"
-    inputType: group
-    fields:
-      - id: maximum_occupants
-        label: "Maximum number of occupants permitted"
-        inputType: number
-        validation:
-          required: false
-          min: 1
-          max: 30
-      - id: permitted_occupiers
-        label: "Permitted occupiers (not named as tenants)"
-        inputType: textarea
-        helperText: "For example, children or other family members who will live at the property but are not named as tenants."
-        validation:
-          required: false
-      - id: existing_pets
-        label: "Any existing pets the tenants will bring"
-        inputType: textarea
-        validation:
-          required: false
-    maps_to:
-      - "occupancy.maximum_occupants"
-      - "occupancy.permitted_occupiers"
-      - "occupancy.existing_pets"
-
+  # 4. Tenancy type & dates
   - id: tenancy_type_and_dates
-    section: "Tenancy Structure"
-    question: "What type of tenancy is this and what are the key dates?"
+    section: Tenancy
+    question: "Tenancy start and term"
     inputType: group
+    helperText: "NI tenancies can be fixed term or periodic."
     fields:
-      - id: tenancy_type
-        label: "Tenancy type"
-        inputType: select
-        helperText: "Choose the basic structure of the tenancy for Northern Ireland."
-        options:
-          - "Fixed term"
-          - "Periodic (rolling)"
-        validation:
-          required: true
-      - id: start_date
-        label: "Tenancy start date"
+      - id: tenancy_start_date
+        label: "Start date"
         inputType: date
         validation:
           required: true
-      - id: fixed_term_end_date
-        label: "Fixed term end date"
-        inputType: date
-        helperText: "Only required for fixed term tenancies."
-        validation:
-          required: false
-      - id: intended_initial_term_months
-        label: "Intended initial term (months)"
-        inputType: number
-        helperText: "For example, 12 for a one-year fixed term."
-        validation:
-          required: false
-          min: 1
-          max: 60
-      - id: exclusive_occupation
-        label: "Will the tenant(s) have exclusive occupation of the property?"
+        width: half
+      - id: is_fixed_term
+        label: "Is this a fixed term tenancy?"
         inputType: yes_no
         validation:
           required: true
-    validation:
-      required: true
+        width: half
+      - id: term_length
+        label: "Fixed term length"
+        inputType: select
+        options:
+          - "6 months"
+          - "12 months"
+          - "18 months"
+          - "24 months"
+        dependsOn:
+          questionId: is_fixed_term
+          value: true
+        width: half
+      - id: tenancy_end_date
+        label: "End date (if fixed term)"
+        inputType: date
+        dependsOn:
+          questionId: is_fixed_term
+          value: true
+        width: half
     maps_to:
-      - "tenancy.type"
-      - "tenancy.start_date"
-      - "tenancy.end_date"
-      - "tenancy.initial_term_months"
-      - "tenancy.exclusive_occupation"
+      - tenancy_start_date
+      - is_fixed_term
+      - term_length
+      - tenancy_end_date
 
+  # 5. Rent & payment details
   - id: rent_details
-    section: "Rent & Payment"
-    question: "What are the rent and payment details?"
+    section: Rent & Payments
+    question: "Rent schedule"
     inputType: group
+    helperText: "We include this in the rent clause and summary schedule."
     fields:
       - id: rent_amount
         label: "Rent amount"
         inputType: currency
-        helperText: "Enter the regular rent amount (for example, per month)."
+        placeholder: "1200"
         validation:
           required: true
           min: 1
+        width: half
       - id: rent_period
-        label: "Rent payment period"
+        label: "Rent period"
         inputType: select
         options:
-          - "monthly"
-          - "four_weekly"
-          - "weekly"
+          - "month"
+          - "week"
+          - "quarter"
+          - "year"
         validation:
           required: true
+        width: half
       - id: rent_due_day
-        label: "Day or date when rent is due"
-        inputType: text
-        helperText: "Example: '1st of each month' or 'Each Friday'."
+        label: "Payment due day"
+        inputType: select
+        options:
+          - "1st"
+          - "2nd"
+          - "3rd"
+          - "4th"
+          - "5th"
+          - "6th"
+          - "7th"
+          - "8th"
+          - "9th"
+          - "10th"
+          - "11th"
+          - "12th"
+          - "13th"
+          - "14th"
+          - "15th"
+          - "16th"
+          - "17th"
+          - "18th"
+          - "19th"
+          - "20th"
+          - "21st"
+          - "22nd"
+          - "23rd"
+          - "24th"
+          - "25th"
+          - "26th"
+          - "27th"
+          - "28th"
+          - "29th"
+          - "30th"
+          - "Last day of month"
         validation:
           required: true
-      - id: first_payment_amount
-        label: "First rent payment amount (if different)"
-        inputType: currency
-        helperText: "If the first payment covers a part-period, enter the amount here. Leave blank if the same as the regular rent."
-        validation:
-          required: false
+        width: half
       - id: payment_method
         label: "Preferred payment method"
         inputType: select
         options:
           - "Standing Order"
           - "Bank Transfer"
-          - "Other"
+          - "Cash"
         validation:
           required: true
-      - id: bank_account_name
-        label: "Payee account name"
-        inputType: text
+        width: half
+      - id: payment_details
+        label: "Payment details"
+        inputType: textarea
+        placeholder: "Payment reference"
         validation:
-          required: false
+          required: true
+        width: full
+      - id: bank_account_name
+        label: "Account name"
+        inputType: text
+        width: half
       - id: bank_sort_code
         label: "Sort code"
         inputType: text
-        validation:
-          required: false
+        placeholder: "12-34-56"
+        width: half
       - id: bank_account_number
         label: "Account number"
         inputType: text
-        validation:
-          required: false
-    validation:
-      required: true
+        placeholder: "12345678"
+        width: half
     maps_to:
-      - "rent.amount"
-      - "rent.period"
-      - "rent.due_day"
-      - "rent.first_payment_amount"
-      - "rent.payment_method"
-      - "rent.bank_account_name"
-      - "rent.bank_sort_code"
-      - "rent.bank_account_number"
+      - rent_amount
+      - rent_period
+      - rent_due_day
+      - payment_method
+      - payment_details
+      - bank_account_name
+      - bank_sort_code
+      - bank_account_number
 
+  # 6. Deposit
   - id: deposit_details
-    section: "Tenancy Deposit"
-    question: "Is a tenancy deposit being taken? If so, provide the details."
+    section: Deposit
+    question: "Deposit and protection"
     inputType: group
+    helperText: "We include deposit scheme details and certificate."
     fields:
-      - id: deposit_taken
-        label: "Will you take a deposit?"
-        inputType: yes_no
-        validation:
-          required: true
       - id: deposit_amount
         label: "Deposit amount"
         inputType: currency
+        placeholder: "1400"
         validation:
-          required: false
+          required: true
           min: 0
-      - id: deposit_scheme
-        label: "Which NI tenancy deposit protection scheme will be used?"
+        width: half
+      - id: deposit_scheme_name
+        label: "Deposit protection scheme"
         inputType: select
         options:
           - "Tenancy Deposit Scheme Northern Ireland (TDS NI)"
           - "MyDeposits Northern Ireland"
-          - "Not yet decided"
+          - "Other"
         validation:
-          required: false
-      - id: deposit_due_date
-        label: "When is the deposit due to be paid?"
+          required: true
+        width: half
+      - id: deposit_paid_date
+        label: "Date deposit will be paid"
+        inputType: date
+        width: half
+      - id: deposit_protection_date
+        label: "Date you will protect the deposit"
+        inputType: date
+        width: half
+      - id: deposit_already_protected
+        label: "Is the deposit already protected?"
+        inputType: yes_no
+        width: half
+      - id: deposit_reference_number
+        label: "Deposit protection reference number (if already protected)"
         inputType: text
-        helperText: "Example: 'On or before the tenancy start date'."
-        validation:
-          required: false
+        placeholder: "Reference from scheme"
+        width: half
+    maps_to:
+      - deposit_amount
+      - deposit_scheme_name
+      - deposit_paid_date
+      - deposit_protection_date
+      - deposit.already_protected
+      - deposit.reference_number
+
+  - id: prescribed_information_served
+    section: Deposit
+    question: "Prescribed information compliance"
+    inputType: yes_no
+    helperText: "Will the deposit prescribed information be (or has it been) served within the required timeframe?"
     validation:
       required: true
     maps_to:
-      - "deposit.is_taken"
-      - "deposit.amount"
-      - "deposit.scheme"
-      - "deposit.due_date"
+      - deposit.prescribed_information_served
 
-  - id: bills_and_utilities
-    section: "Bills & Utilities"
-    question: "Who will be responsible for paying which bills?"
+  # 7. Bills & utilities
+  - id: bills_utilities
+    section: Bills & Utilities
+    question: "Who pays which bills?"
     inputType: group
+    helperText: "We include this in the tenant responsibilities section."
     fields:
-      - id: rates_payer
-        label: "Who pays domestic rates (if applicable)?"
+      - id: council_tax_responsibility
+        label: "Domestic rates"
         inputType: select
         options:
           - "Tenant"
@@ -607,8 +743,9 @@ questions:
           - "Included in rent"
         validation:
           required: true
-      - id: utilities_payer
-        label: "Who pays gas, electricity, and water charges?"
+        width: third
+      - id: utilities_responsibility
+        label: "Gas/Electric/Water"
         inputType: select
         options:
           - "Tenant"
@@ -616,8 +753,9 @@ questions:
           - "Included in rent"
         validation:
           required: true
-      - id: broadband_and_tv
-        label: "Who pays for broadband and TV services?"
+        width: third
+      - id: internet_responsibility
+        label: "Internet/Broadband"
         inputType: select
         options:
           - "Tenant"
@@ -625,74 +763,124 @@ questions:
           - "Included in rent"
         validation:
           required: true
-      - id: bills_notes
-        label: "Any additional notes about bills and utilities"
-        inputType: textarea
-        validation:
-          required: false
-    validation:
-      required: true
+        width: third
     maps_to:
-      - "bills.rates_payer"
-      - "bills.utilities_payer"
-      - "bills.broadband_and_tv"
-      - "bills.notes"
+      - council_tax_responsibility
+      - utilities_responsibility
+      - internet_responsibility
 
-  - id: safety_and_compliance
-    section: "Safety & Compliance"
-    question: "Confirm safety and compliance arrangements for the property."
+  - id: meter_readings
+    section: Bills & Utilities
+    question: "Meter readings and utility accounts"
     inputType: group
+    helperText: "Record start readings and transfer arrangements."
     fields:
-      - id: gas_safety_in_place
-        label: "Is there a valid gas safety certificate (if the property has gas)?"
-        inputType: yes_no
+      - id: meter_reading_gas
+        label: "Gas meter reading (start)"
+        inputType: text
+        placeholder: "e.g., 12345"
+        width: half
+      - id: meter_reading_electric
+        label: "Electric meter reading (start)"
+        inputType: text
+        placeholder: "e.g., 67890"
+        width: half
+      - id: meter_reading_water
+        label: "Water meter reading (start, if applicable)"
+        inputType: text
+        placeholder: "e.g., 11223"
+        width: half
+      - id: utility_transfer_responsibility
+        label: "Who arranges utility account transfers?"
+        inputType: select
+        options:
+          - "Tenant"
+          - "Landlord"
+          - "Agent"
         validation:
           required: true
-      - id: electrical_safety_in_place
-        label: "Is there appropriate electrical safety certification in place?"
-        inputType: yes_no
-        validation:
-          required: true
-      - id: smoke_alarms
-        label: "Are smoke alarms installed and tested?"
-        inputType: yes_no
-        validation:
-          required: true
-      - id: carbon_monoxide_alarms
-        label: "Are carbon monoxide alarms installed where required?"
-        inputType: yes_no
-        validation:
-          required: false
+        width: half
+    maps_to:
+      - meter_reading_gas
+      - meter_reading_electric
+      - meter_reading_water
+      - utility_transfer_responsibility
+
+  # 8. Safety & legal compliance
+  - id: safety_compliance
+    section: Safety & Compliance
+    question: "Certificates and legal pack items"
+    inputType: group
+    helperText: "These drive the legal validity summary."
+    fields:
       - id: epc_rating
-        label: "EPC rating (if known)"
-        inputType: text
+        label: "EPC rating"
+        inputType: select
+        options:
+          - "A"
+          - "B"
+          - "C"
+          - "D"
+          - "E"
+          - "F"
+          - "G"
         validation:
-          required: false
-    validation:
-      required: true
+          required: true
+        width: half
+      - id: right_to_rent_check_date
+        label: "Date right-to-rent checks completed (if applicable)"
+        inputType: date
+        width: half
+      - id: gas_safety_certificate
+        label: "Current gas safety certificate provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: electrical_safety_certificate
+        label: "Electrical safety (EICR) provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: smoke_alarms_fitted
+        label: "Smoke alarms fitted and tested?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: carbon_monoxide_alarms
+        label: "CO alarms where required?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: fitness_standard_compliance
+        label: "Property meets NI fitness standards?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
     maps_to:
-      - "safety.gas_safety_in_place"
-      - "safety.electrical_safety_in_place"
-      - "safety.smoke_alarms_in_place"
-      - "safety.co_alarms_in_place"
-      - "safety.epc_rating"
+      - gas_safety_certificate
+      - electrical_safety_certificate
+      - epc_rating
+      - smoke_alarms_fitted
+      - carbon_monoxide_alarms
+      - right_to_rent_check_date
+      - fitness_standard_compliance
 
+  # 9. Maintenance & repairs
   - id: maintenance_repairs
-    section: "Maintenance & Repairs"
+    section: Maintenance & Repairs
     question: "Repairs and emergency contact"
     inputType: group
-    helperText: "Set expectations for reporting issues and emergencies."
+    helperText: "We set expectations for reporting issues and emergencies."
     fields:
       - id: landlord_maintenance_responsibilities
         label: "What the landlord handles"
         inputType: textarea
-        placeholder: "Structural issues, heating system, appliances, etc."
-        helperText: "Landlord's statutory repair obligations"
-        width: full
-      - id: tenant_maintenance_responsibilities
-        label: "What the tenant handles"
-        inputType: textarea
-        placeholder: "Minor repairs, replacing lightbulbs, etc."
+        placeholder: "Structural issues, boilers, white goods, etc."
         width: full
       - id: repairs_reporting_method
         label: "How should tenants report repairs?"
@@ -704,108 +892,72 @@ questions:
         validation:
           required: true
         width: half
-      - id: target_response_time
-        label: "Target response time for non-emergency repairs"
-        inputType: text
-        placeholder: "e.g., Within 48 hours"
-        width: half
       - id: emergency_contact
-        label: "Emergency contact details"
+        label: "Out-of-hours emergency contact"
         inputType: text
-        placeholder: "Name and number for out-of-hours emergencies"
-        width: full
+        placeholder: "Name / number"
+        width: half
     maps_to:
-      - "maintenance.landlord_responsibilities"
-      - "maintenance.tenant_responsibilities"
-      - "maintenance.reporting_method"
-      - "maintenance.response_time"
-      - "maintenance.emergency_contact"
+      - landlord_maintenance_responsibilities
+      - repairs_reporting_method
+      - emergency_contact
 
-  - id: use_of_property_and_house_rules
-    section: "Use of Property & House Rules"
-    question: "Set the basic rules for how the property may be used."
+  # 10. Inventory & condition
+  - id: inventory_condition
+    section: Inventory & Condition
+    question: "Inventory and cleaning"
     inputType: group
+    helperText: "Helps us generate the inventory and cleaning clauses."
     fields:
-      - id: smoking_allowed
-        label: "Is smoking allowed inside the property?"
-        inputType: select
-        options:
-          - "No"
-          - "Yes"
-          - "Designated areas only"
-        validation:
-          required: true
-      - id: pets_allowed
-        label: "Are pets allowed?"
-        inputType: select
-        options:
-          - "No pets allowed"
-          - "With written consent"
-          - "Pets allowed"
-        validation:
-          required: true
-      - id: business_use_allowed
-        label: "Permitted business use (if any)"
-        inputType: select
-        options:
-          - "Not allowed"
-          - "Limited home office use only"
-        validation:
-          required: true
-      - id: visitors_and_overnight_guests
-        label: "Any rules about visitors and overnight guests"
-        inputType: textarea
-        validation:
-          required: false
-      - id: house_rules_notes
-        label: "Any additional house rules or restrictions"
-        inputType: textarea
-        validation:
-          required: false
-    validation:
-      required: true
-    maps_to:
-      - "rules.smoking"
-      - "rules.pets"
-      - "rules.business_use"
-      - "rules.visitors_and_guests"
-      - "rules.additional"
-
-  - id: rent_increase_and_reviews
-    section: "Rent Increases & Reviews"
-    question: "How will rent increases and reviews be handled?"
-    inputType: group
-    fields:
-      - id: intends_rent_increases
-        label: "Do you plan for rent to be reviewed or increased during the tenancy?"
+      - id: inventory_attached
+        label: "Will you attach an inventory schedule?"
         inputType: yes_no
         validation:
           required: true
-      - id: rent_review_notes
-        label: "Any additional information about rent reviews"
-        inputType: textarea
-        helperText: "Describe how you expect to review rent (for example, annual review in line with market conditions), ensuring the approach stays within legal requirements."
-        validation:
-          required: false
-    validation:
-      required: true
-    maps_to:
-      - "rent.increase_intended"
-      - "rent.review_notes"
-
-  - id: access_inspections
-    section: "Access & Inspections"
-    question: "Access rules"
-    inputType: group
-    helperText: "Notice periods for entry and inspections, respecting the tenant's right to quiet enjoyment."
-    fields:
-      - id: landlord_access_notice
-        label: "Notice before access"
-        inputType: text
-        placeholder: "e.g., 24 hours, 48 hours"
+        width: half
+      - id: professional_cleaning_required
+        label: "Require professional cleaning at end?"
+        inputType: yes_no
         validation:
           required: true
         width: half
+      - id: decoration_condition
+        label: "Decoration/alterations policy"
+        inputType: select
+        options:
+          - "No alterations allowed"
+          - "With written permission only"
+          - "Minor alterations allowed"
+        validation:
+          required: true
+        width: half
+      - id: property_description
+        label: "Brief property description (optional)"
+        inputType: text
+        width: full
+    maps_to:
+      - inventory_attached
+      - professional_cleaning_required
+      - decoration_condition
+      - property_description
+
+  # 11. Access & inspections
+  - id: access_viewings
+    section: Access & Inspections
+    question: "Access rules"
+    inputType: group
+    helperText: "Notice periods for entry and inspections."
+    fields:
+      - id: landlord_access_notice
+        label: "Notice before access"
+        inputType: select
+        options:
+          - "24 hours"
+          - "48 hours"
+          - "72 hours"
+        validation:
+          required: true
+        width: third
       - id: inspection_frequency
         label: "Inspection frequency"
         inputType: select
@@ -816,305 +968,371 @@ questions:
           - "As needed"
         validation:
           required: true
-        width: half
+        width: third
       - id: end_of_tenancy_viewings
         label: "Allow end-of-tenancy viewings?"
         inputType: yes_no
-        helperText: "With reasonable notice and tenant consent"
         validation:
           required: true
-        width: half
+        width: third
     maps_to:
-      - "access.notice_period"
-      - "access.inspection_frequency"
-      - "access.end_viewings_allowed"
+      - landlord_access_notice
+      - inspection_frequency
+      - end_of_tenancy_viewings
 
-  - id: communication_preferences
-    section: "Communication & Notices"
-    question: "How should you and the tenant communicate during the tenancy?"
+  # 12. Property rules
+  - id: property_rules
+    section: Property Rules
+    question: "House rules"
     inputType: group
+    helperText: "Pets, smoking and subletting policies."
     fields:
-      - id: preferred_contact_method
-        label: "Preferred method for routine contact"
-        inputType: select
-        options:
-          - "Email"
-          - "Phone"
-          - "Text message"
-          - "Post"
-        validation:
-          required: false
-      - id: notices_email
-        label: "Email address to receive formal notices (if used)"
-        inputType: email
-        helperText: "Optional – formal notices must still comply with legal requirements and the terms of the agreement."
-        validation:
-          required: false
-      - id: alternative_contact
-        label: "Alternative contact details for the landlord/agent (optional)"
-        inputType: textarea
-        validation:
-          required: false
-    maps_to:
-      - "communication.preferred_contact_method"
-      - "communication.notices_email"
-      - "communication.alternative_contact"
-
-  - id: notice_and_ending_summary
-    section: "Ending the Tenancy (Summary in Agreement)"
-    question: "Do you want to include a high-level summary of how the tenancy may be ended?"
-    inputType: group
-    fields:
-      - id: include_notice_summary
-        label: "Include a neutral, high-level summary clause about ending the tenancy?"
+      - id: pets_allowed
+        label: "Are pets allowed?"
         inputType: yes_no
         validation:
           required: true
-      - id: notice_summary_notes
-        label: "Any additional notes about ending the tenancy you want reflected in the agreement"
-        inputType: textarea
-        helperText: "Do not override or contradict any statutory notice requirements. Keep this high-level and factual."
+        width: third
+      - id: approved_pets
+        label: "Approved pets (if any)"
+        inputType: text
+        placeholder: "e.g. 1 cat named Luna"
+        dependsOn:
+          questionId: pets_allowed
+          value: true
+        width: full
+      - id: smoking_allowed
+        label: "Smoking allowed inside?"
+        inputType: select
+        options:
+          - "No"
+          - "Yes"
+          - "Vaping only"
         validation:
-          required: false
+          required: true
+        width: third
+      - id: subletting_allowed
+        label: "Subletting / Airbnb policy"
+        inputType: select
+        options:
+          - "Not allowed"
+          - "Only with written consent"
+          - "Allowed"
+        validation:
+          required: true
+        width: third
+    maps_to:
+      - pets_allowed
+      - approved_pets
+      - smoking_allowed
+      - subletting_allowed
+
+  # 13. Rent reviews
+  - id: rent_increase
+    section: Rent Reviews
+    question: "Rent increase provisions"
+    inputType: group
+    helperText: "Define how rent increases will be handled (subject to legal requirements)."
+    fields:
+      - id: rent_increase_clause
+        label: "Include a rent increase clause?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: rent_increase_method
+        label: "Method"
+        inputType: select
+        options:
+          - "RPI"
+          - "CPI"
+          - "Market review"
+          - "Fixed review"
+        dependsOn:
+          questionId: rent_increase_clause
+          value: true
+        width: half
+      - id: rent_increase_frequency
+        label: "Frequency"
+        inputType: select
+        options:
+          - "Annually"
+          - "Every 2 years"
+          - "On anniversary with notice"
+        dependsOn:
+          questionId: rent_increase_clause
+          value: true
+        width: half
+    maps_to:
+      - rent_increase_clause
+      - rent_increase_method
+      - rent_increase_frequency
+
+  # 14. Additional terms
+  - id: break_clause
+    section: Additional Terms
+    question: "Include a break clause?"
+    inputType: yes_no
     validation:
       required: true
     maps_to:
-      - "termination.include_summary"
-      - "termination.summary_notes"
+      - break_clause
+
+  - id: break_clause_details
+    section: Additional Terms
+    question: "Break clause details"
+    inputType: group
+    dependsOn:
+      questionId: break_clause
+      value: true
+    fields:
+      - id: break_clause_months
+        label: "Can be exercised after"
+        inputType: select
+        options:
+          - "6 months"
+          - "9 months"
+          - "12 months"
+        width: half
+      - id: break_clause_notice_period
+        label: "Notice required"
+        inputType: select
+        options:
+          - "1 month"
+          - "2 months"
+          - "3 months"
+        width: half
+    maps_to:
+      - break_clause_months
+      - break_clause_notice_period
 
   - id: additional_terms
-    section: "Additional Terms"
-    question: "Do you want to include any additional, reasonable terms?"
+    section: Additional Terms
+    question: "Any additional bespoke terms?"
     inputType: textarea
-    helperText: "Only include terms that are fair, lawful, and consistent with the tenant's statutory rights in Northern Ireland."
-    validation:
-      required: false
-      maxLength: 4000
+    helperText: "Optional bespoke clauses to insert into the agreement."
     maps_to:
-      - "tenancy.additional_terms"
+      - additional_terms
 
-  # Premium-only sections
-
+  # 15. Premium-only protections
   - id: guarantor_required
-    section: "Guarantor (Premium Only)"
-    question: "Do you require a guarantor for this tenancy?"
+    section: Premium Protections
+    question: "Is a guarantor required?"
     inputType: yes_no
     dependsOn:
-      questionId: "tenancy_tier"
+      questionId: ni_tier
       value: "Premium NI Private Tenancy"
     validation:
       required: true
     maps_to:
-      - "guarantor.is_required"
+      - guarantor_required
 
   - id: guarantor_details
-    section: "Guarantor (Premium Only)"
+    section: Premium Protections
     question: "Guarantor details"
     inputType: group
     dependsOn:
-      questionId: "guarantor_required"
+      questionId: guarantor_required
       value: true
     fields:
-      - id: guarantor_full_name
-        label: "Guarantor full name"
+      - id: guarantor_name
+        label: "Guarantor name"
         inputType: text
         validation:
           required: true
+        width: full
       - id: guarantor_address
         label: "Guarantor address"
         inputType: textarea
         validation:
           required: true
-          minLength: 10
+        width: full
       - id: guarantor_email
         label: "Guarantor email"
         inputType: email
         validation:
-          required: false
+          required: true
+        width: half
       - id: guarantor_phone
         label: "Guarantor phone"
         inputType: tel
         validation:
-          required: false
+          required: true
+        width: half
+      - id: guarantor_dob
+        label: "Guarantor date of birth"
+        inputType: date
+        validation:
+          required: true
+        width: half
       - id: guarantor_relationship
         label: "Relationship to tenant"
         inputType: text
         validation:
-          required: false
-    validation:
-      required: true
+          required: true
+        width: half
     maps_to:
-      - "guarantor.full_name"
-      - "guarantor.address"
-      - "guarantor.email"
-      - "guarantor.phone"
-      - "guarantor.relationship"
+      - guarantor_name
+      - guarantor_address
+      - guarantor_email
+      - guarantor_phone
+      - guarantor_dob
+      - guarantor_relationship
 
-  - id: joint_and_several_liability
-    section: "Joint & Several Liability (Premium Only)"
-    question: "Should the agreement state that all tenants are jointly and severally liable?"
+  - id: joint_liability
+    section: Premium Protections
+    question: "Include joint & several liability wording?"
     inputType: yes_no
     dependsOn:
-      questionId: "tenancy_tier"
+      questionId: ni_tier
       value: "Premium NI Private Tenancy"
-    helperText: "This means each tenant can be held responsible for the full rent and any breach, not just a share."
-    validation:
-      required: true
+    helperText: "Recommended when there is more than one tenant."
     maps_to:
-      - "tenancy.joint_and_several"
-
-  - id: maintenance_schedule
-    section: "Enhanced Maintenance Schedule (Premium Only)"
-    question: "Property maintenance schedule"
-    inputType: group
-    dependsOn:
-      questionId: "tenancy_tier"
-      value: "Premium NI Private Tenancy"
-    helperText: "Define regular maintenance responsibilities and schedule."
-    fields:
-      - id: boiler_service_frequency
-        label: "Boiler/heating service frequency"
-        inputType: select
-        options:
-          - "Annual"
-          - "Bi-annual"
-          - "As required"
-        validation:
-          required: true
-        width: half
-      - id: gutter_cleaning_frequency
-        label: "Gutter cleaning frequency"
-        inputType: select
-        options:
-          - "Annual"
-          - "Bi-annual"
-          - "As required"
-        validation:
-          required: true
-        width: half
-      - id: window_cleaning_frequency
-        label: "Window cleaning frequency"
-        inputType: select
-        options:
-          - "Monthly"
-          - "Quarterly"
-          - "Bi-annual"
-          - "Tenant responsibility"
-        width: half
-      - id: appliance_maintenance_notes
-        label: "Appliance maintenance notes"
-        inputType: textarea
-        placeholder: "e.g., Washing machine filter cleaning, dishwasher maintenance..."
-        width: full
-      - id: communal_area_maintenance
-        label: "Communal area upkeep responsibility"
-        inputType: select
-        options:
-          - "Landlord"
-          - "Tenant"
-          - "Shared"
-          - "N/A"
-        width: half
-    maps_to:
-      - "maintenance_schedule.boiler_service_frequency"
-      - "maintenance_schedule.gutter_cleaning_frequency"
-      - "maintenance_schedule.window_cleaning_frequency"
-      - "maintenance_schedule.appliance_notes"
-      - "maintenance_schedule.communal_responsibility"
+      - joint_and_several_liability
 
   - id: hmo_details
-    section: "Premium HMO Details (Premium Only)"
+    section: Premium Protections
     question: "HMO / shared facilities"
     inputType: group
     dependsOn:
-      questionId: "tenancy_tier"
+      questionId: ni_tier
       value: "Premium NI Private Tenancy"
-    helperText: "For licensable HMOs in Northern Ireland."
+    helperText: "Premium adds HMO-ready clauses."
     fields:
       - id: is_hmo
-        label: "Is this a licensable HMO?"
+        label: "Is the property an HMO or room-by-room let?"
         inputType: yes_no
         validation:
           required: true
         width: half
       - id: number_of_sharers
-        label: "Number of sharers/occupants"
+        label: "Number of sharers/rooms"
         inputType: number
-        validation:
-          min: 1
-          max: 20
         width: half
-      - id: council_name
-        label: "Local council name"
+      - id: communal_areas
+        label: "Shared/communal areas"
         inputType: text
-        placeholder: "e.g., Belfast City Council"
+        placeholder: "Kitchen, living room, bathrooms, garden"
+        width: full
+      - id: hmo_licence_status
+        label: "HMO licence status"
+        inputType: select
+        options:
+          - "Not required"
+          - "Currently licensed"
+          - "Applied/awaiting"
         width: half
       - id: hmo_licence_number
-        label: "HMO licence number (if applicable)"
+        label: "HMO licence number (if licensed)"
         inputType: text
+        placeholder: "Licence reference number"
         width: half
       - id: hmo_licence_expiry
-        label: "HMO licence expiry date (if applicable)"
+        label: "HMO licence expiry date (if licensed)"
         inputType: date
         width: half
-      - id: communal_areas_description
-        label: "Description of communal areas"
-        inputType: textarea
-        placeholder: "e.g., Shared kitchen, living room, bathrooms..."
-        width: full
-      - id: communal_cleaning_responsibility
-        label: "Who is responsible for cleaning/maintaining communal areas?"
+      - id: communal_cleaning
+        label: "Who cleans communal areas?"
         inputType: select
         options:
-          - "Professional cleaner (landlord pays)"
-          - "Tenants share responsibility"
+          - "Professional cleaner"
+          - "Tenants share"
           - "Landlord"
-          - "Agent"
-          - "N/A"
-        width: full
+          - "Not applicable"
+        width: half
     maps_to:
-      - "hmo.is_hmo"
-      - "hmo.number_of_sharers"
-      - "hmo.council_name"
-      - "hmo.licence_number"
-      - "hmo.licence_expiry"
-      - "hmo.communal_areas_description"
-      - "hmo.communal_cleaning_responsibility"
+      - is_hmo
+      - number_of_sharers
+      - communal_areas
+      - hmo_licence_status
+      - hmo_licence_number
+      - hmo_licence_expiry
+      - communal_cleaning
 
-  - id: tenant_insurance_requirements
-    section: "Premium Insurance Expectations (Premium Only)"
+  - id: insurance_expectations
+    section: Premium Protections
     question: "Tenant insurance requirements"
+    inputType: select
+    dependsOn:
+      questionId: ni_tier
+      value: "Premium NI Private Tenancy"
+    options:
+      - "Required"
+      - "Strongly recommended"
+      - "Not required"
+    helperText: "Premium can mandate contents insurance."
+    maps_to:
+      - tenant_insurance_required
+
+  - id: detailed_inventory
+    section: Premium Protections
+    question: "Detailed inventory / schedule"
+    inputType: textarea
+    dependsOn:
+      questionId: ni_tier
+      value: "Premium NI Private Tenancy"
+    helperText: "Describe any detailed inventory or schedule you will attach."
+    maps_to:
+      - inventory_schedule_notes
+
+  # ============================================================
+  # PREMIUM ENHANCED FEATURES
+  # ============================================================
+
+  - id: late_payment_interest
+    section: Premium Enhanced Features
+    question: "Late payment interest and charges"
     inputType: group
     dependsOn:
-      questionId: "tenancy_tier"
+      questionId: ni_tier
       value: "Premium NI Private Tenancy"
-    helperText: "Expectations around tenant contents insurance."
+    helperText: "Set terms for late rent payments (must comply with statutory limits)."
     fields:
-      - id: tenant_insurance_required
-        label: "Contents insurance requirement"
-        inputType: select
-        options:
-          - "Required"
-          - "Strongly recommended"
-          - "Not required"
+      - id: late_payment_interest_applicable
+        label: "Apply interest on late payments?"
+        inputType: yes_no
         validation:
           required: true
         width: half
-      - id: tenant_insurance_notes
-        label: "Additional notes about insurance"
-        inputType: textarea
-        placeholder: "Any specific coverage requirements or recommendations"
-        width: full
+      - id: late_payment_interest_rate
+        label: "Interest rate (%)"
+        inputType: number
+        placeholder: "e.g., 3"
+        helperText: "Statutory interest is typically 3% above Bank of England base rate"
+        dependsOn:
+          questionId: late_payment_interest_applicable
+          value: true
+        width: half
+      - id: grace_period_days
+        label: "Grace period (days)"
+        inputType: number
+        placeholder: "e.g., 14"
+        helperText: "Number of days before interest applies"
+        dependsOn:
+          questionId: late_payment_interest_applicable
+          value: true
+        width: half
+      - id: late_payment_admin_fee
+        label: "Administrative fee (£)"
+        inputType: number
+        placeholder: "e.g., 50"
+        helperText: "Fee for processing late payment (must be reasonable)"
+        dependsOn:
+          questionId: late_payment_interest_applicable
+          value: true
+        width: half
     maps_to:
-      - "tenant_insurance_required"
-      - "tenant_insurance_notes"
+      - late_payment_interest_applicable
+      - late_payment_interest_rate
+      - grace_period_days
+      - late_payment_admin_fee
 
   - id: key_schedule
-    section: "Premium Enhanced Features"
+    section: Premium Enhanced Features
     question: "Keys and access cards schedule"
     inputType: group
     dependsOn:
-      questionId: "tenancy_tier"
+      questionId: ni_tier
       value: "Premium NI Private Tenancy"
     helperText: "Record all keys and access cards provided to tenant."
     fields:
@@ -1158,20 +1376,64 @@ questions:
         placeholder: "e.g., Garage remote, bike shed key, storage locker..."
         width: full
     maps_to:
-      - "number_of_front_door_keys"
-      - "number_of_back_door_keys"
-      - "number_of_window_keys"
-      - "number_of_mailbox_keys"
-      - "access_cards_fobs"
-      - "key_replacement_cost"
-      - "other_keys_notes"
+      - number_of_front_door_keys
+      - number_of_back_door_keys
+      - number_of_window_keys
+      - number_of_mailbox_keys
+      - access_cards_fobs
+      - key_replacement_cost
+      - other_keys_notes
+
+  - id: contractor_access
+    section: Premium Enhanced Features
+    question: "Contractor and tradesperson access"
+    inputType: group
+    dependsOn:
+      questionId: ni_tier
+      value: "Premium NI Private Tenancy"
+    helperText: "Define terms for contractors accessing property for repairs."
+    fields:
+      - id: contractor_access_notice_period
+        label: "Notice period for contractor access"
+        inputType: select
+        options:
+          - "24 hours"
+          - "48 hours"
+          - "72 hours"
+        validation:
+          required: true
+        width: half
+      - id: emergency_access_allowed
+        label: "Allow emergency access without notice?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: contractor_access_hours
+        label: "Permitted access hours"
+        inputType: text
+        placeholder: "e.g., 9am-5pm weekdays"
+        validation:
+          required: true
+        width: half
+      - id: tenant_presence_required
+        label: "Must tenant be present?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - contractor_access_notice_period
+      - emergency_access_allowed
+      - contractor_access_hours
+      - tenant_presence_required
 
   - id: emergency_procedures
-    section: "Premium Enhanced Features"
+    section: Premium Enhanced Features
     question: "Emergency procedures and contacts"
     inputType: group
     dependsOn:
-      questionId: "tenancy_tier"
+      questionId: ni_tier
       value: "Premium NI Private Tenancy"
     helperText: "Essential emergency contact information and procedures."
     fields:
@@ -1224,21 +1486,92 @@ questions:
           required: true
         width: half
     maps_to:
-      - "emergency_landlord_phone"
-      - "emergency_plumber_phone"
-      - "emergency_electrician_phone"
-      - "emergency_gas_engineer_phone"
-      - "emergency_locksmith_phone"
-      - "water_shutoff_location"
-      - "electricity_fuse_box_location"
-      - "gas_shutoff_location"
+      - emergency_landlord_phone
+      - emergency_plumber_phone
+      - emergency_electrician_phone
+      - emergency_gas_engineer_phone
+      - emergency_locksmith_phone
+      - water_shutoff_location
+      - electricity_fuse_box_location
+      - gas_shutoff_location
+
+  - id: maintenance_schedule
+    section: Premium Enhanced Features
+    question: "Property maintenance schedule"
+    inputType: group
+    dependsOn:
+      questionId: ni_tier
+      value: "Premium NI Private Tenancy"
+    helperText: "Define regular maintenance responsibilities and schedule."
+    fields:
+      - id: boiler_service_frequency
+        label: "Boiler/heating service frequency"
+        inputType: select
+        options:
+          - "Annual"
+          - "Bi-annual"
+          - "As required"
+        validation:
+          required: true
+        width: half
+      - id: boiler_service_responsibility
+        label: "Who arranges boiler service?"
+        inputType: select
+        options:
+          - "Landlord"
+          - "Tenant"
+          - "Agent"
+        validation:
+          required: true
+        width: half
+      - id: gutter_cleaning_frequency
+        label: "Gutter cleaning frequency"
+        inputType: select
+        options:
+          - "Annual"
+          - "Bi-annual"
+          - "As required"
+        validation:
+          required: true
+        width: half
+      - id: gutter_cleaning_responsibility
+        label: "Who arranges gutter cleaning?"
+        inputType: select
+        options:
+          - "Landlord"
+          - "Tenant"
+          - "Agent"
+        validation:
+          required: true
+        width: half
+      - id: window_cleaning_frequency
+        label: "Window cleaning frequency"
+        inputType: select
+        options:
+          - "Monthly"
+          - "Quarterly"
+          - "Bi-annual"
+          - "Tenant responsibility"
+        width: half
+      - id: appliance_maintenance_notes
+        label: "Appliance maintenance notes"
+        inputType: textarea
+        placeholder: "e.g., Washing machine filter cleaning, dishwasher salt refills..."
+        width: full
+    maps_to:
+      - boiler_service_frequency
+      - boiler_service_responsibility
+      - gutter_cleaning_frequency
+      - gutter_cleaning_responsibility
+      - window_cleaning_frequency
+      - appliance_maintenance_notes
 
   - id: garden_maintenance_schedule
-    section: "Premium Enhanced Features"
+    section: Premium Enhanced Features
     question: "Garden and outdoor maintenance"
     inputType: group
     dependsOn:
-      questionId: "tenancy_tier"
+      questionId: ni_tier
       value: "Premium NI Private Tenancy"
     helperText: "Define garden maintenance responsibilities (if applicable)."
     fields:
@@ -1284,18 +1617,18 @@ questions:
         placeholder: "e.g., Garden table and chairs, shed contents, tools provided..."
         width: full
     maps_to:
-      - "lawn_mowing_frequency"
-      - "lawn_mowing_responsibility"
-      - "hedge_trimming_responsibility"
-      - "weed_control_responsibility"
-      - "outdoor_furniture_notes"
+      - lawn_mowing_frequency
+      - lawn_mowing_responsibility
+      - hedge_trimming_responsibility
+      - weed_control_responsibility
+      - outdoor_furniture_notes
 
   - id: move_in_procedures
-    section: "Premium Enhanced Features"
+    section: Premium Enhanced Features
     question: "Move-in procedures and checklist"
     inputType: group
     dependsOn:
-      questionId: "tenancy_tier"
+      questionId: ni_tier
       value: "Premium NI Private Tenancy"
     helperText: "Define pre-tenancy and move-in requirements."
     fields:
@@ -1333,31 +1666,30 @@ questions:
         validation:
           required: true
         width: half
-      - id: domestic_rates_registration_deadline
+      - id: council_tax_registration_deadline
         label: "Domestic rates registration deadline"
         inputType: select
         options:
-          - "On or before the tenancy start date"
-          - "Within 7 days of the start date"
-          - "Within 14 days of the start date"
-          - "Other (not specified here)"
+          - "Day 1 of tenancy"
+          - "Within 7 days"
+          - "Within 14 days"
         validation:
-          required: false
+          required: true
         width: half
     maps_to:
-      - "pre_tenancy_meeting_required"
-      - "move_in_inspection_required"
-      - "photographic_inventory_provided"
-      - "tenant_handbook_provided"
-      - "utility_accounts_transfer_deadline"
-      - "domestic_rates_registration_deadline"
+      - pre_tenancy_meeting_required
+      - move_in_inspection_required
+      - photographic_inventory_provided
+      - tenant_handbook_provided
+      - utility_accounts_transfer_deadline
+      - council_tax_registration_deadline
 
   - id: move_out_procedures
-    section: "Premium Enhanced Features"
+    section: Premium Enhanced Features
     question: "Move-out and checkout procedures"
     inputType: group
     dependsOn:
-      questionId: "tenancy_tier"
+      questionId: ni_tier
       value: "Premium NI Private Tenancy"
     helperText: "Define end-of-tenancy requirements and procedures."
     fields:
@@ -1422,21 +1754,21 @@ questions:
           required: true
         width: half
     maps_to:
-      - "checkout_inspection_required"
-      - "professional_cleaning_standard"
-      - "carpet_cleaning_required"
-      - "oven_cleaning_required"
-      - "garden_condition_required"
-      - "key_return_deadline"
-      - "forwarding_address_required"
-      - "deposit_return_timeline"
+      - checkout_inspection_required
+      - professional_cleaning_standard
+      - carpet_cleaning_required
+      - oven_cleaning_required
+      - garden_condition_required
+      - key_return_deadline
+      - forwarding_address_required
+      - deposit_return_timeline
 
   - id: cleaning_standards
-    section: "Premium Enhanced Features"
+    section: Premium Enhanced Features
     question: "Cleaning standards and expectations"
     inputType: group
     dependsOn:
-      questionId: "tenancy_tier"
+      questionId: ni_tier
       value: "Premium NI Private Tenancy"
     helperText: "Define expected cleaning standards during and at end of tenancy."
     fields:
@@ -1472,21 +1804,7 @@ questions:
         helperText: "For tenant's reference if they choose professional cleaning"
         width: half
     maps_to:
-      - "regular_cleaning_expectations"
-      - "deep_cleaning_areas"
-      - "cleaning_checklist_provided"
-      - "cleaning_cost_estimates"
-
-  - id: detailed_inventory
-    section: "Detailed Inventory (Premium Only)"
-    question: "Add any specific notes about the condition of the property and items at the start of the tenancy."
-    inputType: textarea
-    dependsOn:
-      questionId: "tenancy_tier"
-      value: "Premium NI Private Tenancy"
-    helperText: "You can upload a separate, detailed inventory in the evidence section; this field is for key points you want reflected in the agreement."
-    validation:
-      required: false
-      maxLength: 4000
-    maps_to:
-      - "inventory.notes"
+      - regular_cleaning_expectations
+      - deep_cleaning_areas
+      - cleaning_checklist_provided
+      - cleaning_cost_estimates
