@@ -343,15 +343,27 @@ export function validateASTData(data: ASTData): string[] {
   if (!data.landlord_phone) errors.push('landlord_phone is required');
 
   if (!data.tenants || data.tenants.length === 0) {
-    errors.push('At least one tenant is required');
-  } else {
-    data.tenants.forEach((tenant, i) => {
-      if (!tenant.full_name) errors.push(`tenant[${i}].full_name is required`);
-      if (!tenant.dob) errors.push(`tenant[${i}].dob is required`);
-      if (!tenant.email) errors.push(`tenant[${i}].email is required`);
-      if (!tenant.phone) errors.push(`tenant[${i}].phone is required`);
-    });
-  }
+  errors.push('At least one tenant is required');
+} else {
+  data.tenants.forEach((tenant, i) => {
+    if (!tenant.full_name) {
+      errors.push(`tenant[${i}].full_name is required`);
+    }
+
+    // DOB is optional for now – we still *use* it if present, but don't block generation
+    // if (!tenant.dob) {
+    //   errors.push(`tenant[${i}].dob is required`);
+    // }
+
+    if (!tenant.email) {
+      errors.push(`tenant[${i}].email is required`);
+    }
+    if (!tenant.phone) {
+      errors.push(`tenant[${i}].phone is required`);
+    }
+  });
+}
+
 
   if (!data.property_address) errors.push('property_address is required');
   if (!data.tenancy_start_date) errors.push('tenancy_start_date is required');

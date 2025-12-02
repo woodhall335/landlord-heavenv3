@@ -42,13 +42,23 @@ function normalizeTenants(caseFacts: CaseFacts, wizardFacts: WizardFacts): Tenan
   // Try nested CaseFacts first
   if (caseFacts.parties.tenants && caseFacts.parties.tenants.length > 0) {
     return caseFacts.parties.tenants
-      .filter((t) => t && (t.name || t.email || t.phone))
-      .map((t, index) => ({
-        full_name: t.name || '',
-        dob: getValueAtPath(wizardFacts, `tenants.${index}.dob`) || '', // Get DOB for each tenant by index
-        email: t.email || '',
-        phone: t.phone || '',
-      }));
+      .filter((t) => t && (t.name || t.email || (t as any).dob || t.phone))
+      .map((t, index) => {
+        // Prefer DOB from CaseFacts, fall back to WizardFacts
+        const dobFromCase = (t as any).dob;
+        const dobFromWizard = getValueAtPath(wizardFacts, `tenants.${index}.dob`);
+
+        const fullNameFromWizard = getValueAtPath(wizardFacts, `tenants.${index}.full_name`);
+        const emailFromWizard = getValueAtPath(wizardFacts, `tenants.${index}.email`);
+        const phoneFromWizard = getValueAtPath(wizardFacts, `tenants.${index}.phone`);
+
+        return {
+          full_name: t.name || fullNameFromWizard || '',
+          dob: dobFromCase || dobFromWizard || '',
+          email: t.email || emailFromWizard || '',
+          phone: t.phone || phoneFromWizard || '',
+        };
+      });
   }
 
   // Fallback: extract from flat WizardFacts for fields not yet in CaseFacts
