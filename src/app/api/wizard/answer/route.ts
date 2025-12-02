@@ -308,8 +308,40 @@ function isQuestionAnswered(question: ExtendedWizardQuestion, facts: Record<stri
 
 function computeProgress(mqs: MasterQuestionSet, facts: Record<string, any>): number {
   if (!mqs.questions.length) return 100;
-  const answeredCount = mqs.questions.filter((q) => isQuestionAnswered(q, facts)).length;
-  return Math.round((answeredCount / mqs.questions.length) * 100);
+
+  // Filter to only applicable questions (those without dependencies or with satisfied dependencies)
+  const applicableQuestions = mqs.questions.filter((q) => {
+    const dependsOn = (q as any).depends_on || q.dependsOn;
+    if (!dependsOn?.questionId) return true; // No dependency, always applicable
+
+    // Find the dependent value
+    const dependency = mqs.questions.find((dep) => dep.id === dependsOn.questionId);
+    let depValue: any;
+    if (dependency?.maps_to?.length) {
+      depValue = dependency.maps_to
+        .map((path) => getValueAtPath(facts, path))
+        .find((v) => v !== undefined);
+    }
+    if (depValue === undefined) {
+      depValue = facts[dependsOn.questionId];
+    }
+
+    // Check if dependency is satisfied
+    if (Array.isArray(dependsOn.value)) {
+      // Handle when user's answer is also an array (multi_select questions)
+      if (Array.isArray(depValue)) {
+        return depValue.some(val => dependsOn.value.includes(val));
+      }
+      // User's answer is scalar, check if it's in the dependency array
+      return dependsOn.value.includes(depValue);
+    }
+    return depValue === dependsOn.value;
+  });
+
+  if (!applicableQuestions.length) return 100;
+
+  const answeredCount = applicableQuestions.filter((q) => isQuestionAnswered(q, facts)).length;
+  return Math.round((answeredCount / applicableQuestions.length) * 100);
 }
 
 function normalizeAnswer(question: ExtendedWizardQuestion, answer: any) {

@@ -48,6 +48,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     Array<{ question: ExtendedWizardQuestion; answer: any }>
   >([]);
   const [depositWarning, setDepositWarning] = useState<string | null>(null);
+  const [epcWarning, setEpcWarning] = useState<string | null>(null);
+  const [astSuitabilityWarning, setAstSuitabilityWarning] = useState<string | null>(null);
   const [caseFacts, setCaseFacts] = useState<Record<string, any>>({});
   const [showIntro, setShowIntro] = useState(caseType === 'money_claim');
 
@@ -255,6 +257,52 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   }, [currentAnswer, currentQuestion, caseFacts]);
 
+  // EPC rating validation (England & Wales tenancies)
+  useEffect(() => {
+    if (currentQuestion?.id === 'safety_compliance' && currentAnswer?.epc_rating && jurisdiction === 'england-wales') {
+      const epcRating = currentAnswer.epc_rating;
+      if (epcRating === 'F' || epcRating === 'G') {
+        setEpcWarning(
+          `⚠️ EPC COMPLIANCE WARNING: EPC rating ${epcRating} is below the minimum energy efficiency standard (E) required for most lettings in England & Wales. You may need an exemption or must improve the property before letting.`,
+        );
+      } else {
+        setEpcWarning(null);
+      }
+    } else {
+      setEpcWarning(null);
+    }
+  }, [currentAnswer, currentQuestion, jurisdiction]);
+
+  // AST suitability validation (England & Wales tenancies)
+  useEffect(() => {
+    if (currentQuestion?.id === 'ast_suitability' && currentAnswer && caseType === 'tenancy_agreement' && jurisdiction === 'england-wales') {
+      const warnings: string[] = [];
+
+      if (currentAnswer.tenant_is_individual === false) {
+        warnings.push('Tenant must be an individual (not a company) for an AST');
+      }
+      if (currentAnswer.main_home === false) {
+        warnings.push('Property must be the tenant\'s main home for an AST');
+      }
+      if (currentAnswer.landlord_lives_at_property === true) {
+        warnings.push('If landlord lives at property, this is likely a lodger/licence arrangement, not an AST');
+      }
+      if (currentAnswer.holiday_or_licence === true) {
+        warnings.push('Holiday lets and licence arrangements are not covered by AST regulations');
+      }
+
+      if (warnings.length > 0) {
+        setAstSuitabilityWarning(
+          `⚠️ AST SUITABILITY WARNING: ${warnings.join('. ')}. You may need a different type of agreement.`,
+        );
+      } else {
+        setAstSuitabilityWarning(null);
+      }
+    } else {
+      setAstSuitabilityWarning(null);
+    }
+  }, [currentAnswer, currentQuestion, caseType, jurisdiction]);
+
   // Auto-calculate end date based on start date + term length
   useEffect(() => {
     if (currentQuestion?.id === 'tenancy_type_and_dates' && currentAnswer) {
@@ -383,6 +431,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (depositWarning) {
       setError(
         'Please reduce the deposit amount to comply with the Tenant Fees Act 2019 before continuing.',
+      );
+      return;
+    }
+
+    // Block progression if AST suitability warning exists
+    if (astSuitabilityWarning) {
+      setError(
+        'This scenario is not appropriate for an AST. Please review the suitability checks and adjust your answers, or consider a different type of agreement.',
       );
       return;
     }
@@ -929,6 +985,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             {depositWarning && (
               <div className="bg-orange-50 border border-orange-300 rounded-lg p-4 mb-6">
                 <p className="text-sm text-orange-900 font-medium">{depositWarning}</p>
+              </div>
+            )}
+
+            {epcWarning && (
+              <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4 mb-6">
+                <p className="text-sm text-yellow-900 font-medium">{epcWarning}</p>
+              </div>
+            )}
+
+            {astSuitabilityWarning && (
+              <div className="bg-red-50 border border-red-300 rounded-lg p-4 mb-6">
+                <p className="text-sm text-red-900 font-medium">{astSuitabilityWarning}</p>
               </div>
             )}
 

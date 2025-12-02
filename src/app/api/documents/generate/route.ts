@@ -119,15 +119,47 @@ export async function POST(request: Request) {
           documentTitle = 'Section 21 Notice - Form 6A';
           break;
 
-        case 'ast_standard':
-          generatedDoc = await generateStandardAST(mapWizardToASTData(facts));
+        case 'ast_standard': {
+          const astData = mapWizardToASTData(facts);
+          // Validate AST suitability before generation
+          const { validateASTSuitability } = await import('@/lib/documents/ast-generator');
+          const suitabilityResult = validateASTSuitability(astData);
+          if (!suitabilityResult.valid) {
+            return NextResponse.json(
+              {
+                error: 'AST suitability checks failed: this scenario is not appropriate for an AST. ' +
+                       suitabilityResult.reasons.join('. ') +
+                       '. You may need a lodger or licence agreement instead.',
+                reasons: suitabilityResult.reasons,
+              },
+              { status: 400 }
+            );
+          }
+          generatedDoc = await generateStandardAST(astData);
           documentTitle = 'Assured Shorthold Tenancy Agreement - Standard';
           break;
+        }
 
-        case 'ast_premium':
-          generatedDoc = await generatePremiumAST(mapWizardToASTData(facts));
+        case 'ast_premium': {
+          const astData = mapWizardToASTData(facts);
+          // Validate AST suitability before generation
+          const { validateASTSuitability } = await import('@/lib/documents/ast-generator');
+          const suitabilityResult = validateASTSuitability(astData);
+          if (!suitabilityResult.valid) {
+            return NextResponse.json(
+              {
+                error: 'AST suitability checks failed: this scenario is not appropriate for an AST. ' +
+                       suitabilityResult.reasons.join('. ') +
+                       '. You may need a lodger or licence agreement instead.',
+                reasons: suitabilityResult.reasons,
+              },
+              { status: 400 }
+            );
+          }
+          generatedDoc = await generatePremiumAST(astData);
           documentTitle = 'Assured Shorthold Tenancy Agreement - Premium';
           break;
+        }
 
         case 'notice_to_leave':
           // Map wizard facts to NoticeToLeaveData format
