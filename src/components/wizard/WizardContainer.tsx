@@ -33,6 +33,8 @@ function getDocumentTypeName(caseType: string, product?: string): string {
       case 'complete_pack':
         return 'Complete Eviction Pack';
       case 'money_claim':
+      case 'money_claim_england_wales':
+      case 'money_claim_scotland':
         return 'Money Claim Pack';
       case 'ast_standard':
         return 'Standard AST';
@@ -119,7 +121,12 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   }, []);
 
   const getWelcomeMessage = useCallback((type: string, jur: string): string => {
-    const jurName = jur === 'england-wales' ? 'England & Wales' : 'Scotland';
+    const jurName =
+      jur === 'england-wales'
+        ? 'England & Wales'
+        : jur === 'scotland'
+        ? 'Scotland'
+        : 'Northern Ireland';
 
     switch (type) {
       case 'eviction':
@@ -132,7 +139,6 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         return "👋 Hi! Let's get started...";
     }
   }, []);
-
 
   const handleAnswer = async (answer: any) => {
     // Prevent duplicate submissions while loading
@@ -193,27 +199,27 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   const formatAnalysisResults = useCallback(
     (analysis: any): string => {
-      let message = "✅ **Analysis Complete!**\n\n";
+      let message = '✅ **Analysis Complete!**\n\n';
 
       if (caseType === 'eviction') {
         message += `**Recommended Route:** ${analysis.recommended_route}\n\n`;
 
         if (analysis.primary_grounds && analysis.primary_grounds.length > 0) {
-          message += "**Strongest Grounds:**\n";
+          message += '**Strongest Grounds:**\n';
           analysis.primary_grounds.forEach((ground: any) => {
             message += `• Ground ${ground.ground_number}: ${ground.name} (${ground.success_probability}% success probability)\n`;
           });
         }
 
         if (analysis.red_flags && analysis.red_flags.length > 0) {
-          message += "\n⚠️ **Important Warnings:**\n";
+          message += '\n⚠️ **Important Warnings:**\n';
           analysis.red_flags.forEach((flag: string) => {
             message += `• ${flag}\n`;
           });
         }
       }
 
-      message += "\n🎉 **Ready to generate your documents!**\n\nClick below to preview and purchase.";
+      message += '\n🎉 **Ready to generate your documents!**\n\nClick below to preview and purchase.';
       return message;
     },
     [caseType],
@@ -246,7 +252,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         }
       } catch (error) {
         console.error('Analysis failed:', error);
-        addMessage('assistant', "I encountered an issue analyzing your case. Please contact support.");
+        addMessage(
+          'assistant',
+          'I encountered an issue analyzing your case. Please contact support.',
+        );
       } finally {
         setIsLoading(false);
       }
@@ -276,7 +285,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         if (data.is_complete) {
           // Wizard complete - analyze case
           setIsComplete(true);
-          addMessage('assistant', "Perfect! I have everything I need. Let me analyze your case...");
+          addMessage(
+            'assistant',
+            'Perfect! I have everything I need. Let me analyze your case...',
+          );
           await analyzeCase(currentCaseId);
         } else if (data.next_question) {
           setCurrentQuestion(data.next_question);
@@ -289,7 +301,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         }
       } catch (error) {
         console.error('Failed to get next question:', error);
-        addMessage('assistant', "Sorry, I encountered an error. Let me try again...");
+        addMessage('assistant', 'Sorry, I encountered an error. Let me try again...');
       } finally {
         setIsLoading(false);
       }
@@ -319,7 +331,8 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
           const editMessage: Message = {
             id: `msg-${Date.now()}`,
             role: 'assistant',
-            content: `✏️ **Editing Mode**\n\nI've loaded your previous answers. You can review and change any information. Let's continue from where you left off.`,
+            content:
+              '✏️ **Editing Mode**\n\nI\'ve loaded your previous answers. You can review and change any information. Let\'s continue from where you left off.',
             timestamp: new Date(),
           };
           setMessages([editMessage]);
@@ -331,17 +344,16 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         }
       } else {
         // Create new case
-        const normalizedProduct =
-          product === 'money_claim_england_wales' || product === 'money_claim_scotland'
-            ? 'money_claim'
-            : product;
+
+        // Prefer the explicit product prop if provided; otherwise derive a sensible default.
         const derivedProduct =
-          normalizedProduct ||
+          product ||
           (caseType === 'eviction'
             ? 'complete_pack'
             : caseType === 'money_claim'
             ? 'money_claim'
             : 'tenancy_agreement');
+
         const response = await fetch('/api/wizard/start', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -394,11 +406,22 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         setError('Failed to start wizard. Please check your environment configuration.');
       }
 
-      addMessage('assistant', "Sorry, something went wrong. Please check the error message above.");
+      addMessage(
+        'assistant',
+        'Sorry, something went wrong. Please check the error message above.',
+      );
     } finally {
       setIsLoading(false);
     }
-  }, [addMessage, caseType, editCaseId, getNextQuestion, getWelcomeMessage, jurisdiction, product]);
+  }, [
+    addMessage,
+    caseType,
+    editCaseId,
+    getNextQuestion,
+    getWelcomeMessage,
+    jurisdiction,
+    product,
+  ]);
 
   // Initialize wizard
   useEffect(() => {
@@ -441,10 +464,12 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       case 'multiple_choice':
         return (
           <MultipleChoice
-            options={currentQuestion.options?.map((opt) => ({
-              value: opt,
-              label: opt,
-            })) || []}
+            options={
+              currentQuestion.options?.map((opt) => ({
+                value: opt,
+                label: opt,
+              })) || []
+            }
             value={currentAnswer}
             onChange={(val) => {
               setCurrentAnswer(val);
@@ -475,12 +500,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         );
 
       case 'yes_no':
-        return (
-          <YesNoToggle
-            {...props}
-            helperText={currentQuestion.helper_text}
-          />
-        );
+        return <YesNoToggle {...props} helperText={currentQuestion.helper_text} />;
 
       case 'text':
         return (
@@ -495,10 +515,12 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       case 'multiple_selection':
         return (
           <MultipleSelection
-            options={currentQuestion.options?.map((opt) => ({
-              value: opt,
-              label: opt,
-            })) || []}
+            options={
+              currentQuestion.options?.map((opt) => ({
+                value: opt,
+                label: opt,
+              })) || []
+            }
             value={currentAnswer || []}
             onChange={setCurrentAnswer}
           />
@@ -580,7 +602,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                     key={message.id}
                     className={clsx(
                       'flex',
-                      message.role === 'user' ? 'justify-end' : 'justify-start'
+                      message.role === 'user' ? 'justify-end' : 'justify-start',
                     )}
                   >
                     <div
@@ -588,17 +610,24 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                         'max-w-[80%] rounded-lg px-4 py-3',
                         message.role === 'user'
                           ? 'bg-primary text-white'
-                          : 'bg-gray-100 text-charcoal'
+                          : 'bg-gray-100 text-charcoal',
                       )}
                     >
                       <div className="whitespace-pre-wrap text-sm leading-relaxed">
                         {message.content}
                       </div>
-                      <div className={clsx(
-                        'text-xs mt-1',
-                        message.role === 'user' ? 'text-primary-light' : 'text-gray-500'
-                      )}>
-                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      <div
+                        className={clsx(
+                          'text-xs mt-1',
+                          message.role === 'user'
+                            ? 'text-primary-light'
+                            : 'text-gray-500',
+                        )}
+                      >
+                        {message.timestamp.toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit',
+                        })}
                       </div>
                     </div>
                   </div>
@@ -609,9 +638,18 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                     <div className="bg-gray-100 rounded-lg px-4 py-3">
                       <div className="flex items-center gap-2">
                         <div className="flex gap-1">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                          <div
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: '0ms' }}
+                          />
+                          <div
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: '150ms' }}
+                          />
+                          <div
+                            className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                            style={{ animationDelay: '300ms' }}
+                          />
                         </div>
                         <span className="text-sm text-gray-600">Thinking...</span>
                       </div>
@@ -644,7 +682,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                         'min-h-touch',
                         canSubmit()
                           ? 'bg-primary text-white hover:bg-primary-dark shadow-md hover:shadow-lg'
-                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed',
                       )}
                     >
                       Continue →
@@ -669,7 +707,11 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                   <div className="flex-1">
                     <div className="text-sm font-medium text-charcoal">Location</div>
                     <div className="text-sm text-gray-600">
-                      {jurisdiction === 'england-wales' ? 'England & Wales' : 'Scotland'}
+                      {jurisdiction === 'england-wales'
+                        ? 'England & Wales'
+                        : jurisdiction === 'scotland'
+                        ? 'Scotland'
+                        : 'Northern Ireland'}
                     </div>
                   </div>
                 </div>
@@ -719,9 +761,12 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                 <div className="flex items-start gap-2">
                   <span className="text-lg">💡</span>
                   <div className="flex-1">
-                    <div className="text-sm font-medium text-charcoal mb-1">Why we ask:</div>
+                    <div className="text-sm font-medium text-charcoal mb-1">
+                      Why we ask:
+                    </div>
                     <div className="text-sm text-gray-600">
-                      We need exact details for court-ready documents. Don't worry - you can edit these later.
+                      We need exact details for court-ready documents. Don't worry - you can edit
+                      these later.
                     </div>
                   </div>
                 </div>

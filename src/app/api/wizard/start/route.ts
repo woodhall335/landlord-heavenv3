@@ -11,7 +11,12 @@ import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
 import { createEmptyWizardFacts } from '@/lib/case-facts/schema';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
-import { getNextMQSQuestion, loadMQS, type MasterQuestionSet, type ProductType } from '@/lib/wizard/mqs-loader';
+import {
+  getNextMQSQuestion,
+  loadMQS,
+  type MasterQuestionSet,
+  type ProductType,
+} from '@/lib/wizard/mqs-loader';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -99,7 +104,7 @@ export async function POST(request: Request) {
     if (!validationResult.success) {
       return NextResponse.json(
         { error: 'Validation failed', details: validationResult.error.format() },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -116,8 +121,11 @@ export async function POST(request: Request) {
     // Northern Ireland gating: only tenancy agreements are supported
     if (effectiveJurisdiction === 'northern-ireland' && resolvedCaseType !== 'tenancy_agreement') {
       return NextResponse.json(
-        { error: 'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.' },
-        { status: 400 }
+        {
+          error:
+            'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.',
+        },
+        { status: 400 },
       );
     }
 
@@ -145,10 +153,13 @@ export async function POST(request: Request) {
       // Type assertion: we know data exists after the null check
       const caseData = data as { id: string; case_type: string; jurisdiction: string };
 
-      if (caseData.case_type !== resolvedCaseType || caseData.jurisdiction !== effectiveJurisdiction) {
+      if (
+        caseData.case_type !== resolvedCaseType ||
+        caseData.jurisdiction !== effectiveJurisdiction
+      ) {
         return NextResponse.json(
           { error: 'Case does not match requested product or jurisdiction' },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -159,14 +170,17 @@ export async function POST(request: Request) {
       // ------------------------------------------------
       const emptyFacts = createEmptyWizardFacts();
 
-      // Pre-populate tier if specified
-      const initialFacts = {
+      // Pre-populate meta + country on the *flat* wizard facts
+      const initialFacts: any = {
         ...emptyFacts,
         __meta: {
           product: normalizedProduct as string | null,
           original_product: product as string | null,
-          ...(tier ? { product_tier: tier as string | null } : {})
-        }
+          ...(tier ? { product_tier: tier as string | null } : {}),
+        },
+        // These help downstream normalization / analysis before property questions are answered
+        property_country: effectiveJurisdiction,
+        jurisdiction: effectiveJurisdiction,
       };
 
       const { data, error } = await supabase
@@ -193,22 +207,27 @@ export async function POST(request: Request) {
     // ------------------------------------------------
     // 3. Ensure case_facts row exists and load facts
     // ------------------------------------------------
-    // For new cases, initialize case_facts with the same initial facts from collected_facts
     let facts = await getOrCreateWizardFacts(supabase, caseRecord.id);
 
-    // If this is a newly created case with pre-populated tier, ensure case_facts also has it
-    if (!case_id && tier) {
-      const updatedFacts = {
-        ...facts,
-        __meta: {
-          product: facts.__meta?.product ?? null,
-          original_product: facts.__meta?.original_product ?? null,
-          product_tier: tier as string | null
-        }
+    // For newly created cases, mirror meta + country into case_facts.facts
+    if (!case_id) {
+      const mergedMeta = {
+        ...(facts.__meta ?? {}),
+        product: normalizedProduct as string | null,
+        original_product: product as string | null,
+        ...(tier ? { product_tier: tier as string | null } : {}),
       };
+
+      const updatedFacts: any = {
+        ...facts,
+        __meta: mergedMeta,
+        property_country: facts.property_country ?? effectiveJurisdiction,
+        jurisdiction: facts.jurisdiction ?? effectiveJurisdiction,
+      };
+
       const { error: updateError } = await supabase
         .from('case_facts')
-        .update({ facts: updatedFacts as any } as any) // Supabase types facts as Json
+        .update({ facts: updatedFacts as any })
         .eq('case_id', caseRecord.id);
 
       if (!updateError) {
@@ -223,7 +242,7 @@ export async function POST(request: Request) {
     if (!mqs) {
       return NextResponse.json(
         { error: 'MQS not implemented for this jurisdiction yet' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 

@@ -19,6 +19,14 @@ interface StructuredWizardProps {
   onComplete: (caseId: string) => void;
 }
 
+interface CaseAnalysisState {
+  case_strength_score: number;
+  red_flags: string[];
+  compliance_issues: string[];
+  case_summary?: any;
+  case_health?: any;
+}
+
 export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   caseId,
   caseType,
@@ -37,6 +45,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [depositWarning, setDepositWarning] = useState<string | null>(null);
   const [caseFacts, setCaseFacts] = useState<Record<string, any>>({});
   const [showIntro, setShowIntro] = useState(caseType === 'money_claim');
+
+  // Step 3: money-claim case health / readiness
+  const [analysis, setAnalysis] = useState<CaseAnalysisState | null>(null);
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
 
   const initializeQuestion = useCallback((question: ExtendedWizardQuestion) => {
     setCurrentQuestion(question);
@@ -69,11 +82,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     return 'your area';
   };
 
-  const handleComplete = useCallback(async () => {
-    try {
-      setLoading(true);
+  /**
+   * Step 3 helper: call /api/wizard/analyze to get case strength & readiness.
+   * Used for money claims (and can be reused for AST/eviction later).
+   */
+  const refreshAnalysis = useCallback(async () => {
+    if (!caseId || caseType !== 'money_claim') return;
 
-      await fetch('/api/wizard/analyze', {
+    setAnalysisLoading(true);
+    setAnalysisError(null);
+
+    try {
+      const response = await fetch('/api/wizard/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -81,12 +101,46 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         }),
       });
 
-      onComplete(caseId);
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error || `Analyse failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      setAnalysis({
+        case_strength_score: data.case_strength_score ?? 0,
+        red_flags: Array.isArray(data.red_flags) ? data.red_flags : [],
+        compliance_issues: Array.isArray(data.compliance_issues) ? data.compliance_issues : [],
+        case_summary: data.case_summary,
+        case_health: data.case_health,
+      });
     } catch (err: any) {
-      setError(err.message || 'Failed to complete wizard');
-      setLoading(false);
+      console.error('Case analysis error:', err);
+      setAnalysisError(
+        'We could not analyse your case just yet. You can keep answering questions and we will try again automatically.'
+      );
+    } finally {
+      setAnalysisLoading(false);
     }
-  }, [caseId, onComplete]);
+  }, [caseId, caseType]);
+
+  const handleComplete = useCallback(
+    async () => {
+      try {
+        setLoading(true);
+
+        // Final analysis before redirect (non-blocking for UX, but awaited here)
+        await refreshAnalysis();
+
+        onComplete(caseId);
+      } catch (err: any) {
+        setError(err.message || 'Failed to complete wizard');
+        setLoading(false);
+      }
+    },
+    [caseId, onComplete, refreshAnalysis]
+  );
 
   const loadNextQuestion = useCallback(async () => {
     if (!caseId) return;
@@ -113,7 +167,6 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         await handleComplete();
       } else if (data.next_question) {
         initializeQuestion(data.next_question);
-
         setProgress(data.progress || 0);
       } else {
         throw new Error('No question returned from API');
@@ -157,6 +210,13 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   }, [currentQuestion, caseId]);
 
+  // Optional: kick off an early analysis once the wizard starts (money claims only)
+  useEffect(() => {
+    if (!showIntro && caseType === 'money_claim' && caseId) {
+      void refreshAnalysis();
+    }
+  }, [showIntro, caseType, caseId, refreshAnalysis]);
+
   // Inline deposit validation
   useEffect(() => {
     if (currentQuestion?.id === 'deposit_details' && currentAnswer?.deposit_amount) {
@@ -175,8 +235,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
         if (depositAmount > maxDeposit) {
           setDepositWarning(
-            `⚠️ ILLEGAL DEPOSIT: £${depositAmount.toFixed(2)} exceeds 5 weeks rent (£${maxDeposit.toFixed(2)}). ` +
-            `This VIOLATES the Tenant Fees Act 2019. Maximum permitted: £${maxDeposit.toFixed(2)}.`
+            `⚠️ ILLEGAL DEPOSIT: £${depositAmount.toFixed(2)} exceeds 5 weeks rent (£${maxDeposit.toFixed(
+              2
+            )}). This VIOLATES the Tenant Fees Act 2019. Maximum permitted: £${maxDeposit.toFixed(2)}.`
           );
         } else {
           setDepositWarning(null);
@@ -319,11 +380,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       const response = await fetch('/api/wizard/answer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            case_id: caseId,
-            question_id: currentQuestion!.id,
-            answer: currentAnswer,
-          }),
+        body: JSON.stringify({
+          case_id: caseId,
+          question_id: currentQuestion!.id,
+          answer: currentAnswer,
+        }),
       });
 
       if (!response.ok) {
@@ -350,7 +411,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
       // Save to history before moving forward
       if (currentQuestion) {
-        setQuestionHistory(prev => [...prev, { question: currentQuestion, answer: currentAnswer }]);
+        setQuestionHistory((prev) => [...prev, { question: currentQuestion, answer: currentAnswer }]);
+      }
+
+      // After a successful save, refresh analysis for money-claims
+      if (caseType === 'money_claim') {
+        void refreshAnalysis();
       }
 
       // Check if complete
@@ -373,7 +439,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
     // Pop the last question from history
     const previousEntry = questionHistory[questionHistory.length - 1];
-    setQuestionHistory(prev => prev.slice(0, -1));
+    setQuestionHistory((prev) => prev.slice(0, -1));
 
     // Restore the previous question and answer
     setCurrentQuestion(previousEntry.question);
@@ -382,7 +448,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setAskHeavenSuggestion(null);
 
     // Decrease progress (approximate)
-    setProgress(prev => Math.max(0, prev - 5));
+    setProgress((prev) => Math.max(0, prev - 5));
   };
 
   const renderInput = () => {
@@ -633,7 +699,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       }
                       placeholder={field.placeholder}
                       disabled={loading}
-                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-20"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-20"
                       rows={3}
                     />
                   ) : (
@@ -668,6 +734,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         );
     }
   };
+
+  // ------------------------------
+  // Intro + completion states
+  // ------------------------------
 
   if (showIntro) {
     return (
@@ -710,77 +780,263 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     );
   }
 
+  // ------------------------------
+  // Main layout: wizard + side panel
+  // ------------------------------
+
+  const summary = analysis?.case_summary || {};
+  const readyStatus = summary.ready_for_issue;
+  const missingPrereqs: string[] = summary.missing_prerequisites || [];
+  const evidenceOverview = summary.evidence_overview || {};
+
+  let readinessLabel = 'Building your case...';
+  let readinessBadgeClass = 'bg-gray-100 text-gray-800';
+
+  if (readyStatus === true) {
+    readinessLabel = 'Ready to issue (subject to evidence)';
+    readinessBadgeClass = 'bg-green-100 text-green-800';
+  } else if (readyStatus === false) {
+    readinessLabel = 'Not ready to issue yet';
+    readinessBadgeClass = 'bg-amber-100 text-amber-800';
+  }
+
+  if (analysis && readyStatus == null) {
+    // Fallback to simple score interpretation
+    if (analysis.case_strength_score >= 80) {
+      readinessLabel = 'Strong on paper – check evidence';
+      readinessBadgeClass = 'bg-green-100 text-green-800';
+    } else if (analysis.case_strength_score >= 50) {
+      readinessLabel = 'Mixed – some gaps to fix';
+      readinessBadgeClass = 'bg-amber-100 text-amber-800';
+    } else {
+      readinessLabel = 'Weak / incomplete information';
+      readinessBadgeClass = 'bg-red-100 text-red-800';
+    }
+  }
+
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      {/* Progress Bar */}
-      <div className="mb-8">
-        <div className="flex justify-between text-sm text-gray-600 mb-2">
-          <span>{currentQuestion.section || 'Question'}</span>
-          <span>{Math.round(progress)}% Complete</span>
-        </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
-          <div
-            className="bg-primary h-2 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
-
-      {/* Question Card */}
-      <Card className="p-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">{currentQuestion.question}</h2>
-
-        {currentQuestion.helperText && (
-          <p className="text-sm text-gray-600 mb-6">{currentQuestion.helperText}</p>
-        )}
-
-        <div className="mb-6">{renderInput()}</div>
-
-        {/* Ask Heaven Suggestion */}
-        {askHeavenSuggestion && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <div className="flex items-start gap-2">
-              <div className="text-blue-600 text-sm font-semibold">💡 Suggestion:</div>
-              <p className="text-sm text-blue-800 flex-1">{askHeavenSuggestion}</p>
+    <div className="max-w-6xl mx-auto p-6">
+      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.5fr)_minmax(0,1.5fr)] gap-6 items-start">
+        {/* LEFT: Wizard content */}
+        <div>
+          {/* Progress Bar */}
+          <div className="mb-8">
+            <div className="flex justify-between text-sm text-gray-600 mb-2">
+              <span>{currentQuestion.section || 'Question'}</span>
+              <span>{Math.round(progress)}% Complete</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-primary h-2 rounded-full transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
             </div>
           </div>
-        )}
 
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-            <p className="text-sm text-red-800">{error}</p>
-          </div>
-        )}
+          {/* Question Card */}
+          <Card className="p-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">{currentQuestion.question}</h2>
 
-        {depositWarning && (
-          <div className="bg-orange-50 border border-orange-300 rounded-lg p-4 mb-6">
-            <p className="text-sm text-orange-900 font-medium">{depositWarning}</p>
-          </div>
-        )}
+            {currentQuestion.helperText && (
+              <p className="text-sm text-gray-600 mb-6">{currentQuestion.helperText}</p>
+            )}
 
-        {/* Navigation */}
-        <div className="flex gap-4">
-          {questionHistory.length > 0 && (
-            <Button
-              onClick={handleBack}
-              variant="secondary"
-              size="large"
-              disabled={loading}
-            >
-              ← Back
-            </Button>
-          )}
-          <Button
-            onClick={handleNext}
-            variant="primary"
-            size="large"
-            className="flex-1"
-            disabled={loading || currentAnswer === null || currentAnswer === undefined}
-          >
-            {loading ? 'Saving...' : 'Next →'}
-          </Button>
+            <div className="mb-6">{renderInput()}</div>
+
+            {/* Ask Heaven Suggestion */}
+            {askHeavenSuggestion && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <div className="flex items-start gap-2">
+                  <div className="text-blue-600 text-sm font-semibold">💡 Suggestion:</div>
+                  <p className="text-sm text-blue-800 flex-1">{askHeavenSuggestion}</p>
+                </div>
+              </div>
+            )}
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                <p className="text-sm text-red-800">{error}</p>
+              </div>
+            )}
+
+            {depositWarning && (
+              <div className="bg-orange-50 border border-orange-300 rounded-lg p-4 mb-6">
+                <p className="text-sm text-orange-900 font-medium">{depositWarning}</p>
+              </div>
+            )}
+
+            {/* Navigation */}
+            <div className="flex gap-4">
+              {questionHistory.length > 0 && (
+                <Button
+                  onClick={handleBack}
+                  variant="secondary"
+                  size="large"
+                  disabled={loading}
+                >
+                  ← Back
+                </Button>
+              )}
+              <Button
+                onClick={handleNext}
+                variant="primary"
+                size="large"
+                className="flex-1"
+                disabled={loading || currentAnswer === null || currentAnswer === undefined}
+              >
+                {loading ? 'Saving...' : 'Next →'}
+              </Button>
+            </div>
+          </Card>
         </div>
-      </Card>
+
+        {/* RIGHT: Case health & readiness (money claims only) */}
+        {caseType === 'money_claim' && (
+          <aside className="space-y-4">
+            <Card className="p-6 sticky top-4">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-semibold text-gray-900">Case health &amp; readiness</h3>
+                {analysis && (
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${readinessBadgeClass}`}>
+                    {readinessLabel}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-gray-500 mb-4">
+                This is an automated readiness check based on your answers. It&apos;s guidance only – not legal advice.
+              </p>
+
+              {/* Score */}
+              <div className="mb-4">
+                <div className="flex items-baseline gap-2">
+                  <span className="text-3xl font-bold text-gray-900">
+                    {analysis ? analysis.case_strength_score : '--'}
+                  </span>
+                  <span className="text-sm text-gray-600">/ 100 strength score</span>
+                </div>
+                <div className="mt-2 w-full bg-gray-100 rounded-full h-2">
+                  <div
+                    className="bg-primary h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${analysis ? analysis.case_strength_score : 0}%` }}
+                  />
+                </div>
+              </div>
+
+              {/* Quick facts */}
+              {summary && (
+                <div className="mb-4 text-sm text-gray-700 space-y-1">
+                  {typeof summary.total_arrears === 'number' && (
+                    <p>
+                      <span className="font-medium">Arrears entered:</span>{' '}
+                      {summary.total_arrears > 0 ? `~£${summary.total_arrears}` : 'not yet provided'}
+                    </p>
+                  )}
+                  {summary.is_money_claim && (
+                    <p>
+                      <span className="font-medium">Route:</span> Money claim (County Court)
+                    </p>
+                  )}
+                  {summary.pre_action_status && (
+                    <p>
+                      <span className="font-medium">Pre-action:</span>{' '}
+                      {summary.pre_action_status === 'complete'
+                        ? 'looks complete'
+                        : summary.pre_action_status === 'partial'
+                        ? 'partially complete – some steps missing'
+                        : 'not clearly recorded yet'}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Missing prerequisites */}
+              {missingPrereqs.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-1">
+                    Must-have items before issuing
+                  </h4>
+                  <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                    {missingPrereqs.map((item: string, idx: number) => (
+                      <li key={`${item}-${idx}`}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Evidence overview */}
+              {evidenceOverview && Object.keys(evidenceOverview).length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-1">Evidence overview</h4>
+                  <ul className="text-sm text-gray-700 space-y-0.5">
+                    <li>
+                      <span className="font-medium">Tenancy agreement:</span>{' '}
+                      {evidenceOverview.tenancy_agreement_uploaded ? 'uploaded / recorded' : 'not uploaded yet'}
+                    </li>
+                    <li>
+                      <span className="font-medium">Rent schedule:</span>{' '}
+                      {evidenceOverview.rent_schedule_uploaded ? 'uploaded / recorded' : 'not uploaded yet'}
+                    </li>
+                    <li>
+                      <span className="font-medium">Bank statements:</span>{' '}
+                      {evidenceOverview.bank_statements_uploaded ? 'uploaded / recorded' : 'not flagged'}
+                    </li>
+                    <li>
+                      <span className="font-medium">Other evidence:</span>{' '}
+                      {evidenceOverview.other_evidence_uploaded ? 'uploaded / recorded' : 'not flagged'}
+                    </li>
+                  </ul>
+                </div>
+              )}
+
+              {/* Red flags / compliance notes */}
+              {analysis && (analysis.red_flags.length > 0 || analysis.compliance_issues.length > 0) && (
+                <div className="mt-4 space-y-3">
+                  {analysis.red_flags.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-red-700 mb-1">Key risks</h4>
+                      <ul className="list-disc list-inside text-sm text-red-800 space-y-1">
+                        {analysis.red_flags.slice(0, 3).map((flag, idx) => (
+                          <li key={`flag-${idx}`}>{flag}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {analysis.compliance_issues.length > 0 && (
+                    <div>
+                      <h4 className="text-sm font-semibold text-amber-700 mb-1">Housekeeping to tidy</h4>
+                      <ul className="list-disc list-inside text-sm text-amber-800 space-y-1">
+                        {analysis.compliance_issues.slice(0, 3).map((item, idx) => (
+                          <li key={`comp-${idx}`}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Loading / error state */}
+              {!analysis && !analysisError && (
+                <p className="mt-2 text-xs text-gray-500">
+                  As you answer questions, we&apos;ll show how ready your claim looks to issue and what still needs work.
+                </p>
+              )}
+
+              {analysisLoading && (
+                <p className="mt-2 text-xs text-gray-500 flex items-center gap-2">
+                  <span className="inline-block w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                  Updating case health…
+                </p>
+              )}
+
+              {analysisError && (
+                <p className="mt-2 text-xs text-red-600">
+                  {analysisError}
+                </p>
+              )}
+            </Card>
+          </aside>
+        )}
+      </div>
     </div>
   );
 };

@@ -59,7 +59,9 @@ const jurisdictions: JurisdictionOption[] = [
 ];
 
 // Map product parameter to document type
-function mapProductToDocumentType(product: string): 'eviction' | 'money_claim' | 'tenancy_agreement' | null {
+function mapProductToDocumentType(
+  product: string
+): 'eviction' | 'money_claim' | 'tenancy_agreement' | null {
   switch (product) {
     case 'complete_pack':
     case 'notice_only':
@@ -105,6 +107,7 @@ export default function WizardPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const productParam = searchParams.get('product');
+
   const preselectedDocument = useMemo(() => {
     if (!productParam) return null;
 
@@ -118,8 +121,10 @@ export default function WizardPage() {
     return mapped ? jurisdictions.find((j) => j.value === mapped) ?? null : null;
   }, [productParam]);
 
-  const [selectedDocument, setSelectedDocument] = useState<DocumentOption | null>(preselectedDocument);
-  const [selectedJurisdiction, setSelectedJurisdiction] = useState<JurisdictionOption | null>(preselectedJurisdiction);
+  const [selectedDocument, setSelectedDocument] =
+    useState<DocumentOption | null>(preselectedDocument);
+  const [selectedJurisdiction, setSelectedJurisdiction] =
+    useState<JurisdictionOption | null>(preselectedJurisdiction);
   const [step, setStep] = useState<1 | 2>(preselectedDocument ? 2 : 1);
 
   const isJurisdictionSupported = (jur: JurisdictionOption) => {
@@ -141,8 +146,10 @@ export default function WizardPage() {
   const selectedComboUnsupported =
     !!selectedDocument &&
     !!selectedJurisdiction &&
-    ((selectedDocument.type === 'money_claim' && selectedJurisdiction.value === 'northern-ireland') ||
-      (selectedDocument.type !== 'tenancy_agreement' && selectedJurisdiction.value === 'northern-ireland'));
+    ((selectedDocument.type === 'money_claim' &&
+      selectedJurisdiction.value === 'northern-ireland') ||
+      (selectedDocument.type !== 'tenancy_agreement' &&
+        selectedJurisdiction.value === 'northern-ireland'));
 
   const getUnsupportedCopy = (jur: JurisdictionOption) => {
     // Money claim: differentiate Scotland vs Northern Ireland
@@ -151,7 +158,11 @@ export default function WizardPage() {
     }
 
     // Non-tenancy flows in Northern Ireland (eviction etc.)
-    if (selectedDocument && selectedDocument.type !== 'tenancy_agreement' && jur.value === 'northern-ireland') {
+    if (
+      selectedDocument &&
+      selectedDocument.type !== 'tenancy_agreement' &&
+      jur.value === 'northern-ireland'
+    ) {
       return 'Eviction and money claim flows are unavailable here. Tenancy agreements only.';
     }
 
@@ -220,13 +231,13 @@ export default function WizardPage() {
             <div
               className={clsx(
                 'flex items-center gap-2',
-                step === 1 ? 'text-primary' : 'text-gray-400',
+                step === 1 ? 'text-primary' : 'text-gray-400'
               )}
             >
               <div
                 className={clsx(
                   'w-8 h-8 rounded-full flex items-center justify-center font-semibold',
-                  step === 1 ? 'bg-primary text-white' : 'bg-gray-200',
+                  step === 1 ? 'bg-primary text-white' : 'bg-gray-200'
                 )}
               >
                 1
@@ -239,13 +250,13 @@ export default function WizardPage() {
             <div
               className={clsx(
                 'flex items-center gap-2',
-                step === 2 ? 'text-primary' : 'text-gray-400',
+                step === 2 ? 'text-primary' : 'text-gray-400'
               )}
             >
               <div
                 className={clsx(
                   'w-8 h-8 rounded-full flex items-center justify-center font-semibold',
-                  step === 2 ? 'bg-primary text-white' : 'bg-gray-200',
+                  step === 2 ? 'bg-primary text-white' : 'bg-gray-200'
                 )}
               >
                 2
@@ -272,7 +283,7 @@ export default function WizardPage() {
                     'hover:shadow-lg hover:scale-105',
                     selectedDocument?.type === doc.type
                       ? 'border-primary bg-primary-subtle shadow-md'
-                      : 'border-gray-300 bg-white hover:border-primary',
+                      : 'border-gray-300 bg-white hover:border-primary'
                   )}
                 >
                   {doc.popular && (
@@ -284,12 +295,8 @@ export default function WizardPage() {
                   )}
 
                   <div className="text-4xl mb-4">{doc.icon}</div>
-                  <h3 className="text-xl font-semibold text-charcoal mb-2">
-                    {doc.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 mb-4 min-h-12">
-                    {doc.description}
-                  </p>
+                  <h3 className="text-xl font-semibold text-charcoal mb-2">{doc.title}</h3>
+                  <p className="text-sm text-gray-600 mb-4 min-h-12">{doc.description}</p>
                   <div className="text-primary font-semibold">{doc.price}</div>
                 </button>
               ))}
@@ -334,7 +341,7 @@ export default function WizardPage() {
                     !isJurisdictionSupported(jur) && 'opacity-60 cursor-not-allowed',
                     selectedJurisdiction?.value === jur.value
                       ? 'border-primary bg-primary-subtle shadow-md'
-                      : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm',
+                      : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
                   )}
                 >
                   <div className="text-4xl">{jur.flag}</div>
@@ -373,7 +380,9 @@ export default function WizardPage() {
                 {selectedComboUnsupported && (
                   <p className="text-sm text-red-600 mt-3">{selectedUnsupportedCopy}</p>
                 )}
-                <p className="text-sm text-gray-600 mt-3">This will take about 5-10 minutes</p>
+                <p className="text-sm text-gray-600 mt-3">
+                  This will take about 5-10 minutes
+                </p>
               </div>
             )}
           </div>

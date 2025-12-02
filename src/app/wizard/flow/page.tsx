@@ -21,9 +21,18 @@ function WizardFlowContent() {
   const [initialQuestion, setInitialQuestion] = useState<ExtendedWizardQuestion | null>(null);
   const hasStartedRef = useRef(false);
 
-  const type = searchParams.get('type') as 'eviction' | 'money_claim' | 'tenancy_agreement' | null;
-  const jurisdiction = searchParams.get('jurisdiction') as 'england-wales' | 'scotland' | 'northern-ireland' | null;
+  const type = searchParams.get('type') as
+    | 'eviction'
+    | 'money_claim'
+    | 'tenancy_agreement'
+    | null;
+  const jurisdiction = searchParams.get('jurisdiction') as
+    | 'england-wales'
+    | 'scotland'
+    | 'northern-ireland'
+    | null;
   const product = searchParams.get('product'); // Specific product (notice_only, complete_pack, etc.)
+  const productVariant = searchParams.get('product_variant'); // e.g. money_claim_england_wales
   const normalizedProduct =
     type === 'money_claim' &&
     (product === 'money_claim_england_wales' || product === 'money_claim_scotland')
@@ -54,11 +63,42 @@ function WizardFlowContent() {
         return;
       }
 
-      const productParam = normalizedProduct || product || type || 'tenancy_agreement';
+      // Prefer product_variant (from product page) then product, then sensible defaults
+      const rawProduct = productVariant || product;
+
+      let startProduct: string;
+
+      if (type === 'money_claim') {
+        // Money-claim flows: honour specific product variants first
+        if (
+          rawProduct === 'money_claim_england_wales' ||
+          rawProduct === 'money_claim_scotland' ||
+          rawProduct === 'money_claim'
+        ) {
+          startProduct = rawProduct;
+        } else {
+          startProduct = 'money_claim';
+        }
+      } else if (type === 'tenancy_agreement') {
+        // Tenancy flows: keep AST tiers if provided
+        if (
+          rawProduct === 'ast_standard' ||
+          rawProduct === 'ast_premium' ||
+          rawProduct === 'tenancy_agreement'
+        ) {
+          startProduct = rawProduct;
+        } else {
+          startProduct = 'tenancy_agreement';
+        }
+      } else {
+        // Fallback for any other future types
+        startProduct = rawProduct || type || 'tenancy_agreement';
+      }
+
       const response = await fetch('/api/wizard/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product: productParam, jurisdiction }),
+        body: JSON.stringify({ product: startProduct, jurisdiction }),
       });
 
       const data = await response.json();
@@ -79,7 +119,7 @@ function WizardFlowContent() {
     } finally {
       setLoading(false);
     }
-  }, [editCaseId, jurisdiction, normalizedProduct, product, type]);
+  }, [editCaseId, jurisdiction, product, productVariant, type]);
 
   useEffect(() => {
     if (!hasRequiredParams) {
@@ -151,14 +191,16 @@ function WizardFlowContent() {
 
 export default function WizardFlowPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-          <p className="text-gray-600">Loading wizard...</p>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            <p className="text-gray-600">Loading wizard...</p>
+          </div>
         </div>
-      </div>
-    }>
+      }
+    >
       <WizardFlowContent />
     </Suspense>
   );

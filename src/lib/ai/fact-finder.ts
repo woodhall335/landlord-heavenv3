@@ -30,6 +30,7 @@ export interface FactFinderRequest {
   conversation_history?: ChatMessage[];
 }
 
+
 export interface FactFinderResponse {
   next_question: WizardQuestion | null;
   is_complete: boolean;
