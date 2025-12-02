@@ -10,6 +10,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input, Card } from '@/components/ui';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
+import { GuidanceTips } from '@/components/wizard/GuidanceTips';
 
 interface StructuredWizardProps {
   caseId: string;
@@ -34,14 +35,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   initialQuestion,
   onComplete,
 }) => {
-  const [currentQuestion, setCurrentQuestion] = useState<ExtendedWizardQuestion | null>(initialQuestion ?? null);
+  const [currentQuestion, setCurrentQuestion] = useState<ExtendedWizardQuestion | null>(
+    initialQuestion ?? null,
+  );
   const [currentAnswer, setCurrentAnswer] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [askHeavenSuggestion, setAskHeavenSuggestion] = useState<string | null>(null);
-  const [questionHistory, setQuestionHistory] = useState<Array<{ question: ExtendedWizardQuestion; answer: any }>>([]);
+  const [questionHistory, setQuestionHistory] = useState<
+    Array<{ question: ExtendedWizardQuestion; answer: any }>
+  >([]);
   const [depositWarning, setDepositWarning] = useState<string | null>(null);
   const [caseFacts, setCaseFacts] = useState<Record<string, any>>({});
   const [showIntro, setShowIntro] = useState(caseType === 'money_claim');
@@ -118,7 +123,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     } catch (err: any) {
       console.error('Case analysis error:', err);
       setAnalysisError(
-        'We could not analyse your case just yet. You can keep answering questions and we will try again automatically.'
+        'We could not analyse your case just yet. You can keep answering questions and we will try again automatically.',
       );
     } finally {
       setAnalysisLoading(false);
@@ -139,7 +144,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         setLoading(false);
       }
     },
-    [caseId, onComplete, refreshAnalysis]
+    [caseId, onComplete, refreshAnalysis],
   );
 
   const loadNextQuestion = useCallback(async () => {
@@ -191,7 +196,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   }, [currentQuestion, initialQuestion, initializeQuestion, loadNextQuestion, showIntro]);
 
-  // Fetch case facts when question changes (for validation)
+  // Fetch case facts when question changes (for validation and side panels)
   useEffect(() => {
     const fetchCaseFacts = async () => {
       try {
@@ -235,9 +240,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
         if (depositAmount > maxDeposit) {
           setDepositWarning(
-            `⚠️ ILLEGAL DEPOSIT: £${depositAmount.toFixed(2)} exceeds 5 weeks rent (£${maxDeposit.toFixed(
-              2
-            )}). This VIOLATES the Tenant Fees Act 2019. Maximum permitted: £${maxDeposit.toFixed(2)}.`
+            `⚠️ ILLEGAL DEPOSIT: £${depositAmount.toFixed(
+              2,
+            )} exceeds 5 weeks rent (£${maxDeposit.toFixed(
+              2,
+            )}). This VIOLATES the Tenant Fees Act 2019. Maximum permitted: £${maxDeposit.toFixed(2)}.`,
           );
         } else {
           setDepositWarning(null);
@@ -289,8 +296,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         const fieldValue = currentAnswer?.[field.id];
 
         // Check for required fields - must handle boolean false as valid
-        if (field.validation?.required && (fieldValue === null || fieldValue === undefined || fieldValue === '')) {
-          setError(`Please fill in ${field.label.toLowerCase()}`);
+        if (
+          field.validation?.required &&
+          (fieldValue === null || fieldValue === undefined || fieldValue === '')
+        ) {
+          setError(`Please fill in ${field.label?.toLowerCase?.() ?? 'this field'}`);
           return false;
         }
 
@@ -298,7 +308,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         if (field.validation?.pattern && fieldValue) {
           const regex = new RegExp(field.validation.pattern, 'i');
           if (!regex.test(fieldValue)) {
-            setError(`Invalid format for ${field.label.toLowerCase()}`);
+            setError(`Invalid format for ${field.label?.toLowerCase?.() ?? 'this field'}`);
             return false;
           }
         }
@@ -307,15 +317,15 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         if ((field.inputType === 'number' || field.inputType === 'currency') && fieldValue) {
           const num = parseFloat(fieldValue);
           if (isNaN(num)) {
-            setError(`${field.label} must be a valid number`);
+            setError(`${field.label ?? 'This field'} must be a valid number`);
             return false;
           }
           if (field.validation?.min !== undefined && num < field.validation.min) {
-            setError(`${field.label} must be at least ${field.validation.min}`);
+            setError(`${field.label ?? 'This field'} must be at least ${field.validation.min}`);
             return false;
           }
           if (field.validation?.max !== undefined && num > field.validation.max) {
-            setError(`${field.label} must be at most ${field.validation.max}`);
+            setError(`${field.label ?? 'This field'} must be at most ${field.validation.max}`);
             return false;
           }
         }
@@ -325,7 +335,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
     // For single inputs
     // Note: Must check for null/undefined specifically, not falsy values (false is valid for yes_no)
-    if (currentQuestion.validation?.required && (currentAnswer === null || currentAnswer === undefined)) {
+    if (
+      currentQuestion.validation?.required &&
+      (currentAnswer === null || currentAnswer === undefined)
+    ) {
       setError('This field is required');
       return false;
     }
@@ -368,7 +381,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
     // Block progression if deposit warning exists
     if (depositWarning) {
-      setError('Please reduce the deposit amount to comply with the Tenant Fees Act 2019 before continuing.');
+      setError(
+        'Please reduce the deposit amount to comply with the Tenant Fees Act 2019 before continuing.',
+      );
       return;
     }
 
@@ -640,7 +655,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                     <div className="flex gap-4">
                       <Button
                         onClick={() =>
-                          setCurrentAnswer({ ...groupValue, [field.id]: true })
+                          setCurrentAnswer({
+                            ...groupValue,
+                            [field.id]: true,
+                          })
                         }
                         variant={fieldValue === true ? 'primary' : 'secondary'}
                         disabled={loading}
@@ -650,7 +668,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       </Button>
                       <Button
                         onClick={() =>
-                          setCurrentAnswer({ ...groupValue, [field.id]: false })
+                          setCurrentAnswer({
+                            ...groupValue,
+                            [field.id]: false,
+                          })
                         }
                         variant={fieldValue === false ? 'primary' : 'secondary'}
                         disabled={loading}
@@ -743,13 +764,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     return (
       <div className="max-w-3xl mx-auto p-6">
         <Card className="p-8">
-          <p className="text-sm uppercase tracking-wide text-primary font-semibold mb-2">Welcome</p>
+          <p className="text-sm uppercase tracking-wide text-primary font-semibold mb-2">
+            Welcome
+          </p>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            Hi! I'm here to help you recover money owed by creating a money claim pack for {getJurisdictionName()}.
+            Hi! I&apos;m here to help you recover money owed by creating a money claim pack for{' '}
+            {getJurisdictionName()}.
           </h2>
           <p className="text-gray-700 leading-relaxed mb-6">
-            I'll gather the details of what you're owed, then prepare all the forms and guidance you need. When you're ready,
-            continue below and we'll start with the first question.
+            I&apos;ll gather the details of what you&apos;re owed, then prepare all the forms and
+            guidance you need. When you&apos;re ready, continue below and we&apos;ll start with the
+            first question.
           </p>
           <Button onClick={handleIntroContinue} variant="primary" size="large" className="w-full md:w-auto">
             Continue →
@@ -781,7 +806,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   }
 
   // ------------------------------
-  // Main layout: wizard + side panel
+  // Main layout: wizard + side panels
   // ------------------------------
 
   const summary = analysis?.case_summary || {};
@@ -814,6 +839,39 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   }
 
+  // Narrow jurisdiction for GuidanceTips to avoid TS errors with Northern Ireland
+  const guidanceJurisdiction: 'england-wales' | 'scotland' | undefined =
+    jurisdiction === 'england-wales' || jurisdiction === 'scotland'
+      ? jurisdiction
+      : undefined;
+
+  // ------------------------------
+  // Tenancy Agreement overview data (right-hand card)
+  // ------------------------------
+  const jurisdictionLabel = getJurisdictionName();
+  const meta = (caseFacts && caseFacts.__meta) || {};
+  const productTier = (meta.product_tier || caseFacts.product_tier) as string | undefined;
+  const originalProduct = meta.original_product as string | undefined;
+
+  const tenancyTypeLabel =
+    productTier ||
+    (jurisdiction === 'scotland'
+      ? 'Scottish Private Residential Tenancy'
+      : jurisdiction === 'northern-ireland'
+      ? 'Northern Ireland Private Tenancy'
+      : 'Assured Shorthold Tenancy (AST)');
+
+  const productLabel = (() => {
+    switch (originalProduct) {
+      case 'ast_standard':
+        return 'Standard AST';
+      case 'ast_premium':
+        return 'Premium AST';
+      default:
+        return 'Tenancy agreement';
+    }
+  })();
+
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.5fr)_minmax(0,1.5fr)] gap-6 items-start">
@@ -843,6 +901,15 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
             <div className="mb-6">{renderInput()}</div>
 
+            {/* Contextual guidance helper – tenancy agreements */}
+            {caseType === 'tenancy_agreement' && (
+              <GuidanceTips
+                questionId={currentQuestion.id}
+                jurisdiction={guidanceJurisdiction}
+                caseType={caseType}
+              />
+            )}
+
             {/* Ask Heaven Suggestion */}
             {askHeavenSuggestion && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
@@ -868,12 +935,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             {/* Navigation */}
             <div className="flex gap-4">
               {questionHistory.length > 0 && (
-                <Button
-                  onClick={handleBack}
-                  variant="secondary"
-                  size="large"
-                  disabled={loading}
-                >
+                <Button onClick={handleBack} variant="secondary" size="large" disabled={loading}>
                   ← Back
                 </Button>
               )}
@@ -897,13 +959,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-lg font-semibold text-gray-900">Case health &amp; readiness</h3>
                 {analysis && (
-                  <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${readinessBadgeClass}`}>
+                  <span
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium ${readinessBadgeClass}`}
+                  >
                     {readinessLabel}
                   </span>
                 )}
               </div>
               <p className="text-xs text-gray-500 mb-4">
-                This is an automated readiness check based on your answers. It&apos;s guidance only – not legal advice.
+                This is an automated readiness check based on your answers. It&apos;s guidance only
+                – not legal advice.
               </p>
 
               {/* Score */}
@@ -970,19 +1035,27 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   <ul className="text-sm text-gray-700 space-y-0.5">
                     <li>
                       <span className="font-medium">Tenancy agreement:</span>{' '}
-                      {evidenceOverview.tenancy_agreement_uploaded ? 'uploaded / recorded' : 'not uploaded yet'}
+                      {evidenceOverview.tenancy_agreement_uploaded
+                        ? 'uploaded / recorded'
+                        : 'not uploaded yet'}
                     </li>
                     <li>
                       <span className="font-medium">Rent schedule:</span>{' '}
-                      {evidenceOverview.rent_schedule_uploaded ? 'uploaded / recorded' : 'not uploaded yet'}
+                      {evidenceOverview.rent_schedule_uploaded
+                        ? 'uploaded / recorded'
+                        : 'not uploaded yet'}
                     </li>
                     <li>
                       <span className="font-medium">Bank statements:</span>{' '}
-                      {evidenceOverview.bank_statements_uploaded ? 'uploaded / recorded' : 'not flagged'}
+                      {evidenceOverview.bank_statements_uploaded
+                        ? 'uploaded / recorded'
+                        : 'not flagged'}
                     </li>
                     <li>
                       <span className="font-medium">Other evidence:</span>{' '}
-                      {evidenceOverview.other_evidence_uploaded ? 'uploaded / recorded' : 'not flagged'}
+                      {evidenceOverview.other_evidence_uploaded
+                        ? 'uploaded / recorded'
+                        : 'not flagged'}
                     </li>
                   </ul>
                 </div>
@@ -1003,7 +1076,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   )}
                   {analysis.compliance_issues.length > 0 && (
                     <div>
-                      <h4 className="text-sm font-semibold text-amber-700 mb-1">Housekeeping to tidy</h4>
+                      <h4 className="text-sm font-semibold text-amber-700 mb-1">
+                        Housekeeping to tidy
+                      </h4>
                       <ul className="list-disc list-inside text-sm text-amber-800 space-y-1">
                         {analysis.compliance_issues.slice(0, 3).map((item, idx) => (
                           <li key={`comp-${idx}`}>{item}</li>
@@ -1017,7 +1092,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               {/* Loading / error state */}
               {!analysis && !analysisError && (
                 <p className="mt-2 text-xs text-gray-500">
-                  As you answer questions, we&apos;ll show how ready your claim looks to issue and what still needs work.
+                  As you answer questions, we&apos;ll show how ready your claim looks to issue and
+                  what still needs work.
                 </p>
               )}
 
@@ -1033,6 +1109,43 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   {analysisError}
                 </p>
               )}
+            </Card>
+          </aside>
+        )}
+
+        {/* RIGHT: Agreement overview (tenancy agreements) */}
+        {caseType === 'tenancy_agreement' && (
+          <aside className="space-y-4">
+            <Card className="p-6 sticky top-4">
+              <h3 className="text-lg font-semibold text-gray-900 mb-1">Agreement overview</h3>
+              <p className="text-xs text-gray-500 mb-4">
+                A quick snapshot of the agreement you&apos;re building. We&apos;ll keep this in sync
+                with your selections.
+              </p>
+
+              <div className="text-sm text-gray-800 space-y-1 mb-4">
+                <p>
+                  <span className="font-medium">Jurisdiction:</span> {jurisdictionLabel}
+                </p>
+                <p>
+                  <span className="font-medium">Tenancy type:</span>{' '}
+                  {tenancyTypeLabel}
+                </p>
+                <p>
+                  <span className="font-medium">Product:</span> {productLabel}
+                </p>
+              </div>
+
+              <div className="text-xs text-gray-700 space-y-2">
+                <p>
+                  You&apos;ve already chosen the product and country. The wizard will handle the
+                  legal clauses, so focus on accurate facts (names, dates, rent, deposit, etc.).
+                </p>
+                <p>
+                  You don&apos;t need everything perfect on the first pass – you can download,
+                  review, and come back to tweak any answers before you sign with the tenant.
+                </p>
+              </div>
             </Card>
           </aside>
         )}

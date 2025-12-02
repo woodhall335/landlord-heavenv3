@@ -14,9 +14,10 @@ interface GuidanceTip {
 
 interface GuidanceTipsProps {
   questionId: string;
-  jurisdiction?: 'england-wales' | 'scotland';
+  jurisdiction?: 'england-wales' | 'scotland' | 'northern-ireland';
   caseType?: 'eviction' | 'money_claim' | 'tenancy_agreement';
 }
+
 
 /**
  * Get contextual guidance based on question ID and jurisdiction
@@ -190,15 +191,15 @@ function getGuidanceForQuestion(
   // General guidance for common fields
   switch (questionId) {
     case 'property_address':
-      return {
-        title: '💡 Example addresses',
-        examples: [
-          'Flat 3, 42 High Street, Manchester, M1 2AB',
-          '15 Oak Avenue, Edinburgh, EH3 9QR',
-          'Apartment 2B, Victoria Court, 78 King Street, Glasgow, G1 3PS',
-        ],
-        tip: 'Include flat/apartment number if applicable, and full postcode'
-      };
+  return {
+    title: '💡 Example addresses (split into the 3 boxes)',
+    examples: [
+      'Building and street: Flat 3, 42 High Street\nTown / City: Manchester\nPostcode: M1 2AB',
+      'Building and street: 15 Oak Avenue\nTown / City: Edinburgh\nPostcode: EH3 9QR',
+      'Building and street: Apartment 2B, Victoria Court, 78 King Street\nTown / City: Glasgow\nPostcode: G1 3PS',
+    ],
+    tip: 'Use the first box for building and street, the second for town/city, and the last for the full postcode.'
+  };
 
     case 'landlord_bank_details':
     case 'payment_details':
@@ -242,11 +243,10 @@ export function GuidanceTips({ questionId, jurisdiction, caseType }: GuidanceTip
         className="w-full px-4 py-3 flex items-center justify-between hover:bg-blue-100 transition-colors"
       >
         <div className="flex items-center gap-2">
-          <span className="text-lg">💡</span>
-          <span className="font-medium text-blue-900">
-            {guidance.title}
-          </span>
-        </div>
+  <span className="font-medium text-blue-900">
+    {guidance.title}
+  </span>
+</div>
         <svg
           className={`w-5 h-5 text-blue-600 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
           fill="none"

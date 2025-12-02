@@ -229,9 +229,11 @@ function buildScotlandPreActionSummary(claim: ScotlandMoneyClaimCase): string {
     );
   }
   if (claim.pap_documents_served) {
-    const methods = (claim.pap_service_method || []).length ? claim.pap_service_method.join(', ') : 'unspecified method';
-    steps.push(`Pre-action letter served (${methods}).`);
-  }
+  const methodsArray = claim.pap_service_method ?? [];
+  const methods = methodsArray.length ? methodsArray.join(', ') : 'unspecified method';
+  steps.push(`Pre-action letter served (${methods}).`);
+}
+
   if (claim.pap_service_proof) {
     steps.push(`Proof of service: ${claim.pap_service_proof}.`);
   }

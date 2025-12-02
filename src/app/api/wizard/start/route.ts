@@ -61,14 +61,27 @@ const productToCaseType = (product: StartProduct) => {
   }
 };
 
-// Map specific AST products to tier values
-const productToTier = (product: string): string | null => {
+/**
+ * Resolve a human-readable product tier label based on product + jurisdiction.
+ * This is what MQS "version" questions map to (product_tier).
+ */
+const resolveProductTier = (
+  product: StartProduct,
+  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland',
+): string | null => {
   switch (product) {
     case 'ast_standard':
+      if (jurisdiction === 'scotland') return 'Standard Scottish Private Residential Tenancy';
+      if (jurisdiction === 'northern-ireland') return 'Standard NI Private Tenancy';
       return 'Standard AST';
+
     case 'ast_premium':
+      if (jurisdiction === 'scotland') return 'Premium Scottish Private Residential Tenancy';
+      if (jurisdiction === 'northern-ireland') return 'Premium NI Private Tenancy';
       return 'Premium AST';
+
     default:
+      // Generic tenancy_agreement product should still ask "which version?"
       return null;
   }
 };
@@ -111,8 +124,13 @@ export async function POST(request: Request) {
     const { product, jurisdiction, case_id } = validationResult.data;
     const resolvedCaseType = productToCaseType(product as StartProduct);
     const normalizedProduct = normalizeProduct(product as StartProduct);
-    const tier = productToTier(product);
     const effectiveJurisdiction = resolveJurisdiction(product as StartProduct, jurisdiction);
+
+    // Tier label here is *jurisdiction-aware* (AST vs PRT vs NI tenancy wording)
+    const tierLabel = resolveProductTier(
+      product as StartProduct,
+      effectiveJurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+    );
 
     if (!resolvedCaseType) {
       return NextResponse.json({ error: 'Invalid product' }, { status: 400 });
@@ -176,8 +194,10 @@ export async function POST(request: Request) {
         __meta: {
           product: normalizedProduct as string | null,
           original_product: product as string | null,
-          ...(tier ? { product_tier: tier as string | null } : {}),
+          ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
         },
+        // IMPORTANT: root-level product_tier so MQS version questions see it as answered
+        ...(tierLabel ? { product_tier: tierLabel } : {}),
         // These help downstream normalization / analysis before property questions are answered
         property_country: effectiveJurisdiction,
         jurisdiction: effectiveJurisdiction,
@@ -215,12 +235,13 @@ export async function POST(request: Request) {
         ...(facts.__meta ?? {}),
         product: normalizedProduct as string | null,
         original_product: product as string | null,
-        ...(tier ? { product_tier: tier as string | null } : {}),
+        ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
       };
 
       const updatedFacts: any = {
         ...facts,
         __meta: mergedMeta,
+        ...(tierLabel ? { product_tier: tierLabel } : {}),
         property_country: facts.property_country ?? effectiveJurisdiction,
         jurisdiction: facts.jurisdiction ?? effectiveJurisdiction,
       };
