@@ -1,9 +1,16 @@
 # config/mqs/tenancy_agreement/northern-ireland.yaml
+#
+# Version History:
+# 2.0.1 - Legal compliance audit fixes
+#         - CRITICAL: Removed right_to_rent_check_date field (England-only requirement)
+#         - Added ni_notice_period_days question for NI-specific notice requirements
+#         - Added documentation comments for domestic rates fields (council_tax_responsibility)
+# 2.0.0 - Initial unified structure matching England & Wales master design
 
 id: tenancy_agreement_northern_ireland_v2
 product: tenancy_agreement
 jurisdiction: northern-ireland
-version: "2.0.0"
+version: "2.0.1"
 
 questions:
   # 0. Product selection
@@ -562,6 +569,18 @@ questions:
       - term_length
       - tenancy_end_date
 
+  - id: ni_notice_period_days
+    section: Tenancy
+    question: "Notice period for ending the tenancy (days)"
+    inputType: number
+    helperText: "Notice periods in Northern Ireland depend on tenancy length and local law. Minimum notice periods apply. For tenancies less than 1 year, typically 4 weeks notice is required. For tenancies 1+ years, typically 8-12 weeks. Consult NI tenancy law or legal advice for your specific situation."
+    placeholder: "e.g., 28, 56, 84"
+    validation:
+      required: true
+      min: 1
+    maps_to:
+      - ni_notice_period_days
+
   # 5. Rent & payment details
   - id: rent_details
     section: Rent & Payments
@@ -734,6 +753,8 @@ questions:
     inputType: group
     helperText: "We include this in the tenant responsibilities section."
     fields:
+      # Note: In Northern Ireland, this is referred to as "domestic rates" rather than council tax
+      # The field ID remains council_tax_responsibility for cross-jurisdiction compatibility
       - id: council_tax_responsibility
         label: "Domestic rates"
         inputType: select
@@ -827,10 +848,6 @@ questions:
         validation:
           required: true
         width: half
-      - id: right_to_rent_check_date
-        label: "Date right-to-rent checks completed (if applicable)"
-        inputType: date
-        width: half
       - id: gas_safety_certificate
         label: "Current gas safety certificate provided?"
         inputType: yes_no
@@ -867,7 +884,6 @@ questions:
       - epc_rating
       - smoke_alarms_fitted
       - carbon_monoxide_alarms
-      - right_to_rent_check_date
       - fitness_standard_compliance
 
   # 9. Maintenance & repairs
@@ -1666,6 +1682,8 @@ questions:
         validation:
           required: true
         width: half
+      # Note: In Northern Ireland, this is domestic rates registration, not council tax
+      # The field ID remains council_tax_registration_deadline for cross-jurisdiction compatibility
       - id: council_tax_registration_deadline
         label: "Domestic rates registration deadline"
         inputType: select

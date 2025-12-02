@@ -1,9 +1,16 @@
 # config/mqs/tenancy_agreement/scotland.yaml
+#
+# Version History:
+# 2.0.1 - Legal compliance audit fixes
+#         - CRITICAL: Removed right_to_rent_check_date field (England-only requirement)
+#         - Added uses_model_tenancy_terms question (Scottish model PRT clauses)
+#         - Added in_rent_pressure_zone question (RPZ compliance check)
+# 2.0.0 - Initial unified structure matching England & Wales master design
 
 id: tenancy_agreement_scotland_prt_v2
 product: tenancy_agreement
 jurisdiction: scotland
-version: "2.0.0"
+version: "2.0.1"
 
 questions:
   # 0. Product selection
@@ -839,10 +846,6 @@ questions:
         validation:
           required: true
         width: half
-      - id: right_to_rent_check_date
-        label: "Date right-to-rent checks completed (if applicable)"
-        inputType: date
-        width: half
       - id: gas_safety_certificate
         label: "Current gas safety certificate provided?"
         inputType: yes_no
@@ -879,7 +882,6 @@ questions:
       - epc_rating
       - smoke_alarms_fitted
       - carbon_monoxide_alarms
-      - right_to_rent_check_date
       - repairing_standard_compliance
 
   # 9. Maintenance & repairs
@@ -1040,6 +1042,16 @@ questions:
       - subletting_allowed
 
   # 13. Rent reviews
+  - id: in_rent_pressure_zone
+    section: Rent Reviews
+    question: "Is the property in a Rent Pressure Zone?"
+    inputType: yes_no
+    helperText: "Rent Pressure Zones (RPZs) are designated areas where rent increases are capped. Check with your local council to confirm if the property is in an RPZ. If it is, rent increases are limited and subject to additional restrictions."
+    validation:
+      required: true
+    maps_to:
+      - in_rent_pressure_zone
+
   - id: rent_increase
     section: Rent Reviews
     question: "Rent increase provisions"
@@ -1117,6 +1129,16 @@ questions:
     maps_to:
       - break_clause_months
       - break_clause_notice_period
+
+  - id: uses_model_tenancy_terms
+    section: Additional Terms
+    question: "Are you using the Scottish Government's model PRT terms?"
+    inputType: yes_no
+    helperText: "The Scottish Government provides model clauses for Private Residential Tenancies. Using these is recommended (but not mandatory) as they provide clarity and reduce the risk of disputes."
+    validation:
+      required: true
+    maps_to:
+      - uses_model_tenancy_terms
 
   - id: additional_terms
     section: Additional Terms
