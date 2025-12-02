@@ -1,9 +1,17 @@
 # config/mqs/tenancy_agreement/england-wales.yaml
+#
+# Version History:
+# 2.0.1 - Legal compliance audit fixes
+#         - CRITICAL: Changed how_to_rent_guide_provided default from true to false
+#         - CRITICAL: Added S21 warning to how_to_rent_guide_provided helper text
+#         - CRITICAL: Strengthened prescribed_information_served helper text with statutory consequences
+#         - Updated right_to_rent_check_date label to clarify "England only" scope
+# 2.0.0 - Master design template for cross-jurisdiction unification
 
 id: tenancy_agreement_england_wales_v2
 product: tenancy_agreement
 jurisdiction: england-wales
-version: "2.0.0"
+version: "2.0.1"
 
 questions:
   # 0. Product selection
@@ -708,7 +716,7 @@ questions:
     section: Deposit
     question: "Prescribed information compliance"
     inputType: yes_no
-    helperText: "Will the deposit prescribed information be (or has it been) served within 30 days of receipt? Used for risk scoring (e.g. S21 compatibility)."
+    helperText: "STATUTORY REQUIREMENT: You MUST serve prescribed information to the tenant and any relevant person within 30 days of receiving the deposit. This is a legal obligation under the Housing Act 2004. Failure to comply can result in: (1) Being ordered to pay the tenant 1-3x the deposit amount in compensation, (2) Inability to serve a valid Section 21 notice until compliance is achieved and the tenant has held the deposit for the required period. Non-compliance exposes you to significant financial and legal risk."
     validation:
       required: true
     maps_to:
@@ -815,7 +823,7 @@ questions:
           required: true
         width: half
       - id: right_to_rent_check_date
-        label: "Date right-to-rent checks completed"
+        label: "Date right-to-rent checks completed (England only)"
         inputType: date
         width: half
       - id: gas_safety_certificate
@@ -843,9 +851,10 @@ questions:
           required: true
         width: half
       - id: how_to_rent_guide_provided
-        label: "Latest 'How to Rent' guide given?"
+        label: "Latest 'How to Rent' guide given? (England only - required for valid S21)"
         inputType: yes_no
-        defaultValue: true
+        defaultValue: false
+        helperText: "You MUST provide the latest government 'How to Rent' guide before or at the start of the tenancy. Failure to do so will invalidate any Section 21 notice, meaning you cannot use the accelerated possession procedure."
         validation:
           required: true
         width: half
