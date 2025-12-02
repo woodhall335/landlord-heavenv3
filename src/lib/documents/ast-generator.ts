@@ -284,6 +284,53 @@ export interface ASTData {
 // ============================================================================
 
 /**
+ * Result of AST suitability validation
+ */
+export interface ASTSuitabilityResult {
+  valid: boolean;
+  reasons: string[];
+}
+
+/**
+ * Validate AST suitability based on tenancy characteristics.
+ * Returns whether the arrangement is suitable for an AST and reasons if not.
+ *
+ * For an AST to be valid:
+ * - Tenant must be an individual (not a company)
+ * - Must be the tenant's main home
+ * - Landlord must not live at the property (would be a lodger/licence)
+ * - Must not be a holiday let or licence arrangement
+ */
+export function validateASTSuitability(data: ASTData): ASTSuitabilityResult {
+  const reasons: string[] = [];
+
+  // Check if tenant is an individual
+  if (data.tenant_is_individual === false) {
+    reasons.push('Tenant must be an individual (not a company) for an AST');
+  }
+
+  // Check if it's the tenant's main home
+  if (data.main_home === false) {
+    reasons.push('The property must be the tenant\'s main home for an AST');
+  }
+
+  // Check if landlord lives at property (lodger/licence scenario)
+  if (data.landlord_lives_at_property === true) {
+    reasons.push('If the landlord lives at the property, this is likely a lodger or licence arrangement, not an AST');
+  }
+
+  // Check if it's a holiday let or licence
+  if (data.holiday_or_licence === true) {
+    reasons.push('Holiday lets and licence arrangements are not covered by AST regulations');
+  }
+
+  return {
+    valid: reasons.length === 0,
+    reasons,
+  };
+}
+
+/**
  * Validate AST data before generation
  */
 export function validateASTData(data: ASTData): string[] {

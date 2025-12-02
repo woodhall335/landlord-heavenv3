@@ -43,9 +43,9 @@ function normalizeTenants(caseFacts: CaseFacts, wizardFacts: WizardFacts): Tenan
   if (caseFacts.parties.tenants && caseFacts.parties.tenants.length > 0) {
     return caseFacts.parties.tenants
       .filter((t) => t && (t.name || t.email || t.phone))
-      .map((t) => ({
+      .map((t, index) => ({
         full_name: t.name || '',
-        dob: getValueAtPath(wizardFacts, 'tenants.0.dob') || '', // DOB not in CaseFacts yet
+        dob: getValueAtPath(wizardFacts, `tenants.${index}.dob`) || '', // Get DOB for each tenant by index
         email: t.email || '',
         phone: t.phone || '',
       }));
