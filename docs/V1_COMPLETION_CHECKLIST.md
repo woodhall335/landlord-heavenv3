@@ -160,12 +160,12 @@ Files:
 
 Status: COMPLETE per MQS audit; tasks:
 
-- [ ] Re-verify legal fixes:
-  - [ ] E&W Right to Rent questions present (and only there)
-  - [ ] NI file does **not** contain Right to Rent fields
-  - [ ] NI file has domestic rates and NI-specific notice period logic
-- [ ] Ensure all questions required by AST/PRT/NI templates exist and are mapped
-- [ ] Tag any HMO-specific tenancy questions clearly as `// HMO – future integration`  
+- [x] Re-verify legal fixes:
+  - [x] E&W Right to Rent questions present (and only there)
+  - [x] NI file does **not** contain Right to Rent fields
+  - [x] NI file has domestic rates and NI-specific notice period logic
+- [x] Ensure all questions required by AST/PRT/NI templates exist and are mapped
+- [x] Tag any HMO-specific tenancy questions clearly as `// HMO – future integration`
   (We **keep** them if already there, but treat full HMO suite as v2+)
 
 ---
