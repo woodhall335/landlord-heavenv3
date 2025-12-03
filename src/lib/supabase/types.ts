@@ -44,3 +44,47 @@ export interface Database {
     };
   };
 }
+
+// =============================================================================
+// STRONGLY-TYPED DATABASE INTERFACES (V1+)
+// =============================================================================
+// Re-exported from database-types.ts for convenience.
+// Use these for new code and gradual migration from `any` types.
+//
+// USAGE:
+// ```typescript
+// import type { CaseRow, DocumentRow } from '@/lib/supabase/types';
+//
+// const { data } = await supabase.from('cases').select('*').single();
+// const caseRow: CaseRow = data; // ✅ Typed!
+// ```
+//
+// See docs/DB_SCHEMA_ALIGNMENT.md for full documentation.
+// =============================================================================
+
+export type {
+  // Cases table
+  CaseRow,
+  CaseInsert,
+  CaseUpdate,
+
+  // Case facts table
+  CaseFactsRow,
+  CaseFactsInsert,
+  CaseFactsUpdate,
+
+  // Documents table
+  DocumentRow,
+  DocumentInsert,
+  DocumentUpdate,
+
+  // Conversations table
+  ConversationRow,
+  ConversationInsert,
+  ConversationUpdate,
+
+  // Helper types
+  DatabaseRow,
+  isCaseRow,
+  isDocumentRow,
+} from './database-types';

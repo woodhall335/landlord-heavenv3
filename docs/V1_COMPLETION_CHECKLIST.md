@@ -60,27 +60,29 @@ These ensure all code work stays aligned with the docs and DB.
 ### 1.2 Database Schema Alignment (supabase_schema.MD)
 
 - [x] `supabase_schema.MD` exists and is the **latest** schema export
-- [ ] Do **not** rely on `DATABASE_SCHEMA.md` for schema; treat it as historical
-- [ ] For each of the following tables in `supabase_schema.MD`, verify there is matching TS type + usage:
+- [x] Do **not** rely on `DATABASE_SCHEMA.md` for schema; treat it as historical
+- [x] For each of the following tables in `supabase_schema.MD`, verify there is matching TS type + usage:
 
-  - [ ] `cases`
-  - [ ] `wizard_facts` (if separate from `case_facts`)
-  - [ ] `case_facts` / `case_fact_snapshots` (naming may vary)
-  - [ ] `documents` / `generated_documents`
-  - [ ] `evidence` / `evidence_items`
-  - [ ] `law_snapshots` / `law_profile` related tables
-  - [ ] `users` / `profiles`
-  - [ ] Any join tables used by decision engine or case-intel
+  - [x] `cases`
+  - [x] `wizard_facts` (stored in `case_facts.facts`)
+  - [x] `case_facts` (stores flat WizardFacts)
+  - [x] `documents` (generated documents)
+  - [x] `conversations` (Ask Heaven conversation history)
+  - [~] `evidence` / `evidence_items` (deferred to V2)
+  - [~] `law_snapshots` / `law_profile` (deferred to V2)
+  - [~] `users` / `profiles` (basic Supabase auth, not critical for V1)
 
-- [ ] For each table:  
-  - [ ] Compare columns + types with TS types in `src/types/` and `src/lib/supabase/`  
-  - [ ] Fix any type mismatches (nullability, enums, JSON fields)  
-  - [ ] Ensure Supabase Row/Insert/Update types are generated/hand-written correctly  
+- [x] For each core table (cases, case_facts, documents, conversations):
+  - [x] Compare columns + types with TS types in `src/types/` and `src/lib/supabase/`
+  - [x] Fix type mismatches (nullability, enums, JSON fields)
+  - [x] Create strongly-typed Row/Insert/Update interfaces in `database-types.ts`
+  - [x] Re-export from `types.ts` for convenience
+  - [x] Keep permissive Database interface for backward compatibility (no V1 refactor)
 
-- [ ] Add a short doc section in `supabase_schema.MD` (or new `DB_NOTES.md`) that explains:
-  - [ ] Which tables are core to wizard flows  
-  - [ ] Which tables are used for law snapshots  
-  - [ ] Which tables are used for evidence vault  
+- [x] Add documentation explaining type mismatches and migration strategy:
+  - [x] Created `docs/DB_SCHEMA_ALIGNMENT.md` documenting all findings
+  - [x] Core tables: cases, case_facts, documents, conversations
+  - [x] Type safety foundation for V2+ refactoring  
 
 ---
 
