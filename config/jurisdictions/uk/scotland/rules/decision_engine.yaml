@@ -5,6 +5,19 @@ version: "1.0"
 jurisdiction: "scotland"
 last_updated: "2025-11-21"
 
+# Legal Change Framework Metadata
+metadata:
+  effective_from: "2025-01-01"
+  effective_to: null  # null means currently in effect
+  source:
+    - "Private Housing (Tenancies) (Scotland) Act 2016"
+    - "Rent Arrears Pre-Action Requirements (Coronavirus) (Scotland) Regulations 2020"
+    - "Cost of Living (Tenant Protection) (Scotland) Act 2022"
+    - "First-tier Tribunal for Scotland Housing and Property Chamber Rules 2017"
+  last_reviewed: "2025-12-03"
+  reviewed_by: "Landlord Heaven Legal Team"
+  notes: "PRT eviction rules aligned with Master Blueprint v10.0 and Phase 2 audit. All grounds are discretionary. Pre-action requirements mandatory for Ground 1 (rent arrears)."
+
 # Key Difference: ALL grounds are discretionary - Tribunal has full discretion
 discretionary_all: true
 tribunal: "First-tier Tribunal for Scotland (Housing and Property Chamber)"
