@@ -29,6 +29,20 @@
       {{#if deposit_paid_date}}<li>Deposit due/paid on {{deposit_paid_date}}.</li>{{/if}}
       <li>Deposit cap check: {{#if deposit_amount}}The template enforces Tenant Fees Act limits based on the rent provided.{{else}}Amount missing – cannot validate cap.{{/if}}</li>
     </ul>
+
+    {{#unless prescribed_information_served}}
+    <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 6px; padding: 12px; margin-top: 12px;">
+      <p style="margin: 0; color: #856404; font-weight: bold; font-size: 11pt;">⚠️ CRITICAL WARNING - Prescribed Information Not Confirmed</p>
+      <p style="margin: 8px 0 0 0; color: #856404; font-size: 10pt; line-height: 1.5;">
+        <strong>Legal Requirement:</strong> Prescribed information must be served to the tenant within 30 days of receiving the deposit (Housing Act 2004).
+        <br><strong>Consequences of Non-Compliance:</strong>
+        <br>• Court may order you to pay the tenant 1-3× the deposit amount in compensation
+        <br>• You cannot serve a valid Section 21 notice until compliance is achieved
+        <br>• Tenant must hold the deposit for required period after compliance before S21 is valid
+        <br><strong>Action Required:</strong> Confirm prescribed information has been or will be served within the statutory deadline.
+      </p>
+    </div>
+    {{/unless}}
   </div>
 
   <div style="border: 1px solid #1e88e5; border-radius: 8px; padding: 16px; margin-bottom: 18px;">
@@ -44,6 +58,20 @@
         <li>HMO/shared clauses included{{#if hmo_licence_status}} (licence: {{hmo_licence_status}}){{/if}}.</li>
       {{/if}}
     </ul>
+
+    {{#unless how_to_rent_guide_provided}}
+    <div style="background: #ffebee; border: 2px solid #f44336; border-radius: 6px; padding: 12px; margin-top: 12px;">
+      <p style="margin: 0; color: #c62828; font-weight: bold; font-size: 11pt;">🚨 CRITICAL WARNING - How to Rent Guide Not Confirmed</p>
+      <p style="margin: 8px 0 0 0; color: #c62828; font-size: 10pt; line-height: 1.5;">
+        <strong>Legal Requirement (England Only):</strong> You must provide the latest government "How to Rent" guide before or at the start of the tenancy (Deregulation Act 2015).
+        <br><strong>Consequence of Non-Compliance:</strong>
+        <br>• Any Section 21 notice you serve will be INVALID
+        <br>• You cannot use the accelerated possession procedure
+        <br>• You will need to use slower, more expensive court proceedings if eviction becomes necessary
+        <br><strong>Action Required:</strong> Download the latest "How to Rent" guide from gov.uk and provide it to the tenant immediately. Retain proof of delivery.
+      </p>
+    </div>
+    {{/unless}}
   </div>
 
   <div style="border: 1px solid #1e88e5; border-radius: 8px; padding: 16px; margin-bottom: 18px;">

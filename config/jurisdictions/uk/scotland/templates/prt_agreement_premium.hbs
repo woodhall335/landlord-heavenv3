@@ -756,6 +756,18 @@
       </ul>
       <p><strong>Important:</strong> The landlord cannot simply end this tenancy - they must have a legal ground and apply to the Tribunal.</p>
     </div>
+
+    {{#if uses_model_tenancy_terms}}
+    <div class="info-box" style="margin-top: 15px;">
+      <div class="info-title">📋 Scottish Government Model Terms</div>
+      <p>This agreement is based on the Scottish Government's model PRT terms, which provide a standardised framework designed to reduce disputes and ensure clarity for both parties.</p>
+    </div>
+    {{else}}
+    <div class="info-box" style="margin-top: 15px;">
+      <div class="info-title">📋 Agreement Structure</div>
+      <p>This agreement does not use the Scottish Government's model PRT terms. Bespoke or custom terms have been applied to meet the specific requirements of this tenancy.</p>
+    </div>
+    {{/if}}
   </div>
 
   <!-- SECTION 4: RENT -->
@@ -834,6 +846,16 @@
         <li>✓ The landlord gives you at least 3 months' notice in writing</li>
         <li>✓ The increase is fair and reflects market rent</li>
       </ul>
+      {{#if in_rent_pressure_zone}}
+      <div class="warning-box" style="margin-top: 10px;">
+        <div class="warning-title">⚠️ Rent Pressure Zone</div>
+        <p>This property is located in a designated <strong>Rent Pressure Zone (RPZ)</strong>. Rent increases are subject to additional restrictions and caps as set by the local authority. The landlord must comply with RPZ regulations when proposing any rent increase.</p>
+      </div>
+      {{else}}
+      {{#unless in_rent_pressure_zone}}
+      <p style="margin-top: 10px;"><strong>Rent Pressure Zone Status:</strong> This property is not currently in a designated Rent Pressure Zone.</p>
+      {{/unless}}
+      {{/if}}
       <p><strong>Tenant Rights:</strong> You can refer the rent increase to a Rent Officer if you believe it is unfair. You must do this within 21 days of receiving the notice.</p>
     </div>
 
