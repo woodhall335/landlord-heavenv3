@@ -417,6 +417,431 @@ ORDER BY table_name, ordinal_position;
 | webhook_logs                       | created_at                   | timestamp with time zone | YES         | now()               |
 | webhook_logs                       | processed_at                 | timestamp with time zone | YES         | null                |
 
+SELECT
+    'CREATE TABLE ' || table_name || E' (\n' ||
+    string_agg(
+        '    ' || column_name || ' ' || udt_name ||
+        CASE WHEN is_nullable = 'NO' THEN ' NOT NULL' ELSE '' END ||
+        CASE WHEN column_default IS NOT NULL THEN ' DEFAULT ' || column_default ELSE '' END,
+        E',\n'
+    ) ||
+    E'\n);'
+FROM information_schema.columns
+WHERE table_schema = 'public'
+GROUP BY table_name;
+
+| ?column?                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| CREATE TABLE ai_usage (
+    metadata jsonb DEFAULT '{}'::jsonb,
+    document_id uuid,
+    case_id uuid,
+    operation text NOT NULL,
+    cost_usd numeric NOT NULL,
+    total_tokens int4 NOT NULL,
+    model text NOT NULL,
+    created_at timestamptz DEFAULT now(),
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    user_id uuid NOT NULL,
+    prompt_tokens int4 NOT NULL,
+    completion_tokens int4 NOT NULL
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| CREATE TABLE ai_usage_logs (
+    model text NOT NULL,
+    input_tokens int4 DEFAULT 0,
+    output_tokens int4 DEFAULT 0,
+    total_tokens int4 DEFAULT 0,
+    total_cost_usd numeric DEFAULT 0,
+    user_id uuid,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    case_id uuid,
+    document_id uuid,
+    created_at timestamptz DEFAULT now(),
+    operation_type text NOT NULL
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| CREATE TABLE case_facts (
+    case_id uuid NOT NULL,
+    facts jsonb NOT NULL DEFAULT '{}'::jsonb,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    validated_at timestamptz,
+    validation_errors jsonb,
+    version int4 DEFAULT 1,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now()
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| CREATE TABLE cases (
+    user_id uuid,
+    collected_facts jsonb DEFAULT '{}'::jsonb,
+    wizard_progress int4 DEFAULT 0,
+    wizard_completed_at timestamptz,
+    success_probability int4,
+    jurisdiction text NOT NULL,
+    case_type text NOT NULL,
+    council_code text,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    red_flags jsonb DEFAULT '[]'::jsonb,
+    recommended_grounds _text,
+    recommended_route text,
+    status text DEFAULT 'in_progress'::text,
+    compliance_issues jsonb DEFAULT '[]'::jsonb,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now()
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| CREATE TABLE conversations (
+    role text NOT NULL,
+    question_id text,
+    user_input jsonb,
+    tokens_used int4,
+    case_id uuid NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    content text NOT NULL,
+    model text,
+    input_type text,
+    created_at timestamptz DEFAULT now()
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| CREATE TABLE councils (
+    confidence text DEFAULT '✓✓'::text,
+    hmo_thresholds jsonb NOT NULL,
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
+    postcode_areas _text NOT NULL,
+    updated_at timestamptz DEFAULT now(),
+    name text NOT NULL,
+    website text,
+    region text NOT NULL,
+    hmo_licensing jsonb NOT NULL,
+    created_at timestamptz DEFAULT now(),
+    contact jsonb,
+    code text NOT NULL,
+    jurisdiction text NOT NULL
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| CREATE TABLE councils_with_additional_licensing (
+    name text,
+    has_additional bool,
+    schemes jsonb,
+    region text,
+    jurisdiction text,
+    code text
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| CREATE TABLE councils_with_selective_licensing (
+    schemes jsonb,
+    name text,
+    jurisdiction text,
+    region text,
+    has_selective bool,
+    code text
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| CREATE TABLE councils_with_strict_thresholds (
+    person_threshold int4,
+    name text,
+    code text,
+    region text,
+    jurisdiction text
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| CREATE TABLE documents (
+    document_title text NOT NULL,
+    jurisdiction text NOT NULL,
+    pdf_url text,
+    generated_by_model text,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    case_id uuid,
+    user_id uuid,
+    generation_tokens_used int4,
+    generation_cost_usd numeric,
+    qa_score int4,
+    qa_issues jsonb DEFAULT '[]'::jsonb,
+    qa_passed bool DEFAULT false,
+    is_preview bool DEFAULT true,
+    updated_at timestamptz DEFAULT now(),
+    created_at timestamptz DEFAULT now(),
+    html_content text,
+    document_type text NOT NULL
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| CREATE TABLE hmo_compliance_items (
+    updated_at timestamptz DEFAULT now(),
+    created_at timestamptz DEFAULT now(),
+    reminder_sent_at timestamptz,
+    reminder_sent bool DEFAULT false,
+    completed_date date,
+    due_date date NOT NULL,
+    user_id uuid NOT NULL,
+    property_id uuid NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    item_type text NOT NULL,
+    item_title text NOT NULL,
+    description text,
+    status text DEFAULT 'upcoming'::text,
+    certificate_url text
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| CREATE TABLE hmo_properties (
+    max_occupancy int4,
+    number_of_bathrooms int4,
+    number_of_kitchens int4,
+    has_fire_alarm bool DEFAULT false,
+    license_type text,
+    license_number text,
+    has_co_alarm bool DEFAULT false,
+    has_emergency_lighting bool DEFAULT false,
+    has_fire_doors bool DEFAULT false,
+    has_fire_blanket bool DEFAULT false,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    council_name text,
+    address_line1 text NOT NULL,
+    council_code text NOT NULL,
+    address_line2 text,
+    property_name text NOT NULL,
+    postcode text NOT NULL,
+    city text NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    user_id uuid NOT NULL,
+    license_expiry_date date,
+    number_of_bedrooms int4,
+    number_of_tenants int4
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| CREATE TABLE hmo_tenants (
+    created_at timestamptz DEFAULT now(),
+    tenancy_status text DEFAULT 'active'::text,
+    deposit_scheme text,
+    room_number text,
+    phone text,
+    email text,
+    full_name text NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    property_id uuid NOT NULL,
+    user_id uuid NOT NULL,
+    move_in_date date NOT NULL,
+    tenancy_end_date date,
+    move_out_date date,
+    monthly_rent numeric NOT NULL,
+    deposit_amount numeric,
+    deposit_protected bool DEFAULT false,
+    updated_at timestamptz DEFAULT now()
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| CREATE TABLE orders (
+    amount numeric NOT NULL,
+    product_type text NOT NULL,
+    product_name text NOT NULL,
+    currency text DEFAULT 'GBP'::text,
+    payment_status text DEFAULT 'pending'::text,
+    stripe_payment_intent_id text,
+    stripe_charge_id text,
+    fulfillment_status text DEFAULT 'pending'::text,
+    total_amount numeric NOT NULL,
+    paid_at timestamptz,
+    case_id uuid,
+    fulfilled_at timestamptz,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    user_id uuid NOT NULL
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| CREATE TABLE seo_automation_log (
+    scheduled_time timestamptz,
+    summary text,
+    task_name text NOT NULL,
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
+    created_at timestamptz DEFAULT now(),
+    status text NOT NULL,
+    metadata jsonb,
+    items_failed int4 DEFAULT 0,
+    task_type text NOT NULL,
+    items_successful int4 DEFAULT 0,
+    items_processed int4 DEFAULT 0,
+    error_message text,
+    duration int4,
+    completed_at timestamptz,
+    started_at timestamptz NOT NULL,
+    triggered_by text
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| CREATE TABLE seo_backlinks (
+    is_paid bool DEFAULT false,
+    cost_gbp numeric DEFAULT 0.00,
+    acquired bool DEFAULT false,
+    acquired_at timestamptz,
+    response_date timestamptz,
+    response_received bool DEFAULT false,
+    follow_up_count int4 DEFAULT 0,
+    follow_up_sent_at timestamptz,
+    outreach_sent_at timestamptz,
+    relevance_score int4,
+    monthly_traffic int4,
+    domain_rating int4,
+    domain_authority int4,
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
+    backlink_url text,
+    target_domain text NOT NULL,
+    target_url text,
+    contact_email text,
+    contact_name text,
+    response_type text,
+    link_category text,
+    target_page_url text,
+    anchor_text text,
+    link_type text,
+    discovery_method text,
+    outreach_status text NOT NULL DEFAULT 'identified'::text,
+    outreach_template text,
+    response_notes text,
+    niche _text DEFAULT '{}'::text[],
+    updated_at timestamptz DEFAULT now(),
+    created_at timestamptz DEFAULT now(),
+    auto_discovered bool DEFAULT false,
+    status_check_count int4 DEFAULT 0,
+    last_checked_at timestamptz,
+    verified bool DEFAULT false
+);                                                                                                         |
+| CREATE TABLE seo_content_queue (
+    content_type text NOT NULL,
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
+    page_id uuid,
+    word_count_target int4 DEFAULT 1500,
+    priority int4 DEFAULT 5,
+    scheduled_for timestamptz DEFAULT now(),
+    started_at timestamptz,
+    completed_at timestamptz,
+    processing_time int4,
+    quality_score int4,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    target_keyword text NOT NULL,
+    page_slug text,
+    location text,
+    jurisdiction text,
+    ai_model text DEFAULT 'gpt-4o-mini'::text,
+    generation_prompt text,
+    status text NOT NULL DEFAULT 'pending'::text,
+    generated_content text,
+    error_message text
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| CREATE TABLE seo_keywords (
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
+    category text,
+    search_volume int4 DEFAULT 0,
+    difficulty int4 DEFAULT 0,
+    jurisdiction text,
+    location text,
+    cpc numeric DEFAULT 0.00,
+    priority int4 DEFAULT 0,
+    assigned_page_id uuid,
+    status text NOT NULL DEFAULT 'identified'::text,
+    content_gaps _text,
+    current_rank int4,
+    rank_history jsonb DEFAULT '[]'::jsonb,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    top_ranking_domains _text DEFAULT '{}'::text[],
+    serp_features _text DEFAULT '{}'::text[],
+    intent text,
+    keyword text NOT NULL
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| CREATE TABLE seo_pages (
+    word_count int4 DEFAULT 0,
+    meta_description text NOT NULL,
+    h1 text NOT NULL,
+    content text NOT NULL,
+    content_type text NOT NULL DEFAULT 'location'::text,
+    published_at timestamptz,
+    ai_quality_score int4 DEFAULT 0,
+    last_generated_by text,
+    internal_links _text DEFAULT '{}'::text[],
+    status text NOT NULL DEFAULT 'draft'::text,
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
+    jurisdiction text,
+    region text,
+    location text,
+    search_volume int4 DEFAULT 0,
+    keyword_difficulty int4 DEFAULT 0,
+    title text NOT NULL,
+    updated_at timestamptz DEFAULT now(),
+    created_at timestamptz DEFAULT now(),
+    auto_refresh bool DEFAULT true,
+    schema_markup jsonb,
+    backlinks_count int4 DEFAULT 0,
+    rank_history jsonb DEFAULT '[]'::jsonb,
+    best_rank int4,
+    current_rank int4,
+    conversions int4 DEFAULT 0,
+    bounce_rate numeric DEFAULT 0.00,
+    avg_time_on_page int4 DEFAULT 0,
+    secondary_keywords _text DEFAULT '{}'::text[],
+    target_keyword text NOT NULL,
+    generation_prompt text,
+    unique_visitors int4 DEFAULT 0,
+    readability_score int4 DEFAULT 0,
+    slug text NOT NULL,
+    views int4 DEFAULT 0,
+    last_refreshed_at timestamptz
+); |
+| CREATE TABLE seo_performance (
+    mobile_usability_score int4,
+    competitor_rank_comparison jsonb,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    conversion_rate numeric DEFAULT 0.00,
+    revenue_gbp numeric DEFAULT 0.00,
+    conversions int4 DEFAULT 0,
+    bounce_rate numeric DEFAULT 0.00,
+    avg_session_duration int4 DEFAULT 0,
+    page_views int4 DEFAULT 0,
+    unique_visitors int4 DEFAULT 0,
+    sessions int4 DEFAULT 0,
+    page_id uuid,
+    date date NOT NULL,
+    id uuid NOT NULL DEFAULT gen_random_uuid(),
+    organic_traffic int4 DEFAULT 0,
+    organic_keywords_ranking int4 DEFAULT 0,
+    average_rank numeric,
+    new_backlinks int4 DEFAULT 0,
+    lost_backlinks int4 DEFAULT 0,
+    total_backlinks int4 DEFAULT 0,
+    page_load_time int4,
+    core_web_vitals_score int4
+);                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| CREATE TABLE uk_councils (
+    created_at timestamptz DEFAULT now(),
+    licensing_criteria jsonb DEFAULT '{}'::jsonb,
+    has_selective_licensing bool DEFAULT false,
+    has_additional_licensing bool DEFAULT false,
+    has_mandatory_licensing bool DEFAULT true,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
+    council_code text NOT NULL,
+    updated_at timestamptz DEFAULT now(),
+    fees jsonb DEFAULT '{}'::jsonb,
+    council_name text NOT NULL,
+    application_process jsonb DEFAULT '{}'::jsonb,
+    useful_links jsonb DEFAULT '{}'::jsonb,
+    contact_info jsonb DEFAULT '{}'::jsonb,
+    standards jsonb DEFAULT '{}'::jsonb,
+    requirements jsonb DEFAULT '{}'::jsonb,
+    postcode_areas _text,
+    country text NOT NULL,
+    region text NOT NULL
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| CREATE TABLE users (
+    hmo_pro_active bool DEFAULT false,
+    stripe_subscription_id text,
+    hmo_pro_trial_ends_at timestamptz,
+    hmo_pro_subscription_ends_at timestamptz,
+    created_at timestamptz DEFAULT now(),
+    updated_at timestamptz DEFAULT now(),
+    hmo_pro_tier text,
+    email text NOT NULL,
+    stripe_customer_id text,
+    full_name text,
+    phone text,
+    id uuid NOT NULL
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| CREATE TABLE webhook_logs (
+    payload jsonb DEFAULT '{}'::jsonb,
+    event_type text NOT NULL,
+    processed_at timestamptz,
+    created_at timestamptz DEFAULT now(),
+    status text DEFAULT 'received'::text,
+    stripe_event_id text,
+    error_message text,
+    id uuid NOT NULL DEFAULT uuid_generate_v4()
+);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+
 ✅ 3. Show foreign keys
 SELECT
     tc.table_name,
@@ -894,7 +1319,7 @@ ORDER BY
 | pg_toast_16876             | pg_toast_16876_index                                 | chunk_seq                  |
 | pg_toast_16876             | pg_toast_16876_index                                 | chunk_id                   |
 | pg_toast_16929             | pg_toast_16929_index                                 | chunk_seq                  |
-| pg_toast_16929             | pg_toast_16929_index                                 | chunk_id                   |
+| pg_toast_16929             | pg_toast_16929_index                                  | chunk_id                   |
 | pg_toast_16979             | pg_toast_16979_index                                 | chunk_id                   |
 | pg_toast_16979             | pg_toast_16979_index                                 | chunk_seq                  |
 | pg_toast_17011             | pg_toast_17011_index                                 | chunk_id                   |
@@ -1145,1172 +1570,10 @@ ORDER BY
 | webhook_logs               | idx_webhook_logs_event_type                          | event_type                 |
 | webhook_logs               | idx_webhook_logs_stripe_event_id                     | stripe_event_id            |
 | webhook_logs               | webhook_logs_pkey                                    | id                         |
-
-SELECT
-    'CREATE TABLE ' || table_name || E' (\n' ||
-    string_agg(
-        '    ' || column_name || ' ' || udt_name ||
-        CASE WHEN is_nullable = 'NO' THEN ' NOT NULL' ELSE '' END ||
-        CASE WHEN column_default IS NOT NULL THEN ' DEFAULT ' || column_default ELSE '' END,
-        E',\n'
-    ) ||
-    E'\n);'
-FROM information_schema.columns
-WHERE table_schema = 'public'
-GROUP BY table_name;
-
-| ?column?                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| CREATE TABLE ai_usage (
-    metadata jsonb DEFAULT '{}'::jsonb,
-    document_id uuid,
-    case_id uuid,
-    operation text NOT NULL,
-    cost_usd numeric NOT NULL,
-    total_tokens int4 NOT NULL,
-    model text NOT NULL,
-    created_at timestamptz DEFAULT now(),
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    user_id uuid NOT NULL,
-    prompt_tokens int4 NOT NULL,
-    completion_tokens int4 NOT NULL
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| CREATE TABLE ai_usage_logs (
-    model text NOT NULL,
-    input_tokens int4 DEFAULT 0,
-    output_tokens int4 DEFAULT 0,
-    total_tokens int4 DEFAULT 0,
-    total_cost_usd numeric DEFAULT 0,
-    user_id uuid,
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    case_id uuid,
-    document_id uuid,
-    created_at timestamptz DEFAULT now(),
-    operation_type text NOT NULL
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| CREATE TABLE case_facts (
-    case_id uuid NOT NULL,
-    facts jsonb NOT NULL DEFAULT '{}'::jsonb,
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    validated_at timestamptz,
-    validation_errors jsonb,
-    version int4 DEFAULT 1,
-    created_at timestamptz DEFAULT now(),
-    updated_at timestamptz DEFAULT now()
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| CREATE TABLE cases (
-    user_id uuid,
-    collected_facts jsonb DEFAULT '{}'::jsonb,
-    wizard_progress int4 DEFAULT 0,
-    wizard_completed_at timestamptz,
-    success_probability int4,
-    jurisdiction text NOT NULL,
-    case_type text NOT NULL,
-    council_code text,
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    red_flags jsonb DEFAULT '[]'::jsonb,
-    recommended_grounds _text,
-    recommended_route text,
-    status text DEFAULT 'in_progress'::text,
-    compliance_issues jsonb DEFAULT '[]'::jsonb,
-    created_at timestamptz DEFAULT now(),
-    updated_at timestamptz DEFAULT now()
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| CREATE TABLE conversations (
-    role text NOT NULL,
-    question_id text,
-    user_input jsonb,
-    tokens_used int4,
-    case_id uuid NOT NULL,
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    content text NOT NULL,
-    model text,
-    input_type text,
-    created_at timestamptz DEFAULT now()
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| CREATE TABLE councils (
-    confidence text DEFAULT '✓✓'::text,
-    hmo_thresholds jsonb NOT NULL,
-    id uuid NOT NULL DEFAULT gen_random_uuid(),
-    postcode_areas _text NOT NULL,
-    updated_at timestamptz DEFAULT now(),
-    name text NOT NULL,
-    website text,
-    region text NOT NULL,
-    hmo_licensing jsonb NOT NULL,
-    created_at timestamptz DEFAULT now(),
-    contact jsonb,
-    code text NOT NULL,
-    jurisdiction text NOT NULL
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| CREATE TABLE councils_with_additional_licensing (
-    name text,
-    has_additional bool,
-    schemes jsonb,
-    region text,
-    jurisdiction text,
-    code text
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| CREATE TABLE councils_with_selective_licensing (
-    schemes jsonb,
-    name text,
-    jurisdiction text,
-    region text,
-    has_selective bool,
-    code text
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| CREATE TABLE councils_with_strict_thresholds (
-    person_threshold int4,
-    name text,
-    code text,
-    region text,
-    jurisdiction text
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| CREATE TABLE documents (
-    document_title text NOT NULL,
-    jurisdiction text NOT NULL,
-    pdf_url text,
-    generated_by_model text,
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    case_id uuid,
-    user_id uuid,
-    generation_tokens_used int4,
-    generation_cost_usd numeric,
-    qa_score int4,
-    qa_issues jsonb DEFAULT '[]'::jsonb,
-    qa_passed bool DEFAULT false,
-    is_preview bool DEFAULT true,
-    updated_at timestamptz DEFAULT now(),
-    created_at timestamptz DEFAULT now(),
-    html_content text,
-    document_type text NOT NULL
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| CREATE TABLE hmo_compliance_items (
-    updated_at timestamptz DEFAULT now(),
-    created_at timestamptz DEFAULT now(),
-    reminder_sent_at timestamptz,
-    reminder_sent bool DEFAULT false,
-    completed_date date,
-    due_date date NOT NULL,
-    user_id uuid NOT NULL,
-    property_id uuid NOT NULL,
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    item_type text NOT NULL,
-    item_title text NOT NULL,
-    description text,
-    status text DEFAULT 'upcoming'::text,
-    certificate_url text
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| CREATE TABLE hmo_properties (
-    max_occupancy int4,
-    number_of_bathrooms int4,
-    number_of_kitchens int4,
-    has_fire_alarm bool DEFAULT false,
-    license_type text,
-    license_number text,
-    has_co_alarm bool DEFAULT false,
-    has_emergency_lighting bool DEFAULT false,
-    has_fire_doors bool DEFAULT false,
-    has_fire_blanket bool DEFAULT false,
-    created_at timestamptz DEFAULT now(),
-    updated_at timestamptz DEFAULT now(),
-    council_name text,
-    address_line1 text NOT NULL,
-    council_code text NOT NULL,
-    address_line2 text,
-    property_name text NOT NULL,
-    postcode text NOT NULL,
-    city text NOT NULL,
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    user_id uuid NOT NULL,
-    license_expiry_date date,
-    number_of_bedrooms int4,
-    number_of_tenants int4
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| CREATE TABLE hmo_tenants (
-    created_at timestamptz DEFAULT now(),
-    tenancy_status text DEFAULT 'active'::text,
-    deposit_scheme text,
-    room_number text,
-    phone text,
-    email text,
-    full_name text NOT NULL,
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    property_id uuid NOT NULL,
-    user_id uuid NOT NULL,
-    move_in_date date NOT NULL,
-    tenancy_end_date date,
-    move_out_date date,
-    monthly_rent numeric NOT NULL,
-    deposit_amount numeric,
-    deposit_protected bool DEFAULT false,
-    updated_at timestamptz DEFAULT now()
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| CREATE TABLE orders (
-    amount numeric NOT NULL,
-    product_type text NOT NULL,
-    product_name text NOT NULL,
-    currency text DEFAULT 'GBP'::text,
-    payment_status text DEFAULT 'pending'::text,
-    stripe_payment_intent_id text,
-    stripe_charge_id text,
-    fulfillment_status text DEFAULT 'pending'::text,
-    total_amount numeric NOT NULL,
-    paid_at timestamptz,
-    case_id uuid,
-    fulfilled_at timestamptz,
-    created_at timestamptz DEFAULT now(),
-    updated_at timestamptz DEFAULT now(),
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    user_id uuid NOT NULL
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| CREATE TABLE seo_automation_log (
-    scheduled_time timestamptz,
-    summary text,
-    task_name text NOT NULL,
-    id uuid NOT NULL DEFAULT gen_random_uuid(),
-    created_at timestamptz DEFAULT now(),
-    status text NOT NULL,
-    metadata jsonb,
-    items_failed int4 DEFAULT 0,
-    task_type text NOT NULL,
-    items_successful int4 DEFAULT 0,
-    items_processed int4 DEFAULT 0,
-    error_message text,
-    duration int4,
-    completed_at timestamptz,
-    started_at timestamptz NOT NULL,
-    triggered_by text
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| CREATE TABLE seo_backlinks (
-    is_paid bool DEFAULT false,
-    cost_gbp numeric DEFAULT 0.00,
-    acquired bool DEFAULT false,
-    acquired_at timestamptz,
-    response_date timestamptz,
-    response_received bool DEFAULT false,
-    follow_up_count int4 DEFAULT 0,
-    follow_up_sent_at timestamptz,
-    outreach_sent_at timestamptz,
-    relevance_score int4,
-    monthly_traffic int4,
-    domain_rating int4,
-    domain_authority int4,
-    id uuid NOT NULL DEFAULT gen_random_uuid(),
-    backlink_url text,
-    target_domain text NOT NULL,
-    target_url text,
-    contact_email text,
-    contact_name text,
-    response_type text,
-    link_category text,
-    target_page_url text,
-    anchor_text text,
-    link_type text,
-    discovery_method text,
-    outreach_status text NOT NULL DEFAULT 'identified'::text,
-    outreach_template text,
-    response_notes text,
-    niche _text DEFAULT '{}'::text[],
-    updated_at timestamptz DEFAULT now(),
-    created_at timestamptz DEFAULT now(),
-    auto_discovered bool DEFAULT false,
-    status_check_count int4 DEFAULT 0,
-    last_checked_at timestamptz,
-    verified bool DEFAULT false
-);                                                                                                         |
-| CREATE TABLE seo_content_queue (
-    content_type text NOT NULL,
-    id uuid NOT NULL DEFAULT gen_random_uuid(),
-    page_id uuid,
-    word_count_target int4 DEFAULT 1500,
-    priority int4 DEFAULT 5,
-    scheduled_for timestamptz DEFAULT now(),
-    started_at timestamptz,
-    completed_at timestamptz,
-    processing_time int4,
-    quality_score int4,
-    created_at timestamptz DEFAULT now(),
-    updated_at timestamptz DEFAULT now(),
-    target_keyword text NOT NULL,
-    page_slug text,
-    location text,
-    jurisdiction text,
-    ai_model text DEFAULT 'gpt-4o-mini'::text,
-    generation_prompt text,
-    status text NOT NULL DEFAULT 'pending'::text,
-    generated_content text,
-    error_message text
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| CREATE TABLE seo_keywords (
-    id uuid NOT NULL DEFAULT gen_random_uuid(),
-    category text,
-    search_volume int4 DEFAULT 0,
-    difficulty int4 DEFAULT 0,
-    jurisdiction text,
-    location text,
-    cpc numeric DEFAULT 0.00,
-    priority int4 DEFAULT 0,
-    assigned_page_id uuid,
-    status text NOT NULL DEFAULT 'identified'::text,
-    content_gaps _text,
-    current_rank int4,
-    rank_history jsonb DEFAULT '[]'::jsonb,
-    created_at timestamptz DEFAULT now(),
-    updated_at timestamptz DEFAULT now(),
-    top_ranking_domains _text DEFAULT '{}'::text[],
-    serp_features _text DEFAULT '{}'::text[],
-    intent text,
-    keyword text NOT NULL
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| CREATE TABLE seo_pages (
-    word_count int4 DEFAULT 0,
-    meta_description text NOT NULL,
-    h1 text NOT NULL,
-    content text NOT NULL,
-    content_type text NOT NULL DEFAULT 'location'::text,
-    published_at timestamptz,
-    ai_quality_score int4 DEFAULT 0,
-    last_generated_by text,
-    internal_links _text DEFAULT '{}'::text[],
-    status text NOT NULL DEFAULT 'draft'::text,
-    id uuid NOT NULL DEFAULT gen_random_uuid(),
-    jurisdiction text,
-    region text,
-    location text,
-    search_volume int4 DEFAULT 0,
-    keyword_difficulty int4 DEFAULT 0,
-    title text NOT NULL,
-    updated_at timestamptz DEFAULT now(),
-    created_at timestamptz DEFAULT now(),
-    auto_refresh bool DEFAULT true,
-    schema_markup jsonb,
-    backlinks_count int4 DEFAULT 0,
-    rank_history jsonb DEFAULT '[]'::jsonb,
-    best_rank int4,
-    current_rank int4,
-    conversions int4 DEFAULT 0,
-    bounce_rate numeric DEFAULT 0.00,
-    avg_time_on_page int4 DEFAULT 0,
-    secondary_keywords _text DEFAULT '{}'::text[],
-    target_keyword text NOT NULL,
-    generation_prompt text,
-    unique_visitors int4 DEFAULT 0,
-    readability_score int4 DEFAULT 0,
-    slug text NOT NULL,
-    views int4 DEFAULT 0,
-    last_refreshed_at timestamptz
-); |
-| CREATE TABLE seo_performance (
-    mobile_usability_score int4,
-    competitor_rank_comparison jsonb,
-    created_at timestamptz DEFAULT now(),
-    updated_at timestamptz DEFAULT now(),
-    conversion_rate numeric DEFAULT 0.00,
-    revenue_gbp numeric DEFAULT 0.00,
-    conversions int4 DEFAULT 0,
-    bounce_rate numeric DEFAULT 0.00,
-    avg_session_duration int4 DEFAULT 0,
-    page_views int4 DEFAULT 0,
-    unique_visitors int4 DEFAULT 0,
-    sessions int4 DEFAULT 0,
-    page_id uuid,
-    date date NOT NULL,
-    id uuid NOT NULL DEFAULT gen_random_uuid(),
-    organic_traffic int4 DEFAULT 0,
-    organic_keywords_ranking int4 DEFAULT 0,
-    average_rank numeric,
-    new_backlinks int4 DEFAULT 0,
-    lost_backlinks int4 DEFAULT 0,
-    total_backlinks int4 DEFAULT 0,
-    page_load_time int4,
-    core_web_vitals_score int4
-);                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| CREATE TABLE uk_councils (
-    created_at timestamptz DEFAULT now(),
-    licensing_criteria jsonb DEFAULT '{}'::jsonb,
-    has_selective_licensing bool DEFAULT false,
-    has_additional_licensing bool DEFAULT false,
-    has_mandatory_licensing bool DEFAULT true,
-    id uuid NOT NULL DEFAULT uuid_generate_v4(),
-    council_code text NOT NULL,
-    updated_at timestamptz DEFAULT now(),
-    fees jsonb DEFAULT '{}'::jsonb,
-    council_name text NOT NULL,
-    application_process jsonb DEFAULT '{}'::jsonb,
-    useful_links jsonb DEFAULT '{}'::jsonb,
-    contact_info jsonb DEFAULT '{}'::jsonb,
-    standards jsonb DEFAULT '{}'::jsonb,
-    requirements jsonb DEFAULT '{}'::jsonb,
-    postcode_areas _text,
-    country text NOT NULL,
-    region text NOT NULL
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| CREATE TABLE users (
-    hmo_pro_active bool DEFAULT false,
-    stripe_subscription_id text,
-    hmo_pro_trial_ends_at timestamptz,
-    hmo_pro_subscription_ends_at timestamptz,
-    created_at timestamptz DEFAULT now(),
-    updated_at timestamptz DEFAULT now(),
-    hmo_pro_tier text,
-    email text NOT NULL,
-    stripe_customer_id text,
-    full_name text,
-    phone text,
-    id uuid NOT NULL
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| CREATE TABLE webhook_logs (
-    payload jsonb DEFAULT '{}'::jsonb,
-    event_type text NOT NULL,
-    processed_at timestamptz,
-    created_at timestamptz DEFAULT now(),
-    status text DEFAULT 'received'::text,
-    stripe_event_id text,
-    error_message text,
-    id uuid NOT NULL DEFAULT uuid_generate_v4()
-);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-
-2. Indexes
-
-Claude needs this to understand query performance, uniqueness constraints, and relations.
-
-SQL to run:
-
-SELECT
-    t.relname AS table_name,
-    i.relname AS index_name,
-    a.attname AS column_name
-FROM
-    pg_class t,
-    pg_class i,
-    pg_index ix,
-    pg_attribute a
-WHERE
-    t.oid = ix.indrelid
-    AND i.oid = ix.indexrelid
-    AND a.attrelid = t.oid
-    AND a.attnum = ANY(ix.indkey)
-ORDER BY
-    t.relname, i.relname;
-
-| table_name                 | index_name                                           | column_name                |
-| -------------------------- | ---------------------------------------------------- | -------------------------- |
-| ai_usage                   | ai_usage_pkey                                        | id                         |
-| ai_usage                   | idx_ai_usage_case_id                                 | case_id                    |
-| ai_usage                   | idx_ai_usage_created_at                              | created_at                 |
-| ai_usage                   | idx_ai_usage_document_id                             | document_id                |
-| ai_usage                   | idx_ai_usage_model                                   | model                      |
-| ai_usage                   | idx_ai_usage_operation                               | operation                  |
-| ai_usage                   | idx_ai_usage_user_id                                 | user_id                    |
-| ai_usage_logs              | ai_usage_logs_pkey                                   | id                         |
-| ai_usage_logs              | idx_ai_logs_created_at                               | created_at                 |
-| ai_usage_logs              | idx_ai_logs_model                                    | model                      |
-| ai_usage_logs              | idx_ai_logs_user_id                                  | user_id                    |
-| audit_log_entries          | audit_log_entries_pkey                               | id                         |
-| audit_log_entries          | audit_logs_instance_id_idx                           | instance_id                |
-| buckets                    | bname                                                | name                       |
-| buckets                    | buckets_pkey                                         | id                         |
-| buckets_analytics          | buckets_analytics_pkey                               | id                         |
-| buckets_analytics          | buckets_analytics_unique_name_idx                    | name                       |
-| buckets_vectors            | buckets_vectors_pkey                                 | id                         |
-| case_facts                 | case_facts_pkey                                      | id                         |
-| case_facts                 | idx_case_facts_case_id                               | case_id                    |
-| cases                      | cases_pkey                                           | id                         |
-| cases                      | idx_cases_case_type                                  | case_type                  |
-| cases                      | idx_cases_council_code                               | council_code               |
-| cases                      | idx_cases_jurisdiction                               | jurisdiction               |
-| cases                      | idx_cases_null_user_id                               | created_at                 |
-| cases                      | idx_cases_status                                     | status                     |
-| cases                      | idx_cases_user_id                                    | user_id                    |
-| conversations              | conversations_pkey                                   | id                         |
-| conversations              | idx_conversations_case_id                            | created_at                 |
-| conversations              | idx_conversations_case_id                            | case_id                    |
-| councils                   | councils_code_key                                    | code                       |
-| councils                   | councils_pkey                                        | id                         |
-| councils                   | idx_councils_hmo_licensing                           | hmo_licensing              |
-| councils                   | idx_councils_jurisdiction                            | jurisdiction               |
-| documents                  | documents_pkey                                       | id                         |
-| documents                  | idx_documents_case_id                                | case_id                    |
-| documents                  | idx_documents_document_type                          | document_type              |
-| documents                  | idx_documents_null_user_id                           | created_at                 |
-| documents                  | idx_documents_user_id                                | user_id                    |
-| flow_state                 | flow_state_created_at_idx                            | created_at                 |
-| flow_state                 | flow_state_pkey                                      | id                         |
-| flow_state                 | idx_auth_code                                        | auth_code                  |
-| flow_state                 | idx_user_id_auth_method                              | authentication_method      |
-| flow_state                 | idx_user_id_auth_method                              | user_id                    |
-| hmo_compliance_items       | hmo_compliance_items_pkey                            | id                         |
-| hmo_compliance_items       | idx_compliance_due_date                              | due_date                   |
-| hmo_compliance_items       | idx_compliance_property_id                           | property_id                |
-| hmo_compliance_items       | idx_compliance_status                                | status                     |
-| hmo_compliance_items       | idx_compliance_user_id                               | user_id                    |
-| hmo_properties             | hmo_properties_pkey                                  | id                         |
-| hmo_properties             | idx_hmo_properties_council_code                      | council_code               |
-| hmo_properties             | idx_hmo_properties_postcode                          | postcode                   |
-| hmo_properties             | idx_hmo_properties_user_id                           | user_id                    |
-| hmo_tenants                | hmo_tenants_pkey                                     | id                         |
-| hmo_tenants                | idx_hmo_tenants_property_id                          | property_id                |
-| hmo_tenants                | idx_hmo_tenants_status                               | tenancy_status             |
-| hmo_tenants                | idx_hmo_tenants_user_id                              | user_id                    |
-| identities                 | identities_email_idx                                 | email                      |
-| identities                 | identities_pkey                                      | id                         |
-| identities                 | identities_provider_id_provider_unique               | provider                   |
-| identities                 | identities_provider_id_provider_unique               | provider_id                |
-| identities                 | identities_user_id_idx                               | user_id                    |
-| instances                  | instances_pkey                                       | id                         |
-| messages                   | messages_inserted_at_topic_index                     | topic                      |
-| messages                   | messages_inserted_at_topic_index                     | inserted_at                |
-| messages                   | messages_pkey                                        | id                         |
-| messages                   | messages_pkey                                        | inserted_at                |
-| mfa_amr_claims             | amr_id_pk                                            | id                         |
-| mfa_amr_claims             | mfa_amr_claims_session_id_authentication_method_pkey | session_id                 |
-| mfa_amr_claims             | mfa_amr_claims_session_id_authentication_method_pkey | authentication_method      |
-| mfa_challenges             | mfa_challenge_created_at_idx                         | created_at                 |
-| mfa_challenges             | mfa_challenges_pkey                                  | id                         |
-| mfa_factors                | factor_id_created_at_idx                             | created_at                 |
-| mfa_factors                | factor_id_created_at_idx                             | user_id                    |
-| mfa_factors                | mfa_factors_last_challenged_at_key                   | last_challenged_at         |
-| mfa_factors                | mfa_factors_pkey                                     | id                         |
-| mfa_factors                | mfa_factors_user_friendly_name_unique                | user_id                    |
-| mfa_factors                | mfa_factors_user_friendly_name_unique                | friendly_name              |
-| mfa_factors                | mfa_factors_user_id_idx                              | user_id                    |
-| mfa_factors                | unique_phone_factor_per_user                         | phone                      |
-| mfa_factors                | unique_phone_factor_per_user                         | user_id                    |
-| migrations                 | migrations_name_key                                  | name                       |
-| migrations                 | migrations_pkey                                      | id                         |
-| oauth_authorizations       | oauth_auth_pending_exp_idx                           | expires_at                 |
-| oauth_authorizations       | oauth_authorizations_authorization_code_key          | authorization_code         |
-| oauth_authorizations       | oauth_authorizations_authorization_id_key            | authorization_id           |
-| oauth_authorizations       | oauth_authorizations_pkey                            | id                         |
-| oauth_clients              | oauth_clients_deleted_at_idx                         | deleted_at                 |
-| oauth_clients              | oauth_clients_pkey                                   | id                         |
-| oauth_consents             | oauth_consents_active_client_idx                     | client_id                  |
-| oauth_consents             | oauth_consents_active_user_client_idx                | client_id                  |
-| oauth_consents             | oauth_consents_active_user_client_idx                | user_id                    |
-| oauth_consents             | oauth_consents_pkey                                  | id                         |
-| oauth_consents             | oauth_consents_user_client_unique                    | user_id                    |
-| oauth_consents             | oauth_consents_user_client_unique                    | client_id                  |
-| oauth_consents             | oauth_consents_user_order_idx                        | granted_at                 |
-| oauth_consents             | oauth_consents_user_order_idx                        | user_id                    |
-| objects                    | bucketid_objname                                     | bucket_id                  |
-| objects                    | bucketid_objname                                     | name                       |
-| objects                    | idx_name_bucket_level_unique                         | name                       |
-| objects                    | idx_name_bucket_level_unique                         | bucket_id                  |
-| objects                    | idx_name_bucket_level_unique                         | level                      |
-| objects                    | idx_objects_bucket_id_name                           | name                       |
-| objects                    | idx_objects_bucket_id_name                           | bucket_id                  |
-| objects                    | idx_objects_lower_name                               | bucket_id                  |
-| objects                    | idx_objects_lower_name                               | level                      |
-| objects                    | name_prefix_search                                   | name                       |
-| objects                    | objects_bucket_id_level_idx                          | bucket_id                  |
-| objects                    | objects_bucket_id_level_idx                          | name                       |
-| objects                    | objects_bucket_id_level_idx                          | level                      |
-| objects                    | objects_pkey                                         | id                         |
-| one_time_tokens            | one_time_tokens_pkey                                 | id                         |
-| one_time_tokens            | one_time_tokens_relates_to_hash_idx                  | relates_to                 |
-| one_time_tokens            | one_time_tokens_token_hash_hash_idx                  | token_hash                 |
-| one_time_tokens            | one_time_tokens_user_id_token_type_key               | user_id                    |
-| one_time_tokens            | one_time_tokens_user_id_token_type_key               | token_type                 |
-| orders                     | idx_orders_payment_status                            | payment_status             |
-| orders                     | idx_orders_stripe_payment_intent                     | stripe_payment_intent_id   |
-| orders                     | idx_orders_user_id                                   | user_id                    |
-| orders                     | orders_pkey                                          | id                         |
-| pg_aggregate               | pg_aggregate_fnoid_index                             | aggfnoid                   |
-| pg_am                      | pg_am_name_index                                     | amname                     |
-| pg_am                      | pg_am_oid_index                                      | oid                        |
-| pg_amop                    | pg_amop_fam_strat_index                              | amoprighttype              |
-| pg_amop                    | pg_amop_fam_strat_index                              | amoplefttype               |
-| pg_amop                    | pg_amop_fam_strat_index                              | amopstrategy               |
-| pg_amop                    | pg_amop_fam_strat_index                              | amopfamily                 |
-| pg_amop                    | pg_amop_oid_index                                    | oid                        |
-| pg_amop                    | pg_amop_opr_fam_index                                | amopopr                    |
-| pg_amop                    | pg_amop_opr_fam_index                                | amoppurpose                |
-| pg_amop                    | pg_amop_opr_fam_index                                | amopfamily                 |
-| pg_amproc                  | pg_amproc_fam_proc_index                             | amprocfamily               |
-| pg_amproc                  | pg_amproc_fam_proc_index                             | amproclefttype             |
-| pg_amproc                  | pg_amproc_fam_proc_index                             | amprocnum                  |
-| pg_amproc                  | pg_amproc_fam_proc_index                             | amprocrighttype            |
-| pg_amproc                  | pg_amproc_oid_index                                  | oid                        |
-| pg_attrdef                 | pg_attrdef_adrelid_adnum_index                       | adnum                      |
-| pg_attrdef                 | pg_attrdef_adrelid_adnum_index                       | adrelid                    |
-| pg_attrdef                 | pg_attrdef_oid_index                                 | oid                        |
-| pg_attribute               | pg_attribute_relid_attnam_index                      | attname                    |
-| pg_attribute               | pg_attribute_relid_attnam_index                      | attrelid                   |
-| pg_attribute               | pg_attribute_relid_attnum_index                      | attrelid                   |
-| pg_attribute               | pg_attribute_relid_attnum_index                      | attnum                     |
-| pg_auth_members            | pg_auth_members_grantor_index                        | grantor                    |
-| pg_auth_members            | pg_auth_members_member_role_index                    | grantor                    |
-| pg_auth_members            | pg_auth_members_member_role_index                    | roleid                     |
-| pg_auth_members            | pg_auth_members_member_role_index                    | member                     |
-| pg_auth_members            | pg_auth_members_oid_index                            | oid                        |
-| pg_auth_members            | pg_auth_members_role_member_index                    | roleid                     |
-| pg_auth_members            | pg_auth_members_role_member_index                    | grantor                    |
-| pg_auth_members            | pg_auth_members_role_member_index                    | member                     |
-| pg_authid                  | pg_authid_oid_index                                  | oid                        |
-| pg_authid                  | pg_authid_rolname_index                              | rolname                    |
-| pg_cast                    | pg_cast_oid_index                                    | oid                        |
-| pg_cast                    | pg_cast_source_target_index                          | casttarget                 |
-| pg_cast                    | pg_cast_source_target_index                          | castsource                 |
-| pg_class                   | pg_class_oid_index                                   | oid                        |
-| pg_class                   | pg_class_relname_nsp_index                           | relnamespace               |
-| pg_class                   | pg_class_relname_nsp_index                           | relname                    |
-| pg_class                   | pg_class_tblspc_relfilenode_index                    | reltablespace              |
-| pg_class                   | pg_class_tblspc_relfilenode_index                    | relfilenode                |
-| pg_collation               | pg_collation_name_enc_nsp_index                      | collnamespace              |
-| pg_collation               | pg_collation_name_enc_nsp_index                      | collname                   |
-| pg_collation               | pg_collation_name_enc_nsp_index                      | collencoding               |
-| pg_collation               | pg_collation_oid_index                               | oid                        |
-| pg_constraint              | pg_constraint_conname_nsp_index                      | conname                    |
-| pg_constraint              | pg_constraint_conname_nsp_index                      | connamespace               |
-| pg_constraint              | pg_constraint_conparentid_index                      | conparentid                |
-| pg_constraint              | pg_constraint_conrelid_contypid_conname_index        | conname                    |
-| pg_constraint              | pg_constraint_conrelid_contypid_conname_index        | contypid                   |
-| pg_constraint              | pg_constraint_conrelid_contypid_conname_index        | conrelid                   |
-| pg_constraint              | pg_constraint_contypid_index                         | contypid                   |
-| pg_constraint              | pg_constraint_oid_index                              | oid                        |
-| pg_conversion              | pg_conversion_default_index                          | contoencoding              |
-| pg_conversion              | pg_conversion_default_index                          | conforencoding             |
-| pg_conversion              | pg_conversion_default_index                          | connamespace               |
-| pg_conversion              | pg_conversion_default_index                          | oid                        |
-| pg_conversion              | pg_conversion_name_nsp_index                         | conname                    |
-| pg_conversion              | pg_conversion_name_nsp_index                         | connamespace               |
-| pg_conversion              | pg_conversion_oid_index                              | oid                        |
-| pg_database                | pg_database_datname_index                            | datname                    |
-| pg_database                | pg_database_oid_index                                | oid                        |
-| pg_db_role_setting         | pg_db_role_setting_databaseid_rol_index              | setrole                    |
-| pg_db_role_setting         | pg_db_role_setting_databaseid_rol_index              | setdatabase                |
-| pg_default_acl             | pg_default_acl_oid_index                             | oid                        |
-| pg_default_acl             | pg_default_acl_role_nsp_obj_index                    | defaclobjtype              |
-| pg_default_acl             | pg_default_acl_role_nsp_obj_index                    | defaclnamespace            |
-| pg_default_acl             | pg_default_acl_role_nsp_obj_index                    | defaclrole                 |
-| pg_depend                  | pg_depend_depender_index                             | objid                      |
-| pg_depend                  | pg_depend_depender_index                             | objsubid                   |
-| pg_depend                  | pg_depend_depender_index                             | classid                    |
-| pg_depend                  | pg_depend_reference_index                            | refclassid                 |
-| pg_depend                  | pg_depend_reference_index                            | refobjid                   |
-| pg_depend                  | pg_depend_reference_index                            | refobjsubid                |
-| pg_description             | pg_description_o_c_o_index                           | objsubid                   |
-| pg_description             | pg_description_o_c_o_index                           | classoid                   |
-| pg_description             | pg_description_o_c_o_index                           | objoid                     |
-| pg_enum                    | pg_enum_oid_index                                    | oid                        |
-| pg_enum                    | pg_enum_typid_label_index                            | enumtypid                  |
-| pg_enum                    | pg_enum_typid_label_index                            | enumlabel                  |
-| pg_enum                    | pg_enum_typid_sortorder_index                        | enumsortorder              |
-| pg_enum                    | pg_enum_typid_sortorder_index                        | enumtypid                  |
-| pg_event_trigger           | pg_event_trigger_evtname_index                       | evtname                    |
-| pg_event_trigger           | pg_event_trigger_oid_index                           | oid                        |
-| pg_extension               | pg_extension_name_index                              | extname                    |
-| pg_extension               | pg_extension_oid_index                               | oid                        |
-| pg_foreign_data_wrapper    | pg_foreign_data_wrapper_name_index                   | fdwname                    |
-| pg_foreign_data_wrapper    | pg_foreign_data_wrapper_oid_index                    | oid                        |
-| pg_foreign_server          | pg_foreign_server_name_index                         | srvname                    |
-| pg_foreign_server          | pg_foreign_server_oid_index                          | oid                        |
-| pg_foreign_table           | pg_foreign_table_relid_index                         | ftrelid                    |
-| pg_index                   | pg_index_indexrelid_index                            | indexrelid                 |
-| pg_index                   | pg_index_indrelid_index                              | indrelid                   |
-| pg_inherits                | pg_inherits_parent_index                             | inhparent                  |
-| pg_inherits                | pg_inherits_relid_seqno_index                        | inhrelid                   |
-| pg_inherits                | pg_inherits_relid_seqno_index                        | inhseqno                   |
-| pg_init_privs              | pg_init_privs_o_c_o_index                            | objoid                     |
-| pg_init_privs              | pg_init_privs_o_c_o_index                            | objsubid                   |
-| pg_init_privs              | pg_init_privs_o_c_o_index                            | classoid                   |
-| pg_language                | pg_language_name_index                               | lanname                    |
-| pg_language                | pg_language_oid_index                                | oid                        |
-| pg_largeobject             | pg_largeobject_loid_pn_index                         | loid                       |
-| pg_largeobject             | pg_largeobject_loid_pn_index                         | pageno                     |
-| pg_largeobject_metadata    | pg_largeobject_metadata_oid_index                    | oid                        |
-| pg_namespace               | pg_namespace_nspname_index                           | nspname                    |
-| pg_namespace               | pg_namespace_oid_index                               | oid                        |
-| pg_opclass                 | pg_opclass_am_name_nsp_index                         | opcmethod                  |
-| pg_opclass                 | pg_opclass_am_name_nsp_index                         | opcnamespace               |
-| pg_opclass                 | pg_opclass_am_name_nsp_index                         | opcname                    |
-| pg_opclass                 | pg_opclass_oid_index                                 | oid                        |
-| pg_operator                | pg_operator_oid_index                                | oid                        |
-| pg_operator                | pg_operator_oprname_l_r_n_index                      | oprright                   |
-| pg_operator                | pg_operator_oprname_l_r_n_index                      | oprname                    |
-| pg_operator                | pg_operator_oprname_l_r_n_index                      | oprnamespace               |
-| pg_operator                | pg_operator_oprname_l_r_n_index                      | oprleft                    |
-| pg_opfamily                | pg_opfamily_am_name_nsp_index                        | opfname                    |
-| pg_opfamily                | pg_opfamily_am_name_nsp_index                        | opfmethod                  |
-| pg_opfamily                | pg_opfamily_am_name_nsp_index                        | opfnamespace               |
-| pg_opfamily                | pg_opfamily_oid_index                                | oid                        |
-| pg_parameter_acl           | pg_parameter_acl_oid_index                           | oid                        |
-| pg_parameter_acl           | pg_parameter_acl_parname_index                       | parname                    |
-| pg_partitioned_table       | pg_partitioned_table_partrelid_index                 | partrelid                  |
-| pg_policy                  | pg_policy_oid_index                                  | oid                        |
-| pg_policy                  | pg_policy_polrelid_polname_index                     | polrelid                   |
-| pg_policy                  | pg_policy_polrelid_polname_index                     | polname                    |
-| pg_proc                    | pg_proc_oid_index                                    | oid                        |
-| pg_proc                    | pg_proc_proname_args_nsp_index                       | proargtypes                |
-| pg_proc                    | pg_proc_proname_args_nsp_index                       | proname                    |
-| pg_proc                    | pg_proc_proname_args_nsp_index                       | pronamespace               |
-| pg_publication             | pg_publication_oid_index                             | oid                        |
-| pg_publication             | pg_publication_pubname_index                         | pubname                    |
-| pg_publication_namespace   | pg_publication_namespace_oid_index                   | oid                        |
-| pg_publication_namespace   | pg_publication_namespace_pnnspid_pnpubid_index       | pnpubid                    |
-| pg_publication_namespace   | pg_publication_namespace_pnnspid_pnpubid_index       | pnnspid                    |
-| pg_publication_rel         | pg_publication_rel_oid_index                         | oid                        |
-| pg_publication_rel         | pg_publication_rel_prpubid_index                     | prpubid                    |
-| pg_publication_rel         | pg_publication_rel_prrelid_prpubid_index             | prpubid                    |
-| pg_publication_rel         | pg_publication_rel_prrelid_prpubid_index             | prrelid                    |
-| pg_range                   | pg_range_rngmultitypid_index                         | rngmultitypid              |
-| pg_range                   | pg_range_rngtypid_index                              | rngtypid                   |
-| pg_replication_origin      | pg_replication_origin_roiident_index                 | roident                    |
-| pg_replication_origin      | pg_replication_origin_roname_index                   | roname                     |
-| pg_rewrite                 | pg_rewrite_oid_index                                 | oid                        |
-| pg_rewrite                 | pg_rewrite_rel_rulename_index                        | rulename                   |
-| pg_rewrite                 | pg_rewrite_rel_rulename_index                        | ev_class                   |
-| pg_seclabel                | pg_seclabel_object_index                             | objsubid                   |
-| pg_seclabel                | pg_seclabel_object_index                             | classoid                   |
-| pg_seclabel                | pg_seclabel_object_index                             | objoid                     |
-| pg_seclabel                | pg_seclabel_object_index                             | provider                   |
-| pg_sequence                | pg_sequence_seqrelid_index                           | seqrelid                   |
-| pg_shdepend                | pg_shdepend_depender_index                           | objsubid                   |
-| pg_shdepend                | pg_shdepend_depender_index                           | objid                      |
-| pg_shdepend                | pg_shdepend_depender_index                           | dbid                       |
-| pg_shdepend                | pg_shdepend_depender_index                           | classid                    |
-| pg_shdepend                | pg_shdepend_reference_index                          | refobjid                   |
-| pg_shdepend                | pg_shdepend_reference_index                          | refclassid                 |
-| pg_shdescription           | pg_shdescription_o_c_index                           | classoid                   |
-| pg_shdescription           | pg_shdescription_o_c_index                           | objoid                     |
-| pg_shseclabel              | pg_shseclabel_object_index                           | classoid                   |
-| pg_shseclabel              | pg_shseclabel_object_index                           | provider                   |
-| pg_shseclabel              | pg_shseclabel_object_index                           | objoid                     |
-| pg_statistic               | pg_statistic_relid_att_inh_index                     | starelid                   |
-| pg_statistic               | pg_statistic_relid_att_inh_index                     | stainherit                 |
-| pg_statistic               | pg_statistic_relid_att_inh_index                     | staattnum                  |
-| pg_statistic_ext           | pg_statistic_ext_name_index                          | stxnamespace               |
-| pg_statistic_ext           | pg_statistic_ext_name_index                          | stxname                    |
-| pg_statistic_ext           | pg_statistic_ext_oid_index                           | oid                        |
-| pg_statistic_ext           | pg_statistic_ext_relid_index                         | stxrelid                   |
-| pg_statistic_ext_data      | pg_statistic_ext_data_stxoid_inh_index               | stxdinherit                |
-| pg_statistic_ext_data      | pg_statistic_ext_data_stxoid_inh_index               | stxoid                     |
-| pg_subscription            | pg_subscription_oid_index                            | oid                        |
-| pg_subscription            | pg_subscription_subname_index                        | subdbid                    |
-| pg_subscription            | pg_subscription_subname_index                        | subname                    |
-| pg_subscription_rel        | pg_subscription_rel_srrelid_srsubid_index            | srsubid                    |
-| pg_subscription_rel        | pg_subscription_rel_srrelid_srsubid_index            | srrelid                    |
-| pg_tablespace              | pg_tablespace_oid_index                              | oid                        |
-| pg_tablespace              | pg_tablespace_spcname_index                          | spcname                    |
-| pg_toast_1213              | pg_toast_1213_index                                  | chunk_id                   |
-| pg_toast_1213              | pg_toast_1213_index                                  | chunk_seq                  |
-| pg_toast_1247              | pg_toast_1247_index                                  | chunk_seq                  |
-| pg_toast_1247              | pg_toast_1247_index                                  | chunk_id                   |
-| pg_toast_1255              | pg_toast_1255_index                                  | chunk_id                   |
-| pg_toast_1255              | pg_toast_1255_index                                  | chunk_seq                  |
-| pg_toast_1260              | pg_toast_1260_index                                  | chunk_seq                  |
-| pg_toast_1260              | pg_toast_1260_index                                  | chunk_id                   |
-| pg_toast_1262              | pg_toast_1262_index                                  | chunk_id                   |
-| pg_toast_1262              | pg_toast_1262_index                                  | chunk_seq                  |
-| pg_toast_13402             | pg_toast_13402_index                                 | chunk_id                   |
-| pg_toast_13402             | pg_toast_13402_index                                 | chunk_seq                  |
-| pg_toast_13407             | pg_toast_13407_index                                 | chunk_id                   |
-| pg_toast_13407             | pg_toast_13407_index                                 | chunk_seq                  |
-| pg_toast_13412             | pg_toast_13412_index                                 | chunk_seq                  |
-| pg_toast_13412             | pg_toast_13412_index                                 | chunk_id                   |
-| pg_toast_13417             | pg_toast_13417_index                                 | chunk_seq                  |
-| pg_toast_13417             | pg_toast_13417_index                                 | chunk_id                   |
-| pg_toast_1417              | pg_toast_1417_index                                  | chunk_seq                  |
-| pg_toast_1417              | pg_toast_1417_index                                  | chunk_id                   |
-| pg_toast_1418              | pg_toast_1418_index                                  | chunk_seq                  |
-| pg_toast_1418              | pg_toast_1418_index                                  | chunk_id                   |
-| pg_toast_16495             | pg_toast_16495_index                                 | chunk_seq                  |
-| pg_toast_16495             | pg_toast_16495_index                                 | chunk_id                   |
-| pg_toast_16507             | pg_toast_16507_index                                 | chunk_seq                  |
-| pg_toast_16507             | pg_toast_16507_index                                 | chunk_id                   |
-| pg_toast_16518             | pg_toast_16518_index                                 | chunk_seq                  |
-| pg_toast_16518             | pg_toast_16518_index                                 | chunk_id                   |
-| pg_toast_16525             | pg_toast_16525_index                                 | chunk_seq                  |
-| pg_toast_16525             | pg_toast_16525_index                                 | chunk_id                   |
-| pg_toast_16546             | pg_toast_16546_index                                 | chunk_id                   |
-| pg_toast_16546             | pg_toast_16546_index                                 | chunk_seq                  |
-| pg_toast_16561             | pg_toast_16561_index                                 | chunk_seq                  |
-| pg_toast_16561             | pg_toast_16561_index                                 | chunk_id                   |
-| pg_toast_16658             | pg_toast_16658_index                                 | chunk_id                   |
-| pg_toast_16658             | pg_toast_16658_index                                 | chunk_seq                  |
-| pg_toast_16727             | pg_toast_16727_index                                 | chunk_id                   |
-| pg_toast_16727             | pg_toast_16727_index                                 | chunk_seq                  |
-| pg_toast_16757             | pg_toast_16757_index                                 | chunk_seq                  |
-| pg_toast_16757             | pg_toast_16757_index                                 | chunk_id                   |
-| pg_toast_16791             | pg_toast_16791_index                                 | chunk_seq                  |
-| pg_toast_16791             | pg_toast_16791_index                                 | chunk_id                   |
-| pg_toast_16804             | pg_toast_16804_index                                 | chunk_id                   |
-| pg_toast_16804             | pg_toast_16804_index                                 | chunk_seq                  |
-| pg_toast_16816             | pg_toast_16816_index                                 | chunk_seq                  |
-| pg_toast_16816             | pg_toast_16816_index                                 | chunk_id                   |
-| pg_toast_16834             | pg_toast_16834_index                                 | chunk_id                   |
-| pg_toast_16834             | pg_toast_16834_index                                 | chunk_seq                  |
-| pg_toast_16843             | pg_toast_16843_index                                 | chunk_seq                  |
-| pg_toast_16843             | pg_toast_16843_index                                 | chunk_id                   |
-| pg_toast_16858             | pg_toast_16858_index                                 | chunk_id                   |
-| pg_toast_16858             | pg_toast_16858_index                                 | chunk_seq                  |
-| pg_toast_16876             | pg_toast_16876_index                                 | chunk_seq                  |
-| pg_toast_16876             | pg_toast_16876_index                                 | chunk_id                   |
-| pg_toast_16929             | pg_toast_16929_index                                 | chunk_seq                  |
-| pg_toast_16929             | pg_toast_16929_index                                 | chunk_id                   |
-| pg_toast_16979             | pg_toast_16979_index                                 | chunk_id                   |
-| pg_toast_16979             | pg_toast_16979_index                                 | chunk_seq                  |
-| pg_toast_17011             | pg_toast_17011_index                                 | chunk_id                   |
-| pg_toast_17011             | pg_toast_17011_index                                 | chunk_seq                  |
-| pg_toast_17041             | pg_toast_17041_index                                 | chunk_seq                  |
-| pg_toast_17041             | pg_toast_17041_index                                 | chunk_id                   |
-| pg_toast_17074             | pg_toast_17074_index                                 | chunk_seq                  |
-| pg_toast_17074             | pg_toast_17074_index                                 | chunk_id                   |
-| pg_toast_17144             | pg_toast_17144_index                                 | chunk_seq                  |
-| pg_toast_17144             | pg_toast_17144_index                                 | chunk_id                   |
-| pg_toast_17158             | pg_toast_17158_index                                 | chunk_seq                  |
-| pg_toast_17158             | pg_toast_17158_index                                 | chunk_id                   |
-| pg_toast_17197             | pg_toast_17197_index                                 | chunk_id                   |
-| pg_toast_17197             | pg_toast_17197_index                                 | chunk_seq                  |
-| pg_toast_17242             | pg_toast_17242_index                                 | chunk_id                   |
-| pg_toast_17242             | pg_toast_17242_index                                 | chunk_seq                  |
-| pg_toast_17269             | pg_toast_17269_index                                 | chunk_seq                  |
-| pg_toast_17269             | pg_toast_17269_index                                 | chunk_id                   |
-| pg_toast_17279             | pg_toast_17279_index                                 | chunk_seq                  |
-| pg_toast_17279             | pg_toast_17279_index                                 | chunk_id                   |
-| pg_toast_17331             | pg_toast_17331_index                                 | chunk_id                   |
-| pg_toast_17331             | pg_toast_17331_index                                 | chunk_seq                  |
-| pg_toast_17488             | pg_toast_17488_index                                 | chunk_id                   |
-| pg_toast_17488             | pg_toast_17488_index                                 | chunk_seq                  |
-| pg_toast_17512             | pg_toast_17512_index                                 | chunk_id                   |
-| pg_toast_17512             | pg_toast_17512_index                                 | chunk_seq                  |
-| pg_toast_17541             | pg_toast_17541_index                                 | chunk_seq                  |
-| pg_toast_17541             | pg_toast_17541_index                                 | chunk_id                   |
-| pg_toast_17571             | pg_toast_17571_index                                 | chunk_id                   |
-| pg_toast_17571             | pg_toast_17571_index                                 | chunk_seq                  |
-| pg_toast_17599             | pg_toast_17599_index                                 | chunk_seq                  |
-| pg_toast_17599             | pg_toast_17599_index                                 | chunk_id                   |
-| pg_toast_17626             | pg_toast_17626_index                                 | chunk_id                   |
-| pg_toast_17626             | pg_toast_17626_index                                 | chunk_seq                  |
-| pg_toast_17655             | pg_toast_17655_index                                 | chunk_seq                  |
-| pg_toast_17655             | pg_toast_17655_index                                 | chunk_id                   |
-| pg_toast_17685             | pg_toast_17685_index                                 | chunk_id                   |
-| pg_toast_17685             | pg_toast_17685_index                                 | chunk_seq                  |
-| pg_toast_17711             | pg_toast_17711_index                                 | chunk_seq                  |
-| pg_toast_17711             | pg_toast_17711_index                                 | chunk_id                   |
-| pg_toast_17744             | pg_toast_17744_index                                 | chunk_id                   |
-| pg_toast_17744             | pg_toast_17744_index                                 | chunk_seq                  |
-| pg_toast_17795             | pg_toast_17795_index                                 | chunk_seq                  |
-| pg_toast_17795             | pg_toast_17795_index                                 | chunk_id                   |
-| pg_toast_18982             | pg_toast_18982_index                                 | chunk_seq                  |
-| pg_toast_18982             | pg_toast_18982_index                                 | chunk_id                   |
-| pg_toast_19038             | pg_toast_19038_index                                 | chunk_seq                  |
-| pg_toast_19038             | pg_toast_19038_index                                 | chunk_id                   |
-| pg_toast_19072             | pg_toast_19072_index                                 | chunk_id                   |
-| pg_toast_19072             | pg_toast_19072_index                                 | chunk_seq                  |
-| pg_toast_19100             | pg_toast_19100_index                                 | chunk_seq                  |
-| pg_toast_19100             | pg_toast_19100_index                                 | chunk_id                   |
-| pg_toast_19123             | pg_toast_19123_index                                 | chunk_seq                  |
-| pg_toast_19123             | pg_toast_19123_index                                 | chunk_id                   |
-| pg_toast_19146             | pg_toast_19146_index                                 | chunk_seq                  |
-| pg_toast_19146             | pg_toast_19146_index                                 | chunk_id                   |
-| pg_toast_19178             | pg_toast_19178_index                                 | chunk_seq                  |
-| pg_toast_19178             | pg_toast_19178_index                                 | chunk_id                   |
-| pg_toast_21560             | pg_toast_21560_index                                 | chunk_seq                  |
-| pg_toast_21560             | pg_toast_21560_index                                 | chunk_id                   |
-| pg_toast_21626             | pg_toast_21626_index                                 | chunk_seq                  |
-| pg_toast_21626             | pg_toast_21626_index                                 | chunk_id                   |
-| pg_toast_2328              | pg_toast_2328_index                                  | chunk_seq                  |
-| pg_toast_2328              | pg_toast_2328_index                                  | chunk_id                   |
-| pg_toast_2396              | pg_toast_2396_index                                  | chunk_seq                  |
-| pg_toast_2396              | pg_toast_2396_index                                  | chunk_id                   |
-| pg_toast_2600              | pg_toast_2600_index                                  | chunk_seq                  |
-| pg_toast_2600              | pg_toast_2600_index                                  | chunk_id                   |
-| pg_toast_2604              | pg_toast_2604_index                                  | chunk_seq                  |
-| pg_toast_2604              | pg_toast_2604_index                                  | chunk_id                   |
-| pg_toast_2606              | pg_toast_2606_index                                  | chunk_seq                  |
-| pg_toast_2606              | pg_toast_2606_index                                  | chunk_id                   |
-| pg_toast_2609              | pg_toast_2609_index                                  | chunk_seq                  |
-| pg_toast_2609              | pg_toast_2609_index                                  | chunk_id                   |
-| pg_toast_2612              | pg_toast_2612_index                                  | chunk_seq                  |
-| pg_toast_2612              | pg_toast_2612_index                                  | chunk_id                   |
-| pg_toast_2615              | pg_toast_2615_index                                  | chunk_id                   |
-| pg_toast_2615              | pg_toast_2615_index                                  | chunk_seq                  |
-| pg_toast_2618              | pg_toast_2618_index                                  | chunk_id                   |
-| pg_toast_2618              | pg_toast_2618_index                                  | chunk_seq                  |
-| pg_toast_2619              | pg_toast_2619_index                                  | chunk_seq                  |
-| pg_toast_2619              | pg_toast_2619_index                                  | chunk_id                   |
-| pg_toast_2620              | pg_toast_2620_index                                  | chunk_seq                  |
-| pg_toast_2620              | pg_toast_2620_index                                  | chunk_id                   |
-| pg_toast_2964              | pg_toast_2964_index                                  | chunk_id                   |
-| pg_toast_2964              | pg_toast_2964_index                                  | chunk_seq                  |
-| pg_toast_3079              | pg_toast_3079_index                                  | chunk_seq                  |
-| pg_toast_3079              | pg_toast_3079_index                                  | chunk_id                   |
-| pg_toast_3118              | pg_toast_3118_index                                  | chunk_seq                  |
-| pg_toast_3118              | pg_toast_3118_index                                  | chunk_id                   |
-| pg_toast_3256              | pg_toast_3256_index                                  | chunk_seq                  |
-| pg_toast_3256              | pg_toast_3256_index                                  | chunk_id                   |
-| pg_toast_3350              | pg_toast_3350_index                                  | chunk_seq                  |
-| pg_toast_3350              | pg_toast_3350_index                                  | chunk_id                   |
-| pg_toast_3381              | pg_toast_3381_index                                  | chunk_seq                  |
-| pg_toast_3381              | pg_toast_3381_index                                  | chunk_id                   |
-| pg_toast_3394              | pg_toast_3394_index                                  | chunk_id                   |
-| pg_toast_3394              | pg_toast_3394_index                                  | chunk_seq                  |
-| pg_toast_3429              | pg_toast_3429_index                                  | chunk_id                   |
-| pg_toast_3429              | pg_toast_3429_index                                  | chunk_seq                  |
-| pg_toast_3456              | pg_toast_3456_index                                  | chunk_seq                  |
-| pg_toast_3456              | pg_toast_3456_index                                  | chunk_id                   |
-| pg_toast_3466              | pg_toast_3466_index                                  | chunk_seq                  |
-| pg_toast_3466              | pg_toast_3466_index                                  | chunk_id                   |
-| pg_toast_3592              | pg_toast_3592_index                                  | chunk_id                   |
-| pg_toast_3592              | pg_toast_3592_index                                  | chunk_seq                  |
-| pg_toast_3596              | pg_toast_3596_index                                  | chunk_seq                  |
-| pg_toast_3596              | pg_toast_3596_index                                  | chunk_id                   |
-| pg_toast_3600              | pg_toast_3600_index                                  | chunk_id                   |
-| pg_toast_3600              | pg_toast_3600_index                                  | chunk_seq                  |
-| pg_toast_6000              | pg_toast_6000_index                                  | chunk_seq                  |
-| pg_toast_6000              | pg_toast_6000_index                                  | chunk_id                   |
-| pg_toast_6100              | pg_toast_6100_index                                  | chunk_seq                  |
-| pg_toast_6100              | pg_toast_6100_index                                  | chunk_id                   |
-| pg_toast_6106              | pg_toast_6106_index                                  | chunk_id                   |
-| pg_toast_6106              | pg_toast_6106_index                                  | chunk_seq                  |
-| pg_toast_6243              | pg_toast_6243_index                                  | chunk_id                   |
-| pg_toast_6243              | pg_toast_6243_index                                  | chunk_seq                  |
-| pg_toast_826               | pg_toast_826_index                                   | chunk_seq                  |
-| pg_toast_826               | pg_toast_826_index                                   | chunk_id                   |
-| pg_transform               | pg_transform_oid_index                               | oid                        |
-| pg_transform               | pg_transform_type_lang_index                         | trflang                    |
-| pg_transform               | pg_transform_type_lang_index                         | trftype                    |
-| pg_trigger                 | pg_trigger_oid_index                                 | oid                        |
-| pg_trigger                 | pg_trigger_tgconstraint_index                        | tgconstraint               |
-| pg_trigger                 | pg_trigger_tgrelid_tgname_index                      | tgname                     |
-| pg_trigger                 | pg_trigger_tgrelid_tgname_index                      | tgrelid                    |
-| pg_ts_config               | pg_ts_config_cfgname_index                           | cfgnamespace               |
-| pg_ts_config               | pg_ts_config_cfgname_index                           | cfgname                    |
-| pg_ts_config               | pg_ts_config_oid_index                               | oid                        |
-| pg_ts_config_map           | pg_ts_config_map_index                               | mapseqno                   |
-| pg_ts_config_map           | pg_ts_config_map_index                               | maptokentype               |
-| pg_ts_config_map           | pg_ts_config_map_index                               | mapcfg                     |
-| pg_ts_dict                 | pg_ts_dict_dictname_index                            | dictname                   |
-| pg_ts_dict                 | pg_ts_dict_dictname_index                            | dictnamespace              |
-| pg_ts_dict                 | pg_ts_dict_oid_index                                 | oid                        |
-| pg_ts_parser               | pg_ts_parser_oid_index                               | oid                        |
-| pg_ts_parser               | pg_ts_parser_prsname_index                           | prsname                    |
-| pg_ts_parser               | pg_ts_parser_prsname_index                           | prsnamespace               |
-| pg_ts_template             | pg_ts_template_oid_index                             | oid                        |
-| pg_ts_template             | pg_ts_template_tmplname_index                        | tmplnamespace              |
-| pg_ts_template             | pg_ts_template_tmplname_index                        | tmplname                   |
-| pg_type                    | pg_type_oid_index                                    | oid                        |
-| pg_type                    | pg_type_typname_nsp_index                            | typname                    |
-| pg_type                    | pg_type_typname_nsp_index                            | typnamespace               |
-| pg_user_mapping            | pg_user_mapping_oid_index                            | oid                        |
-| pg_user_mapping            | pg_user_mapping_user_server_index                    | umuser                     |
-| pg_user_mapping            | pg_user_mapping_user_server_index                    | umserver                   |
-| prefixes                   | idx_prefixes_lower_name                              | level                      |
-| prefixes                   | idx_prefixes_lower_name                              | bucket_id                  |
-| prefixes                   | prefixes_pkey                                        | bucket_id                  |
-| prefixes                   | prefixes_pkey                                        | level                      |
-| prefixes                   | prefixes_pkey                                        | name                       |
-| refresh_tokens             | refresh_tokens_instance_id_idx                       | instance_id                |
-| refresh_tokens             | refresh_tokens_instance_id_user_id_idx               | user_id                    |
-| refresh_tokens             | refresh_tokens_instance_id_user_id_idx               | instance_id                |
-| refresh_tokens             | refresh_tokens_parent_idx                            | parent                     |
-| refresh_tokens             | refresh_tokens_pkey                                  | id                         |
-| refresh_tokens             | refresh_tokens_session_id_revoked_idx                | session_id                 |
-| refresh_tokens             | refresh_tokens_session_id_revoked_idx                | revoked                    |
-| refresh_tokens             | refresh_tokens_token_unique                          | token                      |
-| refresh_tokens             | refresh_tokens_updated_at_idx                        | updated_at                 |
-| s3_multipart_uploads       | idx_multipart_uploads_list                           | bucket_id                  |
-| s3_multipart_uploads       | idx_multipart_uploads_list                           | key                        |
-| s3_multipart_uploads       | idx_multipart_uploads_list                           | created_at                 |
-| s3_multipart_uploads       | s3_multipart_uploads_pkey                            | id                         |
-| s3_multipart_uploads_parts | s3_multipart_uploads_parts_pkey                      | id                         |
-| saml_providers             | saml_providers_entity_id_key                         | entity_id                  |
-| saml_providers             | saml_providers_pkey                                  | id                         |
-| saml_providers             | saml_providers_sso_provider_id_idx                   | sso_provider_id            |
-| saml_relay_states          | saml_relay_states_created_at_idx                     | created_at                 |
-| saml_relay_states          | saml_relay_states_for_email_idx                      | for_email                  |
-| saml_relay_states          | saml_relay_states_pkey                               | id                         |
-| saml_relay_states          | saml_relay_states_sso_provider_id_idx                | sso_provider_id            |
-| schema_migrations          | schema_migrations_pkey                               | version                    |
-| schema_migrations          | schema_migrations_pkey                               | version                    |
-| secrets                    | secrets_name_idx                                     | name                       |
-| secrets                    | secrets_pkey                                         | id                         |
-| seo_automation_log         | idx_seo_automation_log_date                          | created_at                 |
-| seo_automation_log         | idx_seo_automation_log_status                        | status                     |
-| seo_automation_log         | idx_seo_automation_log_task                          | task_type                  |
-| seo_automation_log         | seo_automation_log_pkey                              | id                         |
-| seo_backlinks              | idx_seo_backlinks_acquired                           | acquired                   |
-| seo_backlinks              | idx_seo_backlinks_domain                             | target_domain              |
-| seo_backlinks              | idx_seo_backlinks_status                             | outreach_status            |
-| seo_backlinks              | seo_backlinks_pkey                                   | id                         |
-| seo_content_queue          | idx_seo_content_queue_priority                       | priority                   |
-| seo_content_queue          | idx_seo_content_queue_scheduled                      | scheduled_for              |
-| seo_content_queue          | idx_seo_content_queue_status                         | status                     |
-| seo_content_queue          | seo_content_queue_pkey                               | id                         |
-| seo_keywords               | idx_seo_keywords_keyword                             | keyword                    |
-| seo_keywords               | idx_seo_keywords_priority                            | priority                   |
-| seo_keywords               | idx_seo_keywords_status                              | status                     |
-| seo_keywords               | seo_keywords_keyword_key                             | keyword                    |
-| seo_keywords               | seo_keywords_pkey                                    | id                         |
-| seo_pages                  | idx_seo_pages_keyword                                | target_keyword             |
-| seo_pages                  | idx_seo_pages_location                               | location                   |
-| seo_pages                  | idx_seo_pages_published                              | published_at               |
-| seo_pages                  | idx_seo_pages_slug                                   | slug                       |
-| seo_pages                  | idx_seo_pages_status                                 | status                     |
-| seo_pages                  | seo_pages_pkey                                       | id                         |
-| seo_pages                  | seo_pages_slug_key                                   | slug                       |
-| seo_performance            | idx_seo_performance_date                             | date                       |
-| seo_performance            | idx_seo_performance_page                             | page_id                    |
-| seo_performance            | seo_performance_date_page_id_key                     | date                       |
-| seo_performance            | seo_performance_date_page_id_key                     | page_id                    |
-| seo_performance            | seo_performance_pkey                                 | id                         |
-| sessions                   | sessions_not_after_idx                               | not_after                  |
-| sessions                   | sessions_oauth_client_id_idx                         | oauth_client_id            |
-| sessions                   | sessions_pkey                                        | id                         |
-| sessions                   | sessions_user_id_idx                                 | user_id                    |
-| sessions                   | user_id_created_at_idx                               | user_id                    |
-| sessions                   | user_id_created_at_idx                               | created_at                 |
-| sso_domains                | sso_domains_pkey                                     | id                         |
-| sso_domains                | sso_domains_sso_provider_id_idx                      | sso_provider_id            |
-| sso_providers              | sso_providers_pkey                                   | id                         |
-| sso_providers              | sso_providers_resource_id_pattern_idx                | resource_id                |
-| subscription               | ix_realtime_subscription_entity                      | entity                     |
-| subscription               | pk_subscription                                      | id                         |
-| subscription               | subscription_subscription_id_entity_filters_key      | entity                     |
-| subscription               | subscription_subscription_id_entity_filters_key      | subscription_id            |
-| subscription               | subscription_subscription_id_entity_filters_key      | filters                    |
-| uk_councils                | idx_councils_code                                    | council_code               |
-| uk_councils                | idx_councils_postcode_areas                          | postcode_areas             |
-| uk_councils                | idx_councils_region                                  | region                     |
-| uk_councils                | uk_councils_council_code_key                         | council_code               |
-| uk_councils                | uk_councils_pkey                                     | id                         |
-| users                      | confirmation_token_idx                               | confirmation_token         |
-| users                      | email_change_token_current_idx                       | email_change_token_current |
-| users                      | email_change_token_new_idx                           | email_change_token_new     |
-| users                      | idx_users_email                                      | email                      |
-| users                      | idx_users_stripe_customer                            | stripe_customer_id         |
-| users                      | reauthentication_token_idx                           | reauthentication_token     |
-| users                      | recovery_token_idx                                   | recovery_token             |
-| users                      | users_email_key                                      | email                      |
-| users                      | users_email_partial_key                              | email                      |
-| users                      | users_instance_id_email_idx                          | instance_id                |
-| users                      | users_instance_id_idx                                | instance_id                |
-| users                      | users_is_anonymous_idx                               | is_anonymous               |
-| users                      | users_phone_key                                      | phone                      |
-| users                      | users_pkey                                           | id                         |
-| users                      | users_pkey                                           | id                         |
-| users                      | users_stripe_customer_id_key                         | stripe_customer_id         |
-| vector_indexes             | vector_indexes_name_bucket_id_idx                    | bucket_id                  |
-| vector_indexes             | vector_indexes_name_bucket_id_idx                    | name                       |
-| vector_indexes             | vector_indexes_pkey                                  | id                         |
-| webhook_logs               | idx_webhook_logs_created_at                          | created_at                 |
-| webhook_logs               | idx_webhook_logs_event_type                          | event_type                 |
-| webhook_logs               | idx_webhook_logs_stripe_event_id                     | stripe_event_id            |
-| webhook_logs               | webhook_logs_pkey                                    | id                         |
-
-Primary Keys
-SELECT
-    tc.table_name,
-    kcu.column_name
-FROM
-    information_schema.table_constraints AS tc
-JOIN information_schema.key_column_usage AS kcu
-    ON tc.constraint_name = kcu.constraint_name
-WHERE tc.constraint_type = 'PRIMARY KEY';
-
-| table_name                 | column_name |
-| -------------------------- | ----------- |
-| users                      | id          |
-| users                      | id          |
-| refresh_tokens             | id          |
-| instances                  | id          |
-| audit_log_entries          | id          |
-| buckets                    | id          |
-| objects                    | id          |
-| secrets                    | id          |
-| schema_migrations          | version     |
-| schema_migrations          | version     |
-| messages                   | id          |
-| messages                   | inserted_at |
-| sessions                   | id          |
-| mfa_factors                | id          |
-| mfa_challenges             | id          |
-| mfa_amr_claims             | id          |
-| sso_providers              | id          |
-| sso_domains                | id          |
-| saml_providers             | id          |
-| saml_relay_states          | id          |
-| flow_state                 | id          |
-| identities                 | id          |
-| one_time_tokens            | id          |
-| oauth_clients              | id          |
-| s3_multipart_uploads_parts | id          |
-| subscription               | id          |
-| oauth_authorizations       | id          |
-| oauth_consents             | id          |
-| s3_multipart_uploads       | id          |
-| prefixes                   | bucket_id   |
-| prefixes                   | level       |
-| prefixes                   | name        |
-| buckets_analytics          | id          |
-| users                      | id          |
-| users                      | id          |
-| cases                      | id          |
-| documents                  | id          |
-| orders                     | id          |
-| hmo_properties             | id          |
-| hmo_tenants                | id          |
-| hmo_compliance_items       | id          |
-| uk_councils                | id          |
-| ai_usage_logs              | id          |
-| webhook_logs               | id          |
-| councils                   | id          |
-| ai_usage                   | id          |
-| seo_pages                  | id          |
-| seo_keywords               | id          |
-| seo_content_queue          | id          |
-| seo_backlinks              | id          |
-| seo_performance            | id          |
-| seo_automation_log         | id          |
-| case_facts                 | id          |
-| conversations              | id          |
-
-Foreign Keys / Relationships (very important)
-
-Claude needs these to understand how cases, wizard answers, documents, users, sessions, etc. link together.
-
-SELECT
-    tc.table_name,
-    kcu.column_name,
-    ccu.table_name AS foreign_table,
-    ccu.column_name AS foreign_column
-FROM
-    information_schema.table_constraints AS tc
-JOIN information_schema.key_column_usage AS kcu
-    ON tc.constraint_name = kcu.constraint_name
-JOIN information_schema.constraint_column_usage AS ccu
-    ON ccu.constraint_name = tc.constraint_name
-WHERE tc.constraint_type = 'FOREIGN KEY';
-
-| table_name           | column_name      | foreign_table  | foreign_column |
-| -------------------- | ---------------- | -------------- | -------------- |
-| cases                | user_id          | users          | id             |
-| documents            | user_id          | users          | id             |
-| documents            | case_id          | cases          | id             |
-| orders               | user_id          | users          | id             |
-| orders               | case_id          | cases          | id             |
-| hmo_properties       | user_id          | users          | id             |
-| hmo_tenants          | property_id      | hmo_properties | id             |
-| hmo_tenants          | user_id          | users          | id             |
-| hmo_compliance_items | property_id      | hmo_properties | id             |
-| hmo_compliance_items | user_id          | users          | id             |
-| ai_usage_logs        | user_id          | users          | id             |
-| ai_usage_logs        | case_id          | cases          | id             |
-| ai_usage_logs        | document_id      | documents      | id             |
-| ai_usage             | user_id          | users          | id             |
-| ai_usage             | case_id          | cases          | id             |
-| ai_usage             | document_id      | documents      | id             |
-| seo_keywords         | assigned_page_id | seo_pages      | id             |
-| seo_content_queue    | page_id          | seo_pages      | id             |
-| seo_performance      | page_id          | seo_pages      | id             |
-| case_facts           | case_id          | cases          | id             |
-| conversations        | case_id          | cases          | id             |
 
 Row-Level Security (RLS) Policies
 
-Supabase uses RLS heavily. Claude needs these so it doesn’t create migrations that break access.
+Supabase uses RLS heavily. Claude needs these so it doesn't create migrations that break access.
 
 SELECT
     schemaname,
@@ -2713,7 +1976,7 @@ AS '$libdir/pg_stat_statements', $function$pg_stat_statements_info$function$
  LANGUAGE c
  PARALLEL SAFE STRICT
 AS '$libdir/pg_stat_statements', $function$pg_stat_statements_reset_1_11$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | extensions     | pgp_armor_headers                     | CREATE OR REPLACE FUNCTION extensions.pgp_armor_headers(text, OUT key text, OUT value text)
  RETURNS SETOF record
  LANGUAGE c
@@ -3201,1168 +2464,4 @@ columns =
             x->>'type',
             x->>'typeoid',
             realtime.cast(
-                (x->'value') #>> '{}',
-                coalesce(
-                    (x->>'typeoid')::regtype, -- null when wal2json version <= 2.4
-                    (x->>'type')::regtype
-                )
-            ),
-            (pks ->> 'name') is not null,
-            true
-        )::realtime.wal_column
-    )
-    from
-        jsonb_array_elements(wal -> 'columns') x
-        left join jsonb_array_elements(wal -> 'pk') pks
-            on (x ->> 'name') = (pks ->> 'name');
-
-old_columns =
-    array_agg(
-        (
-            x->>'name',
-            x->>'type',
-            x->>'typeoid',
-            realtime.cast(
-                (x->'value') #>> '{}',
-                coalesce(
-                    (x->>'typeoid')::regtype, -- null when wal2json version <= 2.4
-                    (x->>'type')::regtype
-                )
-            ),
-            (pks ->> 'name') is not null,
-            true
-        )::realtime.wal_column
-    )
-    from
-        jsonb_array_elements(wal -> 'identity') x
-        left join jsonb_array_elements(wal -> 'pk') pks
-            on (x ->> 'name') = (pks ->> 'name');
-
-for working_role in select * from unnest(roles) loop
-
-    -- Update `is_selectable` for columns and old_columns
-    columns =
-        array_agg(
-            (
-                c.name,
-                c.type_name,
-                c.type_oid,
-                c.value,
-                c.is_pkey,
-                pg_catalog.has_column_privilege(working_role, entity_, c.name, 'SELECT')
-            )::realtime.wal_column
-        )
-        from
-            unnest(columns) c;
-
-    old_columns =
-            array_agg(
-                (
-                    c.name,
-                    c.type_name,
-                    c.type_oid,
-                    c.value,
-                    c.is_pkey,
-                    pg_catalog.has_column_privilege(working_role, entity_, c.name, 'SELECT')
-                )::realtime.wal_column
-            )
-            from
-                unnest(old_columns) c;
-
-    if action <> 'DELETE' and count(1) = 0 from unnest(columns) c where c.is_pkey then
-        return next (
-            jsonb_build_object(
-                'schema', wal ->> 'schema',
-                'table', wal ->> 'table',
-                'type', action
-            ),
-            is_rls_enabled,
-            -- subscriptions is already filtered by entity
-            (select array_agg(s.subscription_id) from unnest(subscriptions) as s where claims_role = working_role),
-            array['Error 400: Bad Request, no primary key']
-        )::realtime.wal_rls;
-
-    -- The claims role does not have SELECT permission to the primary key of entity
-    elsif action <> 'DELETE' and sum(c.is_selectable::int) <> count(1) from unnest(columns) c where c.is_pkey then
-        return next (
-            jsonb_build_object(
-                'schema', wal ->> 'schema',
-                'table', wal ->> 'table',
-                'type', action
-            ),
-            is_rls_enabled,
-            (select array_agg(s.subscription_id) from unnest(subscriptions) as s where claims_role = working_role),
-            array['Error 401: Unauthorized']
-        )::realtime.wal_rls;
-
-    else
-        output = jsonb_build_object(
-            'schema', wal ->> 'schema',
-            'table', wal ->> 'table',
-            'type', action,
-            'commit_timestamp', to_char(
-                ((wal ->> 'timestamp')::timestamptz at time zone 'utc'),
-                'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"'
-            ),
-            'columns', (
-                select
-                    jsonb_agg(
-                        jsonb_build_object(
-                            'name', pa.attname,
-                            'type', pt.typname
-                        )
-                        order by pa.attnum asc
-                    )
-                from
-                    pg_attribute pa
-                    join pg_type pt
-                        on pa.atttypid = pt.oid
-                where
-                    attrelid = entity_
-                    and attnum > 0
-                    and pg_catalog.has_column_privilege(working_role, entity_, pa.attname, 'SELECT')
-            )
-        )
-        -- Add "record" key for insert and update
-        || case
-            when action in ('INSERT', 'UPDATE') then
-                jsonb_build_object(
-                    'record',
-                    (
-                        select
-                            jsonb_object_agg(
-                                -- if unchanged toast, get column name and value from old record
-                                coalesce((c).name, (oc).name),
-                                case
-                                    when (c).name is null then (oc).value
-                                    else (c).value
-                                end
-                            )
-                        from
-                            unnest(columns) c
-                            full outer join unnest(old_columns) oc
-                                on (c).name = (oc).name
-                        where
-                            coalesce((c).is_selectable, (oc).is_selectable)
-                            and ( not error_record_exceeds_max_size or (octet_length((c).value::text) <= 64))
-                    )
-                )
-            else '{}'::jsonb
-        end
-        -- Add "old_record" key for update and delete
-        || case
-            when action = 'UPDATE' then
-                jsonb_build_object(
-                        'old_record',
-                        (
-                            select jsonb_object_agg((c).name, (c).value)
-                            from unnest(old_columns) c
-                            where
-                                (c).is_selectable
-                                and ( not error_record_exceeds_max_size or (octet_length((c).value::text) <= 64))
-                        )
-                    )
-            when action = 'DELETE' then
-                jsonb_build_object(
-                    'old_record',
-                    (
-                        select jsonb_object_agg((c).name, (c).value)
-                        from unnest(old_columns) c
-                        where
-                            (c).is_selectable
-                            and ( not error_record_exceeds_max_size or (octet_length((c).value::text) <= 64))
-                            and ( not is_rls_enabled or (c).is_pkey ) -- if RLS enabled, we can't secure deletes so filter to pkey
-                    )
-                )
-            else '{}'::jsonb
-        end;
-
-        -- Create the prepared statement
-        if is_rls_enabled and action <> 'DELETE' then
-            if (select 1 from pg_prepared_statements where name = 'walrus_rls_stmt' limit 1) > 0 then
-                deallocate walrus_rls_stmt;
-            end if;
-            execute realtime.build_prepared_statement_sql('walrus_rls_stmt', entity_, columns);
-        end if;
-
-        visible_to_subscription_ids = '{}';
-
-        for subscription_id, claims in (
-                select
-                    subs.subscription_id,
-                    subs.claims
-                from
-                    unnest(subscriptions) subs
-                where
-                    subs.entity = entity_
-                    and subs.claims_role = working_role
-                    and (
-                        realtime.is_visible_through_filters(columns, subs.filters)
-                        or (
-                          action = 'DELETE'
-                          and realtime.is_visible_through_filters(old_columns, subs.filters)
-                        )
-                    )
-        ) loop
-
-            if not is_rls_enabled or action = 'DELETE' then
-                visible_to_subscription_ids = visible_to_subscription_ids || subscription_id;
-            else
-                -- Check if RLS allows the role to see the record
-                perform
-                    -- Trim leading and trailing quotes from working_role because set_config
-                    -- doesn't recognize the role as valid if they are included
-                    set_config('role', trim(both '"' from working_role::text), true),
-                    set_config('request.jwt.claims', claims::text, true);
-
-                execute 'execute walrus_rls_stmt' into subscription_has_access;
-
-                if subscription_has_access then
-                    visible_to_subscription_ids = visible_to_subscription_ids || subscription_id;
-                end if;
-            end if;
-        end loop;
-
-        perform set_config('role', null, true);
-
-        return next (
-            output,
-            is_rls_enabled,
-            visible_to_subscription_ids,
-            case
-                when error_record_exceeds_max_size then array['Error 413: Payload Too Large']
-                else '{}'
-            end
-        )::realtime.wal_rls;
-
-    end if;
-end loop;
-
-perform set_config('role', null, true);
-end;
-$function$
- |
-| realtime       | broadcast_changes                     | CREATE OR REPLACE FUNCTION realtime.broadcast_changes(topic_name text, event_name text, operation text, table_name text, table_schema text, new record, old record, level text DEFAULT 'ROW'::text)
- RETURNS void
- LANGUAGE plpgsql
-AS $function$
-DECLARE
-    -- Declare a variable to hold the JSONB representation of the row
-    row_data jsonb := '{}'::jsonb;
-BEGIN
-    IF level = 'STATEMENT' THEN
-        RAISE EXCEPTION 'function can only be triggered for each row, not for each statement';
-    END IF;
-    -- Check the operation type and handle accordingly
-    IF operation = 'INSERT' OR operation = 'UPDATE' OR operation = 'DELETE' THEN
-        row_data := jsonb_build_object('old_record', OLD, 'record', NEW, 'operation', operation, 'table', table_name, 'schema', table_schema);
-        PERFORM realtime.send (row_data, event_name, topic_name);
-    ELSE
-        RAISE EXCEPTION 'Unexpected operation type: %', operation;
-    END IF;
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE EXCEPTION 'Failed to process the row: %', SQLERRM;
-END;
-
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| realtime       | build_prepared_statement_sql          | CREATE OR REPLACE FUNCTION realtime.build_prepared_statement_sql(prepared_statement_name text, entity regclass, columns realtime.wal_column[])
- RETURNS text
- LANGUAGE sql
-AS $function$
-      /*
-      Builds a sql string that, if executed, creates a prepared statement to
-      tests retrive a row from *entity* by its primary key columns.
-      Example
-          select realtime.build_prepared_statement_sql('public.notes', '{"id"}'::text[], '{"bigint"}'::text[])
-      */
-          select
-      'prepare ' || prepared_statement_name || ' as
-          select
-              exists(
-                  select
-                      1
-                  from
-                      ' || entity || '
-                  where
-                      ' || string_agg(quote_ident(pkc.name) || '=' || quote_nullable(pkc.value #>> '{}') , ' and ') || '
-              )'
-          from
-              unnest(columns) pkc
-          where
-              pkc.is_pkey
-          group by
-              entity
-      $function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| realtime       | cast                                  | CREATE OR REPLACE FUNCTION realtime."cast"(val text, type_ regtype)
- RETURNS jsonb
- LANGUAGE plpgsql
- IMMUTABLE
-AS $function$
-    declare
-      res jsonb;
-    begin
-      execute format('select to_jsonb(%L::'|| type_::text || ')', val)  into res;
-      return res;
-    end
-    $function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| realtime       | check_equality_op                     | CREATE OR REPLACE FUNCTION realtime.check_equality_op(op realtime.equality_op, type_ regtype, val_1 text, val_2 text)
- RETURNS boolean
- LANGUAGE plpgsql
- IMMUTABLE
-AS $function$
-      /*
-      Casts *val_1* and *val_2* as type *type_* and check the *op* condition for truthiness
-      */
-      declare
-          op_symbol text = (
-              case
-                  when op = 'eq' then '='
-                  when op = 'neq' then '!='
-                  when op = 'lt' then '<'
-                  when op = 'lte' then '<='
-                  when op = 'gt' then '>'
-                  when op = 'gte' then '>='
-                  when op = 'in' then '= any'
-                  else 'UNKNOWN OP'
-              end
-          );
-          res boolean;
-      begin
-          execute format(
-              'select %L::'|| type_::text || ' ' || op_symbol
-              || ' ( %L::'
-              || (
-                  case
-                      when op = 'in' then type_::text || '[]'
-                      else type_::text end
-              )
-              || ')', val_1, val_2) into res;
-          return res;
-      end;
-      $function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| realtime       | is_visible_through_filters            | CREATE OR REPLACE FUNCTION realtime.is_visible_through_filters(columns realtime.wal_column[], filters realtime.user_defined_filter[])
- RETURNS boolean
- LANGUAGE sql
- IMMUTABLE
-AS $function$
-    /*
-    Should the record be visible (true) or filtered out (false) after *filters* are applied
-    */
-        select
-            -- Default to allowed when no filters present
-            $2 is null -- no filters. this should not happen because subscriptions has a default
-            or array_length($2, 1) is null -- array length of an empty array is null
-            or bool_and(
-                coalesce(
-                    realtime.check_equality_op(
-                        op:=f.op,
-                        type_:=coalesce(
-                            col.type_oid::regtype, -- null when wal2json version <= 2.4
-                            col.type_name::regtype
-                        ),
-                        -- cast jsonb to text
-                        val_1:=col.value #>> '{}',
-                        val_2:=f.value
-                    ),
-                    false -- if null, filter does not match
-                )
-            )
-        from
-            unnest(filters) f
-            join unnest(columns) col
-                on f.column_name = col.name;
-    $function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| realtime       | list_changes                          | CREATE OR REPLACE FUNCTION realtime.list_changes(publication name, slot_name name, max_changes integer, max_record_bytes integer)
- RETURNS SETOF realtime.wal_rls
- LANGUAGE sql
- SET log_min_messages TO 'fatal'
-AS $function$
-      with pub as (
-        select
-          concat_ws(
-            ',',
-            case when bool_or(pubinsert) then 'insert' else null end,
-            case when bool_or(pubupdate) then 'update' else null end,
-            case when bool_or(pubdelete) then 'delete' else null end
-          ) as w2j_actions,
-          coalesce(
-            string_agg(
-              realtime.quote_wal2json(format('%I.%I', schemaname, tablename)::regclass),
-              ','
-            ) filter (where ppt.tablename is not null and ppt.tablename not like '% %'),
-            ''
-          ) w2j_add_tables
-        from
-          pg_publication pp
-          left join pg_publication_tables ppt
-            on pp.pubname = ppt.pubname
-        where
-          pp.pubname = publication
-        group by
-          pp.pubname
-        limit 1
-      ),
-      w2j as (
-        select
-          x.*, pub.w2j_add_tables
-        from
-          pub,
-          pg_logical_slot_get_changes(
-            slot_name, null, max_changes,
-            'include-pk', 'true',
-            'include-transaction', 'false',
-            'include-timestamp', 'true',
-            'include-type-oids', 'true',
-            'format-version', '2',
-            'actions', pub.w2j_actions,
-            'add-tables', pub.w2j_add_tables
-          ) x
-      )
-      select
-        xyz.wal,
-        xyz.is_rls_enabled,
-        xyz.subscription_ids,
-        xyz.errors
-      from
-        w2j,
-        realtime.apply_rls(
-          wal := w2j.data::jsonb,
-          max_record_bytes := max_record_bytes
-        ) xyz(wal, is_rls_enabled, subscription_ids, errors)
-      where
-        w2j.w2j_add_tables <> ''
-        and xyz.subscription_ids[1] is not null
-    $function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| realtime       | quote_wal2json                        | CREATE OR REPLACE FUNCTION realtime.quote_wal2json(entity regclass)
- RETURNS text
- LANGUAGE sql
- IMMUTABLE STRICT
-AS $function$
-      select
-        (
-          select string_agg('' || ch,'')
-          from unnest(string_to_array(nsp.nspname::text, null)) with ordinality x(ch, idx)
-          where
-            not (x.idx = 1 and x.ch = '"')
-            and not (
-              x.idx = array_length(string_to_array(nsp.nspname::text, null), 1)
-              and x.ch = '"'
-            )
-        )
-        || '.'
-        || (
-          select string_agg('' || ch,'')
-          from unnest(string_to_array(pc.relname::text, null)) with ordinality x(ch, idx)
-          where
-            not (x.idx = 1 and x.ch = '"')
-            and not (
-              x.idx = array_length(string_to_array(nsp.nspname::text, null), 1)
-              and x.ch = '"'
-            )
-          )
-      from
-        pg_class pc
-        join pg_namespace nsp
-          on pc.relnamespace = nsp.oid
-      where
-        pc.oid = entity
-    $function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| realtime       | send                                  | CREATE OR REPLACE FUNCTION realtime.send(payload jsonb, event text, topic text, private boolean DEFAULT true)
- RETURNS void
- LANGUAGE plpgsql
-AS $function$
-DECLARE
-  generated_id uuid;
-  final_payload jsonb;
-BEGIN
-  BEGIN
-    -- Generate a new UUID for the id
-    generated_id := gen_random_uuid();
-
-    -- Check if payload has an 'id' key, if not, add the generated UUID
-    IF payload ? 'id' THEN
-      final_payload := payload;
-    ELSE
-      final_payload := jsonb_set(payload, '{id}', to_jsonb(generated_id));
-    END IF;
-
-    -- Set the topic configuration
-    EXECUTE format('SET LOCAL realtime.topic TO %L', topic);
-
-    -- Attempt to insert the message
-    INSERT INTO realtime.messages (id, payload, event, topic, private, extension)
-    VALUES (generated_id, final_payload, event, topic, private, 'broadcast');
-  EXCEPTION
-    WHEN OTHERS THEN
-      -- Capture and notify the error
-      RAISE WARNING 'ErrorSendingBroadcastMessage: %', SQLERRM;
-  END;
-END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| realtime       | subscription_check_filters            | CREATE OR REPLACE FUNCTION realtime.subscription_check_filters()
- RETURNS trigger
- LANGUAGE plpgsql
-AS $function$
-    /*
-    Validates that the user defined filters for a subscription:
-    - refer to valid columns that the claimed role may access
-    - values are coercable to the correct column type
-    */
-    declare
-        col_names text[] = coalesce(
-                array_agg(c.column_name order by c.ordinal_position),
-                '{}'::text[]
-            )
-            from
-                information_schema.columns c
-            where
-                format('%I.%I', c.table_schema, c.table_name)::regclass = new.entity
-                and pg_catalog.has_column_privilege(
-                    (new.claims ->> 'role'),
-                    format('%I.%I', c.table_schema, c.table_name)::regclass,
-                    c.column_name,
-                    'SELECT'
-                );
-        filter realtime.user_defined_filter;
-        col_type regtype;
-
-        in_val jsonb;
-    begin
-        for filter in select * from unnest(new.filters) loop
-            -- Filtered column is valid
-            if not filter.column_name = any(col_names) then
-                raise exception 'invalid column for filter %', filter.column_name;
-            end if;
-
-            -- Type is sanitized and safe for string interpolation
-            col_type = (
-                select atttypid::regtype
-                from pg_catalog.pg_attribute
-                where attrelid = new.entity
-                      and attname = filter.column_name
-            );
-            if col_type is null then
-                raise exception 'failed to lookup type for column %', filter.column_name;
-            end if;
-
-            -- Set maximum number of entries for in filter
-            if filter.op = 'in'::realtime.equality_op then
-                in_val = realtime.cast(filter.value, (col_type::text || '[]')::regtype);
-                if coalesce(jsonb_array_length(in_val), 0) > 100 then
-                    raise exception 'too many values for `in` filter. Maximum 100';
-                end if;
-            else
-                -- raises an exception if value is not coercable to type
-                perform realtime.cast(filter.value, col_type);
-            end if;
-
-        end loop;
-
-        -- Apply consistent order to filters so the unique constraint on
-        -- (subscription_id, entity, filters) can't be tricked by a different filter order
-        new.filters = coalesce(
-            array_agg(f order by f.column_name, f.op, f.value),
-            '{}'
-        ) from unnest(new.filters) f;
-
-        return new;
-    end;
-    $function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| realtime       | to_regrole                            | CREATE OR REPLACE FUNCTION realtime.to_regrole(role_name text)
- RETURNS regrole
- LANGUAGE sql
- IMMUTABLE
-AS $function$ select role_name::regrole $function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| realtime       | topic                                 | CREATE OR REPLACE FUNCTION realtime.topic()
- RETURNS text
- LANGUAGE sql
- STABLE
-AS $function$
-select nullif(current_setting('realtime.topic', true), '')::text;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| storage        | add_prefixes                          | CREATE OR REPLACE FUNCTION storage.add_prefixes(_bucket_id text, _name text)
- RETURNS void
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $function$
-DECLARE
-    prefixes text[];
-BEGIN
-    prefixes := "storage"."get_prefixes"("_name");
-
-    IF array_length(prefixes, 1) > 0 THEN
-        INSERT INTO storage.prefixes (name, bucket_id)
-        SELECT UNNEST(prefixes) as name, "_bucket_id" ON CONFLICT DO NOTHING;
-    END IF;
-END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| storage        | can_insert_object                     | CREATE OR REPLACE FUNCTION storage.can_insert_object(bucketid text, name text, owner uuid, metadata jsonb)
- RETURNS void
- LANGUAGE plpgsql
-AS $function$
-BEGIN
-  INSERT INTO "storage"."objects" ("bucket_id", "name", "owner", "metadata") VALUES (bucketid, name, owner, metadata);
-  -- hack to rollback the successful insert
-  RAISE sqlstate 'PT200' using
-  message = 'ROLLBACK',
-  detail = 'rollback successful insert';
-END
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| storage        | delete_leaf_prefixes                  | CREATE OR REPLACE FUNCTION storage.delete_leaf_prefixes(bucket_ids text[], names text[])
- RETURNS void
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $function$
-DECLARE
-    v_rows_deleted integer;
-BEGIN
-    LOOP
-        WITH candidates AS (
-            SELECT DISTINCT
-                t.bucket_id,
-                unnest(storage.get_prefixes(t.name)) AS name
-            FROM unnest(bucket_ids, names) AS t(bucket_id, name)
-        ),
-        uniq AS (
-             SELECT
-                 bucket_id,
-                 name,
-                 storage.get_level(name) AS level
-             FROM candidates
-             WHERE name <> ''
-             GROUP BY bucket_id, name
-        ),
-        leaf AS (
-             SELECT
-                 p.bucket_id,
-                 p.name,
-                 p.level
-             FROM storage.prefixes AS p
-                  JOIN uniq AS u
-                       ON u.bucket_id = p.bucket_id
-                           AND u.name = p.name
-                           AND u.level = p.level
-             WHERE NOT EXISTS (
-                 SELECT 1
-                 FROM storage.objects AS o
-                 WHERE o.bucket_id = p.bucket_id
-                   AND o.level = p.level + 1
-                   AND o.name COLLATE "C" LIKE p.name || '/%'
-             )
-             AND NOT EXISTS (
-                 SELECT 1
-                 FROM storage.prefixes AS c
-                 WHERE c.bucket_id = p.bucket_id
-                   AND c.level = p.level + 1
-                   AND c.name COLLATE "C" LIKE p.name || '/%'
-             )
-        )
-        DELETE
-        FROM storage.prefixes AS p
-            USING leaf AS l
-        WHERE p.bucket_id = l.bucket_id
-          AND p.name = l.name
-          AND p.level = l.level;
-
-        GET DIAGNOSTICS v_rows_deleted = ROW_COUNT;
-        EXIT WHEN v_rows_deleted = 0;
-    END LOOP;
-END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| storage        | delete_prefix                         | CREATE OR REPLACE FUNCTION storage.delete_prefix(_bucket_id text, _name text)
- RETURNS boolean
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $function$
-BEGIN
-    -- Check if we can delete the prefix
-    IF EXISTS(
-        SELECT FROM "storage"."prefixes"
-        WHERE "prefixes"."bucket_id" = "_bucket_id"
-          AND level = "storage"."get_level"("_name") + 1
-          AND "prefixes"."name" COLLATE "C" LIKE "_name" || '/%'
-        LIMIT 1
-    )
-    OR EXISTS(
-        SELECT FROM "storage"."objects"
-        WHERE "objects"."bucket_id" = "_bucket_id"
-          AND "storage"."get_level"("objects"."name") = "storage"."get_level"("_name") + 1
-          AND "objects"."name" COLLATE "C" LIKE "_name" || '/%'
-        LIMIT 1
-    ) THEN
-    -- There are sub-objects, skip deletion
-    RETURN false;
-    ELSE
-        DELETE FROM "storage"."prefixes"
-        WHERE "prefixes"."bucket_id" = "_bucket_id"
-          AND level = "storage"."get_level"("_name")
-          AND "prefixes"."name" = "_name";
-        RETURN true;
-    END IF;
-END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| storage        | delete_prefix_hierarchy_trigger       | CREATE OR REPLACE FUNCTION storage.delete_prefix_hierarchy_trigger()
- RETURNS trigger
- LANGUAGE plpgsql
-AS $function$
-DECLARE
-    prefix text;
-BEGIN
-    prefix := "storage"."get_prefix"(OLD."name");
-
-    IF coalesce(prefix, '') != '' THEN
-        PERFORM "storage"."delete_prefix"(OLD."bucket_id", prefix);
-    END IF;
-
-    RETURN OLD;
-END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
-| storage        | enforce_bucket_name_length            | CREATE OR REPLACE FUNCTION storage.enforce_bucket_name_length()
- RETURNS trigger
- LANGUAGE plpgsql
-AS $function$
-begin
-    if length(new.name) > 100 then
-        raise exception 'bucket name "%" is too long (% characters). Max is 100.', new.name, length(new.name);
-    end if;
-    return new;
-end;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| storage        | extension                             | CREATE OR REPLACE FUNCTION storage.extension(name text)
- RETURNS text
- LANGUAGE plpgsql
- IMMUTABLE
-AS $function$
-DECLARE
-    _parts text[];
-    _filename text;
-BEGIN
-    SELECT string_to_array(name, '/') INTO _parts;
-    SELECT _parts[array_length(_parts,1)] INTO _filename;
-    RETURN reverse(split_part(reverse(_filename), '.', 1));
-END
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| storage        | filename                              | CREATE OR REPLACE FUNCTION storage.filename(name text)
- RETURNS text
- LANGUAGE plpgsql
-AS $function$
-DECLARE
-_parts text[];
-BEGIN
-	select string_to_array(name, '/') into _parts;
-	return _parts[array_length(_parts,1)];
-END
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| storage        | foldername                            | CREATE OR REPLACE FUNCTION storage.foldername(name text)
- RETURNS text[]
- LANGUAGE plpgsql
- IMMUTABLE
-AS $function$
-DECLARE
-    _parts text[];
-BEGIN
-    -- Split on "/" to get path segments
-    SELECT string_to_array(name, '/') INTO _parts;
-    -- Return everything except the last segment
-    RETURN _parts[1 : array_length(_parts,1) - 1];
-END
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| storage        | get_level                             | CREATE OR REPLACE FUNCTION storage.get_level(name text)
- RETURNS integer
- LANGUAGE sql
- IMMUTABLE STRICT
-AS $function$
-SELECT array_length(string_to_array("name", '/'), 1);
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| storage        | get_prefix                            | CREATE OR REPLACE FUNCTION storage.get_prefix(name text)
- RETURNS text
- LANGUAGE sql
- IMMUTABLE STRICT
-AS $function$
-SELECT
-    CASE WHEN strpos("name", '/') > 0 THEN
-             regexp_replace("name", '[\/]{1}[^\/]+\/?$', '')
-         ELSE
-             ''
-        END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| storage        | get_prefixes                          | CREATE OR REPLACE FUNCTION storage.get_prefixes(name text)
- RETURNS text[]
- LANGUAGE plpgsql
- IMMUTABLE STRICT
-AS $function$
-DECLARE
-    parts text[];
-    prefixes text[];
-    prefix text;
-BEGIN
-    -- Split the name into parts by '/'
-    parts := string_to_array("name", '/');
-    prefixes := '{}';
-
-    -- Construct the prefixes, stopping one level below the last part
-    FOR i IN 1..array_length(parts, 1) - 1 LOOP
-            prefix := array_to_string(parts[1:i], '/');
-            prefixes := array_append(prefixes, prefix);
-    END LOOP;
-
-    RETURN prefixes;
-END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| storage        | get_size_by_bucket                    | CREATE OR REPLACE FUNCTION storage.get_size_by_bucket()
- RETURNS TABLE(size bigint, bucket_id text)
- LANGUAGE plpgsql
- STABLE
-AS $function$
-BEGIN
-    return query
-        select sum((metadata->>'size')::bigint) as size, obj.bucket_id
-        from "storage".objects as obj
-        group by obj.bucket_id;
-END
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| storage        | list_multipart_uploads_with_delimiter | CREATE OR REPLACE FUNCTION storage.list_multipart_uploads_with_delimiter(bucket_id text, prefix_param text, delimiter_param text, max_keys integer DEFAULT 100, next_key_token text DEFAULT ''::text, next_upload_token text DEFAULT ''::text)
- RETURNS TABLE(key text, id text, created_at timestamp with time zone)
- LANGUAGE plpgsql
-AS $function$
-BEGIN
-    RETURN QUERY EXECUTE
-        'SELECT DISTINCT ON(key COLLATE "C") * from (
-            SELECT
-                CASE
-                    WHEN position($2 IN substring(key from length($1) + 1)) > 0 THEN
-                        substring(key from 1 for length($1) + position($2 IN substring(key from length($1) + 1)))
-                    ELSE
-                        key
-                END AS key, id, created_at
-            FROM
-                storage.s3_multipart_uploads
-            WHERE
-                bucket_id = $5 AND
-                key ILIKE $1 || ''%'' AND
-                CASE
-                    WHEN $4 != '''' AND $6 = '''' THEN
-                        CASE
-                            WHEN position($2 IN substring(key from length($1) + 1)) > 0 THEN
-                                substring(key from 1 for length($1) + position($2 IN substring(key from length($1) + 1))) COLLATE "C" > $4
-                            ELSE
-                                key COLLATE "C" > $4
-                            END
-                    ELSE
-                        true
-                END AND
-                CASE
-                    WHEN $6 != '''' THEN
-                        id COLLATE "C" > $6
-                    ELSE
-                        true
-                    END
-            ORDER BY
-                key COLLATE "C" ASC, created_at ASC) as e order by key COLLATE "C" LIMIT $3'
-        USING prefix_param, delimiter_param, max_keys, next_key_token, bucket_id, next_upload_token;
-END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| storage        | list_objects_with_delimiter           | CREATE OR REPLACE FUNCTION storage.list_objects_with_delimiter(bucket_id text, prefix_param text, delimiter_param text, max_keys integer DEFAULT 100, start_after text DEFAULT ''::text, next_token text DEFAULT ''::text)
- RETURNS TABLE(name text, id uuid, metadata jsonb, updated_at timestamp with time zone)
- LANGUAGE plpgsql
-AS $function$
-BEGIN
-    RETURN QUERY EXECUTE
-        'SELECT DISTINCT ON(name COLLATE "C") * from (
-            SELECT
-                CASE
-                    WHEN position($2 IN substring(name from length($1) + 1)) > 0 THEN
-                        substring(name from 1 for length($1) + position($2 IN substring(name from length($1) + 1)))
-                    ELSE
-                        name
-                END AS name, id, metadata, updated_at
-            FROM
-                storage.objects
-            WHERE
-                bucket_id = $5 AND
-                name ILIKE $1 || ''%'' AND
-                CASE
-                    WHEN $6 != '''' THEN
-                    name COLLATE "C" > $6
-                ELSE true END
-                AND CASE
-                    WHEN $4 != '''' THEN
-                        CASE
-                            WHEN position($2 IN substring(name from length($1) + 1)) > 0 THEN
-                                substring(name from 1 for length($1) + position($2 IN substring(name from length($1) + 1))) COLLATE "C" > $4
-                            ELSE
-                                name COLLATE "C" > $4
-                            END
-                    ELSE
-                        true
-                END
-            ORDER BY
-                name COLLATE "C" ASC) as e order by name COLLATE "C" LIMIT $3'
-        USING prefix_param, delimiter_param, max_keys, next_token, bucket_id, start_after;
-END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| storage        | lock_top_prefixes                     | CREATE OR REPLACE FUNCTION storage.lock_top_prefixes(bucket_ids text[], names text[])
- RETURNS void
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $function$
-DECLARE
-    v_bucket text;
-    v_top text;
-BEGIN
-    FOR v_bucket, v_top IN
-        SELECT DISTINCT t.bucket_id,
-            split_part(t.name, '/', 1) AS top
-        FROM unnest(bucket_ids, names) AS t(bucket_id, name)
-        WHERE t.name <> ''
-        ORDER BY 1, 2
-        LOOP
-            PERFORM pg_advisory_xact_lock(hashtextextended(v_bucket || '/' || v_top, 0));
-        END LOOP;
-END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| storage        | objects_delete_cleanup                | CREATE OR REPLACE FUNCTION storage.objects_delete_cleanup()
- RETURNS trigger
- LANGUAGE plpgsql
- SECURITY DEFINER
-AS $function$
-DECLARE
-    v_bucket_ids text[];
-    v_names      text[];
-BEGIN
-    IF current_setting('storage.gc.prefixes', true) = '1' THEN
-        RETURN NULL;
-    END IF;
-
-    PERFORM set_config('storage.gc.prefixes', '1', true);
-
-    SELECT COALESCE(array_agg(d.bucket_id), '{}'),
-           COALESCE(array_agg(d.name), '{}')
-    INTO v_bucket_ids, v_names
-    FROM deleted AS d
-    WHERE d.name <> '';
-
-    PERFORM storage.lock_top_prefixes(v_bucket_ids, v_names);
-    PERFORM storage.delete_leaf_prefixes(v_bucket_ids, v_names);
-
-    RETURN NULL;
-END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| storage        | objects_insert_prefix_trigger         | CREATE OR REPLACE FUNCTION storage.objects_insert_prefix_trigger()
- RETURNS trigger
- LANGUAGE plpgsql
-AS $function$
-BEGIN
-    PERFORM "storage"."add_prefixes"(NEW."bucket_id", NEW."name");
-    NEW.level := "storage"."get_level"(NEW."name");
-
-    RETURN NEW;
-END;
-$function$
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-
-
-Trigger Definitions
-SELECT
-    event_object_table AS table_name,
-    trigger_name,
-    action_timing,
-    event_manipulation AS event,
-    action_statement
-FROM information_schema.triggers
-ORDER BY event_object_table;
-
-| table_name           | trigger_name                        | action_timing | event  | action_statement                                           |
-| -------------------- | ----------------------------------- | ------------- | ------ | ---------------------------------------------------------- |
-| buckets              | enforce_bucket_name_length_trigger  | BEFORE        | INSERT | EXECUTE FUNCTION storage.enforce_bucket_name_length()      |
-| buckets              | enforce_bucket_name_length_trigger  | BEFORE        | UPDATE | EXECUTE FUNCTION storage.enforce_bucket_name_length()      |
-| cases                | update_cases_updated_at             | BEFORE        | UPDATE | EXECUTE FUNCTION update_updated_at_column()                |
-| councils             | trigger_councils_updated_at         | BEFORE        | UPDATE | EXECUTE FUNCTION update_councils_updated_at()              |
-| documents            | update_documents_updated_at         | BEFORE        | UPDATE | EXECUTE FUNCTION update_updated_at_column()                |
-| hmo_compliance_items | update_hmo_compliance_updated_at    | BEFORE        | UPDATE | EXECUTE FUNCTION update_updated_at_column()                |
-| hmo_properties       | update_hmo_properties_updated_at    | BEFORE        | UPDATE | EXECUTE FUNCTION update_updated_at_column()                |
-| hmo_tenants          | update_hmo_tenants_updated_at       | BEFORE        | UPDATE | EXECUTE FUNCTION update_updated_at_column()                |
-| objects              | update_objects_updated_at           | BEFORE        | UPDATE | EXECUTE FUNCTION storage.update_updated_at_column()        |
-| objects              | objects_insert_create_prefix        | BEFORE        | INSERT | EXECUTE FUNCTION storage.objects_insert_prefix_trigger()   |
-| objects              | objects_delete_delete_prefix        | AFTER         | DELETE | EXECUTE FUNCTION storage.delete_prefix_hierarchy_trigger() |
-| objects              | objects_update_create_prefix        | BEFORE        | UPDATE | EXECUTE FUNCTION storage.objects_update_prefix_trigger()   |
-| orders               | update_orders_updated_at            | BEFORE        | UPDATE | EXECUTE FUNCTION update_updated_at_column()                |
-| prefixes             | prefixes_delete_hierarchy           | AFTER         | DELETE | EXECUTE FUNCTION storage.delete_prefix_hierarchy_trigger() |
-| prefixes             | prefixes_create_hierarchy           | BEFORE        | INSERT | EXECUTE FUNCTION storage.prefixes_insert_trigger()         |
-| seo_backlinks        | update_seo_backlinks_updated_at     | BEFORE        | UPDATE | EXECUTE FUNCTION update_seo_updated_at()                   |
-| seo_content_queue    | update_seo_content_queue_updated_at | BEFORE        | UPDATE | EXECUTE FUNCTION update_seo_updated_at()                   |
-| seo_keywords         | update_seo_keywords_updated_at      | BEFORE        | UPDATE | EXECUTE FUNCTION update_seo_updated_at()                   |
-| seo_pages            | update_seo_pages_updated_at         | BEFORE        | UPDATE | EXECUTE FUNCTION update_seo_updated_at()                   |
-| subscription         | tr_check_filters                    | BEFORE        | INSERT | EXECUTE FUNCTION realtime.subscription_check_filters()     |
-| subscription         | tr_check_filters                    | BEFORE        | UPDATE | EXECUTE FUNCTION realtime.subscription_check_filters()     |
-| uk_councils          | update_councils_updated_at          | BEFORE        | UPDATE | EXECUTE FUNCTION update_updated_at_column()                |
-| users                | update_users_updated_at             | BEFORE        | UPDATE | EXECUTE FUNCTION update_updated_at_column()                |
-
-Row Counts (optional but helpful)
-
-Allows Claude to reason about magnitude + performance.
-
-SELECT
-    table_name,
-    row_estimate::bigint
-FROM (
-    SELECT
-        relname AS table_name,
-        reltuples AS row_estimate
-    FROM pg_class
-    WHERE relkind = 'r'
-) AS estimates
-ORDER BY row_estimate DESC;
-
-| table_name                 | row_estimate |
-| -------------------------- | ------------ |
-| pg_description             | 5224         |
-| pg_attribute               | 4945         |
-| pg_depend                  | 3520         |
-| pg_proc                    | 3446         |
-| pg_amop                    | 945          |
-| pg_collation               | 815          |
-| pg_operator                | 799          |
-| pg_type                    | 763          |
-| sql_features               | 755          |
-| pg_class                   | 700          |
-| pg_amproc                  | 696          |
-| pg_shdepend                | 659          |
-| conversations              | 575          |
-| pg_ts_config_map           | 551          |
-| pg_statistic               | 503          |
-| councils                   | 361          |
-| pg_index                   | 349          |
-| pg_constraint              | 248          |
-| pg_cast                    | 229          |
-| pg_init_privs              | 223          |
-| pg_attrdef                 | 209          |
-| pg_opclass                 | 177          |
-| cases                      | 173          |
-| pg_trigger                 | 160          |
-| pg_aggregate               | 157          |
-| pg_opfamily                | 146          |
-| pg_rewrite                 | 145          |
-| pg_conversion              | 128          |
-| case_facts                 | 77           |
-| schema_migrations          | 69           |
-| schema_migrations          | 65           |
-| pg_policy                  | 43           |
-| pg_enum                    | 40           |
-| pg_ts_config               | 29           |
-| pg_ts_dict                 | 29           |
-| sql_sizing                 | 23           |
-| pg_authid                  | 16           |
-| sql_implementation_info    | 12           |
-| sql_parts                  | 11           |
-| pg_am                      | 7            |
-| pg_range                   | 6            |
-| pg_ts_template             | 5            |
-| pg_namespace               | 4            |
-| pg_language                | 4            |
-| pg_auth_members            | 3            |
-| pg_database                | 2            |
-| pg_tablespace              | 2            |
-| pg_shdescription           | 1            |
-| pg_extension               | 1            |
-| pg_ts_parser               | 1            |
-| pg_statistic_ext           | 0            |
-| pg_largeobject_metadata    | 0            |
-| pg_inherits                | 0            |
-| pg_subscription            | 0            |
-| pg_user_mapping            | 0            |
-| pg_foreign_data_wrapper    | 0            |
-| pg_foreign_server          | 0            |
-| pg_foreign_table           | 0            |
-| pg_replication_origin      | 0            |
-| pg_default_acl             | 0            |
-| pg_statistic_ext_data      | 0            |
-| pg_seclabel                | 0            |
-| pg_shseclabel              | 0            |
-| pg_largeobject             | 0            |
-| pg_parameter_acl           | 0            |
-| pg_partitioned_table       | 0            |
-| pg_subscription_rel        | 0            |
-| pg_transform               | 0            |
-| pg_sequence                | 0            |
-| pg_publication             | 0            |
-| pg_db_role_setting         | 0            |
-| pg_publication_rel         | 0            |
-| pg_publication_namespace   | 0            |
-| pg_event_trigger           | 0            |
-| ai_usage_logs              | -1           |
-| sso_domains                | -1           |
-| saml_providers             | -1           |
-| sso_providers              | -1           |
-| instances                  | -1           |
-| documents                  | -1           |
-| orders                     | -1           |
-| objects                    | -1           |
-| buckets                    | -1           |
-| mfa_factors                | -1           |
-| refresh_tokens             | -1           |
-| secrets                    | -1           |
-| hmo_properties             | -1           |
-| users                      | -1           |
-| audit_log_entries          | -1           |
-| saml_relay_states          | -1           |
-| mfa_amr_claims             | -1           |
-| flow_state                 | -1           |
-| identities                 | -1           |
-| one_time_tokens            | -1           |
-| mfa_challenges             | -1           |
-| oauth_clients              | -1           |
-| hmo_tenants                | -1           |
-| sessions                   | -1           |
-| oauth_authorizations       | -1           |
-| oauth_consents             | -1           |
-| hmo_compliance_items       | -1           |
-| migrations                 | -1           |
-| s3_multipart_uploads       | -1           |
-| s3_multipart_uploads_parts | -1           |
-| prefixes                   | -1           |
-| buckets_vectors            | -1           |
-| vector_indexes             | -1           |
-| buckets_analytics          | -1           |
-| users                      | -1           |
-| webhook_logs               | -1           |
-| uk_councils                | -1           |
-| subscription               | -1           |
-| ai_usage                   | -1           |
-| seo_pages                  | -1           |
-| seo_keywords               | -1           |
-| seo_content_queue          | -1           |
-| seo_performance            | -1           |
-| seo_automation_log         | -1           |
-| seo_backlinks              | -1           |
-
-
+                (x->'value') #>> '{}'
