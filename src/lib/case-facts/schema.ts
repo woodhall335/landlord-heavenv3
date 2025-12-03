@@ -5,6 +5,11 @@
 // - Keys are MQS question IDs or flat paths like "property_address_line1"
 // - Array items use dot notation: "tenants.0.full_name"
 // - Special __meta field tracks product/tier information
+//
+// Jurisdiction-specific fields (automatically populated from MQS v2.0.1+):
+// - England/Wales: right_to_rent_check_date, how_to_rent_guide_provided, prescribed_information_served
+// - Scotland: uses_model_tenancy_terms, in_rent_pressure_zone, landlord_registration, repairing_standard_compliance
+// - Northern Ireland: ni_notice_period_days, fitness_standard_compliance
 
 export interface WizardFactsMeta {
   product: string | null;
