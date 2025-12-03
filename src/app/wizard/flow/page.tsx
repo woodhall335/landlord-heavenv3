@@ -149,8 +149,13 @@ function WizardFlowContent() {
   }
 
   const handleComplete = (completedCaseId: string) => {
-    // Navigate to preview/checkout page
-    router.push(`/wizard/preview/${completedCaseId}`);
+    // For eviction cases, route through review page for analysis
+    if (type === 'eviction') {
+      router.push(`/wizard/review?case_id=${completedCaseId}`);
+    } else {
+      // Navigate to preview/checkout page for other case types
+      router.push(`/wizard/preview/${completedCaseId}`);
+    }
   };
 
   // Use structured wizard for tenancy agreements and money claims
