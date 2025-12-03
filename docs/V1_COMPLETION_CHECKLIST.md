@@ -300,80 +300,115 @@ Canonical: Scotland sections in MASTER_BLUEPRINT.md, SCOTLAND_MQS_EXPANSION.md
  At least one Form E test case covering a common ground (e.g. arrears).
 
 5. Money Claims – England & Wales (N1)
-Canonical: MASTER_BLUEPRINT.md §3.3, BUNDLE_BUILDER_SPEC.md, CASE_INTEL_SPEC.md
+Canonical: MASTER_BLUEPRINT.md §3.3, BUNDLE_BUILDER_SPEC.md, CASE_INTEL_SPEC.md, **docs/MONEY_CLAIM_SPEC.md** ✅
 
 Note: A lot of money-claim functionality is already implemented (MQS, pack generator, official forms). This section is about verification & finishing touches.
 
- Verify N1 filler (official-forms-filler.ts):
+- [x] Verify N1 filler (official-forms-filler.ts):
+  - [x] Parties, claim value, rent arrears, interest, court fee fields mapped
+  - **Implementation:** `src/lib/documents/official-forms-filler.ts:fillN1Form()` (43 fields mapped)
+  - **Verified:** 2025-12-03
 
- Parties, claim value, rent arrears, interest, court fee fields mapped
+- [x] Arrears schedule:
+  - [x] Confirm generator produces:
+    - [x] Month-by-month breakdown
+    - [x] Running total
+    - [x] Used correctly in pack and (if promised) attached to N1
+  - **Template:** `uk/england-wales/templates/money_claims/schedule_of_arrears.hbs`
+  - **Generator:** `src/lib/documents/money-claim-pack-generator.ts:350-365`
+  - **Verified:** 2025-12-03
 
- Arrears schedule:
+- [x] Interest:
+  - [x] Confirm Section 69 CCA 8% logic and daily rate
+  - [x] Correctly written into:
+    - [x] N1 fields
+    - [x] Particulars of Claim wording
+  - **Template:** `uk/england-wales/templates/money_claims/interest_workings.hbs`
+  - **Calculation:** `src/lib/documents/money-claim-pack-generator.ts:172-178` (8% default, daily rate)
+  - **Verified:** 2025-12-03
 
- Confirm generator produces:
+- [x] Particulars of Claim:
+  - [x] Generator exists and:
+    - [x] Uses MQS + CaseFacts + case-intel
+    - [x] Includes arrears narrative, interest wording, what the court should order
+  - **Template:** `uk/england-wales/templates/money_claims/particulars_of_claim.hbs`
+  - **Generator:** `src/lib/documents/money-claim-pack-generator.ts:334-348`
+  - **Verified:** 2025-12-03
 
- Month-by-month breakdown
+- [x] Bundle:
+  - [x] Money-claim bundle for E&W includes:
+    - [x] N1 (official PDF via pdf-lib)
+    - [x] POC (Particulars of Claim)
+    - [x] Arrears schedule
+    - [x] Evidence index/checklist
+    - [x] Interest calculation workings
+    - [x] PAP-DEBT documents (Letter Before Claim, Info Sheet, Reply Form, Financial Statement)
+    - [x] Filing guide (MCOL + paper)
+    - [x] Hearing preparation sheet
+  - **Total Documents:** 12
+  - **Pack Generator:** `src/lib/documents/money-claim-pack-generator.ts:generateEnglandWalesMoneyClaimPack()`
+  - **Verified:** 2025-12-03
 
- Running total
+- [x] Add tests or verify existing tests:
+  - [x] At least one test filling N1 and asserting key fields.
+  - **Test File:** `tests/documents/money-claim-pack.test.ts`
+  - **Coverage:** N1 generation, error handling, jurisdiction validation
+  - **Additional Tests:**
+    - `tests/api/wizard-mqs-money-claim.test.ts` (MQS validation)
+    - `tests/api/wizard-money-claim-completion.test.ts` (E2E wizard)
+    - `tests/integration/money-claim-wizard-flow.test.ts` (Full integration)
+  - **Verified:** 2025-12-03
 
- Used correctly in pack and (if promised) attached to N1
-
- Interest:
-
- Confirm Section 69 CCA 8% logic and daily rate
-
- Correctly written into:
-
- N1 fields
-
- Particulars of Claim wording
-
- Particulars of Claim:
-
- Generator exists and:
-
- Uses MQS + CaseFacts + case-intel
-
- Includes arrears narrative, interest wording, what the court should order
-
- Bundle:
-
- Money-claim bundle for E&W includes:
-
- N1
-
- POC
-
- Arrears schedule
-
- Evidence index/checklist
-
- Add tests or verify existing tests:
-
- At least one test filling N1 and asserting key fields.
+**✅ Section 5 Complete - England & Wales money claims fully verified and documented**
 
 6. Money Claims – Scotland (Form 3A / Simple Procedure)
-Canonical: Scotland money-claim sections in MASTER_BLUEPRINT.md, BUNDLE_BUILDER_SPEC.md
+Canonical: Scotland money-claim sections in MASTER_BLUEPRINT.md, BUNDLE_BUILDER_SPEC.md, **docs/MONEY_CLAIM_SPEC.md** ✅
 
- Verify Form 3A filler:
+- [x] Verify Form 3A filler:
+  - [x] Parties, sheriff court selection, claim value, arrears summary, narrative
+  - [x] Based on MQS fields and CaseFacts
+  - **Implementation:** `src/lib/documents/scotland-forms-filler.ts:fillSimpleProcedureClaim()`
+  - **Official Form:** `public/official-forms/scotland/simple_procedure_claim_form.pdf` (Form 3A v2024.03)
+  - **Key Features:**
+    - Pursuer (claimant) / Defender (respondent) details
+    - Sheriffdom selection (e.g., Edinburgh Sheriff Court)
+    - Claim breakdown (arrears/damages/other)
+    - Interest calculation (8% default)
+    - Pre-action attempts (Simple Procedure Rule 3.1)
+    - Statement of truth
+  - **Verified:** 2025-12-03
 
- Parties, sheriff court selection, claim value, arrears summary, narrative
+- [x] Bundle:
+  - [x] Scotland money-claim bundle includes:
+    - [x] Form 3A (official PDF via pdf-lib)
+    - [x] Arrears schedule equivalent
+    - [x] Evidence index/schedule
+    - [x] Simple Procedure Particulars
+    - [x] Interest calculation (if applicable)
+    - [x] Pre-Action Letter (Rule 3.1, 14-day deadline)
+    - [x] Filing guide (Civil Online + paper)
+    - [x] Hearing preparation sheet
+  - **Total Documents:** 7-9 (depending on arrears/interest)
+  - **Pack Generator:** `src/lib/documents/scotland-money-claim-pack-generator.ts:generateScotlandMoneyClaimPack()`
+  - **Court Fee Calculation:** £21/£75/£145 bands (Simple Procedure limit £5,000)
+  - **Verified:** 2025-12-03
 
- Based on MQS fields and CaseFacts
+- [x] Add tests:
+  - [x] At least one test generating Form 3A and asserting key fields are correct.
+  - **Test File:** `tests/documents/scotland-money-claim-pack.test.ts`
+  - **Coverage:**
+    - Form 3A generation
+    - Court fee calculation (£300/£1,500/£5,000 bands)
+    - Error handling
+    - Jurisdiction validation
+    - Simple Procedure £5,000 limit warning
+  - **Additional Tests:**
+    - `tests/api/wizard-mqs-money-claim.test.ts` (Scotland MQS validation)
+    - `tests/api/wizard-money-claim-completion.test.ts` (E2E wizard)
+    - `tests/integration/money-claim-wizard-flow.test.ts` (Full integration)
+  - **Verified:** 2025-12-03
 
- Bundle:
-
- Scotland money-claim bundle includes:
-
- Form 3A
-
- Arrears schedule equivalent
-
- Evidence index/schedule
-
- Add tests:
-
- At least one test generating Form 3A and asserting key fields are correct.
+**✅ Section 6 Complete - Scotland Simple Procedure money claims fully verified and documented**
 
 7. Tenancy Agreements – AST / PRT / NI
 Canonical: MASTER_BLUEPRINT.md §3.4, tenancy templates, Ask Heaven prompt
