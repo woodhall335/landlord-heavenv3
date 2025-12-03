@@ -14,6 +14,8 @@ import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
+import { runDecisionEngine, type DecisionInput } from '@/lib/decision-engine';
+import { normalizeCaseFacts } from '@/lib/case-facts/normalize';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -535,7 +537,28 @@ export async function POST(request: Request) {
       console.error('Failed to insert user conversation row:', convErr);
     }
 
-    // Call Ask Heaven, but treat all errors as non-fatal
+    // Build decision context for Ask Heaven
+    let decisionContext = null;
+    try {
+      // Only run decision engine for eviction cases with enough data
+      if (caseRow.case_type === 'eviction' && collectedFacts && Object.keys(collectedFacts).length > 5) {
+        const caseFacts = normalizeCaseFacts(collectedFacts);
+
+        const decisionInput: DecisionInput = {
+          jurisdiction: caseRow.jurisdiction as any,
+          product: product as any,
+          case_type: 'eviction',
+          facts: caseFacts,
+        };
+
+        decisionContext = runDecisionEngine(decisionInput);
+      }
+    } catch (decisionErr) {
+      console.warn('Decision engine failed in answer route:', decisionErr);
+      // Continue without decision context
+    }
+
+    // Call Ask Heaven with enhanced context, but treat all errors as non-fatal
     let enhanced: Awaited<ReturnType<typeof enhanceAnswer>> | null = null;
     try {
       enhanced = await enhanceAnswer({
@@ -544,6 +567,8 @@ export async function POST(request: Request) {
         jurisdiction: caseRow.jurisdiction,
         product,
         caseType: caseRow.case_type,
+        decisionContext,           // NEW: Decision engine context
+        wizardFacts: collectedFacts, // NEW: Current wizard state
       });
     } catch (enhErr) {
       console.error('enhanceAnswer failed, proceeding without suggestions:', enhErr);
