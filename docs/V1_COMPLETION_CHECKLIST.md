@@ -1,567 +1,623 @@
-# 🚦 Landlord Heaven – V1 Completion Checklist (Non-HMO, Non-NI Evictions/Money Claims)
+# V1 Completion Checklist (Non-HMO, Non-NI Eviction/Money-Claim)
 
 **Scope:**  
-This checklist is for **Claude Code** to complete and verify V1 of Landlord Heaven, **excluding**:
+This checklist tracks everything required to ship **V1 (non-HMO)** of Landlord Heaven:
 
-- HMO Licensing Suite (see `HMO_LICENSING_SUITE_SPECIFICATION.md`)  
-- Northern Ireland **eviction** workflows  
-- Northern Ireland **money claim** workflows  
+- ✅ England & Wales: evictions, money claims, tenancy agreements  
+- ✅ Scotland: evictions, money claims, tenancy agreements  
+- ✅ Northern Ireland: *tenancy agreements only*  
+- ❌ Northern Ireland evictions: **explicitly v2+ / blocked**  
+- ❌ Northern Ireland money-claims: **explicitly v2+ / blocked**  
+- ❌ HMO Licensing Suite: **explicitly v2+ / blocked**
 
-Those are **explicit v2+/future** items. Everything else below is **in-scope for V1**.
+**Canonical references:**
 
----
+- `docs/MASTER_BLUEPRINT.md`
+- `docs/supabase_schema.MD` ← **canonical schema snapshot**
+- `docs/DB_SCHEMA_ALIGNMENT.md`
+- `docs/ASK_HEAVEN_SYSTEM_PROMPT.md`
+- `docs/CASE_INTEL_SPEC.md`
+- `docs/BUNDLE_BUILDER_SPEC.md`
+- `docs/CONVERSATIONAL_WIZARD_SPECIFICATION.md`
+- `docs/FRONTEND_INTEGRATION_GUIDE.md`
+- `docs/LEGAL_CHANGE_PROTOCOL.md`
+- `docs/EVICTION_AUDIT_IMPLEMENTATION_SUMMARY.md`
+- `docs/MQS_INTEGRATION_COMPLETE.md`
+- `docs/MQS_AUDIT_REPORT.md`
+- `docs/NI_EVICTION_STATUS.md`
 
-## 0. Ground Rules for This Checklist
-
-- ✅ **Source of truth for product/tech:** `MASTER_BLUEPRINT.md`
-- ✅ **Source of truth for MQS state:** `MQS_AUDIT_REPORT.md`
-- ✅ **Source of truth for DB schema:** `supabase_schema.MD` (NOT `DATABASE_SCHEMA.md`)
-- ✅ **Source of truth for AI/Case Intel/Bundle Builder/Legal Change:**  
-  - `ASK_HEAVEN_SYSTEM_PROMPT.md`  
-  - `CASE_INTEL_SPEC.md`  
-  - `BUNDLE_BUILDER_SPEC.md`  
-  - `LEGAL_CHANGE_PROTOCOL.md`  
-  - `adr-001-wizardfacts-casefacts.md`
-- ✅ **Source of truth for Wizard UX / Frontend wiring:**  
-  - `CONVERSATIONAL_WIZARD_SPECIFICATION.md`  
-  - `FRONTEND_INTEGRATION_GUIDE.md`  
-  - `MQS_INTEGRATION_COMPLETE.md`  
-  - `EVICTION_AUDIT_IMPLEMENTATION_SUMMARY.md`
-
-**Conventions**
-
-- `[x]` = Done / already implemented and verified  
-- `[~]` = Implemented but needs verification / polish / partial  
-- `[ ]` = Not done yet / TODO  
-- `//` comments tell you where to look and what to do
+> **Rule for Claude:**  
+> For each item, either:
+> - Implement/fix it and change `[ ]` → `[x]`, or  
+> - If it’s *already* fully done in the codebase, just change `[ ]` → `[x]` and briefly note “verified”.  
+> Use `docs/supabase_schema.MD` and the other specs as the source of truth.
 
 ---
 
-## 1. Documentation & Schema Alignment (Meta Layer)
+## 0. Scope & Guardrails
 
-These ensure all code work stays aligned with the docs and DB.
-
-### 1.1 Canonical Docs Hook-Up
-
-- [x] Confirm `MASTER_BLUEPRINT.md` is v10+ and in `/docs`
-- [x] Confirm all key specs exist and are discoverable by tools:
-  - [x] `ASK_HEAVEN_SYSTEM_PROMPT.md`
-  - [x] `CASE_INTEL_SPEC.md`
-  - [x] `BUNDLE_BUILDER_SPEC.md`
-  - [x] `LEGAL_CHANGE_PROTOCOL.md`
-  - [x] `MQS_INTEGRATION_COMPLETE.md`
-  - [x] `EVICTION_AUDIT_IMPLEMENTATION_SUMMARY.md`
-  - [x] `CONVERSATIONAL_WIZARD_SPECIFICATION.md`
-  - [x] `FRONTEND_INTEGRATION_GUIDE.md`
-  - [x] `adr-001-wizardfacts-casefacts.md`
-  - [x] `NI_EVICTION_STATUS.md`
-- [ ] Add this file as `docs/V1_COMPLETION_CHECKLIST.md` and commit
-
-### 1.2 Database Schema Alignment (supabase_schema.MD)
-
-- [x] `supabase_schema.MD` exists and is the **latest** schema export
-- [x] Do **not** rely on `DATABASE_SCHEMA.md` for schema; treat it as historical
-- [x] For each of the following tables in `supabase_schema.MD`, verify there is matching TS type + usage:
-
-  - [x] `cases`
-  - [x] `wizard_facts` (stored in `case_facts.facts`)
-  - [x] `case_facts` (stores flat WizardFacts)
-  - [x] `documents` (generated documents)
-  - [x] `conversations` (Ask Heaven conversation history)
-  - [~] `evidence` / `evidence_items` (deferred to V2)
-  - [~] `law_snapshots` / `law_profile` (deferred to V2)
-  - [~] `users` / `profiles` (basic Supabase auth, not critical for V1)
-
-- [x] For each core table (cases, case_facts, documents, conversations):
-  - [x] Compare columns + types with TS types in `src/types/` and `src/lib/supabase/`
-  - [x] Fix type mismatches (nullability, enums, JSON fields)
-  - [x] Create strongly-typed Row/Insert/Update interfaces in `database-types.ts`
-  - [x] Re-export from `types.ts` for convenience
-  - [x] Keep permissive Database interface for backward compatibility (no V1 refactor)
-
-- [x] Add documentation explaining type mismatches and migration strategy:
-  - [x] Created `docs/DB_SCHEMA_ALIGNMENT.md` documenting all findings
-  - [x] Core tables: cases, case_facts, documents, conversations
-  - [x] Type safety foundation for V2+ refactoring  
+- [ ] Confirm the following are **NOT** implemented for V1 (and are clearly blocked in UX/API):
+  - [ ] HMO licensing flows (Standard/Premium packs, fire risk scoring, council-specific HMO logic)
+  - [ ] Northern Ireland eviction workflows
+  - [ ] Northern Ireland money-claim workflows
+- [ ] Ensure blocking is:
+  - [ ] Implemented in `/api/wizard/start`
+  - [ ] Reflected in error messages (roadmap wording, “consult local solicitor”)
+  - [ ] Documented in `docs/NI_EVICTION_STATUS.md`
+  - [ ] Mentioned in `docs/MASTER_BLUEPRINT.md` as **v2+ roadmap**, not V1 feature
 
 ---
 
-## 2. MQS Layer (All Products, All In-Scope Jurisdictions)
+## 1. Database & Types (Supabase-Aligned)
 
-Reference: `MQS_AUDIT_REPORT.md`, `MQS_INTEGRATION_COMPLETE.md`, `MASTER_BLUEPRINT.md`
+### 1.1 Schema Snapshot
 
-### 2.1 MQS Files – Metadata & Consistency
+- [x] `docs/supabase_schema.MD` exists with a current `psql` schema dump  
+- [ ] Verify `docs/DATABASE_SCHEMA.md` is either:
+  - [ ] Updated to match `supabase_schema.MD`, **OR**
+  - [ ] Clearly marked as “historical, see supabase_schema.MD for canonical schema”
 
-For all **9 MQS files** (notice_only, complete_pack, money_claim, tenancy_agreement × E&W/Scotland/NI):
+### 1.2 TypeScript Type Alignment (Core Tables)
 
-- [x] Add `__meta` block at the top of each MQS YAML:
-  - [x] `version` (e.g. `2.0.1`)
-  - [x] `effective_from`
-  - [x] `last_updated`
-  - [x] `legal_review_date`
-  - [x] `jurisdiction`
-  - [x] `product`
-- [x] Ensure question IDs follow consistent naming (e.g. `tenancy.basic_details`, `eviction.notice_type`, etc.)
-- [x] Ensure `depends_on` / `dependsOn` usage is consistent and supported by `mqs-loader.ts`
-- [x] Ensure `maps_to` fields reference valid CaseFacts paths
+> Canonical: `docs/supabase_schema.MD`, `docs/DB_SCHEMA_ALIGNMENT.md`
 
-### 2.2 Scotland Eviction MQS Expansion
+Core tables (at minimum):
 
-Files:
-
-- `config/mqs/notice_only/scotland.yaml`
-- `config/mqs/complete_pack/scotland.yaml`
+- `cases`
+- `case_facts`
+- `documents`
+- `conversations` (if used in-app)
+- (Optional for V1 core: `orders` / `payments` / `ai_usage`)
 
 Tasks:
 
-- [x] Add **ground-by-ground detail** questions for PRT grounds (1–6):
-  - [x] Ground 1 (rent arrears): arrears months, pre-action requirements, narrative
-  - [x] Ground 2 (breach): breach type, materiality, continuing status, clause references, narrative
-  - [x] Ground 3 (ASB): incident details, evidence types, police involvement, narrative
-  - [x] Ground 4 (landlord occupy): who, when, genuine intention, alternatives, narrative
-  - [x] Ground 5 (sell): sale plans, valuation, estate agent, timeline, narrative
-  - [x] Ground 6 (refurb): works description, planning, funding, vacant possession, narrative
-  - [x] All grounds map to decision_engine.yaml expected fields
-- [x] Add all **Form E** required fields:
-  - [x] Applicant/landlord details (already comprehensive)
-  - [x] Respondent/tenant details (already comprehensive)
-  - [x] Property details (already comprehensive)
-  - [x] Notice details (already comprehensive)
-  - [x] Rent arrears schedule (already comprehensive)
-  - [x] Ground-specific structured capture (NEW - v2.0.0)
-  - [x] Evidence references (already comprehensive)
-- [x] Align question flow with blueprint Scotland section:
-  - [x] Pre-action steps (already present)
-  - [x] Arrears documentation (already present)
-  - [x] Tribunal selection / sheriffdom (already present)
+- [ ] Create strict row/insert/update types for core tables in **one place**, e.g.:
+  - `src/lib/supabase/database-types.ts`
+- [ ] For each table above, ensure strict types match `supabase_schema.MD`:
+  - [ ] column names
+  - [ ] types (text, jsonb, boolean, numeric, timestamptz, arrays)
+  - [ ] nullability
+  - [ ] enum-like fields (e.g. case status, jurisdiction, product)
+- [ ] Update `src/lib/supabase/types.ts` to:
+  - [ ] Re-export strict types (`CaseRow`, `CaseFactsRow`, `DocumentRow`, `ConversationRow`, etc.)
+  - [ ] Keep `Database` interface in sync with `supabase_schema.MD`
+  - [ ] (Optional) keep a permissive `GenericRow = any` for legacy code but mark as deprecated
+- [ ] Update any obvious incorrect usages:
+  - [ ] `row as any` patterns for core tables replaced with typed rows where low-risk
+  - [ ] Obvious mismatches (e.g. treating jsonb as `string`) fixed
 
-### 2.3 Money Claims MQS (Verification)
+Documentation:
 
-Files (already COMPLETE per `MQS_AUDIT_REPORT.md`, but need **verification**):
-
-- `config/mqs/money_claim/england-wales.yaml`
-- `config/mqs/money_claim/scotland.yaml`
-
-Tasks:
-
-- [~] Confirm question coverage vs blueprint:
-  - [x] Tenancy basics
-  - [x] Arrears detail
-  - [x] Damages
-  - [x] Interest (Section 69 CCA, Scottish equivalent)
-  - [x] Court route selection
-  - [x] Evidence listing
-  - [~] Particulars of Claim / narrative sections
-- [ ] Ensure all N1 (E&W) and Form 3A (Scotland) fields have mapping questions:
-  - [ ] No required field of N1/Form 3A missing a corresponding question
-  - [ ] No question that maps to nowhere
-
-### 2.4 Tenancy Agreement MQS (All Jurisdictions)
-
-Files:
-
-- `config/mqs/tenancy_agreement/england-wales.yaml`
-- `config/mqs/tenancy_agreement/scotland.yaml`
-- `config/mqs/tenancy_agreement/northern-ireland.yaml`
-
-Status: COMPLETE per MQS audit; tasks:
-
-- [x] Re-verify legal fixes:
-  - [x] E&W Right to Rent questions present (and only there)
-  - [x] NI file does **not** contain Right to Rent fields
-  - [x] NI file has domestic rates and NI-specific notice period logic
-- [x] Ensure all questions required by AST/PRT/NI templates exist and are mapped
-- [x] Tag any HMO-specific tenancy questions clearly as `// HMO – future integration`
-  (We **keep** them if already there, but treat full HMO suite as v2+)
+- [ ] Ensure `docs/DB_SCHEMA_ALIGNMENT.md` accurately describes the **current** state:
+  - [ ] If strict types are actually implemented, reflect that.
+  - [ ] If doc claims “✅ complete” but code is not aligned, update the doc and/or code so they match.
 
 ---
 
-## 3. Evictions – England & Wales
-
-Reference: `MASTER_BLUEPRINT.md` §3.1–3.2, `EVICTION_AUDIT_IMPLEMENTATION_SUMMARY.md`, `CASE_INTEL_SPEC.md`, `BUNDLE_BUILDER_SPEC.md`
-
-### 3.1 MQS & Decision Engine
-
-- [x] MQS files for `notice_only` and `complete_pack` (E&W) are comprehensive
-- [x] Decision engine rules for Section 8/21 exist:
-  - [x] Ground 8/10/11/14 logic
-  - [x] Deposit protection checks
-  - [x] Prescribed information / notice validity checks
-- [ ] Add/verify **ground coverage** and error messages:
-  - [ ] Confirm all Schedule 2 grounds are represented
-  - [ ] For each ground, verify:
-    - [ ] Fact fields exist
-    - [ ] Decision engine uses them
-    - [ ] Ask Heaven sees them in context
-
-### 3.2 PDFs & Bundle Builder
-
-- [ ] Verify **N5**, **N5B**, **N119** PDFs are correctly filled:
-  - [ ] Cross-check each field with CaseFacts mapping
-  - [ ] Ensure arrears schedule references match money-claim/eviction data
-- [ ] Ensure bundle builder creates:
-  - [ ] Cover sheet with case summary
-  - [ ] Completed forms (N5/N5B/N119)
-  - [ ] Notice copy
-  - [ ] Rent schedule / evidence index
-  - [ ] Case-intel narrative (timeline + score summary)
-- [ ] Add tests:
-  - [ ] Snapshot tests for filled PDFs (or key field assertions)
-  - [ ] Bundle structure tests (correct documents included)
-
-### 3.3 Wizard & Review Flow
-
-- [ ] End-to-end E&W eviction test path:
-  - [ ] `/wizard/start` with `notice_only` and `complete_pack`
-  - [ ] `next-question` cycles correctly through MQS
-  - [ ] `checkpoint` returns decision engine results (blocking issues, warnings)
-  - [ ] `analyze` returns full case-intel/bundle recommendations
-  - [ ] Review page shows:
-    - [ ] Case strength
-    - [ ] Key risks
-    - [ ] Missing evidence
-- [ ] Case strength widget:
-  - [ ] Shown in **wizard** as user answers
-  - [ ] Shown again on **review** page
-  - [ ] Uses `CASE_INTEL_SPEC.md` scoring rules
-
----
-
-## 4. Evictions – Scotland
-
-Reference: `MASTER_BLUEPRINT.md` §3.1 (Scotland), `EVICTION_AUDIT_IMPLEMENTATION_SUMMARY.md`, `BUNDLE_BUILDER_SPEC.md`
-
-### 4.1 MQS & Decision Engine
-
-- [x] MQS exists for `notice_only` and `complete_pack` (Scotland) – EXPANDED to v2.0.0
-  - [x] Ground-specific conditional questions added (Grounds 1-6)
-  - [x] All decision_engine.yaml expected fields now captured
-- [x] Decision engine rules for PRT grounds and pre-action steps exist
-- [x] After MQS expansion (Section 2.2), verify:
-  - [x] For each ground used, decision engine properly:
-    - [x] Maps to structured fields (`rent_arrears_months`, `landlord_intends_to_sell`, etc.)
-    - [x] Can assess strength based on captured evidence flags
-    - [x] Pre-action requirements wired for Ground 1
-- [x] Ensure pre-action compliance logic uses new MQS fields (`pre_action_requirements_met`)
-
-### 4.2 Tribunal Bundle & Form E
-
-- [~] Validate **Form E** PDF filler:
-  - [x] All required data captured in MQS v2.0.0 (landlord, tenant, property, grounds, narratives)
-  - [ ] Runtime verification: scotland-forms-filler.ts field mapping (needs manual test)
-- [ ] Tribunal bundle:
-  - [ ] Ensure `generateTribunalBundle()` includes:
-    - [ ] Form E
-    - [ ] Notice to Leave
-    - [ ] Rent schedule (if relevant)
-    - [ ] Evidence summary from case-intel
-- [ ] Add tests:
-  - [ ] At least 1 end-to-end Scotland eviction test
-  - [ ] Bundle sanity test (all expected docs present)
-
----
-
-## 5. Money Claims – England & Wales
-
-Reference: `MASTER_BLUEPRINT.md` §3.3, `CASE_INTEL_SPEC.md`, `BUNDLE_BUILDER_SPEC.md`
-
-### 5.1 Wizard & MQS Integration
-
-- [x] MQS exists and is comprehensive (E&W) – ~90 questions
-- [ ] Ensure wizard routes for products:
-  - [ ] `money_claim` / `money_claim_england_wales` map to correct MQS
-  - [ ] `start` → `next-question` → `checkpoint` → `analyze` flows are correct
-  - [ ] Edge case: NI money claim blocked (see Section 8.2)
-
-### 5.2 N1 Form & Supporting Docs
-
-- [ ] Implement or verify **N1** PDF filler:
-  - [ ] All required fields filled
-  - [ ] Interest sections correct (Section 69 CCA)
-  - [ ] Daily rate and running total logic implemented
-- [ ] Arrears schedule & evidential docs:
-  - [ ] `rent_arrears_schedule` generator:
-    - [ ] Month-by-month breakdown
-    - [ ] Running balance
-  - [ ] Interest calculator:
-    - [ ] 8% statutory interest on arrears
-- [ ] Particulars of Claim:
-  - [ ] Template or AI-assisted generator implemented
-  - [ ] Uses case-intel facts and MQS answers
-  - [ ] Includes interest wording and court request
+## 2. MQS (Master Question Sets)
 
-### 5.3 Money Claim Bundle
+> Canonical: `config/mqs/*`, `docs/MQS_AUDIT_REPORT.md`, `docs/MQS_INTEGRATION_COMPLETE.md`
 
-- [ ] Add money claim bundle type in bundle builder:
-  - [ ] N1 form
-  - [ ] Particulars of claim
-  - [ ] Arrears schedule
-  - [ ] Evidence index
-  - [ ] Guidance sheet (from blueprint, if specified)
-
-- [ ] Add tests:
-  - [ ] At least 1 end-to-end money claim E&W test
-  - [ ] Bundle structure test
+### 2.1 MQS Inventory & Metadata
 
----
+- [ ] Confirm **9 MQS files** exist:
+  - [ ] `notice_only/england-wales.yaml`
+  - [ ] `notice_only/scotland.yaml`
+  - [ ] `complete_pack/england-wales.yaml`
+  - [ ] `complete_pack/scotland.yaml`
+  - [ ] `money_claim/england-wales.yaml`
+  - [ ] `money_claim/scotland.yaml`
+  - [ ] `tenancy_agreement/england-wales.yaml`
+  - [ ] `tenancy_agreement/scotland.yaml`
+  - [ ] `tenancy_agreement/northern-ireland.yaml`
+- [ ] Add/verify `__meta` block at top of each MQS:
+  ```yaml
+  __meta:
+    version: "X.Y.Z"
+    effective_from: "YYYY-MM-DD"
+    last_updated: "2025-12-03"
+    legal_review_date: "YYYY-MM-DD"
+    jurisdiction: "england-wales" | "scotland" | "northern-ireland"
+    product: "notice_only" | "complete_pack" | "money_claim" | "tenancy_agreement"
+ Re-run MQS audit if needed and update docs/MQS_AUDIT_REPORT.md to reflect current versions (v2.x where applicable).
 
-## 6. Money Claims – Scotland
-
-Reference: Blueprint §3.3 (Scotland), `MQS_AUDIT_REPORT.md`
+2.2 Scotland Eviction MQS Expansion
+ Upgrade notice_only/scotland.yaml and complete_pack/scotland.yaml so:
 
-### 6.1 Wizard & MQS Integration
+ Grounds are selected explicitly (PRT grounds)
 
-- [x] MQS exists and is comprehensive for Scotland money claims (~88 questions)
-- [ ] Wizard routing:
-  - [ ] `money_claim_scotland` product wired to MQS
-  - [ ] Court route / sheriffdom selection implemented per MQS
-  - [ ] Checkpoint & analyze endpoints support `money_claim` for Scotland
+ Ground-specific structured questions exist for at least:
 
-### 6.2 Form 3A & Bundle
+ Ground 1 – Rent arrears
 
-- [ ] Implement or verify **Form 3A** PDF filler:
-  - [ ] All simple procedure fields mapped
-  - [ ] Interest and amounts correctly calculated
-- [ ] Money claim bundle (Scotland):
-  - [ ] Form 3A
-  - [ ] Arrears schedule
-  - [ ] Evidence index
-  - [ ] Any additional forms required (per blueprint)
+ Ground 2 – Breach of tenancy
 
----
+ Ground 3 – Antisocial behaviour
 
-## 7. Tenancy Agreements – All Jurisdictions (AST / PRT / NI)
+ Ground 4 – Landlord intends to occupy
 
-Reference: `MASTER_BLUEPRINT.md` §3.4, AST/PRT templates under `config/templates` or similar
+ Ground 5 – Landlord intends to sell
 
-### 7.1 Document Generation
+ Ground 6 – Substantial refurbishment/works
 
-- [ ] Verify AST generation (E&W):
-  - [ ] Standard and Premium flows both work end-to-end
-  - [ ] All clauses receive correct data from MQS
-  - [ ] Right to Rent, deposit protection, rent details correct
-- [ ] Verify PRT generation (Scotland):
-  - [ ] All mandatory statutory terms present
-  - [ ] Optional clauses handled correctly
-- [ ] Verify NI tenancy generation:
-  - [ ] Domestic rates handled correctly
-  - [ ] NI-specific standards applied
-  - [ ] No E&W-only clauses leaked in
+ Each such ground has:
 
-### 7.2 Ask Heaven Integration (Tenancy)
+ Essential structured facts (dates, durations, arrears, behaviour details, etc.)
 
-- [ ] Tenancy-specific Ask Heaven prompts:
-  - [ ] Clause-level suggestions where appropriate
-  - [ ] Highlight risk clauses (fees, penalty clauses, unfair terms)
-- [ ] Ensure safety checks:
-  - [ ] Gas safety / EICR / smoke alarms flagged where required
-  - [ ] Those facts flow back into CaseFacts and dashboards (for future compliance tracker)
+ A free-text “tribunal narrative” field
 
-> Note: HMO-specific tenancy questions are allowed but **HMO licensing packs** are out of scope here.
+ Proper depends_on logic so they display only when relevant
 
----
+ maps_to paths that align with Scotland decision engine and Form E
 
-## 8. Jurisdiction Blocking & NI Handling
+ Ensure config/jurisdictions/uk/scotland/rules/decision_engine.yaml consumes these new fields:
 
-Reference: `NI_EVICTION_STATUS.md`, `MASTER_BLUEPRINT.md`
+ No references to now-nonexistent fields
 
-### 8.1 NI Evictions
+ Ground strength / scoring uses structured facts, not just generic text
 
-- [x] NI evictions blocked in `/api/wizard/start`
-- [x] Update wording to make roadmap explicit:
-  - [x] Error message: "Northern Ireland **eviction and money claim workflows** are not yet supported (roadmap Q2 2026)."
+ Update docs/SCOTLAND_MQS_EXPANSION.md (create if needed) describing:
 
-### 8.2 NI Money Claims
+ New ground-specific fields
 
-- [x] Clarify that NI **money claim** workflows are also blocked:
-  - [x] Update `/api/wizard/start` error text to say:
-    - "Northern Ireland **eviction and money claim workflows** are not yet supported…"
-  - [x] Ensure supported matrix shows NI only has:
-    - `[ 'tenancy_agreement' ]` (✅ Confirmed: E&W and Scotland show all 4 products)
+ Mapping to decision engine and Form E
 
----
+2.3 Money Claim MQS Verification
+ Confirm money_claim/england-wales.yaml and money_claim/scotland.yaml:
 
-## 9. Ask Heaven / AI Integration
+ Capture all the fields required for:
 
-Reference: `ASK_HEAVEN_SYSTEM_PROMPT.md`, `FRONTEND_INTEGRATION_GUIDE.md`, `CASE_INTEL_SPEC.md`
+ N1 (E&W)
 
-### 9.1 Backend Integration
+ Form 3A (Scotland)
 
-- [x] Advanced Ask Heaven wired with decision engine context
-- [ ] For each case type (`eviction`, `money_claim`, `tenancy_agreement`):
-  - [ ] Ensure `analyze` response includes:
-    - [ ] Case strength
-    - [ ] Key issues
-    - [ ] Evidence gaps
-  - [ ] Ensure prompt includes:
-    - [ ] Jurisdiction
-    - [ ] Product type
-    - [ ] Decision engine outputs
-    - [ ] Case-intel summary
-
-### 9.2 Frontend UX
-
-- [ ] AskHeavenPanel:
-  - [ ] Available inside wizard
-  - [ ] Shows relevant suggestions per step
-  - [ ] Can be toggled / opened from review page
-- [ ] Verify concurrency / throttling if multiple calls are made
+ Have clear sectioning for:
 
----
+ Tenancy & parties
 
-## 10. Decision Engine & Legal Change
-
-Reference: `LEGAL_CHANGE_PROTOCOL.md`, `CASE_INTEL_SPEC.md`, decision engine YAMLs
-
-### 10.1 Decision Engine
-
-- [x] Core engine implemented (`src/lib/decision-engine`)
-- [ ] Add/verify **money claim** rules:
-  - [ ] Arrears severity bands
-  - [ ] Interest application checks
-  - [ ] Evidence sufficiency for claim
-- [ ] Ensure eviction rules use expanded Scotland MQS facts
-
-### 10.2 Legal Change Framework
-
-- [x] `law-profile` and metadata fields in YAML implemented
-- [x] `law-monitor` scaffold and CLI exist
-- [ ] Add minimal instructions in `LEGAL_CHANGE_PROTOCOL.md` on:
-  - [ ] How to run law monitor manually (CLI command)
-  - [ ] How to update `effective_from` and `last_reviewed` for MQS and rules YAML
-
----
+ Rent history & arrears
 
-## 11. Case Intelligence & Bundles
-
-Reference: `CASE_INTEL_SPEC.md`, `BUNDLE_BUILDER_SPEC.md`
-
-### 11.1 Case Intel
-
-- [x] Scoring, evidence analysis, consistency checks implemented
-- [ ] For each case type:
-  - [ ] Eviction (E&W & Scotland):
-    - [ ] Score correctly reflects grounds, evidence, and pre-action steps
-  - [ ] Money claim (E&W & Scotland):
-    - [ ] Score considers amount, documentation, and arrears age
-  - [ ] Tenancy agreements:
-    - [ ] Risk score for aggressive clauses / missing safety docs (if specified in spec)
-
-### 11.2 Bundle Builder
-
-- [x] Court & tribunal bundles implemented for evictions
-- [ ] Implement money claim bundles (E&W N1, Scotland Form 3A)
-- [ ] Ensure bundle builder receives:
-  - [ ] CaseFacts
-  - [ ] Decision engine results
-  - [ ] Case-intel report
-- [ ] Add doc to `BUNDLE_BUILDER_SPEC.md` summarizing:
-  - [ ] Money claim bundle structure
-  - [ ] Where to add new bundle types in future
-
----
-
-## 12. Frontend – Wizard, Dashboard, Evidence
-
-Reference: `CONVERSATIONAL_WIZARD_SPECIFICATION.md`, `FRONTEND_INTEGRATION_GUIDE.md`, `MASTER_BLUEPRINT.md` §10
-
-### 12.1 Wizard UX
-
-- [ ] Ensure **single** unified wizard container:
-  - [ ] Uses MQS backend for all flows
-  - [ ] Shows:
-    - [ ] Question
-    - [ ] Progress
-    - [ ] Blocking issues (from checkpoint)
-    - [ ] Warnings & hints
-    - [ ] Case strength indicator (if available)
-- [ ] Review page:
-  - [ ] Shows:
-    - [ ] Case summary
-    - [ ] Case strength
-    - [ ] Key issues & missing items
-    - [ ] Button(s) to generate/download bundles
-
-### 12.2 Dashboard MVP (V1)
-
-- [ ] Implement `/dashboard` with at least:
-  - [ ] Case list:
-    - [ ] Case ID
-    - [ ] Product
-    - [ ] Jurisdiction
-    - [ ] Status
-  - [ ] Case detail:
-    - [ ] Generated documents list with download buttons
-    - [ ] Trigger regeneration of a document (where supported)
-- [ ] Evidence vault (MVP):
-  - [ ] List uploaded evidence for a case
-  - [ ] Show basic metadata (type, uploaded_at, tags)
-
-> NOTE: Full compliance tracker & fancy evidence UX can be v1.1+, but basic dashboard is V1.
-
----
-
-## 13. Testing & QA
-
-### 13.1 End-to-End Flows
-
-- [ ] E&W eviction: Section 8
-- [ ] E&W eviction: Section 21
-- [ ] Scotland eviction: PRT ground, Tribunal flow
-- [ ] E&W money claim: standard rent arrears claim
-- [ ] Scotland money claim: simple procedure
-- [ ] AST standard & premium (E&W)
-- [ ] PRT (Scotland)
-- [ ] NI tenancy agreement
-
-### 13.2 Unit / Integration
-
-- [ ] Decision engine integration tests for:
-  - [ ] Eviction (E&W & Scotland)
-  - [ ] Money claims (both jurisdictions)
-- [ ] Case-intel integration tests:
-  - [ ] Score calculation correctness
-  - [ ] Evidence gap detection
-- [ ] MQS navigation tests:
-  - [ ] `getNextMQSQuestion` behaves correctly with `depends_on` logic
-
----
-
-## 14. Out of Scope for This Checklist (Future Work)
-
-These are **explicitly NOT part of V1** checklist:
-
-- ❌ HMO Licensing Suite:
-  - Council-specific rules
-  - HMO pack generation
-  - Fire risk scoring
-- ❌ NI Eviction Workflows:
-  - NI Notice to Quit
-  - NI eviction bundles
-- ❌ NI Money Claim Workflows
-- ❌ Full Compliance Tracker & certificate reminders (beyond minimal evidence handling)
-- ❌ Admin portal (template manager, AI logs, scraper control)
-- ❌ SEO tools & free calculators
-
----
-
-## 15. Done When…
-
-You can mark V1 as **“Implementation Complete”** when:
-
-- [ ] All `[ ]` items above that are **not** in the “Out of Scope” section are either:
-  - [x] Completed and tested, or
-  - [ ] Explicitly bumped to v1.1+ with a note in this file.
-- [ ] All in-scope flows work **end-to-end**:
-  - [ ] User can go from product page → wizard → review → bundle → PDF → download for:
-    - [ ] E&W eviction
-    - [ ] Scotland eviction
-    - [ ] E&W money claim
-    - [ ] Scotland money claim
-    - [ ] AST/PRT/NI tenancy agreements
-- [ ] Documentation & schema are in sync:
-  - [ ] `MASTER_BLUEPRINT.md` reflects NI & HMO as future
-  - [ ] `supabase_schema.MD` matches code
-  - [ ] Key specs updated where necessary
-
-Once those are ticked, you’re not “idea complete” – you’re **ship-ready** for non-HMO, non-NI workflows.
+ Damages (if any)
+
+ Interest (rules & preferences)
+
+ Evidence
+
+ Court routing (county court / sheriff court)
+
+ maps_to values align with CaseFacts required by forms & pack generators
+
+ If any missing fields are found during money-claim work, update MQS accordingly and document in MONEY_CLAIM_SPEC.md.
+
+2.4 Tenancy Agreement MQS (All Jurisdictions)
+ Re-verify legal compliance tweaks:
+
+ E&W has Right to Rent questions (and only E&W)
+
+ Scotland and NI have no Right to Rent questions
+
+ NI uses “Domestic rates” not “Council tax”
+
+ NI has ni_notice_period_days / NI-specific notice logic
+
+ Check all clauses required by AST/PRT/NI templates are mapped:
+
+ Guarantor details (Premium)
+
+ Late interest/fees
+
+ Pets, smoking, HMO-related questions
+
+ Tag clearly any HMO-related questions in tenancy MQS as:
+
+ Commented or annotated # HMO – future integration (v2+)
+
+3. Evictions – England & Wales
+Canonical: MASTER_BLUEPRINT.md §3.1, EVICTION_AUDIT_IMPLEMENTATION_SUMMARY.md, BUNDLE_BUILDER_SPEC.md
+
+3.1 Eviction MQS & DE Coverage
+ Confirm:
+
+ All Schedule 2 grounds are represented in MQS (where promised)
+
+ decision_engine.yaml for E&W handles:
+
+ Ground 8 (mandatory arrears)
+
+ Grounds 10 & 11 (discretionary arrears)
+
+ Behaviour/antisocial grounds
+
+ Disrepair/counterclaim risks
+
+ Deposit protection / gas safety / How to Rent checks
+
+ Ensure MQS → CaseFacts → decision engine routes are consistent.
+
+3.2 Forms & Bundles
+ Verify N5, N5B, N119 fillers in src/lib/documents/official-forms-filler.ts:
+
+ All required fields mapped
+
+ No obvious placeholders left
+
+ E2E bundle:
+
+ generateCourtBundle includes:
+
+ Correct notice
+
+ Proof of service
+
+ Rent schedule if relevant
+
+ N5/N5B/N119 as appropriate
+
+ Case-intel narrative where expected
+
+3.3 End-to-End Testing / QA
+ Add/update tests to cover:
+
+ S8 arrears-only case E2E
+
+ S21 accelerated case E2E
+
+ Manual QA:
+
+ Run at least 2–3 realistic landlord scenarios and inspect final PDF bundle.
+
+4. Evictions – Scotland
+Canonical: Scotland sections in MASTER_BLUEPRINT.md, SCOTLAND_MQS_EXPANSION.md
+
+4.1 MQS + Decision Engine
+ After MQS expansion (Section 2.2), confirm:
+
+ All critical PRT grounds used in blueprint are supported
+
+ Decision engine rules use the new structured fields and produce:
+
+ Case strength scores
+
+ Ground-specific warnings
+
+ Pre-action compliance flags (especially arrears)
+
+4.2 Form E & Tribunal Bundle
+ Ensure Form E filler:
+
+ Uses structured ground fields
+
+ Correctly includes pre-action steps
+
+ Includes rent arrears summary references
+
+ Tribunal bundle:
+
+ Generates Form E + supporting documents as described in blueprint
+
+ Add tests:
+
+ At least one Form E test case covering a common ground (e.g. arrears).
+
+5. Money Claims – England & Wales (N1)
+Canonical: MASTER_BLUEPRINT.md §3.3, BUNDLE_BUILDER_SPEC.md, CASE_INTEL_SPEC.md
+
+Note: A lot of money-claim functionality is already implemented (MQS, pack generator, official forms). This section is about verification & finishing touches.
+
+ Verify N1 filler (official-forms-filler.ts):
+
+ Parties, claim value, rent arrears, interest, court fee fields mapped
+
+ Arrears schedule:
+
+ Confirm generator produces:
+
+ Month-by-month breakdown
+
+ Running total
+
+ Used correctly in pack and (if promised) attached to N1
+
+ Interest:
+
+ Confirm Section 69 CCA 8% logic and daily rate
+
+ Correctly written into:
+
+ N1 fields
+
+ Particulars of Claim wording
+
+ Particulars of Claim:
+
+ Generator exists and:
+
+ Uses MQS + CaseFacts + case-intel
+
+ Includes arrears narrative, interest wording, what the court should order
+
+ Bundle:
+
+ Money-claim bundle for E&W includes:
+
+ N1
+
+ POC
+
+ Arrears schedule
+
+ Evidence index/checklist
+
+ Add tests or verify existing tests:
+
+ At least one test filling N1 and asserting key fields.
+
+6. Money Claims – Scotland (Form 3A / Simple Procedure)
+Canonical: Scotland money-claim sections in MASTER_BLUEPRINT.md, BUNDLE_BUILDER_SPEC.md
+
+ Verify Form 3A filler:
+
+ Parties, sheriff court selection, claim value, arrears summary, narrative
+
+ Based on MQS fields and CaseFacts
+
+ Bundle:
+
+ Scotland money-claim bundle includes:
+
+ Form 3A
+
+ Arrears schedule equivalent
+
+ Evidence index/schedule
+
+ Add tests:
+
+ At least one test generating Form 3A and asserting key fields are correct.
+
+7. Tenancy Agreements – AST / PRT / NI
+Canonical: MASTER_BLUEPRINT.md §3.4, tenancy templates, Ask Heaven prompt
+
+ Verify:
+
+ AST Standard/Premium flows (E&W) are fully wired from product page → wizard → doc generator
+
+ PRT (Scotland) flow works similarly
+
+ NI Private Tenancy is generated with NI-specific clauses
+
+ Confirm tests:
+
+ AST Standard & Premium document tests pass
+
+ PRT and NI tenancy mapping tests pass
+
+ (Optional for V1) Tidy Ask Heaven clause refinement:
+
+ Ask Heaven has enough context to comment on key clauses.
+
+8. Northern Ireland – Gating (Eviction & Money Claim)
+Canonical: docs/NI_EVICTION_STATUS.md
+
+ In /api/wizard/start:
+
+ If jurisdiction = northern-ireland and caseType ≠ tenancy_agreement:
+
+ Return clear 400 error
+
+ Error mentions both “eviction and money claim workflows”
+
+ Supported matrix in response:
+
+ Shows northern-ireland: ['tenancy_agreement'] only
+
+ Shows all four products for E&W and Scotland
+
+ NI status documented:
+
+ NI_EVICTION_STATUS.md explains roadmap (e.g. Q2 2026)
+
+ MASTER_BLUEPRINT marks NI eviction & money-claim as future phase, not current v1.
+
+9. Ask Heaven / AI Integration
+Canonical: ASK_HEAVEN_SYSTEM_PROMPT.md, FRONTEND_INTEGRATION_GUIDE.md, CASE_INTEL_SPEC.md
+
+ Ensure:
+
+ /api/wizard/analyze passes:
+
+ jurisdiction
+
+ decision-engine outputs
+
+ case-intel outputs
+
+ AskHeavenPanel is wired to show:
+
+ Context-aware suggestions
+
+ Warnings about missing evidence / issues
+
+ Confirm prompt includes:
+
+ Decision engine context section
+
+ Jurisdiction-specific guidance
+
+ Verify AskHeavenPanel appears:
+
+ In wizard flow
+
+ On review page (where promised)
+
+10. Decision Engine & Case Intel
+Canonical: CASE_INTEL_SPEC.md, LEGAL_CHANGE_PROTOCOL.md, jurisdiction rule YAMLs
+
+ Decision engine:
+
+ E&W rules implemented for evictions & money-claims
+
+ Scotland rules implemented for evictions & money-claims
+
+ NI rules intentionally absent / blocked
+
+ Case-intel:
+
+ Scoring, contradictions, evidence completeness implemented
+
+ Outputs consumed by:
+
+ Bundles
+
+ Forms (where relevant)
+
+ Ask Heaven
+
+ Law monitor:
+
+ Law profile metadata present in rules YAMLs
+
+ Law monitor stub present (ok if manual for V1)
+
+11. Bundles & Document Engine
+Canonical: BUNDLE_BUILDER_SPEC.md, template files, /public/official-forms/
+
+ Confirm official forms exist and are current:
+
+ N5, N5B, N119, N1, Form 6A, Form E, Form 3A, etc.
+
+ Bundle builder:
+
+ Eviction court bundle (E&W)
+
+ Tribunal bundle (Scotland)
+
+ Money-claim bundles (E&W + Scotland)
+
+ Templates:
+
+ All .hbs templates referenced by doc generators exist
+
+12. Wizard UX
+Canonical: CONVERSATIONAL_WIZARD_SPECIFICATION.md, FRONTEND_INTEGRATION_GUIDE.md
+
+ Wizard flow:
+
+ Uses MQS for all products in scope
+
+ Shows checkpoint banners (blocking issues, warnings, completeness)
+
+ Can call /api/wizard/checkpoint mid-flow
+
+ Review page:
+
+ Shows:
+
+ Case strength score
+
+ Key issues/warnings
+
+ Key documents available
+
+ Provides a way to trigger bundle/doc generation
+
+13. Dashboard & Evidence Vault
+Canonical: MASTER_BLUEPRINT.md §10 (dashboard), future DASHBOARD_SPEC.md
+
+ Dashboard MVP:
+
+ /dashboard/cases lists user’s cases
+
+ /dashboard/documents lists generated documents/bundles
+
+ Each document row has a download link
+
+ Optional: “Regenerate” button where safe
+
+ Evidence:
+
+ Evidence upload works
+
+ Evidence is visible in a basic UI (even if simple list)
+
+ HMO dashboard sections:
+
+ Either hidden for V1 or clearly labelled as “Coming soon”
+
+14. Testing & QA
+ Unit tests pass (npm test / equivalent)
+
+ Integration tests for:
+
+ E&W eviction wizard → pack
+
+ Scotland eviction wizard → pack
+
+ E&W money-claim wizard → pack
+
+ Scotland money-claim wizard → pack
+
+ AST/PRT/NI tenancy flows
+
+ At least a minimal E2E smoke test for:
+
+ Eviction (E&W)
+
+ Eviction (Scotland)
+
+ Money-claim (E&W)
+
+ Tenancy (E&W)
+
+15. Documentation Sync
+ MASTER_BLUEPRINT.md:
+
+ Updated to clarify:
+
+ NI eviction & money-claim are future roadmap
+
+ HMO suite is future roadmap
+
+ API_ROUTES.md:
+
+ Includes:
+
+ /api/wizard/checkpoint
+
+ /api/wizard/analyze
+
+ Any law-profile related endpoints
+
+ DATABASE_SCHEMA.md:
+
+ Updated or marked as non-canonical (see supabase_schema.MD)
+
+ MONEY_CLAIM_SPEC.md:
+
+ Exists and documents:
+
+ N1 mapping
+
+ Form 3A mapping
+
+ Interest rules
+
+ Bundles
+
+ TENANCY_AGREEMENT_SPEC.md:
+
+ Exists and documents:
+
+ AST/PRT/NI template structure
+
+ Clause mapping
+
+ Ask Heaven clause integration
+
+ (Optional, but ideal) DASHBOARD_SPEC.md:
+
+ Exists and describes MVP dashboard modules.
+
+End of Checklist
+
+Claude: Work through this list item by item. After each chunk of work, update the checkboxes and briefly document what changed. Aim to keep code, tests, and docs in sync with MASTER_BLUEPRINT.md and supabase_schema.MD at all times.
