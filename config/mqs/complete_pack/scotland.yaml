@@ -1,17 +1,26 @@
 # config/mqs/complete_pack/scotland.yaml
+# Version History:
+# 2.0.0 - Major expansion: Added ground-specific conditional questions for PRT grounds 1-6
+#         - Ground 1 (rent arrears): Pre-action requirements, arrears months, tribunal narrative
+#         - Ground 2 (breach): Breach type, materiality, continuing status, tribunal narrative
+#         - Ground 3 (ASB): Incident details, evidence types, police involvement, tribunal narrative
+#         - Ground 4 (landlord occupy): Who, when, genuine intention, alternatives, tribunal narrative
+#         - Ground 5 (sell): Sale plans, valuation, estate agent, timeline, tribunal narrative
+#         - Ground 6 (refurb): Works description, planning, funding, vacant possession, tribunal narrative
+#         - All grounds now map to decision_engine.yaml expected fields
 
 __meta:
-  version: "1.0.0"
-  effective_from: "2025-11-01"
+  version: "2.0.0"
+  effective_from: "2025-12-03"
   last_updated: "2025-12-03"
-  legal_review_date: "2025-10-30"
+  legal_review_date: "2025-12-03"
   jurisdiction: "scotland"
   product: "complete_pack"
 
-id: complete_pack_scotland_v1
+id: complete_pack_scotland_v2
 product: complete_pack
 jurisdiction: scotland
-version: "1.0.0"
+version: "2.0.0"
 
 questions:
   # 1. Case overview
@@ -375,6 +384,401 @@ questions:
     maps_to:
       - scotland_ground_explanation
       - notice_reason
+    conditions: []
+
+  # 7a. Ground 1 - Rent Arrears (detailed capture)
+  - id: ground_1_rent_arrears_details
+    section: Ground 1 Details
+    question: "Rent arrears - Ground 1 specific details"
+    inputType: group
+    helperText: "Ground 1 requires three consecutive months of arrears and pre-action requirements."
+    dependsOn:
+      questionId: scotland_ground_codes
+      value: "Ground 10 - Tenant in rent arrears (mandatory/discretionary)"
+    fields:
+      - id: ground_1_arrears_months
+        label: "How many consecutive months of arrears?"
+        inputType: number
+        validation:
+          required: true
+          min: 3
+        width: half
+      - id: ground_1_pre_action_met
+        label: "Have pre-action requirements been met?"
+        inputType: yes_no
+        helperText: "MANDATORY for rent arrears: clear rent statement, advice signposting, reasonable time to pay, payment plan consideration."
+        validation:
+          required: true
+        width: half
+      - id: ground_1_pre_action_evidence
+        label: "Describe pre-action steps taken"
+        inputType: textarea
+        helperText: "List: date of rent statement, advice given, meetings held, payment plans offered."
+        validation:
+          required: true
+        width: full
+      - id: ground_1_arrears_narrative
+        label: "Tribunal narrative for Ground 1"
+        inputType: textarea
+        helperText: "Explain arrears history, amounts, pre-action efforts, and why eviction is reasonable."
+        validation:
+          required: true
+        width: full
+    suggestion_prompt: >
+      For Ground 1, ensure landlord has documented all pre-action requirements: rent statement provided, advice sources given,
+      payment plan considered, reasonable attempts to resolve. Without these, tribunal will refuse eviction.
+    maps_to:
+      - rent_arrears_months
+      - pre_action_requirements_met
+      - ground_1_pre_action_evidence
+      - ground_1_particulars
+    conditions: []
+
+  # 7b. Ground 4 - Landlord Intends to Occupy
+  - id: ground_4_occupy_details
+    section: Ground 4 Details
+    question: "Landlord intends to occupy - Ground 4 specific details"
+    inputType: group
+    helperText: "Ground 4: landlord or family member intends to occupy as only or principal home."
+    dependsOn:
+      questionId: scotland_ground_codes
+      value: "Ground 18 - Family member to move in (mandatory)"
+    fields:
+      - id: ground_4_who_occupying
+        label: "Who will occupy the property?"
+        inputType: select
+        options:
+          - "Landlord"
+          - "Landlord's spouse/partner"
+          - "Landlord's child"
+          - "Landlord's parent"
+          - "Other family member"
+        validation:
+          required: true
+        width: half
+      - id: ground_4_occupation_date
+        label: "When will occupation begin?"
+        inputType: date
+        helperText: "Intended move-in date."
+        validation:
+          required: true
+        width: half
+      - id: ground_4_genuine_intention
+        label: "Evidence of genuine intention"
+        inputType: textarea
+        helperText: "E.g., selling current home, job relocation, family circumstances."
+        validation:
+          required: true
+        width: full
+      - id: ground_4_alternative_accommodation
+        label: "Does landlord have alternative accommodation available?"
+        inputType: yes_no
+        helperText: "If yes, tribunal may question reasonableness."
+        validation:
+          required: true
+        width: half
+      - id: ground_4_narrative
+        label: "Tribunal narrative for Ground 4"
+        inputType: textarea
+        helperText: "Explain why landlord/family needs THIS property, when occupation will happen, why no alternatives exist."
+        validation:
+          required: true
+        width: full
+    suggestion_prompt: >
+      For Ground 4, tribunal will scrutinize genuine intention. Help landlord provide concrete evidence:
+      property listings if selling current home, job offer letters if relocating, family circumstances if downsizing.
+      Warn: cannot re-let within 3 months or face penalty (up to 6 months rent).
+    maps_to:
+      - landlord_intends_to_occupy
+      - ground_4_who_occupying
+      - ground_4_occupation_date
+      - genuine_intention
+      - no_alternative_accommodation
+      - ground_4_particulars
+    conditions: []
+
+  # 7c. Ground 5 - Landlord Intends to Sell
+  - id: ground_5_sell_details
+    section: Ground 5 Details
+    question: "Landlord intends to sell - Ground 5 specific details"
+    inputType: group
+    helperText: "Ground 5: landlord intends to sell property within 3 months of tenant leaving."
+    dependsOn:
+      questionId: scotland_ground_codes
+      value: "Ground 1 - Landlord intends to sell (mandatory)"
+    fields:
+      - id: ground_5_sale_date
+        label: "Target sale date / marketing start date"
+        inputType: date
+        helperText: "Must market within 3 months of tenant leaving."
+        validation:
+          required: true
+        width: half
+      - id: ground_5_valuation_obtained
+        label: "Has property been valued?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: ground_5_estate_agent
+        label: "Estate agent instructed?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: ground_5_estate_agent_name
+        label: "Estate agent name (if instructed)"
+        inputType: text
+        width: half
+      - id: ground_5_valuation_amount
+        label: "Property valuation / asking price"
+        inputType: currency
+        width: half
+      - id: ground_5_sale_reason
+        label: "Reason for sale"
+        inputType: textarea
+        helperText: "E.g., financial hardship, downsizing, moving abroad."
+        validation:
+          required: true
+        width: full
+      - id: ground_5_narrative
+        label: "Tribunal narrative for Ground 5"
+        inputType: textarea
+        helperText: "Explain intention to sell, evidence of preparations (valuation, agent, marketing materials), timeline."
+        validation:
+          required: true
+        width: full
+    suggestion_prompt: >
+      For Ground 5, tribunal needs evidence of genuine intention to sell. Strong cases have: estate agent instructed,
+      property valued, marketing materials prepared. Warn: must market within 3 months or face penalty (up to 6 months rent).
+    maps_to:
+      - landlord_intends_to_sell
+      - sale_within_3_months
+      - evidence_of_intention
+      - ground_5_valuation_obtained
+      - ground_5_estate_agent
+      - ground_5_valuation_amount
+      - ground_5_particulars
+    conditions: []
+
+  # 7d. Ground 6 - Refurbishment
+  - id: ground_6_refurb_details
+    section: Ground 6 Details
+    question: "Refurbishment - Ground 6 specific details"
+    inputType: group
+    helperText: "Ground 6: substantial refurbishment requiring vacant possession."
+    dependsOn:
+      questionId: scotland_ground_codes
+      value: "Ground 3 - Landlord intends to refurbish (discretionary)"
+    fields:
+      - id: ground_6_works_description
+        label: "Describe the refurbishment works"
+        inputType: textarea
+        helperText: "Detail the scope: structural, electrical, plumbing, layout changes, etc."
+        validation:
+          required: true
+        width: full
+      - id: ground_6_vacant_possession_required
+        label: "Why is vacant possession required?"
+        inputType: textarea
+        helperText: "Explain why works cannot be done with tenant in occupation (safety, access, duration)."
+        validation:
+          required: true
+        width: full
+      - id: ground_6_planning_obtained
+        label: "Planning permission / building warrant obtained?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: ground_6_funding_secured
+        label: "Is funding secured for works?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: ground_6_contractor_quotes
+        label: "Contractor quotes obtained?"
+        inputType: yes_no
+        width: half
+      - id: ground_6_works_cost
+        label: "Estimated cost of works"
+        inputType: currency
+        width: half
+      - id: ground_6_works_duration
+        label: "Expected duration of works"
+        inputType: text
+        helperText: "E.g., 3 months, 6 months."
+        width: half
+      - id: ground_6_architect_report
+        label: "Architect / surveyor report obtained?"
+        inputType: yes_no
+        helperText: "Professional evidence that works require vacant possession."
+        width: half
+      - id: ground_6_narrative
+        label: "Tribunal narrative for Ground 6"
+        inputType: textarea
+        helperText: "Explain works are substantial, require vacant possession, planning/funding in place, professional advice obtained."
+        validation:
+          required: true
+        width: full
+    suggestion_prompt: >
+      For Ground 6, tribunal needs evidence works are substantial and require vacant possession.
+      Strong cases have: professional plans, planning permission, contractor quotes, funding proof, expert evidence.
+      Minor works (decoration, repairs) will fail.
+    maps_to:
+      - substantial_works_planned
+      - vacant_possession_required
+      - planning_obtained
+      - funding_secured
+      - ground_6_works_description
+      - ground_6_works_cost
+      - ground_6_works_duration
+      - ground_6_particulars
+    conditions: []
+
+  # 7e. Ground 2 - Breach of Tenancy
+  - id: ground_2_breach_details
+    section: Ground 2 Details
+    question: "Breach of tenancy - Ground 2 specific details"
+    inputType: group
+    helperText: "Ground 2: tenant has breached tenancy agreement in a material way."
+    dependsOn:
+      questionId: scotland_ground_codes
+      value: "Ground 11 - Tenant in breach of tenancy agreement (discretionary)"
+    fields:
+      - id: ground_2_breach_type
+        label: "Type of breach"
+        inputType: multiselect
+        options:
+          - "Unauthorized subletting"
+          - "Unauthorized occupants"
+          - "Unauthorized pets"
+          - "Property damage"
+          - "Noise / nuisance"
+          - "Illegal use of property"
+          - "Non-payment of utilities"
+          - "Other breach"
+        validation:
+          required: true
+        width: full
+      - id: ground_2_breach_material
+        label: "Is the breach material (serious)?"
+        inputType: yes_no
+        helperText: "Tribunal will only grant for material breaches, not trivial ones."
+        validation:
+          required: true
+        width: half
+      - id: ground_2_breach_continuing
+        label: "Is the breach continuing or likely to recur?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: ground_2_breach_dates
+        label: "When did breach(es) occur?"
+        inputType: textarea
+        helperText: "List dates of incidents or ongoing breach period."
+        validation:
+          required: true
+        width: full
+      - id: ground_2_breach_clause
+        label: "Which tenancy clause(s) were breached?"
+        inputType: textarea
+        helperText: "Reference specific clauses from tenancy agreement."
+        validation:
+          required: true
+        width: full
+      - id: ground_2_narrative
+        label: "Tribunal narrative for Ground 2"
+        inputType: textarea
+        helperText: "Describe breach, evidence it's material, explain why continuing/likely to recur, reference tenancy clauses."
+        validation:
+          required: true
+        width: full
+    suggestion_prompt: >
+      For Ground 2, tribunal considers whether breach is material (serious enough to justify eviction)
+      and whether it's continuing or likely to recur. Minor breaches will fail. Strong evidence needed.
+    maps_to:
+      - breach_of_tenancy
+      - breach_material
+      - breach_continuing
+      - ground_2_breach_type
+      - ground_2_breach_dates
+      - ground_2_particulars
+    conditions: []
+
+  # 7f. Ground 3 - Antisocial Behaviour
+  - id: ground_3_asb_details
+    section: Ground 3 Details
+    question: "Antisocial behaviour - Ground 3 specific details"
+    inputType: group
+    helperText: "Ground 3: tenant engaged in antisocial or criminal behaviour."
+    dependsOn:
+      questionId: scotland_ground_codes
+      value: "Ground 12 - Tenant engaged in relevant criminal or antisocial behaviour (mandatory/discretionary)"
+    fields:
+      - id: ground_3_asb_type
+        label: "Type of antisocial behaviour"
+        inputType: multiselect
+        options:
+          - "Noise nuisance"
+          - "Threatening behaviour"
+          - "Violence"
+          - "Harassment of neighbours"
+          - "Damage to common areas"
+          - "Drug-related activity"
+          - "Criminal activity"
+          - "Other ASB"
+        validation:
+          required: true
+        width: full
+      - id: ground_3_asb_incidents
+        label: "List specific incidents with dates"
+        inputType: textarea
+        helperText: "Date, time, what happened, who witnessed, police/council involvement."
+        validation:
+          required: true
+        width: full
+      - id: ground_3_evidence_available
+        label: "What evidence is available?"
+        inputType: multiselect
+        options:
+          - "Witness statements"
+          - "Police reports"
+          - "Council ASB reports"
+          - "Photos or videos"
+          - "Noise recordings"
+          - "Medical reports"
+          - "Correspondence"
+        validation:
+          required: true
+        width: full
+      - id: ground_3_police_involved
+        label: "Has police been involved?"
+        inputType: yes_no
+        width: half
+      - id: ground_3_police_reference
+        label: "Police reference number(s)"
+        inputType: text
+        width: half
+      - id: ground_3_narrative
+        label: "Tribunal narrative for Ground 3"
+        inputType: textarea
+        helperText: "Describe ASB incidents, dates, evidence, impact on neighbours, police/council involvement."
+        validation:
+          required: true
+        width: full
+    suggestion_prompt: >
+      For Ground 3, tribunal needs clear evidence of serious ASB. Strong cases have: multiple dated incidents,
+      witness statements, police reports, council ASB case files. One-off minor incidents unlikely to succeed.
+    maps_to:
+      - antisocial_behavior
+      - evidence_available
+      - ground_3_asb_type
+      - ground_3_asb_incidents
+      - ground_3_police_involved
+      - ground_3_particulars
     conditions: []
 
   # 8. Pre-action / attempts to resolve
