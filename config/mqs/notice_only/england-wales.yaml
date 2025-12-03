@@ -1,8 +1,14 @@
+# config/mqs/notice_only/england-wales.yaml
+# Expanded MQS for England & Wales notice_only product
+# Implements audit fixes: C2 + M2 (expanded from 5 to ~15 questions)
+
 id: notice_only_england_wales_v1
 product: notice_only
 jurisdiction: england-wales
-version: "1.0.0"
+version: "2.0.0"
+
 questions:
+  # 1. Landlord details
   - id: landlord_details
     section: Landlord Details
     question: Your details
@@ -13,6 +19,13 @@ questions:
         label: Full name
         inputType: text
         placeholder: "Jane Landlord"
+        validation:
+          required: true
+        width: full
+      - id: landlord_address
+        label: Your address (for service)
+        inputType: textarea
+        placeholder: "Building and street\nTown/City\nPostcode"
         validation:
           required: true
         width: full
@@ -31,8 +44,35 @@ questions:
           required: true
         width: half
     maps_to:
-      - parties.landlord
+      - landlord_full_name
+      - landlord_address
+      - landlord_email
+      - landlord_phone
 
+  # 2. Tenant details
+  - id: tenant_details
+    section: Tenant Details
+    question: Tenant details
+    inputType: group
+    helperText: "Main tenant(s) named on the tenancy agreement."
+    fields:
+      - id: tenant_full_name
+        label: Main tenant full name
+        inputType: text
+        placeholder: "John Tenant"
+        validation:
+          required: true
+        width: full
+      - id: tenant_2_name
+        label: Second tenant (if any)
+        inputType: text
+        placeholder: "Second tenant full name"
+        width: full
+    maps_to:
+      - tenant_full_name
+      - tenant_2_name
+
+  # 3. Property address
   - id: property_details
     section: Property
     question: Property address
@@ -44,6 +84,10 @@ questions:
         inputType: text
         validation:
           required: true
+        width: full
+      - id: property_address_line2
+        label: Address line 2 (optional)
+        inputType: text
         width: full
       - id: property_address_town
         label: Town or city
@@ -58,41 +102,349 @@ questions:
           required: true
         width: half
     maps_to:
-      - property
+      - property_address_line1
+      - property_address_line2
+      - property_address_town
+      - property_postcode
 
-  - id: tenancy_start_date
+  # 4. Tenancy dates
+  - id: tenancy_details
     section: Tenancy
-    question: "When did the tenancy start?"
-    inputType: date
-    helperText: "This appears on the notice and must match the agreement."
-    validation:
-      required: true
+    question: Tenancy details
+    inputType: group
+    helperText: "Key dates from your tenancy agreement."
+    fields:
+      - id: tenancy_start_date
+        label: "Date the tenancy started"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: is_fixed_term
+        label: "Was this tenancy granted for a fixed term?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: fixed_term_end_date
+        label: "Fixed term end date (if any)"
+        inputType: date
+        width: half
     maps_to:
-      - tenancy.start_date
+      - tenancy_start_date
+      - is_fixed_term
+      - fixed_term_end_date
 
-  - id: notice_type
-    section: Notice Type
-    question: "Which notice do you need?"
-    inputType: select
-    helperText: "We will tailor the questions to your route."
+  # 5. Rent details
+  - id: rent_details
+    section: Rent
+    question: Rent details
+    inputType: group
+    helperText: "Current rent amount and payment schedule."
+    fields:
+      - id: rent_amount
+        label: "Current rent amount"
+        inputType: currency
+        placeholder: "950"
+        validation:
+          required: true
+          min: 0
+        width: half
+      - id: rent_frequency
+        label: "Rent frequency"
+        inputType: select
+        options:
+          - "weekly"
+          - "fortnightly"
+          - "monthly"
+          - "quarterly"
+        validation:
+          required: true
+        width: half
+      - id: payment_date
+        label: "Day rent is due"
+        inputType: number
+        placeholder: "e.g. 1 for 1st of the month"
+        validation:
+          required: true
+        width: half
+      - id: next_payment_due
+        label: "Next rent payment due date"
+        inputType: date
+        validation:
+          required: false
+        width: half
+    maps_to:
+      - rent_amount
+      - rent_frequency
+      - payment_date
+      - next_payment_due
+
+  # 6. Deposit & compliance (critical for Section 21)
+  - id: deposit_and_compliance
+    section: Deposit & Compliance
+    question: "Deposit and compliance checklist"
+    inputType: group
+    helperText: "These answers determine whether Section 21 is valid."
+    fields:
+      - id: deposit_amount
+        label: "Deposit amount (or 0 if none)"
+        inputType: currency
+        placeholder: "0 if no deposit"
+        validation:
+          required: true
+          min: 0
+        width: half
+      - id: deposit_protected
+        label: "Is the deposit protected in an approved scheme?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: deposit_scheme
+        label: "Deposit scheme"
+        inputType: select
+        options:
+          - "Deposit Protection Service (DPS)"
+          - "Tenancy Deposit Scheme (TDS)"
+          - "MyDeposits"
+          - "Other / not sure"
+        width: half
+      - id: deposit_protection_date
+        label: "Date the deposit was protected"
+        inputType: date
+        width: half
+      - id: prescribed_info_given
+        label: "Was prescribed information given to tenant within 30 days?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: gas_safety_cert_provided
+        label: "Gas safety certificate given BEFORE tenant moved in (if gas present)?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: epc_provided
+        label: "Energy Performance Certificate (EPC) given to tenant?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: epc_rating
+        label: "EPC rating (if known)"
+        inputType: text
+        placeholder: "e.g. C"
+        width: half
+      - id: how_to_rent_given
+        label: "Latest 'How to Rent' guide given at start of tenancy?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: hmo_license_required
+        label: "Is an HMO or selective licence required for this property?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: hmo_license_valid
+        label: "If a licence is required, is there a valid licence in place?"
+        inputType: yes_no
+        width: half
+    suggestion_prompt: >
+      Be brutally honest about deposit protection, prescribed information, gas safety, EPC, How to Rent guide, and licensing.
+      These directly affect whether Section 21 is valid.
+      If anything is missing or was provided late, Section 21 may fail.
+    maps_to:
+      - deposit_amount
+      - deposit_protected
+      - deposit_scheme
+      - deposit_protection_date
+      - prescribed_info_given
+      - gas_safety_cert_provided
+      - epc_provided
+      - epc_rating
+      - how_to_rent_given
+      - hmo_license_required
+      - hmo_license_valid
+
+  # 7. Route selection (Section 8 / Section 21)
+  - id: eviction_route
+    section: Legal Route
+    question: "Which notice route do you want to use?"
+    inputType: multi_select
+    helperText: "Choose all that apply. We will validate your eligibility based on compliance."
     options:
       - "Section 8 - rent arrears / breach"
       - "Section 21 - no-fault (AST)"
     validation:
       required: true
-    maps_to:
-      - notice.notice_type
+    suggestion_prompt: >
+      Help the landlord understand the difference between Section 8 (fault-based, requires grounds)
+      and Section 21 (no-fault, but requires full compliance with deposit, gas, EPC, How to Rent, and licensing rules).
 
-  - id: arrears_total
-    section: Rent Arrears
-    question: "Roughly how much rent is currently owed?"
-    inputType: currency
-    helperText: "We will refine this later if needed."
-    validation:
-      required: true
-      min: 0
+  # 8. Section 8 grounds selection
+  - id: section8_grounds
+    section: Section 8 Grounds
+    question: "Which grounds under Section 8 apply?"
+    inputType: multi_select
+    helperText: "Select all grounds that match your situation."
     dependsOn:
-      questionId: notice_type
+      questionId: eviction_route
       value: "Section 8 - rent arrears / breach"
+    options:
+      - "Ground 8 - serious rent arrears"
+      - "Ground 10 - some rent arrears"
+      - "Ground 11 - persistent late payment"
+      - "Ground 12 - breach of tenancy agreement"
+      - "Ground 13 - deterioration of property"
+      - "Ground 14 - nuisance / anti-social behaviour"
+      - "Ground 15 - damage to furniture"
+      - "Ground 17 - false statement"
+
+  # 9. Arrears amount (for Section 8)
+  - id: arrears_summary
+    section: Rent Arrears
+    question: "Rent arrears summary"
+    inputType: group
+    helperText: "Provide current arrears figures."
+    dependsOn:
+      questionId: section8_grounds
+      value:
+        - "Ground 8 - serious rent arrears"
+        - "Ground 10 - some rent arrears"
+        - "Ground 11 - persistent late payment"
+    fields:
+      - id: total_arrears
+        label: "Total rent arrears currently owed"
+        inputType: currency
+        placeholder: "e.g. 2400"
+        validation:
+          required: true
+          min: 0
+        width: half
+      - id: arrears_at_notice_date
+        label: "Arrears at the date you will serve the notice"
+        inputType: currency
+        placeholder: "Amount owed on notice date"
+        width: half
+      - id: arrears_duration_months
+        label: "How many months of rent are unpaid?"
+        inputType: number
+        placeholder: "e.g. 3"
+        width: half
+      - id: last_payment_date
+        label: "Date of last rent payment"
+        inputType: date
+        width: half
+    suggestion_prompt: >
+      Provide clear arrears figures: total owed now, total owed on the notice date,
+      and how many months are unpaid. This is critical for Ground 8, 10, and 11.
     maps_to:
-      - issues.rent_arrears.total_arrears
+      - total_arrears
+      - arrears_at_notice_date
+      - arrears_duration_months
+      - last_payment_date
+
+  # 10. Breach / ASB / Damage narrative (for other Section 8 grounds)
+  - id: section8_other_grounds_narrative
+    section: Section 8 Details
+    question: "Describe the breach, damage, or anti-social behaviour"
+    inputType: textarea
+    helperText: "Only complete this if you selected Ground 12, 13, 14, 15, or 17. Include dates and specific details."
+    dependsOn:
+      questionId: section8_grounds
+      value:
+        - "Ground 12 - breach of tenancy agreement"
+        - "Ground 13 - deterioration of property"
+        - "Ground 14 - nuisance / anti-social behaviour"
+        - "Ground 15 - damage to furniture"
+        - "Ground 17 - false statement"
+    suggestion_prompt: >
+      Help the landlord describe the incidents in a clear, factual way for an England & Wales county court.
+      Focus on: dates, what happened, which tenancy clause was broken (if Ground 12), evidence available.
+      Keep it professional and judge-ready.
+    maps_to:
+      - section8_grounds_narrative
+
+  # 11. Notice service details
+  - id: notice_service
+    section: Notice Service
+    question: "Notice service details"
+    inputType: group
+    helperText: "How and when you will serve the notice."
+    fields:
+      - id: notice_service_date
+        label: "Date you will serve (or served) the notice"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: notice_expiry_date
+        label: "Date after which tenant must leave (for Section 21 Form 6A)"
+        inputType: date
+        helperText: "This is the expiry date for Section 21. Leave blank if only using Section 8."
+        width: half
+      - id: notice_service_method
+        label: "How will you serve the notice?"
+        inputType: select
+        options:
+          - "Hand-delivered through letterbox"
+          - "First class post"
+          - "Email (if tenancy allows)"
+          - "Process server"
+          - "Other"
+        validation:
+          required: true
+        width: half
+      - id: notice_served_by
+        label: "Who will serve the notice?"
+        inputType: text
+        placeholder: "Your name or process server name"
+        width: half
+    suggestion_prompt: >
+      Ensure the landlord understands the correct notice periods for Section 8 (usually 2 weeks or 2 months depending on ground)
+      and Section 21 (2 months minimum, and must end on last day of a tenancy period).
+      Remind them to keep proof of service.
+    maps_to:
+      - notice_service_date
+      - notice_expiry_date
+      - notice_service_method
+      - notice_served_by
+
+  # 12. Evidence uploads
+  - id: evidence_uploads
+    section: Evidence
+    question: "Upload key documents (optional but recommended)"
+    inputType: group
+    helperText: "These will support your notice if the tenant challenges it."
+    fields:
+      - id: upload_tenancy_agreement
+        label: "Tenancy agreement"
+        inputType: file_upload
+        width: full
+      - id: upload_rent_schedule
+        label: "Rent schedule / account"
+        inputType: file_upload
+        width: full
+      - id: upload_deposit_certificate
+        label: "Deposit protection certificate and prescribed information"
+        inputType: file_upload
+        width: full
+      - id: upload_gas_epc_certs
+        label: "Gas safety certificate and EPC"
+        inputType: file_upload
+        width: full
+      - id: upload_how_to_rent
+        label: "How to Rent guide (proof it was given)"
+        inputType: file_upload
+        width: full
+      - id: upload_correspondence
+        label: "Key correspondence (emails, letters)"
+        inputType: file_upload
+        width: full
+    suggestion_prompt: >
+      Suggest which documents are most important: tenancy agreement, deposit certificate,
+      gas safety cert, EPC, How to Rent guide, and any warning letters or arrears correspondence.

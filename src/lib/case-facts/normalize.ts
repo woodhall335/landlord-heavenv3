@@ -518,8 +518,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   }
 
   // =============================================================================
-  // ISSUES - Arrears, ASB, other breaches
-  // TODO: Add detailed mappings for arrears items and ASB incidents
+  // ISSUES - Arrears, ASB, other breaches, Section 8 grounds, AST verification
   // =============================================================================
   base.issues.rent_arrears.has_arrears ??= getFirstValue(wizard, [
     'case_facts.issues.rent_arrears.has_arrears',
@@ -544,6 +543,15 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
       base.issues.rent_arrears.arrears_items = (arrearsItems as any).arrears_items;
     }
   }
+  // Scotland pre-action requirements
+  const preActionConfirmed = getFirstValue(wizard, [
+    'case_facts.issues.rent_arrears.pre_action_confirmed',
+    'pre_action_contact',
+    'pre_action_confirmed',
+  ]);
+  if (preActionConfirmed !== null && preActionConfirmed !== undefined) {
+    base.issues.rent_arrears.pre_action_confirmed = coerceBoolean(preActionConfirmed);
+  }
 
   base.issues.asb.has_asb ??= getFirstValue(wizard, ['case_facts.issues.asb.has_asb', 'has_asb', 'asb.has_asb']);
   base.issues.asb.description ??= getFirstValue(wizard, ['case_facts.issues.asb.description', 'asb_description', 'asb.description']);
@@ -558,6 +566,95 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'other_breaches_description',
     'other_breaches.description',
   ]);
+
+  // Section 8 ground-specific details (England & Wales)
+  const section8Grounds = getFirstValue(wizard, [
+    'case_facts.issues.section8_grounds.selected_grounds',
+    'section8_grounds',
+    'selected_grounds',
+  ]);
+  if (Array.isArray(section8Grounds)) {
+    base.issues.section8_grounds.selected_grounds = section8Grounds as string[];
+  } else if (section8Grounds && typeof section8Grounds === 'string') {
+    base.issues.section8_grounds.selected_grounds = [section8Grounds];
+  }
+
+  base.issues.section8_grounds.arrears_breakdown ??= getFirstValue(wizard, [
+    'case_facts.issues.section8_grounds.arrears_breakdown',
+    'arrears_breakdown',
+    'section8_arrears_details',
+  ]);
+  base.issues.section8_grounds.incident_log ??= getFirstValue(wizard, [
+    'case_facts.issues.section8_grounds.incident_log',
+    'asb_details',
+    'section8_other_grounds_narrative',
+  ]);
+  base.issues.section8_grounds.breach_details ??= getFirstValue(wizard, [
+    'case_facts.issues.section8_grounds.breach_details',
+    'ground12_details',
+    'tenancy_clause_breached',
+  ]);
+  base.issues.section8_grounds.damage_schedule ??= getFirstValue(wizard, [
+    'case_facts.issues.section8_grounds.damage_schedule',
+    'damage_details',
+    'deterioration_description',
+  ]);
+  base.issues.section8_grounds.false_statement_details ??= getFirstValue(wizard, [
+    'case_facts.issues.section8_grounds.false_statement_details',
+    'ground17_details',
+    'false_statement_description',
+  ]);
+
+  // N5B AST verification (for accelerated possession)
+  const astIsAst = getFirstValue(wizard, [
+    'case_facts.issues.ast_verification.is_ast',
+    'ast_is_ast',
+  ]);
+  if (astIsAst !== null && astIsAst !== undefined) {
+    base.issues.ast_verification.is_ast = coerceBoolean(astIsAst);
+  }
+  const astNotAgricultural = getFirstValue(wizard, [
+    'case_facts.issues.ast_verification.not_agricultural',
+    'ast_not_agricultural',
+  ]);
+  if (astNotAgricultural !== null && astNotAgricultural !== undefined) {
+    base.issues.ast_verification.not_agricultural = coerceBoolean(astNotAgricultural);
+  }
+  const astNotBusiness = getFirstValue(wizard, [
+    'case_facts.issues.ast_verification.not_business',
+    'ast_not_business',
+  ]);
+  if (astNotBusiness !== null && astNotBusiness !== undefined) {
+    base.issues.ast_verification.not_business = coerceBoolean(astNotBusiness);
+  }
+  const astNotLongLease = getFirstValue(wizard, [
+    'case_facts.issues.ast_verification.not_long_lease',
+    'ast_not_long_lease',
+  ]);
+  if (astNotLongLease !== null && astNotLongLease !== undefined) {
+    base.issues.ast_verification.not_long_lease = coerceBoolean(astNotLongLease);
+  }
+  const astNotFormerSecure = getFirstValue(wizard, [
+    'case_facts.issues.ast_verification.not_former_secure',
+    'ast_not_former_secure',
+  ]);
+  if (astNotFormerSecure !== null && astNotFormerSecure !== undefined) {
+    base.issues.ast_verification.not_former_secure = coerceBoolean(astNotFormerSecure);
+  }
+  const astNotExcluded = getFirstValue(wizard, [
+    'case_facts.issues.ast_verification.not_excluded',
+    'ast_not_excluded',
+  ]);
+  if (astNotExcluded !== null && astNotExcluded !== undefined) {
+    base.issues.ast_verification.not_excluded = coerceBoolean(astNotExcluded);
+  }
+  const astStandardRent = getFirstValue(wizard, [
+    'case_facts.issues.ast_verification.standard_rent',
+    'ast_standard_rent',
+  ]);
+  if (astStandardRent !== null && astStandardRent !== undefined) {
+    base.issues.ast_verification.standard_rent = coerceBoolean(astStandardRent);
+  }
 
   // =============================================================================
   // NOTICE - Section 8, Section 21, etc.

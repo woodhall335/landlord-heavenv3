@@ -59,6 +59,9 @@ export async function enhanceAnswer(
     return null;
   }
 
+  // Build jurisdiction-specific guidance
+  const jurisdictionGuidance = getJurisdictionGuidance(jurisdiction, caseType);
+
   const systemPrompt = `
 You are "Ask Heaven", a cautious legal assistant for landlords.
 You help rewrite their rough answers into clear, factual, judge-friendly wording
@@ -70,6 +73,8 @@ Rules:
 - Avoid insults, speculation, and emotional language.
 - Never invent facts or dates that weren't given.
 - If something is missing, clearly say what is missing rather than guessing.
+
+${jurisdictionGuidance}
 
 CRITICAL JSON INSTRUCTIONS:
 - You must respond ONLY with a single JSON object.
@@ -153,5 +158,57 @@ IMPORTANT:
     );
     // Let the wizard continue without blocking
     return null;
+  }
+}
+
+/**
+ * Returns jurisdiction-specific legal guidance for Ask Heaven.
+ * This helps the AI provide contextually relevant suggestions.
+ *
+ * Audit items: C2, C4 - Make Ask Heaven jurisdiction-aware
+ */
+function getJurisdictionGuidance(jurisdiction: string, caseType: string): string {
+  // Only provide guidance for eviction cases
+  if (caseType !== 'eviction') {
+    return '';
+  }
+
+  switch (jurisdiction.toLowerCase()) {
+    case 'england-wales':
+    case 'england':
+    case 'wales':
+      return `
+JURISDICTION-SPECIFIC CONTEXT (England & Wales):
+- Section 21 (no-fault evictions) requires strict compliance: deposit protection, prescribed information, gas safety certificate, EPC, "How to Rent" guide provided at start, and valid HMO/selective license if required.
+- Section 8 (fault-based evictions) uses numbered grounds: Ground 8 (serious arrears, 2+ months) is mandatory if threshold met at notice AND hearing; Grounds 10/11 (lesser arrears, persistent late payment) are discretionary; Ground 14 (ASB/nuisance); Ground 12 (tenancy breach).
+- Courts require clear evidence: dated records, payment histories, witness statements, photographs, correspondence logs.
+- Notice periods: Section 21 requires 2 months; Section 8 can be 2 weeks (serious grounds) or 2 months.
+- Emphasize facts that support the ground being used, and note any compliance issues that could block Section 21.
+`.trim();
+
+    case 'scotland':
+      return `
+JURISDICTION-SPECIFIC CONTEXT (Scotland):
+- ALL grounds are discretionary - the First-tier Tribunal has full discretion on every case.
+- NO Section 21 equivalent - landlords MUST have a valid ground for possession.
+- Pre-action requirements are MANDATORY for rent arrears (Ground 1): must contact tenant, signpost to debt advice, and attempt reasonable resolution before serving Notice to Leave.
+- Notice to Leave grounds include: Ground 1 (rent arrears, 3+ months with pre-action), Ground 2 (tenancy breach), Ground 3 (antisocial behaviour), Ground 4 (landlord to occupy - must not re-let within 3 months or face penalty).
+- Notice periods: 28 days for serious grounds (arrears at notice date, ASB), 84 days for others (landlord occupation, sale, refurbishment).
+- Tribunal considers reasonableness, proportionality, and tenant circumstances in EVERY case.
+- Penalties for misuse: up to 6 months' rent if Ground 4/5 used dishonestly.
+- Emphasize pre-action compliance for arrears cases and genuine intentions for landlord occupation/sale grounds.
+`.trim();
+
+    case 'northern-ireland':
+    case 'northern ireland':
+      return `
+JURISDICTION-SPECIFIC CONTEXT (Northern Ireland):
+- NI eviction workflows are not yet fully supported in this system.
+- General guidance: NI uses Notice to Quit procedures similar to pre-2015 England & Wales.
+- Consult a local NI solicitor for specific eviction advice.
+`.trim();
+
+    default:
+      return '';
   }
 }

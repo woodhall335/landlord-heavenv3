@@ -433,7 +433,69 @@ questions:
       - not_retaliatory
       - tenancy_duration_months
 
-  # 9. Route selection – Section 8 / Section 21
+  # 9. N5B AST verification (for accelerated possession route)
+  - id: n5b_ast_verification
+    section: AST Verification
+    question: "Tenancy type verification (for accelerated possession N5B)"
+    inputType: group
+    helperText: "These questions verify that the tenancy is an Assured Shorthold Tenancy and can use Form N5B for accelerated possession. Complete honestly."
+    fields:
+      - id: ast_is_ast
+        label: "Is this tenancy an Assured Shorthold Tenancy (AST)?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: ast_not_agricultural
+        label: "Is this NOT an agricultural worker tenancy?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: ast_not_business
+        label: "Is this NOT a business tenancy?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: ast_not_long_lease
+        label: "Is this NOT a long residential lease (over 21 years)?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: ast_not_former_secure
+        label: "Is this NOT a tenancy that was formerly a secure or assured tenancy?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: ast_not_excluded
+        label: "Is this NOT an excluded tenancy (e.g. very high or very low rent, resident landlord)?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: ast_standard_rent
+        label: "Is the annual rent under £100,000 (or £1,000 if granted before 1 Oct 2010)?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+    suggestion_prompt: >
+      Help the landlord understand that Form N5B (accelerated possession) can ONLY be used for standard Assured Shorthold Tenancies.
+      If the tenancy is agricultural, business, long residential, was formerly secure/assured, or has very high/low rent, N5B cannot be used.
+      Any 'No' answers here mean you must use the standard N5 route instead.
+    maps_to:
+      - ast_is_ast
+      - ast_not_agricultural
+      - ast_not_business
+      - ast_not_long_lease
+      - ast_not_former_secure
+      - ast_not_excluded
+      - ast_standard_rent
+
+  # 10. Route selection – Section 8 / Section 21
   - id: eviction_route
     section: Legal Route
     question: "Which route do you want to use?"

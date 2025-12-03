@@ -270,6 +270,55 @@ export async function fillNoticeToLeave(data: ScotlandCaseData): Promise<Uint8Ar
  *
  * Official form: /public/official-forms/scotland/form_e_eviction.pdf
  * Source: https://www.housingandpropertychamber.scot/
+ *
+ * FIELD MAPPING (Form E → CaseFacts):
+ * ====================================
+ * Section 1: Applicant (Landlord) Details
+ *   - Applicant Name                → parties.landlord.name
+ *   - Applicant Address             → parties.landlord.address_line1 + city + postcode
+ *   - Applicant Postcode            → parties.landlord.postcode
+ *   - Applicant Telephone           → parties.landlord.phone
+ *   - Applicant Email               → parties.landlord.email
+ *   - Landlord Registration Number  → landlord_registration_number
+ *
+ * Section 2: Respondent (Tenant) Details
+ *   - Respondent Name               → parties.tenants[0].name
+ *   - Respondent 2 Name             → parties.tenants[1].name
+ *
+ * Section 3: Property Details
+ *   - Property Address              → property.address_line1 + city
+ *   - Property Postcode             → property.postcode
+ *
+ * Section 4: Tenancy Details
+ *   - Tenancy Start Date            → tenancy.start_date
+ *   - Rent Amount                   → tenancy.rent_amount
+ *   - Rent Payment Frequency        → tenancy.rent_frequency
+ *
+ * Section 5: Notice to Leave Details
+ *   - Notice to Leave Served Date   → notice.notice_date
+ *   - Notice to Leave Expiry Date   → notice.expiry_date (leaving_date)
+ *   - Copy of Notice to Leave attached → evidence checkbox
+ *
+ * Section 6: Grounds for Eviction
+ *   - Ground 1-18 checkboxes        → issues.grounds (Scotland grounds)
+ *
+ * Section 7: Supporting Evidence
+ *   - Tenancy agreement attached    → evidence.tenancy_agreement_uploaded
+ *   - Copy of Notice attached       → evidence checkbox
+ *   - Proof of service attached     → evidence checkbox
+ *   - Deposit protection cert       → evidence checkbox
+ *   - Deposit Scheme                → tenancy.deposit_scheme_name
+ *   - Deposit Reference             → deposit_reference
+ *
+ * Section 8: Other Information
+ *   - Additional Information        → issues.grounds[].particulars (concatenated)
+ *
+ * Section 9: Declaration
+ *   - Applicant Signature           → parties.landlord.name
+ *   - Signature Date                → today's date
+ *
+ * NOTE: All form fields are filled using fillTextField() and checkBox() helpers
+ * which gracefully handle missing fields in the PDF.
  */
 export async function fillFormE(data: ScotlandCaseData): Promise<Uint8Array> {
   console.log('📄 Filling Form E (Tribunal Application for Eviction Order)...');

@@ -104,9 +104,10 @@ questions:
       questionId: rent_arrears
       value: "Yes"
     maps_to:
-      - evidence.bank_statements_uploaded
+      - issues.rent_arrears.pre_action_confirmed
     suggestion_prompt: >
       Ensure the landlord has attempted reasonable contact about arrears and signposted support before serving a Notice to Leave.
+      Scotland law requires landlords to take specific pre-action steps before evicting for rent arrears.
 
   - id: deposit_protection
     section: Deposit Protection
