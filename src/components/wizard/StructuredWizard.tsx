@@ -11,6 +11,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input, Card } from '@/components/ui';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { GuidanceTips } from '@/components/wizard/GuidanceTips';
+import { AskHeavenPanel } from '@/app/wizard/components/AskHeavenPanel';
 
 interface StructuredWizardProps {
   caseId: string;
@@ -57,6 +58,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [analysis, setAnalysis] = useState<CaseAnalysisState | null>(null);
   const [analysisLoading, setAnalysisLoading] = useState(false);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
+
+  // Checkpoint state for live validation
+  const [checkpoint, setCheckpoint] = useState<any>(null);
 
   const initializeQuestion = useCallback((question: ExtendedWizardQuestion) => {
     setCurrentQuestion(question);
@@ -129,6 +133,29 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       );
     } finally {
       setAnalysisLoading(false);
+    }
+  }, [caseId, caseType]);
+
+  /**
+   * Run checkpoint for eviction cases to get live blocking issues and warnings
+   */
+  const runCheckpoint = useCallback(async () => {
+    if (!caseId || caseType !== 'eviction') return;
+
+    try {
+      const response = await fetch('/api/wizard/checkpoint', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ case_id: caseId }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCheckpoint(data);
+      }
+    } catch (error) {
+      console.error('Checkpoint failed:', error);
+      // Non-fatal - continue wizard
     }
   }, [caseId, caseType]);
 
@@ -223,6 +250,24 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       void refreshAnalysis();
     }
   }, [showIntro, caseType, caseId, refreshAnalysis]);
+
+  // Run checkpoint after key sections (eviction cases only)
+  useEffect(() => {
+    const KEY_SECTIONS = [
+      'tenancy_details',
+      'deposit_compliance',
+      'route_selection',
+      'grounds_selection',
+      'evidence',
+    ];
+
+    if (currentQuestion && caseType === 'eviction') {
+      const section = currentQuestion.section || '';
+      if (KEY_SECTIONS.some((s) => section.toLowerCase().includes(s.toLowerCase()))) {
+        void runCheckpoint();
+      }
+    }
+  }, [currentQuestion, caseType, runCheckpoint]);
 
   // Inline deposit validation
   useEffect(() => {
@@ -947,6 +992,54 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             </div>
           </div>
 
+          {/* Checkpoint: Blocking Issues Banner */}
+          {checkpoint?.blocking_issues && checkpoint.blocking_issues.length > 0 && (
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded">
+              <h3 className="text-sm font-semibold text-red-900 mb-2">
+                ⚠️ Route(s) Currently Blocked
+              </h3>
+              {checkpoint.blocking_issues.map((issue: any, i: number) => (
+                <div key={i} className="text-sm text-red-800 mb-1">
+                  <strong>{issue.route?.toUpperCase() || 'ISSUE'}:</strong> {issue.description}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Checkpoint: Warnings Banner */}
+          {checkpoint?.warnings && checkpoint.warnings.length > 0 && (
+            <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded">
+              <h3 className="text-sm font-semibold text-yellow-900 mb-2">⚠️ Warnings</h3>
+              <ul className="text-sm text-yellow-800 list-disc list-inside">
+                {checkpoint.warnings.map((warning: string, i: number) => (
+                  <li key={i}>{warning}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Checkpoint: Completeness Indicator */}
+          {checkpoint?.completeness_hint && (
+            <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-semibold text-blue-900">Application Completeness</h3>
+                <span className="text-lg font-bold text-blue-900">
+                  {checkpoint.completeness_hint.completeness_percent}%
+                </span>
+              </div>
+              {checkpoint.completeness_hint.missing_critical?.length > 0 && (
+                <>
+                  <p className="text-sm text-blue-800 mb-1">Still need:</p>
+                  <ul className="text-sm text-blue-700 list-disc list-inside">
+                    {checkpoint.completeness_hint.missing_critical.map((item: string, i: number) => (
+                      <li key={i}>{item}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+          )}
+
           {/* Question Card */}
           <Card className="p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">{currentQuestion.question}</h2>
@@ -956,6 +1049,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             )}
 
             <div className="mb-6">{renderInput()}</div>
+
+            {/* Ask Heaven Panel for textarea questions */}
+            {currentQuestion.inputType === 'textarea' && (
+              <AskHeavenPanel
+                questionId={currentQuestion.id}
+                rawAnswer={typeof currentAnswer === 'string' ? currentAnswer : ''}
+                jurisdiction={jurisdiction || 'england-wales'}
+                caseId={caseId}
+                onAccept={(improvedText) => setCurrentAnswer(improvedText)}
+              />
+            )}
 
             {/* Contextual guidance helper – tenancy agreements */}
             {caseType === 'tenancy_agreement' && (
