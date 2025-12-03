@@ -8,6 +8,14 @@
 #         - Updated right_to_rent_check_date label to clarify "England only" scope
 # 2.0.0 - Master design template for cross-jurisdiction unification
 
+__meta:
+  version: "2.0.1"
+  effective_from: "2025-12-01"
+  last_updated: "2025-12-03"
+  legal_review_date: "2025-11-28"
+  jurisdiction: "england-wales"
+  product: "tenancy_agreement"
+
 id: tenancy_agreement_england_wales_v2
 product: tenancy_agreement
 jurisdiction: england-wales

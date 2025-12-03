@@ -1,5 +1,13 @@
 # config/mqs/complete_pack/scotland.yaml
 
+__meta:
+  version: "1.0.0"
+  effective_from: "2025-11-01"
+  last_updated: "2025-12-03"
+  legal_review_date: "2025-10-30"
+  jurisdiction: "scotland"
+  product: "complete_pack"
+
 id: complete_pack_scotland_v1
 product: complete_pack
 jurisdiction: scotland
