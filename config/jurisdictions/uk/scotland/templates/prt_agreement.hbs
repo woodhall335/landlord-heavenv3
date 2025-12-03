@@ -87,6 +87,12 @@ This is a **PRIVATE RESIDENTIAL TENANCY (PRT)** under the Private Housing (Tenan
 - The Landlord must follow the correct legal procedures and obtain a Tribunal order to evict
 - Both parties have specific rights and obligations under the Act
 
+{{#if uses_model_tenancy_terms}}
+**Scottish Government Model Terms:** This agreement is based on the Scottish Government's model PRT terms, which provide a standardised framework designed to reduce disputes.
+{{else}}
+**Agreement Structure:** This agreement does not use the Scottish Government's model PRT terms. Bespoke or custom terms have been applied to meet the specific requirements of this tenancy.
+{{/if}}
+
 ---
 
 ## THE TERM
@@ -128,6 +134,14 @@ The Landlord may increase the rent, but must:
 - Give the Tenant at least **3 months' written notice** using the prescribed Rent Increase Notice (Form 4)
 - Not increase the rent more than once in any 12-month period
 - Set a rent that is no more than the open market rent for a comparable property
+
+{{#if in_rent_pressure_zone}}
+**Rent Pressure Zone:** This property is located in a designated Rent Pressure Zone (RPZ). Rent increases are subject to additional restrictions and caps as set by the local authority. The Landlord must comply with RPZ regulations when proposing any rent increase.
+{{else}}
+{{#unless in_rent_pressure_zone}}
+**Rent Pressure Zone:** This property is not currently in a designated Rent Pressure Zone.
+{{/unless}}
+{{/if}}
 
 The Tenant has the right to refer the rent increase to a Rent Officer if they believe it is too high. The Rent Officer will determine the open market rent.
 
