@@ -12,6 +12,7 @@ import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
+import { runDecisionEngine, checkEPCForSection21, type DecisionOutput } from '@/lib/decision-engine';
 
 const analyzeSchema = z.object({
   case_id: z.string().min(1),
@@ -604,6 +605,45 @@ export async function POST(request: Request) {
       compliance
     );
 
+    // RUN DECISION ENGINE for eviction cases (Audit B2: integrate decision engine)
+    let decisionEngineOutput: DecisionOutput | null = null;
+    if (caseData.case_type === 'eviction') {
+      try {
+        decisionEngineOutput = runDecisionEngine({
+          jurisdiction: caseData.jurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+          product: facts.meta.product as any || 'notice_only',
+          case_type: 'eviction',
+          facts,
+        });
+
+        // Merge decision engine blocking issues into red_flags
+        decisionEngineOutput.blocking_issues.forEach(block => {
+          if (block.severity === 'blocking') {
+            red_flags.push(`${block.route.toUpperCase()} BLOCKED: ${block.description} - ${block.action_required}`);
+          }
+        });
+
+        // Merge decision engine warnings into compliance
+        decisionEngineOutput.warnings.forEach(warning => {
+          compliance.push(warning);
+        });
+
+        // Check EPC rating for S21 (Audit D2: M6)
+        const tenancyStartDate = facts.tenancy.start_date;
+        const epcRating = (wizardFacts as any).epc_rating;
+        if (decisionEngineOutput.recommended_routes.includes('section_21')) {
+          const epcCheck = checkEPCForSection21(tenancyStartDate, epcRating);
+          if (epcCheck.warning) {
+            decisionEngineOutput.warnings.push(epcCheck.warning);
+            compliance.push(epcCheck.warning);
+          }
+        }
+      } catch (error) {
+        console.error('Decision engine error:', error);
+        // Don't block analysis if decision engine fails
+      }
+    }
+
     await supabase
       .from('cases')
       .update({
@@ -661,6 +701,8 @@ export async function POST(request: Request) {
       case_summary: summary,
       ask_heaven_answer: askHeavenAnswer,
       case_health: caseHealth,
+      // Decision engine output (for eviction cases)
+      decision_engine: decisionEngineOutput,
     });
   } catch (error: any) {
     console.error('Analyze case error:', error);
