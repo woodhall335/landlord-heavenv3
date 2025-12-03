@@ -956,7 +956,7 @@ questions:
       - property_description
 
   # 11. Access & inspections
-  - id: access_viewings
+  - id: access_inspections
     section: Access & Inspections
     question: "Access rules"
     inputType: group
@@ -1283,7 +1283,7 @@ questions:
       - hmo_licence_expiry
       - communal_cleaning
 
-  - id: insurance_expectations
+  - id: tenant_insurance_requirements
     section: Premium Protections
     question: "Tenant insurance requirements"
     inputType: select
