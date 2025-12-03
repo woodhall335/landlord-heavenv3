@@ -137,18 +137,21 @@ export async function POST(request: Request) {
     }
 
     // Northern Ireland gating: only tenancy agreements are supported
+    // Evictions and money claims are blocked until legal review complete
     // See docs/NI_EVICTION_STATUS.md for full details
     if (effectiveJurisdiction === 'northern-ireland' && resolvedCaseType !== 'tenancy_agreement') {
       return NextResponse.json(
         {
-          error: 'Northern Ireland eviction workflows are not yet supported.',
+          error: 'Northern Ireland eviction and money claim workflows are not yet supported.',
           message:
-            'We currently support tenancy agreements for Northern Ireland, plus evictions for England & Wales and Scotland. ' +
-            'For NI eviction assistance, please consult a local NI solicitor. Expected availability: Q2 2026.',
+            'We currently support tenancy agreements for Northern Ireland. ' +
+            'For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. ' +
+            'Northern Ireland eviction and money claim support is planned for Q2 2026. ' +
+            'For immediate NI legal assistance, please consult a local solicitor.',
           supported: {
-            ni: ['tenancy_agreement'],
-            'england-wales': ['notice_only', 'complete_pack', 'money_claim'],
-            scotland: ['notice_only', 'complete_pack', 'money_claim'],
+            'northern-ireland': ['tenancy_agreement'],
+            'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
           },
         },
         { status: 400 },

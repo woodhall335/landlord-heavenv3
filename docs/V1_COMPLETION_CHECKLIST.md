@@ -360,16 +360,16 @@ Reference: `NI_EVICTION_STATUS.md`, `MASTER_BLUEPRINT.md`
 ### 8.1 NI Evictions
 
 - [x] NI evictions blocked in `/api/wizard/start`
-- [ ] Update wording to make roadmap explicit:
-  - [ ] Error message: “Northern Ireland **eviction workflows** are not yet supported (roadmap Q2 2026).”
+- [x] Update wording to make roadmap explicit:
+  - [x] Error message: "Northern Ireland **eviction and money claim workflows** are not yet supported (roadmap Q2 2026)."
 
 ### 8.2 NI Money Claims
 
-- [ ] Clarify that NI **money claim** workflows are also blocked:
-  - [ ] Update `/api/wizard/start` error text to say:
-    - “Northern Ireland **eviction and money claim workflows** are not yet supported…”
-  - [ ] Ensure supported matrix shows NI only has:
-    - `[ 'tenancy_agreement' ]`
+- [x] Clarify that NI **money claim** workflows are also blocked:
+  - [x] Update `/api/wizard/start` error text to say:
+    - "Northern Ireland **eviction and money claim workflows** are not yet supported…"
+  - [x] Ensure supported matrix shows NI only has:
+    - `[ 'tenancy_agreement' ]` (✅ Confirmed: E&W and Scotland show all 4 products)
 
 ---
 
