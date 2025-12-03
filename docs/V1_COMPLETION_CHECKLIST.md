@@ -92,16 +92,16 @@ Reference: `MQS_AUDIT_REPORT.md`, `MQS_INTEGRATION_COMPLETE.md`, `MASTER_BLUEPRI
 
 For all **9 MQS files** (notice_only, complete_pack, money_claim, tenancy_agreement × E&W/Scotland/NI):
 
-- [ ] Add `__meta` block at the top of each MQS YAML:
-  - [ ] `version` (e.g. `2.0.1`)
-  - [ ] `effective_from`
-  - [ ] `last_updated`
-  - [ ] `legal_review_date`
-  - [ ] `jurisdiction`
-  - [ ] `product`
-- [ ] Ensure question IDs follow consistent naming (e.g. `tenancy.basic_details`, `eviction.notice_type`, etc.)
-- [ ] Ensure `depends_on` / `dependsOn` usage is consistent and supported by `mqs-loader.ts`
-- [ ] Ensure `maps_to` fields reference valid CaseFacts paths
+- [x] Add `__meta` block at the top of each MQS YAML:
+  - [x] `version` (e.g. `2.0.1`)
+  - [x] `effective_from`
+  - [x] `last_updated`
+  - [x] `legal_review_date`
+  - [x] `jurisdiction`
+  - [x] `product`
+- [x] Ensure question IDs follow consistent naming (e.g. `tenancy.basic_details`, `eviction.notice_type`, etc.)
+- [x] Ensure `depends_on` / `dependsOn` usage is consistent and supported by `mqs-loader.ts`
+- [x] Ensure `maps_to` fields reference valid CaseFacts paths
 
 ### 2.2 Scotland Eviction MQS Expansion
 

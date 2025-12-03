@@ -2,6 +2,14 @@
 # Expanded MQS for England & Wales notice_only product
 # Implements audit fixes: C2 + M2 (expanded from 5 to ~15 questions)
 
+__meta:
+  version: "2.0.0"
+  effective_from: "2025-12-01"
+  last_updated: "2025-12-03"
+  legal_review_date: "2025-11-28"
+  jurisdiction: "england-wales"
+  product: "notice_only"
+
 id: notice_only_england_wales_v1
 product: notice_only
 jurisdiction: england-wales
