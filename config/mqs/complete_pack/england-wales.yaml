@@ -1,4 +1,12 @@
-# config/mqs/complete_pack/england-wales.yaml 
+# config/mqs/complete_pack/england-wales.yaml
+
+__meta:
+  version: "1.0.0"
+  effective_from: "2025-12-01"
+  last_updated: "2025-12-03"
+  legal_review_date: "2025-11-28"
+  jurisdiction: "england-wales"
+  product: "complete_pack"
 
 id: complete_pack_england_wales_v1
 product: complete_pack

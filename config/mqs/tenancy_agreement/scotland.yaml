@@ -7,6 +7,14 @@
 #         - Added in_rent_pressure_zone question (RPZ compliance check)
 # 2.0.0 - Initial unified structure matching England & Wales master design
 
+__meta:
+  version: "2.0.1"
+  effective_from: "2025-11-01"
+  last_updated: "2025-12-03"
+  legal_review_date: "2025-10-30"
+  jurisdiction: "scotland"
+  product: "tenancy_agreement"
+
 id: tenancy_agreement_scotland_prt_v2
 product: tenancy_agreement
 jurisdiction: scotland
