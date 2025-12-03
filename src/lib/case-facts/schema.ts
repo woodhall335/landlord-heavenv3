@@ -82,6 +82,8 @@ export interface IssueFacts {
     has_arrears: boolean | null;
     arrears_items: ArrearsItem[];
     total_arrears: number | null;
+    // Scotland pre-action requirements
+    pre_action_confirmed: boolean | null; // for Scotland Notice to Leave
   };
   asb: {
     has_asb: boolean | null;
@@ -91,6 +93,25 @@ export interface IssueFacts {
   other_breaches: {
     has_breaches: boolean | null;
     description: string | null;
+  };
+  // England & Wales Section 8 ground-specific details
+  section8_grounds: {
+    selected_grounds: string[] | null; // e.g. ["Ground 8", "Ground 14"]
+    arrears_breakdown: string | null; // detailed arrears narrative for Grounds 8/10/11
+    incident_log: string | null; // ASB/nuisance incidents for Ground 14
+    breach_details: string | null; // tenancy breach details for Ground 12
+    damage_schedule: string | null; // damage/deterioration for Grounds 13/15
+    false_statement_details: string | null; // for Ground 17
+  };
+  // N5B AST verification (for accelerated possession)
+  ast_verification: {
+    is_ast: boolean | null;
+    not_agricultural: boolean | null;
+    not_business: boolean | null;
+    not_long_lease: boolean | null;
+    not_former_secure: boolean | null;
+    not_excluded: boolean | null;
+    standard_rent: boolean | null; // annual rent under threshold
   };
 }
 
@@ -265,9 +286,26 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     tenants: [],
   },
   issues: {
-    rent_arrears: { has_arrears: null, arrears_items: [], total_arrears: null },
+    rent_arrears: { has_arrears: null, arrears_items: [], total_arrears: null, pre_action_confirmed: null },
     asb: { has_asb: null, description: null, incidents: [] },
     other_breaches: { has_breaches: null, description: null },
+    section8_grounds: {
+      selected_grounds: null,
+      arrears_breakdown: null,
+      incident_log: null,
+      breach_details: null,
+      damage_schedule: null,
+      false_statement_details: null,
+    },
+    ast_verification: {
+      is_ast: null,
+      not_agricultural: null,
+      not_business: null,
+      not_long_lease: null,
+      not_former_secure: null,
+      not_excluded: null,
+      standard_rent: null,
+    },
   },
   notice: {
     notice_type: null,
