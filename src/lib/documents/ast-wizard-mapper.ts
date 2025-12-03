@@ -255,7 +255,8 @@ export function mapWizardToASTData(wizardFacts: WizardFacts): ASTData {
     guarantor_relationship: getValueAtPath(wizardFacts, 'guarantor_relationship'),
     guarantor_required: coerceBoolean(getValueAtPath(wizardFacts, 'guarantor_required')),
 
-    // Compliance Documents
+    // Compliance Documents (England/Wales only - fields removed from Scotland/NI in MQS v2.0.1)
+    // These will be undefined/null for Scotland/NI jurisdictions, which is correct behavior
     right_to_rent_check_date: getValueAtPath(wizardFacts, 'right_to_rent_check_date'),
     how_to_rent_provision_date: getValueAtPath(wizardFacts, 'how_to_rent_provision_date'),
     how_to_rent_guide_provided: coerceBoolean(getValueAtPath(wizardFacts, 'how_to_rent_guide_provided')),
