@@ -1,15 +1,19 @@
+# Version History:
+# 2.0.0 - Added ground-specific conditional questions for better Notice to Leave particulars
+#         - Ground selection with basic particulars for each ground type
+
 __meta:
-  version: "1.0.0"
-  effective_from: "2025-11-01"
+  version: "2.0.0"
+  effective_from: "2025-12-03"
   last_updated: "2025-12-03"
-  legal_review_date: "2025-10-30"
+  legal_review_date: "2025-12-03"
   jurisdiction: "scotland"
   product: "notice_only"
 
-id: notice_only_scotland_v1
+id: notice_only_scotland_v2
 product: notice_only
 jurisdiction: scotland
-version: "1.0.0"
+version: "2.0.0"
 
 questions:
   - id: case_overview
@@ -176,6 +180,45 @@ questions:
       - issues.asb.incidents
     suggestion_prompt: >
       Summarise dates, witnesses, and any police or council involvement. Keep it factual.
+
+  - id: eviction_grounds
+    section: Grounds for Eviction
+    question: "Which grounds for eviction apply?"
+    inputType: multiselect
+    helperText: "Select all PRT grounds that apply to this case."
+    options:
+      - "Ground 1 - Rent arrears (3+ months)"
+      - "Ground 2 - Breach of tenancy"
+      - "Ground 3 - Antisocial behaviour"
+      - "Ground 4 - Landlord intends to occupy"
+      - "Ground 5 - Landlord intends to sell"
+      - "Ground 6 - Refurbishment required"
+      - "Ground 11 - Not occupying as principal home"
+      - "Ground 12 - Criminal conviction"
+      - "Ground 13 - Mortgage lender repossession"
+      - "Other ground"
+    validation:
+      required: true
+    maps_to:
+      - eviction_grounds
+      - scotland_ground_codes
+    suggestion_prompt: >
+      Help landlord select appropriate grounds based on case facts. Remind that pre-action requirements
+      are mandatory for Ground 1 (rent arrears).
+
+  - id: ground_particulars
+    section: Grounds for Eviction
+    question: "Provide specific details for each ground selected"
+    inputType: textarea
+    helperText: "For each ground selected, provide: dates, amounts (if arrears), specific incidents (if breach/ASB), or plans (if sale/refurb)."
+    validation:
+      required: true
+    maps_to:
+      - ground_particulars
+      - notice_reason
+    suggestion_prompt: >
+      Draft clear, factual particulars for Notice to Leave. Focus on: what happened, when, amounts owed,
+      evidence available. Keep professional and tribunal-ready.
 
   - id: notice_service
     section: Notice Service
