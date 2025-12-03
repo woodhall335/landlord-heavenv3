@@ -13,6 +13,7 @@ import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { runDecisionEngine, checkEPCForSection21, type DecisionOutput } from '@/lib/decision-engine';
+import { getLawProfile } from '@/lib/law-profile';
 
 const analyzeSchema = z.object({
   case_id: z.string().min(1),
@@ -691,6 +692,9 @@ export async function POST(request: Request) {
       }
     }
 
+    // Get law profile for version tracking and legal metadata
+    const law_profile = getLawProfile(caseData.jurisdiction, caseData.case_type);
+
     return NextResponse.json({
       case_id,
       recommended_route: route,
@@ -703,6 +707,8 @@ export async function POST(request: Request) {
       case_health: caseHealth,
       // Decision engine output (for eviction cases)
       decision_engine: decisionEngineOutput,
+      // Legal change framework metadata
+      law_profile,
     });
   } catch (error: any) {
     console.error('Analyze case error:', error);

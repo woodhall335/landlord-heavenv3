@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { normalizeCaseFacts } from '@/lib/case-facts/normalize';
 import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
+import { getLawProfile } from '@/lib/law-profile';
 
 export async function POST(request: NextRequest) {
   try {
@@ -60,6 +61,9 @@ export async function POST(request: NextRequest) {
 
     const decision = runDecisionEngine(decisionInput);
 
+    // Get law profile for version tracking and legal metadata
+    const law_profile = getLawProfile(jurisdiction, effectiveCaseType);
+
     // Format response for wizard UI
     const response = {
       status: 'ok',
@@ -82,6 +86,8 @@ export async function POST(request: NextRequest) {
       jurisdiction,
       product: effectiveProduct,
       completeness_hint: getCompletenessHint(caseFacts, jurisdiction),
+      // Legal change framework metadata
+      law_profile,
     };
 
     return NextResponse.json(response);

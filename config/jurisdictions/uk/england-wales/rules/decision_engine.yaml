@@ -5,6 +5,19 @@ version: "1.0"
 jurisdiction: "england-wales"
 last_updated: "2025-11-21"
 
+# Legal Change Framework Metadata
+metadata:
+  effective_from: "2025-01-01"
+  effective_to: null  # null means currently in effect
+  source:
+    - "Housing Act 1988"
+    - "Housing Act 2004"
+    - "Deregulation Act 2015"
+    - "Tenant Fees Act 2019"
+  last_reviewed: "2025-12-03"
+  reviewed_by: "Landlord Heaven Legal Team"
+  notes: "Eviction rules aligned with Master Blueprint v10.0 and Phase 2 audit. Section 21 rules reflect pre-abolition state."
+
 # Rule evaluation order: mandatory grounds first, then discretionary
 evaluation_order:
   - mandatory_grounds
