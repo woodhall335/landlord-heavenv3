@@ -58,6 +58,12 @@ export interface ChatCompletionResult {
   cost_usd: number;
 }
 
+export interface JsonAIClient {
+  jsonCompletion: typeof jsonCompletion;
+}
+
+let activeJsonClient: JsonAIClient | null = null;
+
 // Pricing per 1M tokens (2025)
 const PRICING = {
   'gpt-4': { input: 30, output: 60 },
@@ -185,6 +191,20 @@ export async function jsonCompletion<T = any>(
     console.error('OpenAI JSON API error:', err);
     throw new Error(`OpenAI JSON API error: ${err.message}`);
   }
+}
+
+export function getJsonAIClient(): JsonAIClient {
+  if (activeJsonClient) return activeJsonClient;
+  return { jsonCompletion };
+}
+
+export function hasCustomJsonAIClient(): boolean {
+  return !!activeJsonClient;
+}
+
+// Test-only setter to override the active JSON AI client
+export function __setTestJsonAIClient(client: JsonAIClient | null) {
+  activeJsonClient = client;
 }
 
 /* ----------------------------------------------------
