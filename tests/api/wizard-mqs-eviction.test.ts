@@ -1,20 +1,6 @@
-import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { beforeAll, afterAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
-// Mock AI clients BEFORE importing any modules that use them
-vi.mock('@/lib/ai/openai-client', () => ({
-  chatCompletion: vi.fn(),
-  jsonCompletion: vi.fn(),
-  streamChatCompletion: vi.fn(),
-  getOpenAIClient: vi.fn(),
-  openai: {},
-}));
-
-vi.mock('@/lib/ai/claude-client', () => ({
-  claudeCompletion: vi.fn(),
-  claudeJsonCompletion: vi.fn(),
-  streamClaudeCompletion: vi.fn(),
-  anthropic: {},
-}));
+import { __setTestJsonAIClient } from '@/lib/ai/openai-client';
 
 import { POST as nextQuestion } from '@/app/api/wizard/next-question/route';
 import { POST as saveAnswer } from '@/app/api/wizard/answer/route';
@@ -80,6 +66,31 @@ vi.mock('@/lib/ai', async () => {
 });
 
 describe('MQS eviction flow (England & Wales)', () => {
+  beforeAll(() => {
+    __setTestJsonAIClient({
+      async jsonCompletion() {
+        const json = {
+          suggested_wording: '',
+          missing_information: [],
+          evidence_suggestions: [],
+          consistency_flags: [],
+        };
+
+        return {
+          content: JSON.stringify(json),
+          json,
+          usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+          model: 'test-model',
+          cost_usd: 0,
+        };
+      },
+    });
+  });
+
+  afterAll(() => {
+    __setTestJsonAIClient(null);
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     supabaseClientMock.from.mockReturnValue(supabaseClientMock);
