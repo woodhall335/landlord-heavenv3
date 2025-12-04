@@ -97,6 +97,8 @@ Generate a single-paragraph case summary (150-200 words) that:
 
 Output ONLY the paragraph, no preamble or explanation.`;
 
+  const { jsonCompletion } = getJsonAIClient();
+
   const messages: ChatMessage[] = [
     { role: 'system', content: systemPrompt },
     { role: 'user', content: userPrompt },
@@ -191,6 +193,8 @@ Generate a factual narrative (100-150 words) explaining why this ground applies.
 Include specific dates, amounts, and events.
 Output ONLY the narrative, no preamble.`;
 
+  const { jsonCompletion } = getJsonAIClient();
+
   const messages: ChatMessage[] = [
     { role: 'system', content: systemPrompt },
     { role: 'user', content: userPrompt },
@@ -244,6 +248,8 @@ ${factsContext}
 Generate a clear, factual arrears narrative (100-150 words) suitable for court documents.
 Output ONLY the narrative, no preamble.`;
 
+  const { jsonCompletion } = getJsonAIClient();
+
   const messages: ChatMessage[] = [
     { role: 'system', content: systemPrompt },
     { role: 'user', content: userPrompt },
@@ -296,6 +302,8 @@ ${factsContext}
 
 Generate a clear, factual ASB narrative (100-150 words) suitable for court documents.
 Output ONLY the narrative, no preamble.`;
+
+  const { jsonCompletion } = getJsonAIClient();
 
   const messages: ChatMessage[] = [
     { role: 'system', content: systemPrompt },
@@ -363,6 +371,8 @@ Generate a structured narrative (200-250 words) covering:
 4. Current status
 
 Output ONLY the narrative, no preamble.`;
+
+  const { jsonCompletion } = getJsonAIClient();
 
   const messages: ChatMessage[] = [
     { role: 'system', content: systemPrompt },
