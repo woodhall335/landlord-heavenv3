@@ -538,7 +538,7 @@ export async function POST(request: Request) {
     }
 
     // Build decision context for Ask Heaven
-    let decisionContext = null;
+    let decisionContext: DecisionOutput | undefined = undefined;
     try {
       // Only run decision engine for eviction cases with enough data
       if (caseRow.case_type === 'eviction' && collectedFacts && Object.keys(collectedFacts).length > 5) {
@@ -567,8 +567,8 @@ export async function POST(request: Request) {
         jurisdiction: caseRow.jurisdiction,
         product,
         caseType: caseRow.case_type,
-        decisionContext,           // NEW: Decision engine context
-        wizardFacts: collectedFacts, // NEW: Current wizard state
+        decisionContext,           // Decision engine context
+        wizardFacts: collectedFacts, // Current wizard state
       });
     } catch (enhErr) {
       console.error('enhanceAnswer failed, proceeding without suggestions:', enhErr);

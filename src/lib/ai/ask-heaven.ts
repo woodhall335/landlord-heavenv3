@@ -51,8 +51,8 @@ export async function enhanceAnswer(
     caseType,
     decisionContext,
     caseIntelContext,
-    wizardFacts
   } = args;
+  // wizardFacts is available in args but not currently used in this function
 
   // If no key, just skip quietly
   if (!process.env.OPENAI_API_KEY) {
@@ -312,10 +312,14 @@ function buildDecisionEngineContext(decision: DecisionOutput): string {
   }
 
   // Pre-action requirements (Scotland)
-  if (decision.pre_action_requirements && decision.pre_action_requirements.length > 0) {
+  if (decision.pre_action_requirements && decision.pre_action_requirements.required) {
     context += '\nPre-Action Requirements:\n';
-    for (const req of decision.pre_action_requirements) {
-      context += `  - ${req.requirement}: ${req.status}\n`;
+    context += `  Required: ${decision.pre_action_requirements.required}\n`;
+    context += `  Met: ${decision.pre_action_requirements.met ?? 'Unknown'}\n`;
+    if (decision.pre_action_requirements.details && decision.pre_action_requirements.details.length > 0) {
+      for (const detail of decision.pre_action_requirements.details) {
+        context += `  - ${detail}\n`;
+      }
     }
   }
 
