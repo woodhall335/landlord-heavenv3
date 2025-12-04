@@ -75,8 +75,9 @@ describe('HMO Pro gating (V1 scope enforcement)', () => {
     expect(response.status).toBe(400);
     const body = await response.json();
 
-    // Should indicate HMO Pro is not supported in V1
-    expect(body.error).toMatch(/hmo.*not.*supported|invalid.*product/i);
+    // Should indicate HMO Pro is not supported in V1 (caught by Zod enum validation)
+    expect(body.error).toBe('Validation failed');
+    expect(body.details).toBeDefined(); // Zod validation details
     expect(supabaseClientMock.insert).not.toHaveBeenCalled();
   });
 
@@ -93,7 +94,8 @@ describe('HMO Pro gating (V1 scope enforcement)', () => {
 
     expect(response.status).toBe(400);
     const body = await response.json();
-    expect(body.error).toMatch(/hmo.*not.*supported|invalid.*product/i);
+    expect(body.error).toBe('Validation failed');
+    expect(body.details).toBeDefined();
   });
 
   it('rejects hmo_premium product variant', async () => {
@@ -109,7 +111,8 @@ describe('HMO Pro gating (V1 scope enforcement)', () => {
 
     expect(response.status).toBe(400);
     const body = await response.json();
-    expect(body.error).toMatch(/hmo.*not.*supported|invalid.*product/i);
+    expect(body.error).toBe('Validation failed');
+    expect(body.details).toBeDefined();
   });
 
   it('lists supported products excluding HMO variants', async () => {

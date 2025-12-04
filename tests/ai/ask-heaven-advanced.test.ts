@@ -9,7 +9,7 @@
  * - Recommends legal strategy
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from 'vitest';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { DecisionOutput } from '@/lib/decision-engine';
 import type { CaseIntelligence } from '@/lib/case-intel';

@@ -2,7 +2,7 @@
  * Decision Engine Module
  *
  * Analyzes case facts and recommends eviction routes, grounds, and flags compliance issues.
- * Based on jurisdiction-specific YAML rules in config/jurisdictions/uk/*/rules/decision_engine.yaml
+ * Based on jurisdiction-specific YAML rules in config/jurisdictions/uk/{jurisdiction}/rules/decision_engine.yaml
  *
  * Audit items addressed: B1 (Create decision-engine module)
  */
