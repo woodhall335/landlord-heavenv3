@@ -427,106 +427,109 @@ export async function fillSimpleProcedureClaim(data: ScotlandMoneyClaimData): Pr
   const form = pdfDoc.getForm();
 
   // Court details
-  fillTextField(form, 'Sheriff Court', data.sheriffdom || data.court_name || 'Edinburgh Sheriff Court');
+  fillTextField(form, '3A_SheriffCourt', data.sheriffdom || data.court_name || 'Edinburgh Sheriff Court');
 
   // Section 1: Claimant (Pursuer) Details
-  fillTextField(form, 'Claimant Name', data.landlord_full_name);
+  fillTextField(form, '3A_Claimant', data.landlord_full_name);
 
-  // Build full claimant address
-  const claimantAddress = [
+  // Claimant address fields (Section A1 - likely 5 fields for address lines)
+  const claimantAddressParts = [
     data.landlord_address,
+    '',  // address line 2
+    '',  // address line 3
+    '',  // city/town
     data.landlord_postcode
-  ].filter(Boolean).join('\n');
-  fillTextField(form, 'Claimant Address', claimantAddress);
-
-  fillTextField(form, 'Claimant Phone', data.landlord_phone || '');
-  fillTextField(form, 'Claimant Email', data.landlord_email || '');
-  fillTextField(form, 'Claimant Reference', data.claimant_reference || '');
+  ];
+  fillTextField(form, '3A_A1_1', claimantAddressParts[0] || '');
+  fillTextField(form, '3A_A1_2', claimantAddressParts[1] || '');
+  fillTextField(form, '3A_A1_3', claimantAddressParts[2] || '');
+  fillTextField(form, '3A_A1_4', claimantAddressParts[3] || '');
+  fillTextField(form, '3A_A1_5', data.landlord_phone || data.landlord_email || '');
 
   // Section 2: Respondent (Defender) Details
-  fillTextField(form, 'Respondent Name', data.tenant_full_name);
+  fillTextField(form, '3A_Respondent', data.tenant_full_name);
 
-  // Build full respondent address (property address for tenant claims)
-  const respondentAddress = [
+  // Respondent address fields (Section B2 - likely 4 fields)
+  const respondentAddressParts = [
     data.property_address,
+    '',  // address line 2
+    '',  // city/town
     data.property_postcode
-  ].filter(Boolean).join('\n');
-  fillTextField(form, 'Respondent Address', respondentAddress);
+  ];
+  fillTextField(form, '3A_B2_1', respondentAddressParts[0] || '');
+  fillTextField(form, '3A_B2_2', respondentAddressParts[1] || '');
+  fillTextField(form, '3A_B2_3', respondentAddressParts[2] || '');
+  fillTextField(form, '3A_B2_4', respondentAddressParts[3] || '');
 
-  // Section 3: What the claim is about
+  // Section B3: What the claim is about (3 fields for detailed description)
   const claimSummary = data.particulars_of_claim ||
     `Claim for unpaid rent arrears of ${formatCurrency(data.arrears_total || 0)}` +
     (data.damages_total ? ` and property damage costs of ${formatCurrency(data.damages_total)}` : '') +
     ` relating to tenancy at ${data.property_address}.`;
 
-  fillTextField(form, 'What is your claim about', claimSummary.substring(0, 500)); // Limit length
+  fillTextField(form, '3A_B3_1', claimSummary.substring(0, 500));
 
-  // Section 4: What has happened
+  // Section B3_2: What has happened
   const background = data.basis_of_claim === 'rent_arrears'
     ? `The respondent occupied the property under a tenancy commencing ${data.tenancy_start_date || 'on or about'} with rent of ${formatCurrency(data.rent_amount || 0)} per ${data.rent_frequency || 'month'}. The respondent failed to pay rent as agreed, resulting in arrears.`
     : data.basis_of_claim === 'damages'
     ? `The respondent caused damage to the property beyond normal wear and tear. The claimant seeks recovery of repair costs.`
     : `The respondent occupied the property under a tenancy and has failed to pay rent as agreed, and has also caused damage to the property.`;
 
-  fillTextField(form, 'What has happened', background.substring(0, 1000));
+  fillTextField(form, '3A_B3_2', background.substring(0, 1000));
 
-  // Section 5: What have you done to try to resolve the dispute
+  // Section B3_3: What have you done to try to resolve
   const attempts = data.attempts_to_resolve ||
     'The claimant sent written demands for payment but the respondent failed to make payment or engage to resolve the debt.';
 
-  fillTextField(form, 'What you have done to resolve', attempts.substring(0, 500));
+  fillTextField(form, '3A_B3_3', attempts.substring(0, 500));
 
-  // Section 6: What do you want the respondent to do
-  fillTextField(form, 'What you want',
-    `Pay the sum of ${formatCurrency(data.total_claim_amount)} plus interest and expenses.`
-  );
+  // Section B4: Financial details (amounts claimed)
+  fillTextField(form, '3A_B4_1', formatCurrency(data.total_claim_amount));
 
-  // Section 7: How much are you claiming
-  fillTextField(form, 'Amount claimed', formatCurrency(data.total_claim_amount));
-
-  // Breakdown
+  // Breakdown in B4 fields
   if (data.arrears_total) {
-    fillTextField(form, 'Amount claimed - arrears', formatCurrency(data.arrears_total));
+    fillTextField(form, '3A_B4_2', `Arrears: ${formatCurrency(data.arrears_total)}`);
   }
   if (data.damages_total) {
-    fillTextField(form, 'Amount claimed - damages', formatCurrency(data.damages_total));
-  }
-  if (data.other_total) {
-    fillTextField(form, 'Amount claimed - other', formatCurrency(data.other_total));
+    fillTextField(form, '3A_B4_3', `Damages: ${formatCurrency(data.damages_total)}`);
   }
 
-  // Interest
+  // Interest details
   if (data.interest_to_date && data.interest_to_date > 0) {
-    fillTextField(form, 'Interest claimed', formatCurrency(data.interest_to_date));
-    fillTextField(form, 'Interest rate', `${data.interest_rate || 8}% per annum`);
-    fillTextField(form, 'Interest from date', data.interest_start_date || '');
+    fillTextField(form, '3A_B4_4', `Interest: ${formatCurrency(data.interest_to_date)} at ${data.interest_rate || 8}% per annum from ${data.interest_start_date || 'date of claim'}`);
   }
 
-  // Court fee
+  // Court fee and total
   if (data.court_fee) {
-    fillTextField(form, 'Court fee', formatCurrency(data.court_fee));
+    fillTextField(form, '3A_B4_5', `Court fee: ${formatCurrency(data.court_fee)}`);
   }
 
-  // Total
+  // Section B5: Total amount
   const totalWithFees = data.total_with_fees ||
     (data.total_claim_amount + (data.interest_to_date || 0) + (data.court_fee || 0) + (data.solicitor_costs || 0));
-  fillTextField(form, 'Total amount claimed', formatCurrency(totalWithFees));
+  fillTextField(form, 'B5', formatCurrency(totalWithFees));
 
-  // Section 8: Attachments checklist
-  checkBox(form, 'Attached - particulars of claim', true);
-  checkBox(form, 'Attached - schedule of arrears', !!data.arrears_total);
-  checkBox(form, 'Attached - evidence list', true);
-  checkBox(form, 'Attached - tenancy agreement', true);
+  // Section E: Attachments checklist (using CheckBox fields)
+  // CheckBox1-6 likely represent different attachment types
+  checkBox(form, 'CheckBox1', true);  // Particulars of claim
+  checkBox(form, 'CheckBox2', !!data.arrears_total);  // Schedule of arrears
+  checkBox(form, 'CheckBox3', true);  // Evidence list
+  checkBox(form, 'CheckBox4', true);  // Tenancy agreement
+  // CheckBox5 and CheckBox6 available for other attachments
 
-  // Section 9: Statement of truth
-  fillTextField(form, 'Statement signatory', data.signatory_name || data.landlord_full_name);
+  // Section D/F: Statement of truth and signature
+  fillTextField(form, 'D1', data.signatory_name || data.landlord_full_name);
 
   const sigDate = splitDate(data.signature_date || new Date().toISOString().split('T')[0]);
   if (sigDate) {
-    fillTextField(form, 'Signature day', sigDate.day);
-    fillTextField(form, 'Signature month', sigDate.month);
-    fillTextField(form, 'Signature year', sigDate.year);
+    fillTextField(form, 'Text2', sigDate.day);
+    fillTextField(form, 'Text3', sigDate.month);
+    fillTextField(form, 'Text4', sigDate.year);
   }
+
+  // F1 field for final details/total or signatory role
+  fillTextField(form, 'F1', data.signatory_role || 'Claimant');
 
   const pdfBytes = await pdfDoc.save();
   console.log('✅ Simple Procedure Claim Form filled successfully');
