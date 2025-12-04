@@ -11,10 +11,24 @@ export const metadata: Metadata = {
 export default function HMOProPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* V2 Roadmap Banner */}
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-4">
+        <Container>
+          <div className="text-center">
+            <p className="text-sm font-semibold mb-1">
+              🚧 Coming Soon - V2 Roadmap Feature 🚧
+            </p>
+            <p className="text-xs text-white/90">
+              HMO Pro is currently in development. Expected launch: Q2 2026. For immediate HMO compliance needs, please consult a local property management specialist.
+            </p>
+          </div>
+        </Container>
+      </div>
+
       <TealHero
         title="HMO Pro"
         subtitle="Manage licences, inspections, and compliance timelines with a calm teal workspace."
-        eyebrow="HMO compliance"
+        eyebrow="HMO compliance - Coming in V2"
       />
 
       {/* What's Included */}
@@ -386,15 +400,15 @@ export default function HMOProPage() {
                 </p>
               </div>
 
-              <Link
-                href="/wizard?product=hmo_pro"
-                className="block w-full bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold text-lg text-center hover:bg-gray-50 transition-colors"
+              <button
+                disabled
+                className="block w-full bg-gray-400 text-gray-600 px-8 py-4 rounded-lg font-semibold text-lg text-center cursor-not-allowed opacity-60"
               >
-                Start Free Trial →
-              </Link>
+                Coming in V2 (Q2 2026)
+              </button>
 
               <p className="text-center text-sm text-white/70 mt-4">
-                Cancel anytime • No long-term contract • Keep access until period ends
+                This feature is currently in development and not yet available
               </p>
             </div>
 
@@ -527,18 +541,18 @@ export default function HMOProPage() {
       <section className="py-16 md:py-20 bg-linear-to-br from-purple-600 to-indigo-700">
         <Container>
           <div className="max-w-3xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Start Your Free Trial Today</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Coming in V2</h2>
             <p className="text-xl mb-8 text-white/90">
-              7 days free. No payment required. Cancel anytime. Never miss an HMO compliance deadline again.
+              HMO Pro is currently under development. Expected launch: Q2 2026. We're building a comprehensive HMO compliance management platform.
             </p>
-            <Link
-              href="/wizard?product=hmo_pro"
-              className="inline-block bg-white text-purple-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
+            <button
+              disabled
+              className="inline-block bg-gray-400 text-gray-600 px-8 py-4 rounded-lg font-semibold text-lg cursor-not-allowed opacity-60 shadow-lg"
             >
-              Start Free Trial - £0 Today →
-            </Link>
+              Not Yet Available
+            </button>
             <p className="mt-4 text-sm text-white/80">
-              Then £19.99-£34.99/month based on property count • Cancel anytime
+              Want to be notified when HMO Pro launches? <Link href="/help" className="underline">Contact us</Link>
             </p>
           </div>
         </Container>

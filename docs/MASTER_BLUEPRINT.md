@@ -23,7 +23,7 @@ Drafting services
 
 The platform delivers full legal-document assembly, evidence ingestion, automated compliance checking, and council/form routing — all via one unified flow built on MQS, Ask Heaven™, and the Official Forms Engine.
 
-1.1 Core Capabilities
+1.1 Core Capabilities (Full Vision)
 
 ✔ Eviction (E&W Section 8, Section 21, N5/N5B/N119, Scotland Tribunal, NI NTQ workflow)
 ✔ Money Claims (England & Wales N1, Scotland Simple Procedure Form 3A)
@@ -38,6 +38,16 @@ The platform delivers full legal-document assembly, evidence ingestion, automate
 ✔ User dashboard with timeline + regeneration
 ✔ Admin portal with template control + legal scrapers
 ✔ Jurisdiction-aware routing for E&W, Scotland, NI
+
+**V1 SCOPE (Current Release):**
+- ✅ **England & Wales:** Evictions, Money Claims, Tenancy Agreements
+- ✅ **Scotland:** Evictions, Money Claims, Tenancy Agreements
+- ✅ **Northern Ireland:** Tenancy Agreements ONLY
+- ❌ **Northern Ireland Evictions:** V2+ Roadmap (Q2 2026)
+- ❌ **Northern Ireland Money Claims:** V2+ Roadmap (Q2 2026)
+- ❌ **HMO Licensing Suite:** V2+ Roadmap (Q2 2026)
+
+V1 focuses on core eviction, money claim, and tenancy agreement workflows for England & Wales and Scotland, with tenancy agreements available for Northern Ireland. NI eviction/money claim workflows and the HMO Licensing Suite are intentionally excluded from V1 and planned for V2.
 
 1.2 The End-to-End Legal Pipeline
 
