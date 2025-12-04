@@ -4,7 +4,7 @@
  * Tests court and tribunal bundle generation.
  */
 
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from 'vitest';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import {
   generateCourtBundle,
