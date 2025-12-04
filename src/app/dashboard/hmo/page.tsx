@@ -46,6 +46,10 @@ interface UserProfile {
 }
 
 export default function HMOProDashboardPage() {
+  // V1 GATING: HMO Pro is not available in V1
+  // This will be removed in V2 when HMO Pro launches
+  const V1_BLOCK_HMO = true;
+
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [properties, setProperties] = useState<HMOProperty[]>([]);
   const [tenants, setTenants] = useState<HMOTenant[]>([]);
@@ -168,6 +172,58 @@ export default function HMOProDashboardPage() {
     const occupiedRooms = properties.reduce((sum, p) => sum + p.occupied_rooms, 0);
     return totalRooms > 0 ? Math.round((occupiedRooms / totalRooms) * 100) : 0;
   };
+
+  // V1 GATING: Block HMO Pro entirely for V1
+  if (V1_BLOCK_HMO) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-8">
+          <Container size="large" className="text-center">
+            <h1 className="text-4xl font-extrabold mb-4">🚧 HMO Pro - Coming in V2</h1>
+            <p className="text-xl opacity-90">
+              This feature is currently under development
+            </p>
+          </Container>
+        </div>
+
+        <Container size="medium" className="py-12">
+          <Card padding="large">
+            <div className="text-center py-8">
+              <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg className="w-10 h-10 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+
+              <h2 className="text-2xl font-bold text-charcoal mb-3">
+                HMO Pro Dashboard
+              </h2>
+              <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                HMO Pro is currently in development and not yet available in V1.
+                We're building a comprehensive HMO compliance management platform.
+              </p>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8 max-w-xl mx-auto">
+                <p className="text-sm text-gray-700">
+                  <strong>Expected Launch:</strong> Q2 2026<br/>
+                  <strong>What's Coming:</strong> License tracking, fire safety management, compliance reminders, tenant management, and more.
+                </p>
+              </div>
+
+              <div className="flex gap-3 justify-center">
+                <Link href="/dashboard">
+                  <Button variant="primary">← Back to Dashboard</Button>
+                </Link>
+                <Link href="/help">
+                  <Button variant="secondary">Contact Us</Button>
+                </Link>
+              </div>
+            </div>
+          </Card>
+        </Container>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
