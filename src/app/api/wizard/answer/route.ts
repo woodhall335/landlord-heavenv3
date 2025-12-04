@@ -14,7 +14,7 @@ import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
-import { runDecisionEngine, type DecisionInput } from '@/lib/decision-engine';
+import { runDecisionEngine, type DecisionInput, type DecisionOutput } from '@/lib/decision-engine';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 
 export const dynamic = 'force-dynamic';
@@ -457,8 +457,17 @@ export async function POST(request: Request) {
     const { data, error: fetchError } = await query.single();
 
     if (fetchError || !data) {
-      console.error('Case not found:', fetchError);
-      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+      if (process.env.NODE_ENV !== 'test') {
+        console.warn('Case not found in wizard answer route', {
+          caseId: case_id,
+          error: fetchError?.message ?? fetchError,
+        });
+      }
+
+      return NextResponse.json(
+        { error: 'Case not found', code: 'CASE_NOT_FOUND' },
+        { status: 404 },
+      );
     }
 
     // Type assertion: we know data exists after the null check

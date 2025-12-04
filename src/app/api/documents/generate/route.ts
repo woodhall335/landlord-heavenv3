@@ -71,9 +71,15 @@ export async function POST(request: Request) {
       .single();
 
     if (caseError || !data) {
-      console.error('Case not found:', caseError);
+      if (process.env.NODE_ENV !== 'test') {
+        console.warn('Case not found in documents generate route', {
+          caseId: case_id,
+          error: caseError?.message ?? caseError,
+        });
+      }
+
       return NextResponse.json(
-        { error: 'Case not found' },
+        { error: 'Case not found', code: 'CASE_NOT_FOUND' },
         { status: 404 }
       );
     }
