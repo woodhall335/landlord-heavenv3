@@ -3,9 +3,10 @@
 
 import { vi } from 'vitest';
 import dotenv from 'dotenv';
+import path from 'path';
 
-// Load environment variables from .env file for tests
-dotenv.config();
+// Load environment variables from .env.local file for tests
+dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
 
 // Avoid launching Chromium during default test runs. Environments without the
 // required system libraries can still execute the suite because Puppeteer is

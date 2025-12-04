@@ -69,7 +69,8 @@ async function main() {
       const snapshot = await fetchLawSource(source);
 
       // Load previous snapshot for comparison
-      const previousSnapshot = loadPreviousSnapshot(source.id);
+      // TODO: Pass source.id when loadPreviousSnapshot is implemented
+      const previousSnapshot = loadPreviousSnapshot();
       const changed = hasContentChanged(snapshot, previousSnapshot);
 
       if (changed) {
@@ -89,8 +90,7 @@ async function main() {
       // Generate change suggestions
       const suggestions = compareSnapshotWithRules(
         snapshot,
-        source.jurisdiction,
-        'eviction' // Default to eviction for monitoring
+        source.jurisdiction
       );
 
       // Generate Markdown report

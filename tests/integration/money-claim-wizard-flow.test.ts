@@ -79,7 +79,7 @@ const { mockSupabase, mockDb } = vi.hoisted(() => {
               then: async (resolve: any) => {
                 const items = Array.from(db[tableName].entries());
                 items
-                  .filter(([_, item]) => updateFilters.every((f) => item[f.column] === f.value))
+                  .filter(([, item]) => updateFilters.every((f) => item[f.column] === f.value))
                   .forEach(([id, item]) => db[tableName].set(id, { ...item, ...data, updated_at: new Date().toISOString() }));
                 const result = { data: null, error: null };
                 if (resolve) resolve(result);

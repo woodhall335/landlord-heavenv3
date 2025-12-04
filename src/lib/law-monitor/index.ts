@@ -180,13 +180,11 @@ export function computeContentHash(content: string): string {
  *
  * @param snapshot - The fetched law snapshot
  * @param jurisdiction - The jurisdiction to check rules for
- * @param caseType - The case type (eviction, tenancy_agreement, etc.)
  * @returns Array of suggestions for human review
  */
 export function compareSnapshotWithRules(
   snapshot: LawSnapshot,
-  jurisdiction: string,
-  _caseType: string
+  jurisdiction: string
 ): LawChangeSuggestion[] {
   const suggestions: LawChangeSuggestion[] = [];
 
@@ -285,8 +283,9 @@ export function compareSnapshotWithRules(
  * This helps detect actual changes rather than just analyzing content.
  *
  * TODO: Implement snapshot storage and retrieval
+ * TODO: Add sourceId parameter when implementing this function
  */
-export function loadPreviousSnapshot(_sourceId: string): LawSnapshot | null {
+export function loadPreviousSnapshot(): LawSnapshot | null {
   // TODO: Load from data/law_snapshots/ directory
   // TODO: Parse JSON and return most recent snapshot for this source
   return null;

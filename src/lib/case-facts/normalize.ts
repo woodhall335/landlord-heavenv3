@@ -237,7 +237,7 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
 // CASE HEALTH - compute contradictions, missing evidence, compliance warnings
 // -----------------------------------------------------------------------------
 
-function computeCaseHealth(base: CaseFacts, _wizard: WizardFacts): CaseFacts['case_health'] {
+function computeCaseHealth(base: CaseFacts): CaseFacts['case_health'] {
   const contradictions: string[] = [];
   const missing_evidence: string[] = [];
   const compliance_warnings: string[] = [];
@@ -959,7 +959,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // ---------------------------------------------------------------------------
   // CASE HEALTH - compute contradictions, missing evidence, compliance warnings
   // ---------------------------------------------------------------------------
-  base.case_health = computeCaseHealth(base, wizard);
+  base.case_health = computeCaseHealth(base);
 
   return base;
 }
