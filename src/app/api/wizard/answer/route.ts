@@ -14,7 +14,7 @@ import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
-import { runDecisionEngine, type DecisionInput } from '@/lib/decision-engine';
+import { runDecisionEngine, type DecisionInput, type DecisionOutput } from '@/lib/decision-engine';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 
 export const dynamic = 'force-dynamic';
