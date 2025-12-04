@@ -9,10 +9,18 @@
 
 import OpenAI from 'openai';
 
-// Initialise client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
+// Lazy initialization - only create client when needed
+// This allows dotenv.config() in test setup to run first
+let openaiInstance: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+  if (!openaiInstance) {
+    openaiInstance = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY!,
+    });
+  }
+  return openaiInstance;
+}
 
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
@@ -73,7 +81,7 @@ export async function chatCompletion(
   const messages = Array.isArray(messagesInput) ? messagesInput : [messagesInput];
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAIClient().chat.completions.create({
       model,
       messages,
       temperature,
@@ -131,7 +139,7 @@ export async function jsonCompletion<T = any>(
   ];
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAIClient().chat.completions.create({
       model,
       messages,
       temperature,
@@ -186,7 +194,7 @@ export async function* streamChatCompletion(
     : [messagesInput];
 
   try {
-    const stream = await openai.chat.completions.create({
+    const stream = await getOpenAIClient().chat.completions.create({
       model,
       messages,
       temperature,

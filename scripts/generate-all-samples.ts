@@ -11,7 +11,6 @@ import {
 } from '../src/lib/documents/section8-generator';
 import { generateStandardAST, calculateRecommendedDeposit } from '../src/lib/documents/ast-generator';
 import { generateLetterBeforeAction, calculateEstimatedCosts } from '../src/lib/documents/letter-generator';
-import { savePdf } from '../src/lib/documents/generator';
 import { join } from 'path';
 
 const OUTPUT_DIR = process.cwd();

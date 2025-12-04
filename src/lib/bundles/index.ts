@@ -18,12 +18,6 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 import { runDecisionEngine, type DecisionInput } from '@/lib/decision-engine';
 import { analyzeCase, type CaseIntelligence } from '@/lib/case-intel';
 import { buildEnglandWalesSections, buildScotlandSections } from './sections';
-import {
-  generateEvidenceIndex,
-  generateBundleTimeline,
-  formatEvidenceIndexAsText,
-  formatTimelineAsText,
-} from './evidence-index';
 import type {
   BundleResult,
   BundleOptions,

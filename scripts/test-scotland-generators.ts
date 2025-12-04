@@ -9,7 +9,7 @@ import path from 'path';
 import { generatePRTAgreement, createSamplePRTData } from '../src/lib/documents/scotland/prt-generator';
 import {
   generateNoticeToLeave,
-  createSampleNoticeToLeaveData,
+  _createSampleNoticeToLeaveData,
   buildGround1RentArrears,
   buildGround3ASB,
   buildGround4LandlordOccupy,

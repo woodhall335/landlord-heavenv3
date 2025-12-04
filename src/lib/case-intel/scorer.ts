@@ -39,7 +39,7 @@ const DEFAULT_WEIGHTS: ScoringWeights = {
  */
 export function calculateCaseStrength(
   facts: CaseFacts,
-  decisionOutput: DecisionOutput,
+  _decisionOutput: DecisionOutput,
   consistencyReport: ConsistencyReport,
   evidenceAnalysis: EvidenceAnalysis,
   weights: ScoringWeights = DEFAULT_WEIGHTS
@@ -76,7 +76,7 @@ export function calculateCaseStrength(
  *
  * IMPORTANT: Uses ONLY decision engine outputs, no hard-coded rules
  */
-function scoreLegalEligibility(facts: CaseFacts, decisionOutput: DecisionOutput): ComponentScore {
+function scoreLegalEligibility(facts: CaseFacts, _decisionOutput: DecisionOutput): ComponentScore {
   let score = 100;
   const notes: string[] = [];
   const issues: string[] = [];
@@ -175,7 +175,7 @@ function scoreLegalEligibility(facts: CaseFacts, decisionOutput: DecisionOutput)
  */
 function scoreEvidence(
   evidenceAnalysis: EvidenceAnalysis,
-  decisionOutput: DecisionOutput
+  _decisionOutput: DecisionOutput
 ): ComponentScore {
   const score = evidenceAnalysis.completeness_score;
   const notes: string[] = [];
@@ -300,7 +300,7 @@ function scoreConsistency(consistencyReport: ConsistencyReport): ComponentScore 
 /**
  * Score procedural validity
  */
-function scoreProcedure(facts: CaseFacts, decisionOutput: DecisionOutput): ComponentScore {
+function scoreProcedure(facts: CaseFacts, _decisionOutput: DecisionOutput): ComponentScore {
   let score = 100;
   const notes: string[] = [];
   const issues: string[] = [];

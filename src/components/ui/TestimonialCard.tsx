@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 import { clsx } from "clsx";
 
 interface TestimonialCardProps {
@@ -24,9 +25,11 @@ export function TestimonialCard({
         <div className="relative shrink-0">
           <div className="w-20 h-20 rounded-2xl overflow-hidden bg-linear-to-br from-secondary/20 to-secondary/40 border-4 border-secondary/30">
             {avatar ? (
-              <img
+              <Image
                 src={avatar}
                 alt={author}
+                width={80}
+                height={80}
                 className="w-full h-full object-cover"
               />
             ) : (

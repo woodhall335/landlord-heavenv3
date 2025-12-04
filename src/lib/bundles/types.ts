@@ -10,9 +10,7 @@
  * - Existing form fillers
  */
 
-import type { CaseFacts } from '@/lib/case-facts/schema';
-import type { DecisionOutput } from '@/lib/decision-engine';
-import type { CaseIntelligence, EvidenceItem, TimelineEvent } from '@/lib/case-intel';
+import type { EvidenceItem } from '@/lib/case-intel';
 
 // =============================================================================
 // BUNDLE STRUCTURE
