@@ -22,6 +22,8 @@ function getOpenAIClient(): OpenAI {
   return openaiInstance;
 }
 
+export const openai = getOpenAIClient();
+
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
   content: string;
