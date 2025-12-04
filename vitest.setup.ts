@@ -2,6 +2,10 @@
 // Additional matchers are not added because we avoid external dependencies in this environment.
 
 import { vi } from 'vitest';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file for tests
+dotenv.config();
 
 // Avoid launching Chromium during default test runs. Environments without the
 // required system libraries can still execute the suite because Puppeteer is
