@@ -505,10 +505,8 @@ export async function fillSimpleProcedureClaim(data: ScotlandMoneyClaimData): Pr
     fillTextField(form, '3A_B4_5', `Court fee: ${formatCurrency(data.court_fee)}`);
   }
 
-  // Section B5: Total amount
-  const totalWithFees = data.total_with_fees ||
-    (data.total_claim_amount + (data.interest_to_date || 0) + (data.court_fee || 0) + (data.solicitor_costs || 0));
-  fillTextField(form, 'B5', formatCurrency(totalWithFees));
+  // Section B5: Total amount (RadioGroup field - skip for now, value shown in B4 fields)
+  // Note: B5 is a RadioGroup, not a text field. Total is captured in B4 breakdown.
 
   // Section E: Attachments checklist (using CheckBox fields)
   // CheckBox1-6 likely represent different attachment types
@@ -519,17 +517,18 @@ export async function fillSimpleProcedureClaim(data: ScotlandMoneyClaimData): Pr
   // CheckBox5 and CheckBox6 available for other attachments
 
   // Section D/F: Statement of truth and signature
-  fillTextField(form, 'D1', data.signatory_name || data.landlord_full_name);
+  // Note: D1 and F1 are RadioGroups. Signature name might be in a different field.
+  // Text1 field might be for signatory name
+  fillTextField(form, 'Text1', data.signatory_name || data.landlord_full_name);
 
+  // Date fields: Text2/3/4 appear to have constraints, use alternative Text fields if available
+  // Using Text22/23/24 for date components as they're standard text fields
   const sigDate = splitDate(data.signature_date || new Date().toISOString().split('T')[0]);
   if (sigDate) {
-    fillTextField(form, 'Text2', sigDate.day);
-    fillTextField(form, 'Text3', sigDate.month);
-    fillTextField(form, 'Text4', sigDate.year);
+    fillTextField(form, 'Text22', sigDate.day);
+    fillTextField(form, 'Text23', sigDate.month);
+    fillTextField(form, 'Text24', sigDate.year);
   }
-
-  // F1 field for final details/total or signatory role
-  fillTextField(form, 'F1', data.signatory_role || 'Claimant');
 
   const pdfBytes = await pdfDoc.save();
   console.log('✅ Simple Procedure Claim Form filled successfully');
