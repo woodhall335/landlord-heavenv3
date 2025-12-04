@@ -16,8 +16,18 @@ let openaiInstance: OpenAI | null = null;
 // 🔧 CHANGE #1: make this an exported function
 export function getOpenAIClient(): OpenAI {
   if (!openaiInstance) {
+    const isTestEnv = process.env.NODE_ENV === 'test' || process.env.VITEST === 'true';
+    const isBrowserLike = typeof window !== 'undefined' || typeof document !== 'undefined';
+    const allowBrowser =
+      process.env.OPENAI_ALLOW_BROWSER === 'true' ||
+      isTestEnv ||
+      isBrowserLike;
+
     openaiInstance = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY!,
+      // Vitest often runs with a jsdom-like environment; enable the safety flag only
+      // in tests or when explicitly opted in to prevent credential leakage warnings.
+      dangerouslyAllowBrowser: allowBrowser,
     });
   }
   return openaiInstance;
