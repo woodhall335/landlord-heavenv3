@@ -100,7 +100,7 @@ describe('Tenancy Agreement MQS - All Jurisdictions', () => {
     });
 
     test('should show premium questions when Premium AST selected', () => {
-      const facts: Record<string, any> = { product_tier: 'Premium AST' };
+      const _facts: Record<string, any> = { product_tier: 'Premium AST' };
 
       // Find all questions
       const premiumQuestions = mqs!.questions.filter((q: ExtendedWizardQuestion) =>

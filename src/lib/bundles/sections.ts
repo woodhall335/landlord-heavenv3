@@ -95,7 +95,7 @@ export function buildEnglandWalesSections(
   });
 
   // Section 8: Evidence
-  const evidenceIndex = generateEvidenceIndex(caseIntel.evidence, 'G');
+  const _evidenceIndex = generateEvidenceIndex(caseIntel.evidence, 'G');
   sections.push({
     id: 'evidence',
     title: 'Evidence',
@@ -227,7 +227,7 @@ export function buildScotlandSections(
   }
 
   // Section 9: Evidence
-  const evidenceIndex = generateEvidenceIndex(caseIntel.evidence, '8');
+  const _evidenceIndex = generateEvidenceIndex(caseIntel.evidence, '8');
   sections.push({
     id: 'evidence',
     title: 'Supporting Evidence',

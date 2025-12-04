@@ -149,7 +149,7 @@ async function generateGroundNarrative(
   facts: CaseFacts,
   groundCode: string,
   groundTitle: string,
-  options: NarrativeOptions
+  _options: NarrativeOptions
 ): Promise<string> {
   const jurisdiction = facts.meta.jurisdiction || 'england-wales';
 
@@ -223,7 +223,7 @@ Output ONLY the narrative, no preamble.`;
  */
 export async function generateArrearsNarrative(
   facts: CaseFacts,
-  options: NarrativeOptions = {}
+  _options: NarrativeOptions = {}
 ): Promise<string> {
   const systemPrompt = `You are a legal document assistant. Generate a factual arrears schedule for court documents.
 
@@ -277,7 +277,7 @@ Output ONLY the narrative, no preamble.`;
  */
 export async function generateASBNarrative(
   facts: CaseFacts,
-  options: NarrativeOptions = {}
+  _options: NarrativeOptions = {}
 ): Promise<string> {
   const systemPrompt = `You are a legal document assistant. Generate a factual ASB narrative for court documents.
 

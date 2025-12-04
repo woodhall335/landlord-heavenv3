@@ -186,7 +186,7 @@ export function computeContentHash(content: string): string {
 export function compareSnapshotWithRules(
   snapshot: LawSnapshot,
   jurisdiction: string,
-  caseType: string
+  _caseType: string
 ): LawChangeSuggestion[] {
   const suggestions: LawChangeSuggestion[] = [];
 
@@ -286,7 +286,7 @@ export function compareSnapshotWithRules(
  *
  * TODO: Implement snapshot storage and retrieval
  */
-export function loadPreviousSnapshot(sourceId: string): LawSnapshot | null {
+export function loadPreviousSnapshot(_sourceId: string): LawSnapshot | null {
   // TODO: Load from data/law_snapshots/ directory
   // TODO: Parse JSON and return most recent snapshot for this source
   return null;

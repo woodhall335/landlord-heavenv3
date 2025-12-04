@@ -12,7 +12,7 @@ const nextConfig: NextConfig = {
       allowedOrigins: ["*"],
     },
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config) => {
     // Suppress handlebars require.extensions warning (harmless)
     config.ignoreWarnings = [
       ...(config.ignoreWarnings || []),

@@ -33,7 +33,7 @@ export function createMockSupabaseClient(): {
   // Helper to create a query builder with common methods
   const createQueryBuilder = (tableName: keyof MockDatabase) => {
     let filters: Array<{ column: string; operator: string; value: any }> = [];
-    let selectColumns = '*';
+    let _selectColumns = '*';
 
     const builder = {
       select: (columns = '*') => {

@@ -15,7 +15,7 @@
  */
 
 import type { CaseFacts } from '@/lib/case-facts/schema';
-import { runDecisionEngine, type DecisionInput, type DecisionOutput } from '@/lib/decision-engine';
+import { runDecisionEngine, type DecisionInput } from '@/lib/decision-engine';
 import { calculateCaseStrength } from './scorer';
 import { checkConsistency } from './consistency';
 import { analyzeEvidence } from './evidence';
