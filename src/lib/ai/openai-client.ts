@@ -30,11 +30,7 @@ export function getOpenAIClient(): OpenAI {
   return openaiInstance;
 }
 
-export const openai = {
-  get client(): OpenAI {
-    return getOpenAIClient();
-  },
-};
+export const openai = getOpenAIClient();
 
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
