@@ -12,6 +12,7 @@ export {
   chatCompletion,
   jsonCompletion,
   streamChatCompletion,
+  getOpenAIClient,
   openai,
   type ChatMessage,
   type ChatCompletionOptions,

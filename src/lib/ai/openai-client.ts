@@ -13,10 +13,18 @@ import OpenAI from 'openai';
 // This allows dotenv.config() in test setup to run first
 let openaiInstance: OpenAI | null = null;
 
-function getOpenAIClient(): OpenAI {
+export function getOpenAIClient(): OpenAI {
   if (!openaiInstance) {
+    const apiKey = process.env.OPENAI_API_KEY;
+
+    if (!apiKey) {
+      throw new Error(
+        'OPENAI_API_KEY is not set. Make sure it is defined in .env.local or the environment before using the OpenAI client.',
+      );
+    }
+
     openaiInstance = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY!,
+      apiKey,
     });
   }
   return openaiInstance;
@@ -214,4 +222,3 @@ export async function* streamChatCompletion(
   }
 }
 
-export { openai };

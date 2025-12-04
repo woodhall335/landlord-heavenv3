@@ -457,8 +457,17 @@ export async function POST(request: Request) {
     const { data, error: fetchError } = await query.single();
 
     if (fetchError || !data) {
-      console.error('Case not found:', fetchError);
-      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+      if (process.env.NODE_ENV !== 'test') {
+        console.warn('Case not found in wizard answer route', {
+          caseId: case_id,
+          error: fetchError?.message ?? fetchError,
+        });
+      }
+
+      return NextResponse.json(
+        { error: 'Case not found', code: 'CASE_NOT_FOUND' },
+        { status: 404 },
+      );
     }
 
     // Type assertion: we know data exists after the null check
