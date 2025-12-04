@@ -9,20 +9,19 @@
 
 import OpenAI from 'openai';
 
+// Lazy initialization - only create client when needed
+// This allows dotenv.config() in test setup to run first
 let openaiInstance: OpenAI | null = null;
 
+// 🔧 CHANGE #1: make this an exported function
 export function getOpenAIClient(): OpenAI {
   if (!openaiInstance) {
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (!apiKey) {
-      throw new Error('OPENAI_API_KEY is not set');
-    }
-    openaiInstance = new OpenAI({ apiKey });
+    openaiInstance = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY!,
+    });
   }
   return openaiInstance;
 }
-
-export type { OpenAI };
 
 export interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
@@ -214,3 +213,5 @@ export async function* streamChatCompletion(
   }
 }
 
+// 🔧 CHANGE #2: remove this line entirely, since there is no `openai` variable anymore
+// export { openai };
