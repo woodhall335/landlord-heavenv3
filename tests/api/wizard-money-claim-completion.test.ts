@@ -1,19 +1,6 @@
-import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { beforeAll, afterAll, beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
-vi.mock('@/lib/ai/openai-client', () => ({
-  chatCompletion: vi.fn(),
-  jsonCompletion: vi.fn(),
-  streamChatCompletion: vi.fn(),
-  getOpenAIClient: vi.fn(),
-  openai: {},
-}));
-
-vi.mock('@/lib/ai/claude-client', () => ({
-  claudeCompletion: vi.fn(),
-  claudeJsonCompletion: vi.fn(),
-  streamClaudeCompletion: vi.fn(),
-  anthropic: {},
-}));
+import { __setTestJsonAIClient } from '@/lib/ai/openai-client';
 
 import { POST as nextQuestion } from '@/app/api/wizard/next-question/route';
 import * as aiModule from '@/lib/ai';
@@ -64,6 +51,31 @@ vi.mock('@/lib/wizard/mqs-loader', async () => {
 });
 
 describe('Money claim completion gating', () => {
+  beforeAll(() => {
+    __setTestJsonAIClient({
+      async jsonCompletion() {
+        const json = {
+          suggested_wording: '',
+          missing_information: [],
+          evidence_suggestions: [],
+          consistency_flags: [],
+        };
+
+        return {
+          content: JSON.stringify(json),
+          json,
+          usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+          model: 'test-model',
+          cost_usd: 0,
+        };
+      },
+    });
+  });
+
+  afterAll(() => {
+    __setTestJsonAIClient(null);
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     supabaseClientMock.from.mockReturnValue(supabaseClientMock);

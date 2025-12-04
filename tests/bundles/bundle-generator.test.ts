@@ -4,13 +4,14 @@
  * Tests court and tribunal bundle generation.
  */
 
-import { describe, it, expect } from 'vitest';
+import { beforeAll, afterAll, describe, it, expect } from 'vitest';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import {
   generateCourtBundle,
   generateTribunalBundle,
   validateBundleReadiness,
 } from '@/lib/bundles';
+import { __setTestJsonAIClient } from '@/lib/ai/openai-client';
 
 // Minimal valid England & Wales case
 const minimalEnglandWalesCase: CaseFacts = {
@@ -124,6 +125,55 @@ const minimalScotlandCase: CaseFacts = {
     },
   },
 } as any;
+
+beforeAll(() => {
+  __setTestJsonAIClient({
+    async jsonCompletion(messages: any) {
+      const messageArr = Array.isArray(messages) ? messages : [messages];
+      const userContent = messageArr[messageArr.length - 1]?.content ?? '';
+      const lowerContent = userContent.toLowerCase();
+
+      if (lowerContent.includes('case summary')) {
+        return {
+          content: JSON.stringify({ summary: 'Bundle mock case summary.' }),
+          json: { summary: 'Bundle mock case summary.' },
+          usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+          model: 'test-model',
+          cost_usd: 0,
+        };
+      }
+
+      if (lowerContent.includes('generate particulars') || lowerContent.includes('narrative')) {
+        return {
+          content: JSON.stringify({ narrative: 'Bundle mock narrative with key facts.' }),
+          json: { narrative: 'Bundle mock narrative with key facts.' },
+          usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+          model: 'test-model',
+          cost_usd: 0,
+        };
+      }
+
+      const json = {
+        suggested_wording: 'Placeholder wording',
+        missing_information: [],
+        evidence_suggestions: [],
+        consistency_flags: [],
+      };
+
+      return {
+        content: JSON.stringify(json),
+        json,
+        usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
+        model: 'test-model',
+        cost_usd: 0,
+      };
+    },
+  });
+});
+
+afterAll(() => {
+  __setTestJsonAIClient(null);
+});
 
 describe('validateBundleReadiness', () => {
   it('should pass validation for minimal England & Wales case', () => {

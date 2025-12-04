@@ -1,7 +1,7 @@
 // src/lib/ai/ask-heaven.ts
 
 import type { ChatMessage } from './openai-client';
-import { jsonCompletion } from './openai-client';
+import { getJsonAIClient, hasCustomJsonAIClient } from './openai-client';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import type { ProductType } from '@/lib/wizard/mqs-loader';
 import type { DecisionOutput } from '@/lib/decision-engine';
@@ -55,7 +55,7 @@ export async function enhanceAnswer(
   // wizardFacts is available in args but not currently used in this function
 
   // If no key, just skip quietly
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.OPENAI_API_KEY && !hasCustomJsonAIClient()) {
     return null;
   }
 
@@ -192,19 +192,29 @@ IMPORTANT:
   };
 
   try {
-    const result = await jsonCompletion<EnhanceAnswerResult>(messages, schema, {
-      model: 'gpt-4o-mini',
-      temperature: 0.2,
-      max_tokens: 800, // Increased for consistency_flags
-    });
+    const result = await getJsonAIClient().jsonCompletion<EnhanceAnswerResult>(
+      messages,
+      schema,
+      {
+        model: 'gpt-4o-mini',
+        temperature: 0.2,
+        max_tokens: 800, // Increased for consistency_flags
+      }
+    );
 
     const json = result.json || ({} as Partial<EnhanceAnswerResult>);
+    const evidenceSuggestions =
+      (json as any).evidence_suggestions ?? (json as any).evidence_you_may_upload ?? [];
+    const missingInformation =
+      (json as any).missing_information ?? (json as any).missing_info ?? [];
+    const consistencyFlagsFromModel =
+      (json as any).consistency_flags ?? (json as any).consistency_issues ?? undefined;
 
     return {
-      suggested_wording: json.suggested_wording ?? '',
-      missing_information: json.missing_information ?? [],
-      evidence_suggestions: json.evidence_suggestions ?? [],
-      consistency_flags: json.consistency_flags ?? consistencyFlags, // Fallback to detected flags
+      suggested_wording: (json as any).suggested_wording ?? '',
+      missing_information: missingInformation,
+      evidence_suggestions: evidenceSuggestions,
+      consistency_flags: consistencyFlagsFromModel ?? consistencyFlags, // Fallback to detected flags
     };
   } catch (error) {
     console.error(

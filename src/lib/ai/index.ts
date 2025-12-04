@@ -12,6 +12,9 @@ export { getOpenAIClient } from './openai-client';
 export {
   chatCompletion,
   jsonCompletion,
+  getJsonAIClient,
+  hasCustomJsonAIClient,
+  __setTestJsonAIClient,
   streamChatCompletion,
   type ChatMessage,
   type ChatCompletionOptions,
