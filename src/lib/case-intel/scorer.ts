@@ -38,17 +38,17 @@ const DEFAULT_WEIGHTS: ScoringWeights = {
  * Calculate overall case strength score
  */
 export function calculateCaseStrength(
-  facts: CaseFacts,
-  _decisionOutput: DecisionOutput,
+  _facts: CaseFacts,
+  decisionOutput: DecisionOutput,
   consistencyReport: ConsistencyReport,
   evidenceAnalysis: EvidenceAnalysis,
   weights: ScoringWeights = DEFAULT_WEIGHTS
 ): CaseStrengthScore {
   // Calculate each component
-  const legal_eligibility = scoreLegalEligibility(facts, decisionOutput);
-  const evidence = scoreEvidence(evidenceAnalysis, decisionOutput);
+  const legal_eligibility = scoreLegalEligibility(_facts, decisionOutput);
+  const evidence = scoreEvidence(evidenceAnalysis);
   const consistency = scoreConsistency(consistencyReport);
-  const procedure = scoreProcedure(facts, decisionOutput);
+  const procedure = scoreProcedure(_facts, decisionOutput);
 
   // Calculate weighted overall score
   const score = Math.round(
@@ -66,7 +66,7 @@ export function calculateCaseStrength(
       consistency,
       procedure,
     },
-    jurisdiction: facts.meta.jurisdiction || 'unknown',
+    jurisdiction: _facts.meta.jurisdiction || 'unknown',
     analyzed_at: new Date().toISOString(),
   };
 }
@@ -76,7 +76,7 @@ export function calculateCaseStrength(
  *
  * IMPORTANT: Uses ONLY decision engine outputs, no hard-coded rules
  */
-function scoreLegalEligibility(facts: CaseFacts, _decisionOutput: DecisionOutput): ComponentScore {
+function scoreLegalEligibility(_facts: CaseFacts, decisionOutput: DecisionOutput): ComponentScore {
   let score = 100;
   const notes: string[] = [];
   const issues: string[] = [];
@@ -174,8 +174,7 @@ function scoreLegalEligibility(facts: CaseFacts, _decisionOutput: DecisionOutput
  * Score evidence completeness
  */
 function scoreEvidence(
-  evidenceAnalysis: EvidenceAnalysis,
-  _decisionOutput: DecisionOutput
+  evidenceAnalysis: EvidenceAnalysis
 ): ComponentScore {
   const score = evidenceAnalysis.completeness_score;
   const notes: string[] = [];
@@ -300,7 +299,7 @@ function scoreConsistency(consistencyReport: ConsistencyReport): ComponentScore 
 /**
  * Score procedural validity
  */
-function scoreProcedure(facts: CaseFacts, _decisionOutput: DecisionOutput): ComponentScore {
+function scoreProcedure(facts: CaseFacts, decisionOutput: DecisionOutput): ComponentScore {
   let score = 100;
   const notes: string[] = [];
   const issues: string[] = [];

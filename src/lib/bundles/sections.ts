@@ -11,7 +11,7 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 import type { DecisionOutput } from '@/lib/decision-engine';
 import type { CaseIntelligence } from '@/lib/case-intel';
 import type { BundleSection, NarrativeContent, IndexContent, IndexEntry } from './types';
-import { generateEvidenceIndex, generateBundleTimeline } from './evidence-index';
+import { generateBundleTimeline } from './evidence-index';
 
 /**
  * Build all sections for England & Wales court bundle
@@ -95,7 +95,6 @@ export function buildEnglandWalesSections(
   });
 
   // Section 8: Evidence
-  const _evidenceIndex = generateEvidenceIndex(caseIntel.evidence, 'G');
   sections.push({
     id: 'evidence',
     title: 'Evidence',
@@ -227,7 +226,6 @@ export function buildScotlandSections(
   }
 
   // Section 9: Evidence
-  const _evidenceIndex = generateEvidenceIndex(caseIntel.evidence, '8');
   sections.push({
     id: 'evidence',
     title: 'Supporting Evidence',

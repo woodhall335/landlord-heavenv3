@@ -85,7 +85,7 @@ async function mapN1FieldsByPosition() {
 }
 
 function guessFieldPurpose(field: any, page: number): string | null {
-  const { _name, y, height, width, type } = field;
+  const { y, height, width, type } = field;
 
   // Page 0 (First page)
   if (page === 0) {

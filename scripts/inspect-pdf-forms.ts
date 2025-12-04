@@ -45,7 +45,7 @@ async function inspectPDFForm(pdfPath: string) {
           if (maxLength) {
             console.log(`     Max Length: ${maxLength}`);
           }
-        } catch (__) {
+        } catch {
           // MaxLength not set
         }
       } else if (type === 'PDFCheckBox') {
@@ -55,7 +55,7 @@ async function inspectPDFForm(pdfPath: string) {
         try {
           const options = radioGroup.getOptions();
           console.log(`     Options: ${options.join(', ')}`);
-        } catch (__) {
+        } catch {
           // No options
         }
       } else if (type === 'PDFDropdown') {
@@ -63,7 +63,7 @@ async function inspectPDFForm(pdfPath: string) {
         try {
           const options = dropdown.getOptions();
           console.log(`     Options: ${options.join(', ')}`);
-        } catch (__) {
+        } catch {
           // No options
         }
       }

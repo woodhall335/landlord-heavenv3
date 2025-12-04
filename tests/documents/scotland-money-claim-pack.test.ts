@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { generateScotlandMoneyClaim } from '@/lib/documents/scotland-money-claim-pack-generator';
 import * as forms from '@/lib/documents/scotland-forms-filler';
 

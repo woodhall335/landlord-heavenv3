@@ -30,12 +30,12 @@ export async function generateCaseNarrative(
 
   try {
     const case_summary = await generateCaseSummary(facts, decisionOutput, options);
-    const ground_narratives = await generateGroundNarratives(facts, decisionOutput, options);
+    const ground_narratives = await generateGroundNarratives(facts, decisionOutput);
     const arrears_narrative = facts.issues.rent_arrears.has_arrears
-      ? await generateArrearsNarrative(facts, options)
+      ? await generateArrearsNarrative(facts)
       : undefined;
     const asb_narrative = facts.issues.asb?.has_asb
-      ? await generateASBNarrative(facts, options)
+      ? await generateASBNarrative(facts)
       : undefined;
     const tribunal_narrative = await generateTribunalNarrative(facts, decisionOutput, options);
 
@@ -127,13 +127,12 @@ Output ONLY the paragraph, no preamble or explanation.`;
  */
 async function generateGroundNarratives(
   facts: CaseFacts,
-  decisionOutput: DecisionOutput,
-  options: NarrativeOptions
+  decisionOutput: DecisionOutput
 ): Promise<{ [ground: string]: string }> {
   const narratives: { [ground: string]: string } = {};
 
   for (const ground of decisionOutput.recommended_grounds) {
-    const narrative = await generateGroundNarrative(facts, ground.code, ground.title, options);
+    const narrative = await generateGroundNarrative(facts, ground.code, ground.title);
     if (narrative) {
       narratives[ground.code] = narrative;
     }
@@ -148,8 +147,7 @@ async function generateGroundNarratives(
 async function generateGroundNarrative(
   facts: CaseFacts,
   groundCode: string,
-  groundTitle: string,
-  _options: NarrativeOptions
+  groundTitle: string
 ): Promise<string> {
   const jurisdiction = facts.meta.jurisdiction || 'england-wales';
 
@@ -222,8 +220,7 @@ Output ONLY the narrative, no preamble.`;
  * Generate arrears narrative
  */
 export async function generateArrearsNarrative(
-  facts: CaseFacts,
-  _options: NarrativeOptions = {}
+  facts: CaseFacts
 ): Promise<string> {
   const systemPrompt = `You are a legal document assistant. Generate a factual arrears schedule for court documents.
 
@@ -276,8 +273,7 @@ Output ONLY the narrative, no preamble.`;
  * Generate ASB narrative
  */
 export async function generateASBNarrative(
-  facts: CaseFacts,
-  _options: NarrativeOptions = {}
+  facts: CaseFacts
 ): Promise<string> {
   const systemPrompt = `You are a legal document assistant. Generate a factual ASB narrative for court documents.
 

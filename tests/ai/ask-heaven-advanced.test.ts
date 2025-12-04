@@ -12,7 +12,6 @@
 import { describe, it, expect } from 'vitest';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { DecisionOutput } from '@/lib/decision-engine';
-import type { CaseIntelligence } from '@/lib/case-intel';
 
 // Skip if no OpenAI key
 const describeIfKey = process.env.OPENAI_API_KEY ? describe : describe.skip;
