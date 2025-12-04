@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 import { Loader2, Sparkles, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
 
 interface AskHeavenPanelProps {

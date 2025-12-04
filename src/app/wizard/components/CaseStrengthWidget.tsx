@@ -1,6 +1,6 @@
 'use client';
 
-import { Card } from '@/components/ui/card';
+import { Card } from '@/components/ui/Card';
 import { Progress } from '@/components/ui/progress';
 import { Shield, FileText, CheckCircle2, FileCheck } from 'lucide-react';
 
