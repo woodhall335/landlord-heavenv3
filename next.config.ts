@@ -12,6 +12,18 @@ const nextConfig: NextConfig = {
       allowedOrigins: ["*"],
     },
   },
+  webpack: (config, { isServer }) => {
+    // Suppress handlebars require.extensions warning (harmless)
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      {
+        module: /node_modules\/handlebars\/lib\/index\.js/,
+        message: /require\.extensions is not supported/,
+      },
+    ];
+
+    return config;
+  },
 };
 
 export default nextConfig;

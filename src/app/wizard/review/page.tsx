@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
 import { CaseStrengthWidget } from '../components/CaseStrengthWidget';
 import { AlertCircle, CheckCircle2, FileText, X } from 'lucide-react';
 

@@ -15,7 +15,7 @@ import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/stor
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { runDecisionEngine, type DecisionInput } from '@/lib/decision-engine';
-import { normalizeCaseFacts } from '@/lib/case-facts/normalize';
+import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -542,7 +542,7 @@ export async function POST(request: Request) {
     try {
       // Only run decision engine for eviction cases with enough data
       if (caseRow.case_type === 'eviction' && collectedFacts && Object.keys(collectedFacts).length > 5) {
-        const caseFacts = normalizeCaseFacts(collectedFacts);
+        const caseFacts = wizardFactsToCaseFacts(collectedFacts);
 
         const decisionInput: DecisionInput = {
           jurisdiction: caseRow.jurisdiction as any,
