@@ -13,7 +13,11 @@
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import type { DecisionOutput } from '@/lib/decision-engine';
 import type { CaseNarrative, NarrativeOptions } from './types';
-import { jsonCompletion, type ChatMessage } from '@/lib/ai/openai-client';
+import {
+  getJsonAIClient,
+  hasCustomJsonAIClient,
+  type ChatMessage,
+} from '@/lib/ai/openai-client';
 
 /**
  * Generate comprehensive case narrative
@@ -23,7 +27,7 @@ export async function generateCaseNarrative(
   decisionOutput: DecisionOutput,
   options: NarrativeOptions = {}
 ): Promise<CaseNarrative | null> {
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.OPENAI_API_KEY && !hasCustomJsonAIClient()) {
     console.warn('OpenAI API key not configured - skipping narrative generation');
     return null;
   }
@@ -99,7 +103,7 @@ Output ONLY the paragraph, no preamble or explanation.`;
   ];
 
   try {
-    const result = await jsonCompletion<{ summary: string }>(
+    const result = await getJsonAIClient().jsonCompletion<{ summary: string }>(
       messages,
       {
         type: 'object',
@@ -193,7 +197,7 @@ Output ONLY the narrative, no preamble.`;
   ];
 
   try {
-    const result = await jsonCompletion<{ narrative: string }>(
+    const result = await getJsonAIClient().jsonCompletion<{ narrative: string }>(
       messages,
       {
         type: 'object',
@@ -246,7 +250,7 @@ Output ONLY the narrative, no preamble.`;
   ];
 
   try {
-    const result = await jsonCompletion<{ narrative: string }>(
+    const result = await getJsonAIClient().jsonCompletion<{ narrative: string }>(
       messages,
       {
         type: 'object',
@@ -299,7 +303,7 @@ Output ONLY the narrative, no preamble.`;
   ];
 
   try {
-    const result = await jsonCompletion<{ narrative: string }>(
+    const result = await getJsonAIClient().jsonCompletion<{ narrative: string }>(
       messages,
       {
         type: 'object',
