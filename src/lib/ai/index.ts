@@ -8,12 +8,11 @@
  */
 
 // OpenAI exports
+export { getOpenAIClient } from './openai-client';
 export {
   chatCompletion,
   jsonCompletion,
   streamChatCompletion,
-  getOpenAIClient,
-  openai,
   type ChatMessage,
   type ChatCompletionOptions,
   type ChatCompletionResult,
