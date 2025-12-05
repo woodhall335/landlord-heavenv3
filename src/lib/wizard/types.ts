@@ -4,6 +4,7 @@ export interface WizardField {
   inputType: string;
   placeholder?: string;
   options?: string[];
+  dependsOn?: { questionId: string; value: any };
   validation?: {
     required?: boolean;
     min?: number;
@@ -11,6 +12,7 @@ export interface WizardField {
     pattern?: string;
   };
   width?: 'full' | 'half' | 'third';
+  defaultValue?: any;
 }
 
 export interface ExtendedWizardQuestion {
@@ -18,6 +20,8 @@ export interface ExtendedWizardQuestion {
   section?: string;
   question: string;
   inputType: string;
+  type?: string;
+  required?: boolean;
   helperText?: string;
   suggestion_prompt?: string;
   placeholder?: string;

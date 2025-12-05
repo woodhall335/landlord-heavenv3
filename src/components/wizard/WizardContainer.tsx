@@ -98,6 +98,12 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const [currentAnswer, setCurrentAnswer] = useState<any>(null);
   const [isComplete, setIsComplete] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [askHeavenResult, setAskHeavenResult] = useState<{
+    suggested_wording: string;
+    missing_information: string[];
+    evidence_suggestions: string[];
+    consistency_flags?: string[];
+  } | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -171,7 +177,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
       // Save to backend
       try {
-        await fetch('/api/wizard/answer', {
+        const response = await fetch('/api/wizard/answer', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -181,6 +187,37 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
             progress,
           }),
         });
+
+        if (response && !response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.error || 'Failed to save answer');
+        }
+
+        const payload = response ? await response.json() : null;
+
+        if (payload?.ask_heaven) {
+          setAskHeavenResult(payload.ask_heaven);
+
+          const suggestionBlocks = [
+            payload.ask_heaven.suggested_wording
+              ? `💡 Ask Heaven suggestion:\n${payload.ask_heaven.suggested_wording}`
+              : null,
+            Array.isArray(payload.ask_heaven.missing_information) &&
+            payload.ask_heaven.missing_information.length > 0
+              ? `Missing information:\n- ${payload.ask_heaven.missing_information.join('\n- ')}`
+              : null,
+            Array.isArray(payload.ask_heaven.evidence_suggestions) &&
+            payload.ask_heaven.evidence_suggestions.length > 0
+              ? `Evidence suggestions:\n- ${payload.ask_heaven.evidence_suggestions.join('\n- ')}`
+              : null,
+          ].filter(Boolean);
+
+          if (suggestionBlocks.length > 0) {
+            addMessage('assistant', suggestionBlocks.join('\n\n'));
+          }
+        } else {
+          setAskHeavenResult(null);
+        }
       } catch (error) {
         console.error('Failed to save answer:', error);
       }
@@ -291,6 +328,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
           );
           await analyzeCase(currentCaseId);
         } else if (data.next_question) {
+          setAskHeavenResult(null);
           setCurrentQuestion(data.next_question);
           addMessage('assistant', data.next_question.question_text);
 
@@ -669,6 +707,55 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                     jurisdiction={jurisdiction}
                     caseType={caseType}
                   />
+
+                  {askHeavenResult && (
+                    <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                      <div className="flex items-start gap-2 mb-2">
+                        <span className="text-blue-600">✨</span>
+                        <div>
+                          <p className="text-sm font-semibold text-blue-900">Ask Heaven suggestions</p>
+                          {askHeavenResult.suggested_wording && (
+                            <p className="text-sm text-blue-800 whitespace-pre-wrap mt-1">
+                              {askHeavenResult.suggested_wording}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {askHeavenResult.missing_information?.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-xs font-semibold text-yellow-800">Missing information</p>
+                          <ul className="text-xs text-yellow-800 list-disc list-inside">
+                            {askHeavenResult.missing_information.map((item, idx) => (
+                              <li key={idx}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {askHeavenResult.evidence_suggestions?.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-xs font-semibold text-green-800">Evidence to gather</p>
+                          <ul className="text-xs text-green-800 list-disc list-inside">
+                            {askHeavenResult.evidence_suggestions.map((item, idx) => (
+                              <li key={idx}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {askHeavenResult.consistency_flags?.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-xs font-semibold text-red-800">Consistency issues</p>
+                          <ul className="text-xs text-red-800 list-disc list-inside">
+                            {askHeavenResult.consistency_flags.map((item, idx) => (
+                              <li key={idx}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {renderInput()}
 
