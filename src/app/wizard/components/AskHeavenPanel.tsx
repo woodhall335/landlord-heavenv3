@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Loader2, Sparkles, CheckCircle2, XCircle, AlertCircle } from 'lucide-react';
@@ -11,6 +11,12 @@ interface AskHeavenPanelProps {
   jurisdiction: string;
   caseId: string;
   onAccept: (improvedText: string) => void;
+  initialResult?: {
+    suggested_wording: string;
+    missing_information: string[];
+    evidence_suggestions: string[];
+    consistency_flags?: string[];
+  } | null;
 }
 
 export function AskHeavenPanel({
@@ -19,10 +25,15 @@ export function AskHeavenPanel({
   jurisdiction,
   caseId,
   onAccept,
+  initialResult,
 }: AskHeavenPanelProps) {
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<any>(initialResult || null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setResult(initialResult || null);
+  }, [initialResult]);
 
   const handleImprove = async () => {
     setLoading(true);
@@ -41,8 +52,10 @@ export function AskHeavenPanel({
 
       const data = await response.json();
 
-      if (data.enhanced) {
-        setResult(data.enhanced);
+      const improved = data.ask_heaven || data.enhanced_answer || data.enhanced;
+
+      if (improved) {
+        setResult(improved);
       } else {
         setError('Ask Heaven is not available for this question');
       }

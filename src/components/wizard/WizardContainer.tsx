@@ -98,6 +98,13 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const [currentAnswer, setCurrentAnswer] = useState<any>(null);
   const [isComplete, setIsComplete] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hasSubmittedCurrentQuestion, setHasSubmittedCurrentQuestion] = useState(false);
+  const [askHeavenResult, setAskHeavenResult] = useState<{
+    suggested_wording: string;
+    missing_information: string[];
+    evidence_suggestions: string[];
+    consistency_flags?: string[];
+  } | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -109,6 +116,17 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // In conversational mode we treat the first message per MQS question as the
+  // canonical answer. Follow-up chatty messages ("yes that's correct", clarifications)
+  // should not be re-posted to /api/wizard/answer because they often fail strict
+  // validation and produce 400s. Reset the submission marker whenever the question
+  // actually changes.
+  useEffect(() => {
+    setHasSubmittedCurrentQuestion(false);
+    setCurrentAnswer(null);
+    setAskHeavenResult(null);
+  }, [currentQuestion?.id]);
 
   const addMessage = useCallback((role: 'assistant' | 'user', content: string) => {
     const message: Message = {
@@ -147,14 +165,29 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     try {
       setIsLoading(true);
 
+      const questionId = currentQuestion.question_id ?? currentQuestion.id;
+      const questionText = currentQuestion.question_text ?? currentQuestion.question;
+      const inputType =
+        currentQuestion.input_type ?? currentQuestion.inputType ?? currentQuestion.type;
+
       // Add user's answer to messages
-      const answerText = formatAnswerForDisplay(answer, currentQuestion.input_type);
+      const answerText = formatAnswerForDisplay(answer, inputType);
+
+      if (hasSubmittedCurrentQuestion) {
+        // Already captured a canonical answer for this MQS question; treat this as
+        // conversational follow-up without re-validating against MQS schemas.
+        addMessage('user', answerText);
+        setCurrentAnswer(null);
+        setIsLoading(false);
+        return;
+      }
+
       addMessage('user', answerText);
 
       // Save answer
       const newFacts = {
         ...collectedFacts,
-        [currentQuestion.question_id]: answer,
+        [questionId || currentQuestion.id]: answer,
       };
       setCollectedFacts(newFacts);
 
@@ -162,8 +195,8 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       setFactsList([
         ...factsList,
         {
-          question_id: currentQuestion.question_id,
-          question: currentQuestion.question_text,
+          question_id: questionId || currentQuestion.id,
+          question: questionText,
           answer,
           timestamp: new Date(),
         },
@@ -171,18 +204,54 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
       // Save to backend
       try {
-        await fetch('/api/wizard/answer', {
+        const response = await fetch('/api/wizard/answer', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             case_id: caseId,
-            question_id: currentQuestion.question_id,
+            question_id: questionId,
             answer,
             progress,
           }),
         });
+
+        if (response && !response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(err.error || 'Failed to save answer');
+        }
+
+        const payload = response ? await response.json() : null;
+
+        // Mark this question as answered only after a successful save
+        setHasSubmittedCurrentQuestion(true);
+
+        if (payload?.ask_heaven) {
+          setAskHeavenResult(payload.ask_heaven);
+
+          const suggestionBlocks = [
+            payload.ask_heaven.suggested_wording
+              ? `💡 Ask Heaven suggestion:\n${payload.ask_heaven.suggested_wording}`
+              : null,
+            Array.isArray(payload.ask_heaven.missing_information) &&
+            payload.ask_heaven.missing_information.length > 0
+              ? `Missing information:\n- ${payload.ask_heaven.missing_information.join('\n- ')}`
+              : null,
+            Array.isArray(payload.ask_heaven.evidence_suggestions) &&
+            payload.ask_heaven.evidence_suggestions.length > 0
+              ? `Evidence suggestions:\n- ${payload.ask_heaven.evidence_suggestions.join('\n- ')}`
+              : null,
+          ].filter(Boolean);
+
+          if (suggestionBlocks.length > 0) {
+            addMessage('assistant', suggestionBlocks.join('\n\n'));
+          }
+        } else {
+          setAskHeavenResult(null);
+        }
       } catch (error) {
         console.error('Failed to save answer:', error);
+        setIsLoading(false);
+        return;
       }
 
       // Clear current answer
@@ -291,8 +360,11 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
           );
           await analyzeCase(currentCaseId);
         } else if (data.next_question) {
-          setCurrentQuestion(data.next_question);
-          addMessage('assistant', data.next_question.question_text);
+          const nextQuestion = data.next_question;
+          const nextQuestionText = nextQuestion.question_text ?? nextQuestion.question;
+          setAskHeavenResult(null);
+          setCurrentQuestion(nextQuestion);
+          addMessage('assistant', nextQuestionText);
 
           // Update progress
           const totalQuestions = 10; // Estimate
@@ -386,7 +458,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
         if (firstQuestion) {
           setCurrentQuestion(firstQuestion);
-          addMessage('assistant', firstQuestion.question_text);
+          addMessage(
+            'assistant',
+            firstQuestion.question_text ?? firstQuestion.question,
+          );
           setProgress(0);
         } else {
           await getNextQuestion(newCaseId, {});
@@ -454,13 +529,16 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const renderInput = () => {
     if (!currentQuestion || isLoading || isComplete) return null;
 
+    const inputType =
+      currentQuestion.input_type ?? currentQuestion.inputType ?? currentQuestion.type;
+
     const props = {
       value: currentAnswer,
       onChange: setCurrentAnswer,
       disabled: false,
     };
 
-    switch (currentQuestion.input_type) {
+    switch (inputType) {
       case 'multiple_choice':
         return (
           <MultipleChoice
@@ -512,6 +590,18 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
           />
         );
 
+      case 'textarea':
+        return (
+          <TextInput
+            {...props}
+            value={currentAnswer || ''}
+            placeholder={currentQuestion.helper_text}
+            required={currentQuestion.is_required}
+            multiline
+            rows={5}
+          />
+        );
+
       case 'multiple_selection':
         return (
           <MultipleSelection
@@ -552,7 +642,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   const canSubmit = () => {
     if (!currentQuestion || isLoading || isComplete) return false;
-    if (currentQuestion.input_type === 'multiple_choice') return false; // Auto-submits
+    const inputType =
+      currentQuestion.input_type ?? currentQuestion.inputType ?? currentQuestion.type;
+    if (inputType === 'multiple_choice') return false; // Auto-submits
     if (currentQuestion.is_required && !currentAnswer) return false;
     return true;
   };
@@ -665,10 +757,59 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                 <div className="border-t border-gray-200 pt-6">
                   {/* Guidance Tips */}
                   <GuidanceTips
-                    questionId={currentQuestion.question_id}
+                    questionId={currentQuestion.question_id ?? currentQuestion.id}
                     jurisdiction={jurisdiction}
                     caseType={caseType}
                   />
+
+                  {askHeavenResult && (
+                    <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                      <div className="flex items-start gap-2 mb-2">
+                        <span className="text-blue-600">✨</span>
+                        <div>
+                          <p className="text-sm font-semibold text-blue-900">Ask Heaven suggestions</p>
+                          {askHeavenResult.suggested_wording && (
+                            <p className="text-sm text-blue-800 whitespace-pre-wrap mt-1">
+                              {askHeavenResult.suggested_wording}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {askHeavenResult.missing_information?.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-xs font-semibold text-yellow-800">Missing information</p>
+                          <ul className="text-xs text-yellow-800 list-disc list-inside">
+                            {askHeavenResult.missing_information.map((item, idx) => (
+                              <li key={idx}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {askHeavenResult.evidence_suggestions?.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-xs font-semibold text-green-800">Evidence to gather</p>
+                          <ul className="text-xs text-green-800 list-disc list-inside">
+                            {askHeavenResult.evidence_suggestions.map((item, idx) => (
+                              <li key={idx}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {askHeavenResult.consistency_flags?.length > 0 && (
+                        <div className="mt-3">
+                          <p className="text-xs font-semibold text-red-800">Consistency issues</p>
+                          <ul className="text-xs text-red-800 list-disc list-inside">
+                            {askHeavenResult.consistency_flags.map((item, idx) => (
+                              <li key={idx}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {renderInput()}
 
@@ -749,7 +890,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                     <div className="flex-1">
                       <div className="text-sm font-medium text-gray-500">Next...</div>
                       <div className="text-sm text-gray-400 line-clamp-2">
-                        {currentQuestion.question_text}
+                        {currentQuestion.question_text ?? currentQuestion.question}
                       </div>
                     </div>
                   </div>
