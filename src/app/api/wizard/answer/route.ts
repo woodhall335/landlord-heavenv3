@@ -85,21 +85,34 @@ function validateCriticalAnswer(questionId: string, answer: unknown): { ok: true
 
     // Critical field: Property address line 1 (part of property_address group)
   if (questionId === 'property_address') {
-    const groupSchema = z.object({
-      property_address_line1: z.string()
-        .min(1, 'Property address line 1 is required')
-        .max(200, 'Property address line 1 is too long')
-        .optional(),
-      address_line1: z.string()
-        .min(1, 'Property address line 1 is required')
-        .max(200, 'Property address line 1 is too long')
-        .optional(),
-    }).passthrough(); // Allow other fields in the group
+    const stringSchema = z
+      .string()
+      .min(1, 'Property address is required')
+      .max(500, 'Property address is too long');
 
-    const parsed = groupSchema.parse(answer);
-    if (!parsed.property_address_line1 && !parsed.address_line1) {
-      throw new Error('Property address line 1 is required');
+    const groupSchema = z
+      .object({
+        property_address_line1: z
+          .string()
+          .min(1, 'Property address line 1 is required')
+          .max(200, 'Property address line 1 is too long')
+          .optional(),
+        address_line1: z
+          .string()
+          .min(1, 'Property address line 1 is required')
+          .max(200, 'Property address line 1 is too long')
+          .optional(),
+      })
+      .passthrough(); // Allow other fields in the group
+
+    const parsed = z.union([stringSchema, groupSchema]).parse(answer);
+
+    if (typeof parsed === 'object') {
+      if (!parsed.property_address_line1 && !parsed.address_line1) {
+        throw new Error('Property address line 1 is required');
+      }
     }
+
     return { ok: true };
   }
 

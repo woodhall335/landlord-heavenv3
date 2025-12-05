@@ -2,6 +2,7 @@ export interface WizardField {
   id: string;
   label?: string;
   inputType: string;
+  input_type?: string;
   placeholder?: string;
   options?: string[];
   dependsOn?: { questionId: string; value: any };

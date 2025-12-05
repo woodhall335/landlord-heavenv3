@@ -153,14 +153,19 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     try {
       setIsLoading(true);
 
+      const questionId = currentQuestion.question_id ?? currentQuestion.id;
+      const questionText = currentQuestion.question_text ?? currentQuestion.question;
+      const inputType =
+        currentQuestion.input_type ?? currentQuestion.inputType ?? currentQuestion.type;
+
       // Add user's answer to messages
-      const answerText = formatAnswerForDisplay(answer, currentQuestion.input_type);
+      const answerText = formatAnswerForDisplay(answer, inputType);
       addMessage('user', answerText);
 
       // Save answer
       const newFacts = {
         ...collectedFacts,
-        [currentQuestion.question_id]: answer,
+        [questionId || currentQuestion.id]: answer,
       };
       setCollectedFacts(newFacts);
 
@@ -168,8 +173,8 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       setFactsList([
         ...factsList,
         {
-          question_id: currentQuestion.question_id,
-          question: currentQuestion.question_text,
+          question_id: questionId || currentQuestion.id,
+          question: questionText,
           answer,
           timestamp: new Date(),
         },
@@ -182,7 +187,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             case_id: caseId,
-            question_id: currentQuestion.question_id,
+            question_id: questionId,
             answer,
             progress,
           }),
@@ -424,7 +429,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
         if (firstQuestion) {
           setCurrentQuestion(firstQuestion);
-          addMessage('assistant', firstQuestion.question_text);
+          addMessage(
+            'assistant',
+            firstQuestion.question_text ?? firstQuestion.question,
+          );
           setProgress(0);
         } else {
           await getNextQuestion(newCaseId, {});
@@ -492,13 +500,16 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const renderInput = () => {
     if (!currentQuestion || isLoading || isComplete) return null;
 
+    const inputType =
+      currentQuestion.input_type ?? currentQuestion.inputType ?? currentQuestion.type;
+
     const props = {
       value: currentAnswer,
       onChange: setCurrentAnswer,
       disabled: false,
     };
 
-    switch (currentQuestion.input_type) {
+    switch (inputType) {
       case 'multiple_choice':
         return (
           <MultipleChoice
@@ -550,6 +561,18 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
           />
         );
 
+      case 'textarea':
+        return (
+          <TextInput
+            {...props}
+            value={currentAnswer || ''}
+            placeholder={currentQuestion.helper_text}
+            required={currentQuestion.is_required}
+            multiline
+            rows={5}
+          />
+        );
+
       case 'multiple_selection':
         return (
           <MultipleSelection
@@ -590,7 +613,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   const canSubmit = () => {
     if (!currentQuestion || isLoading || isComplete) return false;
-    if (currentQuestion.input_type === 'multiple_choice') return false; // Auto-submits
+    const inputType =
+      currentQuestion.input_type ?? currentQuestion.inputType ?? currentQuestion.type;
+    if (inputType === 'multiple_choice') return false; // Auto-submits
     if (currentQuestion.is_required && !currentAnswer) return false;
     return true;
   };
@@ -703,7 +728,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                 <div className="border-t border-gray-200 pt-6">
                   {/* Guidance Tips */}
                   <GuidanceTips
-                    questionId={currentQuestion.question_id}
+                    questionId={currentQuestion.question_id ?? currentQuestion.id}
                     jurisdiction={jurisdiction}
                     caseType={caseType}
                   />
@@ -836,7 +861,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                     <div className="flex-1">
                       <div className="text-sm font-medium text-gray-500">Next...</div>
                       <div className="text-sm text-gray-400 line-clamp-2">
-                        {currentQuestion.question_text}
+                        {currentQuestion.question_text ?? currentQuestion.question}
                       </div>
                     </div>
                   </div>

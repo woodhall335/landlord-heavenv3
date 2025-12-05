@@ -390,8 +390,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const isCurrentAnswerValid = (): boolean => {
     if (!currentQuestion) return false;
 
+    const resolvedInputType =
+      currentQuestion.inputType === 'address' ? 'group' : currentQuestion.inputType;
+
     // For grouped inputs, validate all fields
-    if (currentQuestion.inputType === 'group' && currentQuestion.fields) {
+    if (resolvedInputType === 'group' && currentQuestion.fields) {
       for (const field of currentQuestion.fields) {
         const fieldValue = currentAnswer?.[field.id];
 
@@ -589,8 +592,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (!currentQuestion) return null;
 
     const value = currentAnswer ?? '';
+    const inputType =
+      currentQuestion.inputType === 'address' ? 'group' : currentQuestion.inputType;
 
-    switch (currentQuestion.inputType) {
+    switch (inputType) {
       case 'select':
         return (
           <select
