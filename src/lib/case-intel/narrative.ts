@@ -105,7 +105,7 @@ Output ONLY the paragraph, no preamble or explanation.`;
   ];
 
   try {
-    const result = await jsonCompletion<{ summary: string }>(
+    const result = await getJsonAIClient().jsonCompletion<{ summary: string }>(
       messages,
       {
         type: 'object',
@@ -201,7 +201,7 @@ Output ONLY the narrative, no preamble.`;
   ];
 
   try {
-    const result = await jsonCompletion<{ narrative: string }>(
+    const result = await getJsonAIClient().jsonCompletion<{ narrative: string }>(
       messages,
       {
         type: 'object',
@@ -256,7 +256,7 @@ Output ONLY the narrative, no preamble.`;
   ];
 
   try {
-    const result = await jsonCompletion<{ narrative: string }>(
+    const result = await getJsonAIClient().jsonCompletion<{ narrative: string }>(
       messages,
       {
         type: 'object',
@@ -311,7 +311,7 @@ Output ONLY the narrative, no preamble.`;
   ];
 
   try {
-    const result = await jsonCompletion<{ narrative: string }>(
+    const result = await getJsonAIClient().jsonCompletion<{ narrative: string }>(
       messages,
       {
         type: 'object',

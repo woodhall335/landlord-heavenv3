@@ -203,23 +203,18 @@ IMPORTANT:
     );
 
     const json = result.json || ({} as Partial<EnhanceAnswerResult>);
-    const evidenceSuggestions = toStringArray(
-      (json as any).evidence_suggestions ?? (json as any).evidence_you_may_upload
-    );
-    const missingInformation = toStringArray(
-      (json as any).missing_information ?? (json as any).missing_info
-    );
-    const consistencyFlagsFromModel = toStringArray(
-      (json as any).consistency_flags ?? (json as any).consistency_issues ?? consistencyFlags
-    );
+    const evidenceSuggestions =
+      (json as any).evidence_suggestions ?? (json as any).evidence_you_may_upload ?? [];
+    const missingInformation =
+      (json as any).missing_information ?? (json as any).missing_info ?? [];
+    const consistencyFlagsFromModel =
+      (json as any).consistency_flags ?? (json as any).consistency_issues ?? undefined;
 
     return {
-      suggested_wording: typeof (json as any).suggested_wording === 'string'
-        ? (json as any).suggested_wording
-        : '',
+      suggested_wording: (json as any).suggested_wording ?? '',
       missing_information: missingInformation,
       evidence_suggestions: evidenceSuggestions,
-      consistency_flags: consistencyFlagsFromModel,
+      consistency_flags: consistencyFlagsFromModel ?? consistencyFlags, // Fallback to detected flags
     };
   } catch (error) {
     console.error(
