@@ -10,11 +10,11 @@
     "test": "vitest run",
     "test:pdf": "RUN_PDF_TESTS=true vitest run",
     "law-monitor": "ts-node --esm scripts/law-monitor-run.ts"
-
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",
     "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-progress": "^1.1.8",
     "@radix-ui/react-select": "^2.2.6",
     "@stripe/stripe-js": "^8.5.2",
     "@supabase/auth-helpers-nextjs": "^0.10.0",

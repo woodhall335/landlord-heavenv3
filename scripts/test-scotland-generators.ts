@@ -6,7 +6,10 @@
 
 import fs from 'fs';
 import path from 'path';
-import { generatePRTAgreement, createSamplePRTData } from '../src/lib/documents/scotland/prt-generator';
+import {
+  generatePRTAgreement,
+  createSamplePRTData,
+} from '../src/lib/documents/scotland/prt-generator';
 import {
   generateNoticeToLeave,
   buildGround1RentArrears,
@@ -24,7 +27,7 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 }
 
 async function generateSamples() {
-  console.log('🏴󠁧󠁢󠁳󠁣󠁴󠁿 Testing Scotland Document Generators\n');
+  console.log('🏴 Testing Scotland Document Generators\n');
 
   // ============================================================================
   // 1. PRT AGREEMENT
@@ -105,7 +108,7 @@ async function generateSamples() {
       council_phone: '0131 200 2000',
     };
 
-    const ntlGround1Doc = await generateNoticeToLeave(ntlGround1Data, false, 'html');
+    const ntlGround1Doc = await generateNoticeToLeave(ntlGround1Data as any, false, 'html');
 
     const ntlGround1Path = path.join(OUTPUT_DIR, 'notice_to_leave_ground1_arrears.html');
     if (ntlGround1Doc.html) {
@@ -201,7 +204,7 @@ async function generateSamples() {
       council_phone: '0141 287 2000',
     };
 
-    const ntlGround3Doc = await generateNoticeToLeave(ntlGround3Data, false, 'html');
+    const ntlGround3Doc = await generateNoticeToLeave(ntlGround3Data as any, false, 'html');
 
     const ntlGround3Path = path.join(OUTPUT_DIR, 'notice_to_leave_ground3_asb.html');
     if (ntlGround3Doc.html) {
@@ -266,9 +269,12 @@ async function generateSamples() {
       council_phone: '01382 434000',
     };
 
-    const ntlGround4Doc = await generateNoticeToLeave(ntlGround4Data, false, 'html');
+    const ntlGround4Doc = await generateNoticeToLeave(ntlGround4Data as any, false, 'html');
 
-    const ntlGround4Path = path.join(OUTPUT_DIR, 'notice_to_leave_ground4_landlord_occupy.html');
+    const ntlGround4Path = path.join(
+      OUTPUT_DIR,
+      'notice_to_leave_ground4_landlord_occupy.html',
+    );
     if (ntlGround4Doc.html) {
       fs.writeFileSync(ntlGround4Path, ntlGround4Doc.html);
       console.log(`   ✅ Notice to Leave (Ground 4) generated: ${ntlGround4Path}`);
@@ -333,9 +339,12 @@ async function generateSamples() {
       council_phone: '01349 886606',
     };
 
-    const ntlGround5Doc = await generateNoticeToLeave(ntlGround5Data, false, 'html');
+    const ntlGround5Doc = await generateNoticeToLeave(ntlGround5Data as any, false, 'html');
 
-    const ntlGround5Path = path.join(OUTPUT_DIR, 'notice_to_leave_ground5_landlord_sell.html');
+    const ntlGround5Path = path.join(
+      OUTPUT_DIR,
+      'notice_to_leave_ground5_landlord_sell.html',
+    );
     if (ntlGround5Doc.html) {
       fs.writeFileSync(ntlGround5Path, ntlGround5Doc.html);
       console.log(`   ✅ Notice to Leave (Ground 5) generated: ${ntlGround5Path}`);

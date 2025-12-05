@@ -1,3 +1,5 @@
+//  src/components/wizard/index.ts
+
 /**
  * Wizard Input Components
  *

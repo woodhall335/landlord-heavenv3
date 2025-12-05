@@ -1,6 +1,7 @@
 import { describe, test, expect, beforeAll } from 'vitest';
 import { loadMQS, getNextMQSQuestion } from '@/lib/wizard/mqs-loader';
-import type { MasterQuestionSet, ExtendedWizardQuestion } from '@/lib/wizard/types';
+import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
+import type { MasterQuestionSet } from '@/lib/wizard/mqs-loader';
 
 describe('Tenancy Agreement MQS - All Jurisdictions', () => {
   // Test England & Wales

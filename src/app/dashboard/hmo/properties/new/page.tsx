@@ -62,8 +62,8 @@ export default function NewPropertyPage() {
         body: JSON.stringify({
           address,
           postcode,
-          total_rooms: parseInt(totalRooms),
-          occupied_rooms: parseInt(occupiedRooms || '0'),
+          total_rooms: parseInt(totalRooms, 10),
+          occupied_rooms: parseInt(occupiedRooms || '0', 10),
           council_id: councilId || null,
           license_number: licenseNumber || null,
           license_expiry: licenseExpiry || null,
@@ -77,10 +77,10 @@ export default function NewPropertyPage() {
       } else {
         setError(data.error || 'Failed to add property');
       }
-      } catch {
-        setError('Something went wrong');
-      } finally {
-        setIsLoading(false);
+    } catch {
+      setError('Something went wrong');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -117,7 +117,7 @@ export default function NewPropertyPage() {
                   label="Property Address"
                   type="text"
                   value={address}
-                  onChange={setAddress}
+                  onChange={(e) => setAddress(e.target.value)}
                   placeholder="123 High Street"
                   required
                 />
@@ -126,7 +126,7 @@ export default function NewPropertyPage() {
                   label="Postcode"
                   type="text"
                   value={postcode}
-                  onChange={setPostcode}
+                  onChange={(e) => setPostcode(e.target.value)}
                   placeholder="SW1A 1AA"
                   required
                 />
@@ -136,7 +136,7 @@ export default function NewPropertyPage() {
                     label="Total Rooms"
                     type="number"
                     value={totalRooms}
-                    onChange={setTotalRooms}
+                    onChange={(e) => setTotalRooms(e.target.value)}
                     placeholder="5"
                     min={1}
                     required
@@ -146,7 +146,7 @@ export default function NewPropertyPage() {
                     label="Currently Occupied Rooms"
                     type="number"
                     value={occupiedRooms}
-                    onChange={setOccupiedRooms}
+                    onChange={(e) => setOccupiedRooms(e.target.value)}
                     placeholder="3"
                     min={0}
                     helperText="Can be updated later"
@@ -188,7 +188,7 @@ export default function NewPropertyPage() {
                   label="HMO License Number"
                   type="text"
                   value={licenseNumber}
-                  onChange={setLicenseNumber}
+                  onChange={(e) => setLicenseNumber(e.target.value)}
                   placeholder="HMO/2024/12345"
                 />
 
@@ -196,7 +196,7 @@ export default function NewPropertyPage() {
                   label="License Expiry Date"
                   type="date"
                   value={licenseExpiry}
-                  onChange={setLicenseExpiry}
+                  onChange={(e) => setLicenseExpiry(e.target.value)}
                   helperText="You'll receive alerts before it expires"
                 />
               </div>

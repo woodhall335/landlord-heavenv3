@@ -4,10 +4,10 @@
  * Tests the AI decision engine with Scotland-specific scenarios
  */
 
-import { analyzeCase, CaseFacts } from '../src/lib/decision-engine/engine';
+import { analyzeCase } from '../src/lib/decision-engine/engine';
 
 async function runTests() {
-  console.log('🏴󠁧󠁢󠁳󠁣󠁴󠁿 Testing Scotland Decision Engine\n');
+  console.log('🏴 Testing Scotland Decision Engine\n');
   console.log('='.repeat(60));
 
   // ============================================================================
@@ -16,7 +16,7 @@ async function runTests() {
   console.log('\n📋 Test 1: Ground 1 - Rent Arrears (3 months, £3,600)');
   console.log('-'.repeat(60));
 
-  const scotlandTest1: CaseFacts = {
+  const scotlandTest1 = {
     jurisdiction: 'Scotland',
     tenancy_type: 'PRT',
     rent_arrears: true,
@@ -32,11 +32,24 @@ async function runTests() {
   };
 
   try {
-    const result1 = await analyzeCase(scotlandTest1);
+    const result1 = await analyzeCase(scotlandTest1 as any);
+    const t1 = result1.timeline as any;
+
     console.log('✅ Route:', result1.recommended_route);
-    console.log('✅ Primary grounds:', result1.primary_grounds.map((g) => 'Ground ' + g.ground_number).join(', '));
-    console.log('✅ Success probability:', result1.primary_grounds[0]?.success_probability || 'N/A');
-    console.log('✅ Timeline:', result1.timeline.best_case_days + '-' + result1.timeline.worst_case_days + ' days');
+    console.log(
+      '✅ Primary grounds:',
+      result1.primary_grounds
+        .map((g: any) => 'Ground ' + g.ground_number)
+        .join(', ')
+    );
+    console.log(
+      '✅ Success probability:',
+      (result1.primary_grounds[0] as any)?.success_probability || 'N/A'
+    );
+    console.log(
+      '✅ Timeline:',
+      `${t1.best_case_days}-${t1.worst_case_days} days`
+    );
     console.log('✅ Risk level:', result1.overall_risk_level);
   } catch (error: any) {
     console.error('❌ Test 1 failed:', error.message);
@@ -48,7 +61,7 @@ async function runTests() {
   console.log('\n\n📋 Test 2: Ground 3 - Antisocial Behaviour');
   console.log('-'.repeat(60));
 
-  const scotlandTest2: CaseFacts = {
+  const scotlandTest2 = {
     jurisdiction: 'Scotland',
     tenancy_type: 'PRT',
     antisocial_behavior: true, // American spelling used in Scotland rules
@@ -61,11 +74,25 @@ async function runTests() {
   };
 
   try {
-    const result2 = await analyzeCase(scotlandTest2);
+    const result2 = await analyzeCase(scotlandTest2 as any);
+    const t2 = result2.timeline as any;
+
     console.log('✅ Route:', result2.recommended_route);
-    console.log('✅ Primary grounds:', result2.primary_grounds.map((g) => 'Ground ' + g.ground_number).join(', '));
-    console.log('✅ Notice period:', (result2.primary_grounds[0]?.notice_period_days || 'N/A') + ' days');
-    console.log('✅ Timeline:', result2.timeline.best_case_days + '-' + result2.timeline.worst_case_days + ' days');
+    console.log(
+      '✅ Primary grounds:',
+      result2.primary_grounds
+        .map((g: any) => 'Ground ' + g.ground_number)
+        .join(', ')
+    );
+    console.log(
+      '✅ Notice period:',
+      ((result2.primary_grounds[0] as any)?.notice_period_days || 'N/A') +
+        ' days'
+    );
+    console.log(
+      '✅ Timeline:',
+      `${t2.best_case_days}-${t2.worst_case_days} days`
+    );
     console.log('✅ Risk level:', result2.overall_risk_level);
   } catch (error: any) {
     console.error('❌ Test 2 failed:', error.message);
@@ -77,7 +104,7 @@ async function runTests() {
   console.log('\n\n📋 Test 3: Ground 4 - Landlord Intends to Occupy');
   console.log('-'.repeat(60));
 
-  const scotlandTest3: CaseFacts = {
+  const scotlandTest3 = {
     jurisdiction: 'Scotland',
     tenancy_type: 'PRT',
     landlord_intends_to_occupy: true, // Exact field name from Scotland rules
@@ -89,11 +116,25 @@ async function runTests() {
   };
 
   try {
-    const result3 = await analyzeCase(scotlandTest3);
+    const result3 = await analyzeCase(scotlandTest3 as any);
+    const t3 = result3.timeline as any;
+
     console.log('✅ Route:', result3.recommended_route);
-    console.log('✅ Primary grounds:', result3.primary_grounds.map((g) => 'Ground ' + g.ground_number).join(', '));
-    console.log('✅ Notice period:', (result3.primary_grounds[0]?.notice_period_days || 'N/A') + ' days');
-    console.log('✅ Timeline:', result3.timeline.best_case_days + '-' + result3.timeline.worst_case_days + ' days');
+    console.log(
+      '✅ Primary grounds:',
+      result3.primary_grounds
+        .map((g: any) => 'Ground ' + g.ground_number)
+        .join(', ')
+    );
+    console.log(
+      '✅ Notice period:',
+      ((result3.primary_grounds[0] as any)?.notice_period_days || 'N/A') +
+        ' days'
+    );
+    console.log(
+      '✅ Timeline:',
+      `${t3.best_case_days}-${t3.worst_case_days} days`
+    );
   } catch (error: any) {
     console.error('❌ Test 3 failed:', error.message);
   }

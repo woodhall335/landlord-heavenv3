@@ -21,7 +21,20 @@ import {
   ScaleSlider,
 } from './index';
 import { GuidanceTips } from './GuidanceTips';
-import type { WizardQuestion } from '@/lib/ai/fact-finder';
+import type { WizardQuestion as BaseWizardQuestion } from '@/lib/ai/fact-finder';
+
+// Extend the base WizardQuestion type with optional fields that come from MQS/backend
+type WizardQuestion = BaseWizardQuestion & {
+  id?: string;
+  question?: string;
+  inputType?: string;
+  type?: string;
+  helper_text?: string;
+  is_required?: boolean;
+  options?: string[];
+  min?: number;
+  max?: number;
+};
 
 // Helper function to get product display name
 function getDocumentTypeName(caseType: string, product?: string): string {
@@ -92,6 +105,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const [currentQuestion, setCurrentQuestion] = useState<WizardQuestion | null>(null);
   const [collectedFacts, setCollectedFacts] = useState<Record<string, any>>({});
   const [factsList, setFactsList] = useState<CollectedFact[]>([]);
+  const [submittedQuestionIds, setSubmittedQuestionIds] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [caseId, setCaseId] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
@@ -105,27 +119,27 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     consistency_flags?: string[];
   } | null>(null);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   // Auto-scroll to bottom
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const el = messagesEndRef.current;
+
+    // In tests or odd environments, this ref may not have scrollIntoView
+    if (el && typeof (el as any).scrollIntoView === 'function') {
+      (el as any).scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  // In conversational mode we treat the first message per MQS question as the
-  // canonical answer. Follow-up chatty messages ("yes that's correct", clarifications)
-  // should not be re-posted to /api/wizard/answer because they often fail strict
-  // validation and produce 400s. Reset the submission marker whenever the question
-  // actually changes.
+  // When the question actually changes, clear local input + Ask Heaven panel.
   useEffect(() => {
-    setHasSubmittedCurrentQuestion(false);
     setCurrentAnswer(null);
     setAskHeavenResult(null);
-  }, [currentQuestion?.id]);
+  }, [currentQuestion]);
 
   const addMessage = useCallback((role: 'assistant' | 'user', content: string) => {
     const message: Message = {
@@ -157,26 +171,62 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     }
   }, []);
 
+  const formatAnswerForDisplay = (answer: any, inputType: string): string => {
+    switch (inputType) {
+      case 'currency':
+        return `£${Number(answer).toFixed(2)}`;
+      case 'date':
+        return String(answer);
+      case 'yes_no':
+        return answer === 'yes' ? 'Yes' : answer === 'no' ? 'No' : 'Not sure';
+      case 'multiple_choice':
+        return String(answer);
+      case 'multiple_selection':
+        return Array.isArray(answer) ? answer.join(', ') : String(answer);
+      case 'scale_slider':
+        return `Level ${answer}`;
+      case 'file_upload':
+        return Array.isArray(answer) ? `${answer.length} file(s) uploaded` : '1 file uploaded';
+      default:
+        return String(answer);
+    }
+  };
+
   const handleAnswer = async (answer: any) => {
     // Prevent duplicate submissions while loading
     if (!currentQuestion || !caseId || isLoading) return;
 
+    const questionId = currentQuestion.question_id ?? currentQuestion.id;
+    const effectiveQuestionId = questionId || currentQuestion.id || 'unknown_question';
+    const questionText = currentQuestion.question_text ?? currentQuestion.question ?? '';
+    const inputType: string =
+      (currentQuestion.input_type as any) ??
+      currentQuestion.inputType ??
+      (currentQuestion.type as any) ??
+      'text';
+
+    const answerText = formatAnswerForDisplay(answer, inputType);
+
+    // If this MQS question has already been submitted, treat any further messages for it
+    // as conversational follow-ups only: show them in the chat, but DO NOT call /api/wizard/answer.
+    if (submittedQuestionIds.includes(effectiveQuestionId)) {
+      if (answer !== undefined && answer !== null && answer !== '') {
+        addMessage('user', answerText);
+        setCurrentAnswer(null);
+      }
+      return;
+    }
+
     try {
       setIsLoading(true);
 
-      const questionId = currentQuestion.question_id ?? currentQuestion.id;
-      const questionText = currentQuestion.question_text ?? currentQuestion.question;
-      const inputType =
-        currentQuestion.input_type ?? currentQuestion.inputType ?? currentQuestion.type;
-
       // Add user's answer to messages
-      const answerText = formatAnswerForDisplay(answer, inputType);
       addMessage('user', answerText);
 
-      // Save answer
+      // Save answer into local facts
       const newFacts = {
         ...collectedFacts,
-        [questionId || currentQuestion.id]: answer,
+        [effectiveQuestionId]: answer,
       };
       setCollectedFacts(newFacts);
 
@@ -184,7 +234,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
       setFactsList([
         ...factsList,
         {
-          question_id: questionId || currentQuestion.id,
+          question_id: effectiveQuestionId,
           question: questionText,
           answer,
           timestamp: new Date(),
@@ -239,6 +289,11 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         setIsLoading(false);
         return;
       }
+
+      // Mark this MQS question as having had its canonical answer submitted
+      setSubmittedQuestionIds((prev) =>
+        prev.includes(effectiveQuestionId) ? prev : [...prev, effectiveQuestionId],
+      );
 
       // Clear current answer
       setCurrentAnswer(null);
@@ -347,8 +402,8 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
           await analyzeCase(currentCaseId);
         } else if (data.next_question) {
           setAskHeavenResult(null);
-          setCurrentQuestion(data.next_question);
-          addMessage('assistant', data.next_question.question_text);
+          setCurrentQuestion(data.next_question as WizardQuestion);
+          addMessage('assistant', data.next_question.question_text ?? data.next_question.question);
 
           // Update progress
           const totalQuestions = 10; // Estimate
@@ -388,7 +443,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
             id: `msg-${Date.now()}`,
             role: 'assistant',
             content:
-              '✏️ **Editing Mode**\n\nI\'ve loaded your previous answers. You can review and change any information. Let\'s continue from where you left off.',
+              "✏️ **Editing Mode**\n\nI've loaded your previous answers. You can review and change any information. Let's continue from where you left off.",
             timestamp: new Date(),
           };
           setMessages([editMessage]);
@@ -438,13 +493,15 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         };
         setMessages([welcomeMessage]);
 
-        const firstQuestion = data.next_question || data.current_question;
+        const firstQuestion = (data.next_question || data.current_question) as
+          | WizardQuestion
+          | undefined;
 
         if (firstQuestion) {
           setCurrentQuestion(firstQuestion);
           addMessage(
             'assistant',
-            firstQuestion.question_text ?? firstQuestion.question,
+            firstQuestion.question_text ?? firstQuestion.question ?? '',
           );
           setProgress(0);
         } else {
@@ -489,32 +546,14 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     void startWizard();
   }, [startWizard]);
 
-  const formatAnswerForDisplay = (answer: any, inputType: string): string => {
-    switch (inputType) {
-      case 'currency':
-        return `£${Number(answer).toFixed(2)}`;
-      case 'date':
-        return answer;
-      case 'yes_no':
-        return answer === 'yes' ? 'Yes' : answer === 'no' ? 'No' : 'Not sure';
-      case 'multiple_choice':
-        return String(answer);
-      case 'multiple_selection':
-        return Array.isArray(answer) ? answer.join(', ') : String(answer);
-      case 'scale_slider':
-        return `Level ${answer}`;
-      case 'file_upload':
-        return Array.isArray(answer) ? `${answer.length} file(s) uploaded` : '1 file uploaded';
-      default:
-        return String(answer);
-    }
-  };
-
   const renderInput = () => {
     if (!currentQuestion || isLoading || isComplete) return null;
 
-    const inputType =
-      currentQuestion.input_type ?? currentQuestion.inputType ?? currentQuestion.type;
+    const inputType: string =
+      (currentQuestion.input_type as any) ??
+      currentQuestion.inputType ??
+      (currentQuestion.type as any) ??
+      'text';
 
     const props = {
       value: currentAnswer,
@@ -574,6 +613,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
           />
         );
 
+      // "textarea" is a purely UI-level hint; we still treat it as a multi-line text input.
       case 'textarea':
         return (
           <TextInput
@@ -626,8 +666,11 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   const canSubmit = () => {
     if (!currentQuestion || isLoading || isComplete) return false;
-    const inputType =
-      currentQuestion.input_type ?? currentQuestion.inputType ?? currentQuestion.type;
+    const inputType: string =
+      (currentQuestion.input_type as any) ??
+      currentQuestion.inputType ??
+      (currentQuestion.type as any) ??
+      'text';
     if (inputType === 'multiple_choice') return false; // Auto-submits
     if (currentQuestion.is_required && !currentAnswer) return false;
     return true;
@@ -741,7 +784,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                 <div className="border-t border-gray-200 pt-6">
                   {/* Guidance Tips */}
                   <GuidanceTips
-                    questionId={currentQuestion.question_id ?? currentQuestion.id}
+                    questionId={currentQuestion.question_id ?? currentQuestion.id ?? ''}
                     jurisdiction={jurisdiction}
                     caseType={caseType}
                   />
@@ -751,7 +794,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                       <div className="flex items-start gap-2 mb-2">
                         <span className="text-blue-600">✨</span>
                         <div>
-                          <p className="text-sm font-semibold text-blue-900">Ask Heaven suggestions</p>
+                          <p className="text-sm font-semibold text-blue-900">
+                            Ask Heaven suggestions
+                          </p>
                           {askHeavenResult.suggested_wording && (
                             <p className="text-sm text-blue-800 whitespace-pre-wrap mt-1">
                               {askHeavenResult.suggested_wording}
@@ -762,7 +807,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
                       {askHeavenResult.missing_information?.length > 0 && (
                         <div className="mt-3">
-                          <p className="text-xs font-semibold text-yellow-800">Missing information</p>
+                          <p className="text-xs font-semibold text-yellow-800">
+                            Missing information
+                          </p>
                           <ul className="text-xs text-yellow-800 list-disc list-inside">
                             {askHeavenResult.missing_information.map((item, idx) => (
                               <li key={idx}>{item}</li>
@@ -773,7 +820,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
                       {askHeavenResult.evidence_suggestions?.length > 0 && (
                         <div className="mt-3">
-                          <p className="text-xs font-semibold text-green-800">Evidence to gather</p>
+                          <p className="text-xs font-semibold text-green-800">
+                            Evidence to gather
+                          </p>
                           <ul className="text-xs text-green-800 list-disc list-inside">
                             {askHeavenResult.evidence_suggestions.map((item, idx) => (
                               <li key={idx}>{item}</li>
@@ -782,16 +831,19 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                         </div>
                       )}
 
-                      {askHeavenResult.consistency_flags?.length > 0 && (
-                        <div className="mt-3">
-                          <p className="text-xs font-semibold text-red-800">Consistency issues</p>
-                          <ul className="text-xs text-red-800 list-disc list-inside">
-                            {askHeavenResult.consistency_flags.map((item, idx) => (
-                              <li key={idx}>{item}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                      {Array.isArray(askHeavenResult.consistency_flags) &&
+                        askHeavenResult.consistency_flags.length > 0 && (
+                          <div className="mt-3">
+                            <p className="text-xs font-semibold text-red-800">
+                              Consistency issues
+                            </p>
+                            <ul className="text-xs text-red-800 list-disc list-inside">
+                              {(askHeavenResult.consistency_flags || []).map((item, idx) => (
+                                <li key={idx}>{item}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                     </div>
                   )}
 
@@ -874,7 +926,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                     <div className="flex-1">
                       <div className="text-sm font-medium text-gray-500">Next...</div>
                       <div className="text-sm text-gray-400 line-clamp-2">
-                        {currentQuestion.question_text ?? currentQuestion.question}
+                        {currentQuestion.question_text ?? currentQuestion.question ?? ''}
                       </div>
                     </div>
                   </div>

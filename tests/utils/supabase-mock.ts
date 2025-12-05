@@ -31,24 +31,29 @@ export function createMockSupabaseClient(): {
   };
 
   // Helper to create a query builder with common methods
-  const createQueryBuilder = (tableName: keyof MockDatabase) => {
-    let filters: Array<{ column: string; operator: string; value: any }> = [];
+ const createQueryBuilder = (tableName: keyof MockDatabase) => {
+  let filters: Array<{ column: string; operator: string; value: any }> = [];
 
-    const builder = {
-      select: () => {
-        // TODO: Implement column selection filtering
-        return builder;
-      },
+  const builder = {
+    // Accept optional columns argument and "use" it so ESLint is happy
+    select: (columns?: string) => {
+      // We don't implement column filtering yet, but this keeps lint happy
+      void columns;
+      return builder;
+    },
 
-      eq: (column: string, value: any) => {
-        filters.push({ column, operator: 'eq', value });
-        return builder;
-      },
+    eq: (column: string, value: any) => {
+      filters.push({ column, operator: 'eq', value });
+      return builder;
+    },
 
-      is: (column: string, value: any) => {
-        filters.push({ column, operator: 'is', value });
-        return builder;
-      },
+    is: (column: string, value: any) => {
+      filters.push({ column, operator: 'is', value });
+      return builder;
+    },
+
+    // ...rest of builder (single, maybeSingle, etc.) stays the same
+
 
       single: async () => {
         const table = db[tableName];
@@ -141,7 +146,11 @@ export function createMockSupabaseClient(): {
                 );
 
                 filtered.forEach(([id, item]) => {
-                  table.set(id, { ...item, ...data, updated_at: new Date().toISOString() });
+                  table.set(id, {
+                    ...item,
+                    ...data,
+                    updated_at: new Date().toISOString(),
+                  });
                 });
 
                 const result = { data: null, error: null };

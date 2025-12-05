@@ -4,13 +4,25 @@
  * Tests all Northern Ireland document generation functions to ensure they work correctly.
  */
 
-import {
-  generateNoticeToQuit,
-  generateSampleNoticeToQuit,
+import * as niDocs from '../src/lib/documents/northern-ireland';
+
+// Keep full functionality, just relax typing / export resolution a bit
+const {
   generatePrivateTenancyAgreement,
   generateSamplePrivateTenancyAgreement,
   generateSamplePrivateTenancyWithAgent,
-} from '../src/lib/documents/northern-ireland';
+} = niDocs as any;
+
+// Notice to Quit helpers may be exported under slightly different names,
+// so resolve them dynamically but keep the same usage.
+const generateNoticeToQuit: any =
+  (niDocs as any).generateNoticeToQuit ||
+  (niDocs as any).generateNoticeToQuitDocument ||
+  (niDocs as any).generateNoticeToQuitHtml;
+
+const generateSampleNoticeToQuit: any =
+  (niDocs as any).generateSampleNoticeToQuit ||
+  (niDocs as any).createSampleNoticeToQuitData;
 
 async function runTests() {
   console.log('🏴 Testing Northern Ireland Document Generators\n');
@@ -30,12 +42,14 @@ async function runTests() {
     const result = await generatePrivateTenancyAgreement(ptaData, false, 'html');
 
     console.log('✅ Document generated successfully!');
-    console.log(`   Document ID: ${result.metadata.document_id}`);
+    console.log(`   Document ID: ${result.metadata.documentId}`);
     console.log(`   HTML length: ${result.html.length} chars`);
     console.log(`   Landlord: ${ptaData.landlord.full_name}`);
-    console.log(`   Tenants: ${ptaData.tenants.map((t) => t.full_name).join(', ')}`);
+    console.log(`   Tenants: ${ptaData.tenants.map((t: any) => t.full_name).join(', ')}`);
     console.log(`   Property: ${ptaData.property_address}`);
-    console.log(`   Term: ${ptaData.term_length} (${ptaData.tenancy_start_date} to ${ptaData.tenancy_end_date})`);
+    console.log(
+      `   Term: ${ptaData.term_length} (${ptaData.tenancy_start_date} to ${ptaData.tenancy_end_date})`,
+    );
     console.log(`   Rent: £${ptaData.rent_amount}/${ptaData.rent_period}`);
     console.log(`   Deposit: £${ptaData.deposit_amount} (${ptaData.deposit_scheme})`);
     successCount++;
@@ -55,7 +69,7 @@ async function runTests() {
     const result = await generatePrivateTenancyAgreement(ptaData, false, 'html');
 
     console.log('✅ Document generated successfully!');
-    console.log(`   Document ID: ${result.metadata.document_id}`);
+    console.log(`   Document ID: ${result.metadata.documentId}`);
     console.log(`   HTML length: ${result.html.length} chars`);
     console.log(`   Type: Periodic tenancy`);
     console.log(`   Start: ${ptaData.tenancy_start_date}`);
@@ -77,7 +91,7 @@ async function runTests() {
     const result = await generatePrivateTenancyAgreement(ptaData, false, 'html');
 
     console.log('✅ Document generated successfully!');
-    console.log(`   Document ID: ${result.metadata.document_id}`);
+    console.log(`   Document ID: ${result.metadata.documentId}`);
     console.log(`   Agent: ${ptaData.agent?.name} (${ptaData.agent?.company})`);
     console.log(`   Agent signs: ${ptaData.agent?.signs ? 'Yes' : 'No'}`);
     successCount++;
@@ -97,7 +111,7 @@ async function runTests() {
     const result = await generateNoticeToQuit(ntqData, false, 'html');
 
     console.log('✅ Document generated successfully!');
-    console.log(`   Document ID: ${result.metadata.document_id}`);
+    console.log(`   Document ID: ${result.metadata.documentId}`);
     console.log(`   HTML length: ${result.html.length} chars`);
     console.log(`   Ground: 8 (Serious Rent Arrears - MANDATORY)`);
     console.log(`   Landlord: ${ntqData.landlord.full_name}`);
@@ -105,7 +119,9 @@ async function runTests() {
     console.log(`   Property: ${ntqData.property.address}`);
     console.log(`   Notice date: ${ntqData.notice_date}`);
     console.log(`   Quit date: ${ntqData.quit_date}`);
-    console.log(`   Notice period: ${ntqData.notice_period_weeks} weeks (${ntqData.notice_period_days} days)`);
+    console.log(
+      `   Notice period: ${ntqData.notice_period_weeks} weeks (${ntqData.notice_period_days} days)`,
+    );
     console.log(`   Arrears: £${ntqData.total_arrears} (${ntqData.arrears_weeks} weeks)`);
     successCount++;
   } catch (error: any) {
@@ -124,7 +140,7 @@ async function runTests() {
     const result = await generateNoticeToQuit(ntqData, false, 'html');
 
     console.log('✅ Document generated successfully!');
-    console.log(`   Document ID: ${result.metadata.document_id}`);
+    console.log(`   Document ID: ${result.metadata.documentId}`);
     console.log(`   Ground: 10 (Rent Arrears - DISCRETIONARY)`);
     console.log(`   Arrears: £${ntqData.total_arrears}`);
     console.log(`   Notice period: ${ntqData.notice_period_weeks} weeks`);
@@ -145,7 +161,7 @@ async function runTests() {
     const result = await generateNoticeToQuit(ntqData, false, 'html');
 
     console.log('✅ Document generated successfully!');
-    console.log(`   Document ID: ${result.metadata.document_id}`);
+    console.log(`   Document ID: ${result.metadata.documentId}`);
     console.log(`   Ground: 12 (Breach of Tenancy)`);
     console.log(`   Breach type: ${ntqData.breach_type}`);
     console.log(`   Breach date: ${ntqData.breach_date}`);
@@ -166,7 +182,7 @@ async function runTests() {
     const result = await generateNoticeToQuit(ntqData, false, 'html');
 
     console.log('✅ Document generated successfully!');
-    console.log(`   Document ID: ${result.metadata.document_id}`);
+    console.log(`   Document ID: ${result.metadata.documentId}`);
     console.log(`   Ground: 14 (Nuisance/Annoyance - ASB)`);
     console.log(`   ASB incidents: ${ntqData.asb_incidents?.length || 0}`);
     console.log(`   Evidence: ${ntqData.asb_evidence}`);
@@ -184,7 +200,12 @@ async function runTests() {
   console.log('='.repeat(70));
   console.log(`✅ Passed: ${successCount}`);
   console.log(`❌ Failed: ${failCount}`);
-  console.log(`📈 Success Rate: ${((successCount / (successCount + failCount)) * 100).toFixed(1)}%`);
+  console.log(
+    `📈 Success Rate: ${(
+      (successCount / (successCount + failCount || 1)) *
+      100
+    ).toFixed(1)}%`,
+  );
   console.log('='.repeat(70));
 
   if (failCount === 0) {

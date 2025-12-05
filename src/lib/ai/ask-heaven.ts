@@ -162,7 +162,9 @@ IMPORTANT:
   // Include consistency flags in user prompt if detected
   let userPromptWithConsistency = userPrompt;
   if (consistencyFlags.length > 0) {
-    userPromptWithConsistency += `\n\nCONSISTENCY ISSUES DETECTED:\n${consistencyFlags.map(f => `- ${f}`).join('\n')}\n\nPlease note these issues in consistency_flags array.`;
+    userPromptWithConsistency += `\n\nCONSISTENCY ISSUES DETECTED:\n${consistencyFlags
+      .map((f) => `- ${f}`)
+      .join('\n')}\n\nPlease note these issues in consistency_flags array.`;
   }
 
   const messages: ChatMessage[] = [
@@ -188,7 +190,12 @@ IMPORTANT:
         items: { type: 'string' },
       },
     },
-    required: ['suggested_wording', 'missing_information', 'evidence_suggestions', 'consistency_flags'],
+    required: [
+      'suggested_wording',
+      'missing_information',
+      'evidence_suggestions',
+      'consistency_flags',
+    ],
   };
 
   try {
@@ -199,16 +206,20 @@ IMPORTANT:
         model: 'gpt-4o-mini',
         temperature: 0.2,
         max_tokens: 800, // Increased for consistency_flags
-      }
+      },
     );
 
     const json = result.json || ({} as Partial<EnhanceAnswerResult>);
     const evidenceSuggestions =
-      (json as any).evidence_suggestions ?? (json as any).evidence_you_may_upload ?? [];
+      (json as any).evidence_suggestions ??
+      (json as any).evidence_you_may_upload ??
+      [];
     const missingInformation =
       (json as any).missing_information ?? (json as any).missing_info ?? [];
     const consistencyFlagsFromModel =
-      (json as any).consistency_flags ?? (json as any).consistency_issues ?? undefined;
+      (json as any).consistency_flags ??
+      (json as any).consistency_issues ??
+      undefined;
 
     return {
       suggested_wording: (json as any).suggested_wording ?? '',
@@ -219,7 +230,7 @@ IMPORTANT:
   } catch (error) {
     console.error(
       'enhanceAnswer failed, proceeding without suggestions:',
-      error
+      error,
     );
     // Let the wizard continue without blocking
     return null;
@@ -301,20 +312,31 @@ function buildDecisionEngineContext(decision: DecisionOutput): string {
 
   // Recommended routes
   if (recommendedRoutes.length > 0) {
-    context += `\nRecommended Routes: ${recommendedRoutes.map((r) => r.toUpperCase()).join(', ')}\n`;
+    context += `\nRecommended Routes: ${recommendedRoutes
+      .map((r) => r.toUpperCase())
+      .join(', ')}\n`;
   }
 
   // Blocking issues
-  const blockingOnly = blockingIssues.filter((b) => b?.severity === 'blocking');
+  const blockingOnly = blockingIssues.filter(
+    (b) => b?.severity === 'blocking',
+  );
   if (blockingOnly.length > 0) {
     context += '\nBLOCKED ROUTES:\n';
     for (const block of blockingOnly) {
       if (!block) continue;
-      const routeLabel = typeof block.route === 'string' ? block.route.toUpperCase() : 'UNKNOWN ROUTE';
-      const description = typeof block.description === 'string' ? block.description : 'Review required';
+      const routeLabel =
+        typeof block.route === 'string'
+          ? block.route.toUpperCase()
+          : 'UNKNOWN ROUTE';
+      const description =
+        typeof block.description === 'string'
+          ? block.description
+          : 'Review required';
       context += `  - ${routeLabel}: ${description}\n`;
     }
-    context += '\n⚠️  When describing blocked routes, state the facts but NEVER recommend alternative routes.\n';
+    context +=
+      '\n⚠️  When describing blocked routes, state the facts but NEVER recommend alternative routes.\n';
   }
 
   // Recommended grounds
@@ -322,8 +344,10 @@ function buildDecisionEngineContext(decision: DecisionOutput): string {
     context += '\nRecommended Grounds:\n';
     for (const ground of recommendedGrounds) {
       if (!ground) continue;
-      const label = typeof ground.code === 'string' ? ground.code : 'Unknown';
-      const title = typeof ground.title === 'string' ? ground.title : 'Review required';
+      const label =
+        typeof ground.code === 'string' ? ground.code : 'Unknown';
+      const title =
+        typeof ground.title === 'string' ? ground.title : 'Review required';
       context += `  - Ground ${label}: ${title}`;
       if (ground.type === 'mandatory') context += ' [MANDATORY]';
       if (ground.type === 'discretionary') context += ' [DISCRETIONARY]';
@@ -339,19 +363,20 @@ function buildDecisionEngineContext(decision: DecisionOutput): string {
     }
   }
 
-  // Pre-action requirements (Scotland)
-  if (preAction && preAction.required) {
+  // Pre-action requirements (Scotland-style summary object)
+  if (preAction && typeof preAction === 'object') {
     context += '\nPre-Action Requirements:\n';
     context += `  Required: ${preAction.required}\n`;
     context += `  Met: ${preAction.met ?? 'Unknown'}\n`;
-    if (preAction.details && preAction.details.length > 0) {
+    if (Array.isArray(preAction.details) && preAction.details.length > 0) {
       for (const detail of preAction.details) {
         context += `  - ${detail}\n`;
       }
     }
   }
 
-  context += '\nYou may reference these facts in your response, but NEVER override them.\n';
+  context +=
+    '\nYou may reference these facts in your response, but NEVER override them.\n';
 
   return context;
 }
@@ -360,33 +385,55 @@ function buildDecisionEngineContext(decision: DecisionOutput): string {
  * Extract consistency flags relevant to this question
  */
 function extractConsistencyFlags(
-  consistencyReport: ConsistencyReport | { inconsistencies?: any[] } | any[] | undefined,
-  question: ExtendedWizardQuestion
+  consistencyReport:
+    | ConsistencyReport
+    | { inconsistencies?: any[] }
+    | any[]
+    | undefined,
+  question: ExtendedWizardQuestion,
 ): string[] {
   const flags: string[] = [];
   const questionId = (question as any).id ?? '';
 
-  const inconsistencies = Array.isArray((consistencyReport as any)?.inconsistencies)
+  const inconsistencies = Array.isArray(
+    (consistencyReport as any)?.inconsistencies,
+  )
     ? (consistencyReport as any).inconsistencies
     : Array.isArray(consistencyReport)
-      ? consistencyReport
-      : [];
+    ? consistencyReport
+    : [];
 
-  const criticalIssues = inconsistencies.filter((i) => i?.severity === 'critical');
+  const criticalIssues = inconsistencies.filter(
+    (i: any) => i?.severity === 'critical',
+  );
 
   for (const issue of criticalIssues) {
     if (!issue || !Array.isArray(issue.fields)) continue;
-    if (issue.fields.some((f: string) => questionId && typeof f === 'string' && f.includes(questionId))) {
-      const category = typeof issue.category === 'string' ? issue.category.toUpperCase() : 'CONSISTENCY';
-      const message = typeof issue.message === 'string' ? issue.message : 'Review required';
+    if (
+      issue.fields.some(
+        (f: string) =>
+          questionId && typeof f === 'string' && f.includes(questionId),
+      )
+    ) {
+      const category =
+        typeof issue.category === 'string'
+          ? issue.category.toUpperCase()
+          : 'CONSISTENCY';
+      const message =
+        typeof issue.message === 'string'
+          ? issue.message
+          : 'Review required';
       flags.push(`${category}: ${message}`);
     }
   }
 
-  const warningIssues = inconsistencies.filter((i) => i?.severity === 'warning');
+  const warningIssues = inconsistencies.filter(
+    (i: any) => i?.severity === 'warning',
+  );
 
   for (const issue of warningIssues.slice(0, 2)) {
     if (!issue) continue;
+
     if (
       issue.category === 'arrears' &&
       (questionId.includes('arrears') || questionId.includes('rent'))
@@ -398,11 +445,4 @@ function extractConsistencyFlags(
   }
 
   return flags;
-}
-
-function toStringArray(value: unknown): string[] {
-  if (!Array.isArray(value)) return [];
-  return value
-    .map((item) => (typeof item === 'string' ? item : item != null ? String(item) : ''))
-    .filter((item) => item.length > 0);
 }

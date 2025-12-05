@@ -1,126 +1,95 @@
-/**
- * Multiple Selection
- *
- * Checkbox group for selecting multiple options
- * Supports "None" option that disables all others
- */
+//  src/components/wizard/MultipleSelection.tsx
 
-import React from 'react';
-import { clsx } from 'clsx';
+'use client';
+
+import React, { useMemo } from 'react';
+import { Button } from '@/components/ui/Button';
 
 export interface MultipleSelectionOption {
   value: string;
   label: string;
   description?: string;
-}
-
-export interface MultipleSelectionProps {
-  options: MultipleSelectionOption[];
-  value?: string[];
-  onChange: (value: string[]) => void;
-  noneOption?: string; // Value for "None" option
-  minSelections?: number;
-  maxSelections?: number;
-  helperText?: string;
   disabled?: boolean;
 }
 
-export const MultipleSelection: React.FC<MultipleSelectionProps> = ({
+export interface MultipleSelectionProps {
+  /** Currently selected option values */
+  value: string[] | null | undefined;
+  /** All options to render */
+  options: MultipleSelectionOption[];
+  /** Called whenever the selection changes */
+  onChange: (next: string[]) => void;
+  /** Disable all interaction */
+  disabled?: boolean;
+  /** Optional ARIA label / test id support */
+  'aria-label'?: string;
+  'data-testid'?: string;
+}
+
+/**
+ * MultipleSelection
+ *
+ * Generic multi-select input used by the wizard.
+ * Renders options as toggleable "chips" using the shared Button component.
+ */
+export function MultipleSelection({
+  value,
   options,
-  value = [],
   onChange,
-  noneOption,
-  minSelections,
-  maxSelections,
-  helperText,
-  disabled = false,
-}) => {
-  const handleToggle = (optionValue: string) => {
+  disabled,
+  ...rest
+}: MultipleSelectionProps) {
+  const selectedValues = useMemo(
+    () => (Array.isArray(value) ? value : []),
+    [value]
+  );
+
+  const toggleValue = (val: string) => {
     if (disabled) return;
 
-    // If toggling "None" option
-    if (noneOption && optionValue === noneOption) {
-      onChange(value.includes(noneOption) ? [] : [noneOption]);
-      return;
-    }
+    const isSelected = selectedValues.includes(val);
+    const next = isSelected
+      ? selectedValues.filter((v) => v !== val)
+      : [...selectedValues, val];
 
-    // If "None" is selected, clear it when selecting anything else
-    const newValue = value.includes(noneOption) ? [] : [...value];
-
-    // Toggle the option
-    const index = newValue.indexOf(optionValue);
-    if (index > -1) {
-      newValue.splice(index, 1);
-    } else {
-      // Check max selections
-      if (maxSelections && newValue.length >= maxSelections) {
-        return; // Don't add if at max
-      }
-      newValue.push(optionValue);
-    }
-
-    onChange(newValue);
+    onChange(next);
   };
 
-  const isNoneSelected = noneOption && value.includes(noneOption);
+  if (!options || options.length === 0) {
+    return null;
+  }
 
   return (
-    <div className="space-y-3">
+    <div
+      className="flex flex-wrap gap-2"
+      {...rest}
+    >
       {options.map((option) => {
-        const isChecked = value.includes(option.value);
-        const isNone = noneOption === option.value;
-        const isDisabledByNone = isNoneSelected && !isNone;
+        const isSelected = selectedValues.includes(option.value);
 
         return (
-          <label
+          <Button
             key={option.value}
-            className={clsx(
-              'flex items-start gap-4 p-4 rounded-lg border-2 cursor-pointer transition-all duration-200',
-              'min-h-touch',
-              isChecked
-                ? 'border-primary bg-primary-subtle'
-                : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm',
-              (disabled || isDisabledByNone) && 'opacity-50 cursor-not-allowed'
-            )}
+            type="button"
+            // Use valid variants from Button.tsx:
+            // 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
+            variant={isSelected ? 'primary' : 'outline'}
+            onClick={() => toggleValue(option.value)}
+            disabled={disabled || option.disabled}
+            className="flex items-center gap-1 px-3 py-1 text-sm"
           >
-            <input
-              type="checkbox"
-              checked={isChecked}
-              onChange={() => handleToggle(option.value)}
-              disabled={disabled || isDisabledByNone}
-              className="w-5 h-5 mt-0.5 rounded border-gray-300 text-primary focus:ring-primary shrink-0"
-            />
-            <div className="flex-1">
-              <div className={clsx(
-                'font-medium text-base',
-                isChecked ? 'text-primary-dark' : 'text-charcoal'
-              )}>
-                {option.label}
-              </div>
-              {option.description && (
-                <div className="text-sm text-gray-600 mt-1">
-                  {option.description}
-                </div>
-              )}
-            </div>
-          </label>
+            <span>{option.label}</span>
+            {option.description && (
+              <span className="text-xs text-muted-foreground">
+                {option.description}
+              </span>
+            )}
+          </Button>
         );
       })}
-
-      <div className="flex items-center justify-between text-sm text-gray-600">
-        <div>
-          {value.length > 0 && !isNoneSelected && (
-            <span>{value.length} selected</span>
-          )}
-        </div>
-        {helperText && <span>{helperText}</span>}
-      </div>
-
-      {minSelections !== undefined && value.length < minSelections && (
-        <p className="text-sm text-amber-700">
-          Please select at least {minSelections} option{minSelections !== 1 ? 's' : ''}
-        </p>
-      )}
     </div>
   );
-};
+}
+
+// Provide default export as well, in case any legacy imports rely on it
+export default MultipleSelection;

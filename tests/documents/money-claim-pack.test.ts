@@ -30,7 +30,9 @@ vi.mock('@/lib/documents/generator', () => ({
   generateDocument: vi.fn(async ({ templatePath, data }) => {
     // Return mock HTML and PDF based on template path
     const templateName = templatePath.split('/').pop()?.replace('.hbs', '') || 'unknown';
-    const html = `<h1>${templateName}</h1><p>Mock document for ${data.landlord_full_name || 'test'}</p>`;
+    const html = `<h1>${templateName}</h1><p>Mock document for ${
+      data.landlord_full_name || 'test'
+    }</p>`;
     return {
       html,
       pdf: Buffer.from('mock-pdf-content'),
@@ -81,7 +83,8 @@ describe('Money claim pack generator', () => {
   it(
     'guards missing N1 PDF with a helpful error',
     async () => {
-      (forms.assertOfficialFormExists as unknown as vi.Mock).mockRejectedValueOnce(
+      // Cast to any rather than vi.Mock to avoid namespace/type issues
+      (forms.assertOfficialFormExists as any).mockRejectedValueOnce(
         new Error('missing N1'),
       );
 

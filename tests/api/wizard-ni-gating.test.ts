@@ -176,7 +176,9 @@ describe('Wizard API Northern Ireland gating', () => {
 
     const body = await response.json();
     expect(response.status).toBe(400);
-    expect(body.error).toBe('Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.');
+    expect(body.error).toBe(
+      'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.'
+    );
   });
 
   it('rejects NI eviction analysis at /api/wizard/analyze', async () => {
@@ -201,7 +203,10 @@ describe('Wizard API Northern Ireland gating', () => {
 
     const body = await response.json();
     expect(response.status).toBe(400);
-    expect(body.error).toBe('Only tenancy agreements are available for Northern Ireland. Eviction and money claim analysis is not currently supported.');
-    expect((decisionEngine.analyzeCase as unknown as vi.Mock)).not.toHaveBeenCalled();
+    expect(body.error).toBe(
+      'Only tenancy agreements are available for Northern Ireland. Eviction and money claim analysis is not currently supported.'
+    );
+    // Just cast to any for the matcher – no vi.Mock type needed
+    expect(decisionEngine.analyzeCase as any).not.toHaveBeenCalled();
   });
 });

@@ -69,7 +69,7 @@ export function AskHeavenPanel({
 
   const jurisdictionLabel = {
     'england-wales': 'England & Wales County Court',
-    'scotland': 'Scotland First-tier Tribunal',
+    scotland: 'Scotland First-tier Tribunal',
     'northern-ireland': 'Northern Ireland',
   }[jurisdiction] || jurisdiction;
 
@@ -127,7 +127,7 @@ export function AskHeavenPanel({
             <Button
               onClick={() => setResult(null)}
               variant="ghost"
-              size="sm"
+              size="small"
             >
               Dismiss
             </Button>
@@ -147,7 +147,7 @@ export function AskHeavenPanel({
                 onAccept(result.suggested_wording);
                 setResult(null);
               }}
-              size="sm"
+              size="small"
               className="flex-1"
             >
               <CheckCircle2 className="mr-2 h-4 w-4" />
@@ -156,7 +156,7 @@ export function AskHeavenPanel({
             <Button
               onClick={() => setResult(null)}
               variant="outline"
-              size="sm"
+              size="small"
             >
               Keep Original
             </Button>
@@ -217,3 +217,4 @@ export function AskHeavenPanel({
     </div>
   );
 }
+
