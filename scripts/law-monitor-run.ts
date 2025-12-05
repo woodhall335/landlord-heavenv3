@@ -169,12 +169,19 @@ function generateMarkdownReport(
     lines.push('- *No automated suggestions generated*');
   } else {
     for (const suggestion of suggestions) {
-      const severityEmoji = {
-        critical: '🔴',
-        high: '🟠',
-        medium: '🟡',
-        low: '🟢',
-      }[suggestion.severity] || '⚪';
+// Define the map with a name + type
+const severityEmojiMap = {
+  critical: '🔴',
+  high: '🟠',
+  medium: '🟡',
+  low: '🟢',
+} as const;
+
+type SeverityLevel = keyof typeof severityEmojiMap;
+
+const severityEmoji =
+  severityEmojiMap[suggestion.severity as SeverityLevel] ?? '⚪';
+
 
       lines.push(`### ${severityEmoji} ${suggestion.summary}`);
       lines.push('');
