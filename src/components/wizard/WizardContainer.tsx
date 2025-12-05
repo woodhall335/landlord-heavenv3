@@ -333,11 +333,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
           );
           await analyzeCase(currentCaseId);
         } else if (data.next_question) {
-          const nextQuestion = data.next_question;
-          const nextQuestionText = nextQuestion.question_text ?? nextQuestion.question;
           setAskHeavenResult(null);
-          setCurrentQuestion(nextQuestion);
-          addMessage('assistant', nextQuestionText);
+          setCurrentQuestion(data.next_question);
+          addMessage('assistant', data.next_question.question_text);
 
           // Update progress
           const totalQuestions = 10; // Estimate
