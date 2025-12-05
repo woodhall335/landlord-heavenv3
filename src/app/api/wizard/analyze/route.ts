@@ -577,6 +577,13 @@ export async function POST(request: Request) {
         {
           error:
             'Only tenancy agreements are available for Northern Ireland. Eviction and money claim analysis is not currently supported.',
+          message:
+            'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
+          supported: {
+            'northern-ireland': ['tenancy_agreement'],
+            'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+          },
         },
         { status: 400 }
       );

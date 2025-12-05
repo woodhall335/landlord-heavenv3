@@ -88,7 +88,7 @@ export async function enhanceAnswer(
 
   // Extract consistency flags from case-intel (if available)
   const consistencyFlags = caseIntelContext
-    ? extractConsistencyFlags(caseIntelContext.inconsistencies, question)
+    ? extractConsistencyFlags(caseIntelContext?.inconsistencies, question)
     : [];
 
   const systemPrompt = `
@@ -287,26 +287,44 @@ JURISDICTION-SPECIFIC CONTEXT (Northern Ireland):
 function buildDecisionEngineContext(decision: DecisionOutput): string {
   let context = '\n\nDECISION ENGINE CONTEXT (do not contradict these facts):\n';
 
+  const recommendedRoutes = Array.isArray(decision.recommended_routes)
+    ? decision.recommended_routes
+    : [];
+  const blockingIssues = Array.isArray(decision.blocking_issues)
+    ? decision.blocking_issues
+    : [];
+  const recommendedGrounds = Array.isArray(decision.recommended_grounds)
+    ? decision.recommended_grounds
+    : [];
+  const warnings = Array.isArray(decision.warnings) ? decision.warnings : [];
+  const preAction = decision.pre_action_requirements ?? null;
+
   // Recommended routes
-  if (decision.recommended_routes && decision.recommended_routes.length > 0) {
-    context += `\nRecommended Routes: ${decision.recommended_routes.map(r => r.toUpperCase()).join(', ')}\n`;
+  if (recommendedRoutes.length > 0) {
+    context += `\nRecommended Routes: ${recommendedRoutes.map((r) => r.toUpperCase()).join(', ')}\n`;
   }
 
   // Blocking issues
-  const blockingIssues = decision.blocking_issues.filter(b => b.severity === 'blocking');
-  if (blockingIssues.length > 0) {
+  const blockingOnly = blockingIssues.filter((b) => b?.severity === 'blocking');
+  if (blockingOnly.length > 0) {
     context += '\nBLOCKED ROUTES:\n';
-    for (const block of blockingIssues) {
-      context += `  - ${block.route.toUpperCase()}: ${block.description}\n`;
+    for (const block of blockingOnly) {
+      if (!block) continue;
+      const routeLabel = typeof block.route === 'string' ? block.route.toUpperCase() : 'UNKNOWN ROUTE';
+      const description = typeof block.description === 'string' ? block.description : 'Review required';
+      context += `  - ${routeLabel}: ${description}\n`;
     }
     context += '\n⚠️  When describing blocked routes, state the facts but NEVER recommend alternative routes.\n';
   }
 
   // Recommended grounds
-  if (decision.recommended_grounds && decision.recommended_grounds.length > 0) {
+  if (recommendedGrounds.length > 0) {
     context += '\nRecommended Grounds:\n';
-    for (const ground of decision.recommended_grounds) {
-      context += `  - Ground ${ground.code}: ${ground.title}`;
+    for (const ground of recommendedGrounds) {
+      if (!ground) continue;
+      const label = typeof ground.code === 'string' ? ground.code : 'Unknown';
+      const title = typeof ground.title === 'string' ? ground.title : 'Review required';
+      context += `  - Ground ${label}: ${title}`;
       if (ground.type === 'mandatory') context += ' [MANDATORY]';
       if (ground.type === 'discretionary') context += ' [DISCRETIONARY]';
       context += '\n';
@@ -314,20 +332,20 @@ function buildDecisionEngineContext(decision: DecisionOutput): string {
   }
 
   // Warnings
-  if (decision.warnings && decision.warnings.length > 0) {
+  if (warnings.length > 0) {
     context += '\nWarnings:\n';
-    for (const warning of decision.warnings.slice(0, 3)) {
+    for (const warning of warnings.slice(0, 3)) {
       context += `  - ${warning}\n`;
     }
   }
 
   // Pre-action requirements (Scotland)
-  if (decision.pre_action_requirements && decision.pre_action_requirements.required) {
+  if (preAction && preAction.required) {
     context += '\nPre-Action Requirements:\n';
-    context += `  Required: ${decision.pre_action_requirements.required}\n`;
-    context += `  Met: ${decision.pre_action_requirements.met ?? 'Unknown'}\n`;
-    if (decision.pre_action_requirements.details && decision.pre_action_requirements.details.length > 0) {
-      for (const detail of decision.pre_action_requirements.details) {
+    context += `  Required: ${preAction.required}\n`;
+    context += `  Met: ${preAction.met ?? 'Unknown'}\n`;
+    if (preAction.details && preAction.details.length > 0) {
+      for (const detail of preAction.details) {
         context += `  - ${detail}\n`;
       }
     }
@@ -342,31 +360,33 @@ function buildDecisionEngineContext(decision: DecisionOutput): string {
  * Extract consistency flags relevant to this question
  */
 function extractConsistencyFlags(
-  consistencyReport: ConsistencyReport,
+  consistencyReport: ConsistencyReport | { inconsistencies?: any[] } | any[] | undefined,
   question: ExtendedWizardQuestion
 ): string[] {
   const flags: string[] = [];
-  const questionId = (question as any).id;
+  const questionId = (question as any).id ?? '';
 
-  // Check for critical inconsistencies
-  const criticalIssues = consistencyReport.inconsistencies.filter(
-    (i) => i.severity === 'critical'
-  );
+  const inconsistencies = Array.isArray((consistencyReport as any)?.inconsistencies)
+    ? (consistencyReport as any).inconsistencies
+    : Array.isArray(consistencyReport)
+      ? consistencyReport
+      : [];
+
+  const criticalIssues = inconsistencies.filter((i) => i?.severity === 'critical');
 
   for (const issue of criticalIssues) {
-    // Check if this question is involved in the inconsistency
-    if (issue.fields.some((f) => f.includes(questionId))) {
-      flags.push(`${issue.category.toUpperCase()}: ${issue.message}`);
+    if (!issue || !Array.isArray(issue.fields)) continue;
+    if (issue.fields.some((f: string) => questionId && typeof f === 'string' && f.includes(questionId))) {
+      const category = typeof issue.category === 'string' ? issue.category.toUpperCase() : 'CONSISTENCY';
+      const message = typeof issue.message === 'string' ? issue.message : 'Review required';
+      flags.push(`${category}: ${message}`);
     }
   }
 
-  // Check for warning-level issues that mention common fields
-  const warningIssues = consistencyReport.inconsistencies.filter(
-    (i) => i.severity === 'warning'
-  );
+  const warningIssues = inconsistencies.filter((i) => i?.severity === 'warning');
 
   for (const issue of warningIssues.slice(0, 2)) {
-    // Only show top 2 warnings
+    if (!issue) continue;
     if (
       issue.category === 'arrears' &&
       (questionId.includes('arrears') || questionId.includes('rent'))
@@ -378,4 +398,11 @@ function extractConsistencyFlags(
   }
 
   return flags;
+}
+
+function toStringArray(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((item) => (typeof item === 'string' ? item : item != null ? String(item) : ''))
+    .filter((item) => item.length > 0);
 }

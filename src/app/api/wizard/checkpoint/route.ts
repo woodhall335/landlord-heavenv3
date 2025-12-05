@@ -26,15 +26,37 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!['england-wales', 'scotland', 'northern-ireland'].includes(jurisdiction)) {
-      return NextResponse.json(
-        { error: 'Invalid jurisdiction' },
-        { status: 400 }
-      );
-    }
+  if (!['england-wales', 'scotland', 'northern-ireland'].includes(jurisdiction)) {
+    return NextResponse.json(
+      { error: 'Invalid jurisdiction' },
+      { status: 400 }
+    );
+  }
 
-    // Default to eviction if not specified
-    const effectiveCaseType = case_type || 'eviction';
+  // Northern Ireland gating: only tenancy agreements are supported for V1
+  if (
+    jurisdiction === 'northern-ireland' &&
+    case_type !== 'tenancy_agreement' &&
+    product !== 'tenancy_agreement'
+  ) {
+    return NextResponse.json(
+      {
+        error:
+          'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.',
+        message:
+          'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
+        supported: {
+          'northern-ireland': ['tenancy_agreement'],
+          'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+          scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+        },
+      },
+      { status: 400 }
+    );
+  }
+
+  // Default to eviction if not specified
+  const effectiveCaseType = case_type || 'eviction';
     const effectiveProduct = product || 'notice_only';
 
     // Early return for money claims (no decision engine needed)

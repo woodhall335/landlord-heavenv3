@@ -64,13 +64,13 @@ async function main() {
     console.log(`  Category: ${source.category}`);
 
     try {
+      // Load previous snapshot for comparison BEFORE fetching (so the new snapshot can be saved)
+      const previousSnapshot = loadPreviousSnapshot(source.id);
+
       // Fetch current snapshot
       console.log('  Fetching...');
       const snapshot = await fetchLawSource(source);
 
-      // Load previous snapshot for comparison
-      // TODO: Pass source.id when loadPreviousSnapshot is implemented
-      const previousSnapshot = loadPreviousSnapshot();
       const changed = hasContentChanged(snapshot, previousSnapshot);
 
       if (changed) {
@@ -79,18 +79,14 @@ async function main() {
         console.log('  ⏭️  No changes detected since last fetch');
       }
 
-      // Save snapshot
       const timestamp = snapshot.fetched_at.substring(0, 19).replace(/:/g, '-');
-      const snapshotFilename = `${source.id}-${timestamp}.json`;
-      const snapshotPath = path.join(SNAPSHOTS_DIR, snapshotFilename);
-
-      fs.writeFileSync(snapshotPath, JSON.stringify(snapshot, null, 2), 'utf8');
-      console.log(`  Snapshot saved: ${snapshotFilename}`);
+      console.log(`  Snapshot saved: ${source.id}-${timestamp}.json`);
 
       // Generate change suggestions
       const suggestions = compareSnapshotWithRules(
         snapshot,
-        source.jurisdiction
+        source.jurisdiction,
+        previousSnapshot
       );
 
       // Generate Markdown report

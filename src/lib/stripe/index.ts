@@ -10,6 +10,7 @@
  */
 
 import Stripe from 'stripe';
+import { HMO_PRO_ENABLED } from '@/lib/feature-flags';
 
 // Initialize Stripe client
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -29,13 +30,16 @@ export const PRICE_IDS = {
   MONEY_CLAIM: process.env.STRIPE_PRICE_ID_MONEY_CLAIM!,
   STANDARD_AST: process.env.STRIPE_PRICE_ID_STANDARD_AST!,
   PREMIUM_AST: process.env.STRIPE_PRICE_ID_PREMIUM_AST!,
-
-  // HMO Pro subscriptions
-  HMO_PRO_1_5: process.env.STRIPE_PRICE_ID_HMO_PRO_1_5!,
-  HMO_PRO_6_10: process.env.STRIPE_PRICE_ID_HMO_PRO_6_10!,
-  HMO_PRO_11_15: process.env.STRIPE_PRICE_ID_HMO_PRO_11_15!,
-  HMO_PRO_16_20: process.env.STRIPE_PRICE_ID_HMO_PRO_16_20!,
 } as const;
+
+export const HMO_PRICE_IDS = HMO_PRO_ENABLED
+  ? {
+      HMO_PRO_1_5: process.env.STRIPE_PRICE_ID_HMO_PRO_1_5,
+      HMO_PRO_6_10: process.env.STRIPE_PRICE_ID_HMO_PRO_6_10,
+      HMO_PRO_11_15: process.env.STRIPE_PRICE_ID_HMO_PRO_11_15,
+      HMO_PRO_16_20: process.env.STRIPE_PRICE_ID_HMO_PRO_16_20,
+    }
+  : {};
 
 /**
  * Product metadata mapping
@@ -66,26 +70,30 @@ export const PRODUCT_METADATA: Record<string, { name: string; type: string; cate
     type: 'one_time',
     category: 'tenancy_agreement',
   },
-  [PRICE_IDS.HMO_PRO_1_5]: {
-    name: 'HMO Pro Starter (1-5 properties)',
-    type: 'subscription',
-    category: 'hmo_pro',
-  },
-  [PRICE_IDS.HMO_PRO_6_10]: {
-    name: 'HMO Pro Growth (6-10 properties)',
-    type: 'subscription',
-    category: 'hmo_pro',
-  },
-  [PRICE_IDS.HMO_PRO_11_15]: {
-    name: 'HMO Pro Professional (11-15 properties)',
-    type: 'subscription',
-    category: 'hmo_pro',
-  },
-  [PRICE_IDS.HMO_PRO_16_20]: {
-    name: 'HMO Pro Enterprise (16-20 properties)',
-    type: 'subscription',
-    category: 'hmo_pro',
-  },
+  ...(HMO_PRO_ENABLED
+    ? {
+        [HMO_PRICE_IDS.HMO_PRO_1_5!]: {
+          name: 'HMO Pro Starter (1-5 properties)',
+          type: 'subscription',
+          category: 'hmo_pro',
+        },
+        [HMO_PRICE_IDS.HMO_PRO_6_10!]: {
+          name: 'HMO Pro Growth (6-10 properties)',
+          type: 'subscription',
+          category: 'hmo_pro',
+        },
+        [HMO_PRICE_IDS.HMO_PRO_11_15!]: {
+          name: 'HMO Pro Professional (11-15 properties)',
+          type: 'subscription',
+          category: 'hmo_pro',
+        },
+        [HMO_PRICE_IDS.HMO_PRO_16_20!]: {
+          name: 'HMO Pro Enterprise (16-20 properties)',
+          type: 'subscription',
+          category: 'hmo_pro',
+        },
+      }
+    : {}),
 };
 
 /**
@@ -151,13 +159,21 @@ export async function createSubscriptionCheckoutSession({
   customerEmail?: string;
   trialDays?: number;
 }): Promise<Stripe.Checkout.Session> {
+  if (!HMO_PRO_ENABLED) {
+    throw new Error('HMO Pro subscriptions are disabled for V1');
+  }
+
+  if (!Object.values(HMO_PRICE_IDS).includes(priceId)) {
+    throw new Error('Unknown or disabled HMO Pro price ID');
+  }
+
   const productInfo = PRODUCT_METADATA[priceId];
 
   // Determine subscription tier from price ID
   let tier = 'hmo_pro_1_5';
-  if (priceId === PRICE_IDS.HMO_PRO_6_10) tier = 'hmo_pro_6_10';
-  if (priceId === PRICE_IDS.HMO_PRO_11_15) tier = 'hmo_pro_11_15';
-  if (priceId === PRICE_IDS.HMO_PRO_16_20) tier = 'hmo_pro_16_20';
+  if (priceId === HMO_PRICE_IDS.HMO_PRO_6_10) tier = 'hmo_pro_6_10';
+  if (priceId === HMO_PRICE_IDS.HMO_PRO_11_15) tier = 'hmo_pro_11_15';
+  if (priceId === HMO_PRICE_IDS.HMO_PRO_16_20) tier = 'hmo_pro_16_20';
 
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
@@ -315,10 +331,11 @@ export function formatStripeAmount(amountInCents: number): string {
  * Get tier from price ID
  */
 export function getTierFromPriceId(priceId: string): string | null {
-  if (priceId === PRICE_IDS.HMO_PRO_1_5) return 'hmo_pro_1_5';
-  if (priceId === PRICE_IDS.HMO_PRO_6_10) return 'hmo_pro_6_10';
-  if (priceId === PRICE_IDS.HMO_PRO_11_15) return 'hmo_pro_11_15';
-  if (priceId === PRICE_IDS.HMO_PRO_16_20) return 'hmo_pro_16_20';
+  if (!HMO_PRO_ENABLED) return null;
+  if (priceId === HMO_PRICE_IDS.HMO_PRO_1_5) return 'hmo_pro_1_5';
+  if (priceId === HMO_PRICE_IDS.HMO_PRO_6_10) return 'hmo_pro_6_10';
+  if (priceId === HMO_PRICE_IDS.HMO_PRO_11_15) return 'hmo_pro_11_15';
+  if (priceId === HMO_PRICE_IDS.HMO_PRO_16_20) return 'hmo_pro_16_20';
   return null;
 }
 
@@ -340,11 +357,12 @@ export function getPropertyLimitFromTier(tier: string): number {
  * Check if price ID is a subscription product
  */
 export function isSubscriptionProduct(priceId: string): boolean {
+  if (!HMO_PRO_ENABLED) return false;
   return [
-    PRICE_IDS.HMO_PRO_1_5,
-    PRICE_IDS.HMO_PRO_6_10,
-    PRICE_IDS.HMO_PRO_11_15,
-    PRICE_IDS.HMO_PRO_16_20,
+    HMO_PRICE_IDS.HMO_PRO_1_5,
+    HMO_PRICE_IDS.HMO_PRO_6_10,
+    HMO_PRICE_IDS.HMO_PRO_11_15,
+    HMO_PRICE_IDS.HMO_PRO_16_20,
   ].includes(priceId);
 }
 

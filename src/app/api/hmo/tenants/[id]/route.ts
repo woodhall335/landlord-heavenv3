@@ -9,6 +9,7 @@
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { HMO_PRO_DISABLED_RESPONSE, HMO_PRO_ENABLED } from '@/lib/feature-flags';
 
 /**
  * GET - Fetch specific tenant by ID
@@ -18,6 +19,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!HMO_PRO_ENABLED) {
+      return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
+    }
+
     const user = await requireServerAuth();
     const { id } = await params;
     const supabase = await createServerSupabaseClient();
@@ -99,6 +104,10 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!HMO_PRO_ENABLED) {
+      return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
+    }
+
     const user = await requireServerAuth();
     const { id } = await params;
     const body = await request.json();
@@ -199,6 +208,10 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    if (!HMO_PRO_ENABLED) {
+      return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
+    }
+
     const user = await requireServerAuth();
     const { id } = await params;
     const supabase = await createServerSupabaseClient();

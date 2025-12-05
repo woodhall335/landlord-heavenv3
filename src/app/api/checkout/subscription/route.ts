@@ -9,18 +9,21 @@ import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/se
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import Stripe from 'stripe';
+import { HMO_PRO_DISABLED_RESPONSE, HMO_PRO_ENABLED } from '@/lib/feature-flags';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-11-17.clover',
 });
 
 // HMO Pro subscription tiers (aligned with .env.example naming)
-const HMO_PRO_TIERS = {
-  starter: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_1_5!, amount: 1999, name: 'HMO Pro Starter (1-5 properties)', max_properties: 5 },
-  growth: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_6_10!, amount: 2499, name: 'HMO Pro Growth (6-10 properties)', max_properties: 10 },
-  professional: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_11_15!, amount: 2999, name: 'HMO Pro Professional (11-15 properties)', max_properties: 15 },
-  enterprise: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_16_20!, amount: 3499, name: 'HMO Pro Enterprise (16-20 properties)', max_properties: 20 },
-} as const;
+const HMO_PRO_TIERS = HMO_PRO_ENABLED
+  ? {
+      starter: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_1_5!, amount: 1999, name: 'HMO Pro Starter (1-5 properties)', max_properties: 5 },
+      growth: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_6_10!, amount: 2499, name: 'HMO Pro Growth (6-10 properties)', max_properties: 10 },
+      professional: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_11_15!, amount: 2999, name: 'HMO Pro Professional (11-15 properties)', max_properties: 15 },
+      enterprise: { price_id: process.env.STRIPE_PRICE_ID_HMO_PRO_16_20!, amount: 3499, name: 'HMO Pro Enterprise (16-20 properties)', max_properties: 20 },
+    } as const
+  : null;
 
 // Validation schema
 const createSubscriptionSchema = z.object({
@@ -31,6 +34,10 @@ const createSubscriptionSchema = z.object({
 
 export async function POST(request: Request) {
   try {
+    if (!HMO_PRO_ENABLED) {
+      return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
+    }
+
     const user = await requireServerAuth();
     const body = await request.json();
 
@@ -47,6 +54,10 @@ export async function POST(request: Request) {
     }
 
     const { tier, success_url, cancel_url } = validationResult.data;
+
+    if (!HMO_PRO_TIERS) {
+      return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
+    }
     const supabase = await createServerSupabaseClient();
 
     // Check if user already has active subscription

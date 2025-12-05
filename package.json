@@ -8,7 +8,8 @@
     "start": "next start -H 0.0.0.0 -p 5000",
     "lint": "eslint",
     "test": "vitest run",
-    "test:pdf": "RUN_PDF_TESTS=true vitest run"
+    "test:pdf": "RUN_PDF_TESTS=true vitest run",
+    "law-monitor": "ts-node scripts/law-monitor-run.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",
@@ -50,6 +51,7 @@
     "jsdom": "^26.0.0",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.4",
+    "ts-node": "^10.9.2"
   }
 }
