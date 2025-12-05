@@ -21,7 +21,6 @@ export interface ExtendedWizardQuestion {
   section?: string;
   question: string;
   inputType: string;
-  input_type?: string;
   type?: string;
   required?: boolean;
   helperText?: string;

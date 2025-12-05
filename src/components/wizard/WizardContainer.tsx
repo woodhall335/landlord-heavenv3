@@ -98,7 +98,6 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
   const [currentAnswer, setCurrentAnswer] = useState<any>(null);
   const [isComplete, setIsComplete] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [hasSubmittedCurrentQuestion, setHasSubmittedCurrentQuestion] = useState(false);
   const [askHeavenResult, setAskHeavenResult] = useState<{
     suggested_wording: string;
     missing_information: string[];
@@ -172,16 +171,6 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
       // Add user's answer to messages
       const answerText = formatAnswerForDisplay(answer, inputType);
-
-      if (hasSubmittedCurrentQuestion) {
-        // Already captured a canonical answer for this MQS question; treat this as
-        // conversational follow-up without re-validating against MQS schemas.
-        addMessage('user', answerText);
-        setCurrentAnswer(null);
-        setIsLoading(false);
-        return;
-      }
-
       addMessage('user', answerText);
 
       // Save answer
@@ -221,9 +210,6 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         }
 
         const payload = response ? await response.json() : null;
-
-        // Mark this question as answered only after a successful save
-        setHasSubmittedCurrentQuestion(true);
 
         if (payload?.ask_heaven) {
           setAskHeavenResult(payload.ask_heaven);
@@ -360,11 +346,9 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
           );
           await analyzeCase(currentCaseId);
         } else if (data.next_question) {
-          const nextQuestion = data.next_question;
-          const nextQuestionText = nextQuestion.question_text ?? nextQuestion.question;
           setAskHeavenResult(null);
-          setCurrentQuestion(nextQuestion);
-          addMessage('assistant', nextQuestionText);
+          setCurrentQuestion(data.next_question);
+          addMessage('assistant', data.next_question.question_text);
 
           // Update progress
           const totalQuestions = 10; // Estimate

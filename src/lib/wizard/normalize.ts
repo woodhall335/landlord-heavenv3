@@ -26,7 +26,6 @@ function normalizeField(field: any): WizardField {
   return {
     ...field,
     inputType: field.inputType ?? field.input_type ?? mapInputType(field.type),
-    input_type: field.input_type ?? field.inputType ?? mapInputType(field.type),
     validation,
     dependsOn: field.dependsOn ?? field.depends_on,
   } as WizardField;
@@ -105,7 +104,6 @@ export function normalizeQuestion(
   const normalizedQuestion: ExtendedWizardQuestion = {
     ...rawQuestion,
     inputType: normalizedType === 'address' ? 'group' : normalizedType,
-    input_type: normalizedType === 'address' ? 'group' : normalizedType,
     validation,
     dependsOn: rawQuestion.dependsOn ?? rawQuestion.depends_on,
     fields,
