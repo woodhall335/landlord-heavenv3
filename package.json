@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:pdf": "RUN_PDF_TESTS=true vitest run",
-    "law-monitor": "ts-node scripts/law-monitor-run.ts"
+    "law-monitor": "ts-node --esm scripts/law-monitor-run.ts"
+
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",

@@ -17,6 +17,8 @@
  * Phase 2.5 - Legal Change Framework
  */
 
+import fs from 'fs';
+import path from 'path';
 import {
   fetchLawSource,
   compareSnapshotWithRules,
@@ -25,9 +27,8 @@ import {
   loadPreviousSnapshot,
   type LawSource,
   type LawSnapshot,
-} from '../src/lib/law-monitor';
-import fs from 'fs';
-import path from 'path';
+} from '../src/lib/law-monitor/index.ts';
+
 
 // ============================================================================
 // CONFIGURATION
@@ -35,6 +36,16 @@ import path from 'path';
 
 const SNAPSHOTS_DIR = path.join(process.cwd(), 'data', 'law_snapshots');
 const REPORTS_DIR = path.join(process.cwd(), 'docs', 'law-change-reports');
+
+// Severity → emoji mapping for report suggestions
+const severityEmojiMap = {
+  critical: '🔴',
+  high: '🟠',
+  medium: '🟡',
+  low: '🟢',
+} as const;
+
+type SeverityLevel = keyof typeof severityEmojiMap;
 
 // ============================================================================
 // MAIN SCRIPT
@@ -79,8 +90,13 @@ async function main() {
         console.log('  ⏭️  No changes detected since last fetch');
       }
 
+      // Persist JSON snapshot
       const timestamp = snapshot.fetched_at.substring(0, 19).replace(/:/g, '-');
-      console.log(`  Snapshot saved: ${source.id}-${timestamp}.json`);
+      const snapshotFilename = `${source.id}-${timestamp}.json`;
+      const snapshotPath = path.join(SNAPSHOTS_DIR, snapshotFilename);
+
+      fs.writeFileSync(snapshotPath, JSON.stringify(snapshot, null, 2), 'utf8');
+      console.log(`  Snapshot saved: ${snapshotFilename}`);
 
       // Generate change suggestions
       const suggestions = compareSnapshotWithRules(
@@ -169,23 +185,12 @@ function generateMarkdownReport(
     lines.push('- *No automated suggestions generated*');
   } else {
     for (const suggestion of suggestions) {
-// Define the map with a name + type
-const severityEmojiMap = {
-  critical: '🔴',
-  high: '🟠',
-  medium: '🟡',
-  low: '🟢',
-} as const;
-
-type SeverityLevel = keyof typeof severityEmojiMap;
-
-const severityEmoji =
-  severityEmojiMap[suggestion.severity as SeverityLevel] ?? '⚪';
-
+      const severityEmoji =
+        severityEmojiMap[(suggestion.severity as SeverityLevel) ?? 'low'] ?? '⚪';
 
       lines.push(`### ${severityEmoji} ${suggestion.summary}`);
       lines.push('');
-      lines.push(`- **Severity:** ${suggestion.severity.toUpperCase()}`);
+      lines.push(`- **Severity:** ${String(suggestion.severity).toUpperCase()}`);
       lines.push(`- **Impact Area:** ${suggestion.impact_area}`);
       lines.push(`- **Notes:** ${suggestion.notes}`);
       lines.push('');
