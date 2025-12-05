@@ -116,6 +116,17 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
     scrollToBottom();
   }, [messages]);
 
+  // In conversational mode we treat the first message per MQS question as the
+  // canonical answer. Follow-up chatty messages ("yes that's correct", clarifications)
+  // should not be re-posted to /api/wizard/answer because they often fail strict
+  // validation and produce 400s. Reset the submission marker whenever the question
+  // actually changes.
+  useEffect(() => {
+    setHasSubmittedCurrentQuestion(false);
+    setCurrentAnswer(null);
+    setAskHeavenResult(null);
+  }, [currentQuestion?.id]);
+
   const addMessage = useCallback((role: 'assistant' | 'user', content: string) => {
     const message: Message = {
       id: `msg-${Date.now()}-${Math.random()}`,
@@ -225,6 +236,8 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         }
       } catch (error) {
         console.error('Failed to save answer:', error);
+        setIsLoading(false);
+        return;
       }
 
       // Clear current answer
