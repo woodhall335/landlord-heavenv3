@@ -9,6 +9,7 @@ import { requireServerAuth } from '@/lib/supabase/server-auth';
 import { createClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 import Stripe from 'stripe';
+import { HMO_PRO_DISABLED_RESPONSE, HMO_PRO_ENABLED } from '@/lib/feature-flags';
 
 const UpgradeSchema = z.object({
   newTier: z.enum(['hmo_pro_1_5', 'hmo_pro_6_10', 'hmo_pro_11_15', 'hmo_pro_16_20']),
@@ -17,6 +18,10 @@ const UpgradeSchema = z.object({
 // Upgrade or downgrade subscription tier
 export async function POST(request: NextRequest) {
   try {
+    if (!HMO_PRO_ENABLED) {
+      return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
+    }
+
     const user = await requireServerAuth();
 
     const body = await request.json();

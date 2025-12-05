@@ -19,6 +19,7 @@ function WizardFlowContent() {
   const [caseId, setCaseId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [initialQuestion, setInitialQuestion] = useState<ExtendedWizardQuestion | null>(null);
+  const [startError, setStartError] = useState<string | null>(null);
   const hasStartedRef = useRef(false);
 
   const type = searchParams.get('type') as
@@ -56,6 +57,7 @@ function WizardFlowContent() {
     if (!type || !jurisdiction) return;
 
     setLoading(true);
+    setStartError(null);
 
     try {
       if (editCaseId) {
@@ -104,7 +106,9 @@ function WizardFlowContent() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(`Failed to start wizard: ${response.status}`);
+        const message = data?.error || `Failed to start wizard: ${response.status}`;
+        setStartError(message);
+        throw new Error(message);
       }
 
       const newCaseId = data.case_id ?? data.case?.id;
@@ -166,6 +170,9 @@ function WizardFlowContent() {
           <div className="flex flex-col items-center gap-4">
             <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
             <p className="text-gray-600">Initializing wizard...</p>
+            {startError ? (
+              <p className="text-sm text-red-600 text-center max-w-md">{startError}</p>
+            ) : null}
           </div>
         </div>
       );

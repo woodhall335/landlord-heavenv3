@@ -542,6 +542,245 @@ export interface ConversationUpdate {
 }
 
 // =============================================================================
+// AI USAGE TABLES
+// =============================================================================
+// Source: supabase_schema.MD lines 56-78 (ai_usage, ai_usage_logs)
+
+export interface AiUsageRow {
+  id: string;
+  user_id: string;
+  model: string;
+  operation: string;
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
+  cost_usd: number;
+  case_id: string | null;
+  document_id: string | null;
+  metadata: Json | null;
+  created_at: string | null;
+}
+
+export interface AiUsageInsert {
+  id?: string;
+  user_id: string;
+  model: string;
+  operation: string;
+  prompt_tokens: number;
+  completion_tokens: number;
+  total_tokens: number;
+  cost_usd: number;
+  case_id?: string | null;
+  document_id?: string | null;
+  metadata?: Json | null;
+  created_at?: string | null;
+}
+
+export interface AiUsageLogRow {
+  id: string;
+  model: string;
+  operation_type: string;
+  input_tokens: number | null;
+  output_tokens: number | null;
+  total_tokens: number | null;
+  total_cost_usd: number | null;
+  user_id: string | null;
+  case_id: string | null;
+  document_id: string | null;
+  created_at: string | null;
+}
+
+export interface AiUsageLogInsert {
+  id?: string;
+  model: string;
+  operation_type: string;
+  input_tokens?: number | null;
+  output_tokens?: number | null;
+  total_tokens?: number | null;
+  total_cost_usd?: number | null;
+  user_id?: string | null;
+  case_id?: string | null;
+  document_id?: string | null;
+  created_at?: string | null;
+}
+
+// =============================================================================
+// ORDERS TABLE
+// =============================================================================
+// Source: supabase_schema.MD lines 215-230
+
+export interface OrderRow {
+  id: string;
+  user_id: string;
+  case_id: string | null;
+  product_type: string;
+  product_name: string;
+  amount: number;
+  currency: string | null;
+  total_amount: number;
+  payment_status: string | null;
+  stripe_payment_intent_id: string | null;
+  stripe_charge_id: string | null;
+  paid_at: string | null;
+  fulfillment_status: string | null;
+  fulfilled_at: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface OrderInsert {
+  id?: string;
+  user_id: string;
+  case_id?: string | null;
+  product_type: string;
+  product_name: string;
+  amount: number;
+  currency?: string | null;
+  total_amount: number;
+  payment_status?: string | null;
+  stripe_payment_intent_id?: string | null;
+  stripe_charge_id?: string | null;
+  paid_at?: string | null;
+  fulfillment_status?: string | null;
+  fulfilled_at?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+// =============================================================================
+// HMO TABLES
+// =============================================================================
+// Source: supabase_schema.MD lines 160-214
+
+export interface HmoComplianceItemRow {
+  id: string;
+  property_id: string;
+  user_id: string;
+  item_type: string;
+  item_title: string;
+  description: string | null;
+  due_date: string;
+  completed_date: string | null;
+  status: string | null;
+  reminder_sent: boolean | null;
+  reminder_sent_at: string | null;
+  certificate_url: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface HmoComplianceItemInsert {
+  id?: string;
+  property_id: string;
+  user_id: string;
+  item_type: string;
+  item_title: string;
+  description?: string | null;
+  due_date: string;
+  completed_date?: string | null;
+  status?: string | null;
+  reminder_sent?: boolean | null;
+  reminder_sent_at?: string | null;
+  certificate_url?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface HmoPropertyRow {
+  id: string;
+  user_id: string;
+  property_name: string;
+  address_line1: string;
+  address_line2: string | null;
+  city: string;
+  postcode: string;
+  council_code: string;
+  council_name: string | null;
+  license_type: string | null;
+  license_number: string | null;
+  license_expiry_date: string | null;
+  number_of_bedrooms: number | null;
+  number_of_tenants: number | null;
+  max_occupancy: number | null;
+  number_of_bathrooms: number | null;
+  number_of_kitchens: number | null;
+  has_fire_alarm: boolean | null;
+  has_co_alarm: boolean | null;
+  has_emergency_lighting: boolean | null;
+  has_fire_doors: boolean | null;
+  has_fire_blanket: boolean | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface HmoPropertyInsert {
+  id?: string;
+  user_id: string;
+  property_name: string;
+  address_line1: string;
+  address_line2?: string | null;
+  city: string;
+  postcode: string;
+  council_code: string;
+  council_name?: string | null;
+  license_type?: string | null;
+  license_number?: string | null;
+  license_expiry_date?: string | null;
+  number_of_bedrooms?: number | null;
+  number_of_tenants?: number | null;
+  max_occupancy?: number | null;
+  number_of_bathrooms?: number | null;
+  number_of_kitchens?: number | null;
+  has_fire_alarm?: boolean | null;
+  has_co_alarm?: boolean | null;
+  has_emergency_lighting?: boolean | null;
+  has_fire_doors?: boolean | null;
+  has_fire_blanket?: boolean | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+export interface HmoTenantRow {
+  id: string;
+  property_id: string;
+  user_id: string;
+  full_name: string;
+  email: string | null;
+  phone: string | null;
+  room_number: string | null;
+  move_in_date: string;
+  tenancy_end_date: string | null;
+  move_out_date: string | null;
+  monthly_rent: number;
+  deposit_amount: number | null;
+  deposit_protected: boolean | null;
+  deposit_scheme: string | null;
+  tenancy_status: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export interface HmoTenantInsert {
+  id?: string;
+  property_id: string;
+  user_id: string;
+  full_name: string;
+  email?: string | null;
+  phone?: string | null;
+  room_number?: string | null;
+  move_in_date: string;
+  tenancy_end_date?: string | null;
+  move_out_date?: string | null;
+  monthly_rent: number;
+  deposit_amount?: number | null;
+  deposit_protected?: boolean | null;
+  deposit_scheme?: string | null;
+  tenancy_status?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
+}
+
+// =============================================================================
 // HELPER TYPES
 // =============================================================================
 
@@ -552,7 +791,13 @@ export type DatabaseRow =
   | CaseRow
   | CaseFactsRow
   | DocumentRow
-  | ConversationRow;
+  | ConversationRow
+  | AiUsageRow
+  | AiUsageLogRow
+  | OrderRow
+  | HmoComplianceItemRow
+  | HmoPropertyRow
+  | HmoTenantRow;
 
 /**
  * Type guard for checking if a value is a CaseRow

@@ -7,10 +7,15 @@
 import { NextResponse } from 'next/server';
 import { requireServerAuth } from '@/lib/supabase/server-auth';
 import { createClient } from '@/lib/supabase/server';
+import { HMO_PRO_DISABLED_RESPONSE, HMO_PRO_ENABLED } from '@/lib/feature-flags';
 
 // Get current subscription status
 export async function GET() {
   try {
+    if (!HMO_PRO_ENABLED) {
+      return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
+    }
+
     const user = await requireServerAuth();
 
     const supabase = await createClient();

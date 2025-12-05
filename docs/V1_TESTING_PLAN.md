@@ -15,6 +15,8 @@ The landlord-heavenv3 V1 codebase has **comprehensive automated test coverage** 
 - `npm test` - Run all tests
 - `npm test:pdf` - Run tests including PDF generation (requires RUN_PDF_TESTS=true)
 
+**Manual AI Smoke:** See [`docs/manual-openai-smoke-test.md`](./manual-openai-smoke-test.md) for the live OpenAI checklist (dev-only, requires `OPENAI_API_KEY`).
+
 ---
 
 ## Test Coverage Matrix

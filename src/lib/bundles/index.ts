@@ -38,7 +38,21 @@ export async function generateCourtBundle(
 ): Promise<BundleResult> {
   try {
     // Validate jurisdiction
-    const jurisdiction = caseFacts.meta.jurisdiction || 'england-wales';
+    const jurisdiction = caseFacts.meta.jurisdiction;
+    if (!jurisdiction) {
+      return {
+        success: false,
+        error: 'Jurisdiction is required for bundle generation. England & Wales only for court bundles.',
+      };
+    }
+
+    if (jurisdiction === 'northern-ireland') {
+      return {
+        success: false,
+        error: 'Northern Ireland bundles are out of scope for V1. Tenancy agreements only are supported in NI.',
+      };
+    }
+
     if (jurisdiction !== 'england-wales') {
       return {
         success: false,
@@ -110,7 +124,21 @@ export async function generateTribunalBundle(
 ): Promise<BundleResult> {
   try {
     // Validate jurisdiction
-    const jurisdiction = caseFacts.meta.jurisdiction || 'scotland';
+    const jurisdiction = caseFacts.meta.jurisdiction;
+    if (!jurisdiction) {
+      return {
+        success: false,
+        error: 'Jurisdiction is required for bundle generation. Scotland only for tribunal bundles.',
+      };
+    }
+
+    if (jurisdiction === 'northern-ireland') {
+      return {
+        success: false,
+        error: 'Northern Ireland bundles are out of scope for V1. Tenancy agreements only are supported in NI.',
+      };
+    }
+
     if (jurisdiction !== 'scotland') {
       return {
         success: false,

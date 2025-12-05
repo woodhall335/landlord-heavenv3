@@ -473,6 +473,24 @@ export async function POST(request: Request) {
     // Type assertion: we know data exists after the null check
     const caseRow = data as { id: string; jurisdiction: string; case_type: string; collected_facts: any };
 
+    // Northern Ireland gating: eviction and money claim are out-of-scope for V1 (roadmap: Q2 2026)
+    if (caseRow.jurisdiction === 'northern-ireland' && caseRow.case_type !== 'tenancy_agreement') {
+      return NextResponse.json(
+        {
+          error:
+            'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.',
+          message:
+            'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
+          supported: {
+            'northern-ireland': ['tenancy_agreement'],
+            'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+          },
+        },
+        { status: 400 },
+      );
+    }
+
     const collectedFacts = (caseRow.collected_facts as Record<string, any>) || {};
     const product = deriveProduct(caseRow.case_type, collectedFacts);
     const mqs = loadMQS(product, caseRow.jurisdiction);

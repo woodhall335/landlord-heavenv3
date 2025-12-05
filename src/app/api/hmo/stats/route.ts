@@ -8,6 +8,7 @@
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import type { Database } from '@/lib/supabase/types';
+import { HMO_PRO_DISABLED_RESPONSE, HMO_PRO_ENABLED } from '@/lib/feature-flags';
 
 type HMOProperty = Database['public']['Tables']['hmo_properties']['Row'];
 type HMOTenant = Database['public']['Tables']['hmo_tenants']['Row'];
@@ -15,6 +16,10 @@ type User = Database['public']['Tables']['users']['Row'];
 
 export async function GET() {
   try {
+    if (!HMO_PRO_ENABLED) {
+      return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
+    }
+
     const user = await requireServerAuth();
     const supabase = await createServerSupabaseClient();
 

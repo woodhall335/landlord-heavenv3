@@ -8,12 +8,17 @@
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
+import { HMO_PRO_DISABLED_RESPONSE, HMO_PRO_ENABLED } from '@/lib/feature-flags';
 
 /**
  * GET - List all tenants for authenticated user
  */
 export async function GET(request: Request) {
   try {
+    if (!HMO_PRO_ENABLED) {
+      return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
+    }
+
     const user = await requireServerAuth();
     const { searchParams } = new URL(request.url);
     const supabase = await createServerSupabaseClient();
@@ -118,6 +123,10 @@ const createTenantSchema = z.object({
  */
 export async function POST(request: Request) {
   try {
+    if (!HMO_PRO_ENABLED) {
+      return NextResponse.json(HMO_PRO_DISABLED_RESPONSE, { status: 403 });
+    }
+
     const user = await requireServerAuth();
     const body = await request.json();
     const supabase = await createServerSupabaseClient();

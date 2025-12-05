@@ -12,6 +12,10 @@
  */
 
 import crypto from 'crypto';
+import fs from 'fs';
+import path from 'path';
+
+const SNAPSHOT_DIR = path.join(process.cwd(), 'data', 'law_snapshots');
 
 // ============================================================================
 // TYPES
@@ -121,40 +125,36 @@ export const OFFICIAL_LAW_SOURCES: LawSource[] = [
  * @returns Promise<LawSnapshot>
  */
 export async function fetchLawSource(source: LawSource): Promise<LawSnapshot> {
-  // STUB: Real implementation would use fetch() or axios
-  // For now, throw to make it clear this is not implemented
-  throw new Error(
-    `fetchLawSource not implemented – wiring for future use only.\n` +
-    `To implement: fetch ${source.url}, clean HTML, extract text, and return snapshot.\n` +
-    `This is intentionally left as a stub to prevent accidental auto-scraping without proper review.`
-  );
-
-  // Example implementation (commented out):
-  /*
   const response = await fetch(source.url, {
     headers: {
-      'User-Agent': 'Landlord Heaven Law Monitor (compliance@landlordheaven.co.uk)',
+      'User-Agent':
+        'Landlord Heaven Law Monitor (compliance@landlordheaven.co.uk)',
+      Accept: 'text/html,application/xhtml+xml',
     },
   });
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch ${source.url}: ${response.statusText}`);
+    throw new Error(`Failed to fetch ${source.url}: ${response.status} ${response.statusText}`);
   }
 
   const html = await response.text();
-  const cleaned_text = cleanHTML(html); // Extract meaningful text from HTML
+  const cleanedText = cleanHTML(html);
 
   const snapshot: LawSnapshot = {
     source_id: source.id,
     fetched_at: new Date().toISOString(),
     jurisdiction: source.jurisdiction,
     category: source.category,
-    raw_text: cleaned_text,
-    hash: computeContentHash(cleaned_text),
+    raw_text: cleanedText,
+    hash: computeContentHash(cleanedText),
   };
 
+  ensureSnapshotDir();
+  const timestamp = snapshot.fetched_at.substring(0, 19).replace(/:/g, '-');
+  const filename = `${source.id}-${timestamp}.json`;
+  fs.writeFileSync(path.join(SNAPSHOT_DIR, filename), JSON.stringify(snapshot, null, 2), 'utf8');
+
   return snapshot;
-  */
 }
 
 /**
@@ -162,6 +162,26 @@ export async function fetchLawSource(source: LawSource): Promise<LawSnapshot> {
  */
 export function computeContentHash(content: string): string {
   return crypto.createHash('sha256').update(content, 'utf8').digest('hex');
+}
+
+function ensureSnapshotDir() {
+  if (!fs.existsSync(SNAPSHOT_DIR)) {
+    fs.mkdirSync(SNAPSHOT_DIR, { recursive: true });
+  }
+}
+
+function cleanHTML(html: string): string {
+  const withoutScripts = html.replace(/<script[\s\S]*?<\/script>/gi, '');
+  const withoutStyles = withoutScripts.replace(/<style[\s\S]*?<\/style>/gi, '');
+  const withBreaks = withoutStyles.replace(/<(p|br|li|div|section|h[1-6])[^>]*>/gi, '\n');
+  const strippedTags = withBreaks.replace(/<[^>]+>/g, ' ');
+  return strippedTags
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/\r?\n+/g, '\n')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .join('\n');
 }
 
 // ============================================================================
@@ -184,18 +204,62 @@ export function computeContentHash(content: string): string {
  */
 export function compareSnapshotWithRules(
   snapshot: LawSnapshot,
-  jurisdiction: string
+  jurisdiction: string,
+  previousSnapshot: LawSnapshot | null = null
 ): LawChangeSuggestion[] {
   const suggestions: LawChangeSuggestion[] = [];
 
-  // TODO: Load current decision_engine.yaml for this jurisdiction
-  // TODO: Parse existing rules and metadata
-  // TODO: Compare with snapshot content using heuristics
+  const normalizedCurrent = snapshot.raw_text.toLowerCase();
+  const normalizedPrevious = previousSnapshot?.raw_text.toLowerCase() ?? '';
 
-  // Example heuristic checks (to be implemented):
+  // Heuristic 1: detect any hash change compared to previous snapshot
+  if (previousSnapshot && snapshot.hash !== previousSnapshot.hash) {
+    suggestions.push({
+      source_id: snapshot.source_id,
+      jurisdiction: snapshot.jurisdiction,
+      category: snapshot.category,
+      summary: 'Content hash changed since last snapshot',
+      impact_area: 'docs',
+      severity: 'medium',
+      notes: 'Review source content and update decision engine/templates if necessary.',
+    });
+  }
 
-  // 1. Check for new legal terminology
-  if (snapshot.raw_text.toLowerCase().includes('new requirement')) {
+  // Heuristic 2: detect added/removed lines
+  if (previousSnapshot) {
+    const currentLines = new Set(normalizedCurrent.split(/\n+/).map((l) => l.trim()).filter(Boolean));
+    const previousLines = new Set(normalizedPrevious.split(/\n+/).map((l) => l.trim()).filter(Boolean));
+
+    const additions = Array.from(currentLines).filter((line) => !previousLines.has(line));
+    const removals = Array.from(previousLines).filter((line) => !currentLines.has(line));
+
+    if (additions.length > 0) {
+      suggestions.push({
+        source_id: snapshot.source_id,
+        jurisdiction: snapshot.jurisdiction,
+        category: snapshot.category,
+        summary: 'New content detected in source guidance',
+        impact_area: 'decision_engine',
+        severity: 'medium',
+        notes: `Sample additions: ${additions.slice(0, 3).join(' | ')}`,
+      });
+    }
+
+    if (removals.length > 0) {
+      suggestions.push({
+        source_id: snapshot.source_id,
+        jurisdiction: snapshot.jurisdiction,
+        category: snapshot.category,
+        summary: 'Content removed since previous snapshot',
+        impact_area: 'docs',
+        severity: 'low',
+        notes: `Sample removals: ${removals.slice(0, 3).join(' | ')}`,
+      });
+    }
+  }
+
+  // Heuristic 3: watch for new legal requirement phrasing
+  if (normalizedCurrent.includes('new requirement')) {
     suggestions.push({
       source_id: snapshot.source_id,
       jurisdiction: snapshot.jurisdiction,
@@ -207,7 +271,7 @@ export function compareSnapshotWithRules(
     });
   }
 
-  // 2. Check for changes to notice periods
+  // Heuristic 4: notice periods
   if (snapshot.raw_text.match(/\d+\s+(days?|weeks?|months?)\s+notice/i)) {
     suggestions.push({
       source_id: snapshot.source_id,
@@ -220,8 +284,8 @@ export function compareSnapshotWithRules(
     });
   }
 
-  // 3. Check for form changes
-  if (snapshot.raw_text.toLowerCase().includes('form') && snapshot.category === 'procedure') {
+  // Heuristic 5: forms/procedure references
+  if (normalizedCurrent.includes('form') && snapshot.category === 'procedure') {
     suggestions.push({
       source_id: snapshot.source_id,
       jurisdiction: snapshot.jurisdiction,
@@ -233,8 +297,8 @@ export function compareSnapshotWithRules(
     });
   }
 
-  // 4. Scotland-specific: Pre-action requirements
-  if (jurisdiction === 'scotland' && snapshot.raw_text.toLowerCase().includes('pre-action')) {
+  // Heuristic 6: Scotland pre-action requirements
+  if (jurisdiction === 'scotland' && normalizedCurrent.includes('pre-action')) {
     suggestions.push({
       source_id: snapshot.source_id,
       jurisdiction: snapshot.jurisdiction,
@@ -246,10 +310,9 @@ export function compareSnapshotWithRules(
     });
   }
 
-  // 5. England & Wales: Deposit protection
+  // Heuristic 7: Deposit protection / fees
   if (jurisdiction === 'england-wales' && snapshot.category === 'compliance') {
-    if (snapshot.raw_text.toLowerCase().includes('deposit') ||
-        snapshot.raw_text.toLowerCase().includes('tenancy fees')) {
+    if (normalizedCurrent.includes('deposit') || normalizedCurrent.includes('tenancy fees')) {
       suggestions.push({
         source_id: snapshot.source_id,
         jurisdiction: snapshot.jurisdiction,
@@ -262,7 +325,6 @@ export function compareSnapshotWithRules(
     }
   }
 
-  // If no heuristic suggestions triggered, add a generic note
   if (suggestions.length === 0) {
     suggestions.push({
       source_id: snapshot.source_id,
@@ -281,14 +343,27 @@ export function compareSnapshotWithRules(
 /**
  * Load previous snapshot for comparison (if it exists).
  * This helps detect actual changes rather than just analyzing content.
- *
- * TODO: Implement snapshot storage and retrieval
- * TODO: Add sourceId parameter when implementing this function
  */
-export function loadPreviousSnapshot(): LawSnapshot | null {
-  // TODO: Load from data/law_snapshots/ directory
-  // TODO: Parse JSON and return most recent snapshot for this source
-  return null;
+export function loadPreviousSnapshot(sourceId: string): LawSnapshot | null {
+  if (!fs.existsSync(SNAPSHOT_DIR)) {
+    return null;
+  }
+
+  const files = fs
+    .readdirSync(SNAPSHOT_DIR)
+    .filter((file) => file.startsWith(`${sourceId}-`) && file.endsWith('.json'))
+    .sort();
+
+  if (files.length === 0) return null;
+
+  const latestFile = files[files.length - 1];
+  const content = fs.readFileSync(path.join(SNAPSHOT_DIR, latestFile), 'utf8');
+  try {
+    return JSON.parse(content) as LawSnapshot;
+  } catch (error) {
+    console.error('Failed to parse previous snapshot', error);
+    return null;
+  }
 }
 
 /**
