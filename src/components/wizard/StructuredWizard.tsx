@@ -45,6 +45,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
   const [askHeavenSuggestion, setAskHeavenSuggestion] = useState<string | null>(null);
+  const [askHeavenResult, setAskHeavenResult] = useState<{
+    suggested_wording: string;
+    missing_information: string[];
+    evidence_suggestions: string[];
+    consistency_flags?: string[];
+  } | null>(null);
   const [questionHistory, setQuestionHistory] = useState<
     Array<{ question: ExtendedWizardQuestion; answer: any }>
   >([]);
@@ -182,6 +188,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setLoading(true);
     setError(null);
     setAskHeavenSuggestion(null);
+    setAskHeavenResult(null);
 
     try {
       const response = await fetch('/api/wizard/next-question', {
@@ -520,6 +527,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       // Check for Ask Heaven suggestions
       if (data.suggested_wording) {
         setAskHeavenSuggestion(data.suggested_wording);
+      }
+
+      if (data.ask_heaven) {
+        setAskHeavenResult(data.ask_heaven);
+      } else if (data.enhanced_answer) {
+        setAskHeavenResult({
+          suggested_wording: data.enhanced_answer.suggested,
+          missing_information: data.enhanced_answer.missing_information || [],
+          evidence_suggestions: data.enhanced_answer.evidence_suggestions || [],
+          consistency_flags: data.enhanced_answer.consistency_flags || [],
+        });
       }
 
       // Update progress
@@ -1058,6 +1076,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 jurisdiction={jurisdiction || 'england-wales'}
                 caseId={caseId}
                 onAccept={(improvedText) => setCurrentAnswer(improvedText)}
+                initialResult={askHeavenResult}
               />
             )}
 

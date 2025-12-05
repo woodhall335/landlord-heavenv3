@@ -639,6 +639,14 @@ export async function POST(request: Request) {
       case_id,
       question_id,
       answer_saved: true,
+      ask_heaven: enhanced
+        ? {
+            suggested_wording: enhanced.suggested_wording,
+            missing_information: enhanced.missing_information,
+            evidence_suggestions: enhanced.evidence_suggestions,
+            consistency_flags: enhanced.consistency_flags,
+          }
+        : null,
       suggested_wording: enhanced?.suggested_wording ?? null,
       missing_information: enhanced?.missing_information ?? [],
       evidence_suggestions: enhanced?.evidence_suggestions ?? [],

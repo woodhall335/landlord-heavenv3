@@ -3,6 +3,7 @@ import path from 'path';
 import yaml from 'js-yaml';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import type { ExtendedWizardQuestion } from './types';
+import { normalizeQuestions } from './normalize';
 
 export type ProductType = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 
@@ -25,7 +26,10 @@ export function loadMQS(product: ProductType, jurisdiction: string): MasterQuest
   const fileContents = fs.readFileSync(basePath, 'utf8');
   const parsed = yaml.load(fileContents) as MasterQuestionSet;
 
-  return parsed;
+  return {
+    ...parsed,
+    questions: normalizeQuestions(parsed.questions || [], jurisdiction),
+  } as MasterQuestionSet;
 }
 
 function getValueAtPath(facts: Record<string, any>, path: string): unknown {
