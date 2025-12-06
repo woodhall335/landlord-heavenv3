@@ -11,12 +11,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input, Card } from '@/components/ui';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { GuidanceTips } from '@/components/wizard/GuidanceTips';
-import { AskHeavenPanel } from '@/app/wizard/components/AskHeavenPanel';
+import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 
 interface StructuredWizardProps {
   caseId: string;
   caseType: 'eviction' | 'money_claim' | 'tenancy_agreement';
   jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland' | null;
+  product: 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
   initialQuestion?: ExtendedWizardQuestion | null;
   onComplete: (caseId: string) => void;
 }
@@ -33,6 +34,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   caseId,
   caseType,
   jurisdiction,
+  product,
   initialQuestion,
   onComplete,
 }) => {
@@ -247,7 +249,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     };
 
     if (currentQuestion && caseId) {
-      fetchCaseFacts();
+      void fetchCaseFacts();
     }
   }, [currentQuestion, caseId]);
 
@@ -311,7 +313,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
   // EPC rating validation (England & Wales tenancies)
   useEffect(() => {
-    if (currentQuestion?.id === 'safety_compliance' && currentAnswer?.epc_rating && jurisdiction === 'england-wales') {
+    if (
+      currentQuestion?.id === 'safety_compliance' &&
+      currentAnswer?.epc_rating &&
+      jurisdiction === 'england-wales'
+    ) {
       const epcRating = currentAnswer.epc_rating;
       if (epcRating === 'F' || epcRating === 'G') {
         setEpcWarning(
@@ -327,17 +333,24 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
   // AST suitability validation (England & Wales tenancies)
   useEffect(() => {
-    if (currentQuestion?.id === 'ast_suitability' && currentAnswer && caseType === 'tenancy_agreement' && jurisdiction === 'england-wales') {
+    if (
+      currentQuestion?.id === 'ast_suitability' &&
+      currentAnswer &&
+      caseType === 'tenancy_agreement' &&
+      jurisdiction === 'england-wales'
+    ) {
       const warnings: string[] = [];
 
       if (currentAnswer.tenant_is_individual === false) {
         warnings.push('Tenant must be an individual (not a company) for an AST');
       }
       if (currentAnswer.main_home === false) {
-        warnings.push('Property must be the tenant\'s main home for an AST');
+        warnings.push("Property must be the tenant's main home for an AST");
       }
       if (currentAnswer.landlord_lives_at_property === true) {
-        warnings.push('If landlord lives at property, this is likely a lodger/licence arrangement, not an AST');
+        warnings.push(
+          'If landlord lives at property, this is likely a lodger/licence arrangement, not an AST',
+        );
       }
       if (currentAnswer.holiday_or_licence === true) {
         warnings.push('Holiday lets and licence arrangements are not covered by AST regulations');
@@ -345,7 +358,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
       if (warnings.length > 0) {
         setAstSuitabilityWarning(
-          `⚠️ AST SUITABILITY WARNING: ${warnings.join('. ')}. You may need a different type of agreement.`,
+          `⚠️ AST SUITABILITY WARNING: ${warnings.join(
+            '. ',
+          )}. You may need a different type of agreement.`,
         );
       } else {
         setAstSuitabilityWarning(null);
@@ -367,7 +382,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         let endDate = new Date(start);
 
         // Parse term length (e.g., "12 months", "6 months")
-        const months = parseInt(termLength.match(/\d+/)?.[0] || '0');
+        const months = parseInt(termLength.match(/\d+/)?.[0] || '0', 10);
 
         if (months > 0) {
           endDate.setMonth(endDate.getMonth() + months);
@@ -419,7 +434,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         // Validate number range
         if ((field.inputType === 'number' || field.inputType === 'currency') && fieldValue) {
           const num = parseFloat(fieldValue);
-          if (isNaN(num)) {
+          if (Number.isNaN(num)) {
             setError(`${field.label ?? 'This field'} must be a valid number`);
             return false;
           }
@@ -452,7 +467,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       currentAnswer
     ) {
       const num = parseFloat(currentAnswer);
-      if (isNaN(num)) {
+      if (Number.isNaN(num)) {
         setError('Please enter a valid number');
         return false;
       }
@@ -508,7 +523,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           case_id: caseId,
-          question_id: currentQuestion!.id,
+          question_id: currentQuestion.id,
           answer: currentAnswer,
         }),
       });
@@ -527,7 +542,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         return;
       }
 
-      // Check for Ask Heaven suggestions
+      // Check for Ask Heaven suggestions (backend-driven inline hints)
       if (data.suggested_wording) {
         setAskHeavenSuggestion(data.suggested_wording);
       }
@@ -633,7 +648,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           </div>
         );
 
-      case 'multi_select':
+      case 'multi_select': {
         const selectedValues = Array.isArray(value) ? value : [];
         return (
           <div className="space-y-2">
@@ -656,6 +671,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             ))}
           </div>
         );
+      }
 
       case 'currency':
         return (
@@ -1073,16 +1089,19 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
             <div className="mb-6">{renderInput()}</div>
 
-            {/* Ask Heaven Panel for textarea questions */}
+            {/* Ask Heaven Panel for free-text answers */}
             {currentQuestion.inputType === 'textarea' && (
-              <AskHeavenPanel
-                questionId={currentQuestion.id}
-                rawAnswer={typeof currentAnswer === 'string' ? currentAnswer : ''}
-                jurisdiction={jurisdiction || 'england-wales'}
-                caseId={caseId}
-                onAccept={(improvedText) => setCurrentAnswer(improvedText)}
-                initialResult={askHeavenResult}
-              />
+              <div className="mb-6">
+                <AskHeavenPanel
+                  caseId={caseId}
+                  caseType={caseType}
+                  jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
+                  product={product}
+                  currentQuestionId={currentQuestion.id}
+                  currentQuestionText={currentQuestion.question}
+                  currentAnswer={typeof currentAnswer === 'string' ? currentAnswer : null}
+                />
+              </div>
             )}
 
             {/* Contextual guidance helper – tenancy agreements */}
@@ -1094,13 +1113,58 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               />
             )}
 
-            {/* Ask Heaven Suggestion */}
+            {/* Ask Heaven Suggestion (backend-driven) */}
             {askHeavenSuggestion && (
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                 <div className="flex items-start gap-2">
                   <div className="text-blue-600 text-sm font-semibold">💡 Suggestion:</div>
                   <p className="text-sm text-blue-800 flex-1">{askHeavenSuggestion}</p>
                 </div>
+              </div>
+            )}
+
+            {/* Rich Ask Heaven breakdown from backend */}
+            {askHeavenResult && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <p className="text-xs font-semibold text-blue-900 mb-1">
+                  Ask Heaven checks (not legal advice):
+                </p>
+                {askHeavenResult.suggested_wording && (
+                  <p className="text-sm text-blue-800 whitespace-pre-wrap mb-2">
+                    {askHeavenResult.suggested_wording}
+                  </p>
+                )}
+                {askHeavenResult.missing_information?.length > 0 && (
+                  <div className="mb-2">
+                    <p className="text-xs font-semibold text-yellow-800">Missing information</p>
+                    <ul className="list-disc list-inside text-xs text-yellow-800">
+                      {askHeavenResult.missing_information.map((item, idx) => (
+                        <li key={`missing-${idx}`}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {askHeavenResult.evidence_suggestions?.length > 0 && (
+                  <div className="mb-1">
+                    <p className="text-xs font-semibold text-green-800">Evidence to gather</p>
+                    <ul className="list-disc list-inside text-xs text-green-800">
+                      {askHeavenResult.evidence_suggestions.map((item, idx) => (
+                        <li key={`evidence-${idx}`}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {Array.isArray(askHeavenResult.consistency_flags) &&
+                  askHeavenResult.consistency_flags.length > 0 && (
+                    <div className="mt-1">
+                      <p className="text-xs font-semibold text-red-800">Consistency issues</p>
+                      <ul className="list-disc list-inside text-xs text-red-800">
+                        {askHeavenResult.consistency_flags.map((item, idx) => (
+                          <li key={`flag-${idx}`}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
               </div>
             )}
 
@@ -1323,6 +1387,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 <p>
                   <span className="font-medium">Jurisdiction:</span> {jurisdictionLabel}
                 </p>
+
                 <p>
                   <span className="font-medium">Tenancy type:</span>{' '}
                   {tenancyTypeLabel}

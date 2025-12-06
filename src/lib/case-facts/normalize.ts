@@ -59,8 +59,9 @@ function setNestedValue(target: Record<string, any>, path: string, value: any) {
 
     if (numericIndex !== null) {
       if (!Array.isArray(current)) {
-        // Ensure current level is array when numeric index encountered
-        current = [];
+        // We can't reassign the parent reference safely here, so if the
+        // structure is wrong we just bail out rather than corrupt it.
+        return;
       }
       if (!current[numericIndex]) current[numericIndex] = nextIsIndex ? [] : {};
       if (isLast) {
@@ -218,11 +219,13 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
     .sort((a, b) => a - b)
     .forEach((index) => {
       tenants.push({
-        name: getWizardValue(wizard, `tenants.${index}.full_name`) ||
-              getWizardValue(wizard, `tenants.${index}.name`),
+        name:
+          getWizardValue(wizard, `tenants.${index}.full_name`) ||
+          getWizardValue(wizard, `tenants.${index}.name`),
         email: getWizardValue(wizard, `tenants.${index}.email`),
-        phone: getWizardValue(wizard, `tenants.${index}.phone`) ||
-               getWizardValue(wizard, `tenants.${index}.phone_number`),
+        phone:
+          getWizardValue(wizard, `tenants.${index}.phone`) ||
+          getWizardValue(wizard, `tenants.${index}.phone_number`),
         address_line1: getWizardValue(wizard, `tenants.${index}.address_line1`),
         address_line2: getWizardValue(wizard, `tenants.${index}.address_line2`),
         city: getWizardValue(wizard, `tenants.${index}.city`),
@@ -232,6 +235,7 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
 
   return tenants;
 }
+
 
 // -----------------------------------------------------------------------------
 // CASE HEALTH - compute contradictions, missing evidence, compliance warnings
@@ -320,20 +324,37 @@ function computeCaseHealth(base: CaseFacts): CaseFacts['case_health'] {
     base.evidence.other_evidence_uploaded;
 
   if (!hasAnyEvidenceFlag) {
-    compliance_warnings.push('No supporting evidence flagged (tenancy agreement, statements, or other evidence).');
+    compliance_warnings.push(
+      'No supporting evidence flagged (tenancy agreement, statements, or other evidence).'
+    );
   }
 
   // Contradictions (simple heuristics)
-  if (base.issues.rent_arrears.has_arrears === false && (base.issues.rent_arrears.total_arrears ?? 0) > 0) {
-    contradictions.push('Marked as having no rent arrears but a positive arrears total was provided.');
+  if (
+    base.issues.rent_arrears.has_arrears === false &&
+    (base.issues.rent_arrears.total_arrears ?? 0) > 0
+  ) {
+    contradictions.push(
+      'Marked as having no rent arrears but a positive arrears total was provided.'
+    );
   }
 
-  if (base.money_claim.tenant_responded === true && !hasString(base.money_claim.tenant_response_details)) {
-    contradictions.push('Tenant is marked as having responded, but no response details were provided.');
+  if (
+    base.money_claim.tenant_responded === true &&
+    !hasString(base.money_claim.tenant_response_details)
+  ) {
+    contradictions.push(
+      'Tenant is marked as having responded, but no response details were provided.'
+    );
   }
 
-  if ((base.issues.rent_arrears.total_arrears ?? 0) === 0 && base.money_claim.basis_of_claim === 'rent_arrears') {
-    contradictions.push('Basis of claim is rent arrears but total arrears is recorded as £0.');
+  if (
+    (base.issues.rent_arrears.total_arrears ?? 0) === 0 &&
+    base.money_claim.basis_of_claim === 'rent_arrears'
+  ) {
+    contradictions.push(
+      'Basis of claim is rent arrears but total arrears is recorded as £0.'
+    );
   }
 
   // Risk level heuristic
@@ -356,9 +377,6 @@ function computeCaseHealth(base: CaseFacts): CaseFacts['case_health'] {
 /**
  * Converts flat WizardFacts (DB storage) to nested CaseFacts (domain model).
  *
- * This mapping focuses on the AST flow initially. Additional mappings can be
- * added as needed for other products and jurisdictions.
- *
  * @param wizard - Flat facts from case_facts.facts column
  * @returns Nested domain model for generators/analysis
  */
@@ -377,12 +395,20 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   });
 
   // =============================================================================
-  // META - Product and tier information
+  // META - Product, tier, jurisdiction, case id
   // =============================================================================
   base.meta = {
     product: wizard.__meta?.product ?? (wizard as any).product ?? null,
     original_product: wizard.__meta?.original_product ?? (wizard as any).product ?? null,
     product_tier: wizard.__meta?.product_tier ?? (wizard as any).product_tier ?? null,
+    jurisdiction:
+      wizard.__meta?.jurisdiction ??
+      (wizard as any).jurisdiction ??
+      null,
+    case_id:
+      wizard.__meta?.case_id ??
+      (wizard as any).case_id ??
+      null,
   };
 
   // =============================================================================
@@ -411,20 +437,41 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'property.postcode',
     'property_address_postcode',
   ]);
-  base.property.country ??= (getFirstValue(wizard, [
+  base.property.country ??= getFirstValue(wizard, [
     'case_facts.property.country',
     'property_country',
     'jurisdiction',
-  ]) as any);
-  const propertyIsHmo = getFirstValue(wizard, ['case_facts.property.is_hmo', 'property_is_hmo', 'is_hmo', 'property.is_hmo']);
+  ]) as any;
+  const propertyIsHmo = getFirstValue(wizard, [
+    'case_facts.property.is_hmo',
+    'property_is_hmo',
+    'is_hmo',
+    'property.is_hmo',
+  ]);
   if (propertyIsHmo !== null) {
     base.property.is_hmo = coerceBoolean(propertyIsHmo);
+  }
+
+  // Keep nested address object in sync for callers that use property.address.*
+  if (!base.property.address) {
+    base.property.address = {
+      line1: base.property.address_line1,
+      line2: base.property.address_line2,
+      city: base.property.city,
+      postcode: base.property.postcode,
+    };
+  } else {
+    base.property.address.line1 ??= base.property.address_line1;
+    base.property.address.line2 ??= base.property.address_line2;
+    base.property.address.city ??= base.property.city;
+    base.property.address.postcode ??= base.property.postcode;
   }
 
   // =============================================================================
   // TENANCY - Dates, rent, deposit
   // =============================================================================
-  base.tenancy.tenancy_type = (getWizardValue(wizard, 'tenancy_type') as any) || base.tenancy.tenancy_type;
+  base.tenancy.tenancy_type =
+    (getWizardValue(wizard, 'tenancy_type') as any) || base.tenancy.tenancy_type;
   base.tenancy.start_date ??= getFirstValue(wizard, [
     'case_facts.tenancy.start_date',
     'tenancy_start_date',
@@ -443,11 +490,11 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'case_facts.tenancy.rent_amount',
     'rent_amount',
   ]);
-  base.tenancy.rent_frequency ??= (getFirstValue(wizard, [
+  base.tenancy.rent_frequency ??= getFirstValue(wizard, [
     'case_facts.tenancy.rent_frequency',
     'rent_frequency',
     'rent_period',
-  ]) as any);
+  ]) as any;
   base.tenancy.rent_due_day ??= getFirstValue(wizard, [
     'case_facts.tenancy.rent_due_day',
     'rent_due_day',
@@ -455,7 +502,10 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   base.tenancy.deposit_amount ??= getWizardValue(wizard, 'deposit_amount');
   base.tenancy.deposit_protected ??= getWizardValue(wizard, 'deposit_protected');
   base.tenancy.deposit_scheme_name ??= getWizardValue(wizard, 'deposit_scheme_name');
-  base.tenancy.deposit_protection_date ??= getWizardValue(wizard, 'deposit_protection_date');
+  base.tenancy.deposit_protection_date ??= getWizardValue(
+    wizard,
+    'deposit_protection_date'
+  );
 
   // =============================================================================
   // PARTIES - Landlord, agent, solicitor, tenants
@@ -475,15 +525,27 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'pursuer_secondary_name',
     'claimant_secondary_name',
   ]);
-  base.parties.landlord.email ??= getFirstValue(wizard, ['case_facts.parties.landlord.email', 'landlord_email', 'landlord.email']);
-  base.parties.landlord.phone ??= getFirstValue(wizard, ['case_facts.parties.landlord.phone', 'landlord_phone', 'landlord.phone']);
+  base.parties.landlord.email ??= getFirstValue(wizard, [
+    'case_facts.parties.landlord.email',
+    'landlord_email',
+    'landlord.email',
+  ]);
+  base.parties.landlord.phone ??= getFirstValue(wizard, [
+    'case_facts.parties.landlord.phone',
+    'landlord_phone',
+    'landlord.phone',
+  ]);
   base.parties.landlord.address_line1 ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.address_line1',
     'landlord_address_line1',
     'landlord.address_line1',
     'landlord_address',
   ]);
-  base.parties.landlord.address_line2 ??= getFirstValue(wizard, ['case_facts.parties.landlord.address_line2', 'landlord_address_line2', 'landlord.address_line2']);
+  base.parties.landlord.address_line2 ??= getFirstValue(wizard, [
+    'case_facts.parties.landlord.address_line2',
+    'landlord_address_line2',
+    'landlord.address_line2',
+  ]);
   base.parties.landlord.city ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.city',
     'landlord_city',
@@ -497,21 +559,77 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'landlord_address_postcode',
   ]);
 
-  base.parties.agent.name ??= getFirstValue(wizard, ['case_facts.parties.agent.name', 'agent_name', 'agent.name']);
-  base.parties.agent.email ??= getFirstValue(wizard, ['case_facts.parties.agent.email', 'agent_email', 'agent.email']);
-  base.parties.agent.phone ??= getFirstValue(wizard, ['case_facts.parties.agent.phone', 'agent_phone', 'agent.phone']);
-  base.parties.agent.address_line1 ??= getFirstValue(wizard, ['case_facts.parties.agent.address_line1', 'agent_address_line1', 'agent.address_line1']);
-  base.parties.agent.address_line2 ??= getFirstValue(wizard, ['case_facts.parties.agent.address_line2', 'agent_address_line2', 'agent.address_line2']);
-  base.parties.agent.city ??= getFirstValue(wizard, ['case_facts.parties.agent.city', 'agent_city', 'agent.city']);
-  base.parties.agent.postcode ??= getFirstValue(wizard, ['case_facts.parties.agent.postcode', 'agent_postcode', 'agent.postcode']);
+  base.parties.agent.name ??= getFirstValue(wizard, [
+    'case_facts.parties.agent.name',
+    'agent_name',
+    'agent.name',
+  ]);
+  base.parties.agent.email ??= getFirstValue(wizard, [
+    'case_facts.parties.agent.email',
+    'agent_email',
+    'agent.email',
+  ]);
+  base.parties.agent.phone ??= getFirstValue(wizard, [
+    'case_facts.parties.agent.phone',
+    'agent_phone',
+    'agent.phone',
+  ]);
+  base.parties.agent.address_line1 ??= getFirstValue(wizard, [
+    'case_facts.parties.agent.address_line1',
+    'agent_address_line1',
+    'agent.address_line1',
+  ]);
+  base.parties.agent.address_line2 ??= getFirstValue(wizard, [
+    'case_facts.parties.agent.address_line2',
+    'agent_address_line2',
+    'agent.address_line2',
+  ]);
+  base.parties.agent.city ??= getFirstValue(wizard, [
+    'case_facts.parties.agent.city',
+    'agent_city',
+    'agent.city',
+  ]);
+  base.parties.agent.postcode ??= getFirstValue(wizard, [
+    'case_facts.parties.agent.postcode',
+    'agent_postcode',
+    'agent.postcode',
+  ]);
 
-  base.parties.solicitor.name ??= getFirstValue(wizard, ['case_facts.parties.solicitor.name', 'solicitor_name', 'solicitor.name']);
-  base.parties.solicitor.email ??= getFirstValue(wizard, ['case_facts.parties.solicitor.email', 'solicitor_email', 'solicitor.email']);
-  base.parties.solicitor.phone ??= getFirstValue(wizard, ['case_facts.parties.solicitor.phone', 'solicitor_phone', 'solicitor.phone']);
-  base.parties.solicitor.address_line1 ??= getFirstValue(wizard, ['case_facts.parties.solicitor.address_line1', 'solicitor_address_line1', 'solicitor.address_line1']);
-  base.parties.solicitor.address_line2 ??= getFirstValue(wizard, ['case_facts.parties.solicitor.address_line2', 'solicitor_address_line2', 'solicitor.address_line2']);
-  base.parties.solicitor.city ??= getFirstValue(wizard, ['case_facts.parties.solicitor.city', 'solicitor_city', 'solicitor.city']);
-  base.parties.solicitor.postcode ??= getFirstValue(wizard, ['case_facts.parties.solicitor.postcode', 'solicitor_postcode', 'solicitor.postcode']);
+  base.parties.solicitor.name ??= getFirstValue(wizard, [
+    'case_facts.parties.solicitor.name',
+    'solicitor_name',
+    'solicitor.name',
+  ]);
+  base.parties.solicitor.email ??= getFirstValue(wizard, [
+    'case_facts.parties.solicitor.email',
+    'solicitor_email',
+    'solicitor.email',
+  ]);
+  base.parties.solicitor.phone ??= getFirstValue(wizard, [
+    'case_facts.parties.solicitor.phone',
+    'solicitor_phone',
+    'solicitor.phone',
+  ]);
+  base.parties.solicitor.address_line1 ??= getFirstValue(wizard, [
+    'case_facts.parties.solicitor.address_line1',
+    'solicitor_address_line1',
+    'solicitor.address_line1',
+  ]);
+  base.parties.solicitor.address_line2 ??= getFirstValue(wizard, [
+    'case_facts.parties.solicitor.address_line2',
+    'solicitor_address_line2',
+    'solicitor.address_line2',
+  ]);
+  base.parties.solicitor.city ??= getFirstValue(wizard, [
+    'case_facts.parties.solicitor.city',
+    'solicitor_city',
+    'solicitor.city',
+  ]);
+  base.parties.solicitor.postcode ??= getFirstValue(wizard, [
+    'case_facts.parties.solicitor.postcode',
+    'solicitor_postcode',
+    'solicitor.postcode',
+  ]);
 
   if (!base.parties.tenants.length) {
     base.parties.tenants = extractTenants(wizard);
@@ -532,7 +650,10 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'rent_arrears.total_arrears',
   ]);
   if (!base.issues.rent_arrears.arrears_items.length) {
-    const arrearsItems = getFirstValue(wizard, ['case_facts.issues.rent_arrears.arrears_items', 'arrears_items']);
+    const arrearsItems = getFirstValue(wizard, [
+      'case_facts.issues.rent_arrears.arrears_items',
+      'arrears_items',
+    ]);
     if (Array.isArray(arrearsItems)) {
       base.issues.rent_arrears.arrears_items = arrearsItems as any;
     } else if (
@@ -553,8 +674,16 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     base.issues.rent_arrears.pre_action_confirmed = coerceBoolean(preActionConfirmed);
   }
 
-  base.issues.asb.has_asb ??= getFirstValue(wizard, ['case_facts.issues.asb.has_asb', 'has_asb', 'asb.has_asb']);
-  base.issues.asb.description ??= getFirstValue(wizard, ['case_facts.issues.asb.description', 'asb_description', 'asb.description']);
+  base.issues.asb.has_asb ??= getFirstValue(wizard, [
+    'case_facts.issues.asb.has_asb',
+    'has_asb',
+    'asb.has_asb',
+  ]);
+  base.issues.asb.description ??= getFirstValue(wizard, [
+    'case_facts.issues.asb.description',
+    'asb_description',
+    'asb.description',
+  ]);
 
   base.issues.other_breaches.has_breaches ??= getFirstValue(wizard, [
     'case_facts.issues.other_breaches.has_breaches',
@@ -566,6 +695,9 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'other_breaches_description',
     'other_breaches.description',
   ]);
+
+  // Keep "breaches" alias in sync for case-intel / evidence helpers
+  (base.issues as any).breaches ??= base.issues.other_breaches;
 
   // Section 8 ground-specific details (England & Wales)
   const section8Grounds = getFirstValue(wizard, [
@@ -658,17 +790,39 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
 
   // =============================================================================
   // NOTICE - Section 8, Section 21, etc.
-  // TODO: Add mappings for notice details
   // =============================================================================
-  base.notice.notice_type ??= getFirstValue(wizard, ['case_facts.notice.notice_type', 'notice_type', 'notice_reason']);
-  base.notice.notice_date ??= getFirstValue(wizard, ['case_facts.notice.notice_date', 'notice_date']);
-  base.notice.expiry_date ??= getFirstValue(wizard, ['case_facts.notice.expiry_date', 'notice_expiry_date', 'expiry_date']);
-  base.notice.service_method ??= getFirstValue(wizard, ['case_facts.notice.service_method', 'notice_service_method', 'service_method']);
-  base.notice.served_by ??= getFirstValue(wizard, ['case_facts.notice.served_by', 'notice_served_by', 'served_by']);
+  base.notice.notice_type ??= getFirstValue(wizard, [
+    'case_facts.notice.notice_type',
+    'notice_type',
+    'notice_reason',
+  ]);
+  base.notice.notice_date ??= getFirstValue(wizard, [
+    'case_facts.notice.notice_date',
+    'notice_date',
+  ]);
+  base.notice.service_date ??= getFirstValue(wizard, [
+    'case_facts.notice.service_date',
+    'notice_service_date',
+    'service_date',
+  ]);
+  base.notice.expiry_date ??= getFirstValue(wizard, [
+    'case_facts.notice.expiry_date',
+    'notice_expiry_date',
+    'expiry_date',
+  ]);
+  base.notice.service_method ??= getFirstValue(wizard, [
+    'case_facts.notice.service_method',
+    'notice_service_method',
+    'service_method',
+  ]);
+  base.notice.served_by ??= getFirstValue(wizard, [
+    'case_facts.notice.served_by',
+    'notice_served_by',
+    'served_by',
+  ]);
 
   // =============================================================================
   // COURT - Claim amounts and form requirements
-  // TODO: Add mappings for court details
   // =============================================================================
   base.court.route ??= getFirstValue(wizard, [
     'money_claim_route',
@@ -682,63 +836,138 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'total_arrears',
     'arrears_total',
   ]);
-  base.court.claim_amount_costs ??= getFirstValue(wizard, ['case_facts.court.claim_amount_costs', 'claim_amount_costs']);
-  base.court.claim_amount_other ??= getFirstValue(wizard, ['case_facts.court.claim_amount_other', 'claim_amount_other']);
-  base.court.total_claim_amount ??= getFirstValue(wizard, ['case_facts.court.total_claim_amount', 'total_claim_amount']);
-  base.court.claimant_reference ??= getFirstValue(wizard, ['case_facts.court.claimant_reference', 'claimant_reference']);
-  base.court.court_name ??= getFirstValue(wizard, ['case_facts.court.court_name', 'court_name', 'preferred_court', 'sheriffdom']);
-  base.court.particulars_of_claim ??= getFirstValue(wizard, ['case_facts.court.particulars_of_claim', 'particulars_of_claim']);
+  base.court.claim_amount_costs ??= getFirstValue(wizard, [
+    'case_facts.court.claim_amount_costs',
+    'claim_amount_costs',
+  ]);
+  base.court.claim_amount_other ??= getFirstValue(wizard, [
+    'case_facts.court.claim_amount_other',
+    'claim_amount_other',
+  ]);
+  base.court.total_claim_amount ??= getFirstValue(wizard, [
+    'case_facts.court.total_claim_amount',
+    'total_claim_amount',
+  ]);
+  base.court.claimant_reference ??= getFirstValue(wizard, [
+    'case_facts.court.claimant_reference',
+    'claimant_reference',
+  ]);
+  base.court.court_name ??= getFirstValue(wizard, [
+    'case_facts.court.court_name',
+    'court_name',
+    'preferred_court',
+    'sheriffdom',
+  ]);
+  base.court.particulars_of_claim ??= getFirstValue(wizard, [
+    'case_facts.court.particulars_of_claim',
+    'particulars_of_claim',
+  ]);
   base.court.n5_required ??= getWizardValue(wizard, 'n5_required');
   base.court.n119_required ??= getWizardValue(wizard, 'n119_required');
   base.court.n1_required ??= getWizardValue(wizard, 'n1_required');
-  base.court.scotland_form3a_required ??= getWizardValue(wizard, 'scotland_form3a_required');
-  base.court.scotland_form_e_required ??= getWizardValue(wizard, 'scotland_form_e_required');
+  base.court.scotland_form3a_required ??= getWizardValue(
+    wizard,
+    'scotland_form3a_required'
+  );
+  base.court.scotland_form_e_required ??= getWizardValue(
+    wizard,
+    'scotland_form_e_required'
+  );
 
   // =============================================================================
   // EVIDENCE - Upload tracking
-  // TODO: Add mappings for evidence fields if stored flat
   // =============================================================================
   base.evidence.tenancy_agreement_uploaded = Boolean(
-    getFirstValue(wizard, ['case_facts.evidence.tenancy_agreement_uploaded', 'evidence.tenancy_agreement_uploaded', 'tenancy_agreement_uploaded']) ??
-      base.evidence.tenancy_agreement_uploaded
+    getFirstValue(wizard, [
+      'case_facts.evidence.tenancy_agreement_uploaded',
+      'evidence.tenancy_agreement_uploaded',
+      'tenancy_agreement_uploaded',
+    ]) ?? base.evidence.tenancy_agreement_uploaded
   );
   base.evidence.rent_schedule_uploaded = Boolean(
-    getFirstValue(wizard, ['case_facts.evidence.rent_schedule_uploaded', 'evidence.rent_schedule_uploaded', 'rent_schedule_uploaded']) ??
-      base.evidence.rent_schedule_uploaded
+    getFirstValue(wizard, [
+      'case_facts.evidence.rent_schedule_uploaded',
+      'evidence.rent_schedule_uploaded',
+      'rent_schedule_uploaded',
+    ]) ?? base.evidence.rent_schedule_uploaded
   );
   base.evidence.bank_statements_uploaded = Boolean(
-    getFirstValue(wizard, ['case_facts.evidence.bank_statements_uploaded', 'evidence.bank_statements_uploaded', 'bank_statements_uploaded']) ??
-      base.evidence.bank_statements_uploaded
+    getFirstValue(wizard, [
+      'case_facts.evidence.bank_statements_uploaded',
+      'evidence.bank_statements_uploaded',
+      'bank_statements_uploaded',
+    ]) ?? base.evidence.bank_statements_uploaded
   );
   base.evidence.safety_certificates_uploaded = Boolean(
-    getFirstValue(wizard, ['case_facts.evidence.safety_certificates_uploaded', 'evidence.safety_certificates_uploaded', 'safety_certificates_uploaded']) ??
-      base.evidence.safety_certificates_uploaded
+    getFirstValue(wizard, [
+      'case_facts.evidence.safety_certificates_uploaded',
+      'evidence.safety_certificates_uploaded',
+      'safety_certificates_uploaded',
+    ]) ?? base.evidence.safety_certificates_uploaded
   );
   base.evidence.asb_evidence_uploaded = Boolean(
-    getFirstValue(wizard, ['case_facts.evidence.asb_evidence_uploaded', 'evidence.asb_evidence_uploaded']) ??
-      base.evidence.asb_evidence_uploaded
+    getFirstValue(wizard, [
+      'case_facts.evidence.asb_evidence_uploaded',
+      'evidence.asb_evidence_uploaded',
+    ]) ?? base.evidence.asb_evidence_uploaded
   );
   base.evidence.other_evidence_uploaded = Boolean(
-    getFirstValue(wizard, ['case_facts.evidence.other_evidence_uploaded', 'evidence.other_evidence_uploaded', 'other_evidence_uploaded']) ??
-      base.evidence.other_evidence_uploaded
+    getFirstValue(wizard, [
+      'case_facts.evidence.other_evidence_uploaded',
+      'evidence.other_evidence_uploaded',
+      'other_evidence_uploaded',
+    ]) ?? base.evidence.other_evidence_uploaded
   );
-  const missingEvidenceNotes = getFirstValue(wizard, ['case_facts.evidence.missing_evidence_notes', 'evidence.missing_evidence_notes']);
+  const missingEvidenceNotes = getFirstValue(wizard, [
+    'case_facts.evidence.missing_evidence_notes',
+    'evidence.missing_evidence_notes',
+  ]);
   if (Array.isArray(missingEvidenceNotes)) {
     base.evidence.missing_evidence_notes = missingEvidenceNotes as string[];
   }
 
   // =============================================================================
   // SERVICE CONTACT - Service address for legal documents
-  // TODO: Add mappings for service contact details
   // =============================================================================
-  base.service_contact.has_override ??= getFirstValue(wizard, ['case_facts.service_contact.has_override', 'service_address_override']);
-  base.service_contact.service_name ??= getFirstValue(wizard, ['case_facts.service_contact.service_name', 'service_contact.service_name', 'service_name']);
-  base.service_contact.service_address_line1 ??= getFirstValue(wizard, ['case_facts.service_contact.service_address_line1', 'service_contact.service_address_line1', 'service_address_line1']);
-  base.service_contact.service_address_line2 ??= getFirstValue(wizard, ['case_facts.service_contact.service_address_line2', 'service_contact.service_address_line2', 'service_address_line2']);
-  base.service_contact.service_city ??= getFirstValue(wizard, ['case_facts.service_contact.service_city', 'service_contact.service_city', 'service_city']);
-  base.service_contact.service_postcode ??= getFirstValue(wizard, ['case_facts.service_contact.service_postcode', 'service_contact.service_postcode', 'service_postcode']);
-  base.service_contact.service_email ??= getFirstValue(wizard, ['case_facts.service_contact.service_email', 'service_contact.service_email', 'service_email']);
-  base.service_contact.service_phone ??= getFirstValue(wizard, ['case_facts.service_contact.service_phone', 'service_contact.service_phone', 'service_phone']);
+  base.service_contact.has_override ??= getFirstValue(wizard, [
+    'case_facts.service_contact.has_override',
+    'service_address_override',
+  ]);
+  base.service_contact.service_name ??= getFirstValue(wizard, [
+    'case_facts.service_contact.service_name',
+    'service_contact.service_name',
+    'service_name',
+  ]);
+  base.service_contact.service_address_line1 ??= getFirstValue(wizard, [
+    'case_facts.service_contact.service_address_line1',
+    'service_contact.service_address_line1',
+    'service_address_line1',
+  ]);
+  base.service_contact.service_address_line2 ??= getFirstValue(wizard, [
+    'case_facts.service_contact.service_address_line2',
+    'service_contact.service_address_line2',
+    'service_address_line2',
+  ]);
+  base.service_contact.service_city ??= getFirstValue(wizard, [
+    'case_facts.service_contact.service_city',
+    'service_contact.service_city',
+    'service_city',
+  ]);
+  base.service_contact.service_postcode ??= getFirstValue(wizard, [
+    'case_facts.service_contact.service_postcode',
+    'service_contact.service_postcode',
+    'service_postcode',
+  ]);
+  base.service_contact.service_email ??= getFirstValue(wizard, [
+    'case_facts.service_contact.service_email',
+    'service_contact.service_email',
+    'service_email',
+  ]);
+  base.service_contact.service_phone ??= getFirstValue(wizard, [
+    'case_facts.service_contact.service_phone',
+    'service_contact.service_phone',
+    'service_phone',
+  ]);
 
   // =============================================================================
   // MONEY CLAIM - Claim breakdown, interest, pre-action
@@ -751,15 +980,24 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'case_facts.money_claim.payment_day',
   ]);
   if (paymentDay !== null && paymentDay !== undefined) {
-    base.money_claim.payment_day = typeof paymentDay === 'string' ? Number(paymentDay) || paymentDay : (paymentDay as any);
+    base.money_claim.payment_day =
+      typeof paymentDay === 'string' ? Number(paymentDay) || (paymentDay as any) : (paymentDay as any);
   }
-  const damageClaim = getFirstValue(wizard, ['damage_claim', 'case_facts.money_claim.damage_claim', 'claim_damages']);
+  const damageClaim = getFirstValue(wizard, [
+    'damage_claim',
+    'case_facts.money_claim.damage_claim',
+    'claim_damages',
+  ]);
   if (damageClaim !== null && damageClaim !== undefined) {
     base.money_claim.damage_claim = coerceBoolean(damageClaim);
   }
 
   if (!base.money_claim.damage_items.length) {
-    const damageItems = getFirstValue(wizard, ['damage_items', 'case_facts.money_claim.damage_items', 'damage_items_description']);
+    const damageItems = getFirstValue(wizard, [
+      'damage_items',
+      'case_facts.money_claim.damage_items',
+      'damage_items_description',
+    ]);
     if (Array.isArray(damageItems)) {
       base.money_claim.damage_items = damageItems as any;
     } else if (typeof damageItems === 'string' && damageItems.trim()) {
@@ -768,7 +1006,10 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   }
 
   if (!base.money_claim.other_charges.length) {
-    const otherCharges = getFirstValue(wizard, ['other_charges', 'case_facts.money_claim.other_charges']);
+    const otherCharges = getFirstValue(wizard, [
+      'other_charges',
+      'case_facts.money_claim.other_charges',
+    ]);
     if (Array.isArray(otherCharges)) {
       base.money_claim.other_charges = otherCharges as any;
     } else if (typeof otherCharges === 'string' && otherCharges.trim()) {
@@ -776,7 +1017,10 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     }
   }
 
-  const chargeInterest = getFirstValue(wizard, ['charge_interest', 'case_facts.money_claim.charge_interest']);
+  const chargeInterest = getFirstValue(wizard, [
+    'charge_interest',
+    'case_facts.money_claim.charge_interest',
+  ]);
   if (chargeInterest !== null && chargeInterest !== undefined) {
     base.money_claim.charge_interest = coerceBoolean(chargeInterest);
   }
@@ -784,11 +1028,18 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'interest_start_date',
     'case_facts.money_claim.interest_start_date',
   ]);
-  const interestRate = getFirstValue(wizard, ['interest_rate', 'case_facts.money_claim.interest_rate']);
+  const interestRate = getFirstValue(wizard, [
+    'interest_rate',
+    'case_facts.money_claim.interest_rate',
+  ]);
   if (interestRate !== null && interestRate !== undefined) {
-    base.money_claim.interest_rate = typeof interestRate === 'string' ? Number(interestRate) || null : (interestRate as any);
+    base.money_claim.interest_rate =
+      typeof interestRate === 'string' ? Number(interestRate) || null : (interestRate as any);
   }
-  const solicitorCosts = getFirstValue(wizard, ['solicitor_costs', 'case_facts.money_claim.solicitor_costs']);
+  const solicitorCosts = getFirstValue(wizard, [
+    'solicitor_costs',
+    'case_facts.money_claim.solicitor_costs',
+  ]);
   if (solicitorCosts !== null && solicitorCosts !== undefined) {
     base.money_claim.solicitor_costs =
       typeof solicitorCosts === 'string' ? Number(solicitorCosts) || null : (solicitorCosts as any);
@@ -802,8 +1053,14 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   if (lbaSent !== null && lbaSent !== undefined) {
     base.money_claim.lba_sent = coerceBoolean(lbaSent);
   }
-  base.money_claim.lba_date ??= getFirstValue(wizard, ['lba_date', 'case_facts.money_claim.lba_date']);
-  base.money_claim.lba_method ??= getFirstValue(wizard, ['lba_method', 'case_facts.money_claim.lba_method']);
+  base.money_claim.lba_date ??= getFirstValue(wizard, [
+    'lba_date',
+    'case_facts.money_claim.lba_date',
+  ]);
+  base.money_claim.lba_method ??= getFirstValue(wizard, [
+    'lba_method',
+    'case_facts.money_claim.lba_method',
+  ]);
   base.money_claim.lba_response_deadline ??= getFirstValue(wizard, [
     'lba_response_deadline',
     'case_facts.money_claim.lba_response_deadline',
@@ -833,7 +1090,10 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'pre_action_reply_details',
     'case_facts.money_claim.tenant_response_details',
   ]);
-  const lbaSecondSent = getFirstValue(wizard, ['lba_second_sent', 'case_facts.money_claim.lba_second_sent']);
+  const lbaSecondSent = getFirstValue(wizard, [
+    'lba_second_sent',
+    'case_facts.money_claim.lba_second_sent',
+  ]);
   if (lbaSecondSent !== null && lbaSecondSent !== undefined) {
     base.money_claim.lba_second_sent = coerceBoolean(lbaSecondSent);
   }
@@ -857,26 +1117,51 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'case_facts.money_claim.pre_action_deadline_confirmation',
   ]);
   if (preActionDeadlineConfirm !== null && preActionDeadlineConfirm !== undefined) {
-    base.money_claim.pre_action_deadline_confirmation = coerceBoolean(preActionDeadlineConfirm);
+    base.money_claim.pre_action_deadline_confirmation = coerceBoolean(
+      preActionDeadlineConfirm
+    );
   }
-  base.money_claim.signatory_name ??= getFirstValue(wizard, ['signatory_name', 'case_facts.money_claim.signatory_name']);
-  base.money_claim.signature_date ??= getFirstValue(wizard, ['signature_date', 'case_facts.money_claim.signature_date']);
-  base.money_claim.sheriffdom ??= getFirstValue(wizard, ['sheriffdom', 'case_facts.money_claim.sheriffdom']);
+  base.money_claim.signatory_name ??= getFirstValue(wizard, [
+    'signatory_name',
+    'case_facts.money_claim.signatory_name',
+  ]);
+  base.money_claim.signature_date ??= getFirstValue(wizard, [
+    'signature_date',
+    'case_facts.money_claim.signature_date',
+  ]);
+  base.money_claim.sheriffdom ??= getFirstValue(wizard, [
+    'sheriffdom',
+    'case_facts.money_claim.sheriffdom',
+  ]);
   const courtJurisdictionConfirmed = getFirstValue(wizard, [
     'court_jurisdiction_confirmed',
     'case_facts.money_claim.court_jurisdiction_confirmed',
   ]);
   if (courtJurisdictionConfirmed !== null && courtJurisdictionConfirmed !== undefined) {
-    base.money_claim.court_jurisdiction_confirmed = coerceBoolean(courtJurisdictionConfirmed);
+    base.money_claim.court_jurisdiction_confirmed = coerceBoolean(
+      courtJurisdictionConfirmed
+    );
   }
   base.money_claim.lodging_method ??= getFirstValue(wizard, [
     'lodging_method',
     'case_facts.money_claim.lodging_method',
   ]);
-  base.money_claim.demand_letter_date ??= getFirstValue(wizard, ['demand_letter_date', 'case_facts.money_claim.demand_letter_date']);
-  base.money_claim.second_demand_date ??= getFirstValue(wizard, ['second_demand_date', 'case_facts.money_claim.second_demand_date']);
-  base.money_claim.evidence_summary ??= getFirstValue(wizard, ['evidence_summary', 'case_facts.money_claim.evidence_summary']);
-  const basisOfClaim = getFirstValue(wizard, ['basis_of_claim', 'case_facts.money_claim.basis_of_claim']);
+  base.money_claim.demand_letter_date ??= getFirstValue(wizard, [
+    'demand_letter_date',
+    'case_facts.money_claim.demand_letter_date',
+  ]);
+  base.money_claim.second_demand_date ??= getFirstValue(wizard, [
+    'second_demand_date',
+    'case_facts.money_claim.second_demand_date',
+  ]);
+  base.money_claim.evidence_summary ??= getFirstValue(wizard, [
+    'evidence_summary',
+    'case_facts.money_claim.evidence_summary',
+  ]);
+  const basisOfClaim = getFirstValue(wizard, [
+    'basis_of_claim',
+    'case_facts.money_claim.basis_of_claim',
+  ]);
   if (Array.isArray(basisOfClaim)) {
     const hasRent = basisOfClaim.includes('rent_arrears');
     const hasDamage = basisOfClaim.includes('property_damage');
@@ -894,7 +1179,9 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'case_facts.money_claim.arrears_schedule_confirmed',
   ]);
   if (arrearsScheduleConfirmed !== null && arrearsScheduleConfirmed !== undefined) {
-    base.money_claim.arrears_schedule_confirmed = coerceBoolean(arrearsScheduleConfirmed);
+    base.money_claim.arrears_schedule_confirmed = coerceBoolean(
+      arrearsScheduleConfirmed
+    );
   }
 
   const evidenceTypesAvailable = getFirstValue(wizard, [
@@ -956,9 +1243,102 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'case_facts.money_claim.enforcement_notes',
   ]);
 
+  // =============================================================================
+  // COMPLIANCE - Gas safety, EPC, How to Rent
+  // =============================================================================
+  const gasSafety = getFirstValue(wizard, [
+    'case_facts.compliance.gas_safety_cert_provided',
+    'gas_safety_cert_provided',
+    'gas_safety_certificate_provided',
+  ]);
+  if (gasSafety !== null && gasSafety !== undefined) {
+    base.compliance.gas_safety_cert_provided = coerceBoolean(gasSafety);
+  }
+
+  const epcProvided = getFirstValue(wizard, [
+    'case_facts.compliance.epc_provided',
+    'epc_provided',
+  ]);
+  if (epcProvided !== null && epcProvided !== undefined) {
+    base.compliance.epc_provided = coerceBoolean(epcProvided);
+  }
+
+  const howToRent = getFirstValue(wizard, [
+    'case_facts.compliance.how_to_rent_given',
+    'how_to_rent_given',
+    'how_to_rent_guide_provided',
+  ]);
+  if (howToRent !== null && howToRent !== undefined) {
+    base.compliance.how_to_rent_given = coerceBoolean(howToRent);
+  }
+
+  // Keep "breaches" in sync with "other_breaches" for modules that expect either
+  if (!base.issues.breaches) {
+    base.issues.breaches = {
+      has_breaches: base.issues.other_breaches.has_breaches,
+      description: base.issues.other_breaches.description,
+    };
+  }
+
   // ---------------------------------------------------------------------------
   // CASE HEALTH - compute contradictions, missing evidence, compliance warnings
   // ---------------------------------------------------------------------------
+  base.case_health = computeCaseHealth(base);
+
+  return base;
+}
+
+/**
+ * Public helper used across APIs (checkpoint / analyze) to normalize
+ * whatever we have (flat wizard facts or already-nested case facts)
+ * into a full CaseFacts object with up-to-date case_health and meta hints.
+ */
+export function normalizeCaseFacts(
+  input: WizardFacts | CaseFacts | null | undefined
+): CaseFacts {
+  // If nothing sensible provided, return empty skeleton
+  if (!input || typeof input !== 'object') {
+    return createEmptyCaseFacts();
+  }
+
+  // If it already looks like CaseFacts (nested structure),
+  // just ensure case_health is present and up-to-date.
+  if (
+    (input as any).tenancy &&
+    (input as any).property &&
+    (input as any).parties
+  ) {
+    const existing = input as CaseFacts;
+    return {
+      ...existing,
+      case_health: existing.case_health ?? computeCaseHealth(existing),
+    };
+  }
+
+  // Otherwise treat it as flat WizardFacts and map to CaseFacts
+  const wizard = input as WizardFacts;
+  const base = wizardFactsToCaseFacts(wizard);
+
+  // Try to enrich meta with jurisdiction / case id if present on flat facts
+  const jurisdiction =
+    (wizard as any).jurisdiction ||
+    (wizard as any).case_jurisdiction ||
+    wizard.__meta?.jurisdiction;
+
+  const caseId =
+    (wizard as any).case_id ||
+    (wizard as any).id ||
+    wizard.__meta?.case_id;
+
+  if (jurisdiction && !base.meta.jurisdiction) {
+    base.meta.jurisdiction = jurisdiction as any;
+  }
+
+  if (caseId && !base.meta.case_id) {
+    base.meta.case_id = caseId as any;
+  }
+
+  // Always recompute case health on the final object
   base.case_health = computeCaseHealth(base);
 
   return base;

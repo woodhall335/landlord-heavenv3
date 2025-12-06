@@ -135,9 +135,10 @@ function scoreLegalEligibility(_facts: CaseFacts, decisionOutput: DecisionOutput
   }
 
   // Check ground success probabilities (from decision engine)
-  const highProbabilityGrounds = decisionOutput.recommended_grounds.filter(
-    (g) => (g.success_probability || 0) >= 0.8
-  );
+  const highProbabilityGrounds = decisionOutput.recommended_grounds.filter((g) => {
+    const prob = Number(g.success_probability ?? 0);
+    return prob >= 0.8;
+  });
   if (highProbabilityGrounds.length > 0) {
     strengths.push(
       `${highProbabilityGrounds.length} ground(s) with high success probability (≥80%)`
@@ -146,10 +147,9 @@ function scoreLegalEligibility(_facts: CaseFacts, decisionOutput: DecisionOutput
   }
 
   // Check pre-action requirements (Scotland specific, from decision engine)
-  if (decisionOutput.pre_action_requirements && decisionOutput.pre_action_requirements.length > 0) {
-    const unmetRequirements = decisionOutput.pre_action_requirements.filter(
-      (req) => req.status === 'not_met'
-    );
+  const preAction = decisionOutput.pre_action_requirements;
+  if (Array.isArray(preAction) && preAction.length > 0) {
+    const unmetRequirements = preAction.filter((req: any) => req.status === 'not_met');
     if (unmetRequirements.length > 0) {
       issues.push(`${unmetRequirements.length} pre-action requirement(s) not met`);
       score -= unmetRequirements.length * 15;
@@ -169,6 +169,7 @@ function scoreLegalEligibility(_facts: CaseFacts, decisionOutput: DecisionOutput
     strengths,
   };
 }
+
 
 /**
  * Score evidence completeness

@@ -9,7 +9,12 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
-import { loadMQS, getNextMQSQuestion, type ProductType, type MasterQuestionSet } from '@/lib/wizard/mqs-loader';
+import {
+  loadMQS,
+  getNextMQSQuestion,
+  type ProductType,
+  type MasterQuestionSet,
+} from '@/lib/wizard/mqs-loader';
 import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
@@ -32,14 +37,33 @@ const answerSchema = z.object({
 
 /**
  * Validates critical answers using Zod schemas per question ID.
- * Protects essential data like dates, money, and product configuration.
+ *
+ * IMPORTANT:
+ * - We ONLY enforce this for structured MQS flows (tenancy_agreement, money_claim, etc.).
+ * - We explicitly SKIP eviction flows, because those questions may reuse IDs
+ *   with different shapes (conversational wizard).
  */
-function validateCriticalAnswer(questionId: string, answer: unknown): { ok: true } | { ok: false; errors: string[] } {
+function validateCriticalAnswer(
+  questionId: string,
+  answer: unknown,
+  caseType: string,
+  jurisdiction: string,
+): { ok: true } | { ok: false; errors: string[] } {
+  // Do NOT enforce these runtime validations for conversational eviction flows.
+  // The MQS + downstream generators already enforce their own constraints.
+  if (caseType === 'eviction') {
+    return { ok: true };
+  }
+
   try {
+    // ------------------------------------------------------------------------
+    // Shared tenancy / money-claim validations (caseType !== 'eviction')
+    // ------------------------------------------------------------------------
+
     // Critical field: AST tier (product selection)
-    if (questionId === 'ast_tier') {
+    if (questionId === 'ast_tier' && caseType === 'tenancy_agreement') {
       const schema = z.enum(['Standard AST', 'Premium AST'], {
-        message: 'AST tier must be "Standard AST" or "Premium AST"'
+        message: 'AST tier must be "Standard AST" or "Premium AST"',
       });
       schema.parse(answer);
       return { ok: true };
@@ -47,18 +71,21 @@ function validateCriticalAnswer(questionId: string, answer: unknown): { ok: true
 
     // Critical field: Tenancy start date (part of tenancy_type_and_dates group)
     // Handles both AST (tenancy_start_date) and Scotland/NI (start_date) field names
-    if (questionId === 'tenancy_type_and_dates') {
-      const dateValidation = z.string()
+    if (questionId === 'tenancy_type_and_dates' && caseType === 'tenancy_agreement') {
+      const dateValidation = z
+        .string()
         .min(1, 'Tenancy start date is required')
         .regex(/^\d{4}-\d{2}-\d{2}$/, 'Tenancy start date must be in YYYY-MM-DD format');
 
-      const groupSchema = z.object({
-        tenancy_start_date: dateValidation.optional(),
-        start_date: dateValidation.optional(),
-      }).passthrough() // Allow other fields in the group
+      const groupSchema = z
+        .object({
+          tenancy_start_date: dateValidation.optional(),
+          start_date: dateValidation.optional(),
+        })
+        .passthrough() // Allow other fields in the group
         .refine(
           (data) => data.tenancy_start_date || data.start_date,
-          'Either tenancy_start_date or start_date is required'
+          'Either tenancy_start_date or start_date is required',
         );
 
       groupSchema.parse(answer);
@@ -66,217 +93,261 @@ function validateCriticalAnswer(questionId: string, answer: unknown): { ok: true
     }
 
     // Critical field: Rent amount (part of rent_details group)
-    if (questionId === 'rent_details') {
-      const groupSchema = z.object({
-        rent_amount: z.union([
-          z.number().positive('Rent amount must be positive'),
-          z.string()
-            .min(1, 'Rent amount is required')
-            .refine(
-              (val) => !isNaN(Number(val)) && Number(val) > 0,
-              'Rent amount must be a positive number'
-            )
-        ]),
-      }).passthrough(); // Allow other fields in the group
+    if (questionId === 'rent_details' && caseType === 'tenancy_agreement') {
+      const groupSchema = z
+        .object({
+          rent_amount: z.union([
+            z.number().positive('Rent amount must be positive'),
+            z
+              .string()
+              .min(1, 'Rent amount is required')
+              .refine(
+                (val) => !isNaN(Number(val)) && Number(val) > 0,
+                'Rent amount must be a positive number',
+              ),
+          ]),
+        })
+        .passthrough(); // Allow other fields in the group
 
       groupSchema.parse(answer);
       return { ok: true };
     }
 
     // Critical field: Property address line 1 (part of property_address group)
-  if (questionId === 'property_address') {
-    const stringSchema = z
-      .string()
-      .min(1, 'Property address is required')
-      .max(500, 'Property address is too long');
+    if (questionId === 'property_address' && caseType === 'tenancy_agreement') {
+      const stringSchema = z
+        .string()
+        .min(1, 'Property address is required')
+        .max(500, 'Property address is too long');
 
-    const groupSchema = z
-      .object({
-        property_address_line1: z
+      const groupSchema = z
+        .object({
+          property_address_line1: z
+            .string()
+            .min(1, 'Property address line 1 is required')
+            .max(200, 'Property address line 1 is too long')
+            .optional(),
+          address_line1: z
+            .string()
+            .min(1, 'Property address line 1 is required')
+            .max(200, 'Property address line 1 is too long')
+            .optional(),
+        })
+        .passthrough(); // Allow other fields in the group
+
+      const parsed = z.union([stringSchema, groupSchema]).parse(answer);
+
+      if (typeof parsed === 'object') {
+        if (!parsed.property_address_line1 && !parsed.address_line1) {
+          throw new Error('Property address line 1 is required');
+        }
+      }
+
+      return { ok: true };
+    }
+
+    // ========================================================================
+    // Scotland-specific validations (only when jurisdiction === 'scotland')
+    // ========================================================================
+
+    if (jurisdiction === 'scotland') {
+      // Critical field: Scotland landlord registration details
+      if (questionId === 'landlord_details') {
+        const groupSchema = z
+          .object({
+            landlord_registration_number: z.union([
+              z
+                .string()
+                .min(1, 'Landlord registration number should not be empty if provided')
+                .optional(),
+              z.literal('').optional(),
+              z.undefined(),
+            ]),
+            landlord_registration_authority: z.union([
+              z
+                .string()
+                .min(1, 'Registration authority should not be empty if provided')
+                .optional(),
+              z.literal('').optional(),
+              z.undefined(),
+            ]),
+          })
+          .passthrough(); // Allow other fields in the group
+
+        groupSchema.parse(answer);
+        return { ok: true };
+      }
+
+      // Critical field: Scotland tenancy dates (Notice to Leave)
+      if (questionId === 'tenancy_dates') {
+        const dateSchema = z
           .string()
-          .min(1, 'Property address line 1 is required')
-          .max(200, 'Property address line 1 is too long')
-          .optional(),
-        address_line1: z
-          .string()
-          .min(1, 'Property address line 1 is required')
-          .max(200, 'Property address line 1 is too long')
-          .optional(),
-      })
-      .passthrough(); // Allow other fields in the group
+          .min(1, 'Tenancy start date is required')
+          .regex(/^\d{4}-\d{2}-\d{2}$/, 'Tenancy start date must be in YYYY-MM-DD format');
 
-    const parsed = z.union([stringSchema, groupSchema]).parse(answer);
+        dateSchema.parse(answer);
+        return { ok: true };
+      }
 
-    if (typeof parsed === 'object') {
-      if (!parsed.property_address_line1 && !parsed.address_line1) {
-        throw new Error('Property address line 1 is required');
+      // Critical field: Scotland rent terms (Notice to Leave)
+      if (questionId === 'rent_terms') {
+        const groupSchema = z
+          .object({
+            rent_amount: z.union([
+              z.number().positive('Rent amount must be positive'),
+              z
+                .string()
+                .min(1, 'Rent amount is required')
+                .refine(
+                  (val) => !isNaN(Number(val)) && Number(val) > 0,
+                  'Rent amount must be a positive number',
+                ),
+            ]),
+          })
+          .passthrough(); // Allow other fields in the group
+
+        groupSchema.parse(answer);
+        return { ok: true };
+      }
+
+      // Critical field: Scotland deposit protection (Notice to Leave)
+      if (questionId === 'deposit_protection') {
+        const groupSchema = z
+          .object({
+            deposit_amount: z
+              .union([
+                z.number().nonnegative('Deposit amount must be zero or positive'),
+                z
+                  .string()
+                  .refine(
+                    (val) => val === '' || (!isNaN(Number(val)) && Number(val) >= 0),
+                    'Deposit amount must be zero or a positive number',
+                  ),
+              ])
+              .optional(),
+          })
+          .passthrough(); // Allow other fields in the group
+
+        groupSchema.parse(answer);
+        return { ok: true };
+      }
+
+      // Critical field: Scotland deposit details (PRT Agreement)
+      if (questionId === 'deposit_details') {
+        const groupSchema = z
+          .object({
+            deposit_amount: z
+              .union([
+                z.number().nonnegative('Deposit amount must be zero or positive'),
+                z
+                  .string()
+                  .refine(
+                    (val) => val === '' || (!isNaN(Number(val)) && Number(val) >= 0),
+                    'Deposit amount must be zero or a positive number',
+                  ),
+              ])
+              .optional(),
+          })
+          .passthrough(); // Allow other fields in the group
+
+        groupSchema.parse(answer);
+        return { ok: true };
+      }
+
+      // Critical field: Scotland/NI property details with postcode
+      if (questionId === 'property_details') {
+        const groupSchema = z
+          .object({
+            postcode: z
+              .union([
+                z
+                  .string()
+                  .min(1, 'Postcode is required')
+                  .max(10, 'Postcode is too long'),
+                z.undefined(),
+              ])
+              .optional(),
+          })
+          .passthrough(); // Allow other fields in the group
+
+        groupSchema.parse(answer);
+        return { ok: true };
+      }
+
+      // Critical field: Scotland notice service dates (Notice to Leave)
+      if (questionId === 'notice_service') {
+        const groupSchema = z
+          .object({
+            notice_date: z
+              .string()
+              .min(1, 'Notice date is required')
+              .regex(/^\d{4}-\d{2}-\d{2}$/, 'Notice date must be in YYYY-MM-DD format'),
+            notice_expiry: z
+              .string()
+              .min(1, 'Notice expiry date is required')
+              .regex(/^\d{4}-\d{2}-\d{2}$/, 'Notice expiry date must be in YYYY-MM-DD format'),
+          })
+          .passthrough(); // Allow other fields in the group
+
+        groupSchema.parse(answer);
+        return { ok: true };
+      }
+
+      // Critical field: Scotland arrears amount (Notice to Leave)
+      if (questionId === 'arrears_amount') {
+        const amountSchema = z.union([
+          z.number().nonnegative('Arrears amount must be zero or positive'),
+          z
+            .string()
+            .min(1, 'Arrears amount is required')
+            .refine(
+              (val) => !isNaN(Number(val)) && Number(val) >= 0,
+              'Arrears amount must be zero or a positive number',
+            ),
+        ]);
+
+        amountSchema.parse(answer);
+        return { ok: true };
       }
     }
 
-    return { ok: true };
-  }
-
-    // ============================================================================
-    // Scotland-specific validations
-    // ============================================================================
-
-    // Critical field: Scotland landlord registration details
-    if (questionId === 'landlord_details') {
-      const groupSchema = z.object({
-        landlord_registration_number: z.union([
-          z.string().min(1, 'Landlord registration number should not be empty if provided').optional(),
-          z.literal('').optional(),
-          z.undefined()
-        ]),
-        landlord_registration_authority: z.union([
-          z.string().min(1, 'Registration authority should not be empty if provided').optional(),
-          z.literal('').optional(),
-          z.undefined()
-        ])
-      }).passthrough(); // Allow other fields in the group
-
-      groupSchema.parse(answer);
-      return { ok: true };
-    }
-
-    // Critical field: Scotland tenancy dates (Notice to Leave)
-    if (questionId === 'tenancy_dates') {
-      const dateSchema = z.string()
-        .min(1, 'Tenancy start date is required')
-        .regex(/^\d{4}-\d{2}-\d{2}$/, 'Tenancy start date must be in YYYY-MM-DD format');
-
-      dateSchema.parse(answer);
-      return { ok: true };
-    }
-
-    // Critical field: Scotland rent terms (Notice to Leave)
-    if (questionId === 'rent_terms') {
-      const groupSchema = z.object({
-        rent_amount: z.union([
-          z.number().positive('Rent amount must be positive'),
-          z.string()
-            .min(1, 'Rent amount is required')
-            .refine(
-              (val) => !isNaN(Number(val)) && Number(val) > 0,
-              'Rent amount must be a positive number'
-            )
-        ]),
-      }).passthrough(); // Allow other fields in the group
-
-      groupSchema.parse(answer);
-      return { ok: true };
-    }
-
-    // Critical field: Scotland deposit protection (Notice to Leave)
-    if (questionId === 'deposit_protection') {
-      const groupSchema = z.object({
-        deposit_amount: z.union([
-          z.number().nonnegative('Deposit amount must be zero or positive'),
-          z.string()
-            .refine(
-              (val) => val === '' || (!isNaN(Number(val)) && Number(val) >= 0),
-              'Deposit amount must be zero or a positive number'
-            )
-        ]).optional(),
-      }).passthrough(); // Allow other fields in the group
-
-      groupSchema.parse(answer);
-      return { ok: true };
-    }
-
-    // Critical field: Scotland deposit details (PRT Agreement)
-    if (questionId === 'deposit_details') {
-      const groupSchema = z.object({
-        deposit_amount: z.union([
-          z.number().nonnegative('Deposit amount must be zero or positive'),
-          z.string()
-            .refine(
-              (val) => val === '' || (!isNaN(Number(val)) && Number(val) >= 0),
-              'Deposit amount must be zero or a positive number'
-            )
-        ]).optional(),
-      }).passthrough(); // Allow other fields in the group
-
-      groupSchema.parse(answer);
-      return { ok: true };
-    }
-
-    // Critical field: Scotland/NI property details with postcode
-    if (questionId === 'property_details') {
-      const groupSchema = z.object({
-        postcode: z.union([
-          z.string()
-            .min(1, 'Postcode is required')
-            .max(10, 'Postcode is too long'),
-          z.undefined()
-        ]).optional(),
-      }).passthrough(); // Allow other fields in the group
-
-      groupSchema.parse(answer);
-      return { ok: true };
-    }
-
-    // Critical field: Scotland notice service dates (Notice to Leave)
-    if (questionId === 'notice_service') {
-      const groupSchema = z.object({
-        notice_date: z.string()
-          .min(1, 'Notice date is required')
-          .regex(/^\d{4}-\d{2}-\d{2}$/, 'Notice date must be in YYYY-MM-DD format'),
-        notice_expiry: z.string()
-          .min(1, 'Notice expiry date is required')
-          .regex(/^\d{4}-\d{2}-\d{2}$/, 'Notice expiry date must be in YYYY-MM-DD format'),
-      }).passthrough(); // Allow other fields in the group
-
-      groupSchema.parse(answer);
-      return { ok: true };
-    }
-
-    // Critical field: Scotland arrears amount (Notice to Leave)
-    if (questionId === 'arrears_amount') {
-      const amountSchema = z.union([
-        z.number().nonnegative('Arrears amount must be zero or positive'),
-        z.string()
-          .min(1, 'Arrears amount is required')
-          .refine(
-            (val) => !isNaN(Number(val)) && Number(val) >= 0,
-            'Arrears amount must be zero or a positive number'
-          )
-      ]);
-
-      amountSchema.parse(answer);
-      return { ok: true };
-    }
-
-    // ============================================================================
+    // ========================================================================
     // Northern Ireland-specific validations
-    // ============================================================================
+    // ========================================================================
 
-    // Critical field: NI HMO details with council name
-    if (questionId === 'hmo_details') {
-      const groupSchema = z.object({
-        council_name: z.union([
-          z.string().min(1, 'Council name should not be empty if provided').optional(),
-          z.literal('').optional(),
-          z.undefined()
-        ])
-      }).passthrough(); // Allow other fields in the group
+    if (jurisdiction === 'northern-ireland') {
+      // Critical field: NI HMO details with council name
+      if (questionId === 'hmo_details') {
+        const groupSchema = z
+          .object({
+            council_name: z.union([
+              z
+                .string()
+                .min(1, 'Council name should not be empty if provided')
+                .optional(),
+              z.literal('').optional(),
+              z.undefined(),
+            ]),
+          })
+          .passthrough(); // Allow other fields in the group
 
-      groupSchema.parse(answer);
-      return { ok: true };
+        groupSchema.parse(answer);
+        return { ok: true };
+      }
     }
 
-    // Not a critical field - validation passes
+    // Not a critical field (or caseType/jurisdiction not targeted) - validation passes
     return { ok: true };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {
         ok: false,
-        errors: error.issues.map((e: z.ZodIssue) => `${e.path.join('.')}: ${e.message}`)
+        errors: error.issues.map((e: z.ZodIssue) => `${e.path.join('.')}: ${e.message}`),
       };
     }
     return {
       ok: false,
-      errors: ['Validation failed for this answer']
+      errors: ['Validation failed for this answer'],
     };
   }
 }
@@ -315,7 +386,7 @@ function isQuestionAnswered(question: ExtendedWizardQuestion, facts: Record<stri
   }
 
   // For questions without maps_to, check if answered directly by question ID
-  const fallbackValue = facts[question.id];
+  const fallbackValue = (facts as any)[question.id as string];
   if (fallbackValue === null || fallbackValue === undefined) return false;
   if (typeof fallbackValue === 'string') return fallbackValue.trim().length > 0;
   return true;
@@ -326,7 +397,7 @@ function computeProgress(mqs: MasterQuestionSet, facts: Record<string, any>): nu
 
   // Filter to only applicable questions (those without dependencies or with satisfied dependencies)
   const applicableQuestions = mqs.questions.filter((q) => {
-    const dependsOn = (q as any).depends_on || q.dependsOn;
+    const dependsOn = (q as any).depends_on || (q as any).dependsOn;
     if (!dependsOn?.questionId) return true; // No dependency, always applicable
 
     // Find the dependent value
@@ -338,14 +409,14 @@ function computeProgress(mqs: MasterQuestionSet, facts: Record<string, any>): nu
         .find((v) => v !== undefined);
     }
     if (depValue === undefined) {
-      depValue = facts[dependsOn.questionId];
+      depValue = (facts as any)[dependsOn.questionId];
     }
 
     // Check if dependency is satisfied
     if (Array.isArray(dependsOn.value)) {
-      // Handle when user's answer is also an array (multi_select questions)
+      // Handle when user's answer is also an array (multi-select questions)
       if (Array.isArray(depValue)) {
-        return depValue.some(val => dependsOn.value.includes(val));
+        return depValue.some((val: any) => dependsOn.value.includes(val));
       }
       // User's answer is scalar, check if it's in the dependency array
       return dependsOn.value.includes(depValue);
@@ -390,7 +461,7 @@ function updateDerivedFacts(
   questionId: string,
   jurisdiction: string,
   facts: Record<string, any>,
-  value: any
+  value: any,
 ): Record<string, any> {
   let updatedFacts = { ...facts };
 
@@ -410,7 +481,7 @@ function updateDerivedFacts(
       updatedFacts = setFactPath(
         updatedFacts,
         'issues.rent_arrears.has_arrears',
-        numericValue > 0
+        numericValue > 0,
       );
     }
   }
@@ -419,7 +490,7 @@ function updateDerivedFacts(
     updatedFacts = setFactPath(
       updatedFacts,
       'issues.rent_arrears.has_arrears',
-      Boolean(value)
+      Boolean(value),
     );
   }
 
@@ -439,20 +510,11 @@ export async function POST(request: Request) {
     if (!validationResult.success) {
       return NextResponse.json(
         { error: 'Validation failed', details: validationResult.error.format() },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const { case_id, question_id, answer } = validationResult.data;
-
-    // Runtime validation for critical WizardFacts fields
-    const criticalValidation = validateCriticalAnswer(question_id, answer);
-    if (!criticalValidation.ok) {
-      return NextResponse.json(
-        { error: 'Invalid answer for this question', details: criticalValidation.errors },
-        { status: 400 }
-      );
-    }
 
     // Create properly typed Supabase client
     const supabase = await createServerSupabaseClient();
@@ -483,11 +545,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // Type assertion: we know data exists after the null check
-    const caseRow = data as { id: string; jurisdiction: string; case_type: string; collected_facts: any };
+    const caseRow = data as {
+      id: string;
+      jurisdiction: string;
+      case_type: string;
+      collected_facts: any;
+    };
 
-    // Northern Ireland gating: eviction and money claim are out-of-scope for V1 (roadmap: Q2 2026)
-    if (caseRow.jurisdiction === 'northern-ireland' && caseRow.case_type !== 'tenancy_agreement') {
+    // ---------------------------------------
+    // 1a. Northern Ireland gating
+    // ---------------------------------------
+    if (
+      caseRow.jurisdiction === 'northern-ireland' &&
+      caseRow.case_type !== 'tenancy_agreement'
+    ) {
       return NextResponse.json(
         {
           error:
@@ -496,7 +567,12 @@ export async function POST(request: Request) {
             'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
           supported: {
             'northern-ireland': ['tenancy_agreement'],
-            'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            'england-wales': [
+              'notice_only',
+              'complete_pack',
+              'money_claim',
+              'tenancy_agreement',
+            ],
             scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
           },
         },
@@ -504,6 +580,30 @@ export async function POST(request: Request) {
       );
     }
 
+    // ---------------------------------------
+    // 1b. Runtime validation for critical WizardFacts fields
+    //      (only for structured flows; eviction is skipped)
+    // ---------------------------------------
+    const criticalValidation = validateCriticalAnswer(
+      question_id,
+      answer,
+      caseRow.case_type,
+      caseRow.jurisdiction,
+    );
+
+    if (!criticalValidation.ok) {
+      return NextResponse.json(
+        {
+          error: 'Invalid answer for this question',
+          details: criticalValidation.errors,
+        },
+        { status: 400 },
+      );
+    }
+
+    // ---------------------------------------
+    // 2. Load MQS and question
+    // ---------------------------------------
     const collectedFacts = (caseRow.collected_facts as Record<string, any>) || {};
     const product = deriveProduct(caseRow.case_type, collectedFacts);
     const mqs = loadMQS(product, caseRow.jurisdiction);
@@ -511,7 +611,7 @@ export async function POST(request: Request) {
     if (!mqs) {
       return NextResponse.json(
         { error: 'MQS not implemented for this jurisdiction yet' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -523,19 +623,19 @@ export async function POST(request: Request) {
 
     const normalizedAnswer = normalizeAnswer(question, answer);
 
-    if (!validateAnswer(question, normalizedAnswer)) {
-      return NextResponse.json({ error: 'Answer failed validation' }, { status: 400 });
-    }
+// For conversational eviction flows, skip strict MQS per-question validation.
+// The eviction wizard uses a looser, AI-driven flow and may send simple strings
+// to questions that are modelled as groups in the MQS.
+if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnswer)) {
+  return NextResponse.json({ error: 'Answer failed validation' }, { status: 400 });
+}
+
 
     // ---------------------------------------
-    // 2. Merge into WizardFacts (flat DB format)
+    // 3. Merge into WizardFacts (flat DB format)
     // ---------------------------------------
     const currentFacts = await getOrCreateWizardFacts(supabase, case_id);
-    let mergedFacts = applyMappedAnswers(
-      currentFacts,
-      question.maps_to,
-      normalizedAnswer
-    );
+    let mergedFacts = applyMappedAnswers(currentFacts, question.maps_to, normalizedAnswer);
 
     if (!question.maps_to || question.maps_to.length === 0) {
       mergedFacts = setFactPath(mergedFacts, question_id, normalizedAnswer);
@@ -545,43 +645,44 @@ export async function POST(request: Request) {
       question_id,
       caseRow.jurisdiction,
       mergedFacts,
-      normalizedAnswer
+      normalizedAnswer,
     );
 
-    const newFacts = await updateWizardFacts(
-      supabase,
-      case_id,
-      () => mergedFacts,
-      { meta: collectedFacts.__meta }
-    );
+    const newFacts = await updateWizardFacts(supabase, case_id, () => mergedFacts, {
+      meta: (collectedFacts as any).__meta,
+    });
 
     // ---------------------------------------
-    // 3. Log conversation (user + assistant)
+    // 4. Log conversation (user + assistant)
     // ---------------------------------------
     const rawAnswerText =
       typeof normalizedAnswer === 'string'
         ? normalizedAnswer
         : JSON.stringify(normalizedAnswer);
 
-    // Log the user message – DO NOT let failures here break the flow
     try {
       await supabase.from('conversations').insert({
         case_id,
         role: 'user',
         content: rawAnswerText,
         question_id,
-        input_type: question.inputType ?? null,
-        user_input: normalizedAnswer as any, // Supabase types user_input as Json
+        input_type: (question as any).inputType ?? null,
+        user_input: normalizedAnswer as any,
       } as any);
     } catch (convErr) {
       console.error('Failed to insert user conversation row:', convErr);
     }
 
-    // Build decision context for Ask Heaven
+    // ---------------------------------------
+    // 5. Decision engine context for Ask Heaven (evictions only, non-blocking)
+    // ---------------------------------------
     let decisionContext: DecisionOutput | undefined = undefined;
     try {
-      // Only run decision engine for eviction cases with enough data
-      if (caseRow.case_type === 'eviction' && collectedFacts && Object.keys(collectedFacts).length > 5) {
+      if (
+        caseRow.case_type === 'eviction' &&
+        collectedFacts &&
+        Object.keys(collectedFacts).length > 5
+      ) {
         const caseFacts = wizardFactsToCaseFacts(collectedFacts);
 
         const decisionInput: DecisionInput = {
@@ -598,7 +699,9 @@ export async function POST(request: Request) {
       // Continue without decision context
     }
 
-    // Call Ask Heaven with enhanced context, but treat all errors as non-fatal
+    // ---------------------------------------
+    // 6. Ask Heaven enhancement (non-fatal)
+    // ---------------------------------------
     let enhanced: Awaited<ReturnType<typeof enhanceAnswer>> | null = null;
     try {
       enhanced = await enhanceAnswer({
@@ -607,7 +710,7 @@ export async function POST(request: Request) {
         jurisdiction: caseRow.jurisdiction,
         product,
         caseType: caseRow.case_type,
-        decisionContext,           // Decision engine context
+        decisionContext, // Decision engine context
         wizardFacts: collectedFacts, // Current wizard state
       });
     } catch (enhErr) {
@@ -617,24 +720,21 @@ export async function POST(request: Request) {
 
     if (enhanced) {
       try {
-        await supabase
-          .from('conversations')
-          .insert({
-            case_id,
-            role: 'assistant',
-            content: enhanced.suggested_wording,
-            question_id,
-            model: 'ask-heaven',
-            user_input: normalizedAnswer as any, // Supabase types user_input as Json
-          } as any);
+        await supabase.from('conversations').insert({
+          case_id,
+          role: 'assistant',
+          content: enhanced.suggested_wording,
+          question_id,
+          model: 'ask-heaven',
+          user_input: normalizedAnswer as any,
+        } as any);
       } catch (convErr) {
         console.error('Failed to insert assistant conversation row:', convErr);
       }
     }
 
-
     // ---------------------------------------
-    // 4. Determine next question + progress
+    // 7. Determine next question + progress
     // ---------------------------------------
     const nextQuestion = getNextMQSQuestion(mqs, newFacts);
     const progress = computeProgress(mqs, newFacts);

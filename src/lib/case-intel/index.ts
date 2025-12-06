@@ -19,11 +19,15 @@ import { runDecisionEngine, type DecisionInput } from '@/lib/decision-engine';
 import { calculateCaseStrength } from './scorer';
 import { checkConsistency } from './consistency';
 import { analyzeEvidence } from './evidence';
-import { generateCaseNarrative } from './narrative';
+import {
+  generateCaseNarrative,
+  generateArrearsNarrative,
+  generateASBNarrative,
+} from './narrative';
 import type { CaseIntelligence, AnalyzeCaseOptions } from './types';
 
 export * from './types';
-export { generateArrearsNarrative, generateASBNarrative } from './narrative';
+export { generateArrearsNarrative, generateASBNarrative };
 
 /**
  * Main case intelligence analysis function
@@ -39,14 +43,12 @@ export async function analyzeCase(
   facts: CaseFacts,
   options: AnalyzeCaseOptions = {}
 ): Promise<CaseIntelligence> {
-  // Set defaults
   const {
     include_narrative = true,
     include_evidence = true,
     narrative_options = {},
   } = options;
 
-  // Validate inputs
   if (!facts) {
     throw new Error('CaseFacts is required for case analysis');
   }
@@ -89,25 +91,30 @@ export async function analyzeCase(
 
   // Step 5: Generate narratives (if requested and API key available)
   let narrative = null;
-  if (include_narrative && process.env.OPENAI_API_KEY) {
+    if (include_narrative && process.env.OPENAI_API_KEY) {
     try {
-      narrative = await generateCaseNarrative(facts, decision_engine_output, narrative_options);
+      narrative = await generateCaseNarrative(
+        facts,
+        decision_engine_output,
+        narrative_options
+      );
     } catch (error) {
+      // Log and continue without narratives rather than failing
       console.error('Narrative generation failed:', error);
-      // Continue without narratives rather than failing
     }
   }
+
 
   // Fallback if narrative generation failed or was skipped
   if (!narrative) {
     narrative = {
-      case_summary: 'Narrative generation not available (API key not configured or error occurred)',
+      case_summary:
+        'Narrative generation not available (API key not configured or error occurred)',
       ground_narratives: {},
       generated_at: new Date().toISOString(),
     };
   }
 
-  // Step 6: Return comprehensive intelligence
   return {
     score_report,
     narrative,
@@ -128,7 +135,9 @@ export async function analyzeCase(
 /**
  * Quick strength score only (no narratives or detailed evidence)
  */
-export function quickScoreCase(facts: CaseFacts): {
+export function quickScoreCase(
+  facts: CaseFacts
+): {
   score: number;
   rating: string;
   key_issues: string[];
@@ -163,7 +172,9 @@ export function quickScoreCase(facts: CaseFacts): {
   // Extract key issues
   const key_issues: string[] = [];
   if (score_report.components.legal_eligibility.issues) {
-    key_issues.push(...score_report.components.legal_eligibility.issues.slice(0, 3));
+    key_issues.push(
+      ...score_report.components.legal_eligibility.issues.slice(0, 3)
+    );
   }
   if (score_report.components.evidence.issues) {
     key_issues.push(...score_report.components.evidence.issues.slice(0, 2));
@@ -179,7 +190,9 @@ export function quickScoreCase(facts: CaseFacts): {
 /**
  * Check if case is ready for submission
  */
-export function isCaseReadyForSubmission(facts: CaseFacts): {
+export function isCaseReadyForSubmission(
+  facts: CaseFacts
+): {
   ready: boolean;
   blockers: string[];
   warnings: string[];
@@ -217,7 +230,9 @@ export function isCaseReadyForSubmission(facts: CaseFacts): {
   }
 
   // Check high-priority data gaps
-  const highPriorityGaps = inconsistencies.data_gaps.filter((g) => g.priority === 'high');
+  const highPriorityGaps = inconsistencies.data_gaps.filter(
+    (g) => g.priority === 'high'
+  );
   for (const gap of highPriorityGaps) {
     blockers.push(`Missing: ${gap.field} - ${gap.impact}`);
   }

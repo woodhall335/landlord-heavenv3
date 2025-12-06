@@ -128,15 +128,17 @@ const minimalScotlandCase: CaseFacts = {
 
 beforeAll(() => {
   __setTestJsonAIClient({
-    async jsonCompletion(messages: any) {
+    // Cast as any so we don't fight the generic type signature
+    jsonCompletion: (async (messages: any) => {
       const messageArr = Array.isArray(messages) ? messages : [messages];
       const userContent = messageArr[messageArr.length - 1]?.content ?? '';
-      const lowerContent = userContent.toLowerCase();
+      const lowerContent = String(userContent).toLowerCase();
 
       if (lowerContent.includes('case summary')) {
+        const json = { summary: 'Bundle mock case summary.' };
         return {
-          content: JSON.stringify({ summary: 'Bundle mock case summary.' }),
-          json: { summary: 'Bundle mock case summary.' },
+          content: JSON.stringify(json),
+          json,
           usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
           model: 'test-model',
           cost_usd: 0,
@@ -144,9 +146,10 @@ beforeAll(() => {
       }
 
       if (lowerContent.includes('generate particulars') || lowerContent.includes('narrative')) {
+        const json = { narrative: 'Bundle mock narrative with key facts.' };
         return {
-          content: JSON.stringify({ narrative: 'Bundle mock narrative with key facts.' }),
-          json: { narrative: 'Bundle mock narrative with key facts.' },
+          content: JSON.stringify(json),
+          json,
           usage: { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 },
           model: 'test-model',
           cost_usd: 0,
@@ -154,7 +157,7 @@ beforeAll(() => {
       }
 
       const json = {
-        suggested_wording: 'Placeholder wording',
+        suggested_wording: 'Bundle placeholder wording',
         missing_information: [],
         evidence_suggestions: [],
         consistency_flags: [],
@@ -167,8 +170,8 @@ beforeAll(() => {
         model: 'test-model',
         cost_usd: 0,
       };
-    },
-  });
+    }) as any,
+  } as any);
 });
 
 afterAll(() => {

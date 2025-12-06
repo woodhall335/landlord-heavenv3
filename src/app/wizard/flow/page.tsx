@@ -13,6 +13,10 @@ import { WizardContainer } from '@/components/wizard/WizardContainer';
 import { StructuredWizard } from '@/components/wizard/StructuredWizard';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
+type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
+type Jurisdiction = 'england-wales' | 'scotland' | 'northern-ireland' | null;
+type AskHeavenProduct = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
+
 function WizardFlowContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -22,16 +26,8 @@ function WizardFlowContent() {
   const [startError, setStartError] = useState<string | null>(null);
   const hasStartedRef = useRef(false);
 
-  const type = searchParams.get('type') as
-    | 'eviction'
-    | 'money_claim'
-    | 'tenancy_agreement'
-    | null;
-  const jurisdiction = searchParams.get('jurisdiction') as
-    | 'england-wales'
-    | 'scotland'
-    | 'northern-ireland'
-    | null;
+  const type = searchParams.get('type') as CaseType | null;
+  const jurisdiction = searchParams.get('jurisdiction') as Jurisdiction;
   const product = searchParams.get('product'); // Specific product (notice_only, complete_pack, etc.)
   const productVariant = searchParams.get('product_variant'); // e.g. money_claim_england_wales
   const normalizedProduct =
@@ -48,6 +44,18 @@ function WizardFlowContent() {
       router.push('/wizard');
     }
   }, [hasRequiredParams, router]);
+
+  // Derive a coarse product label for Ask Heaven (its Product union)
+  const askHeavenProduct: AskHeavenProduct | null = (() => {
+    if (type === 'money_claim') return 'money_claim';
+    if (type === 'tenancy_agreement') return 'tenancy_agreement';
+    if (type === 'eviction') {
+      // For eviction flows we pass product down directly to WizardContainer,
+      // and Ask Heaven is handled via the conversational flow itself.
+      return null;
+    }
+    return null;
+  })();
 
   // Initialize case for structured wizard
   const startStructuredWizard = useCallback(async () => {
@@ -183,6 +191,7 @@ function WizardFlowContent() {
         caseId={caseId}
         caseType={type}
         jurisdiction={jurisdiction}
+        product={askHeavenProduct ?? (type === 'money_claim' ? 'money_claim' : 'tenancy_agreement')}
         initialQuestion={initialQuestion ?? undefined}
         onComplete={handleComplete}
       />

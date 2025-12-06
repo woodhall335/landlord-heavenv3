@@ -53,7 +53,7 @@ vi.mock('@/lib/wizard/mqs-loader', async () => {
 describe('Money claim completion gating', () => {
   beforeAll(() => {
     __setTestJsonAIClient({
-      async jsonCompletion() {
+      jsonCompletion: (async () => {
         const json = {
           suggested_wording: '',
           missing_information: [],
@@ -68,8 +68,8 @@ describe('Money claim completion gating', () => {
           model: 'test-model',
           cost_usd: 0,
         };
-      },
-    });
+      }) as any,
+    } as any);
   });
 
   afterAll(() => {

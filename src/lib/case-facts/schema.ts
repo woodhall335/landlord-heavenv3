@@ -15,6 +15,8 @@ export interface WizardFactsMeta {
   product: string | null;
   original_product: string | null;
   product_tier?: string | null;
+  jurisdiction?: 'england-wales' | 'scotland' | 'northern-ireland' | null;
+  case_id?: string | null;
 }
 
 export interface WizardFacts {
@@ -41,6 +43,15 @@ export interface TenancyFacts {
   deposit_protected: boolean | null;
   deposit_scheme_name: string | null;
   deposit_protection_date: string | null;
+  // For deposit prescribed information (England & Wales)
+  prescribed_info_given?: boolean | null;
+}
+
+export interface PropertyAddress {
+  line1: string | null;
+  line2: string | null;
+  city: string | null;
+  postcode: string | null;
 }
 
 export interface PropertyFacts {
@@ -50,6 +61,8 @@ export interface PropertyFacts {
   postcode: string | null;
   country: 'england-wales' | 'scotland' | 'northern-ireland' | null;
   is_hmo: boolean | null;
+  // Legacy/alternative nested address shape used by some bundles/case-intel
+  address?: PropertyAddress;
 }
 
 export interface PartyDetails {
@@ -72,9 +85,11 @@ export interface PartiesFacts {
 
 export interface ArrearsItem {
   period_start: string; // YYYY-MM-DD
-  period_end: string; // YYYY-MM-DD
+  period_end: string;   // YYYY-MM-DD
   rent_due: number;
   rent_paid: number;
+  // Some modules work directly with "amount_owed"
+  amount_owed?: number | null;
 }
 
 export interface IssueFacts {
@@ -91,6 +106,11 @@ export interface IssueFacts {
     incidents: string[]; // free-text incident descriptions
   };
   other_breaches: {
+    has_breaches: boolean | null;
+    description: string | null;
+  };
+  // Alias for "other_breaches" used by some intel/evidence modules
+  breaches?: {
     has_breaches: boolean | null;
     description: string | null;
   };
@@ -121,6 +141,8 @@ export interface NoticeFacts {
   expiry_date: string | null;
   service_method: string | null;
   served_by: string | null;
+  // Date the notice was actually served (distinct from notice_date in some flows)
+  service_date?: string | null;
 }
 
 export interface CourtFacts {
@@ -146,6 +168,10 @@ export interface EvidenceFacts {
   safety_certificates_uploaded: boolean;
   asb_evidence_uploaded: boolean;
   other_evidence_uploaded: boolean;
+  // Additional evidence flags used by intel/evidence scoring
+  correspondence_uploaded?: boolean;
+  asb_logs_uploaded?: boolean;
+  photos_uploaded?: boolean;
   missing_evidence_notes: string[];
 }
 
@@ -190,7 +216,8 @@ export interface MoneyClaimFacts {
   demand_letter_date?: string | null;
   second_demand_date?: string | null;
   evidence_summary?: string | null;
-  basis_of_claim?: string | null;
+  // Narrowed to the actual values the rest of the system expects
+  basis_of_claim?: 'rent_arrears' | 'damages' | 'both' | null;
   arrears_schedule_confirmed?: boolean | null;
   evidence_types_available?: string[] | null;
   pap_documents_served?: boolean | null;
@@ -207,6 +234,8 @@ export interface MetaFacts {
   product: string | null;
   original_product: string | null;
   product_tier?: string | null;
+  jurisdiction?: 'england-wales' | 'scotland' | 'northern-ireland' | null;
+  case_id?: string | null;
 }
 
 // -----------------------------------------------------------------------------
@@ -222,6 +251,12 @@ export interface CaseHealth {
   risk_level: CaseRiskLevel;
 }
 
+export interface ComplianceFacts {
+  gas_safety_cert_provided?: boolean | null;
+  epc_provided?: boolean | null;
+  how_to_rent_given?: boolean | null;
+}
+
 export interface CaseFacts {
   tenancy: TenancyFacts;
   property: PropertyFacts;
@@ -234,6 +269,7 @@ export interface CaseFacts {
   money_claim: MoneyClaimFacts;
   meta: MetaFacts;
   case_health: CaseHealth;
+  compliance: ComplianceFacts;
 }
 
 // =============================================================================
@@ -249,6 +285,8 @@ export const createEmptyWizardFacts = (): WizardFacts => ({
     product: null,
     original_product: null,
     product_tier: null,
+    jurisdiction: null,
+    case_id: null,
   },
 });
 
@@ -270,6 +308,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     deposit_protected: null,
     deposit_scheme_name: null,
     deposit_protection_date: null,
+    prescribed_info_given: null,
   },
   property: {
     address_line1: null,
@@ -278,6 +317,12 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     postcode: null,
     country: null,
     is_hmo: null,
+    address: {
+      line1: null,
+      line2: null,
+      city: null,
+      postcode: null,
+    },
   },
   parties: {
     landlord: { name: null, email: null, phone: null, address_line1: null, address_line2: null, city: null, postcode: null },
@@ -289,6 +334,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     rent_arrears: { has_arrears: null, arrears_items: [], total_arrears: null, pre_action_confirmed: null },
     asb: { has_asb: null, description: null, incidents: [] },
     other_breaches: { has_breaches: null, description: null },
+    breaches: { has_breaches: null, description: null },
     section8_grounds: {
       selected_grounds: null,
       arrears_breakdown: null,
@@ -313,6 +359,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     expiry_date: null,
     service_method: null,
     served_by: null,
+    service_date: null,
   },
   court: {
     route: null,
@@ -336,6 +383,9 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     safety_certificates_uploaded: false,
     asb_evidence_uploaded: false,
     other_evidence_uploaded: false,
+    correspondence_uploaded: false,
+    asb_logs_uploaded: false,
+    photos_uploaded: false,
     missing_evidence_notes: [],
   },
   service_contact: {
@@ -394,11 +444,18 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     product: null,
     original_product: null,
     product_tier: null,
+    jurisdiction: null,
+    case_id: null,
   },
   case_health: {
     contradictions: [],
     missing_evidence: [],
     compliance_warnings: [],
     risk_level: 'low',
+  },
+  compliance: {
+    gas_safety_cert_provided: null,
+    epc_provided: null,
+    how_to_rent_given: null,
   },
 });

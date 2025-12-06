@@ -616,6 +616,21 @@ export function createSampleNoticeToLeaveData(): NoticeToLeaveData {
   const noticeDate = new Date('2025-01-15');
   const earliestLeavingDate = calculateEarliestLeavingDate(noticeDate, 28);
 
+  const ground1 = buildGround1RentArrears({
+    totalArrears: 3600,
+    rentAmount: 1200,
+    rentPeriod: 'month',
+    arrearsBreakdown: [
+      { period: 'November 2024', amount_due: 1200, amount_paid: 0, balance: 1200 },
+      { period: 'December 2024', amount_due: 1200, amount_paid: 0, balance: 2400 },
+      { period: 'January 2025', amount_due: 1200, amount_paid: 0, balance: 3600 },
+    ],
+    lastPaymentDate: '1 October 2024',
+    lastPaymentAmount: 1200,
+    preActionEvidence:
+      'Rent statements provided on 5 Nov 2024, 10 Dec 2024, 5 Jan 2025. Payment plan offered on 20 Dec 2024.',
+  });
+
   return {
     // Landlord
     landlord_full_name: 'Sarah MacDonald',
@@ -632,24 +647,21 @@ export function createSampleNoticeToLeaveData(): NoticeToLeaveData {
 
     // Dates
     notice_date: '15 January 2025',
-    earliest_leaving_date: earliestLeavingDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }),
-    earliest_tribunal_date: earliestLeavingDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }),
+    earliest_leaving_date: earliestLeavingDate.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    }),
+    earliest_tribunal_date: earliestLeavingDate.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    }),
     notice_period_days: 28,
 
-    // Ground 1 - Rent arrears
-    ...buildGround1RentArrears({
-      totalArrears: 3600,
-      rentAmount: 1200,
-      rentPeriod: 'month',
-      arrearsBreakdown: [
-        { period: 'November 2024', amount_due: 1200, amount_paid: 0, balance: 1200 },
-        { period: 'December 2024', amount_due: 1200, amount_paid: 0, balance: 2400 },
-        { period: 'January 2025', amount_due: 1200, amount_paid: 0, balance: 3600 },
-      ],
-      lastPaymentDate: '1 October 2024',
-      lastPaymentAmount: 1200,
-      preActionEvidence: 'Rent statements provided on 5 Nov 2024, 10 Dec 2024, 5 Jan 2025. Payment plan offered on 20 Dec 2024.',
-    }),
+    // Ground 1 - Rent arrears (spread partial + force grounds to array)
+    ...ground1,
+    grounds: ground1.grounds ?? [],
 
     // Deposit
     deposit_protected: true,
@@ -657,10 +669,10 @@ export function createSampleNoticeToLeaveData(): NoticeToLeaveData {
     deposit_scheme: 'SafeDeposits Scotland',
 
     // Council
-    council_name: 'City of Edinburgh Council',
     council_phone: '0131 200 2000',
 
     // Metadata
     document_id: 'NTL-SAMPLE-001',
   };
 }
+

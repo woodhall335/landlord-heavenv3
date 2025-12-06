@@ -302,8 +302,21 @@ function buildASBIncidents(facts: WizardFacts): ASBIncident[] {
 /**
  * Helper: Normalize rent period to "month" or "week"
  */
-function normalizeRentPeriod(period: 'weekly' | 'monthly' | 'yearly' | 'other' | null | undefined): string {
+function normalizeRentPeriod(
+  period:
+    | 'weekly'
+    | 'fortnightly'
+    | 'monthly'
+    | 'quarterly'
+    | 'yearly'
+    | 'other'
+    | null
+    | undefined
+): string {
   if (!period) return 'month'; // Default
+
+  if (period === 'fortnightly') return 'week';
+  if (period === 'quarterly') return 'month';
 
   if (period === 'weekly') return 'week';
   if (period === 'monthly') return 'month';
@@ -311,6 +324,7 @@ function normalizeRentPeriod(period: 'weekly' | 'monthly' | 'yearly' | 'other' |
 
   return 'month'; // Default
 }
+
 
 /**
  * Helper: Parse UK date string (DD/MM/YYYY or "15 January 2025")

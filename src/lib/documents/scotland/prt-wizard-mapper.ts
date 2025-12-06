@@ -53,11 +53,26 @@ function buildAddress(
   return parts.join(', ');
 }
 
-function mapRentPeriod(value: 'weekly' | 'monthly' | 'yearly' | 'other' | null | undefined): PRTData['rent_period'] {
+function mapRentPeriod(
+  value:
+    | 'weekly'
+    | 'fortnightly'
+    | 'monthly'
+    | 'quarterly'
+    | 'yearly'
+    | 'other'
+    | null
+    | undefined
+): PRTData['rent_period'] {
   if (!value) return 'month';
+
+  if (value === 'fortnightly') return 'week'; // map to weekly for PRT template
+  if (value === 'quarterly') return 'month'; // map to monthly equivalent
+
   if (value === 'weekly') return 'week';
   if (value === 'monthly') return 'month';
   if (value === 'yearly') return 'year';
+
   return 'month';
 }
 

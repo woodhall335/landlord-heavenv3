@@ -11,7 +11,12 @@
 
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import type { DecisionOutput } from '@/lib/decision-engine';
-import type { EvidenceAnalysis, EvidenceItem, MissingEvidence, TimelineEvent } from './types';
+import type {
+  EvidenceAnalysis,
+  EvidenceItem,
+  MissingEvidence,
+  TimelineEvent,
+} from './types';
 
 /**
  * Analyze evidence completeness and quality
@@ -44,9 +49,13 @@ export function analyzeEvidence(
   const missing_evidence = identifyMissingEvidence(facts, decisionOutput);
 
   // Calculate completeness score
-  const completeness_score = calculateCompletenessScore(facts, decisionOutput, missing_evidence);
+  const completeness_score = calculateCompletenessScore(
+    facts,
+    decisionOutput,
+    missing_evidence
+  );
 
-  // Sort timeline by date
+  // Sort timeline by date (keep undated events stable)
   extracted_timeline.sort((a, b) => {
     if (!a.date || !b.date) return 0;
     return a.date.localeCompare(b.date);
@@ -102,8 +111,12 @@ function extractArrearsEvidence(
         id,
         category: 'arrears',
         type: 'amount',
-        content: `Period ${item.period_start || 'unknown'} to ${item.period_end || 'unknown'}: £${(item.amount_owed || 0).toFixed(2)}`,
-        dates: [item.period_start, item.period_end].filter((d) => d !== null) as string[],
+        content: `Period ${item.period_start || 'unknown'} to ${
+          item.period_end || 'unknown'
+        }: £${(item.amount_owed || 0).toFixed(2)}`,
+        dates: [item.period_start, item.period_end].filter(
+          (d): d is string => d !== null && d !== undefined
+        ),
         amounts: [item.amount_owed || 0],
         quality: item.amount_owed && item.period_start ? 'strong' : 'weak',
       });
@@ -117,9 +130,12 @@ function extractArrearsEvidence(
         });
       }
 
-      groundLinks['8']?.push(id);
-      groundLinks['10']?.push(id);
-      groundLinks['11']?.push(id);
+      if (!groundLinks['8']) groundLinks['8'] = [];
+      if (!groundLinks['10']) groundLinks['10'] = [];
+      if (!groundLinks['11']) groundLinks['11'] = [];
+      groundLinks['8'].push(id);
+      groundLinks['10'].push(id);
+      groundLinks['11'].push(id);
     }
 
     // Extract arrears breakdown text
@@ -159,35 +175,47 @@ function extractASBEvidence(
     }
 
     if (facts.issues.asb.incidents) {
-      const incidents = Array.isArray(facts.issues.asb.incidents)
-        ? facts.issues.asb.incidents
-        : [facts.issues.asb.incidents];
+      const raw = facts.issues.asb.incidents as any;
+      const incidents: any[] = Array.isArray(raw) ? raw : [raw];
+
+      if (!groundLinks['14']) groundLinks['14'] = [];
 
       for (let i = 0; i < incidents.length; i++) {
-        const incident = incidents[i];
+        const incident: any = incidents[i];
         const id = `asb_incident_${i}`;
 
-        if (typeof incident === 'object' && incident !== null) {
-          items.push({
-            id,
-            category: 'asb',
-            type: 'text',
-            content: JSON.stringify(incident),
-            dates: incident.date ? [incident.date] : [],
-            quality: incident.date ? 'strong' : 'adequate',
-          });
+        let date: string | undefined;
+        let description: string | undefined;
 
-          if (incident.date) {
-            timeline.push({
-              date: incident.date,
-              description: incident.description || 'ASB incident',
-              category: 'asb',
-              source: 'asb_incidents',
-            });
+        if (incident && typeof incident === 'object') {
+          if ('date' in incident && typeof incident.date === 'string') {
+            date = incident.date;
+          }
+          if ('description' in incident && typeof incident.description === 'string') {
+            description = incident.description;
           }
         }
 
-        groundLinks['14']?.push(id);
+        items.push({
+          id,
+          category: 'asb',
+          type: 'text',
+          content:
+            typeof incident === 'string' ? incident : JSON.stringify(incident),
+          dates: date ? [date] : [],
+          quality: date ? 'strong' : 'adequate',
+        });
+
+        if (date) {
+          timeline.push({
+            date,
+            description: description || 'ASB incident',
+            category: 'asb',
+            source: 'asb_incidents',
+          });
+        }
+
+        groundLinks['14'].push(id);
       }
     }
 
@@ -199,7 +227,8 @@ function extractASBEvidence(
         content: facts.issues.section8_grounds.incident_log,
         quality: 'adequate',
       });
-      groundLinks['14']?.push('incident_log');
+      if (!groundLinks['14']) groundLinks['14'] = [];
+      groundLinks['14'].push('incident_log');
     }
   }
 }
@@ -210,7 +239,7 @@ function extractASBEvidence(
 function extractBreachEvidence(
   facts: CaseFacts,
   items: EvidenceItem[],
-  timeline: TimelineEvent[],
+  _timeline: TimelineEvent[],
   groundLinks: { [ground: string]: string[] }
 ): void {
   if (facts.issues.breaches?.has_breaches) {
@@ -235,7 +264,8 @@ function extractBreachEvidence(
         content: facts.issues.section8_grounds.breach_details,
         quality: 'adequate',
       });
-      groundLinks['12']?.push('breach_details');
+      if (!groundLinks['12']) groundLinks['12'] = [];
+      groundLinks['12'].push('breach_details');
     }
 
     if (facts.issues.section8_grounds?.damage_schedule) {
@@ -246,7 +276,8 @@ function extractBreachEvidence(
         content: facts.issues.section8_grounds.damage_schedule,
         quality: 'adequate',
       });
-      groundLinks['15']?.push('damage_schedule');
+      if (!groundLinks['15']) groundLinks['15'] = [];
+      groundLinks['15'].push('damage_schedule');
     }
   }
 }
@@ -254,14 +285,19 @@ function extractBreachEvidence(
 /**
  * Extract compliance evidence
  */
-function extractComplianceEvidence(facts: CaseFacts, items: EvidenceItem[]): void {
+function extractComplianceEvidence(
+  facts: CaseFacts,
+  items: EvidenceItem[]
+): void {
   // Deposit protection
   if (facts.tenancy.deposit_protected !== null) {
     items.push({
       id: 'deposit_protected',
       category: 'compliance',
       type: 'text',
-      content: `Deposit protected: ${facts.tenancy.deposit_protected ? 'Yes' : 'No'}`,
+      content: `Deposit protected: ${
+        facts.tenancy.deposit_protected ? 'Yes' : 'No'
+      }`,
       quality: facts.tenancy.deposit_protected ? 'strong' : 'weak',
     });
   }
@@ -272,7 +308,9 @@ function extractComplianceEvidence(facts: CaseFacts, items: EvidenceItem[]): voi
       id: 'prescribed_info_given',
       category: 'compliance',
       type: 'text',
-      content: `Prescribed info given: ${facts.tenancy.prescribed_info_given ? 'Yes' : 'No'}`,
+      content: `Prescribed info given: ${
+        facts.tenancy.prescribed_info_given ? 'Yes' : 'No'
+      }`,
       quality: facts.tenancy.prescribed_info_given ? 'strong' : 'weak',
     });
   }
@@ -283,7 +321,9 @@ function extractComplianceEvidence(facts: CaseFacts, items: EvidenceItem[]): voi
       id: 'gas_safety_cert',
       category: 'compliance',
       type: 'text',
-      content: `Gas safety cert: ${facts.compliance.gas_safety_cert_provided ? 'Yes' : 'No'}`,
+      content: `Gas safety cert: ${
+        facts.compliance.gas_safety_cert_provided ? 'Yes' : 'No'
+      }`,
       quality: facts.compliance.gas_safety_cert_provided ? 'strong' : 'weak',
     });
   }
@@ -294,7 +334,9 @@ function extractComplianceEvidence(facts: CaseFacts, items: EvidenceItem[]): voi
       id: 'epc_provided',
       category: 'compliance',
       type: 'text',
-      content: `EPC provided: ${facts.compliance.epc_provided ? 'Yes' : 'No'}`,
+      content: `EPC provided: ${
+        facts.compliance.epc_provided ? 'Yes' : 'No'
+      }`,
       quality: facts.compliance.epc_provided ? 'strong' : 'weak',
     });
   }
@@ -305,7 +347,9 @@ function extractComplianceEvidence(facts: CaseFacts, items: EvidenceItem[]): voi
       id: 'how_to_rent',
       category: 'compliance',
       type: 'text',
-      content: `How to Rent guide: ${facts.compliance.how_to_rent_given ? 'Yes' : 'No'}`,
+      content: `How to Rent guide: ${
+        facts.compliance.how_to_rent_given ? 'Yes' : 'No'
+      }`,
       quality: facts.compliance.how_to_rent_given ? 'strong' : 'weak',
     });
   }
@@ -363,11 +407,16 @@ function extractUploadedEvidence(
 /**
  * Extract notice evidence to timeline
  */
-function extractNoticeEvidence(facts: CaseFacts, timeline: TimelineEvent[]): void {
+function extractNoticeEvidence(
+  facts: CaseFacts,
+  timeline: TimelineEvent[]
+): void {
   if (facts.notice.service_date) {
     timeline.push({
       date: facts.notice.service_date,
-      description: `Notice served (${facts.notice.service_method || 'method not specified'})`,
+      description: `Notice served (${
+        facts.notice.service_method || 'method not specified'
+      })`,
       category: 'procedural',
       source: 'notice',
     });
@@ -513,17 +562,21 @@ function identifyMissingEvidence(
  */
 function calculateCompletenessScore(
   facts: CaseFacts,
-  decisionOutput: DecisionOutput,
+  _decisionOutput: DecisionOutput,
   missingEvidence: MissingEvidence[]
 ): number {
   let score = 100;
 
   // Deduct for missing critical evidence
-  const criticalMissing = missingEvidence.filter((m) => m.priority === 'critical').length;
+  const criticalMissing = missingEvidence.filter(
+    (m) => m.priority === 'critical'
+  ).length;
   score -= criticalMissing * 15;
 
   // Deduct for missing recommended evidence
-  const recommendedMissing = missingEvidence.filter((m) => m.priority === 'recommended').length;
+  const recommendedMissing = missingEvidence.filter(
+    (m) => m.priority === 'recommended'
+  ).length;
   score -= recommendedMissing * 5;
 
   // Check basic evidence is present

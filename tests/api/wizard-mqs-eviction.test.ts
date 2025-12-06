@@ -68,7 +68,7 @@ vi.mock('@/lib/ai', async () => {
 describe('MQS eviction flow (England & Wales)', () => {
   beforeAll(() => {
     __setTestJsonAIClient({
-      async jsonCompletion() {
+      jsonCompletion: (async () => {
         const json = {
           suggested_wording: '',
           missing_information: [],
@@ -83,8 +83,8 @@ describe('MQS eviction flow (England & Wales)', () => {
           model: 'test-model',
           cost_usd: 0,
         };
-      },
-    });
+      }) as any,
+    } as any);
   });
 
   afterAll(() => {
@@ -186,7 +186,7 @@ describe('MQS eviction flow (England & Wales)', () => {
     const body = await response.json();
     expect(response.status).toBe(200);
     expect(body.next_question.id).toBe('ai_q1');
-      expect((aiModule.getNextQuestion as unknown as Mock)).toHaveBeenCalled();
+    expect((aiModule.getNextQuestion as unknown as Mock)).toHaveBeenCalled();
   });
 
   it('starts Scotland complete-pack cases with MQS first question', async () => {
