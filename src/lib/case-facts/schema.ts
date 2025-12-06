@@ -43,6 +43,7 @@ export interface TenancyFacts {
   deposit_protected: boolean | null;
   deposit_scheme_name: string | null;
   deposit_protection_date: string | null;
+  deposit_reference?: string | null;
   // For deposit prescribed information (England & Wales)
   prescribed_info_given?: boolean | null;
 }
@@ -97,6 +98,7 @@ export interface IssueFacts {
     has_arrears: boolean | null;
     arrears_items: ArrearsItem[];
     total_arrears: number | null;
+    arrears_at_notice_date?: number | null;
     // Scotland pre-action requirements
     pre_action_confirmed: boolean | null; // for Scotland Notice to Leave
   };
@@ -181,6 +183,7 @@ export interface ServiceContactFacts {
   service_address_line1: string | null;
   service_address_line2: string | null;
   service_city: string | null;
+   service_address_county?: string | null;
   service_postcode: string | null;
   service_email: string | null;
   service_phone: string | null;
@@ -308,6 +311,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     deposit_protected: null,
     deposit_scheme_name: null,
     deposit_protection_date: null,
+    deposit_reference: null,
     prescribed_info_given: null,
   },
   property: {
@@ -331,7 +335,13 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     tenants: [],
   },
   issues: {
-    rent_arrears: { has_arrears: null, arrears_items: [], total_arrears: null, pre_action_confirmed: null },
+    rent_arrears: {
+      has_arrears: null,
+      arrears_items: [],
+      total_arrears: null,
+      arrears_at_notice_date: null,
+      pre_action_confirmed: null,
+    },
     asb: { has_asb: null, description: null, incidents: [] },
     other_breaches: { has_breaches: null, description: null },
     breaches: { has_breaches: null, description: null },
@@ -394,6 +404,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     service_address_line1: null,
     service_address_line2: null,
     service_city: null,
+    service_address_county: null,
     service_postcode: null,
     service_email: null,
     service_phone: null,

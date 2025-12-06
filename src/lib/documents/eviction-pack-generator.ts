@@ -17,6 +17,11 @@ import { generateSection8Notice, Section8NoticeData } from './section8-generator
 import { fillN5Form, fillN119Form, CaseData } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
 import { buildServiceContact } from '@/lib/documents/service-contact';
+import {
+  wizardFactsToEnglandWalesEviction,
+  wizardFactsToScotlandEviction,
+  buildScotlandEvictionCase,
+} from './eviction-wizard-mapper';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -441,6 +446,7 @@ function calculateEstimatedTimeline(evictionCase: EvictionCase): any {
  */
 async function generateEnglandWalesEvictionPack(
   evictionCase: EvictionCase,
+  caseData: CaseData,
   groundsData: any
 ): Promise<EvictionPackDocument[]> {
   const documents: EvictionPackDocument[] = [];
@@ -502,38 +508,24 @@ async function generateEnglandWalesEvictionPack(
   }
 
   // 3. N5 Claim Form
-  const service = buildServiceContact(evictionCase);
+  const service = buildServiceContact({ ...evictionCase, ...caseData });
 
-  const caseData: CaseData = {
-    landlord_full_name: evictionCase.landlord_full_name,
-    landlord_address: evictionCase.landlord_address,
-    landlord_postcode: evictionCase.landlord_address_postcode,
-    landlord_phone: evictionCase.landlord_phone,
-    landlord_email: evictionCase.landlord_email,
-
-    // Solicitor / representative (if any)
-    solicitor_firm: evictionCase.solicitor_firm,
-    solicitor_address: evictionCase.solicitor_address,
-    solicitor_phone: evictionCase.solicitor_phone,
-    solicitor_email: evictionCase.solicitor_email,
-    dx_number: evictionCase.dx_number,
-
-    // Tenant / property
-    tenant_full_name: evictionCase.tenant_full_name,
-    property_address: evictionCase.property_address,
-    property_postcode: evictionCase.property_address_postcode,
-
-    // Tenancy
-    tenancy_start_date: evictionCase.tenancy_start_date,
-    rent_amount: evictionCase.rent_amount,
-    rent_frequency: evictionCase.rent_frequency,
-
-    // Signature & court
-    signatory_name: evictionCase.landlord_full_name,
-    signature_date: new Date().toISOString().split('T')[0],
-    court_name: evictionCase.court_name,
-
-    // Unified address for service
+  const enrichedCaseData: CaseData = {
+    ...caseData,
+    landlord_full_name: caseData.landlord_full_name || evictionCase.landlord_full_name,
+    landlord_address: caseData.landlord_address || evictionCase.landlord_address,
+    landlord_postcode: caseData.landlord_postcode || evictionCase.landlord_address_postcode,
+    landlord_phone: caseData.landlord_phone || evictionCase.landlord_phone,
+    landlord_email: caseData.landlord_email || evictionCase.landlord_email,
+    tenant_full_name: caseData.tenant_full_name || evictionCase.tenant_full_name,
+    property_address: caseData.property_address || evictionCase.property_address,
+    property_postcode: caseData.property_postcode || evictionCase.property_address_postcode,
+    tenancy_start_date: caseData.tenancy_start_date || evictionCase.tenancy_start_date,
+    rent_amount: caseData.rent_amount ?? evictionCase.rent_amount,
+    rent_frequency: caseData.rent_frequency || evictionCase.rent_frequency,
+    signatory_name: caseData.signatory_name || evictionCase.landlord_full_name,
+    signature_date: caseData.signature_date || new Date().toISOString().split('T')[0],
+    court_name: caseData.court_name || evictionCase.court_name,
     service_address_line1: service.service_address_line1,
     service_address_line2: service.service_address_line2,
     service_address_town: service.service_address_town,
@@ -543,7 +535,7 @@ async function generateEnglandWalesEvictionPack(
     service_email: service.service_email,
   };
 
-  const n5Pdf = await fillN5Form(caseData);
+  const n5Pdf = await fillN5Form(enrichedCaseData);
   documents.push({
     title: 'Form N5 - Claim for Possession',
     description: 'Official court claim form for possession proceedings',
@@ -553,7 +545,7 @@ async function generateEnglandWalesEvictionPack(
   });
 
   // 4. N119 Particulars of Claim
-  const n119Pdf = await fillN119Form(caseData);
+  const n119Pdf = await fillN119Form(enrichedCaseData);
   documents.push({
     title: 'Form N119 - Particulars of Claim',
     description: 'Detailed particulars supporting your possession claim',
@@ -569,55 +561,12 @@ async function generateEnglandWalesEvictionPack(
  * Generate Scotland Eviction Pack
  */
 async function generateScotlandEvictionPack(
-  evictionCase: EvictionCase
+  evictionCase: EvictionCase,
+  scotlandData: ScotlandCaseData
 ): Promise<EvictionPackDocument[]> {
   const documents: EvictionPackDocument[] = [];
 
   const { fillScotlandOfficialForm } = await import('./scotland-forms-filler');
-
-  // Prepare Scotland case data
-  const mapDepositSchemeToScotland = (
-    scheme?: EvictionCase['deposit_scheme_name']
-  ): ScotlandCaseData['deposit_scheme'] => {
-    switch (scheme) {
-      case 'SafeDeposits Scotland':
-        return 'SafeDeposits Scotland';
-      case 'DPS':
-        return 'Letting Protection Service Scotland';
-      case 'MyDeposits':
-        return 'MyDeposits Scotland';
-      default:
-        return undefined;
-    }
-  };
-
-  const scotlandData: ScotlandCaseData = {
-    landlord_full_name: evictionCase.landlord_full_name,
-    landlord_2_name: evictionCase.landlord_2_name,
-    landlord_address: evictionCase.landlord_address,
-    landlord_postcode: evictionCase.landlord_address_postcode,
-    landlord_phone: evictionCase.landlord_phone,
-    landlord_email: evictionCase.landlord_email,
-    landlord_registration_number: evictionCase.landlord_registration_number,
-    tenant_full_name: evictionCase.tenant_full_name,
-    tenant_2_name: evictionCase.tenant_2_name,
-    property_address: evictionCase.property_address,
-    property_postcode: evictionCase.property_address_postcode,
-    tenancy_start_date: evictionCase.tenancy_start_date,
-    rent_amount: evictionCase.rent_amount,
-    rent_frequency: evictionCase.rent_frequency,
-    notice_date: new Date().toISOString().split('T')[0],
-    leaving_date: calculateLeavingDate(evictionCase, 84), // 84 days notice in Scotland
-    grounds: evictionCase.grounds.map((g) => ({
-      code: g.code,
-      title: g.title,
-      particulars: g.particulars,
-      evidence: g.evidence,
-    })),
-    deposit_amount: evictionCase.deposit_amount,
-    deposit_scheme: mapDepositSchemeToScotland(evictionCase.deposit_scheme_name),
-    deposit_reference: evictionCase.deposit_reference,
-  };
 
   // 1. Notice to Leave (Official Form)
   const noticeToLeavePdf = await fillScotlandOfficialForm('notice_to_leave', scotlandData);
@@ -662,13 +611,17 @@ async function generateScotlandEvictionPack(
  * Price: £149.99 one-time
  */
 export async function generateCompleteEvictionPack(
-  evictionCase: EvictionCase
+  wizardFacts: any
 ): Promise<CompleteEvictionPack> {
-  console.log(`\n📦 Generating Complete Eviction Pack for ${evictionCase.jurisdiction}...`);
+  const caseId = wizardFacts?.__meta?.case_id || wizardFacts?.case_id || `EVICT-${Date.now()}`;
+  const jurisdiction =
+    wizardFacts?.__meta?.jurisdiction || wizardFacts?.jurisdiction || ('england-wales' as Jurisdiction);
+
+  console.log(`\n📦 Generating Complete Eviction Pack for ${jurisdiction}...`);
   console.log('='.repeat(80));
 
   // Load jurisdiction-specific grounds
-  const groundsData = await loadEvictionGrounds(evictionCase.jurisdiction);
+  const groundsData = await loadEvictionGrounds(jurisdiction);
 
   // Initialize documents array
   const documents: EvictionPackDocument[] = [];
@@ -676,10 +629,16 @@ export async function generateCompleteEvictionPack(
   // 1. Generate region-specific notices and court forms
   let regionDocs: EvictionPackDocument[] = [];
 
-  if (evictionCase.jurisdiction === 'england-wales') {
-    regionDocs = await generateEnglandWalesEvictionPack(evictionCase, groundsData);
-  } else if (evictionCase.jurisdiction === 'scotland') {
-    regionDocs = await generateScotlandEvictionPack(evictionCase);
+  let evictionCase: EvictionCase;
+
+  if (jurisdiction === 'england-wales') {
+    const { evictionCase: ewCase, caseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
+    evictionCase = ewCase;
+    regionDocs = await generateEnglandWalesEvictionPack(evictionCase, caseData, groundsData);
+  } else {
+    const { scotlandCaseData } = wizardFactsToScotlandEviction(caseId, wizardFacts);
+    evictionCase = buildScotlandEvictionCase(caseId, scotlandCaseData);
+    regionDocs = await generateScotlandEvictionPack(evictionCase, scotlandCaseData);
   }
 
   documents.push(...regionDocs);
@@ -757,14 +716,19 @@ export async function generateCompleteEvictionPack(
  * Includes only the eviction notice (Section 8/21, Notice to Leave, or Notice to Quit)
  */
 export async function generateNoticeOnlyPack(
-  evictionCase: EvictionCase
+  wizardFacts: any
 ): Promise<CompleteEvictionPack> {
-  console.log(`\n📄 Generating Notice Only Pack for ${evictionCase.jurisdiction}...`);
+  const caseId = wizardFacts?.__meta?.case_id || wizardFacts?.case_id || `EVICT-NOTICE-${Date.now()}`;
+  const jurisdiction =
+    wizardFacts?.__meta?.jurisdiction || wizardFacts?.jurisdiction || ('england-wales' as Jurisdiction);
 
-  const groundsData = await loadEvictionGrounds(evictionCase.jurisdiction);
+  console.log(`\n📄 Generating Notice Only Pack for ${jurisdiction}...`);
+
+  const groundsData = await loadEvictionGrounds(jurisdiction);
   const documents: EvictionPackDocument[] = [];
 
-  if (evictionCase.jurisdiction === 'england-wales') {
+  if (jurisdiction === 'england-wales') {
+    const { evictionCase } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
     // Section 8 or Section 21
     if (evictionCase.case_type === 'no_fault') {
       const section21Doc = await generateDocument({
@@ -816,10 +780,12 @@ export async function generateNoticeOnlyPack(
         file_name: 'section8_notice.pdf',
       });
     }
-  } else if (evictionCase.jurisdiction === 'scotland') {
+  } else if (jurisdiction === 'scotland') {
+    const { scotlandCaseData } = wizardFactsToScotlandEviction(caseId, wizardFacts);
+    const evictionCase = buildScotlandEvictionCase(caseId, scotlandCaseData);
     const noticeDoc = await generateDocument({
       templatePath: 'uk/scotland/templates/notice_to_leave.hbs',
-      data: evictionCase,
+      data: { ...evictionCase, ...scotlandCaseData },
       isPreview: false,
       outputFormat: 'both',
     });
@@ -834,8 +800,8 @@ export async function generateNoticeOnlyPack(
   }
 
   return {
-    case_id: evictionCase.case_id || `EVICT-NOTICE-${Date.now()}`,
-    jurisdiction: evictionCase.jurisdiction,
+    case_id: caseId,
+    jurisdiction,
     pack_type: 'complete_eviction_pack',
     generated_at: new Date().toISOString(),
     documents,

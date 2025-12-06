@@ -506,6 +506,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     wizard,
     'deposit_protection_date'
   );
+  base.tenancy.deposit_reference ??= getWizardValue(wizard, 'deposit_reference');
 
   // =============================================================================
   // PARTIES - Landlord, agent, solicitor, tenants
@@ -648,6 +649,11 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'total_arrears',
     'arrears_total',
     'rent_arrears.total_arrears',
+  ]);
+  base.issues.rent_arrears.arrears_at_notice_date ??= getFirstValue(wizard, [
+    'case_facts.issues.rent_arrears.arrears_at_notice_date',
+    'arrears_at_notice_date',
+    'arrears_summary.arrears_at_notice_date',
   ]);
   if (!base.issues.rent_arrears.arrears_items.length) {
     const arrearsItems = getFirstValue(wizard, [
@@ -947,6 +953,11 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'case_facts.service_contact.service_address_line2',
     'service_contact.service_address_line2',
     'service_address_line2',
+  ]);
+  base.service_contact.service_address_county ??= getFirstValue(wizard, [
+    'case_facts.service_contact.service_address_county',
+    'service_contact.service_address_county',
+    'service_address_county',
   ]);
   base.service_contact.service_city ??= getFirstValue(wizard, [
     'case_facts.service_contact.service_city',
