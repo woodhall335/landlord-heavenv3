@@ -222,6 +222,9 @@ async function generateEvictionRoadmap(
     templatePath = 'uk/england-wales/templates/eviction/eviction_roadmap.hbs';
   } else if (jurisdiction === 'scotland') {
     templatePath = 'uk/scotland/templates/eviction_roadmap.hbs';
+  } else {
+    // Fallback to a shared roadmap template if we ever support NI / others
+    templatePath = 'shared/templates/eviction_roadmap.hbs';
   }
 
   const data = {
@@ -344,7 +347,8 @@ async function generateExpertGuidance(
 
   return {
     title: 'Expert Eviction Guidance',
-    description: 'Professional tips, common mistakes to avoid, and success strategies',
+    description:
+      'Professional tips, common mistakes to avoid, and success strategies',
     category: 'guidance',
     html: doc.html,
     pdf: doc.pdf,
@@ -387,53 +391,79 @@ async function generateTimelineExpectations(
 /**
  * Calculate leaving date based on notice period
  */
-function calculateLeavingDate(evictionCase: EvictionCase, noticePeriodDays: number): string {
+function calculateLeavingDate(
+  evictionCase: EvictionCase,
+  noticePeriodDays: number
+): string {
   const today = new Date();
-  const leavingDate = new Date(today.getTime() + noticePeriodDays * 24 * 60 * 60 * 1000);
+  const leavingDate = new Date(
+    today.getTime() + noticePeriodDays * 24 * 60 * 60 * 1000
+  );
   return leavingDate.toISOString().split('T')[0];
 }
 
 /**
  * Calculate estimated timeline based on jurisdiction and grounds
  */
-function calculateEstimatedTimeline(evictionCase: EvictionCase): any {
-  const jurisdiction = evictionCase.jurisdiction;
-  const hasMandatoryGround = evictionCase.grounds.some((g) => g.mandatory);
+function calculateEstimatedTimeline(evictionCase: EvictionCase): {
+  notice_stage: { start: string; end: string };
+  court_stage?: { start: string; end: string };
+  enforcement_stage?: { start: string; end: string };
+} {
+  const baseDaysNotice = 14; // generic baseline – templates can explain nuances
+  const baseDaysCourt = 90;
+  const baseDaysEnforcement = 60;
 
-  let noticeNoticePeriodDays = 0;
-  let courtProcessWeeks = 0;
-  let bailiffWeeks = 0;
+  const today = new Date();
+
+  const hasMandatoryGround = evictionCase.grounds?.some((g) => g.mandatory);
+  const jurisdiction = evictionCase.jurisdiction;
+
+  // Simple tweaks – you can refine per-ground in templates:
+  let noticeDays = baseDaysNotice;
+  let courtDays = baseDaysCourt;
+  let enforcementDays = baseDaysEnforcement;
 
   if (jurisdiction === 'england-wales') {
-    // Determine notice period
-    if (evictionCase.grounds.some((g) => g.code === 'Ground 8' || g.code === 'Ground 14')) {
-      noticeNoticePeriodDays = 14; // 2 weeks for serious arrears/antisocial
-    } else if (hasMandatoryGround) {
-      noticeNoticePeriodDays = 14;
-    } else {
-      noticeNoticePeriodDays = 60; // 2 months for discretionary
+    // Section 8 mandatory arrears / strong grounds often resolve a bit faster
+    if (hasMandatoryGround) {
+      courtDays -= 14;
     }
-
-    courtProcessWeeks = hasMandatoryGround ? 6 : 10;
-    bailiffWeeks = 4;
   } else if (jurisdiction === 'scotland') {
-    noticeNoticePeriodDays = 84; // 12 weeks minimum
-    courtProcessWeeks = 10; // Tribunal process
-    bailiffWeeks = 4;
+    // Tribunal tends to be slower in practice
+    courtDays += 30;
   }
 
-  const totalWeeks = Math.ceil(noticeNoticePeriodDays / 7) + courtProcessWeeks + bailiffWeeks;
+  const noticeStart = today;
+  const noticeEnd = new Date(
+    noticeStart.getTime() + noticeDays * 24 * 60 * 60 * 1000
+  );
+
+  const courtStart = new Date(noticeEnd.getTime());
+  const courtEnd = new Date(
+    courtStart.getTime() + courtDays * 24 * 60 * 60 * 1000
+  );
+
+  const enforcementStart = new Date(courtEnd.getTime());
+  const enforcementEnd = new Date(
+    enforcementStart.getTime() + enforcementDays * 24 * 60 * 60 * 1000
+  );
+
+  const fmt = (d: Date) => d.toISOString().split('T')[0];
 
   return {
-    notice_period_days: noticeNoticePeriodDays,
-    notice_period_weeks: Math.ceil(noticeNoticePeriodDays / 7),
-    court_process_weeks: courtProcessWeeks,
-    bailiff_weeks: bailiffWeeks,
-    total_weeks: totalWeeks,
-    total_months: Math.ceil(totalWeeks / 4),
-    estimated_completion_date: new Date(
-      Date.now() + totalWeeks * 7 * 24 * 60 * 60 * 1000
-    ).toISOString().split('T')[0],
+    notice_stage: {
+      start: fmt(noticeStart),
+      end: fmt(noticeEnd),
+    },
+    court_stage: {
+      start: fmt(courtStart),
+      end: fmt(courtEnd),
+    },
+    enforcement_stage: {
+      start: fmt(enforcementStart),
+      end: fmt(enforcementEnd),
+    },
   };
 }
 

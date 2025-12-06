@@ -25,7 +25,13 @@ interface CaseData {
 }
 
 interface PricingOption {
-  productType: 'notice_only' | 'complete_pack' | 'money_claim' | 'sc_money_claim' | 'ast_standard' | 'ast_premium';
+  productType:
+    | 'notice_only'
+    | 'complete_pack'
+    | 'money_claim'
+    | 'sc_money_claim'
+    | 'ast_standard'
+    | 'ast_premium';
   name: string;
   price: string;
   description: string;
@@ -143,14 +149,14 @@ export default function WizardPreviewPage() {
             productType: 'complete_pack',
             name: 'Complete Eviction Pack',
             price: '£149.99',
-            description: 'Everything you need to evict your tenant legally',
+            description: 'Everything you need from notice to court eviction.',
             features: [
-              'Section 8 or Section 21 Notice',
-              'Court claim forms (N5/N5A)',
-              'Letter before action',
-              'Step-by-step filing guide',
-              'Multi-jurisdiction support',
-              'Lifetime access to documents',
+              'Correct Section 8 and/or Section 21 notice',
+              'Court possession claim forms (N5 & N119, plus N5B where eligible)',
+              'Rent arrears schedule & payment history log',
+              'Step-by-step eviction roadmap & filing guide',
+              'Evidence checklist & proof of service templates',
+              'Lifetime access to all pack documents',
             ],
           },
         ];
@@ -163,15 +169,19 @@ export default function WizardPreviewPage() {
             price: '£179.99',
             description:
               jurisdiction === 'scotland'
-                ? 'Simple Procedure money claim bundle with Form 3A and pre-action letter'
-                : 'Recover rent arrears and damages in England & Wales',
+                ? 'Simple Procedure money claim bundle with Form 3A and pre-action letter.'
+                : 'Recover rent arrears and damages in England & Wales.',
             features: [
-              jurisdiction === 'scotland' ? 'Simple Procedure Form 3A' : 'Money claim form (N1)',
-              'Rent arrears calculation',
-              'Deposit deduction breakdown',
+              jurisdiction === 'scotland'
+                ? 'Simple Procedure Form 3A (sheriff court)'
+                : 'Money claim form (N1) & particulars',
+              'Rent arrears calculation & interest breakdown',
+              'Deposit deduction breakdown (where applicable)',
               jurisdiction === 'scotland' ? 'Pre-action demand letter' : 'Letter before action',
-              jurisdiction === 'scotland' ? 'Sheriff Court filing guide' : 'Filing guide for Money Claim Online',
-              'Lifetime access to documents',
+              jurisdiction === 'scotland'
+                ? 'Sheriff Court filing guide & timeline'
+                : 'Filing guide for County Court / MCOL',
+              'Lifetime access to all pack documents',
             ],
           },
         ];
@@ -182,13 +192,13 @@ export default function WizardPreviewPage() {
             productType: 'ast_standard',
             name: 'Standard Tenancy Agreement',
             price: '£39.99',
-            description: 'Legally compliant AST',
+            description: 'Legally compliant AST for typical lets.',
             features: [
-              'Assured Shorthold Tenancy (AST)',
-              'Government model tenancy clauses',
-              'Deposit protection certificate',
-              'Inventory template',
-              'How-to-Rent booklet',
+              'Assured Shorthold Tenancy (AST) agreement',
+              'Core government model tenancy clauses',
+              'Deposit protection information clause',
+              'Inventory template & check-in checklist',
+              'How-to-Rent booklet download link',
               'Lifetime access to documents',
             ],
           },
@@ -196,14 +206,14 @@ export default function WizardPreviewPage() {
             productType: 'ast_premium',
             name: 'Premium Tenancy Agreement',
             price: '£59.00',
-            description: 'Enhanced protection with additional clauses',
+            description: 'Enhanced protection with additional clauses.',
             features: [
-              'Everything in Standard',
-              'Enhanced tenant obligation clauses',
-              'Pet clauses (if applicable)',
+              'Everything in Standard AST',
+              'Enhanced tenant obligation & rent arrears clauses',
+              'Pet clauses & special conditions (if applicable)',
               'Guarantor agreement template',
-              'Right to Rent checklist',
-              'Professional lettings pack',
+              'Right to Rent checklist & guidance',
+              'Professional landlord pack for lets',
             ],
           },
         ];
@@ -270,7 +280,7 @@ export default function WizardPreviewPage() {
     }
   };
 
-    const handleSignupSuccess = async () => {
+  const handleSignupSuccess = async () => {
     // Close modal
     setShowSignupModal(false);
 
@@ -302,12 +312,8 @@ export default function WizardPreviewPage() {
         <Card className="max-w-md">
           <div className="text-center">
             <div className="text-red-600 text-4xl mb-4">⚠️</div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">
-              Something went wrong
-            </h2>
-            <p className="text-gray-600 mb-6">
-              {error || 'Failed to load preview'}
-            </p>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Something went wrong</h2>
+            <p className="text-gray-600 mb-6">{error || 'Failed to load preview'}</p>
             <Button onClick={() => router.push('/wizard')} variant="primary">
               Start Over
             </Button>
@@ -318,6 +324,9 @@ export default function WizardPreviewPage() {
   }
 
   const pricingOptions = getPricingOptions(caseData.case_type, caseData.jurisdiction);
+  const isEviction = caseData.case_type === 'eviction';
+  const isMoneyClaim = caseData.case_type === 'money_claim';
+  const isTenancy = caseData.case_type === 'tenancy_agreement';
 
   return (
     <div className="min-h-screen bg-gray-50 py-12">
@@ -333,7 +342,11 @@ export default function WizardPreviewPage() {
           </p>
           <div className="mt-6">
             <Button
-              onClick={() => router.push(`/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}`)}
+              onClick={() =>
+                router.push(
+                  `/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}`
+                )
+              }
               variant="secondary"
               size="medium"
             >
@@ -375,13 +388,51 @@ export default function WizardPreviewPage() {
                 <h4 className="text-sm font-semibold text-blue-900 mb-2">
                   What you'll receive:
                 </h4>
-                <ul className="text-sm text-blue-800 space-y-1">
-                  <li>✅ Court-ready PDF (no watermark)</li>
-                  <li>✅ Editable HTML version</li>
-                  <li>✅ Step-by-step filing guide</li>
-                  <li>✅ Lifetime access in your dashboard</li>
-                  <li>✅ Multi-jurisdiction support</li>
-                </ul>
+
+                {isEviction && (
+                  <ul className="text-sm text-blue-800 space-y-1">
+                    <li>✅ Correct Section 8 and/or Section 21 notice</li>
+                    <li>✅ Court possession claim forms (N5, N119, and N5B where eligible)</li>
+                    <li>✅ Rent arrears schedule and payment history summary</li>
+                    <li>✅ Evidence checklist & proof of service templates</li>
+                    <li>✅ Step-by-step eviction roadmap & filing guide</li>
+                    <li>✅ Lifetime access to all documents in your dashboard</li>
+                  </ul>
+                )}
+
+                {isMoneyClaim && (
+                  <ul className="text-sm text-blue-800 space-y-1">
+                    <li>
+                      ✅ {caseData.jurisdiction === 'scotland'
+                        ? 'Simple Procedure Form 3A and supporting schedules'
+                        : 'Money claim form (N1) and particulars'}
+                    </li>
+                    <li>✅ Rent arrears and interest calculation schedule</li>
+                    <li>✅ Deposit deduction breakdown (if applicable)</li>
+                    <li>✅ Pre-action / letter before action template</li>
+                    <li>✅ Filing guide with step-by-step instructions</li>
+                    <li>✅ Lifetime access to all documents in your dashboard</li>
+                  </ul>
+                )}
+
+                {isTenancy && (
+                  <ul className="text-sm text-blue-800 space-y-1">
+                    <li>✅ Court-ready tenancy agreement (AST / PRT / NI as applicable)</li>
+                    <li>✅ Editable version for future reuse</li>
+                    <li>✅ Inventory and check-in templates</li>
+                    <li>✅ Key compliance guidance (deposit, HTR, safety)</li>
+                    <li>✅ Lifetime access in your dashboard</li>
+                  </ul>
+                )}
+
+                {!isEviction && !isMoneyClaim && !isTenancy && (
+                  <ul className="text-sm text-blue-800 space-y-1">
+                    <li>✅ Court-ready PDF (no watermark)</li>
+                    <li>✅ Editable HTML version</li>
+                    <li>✅ Step-by-step filing or usage guide</li>
+                    <li>✅ Lifetime access in your dashboard</li>
+                  </ul>
+                )}
               </div>
             </Card>
           </div>
@@ -405,9 +456,7 @@ export default function WizardPreviewPage() {
                   )}
 
                   <div className="mb-4">
-                    <h3 className="text-2xl font-bold text-gray-900">
-                      {option.name}
-                    </h3>
+                    <h3 className="text-2xl font-bold text-gray-900">{option.name}</h3>
                     <p className="text-gray-600 mt-1">{option.description}</p>
                   </div>
 
@@ -486,7 +535,7 @@ export default function WizardPreviewPage() {
               </h3>
               <p className="text-gray-600 text-sm">
                 Yes! All documents are based on official court forms and
-                government-approved templates. They're designed to be
+                government-approved templates. They&apos;re designed to be
                 court-ready and comply with current UK landlord-tenant law.
               </p>
             </Card>
@@ -496,7 +545,7 @@ export default function WizardPreviewPage() {
                 Can I edit the documents after purchase?
               </h3>
               <p className="text-gray-600 text-sm">
-                Yes! You'll receive both a PDF version (for printing/filing) and
+                Yes! You&apos;ll receive both a PDF version (for printing/filing) and
                 an HTML version that you can edit if needed.
               </p>
             </Card>

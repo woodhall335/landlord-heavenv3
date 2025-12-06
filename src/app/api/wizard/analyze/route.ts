@@ -699,13 +699,73 @@ export async function POST(request: Request) {
       }
     }
 
-    // Get law profile for version tracking and legal metadata
+        // Get law profile for version tracking and legal metadata
     const law_profile = getLawProfile(caseData.jurisdiction, caseData.case_type);
+
+    // Derived fields for final analysis UI (non-blocking, informative only)
+    const case_strength_band =
+      score >= 70 ? 'strong' : score >= 40 ? 'medium' : score > 0 ? 'weak' : 'unknown';
+
+    let is_court_ready: boolean | null = null;
+    let readiness_summary: string | null = null;
+    let recommended_route_label: string = route;
+
+    // Human-friendly route labels for the UI
+    if (caseData.case_type === 'eviction') {
+      if (caseData.jurisdiction === 'england-wales') {
+        if (route === 'section_21') {
+          recommended_route_label =
+            'Section 21 possession (accelerated or standard, depending on compliance)';
+        } else if (route === 'section_8') {
+          recommended_route_label = 'Section 8 standard possession (N5 + N119)';
+        } else if (route === 'notice_only') {
+          recommended_route_label = 'Notice-only route (serve notice now, claim later)';
+        } else if (route === 'standard_possession') {
+          recommended_route_label = 'Standard possession (N5 + N119)';
+        }
+      } else if (caseData.jurisdiction === 'scotland') {
+        if (route === 'notice_to_leave') {
+          recommended_route_label = 'Notice to Leave + Form E (First-tier Tribunal)';
+        }
+      }
+    } else if (caseData.case_type === 'money_claim') {
+      recommended_route_label = 'Money claim (County Court / Simple Procedure)';
+    }
+
+    // Readiness flags - NEVER used to block generation or payment, only for messaging
+    if (caseData.case_type === 'eviction' && decisionEngineOutput) {
+      const hasBlocking = decisionEngineOutput.blocking_issues?.some(
+        (block) => block.severity === 'blocking'
+      );
+      is_court_ready = !hasBlocking;
+
+      if (hasBlocking) {
+        readiness_summary =
+          'You are not fully ready to file your claim today. We will still generate your full eviction pack, including notices, court forms, and a procedural guide to help you fix the issues identified.';
+      } else {
+        readiness_summary =
+          'You appear ready to file your claim based on the information provided. We will generate your full eviction pack with court forms, notices, and a filing checklist.';
+      }
+    } else if (caseHealth) {
+      // Money-claim case health
+      is_court_ready = caseHealth.overall_status === 'ready_to_issue';
+      if (caseHealth.overall_status === 'ready_to_issue') {
+        readiness_summary =
+          'You appear ready to issue your money claim based on the information provided. We will generate your full pack with N1 / Simple Procedure forms and a filing checklist.';
+      } else if (caseHealth.overall_status === 'needs_work') {
+        readiness_summary =
+          'Your money claim needs further work, but we will still generate your pack and highlight what to fix before issuing.';
+      }
+    }
 
     return NextResponse.json({
       case_id,
       recommended_route: route,
+      recommended_route_label,
       case_strength_score: score,
+      case_strength_band,
+      is_court_ready,
+      readiness_summary,
       red_flags,
       compliance_issues: compliance,
       preview_documents: previewDocuments,
@@ -717,6 +777,7 @@ export async function POST(request: Request) {
       // Legal change framework metadata
       law_profile,
     });
+
   } catch (error: any) {
     console.error('Analyze case error:', error);
     return NextResponse.json(

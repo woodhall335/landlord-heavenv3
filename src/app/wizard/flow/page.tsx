@@ -1,7 +1,7 @@
 /**
  * Wizard Flow Page
  *
- * The main conversational wizard experience
+ * The main structured wizard experience
  * Receives document type and jurisdiction from URL params
  */
 
@@ -9,7 +9,6 @@
 
 import React, { Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { WizardContainer } from '@/components/wizard/WizardContainer';
 import { StructuredWizard } from '@/components/wizard/StructuredWizard';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
@@ -30,11 +29,6 @@ function WizardFlowContent() {
   const jurisdiction = searchParams.get('jurisdiction') as Jurisdiction;
   const product = searchParams.get('product'); // Specific product (notice_only, complete_pack, etc.)
   const productVariant = searchParams.get('product_variant'); // e.g. money_claim_england_wales
-  const normalizedProduct =
-    type === 'money_claim' &&
-    (product === 'money_claim_england_wales' || product === 'money_claim_scotland')
-      ? 'money_claim'
-      : product;
   const editCaseId = searchParams.get('case_id'); // Case ID to edit
 
   const hasRequiredParams = Boolean(type && jurisdiction);
@@ -45,19 +39,30 @@ function WizardFlowContent() {
     }
   }, [hasRequiredParams, router]);
 
+  // Normalise money-claim product variants to a single Ask Heaven / wizard product label
+  const normalizedProduct =
+    type === 'money_claim' &&
+    (product === 'money_claim_england_wales' || product === 'money_claim_scotland')
+      ? 'money_claim'
+      : product;
+
   // Derive a coarse product label for Ask Heaven (its Product union)
   const askHeavenProduct: AskHeavenProduct | null = (() => {
+    if (!type) return null;
+
     if (type === 'money_claim') return 'money_claim';
     if (type === 'tenancy_agreement') return 'tenancy_agreement';
+
     if (type === 'eviction') {
-      // For eviction flows we pass product down directly to WizardContainer,
-      // and Ask Heaven is handled via the conversational flow itself.
-      return null;
+      // For eviction flows, we treat Ask Heaven product as either notice_only or complete_pack
+      if (normalizedProduct === 'notice_only') return 'notice_only';
+      return 'complete_pack';
     }
+
     return null;
   })();
 
-  // Initialize case for structured wizard
+  // Initialize case for structured wizard (all case types now use structured flows)
   const startStructuredWizard = useCallback(async () => {
     if (hasStartedRef.current) return;
     hasStartedRef.current = true;
@@ -68,6 +73,7 @@ function WizardFlowContent() {
     setStartError(null);
 
     try {
+      // Resume existing case if editing
       if (editCaseId) {
         setCaseId(editCaseId);
         return;
@@ -99,6 +105,14 @@ function WizardFlowContent() {
           startProduct = rawProduct;
         } else {
           startProduct = 'tenancy_agreement';
+        }
+      } else if (type === 'eviction') {
+        // Eviction flows: honour notice_only / complete_pack explicitly
+        if (rawProduct === 'notice_only' || rawProduct === 'complete_pack') {
+          startProduct = rawProduct;
+        } else {
+          // Sensible default if someone deep-links without a product
+          startProduct = 'complete_pack';
         }
       } else {
         // Fallback for any other future types
@@ -139,7 +153,8 @@ function WizardFlowContent() {
       return;
     }
 
-    if (type === 'tenancy_agreement' || type === 'money_claim') {
+    // All supported case types now use the structured wizard
+    if (type === 'tenancy_agreement' || type === 'money_claim' || type === 'eviction') {
       void startStructuredWizard();
     } else if (editCaseId) {
       setCaseId(editCaseId);
@@ -170,8 +185,8 @@ function WizardFlowContent() {
     }
   };
 
-  // Use structured wizard for tenancy agreements and money claims
-  if (type === 'tenancy_agreement' || type === 'money_claim') {
+  // Use structured wizard for all supported case types
+  if (type === 'tenancy_agreement' || type === 'money_claim' || type === 'eviction') {
     if (loading || !caseId) {
       return (
         <div className="min-h-screen flex items-center justify-center">
@@ -191,22 +206,27 @@ function WizardFlowContent() {
         caseId={caseId}
         caseType={type}
         jurisdiction={jurisdiction}
-        product={askHeavenProduct ?? (type === 'money_claim' ? 'money_claim' : 'tenancy_agreement')}
+        product={
+          askHeavenProduct ??
+          (type === 'money_claim'
+            ? 'money_claim'
+            : type === 'tenancy_agreement'
+            ? 'tenancy_agreement'
+            : 'complete_pack')
+        }
         initialQuestion={initialQuestion ?? undefined}
         onComplete={handleComplete}
       />
     );
   }
 
-  // Use conversational wizard for evictions
+  // Fallback – should rarely be hit with current routing
   return (
-    <WizardContainer
-      caseType={type!}
-      jurisdiction={jurisdiction!}
-      product={normalizedProduct || undefined}
-      editCaseId={editCaseId || undefined}
-      onComplete={handleComplete}
-    />
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <p className="text-gray-600">Unsupported case type.</p>
+      </div>
+    </div>
   );
 }
 

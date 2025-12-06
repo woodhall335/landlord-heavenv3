@@ -12,6 +12,36 @@ import { Button, Input, Card } from '@/components/ui';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { GuidanceTips } from '@/components/wizard/GuidanceTips';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import {
+  MultipleChoice,
+  CurrencyInput,
+  DateInput,
+  YesNoToggle,
+  TextInput,
+  MultipleSelection,
+} from '@/components/wizard';
+import type { YesNoValue } from '@/components/wizard/YesNoToggle';
+
+/**
+ * Helpers to convert date formats without changing stored ISO dates
+ */
+function isoToDdmmyyyy(value?: string | null): string {
+  if (!value) return '';
+  if (value.includes('/')) return value; // already DD/MM/YYYY
+  const parts = value.split('-');
+  if (parts.length !== 3) return value;
+  const [year, month, day] = parts;
+  return `${day}/${month}/${year}`;
+}
+
+function ddmmyyyyToIso(value: string): string {
+  if (!value) return '';
+  if (value.includes('-')) return value; // already ISO-ish
+  const parts = value.split('/');
+  if (parts.length !== 3) return value;
+  const [day, month, year] = parts;
+  return `${year}-${month}-${day}`;
+}
 
 interface StructuredWizardProps {
   caseId: string;
@@ -452,10 +482,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
 
     // For single inputs
-    // Note: Must check for null/undefined specifically, not falsy values (false is valid for yes_no)
     if (
       currentQuestion.validation?.required &&
-      (currentAnswer === null || currentAnswer === undefined)
+      (currentAnswer === null || currentAnswer === undefined || currentAnswer === '')
     ) {
       setError('This field is required');
       return false;
@@ -606,18 +635,112 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const renderInput = () => {
     if (!currentQuestion) return null;
 
-    const value = currentAnswer ?? '';
-    const inputType =
-      currentQuestion.inputType === 'address' ? 'group' : currentQuestion.inputType;
+    const rawType = (currentQuestion.inputType || 'text').toLowerCase();
+    const inputType = rawType === 'address' ? 'group' : rawType;
+    const value = currentAnswer;
+    const disabled = loading;
 
     switch (inputType) {
+      case 'multiple_choice':
+        return (
+          <MultipleChoice
+            options={
+              currentQuestion.options?.map((opt) => ({
+                value: String(opt),
+                label: String(opt),
+              })) || []
+            }
+            value={typeof value === 'string' ? value : ''}
+            onChange={(v) => setCurrentAnswer(v)}
+            disabled={disabled}
+          />
+        );
+
+      case 'multiple_selection':
+      case 'multi_select':
+        return (
+          <MultipleSelection
+            options={
+              currentQuestion.options?.map((opt) => ({
+                value: String(opt),
+                label: String(opt),
+              })) || []
+            }
+            value={Array.isArray(value) ? value : []}
+            onChange={(vals) => setCurrentAnswer(vals)}
+            disabled={disabled}
+          />
+        );
+
+      case 'yes_no': {
+        let yesNoValue: YesNoValue | undefined;
+        if (value === true) yesNoValue = 'yes';
+        else if (value === false) yesNoValue = 'no';
+        else yesNoValue = undefined;
+
+        return (
+          <YesNoToggle
+            value={yesNoValue}
+            onChange={(v) => {
+              if (v === 'yes') setCurrentAnswer(true);
+              else if (v === 'no') setCurrentAnswer(false);
+              else setCurrentAnswer(null);
+            }}
+            helperText={currentQuestion.helperText}
+            disabled={disabled}
+          />
+        );
+      }
+
+      case 'currency': {
+        const numeric =
+          typeof value === 'number'
+            ? value
+            : typeof value === 'string' && value.trim() !== ''
+            ? Number(value)
+            : undefined;
+
+        return (
+          <CurrencyInput
+            value={Number.isFinite(numeric as any) ? (numeric as number) : undefined}
+            onChange={(num) => {
+              if (num === null || num === undefined || Number.isNaN(num as any)) {
+                setCurrentAnswer('');
+              } else {
+                setCurrentAnswer(String(num));
+              }
+            }}
+            min={currentQuestion.validation?.min}
+            max={currentQuestion.validation?.max}
+            helperText={currentQuestion.helperText}
+            disabled={disabled}
+          />
+        );
+      }
+
+      case 'date': {
+        const iso = typeof value === 'string' ? value : '';
+        const ddmmyyyy = isoToDdmmyyyy(iso);
+
+        return (
+          <DateInput
+            value={ddmmyyyy}
+            onChange={(dd) => setCurrentAnswer(ddmmyyyyToIso(dd))}
+            helperText={currentQuestion.helperText}
+            allowPast
+            allowFuture
+            disabled={disabled}
+          />
+        );
+      }
+
       case 'select':
         return (
           <select
-            value={value}
+            value={typeof value === 'string' ? value : ''}
             onChange={(e) => setCurrentAnswer(e.target.value)}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-            disabled={loading}
+            disabled={disabled}
           >
             <option value="">-- Select an option --</option>
             {currentQuestion.options?.map((option) => (
@@ -628,75 +751,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           </select>
         );
 
-      case 'yes_no':
+      case 'textarea':
+      case 'long_text':
         return (
-          <div className="flex gap-4">
-            <Button
-              onClick={() => setCurrentAnswer(true)}
-              variant={value === true ? 'primary' : 'secondary'}
-              disabled={loading}
-            >
-              Yes
-            </Button>
-            <Button
-              onClick={() => setCurrentAnswer(false)}
-              variant={value === false ? 'primary' : 'secondary'}
-              disabled={loading}
-            >
-              No
-            </Button>
-          </div>
-        );
-
-      case 'multi_select': {
-        const selectedValues = Array.isArray(value) ? value : [];
-        return (
-          <div className="space-y-2">
-            {currentQuestion.options?.map((option) => (
-              <label key={option} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={selectedValues.includes(option)}
-                  onChange={(e) => {
-                    const newValues = e.target.checked
-                      ? [...selectedValues, option]
-                      : selectedValues.filter((v: string) => v !== option);
-                    setCurrentAnswer(newValues);
-                  }}
-                  className="w-4 h-4 text-primary"
-                  disabled={loading}
-                />
-                <span>{option}</span>
-              </label>
-            ))}
-          </div>
-        );
-      }
-
-      case 'currency':
-        return (
-          <div className="relative">
-            <span className="absolute left-3 top-3 text-gray-500">£</span>
-            <Input
-              type="number"
-              value={value}
-              onChange={(e) => setCurrentAnswer(e.target.value)}
-              placeholder={currentQuestion.placeholder}
-              className="pl-8"
-              min={currentQuestion.validation?.min}
-              max={currentQuestion.validation?.max}
-              disabled={loading}
-            />
-          </div>
-        );
-
-      case 'date':
-        return (
-          <Input
-            type="date"
-            value={value}
-            onChange={(e) => setCurrentAnswer(e.target.value)}
-            disabled={loading}
+          <TextInput
+            value={typeof value === 'string' ? value : ''}
+            onChange={(v) => setCurrentAnswer(v)}
+            placeholder={currentQuestion.placeholder}
+            helperText={currentQuestion.helperText}
+            required={currentQuestion.validation?.required}
+            disabled={disabled}
+            multiline
+            rows={5}
           />
         );
 
@@ -704,10 +770,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         return (
           <Input
             type="email"
-            value={value}
+            value={typeof value === 'string' ? value : ''}
             onChange={(e) => setCurrentAnswer(e.target.value)}
             placeholder={currentQuestion.placeholder}
-            disabled={loading}
+            disabled={disabled}
           />
         );
 
@@ -715,22 +781,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         return (
           <Input
             type="tel"
-            value={value}
+            value={typeof value === 'string' ? value : ''}
             onChange={(e) => setCurrentAnswer(e.target.value)}
             placeholder={currentQuestion.placeholder}
-            disabled={loading}
-          />
-        );
-
-      case 'textarea':
-        return (
-          <textarea
-            value={value}
-            onChange={(e) => setCurrentAnswer(e.target.value)}
-            placeholder={currentQuestion.placeholder}
-            disabled={loading}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-[120px]"
-            rows={4}
+            disabled={disabled}
           />
         );
 
@@ -738,12 +792,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         return (
           <Input
             type="number"
-            value={value}
+            value={typeof value === 'string' || typeof value === 'number' ? value : ''}
             onChange={(e) => setCurrentAnswer(e.target.value)}
             placeholder={currentQuestion.placeholder}
             min={currentQuestion.validation?.min}
             max={currentQuestion.validation?.max}
-            disabled={loading}
+            disabled={disabled}
           />
         );
 
@@ -751,7 +805,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         // Render multiple fields in a grouped layout
         if (!currentQuestion.fields) return null;
 
-        const groupValue = currentAnswer || {};
+        const groupValue = value || {};
 
         return (
           <div className="flex flex-wrap gap-4">
@@ -791,6 +845,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   {(field as any).helperText && (
                     <p className="text-sm text-gray-600 mb-2">{(field as any).helperText}</p>
                   )}
+
                   {field.inputType === 'yes_no' ? (
                     <div className="flex gap-4">
                       <Button
@@ -801,7 +856,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                           })
                         }
                         variant={fieldValue === true ? 'primary' : 'secondary'}
-                        disabled={loading}
+                        disabled={disabled}
                         type="button"
                       >
                         Yes
@@ -814,7 +869,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                           })
                         }
                         variant={fieldValue === false ? 'primary' : 'secondary'}
-                        disabled={loading}
+                        disabled={disabled}
                         type="button"
                       >
                         No
@@ -827,7 +882,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                         setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
                       }
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                      disabled={loading}
+                      disabled={disabled}
                     >
                       <option value="">-- Select --</option>
                       {field.options?.map((option) => (
@@ -849,7 +904,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                         className="pl-8 w-full"
                         min={field.validation?.min}
                         max={field.validation?.max}
-                        disabled={loading}
+                        disabled={disabled}
                       />
                     </div>
                   ) : field.inputType === 'textarea' ? (
@@ -859,7 +914,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                         setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
                       }
                       placeholder={field.placeholder}
-                      disabled={loading}
+                      disabled={disabled}
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-20"
                       rows={3}
                     />
@@ -871,7 +926,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                         setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
                       }
                       placeholder={field.placeholder}
-                      disabled={loading}
+                      disabled={disabled}
                       className="w-full"
                       min={field.validation?.min}
                       max={field.validation?.max}
@@ -885,12 +940,13 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
       default:
         return (
-          <Input
-            type="text"
-            value={value}
-            onChange={(e) => setCurrentAnswer(e.target.value)}
+          <TextInput
+            value={typeof value === 'string' ? value : ''}
+            onChange={(v) => setCurrentAnswer(v)}
             placeholder={currentQuestion.placeholder}
-            disabled={loading}
+            helperText={currentQuestion.helperText}
+            required={currentQuestion.validation?.required}
+            disabled={disabled}
           />
         );
     }
@@ -916,7 +972,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             guidance you need. When you&apos;re ready, continue below and we&apos;ll start with the
             first question.
           </p>
-          <Button onClick={handleIntroContinue} variant="primary" size="large" className="w-full md:w-auto">
+          <Button
+            onClick={handleIntroContinue}
+            variant="primary"
+            size="large"
+            className="w-full md:w-auto"
+          >
             Continue →
           </Button>
         </Card>
@@ -1090,12 +1151,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             <div className="mb-6">{renderInput()}</div>
 
             {/* Ask Heaven Panel for free-text answers */}
-            {currentQuestion.inputType === 'textarea' && (
+            {(currentQuestion.inputType === 'textarea' ||
+              currentQuestion.inputType === 'long_text') && (
               <div className="mb-6">
                 <AskHeavenPanel
                   caseId={caseId}
                   caseType={caseType}
-                  jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
+                  jurisdiction={(jurisdiction || 'england-wales') as
+                    | 'england-wales'
+                    | 'scotland'
+                    | 'northern-ireland'}
                   product={product}
                   currentQuestionId={currentQuestion.id}
                   currentQuestionText={currentQuestion.question}
@@ -1104,14 +1169,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               </div>
             )}
 
-            {/* Contextual guidance helper – tenancy agreements */}
-            {caseType === 'tenancy_agreement' && (
-              <GuidanceTips
-                questionId={currentQuestion.id}
-                jurisdiction={guidanceJurisdiction}
-                caseType={caseType}
-              />
-            )}
+            {/* Contextual guidance helper – eviction, money claim, tenancy */}
+            <GuidanceTips
+              questionId={currentQuestion.id}
+              jurisdiction={guidanceJurisdiction}
+              caseType={caseType}
+            />
 
             {/* Ask Heaven Suggestion (backend-driven) */}
             {askHeavenSuggestion && (
@@ -1204,7 +1267,13 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 variant="primary"
                 size="large"
                 className="flex-1"
-                disabled={loading || currentAnswer === null || currentAnswer === undefined}
+                disabled={
+                  loading ||
+                  (currentQuestion.validation?.required &&
+                    (currentAnswer === null ||
+                      currentAnswer === undefined ||
+                      currentAnswer === ''))
+                }
               >
                 {loading ? 'Saving...' : 'Next →'}
               </Button>
@@ -1322,32 +1391,33 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               )}
 
               {/* Red flags / compliance notes */}
-              {analysis && (analysis.red_flags.length > 0 || analysis.compliance_issues.length > 0) && (
-                <div className="mt-4 space-y-3">
-                  {analysis.red_flags.length > 0 && (
-                    <div>
-                      <h4 className="text-sm font-semibold text-red-700 mb-1">Key risks</h4>
-                      <ul className="list-disc list-inside text-sm text-red-800 space-y-1">
-                        {analysis.red_flags.slice(0, 3).map((flag, idx) => (
-                          <li key={`flag-${idx}`}>{flag}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  {analysis.compliance_issues.length > 0 && (
-                    <div>
-                      <h4 className="text-sm font-semibold text-amber-700 mb-1">
-                        Housekeeping to tidy
-                      </h4>
-                      <ul className="list-disc list-inside text-sm text-amber-800 space-y-1">
-                        {analysis.compliance_issues.slice(0, 3).map((item, idx) => (
-                          <li key={`comp-${idx}`}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              )}
+              {analysis &&
+                (analysis.red_flags.length > 0 || analysis.compliance_issues.length > 0) && (
+                  <div className="mt-4 space-y-3">
+                    {analysis.red_flags.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-red-700 mb-1">Key risks</h4>
+                        <ul className="list-disc list-inside text-sm text-red-800 space-y-1">
+                          {analysis.red_flags.slice(0, 3).map((flag, idx) => (
+                            <li key={`flag-${idx}`}>{flag}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    {analysis.compliance_issues.length > 0 && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-amber-700 mb-1">
+                          Housekeeping to tidy
+                        </h4>
+                        <ul className="list-disc list-inside text-sm text-amber-800 space-y-1">
+                          {analysis.compliance_issues.slice(0, 3).map((item, idx) => (
+                            <li key={`comp-${idx}`}>{item}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
 
               {/* Loading / error state */}
               {!analysis && !analysisError && (
