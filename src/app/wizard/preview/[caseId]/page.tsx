@@ -52,71 +52,26 @@ export default function WizardPreviewPage() {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
-  // Fetch case data and generate preview
-  useEffect(() => {
-    const fetchCaseAndPreview = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        // Fetch case data
-        const caseResponse = await fetch(`/api/cases/${caseId}`);
-        if (!caseResponse.ok) {
-          throw new Error('Failed to fetch case data');
-        }
-
-        const caseResult = await caseResponse.json();
-        setCaseData(caseResult.case);
-
-        // Generate preview document
-        const previewResponse = await fetch('/api/documents/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            case_id: caseId,
-            document_type: getDocumentType(caseResult.case.case_type, caseResult.case),
-            is_preview: true,
-          }),
-        });
-
-        if (!previewResponse.ok) {
-          // Get the actual error message from the server
-          const errorData = await previewResponse.json().catch(() => ({}));
-          const errorMessage = errorData.error || 'Failed to generate preview document';
-          console.error('Preview generation error:', errorMessage);
-          throw new Error(errorMessage);
-        }
-
-        const previewResult = await previewResponse.json();
-
-        // Get signed URL for preview
-        if (previewResult.document?.id) {
-          const signedUrlResponse = await fetch(
-            `/api/documents/preview/${previewResult.document.id}`
-          );
-
-          if (signedUrlResponse.ok) {
-            const signedUrlResult = await signedUrlResponse.json();
-            setPreviewUrl(signedUrlResult.preview_url);
-          }
-        }
-      } catch (err: any) {
-        console.error('Error loading preview:', err);
-        setError(err.message || 'Failed to load preview');
-        showToast('Failed to load preview. Please try again.', 'error');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (caseId) {
-      fetchCaseAndPreview();
-    }
-  }, [caseId, showToast]);
-
   // Map case type to document type
   const getDocumentType = (caseType: string, caseData?: CaseData): string => {
-    // For tenancy agreements, check the product tier
+    // Eviction: preview the main notice that matches the recommended route
+    if (caseType === 'eviction') {
+      const route = caseData?.recommended_route;
+
+      // Accelerated / N5B → Section 21 (Form 6A)
+      if (
+        route === 'accelerated_possession' ||
+        route === 'n5b_accelerated' ||
+        route === 'accelerated_section21'
+      ) {
+        return 'section21_notice';
+      }
+
+      // Default to Section 8 notice preview for standard / mixed routes
+      return 'section8_notice';
+    }
+
+    // Tenancy agreements: check the product tier
     if (caseType === 'tenancy_agreement' && caseData?.collected_facts) {
       const originalProduct = caseData.collected_facts.__meta?.original_product;
       const productTier = caseData.collected_facts.product_tier;
@@ -134,9 +89,10 @@ export default function WizardPreviewPage() {
     }
 
     const mapping: Record<string, string> = {
-      eviction: 'section8_notice',
       money_claim: 'money_claim',
     };
+
+    // Fallbacks: eviction handled above, anything else falls back to Section 8 notice
     return mapping[caseType] || 'section8_notice';
   };
 
@@ -222,6 +178,68 @@ export default function WizardPreviewPage() {
         return [];
     }
   };
+
+  // Fetch case data and generate preview
+  useEffect(() => {
+    const fetchCaseAndPreview = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Fetch case data
+        const caseResponse = await fetch(`/api/cases/${caseId}`);
+        if (!caseResponse.ok) {
+          throw new Error('Failed to fetch case data');
+        }
+
+        const caseResult = await caseResponse.json();
+        setCaseData(caseResult.case);
+
+        // Generate preview document
+        const previewResponse = await fetch('/api/documents/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            case_id: caseId,
+            document_type: getDocumentType(caseResult.case.case_type, caseResult.case),
+            is_preview: true,
+          }),
+        });
+
+        if (!previewResponse.ok) {
+          // Get the actual error message from the server
+          const errorData = await previewResponse.json().catch(() => ({}));
+          const errorMessage = errorData.error || 'Failed to generate preview document';
+          console.error('Preview generation error:', errorMessage);
+          throw new Error(errorMessage);
+        }
+
+        const previewResult = await previewResponse.json();
+
+        // Get signed URL for preview
+        if (previewResult.document?.id) {
+          const signedUrlResponse = await fetch(
+            `/api/documents/preview/${previewResult.document.id}`,
+          );
+
+          if (signedUrlResponse.ok) {
+            const signedUrlResult = await signedUrlResponse.json();
+            setPreviewUrl(signedUrlResult.preview_url);
+          }
+        }
+      } catch (err: any) {
+        console.error('Error loading preview:', err);
+        setError(err.message || 'Failed to load preview');
+        showToast('Failed to load preview. Please try again.', 'error');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (caseId) {
+      void fetchCaseAndPreview();
+    }
+  }, [caseId, showToast]);
 
   // Handle checkout
   const handleCheckout = async (productType: string) => {
@@ -344,7 +362,7 @@ export default function WizardPreviewPage() {
             <Button
               onClick={() =>
                 router.push(
-                  `/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}`
+                  `/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}`,
                 )
               }
               variant="secondary"
@@ -360,7 +378,7 @@ export default function WizardPreviewPage() {
           <div>
             <Card>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                📄 Document Preview
+                {isEviction ? '📦 Eviction Pack Preview' : '📄 Document Preview'}
               </h3>
 
               {previewUrl ? (
@@ -386,7 +404,7 @@ export default function WizardPreviewPage() {
 
               <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <h4 className="text-sm font-semibold text-blue-900 mb-2">
-                  What you'll receive:
+                  What you&apos;ll receive:
                 </h4>
 
                 {isEviction && (
@@ -403,7 +421,8 @@ export default function WizardPreviewPage() {
                 {isMoneyClaim && (
                   <ul className="text-sm text-blue-800 space-y-1">
                     <li>
-                      ✅ {caseData.jurisdiction === 'scotland'
+                      ✅{' '}
+                      {caseData.jurisdiction === 'scotland'
                         ? 'Simple Procedure Form 3A and supporting schedules'
                         : 'Money claim form (N1) and particulars'}
                     </li>

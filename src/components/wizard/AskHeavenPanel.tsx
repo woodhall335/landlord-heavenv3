@@ -1,7 +1,8 @@
-// src/components/wizard/AskHeavenPanel.tsx
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
+import { Button, Card } from '@/components/ui';
+import { Sparkles, MessageCircle, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Jurisdiction = 'england-wales' | 'scotland' | 'northern-ireland';
@@ -12,21 +13,27 @@ interface AskHeavenPanelProps {
   caseType: CaseType;
   jurisdiction: Jurisdiction;
   product: Product;
-  currentQuestionId?: string | null;
-  currentQuestionText?: string | null;
+  currentQuestionId?: string;
+  currentQuestionText?: string;
   currentAnswer?: string | null;
+  /**
+   * Optional: allows Ask Heaven to push improved wording
+   * straight back into the current answer field.
+   */
+  onApplySuggestion?: (newText: string) => void;
 }
 
-type ChatRole = 'user' | 'assistant' | 'system';
-
-interface ChatMessage {
-  id: string;
-  role: ChatRole;
-  content: string;
-  createdAt: string;
+interface AskHeavenResult {
+  suggested_wording: string;
+  missing_information: string[];
+  evidence_suggestions: string[];
+  consistency_flags?: string[];
 }
 
-type TabId = 'writing' | 'chat';
+interface QAMessage {
+  role: 'user' | 'assistant';
+  text: string;
+}
 
 export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
   caseId,
@@ -36,317 +43,419 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
   currentQuestionId,
   currentQuestionText,
   currentAnswer,
+  onApplySuggestion,
 }) => {
-  const [activeTab, setActiveTab] = useState<TabId>('writing');
-
   // Writing helper state
-  const [isEnhancing, setIsEnhancing] = useState(false);
-  const [enhanced, setEnhanced] = useState<{
-    suggested?: string;
-    missing_information?: string[];
-    evidence_suggestions?: string[];
-  } | null>(null);
-  const [enhanceError, setEnhanceError] = useState<string | null>(null);
+  const [writingLoading, setWritingLoading] = useState(false);
+  const [writingError, setWritingError] = useState<string | null>(null);
+  const [writingResult, setWritingResult] = useState<AskHeavenResult | null>(null);
 
-  // Chat state
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-  const [chatInput, setChatInput] = useState('');
-  const [isChatting, setIsChatting] = useState(false);
-  const [chatError, setChatError] = useState<string | null>(null);
+  // Q&A state
+  const [qaInput, setQaInput] = useState('');
+  const [qaMessages, setQaMessages] = useState<QAMessage[]>([]);
+  const [qaLoading, setQaLoading] = useState(false);
+  const [qaError, setQaError] = useState<string | null>(null);
 
-  const handleEnhance = useCallback(async () => {
-    if (!currentQuestionId || !currentAnswer) {
-      setEnhanceError('Please answer the question first so Ask Heaven can help you refine it.');
-      return;
+  const hasAnswerText = !!(currentAnswer && currentAnswer.trim().length > 0);
+
+  const jurisdictionLabel: string =
+    {
+      'england-wales': 'England & Wales',
+      scotland: 'Scotland',
+      'northern-ireland': 'Northern Ireland',
+    }[jurisdiction] || 'your area';
+
+  const productLabel: string =
+    product === 'complete_pack'
+      ? 'Eviction Pack'
+      : product === 'notice_only'
+      ? 'Notice Only'
+      : product === 'money_claim'
+      ? 'Money Claim Pack'
+      : 'Tenancy Agreement';
+
+  /**
+   * Normalise different backend response shapes into a single
+   * AskHeavenResult structure.
+   */
+  const normaliseResult = (data: any): AskHeavenResult | null => {
+    if (!data) return null;
+
+    // 1) Advanced Ask Heaven block
+    if (data.ask_heaven && typeof data.ask_heaven === 'object') {
+      const r = data.ask_heaven;
+      if (r.suggested_wording) {
+        return {
+          suggested_wording: r.suggested_wording,
+          missing_information: r.missing_information || [],
+          evidence_suggestions: r.evidence_suggestions || [],
+          consistency_flags: r.consistency_flags || [],
+        };
+      }
     }
 
-    setIsEnhancing(true);
-    setEnhanceError(null);
+    // 2) enhanced_answer format
+    if (data.enhanced_answer && typeof data.enhanced_answer === 'object') {
+      const r = data.enhanced_answer;
+      if (r.suggested) {
+        return {
+          suggested_wording: r.suggested,
+          missing_information: r.missing_information || [],
+          evidence_suggestions: r.evidence_suggestions || [],
+          consistency_flags: r.consistency_flags || [],
+        };
+      }
+    }
+
+    // 3) Flat suggested_wording
+    if (data.suggested_wording) {
+      return {
+        suggested_wording: data.suggested_wording,
+        missing_information: data.missing_information || [],
+        evidence_suggestions: data.evidence_suggestions || [],
+        consistency_flags: data.consistency_flags || [],
+      };
+    }
+
+    return null;
+  };
+
+  /**
+   * Writing helper – improve the user’s wording for the current question.
+   * This reuses your existing /api/wizard/answer behaviour.
+   */
+  const handleImprove = async () => {
+    if (!caseId || !currentQuestionId || !hasAnswerText) return;
+
+    setWritingLoading(true);
+    setWritingError(null);
 
     try {
-      const res = await fetch('/api/ask-heaven/enhance-answer', {
+      const response = await fetch('/api/wizard/answer', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           case_id: caseId,
-          case_type: caseType,
-          jurisdiction,
-          product,
           question_id: currentQuestionId,
-          question_text: currentQuestionText,
           answer: currentAnswer,
+          // Backend can optionally treat this as "preview / enhance only"
+          mode: 'enhance_only',
         }),
       });
 
-      if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as { error?: string } | null;
-        setEnhanceError(body?.error ?? 'Ask Heaven could not enhance this answer right now.');
-        setEnhanced(null);
-        return;
+      const json = await response.json();
+      if (!response.ok) {
+        throw new Error(json.error || 'Ask Heaven could not improve this answer.');
       }
 
-      const body = (await res.json()) as {
-        suggested_wording?: string;
-        missing_information?: string[];
-        evidence_suggestions?: string[];
-      };
+      const normalised = normaliseResult(json);
+      if (!normalised) {
+        throw new Error('Ask Heaven is not available for this question.');
+      }
 
-      setEnhanced({
-        suggested: body.suggested_wording,
-        missing_information: body.missing_information ?? [],
-        evidence_suggestions: body.evidence_suggestions ?? [],
-      });
-    } catch {
-      setEnhanceError('Ask Heaven encountered a problem. Please try again.');
-      setEnhanced(null);
+      setWritingResult(normalised);
+    } catch (err: any) {
+      console.error('Ask Heaven writing helper error:', err);
+      setWritingError(
+        err?.message || 'Failed to improve your wording. Please try again in a moment.',
+      );
     } finally {
-      setIsEnhancing(false);
+      setWritingLoading(false);
     }
-  }, [caseId, caseType, jurisdiction, product, currentQuestionId, currentQuestionText, currentAnswer]);
+  };
 
-  const handleSendChat = useCallback(async () => {
-    const trimmed = chatInput.trim();
-    if (!trimmed) return;
+  const handleApplySuggestion = () => {
+    if (writingResult?.suggested_wording && onApplySuggestion) {
+      onApplySuggestion(writingResult.suggested_wording);
+    }
+  };
 
-    setChatError(null);
-    setIsChatting(true);
+  /**
+   * Q&A helper – let the user ask free-form questions about the process.
+   *
+   * NOTE: This assumes you expose a dedicated Ask Heaven Q&A endpoint.
+   * If your backend uses a different route, update the URL below to match.
+   */
+  const handleAskQuestion = async () => {
+    const question = qaInput.trim();
+    if (!question) return;
 
-    const newMessage: ChatMessage = {
-      id: `local-${Date.now()}`,
-      role: 'user',
-      content: trimmed,
-      createdAt: new Date().toISOString(),
-    };
-
-    const nextMessages = [...chatMessages, newMessage];
-    setChatMessages(nextMessages);
-    setChatInput('');
+    setQaError(null);
+    setQaLoading(true);
+    setQaMessages((prev) => [...prev, { role: 'user', text: question }]);
+    setQaInput('');
 
     try {
-      const res = await fetch('/api/ask-heaven/chat', {
+      const response = await fetch('/api/wizard/ask-heaven', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           case_id: caseId,
           case_type: caseType,
           jurisdiction,
           product,
-          messages: nextMessages.map((m) => ({
-            role: m.role,
-            content: m.content,
-          })),
+          question,
+          current_question_id: currentQuestionId,
+          current_question_text: currentQuestionText,
         }),
       });
 
-      if (!res.ok) {
-        const body = (await res.json().catch(() => null)) as { error?: string } | null;
-        setChatError(body?.error ?? 'Ask Heaven could not reply right now.');
-        return;
+      const json = await response.json();
+      if (!response.ok) {
+        throw new Error(json.error || 'Ask Heaven could not answer that question.');
       }
 
-      const body = (await res.json()) as {
-        reply: string;
-      };
+      const answer: string =
+        json.answer ||
+        json.explanation ||
+        json.message ||
+        'I have provided some guidance based on the details of your case so far.';
 
-      const assistantMessage: ChatMessage = {
-        id: `assistant-${Date.now()}`,
-        role: 'assistant',
-        content: body.reply,
-        createdAt: new Date().toISOString(),
-      };
-
-      setChatMessages((prev) => [...prev, assistantMessage]);
-    } catch {
-      setChatError('Ask Heaven encountered a problem. Please try again.');
+      setQaMessages((prev) => [...prev, { role: 'assistant', text: answer }]);
+    } catch (err: any) {
+      console.error('Ask Heaven Q&A error:', err);
+      setQaError(err?.message || 'Sorry, something went wrong. Please try again.');
     } finally {
-      setIsChatting(false);
+      setQaLoading(false);
     }
-  }, [chatInput, chatMessages, caseId, caseType, jurisdiction, product]);
+  };
 
-  const renderWritingTab = () => (
-    <div className="flex flex-col gap-3">
-      <p className="text-sm text-muted-foreground">
-        Ask Heaven can refine your wording and highlight missing details based on your{' '}
-        <span className="font-medium">{product.replace('_', ' ')}</span> answers for{' '}
-        <span className="font-medium">{jurisdiction}</span>. It behaves like a cautious senior
-        housing solicitor, but cannot give personalised legal advice.
-      </p>
+  // If there is literally no current question yet (very early edge case),
+  // we still show the panel so the user can ask generic questions.
+  const writingDisabledReason = !hasAnswerText
+    ? 'Type your answer first, then Ask Heaven can help tidy it up.'
+    : !currentQuestionId
+    ? 'Once this question has fully loaded, Ask Heaven can improve your wording.'
+    : null;
 
-      <button
-        type="button"
-        onClick={handleEnhance}
-        disabled={isEnhancing || !currentAnswer}
-        className="inline-flex items-center justify-center rounded-md border px-3 py-2 text-sm font-medium shadow-sm disabled:opacity-50"
-      >
-        {isEnhancing ? 'Analyzing…' : 'Improve this answer'}
-      </button>
-
-      {enhanceError && (
-        <div className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-          {enhanceError}
+  const renderPanelContent = () => (
+    <Card className="shadow-xl border border-primary/20 bg-white/95 backdrop-blur">
+      {/* Header */}
+      <div className="flex items-start gap-3 mb-3">
+        <div className="mt-0.5">
+          <Sparkles className="h-5 w-5 text-primary" />
         </div>
-      )}
-
-      {enhanced && (
-        <div className="flex flex-col gap-3">
-          {enhanced.suggested && (
-            <div className="rounded-md border bg-muted/40 p-3">
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Suggested wording
-              </div>
-              <p className="whitespace-pre-wrap text-sm">{enhanced.suggested}</p>
-            </div>
-          )}
-
-          {enhanced.missing_information && enhanced.missing_information.length > 0 && (
-            <div className="rounded-md border bg-muted/40 p-3">
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Missing information
-              </div>
-              <ul className="list-disc space-y-1 pl-4 text-sm">
-                {enhanced.missing_information.map((item, idx) => (
-                  <li key={`missing-${idx}`}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {enhanced.evidence_suggestions && enhanced.evidence_suggestions.length > 0 && (
-            <div className="rounded-md border bg-muted/40 p-3">
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Evidence suggestions
-              </div>
-              <ul className="list-disc space-y-1 pl-4 text-sm">
-                {enhanced.evidence_suggestions.map((item, idx) => (
-                  <li key={`evidence-${idx}`}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {!enhanced.suggested &&
-            (!enhanced.missing_information || enhanced.missing_information.length === 0) &&
-            (!enhanced.evidence_suggestions || enhanced.evidence_suggestions.length === 0) && (
-              <p className="text-sm text-muted-foreground">
-                Ask Heaven did not find any obvious improvements, but you can still use the chat tab to
-                ask follow-up questions.
-              </p>
-            )}
-        </div>
-      )}
-    </div>
-  );
-
-  const renderChatTab = () => (
-    <div className="flex h-full flex-col gap-3">
-      <div className="flex-1 space-y-3 overflow-y-auto rounded-md border bg-muted/40 p-3 text-sm">
-        {chatMessages.length === 0 && (
-          <p className="text-muted-foreground">
-            Ask questions about your <span className="font-medium">{caseType}</span> for{' '}
-            <span className="font-medium">{jurisdiction}</span>. Ask Heaven uses your case details
-            where available, but cannot change your answers or create new legal rules, and it does not
-            replace a solicitor.
+        <div>
+          <h3 className="text-sm font-semibold text-gray-900">Ask Heaven</h3>
+          <p className="text-xs text-gray-500">
+            Your AI co-pilot for the {productLabel.toLowerCase()} in {jurisdictionLabel}. Helps
+            with wording and next-step questions. It&apos;s guidance only and not a substitute for
+            advice from a regulated legal professional.
           </p>
-        )}
-
-        {chatMessages.map((m) => (
-          <div
-            key={m.id}
-            className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div
-              className={`max-w-[80%] rounded-md px-3 py-2 text-sm ${
-                m.role === 'user'
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-background border'
-              }`}
-            >
-              <p className="whitespace-pre-wrap">{m.content}</p>
-            </div>
-          </div>
-        ))}
+        </div>
       </div>
 
-      {chatError && (
-        <div className="rounded-md border border-destructive/50 bg-destructive/10 px-3 py-2 text-xs text-destructive">
-          {chatError}
+      {/* Writing helper */}
+      <div className="mt-3 border-t border-gray-100 pt-3">
+        <div className="flex items-center gap-2 mb-1">
+          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          <span className="text-xs font-semibold text-gray-800">Writing helper</span>
         </div>
-      )}
+        <p className="text-xs text-gray-500 mb-2">
+          Ask Heaven can rewrite your answer in clear, court-friendly language and highlight gaps
+          or helpful evidence to mention.
+        </p>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!isChatting) {
-            void handleSendChat();
-          }
-        }}
-        className="flex gap-2"
-      >
-        <textarea
-          className="min-h-12 flex-1 resize-none rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-          placeholder="Ask a question about your notice, eviction pack, or money claim…"
-          value={chatInput}
-          onChange={(e) => setChatInput(e.target.value)}
-        />
-        <button
-          type="submit"
-          disabled={isChatting || !chatInput.trim()}
-          className="inline-flex h-12 items-center justify-center rounded-md border px-3 text-sm font-medium shadow-sm disabled:opacity-50"
+        <Button
+          type="button"
+          variant="outline"
+          size="small"
+          className="w-full justify-center"
+          onClick={handleImprove}
+          disabled={writingLoading || !hasAnswerText || !currentQuestionId}
         >
-          {isChatting ? 'Sending…' : 'Ask'}
-        </button>
-      </form>
-    </div>
+          {writingLoading ? (
+            <>
+              <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+              Improving your wording…
+            </>
+          ) : (
+            <>
+              <Sparkles className="mr-2 h-3.5 w-3.5" />
+              Improve my wording
+            </>
+          )}
+        </Button>
+
+        {writingDisabledReason && (
+          <p className="mt-2 text-[11px] text-gray-500">{writingDisabledReason}</p>
+        )}
+
+        {writingError && (
+          <div className="mt-2 flex items-start gap-2 rounded-md bg-red-50 px-2.5 py-2">
+            <AlertCircle className="h-3.5 w-3.5 text-red-500 mt-0.5" />
+            <p className="text-[11px] text-red-700">{writingError}</p>
+          </div>
+        )}
+
+        {writingResult && (
+          <div className="mt-3 rounded-md border border-blue-100 bg-blue-50/60 p-2.5">
+            <div className="flex items-center gap-1.5 mb-1">
+              <CheckCircle2 className="h-3.5 w-3.5 text-blue-600" />
+              <span className="text-[11px] font-semibold text-blue-900">
+                Suggested wording (you stay in control)
+              </span>
+            </div>
+            <p className="text-xs text-blue-900 whitespace-pre-wrap mb-2">
+              {writingResult.suggested_wording}
+            </p>
+
+            {(writingResult.missing_information?.length > 0 ||
+              writingResult.evidence_suggestions?.length > 0 ||
+              (writingResult.consistency_flags?.length ?? 0) > 0) && (
+              <div className="space-y-1.5 mb-2">
+                {writingResult.missing_information?.length > 0 && (
+                  <div>
+                    <p className="text-[11px] font-semibold text-yellow-900">
+                      Things you haven&apos;t mentioned yet
+                    </p>
+                    <ul className="mt-0.5 list-disc list-inside text-[11px] text-yellow-900">
+                      {writingResult.missing_information.map((item, idx) => (
+                        <li key={`missing-${idx}`}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {writingResult.evidence_suggestions?.length > 0 && (
+                  <div>
+                    <p className="text-[11px] font-semibold text-emerald-900">
+                      Helpful evidence to gather
+                    </p>
+                    <ul className="mt-0.5 list-disc list-inside text-[11px] text-emerald-900">
+                      {writingResult.evidence_suggestions.map((item, idx) => (
+                        <li key={`ev-${idx}`}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {writingResult.consistency_flags &&
+                  writingResult.consistency_flags.length > 0 && (
+                    <div>
+                      <p className="text-[11px] font-semibold text-red-900">
+                        Possible inconsistencies
+                      </p>
+                      <ul className="mt-0.5 list-disc list-inside text-[11px] text-red-900">
+                        {writingResult.consistency_flags.map((item, idx) => (
+                          <li key={`flag-${idx}`}>{item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <Button
+                type="button"
+                size="small"
+                variant="primary"
+                className="flex-1"
+                onClick={handleApplySuggestion}
+                disabled={!onApplySuggestion}
+              >
+                Use this wording
+              </Button>
+              <Button
+                type="button"
+                size="small"
+                variant="ghost"
+                className="flex-1"
+                onClick={() => setWritingResult(null)}
+              >
+                Dismiss
+              </Button>
+            </div>
+            {!onApplySuggestion && (
+              <p className="mt-1 text-[10px] text-blue-900/80">
+                Tip: you can also copy &amp; paste this into the answer box manually.
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Q&A helper */}
+      <div className="mt-4 border-t border-gray-100 pt-3">
+        <div className="flex items-center gap-2 mb-1">
+          <MessageCircle className="h-3.5 w-3.5 text-primary" />
+          <span className="text-xs font-semibold text-gray-800">Ask questions</span>
+        </div>
+        <p className="text-xs text-gray-500 mb-2">
+          Ask quick questions about this step, the documents we&apos;re generating, or procedure in{' '}
+          {jurisdictionLabel}. Answers are general guidance only – not personalised legal advice.
+        </p>
+
+        <div className="space-y-2">
+          <textarea
+            value={qaInput}
+            onChange={(e) => setQaInput(e.target.value)}
+            rows={3}
+            className="w-full rounded-md border border-gray-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-primary/60 focus:border-transparent"
+            placeholder='E.g. “Do I need to attach the tenancy agreement?” or “What happens after the court issues the claim?”'
+          />
+          <Button
+            type="button"
+            variant="secondary"
+            size="small"
+            className="w-full justify-center"
+            onClick={handleAskQuestion}
+            disabled={qaLoading || !qaInput.trim()}
+          >
+            {qaLoading ? (
+              <>
+                <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                Asking Ask Heaven…
+              </>
+            ) : (
+              <>
+                <MessageCircle className="mr-2 h-3.5 w-3.5" />
+                Ask a question
+              </>
+            )}
+          </Button>
+        </div>
+
+        {qaError && (
+          <div className="mt-2 flex items-start gap-2 rounded-md bg-red-50 px-2.5 py-2">
+            <AlertCircle className="h-3.5 w-3.5 text-red-500 mt-0.5" />
+            <p className="text-[11px] text-red-700">{qaError}</p>
+          </div>
+        )}
+
+        {qaMessages.length > 0 && (
+          <div className="mt-3 max-h-40 overflow-y-auto rounded-md bg-gray-50 px-2.5 py-2 space-y-1.5">
+            {qaMessages.map((m, idx) => (
+              <div
+                key={idx}
+                className={`text-[11px] leading-snug ${
+                  m.role === 'user' ? 'text-gray-800' : 'text-gray-700'
+                }`}
+              >
+                <span className="font-semibold mr-1">
+                  {m.role === 'user' ? 'You:' : 'Ask Heaven:'}
+                </span>
+                <span>{m.text}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </Card>
   );
 
   return (
-    <div className="flex h-full flex-col rounded-xl border bg-card p-4 shadow-sm">
-      <div className="mb-3 flex items-center justify-between gap-2">
-        <div>
-          <h2 className="text-sm font-semibold">Ask Heaven</h2>
-          <p className="text-xs text-muted-foreground">
-            Smart landlord assistant for{' '}
-            <span className="font-medium">
-              {product.replace('_', ' ')} · {jurisdiction}
-            </span>
-            . It thinks like a £500/hour housing solicitor, but stays within strict safety rules and
-            does not replace legal advice.
-          </p>
+    <>
+      {/* Desktop / large screens – sticky in the wizard column only */}
+      <div className="hidden lg:block">
+        <div className="sticky top-24">
+          {renderPanelContent()}
         </div>
       </div>
 
-      <div className="mb-3 flex gap-2 border-b pb-1 text-xs">
-        <button
-          type="button"
-          onClick={() => setActiveTab('writing')}
-          className={`rounded-md px-2 py-1 ${
-            activeTab === 'writing'
-              ? 'bg-primary/10 text-primary'
-              : 'text-muted-foreground hover:bg-muted'
-          }`}
-        >
-          Writing helper
-        </button>
-        <button
-          type="button"
-          onClick={() => setActiveTab('chat')}
-          className={`rounded-md px-2 py-1 ${
-            activeTab === 'chat'
-              ? 'bg-primary/10 text-primary'
-              : 'text-muted-foreground hover:bg-muted'
-          }`}
-        >
-          Ask questions
-        </button>
+      {/* Mobile / small screens – inline below the wizard content */}
+      <div className="mt-6 lg:hidden">
+        {renderPanelContent()}
       </div>
-
-      <div className="flex-1 overflow-hidden">
-        {activeTab === 'writing' ? renderWritingTab() : renderChatTab()}
-      </div>
-    </div>
+    </>
   );
 };
