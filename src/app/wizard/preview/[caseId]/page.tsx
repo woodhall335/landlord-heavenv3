@@ -24,6 +24,21 @@ interface CaseData {
   created_at: string;
 }
 
+// Mirrors /api/documents shape (plus optional metadata)
+interface DocumentRow {
+  id: string;
+  document_title: string;
+  document_type: string;
+  is_preview: boolean;
+  created_at: string;
+  file_path?: string | null;
+  metadata?: {
+    description?: string;
+    pack_type?: string;
+    [key: string]: any;
+  } | null;
+}
+
 interface PricingOption {
   productType:
     | 'notice_only'
@@ -52,7 +67,15 @@ export default function WizardPreviewPage() {
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
-  // Map case type to document type
+  // Preview docs for this case (is_preview = true)
+  const [previewDocuments, setPreviewDocuments] = useState<DocumentRow[]>([]);
+  const [previewDocsLoading, setPreviewDocsLoading] = useState(false);
+
+  // Full pack documents (post-payment) for this case
+  const [fullPackDocuments, setFullPackDocuments] = useState<DocumentRow[]>([]);
+  const [fullPackDocsLoading, setFullPackDocsLoading] = useState(false);
+
+  // Map case type to primary preview document type
   const getDocumentType = (caseType: string, caseData?: CaseData): string => {
     // Eviction: preview the main notice that matches the recommended route
     if (caseType === 'eviction') {
@@ -107,10 +130,10 @@ export default function WizardPreviewPage() {
             price: '£149.99',
             description: 'Everything you need from notice to court eviction.',
             features: [
-              'Correct Section 8 and/or Section 21 notice',
-              'Court possession claim forms (N5 & N119, plus N5B where eligible)',
+              'Correct Section 8 and/or Section 21 notice (or Notice to Leave in Scotland)',
+              'Court / tribunal claim forms (N5, N119, N5B where eligible, or Form E for Scotland)',
               'Rent arrears schedule & payment history log',
-              'Step-by-step eviction roadmap & filing guide',
+              'Step-by-step eviction roadmap & filing / lodging guide',
               'Evidence checklist & proof of service templates',
               'Lifetime access to all pack documents',
             ],
@@ -179,6 +202,59 @@ export default function WizardPreviewPage() {
     }
   };
 
+  // Load preview documents (is_preview = true)
+  const loadPreviewDocuments = async (caseIdToLoad: string) => {
+    try {
+      setPreviewDocsLoading(true);
+      const res = await fetch(
+        `/api/documents?case_id=${encodeURIComponent(caseIdToLoad)}&is_preview=true`
+      );
+
+      if (!res.ok) {
+        return;
+      }
+
+      const data = (await res.json()) as { documents?: DocumentRow[] };
+      setPreviewDocuments(data.documents || []);
+    } catch (err) {
+      console.error('Failed to load preview documents:', err);
+    } finally {
+      setPreviewDocsLoading(false);
+    }
+  };
+
+  // Load full pack docs (post-payment)
+  const loadFullPackDocuments = async (caseIdToLoad: string) => {
+    try {
+      setFullPackDocsLoading(true);
+      const res = await fetch(`/api/documents?case_id=${encodeURIComponent(caseIdToLoad)}`);
+
+      // If user is anonymous, this may 401 – just treat as “no pack docs yet”
+      if (!res.ok) {
+        return;
+      }
+
+      const data = (await res.json()) as { documents?: DocumentRow[] };
+      const allDocs = data.documents || [];
+
+      // Only keep eviction pack docs
+      const packDocs = allDocs.filter((doc) => {
+        const packType = doc.metadata?.pack_type;
+        return (
+          packType === 'complete_pack' ||
+          packType === 'notice_only' ||
+          packType === 'complete_eviction_pack'
+        );
+      });
+
+      setFullPackDocuments(packDocs);
+    } catch (err) {
+      console.error('Failed to load full pack documents:', err);
+    } finally {
+      setFullPackDocsLoading(false);
+    }
+  };
+
   // Fetch case data and generate preview
   useEffect(() => {
     const fetchCaseAndPreview = async () => {
@@ -193,7 +269,8 @@ export default function WizardPreviewPage() {
         }
 
         const caseResult = await caseResponse.json();
-        setCaseData(caseResult.case);
+        const fetchedCase: CaseData = caseResult.case;
+        setCaseData(fetchedCase);
 
         // Generate preview document
         const previewResponse = await fetch('/api/documents/generate', {
@@ -201,15 +278,14 @@ export default function WizardPreviewPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             case_id: caseId,
-            document_type: getDocumentType(caseResult.case.case_type, caseResult.case),
+            document_type: getDocumentType(fetchedCase.case_type, fetchedCase),
             is_preview: true,
           }),
         });
 
         if (!previewResponse.ok) {
-          // Get the actual error message from the server
           const errorData = await previewResponse.json().catch(() => ({}));
-          const errorMessage = errorData.error || 'Failed to generate preview document';
+          const errorMessage = (errorData as any).error || 'Failed to generate preview document';
           console.error('Preview generation error:', errorMessage);
           throw new Error(errorMessage);
         }
@@ -219,13 +295,19 @@ export default function WizardPreviewPage() {
         // Get signed URL for preview
         if (previewResult.document?.id) {
           const signedUrlResponse = await fetch(
-            `/api/documents/preview/${previewResult.document.id}`,
+            `/api/documents/preview/${previewResult.document.id}`
           );
 
           if (signedUrlResponse.ok) {
             const signedUrlResult = await signedUrlResponse.json();
             setPreviewUrl(signedUrlResult.preview_url);
           }
+        }
+
+        // Load any other docs for this case:
+        await loadPreviewDocuments(caseId);
+        if (fetchedCase.case_type === 'eviction') {
+          await loadFullPackDocuments(caseId);
         }
       } catch (err: any) {
         console.error('Error loading preview:', err);
@@ -299,13 +381,9 @@ export default function WizardPreviewPage() {
   };
 
   const handleSignupSuccess = async () => {
-    // Close modal
     setShowSignupModal(false);
-
-    // Show success message
     showToast('Account created! Proceeding to checkout...', 'success');
 
-    // Proceed to checkout with selected product
     if (selectedProduct) {
       await proceedToCheckout(selectedProduct);
     }
@@ -346,6 +424,53 @@ export default function WizardPreviewPage() {
   const isMoneyClaim = caseData.case_type === 'money_claim';
   const isTenancy = caseData.case_type === 'tenancy_agreement';
 
+  // Group full pack docs by category for nicer UI (eviction only)
+  const categoryOrder: string[] = ['notice', 'court_form', 'guidance', 'evidence_tool', 'bonus'];
+  const categoryLabels: Record<string, string> = {
+    notice: 'Notices',
+    court_form: 'Court forms',
+    guidance: 'Guides & roadmap',
+    evidence_tool: 'Evidence tools',
+    bonus: 'Bonus documents',
+    other: 'Other documents',
+  };
+  const categoryIcons: Record<string, string> = {
+    notice: '📜',
+    court_form: '⚖️',
+    guidance: '🧭',
+    evidence_tool: '📂',
+    bonus: '🎁',
+    other: '📁',
+  };
+
+  const groupedPackDocs: { key: string; label: string; icon: string; docs: DocumentRow[] }[] = [];
+  if (fullPackDocuments.length > 0) {
+    for (const cat of categoryOrder) {
+      const docsInCat = fullPackDocuments.filter((d) => d.document_type === cat);
+      if (docsInCat.length > 0) {
+        groupedPackDocs.push({
+          key: cat,
+          label: categoryLabels[cat] || cat,
+          icon: categoryIcons[cat] || '📁',
+          docs: docsInCat,
+        });
+      }
+    }
+    const otherDocs = fullPackDocuments.filter(
+      (d) => !categoryOrder.includes(d.document_type)
+    );
+    if (otherDocs.length > 0) {
+      groupedPackDocs.push({
+        key: 'other',
+        label: categoryLabels.other,
+        icon: categoryIcons.other,
+        docs: otherDocs,
+      });
+    }
+  }
+
+  const isScotlandEviction = isEviction && caseData.jurisdiction === 'scotland';
+
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -362,7 +487,7 @@ export default function WizardPreviewPage() {
             <Button
               onClick={() =>
                 router.push(
-                  `/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}`,
+                  `/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}`
                 )
               }
               variant="secondary"
@@ -409,12 +534,25 @@ export default function WizardPreviewPage() {
 
                 {isEviction && (
                   <ul className="text-sm text-blue-800 space-y-1">
-                    <li>✅ Correct Section 8 and/or Section 21 notice</li>
-                    <li>✅ Court possession claim forms (N5, N119, and N5B where eligible)</li>
-                    <li>✅ Rent arrears schedule and payment history summary</li>
-                    <li>✅ Evidence checklist & proof of service templates</li>
-                    <li>✅ Step-by-step eviction roadmap & filing guide</li>
-                    <li>✅ Lifetime access to all documents in your dashboard</li>
+                    {isScotlandEviction ? (
+                      <>
+                        <li>✅ Notice to Leave drafted for this tenancy</li>
+                        <li>✅ Form E – Tribunal application for eviction</li>
+                        <li>✅ Rent arrears schedule and payment history summary</li>
+                        <li>✅ Evidence checklist & proof of service templates</li>
+                        <li>✅ Lodging guide for the First-tier Tribunal (Housing and Property Chamber)</li>
+                        <li>✅ Lifetime access to all documents in your dashboard</li>
+                      </>
+                    ) : (
+                      <>
+                        <li>✅ Correct Section 8 and/or Section 21 notice</li>
+                        <li>✅ Court possession claim forms (N5, N119, and N5B where eligible)</li>
+                        <li>✅ Rent arrears schedule and payment history summary</li>
+                        <li>✅ Evidence checklist & proof of service templates</li>
+                        <li>✅ Step-by-step eviction roadmap & filing guide</li>
+                        <li>✅ Lifetime access to all documents in your dashboard</li>
+                      </>
+                    )}
                   </ul>
                 )}
 
@@ -453,6 +591,103 @@ export default function WizardPreviewPage() {
                   </ul>
                 )}
               </div>
+
+              {/* Eviction pack contents overview */}
+              {isEviction && (
+                <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                  <h4 className="text-sm font-semibold text-gray-900 mb-2">
+                    Pack contents for this case
+                  </h4>
+
+                  {fullPackDocsLoading && (
+                    <p className="text-sm text-gray-600">
+                      Checking for any existing pack documents…
+                    </p>
+                  )}
+
+                  {!fullPackDocsLoading && groupedPackDocs.length === 0 && (
+                    <p className="text-sm text-gray-600">
+                      Your complete eviction pack will include multiple notices,
+                      court / tribunal forms, schedules, checklists and guidance
+                      documents tailored to this case. These will be fully
+                      generated and unlocked in your dashboard after purchase.
+                    </p>
+                  )}
+
+                  {!fullPackDocsLoading && groupedPackDocs.length > 0 && (
+                    <>
+                      {isScotlandEviction && (
+                        <p className="text-sm text-gray-700 mb-3">
+                          These documents form your bundle for the First-tier
+                          Tribunal for Scotland (Housing and Property Chamber).
+                        </p>
+                      )}
+
+                      {!isScotlandEviction && (
+                        <p className="text-sm text-gray-700 mb-3">
+                          The following documents have already been generated
+                          for this case and will be available in your dashboard
+                          as part of your eviction pack:
+                        </p>
+                      )}
+
+                      <div className="space-y-3">
+                        {groupedPackDocs.map((group) => (
+                          <div
+                            key={group.key}
+                            className="border border-gray-200 rounded-md p-3 bg-white"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                                <span>{group.icon}</span>
+                                <span>{group.label}</span>
+                              </span>
+                              <span className="text-xs text-gray-500">
+                                {group.docs.length} document
+                                {group.docs.length > 1 ? 's' : ''}
+                              </span>
+                            </div>
+                            <ul className="text-sm text-gray-700 space-y-1">
+                              {group.docs.map((doc) => (
+                                <li
+                                  key={doc.id}
+                                  className="flex items-center justify-between gap-2"
+                                >
+                                  <span>{doc.document_title}</span>
+                                  {doc.is_preview && (
+                                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                                      Preview
+                                    </span>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  {previewDocsLoading && (
+                    <p className="mt-3 text-xs text-gray-500">
+                      Generating preview documents…
+                    </p>
+                  )}
+
+                  {!previewDocsLoading && previewDocuments.length > 0 && (
+                    <div className="mt-3 border-t border-gray-200 pt-3">
+                      <h5 className="text-xs font-semibold text-gray-700 mb-1">
+                        Preview documents created for this case
+                      </h5>
+                      <ul className="text-xs text-gray-600 space-y-1">
+                        {previewDocuments.map((doc) => (
+                          <li key={doc.id}>• {doc.document_title}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              )}
             </Card>
           </div>
 
@@ -553,9 +788,9 @@ export default function WizardPreviewPage() {
                 Are these documents legally valid?
               </h3>
               <p className="text-gray-600 text-sm">
-                Yes! All documents are based on official court forms and
-                government-approved templates. They&apos;re designed to be
-                court-ready and comply with current UK landlord-tenant law.
+                Yes! All documents are based on official court and tribunal forms and
+                government-approved templates. They&apos;re designed to be court-ready
+                and comply with current UK landlord-tenant law.
               </p>
             </Card>
 
