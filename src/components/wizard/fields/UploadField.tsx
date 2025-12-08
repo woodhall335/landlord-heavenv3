@@ -5,7 +5,7 @@ import { FileUpload } from '@/components/wizard/FileUpload';
 
 export interface EvidenceFileSummary {
   id: string;
-  documentId: string;    // for now we’ll use the upload id as a stable identifier
+  documentId: string; // documents table id
   questionId?: string;
   fileName: string;
   category?: string;
@@ -53,6 +53,28 @@ export const UploadField: React.FC<UploadFieldProps> = ({
     onUploadingChange?.(uploading);
   }, [uploading, onUploadingChange]);
 
+  const mapEvidenceFiles = (entries: any[], document?: any): EvidenceFileSummary[] => {
+    return entries.map((entry) => {
+      const fallbackUrl =
+        (entry as any)?.public_url ??
+        (entry as any)?.url ??
+        (entry as any)?.pdf_url ??
+        (document && entry.document_id === document.id ? document.pdf_url : null) ??
+        document?.pdf_url ??
+        null;
+
+      return {
+        id: entry.id || entry.document_id || crypto.randomUUID(),
+        documentId: entry.document_id || document?.id || entry.id || '',
+        questionId: entry.question_id ?? questionId,
+        fileName: entry.file_name || document?.document_title || 'Uploaded file',
+        category: entry.category || entry.label || evidenceCategory,
+        url: fallbackUrl,
+        uploadedAt: entry.uploaded_at || document?.created_at,
+      };
+    });
+  };
+
   const handleFilesSelected = async (files: File[]) => {
     if (disabled) return;
 
@@ -62,18 +84,16 @@ export const UploadField: React.FC<UploadFieldProps> = ({
     setUploading(true);
     setError(null);
 
-    const newlyUploaded: EvidenceFileSummary[] = [];
-
     try {
+      let latestSummaries: EvidenceFileSummary[] = uploadedFiles;
+
       for (const file of files) {
         const formData = new FormData();
 
-        // 🔁 Match backend field names exactly
-        formData.append('case_id', caseId);
-        formData.append('question_id', questionId);
+        formData.append('caseId', caseId);
+        formData.append('questionId', questionId);
         if (evidenceCategory) {
-          // Use evidenceCategory as a human label for this upload
-          formData.append('label', evidenceCategory);
+          formData.append('category', evidenceCategory);
         }
         formData.append('file', file);
 
@@ -88,35 +108,17 @@ export const UploadField: React.FC<UploadFieldProps> = ({
           throw new Error(data?.error || 'Failed to upload file');
         }
 
-        const uploadedItems: any[] = Array.isArray(data?.files) ? data.files : [];
-        if (uploadedItems.length === 0) {
-          continue;
-        }
-
-        // This request may have uploaded multiple files; take all of them.
-        for (const item of uploadedItems) {
-          const summary: EvidenceFileSummary = {
-            id: item.id || crypto.randomUUID(),
-            // We don’t have a documents table id here yet, so use the upload id
-            documentId: item.id || '',
-            questionId,
-            fileName: item.file_name || file.name,
-            category: item.label || evidenceCategory,
-            url: item.public_url ?? null,
-            uploadedAt: item.uploaded_at,
-          };
-
-          newlyUploaded.push(summary);
+        const evidenceFiles: any[] = Array.isArray(data?.evidence?.files)
+          ? data.evidence.files
+          : [];
+        const mapped = mapEvidenceFiles(evidenceFiles, data.document);
+        if (mapped.length > 0) {
+          latestSummaries = mapped;
         }
       }
 
-      if (newlyUploaded.length > 0) {
-        setUploadedFiles((prev) => {
-          const next = [...prev, ...newlyUploaded];
-          onChange?.(next);
-          return next;
-        });
-      }
+      setUploadedFiles(latestSummaries);
+      onChange?.(latestSummaries);
     } catch (uploadError) {
       console.error('Evidence upload failed', uploadError);
       setError(uploadError instanceof Error ? uploadError.message : 'Upload failed');

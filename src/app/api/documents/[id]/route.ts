@@ -8,6 +8,18 @@
 import { createServerSupabaseClient, requireServerAuth, createAdminClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
+function resolveStoragePath(pdfUrl?: string | null): string | null {
+  if (!pdfUrl) return null;
+
+  if (pdfUrl.includes('/documents/')) {
+    const [, path] = pdfUrl.split('/documents/');
+    return path || null;
+  }
+
+  const cleaned = pdfUrl.replace(/^\/+/, '');
+  return cleaned.length > 0 ? cleaned : null;
+}
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -36,24 +48,18 @@ export async function GET(
     // Generate signed URL for PDF if available
     let signedUrl: string | null = null;
 
-    if ((document as any).pdf_url) {
+    const storagePath = resolveStoragePath((document as any).pdf_url);
+    if (storagePath) {
       const adminClient = createAdminClient();
 
-      // Extract file path from public URL
-      const urlParts = (document as any).pdf_url.split('/documents/');
-      if (urlParts.length === 2) {
-        const filePath = urlParts[1];
+      const { data: signedUrlData, error: signedUrlError } = await adminClient.storage
+        .from('documents')
+        .createSignedUrl(storagePath, 3600);
 
-        // Generate signed URL (valid for 1 hour)
-        const { data: signedUrlData, error: signedUrlError } = await adminClient.storage
-          .from('documents')
-          .createSignedUrl(filePath, 3600);
-
-        if (signedUrlError) {
-          console.error('Failed to generate signed URL:', signedUrlError);
-        } else {
-          signedUrl = signedUrlData.signedUrl;
-        }
+      if (signedUrlError) {
+        console.error('Failed to generate signed URL:', signedUrlError);
+      } else {
+        signedUrl = signedUrlData.signedUrl;
       }
     }
 
@@ -112,22 +118,19 @@ export async function DELETE(
       );
     }
 
+    const storagePath = resolveStoragePath((document as any).pdf_url);
+
     // Delete file from storage if exists
-    if ((document as any).pdf_url) {
+    if (storagePath) {
       const adminClient = createAdminClient();
-      const urlParts = (document as any).pdf_url.split('/documents/');
 
-      if (urlParts.length === 2) {
-        const filePath = urlParts[1];
+      const { error: deleteStorageError } = await adminClient.storage
+        .from('documents')
+        .remove([storagePath]);
 
-        const { error: deleteStorageError } = await adminClient.storage
-          .from('documents')
-          .remove([filePath]);
-
-        if (deleteStorageError) {
-          console.error('Failed to delete file from storage:', deleteStorageError);
-          // Continue with database deletion even if storage deletion fails
-        }
+      if (deleteStorageError) {
+        console.error('Failed to delete file from storage:', deleteStorageError);
+        // Continue with database deletion even if storage deletion fails
       }
     }
 

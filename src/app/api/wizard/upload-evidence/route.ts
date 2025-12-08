@@ -11,19 +11,50 @@ function sanitizeFilename(name: string) {
 }
 
 function mapQuestionToEvidenceFlags(questionId: string) {
-  switch (questionId) {
+  const normalized = questionId.toLowerCase();
+
+  switch (normalized) {
     case 'upload_tenancy_agreement':
+    case 'tenancy_agreement_upload':
       return ['tenancy_agreement_uploaded'];
     case 'upload_rent_schedule':
     case 'arrears_schedule_upload':
+    case 'rent_schedule_upload':
       return ['rent_schedule_uploaded'];
     case 'upload_bank_statements':
+    case 'bank_statements_upload':
       return ['bank_statements_uploaded'];
+    case 'upload_safety_certificates':
+    case 'safety_certificates_upload':
+      return ['safety_certificates_uploaded'];
+    case 'upload_asb_evidence':
+    case 'asb_evidence_upload':
+      return ['asb_evidence_uploaded'];
     case 'upload_damage_evidence':
     case 'upload_other_evidence':
       return ['other_evidence_uploaded'];
-    default:
-      return [];
+    default: {
+      const inferred: string[] = [];
+      if (normalized.includes('tenancy')) {
+        inferred.push('tenancy_agreement_uploaded');
+      }
+      if (normalized.includes('rent') || normalized.includes('arrears')) {
+        inferred.push('rent_schedule_uploaded');
+      }
+      if (normalized.includes('bank')) {
+        inferred.push('bank_statements_uploaded');
+      }
+      if (normalized.includes('safety')) {
+        inferred.push('safety_certificates_uploaded');
+      }
+      if (normalized.includes('asb')) {
+        inferred.push('asb_evidence_uploaded');
+      }
+      if (inferred.length === 0) {
+        inferred.push('other_evidence_uploaded');
+      }
+      return inferred;
+    }
   }
 }
 
@@ -90,6 +121,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Could not upload file' }, { status: 500 });
     }
 
+    const { data: publicUrlData } = supabase.storage.from('documents').getPublicUrl(objectKey);
+    const publicUrl = publicUrlData?.publicUrl || null;
+
     const { data: documentRow, error: documentError } = await supabase
       .from('documents')
       .insert({
@@ -98,7 +132,7 @@ export async function POST(request: Request) {
         document_type: 'evidence',
         document_title: file.name || safeFilename,
         jurisdiction: caseRow.jurisdiction,
-        pdf_url: objectKey,
+        pdf_url: publicUrl || objectKey,
         is_preview: false,
       })
       .select('id, document_title, document_type, pdf_url, created_at')
@@ -124,22 +158,32 @@ export async function POST(request: Request) {
 
     const updatedFacts = await updateWizardFacts(supabase, caseId, (currentRaw) => {
       const current = (currentRaw as any) || {};
-      const currentEvidence = (current as any).evidence || {};
-      const nextEvidence = {
-        ...currentEvidence,
-        files: Array.isArray(currentEvidence.files) ? [...currentEvidence.files] : [],
+      const existingEvidence = (current as any).evidence || {};
+
+      const evidenceFlags = {
+        tenancy_agreement_uploaded: !!existingEvidence.tenancy_agreement_uploaded,
+        rent_schedule_uploaded: !!existingEvidence.rent_schedule_uploaded,
+        bank_statements_uploaded: !!existingEvidence.bank_statements_uploaded,
+        safety_certificates_uploaded: !!existingEvidence.safety_certificates_uploaded,
+        asb_evidence_uploaded: !!existingEvidence.asb_evidence_uploaded,
+        other_evidence_uploaded: !!existingEvidence.other_evidence_uploaded,
       };
 
-      nextEvidence.files.push(evidenceEntry);
+      const files = Array.isArray(existingEvidence.files) ? [...existingEvidence.files] : [];
+      files.push(evidenceEntry);
 
-      const flags = mapQuestionToEvidenceFlags(questionId);
-      for (const flag of flags) {
-        nextEvidence[flag] = true;
+      const flagsToSet = mapQuestionToEvidenceFlags(questionId);
+      for (const flag of flagsToSet) {
+        (evidenceFlags as any)[flag] = true;
       }
 
       return {
         ...current,
-        evidence: nextEvidence,
+        evidence: {
+          ...existingEvidence,
+          ...evidenceFlags,
+          files,
+        },
       } as typeof current;
     });
 
@@ -154,6 +198,8 @@ export async function POST(request: Request) {
           tenancy_agreement_uploaded: !!evidenceFacts.tenancy_agreement_uploaded,
           rent_schedule_uploaded: !!evidenceFacts.rent_schedule_uploaded,
           bank_statements_uploaded: !!evidenceFacts.bank_statements_uploaded,
+          safety_certificates_uploaded: !!evidenceFacts.safety_certificates_uploaded,
+          asb_evidence_uploaded: !!evidenceFacts.asb_evidence_uploaded,
           other_evidence_uploaded: !!evidenceFacts.other_evidence_uploaded,
         },
       },

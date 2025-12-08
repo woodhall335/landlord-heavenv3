@@ -12,6 +12,7 @@ import { Button, Input, Card } from '@/components/ui';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { GuidanceTips } from '@/components/wizard/GuidanceTips';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 
 interface StructuredWizardProps {
   caseId: string;
@@ -54,13 +55,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     consistency_flags?: string[];
   } | null>(null);
   const [questionHistory, setQuestionHistory] = useState<
-    Array<{ question: ExtendedWizardQuestion; answer: any }>
+    Array<{ question: ExtendedWizardQuestion; answer: any; uploads?: EvidenceFileSummary[] }>
   >([]);
   const [depositWarning, setDepositWarning] = useState<string | null>(null);
   const [epcWarning, setEpcWarning] = useState<string | null>(null);
   const [astSuitabilityWarning, setAstSuitabilityWarning] = useState<string | null>(null);
   const [caseFacts, setCaseFacts] = useState<Record<string, any>>({});
   const [showIntro, setShowIntro] = useState(caseType === 'money_claim');
+  const [uploadFilesForCurrentQuestion, setUploadFilesForCurrentQuestion] = useState<
+    EvidenceFileSummary[]
+  >([]);
+  const [uploadingEvidence, setUploadingEvidence] = useState(false);
 
   // Step 3: money-claim case health / readiness
   const [analysis, setAnalysis] = useState<CaseAnalysisState | null>(null);
@@ -72,6 +77,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
   const initializeQuestion = useCallback((question: ExtendedWizardQuestion) => {
     setCurrentQuestion(question);
+    setUploadFilesForCurrentQuestion([]);
 
     if (question.inputType === 'group' && question.fields) {
       const defaults: Record<string, any> = {};
@@ -81,6 +87,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         }
       });
       setCurrentAnswer(Object.keys(defaults).length > 0 ? defaults : null);
+    } else if (question.inputType === 'upload' || question.inputType === 'file_upload') {
+      setCurrentAnswer({ uploaded_document_ids: [], file_count: 0 });
     } else {
       setCurrentAnswer(null);
     }
@@ -166,6 +174,15 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       // Non-fatal - continue wizard
     }
   }, [caseId, caseType]);
+
+  const handleApplySuggestion = useCallback(
+    (newText: string) => {
+      if (currentQuestion?.inputType === 'textarea') {
+        setCurrentAnswer(newText);
+      }
+    },
+    [currentQuestion],
+  );
 
   const handleComplete = useCallback(
     async () => {
@@ -408,6 +425,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     const resolvedInputType =
       currentQuestion.inputType === 'address' ? 'group' : currentQuestion.inputType;
 
+    if (resolvedInputType === 'upload' || resolvedInputType === 'file_upload') {
+      if (currentQuestion.validation?.required && uploadFilesForCurrentQuestion.length === 0) {
+        setError('Please upload at least one file');
+        return false;
+      }
+      return true;
+    }
+
     // For grouped inputs, validate all fields
     if (resolvedInputType === 'group' && currentQuestion.fields) {
       for (const field of currentQuestion.fields) {
@@ -497,6 +522,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       return;
     }
 
+    if (uploadingEvidence) {
+      setError('Please wait for your files to finish uploading.');
+      return;
+    }
+
     // Block progression if deposit warning exists
     if (depositWarning) {
       setError(
@@ -563,7 +593,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
       // Save to history before moving forward
       if (currentQuestion) {
-        setQuestionHistory((prev) => [...prev, { question: currentQuestion, answer: currentAnswer }]);
+        setQuestionHistory((prev) => [
+          ...prev,
+          { question: currentQuestion, answer: currentAnswer, uploads: uploadFilesForCurrentQuestion },
+        ]);
       }
 
       // After a successful save, refresh analysis for money-claims
@@ -596,6 +629,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     // Restore the previous question and answer
     setCurrentQuestion(previousEntry.question);
     setCurrentAnswer(previousEntry.answer);
+    setUploadFilesForCurrentQuestion(previousEntry.uploads || []);
+    setUploadingEvidence(false);
     setError(null);
     setAskHeavenSuggestion(null);
 
@@ -731,6 +766,29 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             disabled={loading}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-[120px]"
             rows={4}
+          />
+        );
+
+      case 'upload':
+      case 'file_upload':
+        return (
+          <UploadField
+            caseId={caseId}
+            questionId={currentQuestion.id}
+            label={currentQuestion.label ?? currentQuestion.question}
+            description={currentQuestion.helperText}
+            evidenceCategory={currentQuestion.label}
+            required={!!currentQuestion.validation?.required}
+            disabled={loading}
+            value={uploadFilesForCurrentQuestion}
+            onChange={(files) => {
+              setUploadFilesForCurrentQuestion(files);
+              setCurrentAnswer({
+                uploaded_document_ids: files.map((file) => file.documentId),
+                file_count: files.length,
+              });
+            }}
+            onUploadingChange={(state) => setUploadingEvidence(state)}
           />
         );
 
@@ -895,6 +953,22 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         );
     }
   };
+
+  // ------------------------------
+  // Upload / navigation helpers
+  // ------------------------------
+  const isUploadQuestion =
+    currentQuestion?.inputType === 'upload' || currentQuestion?.inputType === 'file_upload';
+  const uploadRequiredMissing = !!(
+    isUploadQuestion &&
+    currentQuestion?.validation?.required &&
+    uploadFilesForCurrentQuestion.length === 0
+  );
+  const disableNextButton =
+    loading ||
+    uploadingEvidence ||
+    uploadRequiredMissing ||
+    (!isUploadQuestion && (currentAnswer === null || currentAnswer === undefined));
 
   // ------------------------------
   // Intro + completion states
@@ -1100,6 +1174,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   currentQuestionId={currentQuestion.id}
                   currentQuestionText={currentQuestion.question}
                   currentAnswer={typeof currentAnswer === 'string' ? currentAnswer : null}
+                  onApplySuggestion={handleApplySuggestion}
                 />
               </div>
             )}
@@ -1202,7 +1277,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 variant="primary"
                 size="large"
                 className="flex-1"
-                disabled={loading || currentAnswer === null || currentAnswer === undefined}
+                disabled={disableNextButton}
               >
                 {loading ? 'Saving...' : 'Next →'}
               </Button>
@@ -1223,6 +1298,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 currentQuestionId={currentQuestion.id}
                 currentQuestionText={currentQuestion.question}
                 currentAnswer={typeof currentAnswer === 'string' ? currentAnswer : null}
+                onApplySuggestion={handleApplySuggestion}
               />
             </div>
           )}
