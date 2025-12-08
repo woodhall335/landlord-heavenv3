@@ -49,6 +49,14 @@ The platform delivers full legal-document assembly, evidence ingestion, automate
 
 V1 focuses on core eviction, money claim, and tenancy agreement workflows for England & Wales and Scotland, with tenancy agreements available for Northern Ireland. NI eviction/money claim workflows and the HMO Licensing Suite are intentionally excluded from V1 and planned for V2.
 
+**Status snapshot (Dec 2025 audit):**
+- **Evictions:** ✅ MQS-driven wizards for England & Wales and Scotland, backed by document generators and official form fillers; Northern Ireland gated in the API until legal review concludes.
+- **Money Claim Pack:** ✅ MQS YAMLs exist for England & Wales and Scotland, and both jurisdictions are wired through StructuredWizard with N1/Form 3A generation.
+- **Tenancy Agreements:** ✅ MQS flows for England & Wales, Scotland, and Northern Ireland with AST/PRT/NI generators available; NI remains the only jurisdiction allowed in the API for tenancy-only cases.
+- **Ask Heaven:** ✅ StructuredWizard uses `src/components/wizard/AskHeavenPanel.tsx` with `/api/ask-heaven/enhance-answer` and `/api/ask-heaven/chat` endpoints.
+- **HMO Licensing Suite:** ⏳ Not implemented in this codebase (no MQS/config or generators yet); remains a roadmap item.
+- **Law Monitor:** ⚠️ Scaffolding only (`src/lib/law-monitor/index.ts` is a stub with no live monitoring or rule updates).
+
 1.2 The End-to-End Legal Pipeline
 
 The system manages the entire legal lifecycle of a tenancy:

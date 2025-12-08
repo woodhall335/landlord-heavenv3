@@ -342,6 +342,7 @@ The law monitor script (`scripts/law-monitor-run.ts`) is designed with these har
 - **No file modifications** – Never touches `config/` or `src/` (except creating reports)
 - **Stub implementation** – `fetchLawSource()` is intentionally left as a stub to prevent accidental scraping
 - **Heuristic suggestions only** – `compareSnapshotWithRules()` uses simple text matching, not legal interpretation
+- **Implementation status** – `src/lib/law-monitor/index.ts` remains scaffolding; snapshot fetching and diffing are not wired to production workflows.
 
 To implement real scraping:
 1. Review and test scraping logic thoroughly

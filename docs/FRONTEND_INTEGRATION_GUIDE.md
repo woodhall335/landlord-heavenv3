@@ -78,7 +78,9 @@ enhanced = await enhanceAnswer({
 
 ## Part 2: Frontend Ask Heaven UI Component
 
-### File: `src/app/wizard/components/AskHeavenPanel.tsx` (NEW)
+### File: `src/components/wizard/AskHeavenPanel.tsx`
+
+This component already ships with the StructuredWizard and powers the live Ask Heaven sidebar used across eviction, money claim, and tenancy MQS flows.
 
 ```typescript
 'use client';
@@ -292,7 +294,7 @@ export function AskHeavenPanel({
 **Usage in Wizard Question Component:**
 ```typescript
 // In your textarea question component
-import { AskHeavenPanel } from './AskHeavenPanel';
+import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 
 // After the textarea:
 <AskHeavenPanel
@@ -863,7 +865,7 @@ describe('Wizard Live Checks Integration', () => {
 - [ ] Verify backward compatibility (existing calls still work)
 
 ### Frontend Components (Priority 2)
-- [ ] Create `AskHeavenPanel.tsx` component
+- [x] AskHeavenPanel lives at `src/components/wizard/AskHeavenPanel.tsx` and is consumed by `StructuredWizard.tsx`
 - [ ] Create `CaseStrengthWidget.tsx` component
 - [ ] Add checkpoint integration to wizard flow
 - [ ] Update final review page with analysis display
