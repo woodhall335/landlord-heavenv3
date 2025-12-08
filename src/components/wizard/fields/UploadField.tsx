@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { FileUpload } from '@/components/wizard/FileUpload';
 
 export interface EvidenceFileSummary {
-  id: string;
-  documentId: string; // documents table id
+  id: string; // stable id per evidence entry
+  documentId: string; // documents table id, if available
   questionId?: string;
   fileName: string;
   category?: string;
@@ -56,11 +56,11 @@ export const UploadField: React.FC<UploadFieldProps> = ({
   const mapEvidenceFiles = (entries: any[], document?: any): EvidenceFileSummary[] => {
     return entries.map((entry) => {
       const fallbackUrl =
-        (entry as any)?.public_url ??
-        (entry as any)?.url ??
-        (entry as any)?.pdf_url ??
-        (document && entry.document_id === document.id ? document.pdf_url : null) ??
-        document?.pdf_url ??
+        (entry as any)?.public_url ||
+        (entry as any)?.url ||
+        (entry as any)?.pdf_url ||
+        (document && entry.document_id === document.id ? document.pdf_url : null) ||
+        document?.pdf_url ||
         null;
 
       return {
@@ -79,7 +79,9 @@ export const UploadField: React.FC<UploadFieldProps> = ({
     if (disabled) return;
 
     setPendingFiles(files);
-    if (files.length === 0) return;
+    if (files.length === 0) {
+      return;
+    }
 
     setUploading(true);
     setError(null);
@@ -89,7 +91,6 @@ export const UploadField: React.FC<UploadFieldProps> = ({
 
       for (const file of files) {
         const formData = new FormData();
-
         formData.append('caseId', caseId);
         formData.append('questionId', questionId);
         if (evidenceCategory) {
@@ -111,7 +112,14 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         const evidenceFiles: any[] = Array.isArray(data?.evidence?.files)
           ? data.evidence.files
           : [];
-        const mapped = mapEvidenceFiles(evidenceFiles, data.document);
+
+        // 🔑 Only keep files for THIS question
+        const forThisQuestion = evidenceFiles.filter(
+          (entry) => entry.question_id === questionId,
+        );
+
+        const mapped = mapEvidenceFiles(forThisQuestion, data.document);
+
         if (mapped.length > 0) {
           latestSummaries = mapped;
         }
@@ -190,9 +198,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         </div>
       )}
 
-      {uploading && (
-        <p className="text-sm text-gray-600">Uploading files, please wait…</p>
-      )}
+      {uploading && <p className="text-sm text-gray-600">Uploading files, please wait…</p>}
     </div>
   );
 };
