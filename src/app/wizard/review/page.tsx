@@ -1,5 +1,3 @@
-// src/app/wizard/review/page.tsx
-
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -72,7 +70,7 @@ export default function ReviewPage() {
   }
 
   const hasBlockingIssues = analysis.decision_engine?.blocking_issues?.some(
-    (issue: any) => issue.severity === 'blocking'
+    (issue: any) => issue.severity === 'blocking',
   );
 
   const jurisdiction = analysis.jurisdiction;
@@ -88,7 +86,6 @@ export default function ReviewPage() {
 
   const redFlags: string[] = analysis.red_flags || [];
   const complianceIssues: string[] = analysis.compliance_issues || [];
-
   const previewDocuments: Array<{
     id: string;
     title: string;
@@ -96,6 +93,9 @@ export default function ReviewPage() {
     jurisdiction: string;
     requiredToFile?: boolean;
   }> = analysis.preview_documents || [];
+
+  // Evidence overview from analysis (booleans: tenancy_agreement_uploaded, etc.)
+  const evidence = analysis.evidence_overview || {};
 
   const handleEdit = () => {
     const params = new URLSearchParams({
@@ -259,9 +259,7 @@ export default function ReviewPage() {
                       <p className="font-medium">
                         Ground {ground.code}: {ground.title}
                       </p>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {ground.description}
-                      </p>
+                      <p className="text-sm text-gray-600 mt-1">{ground.description}</p>
                     </div>
                     <span
                       className={`px-2 py-1 rounded text-xs font-medium ${
@@ -282,7 +280,7 @@ export default function ReviewPage() {
         </div>
       </Card>
 
-      {/* Red flags & compliance issues */}
+      {/* Things to Fix or Improve */}
       {(redFlags.length > 0 || complianceIssues.length > 0) && (
         <Card className="p-6">
           <h2 className="text-lg font-semibold mb-4">Things to Fix or Improve</h2>
@@ -314,6 +312,84 @@ export default function ReviewPage() {
           </p>
         </Card>
       )}
+
+      {/* Evidence & documents checklist */}
+      <Card className="p-6">
+        <h2 className="text-lg font-semibold mb-4">Evidence &amp; documents checklist</h2>
+        <p className="text-sm text-gray-600 mb-3">
+          This is a quick snapshot of the key documents courts expect to see. Uploading them
+          now makes your pack much stronger and reduces the risk of delays.
+        </p>
+        <div className="grid md:grid-cols-2 gap-4">
+          {/* Tenancy agreement */}
+          <div className="flex items-start gap-3">
+            {evidence.tenancy_agreement_uploaded ? (
+              <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+            ) : (
+              <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">Tenancy agreement</p>
+              <p className="text-xs text-gray-600">
+                {evidence.tenancy_agreement_uploaded
+                  ? 'Marked as provided in your case facts.'
+                  : 'Not uploaded yet – strongly recommended so the judge can see the contract.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Rent / arrears schedule */}
+          <div className="flex items-start gap-3">
+            {evidence.rent_schedule_uploaded ? (
+              <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+            ) : (
+              <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">Rent / arrears schedule</p>
+              <p className="text-xs text-gray-600">
+                {evidence.rent_schedule_uploaded
+                  ? 'Arrears schedule recorded for the claim.'
+                  : 'Not uploaded yet – courts expect a clear chronology of missed payments.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Bank statements */}
+          <div className="flex items-start gap-3">
+            {evidence.bank_statements_uploaded ? (
+              <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+            ) : (
+              <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">Bank statements</p>
+              <p className="text-xs text-gray-600">
+                {evidence.bank_statements_uploaded
+                  ? 'Supporting payment history has been flagged.'
+                  : 'Not flagged yet – optional, but helpful to prove what was paid or missed.'}
+              </p>
+            </div>
+          </div>
+
+          {/* Other supporting evidence */}
+          <div className="flex items-start gap-3">
+            {evidence.other_evidence_uploaded ? (
+              <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+            ) : (
+              <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-900">Other supporting evidence</p>
+              <p className="text-xs text-gray-600">
+                {evidence.other_evidence_uploaded
+                  ? 'You have flagged additional documents (photos, quotes, correspondence, etc.).'
+                  : 'Not flagged yet – think about emails, texts, photos or reports that support your case.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      </Card>
 
       {/* Documents to be generated */}
       <Card className="p-6">
@@ -391,17 +467,10 @@ export default function ReviewPage() {
 
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4 mt-4">
-        <Button
-          onClick={handleEdit}
-          variant="outline"
-          className="flex-1"
-        >
+        <Button onClick={handleEdit} variant="outline" className="flex-1">
           Go back &amp; edit answers
         </Button>
-        <Button
-          onClick={handleProceed}
-          className="flex-1"
-        >
+        <Button onClick={handleProceed} className="flex-1">
           Proceed to payment &amp; pack
         </Button>
       </div>

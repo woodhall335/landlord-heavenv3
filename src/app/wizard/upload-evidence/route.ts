@@ -5,19 +5,20 @@
  *
  * POST /api/wizard/upload-evidence
  *
- * - Accepts multipart/form-data with:
- *   - case_id: string (UUID)
- *   - question_id: string (MQS upload question id)
- *   - label?: string
- *   - file: File | File[] (one or more)
+ * Responsibilities:
+ * - Accept multipart/form-data with:
+ *     - case_id: string (UUID)
+ *     - question_id: string (MQS upload question id, e.g. `upload_tenancy_agreement`)
+ *     - label?: string (optional human label)
+ *     - file: File | File[] (one or more files)
+ * - Store files in Supabase Storage (bucket: "cases" by default)
+ * - Update WizardFacts (case_facts.facts + cases.collected_facts) with:
+ *     - evidence.files[]: array of uploaded file metadata
+ *     - evidence.<flag>_uploaded = true, mapped from question_id
  *
- * - Stores files in Supabase Storage under:
- *   bucket: "cases"
- *   path:   "{case_id}/evidence/{uuid}-{originalName}"
- *
- * - Updates WizardFacts (case_facts.facts) with:
- *   - evidence.files: array of uploaded file metadata
- *   - evidence.<flag>_uploaded = true (based on question_id)
+ * NOTE:
+ * - If your actual storage bucket is different (e.g. "documents"),
+ *   update the BUCKET_NAME constant below.
  */
 
 import { NextResponse } from 'next/server';
@@ -27,13 +28,16 @@ import { updateWizardFacts } from '@/lib/case-facts/store';
 
 export const dynamic = 'force-dynamic';
 
+const BUCKET_NAME = 'cases'; // 🔧 Change to 'documents' or your actual bucket if needed
+
 const uploadEvidenceSchema = z.object({
   case_id: z.string().uuid(),
   question_id: z.string().min(1),
   label: z.string().optional(),
 });
 
-// Map MQS upload question IDs → evidence boolean flags used by CaseFacts
+// Map MQS upload question IDs → evidence boolean flags used in CaseFacts
+// These names line up with EvidenceFacts in case-facts + money-claim-health.ts
 const EVIDENCE_FLAG_BY_QUESTION: Record<string, string> = {
   // Money claim / rent arrears
   upload_rent_ledger: 'rent_schedule_uploaded',
@@ -66,23 +70,25 @@ function mapQuestionToEvidenceFlag(questionId: string): string | null {
     return EVIDENCE_FLAG_BY_QUESTION[questionId];
   }
 
-  // Fallback: if question id contains a known token, try to infer
-  if (questionId.includes('tenancy') || questionId.includes('agreement')) {
+  // Fallbacks – try to infer from id if new MQS IDs appear later
+  const q = questionId.toLowerCase();
+
+  if (q.includes('tenancy') || q.includes('agreement')) {
     return 'tenancy_agreement_uploaded';
   }
-  if (questionId.includes('rent') || questionId.includes('ledger') || questionId.includes('schedule')) {
+  if (q.includes('rent') && (q.includes('ledger') || q.includes('schedule'))) {
     return 'rent_schedule_uploaded';
   }
-  if (questionId.includes('bank')) {
+  if (q.includes('bank')) {
     return 'bank_statements_uploaded';
   }
-  if (questionId.includes('safety') || questionId.includes('certificate')) {
+  if (q.includes('safety') || q.includes('certificate')) {
     return 'safety_certificates_uploaded';
   }
-  if (questionId.includes('asb') || questionId.includes('antisocial')) {
+  if (q.includes('asb') || q.includes('antisocial')) {
     return 'asb_evidence_uploaded';
   }
-  if (questionId.includes('other_evidence')) {
+  if (q.includes('other_evidence')) {
     return 'other_evidence_uploaded';
   }
 
@@ -94,7 +100,6 @@ function getFilesFromFormData(formData: FormData): File[] {
 
   // Support both "file" and "file[]" naming conventions
   for (const [key, value] of formData.entries()) {
-    if (!value) continue;
     if (!(value instanceof File)) continue;
     if (!value.size) continue;
 
@@ -106,30 +111,27 @@ function getFilesFromFormData(formData: FormData): File[] {
   return files;
 }
 
-/**
- * POST /api/wizard/upload-evidence
- */
 export async function POST(request: Request) {
   try {
     const contentType = request.headers.get('content-type') || '';
     if (!contentType.toLowerCase().includes('multipart/form-data')) {
       return NextResponse.json(
         { error: 'Content-Type must be multipart/form-data' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const supabase = createServerSupabaseClient();
     const formData = await request.formData();
 
-    const case_id_raw = formData.get('case_id');
-    const question_id_raw = formData.get('question_id');
-    const label_raw = formData.get('label');
+    const caseIdRaw = formData.get('case_id');
+    const questionIdRaw = formData.get('question_id');
+    const labelRaw = formData.get('label');
 
     const parsed = uploadEvidenceSchema.safeParse({
-      case_id: typeof case_id_raw === 'string' ? case_id_raw : '',
-      question_id: typeof question_id_raw === 'string' ? question_id_raw : '',
-      label: typeof label_raw === 'string' ? label_raw : undefined,
+      case_id: typeof caseIdRaw === 'string' ? caseIdRaw : '',
+      question_id: typeof questionIdRaw === 'string' ? questionIdRaw : '',
+      label: typeof labelRaw === 'string' ? labelRaw : undefined,
     });
 
     if (!parsed.success) {
@@ -138,7 +140,7 @@ export async function POST(request: Request) {
           error: 'Invalid input',
           details: parsed.error.flatten(),
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -148,7 +150,7 @@ export async function POST(request: Request) {
     if (!files.length) {
       return NextResponse.json(
         { error: 'No files uploaded' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -156,13 +158,13 @@ export async function POST(request: Request) {
     const uploadedItems: any[] = [];
 
     for (const file of files) {
-      const safeName = file.name || 'evidence';
-      const ext = safeName.includes('.') ? `.${safeName.split('.').pop()}` : '';
+      const originalName = file.name || 'evidence';
+      const safeName = originalName.replace(/\s+/g, '_');
       const uuid = crypto.randomUUID();
-      const objectPath = `${case_id}/evidence/${uuid}-${safeName.replace(/\s+/g, '_')}`;
+      const objectPath = `${case_id}/evidence/${uuid}-${safeName}`;
 
       const { data: storageResult, error: storageError } = await supabase.storage
-        .from('cases')
+        .from(BUCKET_NAME)
         .upload(objectPath, file, {
           cacheControl: '3600',
           upsert: false,
@@ -173,35 +175,37 @@ export async function POST(request: Request) {
         console.error('Evidence upload failed', storageError);
         return NextResponse.json(
           { error: 'Failed to upload evidence file' },
-          { status: 500 }
+          { status: 500 },
         );
       }
 
       const { data: publicUrlData } = supabase.storage
-        .from('cases')
+        .from(BUCKET_NAME)
         .getPublicUrl(storageResult.path);
 
       uploadedItems.push({
         id: uuid,
         question_id,
         label: label ?? null,
-        file_name: safeName,
+        file_name: originalName,
         file_size: file.size,
         mime_type: file.type || null,
-        storage_bucket: 'cases',
+        storage_bucket: BUCKET_NAME,
         storage_path: storageResult.path,
         public_url: publicUrlData?.publicUrl ?? null,
         uploaded_at: uploadedAt,
       });
     }
 
-    // Update WizardFacts (case_facts.facts + cases.collected_facts)
+    // 🔁 Update WizardFacts (flat facts) so normalize() + money-claim-health
+    // can see the evidence flags and files.
     const updatedFacts = await updateWizardFacts(
       supabase,
       case_id,
       (current) => {
         const facts = { ...current };
 
+        // Existing list of files
         const existingFiles =
           (facts['evidence.files'] as any[]) ||
           (facts.evidence?.files as any[]) ||
@@ -211,16 +215,14 @@ export async function POST(request: Request) {
 
         const flagKey = mapQuestionToEvidenceFlag(question_id);
         if (flagKey) {
-          // Primary canonical key used by normalize.ts
+          // Canonical key used by normalize.ts / money-claim-health.ts
           facts[`evidence.${flagKey}`] = true;
-
-          // Optional additional aliases for robustness
-          facts[`case_facts.evidence.${flagKey}`] ??= true;
-          facts[flagKey] ??= true;
         }
 
         return facts;
-      }
+      },
+      // You can put optional meta here if you want to track origin
+      { meta: { last_evidence_upload_question: question_id } },
     );
 
     return NextResponse.json(
@@ -229,16 +231,16 @@ export async function POST(request: Request) {
         files: uploadedItems,
         facts: updatedFacts,
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (err: any) {
-    console.error('Unexpected error in upload-evidence route', err);
+    console.error('Unexpected error in /api/wizard/upload-evidence', err);
     return NextResponse.json(
       {
         error: 'Unexpected server error during evidence upload',
         details: err?.message || String(err),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
