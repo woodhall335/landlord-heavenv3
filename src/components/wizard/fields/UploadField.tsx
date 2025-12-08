@@ -5,7 +5,7 @@ import { FileUpload } from '@/components/wizard/FileUpload';
 
 export interface EvidenceFileSummary {
   id: string;
-  documentId: string;
+  documentId: string;    // for now we’ll use the upload id as a stable identifier
   questionId?: string;
   fileName: string;
   category?: string;
@@ -67,10 +67,13 @@ export const UploadField: React.FC<UploadFieldProps> = ({
     try {
       for (const file of files) {
         const formData = new FormData();
-        formData.append('caseId', caseId);
-        formData.append('questionId', questionId);
+
+        // 🔁 Match backend field names exactly
+        formData.append('case_id', caseId);
+        formData.append('question_id', questionId);
         if (evidenceCategory) {
-          formData.append('category', evidenceCategory);
+          // Use evidenceCategory as a human label for this upload
+          formData.append('label', evidenceCategory);
         }
         formData.append('file', file);
 
@@ -80,33 +83,40 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         });
 
         const data = await response.json();
+
         if (!response.ok || !data?.success) {
           throw new Error(data?.error || 'Failed to upload file');
         }
 
-        const evidenceFiles: any[] = Array.isArray(data?.evidence?.files) ? data.evidence.files : [];
-        const matchingEvidence =
-          evidenceFiles.find((entry) => entry.document_id === data.document?.id) ||
-          evidenceFiles[evidenceFiles.length - 1];
+        const uploadedItems: any[] = Array.isArray(data?.files) ? data.files : [];
+        if (uploadedItems.length === 0) {
+          continue;
+        }
 
-        const summary: EvidenceFileSummary = {
-          id: matchingEvidence?.id || data.document?.id || crypto.randomUUID(),
-          documentId: matchingEvidence?.document_id || data.document?.id || '',
-          questionId,
-          fileName: matchingEvidence?.file_name || file.name,
-          category: matchingEvidence?.category || evidenceCategory,
-          url: data.document?.pdf_url ?? null,
-          uploadedAt: matchingEvidence?.uploaded_at || data.document?.created_at,
-        };
+        // This request may have uploaded multiple files; take all of them.
+        for (const item of uploadedItems) {
+          const summary: EvidenceFileSummary = {
+            id: item.id || crypto.randomUUID(),
+            // We don’t have a documents table id here yet, so use the upload id
+            documentId: item.id || '',
+            questionId,
+            fileName: item.file_name || file.name,
+            category: item.label || evidenceCategory,
+            url: item.public_url ?? null,
+            uploadedAt: item.uploaded_at,
+          };
 
-        newlyUploaded.push(summary);
+          newlyUploaded.push(summary);
+        }
       }
 
-      setUploadedFiles((prev) => {
-        const next = [...prev, ...newlyUploaded];
-        onChange?.(next);
-        return next;
-      });
+      if (newlyUploaded.length > 0) {
+        setUploadedFiles((prev) => {
+          const next = [...prev, ...newlyUploaded];
+          onChange?.(next);
+          return next;
+        });
+      }
     } catch (uploadError) {
       console.error('Evidence upload failed', uploadError);
       setError(uploadError instanceof Error ? uploadError.message : 'Upload failed');
@@ -152,9 +162,13 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                 </svg>
                 <div className="flex-1 min-w-0">
                   <p className="truncate text-sm font-medium text-charcoal">{file.fileName}</p>
-                  {file.category && <p className="text-xs text-gray-500">Category: {file.category}</p>}
+                  {file.category && (
+                    <p className="text-xs text-gray-500">Category: {file.category}</p>
+                  )}
                 </div>
-                {file.uploadedAt && <p className="text-xs text-gray-500">Uploaded {file.uploadedAt}</p>}
+                {file.uploadedAt && (
+                  <p className="text-xs text-gray-500">Uploaded {file.uploadedAt}</p>
+                )}
               </li>
             ))}
           </ul>
