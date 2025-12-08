@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { FileUpload } from '@/components/wizard/FileUpload';
 
 export interface EvidenceFileSummary {
-  id: string; // stable id per evidence entry
-  documentId: string; // documents table id, if available
+  id: string;
+  documentId: string; // documents table id
   questionId?: string;
   fileName: string;
   category?: string;
@@ -43,22 +43,31 @@ export const UploadField: React.FC<UploadFieldProps> = ({
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  //
+  // Sync external value
+  //
   useEffect(() => {
     if (value) {
       setUploadedFiles(value);
     }
   }, [value]);
 
+  //
+  // Notify parent when uploading state changes
+  //
   useEffect(() => {
     onUploadingChange?.(uploading);
   }, [uploading, onUploadingChange]);
 
+  //
+  // Convert backend evidence rows → UI summaries
+  //
   const mapEvidenceFiles = (entries: any[], document?: any): EvidenceFileSummary[] => {
     return entries.map((entry) => {
       const fallbackUrl =
-        (entry as any)?.public_url ||
-        (entry as any)?.url ||
-        (entry as any)?.pdf_url ||
+        entry.public_url ||
+        entry.url ||
+        entry.pdf_url ||
         (document && entry.document_id === document.id ? document.pdf_url : null) ||
         document?.pdf_url ||
         null;
@@ -75,13 +84,14 @@ export const UploadField: React.FC<UploadFieldProps> = ({
     });
   };
 
+  //
+  // Upload handler
+  //
   const handleFilesSelected = async (files: File[]) => {
     if (disabled) return;
 
     setPendingFiles(files);
-    if (files.length === 0) {
-      return;
-    }
+    if (files.length === 0) return;
 
     setUploading(true);
     setError(null);
@@ -91,11 +101,17 @@ export const UploadField: React.FC<UploadFieldProps> = ({
 
       for (const file of files) {
         const formData = new FormData();
+
+        // REQUIRED backend fields
         formData.append('caseId', caseId);
         formData.append('questionId', questionId);
+
+        // Optional category
         if (evidenceCategory) {
           formData.append('category', evidenceCategory);
         }
+
+        // Actual file
         formData.append('file', file);
 
         const response = await fetch('/api/wizard/upload-evidence', {
@@ -113,12 +129,12 @@ export const UploadField: React.FC<UploadFieldProps> = ({
           ? data.evidence.files
           : [];
 
-        // 🔑 Only keep files for THIS question
-        const forThisQuestion = evidenceFiles.filter(
-          (entry) => entry.question_id === questionId,
+        // Filter ONLY this question's evidence entries
+        const filtered = evidenceFiles.filter(
+          (entry) => entry.question_id === questionId
         );
 
-        const mapped = mapEvidenceFiles(forThisQuestion, data.document);
+        const mapped = mapEvidenceFiles(filtered, data.document);
 
         if (mapped.length > 0) {
           latestSummaries = mapped;
@@ -128,7 +144,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
       setUploadedFiles(latestSummaries);
       onChange?.(latestSummaries);
     } catch (uploadError) {
-      console.error('Evidence upload failed', uploadError);
+      console.error('Evidence upload failed:', uploadError);
       setError(uploadError instanceof Error ? uploadError.message : 'Upload failed');
     } finally {
       setPendingFiles([]);
@@ -136,6 +152,9 @@ export const UploadField: React.FC<UploadFieldProps> = ({
     }
   };
 
+  //
+  // UI
+  //
   return (
     <div className="space-y-4">
       {label && (
@@ -170,14 +189,20 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                     clipRule="evenodd"
                   />
                 </svg>
+
                 <div className="flex-1 min-w-0">
-                  <p className="truncate text-sm font-medium text-charcoal">{file.fileName}</p>
+                  <p className="truncate text-sm font-medium text-charcoal">
+                    {file.fileName}
+                  </p>
                   {file.category && (
                     <p className="text-xs text-gray-500">Category: {file.category}</p>
                   )}
                 </div>
+
                 {file.uploadedAt && (
-                  <p className="text-xs text-gray-500">Uploaded {file.uploadedAt}</p>
+                  <p className="text-xs text-gray-500">
+                    Uploaded {file.uploadedAt}
+                  </p>
                 )}
               </li>
             ))}
@@ -198,7 +223,9 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         </div>
       )}
 
-      {uploading && <p className="text-sm text-gray-600">Uploading files, please wait…</p>}
+      {uploading && (
+        <p className="text-sm text-gray-600">Uploading files, please wait…</p>
+      )}
     </div>
   );
 };
