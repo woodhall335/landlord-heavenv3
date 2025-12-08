@@ -5,7 +5,7 @@
 
 Version: 4.0
 Date: December 2025
-Status: Complete & Engineering-Ready
+Status: ⏳ Roadmap only (no live MQS/config/generators in repo)
 Owner: Landlord Heaven
 Product Tiering:
 
@@ -17,8 +17,8 @@ HMO Pro Membership (Add-On) — £14.99/mo (first month £1)
 
 1. EXECUTIVE SUMMARY
 
-The HMO Licensing Suite is the UK’s first fully automated, end-to-end HMO licence preparation system.
-It produces council-ready submission packs, performs AI-driven compliance scoring, and—when upgraded—generates the full 2D floor plan and fire escape maps required by councils.
+The HMO Licensing Suite is scoped as an automated, end-to-end HMO licence preparation system.
+Implementation has not started in this codebase: there are no HMO MQS YAMLs, no wizard wiring, and no document generators yet. The sections below remain roadmap guidance until those components are built.
 
 The suite combines:
 
