@@ -775,9 +775,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           <UploadField
             caseId={caseId}
             questionId={currentQuestion.id}
-            label={currentQuestion.label ?? currentQuestion.question}
+            // Some MQS questions include a separate label, but it's not in the TS type.
+            // Fall back to the main question text when label is missing.
+            label={(currentQuestion as any).label ?? currentQuestion.question}
             description={currentQuestion.helperText}
-            evidenceCategory={currentQuestion.label}
+            // Use label as the evidence category tag if present
+            evidenceCategory={(currentQuestion as any).label}
             required={!!currentQuestion.validation?.required}
             disabled={loading}
             value={uploadFilesForCurrentQuestion}

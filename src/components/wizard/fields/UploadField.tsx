@@ -112,7 +112,13 @@ export const UploadField: React.FC<UploadFieldProps> = ({
         const evidenceFiles: any[] = Array.isArray(data?.evidence?.files)
           ? data.evidence.files
           : [];
-        const mapped = mapEvidenceFiles(evidenceFiles, data.document);
+
+        // 🔑 Only keep files for THIS question
+        const forThisQuestion = evidenceFiles.filter(
+          (entry) => entry.question_id === questionId,
+        );
+
+        const mapped = mapEvidenceFiles(forThisQuestion, data.document);
 
         if (mapped.length > 0) {
           latestSummaries = mapped;
