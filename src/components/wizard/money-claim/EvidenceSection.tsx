@@ -8,14 +8,15 @@ type Jurisdiction = 'england-wales' | 'scotland';
 interface SectionProps {
   facts: any;
   caseId: string;
-  jurisdiction: Jurisdiction;
+  // We accept jurisdiction from the parent for future use,
+  // but it isn't required here and we don't need to reference it.
+  jurisdiction?: Jurisdiction;
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
 export const EvidenceSection: React.FC<SectionProps> = ({
   facts,
   caseId,
-  jurisdiction,
   onUpdate,
 }) => {
   const evidence = facts.evidence || {};
@@ -25,7 +26,7 @@ export const EvidenceSection: React.FC<SectionProps> = ({
     onUpdate({
       evidence: {
         ...evidence,
-        files: files,
+        files,
       },
     });
   };
@@ -33,8 +34,9 @@ export const EvidenceSection: React.FC<SectionProps> = ({
   return (
     <div className="space-y-6">
       <p className="text-sm text-gray-600">
-        Upload documents that support your claim. You don’t have to upload everything now, but the
-        arrears schedule or ledger is strongly recommended.
+        Upload documents that support your claim. You don’t have to upload
+        everything now, but the arrears schedule or ledger is strongly
+        recommended.
       </p>
 
       <UploadField

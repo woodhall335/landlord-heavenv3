@@ -5,13 +5,13 @@ import React, { useState } from 'react';
 type Jurisdiction = 'england-wales' | 'scotland';
 
 interface SectionProps {
-  facts: any;
+  // We don’t currently use facts in this section, so make it optional
+  facts?: any;
   caseId: string;
   jurisdiction: Jurisdiction;
 }
 
 export const ReviewSection: React.FC<SectionProps> = ({
-  facts,
   caseId,
   jurisdiction,
 }) => {
@@ -59,8 +59,8 @@ export const ReviewSection: React.FC<SectionProps> = ({
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600">
-        This is a high-level review step. You’ll get an Ask Heaven analysis and a
-        full document bundle (pre-action, claim pack and guidance) when you
+        This is a high-level review step. You’ll get an Ask Heaven analysis and
+        a full document bundle (pre-action, claim pack and guidance) when you
         generate the premium pack.
       </p>
 
