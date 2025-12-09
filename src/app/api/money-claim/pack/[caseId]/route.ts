@@ -45,7 +45,8 @@ export async function GET(
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
     const moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
 
-    const pack = await generateMoneyClaimPack(moneyClaimCase);
+    // Pass caseFacts to enable AI drafting of LBA, PoC, and Evidence Index
+    const pack = await generateMoneyClaimPack(moneyClaimCase, caseFacts);
 
     const zip = new JSZip();
     const root = zip.folder('Money-Claim-Premium')!;

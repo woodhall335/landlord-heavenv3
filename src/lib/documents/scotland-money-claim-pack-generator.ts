@@ -11,6 +11,8 @@
 import { generateDocument } from './generator';
 import { fillSimpleProcedureClaim, ScotlandMoneyClaimData } from './scotland-forms-filler';
 import { assertOfficialFormExists } from './official-forms-filler';
+import { generateMoneyClaimAskHeavenDrafts } from './money-claim-askheaven';
+import type { CaseFacts } from '@/lib/case-facts/schema';
 
 export interface ArrearsEntry {
   period: string;
@@ -52,6 +54,7 @@ export interface ScotlandMoneyClaimCase {
   rent_amount: number;
   rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly';
   payment_day?: number;
+  usual_payment_weekday?: string;
   tenancy_start_date?: string;
   tenancy_end_date?: string;
 
@@ -60,6 +63,11 @@ export interface ScotlandMoneyClaimCase {
   arrears_schedule?: ArrearsEntry[];
   damage_items?: ClaimLineItem[];
   other_charges?: ClaimLineItem[];
+
+  // Additional narrative fields for AI drafting
+  other_charges_notes?: string;
+  other_costs_notes?: string;
+  other_amounts_summary?: string;
 
   // Interest
   interest_rate?: number; // Default 8%
@@ -292,11 +300,26 @@ function buildSimpleProcedurePayload(
 }
 
 async function generateScotlandMoneyClaimPack(
-  claim: ScotlandMoneyClaimCase
+  claim: ScotlandMoneyClaimCase,
+  caseFacts?: CaseFacts
 ): Promise<ScotlandMoneyClaimPack> {
   const totals = calculateTotals(claim);
   const generationDate = new Date().toISOString();
   const documents: ScotlandMoneyClaimPackDocument[] = [];
+
+  // Generate AI-drafted content for premium pack (LBA, PoC, Evidence Index)
+  let askHeavenDrafts;
+  if (caseFacts) {
+    try {
+      askHeavenDrafts = await generateMoneyClaimAskHeavenDrafts(caseFacts, claim, {
+        includePostIssue: true,
+        includeRiskReport: false, // Can be enabled for premium users
+        jurisdiction: 'scotland',
+      });
+    } catch (error) {
+      console.error('Failed to generate AI drafts, proceeding without:', error);
+    }
+  }
 
   const baseTemplateData = {
     ...claim,
@@ -317,6 +340,8 @@ async function generateScotlandMoneyClaimPack(
     help_with_fees_needed: claim.help_with_fees_needed,
     lodging_method: claim.lodging_method,
     court_jurisdiction_confirmed: claim.court_jurisdiction_confirmed,
+    // Add AI-drafted content if available
+    ask_heaven: askHeavenDrafts,
   };
 
   // 1. Pack cover
@@ -456,6 +481,23 @@ async function generateScotlandMoneyClaimPack(
     file_name: 'pre-action-letter.pdf',
   });
 
+  // ENFORCEMENT GUIDE (Post-Decree)
+  const enforcementGuide = await generateDocument({
+    templatePath: 'uk/scotland/templates/money_claims/enforcement_guide_scotland.hbs',
+    data: baseTemplateData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Enforcement Guide (Diligence)',
+    description: 'Explains enforcement (diligence) options after obtaining a Sheriff Court decree.',
+    category: 'guidance',
+    html: enforcementGuide.html,
+    pdf: enforcementGuide.pdf,
+    file_name: 'enforcement-guide-scotland.pdf',
+  });
+
   // FILING GUIDE
   const filingGuide = await generateDocument({
     templatePath: 'uk/scotland/templates/money_claims/filing_guide_scotland.hbs',
@@ -506,11 +548,12 @@ async function generateScotlandMoneyClaimPack(
 }
 
 export async function generateScotlandMoneyClaim(
-  claim: ScotlandMoneyClaimCase
+  claim: ScotlandMoneyClaimCase,
+  caseFacts?: CaseFacts
 ): Promise<ScotlandMoneyClaimPack> {
   if (claim.jurisdiction !== 'scotland') {
     throw new Error('This generator is for Scotland Simple Procedure claims only.');
   }
 
-  return generateScotlandMoneyClaimPack(claim);
+  return generateScotlandMoneyClaimPack(claim, caseFacts);
 }

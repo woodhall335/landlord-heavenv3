@@ -51,6 +51,7 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     rent_amount: facts.tenancy.rent_amount || 0,
     rent_frequency: normaliseFrequency(facts.tenancy.rent_frequency),
     payment_day: (facts.money_claim.payment_day || facts.tenancy.rent_due_day || undefined) as any,
+    usual_payment_weekday: facts.tenancy.usual_payment_weekday || undefined,
     tenancy_start_date: facts.tenancy.start_date || undefined,
     tenancy_end_date: facts.tenancy.end_date || undefined,
 
@@ -78,6 +79,15 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     service_postcode: facts.service_contact.service_postcode || undefined,
     service_phone: facts.service_contact.service_phone || facts.parties.landlord.phone || undefined,
     service_email: facts.service_contact.service_email || facts.parties.landlord.email || undefined,
+
+    // Additional narrative fields for AI drafting
+    other_charges_notes: facts.money_claim.other_charges_notes || undefined,
+    other_costs_notes: facts.money_claim.other_costs_notes || undefined,
+    other_amounts_summary: facts.money_claim.other_amounts_summary || undefined,
+
+    // Enforcement preferences for guidance
+    enforcement_preferences: facts.money_claim.enforcement_preferences || undefined,
+    enforcement_notes: facts.money_claim.enforcement_notes || undefined,
   };
 }
 
@@ -114,6 +124,7 @@ export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): Scotland
     rent_amount: facts.tenancy.rent_amount || 0,
     rent_frequency: normaliseFrequency(facts.tenancy.rent_frequency),
     payment_day: (facts.money_claim.payment_day || facts.tenancy.rent_due_day || undefined) as any,
+    usual_payment_weekday: facts.tenancy.usual_payment_weekday || undefined,
     tenancy_start_date: facts.tenancy.start_date || undefined,
     tenancy_end_date: facts.tenancy.end_date || undefined,
 
@@ -135,5 +146,14 @@ export function mapCaseFactsToScotlandMoneyClaimCase(facts: CaseFacts): Scotland
 
     signatory_name: facts.money_claim.signatory_name || facts.parties.landlord.name || undefined,
     signature_date: facts.money_claim.signature_date || undefined,
+
+    // Additional narrative fields for AI drafting
+    other_charges_notes: facts.money_claim.other_charges_notes || undefined,
+    other_costs_notes: facts.money_claim.other_costs_notes || undefined,
+    other_amounts_summary: facts.money_claim.other_amounts_summary || undefined,
+
+    // Enforcement preferences for guidance
+    enforcement_preferences: facts.money_claim.enforcement_preferences || undefined,
+    enforcement_notes: facts.money_claim.enforcement_notes || undefined,
   };
 }

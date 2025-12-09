@@ -78,8 +78,8 @@ export const TenancySection: React.FC<SectionProps> = ({
             <input
               type="text"
               className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-              value={property.town_city || ''}
-              onChange={(e) => updateProperty('town_city', e.target.value)}
+              value={property.city || ''}
+              onChange={(e) => updateProperty('city', e.target.value)}
             />
           </div>
 

@@ -39,6 +39,7 @@ export interface TenancyFacts {
   rent_amount: number | null;
   rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly' | 'yearly' | 'other' | null;
   rent_due_day: number | null;
+  usual_payment_weekday?: string | null; // e.g. "monday", "friday" - used for money claims
   deposit_amount: number | null;
   deposit_protected: boolean | null;
   deposit_scheme_name: string | null;
@@ -231,6 +232,10 @@ export interface MoneyClaimFacts {
   help_with_fees_needed?: boolean | null;
   enforcement_preferences?: string[] | null;
   enforcement_notes?: string | null;
+  // Additional narrative fields for richer AI drafting
+  other_charges_notes?: string | null; // from ArrearsSection
+  other_costs_notes?: string | null; // from DamagesSection
+  other_amounts_summary?: string | null; // from ClaimDetailsSection
 }
 
 export interface MetaFacts {

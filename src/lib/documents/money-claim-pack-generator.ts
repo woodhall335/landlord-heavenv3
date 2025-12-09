@@ -11,6 +11,8 @@
 import { generateDocument } from './generator';
 import { assertOfficialFormExists, fillN1Form, CaseData } from '@/lib/documents/official-forms-filler';
 import { buildServiceContact } from '@/lib/documents/service-contact';
+import { generateMoneyClaimAskHeavenDrafts } from './money-claim-askheaven';
+import type { CaseFacts } from '@/lib/case-facts/schema';
 
 export type MoneyClaimJurisdiction = 'england-wales';
 
@@ -50,6 +52,7 @@ export interface MoneyClaimCase {
   rent_amount: number;
   rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly';
   payment_day?: number;
+  usual_payment_weekday?: string;
   tenancy_start_date?: string;
   tenancy_end_date?: string;
 
@@ -58,6 +61,11 @@ export interface MoneyClaimCase {
   arrears_schedule?: ArrearsEntry[];
   damage_items?: ClaimLineItem[];
   other_charges?: ClaimLineItem[];
+
+  // Additional narrative fields for AI drafting
+  other_charges_notes?: string;
+  other_costs_notes?: string;
+  other_amounts_summary?: string;
 
   // Interest
   interest_rate?: number;
@@ -292,11 +300,26 @@ function buildN1Payload(claim: MoneyClaimCase, totals: CalculatedTotals): CaseDa
 }
 
 async function generateEnglandWalesMoneyClaimPack(
-  claim: MoneyClaimCase
+  claim: MoneyClaimCase,
+  caseFacts?: CaseFacts
 ): Promise<MoneyClaimPack> {
   const totals = calculateTotals(claim);
   const generationDate = new Date().toISOString();
   const documents: MoneyClaimPackDocument[] = [];
+
+  // Generate AI-drafted content for premium pack (LBA, PoC, Evidence Index)
+  let askHeavenDrafts;
+  if (caseFacts) {
+    try {
+      askHeavenDrafts = await generateMoneyClaimAskHeavenDrafts(caseFacts, claim, {
+        includePostIssue: true,
+        includeRiskReport: false, // Can be enabled for premium users
+        jurisdiction: 'england-wales',
+      });
+    } catch (error) {
+      console.error('Failed to generate AI drafts, proceeding without:', error);
+    }
+  }
 
   const baseTemplateData = {
     ...claim,
@@ -311,6 +334,8 @@ async function generateEnglandWalesMoneyClaimPack(
     enforcement_notes: claim.enforcement_notes,
     evidence_types_available: claim.evidence_types_available || [],
     arrears_schedule_confirmed: claim.arrears_schedule_confirmed,
+    // Add AI-drafted content if available
+    ask_heaven: askHeavenDrafts,
   };
 
   // PACK COVER
@@ -487,6 +512,23 @@ async function generateEnglandWalesMoneyClaimPack(
     file_name: 'financial-statement-form.pdf',
   });
 
+  // ENFORCEMENT GUIDE (Post-Issue)
+  const enforcementGuide = await generateDocument({
+    templatePath: 'uk/england-wales/templates/money_claims/enforcement_guide.hbs',
+    data: baseTemplateData,
+    isPreview: false,
+    outputFormat: 'both',
+  });
+
+  documents.push({
+    title: 'Enforcement Guide',
+    description: 'Explains enforcement options after obtaining a County Court Judgment.',
+    category: 'guidance',
+    html: enforcementGuide.html,
+    pdf: enforcementGuide.pdf,
+    file_name: 'enforcement-guide.pdf',
+  });
+
   // FILING GUIDE
   const filingGuide = await generateDocument({
     templatePath: 'uk/england-wales/templates/money_claims/filing_guide.hbs',
@@ -534,7 +576,8 @@ async function generateEnglandWalesMoneyClaimPack(
 }
 
 export async function generateMoneyClaimPack(
-  claim: MoneyClaimCase
+  claim: MoneyClaimCase,
+  caseFacts?: CaseFacts
 ): Promise<MoneyClaimPack> {
   if (claim.jurisdiction !== 'england-wales') {
     throw new Error(
@@ -542,5 +585,5 @@ export async function generateMoneyClaimPack(
     );
   }
 
-  return generateEnglandWalesMoneyClaimPack(claim);
+  return generateEnglandWalesMoneyClaimPack(claim, caseFacts);
 }
