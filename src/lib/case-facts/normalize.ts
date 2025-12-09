@@ -416,23 +416,27 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // =============================================================================
   base.property.address_line1 ??= getFirstValue(wizard, [
     'case_facts.property.address_line1',
+    'property_address.address_line1',
     'property_address',
     'property_address_line1',
     'property.address_line1',
   ]);
   base.property.address_line2 ??= getFirstValue(wizard, [
     'case_facts.property.address_line2',
+    'property_address.address_line2',
     'property_address_line2',
     'property.address_line2',
   ]);
   base.property.city ??= getFirstValue(wizard, [
     'case_facts.property.city',
+    'property_address.city',
     'property_city',
     'property.city',
     'property_address_town',
   ]);
   base.property.postcode ??= getFirstValue(wizard, [
     'case_facts.property.postcode',
+    'property_address.postcode',
     'property_postcode',
     'property.postcode',
     'property_address_postcode',
@@ -533,33 +537,45 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   base.parties.landlord.email ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.email',
     'landlord_email',
+    'claimant_email',
+    'pursuer_email',
     'landlord.email',
   ]);
   base.parties.landlord.phone ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.phone',
     'landlord_phone',
+    'claimant_phone',
+    'pursuer_phone',
     'landlord.phone',
   ]);
   base.parties.landlord.address_line1 ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.address_line1',
     'landlord_address_line1',
+    'claimant_address.address_line1',
+    'pursuer_address.address_line1',
     'landlord.address_line1',
     'landlord_address',
   ]);
   base.parties.landlord.address_line2 ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.address_line2',
     'landlord_address_line2',
+    'claimant_address.address_line2',
+    'pursuer_address.address_line2',
     'landlord.address_line2',
   ]);
   base.parties.landlord.city ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.city',
     'landlord_city',
+    'claimant_address.city',
+    'pursuer_address.city',
     'landlord.city',
     'landlord_address_town',
   ]);
   base.parties.landlord.postcode ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.postcode',
     'landlord_postcode',
+    'claimant_address.postcode',
+    'pursuer_address.postcode',
     'landlord.postcode',
     'landlord_address_postcode',
   ]);

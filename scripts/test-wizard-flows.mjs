@@ -279,6 +279,24 @@ async function main() {
     console.error(`❌ Scotland notice_only flow failed:`, err.message);
   }
 
+  // 4) England & Wales - money_claim
+  try {
+    results.push(
+      await runFlow({ product: 'money_claim', jurisdiction: 'england-wales', maxQuestions: 60 })
+    );
+  } catch (err) {
+    console.error(`❌ E&W money_claim flow failed:`, err.message);
+  }
+
+  // 5) Scotland - money_claim (Simple Procedure)
+  try {
+    results.push(
+      await runFlow({ product: 'money_claim', jurisdiction: 'scotland', maxQuestions: 60 })
+    );
+  } catch (err) {
+    console.error(`❌ Scotland money_claim flow failed:`, err.message);
+  }
+
   console.log(`\n==============================`);
   console.log(`📦 Summary of flows:`);
   console.log(`==============================`);
