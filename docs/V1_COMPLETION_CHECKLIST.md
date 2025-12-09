@@ -189,8 +189,9 @@ Documentation:
     - [x] **Ground 4 – Landlord intends to occupy** (ground_4_who_occupying, ground_4_genuine_intention, ground_4_narrative) ✅
     - [x] **Ground 5 – Landlord intends to sell** (ground_5_sale_date, ground_5_estate_agent, ground_5_narrative) ✅
     - [x] **Ground 6 – Substantial refurbishment/works** (ground_6_works_description, ground_6_planning, ground_6_narrative) ✅
-  - **Status:** `complete_pack/scotland.yaml` v2.0.0 with 390+ lines of ground-specific expansion ✅
-  - **Verified:** 2025-12-03
+  - **Status:** `complete_pack/scotland.yaml` v2.0.0 with 996 total lines (390+ lines of ground-specific expansion) ✅
+  - **Note:** Full parity with England & Wales achieved, all 6 major grounds covered comprehensively
+  - **Verified:** 2025-12-09
 
 - [x] Each ground has:
   - [x] Essential structured facts (dates, durations, arrears, behaviour details, etc.) ✅
