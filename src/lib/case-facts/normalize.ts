@@ -499,6 +499,10 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'case_facts.tenancy.rent_due_day',
     'rent_due_day',
   ]);
+  base.tenancy.usual_payment_weekday ??= getFirstValue(wizard, [
+    'case_facts.tenancy.usual_payment_weekday',
+    'usual_payment_weekday',
+  ]);
   base.tenancy.deposit_amount ??= getWizardValue(wizard, 'deposit_amount');
   base.tenancy.deposit_protected ??= getWizardValue(wizard, 'deposit_protected');
   base.tenancy.deposit_scheme_name ??= getWizardValue(wizard, 'deposit_scheme_name');
@@ -1252,6 +1256,20 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   base.money_claim.enforcement_notes ??= getFirstValue(wizard, [
     'enforcement_notes',
     'case_facts.money_claim.enforcement_notes',
+  ]);
+
+  // Additional narrative fields for richer AI drafting
+  base.money_claim.other_charges_notes ??= getFirstValue(wizard, [
+    'other_charges_notes',
+    'case_facts.money_claim.other_charges_notes',
+  ]);
+  base.money_claim.other_costs_notes ??= getFirstValue(wizard, [
+    'other_costs_notes',
+    'case_facts.money_claim.other_costs_notes',
+  ]);
+  base.money_claim.other_amounts_summary ??= getFirstValue(wizard, [
+    'other_amounts_summary',
+    'case_facts.money_claim.other_amounts_summary',
   ]);
 
   // =============================================================================

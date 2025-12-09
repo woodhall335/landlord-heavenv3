@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enforcement Guide - Simple Procedure Scotland</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 20mm;
+      background: white;
+    }
+    .header {
+      text-align: center;
+      border-bottom: 3px solid: #0065BD;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #0065BD;
+      font-size: 24px;
+      margin: 0 0 10px 0;
+    }
+    h2 {
+      color: #0065BD;
+      font-size: 18px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 5px;
+    }
+    h3 {
+      color: #2d7eb8;
+      font-size: 14px;
+      margin-top: 15px;
+      margin-bottom: 10px;
+    }
+    .case-ref {
+      background: #f5f5f5;
+      padding: 15px;
+      border-left: 4px solid #0065BD;
+      margin-bottom: 25px;
+    }
+    .warning-box {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-left: 5px solid #ffc107;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .warning-box strong {
+      color: #856404;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    .info-box {
+      background: #e7f3ff;
+      border: 1px solid #2196F3;
+      border-left: 4px solid #2196F3;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    .method-section {
+      background: #fafafa;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+    }
+    .method-section h3 {
+      margin-top: 0;
+    }
+    ul, ol {
+      margin: 10px 0;
+      padding-left: 25px;
+    }
+    li {
+      margin-bottom: 8px;
+    }
+    .steps-list {
+      counter-reset: step-counter;
+      list-style: none;
+      padding-left: 0;
+    }
+    .steps-list li {
+      counter-increment: step-counter;
+      position: relative;
+      padding-left: 40px;
+      margin-bottom: 15px;
+    }
+    .steps-list li:before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: #0065BD;
+      color: white;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .cost-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    .cost-table th, .cost-table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    .cost-table th {
+      background: #0065BD;
+      color: white;
+      font-weight: bold;
+    }
+    .cost-table tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px solid #e0e0e0;
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+    }
+    .highlight {
+      background: #ffffcc;
+      padding: 2px 4px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Enforcement Guide</h1>
+    <p><strong>What to Do After Obtaining a Sheriff Court Decree</strong></p>
+    <p>Scotland - Simple Procedure Enforcement Options</p>
+  </div>
+
+  <div class="case-ref">
+    <strong>Pursuer:</strong> {{landlord_full_name}}<br>
+    <strong>Defender:</strong> {{tenant_full_name}}<br>
+    <strong>Claim Amount:</strong> £{{total_claim_amount}}<br>
+    {{#if sheriffdom}}<strong>Sheriff Court:</strong> {{sheriffdom}}<br>{{/if}}
+    <strong>Generated:</strong> {{generation_date}}
+  </div>
+
+  <div class="warning-box">
+    <strong>⚠️ Important Notice</strong>
+    This guide provides general information only. It is NOT legal advice and does not constitute a substitute for advice from a regulated solicitor or legal professional. Enforcement options depend on your specific circumstances, the defender's financial situation, and judicial decisions. Always consider taking independent legal advice before proceeding with enforcement action.
+  </div>
+
+  <h2>Introduction</h2>
+  <p>
+    Congratulations on obtaining your Sheriff Court decree through Simple Procedure. However, a decree alone does not automatically result in payment. If the defender does not pay voluntarily within 14 days, you will need to take <strong>diligence</strong> (enforcement action) to recover the money owed.
+  </p>
+  <p>
+    This guide explains the main enforcement methods available in Scotland, the costs involved, and how to choose the most appropriate method based on your circumstances.
+  </p>
+
+  {{#if enforcement_preferences}}
+  <div class="info-box">
+    <strong>📋 Your Selected Enforcement Preferences:</strong>
+    <ul>
+      {{#each enforcement_preferences}}
+      <li>{{this}}</li>
+      {{/each}}
+    </ul>
+    {{#if enforcement_notes}}
+    <p><strong>Notes:</strong> {{enforcement_notes}}</p>
+    {{/if}}
+  </div>
+  {{/if}}
+
+  <h2>Before You Start Diligence (Enforcement)</h2>
+  <div class="info-box">
+    <h3>✓ Checklist Before Enforcement</h3>
+    <ul>
+      <li>Wait at least <strong>14 days</strong> from the date the decree was granted before applying for enforcement</li>
+      <li>Obtain an <strong>extract decree</strong> from the Sheriff Court - this is the official document needed for enforcement</li>
+      <li>Check if the defender has applied for a time to pay order or lodged an appeal</li>
+      <li>Gather information about the defender's financial circumstances (employment, assets, bank details, property)</li>
+      <li>Consider whether the defender can actually pay - diligence against someone with no assets or income may not be worthwhile</li>
+      <li>Be prepared to pay Sheriff Officer fees and court fees upfront</li>
+    </ul>
+  </div>
+
+  <h2>Diligence Methods (Enforcement)</h2>
+  <p>The main diligence methods available in Scotland after obtaining a decree are:</p>
+
+  <div class="method-section">
+    <h3>1. Earnings Arrestment</h3>
+    <p><strong>What it is:</strong> An order requiring the defender's employer to deduct regular amounts from their wages and pay them directly to you.</p>
+
+    <p><strong>When to use:</strong></p>
+    <ul>
+      <li>The defender is <span class="highlight">employed</span> (not self-employed)</li>
+      <li>You know their employer's name and address</li>
+      <li>The defender earns above the protected earnings threshold</li>
+    </ul>
+
+    <p><strong>Advantages:</strong></p>
+    <ul>
+      <li>Regular, automatic payments</li>
+      <li>Relatively straightforward and cost-effective</li>
+      <li>High success rate if defender is employed</li>
+      <li>No need for Sheriff Officer involvement once in place</li>
+    </ul>
+
+    <p><strong>Disadvantages:</strong></p>
+    <ul>
+      <li>Only works for employed defenders</li>
+      <li>Cannot be used if defender earns below protected threshold (approx. £529.90/month as of 2024)</li>
+      <li>Defender can change jobs to avoid payment</li>
+      <li>Deductions are limited based on earnings</li>
+    </ul>
+
+    <p><strong>Cost:</strong> Minimal - you serve the schedule yourself or via Sheriff Officer (approx. £25-50 for service)</p>
+    <p><strong>How to apply:</strong> Complete an Earnings Arrestment Schedule and serve it on the employer</p>
+  </div>
+
+  <div class="method-section">
+    <h3>2. Bank Arrestment</h3>
+    <p><strong>What it is:</strong> An order freezing money in the defender's bank account or building society, allowing you to recover the debt from frozen funds.</p>
+
+    <p><strong>When to use:</strong></p>
+    <ul>
+      <li>You know the defender <span class="highlight">has money in a bank account</span></li>
+      <li>You have the name and address of the defender's bank or building society</li>
+      <li>The defender has sufficient funds to cover the debt</li>
+    </ul>
+
+    <p><strong>Advantages:</strong></p>
+    <ul>
+      <li>Very effective if defender has sufficient funds</li>
+      <li>Immediate freezing of the account</li>
+      <li>Can result in quick payment</li>
+      <li>Can be done without going back to court</li>
+    </ul>
+
+    <p><strong>Disadvantages:</strong></p>
+    <ul>
+      <li>You need to identify the bank and branch</li>
+      <li>Account may have insufficient funds</li>
+      <li>Certain accounts are protected (e.g., some benefit payments up to £1,000)</li>
+      <li>Joint accounts can only be arrested for 50% of the balance</li>
+      <li>Defender can apply to have arrestment recalled or restricted</li>
+    </ul>
+
+    <p><strong>Cost:</strong> Sheriff Officer fees (approx. £50-100) plus bank fees (typically £25-50)</p>
+    <p><strong>How to apply:</strong> Instruct a Sheriff Officer to serve an Arrestment Schedule on the bank</p>
+  </div>
+
+  <div class="method-section">
+    <h3>3. Attachment of Goods (Sheriff Officer and Auction)</h3>
+    <p><strong>What it is:</strong> A Sheriff Officer visits the defender's property, lists valuable items, and can later remove and sell them at auction to recover the debt.</p>
+
+    <p><strong>When to use:</strong></p>
+    <ul>
+      <li>The defender has <span class="highlight">valuable possessions</span></li>
+      <li>You know where the defender lives or works</li>
+      <li>Other methods have failed or are not suitable</li>
+    </ul>
+
+    <p><strong>Advantages:</strong></p>
+    <ul>
+      <li>Can be very effective if defender has valuable goods</li>
+      <li>Defender may pay to avoid auction</li>
+      <li>Sheriff Officer handles the process</li>
+    </ul>
+
+    <p><strong>Disadvantages:</strong></p>
+    <ul>
+      <li>Many defenders have few or no valuable possessions</li>
+      <li>Certain items cannot be attached (essential household items, tools of trade up to £1,000 value, items on HP/finance)</li>
+      <li>Defender can hide or remove goods before auction</li>
+      <li>Auction proceeds may be less than expected</li>
+      <li>High Sheriff Officer fees</li>
+    </ul>
+
+    <p><strong>Cost:</strong> Sheriff Officer fees for initial visit (£100-150), attachment report (£150-250), and auction (varies, can be £500+)</p>
+    <p><strong>How to apply:</strong> Instruct a Sheriff Officer to execute an Attachment</p>
+  </div>
+
+  <div class="method-section">
+    <h3>4. Inhibition (Land and Property)</h3>
+    <p><strong>What it is:</strong> An order recorded against the defender in the Register of Inhibitions, preventing them from selling or borrowing against heritable property (land/buildings) without settling your debt first.</p>
+
+    <p><strong>When to use:</strong></p>
+    <ul>
+      <li>The defender <span class="highlight">owns property or land</span></li>
+      <li>The debt is substantial (£1,000+)</li>
+      <li>You are prepared to wait for payment until the property is sold or remortgaged</li>
+      <li>You want to prevent the defender from selling assets</li>
+    </ul>
+
+    <p><strong>Advantages:</strong></p>
+    <ul>
+      <li>Secures the debt against heritable property</li>
+      <li>Prevents defender from selling or borrowing without paying you</li>
+      <li>Shows the defender you are serious about enforcement</li>
+      <li>Lasts for 5 years and can be renewed</li>
+    </ul>
+
+    <p><strong>Disadvantages:</strong></p>
+    <ul>
+      <li>Does not give you immediate payment</li>
+      <li>Can take years before you receive payment</li>
+      <li>Property may have existing securities with priority</li>
+      <li>Requires additional steps (land attachment) to force sale</li>
+      <li>Court fee and registration fees apply</li>
+    </ul>
+
+    <p><strong>Cost:</strong> Sheriff Officer fees (approx. £50-100) plus Register of Inhibitions fee (£20)</p>
+    <p><strong>How to apply:</strong> Instruct a Sheriff Officer to serve a Schedule of Inhibition</p>
+  </div>
+
+  <div class="method-section">
+    <h3>5. Money Attachment (Business Cash)</h3>
+    <p><strong>What it is:</strong> An order allowing a Sheriff Officer to seize cash found at the defender's business premises.</p>
+
+    <p><strong>When to use:</strong></p>
+    <ul>
+      <li>The defender operates a <span class="highlight">cash business</span></li>
+      <li>You believe they have significant cash on premises</li>
+      <li>Other methods have failed</li>
+    </ul>
+
+    <p><strong>Advantages:</strong></p>
+    <ul>
+      <li>Immediate recovery of cash</li>
+      <li>Effective for cash businesses</li>
+    </ul>
+
+    <p><strong>Disadvantages:</strong></p>
+    <ul>
+      <li>Rarely successful - most businesses use electronic payments</li>
+      <li>Limited to cash actually found on premises at time of visit</li>
+      <li>Defender can avoid by keeping cash elsewhere</li>
+      <li>High Sheriff Officer fees</li>
+    </ul>
+
+    <p><strong>Cost:</strong> Sheriff Officer fees (approx. £100-200)</p>
+    <p><strong>How to apply:</strong> Instruct a Sheriff Officer to execute a Money Attachment</p>
+  </div>
+
+  <div class="method-section">
+    <h3>6. Debt Arrangement Scheme (DAS) and Sequestration Considerations</h3>
+    <p><strong>What they are:</strong> Formal debt solutions that may affect your enforcement options.</p>
+
+    <ul>
+      <li><strong>Debt Arrangement Scheme (DAS):</strong> If the defender enters a DAS (Debt Payment Programme), all diligence is frozen and you receive scheduled payments through the scheme</li>
+      <li><strong>Sequestration (Bankruptcy):</strong> If the defender is sequestrated, most diligence stops and you become an ordinary creditor in the sequestration</li>
+    </ul>
+
+    <p>Be aware that defenders can use these mechanisms to avoid enforcement. However, you will still be included in the payment plan or bankruptcy distribution.</p>
+  </div>
+
+  <h2>Enforcement Fees and Costs</h2>
+  <table class="cost-table">
+    <thead>
+      <tr>
+        <th>Diligence Method</th>
+        <th>Typical Cost</th>
+        <th>Additional Costs</th>
+        <th>Recoverable from Defender?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Earnings Arrestment</td>
+        <td>£25-50</td>
+        <td>None</td>
+        <td>Yes (added to debt)</td>
+      </tr>
+      <tr>
+        <td>Bank Arrestment</td>
+        <td>£50-100</td>
+        <td>Bank fees (£25-50)</td>
+        <td>Partially</td>
+      </tr>
+      <tr>
+        <td>Attachment of Goods</td>
+        <td>£100-150 initial</td>
+        <td>Auction fees (£500+)</td>
+        <td>From sale proceeds</td>
+      </tr>
+      <tr>
+        <td>Inhibition</td>
+        <td>£50-100</td>
+        <td>Registration (£20)</td>
+        <td>When property sold</td>
+      </tr>
+      <tr>
+        <td>Money Attachment</td>
+        <td>£100-200</td>
+        <td>None</td>
+        <td>From cash seized</td>
+      </tr>
+      <tr>
+        <td>Extract Decree</td>
+        <td>£25-40</td>
+        <td>None</td>
+        <td>Added to debt</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="info-box">
+    <strong>💡 Sheriff Officer Fees</strong>
+    <p>Sheriff Officer fees are regulated but can vary. Always obtain a quote before instructing diligence. Fees are typically added to the debt and recovered from the defender if enforcement is successful.</p>
+  </div>
+
+  <h2>How to Choose the Right Diligence Method</h2>
+  <ol class="steps-list">
+    <li>
+      <strong>Assess the defender's situation</strong><br>
+      Do they have a job? Property? Bank accounts? Assets? Start with the most straightforward method based on what you know.
+    </li>
+    <li>
+      <strong>Start with low-cost methods</strong><br>
+      Earnings Arrestment (if employed) or Bank Arrestment (if you know their bank) are usually the best first steps.
+    </li>
+    <li>
+      <strong>Consider the debt amount</strong><br>
+      For smaller debts (under £1,000), avoid expensive diligence like Attachment of Goods. For larger debts, Inhibition may be worthwhile even if payment is delayed.
+    </li>
+    <li>
+      <strong>Evaluate likelihood of success</strong><br>
+      Don't spend money on diligence if the defender has no assets, income, or ability to pay.
+    </li>
+    <li>
+      <strong>Use multiple methods if necessary</strong><br>
+      You can combine methods - e.g., Earnings Arrestment for ongoing recovery plus Inhibition to secure against property.
+    </li>
+  </ol>
+
+  <h2>Next Steps</h2>
+  <div class="info-box">
+    <h3>Recommended Action Plan</h3>
+    <p>Based on your decree for <strong>£{{total_claim_amount}}</strong> against {{tenant_full_name}}:</p>
+    <ol>
+      <li><strong>Obtain an extract decree</strong> from the Sheriff Court (essential for all diligence)</li>
+      <li><strong>Wait 14 days</strong> from decree to allow voluntary payment</li>
+      <li><strong>Send a final demand letter</strong> warning of diligence</li>
+      <li><strong>Choose appropriate diligence:</strong>
+        <ul>
+          <li>If employed: Earnings Arrestment</li>
+          <li>If you know their bank: Bank Arrestment</li>
+          <li>If they own property: Inhibition (for security)</li>
+          <li>If they have valuable goods: Attachment</li>
+        </ul>
+      </li>
+      <li><strong>Instruct a Sheriff Officer</strong> to execute the diligence</li>
+      <li><strong>Monitor and follow up:</strong> Be prepared to try alternative methods if needed</li>
+    </ol>
+  </div>
+
+  <h2>Important Warnings</h2>
+  <div class="warning-box">
+    <strong>⚠️ Do Not Take Direct Action</strong>
+    You must not harass, threaten, or take the law into your own hands. Always use official diligence procedures through Sheriff Officers and the court. Harassment can result in criminal charges.
+  </div>
+
+  <div class="warning-box">
+    <strong>⚠️ Debt Arrangement and Bankruptcy</strong>
+    If the defender enters a Debt Arrangement Scheme (DAS) or is sequestrated (bankrupt), all diligence is frozen or stopped. You will become an ordinary creditor and may only receive a small portion of the debt owed.
+  </div>
+
+  <h2>Further Resources</h2>
+  <ul>
+    <li><strong>mygov.scot Enforcement Guidance:</strong> <a href="https://www.mygov.scot/recovering-debt-from-court">www.mygov.scot/recovering-debt-from-court</a></li>
+    <li><strong>Scottish Courts and Tribunals Service:</strong> <a href="https://www.scotcourts.gov.uk">www.scotcourts.gov.uk</a></li>
+    <li><strong>Citizens Advice Scotland:</strong> <a href="https://www.citizensadvice.org.uk/scotland/">www.citizensadvice.org.uk/scotland/</a></li>
+    <li><strong>Society of Messengers-at-Arms and Sheriff Officers:</strong> <a href="https://www.smaso.org">www.smaso.org</a> (to find a Sheriff Officer)</li>
+  </ul>
+
+  <div class="footer">
+    <p>
+      <strong>Document Generated:</strong> {{generation_date}}<br>
+      This document was generated by Landlord Heaven as part of your Simple Procedure money claim pack for Scotland.<br>
+      <strong>Disclaimer:</strong> This guide is for general information only and does not constitute legal advice.
+    </p>
+  </div>
+</body>
+</html>
