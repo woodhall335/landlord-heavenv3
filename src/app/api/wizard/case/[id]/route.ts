@@ -12,10 +12,10 @@ type RouteParams = { id: string };
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: RouteParams }
+  context: { params: Promise<RouteParams> }
 ) {
   try {
-    const { id: caseId } = params;
+    const { id: caseId } = await context.params;
     const supabase = await createServerSupabaseClient();
 
     // Try to get a user, but don't fail if unauthenticated
