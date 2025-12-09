@@ -145,9 +145,8 @@ export async function POST(request: Request) {
           error: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
           message:
             'Northern Ireland eviction and money claim workflows are not yet supported. ' +
-            'We currently support tenancy agreements for Northern Ireland. ' +
-            'For evictions and money claims, please consult a local solicitor or await our V2 launch (Q2 2026). ' +
-            'We apologize for the inconvenience.',
+            'We currently only support tenancy agreements for Northern Ireland. ' +
+            'Full NI support is planned for V2 (Q2 2026).',
           supported: {
             'northern-ireland': ['tenancy_agreement'],
             'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
