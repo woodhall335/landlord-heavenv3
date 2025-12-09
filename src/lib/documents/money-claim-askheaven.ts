@@ -385,7 +385,6 @@ function generateFallbackDrafts(
   options?: { includePostIssue?: boolean; includeRiskReport?: boolean }
 ): MoneyClaimDrafts {
   const isScotland = jurisdiction === 'scotland';
-  const landlord = moneyClaimCase.landlord_full_name;
   const tenant = moneyClaimCase.tenant_full_name;
   const property = moneyClaimCase.property_address;
   const arrears = moneyClaimCase.arrears_total || 0;
