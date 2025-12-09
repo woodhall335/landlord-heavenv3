@@ -8,14 +8,14 @@
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse, NextRequest } from 'next/server';
 
-type RouteParams = { caseId: string };
+type RouteParams = { id: string };
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: RouteParams }
 ) {
   try {
-    const { caseId } = params;
+    const { id: caseId } = params;
     const supabase = await createServerSupabaseClient();
 
     // Try to get a user, but don't fail if unauthenticated
