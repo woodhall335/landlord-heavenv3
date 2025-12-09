@@ -14,6 +14,8 @@
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import type { MoneyClaimCase } from './money-claim-pack-generator';
 import type { ScotlandMoneyClaimCase } from './scotland-money-claim-pack-generator';
+import { getJsonAIClient, hasCustomJsonAIClient, type ChatMessage } from '@/lib/ai/openai-client';
+import { ASK_HEAVEN_BASE_SYSTEM_PROMPT } from '@/lib/ai/ask-heaven';
 
 // =============================================================================
 // Types for AI-Generated Content
@@ -100,24 +102,35 @@ export async function generateMoneyClaimAskHeavenDrafts(
 ): Promise<MoneyClaimDrafts> {
   const jurisdiction = options?.jurisdiction || ('jurisdiction' in moneyClaimCase ? moneyClaimCase.jurisdiction : 'england-wales');
 
-  try {
-    // TODO: Implement actual AskHeaven/LLM API call here
-    // For now, return structured fallback content that templates can use
+  // Start with fallback content as a baseline (ensures we never return incomplete data)
+  const fallbackDrafts = generateFallbackDrafts(caseFacts, moneyClaimCase, jurisdiction, options);
 
-    // Build a comprehensive prompt for the AI
+  // Check if AI is disabled via env var (allows safe rollout)
+  if (process.env.DISABLE_MONEY_CLAIM_AI === 'true') {
+    console.log('[MoneyClaimAI] AI drafting disabled via DISABLE_MONEY_CLAIM_AI env var');
+    return fallbackDrafts;
+  }
+
+  // Check if OpenAI API key is available
+  if (!process.env.OPENAI_API_KEY && !hasCustomJsonAIClient()) {
+    console.log('[MoneyClaimAI] No OpenAI API key available, using fallback content');
+    return fallbackDrafts;
+  }
+
+  try {
+    // Build comprehensive prompt for the AI
     const prompt = buildMoneyClaimDraftingPrompt(caseFacts, moneyClaimCase, jurisdiction);
 
-    // In production, this would call your AI service:
-    // const aiResponse = await callAskHeavenAPI(prompt);
-    // return parseAIResponse(aiResponse);
+    // Call the LLM to generate AI drafts
+    const aiDrafts = await callMoneyClaimLLM(prompt, jurisdiction, options);
 
-    // For now, return intelligent fallback content
-    return generateFallbackDrafts(caseFacts, moneyClaimCase, jurisdiction, options);
+    // Merge AI content with fallback (AI takes precedence, fallback fills gaps)
+    return mergeAIDraftsWithFallback(aiDrafts, fallbackDrafts);
 
   } catch (error) {
-    console.error('AskHeaven drafting failed, using fallback:', error);
+    console.error('[MoneyClaimAI] AI drafting failed, using fallback:', error);
     // Always return usable content, never crash the pack generator
-    return generateFallbackDrafts(caseFacts, moneyClaimCase, jurisdiction, options);
+    return fallbackDrafts;
   }
 }
 
@@ -143,14 +156,14 @@ Generate professional, legally sound narrative content for the following money c
 CLAIMANT: ${moneyClaimCase.landlord_full_name}
 DEFENDANT: ${moneyClaimCase.tenant_full_name}
 PROPERTY: ${moneyClaimCase.property_address}
-CLAIM AMOUNT: £${moneyClaimCase.arrears_total || 0}
+CLAIM AMOUNT: \u00A3${moneyClaimCase.arrears_total || 0}
 
 TENANCY DETAILS:
 - Start Date: ${moneyClaimCase.tenancy_start_date || 'Not provided'}
 - End Date: ${moneyClaimCase.tenancy_end_date || 'Ongoing'}
-- Rent: £${moneyClaimCase.rent_amount} ${moneyClaimCase.rent_frequency}
+- Rent: \u00A3${moneyClaimCase.rent_amount} ${moneyClaimCase.rent_frequency}
 
-ARREARS: £${moneyClaimCase.arrears_total || 0}
+ARREARS: \u00A3${moneyClaimCase.arrears_total || 0}
 ${moneyClaimCase.arrears_schedule ? `Schedule: ${JSON.stringify(moneyClaimCase.arrears_schedule, null, 2)}` : ''}
 
 DAMAGE CLAIMS: ${moneyClaimCase.damage_items && moneyClaimCase.damage_items.length > 0 ? JSON.stringify(moneyClaimCase.damage_items, null, 2) : 'None'}
@@ -169,8 +182,196 @@ Generate the following sections in JSON format:
 2. Particulars of Claim (tenancy_background, legal_basis, rent_obligation, arrears_calculation, interest_claim, pre_action_summary, remedy_sought)
 3. Evidence Index (array of {tab, title, description} for typical evidence)
 
-Tone: Professional, factual, firm but not aggressive. Cite relevant law where appropriate ${isScotland ? '(e.g., Housing (Scotland) Act 1988)' : '(e.g., Housing Act 1988, Senior Courts Act 1981 s.69)'}.
+Tone: Professional, factual, firm but not aggressive. Cite relevant law where appropriate ${isScotland ? '(e.g., Housing (Scotland) Act 1988)' : '(e.g., Housing Act 1981 s.69)'}.
 `;
+}
+
+/**
+ * Calls the LLM to generate AI-drafted money claim content
+ * Returns structured JSON matching MoneyClaimDrafts interface
+ */
+async function callMoneyClaimLLM(
+  prompt: string,
+  jurisdiction: 'england-wales' | 'scotland',
+  options?: { includePostIssue?: boolean; includeRiskReport?: boolean }
+): Promise<Partial<MoneyClaimDrafts>> {
+  const isScotland = jurisdiction === 'scotland';
+
+  // Build system prompt for legal drafting
+  const systemPrompt = `
+${ASK_HEAVEN_BASE_SYSTEM_PROMPT}
+
+You are currently acting in MONEY CLAIM LEGAL DOCUMENT DRAFTING mode.
+
+Your job in this mode:
+- Draft professional, legally sound narrative content for ${isScotland ? 'Scottish Simple Procedure' : 'England & Wales County Court'} money claims.
+- Generate Letter Before Action sections with clear, factual language.
+- Draft Particulars of Claim following proper legal structure and terminology.
+- Create Evidence Index entries with helpful descriptions.
+
+CRITICAL RULES FOR THIS MODE:
+- NEVER invent facts, dates, or amounts not provided in the user prompt.
+- NEVER give personalised legal advice or strategy.
+- NEVER guarantee outcomes or make promises about court decisions.
+- ONLY use facts explicitly provided by the user.
+- ONLY cite well-established legal principles and statutory references.
+- Structure content for court/tribunal submission.
+- Use neutral, professional language suitable for legal documents.
+
+Jurisdiction: ${jurisdiction}
+${isScotland ? 'Court: Sheriff Court (Simple Procedure)' : 'Court: County Court'}
+
+STRICT JSON OUTPUT REQUIREMENTS:
+- You MUST respond with ONLY a single JSON object.
+- Do NOT include any markdown, prose, explanations, or commentary.
+- Do NOT wrap the JSON in backticks or code blocks.
+- The JSON must be valid (double quotes, no trailing commas, proper escaping).
+- All string values must be properly escaped.
+
+Required JSON structure:
+{
+  "lba": {
+    "intro": "string",
+    "tenancy_history": "string",
+    "arrears_summary": "string",
+    "amount_due": "string",
+    "response_deadline": "string",
+    "payment_instructions": "string",
+    "consequences": "string"
+  },
+  "particulars_of_claim": {
+    "tenancy_background": "string",
+    "legal_basis": "string",
+    "rent_obligation": "string",
+    "arrears_calculation": "string",
+    "interest_claim": "string",
+    "pre_action_summary": "string",
+    "remedy_sought": "string"
+  },
+  "evidence_index": [
+    {"tab": "string", "title": "string", "description": "string"}
+  ]${options?.includePostIssue ? `,
+  "post_issue": {
+    "what_happens_next": "string",
+    "if_defended": "string",
+    "if_admitted": "string",
+    "if_no_response": "string",
+    "timeline": "string"
+  }` : ''}${options?.includeRiskReport ? `,
+  "risk_report": {
+    "strengths": ["string"],
+    "weaknesses": ["string"],
+    "missing_evidence": ["string"],
+    "recommendations": ["string"]
+  }` : ''}
+}
+`.trim();
+
+  const messages: ChatMessage[] = [
+    { role: 'system', content: systemPrompt },
+    { role: 'user', content: prompt },
+  ];
+
+  // Define JSON schema for validation
+  const schema = {
+    type: 'object',
+    properties: {
+      lba: {
+        type: 'object',
+        properties: {
+          intro: { type: 'string' },
+          tenancy_history: { type: 'string' },
+          arrears_summary: { type: 'string' },
+          amount_due: { type: 'string' },
+          response_deadline: { type: 'string' },
+          payment_instructions: { type: 'string' },
+          consequences: { type: 'string' },
+        },
+        required: ['intro', 'tenancy_history', 'arrears_summary', 'amount_due', 'response_deadline', 'payment_instructions', 'consequences'],
+      },
+      particulars_of_claim: {
+        type: 'object',
+        properties: {
+          tenancy_background: { type: 'string' },
+          legal_basis: { type: 'string' },
+          rent_obligation: { type: 'string' },
+          arrears_calculation: { type: 'string' },
+          interest_claim: { type: 'string' },
+          pre_action_summary: { type: 'string' },
+          remedy_sought: { type: 'string' },
+        },
+        required: ['tenancy_background', 'legal_basis', 'rent_obligation', 'arrears_calculation', 'interest_claim', 'pre_action_summary', 'remedy_sought'],
+      },
+      evidence_index: {
+        type: 'array',
+        items: {
+          type: 'object',
+          properties: {
+            tab: { type: 'string' },
+            title: { type: 'string' },
+            description: { type: 'string' },
+          },
+          required: ['tab', 'title', 'description'],
+        },
+      },
+    },
+    required: ['lba', 'particulars_of_claim', 'evidence_index'],
+  };
+
+  // Call the LLM with JSON mode
+  const result = await getJsonAIClient().jsonCompletion<Partial<MoneyClaimDrafts>>(
+    messages,
+    schema,
+    {
+      model: 'gpt-4o-mini', // Fast and cost-effective for this task
+      temperature: 0.3, // Low temperature for factual, consistent legal drafting
+      max_tokens: 2500, // Enough for comprehensive drafts
+    }
+  );
+
+  console.log(`[MoneyClaimAI] LLM call successful. Cost: $${result.cost_usd.toFixed(4)}, Tokens: ${result.usage.total_tokens}`);
+
+  // Extract and return the JSON
+  return result.json || {};
+}
+
+/**
+ * Merges AI-generated content with fallback content
+ * AI content takes precedence, fallback fills any gaps
+ */
+function mergeAIDraftsWithFallback(
+  aiDrafts: Partial<MoneyClaimDrafts>,
+  fallbackDrafts: MoneyClaimDrafts
+): MoneyClaimDrafts {
+  return {
+    lba: {
+      intro: aiDrafts.lba?.intro || fallbackDrafts.lba.intro,
+      tenancy_history: aiDrafts.lba?.tenancy_history || fallbackDrafts.lba.tenancy_history,
+      arrears_summary: aiDrafts.lba?.arrears_summary || fallbackDrafts.lba.arrears_summary,
+      amount_due: aiDrafts.lba?.amount_due || fallbackDrafts.lba.amount_due,
+      response_deadline: aiDrafts.lba?.response_deadline || fallbackDrafts.lba.response_deadline,
+      payment_instructions: aiDrafts.lba?.payment_instructions || fallbackDrafts.lba.payment_instructions,
+      consequences: aiDrafts.lba?.consequences || fallbackDrafts.lba.consequences,
+      breach_description: aiDrafts.lba?.breach_description || fallbackDrafts.lba.breach_description,
+      annexes: aiDrafts.lba?.annexes || fallbackDrafts.lba.annexes,
+    },
+    particulars_of_claim: {
+      tenancy_background: aiDrafts.particulars_of_claim?.tenancy_background || fallbackDrafts.particulars_of_claim.tenancy_background,
+      legal_basis: aiDrafts.particulars_of_claim?.legal_basis || fallbackDrafts.particulars_of_claim.legal_basis,
+      rent_obligation: aiDrafts.particulars_of_claim?.rent_obligation || fallbackDrafts.particulars_of_claim.rent_obligation,
+      arrears_calculation: aiDrafts.particulars_of_claim?.arrears_calculation || fallbackDrafts.particulars_of_claim.arrears_calculation,
+      damage_items: aiDrafts.particulars_of_claim?.damage_items || fallbackDrafts.particulars_of_claim.damage_items,
+      other_charges: aiDrafts.particulars_of_claim?.other_charges || fallbackDrafts.particulars_of_claim.other_charges,
+      interest_claim: aiDrafts.particulars_of_claim?.interest_claim || fallbackDrafts.particulars_of_claim.interest_claim,
+      pre_action_summary: aiDrafts.particulars_of_claim?.pre_action_summary || fallbackDrafts.particulars_of_claim.pre_action_summary,
+      remedy_sought: aiDrafts.particulars_of_claim?.remedy_sought || fallbackDrafts.particulars_of_claim.remedy_sought,
+    },
+    evidence_index: aiDrafts.evidence_index && aiDrafts.evidence_index.length > 0
+      ? aiDrafts.evidence_index
+      : fallbackDrafts.evidence_index,
+    post_issue: aiDrafts.post_issue || fallbackDrafts.post_issue,
+    risk_report: aiDrafts.risk_report || fallbackDrafts.risk_report,
+  };
 }
 
 /**
@@ -188,7 +389,7 @@ function generateFallbackDrafts(
   const tenant = moneyClaimCase.tenant_full_name;
   const property = moneyClaimCase.property_address;
   const arrears = moneyClaimCase.arrears_total || 0;
-  const rent = `£${moneyClaimCase.rent_amount} ${moneyClaimCase.rent_frequency}`;
+  const rent = `\u00A3${moneyClaimCase.rent_amount} ${moneyClaimCase.rent_frequency}`;
 
   // LBA Draft
   const lba: LBADraft = {
@@ -196,9 +397,9 @@ function generateFallbackDrafts(
 
     tenancy_history: `The tenancy commenced on ${moneyClaimCase.tenancy_start_date || '[date]'} with rent set at ${rent}. ${moneyClaimCase.tenancy_end_date ? `The tenancy ended on ${moneyClaimCase.tenancy_end_date}.` : 'The tenancy is ongoing.'}`,
 
-    arrears_summary: `You have failed to pay rent as required under the tenancy agreement. As of today's date, you owe a total of £${arrears} in rent arrears. ${moneyClaimCase.arrears_schedule && moneyClaimCase.arrears_schedule.length > 0 ? 'A detailed breakdown of the arrears is attached.' : ''}`,
+    arrears_summary: `You have failed to pay rent as required under the tenancy agreement. As of today's date, you owe a total of \u00A3${arrears} in rent arrears. ${moneyClaimCase.arrears_schedule && moneyClaimCase.arrears_schedule.length > 0 ? 'A detailed breakdown of the arrears is attached.' : ''}`,
 
-    amount_due: `The total amount due is £${arrears} comprising:\n- Rent arrears: £${arrears}\n${moneyClaimCase.damage_items && moneyClaimCase.damage_items.length > 0 ? `- Damages: £${moneyClaimCase.damage_items.reduce((sum, item) => sum + (item.amount || 0), 0)}` : ''}\nPlus interest and costs as appropriate.`,
+    amount_due: `The total amount due is \u00A3${arrears} comprising:\n- Rent arrears: \u00A3${arrears}\n${moneyClaimCase.damage_items && moneyClaimCase.damage_items.length > 0 ? `- Damages: \u00A3${moneyClaimCase.damage_items.reduce((sum, item) => sum + (item.amount || 0), 0)}` : ''}\nPlus interest and costs as appropriate.`,
 
     response_deadline: `You must pay the full amount or contact me to discuss payment within 14 days of the date of this letter (by ${new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]}).`,
 
@@ -215,13 +416,56 @@ function generateFallbackDrafts(
 
     rent_obligation: `Under the terms of the tenancy agreement, the Defendant covenanted to pay rent of ${rent}, payable ${moneyClaimCase.payment_day ? `on or before the ${moneyClaimCase.payment_day}${getOrdinalSuffix(moneyClaimCase.payment_day)} day of each ${moneyClaimCase.rent_frequency === 'monthly' ? 'month' : 'payment period'}` : 'in accordance with the tenancy agreement'}.`,
 
-    arrears_calculation: `The Defendant has failed to pay rent as required. ${moneyClaimCase.arrears_schedule && moneyClaimCase.arrears_schedule.length > 0 ? 'A full schedule of arrears showing the rent due, rent paid, and arrears accruing for each period is attached to this claim.' : `As at today's date, the Defendant owes £${arrears} in rent arrears.`} ${moneyClaimCase.other_charges_notes || ''}`,
+    arrears_calculation: (() => {
+      let calc = 'The Defendant has failed to pay rent as required. ';
+      if (moneyClaimCase.arrears_schedule && moneyClaimCase.arrears_schedule.length > 0) {
+        calc += 'A full schedule of arrears showing the rent due, rent paid, and arrears accruing for each period is attached to this claim.';
+      } else {
+        calc += `As at today's date, the Defendant owes \u00A3${arrears} in rent arrears.`;
+      }
+      if (moneyClaimCase.other_charges_notes) {
+        calc += ' ' + moneyClaimCase.other_charges_notes;
+      }
+      return calc;
+    })(),
 
-    interest_claim: `The Claimant claims interest on the sum due ${isScotland ? 'at the rate of 8% per annum from the date of accrual of the debt' : 'pursuant to section 69 of the County Courts Act 1984 at the rate of ' + (moneyClaimCase.interest_rate || 8) + '% per annum from ' + (moneyClaimCase.interest_start_date || 'the date of issue') + ' to the date of judgment and thereafter at the judgment rate until payment'}.`,
+    interest_claim: (() => {
+      if (isScotland) {
+        return 'The Claimant claims interest on the sum due at the rate of 8% per annum from the date of accrual of the debt.';
+      } else {
+        const rate = moneyClaimCase.interest_rate || 8;
+        const startDate = moneyClaimCase.interest_start_date || 'the date of issue';
+        return `The Claimant claims interest on the sum due pursuant to section 69 of the County Courts Act 1984 at the rate of ${rate}% per annum from ${startDate} to the date of judgment and thereafter at the judgment rate until payment.`;
+      }
+    })(),
 
-    pre_action_summary: `${caseFacts.money_claim.lba_date ? `The Claimant sent a letter before action on ${caseFacts.money_claim.lba_date} by ${(caseFacts.money_claim.lba_method || []).join(' and ')}, giving the Defendant 14 days to pay or respond. ${caseFacts.money_claim.tenant_responded ? `The Defendant responded${caseFacts.money_claim.tenant_response_details ? ': ' + caseFacts.money_claim.tenant_response_details : ' but did not make payment or propose a satisfactory resolution.'}` : 'The Defendant did not respond or make payment.'}` : 'The Claimant has attempted to resolve this matter amicably but the Defendant has not paid the arrears.'}`,
+    pre_action_summary: (() => {
+      if (!caseFacts.money_claim.lba_date) {
+        return 'The Claimant has attempted to resolve this matter amicably but the Defendant has not paid the arrears.';
+      }
+      const methods = (caseFacts.money_claim.lba_method || []).join(' and ');
+      let summary = `The Claimant sent a letter before action on ${caseFacts.money_claim.lba_date} by ${methods}, giving the Defendant 14 days to pay or respond. `;
+      if (caseFacts.money_claim.tenant_responded) {
+        if (caseFacts.money_claim.tenant_response_details) {
+          summary += `The Defendant responded: ${caseFacts.money_claim.tenant_response_details}`;
+        } else {
+          summary += 'The Defendant responded but did not make payment or propose a satisfactory resolution.';
+        }
+      } else {
+        summary += 'The Defendant did not respond or make payment.';
+      }
+      return summary;
+    })(),
 
-    remedy_sought: `The Claimant seeks:\n1. Payment of the sum of £${arrears} being rent arrears.\n${moneyClaimCase.damage_items && moneyClaimCase.damage_items.length > 0 ? '2. Payment of damages as particularised.\n' : ''}${isScotland ? '3. Interest at 8% per annum.\n' : '3. Interest pursuant to section 69 of the County Courts Act 1984.\n'}4. Costs${isScotland ? '' : ' and court fees'}.`,
+    remedy_sought: (() => {
+      let remedy = `The Claimant seeks:\n1. Payment of the sum of \u00A3${arrears} being rent arrears.\n`;
+      if (moneyClaimCase.damage_items && moneyClaimCase.damage_items.length > 0) {
+        remedy += '2. Payment of damages as particularised.\n';
+      }
+      remedy += isScotland ? '3. Interest at 8% per annum.\n' : '3. Interest pursuant to section 69 of the County Courts Act 1984.\n';
+      remedy += isScotland ? '4. Costs.' : '4. Costs and court fees.';
+      return remedy;
+    })(),
   };
 
   // Evidence Index
@@ -234,7 +478,7 @@ function generateFallbackDrafts(
     {
       tab: 'Tab 2',
       title: 'Rent Account / Schedule of Arrears',
-      description: `A detailed schedule showing rent due, rent paid, and arrears accruing for each rental period from ${moneyClaimCase.tenancy_start_date || 'the start of the tenancy'} to present. This demonstrates the calculation of the total arrears of £${arrears}.`,
+      description: `A detailed schedule showing rent due, rent paid, and arrears accruing for each rental period from ${moneyClaimCase.tenancy_start_date || 'the start of the tenancy'} to present. This demonstrates the calculation of the total arrears of \u00A3${arrears}.`,
     },
     {
       tab: 'Tab 3',
@@ -275,7 +519,7 @@ function generateFallbackDrafts(
 
       if_no_response: `If the ${isScotland ? 'defender' : 'defendant'} does not respond within the time limit, you can apply for ${isScotland ? 'a decree by default' : 'default judgment'}. This will give you a judgment without a hearing, and you can then proceed with enforcement.`,
 
-      timeline: `Typical timeline: Issue (Day 0) → Service (Days 1-5) → ${isScotland ? 'Defender' : 'Defendant'} response deadline (Day ${isScotland ? '21' : '14'}) → Default judgment OR directions for hearing (Days 28-56) → Final hearing (Days 90-180).`,
+      timeline: `Typical timeline: Issue (Day 0) -> Service (Days 1-5) -> ${isScotland ? 'Defender' : 'Defendant'} response deadline (Day ${isScotland ? '21' : '14'}) -> Default judgment OR directions for hearing (Days 28-56) -> Final hearing (Days 90-180).`,
     };
   }
 
