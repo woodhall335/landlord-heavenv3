@@ -2,43 +2,43 @@
  * Wizard API - Get Case
  *
  * GET /api/wizard/case/[caseId]
- * Retrieves a specific case by ID for the authenticated user
+ * Retrieves a specific case by ID
  */
 
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
+
+type RouteParams = { caseId: string };
 
 export async function GET(
-  request: Request,
-  { params }: { params: { caseId: string } }
+  _request: NextRequest,
+  { params }: { params: RouteParams }
 ) {
   try {
-    const user = await requireServerAuth();
     const { caseId } = params;
-
-    if (!caseId) {
-      return NextResponse.json(
-        { error: 'Case ID is required' },
-        { status: 400 }
-      );
-    }
-
     const supabase = await createServerSupabaseClient();
 
-    // Fetch case scoped to the current user
-    const { data: caseData, error } = await supabase
-      .from('cases')
-      .select('*')
-      .eq('id', caseId)
-      .eq('user_id', user.id)
-      .single();
+    // Try to get a user, but don't fail if unauthenticated
+    let user: { id: string } | null = null;
+    try {
+      user = await requireServerAuth();
+    } catch {
+      user = null;
+    }
+
+    // Base query: case by id
+    let query = supabase.from('cases').select('*').eq('id', caseId);
+
+    // If logged in, also enforce ownership
+    if (user) {
+      query = query.eq('user_id', user.id);
+    }
+
+    const { data: caseData, error } = await query.single();
 
     if (error || !caseData) {
-      console.error('Case not found:', error);
-      return NextResponse.json(
-        { error: 'Case not found' },
-        { status: 404 }
-      );
+      console.error('Case not found or not accessible:', { error, caseId, userId: user?.id });
+      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
     return NextResponse.json(
@@ -48,14 +48,7 @@ export async function GET(
       },
       { status: 200 }
     );
-  } catch (error: any) {
-    if (error?.message === 'Unauthorized - Please log in') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
+  } catch (error) {
     console.error('Get case error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

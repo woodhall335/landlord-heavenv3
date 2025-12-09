@@ -1,8 +1,4 @@
-import { NextResponse } from 'next/server';
-import {
-  createServerSupabaseClient,
-  requireServerAuth,
-} from '@/lib/supabase/server';
+import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
@@ -12,23 +8,24 @@ type CaseRow = any;
 
 export async function GET(
   request: Request,
-  { params }: { params: { caseId: string } }
+  { params }: { params: Promise<{ caseId: string }> }
 ) {
   try {
-    const user = await requireServerAuth();
-    const { caseId } = params;
+    const { caseId } = await params;
 
     const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('cases')
       .select('*')
       .eq('id', caseId)
-      .eq('user_id', user.id)
       .single();
 
     if (error || !data) {
       console.error('Money claim preview case not found:', error);
-      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+      return new Response(JSON.stringify({ error: 'Case not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
     }
 
     const caseRow = data as CaseRow;
@@ -43,13 +40,32 @@ export async function GET(
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
     const moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
 
-    // Optionally you could have a lighter generator for preview, but using the same is fine.
+    // 🔮 This calls the full pack generator, which now includes AskHeaven AI drafting
     const pack = await generateMoneyClaimPack(moneyClaimCase);
 
-    // Pick a couple of key docs for preview (e.g. LBA + PoC)
-    const importantDocs = pack.documents.filter((doc) =>
-      ['Letter Before Action', 'Particulars of Claim'].includes(doc.title)
+    const allDocs = pack.documents || [];
+
+    // Helpful dev log – you can delete this once you're happy
+    console.log(
+      'Money claim preview docs:',
+      allDocs.map((d: any) => d.title)
     );
+
+    // Try to pick out LBA + PoC by title (case-insensitive, substring-friendly)
+    let importantDocs = allDocs.filter((doc: any) => {
+      const title = (doc.title || '').toLowerCase();
+      return (
+        title.includes('letter before') ||
+        title.includes('letter of claim') ||
+        title.includes('particulars of claim') ||
+        title.includes('simple procedure particulars')
+      );
+    });
+
+    // Fallback: if nothing matched, just show the first 2–3 documents
+    if (importantDocs.length === 0) {
+      importantDocs = allDocs.slice(0, 3);
+    }
 
     const chunks: string[] = [];
 
@@ -63,22 +79,33 @@ export async function GET(
       `<p style="font-size: 13px; color: #4b5563;">Showing a short preview of your Letter Before Action and Particulars of Claim. The full pack will include pre-action documents, court forms, a Schedule of Loss, an Evidence Index and post-issue guidance.</p>`
     );
 
-    for (const doc of importantDocs) {
-      const html = doc.html?.toString() || '';
-      const trimmed =
-        html.length > 5000
-          ? html.slice(0, 5000) + '\n\n… (preview truncated)'
-          : html;
+    if (importantDocs.length === 0) {
+      chunks.push(
+        `<p style="font-size: 13px; color: #b91c1c; margin-top: 16px;">No previewable documents were found in this pack. Please check the pack configuration.</p>`
+      );
+    } else {
+      for (const doc of importantDocs) {
+        const rawHtml = doc.html?.toString() || '';
+        const html =
+          rawHtml.trim().length === 0
+            ? `<p style="font-size: 13px; color: #6b7280;">No HTML preview is available for <strong>${doc.title}</strong> (this document may only exist as a PDF).</p>`
+            : rawHtml;
 
-      chunks.push(
-        `<hr style="margin: 24px 0; border: none; border-top: 1px solid #e5e7eb;" />`
-      );
-      chunks.push(
-        `<h2 style="font-size: 16px; margin-bottom: 6px;">${doc.title}</h2>`
-      );
-      chunks.push(
-        `<div style="font-size: 13px; color: #111827; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; background: #f9fafb;">${trimmed}</div>`
-      );
+        const trimmed =
+          html.length > 5000
+            ? html.slice(0, 5000) + '\n\n… (preview truncated)'
+            : html;
+
+        chunks.push(
+          `<hr style="margin: 24px 0; border: none; border-top: 1px solid #e5e7eb;" />`
+        );
+        chunks.push(
+          `<h2 style="font-size: 16px; margin-bottom: 6px;">${doc.title}</h2>`
+        );
+        chunks.push(
+          `<div style="font-size: 13px; color: #111827; border: 1px solid #e5e7eb; border-radius: 6px; padding: 12px; background: #f9fafb;">${trimmed}</div>`
+        );
+      }
     }
 
     chunks.push(
@@ -88,17 +115,18 @@ export async function GET(
 
     const htmlResponse = chunks.join('\n');
 
-    return new NextResponse(htmlResponse, {
+    return new Response(htmlResponse, {
       status: 200,
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-      },
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
     });
   } catch (err) {
     console.error('Money claim preview error:', err);
-    return NextResponse.json(
-      { error: 'Failed to generate money claim preview' },
-      { status: 500 }
+    return new Response(
+      JSON.stringify({ error: 'Failed to generate money claim preview' }),
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      }
     );
   }
 }
