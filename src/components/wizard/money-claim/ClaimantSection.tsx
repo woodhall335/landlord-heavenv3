@@ -32,7 +32,7 @@ export const ClaimantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => 
   };
 
   const referenceValue =
-    landlord.reference ?? facts.money_claim?.reference ?? '';
+    facts.money_claim?.reference ?? landlord.reference ?? '';
 
   return (
     <div className="space-y-4">

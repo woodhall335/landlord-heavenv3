@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 type Jurisdiction = 'england-wales' | 'scotland';
 
@@ -15,14 +15,53 @@ export const ReviewSection: React.FC<SectionProps> = ({
   caseId,
   jurisdiction,
 }) => {
-  const hasAnyFacts =
-    facts && typeof facts === 'object' && Object.keys(facts).length > 0;
+  const [downloading, setDownloading] = useState(false);
+  const [previewing, setPreviewing] = useState(false);
+
+  const handlePreview = async () => {
+    try {
+      setPreviewing(true);
+      // Open the HTML preview in a new tab/window
+      window.open(
+        `/api/money-claim/preview/${encodeURIComponent(caseId)}`,
+        '_blank'
+      );
+    } finally {
+      setPreviewing(false);
+    }
+  };
+
+  const handleGeneratePack = async () => {
+    try {
+      setDownloading(true);
+      const res = await fetch(
+        `/api/money-claim/pack/${encodeURIComponent(caseId)}`
+      );
+      if (!res.ok) {
+        console.error('Failed to generate money claim pack', await res.text());
+        alert('Sorry, there was a problem generating your pack.');
+        return;
+      }
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Money-Claim-Premium-${caseId}.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600">
-        This is a high-level review step. You’ll get a detailed Ask Heaven
-        analysis and full document bundle generation after completing the wizard.
+        This is a high-level review step. You’ll get an Ask Heaven analysis and a
+        full document bundle (pre-action, claim pack and guidance) when you
+        generate the premium pack.
       </p>
 
       <div className="space-y-2 rounded-md border border-gray-200 bg-gray-50 p-3 text-sm">
@@ -34,31 +73,30 @@ export const ReviewSection: React.FC<SectionProps> = ({
         </p>
       </div>
 
-      {hasAnyFacts && (
-        <div className="space-y-2 rounded-md border border-gray-100 bg-white p-3 text-xs text-gray-600">
-          <p className="font-semibold text-gray-700">
-            Wizard data captured so far
-          </p>
-          <p>
-            We&apos;ve captured structured information for this case across the
-            earlier sections. You can go back to edit any section before
-            generating your documents.
-          </p>
-          <details className="mt-1">
-            <summary className="cursor-pointer text-[11px] text-gray-500">
-              Technical view (for support / troubleshooting)
-            </summary>
-            <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap rounded bg-gray-50 p-2 text-[11px]">
-              {JSON.stringify(facts, null, 2)}
-            </pre>
-          </details>
-        </div>
-      )}
-
       <p className="text-sm text-gray-600">
-        Once you’re happy with the information provided in the earlier sections,
-        continue to generate your pre-action and claim packs.
+        Use the buttons below to preview the drafted documents and then download
+        your complete money-claim pack as a ZIP file.
       </p>
+
+      <div className="flex flex-wrap gap-3">
+        <button
+          type="button"
+          onClick={handlePreview}
+          disabled={previewing}
+          className="inline-flex items-center rounded-md border border-indigo-600 px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-indigo-50 disabled:opacity-60"
+        >
+          {previewing ? 'Preparing preview…' : 'Preview drafted pack'}
+        </button>
+
+        <button
+          type="button"
+          onClick={handleGeneratePack}
+          disabled={downloading}
+          className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
+        >
+          {downloading ? 'Generating pack…' : 'Generate & download premium pack'}
+        </button>
+      </div>
     </div>
   );
 };

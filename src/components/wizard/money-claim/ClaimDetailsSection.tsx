@@ -1,5 +1,3 @@
-// src/components/wizard/money-claim/ClaimDetailsSection.tsx
-
 'use client';
 
 import React from 'react';

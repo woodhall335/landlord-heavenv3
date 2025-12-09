@@ -94,9 +94,9 @@ export const DefendantSection: React.FC<SectionProps> = ({ facts, onUpdate }) =>
 
       <p className="text-xs text-gray-500">
         The service address for the defendant will usually be the let property
-        address you enter in the next section. If they should be served
-        somewhere else, you&apos;ll be able to explain that later in the court
-        details.
+        address you enter in the tenancy section. If they should be served
+        somewhere else, your pack will include wording to explain that to the
+        court.
       </p>
     </div>
   );
