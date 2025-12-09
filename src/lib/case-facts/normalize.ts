@@ -11,14 +11,30 @@ import { createEmptyCaseFacts } from './schema';
 /**
  * Helper to safely get a value from flat wizard facts using dot notation.
  * Supports legacy keys (e.g., landlord_name) and case_facts-prefixed MQS paths.
+ * Also supports nested object access (e.g., wizard.property.address_line1).
  */
 function getWizardValue(wizard: WizardFacts, key: string): any {
+  // First try direct key lookup (flat key with dots as string)
   const direct = wizard[key];
   if (direct !== undefined && direct !== null) return direct;
 
+  // Try normalized key
   const normalizedKey = key.replace(/^case_facts\./, '').replace(/\[(\d+)\]/g, '.$1');
   const normalizedValue = wizard[normalizedKey];
   if (normalizedValue !== undefined && normalizedValue !== null) return normalizedValue;
+
+  // Try nested object path navigation (for section-based wizards)
+  const parts = normalizedKey.split('.');
+  let current: any = wizard;
+  for (const part of parts) {
+    if (current && typeof current === 'object' && part in current) {
+      current = current[part];
+    } else {
+      current = null;
+      break;
+    }
+  }
+  if (current !== undefined && current !== null) return current;
 
   return null;
 }
