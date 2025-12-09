@@ -91,7 +91,10 @@ export const PreActionSection: React.FC<SectionProps> = ({
               Array.isArray(moneyClaim.pap_documents_sent) &&
               moneyClaim.pap_documents_sent.length > 0
                 ? 'yes'
-                : moneyClaim.pap_documents_sent === false
+                : moneyClaim.pap_documents_sent === false ||
+                  moneyClaim.pap_documents_sent === null ||
+                  (Array.isArray(moneyClaim.pap_documents_sent) &&
+                    moneyClaim.pap_documents_sent.length === 0)
                 ? 'no'
                 : ''
             }
@@ -100,7 +103,9 @@ export const PreActionSection: React.FC<SectionProps> = ({
                 'pap_documents_sent',
                 e.target.value === 'yes'
                   ? ['info_sheet', 'reply_form', 'arrears_sheet']
-                  : [],
+                  : e.target.value === 'no'
+                  ? false
+                  : null,
               )
             }
           >

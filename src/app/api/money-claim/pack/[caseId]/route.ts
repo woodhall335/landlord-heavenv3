@@ -14,11 +14,11 @@ type CaseRow = any;
 
 export async function GET(
   request: Request,
-  { params }: { params: { caseId: string } }
+  { params }: { params: Promise<{ caseId: string }> }
 ) {
   try {
     const user = await requireServerAuth();
-    const { caseId } = params;
+    const { caseId } = await params;
 
     const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase

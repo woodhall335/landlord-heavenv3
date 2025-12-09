@@ -73,11 +73,23 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
     };
   }, [caseId]);
 
-    const handleUpdateFacts = async (updates: Record<string, any>) => {
-    const next = {
-      ...facts,
-      ...updates,
-    };
+  const handleUpdateFacts = async (updates: Record<string, any>) => {
+    // Deep merge to preserve existing nested fields
+    const next = { ...facts };
+
+    for (const [key, value] of Object.entries(updates)) {
+      if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
+        // Merge nested objects
+        next[key] = {
+          ...(next[key] || {}),
+          ...value,
+        };
+      } else {
+        // Direct assignment for primitives and arrays
+        next[key] = value;
+      }
+    }
+
     setFacts(next);
 
     try {
