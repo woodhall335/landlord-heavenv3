@@ -60,7 +60,7 @@ export async function getCaseFacts(caseId: string): Promise<any> {
   }
 }
 
-// Save facts via /api/wizard/checkpoint, in the shape that route expects
+// Save facts via /api/wizard/save-facts, which persists to the database
 export async function saveCaseFacts(
   caseId: string,
   facts: any,
@@ -81,25 +81,21 @@ export async function saveCaseFacts(
   };
 
   try {
-    const res = await fetch('/api/wizard/checkpoint', {
+    const res = await fetch('/api/wizard/save-facts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
       body: JSON.stringify({
+        case_id: caseId,
         facts: enrichedFacts,
-        jurisdiction,
-        case_type: caseType,
-        product,
       }),
     });
 
-    // Note: your checkpoint route does NOT enforce auth, so 401 here
-    // would only happen if you later add auth middleware.
     if (res.status === 401) {
       console.warn(
-        '[wizard] Unauthorized saving wizard checkpoint – likely unauthenticated. ' +
+        '[wizard] Unauthorized saving wizard facts – likely unauthenticated. ' +
           'Changes will not be persisted.'
       );
       return;
@@ -107,21 +103,20 @@ export async function saveCaseFacts(
 
     if (!res.ok) {
       console.error(
-        'Failed to save wizard checkpoint:',
+        'Failed to save wizard facts:',
         res.status,
         res.statusText
       );
       return;
     }
 
-    // We don't actually care about the response body in the wizard UI,
-    // but consume it to avoid unhandled promise rejections.
+    // Consume response to avoid unhandled promise rejections
     try {
       await res.json();
     } catch {
       // ignore non-JSON responses
     }
   } catch (err) {
-    console.error('Error calling /api/wizard/checkpoint:', err);
+    console.error('Error calling /api/wizard/save-facts:', err);
   }
 }
