@@ -137,11 +137,10 @@ function getCompletenessHint(
   let totalFields = 0;
   let providedFields = 0;
 
-  // Check critical fields for all jurisdictions
   const criticalFields = [
     { path: 'parties.landlord.name', label: 'Landlord name' },
     { path: 'parties.tenants', label: 'Tenant details' },
-    { path: 'property.address.line1', label: 'Property address' },
+    { path: 'property.address_line1', label: 'Property address' }, // ✅ matches CaseFacts
     { path: 'tenancy.start_date', label: 'Tenancy start date' },
     { path: 'tenancy.rent_amount', label: 'Rent amount' },
   ];

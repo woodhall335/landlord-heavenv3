@@ -121,7 +121,20 @@ export const UploadField: React.FC<UploadFieldProps> = ({
           body: formData,
         });
 
-        const data = await response.json();
+        let data: any = null;
+        try {
+          data = await response.json();
+        } catch {
+          // Non-JSON or empty body – we'll fall back to generic messages below
+        }
+
+        if (response.status === 401) {
+          throw new Error('Please sign in to upload evidence for this case.');
+        }
+
+        if (response.status === 403) {
+          throw new Error("You don't have permission to upload evidence to this case.");
+        }
 
         if (!response.ok || !data?.success) {
           throw new Error(data?.error || 'Failed to upload file');

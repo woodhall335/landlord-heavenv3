@@ -10,6 +10,7 @@
 import React, { Suspense, useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { StructuredWizard } from '@/components/wizard/StructuredWizard';
+import { MoneyClaimSectionFlow } from '@/components/wizard/flows/MoneyClaimSectionFlow';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
@@ -62,7 +63,7 @@ function WizardFlowContent() {
     return null;
   })();
 
-  // Initialize case for structured wizard (all case types now use structured flows)
+  // Initialize case for structured wizard / section flows
   const startStructuredWizard = useCallback(async () => {
     if (hasStartedRef.current) return;
     hasStartedRef.current = true;
@@ -153,7 +154,7 @@ function WizardFlowContent() {
       return;
     }
 
-    // All supported case types now use the structured wizard
+    // All supported case types now use structured / section flows
     if (type === 'tenancy_agreement' || type === 'money_claim' || type === 'eviction') {
       void startStructuredWizard();
     } else if (editCaseId) {
@@ -185,22 +186,39 @@ function WizardFlowContent() {
     }
   };
 
-  // Use structured wizard for all supported case types
-  if (type === 'tenancy_agreement' || type === 'money_claim' || type === 'eviction') {
-    if (loading || !caseId) {
-      return (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-600">Initializing wizard...</p>
-            {startError ? (
-              <p className="text-sm text-red-600 text-center max-w-md">{startError}</p>
-            ) : null}
-          </div>
+  // Show loading state while initializing
+  if (loading || !caseId) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          <p className="text-gray-600">Initializing wizard...</p>
+          {startError ? (
+            <p className="text-sm text-red-600 text-center max-w-md">{startError}</p>
+          ) : null}
         </div>
-      );
-    }
+      </div>
+    );
+  }
 
+  // 🟦 NEW: For money_claim, use the section-based premium flow
+  if (type === 'money_claim') {
+    // We only support money claims for England & Wales + Scotland
+    const sectionJurisdiction =
+      jurisdiction === 'england-wales' || jurisdiction === 'scotland'
+        ? jurisdiction
+        : 'england-wales';
+
+    return (
+      <MoneyClaimSectionFlow
+        caseId={caseId}
+        jurisdiction={sectionJurisdiction}
+      />
+    );
+  }
+
+  // Use existing StructuredWizard for tenancy agreements and evictions
+  if (type === 'tenancy_agreement' || type === 'eviction') {
     return (
       <StructuredWizard
         caseId={caseId}
@@ -208,9 +226,7 @@ function WizardFlowContent() {
         jurisdiction={jurisdiction}
         product={
           askHeavenProduct ??
-          (type === 'money_claim'
-            ? 'money_claim'
-            : type === 'tenancy_agreement'
+          (type === 'tenancy_agreement'
             ? 'tenancy_agreement'
             : 'complete_pack')
         }
