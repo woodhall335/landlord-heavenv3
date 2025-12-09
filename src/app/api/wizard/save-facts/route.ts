@@ -1,146 +1,130 @@
-// src/lib/wizard/facts-client.ts
-
 /**
- * Lightweight client helpers for loading / saving wizard facts
- * for use in the section-based wizard flows (money claim, eviction, tenancy).
+ * Wizard API - Save Facts
  *
- * - getCaseFacts: GET /api/wizard/case/[id]
- *   Returns whatever the API exposes, normalised to a facts object.
- *
- * - saveCaseFacts: POST /api/wizard/save-facts
- *   Pure persistence only – merges into cases.collected_facts on the server.
- *
- * The decision / analysis endpoint remains:
- *   POST /api/wizard/checkpoint
- * and should be called explicitly from places that need live analysis
- * (e.g. Ask Heaven, review panels), not on every keystroke.
+ * POST /api/wizard/save-facts
+ * Persists wizard facts to the cases table
  */
 
-// These are still useful for callers that want to run checkpoint analysis.
-export type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement' | null;
-export type Jurisdiction = 'england-wales' | 'scotland' | 'northern-ireland' | null;
-export type Product =
-  | 'notice_only'
-  | 'complete_pack'
-  | 'money_claim'
-  | 'tenancy_agreement'
-  | null;
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export interface SaveFactsMeta {
-  jurisdiction: Jurisdiction;
-  caseType: CaseType;
-  product: Product;
-}
-
-/**
- * Load current facts for a wizard case
- */
-export async function getCaseFacts(caseId: string): Promise<any> {
-  const res = await fetch(`/api/wizard/case/${encodeURIComponent(caseId)}`, {
-    method: 'GET',
-  });
-
-  if (!res.ok) {
-    console.error('Failed to load wizard case:', res.status, res.statusText);
-    throw new Error('Failed to load wizard case');
-  }
-
-  const data = await res.json();
-
-  // The route may return either:
-  // - { success, case: {...} }
-  // - or the case row directly
-  const caseRow = data?.case ?? data;
-
-  return (
-    caseRow?.wizard_facts ||
-    caseRow?.collected_facts ||
-    caseRow?.facts ||
-    caseRow?.case_facts ||
-    {}
-  );
-}
-
-/**
- * Persist wizard facts.
- *
- * This hits /api/wizard/save-facts which:
- * - loads the case row
- * - deep-merges into collected_facts
- * - keeps __meta.case_id / __meta.jurisdiction coherent
- */
-export async function saveCaseFacts(caseId: string, facts: any): Promise<void> {
+export async function POST(request: NextRequest) {
   try {
-    const res = await fetch('/api/wizard/save-facts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        case_id: caseId,
-        facts,
-      }),
-    });
+    const body = await request.json();
+    const { case_id, facts } = body;
 
-    if (!res.ok) {
-      const text = await res.text().catch(() => '');
-      console.error(
-        'Failed to save wizard facts:',
-        res.status,
-        res.statusText,
-        text
+    if (!case_id) {
+      return NextResponse.json(
+        { error: 'case_id is required' },
+        { status: 400 }
       );
     }
-  } catch (err) {
-    console.error('Error calling /api/wizard/save-facts:', err);
-  }
-}
 
-/**
- * Optional helper: run the decision-engine checkpoint explicitly.
- * Call this from places that want live legal analysis (e.g. Ask Heaven).
- */
-export async function runCheckpoint(
-  facts: any,
-  meta: SaveFactsMeta
-): Promise<any | null> {
-  const { jurisdiction, caseType, product } = meta;
+    if (!facts || typeof facts !== 'object') {
+      return NextResponse.json(
+        { error: 'facts must be an object' },
+        { status: 400 }
+      );
+    }
 
-  if (!jurisdiction) {
-    console.warn(
-      'runCheckpoint called without jurisdiction – skipping checkpoint call.'
+    const supabase = await createServerSupabaseClient();
+
+    // Try to get the user (but don't require auth for wizard saves)
+    const { data: { user } } = await supabase.auth.getUser();
+
+    // First, check if the case exists
+    let query = supabase
+      .from('cases')
+      .select('id, user_id, collected_facts')
+      .eq('id', case_id);
+
+    // If logged in, also check ownership
+    if (user) {
+      query = query.eq('user_id', user.id);
+    }
+
+    const { data: existingCase, error: fetchError } = await query.single();
+
+    if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = not found
+      console.error('Error fetching case:', fetchError);
+      return NextResponse.json(
+        { error: 'Failed to fetch case' },
+        { status: 500 }
+      );
+    }
+
+    // Deep merge the new facts with existing facts
+    const existingFacts = existingCase?.collected_facts || {};
+    const mergedFacts = {
+      ...existingFacts,
+      ...facts,
+      __meta: {
+        ...(existingFacts?.__meta || {}),
+        ...(facts?.__meta || {}),
+        case_id,
+        updated_at: new Date().toISOString(),
+      },
+    };
+
+    if (existingCase) {
+      // Update existing case
+      const { error: updateError } = await supabase
+        .from('cases')
+        .update({
+          collected_facts: mergedFacts,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', case_id);
+
+      if (updateError) {
+        console.error('Error updating case facts:', updateError);
+        return NextResponse.json(
+          { error: 'Failed to save facts' },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: 'Facts saved successfully',
+      });
+    } else {
+      // Case doesn't exist - need to create it
+      // Extract metadata from facts to set up the case
+      const meta = facts?.__meta || {};
+      const jurisdiction = meta.jurisdiction || 'england-wales';
+      const caseType = meta.case_type || 'money_claim';
+
+      // Allow anonymous case creation (user_id can be null for "try before you buy")
+      const { error: insertError } = await supabase
+        .from('cases')
+        .insert({
+          id: case_id,
+          user_id: user?.id || null, // Allow null for anonymous users
+          case_type: caseType,
+          jurisdiction: jurisdiction,
+          collected_facts: mergedFacts,
+          status: 'in_progress',
+        });
+
+      if (insertError) {
+        console.error('Error creating case:', insertError);
+        return NextResponse.json(
+          { error: 'Failed to create case' },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: 'Case created and facts saved successfully',
+      });
+    }
+  } catch (error) {
+    console.error('Save facts error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
     );
-    return null;
-  }
-
-  try {
-    const res = await fetch('/api/wizard/checkpoint', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        facts,
-        jurisdiction,
-        case_type: caseType,
-        product,
-      }),
-    });
-
-    if (!res.ok) {
-      const text = await res.text().catch(() => '');
-      console.error(
-        'Checkpoint call failed:',
-        res.status,
-        res.statusText,
-        text
-      );
-      return null;
-    }
-
-    return await res.json();
-  } catch (err) {
-    console.error('Error calling /api/wizard/checkpoint:', err);
-    return null;
   }
 }

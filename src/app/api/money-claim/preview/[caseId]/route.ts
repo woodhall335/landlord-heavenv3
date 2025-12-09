@@ -14,11 +14,25 @@ export async function GET(
     const { caseId } = await params;
 
     const supabase = await createServerSupabaseClient();
-    const { data, error } = await supabase
+
+    // Try to get the current user (but allow anonymous access)
+    const { data: { user } } = await supabase.auth.getUser();
+
+    // Build query to allow viewing own cases or anonymous cases
+    let query = supabase
       .from('cases')
       .select('*')
-      .eq('id', caseId)
-      .single();
+      .eq('id', caseId);
+
+    // If logged in, allow viewing owned cases or anonymous cases
+    if (user) {
+      query = query.or(`user_id.eq.${user.id},user_id.is.null`);
+    } else {
+      // If not logged in, only allow viewing anonymous cases
+      query = query.is('user_id', null);
+    }
+
+    const { data, error } = await query.single();
 
     if (error || !data) {
       console.error('Money claim preview case not found:', error);

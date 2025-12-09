@@ -29,9 +29,12 @@ export async function GET(
     // Base query: case by id
     let query = supabase.from('cases').select('*').eq('id', caseId);
 
-    // If logged in, also enforce ownership
+    // If logged in, enforce ownership OR allow anonymous cases (user_id IS NULL)
     if (user) {
-      query = query.eq('user_id', user.id);
+      query = query.or(`user_id.eq.${user.id},user_id.is.null`);
+    } else {
+      // If not logged in, only show anonymous cases
+      query = query.is('user_id', null);
     }
 
     const { data: caseData, error } = await query.single();
