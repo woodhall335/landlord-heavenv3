@@ -31,7 +31,7 @@ function parseGround(option: string): { code: string; title: string } {
   return { code, title };
 }
 
-function mapSection8Grounds(facts: CaseFacts, evictionRoute: any): GroundClaim[] {
+function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
   const selections = facts.issues.section8_grounds.selected_grounds || [];
   return selections.map((selection) => {
     const { code, title } = parseGround(selection);
@@ -82,7 +82,7 @@ function buildEvictionCaseFromFacts(
   );
 
   const caseType = deriveCaseType(evictionRoute || facts.notice.notice_type);
-  const grounds = mapSection8Grounds(facts, evictionRoute);
+  const grounds = mapSection8Grounds(facts);
 
   const evictionCase: EvictionCase = {
     case_id: caseId,

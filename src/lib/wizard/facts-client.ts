@@ -4,7 +4,7 @@
  * Lightweight client helpers for loading / saving wizard facts
  * for use in the section-based Money Claim flow.
  *
- * These wrap your existing /api/wizard/case/[id] and /api/wizard/checkpoint routes.
+ * These wrap your existing /api/wizard/case/[caseId] and /api/wizard/checkpoint routes.
  */
 
 // What the checkpoint route needs (mirrors the route’s Zod schema)
@@ -20,27 +20,44 @@ interface SaveFactsMeta {
 
 // Load current facts for a wizard case
 export async function getCaseFacts(caseId: string): Promise<any> {
-  const res = await fetch(`/api/wizard/case/${encodeURIComponent(caseId)}`, {
-    method: 'GET',
-  });
+  try {
+    const res = await fetch(`/api/wizard/case/${encodeURIComponent(caseId)}`, {
+      method: 'GET',
+      credentials: 'include', // send cookies / session to Next API route
+    });
 
-  if (!res.ok) {
-    console.error('Failed to load wizard case:', res.status, res.statusText);
-    throw new Error('Failed to load wizard case');
+    // Unauthenticated or missing case → treat as "no saved facts yet"
+    if (res.status === 401 || res.status === 404) {
+      console.info(
+        '[wizard] No existing wizard case facts (status',
+        res.status,
+        ') – starting with empty facts'
+      );
+      return {};
+    }
+
+    if (!res.ok) {
+      console.error('Failed to load wizard case:', res.status, res.statusText);
+      throw new Error(`Failed to load wizard case (${res.status})`);
+    }
+
+    const data = await res.json();
+
+    // Route returns { success, case }, but be tolerant if this changes
+    const caseRow = data?.case ?? data;
+
+    return (
+      caseRow?.wizard_facts ||
+      caseRow?.collected_facts ||
+      caseRow?.facts ||
+      caseRow?.case_facts ||
+      {}
+    );
+  } catch (err) {
+    // Network/unexpected error – log once and fall back to empty
+    console.error('Error calling /api/wizard/case:', err);
+    return {};
   }
-
-  const data = await res.json();
-
-  // The route returns { success, case }, with facts nested under case
-  const caseRow = data?.case ?? data;
-
-  return (
-    caseRow?.wizard_facts ||
-    caseRow?.collected_facts ||
-    caseRow?.facts ||
-    caseRow?.case_facts ||
-    {}
-  );
 }
 
 // Save facts via /api/wizard/checkpoint, in the shape that route expects
@@ -51,7 +68,7 @@ export async function saveCaseFacts(
 ): Promise<void> {
   const { jurisdiction, caseType, product } = meta;
 
-  // Make sure __meta is populated – this is useful later for generators
+  // Ensure __meta is populated for downstream generators / audit
   const enrichedFacts = {
     ...facts,
     __meta: {
@@ -69,6 +86,7 @@ export async function saveCaseFacts(
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
       body: JSON.stringify({
         facts: enrichedFacts,
         jurisdiction,
@@ -77,8 +95,31 @@ export async function saveCaseFacts(
       }),
     });
 
+    // Note: your checkpoint route does NOT enforce auth, so 401 here
+    // would only happen if you later add auth middleware.
+    if (res.status === 401) {
+      console.warn(
+        '[wizard] Unauthorized saving wizard checkpoint – likely unauthenticated. ' +
+          'Changes will not be persisted.'
+      );
+      return;
+    }
+
     if (!res.ok) {
-      console.error('Failed to save wizard checkpoint:', res.status, res.statusText);
+      console.error(
+        'Failed to save wizard checkpoint:',
+        res.status,
+        res.statusText
+      );
+      return;
+    }
+
+    // We don't actually care about the response body in the wizard UI,
+    // but consume it to avoid unhandled promise rejections.
+    try {
+      await res.json();
+    } catch {
+      // ignore non-JSON responses
     }
   } catch (err) {
     console.error('Error calling /api/wizard/checkpoint:', err);

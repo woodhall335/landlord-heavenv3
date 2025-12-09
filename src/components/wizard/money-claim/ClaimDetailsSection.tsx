@@ -22,176 +22,153 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
   const updateMoneyClaim = (field: string, value: any) => {
     onUpdate({
       money_claim: {
-        ...moneyClaim,
+        ...(facts.money_claim || {}),
         [field]: value,
       },
     });
   };
 
-  const primaryIssue = moneyClaim.primary_issue || '';
   const basisOfClaim = moneyClaim.basis_of_claim || '';
-  const tenantStillInProperty =
-    typeof moneyClaim.tenant_still_in_property === 'boolean'
-      ? moneyClaim.tenant_still_in_property
-      : null;
-  const otherAmountsTypes: string[] = Array.isArray(moneyClaim.other_amounts_types)
-    ? moneyClaim.other_amounts_types
-    : [];
   const otherAmountsSummary = moneyClaim.other_amounts_summary || '';
+  const chargeInterest = moneyClaim.charge_interest ?? null;
+  const interestStartDate = moneyClaim.interest_start_date || '';
+  const interestRate =
+    moneyClaim.interest_rate !== undefined && moneyClaim.interest_rate !== null
+      ? String(moneyClaim.interest_rate)
+      : '';
 
-  const toggleOtherAmountType = (value: string) => {
-    const set = new Set(otherAmountsTypes);
-    if (set.has(value)) {
-      set.delete(value);
-    } else {
-      set.add(value);
-    }
-    updateMoneyClaim('other_amounts_types', Array.from(set));
-  };
+  const isEnglandWales = jurisdiction === 'england-wales';
 
   return (
     <div className="space-y-6">
       <p className="text-sm text-gray-600">
-        This section gives the court a clear overview of what your money claim is about
-        and why the tenant owes you money. We&apos;ll use this to draft the legal
-        summary and particulars of claim for{' '}
-        {jurisdiction === 'england-wales' ? 'England & Wales' : 'Scotland'}.
+        This section captures the high-level story of your claim. Ask Heaven will
+        use this, together with your arrears and tenancy details, to draft the
+        Letter Before Action and Particulars of Claim.
       </p>
 
-      {/* Primary issue */}
+      {/* Core claim narrative */}
       <div className="space-y-2">
         <label className="text-sm font-medium text-charcoal">
-          What is this claim mainly about?
+          Briefly describe what this claim is about
         </label>
-        <p className="text-xs text-gray-500">
-          This helps us frame your claim correctly on the court forms and in the
-          particulars of claim.
-        </p>
-        <select
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-          value={primaryIssue}
-          onChange={(e) => updateMoneyClaim('primary_issue', e.target.value || null)}
-        >
-          <option value="">Select one option</option>
-          <option value="unpaid_rent_only">Unpaid rent only</option>
-          <option value="unpaid_rent_and_damage">
-            Unpaid rent and damage / other costs
-          </option>
-          <option value="damage_only">Damage / other costs only (no rent arrears)</option>
-          <option value="other_debt">Other debt owed by the tenant</option>
-        </select>
-      </div>
-
-      {/* Basis of claim */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between gap-2">
-          <label className="text-sm font-medium text-charcoal">
-            Briefly explain what this claim is about
-          </label>
-          <span className="text-xs text-gray-500">
-            This wording is used in the particulars of claim.
-          </span>
-        </div>
         <textarea
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[120px]"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[140px]"
           value={basisOfClaim}
           onChange={(e) => updateMoneyClaim('basis_of_claim', e.target.value)}
-          placeholder="For example: The defendant is my former tenant at [property address]. They have failed to pay rent since [month/year] and left the property owing £[amount] in rent and causing damage to the carpets and doors…"
+          placeholder="For example: This claim is for rent arrears and related charges under an assured shorthold tenancy of 10 High Street, Manchester..."
         />
         <p className="text-xs text-gray-500">
-          You can keep this in plain English. Later we&apos;ll help you turn this into
-          a court-ready legal summary.
+          Focus on the big picture: what the tenancy is, how the arrears arose,
+          and what you are asking the court to do. Ask Heaven will turn this into
+          a solicitor-style narrative later.
         </p>
       </div>
 
-      {/* Occupancy status */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-charcoal">
-          Is the tenant still living in the property?
-        </label>
-        <p className="text-xs text-gray-500">
-          This affects how we describe the claim and how we explain your losses.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={() => updateMoneyClaim('tenant_still_in_property', true)}
-            className={`rounded-md border px-3 py-1.5 text-sm ${
-              tenantStillInProperty === true
-                ? 'border-primary bg-primary/5 text-primary'
-                : 'border-gray-300 text-gray-700'
-            }`}
-          >
-            Yes, they are still living there
-          </button>
-          <button
-            type="button"
-            onClick={() => updateMoneyClaim('tenant_still_in_property', false)}
-            className={`rounded-md border px-3 py-1.5 text-sm ${
-              tenantStillInProperty === false
-                ? 'border-primary bg-primary/5 text-primary'
-                : 'border-gray-300 text-gray-700'
-            }`}
-          >
-            No, they have left the property
-          </button>
-        </div>
-      </div>
+      {/* Interest (statutory) */}
+      {isEnglandWales && (
+        <div className="space-y-3 rounded-md border border-gray-200 bg-gray-50 p-3">
+          <h3 className="text-sm font-medium text-charcoal">
+            Statutory interest (section 69 County Courts Act 1984)
+          </h3>
+          <p className="text-xs text-gray-600">
+            Most money claims include simple interest at 8% per year on the
+            outstanding balance. If you&apos;re unsure, you can select yes and Ask
+            Heaven will draft the interest wording for you.
+          </p>
 
-      {/* Other amounts claimed */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-charcoal">
-          Are you also claiming for any of the following?
-        </label>
-        <p className="text-xs text-gray-500">
-          Tick all that apply. We&apos;ll use this to build a detailed schedule of
-          damages and costs.
-        </p>
+          <div className="grid gap-3 md:grid-cols-3">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-charcoal">
+                Add statutory interest?
+              </label>
+              <select
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                value={
+                  chargeInterest === true
+                    ? 'yes'
+                    : chargeInterest === false
+                    ? 'no'
+                    : ''
+                }
+                onChange={(e) => {
+                  const v = e.target.value;
+                  if (v === 'yes') {
+                    updateMoneyClaim('charge_interest', true);
+                  } else if (v === 'no') {
+                    updateMoneyClaim('charge_interest', false);
+                  } else {
+                    updateMoneyClaim('charge_interest', null);
+                  }
+                }}
+              >
+                <option value="">Select</option>
+                <option value="yes">Yes, add statutory interest</option>
+                <option value="no">No, I don&apos;t want to claim interest</option>
+              </select>
+            </div>
 
-        <div className="grid gap-2 md:grid-cols-2">
-          {[
-            { value: 'property_damage', label: 'Property damage (repairs / replacements)' },
-            { value: 'cleaning', label: 'Cleaning or rubbish removal' },
-            { value: 'unpaid_utilities', label: 'Unpaid utilities in your name' },
-            { value: 'unpaid_council_tax', label: 'Unpaid council tax in your name' },
-            { value: 'legal_costs', label: 'Legal or tracing costs' },
-            { value: 'other_charges', label: 'Other charges or losses' },
-          ].map((item) => (
-            <label
-              key={item.value}
-              className="flex cursor-pointer items-center gap-2 rounded-md border border-gray-200 bg-gray-50 px-3 py-2 text-sm"
-            >
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-charcoal">
+                Interest start date
+              </label>
               <input
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300"
-                checked={otherAmountsTypes.includes(item.value)}
-                onChange={() => toggleOtherAmountType(item.value)}
+                type="date"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                value={interestStartDate}
+                onChange={(e) =>
+                  updateMoneyClaim('interest_start_date', e.target.value)
+                }
+                disabled={chargeInterest !== true}
               />
-              <span className="text-gray-800">{item.label}</span>
-            </label>
-          ))}
-        </div>
-      </div>
+              <p className="text-[11px] text-gray-500">
+                Usually the date of the first missed rent instalment.
+              </p>
+            </div>
 
-      {/* Free-text explanation for other amounts */}
-      <div className="space-y-2">
-        <div className="flex items-center justify-between gap-2">
-          <label className="text-sm font-medium text-charcoal">
-            Any damage, costs or other amounts you are also claiming
-          </label>
-          <span className="text-xs text-gray-500">
-            We&apos;ll convert this into a structured schedule later.
-          </span>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-charcoal">
+                Interest rate (% per year)
+              </label>
+              <input
+                type="number"
+                min={0}
+                step="0.1"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                value={interestRate}
+                onChange={(e) =>
+                  updateMoneyClaim(
+                    'interest_rate',
+                    e.target.value ? Number(e.target.value) : null
+                  )
+                }
+                disabled={chargeInterest !== true}
+              />
+              <p className="text-[11px] text-gray-500">
+                Default statutory rate is 8% simple interest.
+              </p>
+            </div>
+          </div>
         </div>
+      )}
+
+      {/* Other amounts and narrative */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-charcoal">
+          Anything else you&apos;re claiming (damages, costs, other sums)
+        </label>
         <textarea
           className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[120px]"
           value={otherAmountsSummary}
-          onChange={(e) => updateMoneyClaim('other_amounts_summary', e.target.value)}
-          placeholder="For example: £450 to replace damaged bedroom carpet, £120 for deep cleaning, £80 unpaid water bill, £60 locksmith fee…"
+          onChange={(e) =>
+            updateMoneyClaim('other_amounts_summary', e.target.value)
+          }
+          placeholder="For example: £450 to replace damaged flooring, £120 cleaning, £80 unpaid water bill..."
         />
         <p className="text-xs text-gray-500">
-          If you&apos;re not sure how to word this, you&apos;ll be able to ask Ask Heaven
-          for help later.
+          You&apos;ll break down the exact figures in the arrears and damages
+          sections. This text gives Ask Heaven context for the Particulars of
+          Claim and Schedule of Loss.
         </p>
       </div>
     </div>

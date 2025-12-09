@@ -12,7 +12,7 @@ interface SectionProps {
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
-export const TenancySection: React.FC<SectionProps> = ({
+export const TimelineSection: React.FC<SectionProps> = ({
   facts,
   jurisdiction,
   onUpdate,

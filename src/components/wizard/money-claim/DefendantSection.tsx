@@ -10,11 +10,13 @@ interface SectionProps {
 export const DefendantSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
   const tenants = facts.parties?.tenants || [];
   const mainTenant = tenants[0] || {};
+  const secondTenant = tenants[1] || {};
 
-  const updateMainTenant = (field: string, value: string) => {
+  const updateTenant = (index: number, field: string, value: string) => {
     const updatedTenants = [...tenants];
-    updatedTenants[0] = {
-      ...mainTenant,
+    const existing = updatedTenants[index] || {};
+    updatedTenants[index] = {
+      ...existing,
       [field]: value,
     };
 
@@ -29,42 +31,73 @@ export const DefendantSection: React.FC<SectionProps> = ({ facts, onUpdate }) =>
   return (
     <div className="space-y-4">
       <p className="text-sm text-gray-600">
-        Tell us about the tenant (defendant). You can add additional defendants in a later upgrade.
+        These are the people or companies you are claiming against. They will
+        appear as the &quot;Defendant&quot;(s) on the court papers.
       </p>
 
       <div className="space-y-1">
-        <label className="text-sm font-medium text-charcoal">Defendant full name</label>
+        <label className="text-sm font-medium text-charcoal">
+          Defendant full name
+        </label>
         <input
           type="text"
           className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
           value={mainTenant.name || ''}
-          onChange={(e) => updateMainTenant('name', e.target.value)}
+          onChange={(e) => updateTenant(0, 'name', e.target.value)}
+          placeholder="e.g. John Tenant"
         />
+        <p className="text-xs text-gray-500">
+          Match the tenant&apos;s legal name as shown on the tenancy agreement.
+        </p>
       </div>
 
       <div className="space-y-1">
         <label className="text-sm font-medium text-charcoal">
-          Defendant email <span className="text-xs text-gray-500">(if known)</span>
+          Second defendant (if joint tenant)
         </label>
         <input
-          type="email"
+          type="text"
           className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-          value={mainTenant.email || ''}
-          onChange={(e) => updateMainTenant('email', e.target.value)}
+          value={secondTenant.name || ''}
+          onChange={(e) => updateTenant(1, 'name', e.target.value)}
+          placeholder="Leave blank if there is only one tenant"
         />
       </div>
 
-      <div className="space-y-1">
-        <label className="text-sm font-medium text-charcoal">
-          Defendant phone <span className="text-xs text-gray-500">(if known)</span>
-        </label>
-        <input
-          type="tel"
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
-          value={mainTenant.phone || ''}
-          onChange={(e) => updateMainTenant('phone', e.target.value)}
-        />
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-charcoal">
+            Defendant email (if known)
+          </label>
+          <input
+            type="email"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            value={mainTenant.email || ''}
+            onChange={(e) => updateTenant(0, 'email', e.target.value)}
+            placeholder="Used for arrears discussions or correspondence"
+          />
+        </div>
+
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-charcoal">
+            Defendant phone (if known)
+          </label>
+          <input
+            type="tel"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+            value={mainTenant.phone || ''}
+            onChange={(e) => updateTenant(0, 'phone', e.target.value)}
+            placeholder="Daytime number used when discussing payment"
+          />
+        </div>
       </div>
+
+      <p className="text-xs text-gray-500">
+        The service address for the defendant will usually be the let property
+        address you enter in the next section. If they should be served
+        somewhere else, you&apos;ll be able to explain that later in the court
+        details.
+      </p>
     </div>
   );
 };

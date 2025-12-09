@@ -1,8 +1,8 @@
 /**
  * Wizard API - Get Case
  *
- * GET /api/wizard/case/[id]
- * Retrieves a specific case by ID
+ * GET /api/wizard/case/[caseId]
+ * Retrieves a specific case by ID for the authenticated user
  */
 
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
@@ -10,18 +10,26 @@ import { NextResponse } from 'next/server';
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { caseId: string } }
 ) {
   try {
     const user = await requireServerAuth();
-    const { id } = await params;
+    const { caseId } = params;
+
+    if (!caseId) {
+      return NextResponse.json(
+        { error: 'Case ID is required' },
+        { status: 400 }
+      );
+    }
+
     const supabase = await createServerSupabaseClient();
 
-    // Fetch case
+    // Fetch case scoped to the current user
     const { data: caseData, error } = await supabase
       .from('cases')
       .select('*')
-      .eq('id', id)
+      .eq('id', caseId)
       .eq('user_id', user.id)
       .single();
 
@@ -41,7 +49,7 @@ export async function GET(
       { status: 200 }
     );
   } catch (error: any) {
-    if (error.message === 'Unauthorized - Please log in') {
+    if (error?.message === 'Unauthorized - Please log in') {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }

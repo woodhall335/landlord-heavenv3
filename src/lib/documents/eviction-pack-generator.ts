@@ -391,16 +391,14 @@ async function generateTimelineExpectations(
 /**
  * Calculate leaving date based on notice period
  */
-function calculateLeavingDate(
-  evictionCase: EvictionCase,
-  noticePeriodDays: number
-): string {
+function calculateLeavingDate(noticePeriodDays: number): string {
   const today = new Date();
   const leavingDate = new Date(
     today.getTime() + noticePeriodDays * 24 * 60 * 60 * 1000
   );
   return leavingDate.toISOString().split('T')[0];
 }
+
 
 /**
  * Calculate estimated timeline based on jurisdiction and grounds
@@ -481,8 +479,11 @@ async function generateEnglandWalesEvictionPack(
 ): Promise<EvictionPackDocument[]> {
   const documents: EvictionPackDocument[] = [];
 
-  // 1. Section 8 Notice (if fault-based grounds)
+    // 1. Section 8 Notice (if fault-based grounds)
   if (evictionCase.grounds.length > 0) {
+    const noticePeriodDays = 14; // baseline; templates can explain nuances
+    const earliestPossessionDate = calculateLeavingDate(noticePeriodDays);
+
     const section8Data: Section8NoticeData = {
       landlord_full_name: evictionCase.landlord_full_name,
       landlord_address: evictionCase.landlord_address,
@@ -500,8 +501,8 @@ async function generateEnglandWalesEvictionPack(
         supporting_evidence: g.evidence,
         mandatory: g.mandatory || false,
       })),
-      notice_period_days: 14, // Will be calculated
-      earliest_possession_date: '', // Will be calculated
+      notice_period_days: noticePeriodDays,
+      earliest_possession_date: earliestPossessionDate,
       any_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
       any_discretionary_ground: evictionCase.grounds.some((g) => !g.mandatory),
     };
