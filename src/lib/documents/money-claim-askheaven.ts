@@ -239,8 +239,10 @@ function generateFallbackDrafts(
     {
       tab: 'Tab 3',
       title: 'Bank Statements / Rent Ledger',
-      description: 'Bank statements or rent ledger showing payments received (or not received) from the Defendant. This corroborates the schedule of arrears and shows the Claimant's attempts to track payments.',
+      description:
+        'Bank statements or rent ledger showing payments received (or not received) from the Defendant. This corroborates the schedule of arrears and shows the Claimant\'s attempts to track payments.',
     },
+
   ];
 
   if (caseFacts.money_claim.lba_date) {
