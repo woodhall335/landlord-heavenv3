@@ -234,11 +234,28 @@ describe('Money claim wizard integration', () => {
     const claimInput = mapCaseFactsToMoneyClaimCase(caseFacts);
     claimInput.case_id = caseId;
 
-    const pack = await generateMoneyClaimPack(claimInput as any);
+    const pack = await generateMoneyClaimPack(claimInput as any, caseFacts);
     const fileNames = pack.documents.map((d) => d.file_name);
     expect(fileNames).toContain('n1-claim-form.pdf');
     expect(fileNames).toContain('letter-before-claim.pdf');
     expect(fileNames).toContain('schedule-of-arrears.pdf');
+
+    // Verify pack documents contain actual data, not blanks
+    const lbaDoc = pack.documents.find((d) =>
+      d.title.toLowerCase().includes('letter before')
+    );
+    const lbaHtml = lbaDoc?.html?.toString() || '';
+    expect(lbaHtml).toContain('Alice Landlord');
+    expect(lbaHtml).toContain('Tom Tenant');
+
+    const pocDoc = pack.documents.find((d) =>
+      d.title.toLowerCase().includes('particulars')
+    );
+    const pocHtml = pocDoc?.html?.toString() || '';
+    expect(pocHtml).toContain('Alice Landlord');
+    expect(pocHtml).toContain('Tom Tenant');
+    expect(pocHtml).toContain('750');
+    expect(pocHtml).toContain('1200');
   });
 
   test('Scotland money claim flow produces Simple Procedure pack', async () => {
@@ -315,10 +332,20 @@ describe('Money claim wizard integration', () => {
     const claimInput = mapCaseFactsToScotlandMoneyClaimCase(caseFacts);
     claimInput.case_id = caseId;
 
-    const pack = await generateScotlandMoneyClaim(claimInput as any);
+    const pack = await generateScotlandMoneyClaim(claimInput as any, caseFacts);
     const fileNames = pack.documents.map((d) => d.file_name);
     expect(fileNames).toContain('simple-procedure-claim-form.pdf');
     expect(fileNames).toContain('pre-action-letter.pdf');
     expect(fileNames).toContain('schedule-of-arrears.pdf');
+
+    // Verify pack documents contain actual data, not blanks
+    const preActionDoc = pack.documents.find((d) =>
+      d.title.toLowerCase().includes('pre-action') || d.title.toLowerCase().includes('letter')
+    );
+    const preActionHtml = preActionDoc?.html?.toString() || '';
+    expect(preActionHtml).toContain('Sarah Landlord');
+    expect(preActionHtml).toContain('Rob Renter');
+    expect(preActionHtml).toContain('650');
+    expect(preActionHtml).toContain('1300');
   });
 });

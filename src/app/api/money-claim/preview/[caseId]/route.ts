@@ -43,8 +43,8 @@ export async function GET(
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
     const moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
 
-    // Optionally you could have a lighter generator for preview, but using the same is fine.
-    const pack = await generateMoneyClaimPack(moneyClaimCase);
+    // Pass caseFacts to enable AI drafting of LBA, PoC, and Evidence Index
+    const pack = await generateMoneyClaimPack(moneyClaimCase, caseFacts);
 
     // Pick a couple of key docs for preview (e.g. LBA + PoC)
     const importantDocs = pack.documents.filter((doc) =>
