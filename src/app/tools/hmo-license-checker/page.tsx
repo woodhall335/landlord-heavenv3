@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { FreeToolLayout } from '@/components/tools/FreeToolLayout';
+import Link from 'next/link';
+import { Container } from '@/components/ui/Container';
 
 export default function HMOLicenseChecker() {
   const [formData, setFormData] = useState({
@@ -292,26 +293,76 @@ export default function HMOLicenseChecker() {
     formData.hasSharedFacilities;
 
   return (
-    <FreeToolLayout
-      title="Free HMO License Checker"
-      description="Check if your rental property requires HMO licensing. Get instant assessment and guidance on HMO requirements."
-      paidVersion={{
-        price: '£39.99',
-        features: [
-          'Professional AST for HMO rooms',
-          'Individual tenant agreements',
-          'Joint and several liability clauses',
-          'HMO-specific terms included',
-          'Legally compliant for all UK jurisdictions',
-          'Instant download + unlimited revisions',
-        ],
-        href: '/products/ast?type=hmo',
-      }}
-    >
-      {/* Tool Form */}
-      <h2 className="mb-6 text-2xl font-bold text-gray-900">
-        Check Your HMO License Requirements
-      </h2>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Free Tool</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">HMO License Checker</h1>
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
+              Check if Your Rental Property Requires HMO Licensing
+            </p>
+            <div className="flex items-baseline justify-center gap-2 mb-8">
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href="#checker"
+                className="hero-btn-primary"
+              >
+                Start Free Checker →
+              </a>
+              <Link
+                href="/products/ast"
+                className="hero-btn-secondary"
+              >
+                Get HMO Tenancy Agreement →
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-gray-600">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Legal Disclaimer Banner */}
+      <div className="border-b-2 border-warning-500 bg-warning-50 py-4">
+        <Container>
+          <div className="flex items-start gap-3">
+            <svg
+              className="mt-1 h-6 w-6 flex-shrink-0 text-warning-700"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <div>
+              <p className="text-sm font-semibold text-warning-900">
+                Legal Disclaimer
+              </p>
+              <p className="text-sm text-warning-800">
+                This free version is not court-ready and is provided for general informational use only. It is not legal advice. For legally validated, court-ready documents, upgrade to the paid version.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </div>
+
+      {/* Main Content */}
+      <div className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div id="checker" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+              <h2 className="mb-6 text-2xl font-bold text-gray-900">
+                Check Your HMO License Requirements
+              </h2>
 
       <form className="space-y-6">
         {/* Postcode */}
@@ -587,21 +638,24 @@ export default function HMOLicenseChecker() {
               </p>
             </div>
 
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                Do I need separate tenancy agreements for HMO tenants?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                You can use either individual agreements for each tenant or a single joint agreement
-                for all tenants. Individual agreements give you more flexibility (tenants can move out
-                independently) but require more administration. Joint agreements make all tenants
-                jointly and severally liable for the rent, providing more security. Our paid HMO
-                tenancy agreement product (£39.99) includes both options with HMO-specific terms.
-              </p>
+                <div>
+                  <h4 className="mb-2 font-semibold text-gray-900">
+                    Do I need separate tenancy agreements for HMO tenants?
+                  </h4>
+                  <p className="text-sm text-gray-700 leading-relaxed">
+                    You can use either individual agreements for each tenant or a single joint agreement
+                    for all tenants. Individual agreements give you more flexibility (tenants can move out
+                    independently) but require more administration. Joint agreements make all tenants
+                    jointly and severally liable for the rent, providing more security. Our paid HMO
+                    tenancy agreement product (£39.99) includes both options with HMO-specific terms.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </FreeToolLayout>
+      </Container>
+    </div>
+  </div>
   );
 }

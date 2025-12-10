@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { FreeToolLayout } from '@/components/tools/FreeToolLayout';
+import Link from 'next/link';
+import { Container } from '@/components/ui/Container';
 
 // SEO Metadata (exported from separate metadata.ts file for client components)
 // See: src/app/tools/free-section-21-notice-generator/metadata.ts
@@ -224,26 +225,76 @@ export default function FreeSection21Tool() {
     formData.noticeDate;
 
   return (
-    <FreeToolLayout
-      title="Free Section 21 Notice Generator"
-      description="Generate a basic Section 21 notice template for England & Wales. Upgrade for a court-ready, legally validated version."
-      paidVersion={{
-        price: '£14.99',
-        features: [
-          'Court-ready formatting',
-          'Ask Heaven AI validation',
-          'Deposit protection checks',
-          'Prescribed info verification',
-          'Save and edit anytime',
-          'Instant PDF download',
-        ],
-        href: '/products/notice-only?product=section21',
-      }}
-    >
-      {/* Tool Form */}
-      <h2 className="mb-6 text-2xl font-bold text-gray-900">
-        Generate Your Section 21 Notice
-      </h2>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Free Tool</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Section 21 Notice Generator</h1>
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
+              Generate a Basic Section 21 Notice Template for England & Wales
+            </p>
+            <div className="flex items-baseline justify-center gap-2 mb-8">
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href="#generator"
+                className="hero-btn-primary"
+              >
+                Start Free Generator →
+              </a>
+              <Link
+                href="/products/notice-only?product=section21"
+                className="hero-btn-secondary"
+              >
+                Get Court-Ready Version →
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Legal Disclaimer Banner */}
+      <div className="border-b-2 border-warning-500 bg-warning-50 py-4">
+        <Container>
+          <div className="flex items-start gap-3">
+            <svg
+              className="mt-1 h-6 w-6 flex-shrink-0 text-warning-700"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <div>
+              <p className="text-sm font-semibold text-warning-900">
+                Legal Disclaimer
+              </p>
+              <p className="text-sm text-warning-800">
+                This free version is not court-ready and is provided for general informational use only. It is not legal advice. For legally validated, court-ready documents, upgrade to the paid version.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </div>
+
+      {/* Main Content */}
+      <div className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div id="generator" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+              <h2 className="mb-6 text-2xl font-bold text-gray-900">
+                Generate Your Section 21 Notice
+              </h2>
 
       <form className="space-y-6">
         {/* Landlord Name */}
@@ -414,23 +465,27 @@ export default function FreeSection21Tool() {
         </div>
       </div>
 
-      {/* Educational Content */}
-      <div className="mt-8 rounded-xl bg-primary-50 p-6">
-        <h3 className="mb-3 text-lg font-semibold text-gray-900">
-          What is a Section 21 Notice?
-        </h3>
-        <p className="text-sm text-gray-700 leading-relaxed">
-          A Section 21 notice is a formal notice used by landlords in England
-          and Wales to end an assured shorthold tenancy (AST) without providing
-          a specific reason. It requires at least 2 months' notice and must
-          comply with strict legal requirements to be valid.
-        </p>
-        <p className="mt-3 text-sm font-semibold text-primary-600">
-          ⚠️ Important: A Section 21 notice can be invalidated if you haven't
-          protected the deposit correctly or provided prescribed information.
-          Our paid version includes these critical checks.
-        </p>
+              {/* Educational Content */}
+              <div className="mt-8 rounded-xl bg-primary-50 p-6">
+                <h3 className="mb-3 text-lg font-semibold text-gray-900">
+                  What is a Section 21 Notice?
+                </h3>
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  A Section 21 notice is a formal notice used by landlords in England
+                  and Wales to end an assured shorthold tenancy (AST) without providing
+                  a specific reason. It requires at least 2 months' notice and must
+                  comply with strict legal requirements to be valid.
+                </p>
+                <p className="mt-3 text-sm font-semibold text-primary-600">
+                  ⚠️ Important: A Section 21 notice can be invalidated if you haven't
+                  protected the deposit correctly or provided prescribed information.
+                  Our paid version includes these critical checks.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
       </div>
-    </FreeToolLayout>
+    </div>
   );
 }
