@@ -21,7 +21,7 @@ export default function FreeSection21Tool() {
 
     try {
       // Import pdf-lib dynamically (client-side only)
-      const { PDFDocument, rgb, StandardFonts, degrees } = await import('pdf-lib');
+      const { PDFDocument, rgb, StandardFonts } = await import('pdf-lib');
 
       // Create a new PDF document
       const pdfDoc = await PDFDocument.create();
