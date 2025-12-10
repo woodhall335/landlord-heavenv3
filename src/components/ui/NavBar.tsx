@@ -26,9 +26,19 @@ const primaryLinks: NavItem[] = [
   { href: "/help", label: "Help" },
 ];
 
+const freeToolsLinks: NavItem[] = [
+  { href: "/tools/free-section-21-notice-generator", label: "Section 21 Notice" },
+  { href: "/tools/free-section-8-notice-generator", label: "Section 8 Notice" },
+  { href: "/tools/rent-arrears-calculator", label: "Rent Arrears Calculator" },
+  { href: "/tools/hmo-license-checker", label: "HMO License Checker" },
+  { href: "/tools/deposit-protection-checker", label: "Deposit Protection Checker" },
+  { href: "/tools/free-rent-demand-letter", label: "Rent Demand Letter" },
+];
+
 export function NavBar({ user }: NavBarProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [showFreeTools, setShowFreeTools] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
@@ -44,6 +54,38 @@ export function NavBar({ user }: NavBarProps) {
         </Link>
 
         <nav className="hidden items-center gap-9 lg:flex">
+          {/* Free Tools Dropdown */}
+          <div className="relative">
+            <button
+              onMouseEnter={() => setShowFreeTools(true)}
+              onMouseLeave={() => setShowFreeTools(false)}
+              className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors relative py-2 flex items-center gap-1"
+            >
+              Free Tools
+              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </button>
+
+            {showFreeTools && (
+              <div
+                onMouseEnter={() => setShowFreeTools(true)}
+                onMouseLeave={() => setShowFreeTools(false)}
+                className="absolute left-0 mt-2 w-56 rounded-xl bg-white shadow-lg border border-gray-200 py-2 z-50"
+              >
+                {freeToolsLinks.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
           {primaryLinks.map((item) => (
             <Link
               key={item.href}
@@ -100,19 +142,36 @@ export function NavBar({ user }: NavBarProps) {
       {open && (
         <div className="border-t border-gray-200 bg-white lg:hidden">
           <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-4">
-            {primaryLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={clsx(
-                  "text-sm font-semibold",
-                  pathname === item.href ? "text-primary" : "text-charcoal"
-                )}
-                onClick={() => setOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {/* Free Tools Section */}
+            <div>
+              <div className="mb-2 text-xs font-bold uppercase text-gray-500">Free Tools</div>
+              {freeToolsLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="block py-2 text-sm font-semibold text-charcoal hover:text-primary"
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+
+            <div className="border-t border-gray-200 pt-4">
+              {primaryLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={clsx(
+                    "block py-2 text-sm font-semibold",
+                    pathname === item.href ? "text-primary" : "text-charcoal"
+                  )}
+                  onClick={() => setOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
 
             <div className="flex items-center gap-3 pt-2">
               {user ? (
