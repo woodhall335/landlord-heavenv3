@@ -653,9 +653,8 @@ export default function HMOLicenseChecker() {
               </div>
             </div>
           </div>
-        </div>
-      </Container>
+        </Container>
+      </div>
     </div>
-  </div>
   );
 }
