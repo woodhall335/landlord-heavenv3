@@ -37,7 +37,7 @@ export default function FreeSection8Tool() {
 
     try {
       // Import pdf-lib dynamically (client-side only)
-      const { PDFDocument, rgb, StandardFonts } = await import('pdf-lib');
+      const { PDFDocument, rgb, StandardFonts, degrees } = await import('pdf-lib');
 
       // Create a new PDF document
       const pdfDoc = await PDFDocument.create();
@@ -57,7 +57,7 @@ export default function FreeSection8Tool() {
         size: 40,
         font: boldFont,
         color: rgb(0.9, 0.9, 0.9),
-        rotate: { type: 'radians' as const, angle: Math.PI / 4 },
+        rotate: degrees(45),
       });
 
       // Title
