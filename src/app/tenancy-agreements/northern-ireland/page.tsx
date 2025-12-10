@@ -85,7 +85,7 @@ export default function NorthernIrelandTenancyPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
 
-      <div className="min-h-screen bg-gradient-to-r from-lavender-100 to-lavender-200">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 py-4">
           <nav className="text-sm text-gray-600">
@@ -403,7 +403,7 @@ export default function NorthernIrelandTenancyPage() {
         </section>
 
         {/* Benefits Section */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-r from-lavender-100 to-lavender-200">
+        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Benefits of a Written Tenancy Agreement</h2>
 
@@ -897,7 +897,7 @@ export default function NorthernIrelandTenancyPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-12 bg-gradient-to-r from-lavender-100 to-lavender-200">
+        <section className="container mx-auto px-4 py-12 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
 
