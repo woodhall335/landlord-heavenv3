@@ -14,15 +14,33 @@ export default function ASTPage() {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
         <Container>
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Professional Tenancies</span>
+            </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Tenancy Agreements</h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-600">
-              Curated by Landlord Heaven - Legally Compliant ASTs, PRTs & NI Tenancies
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
+              Legally Compliant ASTs, PRTs & NI Tenancies
             </p>
-            <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
-              Choose between Standard (£39.99) or Premium (£59.00) depending on your property complexity and protection
-              needs
-            </p>
+            <div className="flex items-baseline justify-center gap-2 mb-8">
+              <span className="text-2xl text-gray-600">from</span>
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">£39.99</span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/wizard?product=ast_standard"
+                className="hero-btn-primary"
+              >
+                Standard - £39.99 →
+              </Link>
+              <Link
+                href="/wizard?product=ast_premium"
+                className="hero-btn-secondary"
+              >
+                Premium - £59.00 →
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England & Wales, Scotland or NI</p>
           </div>
         </Container>
       </section>
