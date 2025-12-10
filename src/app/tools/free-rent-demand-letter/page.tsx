@@ -868,20 +868,22 @@ export default function RentDemandLetterGenerator() {
               </p>
             </div>
 
-                <div>
-                  <h4 className="mb-2 font-semibold text-gray-900">
-                    Should I send a demand letter before a Section 8 notice?
-                  </h4>
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    Yes, it's good practice to send a demand letter before serving a Section 8 notice.
-                    Here's why: (1) It gives the tenant a chance to pay and avoid eviction proceedings.
-                    (2) It shows the court you tried to resolve the matter reasonably. (3) The tenant may
-                    have a genuine reason for non-payment (e.g., benefits delay) and may be able to pay
-                    quickly once reminded. (4) It strengthens your case if you proceed to court. Many
-                    judges look favorably on landlords who've tried to work with tenants before legal action.
-                  </p>
-                </div>
-              </div>
+            <div>
+              <h4 className="mb-2 font-semibold text-gray-900">
+                Should I send a demand letter before a Section 8 notice?
+              </h4>
+              <p className="text-sm text-gray-700 leading-relaxed">
+                Yes, it's good practice to send a demand letter before serving a Section 8 notice.
+                Here's why: (1) It gives the tenant a chance to pay and avoid eviction proceedings.
+                (2) It shows the court you tried to resolve the matter reasonably. (3) The tenant may
+                have a genuine reason for non-payment (e.g., benefits delay) and may be able to pay
+                quickly once reminded. (4) It strengthens your case if you proceed to court. Many
+                judges look favorably on landlords who've tried to work with tenants before legal action.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
             </div>
           </div>
         </Container>

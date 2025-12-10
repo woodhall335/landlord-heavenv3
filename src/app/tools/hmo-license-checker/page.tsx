@@ -638,19 +638,21 @@ export default function HMOLicenseChecker() {
               </p>
             </div>
 
-                <div>
-                  <h4 className="mb-2 font-semibold text-gray-900">
-                    Do I need separate tenancy agreements for HMO tenants?
-                  </h4>
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    You can use either individual agreements for each tenant or a single joint agreement
-                    for all tenants. Individual agreements give you more flexibility (tenants can move out
-                    independently) but require more administration. Joint agreements make all tenants
-                    jointly and severally liable for the rent, providing more security. Our paid HMO
-                    tenancy agreement product (£39.99) includes both options with HMO-specific terms.
-                  </p>
-                </div>
-              </div>
+            <div>
+              <h4 className="mb-2 font-semibold text-gray-900">
+                Do I need separate tenancy agreements for HMO tenants?
+              </h4>
+              <p className="text-sm text-gray-700 leading-relaxed">
+                You can use either individual agreements for each tenant or a single joint agreement
+                for all tenants. Individual agreements give you more flexibility (tenants can move out
+                independently) but require more administration. Joint agreements make all tenants
+                jointly and severally liable for the rent, providing more security. Our paid HMO
+                tenancy agreement product (£39.99) includes both options with HMO-specific terms.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
             </div>
           </div>
         </Container>
