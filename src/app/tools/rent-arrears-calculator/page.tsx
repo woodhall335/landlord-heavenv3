@@ -322,7 +322,7 @@ export default function RentArrearsCalculator() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-r from-lavender-100 to-lavender-200 py-16">
+      <div className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16">
         <Container className="text-center max-w-4xl">
           <p className="text-sm font-semibold uppercase tracking-wide mb-3 text-primary-600">Free landlord tool</p>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Rent Arrears Calculator</h1>
