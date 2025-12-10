@@ -101,7 +101,7 @@ export default function ScotlandPRTPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
 
-      <div className="min-h-screen bg-linear-to-br from-slate-50 to-blue-50">
+      <div className="min-h-screen bg-gradient-to-r from-lavender-100 to-lavender-200">
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 py-4">
           <nav className="text-sm text-gray-600">
@@ -132,7 +132,7 @@ export default function ScotlandPRTPage() {
               </Link>
               <Link
                 href="/wizard?jurisdiction=scotland&document_type=prt_premium"
-                className="bg-linear-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-colors text-lg"
+                className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:hover:bg-primary-dark transition-colors text-lg"
               >
                 Create Premium PRT - £59.00
               </Link>
@@ -369,7 +369,7 @@ export default function ScotlandPRTPage() {
         </section>
 
         {/* Benefits of PRT Agreements */}
-        <section className="container mx-auto px-4 py-12 bg-linear-to-br from-blue-50 to-indigo-50">
+        <section className="container mx-auto px-4 py-12 bg-gradient-to-r from-lavender-100 to-lavender-200">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Benefits of a Written PRT Agreement</h2>
 
@@ -638,7 +638,7 @@ export default function ScotlandPRTPage() {
               </div>
             </div>
 
-            <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-xl shadow-lg p-8">
+            <div className="bg-primary text-white rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-semibold mb-4">Two Options to Suit Your Needs</h3>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -844,7 +844,7 @@ export default function ScotlandPRTPage() {
               </div>
             </div>
 
-            <div className="bg-linear-to-r from-blue-600 to-indigo-600 text-white rounded-xl shadow-lg p-8">
+            <div className="bg-primary text-white rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-semibold mb-4">Making Changes to a PRT</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -924,7 +924,7 @@ export default function ScotlandPRTPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-12 bg-linear-to-br from-blue-50 to-purple-50">
+        <section className="container mx-auto px-4 py-12 bg-gradient-to-r from-lavender-100 to-lavender-200">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
 
@@ -1055,7 +1055,7 @@ export default function ScotlandPRTPage() {
 
         {/* Final CTA Section */}
         <section className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto bg-linear-to-r from-blue-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-center text-white">
+          <div className="max-w-4xl mx-auto bg-primary rounded-2xl shadow-2xl p-12 text-center text-white">
             <h2 className="text-4xl font-bold mb-4">Ready to Create Your PRT Agreement?</h2>
             <p className="text-xl mb-8 opacity-90">
               Join Scottish landlords who trust Landlord Heaven for legally compliant, professional tenancy agreements.

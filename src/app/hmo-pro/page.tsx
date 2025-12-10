@@ -12,7 +12,7 @@ export default function HMOProPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* V2 Roadmap Banner */}
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-4">
+      <div className="bg-gradient-to-r from-primary to-primary-dark text-white py-4">
         <Container>
           <div className="text-center">
             <p className="text-sm font-semibold mb-1">

@@ -24,27 +24,27 @@ export default function CompleteEvictionPackPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-linear-to-br from-primary to-emerald-600 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-r from-lavender-100 to-lavender-200 py-16 md:py-24">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold">Complete Solution</span>
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Complete Solution</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Complete Eviction Pack</h1>
-            <p className="text-xl md:text-2xl mb-6 text-white/90">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Complete Eviction Pack</h1>
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
               Everything You Need from Notice to Possession Order
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold">£149.99</span>
-              <span className="text-xl text-white/80">one-time</span>
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">£149.99</span>
+              <span className="text-xl text-gray-600">one-time</span>
             </div>
             <Link
               href="/wizard?product=complete_pack"
-              className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
+              className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-dark transition-colors shadow-lg"
             >
               Start Your Eviction Pack →
             </Link>
-            <p className="mt-4 text-sm text-white/80">
+            <p className="mt-4 text-sm text-gray-600">
               Court-ready documents • Expert guidance • Lifetime storage
             </p>
           </div>
