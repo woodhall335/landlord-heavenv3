@@ -28,6 +28,28 @@ export default function RentDemandLetterGenerator() {
   }, []);
 
   const handleGenerate = async () => {
+    // Validate all required fields
+    if (!formData.landlordName?.trim()) {
+      alert('Please enter your name');
+      return;
+    }
+    if (!formData.landlordAddress?.trim()) {
+      alert('Please enter your address');
+      return;
+    }
+    if (!formData.tenantName?.trim()) {
+      alert('Please enter tenant name');
+      return;
+    }
+    if (!formData.tenantAddress?.trim()) {
+      alert('Please enter tenant address');
+      return;
+    }
+    if (!formData.amountOwed || parseFloat(formData.amountOwed) <= 0) {
+      alert('Please enter a valid amount owed');
+      return;
+    }
+
     setIsGenerating(true);
 
     try {
@@ -41,16 +63,6 @@ export default function RentDemandLetterGenerator() {
       const regularFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
 
       let yPosition = height - 80;
-
-      // Large watermark
-      page.drawText('FREE VERSION - NOT FOR LEGAL USE', {
-        x: 90,
-        y: height / 2,
-        size: 42,
-        font: boldFont,
-        color: rgb(0.9, 0.9, 0.9),
-        rotate: { angle: Math.PI / 4, origin: { x: width / 2, y: height / 2 } },
-      });
 
       // Date
       const todayDate = new Date().toLocaleDateString('en-GB', {
@@ -377,6 +389,34 @@ export default function RentDemandLetterGenerator() {
       <h2 className="mb-6 text-2xl font-bold text-gray-900">
         Generate Your Rent Demand Letter
       </h2>
+
+      <div className="mb-6 rounded-lg border-2 border-primary-200 bg-primary-50 p-5">
+        <div className="flex items-start gap-3">
+          <svg className="mt-0.5 h-6 w-6 flex-shrink-0 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+          </svg>
+          <div>
+            <h3 className="font-semibold text-gray-900 mb-2">
+              Need to calculate arrears first?
+            </h3>
+            <p className="text-sm text-gray-700 mb-3">
+              Use our Rent Arrears Calculator to generate a detailed breakdown with interest calculations,
+              then come back here to create the formal demand letter.
+            </p>
+            <a
+              href="/tools/rent-arrears-calculator"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-primary-600 border-2 border-primary-200 hover:bg-primary-50 hover:border-primary-300 transition-all"
+            >
+              Open Arrears Calculator
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
 
       <form className="space-y-6">
         {/* Landlord Name */}

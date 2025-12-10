@@ -46,16 +46,6 @@ export default function HMOLicenseChecker() {
 
       let yPosition = height - 80;
 
-      // Add large watermark
-      page.drawText('FREE ASSESSMENT - NOT LEGAL ADVICE', {
-        x: 80,
-        y: height / 2,
-        size: 40,
-        font: boldFont,
-        color: rgb(0.9, 0.9, 0.9),
-        rotate: { angle: Math.PI / 4, origin: { x: width / 2, y: height / 2 } },
-      });
-
       // Title
       page.drawText('HMO LICENSE ASSESSMENT', {
         x: 50,

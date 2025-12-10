@@ -34,16 +34,6 @@ export default function FreeSection21Tool() {
 
       let yPosition = height - 80;
 
-      // Add watermark
-      page.drawText('FREE WATERMARKED VERSION - NOT COURT READY', {
-        x: 50,
-        y: height / 2,
-        size: 40,
-        font: boldFont,
-        color: rgb(0.9, 0.9, 0.9),
-        rotate: degrees(45),
-      });
-
       // Title
       page.drawText('SECTION 21 NOTICE', {
         x: 50,

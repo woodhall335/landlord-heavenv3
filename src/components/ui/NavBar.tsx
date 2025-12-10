@@ -31,7 +31,6 @@ const freeToolsLinks: NavItem[] = [
   { href: "/tools/free-section-8-notice-generator", label: "Section 8 Notice" },
   { href: "/tools/rent-arrears-calculator", label: "Rent Arrears Calculator" },
   { href: "/tools/hmo-license-checker", label: "HMO License Checker" },
-  { href: "/tools/deposit-protection-checker", label: "Deposit Protection Checker" },
   { href: "/tools/free-rent-demand-letter", label: "Rent Demand Letter" },
 ];
 

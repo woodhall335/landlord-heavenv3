@@ -65,6 +65,58 @@ export default function RentArrearsCalculator() {
     );
   }, [schedule]);
 
+  // Calculate interest using 8% per annum simple interest from earliest unpaid due date
+  // Formula: Principal × Annual Rate × (Days Outstanding ÷ 365)
+  const calculateEnhancedInterest = () => {
+    if (totals.totalOutstanding <= 0) return { interest: 0, daysOutstanding: 0, fromDate: '' };
+
+    // Find the earliest due date that has outstanding balance
+    let earliestDueDate = null;
+    for (const item of schedule) {
+      const due = Number(item.dueAmount) || 0;
+      const paid = Number(item.paidAmount) || 0;
+      const outstanding = due - paid;
+
+      if (outstanding > 0 && item.dueDate) {
+        const dueDate = new Date(item.dueDate + 'T00:00:00');
+        if (!earliestDueDate || dueDate < earliestDueDate) {
+          earliestDueDate = dueDate;
+        }
+      }
+    }
+
+    if (!earliestDueDate) return { interest: 0, daysOutstanding: 0, fromDate: '' };
+
+    // Normalize dates to start of day to avoid timezone issues
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Calculate days outstanding
+    const daysOutstanding = Math.max(0,
+      Math.floor((today.getTime() - earliestDueDate.getTime()) / (1000 * 60 * 60 * 24))
+    );
+
+    if (daysOutstanding <= 0) return { interest: 0, daysOutstanding: 0, fromDate: earliestDueDate.toISOString().split('T')[0] };
+
+    // 8% per annum simple interest
+    const annualRate = 0.08;
+    const dailyRate = annualRate / 365;
+
+    // Interest = Principal × Daily Rate × Days
+    const interest = totals.totalOutstanding * dailyRate * daysOutstanding;
+
+    return {
+      interest: Math.max(0, interest),
+      daysOutstanding,
+      fromDate: earliestDueDate.toISOString().split('T')[0]
+    };
+  };
+
+  const enhancedInterestData = calculateEnhancedInterest();
+  const estimatedInterest = enhancedInterestData.interest;
+  const daysOutstanding = enhancedInterestData.daysOutstanding;
+  const interestFromDate = enhancedInterestData.fromDate;
+
   const handleScheduleChange = (id: string, key: keyof ScheduleItem, value: string) => {
     setSchedule((prev) =>
       prev.map((item) =>
@@ -93,6 +145,179 @@ export default function RentArrearsCalculator() {
 
   const removeScheduleRow = (id: string) => {
     setSchedule((prev) => (prev.length > 1 ? prev.filter((item) => item.id !== id) : prev));
+  };
+
+  const handleSavePDF = async () => {
+    if (schedule.length === 0 || totals.totalOutstanding === 0) {
+      alert('Please add at least one arrears period first');
+      return;
+    }
+
+    try {
+      const { PDFDocument, rgb, StandardFonts } = await import('pdf-lib');
+
+      const pdfDoc = await PDFDocument.create();
+      const page = pdfDoc.addPage([595, 842]); // A4
+      const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+      const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+      let y = 780;
+
+      // Title
+      page.drawText('RENT ARREARS SCHEDULE', {
+        x: 50,
+        y,
+        size: 20,
+        font: boldFont,
+        color: rgb(0, 0, 0),
+      });
+
+      y -= 30;
+
+      // Date
+      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')}`, {
+        x: 50,
+        y,
+        size: 11,
+        font,
+        color: rgb(0.4, 0.4, 0.4),
+      });
+
+      y -= 40;
+
+      // Monthly rent
+      page.drawText(`Monthly Rent: £${rentAmount}`, {
+        x: 50,
+        y,
+        size: 12,
+        font,
+        color: rgb(0, 0, 0),
+      });
+
+      y -= 35;
+
+      // Arrears breakdown
+      page.drawText('ARREARS BREAKDOWN:', {
+        x: 50,
+        y,
+        size: 14,
+        font: boldFont,
+        color: rgb(0, 0, 0),
+      });
+
+      y -= 25;
+
+      schedule.forEach((item, index) => {
+        const due = Number(item.dueAmount) || 0;
+        const paid = Number(item.paidAmount) || 0;
+        const outstanding = due - paid;
+
+        if (outstanding > 0) {
+          const dueDate = item.dueDate ? new Date(item.dueDate + 'T00:00:00').toLocaleDateString('en-GB') : 'N/A';
+          const line = `${dueDate}: £${outstanding.toFixed(2)} outstanding`;
+          page.drawText(line, {
+            x: 70,
+            y,
+            size: 11,
+            font: boldFont,
+            color: rgb(0, 0, 0),
+          });
+          y -= 20;
+
+          if (y < 100 && index < schedule.length - 1) {
+            // Add new page if needed
+            const newPage = pdfDoc.addPage([595, 842]);
+            y = 780;
+          }
+        }
+      });
+
+      y -= 25;
+
+      // Totals section
+      page.drawText('SUMMARY:', {
+        x: 50,
+        y,
+        size: 14,
+        font: boldFont,
+        color: rgb(0, 0, 0),
+      });
+
+      y -= 25;
+
+      page.drawText(`Total Arrears: £${totals.totalOutstanding.toFixed(2)}`, {
+        x: 70,
+        y,
+        size: 12,
+        font: boldFont,
+        color: rgb(0, 0, 0),
+      });
+
+      y -= 20;
+
+      if (estimatedInterest > 0) {
+        page.drawText(`Interest (8% p.a. for ${daysOutstanding} days): £${estimatedInterest.toFixed(2)}`, {
+          x: 70,
+          y,
+          size: 11,
+          font,
+          color: rgb(0, 0, 0),
+        });
+
+        y -= 20;
+
+        page.drawText(`TOTAL CLAIM: £${(totals.totalOutstanding + estimatedInterest).toFixed(2)}`, {
+          x: 70,
+          y,
+          size: 14,
+          font: boldFont,
+          color: rgb(0, 0, 0),
+        });
+
+        y -= 30;
+
+        // Disclaimer
+        page.drawText('Note: Interest calculated at 8% per annum simple interest from last payment date.', {
+          x: 70,
+          y,
+          size: 9,
+          font,
+          color: rgb(0.4, 0.4, 0.4),
+        });
+
+        y -= 12;
+
+        page.drawText('Actual court awards may differ. This is a directional estimate only.', {
+          x: 70,
+          y,
+          size: 9,
+          font,
+          color: rgb(0.4, 0.4, 0.4),
+        });
+      } else {
+        page.drawText(`TOTAL CLAIM: £${totals.totalOutstanding.toFixed(2)}`, {
+          x: 70,
+          y,
+          size: 14,
+          font: boldFont,
+          color: rgb(0, 0, 0),
+        });
+      }
+
+      // NO WATERMARK - Full value free tool
+
+      const pdfBytes = await pdfDoc.save();
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Rent-Arrears-Schedule-${Date.now()}.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('PDF error:', error);
+      alert('Failed to generate PDF. Please try again.');
+    }
   };
 
   return (
@@ -180,9 +405,6 @@ export default function RentArrearsCalculator() {
                     min={0}
                     step={0.01}
                   />
-                  {index === 0 && (
-                    <p className="text-xs text-gray-500 mt-1 leading-tight">Default: {frequency === 'month' ? 'monthly' : 'weekly'} rent</p>
-                  )}
                 </div>
                 <div>
                   <label className="text-sm text-gray-600 font-medium">Paid (£)</label>
@@ -205,9 +427,6 @@ export default function RentArrearsCalculator() {
                   />
                 </div>
                 <div className="flex gap-2 md:justify-end">
-                  <Button variant="secondary" onClick={() => handleScheduleChange(item.id, 'paidAmount', String(item.dueAmount))}>
-                    Mark paid
-                  </Button>
                   <Button
                     variant="outline"
                     onClick={() => removeScheduleRow(item.id)}
@@ -236,7 +455,7 @@ export default function RentArrearsCalculator() {
           </div>
           <div className="relative">
             <h2 className="text-2xl font-semibold text-charcoal mb-4">Summary</h2>
-            <div className="grid md:grid-cols-4 gap-4">
+            <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                 <p className="text-sm text-gray-600">Total rent due</p>
                 <p className="text-2xl font-bold text-charcoal mt-1">£{totals.totalDue.toFixed(2)}</p>
@@ -249,12 +468,44 @@ export default function RentArrearsCalculator() {
                 <p className="text-sm text-gray-600">Outstanding arrears</p>
                 <p className="text-2xl font-bold text-red-600 mt-1">£{totals.totalOutstanding.toFixed(2)}</p>
               </div>
-              <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                <p className="text-sm text-gray-600">Estimated 8% interest</p>
-                <p className="text-2xl font-bold text-charcoal mt-1">£{totals.totalInterest.toFixed(2)}</p>
-                <p className="text-xs text-gray-500 mt-1">Simple statutory rate – not compounded.</p>
-              </div>
             </div>
+
+            {estimatedInterest > 0 && (
+              <div className="rounded-lg bg-warning-50 border-2 border-warning-200 p-4 mt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-sm font-semibold text-gray-900">
+                    Estimated Interest (8% p.a.)
+                  </span>
+                  <span className="text-xl font-bold text-warning-700">
+                    £{estimatedInterest.toFixed(2)}
+                  </span>
+                </div>
+                <div className="space-y-2 text-xs text-gray-700">
+                  <p>
+                    <strong>Calculation:</strong> £{totals.totalOutstanding.toFixed(2)} × 8% × ({daysOutstanding} days ÷ 365) = £{estimatedInterest.toFixed(2)}
+                  </p>
+                  <p>
+                    <strong>From:</strong> {interestFromDate ? new Date(interestFromDate + 'T00:00:00').toLocaleDateString('en-GB') : 'N/A'} to {new Date().toLocaleDateString('en-GB')} ({daysOutstanding} days)
+                  </p>
+                  <div className="flex items-start gap-2 mt-3 pt-3 border-t border-warning-300">
+                    <svg className="h-4 w-4 text-warning-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                    </svg>
+                    <p className="text-warning-800 font-medium">
+                      <strong>Important:</strong> We use a simple 8% per annum rate on any outstanding balance from its due date up to today. Actual court awards may differ depending on jurisdiction and judge discretion. Use this as a directional estimate only.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <button
+              onClick={handleSavePDF}
+              disabled={totals.totalOutstanding === 0}
+              className="mt-6 w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Save Schedule as PDF
+            </button>
 
             <div className="mt-6 grid md:grid-cols-2 gap-4">
               <div className="bg-white p-4 rounded-lg border border-gray-200">
