@@ -322,32 +322,41 @@ export default function RentArrearsCalculator() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16">
-        <Container className="text-center max-w-4xl">
-          <p className="text-sm font-semibold uppercase tracking-wide mb-3 text-primary-600">Free landlord tool</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Rent Arrears Calculator</h1>
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-            Quickly calculate outstanding rent and statutory interest estimate. Download a professional summary to help you decide whether to issue a court claim.
-          </p>
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-              className="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-primary-700 transition"
-            >
-              Upgrade to Money Claim Pack (£179.99)
-            </Link>
-            <Link
-              href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-              className="bg-white text-primary border-2 border-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary/5 transition"
-            >
-              Scotland Simple Procedure Pack
-            </Link>
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Free Tool</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Rent Arrears Calculator</h1>
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
+              Calculate Outstanding Rent and Statutory Interest
+            </p>
+            <div className="flex items-baseline justify-center gap-2 mb-8">
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href="#calculator"
+                className="hero-btn-primary"
+              >
+                Start Free Calculator →
+              </a>
+              <Link
+                href="/products/money-claim"
+                className="hero-btn-secondary"
+              >
+                Upgrade to Money Claim Pack →
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-gray-600">Instant calculation • Professional summary • Upgrade for court claims</p>
           </div>
         </Container>
-      </div>
+      </section>
 
       <Container className="py-12 space-y-8">
-        <Card padding="large">
+        <Card id="calculator" padding="large">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <div>
               <h2 className="text-2xl font-semibold text-charcoal">Enter rent details</h2>

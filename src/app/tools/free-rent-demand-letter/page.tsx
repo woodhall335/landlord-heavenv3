@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FreeToolLayout } from '@/components/tools/FreeToolLayout';
+import Link from 'next/link';
+import { Container } from '@/components/ui/Container';
 
 export default function RentDemandLetterGenerator() {
   const [formData, setFormData] = useState({
@@ -354,25 +355,76 @@ export default function RentDemandLetterGenerator() {
     formData.paymentDeadline;
 
   return (
-    <FreeToolLayout
-      title="Free Rent Demand Letter Generator"
-      description="Generate a professional rent demand letter for unpaid rent arrears. Free template for UK landlords with formal legal warning."
-      paidVersion={{
-        price: '£14.99',
-        features: [
-          'Legally validated demand letter',
-          'Court-compliant formatting',
-          'Pre-Action Protocol compliance',
-          'Save and edit anytime',
-          'No watermark',
-          'Professional letterhead option',
-        ],
-        href: '/products/notice-only?product=demand_letter',
-      }}
-    >
-      <h2 className="mb-6 text-2xl font-bold text-gray-900">
-        Generate Your Rent Demand Letter
-      </h2>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Free Tool</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Rent Demand Letter Generator</h1>
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
+              Generate a Professional Rent Demand Letter for Unpaid Arrears
+            </p>
+            <div className="flex items-baseline justify-center gap-2 mb-8">
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">FREE</span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href="#generator"
+                className="hero-btn-primary"
+              >
+                Start Free Generator →
+              </a>
+              <Link
+                href="/products/notice-only?product=demand_letter"
+                className="hero-btn-secondary"
+              >
+                Get Court-Ready Version →
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Legal Disclaimer Banner */}
+      <div className="border-b-2 border-warning-500 bg-warning-50 py-4">
+        <Container>
+          <div className="flex items-start gap-3">
+            <svg
+              className="mt-1 h-6 w-6 flex-shrink-0 text-warning-700"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              aria-hidden="true"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <div>
+              <p className="text-sm font-semibold text-warning-900">
+                Legal Disclaimer
+              </p>
+              <p className="text-sm text-warning-800">
+                This free version is not court-ready and is provided for general informational use only. It is not legal advice. For legally validated, court-ready documents, upgrade to the paid version.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </div>
+
+      {/* Main Content */}
+      <div className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div id="generator" className="rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+              <h2 className="mb-6 text-2xl font-bold text-gray-900">
+                Generate Your Rent Demand Letter
+              </h2>
 
       <div className="mb-6 rounded-lg border-2 border-primary-200 bg-primary-50 p-5">
         <div className="flex items-start gap-3">
@@ -816,22 +868,24 @@ export default function RentDemandLetterGenerator() {
               </p>
             </div>
 
-            <div>
-              <h4 className="mb-2 font-semibold text-gray-900">
-                Should I send a demand letter before a Section 8 notice?
-              </h4>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                Yes, it's good practice to send a demand letter before serving a Section 8 notice.
-                Here's why: (1) It gives the tenant a chance to pay and avoid eviction proceedings.
-                (2) It shows the court you tried to resolve the matter reasonably. (3) The tenant may
-                have a genuine reason for non-payment (e.g., benefits delay) and may be able to pay
-                quickly once reminded. (4) It strengthens your case if you proceed to court. Many
-                judges look favorably on landlords who've tried to work with tenants before legal action.
-              </p>
+                <div>
+                  <h4 className="mb-2 font-semibold text-gray-900">
+                    Should I send a demand letter before a Section 8 notice?
+                  </h4>
+                  <p className="text-sm text-gray-700 leading-relaxed">
+                    Yes, it's good practice to send a demand letter before serving a Section 8 notice.
+                    Here's why: (1) It gives the tenant a chance to pay and avoid eviction proceedings.
+                    (2) It shows the court you tried to resolve the matter reasonably. (3) The tenant may
+                    have a genuine reason for non-payment (e.g., benefits delay) and may be able to pay
+                    quickly once reminded. (4) It strengthens your case if you proceed to court. Many
+                    judges look favorably on landlords who've tried to work with tenants before legal action.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
+        </Container>
       </div>
-    </FreeToolLayout>
+    </div>
   );
 }
