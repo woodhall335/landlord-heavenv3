@@ -40,7 +40,7 @@ export default function CompleteEvictionPackPage() {
             </div>
             <Link
               href="/wizard?product=complete_pack"
-              className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors shadow-lg"
+              className="hero-btn-primary"
             >
               Start Your Eviction Pack →
             </Link>
