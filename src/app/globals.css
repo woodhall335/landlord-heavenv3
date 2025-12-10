@@ -89,3 +89,36 @@ a:hover {
 .text-gray-700 {
   color: #374151 !important;
 }
+
+/* Hero Section Standardized Buttons */
+.hero-btn-primary {
+  display: inline-block;
+  background-color: #7C3AED;
+  color: #ffffff;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: background-color 0.25s ease;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.hero-btn-primary:hover {
+  background-color: #6D28D9;
+}
+
+.hero-btn-secondary {
+  display: inline-block;
+  background-color: #ffffff;
+  color: #7C3AED;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: background-color 0.25s ease;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.hero-btn-secondary:hover {
+  background-color: #f9fafb;
+}

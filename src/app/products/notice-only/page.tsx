@@ -28,7 +28,7 @@ export default function NoticeOnlyPage() {
             </div>
             <Link
               href="/wizard?product=notice_only"
-              className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors shadow-lg"
+              className="hero-btn-primary"
             >
               Get Your Notice Now →
             </Link>

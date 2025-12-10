@@ -29,13 +29,13 @@ export default function MoneyClaimPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors shadow-lg"
+                className="hero-btn-primary"
               >
                 England &amp; Wales Claim →
               </Link>
               <Link
                 href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary/5 transition-colors border-2 border-primary"
+                className="hero-btn-secondary"
               >
                 Scotland Simple Procedure →
               </Link>
