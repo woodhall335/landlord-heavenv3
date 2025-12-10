@@ -9,20 +9,20 @@
 export const colors = {
   // Primary - Lilac/Purple (Ask Heaven branding) - PandaDoc-style
   primary: {
-    DEFAULT: '#a855f7',  // Main brand color
-    dark: '#9333ea',     // Darker purple - Hover states
-    light: '#c084fc',    // Lighter purple - Accents
+    DEFAULT: '#7C3AED',  // Main brand color
+    dark: '#6D28D9',     // Darker purple - Hover states
+    light: '#A78BFA',    // Lighter purple - Accents
     subtle: '#faf5ff',   // Very light lilac - Backgrounds
     50: '#faf5ff',       // Lightest lilac
     100: '#f3e8ff',
     200: '#e9d5ff',
     300: '#d8b4fe',
     400: '#c084fc',
-    500: '#a855f7',      // Main brand color
-    600: '#9333ea',
-    700: '#7e22ce',
-    800: '#6b21a8',
-    900: '#581c87',
+    500: '#a855f7',
+    600: '#7C3AED',      // Main brand color
+    700: '#6D28D9',
+    800: '#5B21B6',
+    900: '#4C1D95',
   },
 
   // Secondary - Emerald Green (PandaDoc match for success/completion)
