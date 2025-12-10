@@ -19,16 +19,24 @@ export const metadata: Metadata = generateMetadata({
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <Container size="large">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-charcoal mb-4">Simple, Transparent Pricing</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            No hidden fees. No surprises. Choose the product that fits your needs. All prices are one-time payments
-            except HMO Pro.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-lavender-100 to-lavender-200 py-16 md:py-24">
+        <Container size="large">
+          <div className="text-center">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Transparent Pricing</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              No hidden fees. No surprises. Choose the product that fits your needs. All prices are one-time payments
+              except HMO Pro.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      <Container size="large" className="py-12">
 
         {/* Comparison Table - Desktop */}
         <div className="hidden lg:block overflow-x-auto mb-12">

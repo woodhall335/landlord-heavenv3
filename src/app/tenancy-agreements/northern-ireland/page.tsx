@@ -107,8 +107,8 @@ export default function NorthernIrelandTenancyPage() {
             <p className="text-xl text-gray-700 mb-4">
               Create a legally compliant Private Tenancy Agreement for Northern Ireland in minutes. Fully updated for 2025 including mandatory EICR requirements, rent increase restrictions, and all current NI legislation.
             </p>
-            <div className="bg-amber-100 border-l-4 border-amber-600 p-4 mb-8 text-left">
-              <p className="text-sm font-semibold text-amber-900">
+            <div className="bg-amber-100 border-l-4 border-primary-600 p-4 mb-8 text-left">
+              <p className="text-sm font-semibold text-primary-900">
                 ✨ <strong>2025 Updates Included:</strong> Mandatory EICR from 1 April 2025 • 12-month gap between rent increases • 3-month notice for rent increases • Length-based notice periods
               </p>
             </div>
@@ -313,8 +313,8 @@ export default function NorthernIrelandTenancyPage() {
               </table>
             </div>
 
-            <div className="bg-amber-50 border-l-4 border-amber-600 p-6 mt-6">
-              <h3 className="text-xl font-semibold text-amber-900 mb-2">Tenancy Deposit Schemes in Northern Ireland</h3>
+            <div className="bg-primary-50 border-l-4 border-primary-600 p-6 mt-6">
+              <h3 className="text-xl font-semibold text-primary-900 mb-2">Tenancy Deposit Schemes in Northern Ireland</h3>
               <p className="text-gray-700 mb-3">
                 All deposits must be protected in a government-approved scheme within <strong>28 days</strong> of receipt:
               </p>
@@ -514,8 +514,8 @@ export default function NorthernIrelandTenancyPage() {
               </div>
             </div>
 
-            <div className="bg-amber-50 border-l-4 border-amber-600 p-6 mt-8">
-              <h3 className="text-xl font-semibold text-amber-900 mb-2">When NOT to Use a Private Tenancy Agreement</h3>
+            <div className="bg-primary-50 border-l-4 border-primary-600 p-6 mt-8">
+              <h3 className="text-xl font-semibold text-primary-900 mb-2">When NOT to Use a Private Tenancy Agreement</h3>
               <p className="text-gray-700 mb-3">These agreements are NOT suitable for:</p>
               <ul className="list-disc list-inside text-gray-700 space-y-1">
                 <li><strong>Lodgers:</strong> Use a Licence Agreement when the landlord lives in the same property</li>
@@ -731,8 +731,8 @@ export default function NorthernIrelandTenancyPage() {
                 </ul>
               </div>
 
-              <div className="bg-amber-50 border-l-4 border-amber-600 p-6 mb-6">
-                <h3 className="text-xl font-semibold text-amber-900 mb-3">Occupants vs. Tenants</h3>
+              <div className="bg-primary-50 border-l-4 border-primary-600 p-6 mb-6">
+                <h3 className="text-xl font-semibold text-primary-900 mb-3">Occupants vs. Tenants</h3>
                 <p className="text-gray-700 mb-3">Only tenants need to sign the agreement. Occupants (children, visiting relatives, non-paying guests) do not sign but can be mentioned in the agreement.</p>
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse border border-gray-300 text-sm">

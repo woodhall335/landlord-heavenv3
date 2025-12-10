@@ -10,15 +10,23 @@ export const metadata: Metadata = {
 
 export default function HelpPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <Container size="large">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-charcoal mb-4">Help Center</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Find answers to common questions about our services, documents, and processes.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-lavender-100 to-lavender-200 py-16 md:py-24">
+        <Container size="large">
+          <div className="text-center">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Support</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Help Center</h1>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Find answers to common questions about our services, documents, and processes.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      <Container size="large" className="py-12">
 
         {/* Quick Links */}
         <div className="grid md:grid-cols-4 gap-4 mb-12">
@@ -509,7 +517,7 @@ export default function HelpPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
-                className="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors"
+                className="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
               >
                 Contact Support
               </Link>

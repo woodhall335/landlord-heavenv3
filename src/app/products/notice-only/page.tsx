@@ -263,7 +263,7 @@ export default function NoticeOnlyPage() {
             <div className="mt-12 text-center">
               <Link
                 href="/wizard?product=notice_only"
-                className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-emerald-600 transition-colors"
+                className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-dark transition-colors"
               >
                 Start Your Notice Now →
               </Link>

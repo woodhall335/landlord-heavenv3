@@ -10,15 +10,23 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <Container size="medium">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-charcoal mb-4">Contact Us</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            We're here to help. Choose the department that best matches your inquiry.
-          </p>
-        </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-lavender-100 to-lavender-200 py-16 md:py-24">
+        <Container size="medium">
+          <div className="text-center">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Get In Touch</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Contact Us</h1>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              We're here to help. Choose the department that best matches your inquiry.
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      <Container size="medium" className="py-12">
 
         {/* Contact Methods */}
         <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -55,7 +63,7 @@ export default function ContactPage() {
             </div>
             <Link
               href="mailto:support@landlordheaven.co.uk"
-              className="block w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-emerald-600 transition-colors"
+              className="block w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-primary-dark transition-colors"
             >
               Email Support
             </Link>
@@ -188,7 +196,7 @@ export default function ContactPage() {
           </p>
           <Link
             href="/help"
-            className="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors"
+            className="inline-block bg-primary text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
           >
             Browse Help Center →
           </Link>

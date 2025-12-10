@@ -56,7 +56,7 @@ export default function MoneyClaimPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               {/* Court Forms */}
-              <div className="bg-white rounded-lg border-2 border-amber-500 p-6">
+              <div className="bg-white rounded-lg border-2 border-primary p-6">
                 <div className="text-3xl mb-3">📋</div>
                 <h3 className="text-xl font-semibold text-charcoal mb-4">Court Claim Forms</h3>
                 <ul className="space-y-3">
@@ -112,7 +112,7 @@ export default function MoneyClaimPage() {
               </div>
 
               {/* Pre-Action Compliance */}
-              <div className="bg-white rounded-lg border-2 border-amber-500 p-6">
+              <div className="bg-white rounded-lg border-2 border-primary p-6">
                 <div className="text-3xl mb-3">✉️</div>
                 <h3 className="text-xl font-semibold text-charcoal mb-4">Pre-Action Compliance</h3>
                 <ul className="space-y-3">
@@ -224,12 +224,12 @@ export default function MoneyClaimPage() {
               </div>
 
               {/* Filing Guides & Strategy */}
-              <div className="bg-amber-50 rounded-lg border border-amber-200 p-6">
+              <div className="bg-primary-50 rounded-lg border border-primary-200 p-6">
                 <div className="text-3xl mb-3">📚</div>
                 <h3 className="text-xl font-semibold text-charcoal mb-4">Filing Guides & Strategy</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fillRule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -241,7 +241,7 @@ export default function MoneyClaimPage() {
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fillRule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -253,7 +253,7 @@ export default function MoneyClaimPage() {
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fillRule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -265,7 +265,7 @@ export default function MoneyClaimPage() {
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         fillRule="evenodd"
                         d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -291,7 +291,7 @@ export default function MoneyClaimPage() {
 
             <div className="grid md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   1
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">Calculate Arrears</h3>
@@ -301,7 +301,7 @@ export default function MoneyClaimPage() {
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   2
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">We Generate Claim</h3>
@@ -311,7 +311,7 @@ export default function MoneyClaimPage() {
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   3
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">File Online or Paper</h3>
@@ -321,7 +321,7 @@ export default function MoneyClaimPage() {
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-amber-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   4
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">Collect Your Money</h3>
@@ -335,24 +335,24 @@ export default function MoneyClaimPage() {
               <h4 className="font-semibold text-charcoal mb-3">Typical Timeline:</h4>
               <div className="space-y-2 text-sm text-gray-700">
                 <p className="flex items-center gap-2">
-                  <span className="text-amber-600">→</span> <strong>Day 1:</strong> File claim with court (pay court
+                  <span className="text-primary">→</span> <strong>Day 1:</strong> File claim with court (pay court
                   fee)
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="text-amber-600">→</span> <strong>Day 7:</strong> Court serves claim on tenant
+                  <span className="text-primary">→</span> <strong>Day 7:</strong> Court serves claim on tenant
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="text-amber-600">→</span> <strong>Day 21:</strong> Tenant has 14 days to respond
+                  <span className="text-primary">→</span> <strong>Day 21:</strong> Tenant has 14 days to respond
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="text-amber-600">→</span> <strong>Day 28:</strong> If no response, apply for default
+                  <span className="text-primary">→</span> <strong>Day 28:</strong> If no response, apply for default
                   judgment
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="text-amber-600">→</span> <strong>Day 35:</strong> Judgment granted (you win!)
+                  <span className="text-primary">→</span> <strong>Day 35:</strong> Judgment granted (you win!)
                 </p>
                 <p className="flex items-center gap-2">
-                  <span className="text-amber-600">→</span> <strong>Day 42+:</strong> Enforcement (bailiffs, wage
+                  <span className="text-primary">→</span> <strong>Day 42+:</strong> Enforcement (bailiffs, wage
                   attachment, charging order)
                 </p>
               </div>
@@ -361,13 +361,13 @@ export default function MoneyClaimPage() {
             <div className="mt-8 text-center flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                className="inline-block bg-amber-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-600 transition-colors"
+                className="inline-block bg-primary-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-amber-600 transition-colors"
               >
                 England &amp; Wales Claim - £179.99 →
               </Link>
               <Link
                 href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors border border-amber-200"
+                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors border border-primary-200"
               >
                 Scotland Claim - £179.99 →
               </Link>
@@ -579,7 +579,7 @@ export default function MoneyClaimPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                className="inline-block bg-white text-amber-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
+                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
               >
                 England &amp; Wales Claim - £179.99 →
               </Link>
