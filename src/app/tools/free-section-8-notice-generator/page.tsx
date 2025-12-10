@@ -57,7 +57,7 @@ export default function FreeSection8Tool() {
         size: 40,
         font: boldFont,
         color: rgb(0.9, 0.9, 0.9),
-        rotate: { angle: Math.PI / 4 },
+        rotate: { type: 'radians' as const, angle: Math.PI / 4 },
       });
 
       // Title
@@ -254,7 +254,7 @@ export default function FreeSection8Tool() {
       const pdfBytes = await pdfDoc.save();
 
       // Create a blob and download
-      const blob = new Blob([pdfBytes as Uint8Array], { type: 'application/pdf' });
+      const blob = new Blob([new Uint8Array(pdfBytes)], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
