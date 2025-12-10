@@ -231,8 +231,8 @@ export default function FreeSection8Tool() {
         color: rgb(0, 0, 0),
       });
 
-      // Add disclaimer footer
-      page.drawText('FREE VERSION - This is a basic template only. Upgrade for court-ready documents with evidence checklists.', {
+      // Add footer
+      page.drawText('www.LandlordHeaven.com', {
         x: 50,
         y: 50,
         size: 8,
@@ -387,7 +387,7 @@ export default function FreeSection8Tool() {
           disabled={!isFormValid || isGenerating}
           className="w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-300"
         >
-          {isGenerating ? 'Generating...' : 'Generate Free Notice (Watermarked)'}
+          {isGenerating ? 'Generating...' : 'Generate Free Notice'}
         </button>
       </form>
 

@@ -315,24 +315,8 @@ export default function RentDemandLetterGenerator() {
         color: rgb(0, 0, 0),
       });
 
-      // Footer disclaimers
-      page.drawText('FREE VERSION - This is a basic template only. Not for legal proceedings.', {
-        x: 50,
-        y: 80,
-        size: 8,
-        font: boldFont,
-        color: rgb(0.5, 0.5, 0.5),
-      });
-
-      page.drawText('For legally validated, court-compliant demand letters, upgrade to the paid version (£14.99).', {
-        x: 50,
-        y: 65,
-        size: 8,
-        font: regularFont,
-        color: rgb(0.5, 0.5, 0.5),
-      });
-
-      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | Landlord Heaven`, {
+      // Footer
+      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.com`, {
         x: 50,
         y: 50,
         size: 8,
@@ -619,7 +603,7 @@ export default function RentDemandLetterGenerator() {
         >
           {isGenerating
             ? 'Generating Letter...'
-            : 'Generate Free Letter (Watermarked)'}
+            : 'Generate Free Letter'}
         </button>
 
         {generated && (

@@ -188,8 +188,8 @@ export default function FreeSection21Tool() {
         color: rgb(0, 0, 0),
       });
 
-      // Add disclaimer footer
-      page.drawText('FREE VERSION - This is a basic template only. Upgrade for court-ready documents.', {
+      // Add footer
+      page.drawText('www.LandlordHeaven.com', {
         x: 50,
         y: 50,
         size: 8,
@@ -337,7 +337,7 @@ export default function FreeSection21Tool() {
         >
           {isGenerating
             ? 'Generating...'
-            : 'Generate Free Notice (Watermarked)'}
+            : 'Generate Free Notice'}
         </button>
       </form>
 

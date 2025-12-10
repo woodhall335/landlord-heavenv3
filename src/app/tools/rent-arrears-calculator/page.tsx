@@ -322,24 +322,23 @@ export default function RentArrearsCalculator() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="bg-linear-to-br from-blue-700 to-indigo-700 text-white py-16">
+      <div className="bg-gradient-to-r from-lavender-100 to-lavender-200 py-16">
         <Container className="text-center max-w-4xl">
-          <p className="text-sm font-semibold uppercase tracking-wide mb-3">Free landlord tool</p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Rent Arrears Calculator</h1>
-          <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto">
-            Quickly calculate outstanding rent and a simple 8% statutory interest estimate. Download a summary with a
-            clear watermark before you decide to issue a court claim.
+          <p className="text-sm font-semibold uppercase tracking-wide mb-3 text-primary-600">Free landlord tool</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Rent Arrears Calculator</h1>
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+            Quickly calculate outstanding rent and statutory interest estimate. Download a professional summary to help you decide whether to issue a court claim.
           </p>
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-              className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold shadow hover:bg-gray-50 transition"
+              className="bg-primary text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-primary-dark transition"
             >
               Upgrade to Money Claim Pack (£179.99)
             </Link>
             <Link
               href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-              className="bg-white/15 text-white px-6 py-3 rounded-lg font-semibold border border-white/40 hover:bg-white/25 transition"
+              className="bg-white text-primary border-2 border-primary px-6 py-3 rounded-lg font-semibold hover:bg-primary/5 transition"
             >
               Scotland Simple Procedure Pack
             </Link>
@@ -449,11 +448,8 @@ export default function RentArrearsCalculator() {
           </div>
         </Card>
 
-        <Card padding="large" className="relative overflow-hidden">
-          <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-10">
-            <div className="text-4xl font-black text-gray-700 rotate-[-15deg]">NOT COURT-READY – FOR INFORMATION ONLY</div>
-          </div>
-          <div className="relative">
+        <Card padding="large">
+          <div>
             <h2 className="text-2xl font-semibold text-charcoal mb-4">Summary</h2>
             <div className="grid md:grid-cols-3 gap-4">
               <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
