@@ -616,7 +616,7 @@ export default function RentDemandLetterGenerator() {
       </form>
 
       {/* Secondary Upgrade Box */}
-      <div className="mt-8 rounded-xl border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-white p-6">
+      <div className="mt-8 rounded-xl border-2 border-primary-200 bg-gradient-to-br from-lavender-50 to-white p-6">
         <h3 className="mb-2 text-lg font-semibold text-gray-900">
           Need to pursue a money claim?
         </h3>

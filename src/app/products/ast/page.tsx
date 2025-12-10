@@ -268,7 +268,7 @@ export default function ASTPage() {
 
                   <Link
                     href="/wizard?product=ast_premium"
-                    className="block w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-emerald-600 transition-colors"
+                    className="block w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-primary-dark transition-colors"
                   >
                     Get Premium - £59.00
                   </Link>

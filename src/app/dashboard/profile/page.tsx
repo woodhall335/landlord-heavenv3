@@ -232,7 +232,7 @@ export default function ProfilePage() {
               <button
                 onClick={handleUpdateProfile}
                 disabled={saving}
-                className="w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {saving ? "Saving..." : "Update Profile"}
               </button>
@@ -270,7 +270,7 @@ export default function ProfilePage() {
               <button
                 onClick={handleChangePassword}
                 disabled={saving || !formData.newPassword || !formData.confirmPassword}
-                className="w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {saving ? "Changing..." : "Change Password"}
               </button>

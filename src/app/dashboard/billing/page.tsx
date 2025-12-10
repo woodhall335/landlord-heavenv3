@@ -255,7 +255,7 @@ export default function BillingPage() {
                 <div className="flex gap-3 pt-4 border-t">
                   <button
                     onClick={handleManagePaymentMethod}
-                    className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-emerald-600 transition-colors"
+                    className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
                   >
                     Manage Payment Method
                   </button>
@@ -282,7 +282,7 @@ export default function BillingPage() {
                 <p className="text-gray-600 mb-4">You don't have an active HMO Pro subscription.</p>
                 <Link
                   href="/hmo-pro"
-                  className="inline-block bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors"
+                  className="inline-block bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
                 >
                   Start Free Trial
                 </Link>
