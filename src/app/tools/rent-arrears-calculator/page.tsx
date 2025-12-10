@@ -31,19 +31,28 @@ export default function RentArrearsCalculator() {
 
   const totals = useMemo(() => {
     const today = new Date();
+    today.setHours(0, 0, 0, 0); // Normalize to start of day
 
     return schedule.reduce(
       (acc, item) => {
         const due = Number(item.dueAmount) || 0;
         const paid = Number(item.paidAmount) || 0;
         const outstanding = Math.max(due - paid, 0);
-        const dueDate = item.dueDate ? new Date(item.dueDate) : today;
+
+        // Parse due date correctly (add 'T00:00:00' to avoid timezone issues)
+        const dueDate = item.dueDate ? new Date(item.dueDate + 'T00:00:00') : today;
+
+        // Calculate days outstanding (only positive values for overdue amounts)
         const daysOutstanding = Math.max(
           0,
           Math.floor((today.getTime() - dueDate.getTime()) / (1000 * 60 * 60 * 24)),
         );
 
-        const interest = outstanding * 0.08 * (daysOutstanding / 365);
+        // Calculate simple interest: Principal × Rate × Time
+        // Interest only applies to outstanding amounts that are overdue
+        const interest = outstanding > 0 && daysOutstanding > 0
+          ? outstanding * 0.08 * (daysOutstanding / 365)
+          : 0;
 
         acc.totalDue += due;
         acc.totalPaid += paid;
@@ -172,7 +181,7 @@ export default function RentArrearsCalculator() {
                     step={0.01}
                   />
                   {index === 0 && (
-                    <p className="text-xs text-gray-500 mt-1">Defaults to your rent amount ({frequency}).</p>
+                    <p className="text-xs text-gray-500 mt-1 leading-tight">Default: {frequency === 'month' ? 'monthly' : 'weekly'} rent</p>
                   )}
                 </div>
                 <div>
@@ -281,30 +290,96 @@ export default function RentArrearsCalculator() {
         </Card>
 
         <Card padding="large">
-          <h2 className="text-2xl font-semibold text-charcoal mb-4">Landlord guidance (SEO placeholder)</h2>
-          <div className="space-y-3 text-gray-700 leading-relaxed">
-            <p>
-              We'll publish a full guide on calculating rent arrears, evidencing payments, and recovering balances through the
-              courts. Expect a worked example for monthly and weekly tenancies, plus template wording for pre-action letters.
-            </p>
-            <p>
-              Bookmark this page — we're adding jurisdiction-specific FAQs, downloadable CSV templates, and guidance on interest
-              calculations for Scotland and England & Wales.
-            </p>
+          <h2 className="text-2xl font-semibold text-charcoal mb-4">How to Calculate and Evidence Rent Arrears</h2>
+          <div className="space-y-4 text-gray-700 leading-relaxed">
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2">1. Keep Accurate Records</h3>
+              <p>
+                Maintain a detailed rent ledger showing every payment due and received. Include dates, amounts, and payment methods.
+                Bank statements alone are not enough—courts prefer a clear schedule showing the running balance.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2">2. Evidence You'll Need</h3>
+              <ul className="list-disc ml-6 space-y-1">
+                <li>Tenancy agreement showing the rent amount and payment frequency</li>
+                <li>Complete rent payment schedule with all due dates and payments received</li>
+                <li>Bank statements showing missed or partial payments</li>
+                <li>Communication with tenant about arrears (emails, letters, texts)</li>
+                <li>Any payment plans or agreements made</li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2">3. Statutory Interest on Rent Arrears</h3>
+              <p>
+                Under the Late Payment of Commercial Debts (Interest) Act 1998, you may claim interest at 8% per annum on
+                outstanding rent. This is simple interest, calculated from the due date to the date of payment or judgment.
+                Always state in your pre-action letter that you intend to claim interest.
+              </p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-2">4. Pre-Action Protocol</h3>
+              <p>
+                Before starting court proceedings, send a formal letter before action giving the tenant a final opportunity
+                to pay. Include the total arrears, interest claimed, and a deadline (typically 14 days). This demonstrates
+                to the court that you've tried to resolve the matter without litigation.
+              </p>
+            </div>
           </div>
         </Card>
 
         <Card padding="large">
-          <h2 className="text-2xl font-semibold text-charcoal mb-4">FAQs (coming soon)</h2>
-          <div className="space-y-3 text-gray-700 leading-relaxed">
-            <p className="font-semibold">How should I evidence arrears?</p>
-            <p className="text-sm">We'll add guidance on bank statements, rent ledgers, and tenant communications.</p>
+          <h2 className="text-2xl font-semibold text-charcoal mb-4">Frequently Asked Questions</h2>
+          <div className="space-y-6 text-gray-700 leading-relaxed">
+            <div>
+              <p className="font-semibold text-gray-900 text-lg mb-2">How should I evidence rent arrears for court?</p>
+              <p>
+                Prepare a clear rent schedule showing all payments due and received, with a running balance. Attach your
+                tenancy agreement, bank statements highlighting missed payments, and copies of all communications with the
+                tenant about the arrears. The court wants to see you've made reasonable attempts to resolve the issue
+                before litigation.
+              </p>
+            </div>
 
-            <p className="font-semibold">Can I claim interest before court?</p>
-            <p className="text-sm">We'll cover contractual vs statutory interest and how to explain it in pre-action letters.</p>
+            <div>
+              <p className="font-semibold text-gray-900 text-lg mb-2">Can I claim interest on rent arrears?</p>
+              <p>
+                Yes. You can claim statutory interest at 8% per annum under the Late Payment of Commercial Debts (Interest)
+                Act 1998. Interest runs from each payment's due date until it's paid or judgment is entered. You must state
+                your intention to claim interest in your pre-action letter. Some tenancy agreements include contractual
+                interest clauses—check yours carefully.
+              </p>
+            </div>
 
-            <p className="font-semibold">What if my tenant disputes the balance?</p>
-            <p className="text-sm">Expect step-by-step escalation options, including ADR and court filings.</p>
+            <div>
+              <p className="font-semibold text-gray-900 text-lg mb-2">What if my tenant disputes the arrears amount?</p>
+              <p>
+                Request a detailed breakdown from the tenant showing which payments they believe they've made. Check your
+                records carefully—mistakes happen. If there's a genuine dispute, consider mediation before court. If the
+                tenant simply refuses to pay without valid reason, proceed with your money claim and let the court decide.
+                Keep all communication professional and documented.
+              </p>
+            </div>
+
+            <div>
+              <p className="font-semibold text-gray-900 text-lg mb-2">Should I serve a Section 8 notice or file a money claim?</p>
+              <p>
+                It depends on your goal. A Section 8 notice (Ground 8 requires 8+ weeks arrears) seeks possession of the
+                property. A money claim pursues the debt even after the tenant has left. Many landlords do both: serve a
+                Section 8 to regain possession, then file a money claim for any remaining debt. Our Complete Pack guides
+                you through both processes.
+              </p>
+            </div>
+
+            <div>
+              <p className="font-semibold text-gray-900 text-lg mb-2">Is this calculator's 8% interest calculation legally accurate?</p>
+              <p>
+                This calculator uses the standard statutory rate of 8% per annum as simple interest. While widely accepted,
+                actual court awards may vary based on jurisdiction, the judge's discretion, and your specific tenancy
+                agreement. For a court-ready arrears schedule with jurisdiction-specific calculations and full legal
+                validation, upgrade to our Money Claim Pack.
+              </p>
+            </div>
           </div>
         </Card>
       </Container>

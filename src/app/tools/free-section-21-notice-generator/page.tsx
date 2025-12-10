@@ -18,13 +18,213 @@ export default function FreeSection21Tool() {
 
   const handleGenerate = async () => {
     setIsGenerating(true);
-    // TODO: Implement PDF generation with watermark
-    // For now, simulate generation
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsGenerating(false);
-    alert(
-      'Free version generates a watermarked template. Upgrade to get a court-ready version with full validation.'
-    );
+
+    try {
+      // Import pdf-lib dynamically (client-side only)
+      const { PDFDocument, rgb, StandardFonts } = await import('pdf-lib');
+
+      // Create a new PDF document
+      const pdfDoc = await PDFDocument.create();
+      const page = pdfDoc.addPage([595, 842]); // A4 size in points
+      const { width, height } = page.getSize();
+
+      // Load fonts
+      const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+      const regularFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+      let yPosition = height - 80;
+
+      // Add watermark
+      page.drawText('FREE WATERMARKED VERSION - NOT COURT READY', {
+        x: 50,
+        y: height / 2,
+        size: 40,
+        font: boldFont,
+        color: rgb(0.9, 0.9, 0.9),
+        rotate: { angle: Math.PI / 4, origin: { x: width / 2, y: height / 2 } },
+      });
+
+      // Title
+      page.drawText('SECTION 21 NOTICE', {
+        x: 50,
+        y: yPosition,
+        size: 20,
+        font: boldFont,
+        color: rgb(0, 0, 0),
+      });
+      yPosition -= 25;
+
+      page.drawText('Housing Act 1988 Section 21(1)(b) or Section 21(4)(a)', {
+        x: 50,
+        y: yPosition,
+        size: 10,
+        font: regularFont,
+        color: rgb(0.3, 0.3, 0.3),
+      });
+      yPosition -= 40;
+
+      // From section
+      page.drawText('From (Landlord):', {
+        x: 50,
+        y: yPosition,
+        size: 12,
+        font: boldFont,
+        color: rgb(0, 0, 0),
+      });
+      yPosition -= 20;
+
+      page.drawText(formData.landlordName || '[Landlord Name]', {
+        x: 50,
+        y: yPosition,
+        size: 11,
+        font: regularFont,
+        color: rgb(0, 0, 0),
+      });
+      yPosition -= 35;
+
+      // To section
+      page.drawText('To (Tenant):', {
+        x: 50,
+        y: yPosition,
+        size: 12,
+        font: boldFont,
+        color: rgb(0, 0, 0),
+      });
+      yPosition -= 20;
+
+      page.drawText(formData.tenantName || '[Tenant Name]', {
+        x: 50,
+        y: yPosition,
+        size: 11,
+        font: regularFont,
+        color: rgb(0, 0, 0),
+      });
+      yPosition -= 35;
+
+      // Property address section
+      page.drawText('Property Address:', {
+        x: 50,
+        y: yPosition,
+        size: 12,
+        font: boldFont,
+        color: rgb(0, 0, 0),
+      });
+      yPosition -= 20;
+
+      const addressLines = (formData.propertyAddress || '[Property Address]').split('\n');
+      addressLines.forEach((line) => {
+        page.drawText(line, {
+          x: 50,
+          y: yPosition,
+          size: 11,
+          font: regularFont,
+          color: rgb(0, 0, 0),
+        });
+        yPosition -= 18;
+      });
+      yPosition -= 20;
+
+      // Notice text
+      page.drawText('NOTICE REQUIRING POSSESSION', {
+        x: 50,
+        y: yPosition,
+        size: 14,
+        font: boldFont,
+        color: rgb(0, 0, 0),
+      });
+      yPosition -= 30;
+
+      const noticeText = [
+        'I/We give you notice that I/we require possession of the property known as the above address',
+        'which you hold as tenant.',
+        '',
+        `I/We require you to leave the property after: ${formData.noticeDate || '[Notice Date]'}`,
+        '',
+        'This notice is given under Section 21 of the Housing Act 1988.',
+      ];
+
+      noticeText.forEach((line) => {
+        if (line === '') {
+          yPosition -= 10;
+        } else {
+          const words = line.split(' ');
+          let currentLine = '';
+          words.forEach((word) => {
+            const testLine = currentLine + word + ' ';
+            if (testLine.length * 6 > width - 100) {
+              page.drawText(currentLine.trim(), {
+                x: 50,
+                y: yPosition,
+                size: 11,
+                font: regularFont,
+                color: rgb(0, 0, 0),
+              });
+              yPosition -= 18;
+              currentLine = word + ' ';
+            } else {
+              currentLine = testLine;
+            }
+          });
+          if (currentLine.trim()) {
+            page.drawText(currentLine.trim(), {
+              x: 50,
+              y: yPosition,
+              size: 11,
+              font: regularFont,
+              color: rgb(0, 0, 0),
+            });
+            yPosition -= 18;
+          }
+        }
+      });
+
+      yPosition -= 40;
+
+      // Signature section
+      page.drawText('Signed: _______________________________', {
+        x: 50,
+        y: yPosition,
+        size: 11,
+        font: regularFont,
+        color: rgb(0, 0, 0),
+      });
+      yPosition -= 30;
+
+      page.drawText(`Date: ${new Date().toLocaleDateString('en-GB')}`, {
+        x: 50,
+        y: yPosition,
+        size: 11,
+        font: regularFont,
+        color: rgb(0, 0, 0),
+      });
+
+      // Add disclaimer footer
+      page.drawText('FREE VERSION - This is a basic template only. Upgrade for court-ready documents.', {
+        x: 50,
+        y: 50,
+        size: 8,
+        font: regularFont,
+        color: rgb(0.5, 0.5, 0.5),
+      });
+
+      // Serialize the PDF to bytes
+      const pdfBytes = await pdfDoc.save();
+
+      // Create a blob and download
+      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `Section-21-Notice-FREE-${Date.now()}.pdf`;
+      link.click();
+      URL.revokeObjectURL(url);
+
+      setIsGenerating(false);
+    } catch (error) {
+      console.error('PDF generation failed:', error);
+      setIsGenerating(false);
+      alert('Failed to generate PDF. Please try again.');
+    }
   };
 
   const isFormValid =
