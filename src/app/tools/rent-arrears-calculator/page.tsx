@@ -4,11 +4,7 @@ import React, { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { Button, Card, Container, Input } from '@/components/ui';
 
-export const metadata = {
-  title: 'Rent Arrears Calculator | Free Tool | Landlord Heaven',
-  description:
-    'Calculate rent arrears and simple statutory interest for free. Download a summary with a clear arrears total and upgrade to a court-ready Money Claim Pack when you need to issue proceedings.',
-};
+// Note: Metadata moved to layout.tsx (client components cannot export metadata)
 
 type ScheduleItem = {
   id: string;

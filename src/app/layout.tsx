@@ -24,7 +24,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await getServerUser();
+  // Try to get user, but don't fail if Supabase isn't configured (for dev/testing)
+  let user = null;
+  try {
+    user = await getServerUser();
+  } catch (error) {
+    // Supabase not configured - continue without user (anonymous mode)
+    console.warn('Supabase not configured, continuing in anonymous mode');
+  }
 
   // Map user to Header props format
   const headerUser = user?.email
