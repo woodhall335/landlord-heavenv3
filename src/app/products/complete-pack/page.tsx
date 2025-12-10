@@ -40,7 +40,7 @@ export default function CompleteEvictionPackPage() {
             </div>
             <Link
               href="/wizard?product=complete_pack"
-              className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-dark transition-colors shadow-lg"
+              className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors shadow-lg"
             >
               Start Your Eviction Pack →
             </Link>
@@ -425,7 +425,7 @@ export default function CompleteEvictionPackPage() {
             <div className="mt-12 text-center">
               <Link
                 href="/wizard?product=complete_pack"
-                className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-dark transition-colors"
+                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
               >
                 Start Your Complete Pack →
               </Link>
@@ -797,7 +797,7 @@ export default function CompleteEvictionPackPage() {
               <p className="text-gray-600 mb-6">Need the full solution to take your case to court?</p>
               <Link
                 href="/wizard?product=complete_pack"
-                className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-dark transition-colors"
+                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
               >
                 Get Complete Eviction Pack - £149.99 →
               </Link>

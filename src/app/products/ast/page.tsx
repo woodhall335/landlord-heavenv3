@@ -133,7 +133,7 @@ export default function ASTPage() {
 
               {/* Premium AST */}
               <div className="bg-white rounded-lg border-2 border-primary overflow-hidden shadow-lg relative">
-                <div className="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full">
+                <div className="absolute top-4 right-4 bg-primary-600 text-white text-xs font-bold px-3 py-1 rounded-full">
                   RECOMMENDED
                 </div>
                 <div className="bg-linear-to-br from-primary to-emerald-600 text-white p-6 text-center">
@@ -268,7 +268,7 @@ export default function ASTPage() {
 
                   <Link
                     href="/wizard?product=ast_premium"
-                    className="block w-full bg-primary text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-primary-dark transition-colors"
+                    className="block w-full bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-primary-700 transition-colors"
                   >
                     Get Premium - £59.00
                   </Link>

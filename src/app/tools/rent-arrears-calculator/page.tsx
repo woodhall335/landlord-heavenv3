@@ -332,7 +332,7 @@ export default function RentArrearsCalculator() {
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-              className="bg-primary text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-primary-dark transition"
+              className="bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold shadow hover:bg-primary-700 transition"
             >
               Upgrade to Money Claim Pack (£179.99)
             </Link>
@@ -520,7 +520,7 @@ export default function RentArrearsCalculator() {
                 <div className="mt-3 flex flex-col sm:flex-row gap-2">
                   <Link
                     href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                    className="flex-1 text-center bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary/90 transition"
+                    className="flex-1 text-center bg-primary-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary/90 transition"
                   >
                     Start Money Claim (E&W)
                   </Link>
