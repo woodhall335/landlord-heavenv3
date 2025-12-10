@@ -85,7 +85,7 @@ export default function NorthernIrelandTenancyPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
 
-      <div className="min-h-screen bg-linear-to-br from-slate-50 to-red-50">
+      <div className="min-h-screen bg-gradient-to-r from-lavender-100 to-lavender-200">
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 py-4">
           <nav className="text-sm text-gray-600">
@@ -121,7 +121,7 @@ export default function NorthernIrelandTenancyPage() {
               </Link>
               <Link
                 href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy_premium"
-                className="bg-linear-to-r from-red-600 to-purple-600 text-white px-8 py-4 rounded-lg font-semibold hover:from-red-700 hover:to-purple-700 transition-colors text-lg"
+                className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:hover:bg-primary-dark transition-colors text-lg"
               >
                 Create Premium - £59.00
               </Link>
@@ -131,7 +131,7 @@ export default function NorthernIrelandTenancyPage() {
 
         {/* 2025 Legal Updates Highlight */}
         <section className="container mx-auto px-4 py-12">
-          <div className="max-w-4xl mx-auto bg-linear-to-r from-red-600 to-orange-600 text-white rounded-xl shadow-lg p-8">
+          <div className="max-w-4xl mx-auto bg-primary text-white rounded-xl shadow-lg p-8">
             <h2 className="text-3xl font-bold mb-4">🆕 2025 Legal Updates for Northern Ireland</h2>
             <p className="text-lg mb-6">
               Important changes came into effect on <strong>1 April 2025</strong> affecting all private tenancies in Northern Ireland:
@@ -403,7 +403,7 @@ export default function NorthernIrelandTenancyPage() {
         </section>
 
         {/* Benefits Section */}
-        <section className="container mx-auto px-4 py-12 bg-linear-to-br from-red-50 to-orange-50">
+        <section className="container mx-auto px-4 py-12 bg-gradient-to-r from-lavender-100 to-lavender-200">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Benefits of a Written Tenancy Agreement</h2>
 
@@ -659,7 +659,7 @@ export default function NorthernIrelandTenancyPage() {
               </div>
             </div>
 
-            <div className="bg-linear-to-r from-red-600 to-purple-600 text-white rounded-xl shadow-lg p-8">
+            <div className="bg-primary text-white rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-semibold mb-4">Two Options to Suit Your Needs</h3>
 
               <div className="grid md:grid-cols-2 gap-6">
@@ -827,7 +827,7 @@ export default function NorthernIrelandTenancyPage() {
               </div>
             </div>
 
-            <div className="bg-linear-to-r from-red-600 to-orange-600 text-white rounded-xl shadow-lg p-8">
+            <div className="bg-primary text-white rounded-xl shadow-lg p-8">
               <h3 className="text-2xl font-semibold mb-4">Rent Increases: 2025 Rules</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
@@ -897,7 +897,7 @@ export default function NorthernIrelandTenancyPage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="container mx-auto px-4 py-12 bg-linear-to-br from-red-50 to-orange-50">
+        <section className="container mx-auto px-4 py-12 bg-gradient-to-r from-lavender-100 to-lavender-200">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Frequently Asked Questions</h2>
 
@@ -1014,7 +1014,7 @@ export default function NorthernIrelandTenancyPage() {
 
         {/* Final CTA Section */}
         <section className="container mx-auto px-4 py-16">
-          <div className="max-w-4xl mx-auto bg-linear-to-r from-red-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-center text-white">
+          <div className="max-w-4xl mx-auto bg-primary rounded-2xl shadow-2xl p-12 text-center text-white">
             <h2 className="text-4xl font-bold mb-4">Ready to Create Your Tenancy Agreement?</h2>
             <p className="text-xl mb-8 opacity-90">
               Join Northern Ireland landlords who trust Landlord Heaven for 2025-compliant, professional tenancy agreements.

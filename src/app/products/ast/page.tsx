@@ -12,14 +12,14 @@ export default function ASTPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-linear-to-br from-primary to-emerald-600 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-r from-lavender-100 to-lavender-200 py-16 md:py-24">
         <Container>
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Tenancy Agreements</h1>
-            <p className="text-xl md:text-2xl mb-8 text-white/90">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Tenancy Agreements</h1>
+            <p className="text-xl md:text-2xl mb-8 text-gray-600">
               Curated by Landlord Heaven - Legally Compliant ASTs, PRTs & NI Tenancies
             </p>
-            <p className="text-lg text-white/80 mb-12 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
               Choose between Standard (£39.99) or Premium (£59.00) depending on your property complexity and protection
               needs
             </p>

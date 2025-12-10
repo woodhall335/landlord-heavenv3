@@ -12,27 +12,27 @@ export default function NoticeOnlyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-linear-to-br from-primary to-emerald-600 text-white py-16 md:py-24">
+      <section className="bg-gradient-to-r from-lavender-100 to-lavender-200 py-16 md:py-24">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold">Most Popular</span>
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Most Popular</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Notice Only</h1>
-            <p className="text-xl md:text-2xl mb-6 text-white/90">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Notice Only</h1>
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
               Court-Ready Eviction Notices for UK Landlords
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-5xl md:text-6xl font-bold">£29.99</span>
-              <span className="text-xl text-white/80">one-time</span>
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">£29.99</span>
+              <span className="text-xl text-gray-600">one-time</span>
             </div>
             <Link
               href="/wizard?product=notice_only"
-              className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
+              className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-dark transition-colors shadow-lg"
             >
               Get Your Notice Now →
             </Link>
-            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • No subscription</p>
+            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
           </div>
         </Container>
       </section>
