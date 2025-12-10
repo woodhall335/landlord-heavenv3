@@ -29,7 +29,7 @@ export default function MoneyClaimPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-dark transition-colors shadow-lg"
+                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors shadow-lg"
               >
                 England &amp; Wales Claim →
               </Link>
@@ -361,7 +361,7 @@ export default function MoneyClaimPage() {
             <div className="mt-8 text-center flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                className="inline-block bg-primary-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-dark transition-colors"
+                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
               >
                 England &amp; Wales Claim - £179.99 →
               </Link>

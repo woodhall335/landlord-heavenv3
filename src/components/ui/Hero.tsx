@@ -48,7 +48,7 @@ export function Hero({
     variant === 'gradient'
       ? 'bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700'
       : variant === 'secondary'
-      ? 'bg-gradient-to-r from-lavender-100 to-lavender-200'
+      ? 'bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50'
       : 'bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700';
 
   const textClass = variant === 'secondary' ? 'text-gray-900' : 'text-white';

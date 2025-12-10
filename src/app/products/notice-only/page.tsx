@@ -28,7 +28,7 @@ export default function NoticeOnlyPage() {
             </div>
             <Link
               href="/wizard?product=notice_only"
-              className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-dark transition-colors shadow-lg"
+              className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors shadow-lg"
             >
               Get Your Notice Now →
             </Link>
@@ -263,7 +263,7 @@ export default function NoticeOnlyPage() {
             <div className="mt-12 text-center">
               <Link
                 href="/wizard?product=notice_only"
-                className="inline-block bg-primary text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-dark transition-colors"
+                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
               >
                 Start Your Notice Now →
               </Link>
