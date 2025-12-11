@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./Button";
@@ -41,35 +42,14 @@ export function NavBar({ user }: NavBarProps) {
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
         <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
-          {/* Logo SVG */}
-          <svg width="280" height="50" viewBox="0 0 280 50" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-12 w-auto">
-            {/* Purple house with wings icon */}
-            <g transform="translate(0, 5)">
-              {/* Left wing */}
-              <path d="M2 25 C2 20, 8 18, 12 22 L12 32 C8 30, 4 28, 2 25 Z" fill="#7C3AED"/>
-              {/* Right wing */}
-              <path d="M38 25 C38 20, 32 18, 28 22 L28 32 C32 30, 36 28, 38 25 Z" fill="#7C3AED"/>
-              {/* House body */}
-              <rect x="12" y="22" width="16" height="18" rx="2" fill="#7C3AED"/>
-              {/* Roof */}
-              <path d="M10 22 L20 12 L30 22 Z" fill="#7C3AED"/>
-              {/* Door */}
-              <rect x="17" y="30" width="6" height="10" rx="1" fill="white"/>
-              {/* Windows (eyes) */}
-              <circle cx="16" cy="20" r="1.5" fill="white"/>
-              <circle cx="24" cy="20" r="1.5" fill="white"/>
-              {/* Door window */}
-              <rect x="18.5" y="32" width="3" height="3" rx="0.5" fill="#7C3AED"/>
-            </g>
-            {/* LANDLORDHEAVEN text */}
-            <text x="55" y="28" fontFamily="Arial, sans-serif" fontSize="20" fontWeight="900" fill="#000000" letterSpacing="-0.5">
-              LANDLORD<tspan fill="#000000">HEAVEN</tspan>
-            </text>
-            {/* LEGAL DOCUMENTS FOR LANDLORDS subtitle */}
-            <text x="55" y="42" fontFamily="Arial, sans-serif" fontSize="9" fontWeight="400" fill="#6B7280" letterSpacing="1">
-              LEGAL DOCUMENTS FOR LANDLORDS
-            </text>
-          </svg>
+          <Image
+            src="/logo.png"
+            alt="Landlord Heaven - Legal Documents for Landlords"
+            width={280}
+            height={50}
+            priority
+            className="h-10 w-auto"
+          />
         </Link>
 
         <nav className="hidden items-center gap-9 lg:flex">
