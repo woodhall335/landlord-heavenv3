@@ -101,8 +101,8 @@ export function NavBar({ user }: NavBarProps) {
           ))}
         </nav>
 
-        {user && (
-          <div className="hidden items-center gap-4 lg:flex">
+        <div className="hidden items-center gap-4 lg:flex">
+          {user ? (
             <div className="flex items-center gap-3 rounded-full bg-gray-100 px-4 py-2 text-sm text-charcoal">
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white font-bold">
                 {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
@@ -112,8 +112,14 @@ export function NavBar({ user }: NavBarProps) {
                 Dashboard
               </Link>
             </div>
-          </div>
-        )}
+          ) : (
+            <Link href="/auth/login">
+              <Button variant="primary" size="medium" className="px-7 shadow-md hover:shadow-lg">
+                Login
+              </Button>
+            </Link>
+          )}
+        </div>
 
         <button
           className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700 lg:hidden"

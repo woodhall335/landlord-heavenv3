@@ -82,16 +82,24 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Get Started</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Create Your Account</h1>
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
+              Start creating court-ready legal documents
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      <div className="flex items-center justify-center py-12 px-4">
       <Container size="small">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-extrabold text-charcoal mb-2">
-            Create Your Account
-          </h1>
-          <p className="text-gray-600">
-            Start creating court-ready legal documents
-          </p>
-        </div>
 
         <Card padding="large">
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -203,6 +211,7 @@ export default function SignupPage() {
           </Link>
         </div>
       </Container>
+      </div>
     </div>
   );
 }
