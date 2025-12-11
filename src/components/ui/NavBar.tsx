@@ -43,7 +43,7 @@ export function NavBar({ user }: NavBarProps) {
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
         <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
           <Image
-            src="/headerlogo.png"
+            src="/logo.png"
             alt="Landlord Heaven - Legal Documents for Landlords"
             width={280}
             height={50}
