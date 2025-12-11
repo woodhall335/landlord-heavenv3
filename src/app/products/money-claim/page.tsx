@@ -306,7 +306,7 @@ export default function MoneyClaimPage() {
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">We Generate Claim</h3>
                 <p className="text-sm text-gray-600">
-                  Claim forms pre-filled with your case details, arrears schedule, and witness statement ready.
+                  Claim forms pre-filled with your case details, arrears schedule, and supporting documentation ready.
                 </p>
               </div>
 
