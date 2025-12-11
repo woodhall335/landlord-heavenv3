@@ -266,9 +266,9 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   fillTextField(form, 'Full name of the person signing the Statement of Truth', data.signatory_name);
 
   if (data.solicitor_firm) {
-    fillTextField(form, "Name of claimant's legal representative's firm", data.solicitor_firm);
+    fillTextField(form, 'Name of claimant’s legal representative’s firm', data.solicitor_firm);
     checkBox(form, "The Claimant believes that the facts stated in this claim form are true. I am authorised by the claimant to sign this statement", true);
-    checkBox(form, "Statement of Truth is signed by the Claimant's legal representative (as defined by CPR 2.3(1))", true);
+    checkBox(form, 'Statement of Truth is signed by the Claimant’s legal representative (as defined by CPR 2.3(1))', true);
   } else {
     checkBox(form, 'I believe that the facts stated in this clam form are true', true);
     checkBox(form, 'Statement of Truth is signed by the Claimant', true);
@@ -286,21 +286,33 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
 
   fillTextField(
     form,
-    "building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+    'building and street - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
     serviceAddressParts[0]
   );
   if (serviceAddressParts.length > 1) {
     fillTextField(
       form,
-      "Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+      'Second line of address - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
       serviceAddressParts[1]
     );
   }
 
+  fillTextField(
+    form,
+    'Town or city - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
+    data.service_address_town
+  );
+
+  fillTextField(
+    form,
+    'County (optional) - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
+    data.service_address_county
+  );
+
   if (data.service_postcode || data.landlord_postcode) {
     fillTextField(
       form,
-      "Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+      'Postcode - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
       data.service_postcode || data.landlord_postcode
     );
   }
@@ -554,7 +566,7 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
 
   // Property details
   fillTextField(form, 'The claimant has a right to possession of:', data.property_address);
-  fillTextField(form, 'To the best of the claimant\'s knowledge the following persons are in possession of the property:', data.tenant_full_name);
+  fillTextField(form, 'To the best of the claimant’s knowledge the following persons are in possession of the property:', data.tenant_full_name);
 
   // Tenancy details
   fillTextField(form, '3(a) Type of tenancy', 'Assured Shorthold Tenancy');
@@ -617,9 +629,9 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   fillTextField(form, 'Full name of person signing the Statement of Truth', data.signatory_name);
 
   if (data.solicitor_firm) {
-    fillTextField(form, "Name of claimant's legal representative's firm", data.solicitor_firm);
+    fillTextField(form, 'Name of claimant’s legal representative’s firm', data.solicitor_firm);
     checkBox(form, 'The Claimant believes that the facts stated in these particulars of claim are true. I am authorised by the claimant to sign this statement', true);
-    checkBox(form, "Statement of Truth signed by Claimant's legal representative (as defined by CPR 2.3(1))", true);
+    checkBox(form, 'Statement of Truth signed by Claimant’s legal representative (as defined by CPR 2.3(1))', true);
   } else {
     checkBox(form, 'I believe that the facts stated in these particulars of claim are true', true);
     checkBox(form, 'Statement of Truth signed by Claimant', true);
@@ -834,10 +846,10 @@ export async function fillForm6A(data: CaseData): Promise<Uint8Array> {
 
   // Signatory names
   fillTextField(form, 'Signatory Name 1', data.landlord_full_name);
-  fillTextField(form, 'Signatory name 2', data.landlord_2_name);
+  fillTextField(form, 'Signatory name 2 ', data.landlord_2_name);
 
   // Date signed
-  fillTextField(form, 'Date 2', data.signature_date);
+  fillTextField(form, 'Date 2 ', data.signature_date);
 
   const pdfBytes = await pdfDoc.save();
   console.log('✅ Form 6A filled successfully');

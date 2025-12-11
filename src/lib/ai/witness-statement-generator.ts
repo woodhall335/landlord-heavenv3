@@ -332,7 +332,12 @@ ${context.has_conduct_issues ? `- Exhibit 4: Evidence of conduct issues (photos,
  * Extracts witness statement context from CaseFacts
  */
 export function extractWitnessStatementContext(caseFacts: CaseFacts): WitnessStatementContext {
-  const jurisdiction = caseFacts.jurisdiction === 'scotland' ? 'scotland' : 'england-wales';
+  const jurisdiction =
+    caseFacts.jurisdiction === 'scotland' || (caseFacts as any)?.meta?.jurisdiction === 'scotland'
+      ? 'scotland'
+      : caseFacts.jurisdiction === 'northern-ireland' || (caseFacts as any)?.meta?.jurisdiction === 'northern-ireland'
+      ? 'northern-ireland'
+      : 'england-wales';
 
   // Determine if has arrears
   const has_arrears = (caseFacts.eviction?.rent_arrears_amount || 0) > 0;
@@ -353,13 +358,39 @@ export function extractWitnessStatementContext(caseFacts: CaseFacts): WitnessSta
     grounds.push(...caseFacts.eviction.grounds_england_wales);
   }
 
+  const landlord = (caseFacts as any).landlord || caseFacts.parties?.landlord || {};
+  const tenant = (caseFacts as any).tenant || caseFacts.parties?.tenants?.[0] || {};
+
+  const landlordName = [landlord.first_name, landlord.last_name, landlord.name]
+    .filter(Boolean)
+    .join(' ')
+    .trim() || 'Landlord';
+
+  const tenantName = [tenant.first_name, tenant.last_name, tenant.name]
+    .filter(Boolean)
+    .join(' ')
+    .trim() || 'Tenant';
+
+  const propertyAddress =
+    caseFacts.property?.full_address ||
+    [
+      caseFacts.property?.address_line1,
+      caseFacts.property?.address_line2,
+      caseFacts.property?.city,
+      caseFacts.property?.postcode,
+    ]
+      .filter(Boolean)
+      .join(', ') ||
+    caseFacts.property?.postcode ||
+    'the property';
+
   return {
-    landlord_name: `${caseFacts.landlord.first_name} ${caseFacts.landlord.last_name}`,
-    tenant_name: `${caseFacts.tenant.first_name} ${caseFacts.tenant.last_name}`,
-    property_address: caseFacts.property.full_address || caseFacts.property.postcode || 'the property',
-    tenancy_start_date: caseFacts.tenancy.start_date,
-    rent_amount: caseFacts.tenancy.rent_amount,
-    rent_frequency: caseFacts.tenancy.rent_frequency,
+    landlord_name: landlordName,
+    tenant_name: tenantName,
+    property_address: propertyAddress,
+    tenancy_start_date: caseFacts.tenancy?.start_date,
+    rent_amount: caseFacts.tenancy?.rent_amount,
+    rent_frequency: caseFacts.tenancy?.rent_frequency,
     grounds: grounds.length > 0 ? grounds : ['Not specified'],
     arrears_total: caseFacts.eviction?.rent_arrears_amount,
     has_arrears,

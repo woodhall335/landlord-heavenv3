@@ -609,6 +609,9 @@ function generateFallbackComplianceAudit(
  * Extracts compliance audit context from CaseFacts
  */
 export function extractComplianceAuditContext(caseFacts: CaseFacts): ComplianceAuditContext {
+  const tenancy = (caseFacts as any)?.tenancy || {};
+  const property = (caseFacts as any)?.property || {};
+  const eviction = (caseFacts as any)?.eviction || {};
   const jurisdiction =
     caseFacts.jurisdiction === 'scotland'
       ? 'scotland'
@@ -618,41 +621,41 @@ export function extractComplianceAuditContext(caseFacts: CaseFacts): ComplianceA
 
   return {
     jurisdiction,
-    notice_type: caseFacts.eviction?.notice_type,
+    notice_type: eviction?.notice_type,
 
     // Deposit
-    has_deposit: Boolean(caseFacts.tenancy.deposit_amount && caseFacts.tenancy.deposit_amount > 0),
-    deposit_amount: caseFacts.tenancy.deposit_amount,
-    deposit_protected: caseFacts.tenancy.deposit_protected,
-    deposit_protection_date: caseFacts.tenancy.deposit_protection_date,
-    deposit_scheme: caseFacts.tenancy.deposit_scheme,
-    tenancy_start_date: caseFacts.tenancy.start_date,
+    has_deposit: Boolean(tenancy.deposit_amount && tenancy.deposit_amount > 0),
+    deposit_amount: tenancy.deposit_amount,
+    deposit_protected: tenancy.deposit_protected,
+    deposit_protection_date: tenancy.deposit_protection_date,
+    deposit_scheme: tenancy.deposit_scheme,
+    tenancy_start_date: tenancy.start_date,
 
     // Safety certificates
-    has_gas_appliances: Boolean(caseFacts.property.has_gas_appliances),
-    gas_cert_date: caseFacts.property.gas_cert_date,
-    gas_cert_expiry: caseFacts.property.gas_cert_expiry,
-    has_electrical_cert: Boolean(caseFacts.property.electrical_cert_date),
-    electrical_cert_date: caseFacts.property.electrical_cert_date,
+    has_gas_appliances: Boolean(property.has_gas_appliances),
+    gas_cert_date: property.gas_cert_date,
+    gas_cert_expiry: property.gas_cert_expiry,
+    has_electrical_cert: Boolean(property.electrical_cert_date),
+    electrical_cert_date: property.electrical_cert_date,
 
     // EPC
-    epc_rating: caseFacts.property.epc_rating,
-    epc_exempt: caseFacts.property.epc_exempt,
+    epc_rating: property.epc_rating,
+    epc_exempt: property.epc_exempt,
 
     // Other compliance
-    how_to_rent_provided: caseFacts.tenancy.how_to_rent_provided,
-    is_hmo: caseFacts.property.is_hmo,
-    hmo_licensed: caseFacts.property.hmo_licensed,
+    how_to_rent_provided: tenancy.how_to_rent_provided,
+    is_hmo: property.is_hmo,
+    hmo_licensed: property.hmo_licensed,
 
     // Risks
-    tenant_complained_recently: Boolean(caseFacts.eviction?.tenant_complained),
-    complaint_date: caseFacts.eviction?.complaint_date,
-    notice_served_date: caseFacts.eviction?.notice_served_date,
-    disrepair_issues: caseFacts.eviction?.disrepair_issues,
+    tenant_complained_recently: Boolean(eviction?.tenant_complained),
+    complaint_date: eviction?.complaint_date,
+    notice_served_date: eviction?.notice_served_date,
+    disrepair_issues: eviction?.disrepair_issues,
 
     // Grounds
-    arrears_amount: caseFacts.eviction?.rent_arrears_amount,
-    has_asb: Boolean(caseFacts.eviction?.asb_incidents?.length),
-    has_breach: Boolean(caseFacts.eviction?.breach_details),
+    arrears_amount: eviction?.rent_arrears_amount,
+    has_asb: Boolean(eviction?.asb_incidents?.length),
+    has_breach: Boolean(eviction?.breach_details),
   };
 }

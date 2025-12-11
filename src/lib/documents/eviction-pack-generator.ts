@@ -700,7 +700,7 @@ export async function generateCompleteEvictionPack(
     const witnessStatementContent = await generateWitnessStatement(wizardFacts, witnessStatementContext);
 
     const witnessStatementDoc = await generateDocument({
-      templatePath: `${jurisdiction}/templates/eviction/witness-statement.hbs`,
+      templatePath: `uk/${jurisdiction}/templates/eviction/witness-statement.hbs`,
       data: {
         ...evictionCase,
         witness_statement: witnessStatementContent,
@@ -732,7 +732,7 @@ export async function generateCompleteEvictionPack(
     const complianceAuditContent = await generateComplianceAudit(wizardFacts, complianceAuditContext);
 
     const complianceAuditDoc = await generateDocument({
-      templatePath: `${jurisdiction}/templates/eviction/compliance-audit.hbs`,
+      templatePath: `uk/${jurisdiction}/templates/eviction/compliance-audit.hbs`,
       data: {
         ...evictionCase,
         compliance_audit: complianceAuditContent,
@@ -763,7 +763,7 @@ export async function generateCompleteEvictionPack(
     const riskAssessment = computeRiskAssessment(wizardFacts);
 
     const riskReportDoc = await generateDocument({
-      templatePath: `${jurisdiction}/templates/eviction/risk-report.hbs`,
+      templatePath: `uk/${jurisdiction}/templates/eviction/risk-report.hbs`,
       data: {
         ...evictionCase,
         risk_assessment: riskAssessment,
