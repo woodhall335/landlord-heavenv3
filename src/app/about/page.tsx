@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container, TealHero } from "@/components/ui";
 import Link from "next/link";
+import Image from "next/image";
 import { generateMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = generateMetadata({
@@ -113,9 +114,19 @@ export default function AboutPage() {
                   jurisdictions have different laws - we handle all of them.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
-                  <li>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England & Wales: Section 8/21, ASTs, Form 6A</li>
-                  <li>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland: Notice to Leave, PRTs, AT6</li>
-                  <li>🇬🇧 Northern Ireland: Notice to Quit, NI forms</li>
+                  <li className="flex items-center gap-2">
+                    <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="w-4 h-4" />
+                    <Image src="/gb-wls.svg" alt="Wales" width={16} height={16} className="w-4 h-4" />
+                    England & Wales: Section 8/21, ASTs, Form 6A
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Image src="/gb-sct.svg" alt="Scotland" width={16} height={16} className="w-4 h-4" />
+                    Scotland: Notice to Leave, PRTs, AT6
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <Image src="/gb-nir.svg" alt="Northern Ireland" width={16} height={16} className="w-4 h-4" />
+                    Northern Ireland: Notice to Quit, NI forms
+                  </li>
                 </ul>
               </div>
 

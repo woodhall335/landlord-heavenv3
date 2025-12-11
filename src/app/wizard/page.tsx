@@ -9,6 +9,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import { Badge, Button, Container, TealHero } from '@/components/ui';
 import { clsx } from 'clsx';
 
@@ -53,9 +54,9 @@ const documentOptions: DocumentOption[] = [
 ];
 
 const jurisdictions: JurisdictionOption[] = [
-  { value: 'england-wales', label: 'England & Wales', flag: '🏴' },
-  { value: 'scotland', label: 'Scotland', flag: '🏴' },
-  { value: 'northern-ireland', label: 'Northern Ireland', flag: '🇬🇧' },
+  { value: 'england-wales', label: 'England & Wales', flag: '/gb-eng.svg' },
+  { value: 'scotland', label: 'Scotland', flag: '/gb-sct.svg' },
+  { value: 'northern-ireland', label: 'Northern Ireland', flag: '/gb-nir.svg' },
 ];
 
 // Map product parameter to document type
@@ -344,7 +345,9 @@ export default function WizardPage() {
                       : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
                   )}
                 >
-                  <div className="text-4xl">{jur.flag}</div>
+                  <div>
+                    <Image src={jur.flag} alt={jur.label} width={48} height={48} className="w-12 h-12" />
+                  </div>
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-charcoal">{jur.label}</h3>
                     {!isJurisdictionSupported(jur) && (
