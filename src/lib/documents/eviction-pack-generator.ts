@@ -22,6 +22,7 @@ import {
   wizardFactsToScotlandEviction,
   buildScotlandEvictionCase,
 } from './eviction-wizard-mapper';
+import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -690,6 +691,38 @@ export async function generateCompleteEvictionPack(
 
   const proofOfService = await generateProofOfService(evictionCase);
   documents.push(proofOfService);
+
+  // 3.1 Generate witness statement (AI-powered premium feature)
+  try {
+    const witnessStatementContext = extractWitnessStatementContext(wizardFacts);
+    const witnessStatementContent = await generateWitnessStatement(wizardFacts, witnessStatementContext);
+
+    const witnessStatementDoc = await generateDocument({
+      templatePath: `${jurisdiction}/templates/eviction/witness-statement.hbs`,
+      data: {
+        ...evictionCase,
+        witness_statement: witnessStatementContent,
+        landlord_address: evictionCase.landlord_address,
+        court_name: jurisdiction === 'scotland' ? 'First-tier Tribunal' : 'County Court',
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+
+    documents.push({
+      title: 'Witness Statement',
+      description: 'AI-drafted witness statement for court proceedings',
+      category: 'supporting_documents',
+      html: witnessStatementDoc.html,
+      pdf: witnessStatementDoc.pdf,
+      file_name: 'witness_statement.pdf',
+    });
+
+    console.log('✅ Generated witness statement');
+  } catch (error) {
+    console.error('⚠️  Failed to generate witness statement:', error);
+    // Don't fail the entire pack if witness statement generation fails
+  }
 
   // 4. Generate case summary document
   const caseSummaryDoc = await generateDocument({

@@ -1,0 +1,96 @@
+---
+title: Witness Statement of {{landlord_name}}
+category: supporting_documents
+description: Formal witness statement for First-tier Tribunal proceedings
+filename: witness-statement.pdf
+---
+
+WITNESS STATEMENT OF {{landlord_name}}
+
+==================================================================
+
+FIRST-TIER TRIBUNAL FOR SCOTLAND (HOUSING AND PROPERTY CHAMBER)
+
+REFERENCE NUMBER: [To be inserted by Tribunal]
+
+==================================================================
+
+BETWEEN:
+
+{{landlord_name}}
+Applicant
+
+-and-
+
+{{tenant_name}}
+Respondent
+
+==================================================================
+
+WITNESS STATEMENT OF {{landlord_name}}
+
+==================================================================
+
+I, {{landlord_name}}, of {{landlord_address}}, make the following statement:
+
+1. INTRODUCTION
+
+{{witness_statement.introduction}}
+
+2. TENANCY HISTORY
+
+{{witness_statement.tenancy_history}}
+
+{{#if witness_statement.rent_arrears}}
+3. RENT ARREARS
+
+{{witness_statement.rent_arrears}}
+{{/if}}
+
+{{#if witness_statement.conduct_issues}}
+{{#if witness_statement.rent_arrears}}4{{else}}3{{/if}}. CONDUCT AND TENANCY BREACHES
+
+{{witness_statement.conduct_issues}}
+{{/if}}
+
+{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}5{{else}}4{{/if}}{{else}}{{#if witness_statement.conduct_issues}}4{{else}}3{{/if}}{{/if}}. GROUNDS FOR EVICTION
+
+{{witness_statement.grounds_summary}}
+
+{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}6{{else}}5{{/if}}{{else}}{{#if witness_statement.conduct_issues}}5{{else}}4{{/if}}{{/if}}. TIMELINE OF EVENTS
+
+{{witness_statement.timeline}}
+
+{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}7{{else}}6{{/if}}{{else}}{{#if witness_statement.conduct_issues}}6{{else}}5{{/if}}{{/if}}. SUPPORTING EVIDENCE
+
+{{witness_statement.evidence_references}}
+
+{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}8{{else}}7{{/if}}{{else}}{{#if witness_statement.conduct_issues}}7{{else}}6{{/if}}{{/if}}. DECLARATION
+
+{{witness_statement.conclusion}}
+
+I declare that the facts stated in this witness statement are within my own knowledge and are true and accurate to the best of my knowledge and belief.
+
+Signed: _________________________________
+
+{{landlord_name}}
+
+Dated: _________________________________
+
+==================================================================
+
+NOTES FOR TRIBUNAL PROCEEDINGS:
+
+1. This witness statement must be signed and dated.
+
+2. You may be asked to give evidence at a tribunal hearing. Be prepared to answer questions about the contents of this statement.
+
+3. All exhibits referenced should be clearly labeled and attached.
+
+4. Submit this statement to the First-tier Tribunal as part of your application bundle.
+
+5. Serve a copy on the respondent (tenant) as required by tribunal rules.
+
+6. Keep copies of all correspondence and documents for your records.
+
+==================================================================

@@ -1,0 +1,91 @@
+---
+title: Witness Statement of {{landlord_name}}
+category: supporting_documents
+description: Formal witness statement for possession proceedings
+filename: witness-statement.pdf
+---
+
+WITNESS STATEMENT OF {{landlord_name}}
+
+==================================================================
+
+IN THE {{court_name}} COUNTY COURT
+CLAIM NUMBER: [To be inserted by court]
+
+==================================================================
+
+BETWEEN:
+
+{{landlord_name}}
+Claimant
+
+-and-
+
+{{tenant_name}}
+Defendant
+
+==================================================================
+
+WITNESS STATEMENT OF {{landlord_name}}
+
+==================================================================
+
+I, {{landlord_name}}, of {{landlord_address}}, will say as follows:
+
+1. INTRODUCTION
+
+{{witness_statement.introduction}}
+
+2. TENANCY HISTORY
+
+{{witness_statement.tenancy_history}}
+
+{{#if witness_statement.rent_arrears}}
+3. RENT ARREARS
+
+{{witness_statement.rent_arrears}}
+{{/if}}
+
+{{#if witness_statement.conduct_issues}}
+{{#if witness_statement.rent_arrears}}4{{else}}3{{/if}}. CONDUCT AND TENANCY BREACHES
+
+{{witness_statement.conduct_issues}}
+{{/if}}
+
+{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}5{{else}}4{{/if}}{{else}}{{#if witness_statement.conduct_issues}}4{{else}}3{{/if}}{{/if}}. GROUNDS FOR POSSESSION
+
+{{witness_statement.grounds_summary}}
+
+{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}6{{else}}5{{/if}}{{else}}{{#if witness_statement.conduct_issues}}5{{else}}4{{/if}}{{/if}}. TIMELINE OF EVENTS
+
+{{witness_statement.timeline}}
+
+{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}7{{else}}6{{/if}}{{else}}{{#if witness_statement.conduct_issues}}6{{else}}5{{/if}}{{/if}}. SUPPORTING EVIDENCE
+
+{{witness_statement.evidence_references}}
+
+{{#if witness_statement.rent_arrears}}{{#if witness_statement.conduct_issues}}8{{else}}7{{/if}}{{else}}{{#if witness_statement.conduct_issues}}7{{else}}6{{/if}}{{/if}}. STATEMENT OF TRUTH
+
+{{witness_statement.conclusion}}
+
+Signed: _________________________________
+
+{{landlord_name}}
+
+Dated: _________________________________
+
+==================================================================
+
+NOTES:
+
+1. This witness statement must be signed and dated before submission to court.
+
+2. You may be called to give oral evidence at a hearing. Ensure all facts stated are true and accurate.
+
+3. If you are represented by a solicitor, they will verify this statement.
+
+4. Keep a copy for your records and bring the original to any court hearing.
+
+5. Do not alter this statement after signing. If you need to make changes, create a supplemental witness statement.
+
+==================================================================
