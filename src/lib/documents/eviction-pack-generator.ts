@@ -24,6 +24,7 @@ import {
 } from './eviction-wizard-mapper';
 import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
 import { generateComplianceAudit, extractComplianceAuditContext } from '@/lib/ai/compliance-audit-generator';
+import { computeRiskAssessment } from '@/lib/case-intel/risk-assessment';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -755,6 +756,37 @@ export async function generateCompleteEvictionPack(
   } catch (error) {
     console.error('⚠️  Failed to generate compliance audit:', error);
     // Don't fail the entire pack if compliance audit generation fails
+  }
+
+  // 3.3 Generate risk report (premium feature)
+  try {
+    const riskAssessment = computeRiskAssessment(wizardFacts);
+
+    const riskReportDoc = await generateDocument({
+      templatePath: `${jurisdiction}/templates/eviction/risk-report.hbs`,
+      data: {
+        ...evictionCase,
+        risk_assessment: riskAssessment,
+        current_date: new Date().toISOString().split('T')[0],
+        case_type: evictionCase.case_type.replace('_', ' ').toUpperCase(),
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+
+    documents.push({
+      title: 'Case Risk Assessment Report',
+      description: 'Comprehensive risk analysis and success probability assessment',
+      category: 'guidance',
+      html: riskReportDoc.html,
+      pdf: riskReportDoc.pdf,
+      file_name: 'risk_assessment.pdf',
+    });
+
+    console.log('✅ Generated risk assessment report');
+  } catch (error) {
+    console.error('⚠️  Failed to generate risk report:', error);
+    // Don't fail the entire pack if risk report generation fails
   }
 
   // 4. Generate case summary document
