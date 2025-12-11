@@ -113,19 +113,17 @@ applicable:
 
 {{#if periodic_aligned_with_rent}}
 ☑ Is the last day of a period of your tenancy, or
-
-{{#if not periodic_aligned_with_rent}}
+{{else}}
 ☐ Is the first anniversary of the start of your original tenancy or the first anniversary of the start of a subsequent tenancy, if you have been given a new tenancy in the last year
 {{/if}}
-{{/if}}
 
-{{#if not periodic_aligned_with_rent}}
+{{#unless periodic_aligned_with_rent}}
 ☑ Is the first anniversary of the start of your original tenancy or the first anniversary of the start of a subsequent tenancy, if you have been given a new tenancy in the last year
 
 Your tenancy started on: **{{tenancy_start_date}}**
 
 The first anniversary is: **{{first_anniversary_date}}**
-{{/if}}
+{{/unless}}
 
 {{/if}}
 
@@ -445,7 +443,7 @@ This Form 6A has been generated in accordance with The Assured Shorthold Tenancy
 
 ## LEGAL DISCLAIMER
 
-{{#if not is_preview}}
+{{#unless is_preview}}
 This notice has been generated based on the information you provided. While Landlord Heaven has taken care to ensure this form complies with current legislation, this service does not constitute legal advice.
 
 **Important:**
@@ -461,7 +459,7 @@ This notice has been generated based on the information you provided. While Land
 - Court proceedings based on this notice
 
 For complex cases or if you are unsure about any aspect of this notice, **we strongly recommend seeking legal advice from a qualified solicitor.**
-{{/if}}
+{{/unless}}
 
 ---
 

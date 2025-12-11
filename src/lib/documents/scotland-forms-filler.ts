@@ -193,7 +193,7 @@ function splitDate(dateString: string | undefined): { day: string; month: string
 export async function fillNoticeToLeave(data: ScotlandCaseData): Promise<Uint8Array> {
  console.log('📄 Filling Notice to Leave (Scotland)...');
 
-  const pdfDoc = await loadOfficialForm('scotland/notice_to_leave.pdf');
+  const pdfDoc = await loadOfficialForm('notice_to_leave.pdf');
   const form = pdfDoc.getForm();
 
   // Landlord details
@@ -323,7 +323,7 @@ export async function fillNoticeToLeave(data: ScotlandCaseData): Promise<Uint8Ar
 export async function fillFormE(data: ScotlandCaseData): Promise<Uint8Array> {
   console.log('📄 Filling Form E (Tribunal Application for Eviction Order)...');
 
-  const pdfDoc = await loadOfficialForm('scotland/form_e_eviction.pdf');
+  const pdfDoc = await loadOfficialForm('form_e_eviction.pdf');
   const form = pdfDoc.getForm();
 
   // Section 1: Applicant (Landlord) Details
