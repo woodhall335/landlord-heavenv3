@@ -23,6 +23,7 @@ import {
   buildScotlandEvictionCase,
 } from './eviction-wizard-mapper';
 import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
+import { generateComplianceAudit, extractComplianceAuditContext } from '@/lib/ai/compliance-audit-generator';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -722,6 +723,38 @@ export async function generateCompleteEvictionPack(
   } catch (error) {
     console.error('⚠️  Failed to generate witness statement:', error);
     // Don't fail the entire pack if witness statement generation fails
+  }
+
+  // 3.2 Generate compliance audit (AI-powered premium feature)
+  try {
+    const complianceAuditContext = extractComplianceAuditContext(wizardFacts);
+    const complianceAuditContent = await generateComplianceAudit(wizardFacts, complianceAuditContext);
+
+    const complianceAuditDoc = await generateDocument({
+      templatePath: `${jurisdiction}/templates/eviction/compliance-audit.hbs`,
+      data: {
+        ...evictionCase,
+        compliance_audit: complianceAuditContent,
+        current_date: new Date().toISOString().split('T')[0],
+        notice_type: evictionCase.grounds[0]?.ground_id || 'Not specified',
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+
+    documents.push({
+      title: 'Compliance Audit Report',
+      description: 'AI-powered compliance check for eviction proceedings',
+      category: 'guidance',
+      html: complianceAuditDoc.html,
+      pdf: complianceAuditDoc.pdf,
+      file_name: 'compliance_audit.pdf',
+    });
+
+    console.log('✅ Generated compliance audit');
+  } catch (error) {
+    console.error('⚠️  Failed to generate compliance audit:', error);
+    // Don't fail the entire pack if compliance audit generation fails
   }
 
   // 4. Generate case summary document
