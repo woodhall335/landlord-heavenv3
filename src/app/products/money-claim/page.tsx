@@ -291,7 +291,7 @@ export default function MoneyClaimPage() {
 
             <div className="grid md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-charcoal text-2xl font-bold mx-auto mb-4">
                   1
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">Calculate Arrears</h3>
@@ -301,7 +301,7 @@ export default function MoneyClaimPage() {
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-charcoal text-2xl font-bold mx-auto mb-4">
                   2
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">We Generate Claim</h3>
@@ -311,7 +311,7 @@ export default function MoneyClaimPage() {
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-charcoal text-2xl font-bold mx-auto mb-4">
                   3
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">File Online or Paper</h3>
@@ -321,7 +321,7 @@ export default function MoneyClaimPage() {
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-charcoal text-2xl font-bold mx-auto mb-4">
                   4
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">Collect Your Money</h3>
@@ -569,28 +569,28 @@ export default function MoneyClaimPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 bg-linear-to-br from-amber-500 to-orange-600">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Claim Your Arrears?</h2>
-            <p className="text-xl mb-8 text-white/90">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Claim Your Arrears?</h2>
+            <p className="text-xl mb-8 text-gray-600">
               Court-ready money claim documents in 10 minutes. Recover what you're owed.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
-                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
+                className="hero-btn-primary"
               >
                 England &amp; Wales Claim - £179.99 →
               </Link>
               <Link
                 href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                className="inline-block bg-white/20 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/30 transition-colors border border-white/40"
+                className="hero-btn-secondary"
               >
                 Scotland Claim - £179.99 →
               </Link>
             </div>
-            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • No subscription</p>
+            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
           </div>
         </Container>
       </section>

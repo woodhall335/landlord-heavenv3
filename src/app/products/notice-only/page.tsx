@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Notice Only - Section 8 & 21 Eviction Notices | Landlord Heaven",
@@ -50,7 +51,8 @@ export default function NoticeOnlyPage() {
               {/* England & Wales */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                  <Image src="/gb-eng.svg" alt="England" width={28} height={28} className="w-7 h-7" />
+                  <Image src="/gb-wls.svg" alt="Wales" width={28} height={28} className="w-7 h-7" />
                   <h3 className="text-xl font-semibold text-charcoal">England & Wales</h3>
                 </div>
                 <ul className="space-y-3">
@@ -94,7 +96,7 @@ export default function NoticeOnlyPage() {
               {/* Scotland */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+                  <Image src="/gb-sct.svg" alt="Scotland" width={28} height={28} className="w-7 h-7" />
                   <h3 className="text-xl font-semibold text-charcoal">Scotland</h3>
                 </div>
                 <ul className="space-y-3">
@@ -136,7 +138,7 @@ export default function NoticeOnlyPage() {
               {/* Northern Ireland */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">🇬🇧</span>
+                  <Image src="/gb-nir.svg" alt="Northern Ireland" width={28} height={28} className="w-7 h-7" />
                   <h3 className="text-xl font-semibold text-charcoal">Northern Ireland</h3>
                 </div>
                 <ul className="space-y-3">
@@ -300,7 +302,9 @@ export default function NoticeOnlyPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁳󠁣󠁴󠁿🇬🇧</div>
+                <div className="mb-3">
+                  <Image src="/lgb.svg" alt="UK Coverage" width={48} height={48} className="w-12 h-12" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">100% UK Coverage</h3>
                 <p className="text-gray-700">
                   Only service covering England & Wales, Scotland, AND Northern Ireland. Perfect for landlords with

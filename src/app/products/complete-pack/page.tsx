@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Complete Eviction Pack - Full DIY Eviction Bundle | Landlord Heaven",
@@ -586,7 +587,9 @@ export default function CompleteEvictionPackPage() {
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁳󠁣󠁴󠁿🇬🇧</div>
+                <div className="mb-3">
+                  <Image src="/lgb.svg" alt="UK Coverage" width={48} height={48} className="w-12 h-12" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">All UK Jurisdictions</h3>
                 <p className="text-gray-700">
                   England & Wales, Scotland, and Northern Ireland fully supported with jurisdiction-specific forms, laws, and

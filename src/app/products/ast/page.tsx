@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Tenancy Agreements - AST, PRT, NI | Landlord Heaven",
@@ -295,7 +296,10 @@ export default function ASTPage() {
             </div>
 
             <div className="mt-12 bg-primary-subtle border border-primary/20 rounded-lg p-6">
-              <p className="text-charcoal font-semibold mb-2">🏴󠁧󠁢󠁥󠁮󠁧󠁿🏴󠁧󠁢󠁳󠁣󠁴󠁿🇬🇧 Full UK Coverage</p>
+              <p className="text-charcoal font-semibold mb-2 flex items-center gap-2">
+                <Image src="/lgb.svg" alt="UK" width={24} height={24} className="w-6 h-6" />
+                Full UK Coverage
+              </p>
               <p className="text-gray-700">
                 Both Standard and Premium work across the UK:
                 <br />• <strong>England & Wales:</strong> Assured Shorthold Tenancy (AST)
@@ -460,7 +464,8 @@ export default function ASTPage() {
             <div className="space-y-6">
               <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-3xl">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                  <Image src="/gb-eng.svg" alt="England" width={32} height={32} className="w-8 h-8" />
+                  <Image src="/gb-wls.svg" alt="Wales" width={32} height={32} className="w-8 h-8" />
                   <h3 className="text-xl font-semibold text-charcoal">England & Wales - AST</h3>
                 </div>
                 <p className="text-gray-700 mb-3">
@@ -476,7 +481,7 @@ export default function ASTPage() {
 
               <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-3xl">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+                  <Image src="/gb-sct.svg" alt="Scotland" width={32} height={32} className="w-8 h-8" />
                   <h3 className="text-xl font-semibold text-charcoal">Scotland - PRT</h3>
                 </div>
                 <p className="text-gray-700 mb-3">
@@ -493,7 +498,7 @@ export default function ASTPage() {
 
               <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="text-3xl">🇬🇧</span>
+                  <Image src="/gb-nir.svg" alt="Northern Ireland" width={32} height={32} className="w-8 h-8" />
                   <h3 className="text-xl font-semibold text-charcoal">Northern Ireland</h3>
                 </div>
                 <p className="text-gray-700 mb-3">
