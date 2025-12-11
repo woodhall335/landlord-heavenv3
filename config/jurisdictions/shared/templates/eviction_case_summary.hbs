@@ -1,0 +1,12 @@
+<h1>Eviction Case Summary</h1>
+<p>Case ID: {{case_id}}</p>
+<p>Jurisdiction: {{jurisdiction}}</p>
+<p>Landlord: {{landlord_full_name}}</p>
+<p>Tenant: {{tenant_full_name}}</p>
+<p>Property: {{property_address}}</p>
+<p>Grounds:</p>
+<ul>
+  {{#each grounds}}
+    <li>{{this.code}} - {{this.title}}</li>
+  {{/each}}
+</ul>

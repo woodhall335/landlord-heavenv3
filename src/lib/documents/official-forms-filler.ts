@@ -64,12 +64,15 @@ export interface CaseData {
   // Claim details
   claim_type?: 'section_8' | 'section_21' | 'money_claim';
   ground_numbers?: string;
+  ground_codes?: string[];
   section_8_notice_date?: string;
   section_21_notice_date?: string;
+  notice_served_date?: string;
   particulars_of_claim?: string;
 
   // Amounts
   total_arrears?: number;
+  arrears_at_notice_date?: number;
   total_claim_amount?: number;
   court_fee?: number;
   solicitor_costs?: number;
@@ -198,7 +201,7 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   const form = pdfDoc.getForm();
 
   // Court details
-  fillTextField(form, 'In the court', data.court_name);
+  fillTextField(form, 'In the court', data.court_name || 'County Court');
   fillTextField(form, 'Fee account no', data.claimant_reference);
 
   // Claimant and defendant details (combined fields)
@@ -226,10 +229,11 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   // Claim grounds - checkboxes
   if (data.total_arrears && data.total_arrears > 0) {
     checkBox(form, 'rent arrears - yes', true);
+    fillTextField(form, 'rent arrears amount', `£${data.total_arrears.toFixed(2)}`);
   }
 
   if (data.claim_type === 'section_8') {
-    const grounds = data.ground_numbers || '';
+    const grounds = data.ground_numbers || (data.ground_codes || []).join(', ');
 
     // Check specific ground checkboxes based on ground numbers
     if (grounds.includes('12') || grounds.includes('13') || grounds.includes('14') || grounds.includes('15')) {
@@ -246,6 +250,24 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
 
     if (grounds.includes('7')) {
       checkBox(form, 'trespass - yes', true);
+    }
+  }
+
+  if (data.ground_numbers || (data.ground_codes && data.ground_codes.length > 0)) {
+    fillTextField(
+      form,
+      'Ground(s) on which possession is claimed',
+      data.ground_numbers || (data.ground_codes || []).join(', ')
+    );
+  }
+
+  const noticeDate = data.section_8_notice_date || data.section_21_notice_date || data.notice_served_date;
+  if (noticeDate) {
+    const parts = splitDate(noticeDate);
+    if (parts) {
+      fillTextField(form, 'Date section 8 notice served - DD', parts.day);
+      fillTextField(form, 'Date section 8 notice served - MM', parts.month);
+      fillTextField(form, 'Date section 8 notice served - YYYY', parts.year);
     }
   }
 
@@ -266,9 +288,9 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   fillTextField(form, 'Full name of the person signing the Statement of Truth', data.signatory_name);
 
   if (data.solicitor_firm) {
-    fillTextField(form, "Name of claimant's legal representative's firm", data.solicitor_firm);
+    fillTextField(form, 'Name of claimant’s legal representative’s firm', data.solicitor_firm);
     checkBox(form, "The Claimant believes that the facts stated in this claim form are true. I am authorised by the claimant to sign this statement", true);
-    checkBox(form, "Statement of Truth is signed by the Claimant's legal representative (as defined by CPR 2.3(1))", true);
+    checkBox(form, 'Statement of Truth is signed by the Claimant’s legal representative (as defined by CPR 2.3(1))', true);
   } else {
     checkBox(form, 'I believe that the facts stated in this clam form are true', true);
     checkBox(form, 'Statement of Truth is signed by the Claimant', true);
@@ -284,23 +306,39 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
     data.service_address_county,
   ].filter((part): part is string => Boolean(part));
 
+  if (serviceAddressParts.length === 0) {
+    serviceAddressParts.push(data.landlord_address);
+  }
+
   fillTextField(
     form,
-    "building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+    'building and street - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
     serviceAddressParts[0]
   );
   if (serviceAddressParts.length > 1) {
     fillTextField(
       form,
-      "Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+      'Second line of address - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
       serviceAddressParts[1]
     );
   }
 
+  fillTextField(
+    form,
+    'Town or city - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
+    data.service_address_town
+  );
+
+  fillTextField(
+    form,
+    'County (optional) - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
+    data.service_address_county
+  );
+
   if (data.service_postcode || data.landlord_postcode) {
     fillTextField(
       form,
-      "Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+      'Postcode - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
       data.service_postcode || data.landlord_postcode
     );
   }
@@ -548,13 +586,13 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   const form = pdfDoc.getForm();
 
   // Header
-  fillTextField(form, 'name of court', data.court_name);
+  fillTextField(form, 'name of court', data.court_name || 'County Court');
   fillTextField(form, 'name of claimant', data.landlord_full_name);
   fillTextField(form, 'name of defendant', data.tenant_full_name);
 
   // Property details
   fillTextField(form, 'The claimant has a right to possession of:', data.property_address);
-  fillTextField(form, 'To the best of the claimant\'s knowledge the following persons are in possession of the property:', data.tenant_full_name);
+  fillTextField(form, 'To the best of the claimant’s knowledge the following persons are in possession of the property:', data.tenant_full_name);
 
   // Tenancy details
   fillTextField(form, '3(a) Type of tenancy', 'Assured Shorthold Tenancy');
@@ -576,11 +614,20 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
 
   // Arrears
   if (data.total_arrears) {
-    fillTextField(form, '3(c) Any unpaid rent or charge for use and occupation should be calculated at £', data.total_arrears.toString());
+    fillTextField(
+      form,
+      '3(c) Any unpaid rent or charge for use and occupation should be calculated at £',
+      data.total_arrears.toString()
+    );
+    fillTextField(form, '3(d) Total amount outstanding', data.total_arrears.toString());
   }
 
   // Grounds for possession
-  fillTextField(form, '4. (a) The reason the claimant is asking for possession is:', data.particulars_of_claim);
+  fillTextField(
+    form,
+    '4. (a) The reason the claimant is asking for possession is:',
+    data.particulars_of_claim || (data.ground_numbers ? `Grounds: ${data.ground_numbers}` : undefined)
+  );
 
   // Notice details
   if (data.section_8_notice_date) {
@@ -617,9 +664,9 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   fillTextField(form, 'Full name of person signing the Statement of Truth', data.signatory_name);
 
   if (data.solicitor_firm) {
-    fillTextField(form, "Name of claimant's legal representative's firm", data.solicitor_firm);
+    fillTextField(form, 'Name of claimant’s legal representative’s firm', data.solicitor_firm);
     checkBox(form, 'The Claimant believes that the facts stated in these particulars of claim are true. I am authorised by the claimant to sign this statement', true);
-    checkBox(form, "Statement of Truth signed by Claimant's legal representative (as defined by CPR 2.3(1))", true);
+    checkBox(form, 'Statement of Truth signed by Claimant’s legal representative (as defined by CPR 2.3(1))', true);
   } else {
     checkBox(form, 'I believe that the facts stated in these particulars of claim are true', true);
     checkBox(form, 'Statement of Truth signed by Claimant', true);
@@ -834,10 +881,10 @@ export async function fillForm6A(data: CaseData): Promise<Uint8Array> {
 
   // Signatory names
   fillTextField(form, 'Signatory Name 1', data.landlord_full_name);
-  fillTextField(form, 'Signatory name 2', data.landlord_2_name);
+  fillTextField(form, 'Signatory name 2 ', data.landlord_2_name);
 
   // Date signed
-  fillTextField(form, 'Date 2', data.signature_date);
+  fillTextField(form, 'Date 2 ', data.signature_date);
 
   const pdfBytes = await pdfDoc.save();
   console.log('✅ Form 6A filled successfully');

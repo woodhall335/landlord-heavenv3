@@ -111,6 +111,20 @@ function registerHandlebarsHelpers() {
     return options.inverse(this);
   });
 
+  Handlebars.registerHelper('gt', function (a: any, b: any) {
+    const left = Number(a);
+    const right = Number(b);
+    if (Number.isNaN(left) || Number.isNaN(right)) return false;
+    return left > right;
+  });
+
+  Handlebars.registerHelper('gte', function (a: any, b: any) {
+    const left = Number(a);
+    const right = Number(b);
+    if (Number.isNaN(left) || Number.isNaN(right)) return false;
+    return left >= right;
+  });
+
   // Array contains
   Handlebars.registerHelper('contains', function (array, value) {
     return Array.isArray(array) && array.includes(value);

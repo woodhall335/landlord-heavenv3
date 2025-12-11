@@ -172,10 +172,16 @@ function buildCaseData(
     rent_frequency: evictionCase.rent_frequency,
     claim_type: claimType,
     ground_numbers: groundNumbers || undefined,
+    ground_codes: evictionCase.grounds.map((g) => g.code.replace(/Ground\s*/i, '')).filter(Boolean),
     section_8_notice_date: wizardFacts.section_8_notice_date || facts.notice.notice_date || undefined,
     section_21_notice_date: wizardFacts.section_21_notice_date || facts.notice.notice_date || undefined,
+    notice_served_date:
+      wizardFacts.notice_served_date || wizardFacts.notice_date || facts.notice.notice_date || undefined,
     particulars_of_claim: facts.court.particulars_of_claim || undefined,
-    total_arrears: facts.issues.rent_arrears.total_arrears || undefined,
+    total_arrears:
+      wizardFacts.total_arrears || wizardFacts.rent_arrears_amount || facts.issues.rent_arrears.total_arrears || undefined,
+    arrears_at_notice_date:
+      wizardFacts.rent_arrears_amount || facts.issues.rent_arrears.total_arrears || facts.issues.rent_arrears.amount_owing,
     court_fee: facts.court.claim_amount_costs || undefined,
     solicitor_costs: facts.court.claim_amount_other || undefined,
     deposit_amount: facts.tenancy.deposit_amount || undefined,
@@ -194,7 +200,7 @@ function buildCaseData(
     service_postcode: evictionCase.service_postcode,
     service_phone: evictionCase.service_phone,
     service_email: evictionCase.service_email,
-    court_name: evictionCase.court_name,
+    court_name: evictionCase.court_name || wizardFacts.court_name || 'County Court',
     signatory_name: evictionCase.landlord_full_name,
     signature_date: new Date().toISOString().split('T')[0],
     notice_expiry_date: wizardFacts.notice_expiry_date || facts.notice.expiry_date || undefined,
@@ -255,7 +261,7 @@ function buildScotlandEvictionCase(caseId: string, data: ScotlandCaseData): Evic
       particulars: g.particulars,
     })),
     deposit_amount: data.deposit_amount,
-    deposit_scheme_name: data.deposit_scheme as any,
+    deposit_scheme_name: (data.deposit_scheme_name as any) || (data.deposit_scheme as any),
     deposit_reference: data.deposit_reference,
     landlord_registration_number: data.landlord_registration_number,
   } as EvictionCase;
@@ -278,7 +284,8 @@ export function wizardFactsToScotlandEviction(
   wizardFacts: any
 ): { scotlandCaseData: ScotlandCaseData } {
   const facts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
-  const noticeDate = wizardFacts.notice_date || facts.notice.notice_date || new Date().toISOString().split('T')[0];
+  const noticeDate =
+    wizardFacts.notice_served_date || wizardFacts.notice_date || facts.notice.notice_date || new Date().toISOString().split('T')[0];
   const leavingDate =
     wizardFacts.notice_expiry_date || facts.notice.expiry_date || addDays(new Date(noticeDate), 84);
 
@@ -315,6 +322,8 @@ export function wizardFactsToScotlandEviction(
     deposit_amount: facts.tenancy.deposit_amount || undefined,
     deposit_scheme: (facts.tenancy.deposit_scheme_name as any) || undefined,
     deposit_reference: facts.tenancy.deposit_reference || undefined,
+    deposit_scheme_name:
+      (wizardFacts.deposit_scheme_name as any) || (facts.tenancy.deposit_scheme_name as any) || undefined,
   };
 
   return { scotlandCaseData };

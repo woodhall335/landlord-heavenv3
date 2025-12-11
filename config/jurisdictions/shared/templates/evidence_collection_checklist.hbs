@@ -1,0 +1,17 @@
+<h1>Evidence Collection Checklist</h1>
+<p>Case: {{case_id}} | Property: {{property_address}}</p>
+<ul>
+  {{#each required_evidence}}
+    <li><strong>{{this.ground}} - {{this.title}}</strong>
+      <ul>
+        {{#if this.evidence_items}}
+          {{#each this.evidence_items}}
+            <li>{{this}}</li>
+          {{/each}}
+        {{else}}
+          <li>No specific evidence items provided</li>
+        {{/if}}
+      </ul>
+    </li>
+  {{/each}}
+</ul>

@@ -46,6 +46,7 @@ export interface ScotlandCaseData {
   // Deposit
   deposit_amount?: number;
   deposit_scheme?: 'SafeDeposits Scotland' | 'Letting Protection Service Scotland' | 'MyDeposits Scotland';
+  deposit_scheme_name?: string;
   deposit_reference?: string;
 
   // Landlord registration
@@ -193,7 +194,7 @@ function splitDate(dateString: string | undefined): { day: string; month: string
 export async function fillNoticeToLeave(data: ScotlandCaseData): Promise<Uint8Array> {
  console.log('📄 Filling Notice to Leave (Scotland)...');
 
-  const pdfDoc = await loadOfficialForm('scotland/notice_to_leave.pdf');
+  const pdfDoc = await loadOfficialForm('notice_to_leave.pdf');
   const form = pdfDoc.getForm();
 
   // Landlord details
@@ -252,6 +253,12 @@ export async function fillNoticeToLeave(data: ScotlandCaseData): Promise<Uint8Ar
     // Fill in particulars for this ground
     fillTextField(form, `Ground ${groundNumber} Particulars`, ground.particulars);
   });
+
+  // Deposit details
+  if (data.deposit_scheme || data.deposit_scheme_name) {
+    fillTextField(form, 'Deposit Scheme', data.deposit_scheme_name || data.deposit_scheme);
+  }
+  fillTextField(form, 'Deposit Reference', data.deposit_reference);
 
   // Rent details
   fillTextField(form, 'Rent Amount', `£${data.rent_amount}`);
@@ -323,7 +330,7 @@ export async function fillNoticeToLeave(data: ScotlandCaseData): Promise<Uint8Ar
 export async function fillFormE(data: ScotlandCaseData): Promise<Uint8Array> {
   console.log('📄 Filling Form E (Tribunal Application for Eviction Order)...');
 
-  const pdfDoc = await loadOfficialForm('scotland/form_e_eviction.pdf');
+  const pdfDoc = await loadOfficialForm('form_e_eviction.pdf');
   const form = pdfDoc.getForm();
 
   // Section 1: Applicant (Landlord) Details
@@ -362,6 +369,12 @@ export async function fillFormE(data: ScotlandCaseData): Promise<Uint8Array> {
   if (noticeDate) {
     fillTextField(form, 'Notice to Leave Served Date', `${noticeDate.day}/${noticeDate.month}/${noticeDate.year}`);
   }
+
+  // Deposit scheme details
+  if (data.deposit_scheme || data.deposit_scheme_name) {
+    fillTextField(form, 'Deposit Scheme', data.deposit_scheme_name || data.deposit_scheme);
+  }
+  fillTextField(form, 'Deposit Reference', data.deposit_reference);
 
   const leavingDate = splitDate(data.leaving_date);
   if (leavingDate) {

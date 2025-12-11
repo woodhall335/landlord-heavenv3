@@ -20,6 +20,12 @@ export interface RiskAssessment {
  * Computes risk assessment for case
  */
 export function computeRiskAssessment(facts: CaseFacts): RiskAssessment {
+  const tenancy = (facts as any)?.tenancy || {};
+  const property = (facts as any)?.property || {};
+  const eviction = (facts as any)?.eviction || {};
+  const evidence = (facts as any)?.evidence || {};
+  const jurisdiction = (facts as any)?.jurisdiction || (facts as any)?.meta?.jurisdiction;
+
   const red_flags: string[] = [];
   const compliance_issues: string[] = [];
   const strengths: string[] = [];
@@ -29,17 +35,17 @@ export function computeRiskAssessment(facts: CaseFacts): RiskAssessment {
   let score = 50; // Start neutral
 
   // Check deposit protection
-  if (facts.tenancy.deposit_protected === false) {
+  if (tenancy.deposit_protected === false) {
     red_flags.push('Deposit not protected - this blocks Section 21 and may result in penalties');
     score -= 15;
-  } else if (facts.tenancy.deposit_protected === true) {
+  } else if (tenancy.deposit_protected === true) {
     strengths.push('Deposit properly protected');
     score += 5;
   }
 
   // Check gas safety
-  if (facts.property.has_gas_appliances) {
-    if (!facts.property.gas_cert_date) {
+  if (property.has_gas_appliances) {
+    if (!property.gas_cert_date) {
       red_flags.push('No gas safety certificate - this blocks Section 21');
       score -= 15;
     } else {
@@ -49,8 +55,8 @@ export function computeRiskAssessment(facts: CaseFacts): RiskAssessment {
   }
 
   // Check electrical safety (England & Wales)
-  if (facts.jurisdiction === 'england-wales') {
-    if (!facts.property.electrical_cert_date) {
+  if (jurisdiction === 'england-wales') {
+    if (!property.electrical_cert_date) {
       compliance_issues.push('No electrical safety certificate (EICR) - required since June 2020');
       score -= 10;
     } else {
@@ -60,8 +66,8 @@ export function computeRiskAssessment(facts: CaseFacts): RiskAssessment {
   }
 
   // Check EPC
-  if (facts.property.epc_rating) {
-    const rating = facts.property.epc_rating.toUpperCase();
+  if (property.epc_rating) {
+    const rating = property.epc_rating.toUpperCase();
     if (rating === 'F' || rating === 'G') {
       red_flags.push(`EPC rating ${rating} below minimum (E) - illegal to let since April 2020`);
       score -= 20;
@@ -75,31 +81,31 @@ export function computeRiskAssessment(facts: CaseFacts): RiskAssessment {
   }
 
   // Check How to Rent (England & Wales)
-  if (facts.jurisdiction === 'england-wales') {
-    if (facts.tenancy.how_to_rent_provided === false) {
+  if (jurisdiction === 'england-wales') {
+    if (tenancy.how_to_rent_provided === false) {
       red_flags.push('How to Rent guide not provided - blocks Section 21');
       score -= 10;
-    } else if (facts.tenancy.how_to_rent_provided === true) {
+    } else if (tenancy.how_to_rent_provided === true) {
       strengths.push('How to Rent guide provided');
       score += 3;
     }
   }
 
   // Check HMO licensing
-  if (facts.property.is_hmo) {
-    if (facts.property.hmo_licensed === false) {
+  if (property.is_hmo) {
+    if (property.hmo_licensed === false) {
       red_flags.push('Unlicensed HMO - blocks Section 21 and may result in prosecution');
       score -= 20;
-    } else if (facts.property.hmo_licensed === true) {
+    } else if (property.hmo_licensed === true) {
       strengths.push('HMO properly licensed');
       score += 5;
     }
   }
 
   // Check rent arrears
-  if (facts.eviction?.rent_arrears_amount && facts.eviction.rent_arrears_amount > 0) {
-    const arrears = facts.eviction.rent_arrears_amount;
-    const monthlyRent = facts.tenancy.rent_amount || 0;
+  if (eviction?.rent_arrears_amount && eviction.rent_arrears_amount > 0) {
+    const arrears = eviction.rent_arrears_amount;
+    const monthlyRent = tenancy.rent_amount || 0;
 
     if (arrears >= monthlyRent * 2) {
       strengths.push(`Substantial arrears (£${arrears}) - strong grounds for eviction`);
@@ -111,13 +117,13 @@ export function computeRiskAssessment(facts: CaseFacts): RiskAssessment {
   }
 
   // Check ASB/conduct issues
-  if (facts.eviction?.asb_incidents && facts.eviction.asb_incidents.length > 0) {
+  if (eviction?.asb_incidents && eviction.asb_incidents.length > 0) {
     strengths.push('Anti-social behavior documented with specific incidents');
     score += 10;
   }
 
   // Check tenancy agreement
-  if (!facts.evidence.tenancy_agreement_uploaded) {
+  if (!evidence.tenancy_agreement_uploaded) {
     missing_evidence.push('Signed tenancy agreement');
     score -= 5;
   } else {
@@ -126,13 +132,13 @@ export function computeRiskAssessment(facts: CaseFacts): RiskAssessment {
   }
 
   // Check rent schedule
-  if (!facts.evidence.rent_schedule_uploaded) {
+  if (!evidence.rent_schedule_uploaded) {
     missing_evidence.push('Rent schedule showing payments and arrears');
     score -= 3;
   }
 
   // Check notice served
-  if (facts.eviction?.notice_served_date) {
+  if (eviction?.notice_served_date) {
     strengths.push('Notice properly served to tenant');
     score += 5;
   } else {
@@ -140,10 +146,10 @@ export function computeRiskAssessment(facts: CaseFacts): RiskAssessment {
   }
 
   // Check retaliatory eviction risk (England & Wales)
-  if (facts.jurisdiction === 'england-wales' && facts.eviction?.tenant_complained) {
-    if (facts.eviction.complaint_date && facts.eviction.notice_served_date) {
-      const complaintDate = new Date(facts.eviction.complaint_date);
-      const noticeDate = new Date(facts.eviction.notice_served_date);
+  if (jurisdiction === 'england-wales' && eviction?.tenant_complained) {
+    if (eviction.complaint_date && eviction.notice_served_date) {
+      const complaintDate = new Date(eviction.complaint_date);
+      const noticeDate = new Date(eviction.notice_served_date);
       const daysBetween = Math.floor((noticeDate.getTime() - complaintDate.getTime()) / (1000 * 60 * 60 * 24));
 
       if (daysBetween < 180) {

@@ -14,7 +14,7 @@
 
 import { generateDocument } from './generator';
 import { generateSection8Notice, Section8NoticeData } from './section8-generator';
-import { fillN5Form, fillN119Form, CaseData } from './official-forms-filler';
+import { fillN5Form, fillN119Form, CaseData, fillN5BForm } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
 import { buildServiceContact } from '@/lib/documents/service-contact';
 import {
@@ -539,6 +539,37 @@ async function generateEnglandWalesEvictionPack(
       pdf: section21Doc.pdf,
       file_name: 'section21_form6a.pdf',
     });
+
+    // Accelerated possession claim (N5B)
+    const n5bPdf = await fillN5BForm({
+      ...caseData,
+      landlord_full_name: caseData.landlord_full_name || evictionCase.landlord_full_name,
+      landlord_address: caseData.landlord_address || evictionCase.landlord_address,
+      landlord_postcode: caseData.landlord_postcode || evictionCase.landlord_address_postcode,
+      tenant_full_name: caseData.tenant_full_name || evictionCase.tenant_full_name,
+      property_address: caseData.property_address || evictionCase.property_address,
+      property_postcode: caseData.property_postcode || evictionCase.property_address_postcode,
+      tenancy_start_date: caseData.tenancy_start_date || evictionCase.tenancy_start_date,
+      rent_amount: caseData.rent_amount ?? evictionCase.rent_amount,
+      rent_frequency: caseData.rent_frequency || evictionCase.rent_frequency,
+      deposit_protection_date: caseData.deposit_protection_date,
+      deposit_reference: caseData.deposit_reference,
+      deposit_scheme: caseData.deposit_scheme,
+      section_21_notice_date:
+        caseData.section_21_notice_date || caseData.notice_served_date || new Date().toISOString().split('T')[0],
+      notice_expiry_date: caseData.notice_expiry_date,
+      signature_date: caseData.signature_date || new Date().toISOString().split('T')[0],
+      signatory_name: caseData.signatory_name || evictionCase.landlord_full_name,
+      court_name: caseData.court_name || 'County Court',
+    });
+
+    documents.push({
+      title: 'N5B Accelerated Possession Claim',
+      description: 'Accelerated possession claim for Section 21 cases',
+      category: 'court_form',
+      pdf: Buffer.from(n5bPdf),
+      file_name: 'n5b_accelerated_possession.pdf',
+    });
   }
 
   // 3. N5 Claim Form
@@ -559,7 +590,12 @@ async function generateEnglandWalesEvictionPack(
     rent_frequency: caseData.rent_frequency || evictionCase.rent_frequency,
     signatory_name: caseData.signatory_name || evictionCase.landlord_full_name,
     signature_date: caseData.signature_date || new Date().toISOString().split('T')[0],
-    court_name: caseData.court_name || evictionCase.court_name,
+    court_name: caseData.court_name || evictionCase.court_name || 'County Court',
+    notice_served_date:
+      caseData.notice_served_date ||
+      caseData.section_8_notice_date ||
+      caseData.section_21_notice_date ||
+      evictionCase['notice_date'],
     service_address_line1: service.service_address_line1,
     service_address_line2: service.service_address_line2,
     service_address_town: service.service_address_town,
@@ -700,7 +736,7 @@ export async function generateCompleteEvictionPack(
     const witnessStatementContent = await generateWitnessStatement(wizardFacts, witnessStatementContext);
 
     const witnessStatementDoc = await generateDocument({
-      templatePath: `${jurisdiction}/templates/eviction/witness-statement.hbs`,
+      templatePath: `uk/${jurisdiction}/templates/eviction/witness-statement.hbs`,
       data: {
         ...evictionCase,
         witness_statement: witnessStatementContent,
@@ -732,7 +768,7 @@ export async function generateCompleteEvictionPack(
     const complianceAuditContent = await generateComplianceAudit(wizardFacts, complianceAuditContext);
 
     const complianceAuditDoc = await generateDocument({
-      templatePath: `${jurisdiction}/templates/eviction/compliance-audit.hbs`,
+      templatePath: `uk/${jurisdiction}/templates/eviction/compliance-audit.hbs`,
       data: {
         ...evictionCase,
         compliance_audit: complianceAuditContent,
@@ -763,7 +799,7 @@ export async function generateCompleteEvictionPack(
     const riskAssessment = computeRiskAssessment(wizardFacts);
 
     const riskReportDoc = await generateDocument({
-      templatePath: `${jurisdiction}/templates/eviction/risk-report.hbs`,
+      templatePath: `uk/${jurisdiction}/templates/eviction/risk-report.hbs`,
       data: {
         ...evictionCase,
         risk_assessment: riskAssessment,
