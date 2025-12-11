@@ -16,7 +16,7 @@ export function Footer() {
                 alt="Landlord Heaven"
                 width={200}
                 height={40}
-                className="h-10 w-auto"
+                className="h-8 w-auto"
               />
             </div>
             <p className="text-base text-gray-300 leading-relaxed mb-6">

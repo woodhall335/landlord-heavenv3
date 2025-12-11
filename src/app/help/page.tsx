@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Help Center | Landlord Heaven",
@@ -141,14 +142,18 @@ export default function HelpPage() {
                     <strong>100% UK Coverage:</strong>
                   </p>
                   <ul className="space-y-2">
-                    <li>
-                      <strong>🏴󠁧󠁢󠁥󠁮󠁧󠁿 England & Wales:</strong> Section 8/21 notices, ASTs, N5/N5B court forms, MCOL
+                    <li className="flex items-start gap-2">
+                      <Image src="/gb-eng.svg" alt="England" width={16} height={16} className="w-4 h-4 mt-0.5" />
+                      <Image src="/gb-wls.svg" alt="Wales" width={16} height={16} className="w-4 h-4 mt-0.5" />
+                      <span><strong>England & Wales:</strong> Section 8/21 notices, ASTs, N5/N5B court forms, MCOL</span>
                     </li>
-                    <li>
-                      <strong>🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland:</strong> Notice to Leave, PRTs, First-tier Tribunal forms
+                    <li className="flex items-start gap-2">
+                      <Image src="/gb-sct.svg" alt="Scotland" width={16} height={16} className="w-4 h-4 mt-0.5" />
+                      <span><strong>Scotland:</strong> Notice to Leave, PRTs, First-tier Tribunal forms</span>
                     </li>
-                    <li>
-                      <strong>🇬🇧 Northern Ireland:</strong> Notice to Quit, NI tenancy agreements, County Court forms
+                    <li className="flex items-start gap-2">
+                      <Image src="/gb-nir.svg" alt="Northern Ireland" width={16} height={16} className="w-4 h-4 mt-0.5" />
+                      <span><strong>Northern Ireland:</strong> Notice to Quit, NI tenancy agreements, County Court forms</span>
                     </li>
                   </ul>
                   <p className="mt-3">
