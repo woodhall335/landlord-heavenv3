@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./Button";
@@ -40,14 +41,15 @@ export function NavBar({ user }: NavBarProps) {
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
-        <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-primary to-primary-dark text-lg font-extrabold text-white shadow-md">
-            LH
-          </div>
-          <div className="hidden md:flex flex-col leading-tight">
-            <span className="text-xl font-black text-charcoal tracking-tight">Landlord Heaven</span>
-            <span className="text-xs font-medium text-gray-500">Legal documents for landlords</span>
-          </div>
+        <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
+          <Image
+            src="/logo.png"
+            alt="Landlord Heaven - Legal Documents for Landlords"
+            width={280}
+            height={50}
+            priority
+            className="h-10 w-auto"
+          />
         </Link>
 
         <nav className="hidden items-center gap-9 lg:flex">
