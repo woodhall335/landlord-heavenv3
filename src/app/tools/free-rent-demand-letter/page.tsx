@@ -651,7 +651,7 @@ export default function RentDemandLetterGenerator() {
           type="button"
           onClick={handleGenerate}
           disabled={!isFormValid || isGenerating}
-          className="w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+          className="w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isGenerating
             ? 'Generating Letter...'

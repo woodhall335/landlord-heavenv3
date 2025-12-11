@@ -3,6 +3,20 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
+import councilsData from '@/config/jurisdictions/uk/england-wales/councils.json';
+
+// Function to lookup council by postcode
+function getCouncilByPostcode(postcode: string): { name: string; website: string } | null {
+  // Extract postcode area (e.g., "M1 5AB" -> "M1", "SW1A 2AA" -> "SW1A")
+  const postcodeArea = postcode.trim().split(' ')[0].toUpperCase();
+
+  // Find council that has this postcode area
+  const council = councilsData.councils.find((c: any) =>
+    c.postcode_areas?.includes(postcodeArea)
+  );
+
+  return council ? { name: council.name, website: council.website } : null;
+}
 
 export default function HMOLicenseChecker() {
   const [formData, setFormData] = useState({
@@ -22,6 +36,9 @@ export default function HMOLicenseChecker() {
     try {
       // Import pdf-lib dynamically (client-side only)
       const { PDFDocument, rgb, StandardFonts } = await import('pdf-lib');
+
+      // Lookup council info
+      const councilInfo = getCouncilByPostcode(formData.postcode);
 
       // Calculate likelihood
       const numOccupantsInt = parseInt(formData.numOccupants) || 0;
@@ -84,6 +101,27 @@ export default function HMOLicenseChecker() {
         color: rgb(0, 0, 0),
       });
       yPosition -= 20;
+
+      // Add council information if found
+      if (councilInfo) {
+        page.drawText(`Local Council: ${councilInfo.name}`, {
+          x: 50,
+          y: yPosition,
+          size: 11,
+          font: regularFont,
+          color: rgb(0, 0, 0),
+        });
+        yPosition -= 20;
+
+        page.drawText(`Council Website: ${councilInfo.website}`, {
+          x: 50,
+          y: yPosition,
+          size: 10,
+          font: regularFont,
+          color: rgb(0.3, 0.3, 0.3),
+        });
+        yPosition -= 25;
+      }
 
       page.drawText(`Number of Occupants: ${formData.numOccupants}`, {
         x: 50,
@@ -501,7 +539,7 @@ export default function HMOLicenseChecker() {
           type="button"
           onClick={handleGenerate}
           disabled={!isFormValid || isGenerating}
-          className="w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 disabled:cursor-not-allowed disabled:bg-gray-300"
+          className="w-full rounded-xl bg-primary-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isGenerating
             ? 'Generating Assessment...'

@@ -54,10 +54,12 @@ export function NavBar({ user }: NavBarProps) {
 
         <nav className="hidden items-center gap-9 lg:flex">
           {/* Free Tools Dropdown */}
-          <div className="relative">
+          <div
+            className="relative"
+            onMouseEnter={() => setShowFreeTools(true)}
+            onMouseLeave={() => setShowFreeTools(false)}
+          >
             <button
-              onMouseEnter={() => setShowFreeTools(true)}
-              onMouseLeave={() => setShowFreeTools(false)}
               className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors relative py-2 flex items-center gap-1"
             >
               Free Tools
@@ -68,19 +70,19 @@ export function NavBar({ user }: NavBarProps) {
 
             {showFreeTools && (
               <div
-                onMouseEnter={() => setShowFreeTools(true)}
-                onMouseLeave={() => setShowFreeTools(false)}
-                className="absolute left-0 mt-2 w-56 rounded-xl bg-white shadow-lg border border-gray-200 py-2 z-50"
+                className="absolute left-0 top-full pt-2 w-56 z-50"
               >
-                {freeToolsLinks.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+                <div className="rounded-xl bg-white shadow-lg border border-gray-200 py-2">
+                  {freeToolsLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary transition-colors"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
               </div>
             )}
           </div>
