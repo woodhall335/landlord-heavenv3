@@ -21,7 +21,11 @@ export function Footer() {
             <div className="flex flex-col gap-2 text-sm text-gray-400">
               <div className="flex items-center gap-2">
                 <span className="text-lg">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
-                <span>England & Wales</span>
+                <span>England</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
+                <span>Wales</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-lg">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
@@ -120,16 +124,24 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 4: Support */}
+          {/* Column 4: Account */}
           <div>
-            <h5 className="text-base font-bold mb-6">Support</h5>
+            <h5 className="text-base font-bold mb-6">Account</h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
-                  href="/help"
+                  href="/auth/login"
                   className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
-                  Help Center
+                  Login
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/auth/signup"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                >
+                  Register
                 </Link>
               </li>
               <li>
@@ -146,14 +158,6 @@ export function Footer() {
                   className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   About Us
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/pricing"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
-                >
-                  Pricing
                 </Link>
               </li>
             </ul>

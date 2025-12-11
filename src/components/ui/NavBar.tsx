@@ -22,8 +22,6 @@ const primaryLinks: NavItem[] = [
   { href: "/products/ast", label: "Tenancy Agreements" },
   // HMO Pro removed from navigation for V1 - will be re-enabled in V2
   // { href: "/hmo-pro", label: "HMO Pro" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/help", label: "Help" },
 ];
 
 const freeToolsLinks: NavItem[] = [
@@ -103,8 +101,8 @@ export function NavBar({ user }: NavBarProps) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 lg:flex">
-          {user ? (
+        {user && (
+          <div className="hidden items-center gap-4 lg:flex">
             <div className="flex items-center gap-3 rounded-full bg-gray-100 px-4 py-2 text-sm text-charcoal">
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white font-bold">
                 {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
@@ -114,19 +112,8 @@ export function NavBar({ user }: NavBarProps) {
                 Dashboard
               </Link>
             </div>
-          ) : (
-            <>
-              <Link href="/auth/login" className="text-sm font-semibold text-charcoal hover:text-primary transition-colors">
-                Log in
-              </Link>
-              <Link href="/auth/signup">
-                <Button variant="primary" size="medium" className="px-7 shadow-md hover:shadow-lg">
-                  Get started free
-                </Button>
-              </Link>
-            </>
-          )}
-        </div>
+          </div>
+        )}
 
         <button
           className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-700 lg:hidden"
@@ -174,24 +161,13 @@ export function NavBar({ user }: NavBarProps) {
               ))}
             </div>
 
-            <div className="flex items-center gap-3 pt-2">
-              {user ? (
+            {user && (
+              <div className="flex items-center gap-3 pt-2">
                 <Link href="/dashboard" className="text-sm font-semibold text-primary">
                   Go to dashboard
                 </Link>
-              ) : (
-                <>
-                  <Link href="/auth/login" className="text-sm font-semibold text-charcoal">
-                    Log in
-                  </Link>
-                  <Link href="/auth/signup" className="flex-1">
-                    <Button variant="primary" fullWidth>
-                      Get started
-                    </Button>
-                  </Link>
-                </>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       )}
