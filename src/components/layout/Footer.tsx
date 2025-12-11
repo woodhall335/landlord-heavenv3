@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -9,30 +10,57 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Column 1: About */}
           <div>
-            <div className="flex items-center gap-3 mb-6">
-              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-linear-to-br from-primary to-primary-dark shadow-lg">
-                <span className="text-white font-bold text-xl">LH</span>
-              </div>
-              <span className="text-xl font-bold">Landlord Heaven</span>
+            <div className="mb-6">
+              <Image
+                src="/footerlogo.png"
+                alt="Landlord Heaven"
+                width={200}
+                height={40}
+                className="h-10 w-auto"
+              />
             </div>
             <p className="text-base text-gray-300 leading-relaxed mb-6">
               Professional legal documents for UK landlords. Court-ready, compliant, instantly delivered.
             </p>
             <div className="flex flex-col gap-2 text-sm text-gray-400">
               <div className="flex items-center gap-2">
-                <span className="text-lg">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+                <Image
+                  src="/gb-eng.svg"
+                  alt="England"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
                 <span>England</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-lg">🏴󠁧󠁢󠁷󠁬󠁳󠁿</span>
+                <Image
+                  src="/gb-wls.svg"
+                  alt="Wales"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
                 <span>Wales</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-lg">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>
+                <Image
+                  src="/gb-sct.svg"
+                  alt="Scotland"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
                 <span>Scotland</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-lg">🇬🇧</span>
+                <Image
+                  src="/gb-nir.svg"
+                  alt="Northern Ireland"
+                  width={20}
+                  height={20}
+                  className="w-5 h-5"
+                />
                 <span>Northern Ireland</span>
               </div>
             </div>
