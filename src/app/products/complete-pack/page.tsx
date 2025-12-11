@@ -825,7 +825,7 @@ export default function CompleteEvictionPackPage() {
                 <div className="px-6 pb-4 text-gray-700">
                   Yes. The Complete Pack includes all forms required from start to finish: eviction notice (Section 8/21/Notice
                   to Leave), possession claim forms (N5, N5B, N119 for England & Wales; First-tier Tribunal forms for
-                  Scotland; Civil Bill for Northern Ireland), witness statement templates, and evidence bundling guides. If
+                  Scotland; Civil Bill for Northern Ireland), and evidence bundling guides. If
                   you later need bailiff forms, those are also covered.
                 </div>
               </details>
@@ -862,7 +862,7 @@ export default function CompleteEvictionPackPage() {
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
                   The Complete Pack includes guidance for contested cases. You'll get evidence checklists to strengthen your
-                  case, witness statement templates, and advice on attending the possession hearing. If the case becomes very
+                  case and advice on attending the possession hearing. If the case becomes very
                   complex (e.g., tenant has legal representation), you may want to consult a solicitor, but our pack gives you
                   the foundation to represent yourself effectively.
                 </div>

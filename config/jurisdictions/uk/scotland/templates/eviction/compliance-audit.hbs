@@ -1,0 +1,141 @@
+---
+title: Eviction Compliance Audit Report
+category: supporting_documents
+description: Comprehensive compliance check for First-tier Tribunal proceedings
+filename: compliance-audit.pdf
+---
+
+EVICTION COMPLIANCE AUDIT REPORT
+
+==================================================================
+
+LANDLORD: {{landlord_name}}
+PROPERTY: {{property_address}}
+TENANT: {{tenant_name}}
+JURISDICTION: Scotland
+NOTICE TYPE: {{notice_type}}
+AUDIT DATE: {{current_date}}
+
+==================================================================
+
+OVERALL ASSESSMENT: {{compliance_audit.overall_status}}
+
+{{#if (eq compliance_audit.overall_status "ready")}}
+✅ Your case appears compliant and ready to proceed with eviction.
+{{else if (eq compliance_audit.overall_status "needs_work")}}
+⚠️  Your case has some issues that should be addressed to strengthen your position.
+{{else}}
+❌ Your case has CRITICAL issues that may affect your eviction application. You should resolve these before proceeding.
+{{/if}}
+
+==================================================================
+
+COMPLIANCE CHECKLIST
+
+1. DEPOSIT PROTECTION
+{{compliance_audit.deposit_protection}}
+
+2. GAS SAFETY CERTIFICATE
+{{compliance_audit.gas_safety}}
+
+3. ELECTRICAL SAFETY
+{{compliance_audit.electrical_safety}}
+
+4. ENERGY PERFORMANCE CERTIFICATE (EPC)
+{{compliance_audit.epc}}
+
+5. REPAIRING STANDARD
+{{compliance_audit.how_to_rent}}
+
+6. LICENSING (HMO/SELECTIVE)
+{{compliance_audit.licensing}}
+
+7. TENANT COMPLAINTS
+{{compliance_audit.retaliatory_eviction}}
+
+8. DISREPAIR ISSUES
+{{compliance_audit.disrepair_risk}}
+
+==================================================================
+
+EVICTION GROUNDS ANALYSIS
+
+Available Grounds:
+{{#if compliance_audit.s8_grounds}}
+{{#each compliance_audit.s8_grounds}}
+- {{this}}
+{{/each}}
+{{else}}
+No specific grounds identified from the information provided.
+{{/if}}
+
+Recommendations:
+{{#if compliance_audit.s8_recommendations}}
+{{#each compliance_audit.s8_recommendations}}
+- {{this}}
+{{/each}}
+{{else}}
+Ensure you have valid grounds under the Private Housing (Tenancies) (Scotland) Act 2016.
+{{/if}}
+
+==================================================================
+
+ACTION PLAN
+
+{{#if compliance_audit.critical_actions}}
+{{#if (gt compliance_audit.critical_actions.length 0)}}
+CRITICAL ACTIONS (Must Complete Before Proceeding):
+{{#each compliance_audit.critical_actions}}
+{{@index}}. {{this}}
+{{/each}}
+
+{{/if}}
+{{/if}}
+
+{{#if compliance_audit.recommended_actions}}
+{{#if (gt compliance_audit.recommended_actions.length 0)}}
+RECOMMENDED ACTIONS (Should Complete to Strengthen Case):
+{{#each compliance_audit.recommended_actions}}
+{{@index}}. {{this}}
+{{/each}}
+
+{{/if}}
+{{/if}}
+
+{{#unless compliance_audit.critical_actions}}
+{{#unless compliance_audit.recommended_actions}}
+No immediate actions required. Your compliance appears to be in order.
+{{/unless}}
+{{/unless}}
+
+==================================================================
+
+IMPORTANT NOTES:
+
+1. This audit is based on the information you provided. If any information
+   is inaccurate or incomplete, the audit results may not be reliable.
+
+2. This is not legal advice. For complex cases or if you're unsure about
+   any compliance issue, consult a solicitor.
+
+3. Scotland has specific requirements under the Private Housing (Tenancies)
+   (Scotland) Act 2016 and the Repairing Standard (Scotland) Regulations.
+
+4. The First-tier Tribunal has discretion and will consider tenant
+   circumstances when deciding eviction applications.
+
+5. Keep copies of all compliance documents (certificates, deposit protection
+   confirmation, tenancy agreement) for tribunal submission.
+
+==================================================================
+
+NEXT STEPS:
+
+1. Address all CRITICAL ACTIONS listed above (if any)
+2. Consider addressing RECOMMENDED ACTIONS to strengthen your case
+3. Gather evidence of compliance (certificates, receipts, emails)
+4. Serve Notice to Leave with correct notice period for your grounds
+5. Keep detailed records of all communications and actions
+6. Apply to First-tier Tribunal only after notice period expires
+
+==================================================================

@@ -22,6 +22,9 @@ import {
   wizardFactsToScotlandEviction,
   buildScotlandEvictionCase,
 } from './eviction-wizard-mapper';
+import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
+import { generateComplianceAudit, extractComplianceAuditContext } from '@/lib/ai/compliance-audit-generator';
+import { computeRiskAssessment } from '@/lib/case-intel/risk-assessment';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -690,6 +693,101 @@ export async function generateCompleteEvictionPack(
 
   const proofOfService = await generateProofOfService(evictionCase);
   documents.push(proofOfService);
+
+  // 3.1 Generate witness statement (AI-powered premium feature)
+  try {
+    const witnessStatementContext = extractWitnessStatementContext(wizardFacts);
+    const witnessStatementContent = await generateWitnessStatement(wizardFacts, witnessStatementContext);
+
+    const witnessStatementDoc = await generateDocument({
+      templatePath: `${jurisdiction}/templates/eviction/witness-statement.hbs`,
+      data: {
+        ...evictionCase,
+        witness_statement: witnessStatementContent,
+        landlord_address: evictionCase.landlord_address,
+        court_name: jurisdiction === 'scotland' ? 'First-tier Tribunal' : 'County Court',
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+
+    documents.push({
+      title: 'Witness Statement',
+      description: 'AI-drafted witness statement for court proceedings',
+      category: 'supporting_documents',
+      html: witnessStatementDoc.html,
+      pdf: witnessStatementDoc.pdf,
+      file_name: 'witness_statement.pdf',
+    });
+
+    console.log('✅ Generated witness statement');
+  } catch (error) {
+    console.error('⚠️  Failed to generate witness statement:', error);
+    // Don't fail the entire pack if witness statement generation fails
+  }
+
+  // 3.2 Generate compliance audit (AI-powered premium feature)
+  try {
+    const complianceAuditContext = extractComplianceAuditContext(wizardFacts);
+    const complianceAuditContent = await generateComplianceAudit(wizardFacts, complianceAuditContext);
+
+    const complianceAuditDoc = await generateDocument({
+      templatePath: `${jurisdiction}/templates/eviction/compliance-audit.hbs`,
+      data: {
+        ...evictionCase,
+        compliance_audit: complianceAuditContent,
+        current_date: new Date().toISOString().split('T')[0],
+        notice_type: evictionCase.grounds[0]?.ground_id || 'Not specified',
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+
+    documents.push({
+      title: 'Compliance Audit Report',
+      description: 'AI-powered compliance check for eviction proceedings',
+      category: 'guidance',
+      html: complianceAuditDoc.html,
+      pdf: complianceAuditDoc.pdf,
+      file_name: 'compliance_audit.pdf',
+    });
+
+    console.log('✅ Generated compliance audit');
+  } catch (error) {
+    console.error('⚠️  Failed to generate compliance audit:', error);
+    // Don't fail the entire pack if compliance audit generation fails
+  }
+
+  // 3.3 Generate risk report (premium feature)
+  try {
+    const riskAssessment = computeRiskAssessment(wizardFacts);
+
+    const riskReportDoc = await generateDocument({
+      templatePath: `${jurisdiction}/templates/eviction/risk-report.hbs`,
+      data: {
+        ...evictionCase,
+        risk_assessment: riskAssessment,
+        current_date: new Date().toISOString().split('T')[0],
+        case_type: evictionCase.case_type.replace('_', ' ').toUpperCase(),
+      },
+      isPreview: false,
+      outputFormat: 'both',
+    });
+
+    documents.push({
+      title: 'Case Risk Assessment Report',
+      description: 'Comprehensive risk analysis and success probability assessment',
+      category: 'guidance',
+      html: riskReportDoc.html,
+      pdf: riskReportDoc.pdf,
+      file_name: 'risk_assessment.pdf',
+    });
+
+    console.log('✅ Generated risk assessment report');
+  } catch (error) {
+    console.error('⚠️  Failed to generate risk report:', error);
+    // Don't fail the entire pack if risk report generation fails
+  }
 
   // 4. Generate case summary document
   const caseSummaryDoc = await generateDocument({
