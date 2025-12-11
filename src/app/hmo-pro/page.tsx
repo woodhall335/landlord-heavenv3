@@ -15,7 +15,7 @@ export default function HMOProPage() {
       <div className="bg-gradient-to-r from-primary to-primary-dark text-white py-4">
         <Container>
           <div className="text-center">
-            <p className="text-sm font-semibold mb-1">
+            <p className="text-sm font-semibold mb-1 text-white">
               🚧 Coming Soon - V2 Roadmap Feature 🚧
             </p>
             <p className="text-xs text-white/90">

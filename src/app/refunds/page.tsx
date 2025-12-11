@@ -9,10 +9,24 @@ export const metadata: Metadata = {
 
 export default function RefundsPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <Container size="medium">
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">Refunds</span>
+            </div>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Refund Policy</h1>
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
+              Our refund policy for digital products and services
+            </p>
+          </div>
+        </Container>
+      </section>
+
+      <Container size="medium" className="py-12">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 md:p-12">
-          <h1 className="text-4xl font-bold text-charcoal mb-2">Refund Policy</h1>
           <p className="text-sm text-gray-500 mb-8">Last updated: November 22, 2025</p>
 
           <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
