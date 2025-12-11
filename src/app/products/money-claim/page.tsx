@@ -291,7 +291,7 @@ export default function MoneyClaimPage() {
 
             <div className="grid md:grid-cols-4 gap-6">
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-charcoal text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   1
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">Calculate Arrears</h3>
@@ -301,7 +301,7 @@ export default function MoneyClaimPage() {
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-charcoal text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   2
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">We Generate Claim</h3>
@@ -311,7 +311,7 @@ export default function MoneyClaimPage() {
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-charcoal text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   3
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">File Online or Paper</h3>
@@ -321,7 +321,7 @@ export default function MoneyClaimPage() {
               </div>
 
               <div className="text-center">
-                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-charcoal text-2xl font-bold mx-auto mb-4">
+                <div className="w-16 h-16 bg-primary-500 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                   4
                 </div>
                 <h3 className="text-lg font-semibold text-charcoal mb-2">Collect Your Money</h3>
