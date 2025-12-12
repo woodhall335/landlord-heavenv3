@@ -17,6 +17,12 @@ __meta:
   jurisdiction: "scotland"
   product: "complete_pack"
 
+# Audit Notes (2025-12-03)
+# - Unique IDs and dependsOn references validated via script.
+# - maps_to entries align with WizardFacts consumed by fact mappers and generators.
+# - Evidence uploads step present for tenancy, rent, ASB and other documents.
+# - Complete-pack flow keeps tribunal/court outputs distinct from notice-only promises.
+
 id: complete_pack_scotland_v2
 product: complete_pack
 jurisdiction: scotland

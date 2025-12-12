@@ -10,6 +10,11 @@ __meta:
   jurisdiction: "scotland"
   product: "notice_only"
 
+# Audit Notes (2025-12-03)
+# - IDs unique and dependsOn references validated by script.
+# - maps_to keys match WizardFacts for Scottish notice routing; avoids court form promises.
+# - Evidence upload step present to gather tenancy, arrears/ASB and supporting files.
+
 id: notice_only_scotland_v2
 product: notice_only
 jurisdiction: scotland

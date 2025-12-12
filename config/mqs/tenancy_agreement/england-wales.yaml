@@ -16,6 +16,10 @@ __meta:
   jurisdiction: "england-wales"
   product: "tenancy_agreement"
 
+# Audit Notes (2025-12-03)
+# - IDs and dependsOn links validated; maps_to entries align with WizardFacts tenancy paths.
+# - Added evidence_uploads to capture tenancy proofs and optional ID/inventory uploads without affecting court promises.
+
 id: tenancy_agreement_england_wales_v2
 product: tenancy_agreement
 jurisdiction: england-wales
@@ -1813,3 +1817,16 @@ questions:
       - deep_cleaning_areas
       - cleaning_checklist_provided
       - cleaning_cost_estimates
+
+  # Evidence uploads
+  - id: evidence_uploads
+    section: Evidence
+    question: "Upload tenancy proof and optional supporting documents"
+    inputType: upload
+    helperText: "Upload the signed tenancy agreement, inventory, ID checks or other proof to keep everything with your case."
+    validation:
+      required: false
+    suggestion_prompt: "Confirm the right file categories are selected (tenancy agreement, inventory/photos, ID checks, other)."
+    maps_to:
+      - evidence.tenancy_agreement_uploaded
+      - evidence.other_evidence_uploaded
