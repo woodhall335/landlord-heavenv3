@@ -107,7 +107,7 @@ describe('Money claim access controls', () => {
 
     const body = await response.json();
     expect(response.status).toBe(400);
-    expect(body.error).toContain('Northern Ireland');
+expect(body.error).toBe('NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED');
     expect(supabaseClientMock.insert).not.toHaveBeenCalled();
   });
 });
