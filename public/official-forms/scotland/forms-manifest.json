@@ -8,9 +8,10 @@
       "effective_date": "2024-04-01",
       "source_url": "https://www.gov.scot/binaries/content/documents/govscot/publications/form/2017/11/private-residential-tenancy-prescribed-notices-forms/documents/notice-to-leave/7de8561a-c689-463e-b196-bdbe2dee347b/7de8561a-c689-463e-b196-bdbe2dee347b/govscot:document/Notice%2Bto%2BLeave%2Bfrom%2B1%2BApril%2B2024.pdf",
       "last_verified": "2025-02-01",
-      "notes": "Prescribed form under Private Housing (Tenancies) (Scotland) Act 2016. Placeholder PDF stored locally until automated downloader can fetch the latest official version.",
+      "notes": "Prescribed form under Private Housing (Tenancies) (Scotland) Act 2016. Official PDF currently has no AcroForm fields, so generation uses a Handlebars HTML template while retaining prescribed wording.",
       "file_size": "placeholder",
       "pages": 3,
+      "fields_count": 0,
       "status": "PLACEHOLDER"
     },
     "form_e_eviction.pdf": {

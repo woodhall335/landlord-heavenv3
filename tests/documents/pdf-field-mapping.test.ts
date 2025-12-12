@@ -12,6 +12,16 @@ async function loadFieldNames(formFile: string): Promise<Set<string>> {
   return new Set(form.getFields().map((field) => field.getName()));
 }
 
+async function logFieldCount(formFile: string): Promise<number> {
+  const pdfBytes = await fs.readFile(path.join(formsRoot, formFile));
+  const pdfDoc = await PDFDocument.load(pdfBytes);
+  const form = pdfDoc.getForm();
+  const count = form.getFields().length;
+
+  console.info(`[${formFile}] field count: ${count}`);
+  return count;
+}
+
 describe('Official form assets', () => {
   it('includes required England & Wales PDFs', async () => {
     const requiredForms = ['n5-eng.pdf', 'n5b-eng.pdf', 'n119-eng.pdf', 'N1_1224.pdf', 'form_6a.pdf'];
@@ -48,6 +58,21 @@ describe('Official form assets', () => {
     }
 
     expect(missing).toEqual([]);
+  });
+});
+
+describe('Scotland official forms', () => {
+  it('treats Notice to Leave as non-fillable when no AcroForm fields exist', async () => {
+    const fieldCount = await logFieldCount(path.join('scotland', 'notice_to_leave.pdf'));
+
+    expect(fieldCount).toBe(0);
+  });
+
+  it('retains critical Form E fields for pdf-lib filling', async () => {
+    const fields = await loadFieldNames(path.join('scotland', 'form_e_eviction.pdf'));
+    const expected = ['1', '2', '3', '4', '5', '6', '7', 'grounds', 'reqd attach', 'TEL', 'eml'];
+
+    expected.forEach((name) => expect(fields.has(name)).toBe(true));
   });
 });
 
