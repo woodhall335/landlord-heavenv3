@@ -6,6 +6,11 @@ __meta:
   jurisdiction: "scotland"
   product: "money_claim"
 
+# Audit Notes (2025-12-03)
+# - Confirmed unique IDs and valid dependsOn references.
+# - maps_to keys match WizardFacts for Scottish money claims and generators.
+# - Upload steps present for arrears schedule, tenancy agreement, rent schedule, bank statements, and damage evidence.
+
 id: money_claim_scotland_v1
 product: money_claim
 jurisdiction: scotland

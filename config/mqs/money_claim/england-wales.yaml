@@ -6,6 +6,11 @@ __meta:
   jurisdiction: "england-wales"
   product: "money_claim"
 
+# Audit Notes (2025-12-03)
+# - IDs and dependsOn references validated; no duplicates.
+# - maps_to targets align with WizardFacts for claim particulars and generator inputs.
+# - Multiple upload steps present (rent schedule, tenancy agreement, bank statements, damage evidence) with flags set.
+
 id: money_claim_england_wales_v1
 product: money_claim
 jurisdiction: england-wales

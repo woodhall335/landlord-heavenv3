@@ -8,6 +8,12 @@ __meta:
   jurisdiction: "england-wales"
   product: "complete_pack"
 
+# Audit Notes (2025-12-03)
+# - IDs unique and dependsOn references resolved during audit script run.
+# - maps_to entries align with existing WizardFacts keys used by applyMappedAnswers.
+# - Includes evidence_uploads with inputType: upload to capture tenancy, rent, ASB and other proof.
+# - Complete pack retains court/tribunal outputs; notice-only promises avoided.
+
 id: complete_pack_england_wales_v1
 product: complete_pack
 jurisdiction: england-wales

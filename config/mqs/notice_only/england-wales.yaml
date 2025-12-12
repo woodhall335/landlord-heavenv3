@@ -10,6 +10,11 @@ __meta:
   jurisdiction: "england-wales"
   product: "notice_only"
 
+# Audit Notes (2025-12-03)
+# - Verified unique IDs and dependsOn links via script; no duplicates remain.
+# - maps_to fields align with WizardFacts for notice routing; flow does not promise court forms.
+# - Evidence upload step already collects tenancy, arrears/ASB and other supporting files.
+
 id: notice_only_england_wales_v1
 product: notice_only
 jurisdiction: england-wales

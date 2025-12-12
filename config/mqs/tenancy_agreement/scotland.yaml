@@ -15,6 +15,10 @@ __meta:
   jurisdiction: "scotland"
   product: "tenancy_agreement"
 
+# Audit Notes (2025-12-03)
+# - IDs and dependsOn links validated; maps_to values align with WizardFacts tenancy paths.
+# - Added evidence_uploads to capture tenancy proof plus optional inventory/ID uploads without promising court outputs.
+
 id: tenancy_agreement_scotland_prt_v2
 product: tenancy_agreement
 jurisdiction: scotland
@@ -1850,3 +1854,16 @@ questions:
       - deep_cleaning_areas
       - cleaning_checklist_provided
       - cleaning_cost_estimates
+
+  # Evidence uploads
+  - id: evidence_uploads
+    section: Evidence
+    question: "Upload tenancy proof and optional supporting documents"
+    inputType: upload
+    helperText: "Upload the signed PRT/lease, inventory/photos, ID checks or other proof to keep with your case."
+    validation:
+      required: false
+    suggestion_prompt: "Ensure uploads are tagged correctly (tenancy agreement, inventory/photos, ID checks, other)."
+    maps_to:
+      - evidence.tenancy_agreement_uploaded
+      - evidence.other_evidence_uploaded
