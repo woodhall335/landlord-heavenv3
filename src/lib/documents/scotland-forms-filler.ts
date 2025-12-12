@@ -46,6 +46,7 @@ export interface ScotlandCaseData {
   // Deposit
   deposit_amount?: number;
   deposit_scheme?: 'SafeDeposits Scotland' | 'Letting Protection Service Scotland' | 'MyDeposits Scotland';
+  deposit_scheme_name?: string;
   deposit_reference?: string;
 
   // Landlord registration
@@ -253,6 +254,12 @@ export async function fillNoticeToLeave(data: ScotlandCaseData): Promise<Uint8Ar
     fillTextField(form, `Ground ${groundNumber} Particulars`, ground.particulars);
   });
 
+  // Deposit details
+  if (data.deposit_scheme || data.deposit_scheme_name) {
+    fillTextField(form, 'Deposit Scheme', data.deposit_scheme_name || data.deposit_scheme);
+  }
+  fillTextField(form, 'Deposit Reference', data.deposit_reference);
+
   // Rent details
   fillTextField(form, 'Rent Amount', `£${data.rent_amount}`);
   fillTextField(form, 'Rent Frequency', data.rent_frequency);
@@ -362,6 +369,12 @@ export async function fillFormE(data: ScotlandCaseData): Promise<Uint8Array> {
   if (noticeDate) {
     fillTextField(form, 'Notice to Leave Served Date', `${noticeDate.day}/${noticeDate.month}/${noticeDate.year}`);
   }
+
+  // Deposit scheme details
+  if (data.deposit_scheme || data.deposit_scheme_name) {
+    fillTextField(form, 'Deposit Scheme', data.deposit_scheme_name || data.deposit_scheme);
+  }
+  fillTextField(form, 'Deposit Reference', data.deposit_reference);
 
   const leavingDate = splitDate(data.leaving_date);
   if (leavingDate) {
