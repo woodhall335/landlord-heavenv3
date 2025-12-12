@@ -125,6 +125,19 @@ export default function WizardPreviewPage() {
       case 'eviction':
         return [
           {
+            productType: 'notice_only',
+            name: 'Notice-Only Pack',
+            price: '£69.99',
+            description: 'Serve the right notice with proof of service and guidance.',
+            features: [
+              'Correct Section 8 or Section 21 notice (or Notice to Leave in Scotland)',
+              'Route decisioning and timing guidance',
+              'Proof of service templates and checklist',
+              'Evidence checklist tailored to your grounds',
+              'Next steps roadmap for court escalation',
+            ],
+          },
+          {
             productType: 'complete_pack',
             name: 'Complete Eviction Pack',
             price: '£149.99',
@@ -271,6 +284,14 @@ export default function WizardPreviewPage() {
         const caseResult = await caseResponse.json();
         const fetchedCase: CaseData = caseResult.case;
         setCaseData(fetchedCase);
+
+        const factsMeta = (fetchedCase.collected_facts as any)?.meta || {};
+        const originalMeta = (fetchedCase.collected_facts as any)?.__meta || {};
+        const inferredProduct =
+          factsMeta.product || originalMeta.product || originalMeta.original_product;
+        if (inferredProduct === 'notice_only') {
+          setSelectedProduct('notice_only');
+        }
 
         // Generate preview document
         const previewResponse = await fetch('/api/documents/generate', {
@@ -420,6 +441,13 @@ export default function WizardPreviewPage() {
   }
 
   const pricingOptions = getPricingOptions(caseData.case_type, caseData.jurisdiction);
+  const factsMeta = (caseData.collected_facts as any)?.meta || {};
+  const originalMeta = (caseData.collected_facts as any)?.__meta || {};
+  const effectiveProduct =
+    (factsMeta.product as string | undefined) ||
+    (originalMeta.product as string | undefined) ||
+    (originalMeta.original_product as string | undefined) ||
+    null;
   const isEviction = caseData.case_type === 'eviction';
   const isMoneyClaim = caseData.case_type === 'money_claim';
   const isTenancy = caseData.case_type === 'tenancy_agreement';
@@ -487,7 +515,9 @@ export default function WizardPreviewPage() {
             <Button
               onClick={() =>
                 router.push(
-                  `/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}`
+                  `/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}${
+                    effectiveProduct ? `&product=${effectiveProduct}` : ''
+                  }`
                 )
               }
               variant="secondary"

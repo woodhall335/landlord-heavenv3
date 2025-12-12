@@ -177,13 +177,19 @@ function WizardFlowContent() {
   }
 
   const handleComplete = (completedCaseId: string) => {
-    // For eviction cases, route through review page for analysis
+    // For eviction cases, respect product so notice-only flows do not get sent to review
     if (type === 'eviction') {
-      router.push(`/wizard/review?case_id=${completedCaseId}`);
-    } else {
-      // Navigate to preview/checkout page for other case types
-      router.push(`/wizard/preview/${completedCaseId}`);
+      const destination =
+        askHeavenProduct === 'notice_only'
+          ? `/wizard/preview/${completedCaseId}`
+          : `/wizard/review?case_id=${completedCaseId}&product=${askHeavenProduct ?? 'complete_pack'}`;
+
+      router.push(destination);
+      return;
     }
+
+    // Navigate to preview/checkout page for other case types
+    router.push(`/wizard/preview/${completedCaseId}`);
   };
 
   // Show loading state while initializing
