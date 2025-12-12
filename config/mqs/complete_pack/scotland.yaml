@@ -887,34 +887,20 @@ questions:
 
   - id: evidence_uploads
     section: Evidence
-    question: "Upload supporting evidence"
-    inputType: group
-    fields:
-      - id: scotland_evidence_tenancy_uploaded
-        label: "Signed tenancy agreement"
-        inputType: upload
-        validation:
-          required: true
-        width: full
-      - id: scotland_evidence_rent_schedule_uploaded
-        label: "Rent schedule / ledger"
-        inputType: upload
-        validation:
-          required: false
-        width: full
-      - id: scotland_evidence_messages_uploaded
-        label: "Messages or letters to tenant"
-        inputType: upload
-        width: full
-      - id: scotland_evidence_other_uploaded
-        label: "Other evidence (photos, inspection reports, bank statements)"
-        inputType: upload
-        width: full
+    question: "Upload supporting evidence (optional but recommended)"
+    inputType: upload
+    helperText: "Add tenancy agreement/PRT, rent schedule, correspondence and photos to strengthen the case."
+    evidence_types:
+      - tenancy_agreement
+      - rent_schedule
+      - correspondence
+      - photos
+      - authority_letters
     maps_to:
-      - scotland_evidence_tenancy_uploaded
-      - scotland_evidence_rent_schedule_uploaded
-      - scotland_evidence_messages_uploaded
-      - scotland_evidence_other_uploaded
+      - evidence.tenancy_agreement_uploaded
+      - evidence.rent_schedule_uploaded
+      - evidence.asb_evidence_uploaded
+      - evidence.other_evidence_uploaded
     conditions: []
 
   # 12. Service / contact details

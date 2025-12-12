@@ -895,29 +895,19 @@ questions:
   - id: evidence_uploads
     section: Evidence
     question: "Upload key documents (optional but strongly recommended)"
-    inputType: group
+    inputType: upload
     helperText: "These won’t go on the court forms directly but will be listed in your evidence index."
-    fields:
-      - id: upload_tenancy_agreement
-        label: "Tenancy agreement"
-        inputType: file_upload
-        width: full
-      - id: upload_rent_schedule
-        label: "Rent schedule / rent account"
-        inputType: file_upload
-        width: full
-      - id: upload_correspondence
-        label: "Key correspondence (emails, letters, texts)"
-        inputType: file_upload
-        width: full
-      - id: upload_photos_damage
-        label: "Photos of damage or disrepair (if relevant)"
-        inputType: file_upload
-        width: full
-      - id: upload_council_police_letters
-        label: "Council or police letters (if any)"
-        inputType: file_upload
-        width: full
+    evidence_types:
+      - tenancy_agreement
+      - rent_schedule
+      - correspondence
+      - photos
+      - authority_letters
+    maps_to:
+      - evidence.tenancy_agreement_uploaded
+      - evidence.rent_schedule_uploaded
+      - evidence.asb_evidence_uploaded
+      - evidence.other_evidence_uploaded
     suggestion_prompt: >
       Suggest which documents are most persuasive for this particular case:
       tenancy agreement, rent schedule, warning letters, photos, council or police letters,
