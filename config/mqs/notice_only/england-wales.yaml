@@ -426,33 +426,19 @@ questions:
   - id: evidence_uploads
     section: Evidence
     question: "Upload key documents (optional but recommended)"
-    inputType: group
+    inputType: upload
     helperText: "These will support your notice if the tenant challenges it."
-    fields:
-      - id: upload_tenancy_agreement
-        label: "Tenancy agreement"
-        inputType: file_upload
-        width: full
-      - id: upload_rent_schedule
-        label: "Rent schedule / account"
-        inputType: file_upload
-        width: full
-      - id: upload_deposit_certificate
-        label: "Deposit protection certificate and prescribed information"
-        inputType: file_upload
-        width: full
-      - id: upload_gas_epc_certs
-        label: "Gas safety certificate and EPC"
-        inputType: file_upload
-        width: full
-      - id: upload_how_to_rent
-        label: "How to Rent guide (proof it was given)"
-        inputType: file_upload
-        width: full
-      - id: upload_correspondence
-        label: "Key correspondence (emails, letters)"
-        inputType: file_upload
-        width: full
+    evidence_types:
+      - tenancy_agreement
+      - rent_schedule
+      - correspondence
+      - photos
+      - authority_letters
+    maps_to:
+      - evidence.tenancy_agreement_uploaded
+      - evidence.rent_schedule_uploaded
+      - evidence.asb_evidence_uploaded
+      - evidence.other_evidence_uploaded
     suggestion_prompt: >
       Suggest which documents are most important: tenancy agreement, deposit certificate,
       gas safety cert, EPC, How to Rent guide, and any warning letters or arrears correspondence.

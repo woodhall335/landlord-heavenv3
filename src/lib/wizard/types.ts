@@ -38,7 +38,16 @@ export interface ExtendedWizardQuestion {
     value: any;
   };
   fields?: WizardField[];
+  evidence_types?: string[];
   maps_to?: string[];
+}
+
+export interface StepFlags {
+  missing_critical?: string[];
+  inconsistencies?: string[];
+  recommended_uploads?: Array<{ type: string; reason: string }>;
+  route_hint?: { recommended: 's8' | 's21' | 'both' | 'notice_to_leave' | 'unknown'; reason: string };
+  compliance_hints?: string[];
 }
 
 export type { WizardField as WizardFieldType };

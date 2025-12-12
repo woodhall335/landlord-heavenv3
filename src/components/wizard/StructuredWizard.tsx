@@ -9,7 +9,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input, Card } from '@/components/ui';
-import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
+import type { ExtendedWizardQuestion, StepFlags } from '@/lib/wizard/types';
 import { GuidanceTips } from '@/components/wizard/GuidanceTips';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
@@ -74,10 +74,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
   // Checkpoint state for live validation
   const [checkpoint, setCheckpoint] = useState<any>(null);
+  const [stepFlags, setStepFlags] = useState<StepFlags | null>(null);
 
   const initializeQuestion = useCallback((question: ExtendedWizardQuestion) => {
     setCurrentQuestion(question);
     setUploadFilesForCurrentQuestion([]);
+    setStepFlags(null);
 
     if (question.inputType === 'group' && question.fields) {
       const defaults: Record<string, any> = {};
@@ -586,6 +588,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           evidence_suggestions: data.enhanced_answer.evidence_suggestions || [],
           consistency_flags: data.enhanced_answer.consistency_flags || [],
         });
+      }
+
+      if (data.step_flags) {
+        setStepFlags(data.step_flags as StepFlags);
+      } else {
+        setStepFlags(null);
       }
 
       // Update progress
@@ -1165,6 +1173,65 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             )}
 
             <div className="mb-6">{renderInput()}</div>
+
+            {stepFlags && (
+              <div className="mb-6 space-y-3">
+                {stepFlags.route_hint && (
+                  <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">
+                    <p className="font-semibold">Route hint</p>
+                    <p className="text-blue-800">
+                      {stepFlags.route_hint.recommended.toUpperCase()} – {stepFlags.route_hint.reason}
+                    </p>
+                  </div>
+                )}
+
+                {stepFlags.missing_critical && stepFlags.missing_critical.length > 0 && (
+                  <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-900">
+                    <p className="font-semibold mb-1">Critical blockers</p>
+                    <ul className="list-disc list-inside space-y-1">
+                      {stepFlags.missing_critical.map((item, idx) => (
+                        <li key={`crit-${idx}`}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {stepFlags.inconsistencies && stepFlags.inconsistencies.length > 0 && (
+                  <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                    <p className="font-semibold mb-1">Possible inconsistencies</p>
+                    <ul className="list-disc list-inside space-y-1">
+                      {stepFlags.inconsistencies.map((item, idx) => (
+                        <li key={`inc-${idx}`}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {stepFlags.recommended_uploads && stepFlags.recommended_uploads.length > 0 && (
+                  <div className="rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-900">
+                    <p className="font-semibold mb-1">Recommended uploads</p>
+                    <ul className="list-disc list-inside space-y-1">
+                      {stepFlags.recommended_uploads.map((item, idx) => (
+                        <li key={`up-${idx}`}>
+                          <span className="font-medium">{item.type}:</span> {item.reason}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {stepFlags.compliance_hints && stepFlags.compliance_hints.length > 0 && (
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm text-slate-900">
+                    <p className="font-semibold mb-1">Compliance hints</p>
+                    <ul className="list-disc list-inside space-y-1">
+                      {stepFlags.compliance_hints.map((item, idx) => (
+                        <li key={`comp-${idx}`}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Ask Heaven Panel - inline on mobile (below the answer box) */}
             {currentQuestion.inputType === 'textarea' && (

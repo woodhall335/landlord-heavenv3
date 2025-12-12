@@ -21,6 +21,8 @@ import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { runDecisionEngine, type DecisionInput, type DecisionOutput } from '@/lib/decision-engine';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import { chatCompletion } from '@/lib/ai/openai-client';
+import type { StepFlags } from '@/lib/wizard/types';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -734,6 +736,95 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
     }
 
     // ---------------------------------------
+    // 6a. Per-step flags for eviction (lightweight AI + decision engine)
+    // ---------------------------------------
+    let stepFlags: StepFlags | null = null;
+    if (caseRow.case_type === 'eviction') {
+      const evidenceFacts = (newFacts as any).evidence || {};
+      const missingUploads: Array<{ type: string; reason: string }> = [];
+      const evidenceTypes: Record<string, string> = {
+        tenancy_agreement_uploaded: 'tenancy_agreement',
+        rent_schedule_uploaded: 'rent_schedule',
+        bank_statements_uploaded: 'bank_statements',
+        safety_certificates_uploaded: 'safety_certificates',
+        asb_evidence_uploaded: 'correspondence',
+        other_evidence_uploaded: 'other',
+      };
+
+      Object.entries(evidenceTypes).forEach(([flag, friendly]) => {
+        if (!evidenceFacts[flag]) {
+          missingUploads.push({
+            type: friendly,
+            reason: 'Not uploaded yet – recommended before notices/court',
+          });
+        }
+      });
+
+      let routeHint: StepFlags['route_hint'] = undefined;
+      if (decisionContext?.recommended_routes?.length) {
+        const routes = decisionContext.recommended_routes;
+        if (routes.includes('section_8') && routes.includes('section_21')) {
+          routeHint = { recommended: 'both', reason: 'Both Section 8 and 21 appear viable' };
+        } else if (routes.includes('section_8')) {
+          routeHint = { recommended: 's8', reason: 'Section 8 grounds identified by decision engine' };
+        } else if (routes.includes('section_21')) {
+          routeHint = { recommended: 's21', reason: 'No major Section 21 blockers detected' };
+        } else if (routes.includes('notice_to_leave')) {
+          routeHint = { recommended: 'notice_to_leave', reason: 'Scottish Notice to Leave is expected' };
+        }
+      }
+
+      const blockingIssues = decisionContext?.blocking_issues || [];
+      const missingCritical = blockingIssues
+        .filter((issue) => issue.severity === 'blocking')
+        .map((issue) => `${issue.route?.toUpperCase?.() || 'ROUTE'}: ${issue.description}`);
+
+      const complianceHints = decisionContext?.warnings || [];
+
+      let aiHints: Partial<StepFlags> = {};
+      try {
+        if (process.env.OPENAI_API_KEY) {
+          const aiResponse = await chatCompletion(
+            [
+              {
+                role: 'system',
+                content:
+                  'You are an eviction QA bot. Return JSON with keys missing_critical,inconsistencies,compliance_hints. Be concise.',
+              },
+              {
+                role: 'user',
+                content: `Jurisdiction: ${caseRow.jurisdiction}. Product: ${product}. Facts: ${JSON.stringify(
+                  wizardFactsToCaseFacts(newFacts),
+                )}`,
+              },
+            ],
+            { model: 'gpt-4o-mini', max_tokens: 200, temperature: 0 },
+          );
+
+          const parsed = JSON.parse(aiResponse.content || '{}');
+          aiHints = {
+            missing_critical: Array.isArray(parsed.missing_critical) ? parsed.missing_critical : undefined,
+            inconsistencies: Array.isArray(parsed.inconsistencies) ? parsed.inconsistencies : undefined,
+            compliance_hints: Array.isArray(parsed.compliance_hints) ? parsed.compliance_hints : undefined,
+          };
+        }
+      } catch (aiErr) {
+        console.warn('Step AI hints failed, continuing without AI hints:', aiErr);
+      }
+
+      stepFlags = {
+        missing_critical: [
+          ...(aiHints.missing_critical || []),
+          ...(missingCritical || []),
+        ],
+        inconsistencies: aiHints.inconsistencies || [],
+        compliance_hints: aiHints.compliance_hints || complianceHints || [],
+        recommended_uploads: missingUploads,
+        route_hint: routeHint ?? { recommended: 'unknown', reason: 'Need more answers to decide route' },
+      };
+    }
+
+    // ---------------------------------------
     // 7. Determine next question + progress
     // ---------------------------------------
     const nextQuestion = getNextMQSQuestion(mqs, newFacts);
@@ -760,6 +851,7 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
             consistency_flags: enhanced.consistency_flags,
           }
         : null,
+      step_flags: stepFlags,
       suggested_wording: enhanced?.suggested_wording ?? null,
       missing_information: enhanced?.missing_information ?? [],
       evidence_suggestions: enhanced?.evidence_suggestions ?? [],

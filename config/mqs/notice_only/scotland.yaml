@@ -308,6 +308,26 @@ questions:
     suggestion_prompt: >
       Ensure the tenant's contact details are correct for service and tribunal paperwork.
 
+  - id: evidence_uploads
+    section: Evidence
+    question: "Upload key documents (optional but recommended)"
+    inputType: upload
+    helperText: "Add tenancy agreement/PRT, rent schedule, correspondence and photos to strengthen your notice."
+    evidence_types:
+      - tenancy_agreement
+      - rent_schedule
+      - correspondence
+      - photos
+      - authority_letters
+    maps_to:
+      - evidence.tenancy_agreement_uploaded
+      - evidence.rent_schedule_uploaded
+      - evidence.asb_evidence_uploaded
+      - evidence.other_evidence_uploaded
+    suggestion_prompt: >
+      Suggest the most useful evidence for a Scottish notice to leave: signed tenancy, arrears ledger, warning letters,
+      photos of issues, or any council/police correspondence.
+
   - id: service_contact
     section: Service Contact
     question: "Where should tribunal documents be served?"
