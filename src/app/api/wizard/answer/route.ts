@@ -745,9 +745,10 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
       const evidenceTypes: Record<string, string> = {
         tenancy_agreement_uploaded: 'tenancy_agreement',
         rent_schedule_uploaded: 'rent_schedule',
+        correspondence_uploaded: 'correspondence',
+        damage_photos_uploaded: 'damage_photos',
+        authority_letters_uploaded: 'authority_letters',
         bank_statements_uploaded: 'bank_statements',
-        safety_certificates_uploaded: 'safety_certificates',
-        asb_evidence_uploaded: 'correspondence',
         other_evidence_uploaded: 'other',
       };
 
@@ -766,12 +767,17 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
         if (routes.includes('section_8') && routes.includes('section_21')) {
           routeHint = { recommended: 'both', reason: 'Both Section 8 and 21 appear viable' };
         } else if (routes.includes('section_8')) {
-          routeHint = { recommended: 's8', reason: 'Section 8 grounds identified by decision engine' };
+          routeHint = { recommended: 'section_8', reason: 'Section 8 grounds identified by decision engine' };
         } else if (routes.includes('section_21')) {
-          routeHint = { recommended: 's21', reason: 'No major Section 21 blockers detected' };
-        } else if (routes.includes('notice_to_leave')) {
-          routeHint = { recommended: 'notice_to_leave', reason: 'Scottish Notice to Leave is expected' };
+          routeHint = { recommended: 'section_21', reason: 'No major Section 21 blockers detected' };
         }
+      }
+
+      if (!routeHint && caseRow.jurisdiction === 'scotland') {
+        routeHint = {
+          recommended: 'unknown',
+          reason: 'Scottish Notice to Leave likely applies; confirm once notice answers are complete',
+        };
       }
 
       const blockingIssues = decisionContext?.blocking_issues || [];

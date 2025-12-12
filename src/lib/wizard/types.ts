@@ -46,7 +46,7 @@ export interface StepFlags {
   missing_critical?: string[];
   inconsistencies?: string[];
   recommended_uploads?: Array<{ type: string; reason: string }>;
-  route_hint?: { recommended: 's8' | 's21' | 'both' | 'notice_to_leave' | 'unknown'; reason: string };
+  route_hint?: { recommended: 'section_8' | 'section_21' | 'both' | 'unknown'; reason: string };
   compliance_hints?: string[];
 }
 
