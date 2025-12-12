@@ -7,7 +7,7 @@
 
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { Suspense, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Badge, Button, Container, TealHero } from '@/components/ui';
@@ -104,7 +104,12 @@ function normalizeProductForWizard(
   return product;
 }
 
-export default function WizardPage() {
+/**
+ * NOTE:
+ * useSearchParams() must be rendered under a <Suspense> boundary in Next 15/16
+ * to avoid prerender/export build failures ("missing-suspense-with-csr-bailout").
+ */
+function WizardPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const productParam = searchParams.get('product');
@@ -392,5 +397,13 @@ export default function WizardPage() {
         )}
       </Container>
     </div>
+  );
+}
+
+export default function WizardPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+      <WizardPageInner />
+    </Suspense>
   );
 }

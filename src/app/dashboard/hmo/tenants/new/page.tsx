@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
@@ -20,7 +20,7 @@ interface Property {
   postcode: string;
 }
 
-export default function NewTenantPage() {
+function NewTenantPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const preselectedPropertyId = searchParams.get('property_id');
@@ -39,6 +39,12 @@ export default function NewTenantPage() {
   const [depositAmount, setDepositAmount] = useState('');
   const [leaseStart, setLeaseStart] = useState('');
   const [leaseEnd, setLeaseEnd] = useState('');
+
+  // Keep propertyId in sync if querystring changes
+  useEffect(() => {
+    if (preselectedPropertyId) setPropertyId(preselectedPropertyId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preselectedPropertyId]);
 
   useEffect(() => {
     fetchProperties();
@@ -92,6 +98,16 @@ export default function NewTenantPage() {
       setIsLoading(false);
     }
   };
+
+  const isFormValid =
+    propertyId &&
+    fullName &&
+    email &&
+    roomNumber &&
+    rentAmount &&
+    depositAmount &&
+    leaseStart &&
+    leaseEnd;
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -246,7 +262,7 @@ export default function NewTenantPage() {
                 variant="primary"
                 size="large"
                 loading={isLoading}
-                disabled={isLoading}
+                disabled={isLoading || !isFormValid}
               >
                 Add Tenant
               </Button>
@@ -271,5 +287,13 @@ export default function NewTenantPage() {
         </Card>
       </Container>
     </div>
+  );
+}
+
+export default function NewTenantPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+      <NewTenantPageInner />
+    </Suspense>
   );
 }

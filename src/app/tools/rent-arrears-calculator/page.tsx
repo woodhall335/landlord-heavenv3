@@ -307,10 +307,13 @@ export default function RentArrearsCalculator() {
       // NO WATERMARK - Full value free tool
 
       const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
+
+const safeBytes = new Uint8Array(pdfBytes);
+const blob = new Blob([safeBytes], { type: 'application/pdf' });
+const url = URL.createObjectURL(blob);
+
+const link = document.createElement('a');
+link.href = url;
       link.download = `Rent-Arrears-Schedule-${Date.now()}.pdf`;
       link.click();
       URL.revokeObjectURL(url);

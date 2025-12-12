@@ -332,67 +332,89 @@ ${context.has_conduct_issues ? `- Exhibit 4: Evidence of conduct issues (photos,
  * Extracts witness statement context from CaseFacts
  */
 export function extractWitnessStatementContext(caseFacts: CaseFacts): WitnessStatementContext {
-  const jurisdiction =
-    caseFacts.jurisdiction === 'scotland' || (caseFacts as any)?.meta?.jurisdiction === 'scotland'
-      ? 'scotland'
-      : caseFacts.jurisdiction === 'northern-ireland' || (caseFacts as any)?.meta?.jurisdiction === 'northern-ireland'
-      ? 'northern-ireland'
-      : 'england-wales';
+  const cf: any = caseFacts as any;
+
+  // Jurisdiction: WitnessStatementContext only supports england-wales | scotland
+  const rawJurisdiction =
+    cf?.jurisdiction ??
+    cf?.meta?.jurisdiction ??
+    cf?.property?.jurisdiction ??
+    cf?.eviction?.jurisdiction ??
+    'england-wales';
+
+  const jurisdiction: 'england-wales' | 'scotland' =
+    rawJurisdiction === 'scotland' ? 'scotland' : 'england-wales';
+
+  const eviction: any = cf?.eviction ?? {};
+  const tenancy: any = cf?.tenancy ?? {};
+  const property: any = cf?.property ?? {};
+  const parties: any = cf?.parties ?? {};
 
   // Determine if has arrears
-  const has_arrears = (caseFacts.eviction?.rent_arrears_amount || 0) > 0;
+  const arrearsTotal =
+    typeof eviction?.rent_arrears_amount === 'number'
+      ? eviction.rent_arrears_amount
+      : typeof eviction?.arrears_total === 'number'
+      ? eviction.arrears_total
+      : undefined;
+
+  const has_arrears = (arrearsTotal ?? 0) > 0;
 
   // Determine if has conduct issues
   const has_conduct_issues = Boolean(
-    caseFacts.eviction?.asb_incidents?.length ||
-    caseFacts.eviction?.breach_details ||
-    caseFacts.eviction?.damage_description
+    (Array.isArray(eviction?.asb_incidents) && eviction.asb_incidents.length > 0) ||
+      eviction?.breach_details ||
+      eviction?.damage_description
   );
 
   // Extract grounds
   const grounds: string[] = [];
-  if (caseFacts.eviction?.notice_type) {
-    grounds.push(caseFacts.eviction.notice_type);
+  if (typeof eviction?.notice_type === 'string' && eviction.notice_type.trim()) {
+    grounds.push(eviction.notice_type);
   }
-  if (caseFacts.eviction?.grounds_england_wales) {
-    grounds.push(...caseFacts.eviction.grounds_england_wales);
+  if (Array.isArray(eviction?.grounds_england_wales)) {
+    grounds.push(...eviction.grounds_england_wales.filter(Boolean));
   }
 
-  const landlord = (caseFacts as any).landlord || caseFacts.parties?.landlord || {};
-  const tenant = (caseFacts as any).tenant || caseFacts.parties?.tenants?.[0] || {};
+  // Landlord / tenant
+  const landlord = cf?.landlord || parties?.landlord || {};
+  const tenant = cf?.tenant || parties?.tenants?.[0] || parties?.tenant || {};
 
-  const landlordName = [landlord.first_name, landlord.last_name, landlord.name]
-    .filter(Boolean)
-    .join(' ')
-    .trim() || 'Landlord';
+  const landlordName =
+    [landlord.first_name, landlord.last_name, landlord.name].filter(Boolean).join(' ').trim() ||
+    'Landlord';
 
-  const tenantName = [tenant.first_name, tenant.last_name, tenant.name]
-    .filter(Boolean)
-    .join(' ')
-    .trim() || 'Tenant';
+  const tenantName =
+    [tenant.first_name, tenant.last_name, tenant.name].filter(Boolean).join(' ').trim() || 'Tenant';
 
+  // Property address (no property.full_address on typed PropertyFacts)
   const propertyAddress =
-    caseFacts.property?.full_address ||
-    [
-      caseFacts.property?.address_line1,
-      caseFacts.property?.address_line2,
-      caseFacts.property?.city,
-      caseFacts.property?.postcode,
-    ]
+    property?.full_address ||
+    [property?.address_line1, property?.address_line2, property?.city, property?.postcode]
       .filter(Boolean)
       .join(', ') ||
-    caseFacts.property?.postcode ||
+    property?.postcode ||
     'the property';
+
+  // null -> undefined to satisfy WitnessStatementContext types
+  const tenancyStartDate =
+    typeof tenancy?.start_date === 'string' ? tenancy.start_date : undefined;
+
+  const rentAmount =
+    typeof tenancy?.rent_amount === 'number' ? tenancy.rent_amount : undefined;
+
+  const rentFrequency =
+    typeof tenancy?.rent_frequency === 'string' ? tenancy.rent_frequency : undefined;
 
   return {
     landlord_name: landlordName,
     tenant_name: tenantName,
     property_address: propertyAddress,
-    tenancy_start_date: caseFacts.tenancy?.start_date,
-    rent_amount: caseFacts.tenancy?.rent_amount,
-    rent_frequency: caseFacts.tenancy?.rent_frequency,
+    tenancy_start_date: tenancyStartDate,
+    rent_amount: rentAmount,
+    rent_frequency: rentFrequency,
     grounds: grounds.length > 0 ? grounds : ['Not specified'],
-    arrears_total: caseFacts.eviction?.rent_arrears_amount,
+    arrears_total: arrearsTotal,
     has_arrears,
     has_conduct_issues,
     jurisdiction,

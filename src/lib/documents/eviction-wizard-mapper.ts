@@ -179,9 +179,18 @@ function buildCaseData(
       wizardFacts.notice_served_date || wizardFacts.notice_date || facts.notice.notice_date || undefined,
     particulars_of_claim: facts.court.particulars_of_claim || undefined,
     total_arrears:
-      wizardFacts.total_arrears || wizardFacts.rent_arrears_amount || facts.issues.rent_arrears.total_arrears || undefined,
+      wizardFacts.total_arrears ||
+      wizardFacts.rent_arrears_amount ||
+      facts.issues.rent_arrears.total_arrears ||
+      undefined,
+
+    // ✅ FIXED: removed invalid amount_owing access
     arrears_at_notice_date:
-      wizardFacts.rent_arrears_amount || facts.issues.rent_arrears.total_arrears || facts.issues.rent_arrears.amount_owing,
+      wizardFacts.rent_arrears_amount ||
+      facts.issues.rent_arrears.arrears_at_notice_date ||
+      facts.issues.rent_arrears.total_arrears ||
+      undefined,
+
     court_fee: facts.court.claim_amount_costs || undefined,
     solicitor_costs: facts.court.claim_amount_other || undefined,
     deposit_amount: facts.tenancy.deposit_amount || undefined,

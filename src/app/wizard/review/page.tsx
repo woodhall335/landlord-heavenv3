@@ -1,20 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { CaseStrengthWidget } from '../components/CaseStrengthWidget';
-import {
-  AlertCircle,
-  CheckCircle2,
-  FileText,
-  X,
-  ShieldCheck,
-  Info,
-} from 'lucide-react';
+import { AlertCircle, CheckCircle2, FileText, X, ShieldCheck, Info } from 'lucide-react';
 
-export default function ReviewPage() {
+function ReviewPageInner() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const caseId = searchParams.get('case_id');
@@ -70,7 +63,7 @@ export default function ReviewPage() {
   }
 
   const hasBlockingIssues = analysis.decision_engine?.blocking_issues?.some(
-    (issue: any) => issue.severity === 'blocking',
+    (issue: any) => issue.severity === 'blocking'
   );
 
   const jurisdiction = analysis.jurisdiction;
@@ -157,12 +150,8 @@ export default function ReviewPage() {
           {readinessBadge}
           {analysis.case_strength_score != null && (
             <div className="text-right text-sm text-gray-600">
-              <div className="font-semibold">
-                Case strength: {analysis.case_strength_score}/100
-              </div>
-              <div className="text-xs uppercase tracking-wide text-gray-500">
-                {caseStrengthBand}
-              </div>
+              <div className="font-semibold">Case strength: {analysis.case_strength_score}/100</div>
+              <div className="text-xs uppercase tracking-wide text-gray-500">{caseStrengthBand}</div>
             </div>
           )}
         </div>
@@ -321,7 +310,6 @@ export default function ReviewPage() {
           now makes your pack much stronger and reduces the risk of delays.
         </p>
         <div className="grid md:grid-cols-2 gap-4">
-          {/* Tenancy agreement */}
           <div className="flex items-start gap-3">
             {evidence.tenancy_agreement_uploaded ? (
               <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
@@ -338,7 +326,6 @@ export default function ReviewPage() {
             </div>
           </div>
 
-          {/* Rent / arrears schedule */}
           <div className="flex items-start gap-3">
             {evidence.rent_schedule_uploaded ? (
               <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
@@ -355,7 +342,6 @@ export default function ReviewPage() {
             </div>
           </div>
 
-          {/* Bank statements */}
           <div className="flex items-start gap-3">
             {evidence.bank_statements_uploaded ? (
               <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
@@ -372,7 +358,6 @@ export default function ReviewPage() {
             </div>
           </div>
 
-          {/* Other supporting evidence */}
           <div className="flex items-start gap-3">
             {evidence.other_evidence_uploaded ? (
               <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
@@ -450,9 +435,7 @@ export default function ReviewPage() {
           <div className="flex items-start gap-3">
             <AlertCircle className="h-6 w-6 text-yellow-600 mt-1" />
             <div>
-              <h2 className="text-lg font-semibold text-yellow-900 mb-2">
-                Important warnings
-              </h2>
+              <h2 className="text-lg font-semibold text-yellow-900 mb-2">Important warnings</h2>
               <ul className="space-y-1">
                 {analysis.decision_engine.warnings.map((warning: string, i: number) => (
                   <li key={i} className="text-sm text-yellow-800">
@@ -480,5 +463,22 @@ export default function ReviewPage() {
         safe, court-ready position before issuing.
       </p>
     </div>
+  );
+}
+
+export default function ReviewPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+            <p className="text-gray-600">Loading...</p>
+          </div>
+        </div>
+      }
+    >
+      <ReviewPageInner />
+    </Suspense>
   );
 }

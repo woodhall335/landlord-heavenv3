@@ -612,12 +612,20 @@ export function extractComplianceAuditContext(caseFacts: CaseFacts): ComplianceA
   const tenancy = (caseFacts as any)?.tenancy || {};
   const property = (caseFacts as any)?.property || {};
   const eviction = (caseFacts as any)?.eviction || {};
-  const jurisdiction =
-    caseFacts.jurisdiction === 'scotland'
-      ? 'scotland'
-      : caseFacts.jurisdiction === 'northern-ireland'
-      ? 'northern-ireland'
-      : 'england-wales';
+
+const caseJurisdiction =
+  (caseFacts as any)?.jurisdiction ??
+  (eviction as any)?.jurisdiction ??
+  (caseFacts as any)?.property?.jurisdiction ??
+  'england-wales';
+
+const jurisdiction =
+  caseJurisdiction === 'scotland'
+    ? 'scotland'
+    : caseJurisdiction === 'northern-ireland'
+    ? 'northern-ireland'
+    : 'england-wales';
+
 
   return {
     jurisdiction,

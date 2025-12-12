@@ -759,7 +759,7 @@ export async function generateCompleteEvictionPack(
     documents.push({
       title: 'Witness Statement',
       description: 'AI-drafted witness statement for court proceedings',
-      category: 'supporting_documents',
+      category: 'court_form',
       html: witnessStatementDoc.html,
       pdf: witnessStatementDoc.pdf,
       file_name: 'witness_statement.pdf',
@@ -782,7 +782,7 @@ export async function generateCompleteEvictionPack(
         ...evictionCase,
         compliance_audit: complianceAuditContent,
         current_date: new Date().toISOString().split('T')[0],
-        notice_type: evictionCase.grounds[0]?.ground_id || 'Not specified',
+        notice_type: evictionCase.grounds[0]?.code || 'Not specified',
       },
       isPreview: false,
       outputFormat: 'both',

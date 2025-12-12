@@ -326,14 +326,22 @@ export default function RentDemandLetterGenerator() {
       });
 
       // Save and download
-      const pdfBytes = await pdfDoc.save();
-      const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `Rent-Demand-Letter-FREE-${Date.now()}.pdf`;
-      link.click();
-      URL.revokeObjectURL(url);
+const pdfBytes = await pdfDoc.save();
+
+// ✅ Make a "real" Uint8Array backed by a normal ArrayBuffer (not SharedArrayBuffer/ArrayBufferLike)
+const safeBytes = new Uint8Array(pdfBytes);
+
+const blob = new Blob([safeBytes], { type: 'application/pdf' });
+const url = URL.createObjectURL(blob);
+
+const link = document.createElement('a');
+link.href = url;
+link.download = 'rent-demand-letter.pdf';
+document.body.appendChild(link);
+link.click();
+link.remove();
+URL.revokeObjectURL(url);
+
 
       setGenerated(true);
       setIsGenerating(false);
