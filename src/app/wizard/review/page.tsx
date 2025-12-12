@@ -68,6 +68,7 @@ function ReviewPageInner() {
 
   const jurisdiction = analysis.jurisdiction;
   const caseType = analysis.case_type ?? 'eviction';
+  const product: string = analysis.product || 'complete_pack';
 
   // New fields from /api/wizard/analyze
   const recommendedRouteLabel: string =
@@ -95,6 +96,7 @@ function ReviewPageInner() {
       case_id: caseId,
       type: caseType,
       jurisdiction: jurisdiction,
+      product,
     });
 
     router.push(`/wizard/flow?${params.toString()}`);
@@ -391,8 +393,8 @@ function ReviewPageInner() {
             previewDocuments.map((doc) => (
               <li key={doc.id} className="flex items-center gap-2 text-sm">
                 <CheckCircle2 className="h-4 w-4 text-green-600" />
-                <span className="font-medium">{doc.title}</span>
-                {doc.requiredToFile && (
+                <span className="font-medium">{doc.title || doc.document_title}</span>
+                {(doc as any).requiredToFile && (
                   <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 text-gray-700">
                     Required for filing
                   </span>
@@ -405,10 +407,12 @@ function ReviewPageInner() {
                 <CheckCircle2 className="h-4 w-4 text-green-600" />
                 Notice to Leave
               </li>
-              <li className="flex items-center gap-2 text-sm">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
-                Form E (Tribunal application)
-              </li>
+              {!product.includes('notice_only') && (
+                <li className="flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  Form E (Tribunal application)
+                </li>
+              )}
             </>
           ) : (
             <>
@@ -420,10 +424,12 @@ function ReviewPageInner() {
                 <CheckCircle2 className="h-4 w-4 text-green-600" />
                 Section 21 Notice (if available)
               </li>
-              <li className="flex items-center gap-2 text-sm">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
-                Form N5 / N119 (court forms)
-              </li>
+              {!product.includes('notice_only') && (
+                <li className="flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  Form N5 / N119 (court forms)
+                </li>
+              )}
             </>
           )}
         </ul>

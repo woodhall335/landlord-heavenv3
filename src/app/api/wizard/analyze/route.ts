@@ -650,6 +650,11 @@ export async function POST(request: Request) {
     };
 
     const route = computeRoute(facts, caseData.jurisdiction, caseData.case_type);
+    const product =
+      (facts.meta?.product as string | undefined) ||
+      (facts.meta?.original_product as string | undefined) ||
+      (caseData as any)?.product ||
+      (caseData.case_type === 'eviction' ? 'complete_pack' : caseData.case_type);
     const { score, red_flags, compliance } = computeStrength(facts);
     const summary = buildCaseSummary(facts, caseData.jurisdiction);
     const askHeavenAnswer = craftAskHeavenAnswer(
@@ -741,35 +746,61 @@ export async function POST(request: Request) {
       id: string;
       document_type: string;
       document_title: string;
+      requiredToFile?: boolean;
     }[] = [];
 
-    if (caseData.user_id) {
-      const htmlContent = `<h1>Preview - ${route}</h1><p>Case strength: ${score}%</p>`;
-      const { data: docData, error: docError } = await supabase
-        .from('documents')
-        .insert({
-          user_id: caseData.user_id,
-          case_id,
-          document_type: route,
-          document_title: 'Preview document',
-          jurisdiction: caseData.jurisdiction,
-          html_content: htmlContent,
-          is_preview: true,
-        } as any)
-        .select()
-        .single();
+    if (caseData.case_type === 'eviction') {
+      const isNoticeOnly = product === 'notice_only';
+      if (caseData.jurisdiction === 'scotland') {
+        previewDocuments.push(
+          { id: 'notice_to_leave', document_type: 'notice', document_title: 'Notice to Leave' },
+          {
+            id: 'form_e',
+            document_type: 'tribunal_form',
+            document_title: 'Form E (application)',
+            requiredToFile: !isNoticeOnly,
+          },
+          {
+            id: 'guidance',
+            document_type: 'guidance',
+            document_title: 'Eviction roadmap & service checklist',
+          },
+        );
+      } else {
+        previewDocuments.push(
+          {
+            id: 's8_notice',
+            document_type: 'notice',
+            document_title: 'Section 8 notice (Form 3)',
+          },
+          {
+            id: 's21_notice',
+            document_type: 'notice',
+            document_title: 'Section 21 notice (Form 6A)',
+          },
+          {
+            id: 'service_proofs',
+            document_type: 'guidance',
+            document_title: 'Service checklist & certificates of service',
+          },
+        );
 
-      if (!docError && docData) {
-        const docRow = docData as {
-          id: string;
-          document_type: string;
-          document_title: string;
-        };
-        previewDocuments.push({
-          id: docRow.id,
-          document_type: docRow.document_type,
-          document_title: docRow.document_title,
-        });
+        if (!isNoticeOnly) {
+          previewDocuments.push(
+            {
+              id: 'n5',
+              document_type: 'court_form',
+              document_title: 'N5 claim form',
+              requiredToFile: true,
+            },
+            {
+              id: 'n119',
+              document_type: 'court_form',
+              document_title: 'N119 particulars of claim',
+              requiredToFile: true,
+            },
+          );
+        }
       }
     }
 
@@ -815,10 +846,14 @@ export async function POST(request: Request) {
 
       if (hasBlocking) {
         readiness_summary =
-          'You are not fully ready to file your claim today. We will still generate your full eviction pack, including notices, court forms, and a procedural guide to help you fix the issues identified.';
+          product === 'notice_only'
+            ? 'You are not fully ready to file your claim today. We will generate your notice pack and service guidance, and highlight what to fix before issuing a claim.'
+            : 'You are not fully ready to file your claim today. We will still generate your full eviction pack, including notices, court forms, and a procedural guide to help you fix the issues identified.';
       } else {
         readiness_summary =
-          'You appear ready to file your claim based on the information provided. We will generate your full eviction pack with court forms, notices, and a filing checklist.';
+          product === 'notice_only'
+            ? 'You appear ready to serve notice based on the information provided. We will generate your notice pack with service checklist and evidence prompts.'
+            : 'You appear ready to file your claim based on the information provided. We will generate your full eviction pack with court forms, notices, and a filing checklist.';
       }
     } else if (caseHealth) {
       // Money-claim case health
@@ -834,6 +869,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       case_id,
+      product,
       recommended_route: route,
       recommended_route_label,
       case_strength_score: score,
