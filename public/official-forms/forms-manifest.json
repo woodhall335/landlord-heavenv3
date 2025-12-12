@@ -96,8 +96,8 @@
           "checksum_sha256": "calculated_on_download",
           "status": "TEMPLATE_GENERATED",
           "use_case": "Notice to Leave for PRT evictions",
-          "notes": "Template-based generation. Must include correct grounds and notice periods.",
-          "fields_count": 15,
+          "notes": "Official PDF has no AcroForm fields. Generated via Handlebars HTML → PDF template to preserve prescribed content.",
+          "fields_count": 0,
           "crown_copyright": true
         },
         "form_e_eviction.pdf": {

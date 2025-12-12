@@ -1,0 +1,44 @@
+---
+title: Notice to Leave (Private Residential Tenancy)
+category: notice
+description: Statutory Notice to Leave served under the Private Housing (Tenancies) (Scotland) Act 2016
+filename: notice_to_leave.pdf
+---
+
+NOTICE TO LEAVE
+Private Housing (Tenancies) (Scotland) Act 2016
+
+PROPERTY
+- Address: {{property_address}}
+
+TENANT(S)
+- Name(s): {{tenant_full_name}}{{#if tenant_2_name}} and {{tenant_2_name}}{{/if}}
+
+LANDLORD DETAILS
+- Name: {{landlord_full_name}}{{#if landlord_2_name}} and {{landlord_2_name}}{{/if}}
+- Address: {{landlord_address}}
+{{#if landlord_phone}}- Phone: {{landlord_phone}}{{/if}}
+{{#if landlord_email}}- Email: {{landlord_email}}{{/if}}
+{{#if landlord_registration_number}}- Landlord Registration Number: {{landlord_registration_number}}{{/if}}
+
+TENANCY DETAILS
+- Tenancy start date: {{format_date tenancy_start_date 'DD/MM/YYYY'}}
+- Rent: £{{rent_amount}} per {{rent_frequency}}
+
+NOTICE DETAILS
+- Date notice served: {{format_date notice_date 'DD/MM/YYYY'}}
+- Earliest date you must leave: {{format_date leaving_date 'DD/MM/YYYY'}}
+
+GROUNDS FOR EVICTION
+The landlord is applying on the following ground(s):
+{{#each grounds}}
+- {{code}} — {{title}}
+  Particulars: {{particulars}}
+{{/each}}
+
+SIGNATURE
+I/we confirm this Notice to Leave has been served in accordance with the Private Housing (Tenancies) (Scotland) Act 2016.
+
+Signature: ________________________________
+Name: {{landlord_full_name}}
+Date: {{format_date notice_date 'DD/MM/YYYY'}}

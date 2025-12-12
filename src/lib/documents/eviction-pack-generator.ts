@@ -638,14 +638,23 @@ async function generateScotlandEvictionPack(
 
   const { fillScotlandOfficialForm } = await import('./scotland-forms-filler');
 
-  // 1. Notice to Leave (Official Form)
-  const noticeToLeavePdf = await fillScotlandOfficialForm('notice_to_leave', scotlandData);
+  // 1. Notice to Leave (generated via Handlebars template because official PDF is not fillable)
+  const noticeToLeaveDoc = await generateDocument({
+    templatePath: 'uk/scotland/templates/eviction/notice_to_leave.hbs',
+    data: scotlandData,
+    outputFormat: 'both',
+  });
+
+  if (!noticeToLeaveDoc.pdf) {
+    throw new Error('Failed to generate Notice to Leave PDF for Scotland');
+  }
 
   documents.push({
     title: 'Notice to Leave',
     description: 'Official notice under Private Housing (Tenancies) (Scotland) Act 2016',
     category: 'notice',
-    pdf: Buffer.from(noticeToLeavePdf),
+    html: noticeToLeaveDoc.html,
+    pdf: noticeToLeaveDoc.pdf,
     file_name: 'notice_to_leave.pdf',
   });
 
