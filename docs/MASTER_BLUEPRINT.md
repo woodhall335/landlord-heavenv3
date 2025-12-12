@@ -49,6 +49,24 @@ The platform delivers full legal-document assembly, evidence ingestion, automate
 
 V1 focuses on core eviction, money claim, and tenancy agreement workflows for England & Wales and Scotland, with tenancy agreements available for Northern Ireland. NI eviction/money claim workflows and the HMO Licensing Suite are intentionally excluded from V1 and planned for V2.
 
+**Reality status (code audit – December 2025):**
+- ✅ **Eviction – England & Wales:** MQS flows present (`config/mqs/complete_pack/england-wales.yaml` + `notice_only`), wizard endpoints load them, and the eviction pack generator covers notices and court forms.
+- ✅ **Eviction – Scotland:** MQS present (`config/mqs/complete_pack/scotland.yaml` + `notice_only`), wizard wired, and the eviction pack generator fills Tribunal forms (Notice to Leave + Form E).
+- ❌ **Eviction – Northern Ireland:** No MQS or generators; `/api/wizard/start` blocks NI eviction flows and returns guidance.
+- ✅ **Money Claim Pack – England & Wales:** MQS config (`config/mqs/money_claim/england-wales.yaml`) is loaded by the wizard, and the money-claim pack generator fills the N1 form and supporting schedules.
+- ✅ **Money Claim Pack – Scotland:** MQS config (`config/mqs/money_claim/scotland.yaml`) is wired to the wizard; the Scotland money-claim generator outputs the Simple Procedure pack.
+- ✅ **Tenancy agreements – England & Wales:** AST MQS present and mapped into the AST generator (standard + premium variants).
+- ✅ **Tenancy agreements – Scotland:** PRT MQS present and mapped into the Scotland PRT generator (standard + premium wording supported).
+- ✅ **Tenancy agreements – Northern Ireland:** NI tenancy MQS present; wizard allowed and mapped into the NI private tenancy generator (standard + premium).
+- ⏳ **HMO / HMO Pro:** No MQS or generators yet; only footer links and decision-engine flags exist.
+- ✅ **Ask Heaven:** Active panel component and API endpoints provide AI drafting, suggestions, and Q&A inside the MQS wizard.
+- ⚠️ **Law monitor / legal change scaffolding:** Read-only monitoring module (`src/lib/law-monitor`) and CLI (`scripts/law-monitor-run.ts`) generate snapshots and reports; no automatic rule updates.
+
+**What’s left to build (current gaps):**
+- **Northern Ireland evictions + money claims:** Wizard explicitly blocks these flows and returns a guidance message; no MQS or generators are present yet. Target is future Q2 2026 enablement.
+- **HMO / HMO Pro licensing suite:** No MQS, document generators, or wizard products exist yet (only links/flags). The licensing questionnaires, council logic, and PDF packs still need building.
+- **Law monitor automation:** The monitoring module is scaffolded as a read-only fetcher/generator. It still needs hardened HTTP fetching, scheduling, and integration that can surface changes into decision-engine updates after legal review.
+
 1.2 The End-to-End Legal Pipeline
 
 The system manages the entire legal lifecycle of a tenancy:

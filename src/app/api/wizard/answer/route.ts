@@ -561,6 +561,7 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json(
         {
+          error_code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
           error:
             'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.',
           message:

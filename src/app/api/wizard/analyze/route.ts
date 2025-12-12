@@ -575,6 +575,7 @@ export async function POST(request: Request) {
     if (caseData.jurisdiction === 'northern-ireland' && caseData.case_type !== 'tenancy_agreement') {
       return NextResponse.json(
         {
+          error_code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
           error:
             'Only tenancy agreements are available for Northern Ireland. Eviction and money claim analysis is not currently supported.',
           message:
