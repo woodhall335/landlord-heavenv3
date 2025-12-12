@@ -21,6 +21,46 @@ const analyzeSchema = z.object({
   question: z.string().optional(),
 });
 
+type EvidenceSnapshot = {
+  tenancy_agreement_uploaded: boolean;
+  rent_schedule_uploaded: boolean;
+  correspondence_uploaded: boolean;
+  damage_photos_uploaded: boolean;
+  authority_letters_uploaded: boolean;
+  bank_statements_uploaded: boolean;
+  other_evidence_uploaded: boolean;
+  files: Array<{ id?: string; category?: string; file_name?: string }>;
+};
+
+function normaliseEvidence(facts: CaseFacts): EvidenceSnapshot {
+  const files = Array.isArray((facts as any)?.evidence?.files)
+    ? ((facts as any).evidence.files as any[])
+    : [];
+
+  const lc = (val: string | undefined) => (typeof val === 'string' ? val.toLowerCase() : '');
+
+  const hasCategory = (keywords: string[]) =>
+    files.some((file) => {
+      const cat = lc(file.category || file.label || file.question_id || file.file_name);
+      return keywords.some((kw) => cat.includes(kw));
+    });
+
+  return {
+    tenancy_agreement_uploaded:
+      (facts as any)?.evidence?.tenancy_agreement_uploaded === true || hasCategory(['tenancy']),
+    rent_schedule_uploaded:
+      (facts as any)?.evidence?.rent_schedule_uploaded === true || hasCategory(['rent', 'arrears']),
+    correspondence_uploaded: hasCategory(['correspondence', 'email', 'text', 'message']),
+    damage_photos_uploaded: hasCategory(['damage', 'photo', 'picture', 'image']),
+    authority_letters_uploaded: hasCategory(['council', 'police', 'authority', 'asb']),
+    bank_statements_uploaded:
+      (facts as any)?.evidence?.bank_statements_uploaded === true || hasCategory(['bank', 'statement']),
+    other_evidence_uploaded:
+      (facts as any)?.evidence?.other_evidence_uploaded === true || files.length > 0,
+    files,
+  };
+}
+
 function computeRoute(facts: CaseFacts, jurisdiction: string, caseType: string): string {
   if (caseType === 'money_claim') return 'money_claim';
   if (jurisdiction === 'scotland') return 'notice_to_leave';
@@ -593,6 +633,22 @@ export async function POST(request: Request) {
     const wizardFacts = await getOrCreateWizardFacts(supabase, case_id);
     const facts = wizardFactsToCaseFacts(wizardFacts);
 
+    const evidence = normaliseEvidence(facts);
+    facts.evidence.tenancy_agreement_uploaded = evidence.tenancy_agreement_uploaded;
+    facts.evidence.rent_schedule_uploaded = evidence.rent_schedule_uploaded;
+    facts.evidence.bank_statements_uploaded = evidence.bank_statements_uploaded;
+    facts.evidence.other_evidence_uploaded = evidence.other_evidence_uploaded;
+    const evidence_overview = {
+      tenancy_agreement_uploaded: evidence.tenancy_agreement_uploaded,
+      rent_schedule_uploaded: evidence.rent_schedule_uploaded,
+      correspondence_uploaded: evidence.correspondence_uploaded,
+      damage_photos_uploaded: evidence.damage_photos_uploaded,
+      authority_letters_uploaded: evidence.authority_letters_uploaded,
+      bank_statements_uploaded: evidence.bank_statements_uploaded,
+      other_evidence_uploaded: evidence.other_evidence_uploaded,
+      files: evidence.files,
+    };
+
     const route = computeRoute(facts, caseData.jurisdiction, caseData.case_type);
     const { score, red_flags, compliance } = computeStrength(facts);
     const summary = buildCaseSummary(facts, caseData.jurisdiction);
@@ -649,6 +705,24 @@ export async function POST(request: Request) {
       } catch (error) {
         console.error('Decision engine error:', error);
         // Don't block analysis if decision engine fails
+      }
+    }
+
+    if (caseData.case_type === 'eviction') {
+      if (!evidence.tenancy_agreement_uploaded) {
+        compliance.push('Tenancy agreement not uploaded yet – add it under evidence to strengthen your position.');
+      }
+      if (!evidence.rent_schedule_uploaded) {
+        compliance.push('Rent schedule missing – courts expect a clear arrears schedule. Upload it under evidence.');
+      }
+      if (!evidence.correspondence_uploaded) {
+        compliance.push('No correspondence uploaded – add key emails or letters showing the dispute history.');
+      }
+      if (!evidence.damage_photos_uploaded) {
+        compliance.push('Damage/photos evidence missing – upload photos if you rely on property damage or disrepair.');
+      }
+      if (!evidence.authority_letters_uploaded) {
+        compliance.push('Council/police letters not uploaded – include them if anti-social behaviour is part of your case.');
       }
     }
 
@@ -768,6 +842,7 @@ export async function POST(request: Request) {
       readiness_summary,
       red_flags,
       compliance_issues: compliance,
+      evidence_overview,
       preview_documents: previewDocuments,
       case_summary: summary,
       ask_heaven_answer: askHeavenAnswer,

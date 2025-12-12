@@ -37,6 +37,24 @@ const generateDocumentSchema = z.object({
   is_preview: z.boolean().optional().default(true),
 });
 
+function buildPropertyAddress(facts: any): string | null {
+  const fromFlat = (facts?.property_address as string | undefined)?.trim();
+  const fromGroup = [
+    facts?.property?.address_line1,
+    facts?.property?.address_line2,
+    facts?.property?.city,
+    facts?.property?.postcode,
+  ]
+    .filter(Boolean)
+    .join('\n')
+    .trim();
+
+  if (fromFlat) return fromFlat;
+  if (fromGroup) return fromGroup;
+
+  return null;
+}
+
 
 export async function POST(request: Request) {
   try {
@@ -94,6 +112,27 @@ export async function POST(request: Request) {
     // Map document type to generator function and template
     let generatedDoc: any;
     let documentTitle = '';
+
+    const propertyAddress = buildPropertyAddress(facts);
+    if (!propertyAddress) {
+      return NextResponse.json(
+        {
+          error: 'Property address is required before generating documents.',
+          missing_fields: ['property_address'],
+          suggested_step: 'property',
+        },
+        { status: 400 }
+      );
+    }
+
+    // Normalise property address so downstream generators always have a value
+    (facts as any).property_address = propertyAddress;
+    if (!(facts as any).property) {
+      (facts as any).property = {};
+    }
+    if (!(facts as any).property.address_line1) {
+      (facts as any).property.address_line1 = propertyAddress.split('\n')[0];
+    }
 
     if (
       jurisdiction === 'northern-ireland' &&
