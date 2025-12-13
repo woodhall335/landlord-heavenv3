@@ -9,46 +9,74 @@ export type SupabaseBrowserConfig = {
   anonKey: string;
 };
 
-declare global {
-  // eslint-disable-next-line no-var
-  var __supabaseWarned: boolean | undefined;
-}
+type SupabaseWarnState = {
+  warned: boolean;
+};
 
 const warnMessage = 'Supabase not configured, continuing in anonymous mode';
 
-export function warnSupabaseNotConfiguredOnce(message = warnMessage) {
-  if (!globalThis.__supabaseWarned) {
-    globalThis.__supabaseWarned = true;
-    console.warn(message);
+declare global {
+  // eslint-disable-next-line no-var
+  var __supabaseWarnState: SupabaseWarnState | undefined;
+}
+
+function getWarnState(): SupabaseWarnState {
+  if (!globalThis.__supabaseWarnState) {
+    globalThis.__supabaseWarnState = { warned: false };
   }
+  return globalThis.__supabaseWarnState;
 }
 
-export function isSupabaseConfiguredServer() {
-  return Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY);
-}
+export function warnSupabaseNotConfiguredOnce(message = warnMessage) {
+  const warnState = getWarnState();
+  if (warnState.warned) return;
 
-export function isSupabaseConfiguredBrowser() {
-  return Boolean(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
+  warnState.warned = true;
+  console.warn(message);
 }
 
 export function getSupabaseConfigServer(): SupabaseServerConfig | null {
-  if (!isSupabaseConfiguredServer()) return null;
+  const url = process.env.SUPABASE_URL;
+  const anonKey = process.env.SUPABASE_ANON_KEY;
+
+  if (!url || !anonKey) return null;
 
   return {
-    url: process.env.SUPABASE_URL!,
-    anonKey: process.env.SUPABASE_ANON_KEY!,
+    url,
+    anonKey,
     serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
   } satisfies SupabaseServerConfig;
 }
 
 export function getSupabaseConfigBrowser(): SupabaseBrowserConfig | null {
-  if (!isSupabaseConfiguredBrowser()) return null;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !anonKey) return null;
 
   return {
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    url,
+    anonKey,
   } satisfies SupabaseBrowserConfig;
+}
+
+export function isSupabaseConfiguredServer() {
+  return Boolean(getSupabaseConfigServer());
+}
+
+export function isSupabaseConfiguredBrowser() {
+  return Boolean(getSupabaseConfigBrowser());
+}
+
+export function getSupabaseConfigForServerRuntime() {
+  return getSupabaseConfigServer();
+}
+
+export function getSupabaseConfigForBrowserRuntime() {
+  return getSupabaseConfigBrowser();
+}
+
+export function resetSupabaseWarningState() {
+  // Primarily for tests
+  globalThis.__supabaseWarnState = { warned: false };
 }

@@ -365,7 +365,7 @@ URL.revokeObjectURL(url);
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -402,7 +402,7 @@ URL.revokeObjectURL(url);
         <Container>
           <div className="flex items-start gap-3">
             <svg
-              className="mt-1 h-6 w-6 flex-shrink-0 text-warning-700"
+              className="mt-1 h-6 w-6 shrink-0 text-warning-700"
               fill="currentColor"
               viewBox="0 0 20 20"
               aria-hidden="true"
@@ -436,7 +436,7 @@ URL.revokeObjectURL(url);
 
       <div className="mb-6 rounded-lg border-2 border-primary-200 bg-primary-50 p-5">
         <div className="flex items-start gap-3">
-          <svg className="mt-0.5 h-6 w-6 flex-shrink-0 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="mt-0.5 h-6 w-6 shrink-0 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
           </svg>
           <div>
@@ -676,7 +676,7 @@ URL.revokeObjectURL(url);
       </form>
 
       {/* Secondary Upgrade Box */}
-      <div className="mt-8 rounded-xl border-2 border-primary-200 bg-gradient-to-br from-purple-50 to-white p-6">
+      <div className="mt-8 rounded-xl border-2 border-primary-200 bg-linear-to-br from-purple-50 to-white p-6">
         <h3 className="mb-2 text-lg font-semibold text-gray-900">
           Need to pursue a money claim?
         </h3>
@@ -688,31 +688,31 @@ URL.revokeObjectURL(url);
           <p className="text-2xl font-bold text-blue-600">£179.99</p>
           <ul className="mt-3 space-y-2 text-sm text-gray-700">
             <li className="flex items-start gap-2">
-              <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="mt-0.5 h-5 w-5 shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
               </svg>
               Complete Money Claims Pack
             </li>
             <li className="flex items-start gap-2">
-              <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="mt-0.5 h-5 w-5 shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
               </svg>
               N1 claim form (England & Wales)
             </li>
             <li className="flex items-start gap-2">
-              <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="mt-0.5 h-5 w-5 shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
               </svg>
               Form 3A (Scotland)
             </li>
             <li className="flex items-start gap-2">
-              <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="mt-0.5 h-5 w-5 shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
               </svg>
               Particulars of claim templates
             </li>
             <li className="flex items-start gap-2">
-              <svg className="mt-0.5 h-5 w-5 flex-shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="mt-0.5 h-5 w-5 shrink-0 text-success-500" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
               </svg>
               Evidence bundle templates

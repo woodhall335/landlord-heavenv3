@@ -11,7 +11,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { generateSEOContent } from '@/lib/seo/content-generator';
-import { getSupabaseConfigServer, warnSupabaseNotConfiguredOnce } from '@/lib/supabase/config';
+import {
+  getSupabaseConfigForServerRuntime,
+  warnSupabaseNotConfiguredOnce,
+} from '@/lib/supabase/config';
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,8 +26,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const supabaseConfig = getSupabaseConfigServer();
-    if (!supabaseConfig || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    const supabaseConfig = getSupabaseConfigForServerRuntime();
+    if (!supabaseConfig || !supabaseConfig.serviceRoleKey) {
       warnSupabaseNotConfiguredOnce();
       throw new Error('Supabase not configured');
     }
@@ -32,7 +35,7 @@ export async function POST(request: NextRequest) {
     // Create Supabase admin client
     const supabase = createClient(
       supabaseConfig.url,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
+      supabaseConfig.serviceRoleKey
     );
 
     const startTime = new Date();

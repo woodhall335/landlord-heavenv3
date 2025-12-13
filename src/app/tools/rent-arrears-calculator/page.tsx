@@ -326,7 +326,7 @@ link.href = url;
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -496,7 +496,7 @@ link.href = url;
                     <strong>From:</strong> {interestFromDate ? new Date(interestFromDate + 'T00:00:00').toLocaleDateString('en-GB') : 'N/A'} to {new Date().toLocaleDateString('en-GB')} ({daysOutstanding} days)
                   </p>
                   <div className="flex items-start gap-2 mt-3 pt-3 border-t border-warning-300">
-                    <svg className="h-4 w-4 text-warning-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="h-4 w-4 text-warning-600 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
                     </svg>
                     <p className="text-warning-800 font-medium">
