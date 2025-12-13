@@ -43,7 +43,6 @@ function NewTenantPageInner() {
   // Keep propertyId in sync if querystring changes
   useEffect(() => {
     if (preselectedPropertyId) setPropertyId(preselectedPropertyId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [preselectedPropertyId]);
 
   useEffect(() => {

@@ -149,7 +149,6 @@ function buildComplianceAuditPrompt(
   context: ComplianceAuditContext
 ): string {
   const isEnglandWales = context.jurisdiction === 'england-wales';
-  const isScotland = context.jurisdiction === 'scotland';
 
   return `
 You are a legal compliance auditor specializing in UK residential tenancy law.
@@ -234,8 +233,6 @@ async function callComplianceAuditLLM(
   prompt: string,
   jurisdiction: string
 ): Promise<Partial<ComplianceAuditJSON>> {
-  const isEnglandWales = jurisdiction === 'england-wales';
-
   const systemPrompt = `
 ${ASK_HEAVEN_BASE_SYSTEM_PROMPT}
 

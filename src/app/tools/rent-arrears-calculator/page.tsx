@@ -226,7 +226,7 @@ export default function RentArrearsCalculator() {
 
           if (y < 100 && index < schedule.length - 1) {
             // Add new page if needed
-            const newPage = pdfDoc.addPage([595, 842]);
+            pdfDoc.addPage([595, 842]);
             y = 780;
           }
         }
@@ -392,7 +392,7 @@ link.href = url;
           </div>
 
           <div className="space-y-4">
-            {schedule.map((item, index) => (
+            {schedule.map((item) => (
               <div
                 key={item.id}
                 className="grid grid-cols-1 md:grid-cols-5 gap-3 items-end bg-gray-50 p-4 rounded-lg border border-gray-200"
