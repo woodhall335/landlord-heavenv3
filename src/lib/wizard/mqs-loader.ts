@@ -63,7 +63,13 @@ function deriveRoutesFromFacts(
 ): string[] {
   const answers = facts || {};
   const routes: string[] = [];
-  const routeAnswer = (answers as any).eviction_route || (answers as any).notice_type;
+
+  // IMPORTANT: Check all possible route field names (including eviction_route_intent from Notice Only YAML)
+  const routeAnswer =
+    (answers as any).eviction_route_intent ||
+    (answers as any).eviction_route ||
+    (answers as any).notice_type;
+
   const docRoutes: string[] = (answers as any).__document_routes || [];
 
   if (jurisdiction === 'scotland') {
@@ -73,14 +79,16 @@ function deriveRoutesFromFacts(
   if (Array.isArray(routeAnswer)) {
     routeAnswer.forEach((val) => {
       const lower = String(val).toLowerCase();
-      if (lower.includes('section 8')) routes.push('section_8');
-      if (lower.includes('section 21')) routes.push('section_21');
+      // Handle both canonical values (section_8) and human-readable labels (Section 8)
+      if (lower.includes('section_8') || lower.includes('section 8')) routes.push('section_8');
+      if (lower.includes('section_21') || lower.includes('section 21')) routes.push('section_21');
       if (lower.includes('notice to leave')) routes.push('notice_to_leave');
     });
   } else if (routeAnswer) {
     const lower = String(routeAnswer).toLowerCase();
-    if (lower.includes('section 8')) routes.push('section_8');
-    if (lower.includes('section 21')) routes.push('section_21');
+    // Handle both canonical values (section_8) and human-readable labels (Section 8)
+    if (lower.includes('section_8') || lower.includes('section 8')) routes.push('section_8');
+    if (lower.includes('section_21') || lower.includes('section 21')) routes.push('section_21');
     if (lower.includes('leave')) routes.push('notice_to_leave');
     if (lower.includes('quit')) routes.push('notice_to_quit');
   }
