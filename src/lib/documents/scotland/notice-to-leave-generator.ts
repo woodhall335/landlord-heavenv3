@@ -8,6 +8,11 @@
  */
 
 import { generateDocument, GeneratedDocument } from '../generator';
+import {
+  calculateNoticeToLeaveDate,
+  validateNoticeToLeaveDate,
+  type NoticeToLeaveDateParams,
+} from '../notice-date-calculator';
 
 // ============================================================================
 // TYPES
@@ -65,6 +70,7 @@ export interface NoticeToLeaveData {
   // Notice dates
   notice_date: string; // Date notice is served
   earliest_leaving_date: string; // Earliest date tenant can be required to leave
+  earliest_leaving_date_explanation?: string; // How we calculated this
   earliest_tribunal_date: string; // Earliest date landlord can apply to Tribunal
   notice_period_days: 28 | 84; // 28 days or 84 days depending on ground
 
@@ -561,6 +567,35 @@ export async function generateNoticeToLeave(
   isPreview = false,
   outputFormat: 'html' | 'pdf' | 'both' = 'html'
 ): Promise<GeneratedDocument> {
+  // Auto-calculate earliest leaving date if not provided or validate if provided
+  const noticeDate = data.notice_date || new Date().toISOString().split('T')[0];
+
+  const dateParams: NoticeToLeaveDateParams = {
+    service_date: noticeDate,
+    grounds: data.grounds.map((g) => ({ number: g.number })),
+  };
+
+  // If earliest_leaving_date is provided, validate it
+  if (data.earliest_leaving_date) {
+    const validation = validateNoticeToLeaveDate(data.earliest_leaving_date, dateParams);
+    if (!validation.valid) {
+      // Return 422 error with precise explanation
+      const error = new Error(validation.errors.join(' '));
+      (error as any).statusCode = 422;
+      (error as any).validationErrors = validation.errors;
+      (error as any).suggestedDate = validation.suggested_date;
+      throw error;
+    }
+  } else {
+    // Auto-calculate the earliest leaving date
+    const calculatedDate = calculateNoticeToLeaveDate(dateParams);
+    data.earliest_leaving_date = calculatedDate.earliest_valid_date;
+    data.notice_period_days = calculatedDate.notice_period_days as 28 | 84;
+    data.earliest_leaving_date_explanation = calculatedDate.explanation;
+    // Tribunal date is same as leaving date
+    data.earliest_tribunal_date = calculatedDate.earliest_valid_date;
+  }
+
   // Validate data
   const validation = validateNoticeToLeaveData(data);
   if (!validation.valid) {
@@ -591,6 +626,7 @@ export async function generateNoticeToLeave(
 
 /**
  * Calculates earliest leaving date based on notice period
+ * @deprecated Use calculateNoticeToLeaveDate from notice-date-calculator instead
  */
 export function calculateEarliestLeavingDate(noticeDate: Date, noticePeriod: 28 | 84): Date {
   const leavingDate = new Date(noticeDate);
@@ -600,6 +636,7 @@ export function calculateEarliestLeavingDate(noticeDate: Date, noticePeriod: 28 
 
 /**
  * Returns the required notice period for a given ground
+ * @deprecated Use calculateNoticeToLeaveNoticePeriod from notice-date-calculator instead
  */
 export function getNoticePeriodForGround(groundNumber: number): 28 | 84 {
   const def = GROUND_DEFINITIONS[groundNumber];
