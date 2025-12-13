@@ -7,6 +7,7 @@
 
 import type { WizardFacts, CaseFacts, PartyDetails } from './schema';
 import { createEmptyCaseFacts } from './schema';
+import { normalizeRoutes, getPrimaryRoute, routeToDocumentType } from '../wizard/route-normalizer';
 
 /**
  * Helper to safely get a value from flat wizard facts using dot notation.
@@ -833,6 +834,31 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // =============================================================================
   // NOTICE - Section 8, Section 21, etc.
   // =============================================================================
+
+  // ROUTE NORMALIZATION: Convert user's route intent to canonical format
+  // Handles legacy human-readable labels (e.g., "Section 8 - rent arrears / breach")
+  // and new canonical values (e.g., "section_8")
+  const evictionRouteIntent = getFirstValue(wizard, [
+    'eviction_route_intent',
+    'eviction_route',
+    'route_intent',
+  ]);
+
+  if (evictionRouteIntent) {
+    const normalizedRoutes = normalizeRoutes(evictionRouteIntent);
+    const primaryRoute = getPrimaryRoute(normalizedRoutes);
+
+    // Store normalized route as notice_type if not already set
+    if (primaryRoute && !base.notice.notice_type) {
+      base.notice.notice_type = routeToDocumentType(primaryRoute);
+    }
+
+    // Also set court.route for consistency
+    if (primaryRoute && !base.court.route) {
+      base.court.route = primaryRoute;
+    }
+  }
+
   base.notice.notice_type ??= getFirstValue(wizard, [
     'case_facts.notice.notice_type',
     'notice_type',

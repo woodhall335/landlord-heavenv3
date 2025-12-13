@@ -305,13 +305,52 @@ export default function WizardPreviewPage() {
         }
 
         // Determine document type based on smart recommendation
-        const documentType = getDocumentType(fetchedCase.case_type, fetchedCase);
+        let documentType = getDocumentType(fetchedCase.case_type, fetchedCase);
 
+        // SMART RECOMMEND WINS: If no recommendation for eviction cases, try calling checkpoint once to compute it
+        if (!documentType && fetchedCase.case_type === 'eviction') {
+          console.log('No recommended_route found - attempting checkpoint to compute recommendation');
+
+          try {
+            const checkpointResponse = await fetch('/api/wizard/checkpoint', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ case_id: caseId }),
+            });
+
+            if (checkpointResponse.ok) {
+              const checkpointData = await checkpointResponse.json();
+              console.log('Checkpoint response:', checkpointData);
+
+              // If checkpoint returned a recommendation, refetch the case
+              if (checkpointData.recommended_route) {
+                const refetchResponse = await fetch(`/api/cases/${caseId}`);
+                if (refetchResponse.ok) {
+                  const refetchResult = await refetchResponse.json();
+                  const refetchedCase: CaseData = refetchResult.case;
+                  setCaseData(refetchedCase);
+                  documentType = getDocumentType(refetchedCase.case_type, refetchedCase);
+                }
+              } else if (!checkpointData.ok && checkpointData.missingFields) {
+                // Checkpoint returned structured missing fields - show helpful error
+                throw new Error(
+                  `Cannot generate preview: Missing required information - ${checkpointData.missingFields.join(', ')}. ` +
+                  `${checkpointData.reason || 'Please complete the wizard and try again.'}`
+                );
+              }
+            }
+          } catch (checkpointError) {
+            console.error('Checkpoint failed:', checkpointError);
+            // Continue to show generic error below if checkpoint itself failed
+          }
+        }
+
+        // After trying checkpoint, if still no documentType, show detailed error
         if (!documentType) {
-          // No recommendation available - show helpful error
           throw new Error(
             'Cannot generate preview: The system needs more information to recommend the right notice type. ' +
-            'Please go back and complete the required questions, or contact support if you believe this is an error.'
+            'Please go back and complete all required questions (tenancy details, compliance checklist, grounds/route selection), ' +
+            'or contact support if you believe this is an error.'
           );
         }
 
