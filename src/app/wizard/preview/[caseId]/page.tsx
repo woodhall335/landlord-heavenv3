@@ -658,27 +658,67 @@ export default function WizardPreviewPage() {
                 </h4>
 
                 {isEviction && (
-                  <ul className="text-sm text-blue-800 space-y-1">
-                    {isScotlandEviction ? (
-                      <>
-                        <li>✅ Notice to Leave drafted for this tenancy</li>
-                        <li>✅ Form E – Tribunal application for eviction</li>
-                        <li>✅ Rent arrears schedule and payment history summary</li>
-                        <li>✅ Evidence checklist & proof of service templates</li>
-                        <li>✅ Lodging guide for the First-tier Tribunal (Housing and Property Chamber)</li>
-                        <li>✅ Lifetime access to all documents in your dashboard</li>
-                      </>
-                    ) : (
-                      <>
-                        <li>✅ Correct Section 8 and/or Section 21 notice</li>
-                        <li>✅ Court possession claim forms (N5, N119, and N5B where eligible)</li>
-                        <li>✅ Rent arrears schedule and payment history summary</li>
-                        <li>✅ Evidence checklist & proof of service templates</li>
-                        <li>✅ Step-by-step eviction roadmap & filing guide</li>
-                        <li>✅ Lifetime access to all documents in your dashboard</li>
-                      </>
+                  <>
+                    {/* Show auto-selected route */}
+                    {caseData.recommended_route && (
+                      <div className="mb-3 p-2 bg-blue-100 border border-blue-300 rounded">
+                        <p className="text-sm font-semibold text-blue-900">
+                          📋 Auto-selected route for your case:
+                        </p>
+                        <p className="text-sm text-blue-800 mt-1">
+                          {isScotlandEviction && '★ Notice to Leave (Private Residential Tenancy)'}
+                          {!isScotlandEviction && caseData.recommended_route === 'section_21' && '★ Section 21 notice (Form 6A) - No-fault possession'}
+                          {!isScotlandEviction && caseData.recommended_route === 'section_8' && '★ Section 8 notice (Form 3) - Grounds-based possession'}
+                        </p>
+                      </div>
                     )}
-                  </ul>
+
+                    <ul className="text-sm text-blue-800 space-y-1">
+                      {/* NOTICE_ONLY product - notice-specific features */}
+                      {effectiveProduct === 'notice_only' && isScotlandEviction && (
+                        <>
+                          <li>✅ Notice to Leave with auto-calculated leaving date</li>
+                          <li>✅ Service guidance & proof of service templates</li>
+                          <li>✅ Evidence checklist for your selected grounds</li>
+                          <li>✅ Pre-tribunal preparation guide</li>
+                          <li>✅ Explanation of why this route was selected</li>
+                        </>
+                      )}
+
+                      {effectiveProduct === 'notice_only' && !isScotlandEviction && (
+                        <>
+                          <li>✅ {caseData.recommended_route === 'section_21' ? 'Section 21 notice (Form 6A)' : 'Section 8 notice (Form 3)'} with auto-calculated expiry date</li>
+                          <li>✅ Service guidance & certificates of service</li>
+                          <li>✅ Evidence checklist tailored to your situation</li>
+                          <li>✅ Route explanation (why Section 8 or 21 was chosen)</li>
+                          <li>✅ Pre-court preparation guide</li>
+                        </>
+                      )}
+
+                      {/* COMPLETE_PACK product - full eviction bundle */}
+                      {effectiveProduct !== 'notice_only' && isScotlandEviction && (
+                        <>
+                          <li>✅ Notice to Leave with auto-calculated dates</li>
+                          <li>✅ Form E (First-tier Tribunal application)</li>
+                          <li>✅ Rent arrears schedule & payment history log</li>
+                          <li>✅ Evidence checklist & proof of service templates</li>
+                          <li>✅ Step-by-step tribunal roadmap & lodging guide</li>
+                          <li>✅ Lifetime access to all documents in your dashboard</li>
+                        </>
+                      )}
+
+                      {effectiveProduct !== 'notice_only' && !isScotlandEviction && (
+                        <>
+                          <li>✅ {caseData.recommended_route === 'section_21' ? 'Section 21 notice (Form 6A)' : caseData.recommended_route === 'section_8' ? 'Section 8 notice (Form 3)' : 'Required notice'} (auto-selected)</li>
+                          <li>✅ Court possession claim forms (N5, N119, and N5B where eligible)</li>
+                          <li>✅ Rent arrears schedule & payment history log</li>
+                          <li>✅ Evidence checklist & proof of service templates</li>
+                          <li>✅ Step-by-step court roadmap & filing guide</li>
+                          <li>✅ Lifetime access to all documents in your dashboard</li>
+                        </>
+                      )}
+                    </ul>
+                  </>
                 )}
 
                 {isMoneyClaim && (
