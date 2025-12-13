@@ -8,6 +8,10 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
+import {
+  getSupabaseConfigServer,
+  warnSupabaseNotConfiguredOnce,
+} from './config';
 import type { Database } from './types';
 
 /**
@@ -17,11 +21,17 @@ import type { Database } from './types';
  * @returns SupabaseClient<Database> - Fully typed client with schema inference
  */
 export async function createServerSupabaseClient(): Promise<SupabaseClient<Database>> {
+  const config = getSupabaseConfigServer();
+  if (!config) {
+    warnSupabaseNotConfiguredOnce();
+    throw new Error('Supabase not configured');
+  }
+
   const cookieStore = await cookies();
 
   return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    config.url,
+    config.anonKey,
     {
       cookies: {
         get(name: string) {
@@ -53,13 +63,19 @@ export async function createServerSupabaseClient(): Promise<SupabaseClient<Datab
  * NEVER expose to client-side code
  */
 export function createAdminClient(): SupabaseClient<Database> {
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  const config = getSupabaseConfigServer();
+  if (!config) {
+    warnSupabaseNotConfiguredOnce();
+    throw new Error('Supabase not configured');
+  }
+
+  if (!config.serviceRoleKey) {
     throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set');
   }
 
   return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    config.url,
+    config.serviceRoleKey,
     {
       cookies: {
         get() {
@@ -81,6 +97,11 @@ export function createAdminClient(): SupabaseClient<Database> {
  * Returns null if not authenticated
  */
 export async function getServerUser() {
+  if (!getSupabaseConfigServer()) {
+    warnSupabaseNotConfiguredOnce();
+    return null;
+  }
+
   const supabase = await createServerSupabaseClient();
 
   const {
