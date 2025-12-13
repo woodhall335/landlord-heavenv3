@@ -94,7 +94,10 @@ function missingFieldsForSection8(caseData: Record<string, any>): string[] {
   if (!caseData.property_address) missing.push('property_address');
   if (!caseData.tenant_full_name) missing.push('tenant_full_name');
   if (!caseData.landlord_full_name) missing.push('landlord_full_name');
-  if (!Array.isArray(caseData.grounds) || caseData.grounds.length === 0) missing.push('grounds');
+  // Check for either grounds (Section8Ground[]) or ground_codes (string[])
+  const hasGrounds = Array.isArray(caseData.grounds) && caseData.grounds.length > 0;
+  const hasGroundCodes = Array.isArray(caseData.ground_codes) && caseData.ground_codes.length > 0;
+  if (!hasGrounds && !hasGroundCodes) missing.push('grounds');
   // Add more here if your generator requires them strictly
   return missing;
 }
@@ -185,9 +188,16 @@ export async function POST(request: Request) {
          * IMPORTANT: Map wizard facts -> CaseData so Section 8 generator gets property_address, grounds, etc.
          */
         case 'section8_notice': {
-          const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
+          // Extract BOTH caseData and evictionCase - evictionCase contains the full grounds array
+          const { caseData, evictionCase } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
 
-          const safeCaseData = ensurePropertyAddress(caseData as any);
+          // Merge grounds from evictionCase into caseData for Section 8 generator
+          const section8Data = {
+            ...caseData,
+            grounds: evictionCase.grounds, // Add the full grounds array (Section8Ground[])
+          };
+
+          const safeCaseData = ensurePropertyAddress(section8Data as any);
           const missing = missingFieldsForSection8(safeCaseData);
 
           if (missing.length > 0) {
