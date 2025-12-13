@@ -87,7 +87,7 @@ beforeEach(() => {
   // Provide a harmless test AI client for risk report generation paths
   __setTestJsonAIClient({
     jsonCompletion: async () => ({
-      json: {},
+      json: {} as unknown as any,
       content: '{}',
       usage: { prompt_tokens: 1, completion_tokens: 1, total_tokens: 2 },
       model: 'gpt-4o-mini',
