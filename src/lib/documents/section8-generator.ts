@@ -6,6 +6,11 @@
  */
 
 import { generateDocument, GeneratedDocument } from './generator';
+import {
+  calculateSection8ExpiryDate,
+  validateSection8ExpiryDate,
+  type Section8DateParams,
+} from './notice-date-calculator';
 
 // ============================================================================
 // TYPES
@@ -161,8 +166,10 @@ export interface Section8NoticeData {
   evidence_of_falsehood_attached?: boolean;
 
   // Notice details
+  service_date?: string; // Date notice is served (defaults to today)
   notice_period_days: number;
   earliest_possession_date: string;
+  earliest_possession_date_explanation?: string; // How we calculated this
   any_mandatory_ground: boolean;
   any_discretionary_ground: boolean;
 
@@ -290,6 +297,7 @@ const GROUND_DEFINITIONS: Record<number | '14A', Omit<Section8Ground, 'particula
 
 /**
  * Calculate the earliest possession date based on notice period
+ * @deprecated Use calculateSection8ExpiryDate from notice-date-calculator instead
  */
 export function calculateEarliestPossessionDate(
   serviceDate: string,
@@ -302,6 +310,7 @@ export function calculateEarliestPossessionDate(
 
 /**
  * Determine notice period based on grounds
+ * @deprecated Use calculateSection8NoticePeriod from notice-date-calculator instead
  */
 export function determineNoticePeriod(grounds: Section8Ground[]): number {
   // If any ground 14 or 14A, can use 2 weeks
@@ -359,6 +368,36 @@ export async function generateSection8Notice(
   }
   if (!data.grounds || data.grounds.length === 0) {
     throw new Error('At least one ground is required');
+  }
+
+  // Auto-calculate earliest possession date if not provided or validate if provided
+  const serviceDate = data.service_date || new Date().toISOString().split('T')[0];
+
+  const dateParams: Section8DateParams = {
+    service_date: serviceDate,
+    grounds: data.grounds.map((g) => ({ code: g.code, mandatory: g.mandatory })),
+    tenancy_start_date: data.tenancy_start_date,
+    fixed_term: data.fixed_term,
+    fixed_term_end_date: data.fixed_term_end_date,
+  };
+
+  // If earliest_possession_date is provided, validate it
+  if (data.earliest_possession_date) {
+    const validation = validateSection8ExpiryDate(data.earliest_possession_date, dateParams);
+    if (!validation.valid) {
+      // Return 422 error with precise explanation
+      const error = new Error(validation.errors.join(' '));
+      (error as any).statusCode = 422;
+      (error as any).validationErrors = validation.errors;
+      (error as any).suggestedDate = validation.suggested_date;
+      throw error;
+    }
+  } else {
+    // Auto-calculate the earliest possession date
+    const calculatedDate = calculateSection8ExpiryDate(dateParams);
+    data.earliest_possession_date = calculatedDate.earliest_valid_date;
+    data.notice_period_days = calculatedDate.notice_period_days;
+    data.earliest_possession_date_explanation = calculatedDate.explanation;
   }
 
   // Determine if mandatory/discretionary
