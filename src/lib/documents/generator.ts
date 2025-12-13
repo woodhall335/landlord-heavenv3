@@ -155,6 +155,11 @@ function registerHandlebarsHelpers() {
   Handlebars.registerHelper('multiply', function (a, b) {
     return Number(a) * Number(b);
   });
+
+  // Safe text helper - prevents [object Object] leaks in templates
+  Handlebars.registerHelper('safe', function (value) {
+    return safeText(value);
+  });
 }
 
 // Register helpers once
@@ -185,7 +190,9 @@ export function loadTemplate(templatePath: string): string {
 function markdownToHtml(markdown: string): string {
   let html = markdown;
 
-  // Convert headings (## to <h2>, ### to <h3>, etc.)
+  // Convert headings (# to <h1>, ## to <h2>, ### to <h3>, #### to <h4>)
+  // Process longer patterns first to avoid partial matches
+  html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
   html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
   html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
   html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
@@ -193,8 +200,8 @@ function markdownToHtml(markdown: string): string {
   // Convert bold text (**text** to <strong>text</strong>)
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 
-  // Convert italic text (*text* to <em>text</em>)
-  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  // Convert italic text (*text* to <em>text</em>)  // Must be after bold to avoid conflicts
+  html = html.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
 
   // Convert horizontal rules (--- to <hr />)
   html = html.replace(/^---$/gm, '<hr />');
@@ -206,7 +213,7 @@ function markdownToHtml(markdown: string): string {
     para = para.trim();
     if (!para) return '';
     // Don't wrap if already has HTML tags
-    if (para.startsWith('<h') || para.startsWith('<hr') || para.startsWith('<div') || para.startsWith('<p')) {
+    if (para.startsWith('<h') || para.startsWith('<hr') || para.startsWith('<div') || para.startsWith('<p') || para.startsWith('<table')) {
       return para;
     }
     // Don't wrap standalone --- lines
