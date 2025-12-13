@@ -167,15 +167,18 @@ export interface CourtFacts {
 export interface EvidenceFacts {
   tenancy_agreement_uploaded: boolean;
   rent_schedule_uploaded: boolean;
+  correspondence_uploaded: boolean;
+  damage_photos_uploaded: boolean;
+  authority_letters_uploaded: boolean;
   bank_statements_uploaded: boolean;
-  safety_certificates_uploaded: boolean;
-  asb_evidence_uploaded: boolean;
   other_evidence_uploaded: boolean;
-  // Additional evidence flags used by intel/evidence scoring
-  correspondence_uploaded?: boolean;
+  // Legacy / compatibility flags – keep for older flows but mirror into new categories
+  safety_certificates_uploaded?: boolean;
+  asb_evidence_uploaded?: boolean;
   asb_logs_uploaded?: boolean;
   photos_uploaded?: boolean;
   missing_evidence_notes: string[];
+  analysis?: Record<string, any>;
 }
 
 export interface ServiceContactFacts {
@@ -394,14 +397,18 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
   evidence: {
     tenancy_agreement_uploaded: false,
     rent_schedule_uploaded: false,
+    correspondence_uploaded: false,
+    damage_photos_uploaded: false,
+    authority_letters_uploaded: false,
     bank_statements_uploaded: false,
+    other_evidence_uploaded: false,
+    // Legacy flags (maintain for backward compatibility)
     safety_certificates_uploaded: false,
     asb_evidence_uploaded: false,
-    other_evidence_uploaded: false,
-    correspondence_uploaded: false,
     asb_logs_uploaded: false,
     photos_uploaded: false,
     missing_evidence_notes: [],
+    analysis: {},
   },
   service_contact: {
     has_override: null,

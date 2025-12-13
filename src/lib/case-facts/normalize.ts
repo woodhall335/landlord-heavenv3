@@ -933,6 +933,26 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
       'rent_schedule_uploaded',
     ]) ?? base.evidence.rent_schedule_uploaded
   );
+  base.evidence.correspondence_uploaded = Boolean(
+    getFirstValue(wizard, [
+      'case_facts.evidence.correspondence_uploaded',
+      'evidence.correspondence_uploaded',
+    ]) ?? base.evidence.correspondence_uploaded
+  );
+  base.evidence.damage_photos_uploaded = Boolean(
+    getFirstValue(wizard, [
+      'case_facts.evidence.damage_photos_uploaded',
+      'evidence.damage_photos_uploaded',
+      'photos_uploaded',
+    ]) ?? base.evidence.damage_photos_uploaded
+  );
+  base.evidence.authority_letters_uploaded = Boolean(
+    getFirstValue(wizard, [
+      'case_facts.evidence.authority_letters_uploaded',
+      'evidence.authority_letters_uploaded',
+      'asb_evidence_uploaded',
+    ]) ?? base.evidence.authority_letters_uploaded
+  );
   base.evidence.bank_statements_uploaded = Boolean(
     getFirstValue(wizard, [
       'case_facts.evidence.bank_statements_uploaded',
@@ -966,6 +986,15 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   ]);
   if (Array.isArray(missingEvidenceNotes)) {
     base.evidence.missing_evidence_notes = missingEvidenceNotes as string[];
+  }
+
+  const evidenceAnalysis = getFirstValue(wizard, [
+    'case_facts.evidence.analysis',
+    'evidence.analysis',
+  ]);
+
+  if (evidenceAnalysis && typeof evidenceAnalysis === 'object') {
+    base.evidence.analysis = evidenceAnalysis as Record<string, any>;
   }
 
   // =============================================================================

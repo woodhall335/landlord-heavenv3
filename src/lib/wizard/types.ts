@@ -43,11 +43,11 @@ export interface ExtendedWizardQuestion {
 }
 
 export interface StepFlags {
-  missing_critical?: string[];
-  inconsistencies?: string[];
-  recommended_uploads?: Array<{ type: string; reason: string }>;
+  missing_critical: string[];
+  inconsistencies: string[];
+  recommended_uploads: Array<{ type: string; reason: string }>;
   route_hint?: { recommended: 'section_8' | 'section_21' | 'both' | 'unknown'; reason: string };
-  compliance_hints?: string[];
+  compliance_hints: string[];
 }
 
 export type { WizardField as WizardFieldType };

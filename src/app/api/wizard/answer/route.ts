@@ -738,7 +738,13 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
     // ---------------------------------------
     // 6a. Per-step flags for eviction (lightweight AI + decision engine)
     // ---------------------------------------
-    let stepFlags: StepFlags | null = null;
+    let stepFlags: StepFlags = {
+      missing_critical: [],
+      inconsistencies: [],
+      compliance_hints: [],
+      recommended_uploads: [],
+    };
+
     if (caseRow.case_type === 'eviction') {
       const evidenceFacts = (newFacts as any).evidence || {};
       const missingUploads: Array<{ type: string; reason: string }> = [];
