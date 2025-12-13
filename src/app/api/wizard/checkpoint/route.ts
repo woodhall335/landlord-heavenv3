@@ -2,33 +2,109 @@
  * Wizard Checkpoint Endpoint
  *
  * Provides lightweight, real-time decision analysis as users progress through the wizard.
- * Accepts partial WizardFacts and returns early warnings and blocking issues.
+ * Loads WizardFacts from database, runs decision engine, and persists recommendations.
+ *
+ * Now compliant with ADR-001: loads WizardFacts from case_facts.facts via getOrCreateWizardFacts()
+ * and persists recommended_route to cases table for preview/document generation.
  *
  * Audit item: B3 - Add lightweight decision endpoint for live flow checks
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { normalizeCaseFacts } from '@/lib/case-facts/normalize';
+import { z } from 'zod';
+import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
+import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
 
+const checkpointSchema = z.object({
+  case_id: z.string().uuid(),
+  // Optional: can still accept direct facts for stateless usage (testing)
+  facts: z.record(z.any()).optional(),
+  jurisdiction: z.string().optional(),
+  product: z.string().optional(),
+  case_type: z.string().optional(),
+});
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { facts, jurisdiction, product, case_type } = body;
+    const validation = checkpointSchema.safeParse(body);
+
+    if (!validation.success) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: 'Invalid request',
+          missingFields: ['case_id'],
+          reason: 'case_id is required and must be a valid UUID',
+        },
+        { status: 400 }
+      );
+    }
+
+    const { case_id, facts: providedFacts, jurisdiction: providedJurisdiction, product: providedProduct, case_type: providedCaseType } = validation.data;
+
+    const user = await getServerUser().catch(() => null);
+    const supabase = await createServerSupabaseClient();
+
+    // Load case from database
+    let query = supabase.from('cases').select('*').eq('id', case_id);
+    if (user) {
+      query = query.eq('user_id', user.id);
+    } else {
+      query = query.is('user_id', null);
+    }
+
+    const { data: caseData, error: caseError } = await query.single();
+
+    if (caseError || !caseData) {
+      return NextResponse.json(
+        {
+          ok: false,
+          error: 'Case not found',
+          reason: 'The specified case_id does not exist or you do not have access to it',
+        },
+        { status: 404 }
+      );
+    }
+
+    const caseRow = caseData as {
+      id: string;
+      jurisdiction: string;
+      case_type: string;
+      user_id: string | null;
+      wizard_progress: number | null;
+    };
+
+    // Use case data from DB, falling back to provided values
+    const jurisdiction = caseRow.jurisdiction || providedJurisdiction;
+    const case_type = caseRow.case_type || providedCaseType;
+    const product = providedProduct || ((caseData as any).product) || (case_type === 'money_claim' ? 'money_claim' : case_type === 'tenancy_agreement' ? 'tenancy_agreement' : 'complete_pack');
 
     // Validate required fields
     if (!jurisdiction) {
       return NextResponse.json(
-        { error: 'jurisdiction is required' },
+        {
+          ok: false,
+          error: 'jurisdiction is required',
+          missingFields: ['jurisdiction'],
+          reason: 'Cannot determine jurisdiction from case or request',
+        },
         { status: 400 }
       );
     }
 
   if (!['england-wales', 'scotland', 'northern-ireland'].includes(jurisdiction)) {
     return NextResponse.json(
-      { error: 'Invalid jurisdiction' },
+      {
+        ok: false,
+        error: 'Invalid jurisdiction',
+        missingFields: [],
+        reason: `jurisdiction must be one of: england-wales, scotland, northern-ireland (got: ${jurisdiction})`,
+      },
       { status: 400 }
     );
   }
@@ -41,9 +117,11 @@ export async function POST(request: NextRequest) {
   ) {
     return NextResponse.json(
       {
-        error:
-          'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.',
+        ok: false,
+        error: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
         message:
+          'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.',
+        reason:
           'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
         supported: {
           'northern-ireland': ['tenancy_agreement'],
@@ -59,19 +137,24 @@ export async function POST(request: NextRequest) {
   const effectiveCaseType = case_type || 'eviction';
     const effectiveProduct = product || 'notice_only';
 
-    // Early return for money claims (no decision engine needed)
+    // Early return for money claims (no decision engine needed for checkpoint)
     if (effectiveCaseType === 'money_claim') {
       return NextResponse.json({
+        ok: true,
         status: 'ok',
         blocking_issues: [],
         warnings: [],
-        summary: 'Money claim workflow - decision engine not applicable',
+        summary: 'Money claim workflow - decision engine not applicable for checkpoint',
       });
     }
 
-    // Normalize partial WizardFacts to CaseFacts
+    // ADR-001 COMPLIANCE: Load WizardFacts from case_facts.facts (canonical source of truth)
+    // Use providedFacts as fallback only for testing/stateless usage
+    const wizardFacts = providedFacts || await getOrCreateWizardFacts(supabase, case_id);
+
+    // Normalize WizardFacts to CaseFacts (domain model)
     // Missing fields will be null, which the decision engine handles gracefully
-    const caseFacts = normalizeCaseFacts(facts || {});
+    const caseFacts = wizardFactsToCaseFacts(wizardFacts);
 
     // Run decision engine with partial data
     const decisionInput: DecisionInput = {
@@ -86,9 +169,32 @@ export async function POST(request: NextRequest) {
     // Get law profile for version tracking and legal metadata
     const law_profile = getLawProfile(jurisdiction, effectiveCaseType);
 
+    // SMART RECOMMEND WINS: Persist recommended_route to cases table
+    // This ensures preview/document generation uses the decision engine recommendation
+    const smartRecommendedRoute = decision.recommended_routes.length > 0
+      ? decision.recommended_routes[0]
+      : null;
+
+    if (smartRecommendedRoute) {
+      try {
+        await supabase
+          .from('cases')
+          .update({
+            recommended_route: smartRecommendedRoute,
+          } as any)
+          .eq('id', case_id);
+      } catch (updateError) {
+        console.error('Failed to persist recommended_route:', updateError);
+        // Non-fatal - continue with response
+      }
+    }
+
     // Format response for wizard UI
     const response = {
+      ok: true,
       status: 'ok',
+      case_id,
+      recommended_route: smartRecommendedRoute,
       blocking_issues: decision.blocking_issues.filter(b => b.severity === 'blocking'),
       warnings: [
         ...decision.warnings,
@@ -117,7 +223,9 @@ export async function POST(request: NextRequest) {
     console.error('Checkpoint error:', error);
     return NextResponse.json(
       {
+        ok: false,
         error: 'Failed to run checkpoint analysis',
+        reason: error instanceof Error ? error.message : 'Unknown error',
         details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
