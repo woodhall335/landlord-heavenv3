@@ -676,7 +676,7 @@ export async function POST(request: Request) {
 
     // RUN DECISION ENGINE for eviction cases (Audit B2: integrate decision engine)
     let decisionEngineOutput: DecisionOutput | null = null;
-    let smartRecommendedRoute: string | null = null;
+    let decisionEngineRecommendedRoute: string | null = null;
     if (caseData.case_type === 'eviction') {
       try {
         decisionEngineOutput = runDecisionEngine({
@@ -686,10 +686,9 @@ export async function POST(request: Request) {
           facts,
         });
 
-        // SMART RECOMMEND: Use the first recommended route from the decision engine
-        // This is the route that will be used for preview and document generation
+        // Decision engine recommendation (may be overridden by user intent for notice_only)
         if (decisionEngineOutput.recommended_routes.length > 0) {
-          smartRecommendedRoute = decisionEngineOutput.recommended_routes[0];
+          decisionEngineRecommendedRoute = decisionEngineOutput.recommended_routes[0];
         }
 
         // Merge decision engine blocking issues into red_flags
@@ -738,8 +737,44 @@ export async function POST(request: Request) {
       }
     }
 
-    // Save the smart-recommended route to the case (decision engine wins for evictions)
-    const finalRecommendedRoute = smartRecommendedRoute || route;
+    // ROUTE INTENT PRIORITY LOGIC:
+    // For notice_only product, explicit user route selection (eviction_route_intent) takes precedence
+    // over decision engine "smart recommend". Complete pack can still use smart recommend.
+    const userRouteIntent =
+      (wizardFacts as any).eviction_route_intent ||
+      (wizardFacts as any).eviction_route ||
+      null;
+
+    let finalRecommendedRoute: string | null = null;
+
+    if (product === 'notice_only' && userRouteIntent) {
+      // For notice_only: User intent wins
+      if (Array.isArray(userRouteIntent)) {
+        // User selected multiple routes - use first one (or prioritize section_8)
+        const normalized = userRouteIntent.map((r) =>
+          String(r).toLowerCase().includes('section_8') || String(r).toLowerCase().includes('section 8')
+            ? 'section_8'
+            : String(r).toLowerCase().includes('section_21') || String(r).toLowerCase().includes('section 21')
+            ? 'section_21'
+            : r
+        );
+        finalRecommendedRoute = normalized.includes('section_8')
+          ? 'section_8'
+          : normalized[0] || null;
+      } else if (typeof userRouteIntent === 'string') {
+        const lower = userRouteIntent.toLowerCase();
+        if (lower.includes('section_8') || lower.includes('section 8')) {
+          finalRecommendedRoute = 'section_8';
+        } else if (lower.includes('section_21') || lower.includes('section 21')) {
+          finalRecommendedRoute = 'section_21';
+        } else {
+          finalRecommendedRoute = userRouteIntent;
+        }
+      }
+    } else {
+      // For complete_pack or when no explicit user intent: Decision engine wins
+      finalRecommendedRoute = decisionEngineRecommendedRoute || route;
+    }
 
     await supabase
       .from('cases')

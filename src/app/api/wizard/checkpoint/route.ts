@@ -169,18 +169,52 @@ export async function POST(request: NextRequest) {
     // Get law profile for version tracking and legal metadata
     const law_profile = getLawProfile(jurisdiction, effectiveCaseType);
 
-    // SMART RECOMMEND WINS: Persist recommended_route to cases table
-    // This ensures preview/document generation uses the decision engine recommendation
-    const smartRecommendedRoute = decision.recommended_routes.length > 0
-      ? decision.recommended_routes[0]
-      : null;
+    // ROUTE INTENT PRIORITY LOGIC:
+    // For notice_only product, explicit user route selection (eviction_route_intent) takes precedence
+    // over decision engine "smart recommend". Complete pack can still use smart recommend.
+    const userRouteIntent =
+      (wizardFacts as any).eviction_route_intent ||
+      (wizardFacts as any).eviction_route ||
+      null;
 
-    if (smartRecommendedRoute) {
+    let finalRecommendedRoute: string | null = null;
+
+    if (effectiveProduct === 'notice_only' && userRouteIntent) {
+      // For notice_only: User intent wins
+      if (Array.isArray(userRouteIntent)) {
+        // User selected multiple routes - use first one (or prioritize section_8)
+        const normalized = userRouteIntent.map((r) =>
+          String(r).toLowerCase().includes('section_8') || String(r).toLowerCase().includes('section 8')
+            ? 'section_8'
+            : String(r).toLowerCase().includes('section_21') || String(r).toLowerCase().includes('section 21')
+            ? 'section_21'
+            : r
+        );
+        finalRecommendedRoute = normalized.includes('section_8')
+          ? 'section_8'
+          : normalized[0] || null;
+      } else if (typeof userRouteIntent === 'string') {
+        const lower = userRouteIntent.toLowerCase();
+        if (lower.includes('section_8') || lower.includes('section 8')) {
+          finalRecommendedRoute = 'section_8';
+        } else if (lower.includes('section_21') || lower.includes('section 21')) {
+          finalRecommendedRoute = 'section_21';
+        } else {
+          finalRecommendedRoute = userRouteIntent;
+        }
+      }
+    } else {
+      // For complete_pack or when no explicit user intent: Decision engine wins
+      finalRecommendedRoute =
+        decision.recommended_routes.length > 0 ? decision.recommended_routes[0] : null;
+    }
+
+    if (finalRecommendedRoute) {
       try {
         await supabase
           .from('cases')
           .update({
-            recommended_route: smartRecommendedRoute,
+            recommended_route: finalRecommendedRoute,
           } as any)
           .eq('id', case_id);
       } catch (updateError) {
@@ -194,7 +228,7 @@ export async function POST(request: NextRequest) {
       ok: true,
       status: 'ok',
       case_id,
-      recommended_route: smartRecommendedRoute,
+      recommended_route: finalRecommendedRoute,
       blocking_issues: decision.blocking_issues.filter(b => b.severity === 'blocking'),
       warnings: [
         ...decision.warnings,

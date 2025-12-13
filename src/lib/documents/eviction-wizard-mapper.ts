@@ -114,6 +114,7 @@ function buildEvictionCaseFromFacts(
     service_postcode: facts.service_contact.service_postcode || undefined,
     service_phone: facts.service_contact.service_phone || undefined,
     service_email: facts.service_contact.service_email || undefined,
+    // IMPORTANT: Extract tenant names from normalized parties.tenants (populated by normalize.ts)
     tenant_full_name: facts.parties.tenants[0]?.name || '',
     tenant_2_name: facts.parties.tenants[1]?.name || undefined,
     property_address: propertyAddress || '',

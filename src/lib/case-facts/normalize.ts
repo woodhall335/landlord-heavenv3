@@ -141,6 +141,7 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
   const tenants: PartyDetails[] = [];
 
   const explicitPrimaryName =
+    getWizardValue(wizard, 'tenant_full_name') ||  // IMPORTANT: Notice Only YAML maps to this
     getWizardValue(wizard, 'tenant1_name') ||
     getWizardValue(wizard, 'defendant_name_1') ||
     getWizardValue(wizard, 'defendant_full_name') ||
@@ -151,11 +152,13 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
     tenants.push({
       name: explicitPrimaryName,
       email:
+        getWizardValue(wizard, 'tenant_email') ||
         getWizardValue(wizard, 'tenant1_email') ||
         getWizardValue(wizard, 'defendant_email') ||
         getWizardValue(wizard, 'defender_email') ||
         getWizardValue(wizard, 'defender_contact'),
       phone:
+        getWizardValue(wizard, 'tenant_phone') ||
         getWizardValue(wizard, 'tenant1_phone') ||
         getWizardValue(wizard, 'defendant_phone') ||
         getWizardValue(wizard, 'defender_phone') ||
