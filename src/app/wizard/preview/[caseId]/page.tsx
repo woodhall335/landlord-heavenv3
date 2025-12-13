@@ -12,6 +12,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Button, Card, Loading } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
 import { SignupModal } from '@/components/modals/SignupModal';
+import { PRICING, formatPrice } from '@/config/pricing';
 
 interface CaseData {
   id: string;
@@ -132,58 +133,76 @@ export default function WizardPreviewPage() {
 
   // Get pricing options based on case type
   const getPricingOptions = (caseType: string, jurisdiction?: string): PricingOption[] => {
+    const isScotland = jurisdiction === 'scotland';
+
     switch (caseType) {
       case 'eviction':
         return [
           {
             productType: 'notice_only',
-            name: 'Notice-Only Pack',
-            price: '£69.99',
-            description: 'Serve the right notice with proof of service and guidance.',
-            features: [
-              'Correct Section 8 or Section 21 notice (or Notice to Leave in Scotland)',
-              'Route decisioning and timing guidance',
-              'Proof of service templates and checklist',
-              'Evidence checklist tailored to your grounds',
-              'Next steps roadmap for court escalation',
-            ],
+            name: isScotland ? 'Notice to Leave' : 'Notice Only',
+            price: formatPrice(PRICING.NOTICE_ONLY), // ✅ Fixed: £29.99 from config (was £69.99!)
+            description: isScotland
+              ? 'Serve a legally valid Notice to Leave for Scotland.'
+              : 'Serve the right notice (Section 8 or Section 21) with proof of service.',
+            features: isScotland
+              ? [
+                  'Notice to Leave (Private Residential Tenancy)',
+                  'Ground-specific notice period calculation (28 or 84 days)',
+                  'Pre-action requirements checklist (where applicable)',
+                  'Proof of service templates',
+                  'First-tier Tribunal roadmap',
+                ]
+              : [
+                  'Section 8 or Section 21 notice (auto-selected based on eligibility)',
+                  'Legally valid expiry date (auto-calculated from service date)',
+                  'Route decisioning and timing guidance',
+                  'Proof of service templates and checklist',
+                  'Evidence checklist tailored to your grounds',
+                ],
           },
           {
             productType: 'complete_pack',
-            name: 'Complete Eviction Pack',
-            price: '£149.99',
-            description: 'Everything you need from notice to court eviction.',
-            features: [
-              'Correct Section 8 and/or Section 21 notice (or Notice to Leave in Scotland)',
-              'Court / tribunal claim forms (N5, N119, N5B where eligible, or Form E for Scotland)',
-              'Rent arrears schedule & payment history log',
-              'Step-by-step eviction roadmap & filing / lodging guide',
-              'Evidence checklist & proof of service templates',
-              'Lifetime access to all pack documents',
-            ],
+            name: isScotland ? 'Complete Eviction Pack (Scotland)' : 'Complete Eviction Pack',
+            price: formatPrice(PRICING.COMPLETE_EVICTION_PACK), // ✅ £149.99 from config
+            description: isScotland
+              ? 'Everything you need from notice to First-tier Tribunal application.'
+              : 'Everything you need from notice to court eviction.',
+            features: isScotland
+              ? [
+                  'Notice to Leave with auto-calculated dates',
+                  'Form E (First-tier Tribunal application)',
+                  'Rent arrears schedule & payment history log',
+                  'Step-by-step tribunal roadmap & lodging guide',
+                  'Evidence checklist & proof of service templates',
+                  'Lifetime access to all pack documents',
+                ]
+              : [
+                  'Section 8 and/or Section 21 notice (auto-selected based on eligibility)',
+                  'Court claim forms (N5, N119, N5B where eligible)',
+                  'Rent arrears schedule & payment history log',
+                  'Step-by-step eviction roadmap & filing guide',
+                  'Evidence checklist & proof of service templates',
+                  'Lifetime access to all pack documents',
+                ],
           },
         ];
 
       case 'money_claim':
         return [
           {
-            productType: jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim',
-            name: jurisdiction === 'scotland' ? 'Simple Procedure Pack' : 'Money Claim Pack',
-            price: '£179.99',
-            description:
-              jurisdiction === 'scotland'
-                ? 'Simple Procedure money claim bundle with Form 3A and pre-action letter.'
-                : 'Recover rent arrears and damages in England & Wales.',
+            productType: isScotland ? 'sc_money_claim' : 'money_claim',
+            name: isScotland ? 'Simple Procedure Pack' : 'Money Claim Pack',
+            price: formatPrice(PRICING.MONEY_CLAIM_PACK), // ✅ £179.99 from config
+            description: isScotland
+              ? 'Simple Procedure money claim bundle with Form 3A and pre-action letter.'
+              : 'Recover rent arrears and damages in England & Wales.',
             features: [
-              jurisdiction === 'scotland'
-                ? 'Simple Procedure Form 3A (sheriff court)'
-                : 'Money claim form (N1) & particulars',
+              isScotland ? 'Simple Procedure Form 3A (sheriff court)' : 'Money claim form (N1) & particulars',
               'Rent arrears calculation & interest breakdown',
               'Deposit deduction breakdown (where applicable)',
-              jurisdiction === 'scotland' ? 'Pre-action demand letter' : 'Letter before action',
-              jurisdiction === 'scotland'
-                ? 'Sheriff Court filing guide & timeline'
-                : 'Filing guide for County Court / MCOL',
+              isScotland ? 'Pre-action demand letter' : 'Letter before action',
+              isScotland ? 'Sheriff Court filing guide & timeline' : 'Filing guide for County Court / MCOL',
               'Lifetime access to all pack documents',
             ],
           },
@@ -194,7 +213,7 @@ export default function WizardPreviewPage() {
           {
             productType: 'ast_standard',
             name: 'Standard Tenancy Agreement',
-            price: '£39.99',
+            price: formatPrice(PRICING.STANDARD_AST), // ✅ £39.99 from config
             description: 'Legally compliant AST for typical lets.',
             features: [
               'Assured Shorthold Tenancy (AST) agreement',
@@ -208,7 +227,7 @@ export default function WizardPreviewPage() {
           {
             productType: 'ast_premium',
             name: 'Premium Tenancy Agreement',
-            price: '£59.00',
+            price: formatPrice(PRICING.PREMIUM_AST), // ✅ £59.00 from config
             description: 'Enhanced protection with additional clauses.',
             features: [
               'Everything in Standard AST',

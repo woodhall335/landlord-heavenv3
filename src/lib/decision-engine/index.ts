@@ -40,7 +40,9 @@ export interface BlockingIssue {
 }
 
 export interface DecisionOutput {
-  recommended_routes: string[]; // ['section_21', 'section_8']
+  recommended_routes: string[]; // ['section_21', 'section_8'] - AI-suggested best routes
+  allowed_routes: string[]; // ['section_21', 'section_8'] - Legally permitted routes (no blocking issues)
+  blocked_routes: string[]; // ['section_21'] - Routes that are legally blocked
   recommended_grounds: GroundRecommendation[];
   notice_period_suggestions: {
     section_8?: number;
@@ -52,9 +54,14 @@ export interface DecisionOutput {
     met: boolean | null;
     details: string[];
   };
-  blocking_issues: BlockingIssue[];
+  blocking_issues: BlockingIssue[]; // All blocking issues, grouped by route
   warnings: string[];
   analysis_summary: string;
+  route_explanations: {
+    section_8?: string;
+    section_21?: string;
+    notice_to_leave?: string;
+  };
 }
 
 // ============================================================================
@@ -65,12 +72,15 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   const { facts } = input;
   const output: DecisionOutput = {
     recommended_routes: [],
+    allowed_routes: [],
+    blocked_routes: [],
     recommended_grounds: [],
     notice_period_suggestions: {},
     pre_action_requirements: { required: false, met: null, details: [] },
     blocking_issues: [],
     warnings: [],
     analysis_summary: '',
+    route_explanations: {},
   };
 
   // Check Section 21 eligibility and blocking issues
@@ -156,10 +166,16 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
 
   output.blocking_issues = s21Blocks;
 
-  // If no blocking issues for S21, recommend it
+  // Determine if Section 21 is allowed (no blocking issues)
   if (s21Blocks.length === 0) {
-    output.recommended_routes.push('section_21');
-    output.notice_period_suggestions.section_21 = 60; // 2 months
+    output.allowed_routes.push('section_21');
+    output.recommended_routes.push('section_21'); // Also recommend it as primary route
+    output.notice_period_suggestions.section_21 = 60; // 2 calendar months
+    output.route_explanations.section_21 = 'Section 21 (no-fault eviction) is available. All compliance requirements are met. This is usually the quickest route.';
+  } else {
+    output.blocked_routes.push('section_21');
+    const blockReasons = s21Blocks.map(b => b.issue).join(', ');
+    output.route_explanations.section_21 = `Section 21 is NOT available because: ${blockReasons}. You must use Section 8 instead.`;
   }
 
   // Analyze Section 8 grounds
@@ -241,9 +257,20 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   }
 
   output.recommended_grounds = section8Grounds;
+
+  // Section 8 is always allowed (you can always evict with valid grounds)
+  output.allowed_routes.push('section_8');
+
   if (section8Grounds.length > 0) {
-    output.recommended_routes.push('section_8');
-    output.notice_period_suggestions.section_8 = 14; // Can be immediate for serious cases
+    // Only recommend Section 8 if we have grounds to suggest
+    if (!output.recommended_routes.includes('section_21')) {
+      // If S21 is blocked, S8 becomes the recommended route
+      output.recommended_routes.push('section_8');
+    }
+    output.notice_period_suggestions.section_8 = 14; // Minimum for mandatory grounds
+    output.route_explanations.section_8 = `Section 8 (grounds-based eviction) is available. We've identified ${section8Grounds.length} potential ground(s).`;
+  } else {
+    output.route_explanations.section_8 = 'Section 8 is available but we haven\'t identified specific grounds yet. You can select grounds manually.';
   }
 
   // Generate analysis summary
@@ -273,12 +300,15 @@ function analyzeScotland(input: DecisionInput): DecisionOutput {
   const { facts } = input;
   const output: DecisionOutput = {
     recommended_routes: ['notice_to_leave'], // Scotland only has Notice to Leave
+    allowed_routes: [], // Will be populated based on pre-action requirements
+    blocked_routes: [],
     recommended_grounds: [],
     notice_period_suggestions: {},
     pre_action_requirements: { required: false, met: null, details: [] },
     blocking_issues: [],
     warnings: [],
     analysis_summary: '',
+    route_explanations: {},
   };
 
   const grounds: GroundRecommendation[] = [];
@@ -358,6 +388,15 @@ function analyzeScotland(input: DecisionInput): DecisionOutput {
   output.notice_period_suggestions.notice_to_leave = grounds.length > 0 ?
     Math.max(...grounds.map(g => g.notice_period_days || 84)) : 84;
 
+  // Determine if Notice to Leave is allowed
+  if (output.blocking_issues.length === 0) {
+    output.allowed_routes.push('notice_to_leave');
+    output.route_explanations.notice_to_leave = 'Notice to Leave is available. This is the only eviction route in Scotland.';
+  } else {
+    output.blocked_routes.push('notice_to_leave');
+    output.route_explanations.notice_to_leave = 'Notice to Leave is currently blocked due to unmet pre-action requirements for rent arrears.';
+  }
+
   output.analysis_summary = `Scotland: ALL grounds are discretionary. First-tier Tribunal has full discretion. `;
   if (output.pre_action_requirements.required) {
     output.analysis_summary += output.pre_action_requirements.met
@@ -391,6 +430,8 @@ export function runDecisionEngine(input: DecisionInput): DecisionOutput {
       // NI evictions not yet supported (see docs/NI_EVICTION_STATUS.md)
       return {
         recommended_routes: [],
+        allowed_routes: [],
+        blocked_routes: ['all'],
         recommended_grounds: [],
         notice_period_suggestions: {},
         pre_action_requirements: { required: false, met: null, details: [] },
@@ -405,6 +446,7 @@ export function runDecisionEngine(input: DecisionInput): DecisionOutput {
         ],
         warnings: [],
         analysis_summary: 'Northern Ireland evictions not yet implemented (Q2 2026 roadmap).',
+        route_explanations: {},
       };
     default:
       throw new Error(`Unsupported jurisdiction: ${input.jurisdiction}`);

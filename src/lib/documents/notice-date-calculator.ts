@@ -208,13 +208,12 @@ export function calculateSection21ExpiryDate(params: Section21DateParams): DateC
   const tenancyStartObj = new Date(tenancy_start_date);
 
   const warnings: string[] = [];
-  let notice_period_days = 60; // Minimum 2 months
 
-  // Add 2 months to service date
+  // Add 2 calendar months to service date (NOT 60 days - this is critical for legal validity)
   let expiryDateObj = new Date(serviceDateObj);
-  expiryDateObj.setDate(expiryDateObj.getDate() + 60);
+  expiryDateObj.setMonth(expiryDateObj.getMonth() + 2);
 
-  let explanation = `Section 21 requires a minimum of 2 months notice. We added 60 days to your service date (${formatDate(serviceDateObj)}). `;
+  let explanation = `Section 21 requires a minimum of 2 calendar months notice. We added 2 months to your service date (${formatDate(serviceDateObj)}). `;
 
   // Check 4-month rule (for tenancies started after October 2015)
   const fourMonthsAfterStart = new Date(tenancyStartObj);
@@ -293,14 +292,14 @@ export function validateSection21ExpiryDate(
     );
   }
 
-  // Check 2-month notice
+  // Check 2-month notice (must be 2 calendar months, not 60 days)
   const serviceDateObj = new Date(params.service_date);
   const twoMonthsFromService = new Date(serviceDateObj);
-  twoMonthsFromService.setDate(twoMonthsFromService.getDate() + 60);
+  twoMonthsFromService.setMonth(twoMonthsFromService.getMonth() + 2);
 
   if (proposedDateObj < twoMonthsFromService) {
     errors.push(
-      `Section 21 requires a minimum of 2 months notice (60 days). ` +
+      `Section 21 requires a minimum of 2 calendar months notice. ` +
         `The earliest valid date is ${formatDate(twoMonthsFromService)}.`
     );
   }

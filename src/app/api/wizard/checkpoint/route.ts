@@ -229,6 +229,9 @@ export async function POST(request: NextRequest) {
       status: 'ok',
       case_id,
       recommended_route: finalRecommendedRoute,
+      allowed_routes: decision.allowed_routes, // ✅ NEW: Routes user CAN legally use
+      blocked_routes: decision.blocked_routes, // ✅ NEW: Routes that are blocked
+      route_explanations: decision.route_explanations, // ✅ NEW: Plain-English explanations
       blocking_issues: decision.blocking_issues.filter(b => b.severity === 'blocking'),
       warnings: [
         ...decision.warnings,

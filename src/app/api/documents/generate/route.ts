@@ -27,6 +27,9 @@ import { mapWizardToPrivateTenancyData } from '@/lib/documents/northern-ireland/
 
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
+import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import { runDecisionEngine } from '@/lib/decision-engine';
+import type { DecisionInput } from '@/lib/decision-engine';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -219,6 +222,35 @@ export async function POST(request: Request) {
         }
 
         case 'section21_notice': {
+          // ✅ ELIGIBILITY CHECK: Verify Section 21 is allowed before generating
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const decisionInput: DecisionInput = {
+            jurisdiction: jurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+            product: 'notice_only', // This route handles notice generation
+            case_type: 'eviction',
+            facts: caseFacts,
+          };
+          const decisionOutput = runDecisionEngine(decisionInput);
+
+          // Block if Section 21 is not in allowed_routes
+          if (!decisionOutput.allowed_routes.includes('section_21')) {
+            const blockingReasons = decisionOutput.blocking_issues
+              .filter(b => b.route === 'section_21')
+              .map(b => b.description);
+
+            return NextResponse.json(
+              {
+                error: 'Section 21 is not available for this case',
+                code: 'SECTION_21_BLOCKED',
+                explanation: decisionOutput.route_explanations.section_21 || 'Section 21 eligibility requirements not met',
+                blocking_issues: blockingReasons,
+                alternative_routes: decisionOutput.allowed_routes,
+                suggested_action: 'Use Section 8 instead or fix the compliance issues listed in blocking_issues',
+              },
+              { status: 403 } // 403 Forbidden (not just unprocessable - legally forbidden)
+            );
+          }
+
           const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
           const safeCaseData = ensurePropertyAddress(caseData as any);
           const missing = missingFieldsForSection21(safeCaseData);

@@ -9,6 +9,7 @@ import Handlebars from 'handlebars';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import puppeteer from 'puppeteer';
+import { SITE_CONFIG } from '@/config/site';
 
 // ============================================================================
 // TYPES
@@ -175,12 +176,17 @@ export function loadTemplate(templatePath: string): string {
  */
 export function compileTemplate(templateContent: string, data: Record<string, any>): string {
   try {
-    // Add generation metadata
+    // Add generation metadata + site config
     const enrichedData = {
       ...data,
       generation_date: new Date().toISOString().split('T')[0],
       generation_timestamp: new Date().toISOString(),
       document_id: generateDocumentId(),
+      // Site configuration (for footer, domain, etc.)
+      site_domain: SITE_CONFIG.domain,
+      site_name: SITE_CONFIG.name,
+      site_url: SITE_CONFIG.url,
+      support_email: SITE_CONFIG.support_email,
     };
 
     const template = Handlebars.compile(templateContent);
