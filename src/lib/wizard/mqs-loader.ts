@@ -131,14 +131,21 @@ function questionIsApplicable(
     }
 
     if (Array.isArray(dependsOn.value)) {
+      // dependsOn.value is array: check if any match
       if (Array.isArray(depValue)) {
         const hasMatch = depValue.some((val) => dependsOn.value.includes(val));
         if (!hasMatch) return false;
       } else if (!dependsOn.value.includes(depValue)) {
         return false;
       }
-    } else if (depValue !== dependsOn.value) {
-      return false;
+    } else {
+      // dependsOn.value is scalar
+      if (Array.isArray(depValue)) {
+        // But user's answer is array (multi-select): check if it includes the scalar value
+        if (!depValue.includes(dependsOn.value)) return false;
+      } else if (depValue !== dependsOn.value) {
+        return false;
+      }
     }
   }
 
