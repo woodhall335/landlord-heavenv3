@@ -76,22 +76,34 @@ export default function WizardPreviewPage() {
   const [fullPackDocsLoading, setFullPackDocsLoading] = useState(false);
 
   // Map case type to primary preview document type
-  const getDocumentType = (caseType: string, caseData?: CaseData): string => {
+  const getDocumentType = (caseType: string, caseData?: CaseData): string | null => {
     // Eviction: preview the main notice that matches the recommended route
     if (caseType === 'eviction') {
       const route = caseData?.recommended_route;
 
-      // Accelerated / N5B → Section 21 (Form 6A)
-      if (
-        route === 'accelerated_possession' ||
-        route === 'n5b_accelerated' ||
-        route === 'accelerated_section21'
-      ) {
+      // IMPORTANT: Smart recommend wins - no default fallback
+      // If no route is recommended, we return null and show an error
+      if (!route) {
+        console.warn('No recommended_route found for eviction case - cannot determine document type');
+        return null;
+      }
+
+      // Map the recommended route to the correct document type
+      if (route === 'section_21' || route === 'accelerated_possession' || route === 'accelerated_section21') {
         return 'section21_notice';
       }
 
-      // Default to Section 8 notice preview for standard / mixed routes
-      return 'section8_notice';
+      if (route === 'section_8') {
+        return 'section8_notice';
+      }
+
+      if (route === 'notice_to_leave') {
+        return 'notice_to_leave';
+      }
+
+      // If we have a route but don't recognize it, log warning and return null
+      console.warn(`Unrecognized recommended_route: ${route} - cannot determine document type`);
+      return null;
     }
 
     // Tenancy agreements: check the product tier
@@ -115,8 +127,7 @@ export default function WizardPreviewPage() {
       money_claim: 'money_claim',
     };
 
-    // Fallbacks: eviction handled above, anything else falls back to Section 8 notice
-    return mapping[caseType] || 'section8_notice';
+    return mapping[caseType] || null;
   };
 
   // Get pricing options based on case type
@@ -293,13 +304,24 @@ export default function WizardPreviewPage() {
           setSelectedProduct('notice_only');
         }
 
+        // Determine document type based on smart recommendation
+        const documentType = getDocumentType(fetchedCase.case_type, fetchedCase);
+
+        if (!documentType) {
+          // No recommendation available - show helpful error
+          throw new Error(
+            'Cannot generate preview: The system needs more information to recommend the right notice type. ' +
+            'Please go back and complete the required questions, or contact support if you believe this is an error.'
+          );
+        }
+
         // Generate preview document
         const previewResponse = await fetch('/api/documents/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             case_id: caseId,
-            document_type: getDocumentType(fetchedCase.case_type, fetchedCase),
+            document_type: documentType,
             is_preview: true,
           }),
         });
@@ -307,7 +329,22 @@ export default function WizardPreviewPage() {
         if (!previewResponse.ok) {
           const errorData = await previewResponse.json().catch(() => ({}));
           const errorMessage = (errorData as any).error || 'Failed to generate preview document';
-          console.error('Preview generation error:', errorMessage);
+          const missingFields = (errorData as any).missing || [];
+          const documentTypeFromError = (errorData as any).documentType || documentType;
+
+          console.error('Preview generation error:', errorMessage, {
+            documentType: documentTypeFromError,
+            missingFields,
+          });
+
+          // Show user-friendly error with missing fields if available
+          if (missingFields.length > 0) {
+            throw new Error(
+              `Missing required information for ${documentTypeFromError}: ${missingFields.join(', ')}. ` +
+              'Please go back and complete these fields.'
+            );
+          }
+
           throw new Error(errorMessage);
         }
 
