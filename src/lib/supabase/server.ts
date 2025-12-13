@@ -9,7 +9,7 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import {
-  getSupabaseConfigServer,
+  getSupabaseConfigForServerRuntime,
   warnSupabaseNotConfiguredOnce,
 } from './config';
 import type { Database } from './types';
@@ -21,40 +21,13 @@ import type { Database } from './types';
  * @returns SupabaseClient<Database> - Fully typed client with schema inference
  */
 export async function createServerSupabaseClient(): Promise<SupabaseClient<Database>> {
-  const config = getSupabaseConfigServer();
-  if (!config) {
+  const client = await tryCreateServerSupabaseClient();
+  if (!client) {
     warnSupabaseNotConfiguredOnce();
     throw new Error('Supabase not configured');
   }
 
-  const cookieStore = await cookies();
-
-  return createServerClient<Database>(
-    config.url,
-    config.anonKey,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
-          set(name: string, value: string, options: CookieOptions) {
-            try {
-              cookieStore.set({ name, value, ...options });
-            } catch {
-              // In some server contexts (e.g. certain Server Components),
-              // setting cookies isn't allowed. Silently ignore in those cases.
-            }
-          },
-          remove(name: string, options: CookieOptions) {
-            try {
-              cookieStore.set({ name, value: '', ...options });
-            } catch {
-              // Same as above – safe no-op when cookies can't be mutated
-            }
-          },
-      },
-    }
-  );
+  return client;
 }
 
 /**
@@ -63,33 +36,26 @@ export async function createServerSupabaseClient(): Promise<SupabaseClient<Datab
  * NEVER expose to client-side code
  */
 export function createAdminClient(): SupabaseClient<Database> {
-  const config = getSupabaseConfigServer();
-  if (!config) {
+  const config = getSupabaseConfigForServerRuntime();
+
+  if (!config || !config.serviceRoleKey) {
     warnSupabaseNotConfiguredOnce();
     throw new Error('Supabase not configured');
   }
 
-  if (!config.serviceRoleKey) {
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY is not set');
-  }
-
-  return createServerClient<Database>(
-    config.url,
-    config.serviceRoleKey,
-    {
-      cookies: {
-        get() {
-          return undefined;
-        },
-        set() {
-          // no-op for admin client
-        },
-        remove() {
-          // no-op for admin client
-        },
+  return createServerClient<Database>(config.url, config.serviceRoleKey, {
+    cookies: {
+      get() {
+        return undefined;
       },
-    }
-  );
+      set() {
+        // no-op for admin client
+      },
+      remove() {
+        // no-op for admin client
+      },
+    },
+  });
 }
 
 /**
@@ -97,12 +63,11 @@ export function createAdminClient(): SupabaseClient<Database> {
  * Returns null if not authenticated
  */
 export async function getServerUser() {
-  if (!getSupabaseConfigServer()) {
+  const supabase = await tryCreateServerSupabaseClient();
+  if (!supabase) {
     warnSupabaseNotConfiguredOnce();
     return null;
   }
-
-  const supabase = await createServerSupabaseClient();
 
   const {
     data: { user },
@@ -134,3 +99,49 @@ export async function requireServerAuth() {
  * Alias for createServerSupabaseClient (for backwards compatibility)
  */
 export const createClient = createServerSupabaseClient;
+
+export async function tryCreateServerSupabaseClient(): Promise<SupabaseClient<Database> | null> {
+  const config = getSupabaseConfigForServerRuntime();
+  if (!config) return null;
+
+  const cookieStore = await cookies();
+
+  return createServerClient<Database>(config.url, config.anonKey, {
+    cookies: {
+      get(name: string) {
+        return cookieStore.get(name)?.value;
+      },
+      set(name: string, value: string, options: CookieOptions) {
+        try {
+          cookieStore.set({ name, value, ...options });
+        } catch {
+          // In some server contexts (e.g. certain Server Components),
+          // setting cookies isn't allowed. Silently ignore in those cases.
+        }
+      },
+      remove(name: string, options: CookieOptions) {
+        try {
+          cookieStore.set({ name, value: '', ...options });
+        } catch {
+          // Same as above – safe no-op when cookies can't be mutated
+        }
+      },
+    },
+  });
+}
+
+export async function tryGetServerUser() {
+  const supabase = await tryCreateServerSupabaseClient();
+  if (!supabase) return null;
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    return null;
+  }
+
+  return user;
+}

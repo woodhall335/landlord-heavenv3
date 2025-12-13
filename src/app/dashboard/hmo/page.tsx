@@ -177,7 +177,7 @@ export default function HMOProDashboardPage() {
   if (V1_BLOCK_HMO) {
     return (
       <div className="min-h-screen bg-gray-50">
-        <div className="bg-gradient-to-r from-purple-600 to-indigo-700 text-white py-8">
+        <div className="bg-linear-to-r from-purple-600 to-indigo-700 text-white py-8">
           <Container size="large" className="text-center">
             <h1 className="text-4xl font-extrabold mb-4">🚧 HMO Pro - Coming in V2</h1>
             <p className="text-xl opacity-90">

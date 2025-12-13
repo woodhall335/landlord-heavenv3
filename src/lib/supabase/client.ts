@@ -6,11 +6,14 @@
  */
 
 import { createBrowserClient } from '@supabase/ssr';
-import { getSupabaseConfigBrowser, warnSupabaseNotConfiguredOnce } from './config';
+import {
+  getSupabaseConfigForBrowserRuntime,
+  warnSupabaseNotConfiguredOnce,
+} from './config';
 import type { Database } from './types';
 
 export function createClient() {
-  const config = getSupabaseConfigBrowser();
+  const config = getSupabaseConfigForBrowserRuntime();
   if (!config) {
     warnSupabaseNotConfiguredOnce();
     throw new Error('Supabase not configured');

@@ -10,4 +10,6 @@ export {
   getServerUser,
   createServerSupabaseClient,
   createAdminClient,
+  tryCreateServerSupabaseClient,
+  tryGetServerUser,
 } from './server';

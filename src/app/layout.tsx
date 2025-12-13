@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Header, Footer } from "@/components/layout";
-import { getServerUser } from "@/lib/supabase/server";
+import { tryGetServerUser } from "@/lib/supabase/server";
 import { defaultMetadata } from "@/lib/seo";
 import {
   organizationSchema,
@@ -27,7 +27,7 @@ export default async function RootLayout({
   // Try to get user, but don't fail if Supabase isn't configured (for dev/testing)
   let user = null;
   try {
-    user = await getServerUser();
+    user = await tryGetServerUser();
   } catch {
     // Supabase not configured or unavailable - continue without user (anonymous mode)
   }
