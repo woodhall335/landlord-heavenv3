@@ -751,32 +751,12 @@ export async function POST(request: Request) {
     } | null = null;
 
     if (product === 'notice_only' && decisionEngineOutput) {
-      // NOTICE_ONLY: Decision engine ALWAYS wins (no user route selection)
+      // NOTICE_ONLY: Decision engine ALWAYS wins (no user override allowed)
+      // The decision engine auto-routes to the legally valid option
 
-      // Check if there are allowed routes from decision engine
       const allowedRoutes = decisionEngineOutput.allowed_routes || [];
       const recommendedRoute = decisionEngineOutput.recommended_routes[0] || null;
       const blockedRoutes = decisionEngineOutput.blocked_routes || [];
-
-      // Get user's original preference (if any) for override messaging
-      const userRouteIntent =
-        (wizardFacts as any).eviction_route_intent ||
-        (wizardFacts as any).eviction_route ||
-        null;
-
-      let userPreferredRoute: string | null = null;
-      if (userRouteIntent) {
-        if (typeof userRouteIntent === 'string') {
-          const lower = userRouteIntent.toLowerCase();
-          if (lower.includes('section_21') || lower.includes('section 21')) {
-            userPreferredRoute = 'section_21';
-          } else if (lower.includes('section_8') || lower.includes('section 8')) {
-            userPreferredRoute = 'section_8';
-          } else if (lower.includes('notice_to_leave')) {
-            userPreferredRoute = 'notice_to_leave';
-          }
-        }
-      }
 
       // If S21 is blocked, auto-route to S8/Notice to Leave
       if (blockedRoutes.includes('section_21')) {
@@ -791,7 +771,7 @@ export async function POST(request: Request) {
           'Section 21 is not available due to compliance issues.';
 
         route_override = {
-          from: userPreferredRoute === 'section_21' ? 'section_21' : undefined,
+          from: 'section_21',
           to: fallbackRoute,
           reason: routeExplanation,
           blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
@@ -800,10 +780,28 @@ export async function POST(request: Request) {
         // Use decision engine recommendation
         finalRecommendedRoute = recommendedRoute;
 
-        // If user preferred something different, note the override
+        // Check if user had stored a different preference (for informational override message only)
+        const userRouteIntent =
+          (wizardFacts as any).eviction_route_intent ||
+          (wizardFacts as any).eviction_route ||
+          null;
+
+        let userPreferredRoute: string | null = null;
+        if (userRouteIntent && typeof userRouteIntent === 'string') {
+          const lower = userRouteIntent.toLowerCase();
+          if (lower.includes('section_21') || lower.includes('section 21')) {
+            userPreferredRoute = 'section_21';
+          } else if (lower.includes('section_8') || lower.includes('section 8')) {
+            userPreferredRoute = 'section_8';
+          } else if (lower.includes('notice_to_leave')) {
+            userPreferredRoute = 'notice_to_leave';
+          }
+        }
+
+        // If user had a different preference, note the override (informational only)
         if (userPreferredRoute && userPreferredRoute !== recommendedRoute) {
           const routeExplanation = decisionEngineOutput.route_explanations?.[recommendedRoute as keyof typeof decisionEngineOutput.route_explanations] ||
-            `Based on your answers, ${recommendedRoute.replace('_', ' ')} is recommended.`;
+            `Based on your case details, ${recommendedRoute.replace('_', ' ')} is the legally valid route.`;
 
           route_override = {
             from: userPreferredRoute,
