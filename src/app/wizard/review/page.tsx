@@ -80,13 +80,18 @@ function ReviewPageInner() {
 
   const redFlags: string[] = analysis.red_flags || [];
   const complianceIssues: string[] = analysis.compliance_issues || [];
-  const previewDocuments: Array<{
-    id: string;
-    title: string;
-    type: string;
-    jurisdiction: string;
-    requiredToFile?: boolean;
-  }> = analysis.preview_documents || [];
+  type PreviewDocument = {
+  id: string;
+  title?: string;
+  document_title?: string;
+  type: string;
+  jurisdiction: string;
+  requiredToFile?: boolean;
+};
+
+const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_documents)
+  ? analysis.preview_documents
+  : [];
 
   // Evidence overview from analysis (booleans: tenancy_agreement_uploaded, etc.)
   const evidence = analysis.evidence_overview || {};
@@ -393,8 +398,12 @@ function ReviewPageInner() {
             previewDocuments.map((doc) => (
               <li key={doc.id} className="flex items-center gap-2 text-sm">
                 <CheckCircle2 className="h-4 w-4 text-green-600" />
-                <span className="font-medium">{doc.title || doc.document_title}</span>
-                {(doc as any).requiredToFile && (
+                <span className="font-medium">
+  {doc.title ?? doc.document_title ?? 'Untitled document'}
+</span>
+
+                {doc.requiredToFile && (
+
                   <span className="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-medium bg-gray-100 text-gray-700">
                     Required for filing
                   </span>

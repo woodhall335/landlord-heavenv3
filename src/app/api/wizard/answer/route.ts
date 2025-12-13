@@ -1,7 +1,7 @@
 /**
  * Wizard API - Submit Answer
  *
- * POST /api/wizard/answer
+ * POST src/api/wizard/answer
  * Saves user's answer to the wizard and updates case facts
  * ALLOWS ANONYMOUS ACCESS
  */
@@ -14,9 +14,6 @@ import {
   getNextMQSQuestion,
   type ProductType,
   type MasterQuestionSet,
-  questionIsApplicable,
-  deriveRoutesFromFacts,
-  normalizeAskOnceFacts,
 } from '@/lib/wizard/mqs-loader';
 import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
@@ -24,9 +21,6 @@ import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { runDecisionEngine, type DecisionInput, type DecisionOutput } from '@/lib/decision-engine';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
-import { chatCompletion } from '@/lib/ai/openai-client';
-import type { StepFlags } from '@/lib/wizard/types';
-import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -401,7 +395,35 @@ function isQuestionAnswered(question: ExtendedWizardQuestion, facts: Record<stri
 function computeProgress(mqs: MasterQuestionSet, facts: Record<string, any>): number {
   if (!mqs.questions.length) return 100;
 
-  const applicableQuestions = mqs.questions.filter((q) => questionIsApplicable(mqs, q, facts));
+  // Filter to only applicable questions (those without dependencies or with satisfied dependencies)
+  const applicableQuestions = mqs.questions.filter((q) => {
+    const dependsOn = (q as any).depends_on || (q as any).dependsOn;
+    if (!dependsOn?.questionId) return true; // No dependency, always applicable
+
+    // Find the dependent value
+    const dependency = mqs.questions.find((dep) => dep.id === dependsOn.questionId);
+    let depValue: any;
+    if (dependency?.maps_to?.length) {
+      depValue = dependency.maps_to
+        .map((path) => getValueAtPath(facts, path))
+        .find((v) => v !== undefined);
+    }
+    if (depValue === undefined) {
+      depValue = (facts as any)[dependsOn.questionId];
+    }
+
+    // Check if dependency is satisfied
+    if (Array.isArray(dependsOn.value)) {
+      // Handle when user's answer is also an array (multi-select questions)
+      if (Array.isArray(depValue)) {
+        return depValue.some((val: any) => dependsOn.value.includes(val));
+      }
+      // User's answer is scalar, check if it's in the dependency array
+      return dependsOn.value.includes(depValue);
+    }
+    return depValue === dependsOn.value;
+  });
+
   if (!applicableQuestions.length) return 100;
 
   const answeredCount = applicableQuestions.filter((q) => isQuestionAnswered(q, facts)).length;
@@ -626,9 +648,6 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
       normalizedAnswer,
     );
 
-    const docIntel = applyDocumentIntelligence(mergedFacts);
-    mergedFacts = normalizeAskOnceFacts(docIntel.facts, mqs);
-
     const newFacts = await updateWizardFacts(supabase, case_id, () => mergedFacts, {
       meta: (collectedFacts as any).__meta,
     });
@@ -715,129 +734,6 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
     }
 
     // ---------------------------------------
-    // 6a. Per-step flags across flows (AI hints + decision engine + docs)
-    // ---------------------------------------
-    const docRoutes = deriveRoutesFromFacts(newFacts, caseRow.jurisdiction as any);
-    let stepFlags: StepFlags = {
-      missing_critical: [],
-      inconsistencies: [...(docIntel.inconsistencies || [])],
-      compliance_hints: [...(docIntel.complianceHints || [])],
-      recommended_uploads: [...(docIntel.recommendedUploads || [])],
-      route_hint: docRoutes.length
-        ? { recommended: (docRoutes[0] as any) ?? 'unknown', reason: 'Based on answers/documents so far' }
-        : undefined,
-    };
-
-    if (caseRow.case_type === 'eviction') {
-      const evidenceFacts = (newFacts as any).evidence || {};
-      const missingUploads: Array<{ type: string; reason: string }> = [];
-      const evidenceTypes: Record<string, string> = {
-        tenancy_agreement_uploaded: 'tenancy_agreement',
-        rent_schedule_uploaded: 'rent_schedule',
-        correspondence_uploaded: 'correspondence',
-        damage_photos_uploaded: 'damage_photos',
-        authority_letters_uploaded: 'authority_letters',
-        bank_statements_uploaded: 'bank_statements',
-        other_evidence_uploaded: 'other',
-      };
-
-      Object.entries(evidenceTypes).forEach(([flag, friendly]) => {
-        if (!evidenceFacts[flag]) {
-          missingUploads.push({
-            type: friendly,
-            reason: 'Not uploaded yet – recommended before notices/court',
-          });
-        }
-      });
-
-      let routeHint: StepFlags['route_hint'] = undefined;
-      if (decisionContext?.recommended_routes?.length) {
-        const routes = decisionContext.recommended_routes;
-        if (routes.includes('section_8') && routes.includes('section_21')) {
-          routeHint = { recommended: 'both', reason: 'Both Section 8 and 21 appear viable' };
-        } else if (routes.includes('section_8')) {
-          routeHint = { recommended: 'section_8', reason: 'Section 8 grounds identified by decision engine' };
-        } else if (routes.includes('section_21')) {
-          routeHint = { recommended: 'section_21', reason: 'No major Section 21 blockers detected' };
-        }
-      }
-
-      if (!routeHint && caseRow.jurisdiction === 'scotland') {
-        routeHint = {
-          recommended: 'unknown',
-          reason: 'Scottish Notice to Leave likely applies; confirm once notice answers are complete',
-        };
-      }
-
-      const blockingIssues = decisionContext?.blocking_issues || [];
-      const missingCritical = blockingIssues
-        .filter((issue) => issue.severity === 'blocking')
-        .map((issue) => `${issue.route?.toUpperCase?.() || 'ROUTE'}: ${issue.description}`);
-
-      const complianceHints = decisionContext?.warnings || [];
-
-      let aiHints: Partial<StepFlags> = {};
-      try {
-        if (process.env.OPENAI_API_KEY) {
-          const aiResponse = await chatCompletion(
-            [
-              {
-                role: 'system',
-                content:
-                  'You are an eviction QA bot. Return JSON with keys missing_critical,inconsistencies,compliance_hints. Be concise.',
-              },
-              {
-                role: 'user',
-                content: `Jurisdiction: ${caseRow.jurisdiction}. Product: ${product}. Facts: ${JSON.stringify(
-                  wizardFactsToCaseFacts(newFacts),
-                )}`,
-              },
-            ],
-            { model: 'gpt-4o-mini', max_tokens: 200, temperature: 0 },
-          );
-
-          const parsed = JSON.parse(aiResponse.content || '{}');
-          aiHints = {
-            missing_critical: Array.isArray(parsed.missing_critical) ? parsed.missing_critical : undefined,
-            inconsistencies: Array.isArray(parsed.inconsistencies) ? parsed.inconsistencies : undefined,
-            compliance_hints: Array.isArray(parsed.compliance_hints) ? parsed.compliance_hints : undefined,
-          };
-        }
-      } catch (aiErr) {
-        console.warn('Step AI hints failed, continuing without AI hints:', aiErr);
-      }
-
-      stepFlags = {
-        missing_critical: [
-          ...(aiHints.missing_critical || []),
-          ...(missingCritical || []),
-        ],
-        inconsistencies: [...stepFlags.inconsistencies, ...(aiHints.inconsistencies || [])],
-        compliance_hints: [
-          ...stepFlags.compliance_hints,
-          ...(aiHints.compliance_hints || complianceHints || []),
-        ],
-        recommended_uploads: [...stepFlags.recommended_uploads, ...missingUploads],
-        route_hint: routeHint ?? stepFlags.route_hint ?? { recommended: 'unknown', reason: 'Need more answers to decide route' },
-      };
-    } else {
-      // Non-eviction flows: surface document-led guidance without blocking
-      const evidenceFacts = (newFacts as any).evidence || {};
-      const uploadGaps = ['tenancy_agreement_uploaded', 'rent_schedule_uploaded']
-        .filter((flag) => !evidenceFacts[flag])
-        .map((flag) => ({ type: flag.replace('_uploaded', ''), reason: 'Upload improves accuracy but is optional.' }));
-
-      stepFlags = {
-        ...stepFlags,
-        recommended_uploads: [...stepFlags.recommended_uploads, ...uploadGaps],
-      };
-    }
-
-    stepFlags.missing_critical = Array.from(new Set(stepFlags.missing_critical));
-    stepFlags.inconsistencies = Array.from(new Set(stepFlags.inconsistencies));
-    stepFlags.compliance_hints = Array.from(new Set(stepFlags.compliance_hints));
-
-    // ---------------------------------------
     // 7. Determine next question + progress
     // ---------------------------------------
     const nextQuestion = getNextMQSQuestion(mqs, newFacts);
@@ -864,7 +760,6 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
             consistency_flags: enhanced.consistency_flags,
           }
         : null,
-      step_flags: stepFlags,
       suggested_wording: enhanced?.suggested_wording ?? null,
       missing_information: enhanced?.missing_information ?? [],
       evidence_suggestions: enhanced?.evidence_suggestions ?? [],
