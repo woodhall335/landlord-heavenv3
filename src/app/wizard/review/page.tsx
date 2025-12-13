@@ -108,6 +108,35 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
   };
 
   const handleProceed = () => {
+    // VALIDATION: For eviction cases, ensure we have a recommended route before preview
+    if (caseType === 'eviction') {
+      const recommendedRoute = analysis.recommended_route;
+      if (!recommendedRoute) {
+        alert(
+          'Cannot generate preview: The system needs more information to recommend the right notice type. ' +
+          'Please complete all required questions and try again.'
+        );
+        return;
+      }
+
+      // Check for blocking issues that would prevent document generation
+      if (hasBlockingIssues) {
+        const blockingIssuesList = analysis.decision_engine?.blocking_issues
+          ?.filter((issue: any) => issue.severity === 'blocking')
+          .map((issue: any) => issue.description)
+          .join(', ');
+
+        const proceed = confirm(
+          `Warning: Your case has blocking issues that may prevent successful document generation:\n\n${blockingIssuesList}\n\n` +
+          'Do you want to proceed to preview anyway? You may need to go back and fix these issues.'
+        );
+
+        if (!proceed) {
+          return;
+        }
+      }
+    }
+
     router.push(`/wizard/preview/${caseId}`);
   };
 

@@ -676,6 +676,7 @@ export async function POST(request: Request) {
 
     // RUN DECISION ENGINE for eviction cases (Audit B2: integrate decision engine)
     let decisionEngineOutput: DecisionOutput | null = null;
+    let smartRecommendedRoute: string | null = null;
     if (caseData.case_type === 'eviction') {
       try {
         decisionEngineOutput = runDecisionEngine({
@@ -684,6 +685,12 @@ export async function POST(request: Request) {
           case_type: 'eviction',
           facts,
         });
+
+        // SMART RECOMMEND: Use the first recommended route from the decision engine
+        // This is the route that will be used for preview and document generation
+        if (decisionEngineOutput.recommended_routes.length > 0) {
+          smartRecommendedRoute = decisionEngineOutput.recommended_routes[0];
+        }
 
         // Merge decision engine blocking issues into red_flags
         decisionEngineOutput.blocking_issues.forEach(block => {
@@ -731,10 +738,13 @@ export async function POST(request: Request) {
       }
     }
 
+    // Save the smart-recommended route to the case (decision engine wins for evictions)
+    const finalRecommendedRoute = smartRecommendedRoute || route;
+
     await supabase
       .from('cases')
       .update({
-        recommended_route: route,
+        recommended_route: finalRecommendedRoute,
         red_flags: red_flags as any, // Supabase types red_flags as Json
         compliance_issues: compliance as any, // Supabase types compliance_issues as Json
         success_probability: score,
@@ -870,7 +880,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       case_id,
       product,
-      recommended_route: route,
+      recommended_route: finalRecommendedRoute,
       recommended_route_label,
       case_strength_score: score,
       case_strength_band,

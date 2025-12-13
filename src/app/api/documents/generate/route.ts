@@ -99,6 +99,17 @@ function missingFieldsForSection8(caseData: Record<string, any>): string[] {
   return missing;
 }
 
+function missingFieldsForSection21(caseData: Record<string, any>): string[] {
+  const missing: string[] = [];
+  if (!caseData.property_address) missing.push('property_address');
+  if (!caseData.tenant_full_name) missing.push('tenant_full_name');
+  if (!caseData.landlord_full_name) missing.push('landlord_full_name');
+  if (!caseData.notice_expiry_date && !caseData.notice?.expiry_date) {
+    missing.push('notice_expiry_date');
+  }
+  return missing;
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -184,7 +195,9 @@ export async function POST(request: Request) {
               {
                 error: 'Missing required fields for Section 8 notice',
                 code: 'MISSING_REQUIRED_FIELDS',
+                documentType: 'section8_notice',
                 missing,
+                missingFields: missing, // Include both formats for compatibility
               },
               { status: 422 }
             );
@@ -198,6 +211,20 @@ export async function POST(request: Request) {
         case 'section21_notice': {
           const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
           const safeCaseData = ensurePropertyAddress(caseData as any);
+          const missing = missingFieldsForSection21(safeCaseData);
+
+          if (missing.length > 0) {
+            return NextResponse.json(
+              {
+                error: 'Missing required fields for Section 21 notice',
+                code: 'MISSING_REQUIRED_FIELDS',
+                documentType: 'section21_notice',
+                missing,
+                missingFields: missing, // Include both formats for compatibility
+              },
+              { status: 422 }
+            );
+          }
 
           generatedDoc = await generateDocument({
             templatePath: `${jurisdiction}/eviction/section21_form6a.hbs`,
