@@ -6,7 +6,8 @@
 import { NextResponse } from 'next/server';
 import { randomUUID } from 'node:crypto';
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
-import { updateWizardFacts } from '@/lib/case-facts/store';
+import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
+import { chatCompletion } from '@/lib/ai/openai-client';
 
 export const runtime = 'nodejs';
 
@@ -15,8 +16,61 @@ function sanitizeFilename(name: string) {
   return trimmed.replace(/[^a-zA-Z0-9_.-]+/g, '_');
 }
 
-function mapQuestionToEvidenceFlags(questionId: string) {
+async function analyseDocument(
+  fileBuffer: Buffer,
+  metadata: { fileName: string; mimeType: string; category?: string },
+  facts: Record<string, any>,
+): Promise<Record<string, any> | null> {
+  if (!process.env.OPENAI_API_KEY) return null;
+
+  const snippet = (() => {
+    if (metadata.mimeType?.startsWith('text/')) {
+      const text = fileBuffer.toString('utf8');
+      return text.slice(0, 2000);
+    }
+    return `Binary file preview unavailable. Name: ${metadata.fileName}.`;
+  })();
+
+  try {
+    const aiResponse = await chatCompletion(
+      [
+        {
+          role: 'system',
+          content:
+            'You are a legal evidence triage assistant. Return JSON only with keys detected_type, extracted_fields, confidence (0-1) and warnings (array). Do not invent facts; if unsure, keep fields empty.',
+        },
+        {
+          role: 'user',
+          content: `Jurisdiction: ${facts?.property?.country || 'unknown'}. Category: ${
+            metadata.category || 'unspecified'
+          }. File name: ${metadata.fileName}. Mime: ${metadata.mimeType}. Known parties: landlord ${
+            facts?.landlord?.name || ''
+          }, tenant ${facts?.tenant?.name || ''}. Property: ${
+            facts?.property?.address_line1 || facts?.property?.property_address_line1 || ''
+          }. Known arrears: ${facts?.issues?.rent_arrears?.total_arrears ?? 'unknown'}. Snippet: ${snippet}`,
+        },
+      ],
+      { model: 'gpt-4o-mini', max_tokens: 300, temperature: 0 },
+    );
+
+    const parsed = JSON.parse(aiResponse.content || '{}');
+    if (!parsed.detected_type) {
+      parsed.detected_type = metadata.category || metadata.mimeType || 'unknown';
+    }
+    parsed.confidence = typeof parsed.confidence === 'number' ? parsed.confidence : 0.35;
+    return parsed;
+  } catch (err) {
+    console.warn('Evidence analysis failed, continuing without AI flags', err);
+    return null;
+  }
+}
+
+function mapQuestionToEvidenceFlags(questionId: string, explicitCategory?: string) {
   const normalized = questionId.toLowerCase();
+
+  if (explicitCategory) {
+    return [`${explicitCategory}_uploaded`];
+  }
 
   switch (normalized) {
     case 'upload_tenancy_agreement':
@@ -26,6 +80,15 @@ function mapQuestionToEvidenceFlags(questionId: string) {
     case 'arrears_schedule_upload':
     case 'rent_schedule_upload':
       return ['rent_schedule_uploaded'];
+    case 'upload_correspondence':
+    case 'correspondence_upload':
+      return ['correspondence_uploaded'];
+    case 'upload_damage_photos':
+    case 'damage_photos_upload':
+      return ['damage_photos_uploaded'];
+    case 'upload_authority_letters':
+    case 'authority_letters_upload':
+      return ['authority_letters_uploaded'];
     case 'upload_bank_statements':
     case 'bank_statements_upload':
       return ['bank_statements_uploaded'];
@@ -34,7 +97,7 @@ function mapQuestionToEvidenceFlags(questionId: string) {
       return ['safety_certificates_uploaded'];
     case 'upload_asb_evidence':
     case 'asb_evidence_upload':
-      return ['asb_evidence_uploaded'];
+      return ['asb_evidence_uploaded', 'authority_letters_uploaded'];
     case 'upload_damage_evidence':
     case 'upload_other_evidence':
       return ['other_evidence_uploaded'];
@@ -46,6 +109,15 @@ function mapQuestionToEvidenceFlags(questionId: string) {
       if (normalized.includes('rent') || normalized.includes('arrears')) {
         inferred.push('rent_schedule_uploaded');
       }
+      if (normalized.includes('correspondence') || normalized.includes('message')) {
+        inferred.push('correspondence_uploaded');
+      }
+      if (normalized.includes('photo') || normalized.includes('damage')) {
+        inferred.push('damage_photos_uploaded');
+      }
+      if (normalized.includes('authority') || normalized.includes('council')) {
+        inferred.push('authority_letters_uploaded');
+      }
       if (normalized.includes('bank')) {
         inferred.push('bank_statements_uploaded');
       }
@@ -53,7 +125,7 @@ function mapQuestionToEvidenceFlags(questionId: string) {
         inferred.push('safety_certificates_uploaded');
       }
       if (normalized.includes('asb')) {
-        inferred.push('asb_evidence_uploaded');
+        inferred.push('asb_evidence_uploaded', 'authority_letters_uploaded');
       }
       if (inferred.length === 0) {
         inferred.push('other_evidence_uploaded');
@@ -161,7 +233,7 @@ export async function POST(request: Request) {
       id: randomUUID(),
       document_id: documentRow.id,
       question_id: questionId,
-      category: typeof category === 'string' && category.length > 0 ? category : undefined,
+      category: typeof category === 'string' && category.length > 0 ? (category as string) : undefined,
       file_name: file.name || safeFilename,
       storage_bucket: 'documents',
       storage_path: objectKey,
@@ -177,6 +249,9 @@ export async function POST(request: Request) {
       const evidenceFlags = {
         tenancy_agreement_uploaded: !!existingEvidence.tenancy_agreement_uploaded,
         rent_schedule_uploaded: !!existingEvidence.rent_schedule_uploaded,
+        correspondence_uploaded: !!existingEvidence.correspondence_uploaded,
+        damage_photos_uploaded: !!existingEvidence.damage_photos_uploaded,
+        authority_letters_uploaded: !!existingEvidence.authority_letters_uploaded,
         bank_statements_uploaded: !!existingEvidence.bank_statements_uploaded,
         safety_certificates_uploaded: !!existingEvidence.safety_certificates_uploaded,
         asb_evidence_uploaded: !!existingEvidence.asb_evidence_uploaded,
@@ -186,7 +261,10 @@ export async function POST(request: Request) {
       const files = Array.isArray(existingEvidence.files) ? [...existingEvidence.files] : [];
       files.push(evidenceEntry);
 
-      const flagsToSet = mapQuestionToEvidenceFlags(questionId);
+      const flagsToSet = mapQuestionToEvidenceFlags(
+        questionId,
+        typeof category === 'string' && category.length > 0 ? (category as string) : undefined,
+      );
       for (const flag of flagsToSet) {
         (evidenceFlags as any)[flag] = true;
       }
@@ -201,6 +279,40 @@ export async function POST(request: Request) {
       } as typeof current;
     });
 
+    // ------------------------------------------------------------------
+    // Optional AI analysis (non-blocking)
+    // ------------------------------------------------------------------
+    try {
+      const factsSnapshot = await getOrCreateWizardFacts(supabase as any, caseId);
+      const analysis = await analyseDocument(
+        fileBuffer,
+        {
+          fileName: file.name || safeFilename,
+          mimeType: (file as any).type || 'application/octet-stream',
+          category: typeof category === 'string' && category.length > 0 ? (category as string) : undefined,
+        },
+        (factsSnapshot as any) || {},
+      );
+
+      if (analysis) {
+        await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
+          const current = (currentRaw as any) || {};
+          const existingEvidence = (current as any).evidence || {};
+          const analysisMap = { ...(existingEvidence.analysis || {}) };
+          analysisMap[evidenceEntry.id] = analysis;
+          return {
+            ...current,
+            evidence: {
+              ...existingEvidence,
+              analysis: analysisMap,
+            },
+          } as typeof current;
+        });
+      }
+    } catch (analysisErr) {
+      console.warn('Evidence analysis skipped due to error', analysisErr);
+    }
+
     const evidenceFacts: any = (updatedFacts as any).evidence || {};
 
     return NextResponse.json({
@@ -211,6 +323,9 @@ export async function POST(request: Request) {
         flags: {
           tenancy_agreement_uploaded: !!evidenceFacts.tenancy_agreement_uploaded,
           rent_schedule_uploaded: !!evidenceFacts.rent_schedule_uploaded,
+          correspondence_uploaded: !!evidenceFacts.correspondence_uploaded,
+          damage_photos_uploaded: !!evidenceFacts.damage_photos_uploaded,
+          authority_letters_uploaded: !!evidenceFacts.authority_letters_uploaded,
           bank_statements_uploaded: !!evidenceFacts.bank_statements_uploaded,
           safety_certificates_uploaded: !!evidenceFacts.safety_certificates_uploaded,
           asb_evidence_uploaded: !!evidenceFacts.asb_evidence_uploaded,
