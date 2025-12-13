@@ -80,20 +80,27 @@ function registerHandlebarsHelpers() {
     return `£${amount.toFixed(2)}`;
   });
 
-  // Format date
+  // Format date (UK format: DD/MM/YYYY, using UTC to avoid DST issues)
   Handlebars.registerHelper('format_date', function (date, format) {
     if (!date) return '';
-    const d = new Date(date);
+
+    // Parse as UTC date-only
+    const d = new Date(date + (typeof date === 'string' && !date.includes('T') ? 'T00:00:00.000Z' : ''));
     if (isNaN(d.getTime())) return '';
 
-    if (format === 'DD/MM/YYYY') {
-      const day = String(d.getDate()).padStart(2, '0');
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const year = d.getFullYear();
-      return `${day}/${month}/${year}`;
+    // Always use DD/MM/YYYY for UK legal documents
+    const day = String(d.getUTCDate()).padStart(2, '0');
+    const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const year = d.getUTCFullYear();
+
+    if (format === 'long') {
+      // "DD Month YYYY" format
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      return `${parseInt(day)} ${monthNames[d.getUTCMonth()]} ${year}`;
     }
 
-    return d.toLocaleDateString('en-GB');
+    // Default: DD/MM/YYYY
+    return `${day}/${month}/${year}`;
   });
 
   // Conditional class
@@ -172,6 +179,86 @@ export function loadTemplate(templatePath: string): string {
 }
 
 /**
+ * Convert markdown to HTML (simplified for legal documents)
+ * Handles the markdown syntax used in templates: ##, **, ---, etc.
+ */
+function markdownToHtml(markdown: string): string {
+  let html = markdown;
+
+  // Convert headings (## to <h2>, ### to <h3>, etc.)
+  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+
+  // Convert bold text (**text** to <strong>text</strong>)
+  html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+  // Convert italic text (*text* to <em>text</em>)
+  html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+  // Convert horizontal rules (--- to <hr />)
+  html = html.replace(/^---$/gm, '<hr />');
+
+  // Convert line breaks to paragraphs (preserve existing structure)
+  // Split by double newlines and wrap in <p> tags if not already wrapped
+  const paragraphs = html.split('\n\n');
+  html = paragraphs.map(para => {
+    para = para.trim();
+    if (!para) return '';
+    // Don't wrap if already has HTML tags
+    if (para.startsWith('<h') || para.startsWith('<hr') || para.startsWith('<div') || para.startsWith('<p')) {
+      return para;
+    }
+    // Don't wrap standalone --- lines
+    if (para === '---' || para === '<hr />') {
+      return para;
+    }
+    return `<p>${para.replace(/\n/g, '<br />')}</p>`;
+  }).join('\n');
+
+  return html;
+}
+
+/**
+ * Safe text helper - converts objects to strings, prevents [object Object]
+ */
+export function safeText(value: any): string {
+  if (value === null || value === undefined) {
+    return '';
+  }
+  if (typeof value === 'string') {
+    return value;
+  }
+  if (typeof value === 'number' || typeof value === 'boolean') {
+    return String(value);
+  }
+  if (Array.isArray(value)) {
+    return value.map(v => safeText(v)).join(', ');
+  }
+  if (typeof value === 'object') {
+    // If it's an address object, try to format it
+    if (value.line1 || value.street || value.address_line_1) {
+      const parts = [
+        value.line1 || value.street || value.address_line_1,
+        value.line2 || value.address_line_2,
+        value.city || value.town,
+        value.state || value.county,
+        value.postcode || value.postal_code || value.zip,
+        value.country,
+      ].filter(Boolean);
+      return parts.join(', ');
+    }
+    // Fallback: try JSON stringify
+    try {
+      return JSON.stringify(value);
+    } catch {
+      return '[Complex Object]';
+    }
+  }
+  return String(value);
+}
+
+/**
  * Compile a template with data
  */
 export function compileTemplate(templateContent: string, data: Record<string, any>): string {
@@ -189,8 +276,19 @@ export function compileTemplate(templateContent: string, data: Record<string, an
       support_email: SITE_CONFIG.support_email,
     };
 
+    // Safe-convert all data values to prevent [object Object] leaks
+    const safeData = Object.entries(enrichedData).reduce((acc, [key, value]) => {
+      acc[key] = typeof value === 'object' && value !== null && !Array.isArray(value)
+        ? safeText(value)
+        : value;
+      return acc;
+    }, {} as Record<string, any>);
+
     const template = Handlebars.compile(templateContent);
-    const html = template(enrichedData);
+    let html = template(safeData);
+
+    // Convert markdown to HTML for PDF rendering
+    html = markdownToHtml(html);
 
     return html;
   } catch (error: any) {

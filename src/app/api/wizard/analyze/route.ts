@@ -738,42 +738,92 @@ export async function POST(request: Request) {
     }
 
     // ROUTE INTENT PRIORITY LOGIC:
-    // For notice_only product, explicit user route selection (eviction_route_intent) takes precedence
-    // over decision engine "smart recommend". Complete pack can still use smart recommend.
-    const userRouteIntent =
-      (wizardFacts as any).eviction_route_intent ||
-      (wizardFacts as any).eviction_route ||
-      null;
+    // For notice_only product: ALWAYS use decision engine auto-routing (no user override)
+    // If S21 is blocked, auto-route to S8 (or Notice to Leave in Scotland)
+    // For complete_pack: Use decision engine recommendation
 
     let finalRecommendedRoute: string | null = null;
+    let route_override: {
+      from?: string;
+      to: string;
+      reason: string;
+      blocking_issues?: string[];
+    } | null = null;
 
-    if (product === 'notice_only' && userRouteIntent) {
-      // For notice_only: User intent wins
-      if (Array.isArray(userRouteIntent)) {
-        // User selected multiple routes - use first one (or prioritize section_8)
-        const normalized = userRouteIntent.map((r) =>
-          String(r).toLowerCase().includes('section_8') || String(r).toLowerCase().includes('section 8')
-            ? 'section_8'
-            : String(r).toLowerCase().includes('section_21') || String(r).toLowerCase().includes('section 21')
-            ? 'section_21'
-            : r
-        );
-        finalRecommendedRoute = normalized.includes('section_8')
-          ? 'section_8'
-          : normalized[0] || null;
-      } else if (typeof userRouteIntent === 'string') {
-        const lower = userRouteIntent.toLowerCase();
-        if (lower.includes('section_8') || lower.includes('section 8')) {
-          finalRecommendedRoute = 'section_8';
-        } else if (lower.includes('section_21') || lower.includes('section 21')) {
-          finalRecommendedRoute = 'section_21';
-        } else {
-          finalRecommendedRoute = userRouteIntent;
+    if (product === 'notice_only' && decisionEngineOutput) {
+      // NOTICE_ONLY: Decision engine ALWAYS wins (no user route selection)
+
+      // Check if there are allowed routes from decision engine
+      const allowedRoutes = decisionEngineOutput.allowed_routes || [];
+      const recommendedRoute = decisionEngineOutput.recommended_routes[0] || null;
+      const blockedRoutes = decisionEngineOutput.blocked_routes || [];
+
+      // Get user's original preference (if any) for override messaging
+      const userRouteIntent =
+        (wizardFacts as any).eviction_route_intent ||
+        (wizardFacts as any).eviction_route ||
+        null;
+
+      let userPreferredRoute: string | null = null;
+      if (userRouteIntent) {
+        if (typeof userRouteIntent === 'string') {
+          const lower = userRouteIntent.toLowerCase();
+          if (lower.includes('section_21') || lower.includes('section 21')) {
+            userPreferredRoute = 'section_21';
+          } else if (lower.includes('section_8') || lower.includes('section 8')) {
+            userPreferredRoute = 'section_8';
+          } else if (lower.includes('notice_to_leave')) {
+            userPreferredRoute = 'notice_to_leave';
+          }
         }
       }
+
+      // If S21 is blocked, auto-route to S8/Notice to Leave
+      if (blockedRoutes.includes('section_21')) {
+        const fallbackRoute = caseData.jurisdiction === 'scotland' ? 'notice_to_leave' : 'section_8';
+        finalRecommendedRoute = fallbackRoute;
+
+        const blockingIssues = decisionEngineOutput.blocking_issues
+          .filter(b => b.route === 'section_21' && b.severity === 'blocking')
+          .map(b => b.description);
+
+        const routeExplanation = decisionEngineOutput.route_explanations?.section_21 ||
+          'Section 21 is not available due to compliance issues.';
+
+        route_override = {
+          from: userPreferredRoute === 'section_21' ? 'section_21' : undefined,
+          to: fallbackRoute,
+          reason: routeExplanation,
+          blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
+        };
+      } else if (recommendedRoute) {
+        // Use decision engine recommendation
+        finalRecommendedRoute = recommendedRoute;
+
+        // If user preferred something different, note the override
+        if (userPreferredRoute && userPreferredRoute !== recommendedRoute) {
+          const routeExplanation = decisionEngineOutput.route_explanations?.[recommendedRoute as keyof typeof decisionEngineOutput.route_explanations] ||
+            `Based on your answers, ${recommendedRoute.replace('_', ' ')} is recommended.`;
+
+          route_override = {
+            from: userPreferredRoute,
+            to: recommendedRoute,
+            reason: routeExplanation,
+          };
+        }
+      } else if (allowedRoutes.length > 0) {
+        // Fallback to first allowed route
+        finalRecommendedRoute = allowedRoutes[0];
+      } else {
+        // Ultimate fallback
+        finalRecommendedRoute = caseData.jurisdiction === 'scotland' ? 'notice_to_leave' : 'section_8';
+      }
+    } else if (decisionEngineOutput) {
+      // For complete_pack: Use decision engine recommendation
+      finalRecommendedRoute = decisionEngineOutput.recommended_routes[0] || route;
     } else {
-      // For complete_pack or when no explicit user intent: Decision engine wins
-      finalRecommendedRoute = decisionEngineRecommendedRoute || route;
+      // Fallback if no decision engine output
+      finalRecommendedRoute = route;
     }
 
     await supabase
@@ -917,6 +967,7 @@ export async function POST(request: Request) {
       product,
       recommended_route: finalRecommendedRoute,
       recommended_route_label,
+      route_override, // New field for auto-routing explanation
       case_strength_score: score,
       case_strength_band,
       is_court_ready,
