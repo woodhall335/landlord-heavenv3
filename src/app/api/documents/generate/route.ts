@@ -227,7 +227,7 @@ export async function POST(request: Request) {
           }
 
           generatedDoc = await generateDocument({
-            templatePath: `${jurisdiction}/eviction/section21_form6a.hbs`,
+            templatePath: `uk/${jurisdiction}/templates/eviction/section21_form6a.hbs`,
             data: safeCaseData as any,
             isPreview: is_preview,
             outputFormat: 'both',
