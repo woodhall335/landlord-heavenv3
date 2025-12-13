@@ -902,6 +902,10 @@ questions:
     section: Evidence
     question: "Upload key documents (optional but strongly recommended)"
     inputType: upload
+    skip_if_evidence:
+      - tenancy_agreement_uploaded
+      - rent_schedule_uploaded
+      - correspondence_uploaded
     helperText: "These won’t go on the court forms directly but will be listed in your evidence index."
     evidence_types:
       - tenancy_agreement

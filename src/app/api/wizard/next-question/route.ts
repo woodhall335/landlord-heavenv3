@@ -11,6 +11,8 @@ import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server
 import {
   getNextMQSQuestion,
   loadMQS,
+  normalizeAskOnceFacts,
+  questionIsApplicable,
   type MasterQuestionSet,
   type ProductType,
 } from '@/lib/wizard/mqs-loader';
@@ -19,6 +21,7 @@ import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { getNextQuestion as getNextAIQuestion } from '@/lib/ai';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
+import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -84,8 +87,9 @@ function deriveProduct(
 
 function computeProgress(mqs: MasterQuestionSet, facts: Record<string, any>): number {
   if (!mqs.questions.length) return 100;
-  const answeredCount = mqs.questions.filter((q) => isQuestionAnswered(q, facts)).length;
-  return Math.round((answeredCount / mqs.questions.length) * 100);
+  const applicable = mqs.questions.filter((q) => questionIsApplicable(mqs, q, facts));
+  const answeredCount = applicable.filter((q) => isQuestionAnswered(q, facts)).length;
+  return Math.round((answeredCount / applicable.length) * 100);
 }
 
 function hasStringValue(value: unknown): boolean {
@@ -228,8 +232,11 @@ export async function POST(request: Request) {
       });
     }
 
-    const nextQuestion = getNextMQSQuestion(mqs, facts);
-    const progress = computeProgress(mqs, facts);
+    const docIntel = applyDocumentIntelligence(facts);
+    const hydratedFacts = normalizeAskOnceFacts(docIntel.facts, mqs);
+
+    const nextQuestion = getNextMQSQuestion(mqs, hydratedFacts);
+    const progress = computeProgress(mqs, hydratedFacts);
 
     if (!nextQuestion) {
       // MQS thinks we're done – for money claim, sanity-check essentials first

@@ -14,9 +14,11 @@ import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import {
   getNextMQSQuestion,
   loadMQS,
+  normalizeAskOnceFacts,
   type MasterQuestionSet,
   type ProductType,
 } from '@/lib/wizard/mqs-loader';
+import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -280,7 +282,10 @@ export async function POST(request: Request) {
     // ------------------------------------------------
     // 5. Determine first question from MQS + facts
     // ------------------------------------------------
-    const nextQuestion = getNextMQSQuestion(mqs, facts);
+    const docIntel = applyDocumentIntelligence(facts);
+    const hydratedFacts = normalizeAskOnceFacts(docIntel.facts, mqs);
+
+    const nextQuestion = getNextMQSQuestion(mqs, hydratedFacts);
     const isComplete = !nextQuestion;
 
     return NextResponse.json({

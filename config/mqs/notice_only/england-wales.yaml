@@ -198,6 +198,8 @@ questions:
     section: Deposit & Compliance
     question: "Deposit and compliance checklist"
     inputType: group
+    routes:
+      - section_21
     helperText: "These answers determine whether Section 21 is valid."
     fields:
       - id: deposit_amount
@@ -303,6 +305,8 @@ questions:
     section: Section 8 Grounds
     question: "Which grounds under Section 8 apply?"
     inputType: multi_select
+    routes:
+      - section_8
     helperText: "Select all grounds that match your situation."
     dependsOn:
       questionId: eviction_route
@@ -322,6 +326,8 @@ questions:
     section: Rent Arrears
     question: "Rent arrears summary"
     inputType: group
+    routes:
+      - section_8
     helperText: "Provide current arrears figures."
     dependsOn:
       questionId: section8_grounds
@@ -366,6 +372,8 @@ questions:
     section: Section 8 Details
     question: "Describe the breach, damage, or anti-social behaviour"
     inputType: textarea
+    routes:
+      - section_8
     helperText: "Only complete this if you selected Ground 12, 13, 14, 15, or 17. Include dates and specific details."
     dependsOn:
       questionId: section8_grounds
@@ -432,6 +440,10 @@ questions:
     section: Evidence
     question: "Upload key documents (optional but recommended)"
     inputType: upload
+    skip_if_evidence:
+      - tenancy_agreement_uploaded
+      - rent_schedule_uploaded
+      - correspondence_uploaded
     helperText: "These will support your notice if the tenant challenges it."
     evidence_types:
       - tenancy_agreement

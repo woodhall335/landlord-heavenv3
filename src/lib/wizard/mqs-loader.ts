@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import type { CaseFacts } from '@/lib/case-facts/schema';
+import type { CaseFacts, WizardFacts } from '@/lib/case-facts/schema';
 import type { ExtendedWizardQuestion } from './types';
 import { normalizeQuestions } from './normalize';
+import { setFactPath } from '@/lib/case-facts/mapping';
 
 export type ProductType = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 
@@ -56,6 +57,120 @@ function isTruthyValue(value: unknown): boolean {
   return true;
 }
 
+function deriveRoutesFromFacts(
+  facts: WizardFacts | Record<string, any>,
+  jurisdiction: MasterQuestionSet['jurisdiction']
+): string[] {
+  const answers = facts || {};
+  const routes: string[] = [];
+  const routeAnswer = (answers as any).eviction_route || (answers as any).notice_type;
+  const docRoutes: string[] = (answers as any).__document_routes || [];
+
+  if (jurisdiction === 'scotland') {
+    routes.push('notice_to_leave');
+  }
+
+  if (Array.isArray(routeAnswer)) {
+    routeAnswer.forEach((val) => {
+      const lower = String(val).toLowerCase();
+      if (lower.includes('section 8')) routes.push('section_8');
+      if (lower.includes('section 21')) routes.push('section_21');
+      if (lower.includes('notice to leave')) routes.push('notice_to_leave');
+    });
+  } else if (routeAnswer) {
+    const lower = String(routeAnswer).toLowerCase();
+    if (lower.includes('section 8')) routes.push('section_8');
+    if (lower.includes('section 21')) routes.push('section_21');
+    if (lower.includes('leave')) routes.push('notice_to_leave');
+    if (lower.includes('quit')) routes.push('notice_to_quit');
+  }
+
+  docRoutes.forEach((r) => {
+    if (!routes.includes(r)) routes.push(r);
+  });
+
+  return routes.length ? routes : ['unknown'];
+}
+
+function shouldSkipForProduct(question: ExtendedWizardQuestion, product: ProductType): boolean {
+  if (product === 'notice_only') {
+    const skipKeywords = ['claim', 'court', 'n5', 'n119', 'hearing'];
+    return skipKeywords.some(
+      (kw) =>
+        question.id.toLowerCase().includes(kw) || question.question.toLowerCase().includes(kw)
+    );
+  }
+
+  return false;
+}
+
+function questionIsApplicable(
+  mqs: MasterQuestionSet,
+  question: ExtendedWizardQuestion,
+  facts: CaseFacts | Record<string, any>
+): boolean {
+  const dependsOn = (question as any).depends_on || question.dependsOn;
+  if (dependsOn?.questionId) {
+    const dependency = mqs.questions.find((dep) => dep.id === dependsOn.questionId);
+    let depValue: any;
+    if (dependency?.maps_to?.length) {
+      depValue = dependency.maps_to
+        .map((path) => getValueAtPath(facts as Record<string, any>, path))
+        .find((v) => v !== undefined);
+    }
+    if (depValue === undefined) {
+      depValue = (facts as Record<string, any>)[dependsOn.questionId];
+    }
+
+    if (Array.isArray(dependsOn.value)) {
+      if (Array.isArray(depValue)) {
+        const hasMatch = depValue.some((val) => dependsOn.value.includes(val));
+        if (!hasMatch) return false;
+      } else if (!dependsOn.value.includes(depValue)) {
+        return false;
+      }
+    } else if (depValue !== dependsOn.value) {
+      return false;
+    }
+  }
+
+  if (shouldSkipForProduct(question, mqs.product)) return false;
+
+  const routes = deriveRoutesFromFacts(facts, mqs.jurisdiction);
+  if (question.routes && question.routes.length) {
+    const hasRoute = question.routes.some((r) => routes.includes(r));
+    if (!hasRoute) return false;
+  }
+
+  if (mqs.jurisdiction === 'scotland') {
+    if (question.id.toLowerCase().includes('section_8') || question.id.toLowerCase().includes('section_21')) {
+      return false;
+    }
+  }
+
+  if (question.skip_if_evidence?.length) {
+    const evidence = (facts as any).evidence || {};
+    const shouldSkip = question.skip_if_evidence.some((flag) => evidence[flag]);
+    if (shouldSkip) return false;
+  }
+
+  return true;
+}
+
+export function normalizeAskOnceFacts(facts: WizardFacts, mqs: MasterQuestionSet): WizardFacts {
+  let updatedFacts = { ...facts };
+
+  mqs.questions.forEach((q) => {
+    if (!q.maps_to || !q.maps_to.length) return;
+    const allPresent = q.maps_to.every((path) => isTruthyValue(getValueAtPath(updatedFacts, path)));
+    if (!allPresent && (updatedFacts as any)[q.id] !== undefined) {
+      updatedFacts = setFactPath(updatedFacts, q.maps_to[0], (updatedFacts as any)[q.id]);
+    }
+  });
+
+  return updatedFacts;
+}
+
 // Determine the next question from an MQS definition and current facts
 export function getNextMQSQuestion(
   mqs: MasterQuestionSet,
@@ -63,35 +178,8 @@ export function getNextMQSQuestion(
 ): ExtendedWizardQuestion | null {
   const answered = collectedFacts || {};
 
-  const findDependentValue = (questionId: string) => {
-    const dependency = mqs.questions.find((q) => q.id === questionId);
-    if (dependency?.maps_to?.length) {
-      const mappedValue = dependency.maps_to
-        .map((path) => getValueAtPath(answered as Record<string, any>, path))
-        .find((v) => v !== undefined);
-      if (mappedValue !== undefined) return mappedValue;
-    }
-    return (answered as Record<string, any>)[questionId];
-  };
-
   for (const q of mqs.questions) {
-    const dependsOn = (q as any).depends_on || q.dependsOn;
-    if (dependsOn?.questionId) {
-      const depValue = findDependentValue(dependsOn.questionId);
-      if (Array.isArray(dependsOn.value)) {
-        // Handle when user's answer is also an array (multi_select questions)
-        if (Array.isArray(depValue)) {
-          // Check if arrays intersect (any value in depValue is in dependsOn.value)
-          const hasMatch = depValue.some(val => dependsOn.value.includes(val));
-          if (!hasMatch) continue;
-        } else {
-          // User's answer is scalar, check if it's in the dependency array
-          if (!dependsOn.value.includes(depValue)) continue;
-        }
-      } else if (depValue !== dependsOn.value) {
-        continue;
-      }
-    }
+    if (!questionIsApplicable(mqs, q, answered)) continue;
 
     const maps = q.maps_to;
     if (maps && maps.length > 0) {
@@ -102,7 +190,6 @@ export function getNextMQSQuestion(
       continue;
     }
 
-    // For questions without maps_to, check if answered directly by question ID
     const fallbackValue = (answered as Record<string, any>)[q.id];
     if (!isTruthyValue(fallbackValue)) {
       return q;
@@ -111,3 +198,5 @@ export function getNextMQSQuestion(
 
   return null; // no more questions
 }
+
+export { questionIsApplicable, deriveRoutesFromFacts };

@@ -14,6 +14,9 @@ import {
   getNextMQSQuestion,
   type ProductType,
   type MasterQuestionSet,
+  questionIsApplicable,
+  deriveRoutesFromFacts,
+  normalizeAskOnceFacts,
 } from '@/lib/wizard/mqs-loader';
 import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
@@ -23,6 +26,7 @@ import { runDecisionEngine, type DecisionInput, type DecisionOutput } from '@/li
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { chatCompletion } from '@/lib/ai/openai-client';
 import type { StepFlags } from '@/lib/wizard/types';
+import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -397,35 +401,7 @@ function isQuestionAnswered(question: ExtendedWizardQuestion, facts: Record<stri
 function computeProgress(mqs: MasterQuestionSet, facts: Record<string, any>): number {
   if (!mqs.questions.length) return 100;
 
-  // Filter to only applicable questions (those without dependencies or with satisfied dependencies)
-  const applicableQuestions = mqs.questions.filter((q) => {
-    const dependsOn = (q as any).depends_on || (q as any).dependsOn;
-    if (!dependsOn?.questionId) return true; // No dependency, always applicable
-
-    // Find the dependent value
-    const dependency = mqs.questions.find((dep) => dep.id === dependsOn.questionId);
-    let depValue: any;
-    if (dependency?.maps_to?.length) {
-      depValue = dependency.maps_to
-        .map((path) => getValueAtPath(facts, path))
-        .find((v) => v !== undefined);
-    }
-    if (depValue === undefined) {
-      depValue = (facts as any)[dependsOn.questionId];
-    }
-
-    // Check if dependency is satisfied
-    if (Array.isArray(dependsOn.value)) {
-      // Handle when user's answer is also an array (multi-select questions)
-      if (Array.isArray(depValue)) {
-        return depValue.some((val: any) => dependsOn.value.includes(val));
-      }
-      // User's answer is scalar, check if it's in the dependency array
-      return dependsOn.value.includes(depValue);
-    }
-    return depValue === dependsOn.value;
-  });
-
+  const applicableQuestions = mqs.questions.filter((q) => questionIsApplicable(mqs, q, facts));
   if (!applicableQuestions.length) return 100;
 
   const answeredCount = applicableQuestions.filter((q) => isQuestionAnswered(q, facts)).length;
@@ -650,6 +626,9 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
       normalizedAnswer,
     );
 
+    const docIntel = applyDocumentIntelligence(mergedFacts);
+    mergedFacts = normalizeAskOnceFacts(docIntel.facts, mqs);
+
     const newFacts = await updateWizardFacts(supabase, case_id, () => mergedFacts, {
       meta: (collectedFacts as any).__meta,
     });
@@ -736,13 +715,17 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
     }
 
     // ---------------------------------------
-    // 6a. Per-step flags for eviction (lightweight AI + decision engine)
+    // 6a. Per-step flags across flows (AI hints + decision engine + docs)
     // ---------------------------------------
+    const docRoutes = deriveRoutesFromFacts(newFacts, caseRow.jurisdiction as any);
     let stepFlags: StepFlags = {
       missing_critical: [],
-      inconsistencies: [],
-      compliance_hints: [],
-      recommended_uploads: [],
+      inconsistencies: [...(docIntel.inconsistencies || [])],
+      compliance_hints: [...(docIntel.complianceHints || [])],
+      recommended_uploads: [...(docIntel.recommendedUploads || [])],
+      route_hint: docRoutes.length
+        ? { recommended: (docRoutes[0] as any) ?? 'unknown', reason: 'Based on answers/documents so far' }
+        : undefined,
     };
 
     if (caseRow.case_type === 'eviction') {
@@ -829,12 +812,30 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
           ...(aiHints.missing_critical || []),
           ...(missingCritical || []),
         ],
-        inconsistencies: aiHints.inconsistencies || [],
-        compliance_hints: aiHints.compliance_hints || complianceHints || [],
-        recommended_uploads: missingUploads,
-        route_hint: routeHint ?? { recommended: 'unknown', reason: 'Need more answers to decide route' },
+        inconsistencies: [...stepFlags.inconsistencies, ...(aiHints.inconsistencies || [])],
+        compliance_hints: [
+          ...stepFlags.compliance_hints,
+          ...(aiHints.compliance_hints || complianceHints || []),
+        ],
+        recommended_uploads: [...stepFlags.recommended_uploads, ...missingUploads],
+        route_hint: routeHint ?? stepFlags.route_hint ?? { recommended: 'unknown', reason: 'Need more answers to decide route' },
+      };
+    } else {
+      // Non-eviction flows: surface document-led guidance without blocking
+      const evidenceFacts = (newFacts as any).evidence || {};
+      const uploadGaps = ['tenancy_agreement_uploaded', 'rent_schedule_uploaded']
+        .filter((flag) => !evidenceFacts[flag])
+        .map((flag) => ({ type: flag.replace('_uploaded', ''), reason: 'Upload improves accuracy but is optional.' }));
+
+      stepFlags = {
+        ...stepFlags,
+        recommended_uploads: [...stepFlags.recommended_uploads, ...uploadGaps],
       };
     }
+
+    stepFlags.missing_critical = Array.from(new Set(stepFlags.missing_critical));
+    stepFlags.inconsistencies = Array.from(new Set(stepFlags.inconsistencies));
+    stepFlags.compliance_hints = Array.from(new Set(stepFlags.compliance_hints));
 
     // ---------------------------------------
     // 7. Determine next question + progress
