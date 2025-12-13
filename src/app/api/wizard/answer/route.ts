@@ -414,12 +414,17 @@ function computeProgress(mqs: MasterQuestionSet, facts: Record<string, any>): nu
 
     // Check if dependency is satisfied
     if (Array.isArray(dependsOn.value)) {
-      // Handle when user's answer is also an array (multi-select questions)
+      // dependsOn.value is array: check if any match
       if (Array.isArray(depValue)) {
         return depValue.some((val: any) => dependsOn.value.includes(val));
       }
       // User's answer is scalar, check if it's in the dependency array
       return dependsOn.value.includes(depValue);
+    }
+    // dependsOn.value is scalar
+    if (Array.isArray(depValue)) {
+      // But user's answer is array (multi-select): check if it includes the scalar value
+      return depValue.includes(dependsOn.value);
     }
     return depValue === dependsOn.value;
   });
