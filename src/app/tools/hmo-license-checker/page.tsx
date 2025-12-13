@@ -56,7 +56,7 @@ export default function HMOLicenseChecker() {
       // Create a new PDF document
       const pdfDoc = await PDFDocument.create();
       const page = pdfDoc.addPage([595, 842]); // A4 size in points
-      const { width, height } = page.getSize();
+      const { height } = page.getSize();
 
       // Load fonts
       const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);

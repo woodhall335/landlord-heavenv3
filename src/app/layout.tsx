@@ -28,7 +28,7 @@ export default async function RootLayout({
   let user = null;
   try {
     user = await getServerUser();
-  } catch (error) {
+  } catch {
     // Supabase not configured - continue without user (anonymous mode)
     console.warn('Supabase not configured, continuing in anonymous mode');
   }

@@ -312,7 +312,7 @@ export const zIndex = {
   tooltip: 50,
 };
 
-export default {
+const designSystem = {
   colors,
   typography,
   spacing,
@@ -324,3 +324,5 @@ export default {
   grid,
   zIndex,
 };
+
+export default designSystem;
