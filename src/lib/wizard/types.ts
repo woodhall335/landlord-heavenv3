@@ -37,6 +37,8 @@ export interface ExtendedWizardQuestion {
     questionId: string;
     value: any;
   };
+  routes?: string[];
+  skip_if_evidence?: string[];
   fields?: WizardField[];
   evidence_types?: string[];
   maps_to?: string[];
@@ -46,7 +48,10 @@ export interface StepFlags {
   missing_critical: string[];
   inconsistencies: string[];
   recommended_uploads: Array<{ type: string; reason: string }>;
-  route_hint?: { recommended: 'section_8' | 'section_21' | 'both' | 'unknown'; reason: string };
+  route_hint?: {
+    recommended: 'section_8' | 'section_21' | 'both' | 'unknown' | 'notice_to_leave' | string;
+    reason: string;
+  };
   compliance_hints: string[];
 }
 
