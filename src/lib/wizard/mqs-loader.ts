@@ -130,20 +130,41 @@ function questionIsApplicable(
       depValue = (facts as Record<string, any>)[dependsOn.questionId];
     }
 
+    // Debug logging for section8_grounds dependency check
+    if (question.id === 'section8_grounds') {
+      console.log('[DEBUG] section8_grounds dependency check:', {
+        questionId: question.id,
+        dependsOn,
+        depValue,
+        depValueType: Array.isArray(depValue) ? 'array' : typeof depValue,
+        dependsOnValueType: Array.isArray(dependsOn.value) ? 'array' : typeof dependsOn.value,
+      });
+    }
+
     if (Array.isArray(dependsOn.value)) {
       // dependsOn.value is array: check if any match
       if (Array.isArray(depValue)) {
         const hasMatch = depValue.some((val) => dependsOn.value.includes(val));
-        if (!hasMatch) return false;
+        if (!hasMatch) {
+          if (question.id === 'section8_grounds') console.log('[DEBUG] section8_grounds: NO MATCH (array-array)');
+          return false;
+        }
       } else if (!dependsOn.value.includes(depValue)) {
+        if (question.id === 'section8_grounds') console.log('[DEBUG] section8_grounds: NO MATCH (scalar not in array)');
         return false;
       }
     } else {
       // dependsOn.value is scalar
       if (Array.isArray(depValue)) {
         // But user's answer is array (multi-select): check if it includes the scalar value
-        if (!depValue.includes(dependsOn.value)) return false;
+        if (!depValue.includes(dependsOn.value)) {
+          if (question.id === 'section8_grounds') console.log('[DEBUG] section8_grounds: NO MATCH (array does not include scalar)');
+          return false;
+        } else {
+          if (question.id === 'section8_grounds') console.log('[DEBUG] section8_grounds: MATCH! (array includes scalar)');
+        }
       } else if (depValue !== dependsOn.value) {
+        if (question.id === 'section8_grounds') console.log('[DEBUG] section8_grounds: NO MATCH (scalar !== scalar)');
         return false;
       }
     }

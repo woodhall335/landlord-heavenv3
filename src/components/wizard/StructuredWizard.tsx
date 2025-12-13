@@ -838,8 +838,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   } else if (!dep.value.includes(depValue)) {
                     return null;
                   }
-                } else if (depValue !== dep.value) {
-                  return null;
+                } else {
+                  // dep.value is scalar
+                  if (Array.isArray(depValue)) {
+                    // But user's answer is array (multi-select): check if it includes the scalar value
+                    if (!depValue.includes(dep.value)) return null;
+                  } else if (depValue !== dep.value) {
+                    return null;
+                  }
                 }
               }
 
