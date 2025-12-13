@@ -29,8 +29,7 @@ export default async function RootLayout({
   try {
     user = await getServerUser();
   } catch {
-    // Supabase not configured - continue without user (anonymous mode)
-    console.warn('Supabase not configured, continuing in anonymous mode');
+    // Supabase not configured or unavailable - continue without user (anonymous mode)
   }
 
   // Map user to Header props format
