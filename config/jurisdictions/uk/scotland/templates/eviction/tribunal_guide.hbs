@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tribunal Application Guide - After Serving Notice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 40px;
+      color: #333;
+    }
+    h1 {
+      color: #1a1a1a;
+      border-bottom: 3px solid #8b5cf6;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #8b5cf6;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      color: #1a1a1a;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .timeline {
+      background: #f3f4f6;
+      padding: 20px;
+      border-left: 4px solid #8b5cf6;
+      margin: 20px 0;
+    }
+    .timeline-step {
+      margin: 15px 0;
+      padding-left: 30px;
+      position: relative;
+    }
+    .timeline-step::before {
+      content: "●";
+      position: absolute;
+      left: 0;
+      color: #8b5cf6;
+      font-size: 20px;
+    }
+    .info-box {
+      background: #dbeafe;
+      border-left: 4px solid #3b82f6;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .warning {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .critical {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 15px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .success {
+      background: #d1fae5;
+      border-left: 4px solid #10b981;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .cost-breakdown {
+      background: #fff;
+      border: 2px solid #e5e7eb;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: bold;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    li {
+      margin: 8px 0;
+    }
+    footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 2px solid #e5e7eb;
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <h1>Tribunal Application Guide - After Serving Your Notice</h1>
+
+  <p><strong>Notice Grounds:</strong>
+    {{#each selected_grounds}}
+      Ground {{this}}{{#unless @last}}, {{/unless}}
+    {{/each}}
+  </p>
+  <p><strong>Service Date:</strong> {{format_date notice_service_date}}</p>
+  <p><strong>Notice Expiry Date:</strong> {{format_date notice_expiry_date}}</p>
+  <p><strong>Property:</strong> {{property.address_line1}}, {{property.address_town}}</p>
+
+  <div class="info-box">
+    ℹ️ <strong>What Happens Next:</strong> You've served your Notice to Leave. Now you wait until the expiry date. If the tenant doesn't leave voluntarily, you'll need to apply to the First-tier Tribunal for Scotland (Housing and Property Chamber) for an eviction order. This guide explains the complete timeline and process.
+  </div>
+
+  <h2>Complete Timeline</h2>
+
+  <div class="timeline">
+    <div class="timeline-step">
+      <strong>NOW → {{format_date notice_expiry_date}}</strong>: Waiting period. Tenant should leave voluntarily.
+    </div>
+    <div class="timeline-step">
+      <strong>{{format_date notice_expiry_date}}</strong>: Notice expiry date. Tenant should vacate by end of this day.
+    </div>
+    <div class="timeline-step">
+      <strong>Day After Expiry</strong>: If tenant hasn't left, you can apply to tribunal (do NOT change locks).
+    </div>
+    <div class="timeline-step">
+      <strong>1-2 Weeks Later</strong>: Tribunal acknowledges application and sets case management discussion (CMD) date.
+    </div>
+    <div class="timeline-step">
+      <strong>6-12 Weeks Later</strong>: Case Management Discussion (preliminary hearing) via phone/video.
+    </div>
+    <div class="timeline-step">
+      <strong>8-16 Weeks Later</strong>: Full tribunal hearing (if needed). Tribunal makes decision.
+    </div>
+    <div class="timeline-step">
+      <strong>14 Days After Decision</strong>: If eviction granted, eviction order takes effect.
+    </div>
+    <div class="timeline-step">
+      <strong>If Still There</strong>: Apply for eviction officer warrant (sheriff officers physically evict).
+    </div>
+  </div>
+
+  <p><strong>Total Timeline Estimate:</strong> 10-20 weeks from notice expiry to tenant physically removed (if they don't leave voluntarily).</p>
+
+  <h2>Scenario 1: Tenant Leaves Voluntarily ✓</h2>
+
+  <div class="success">
+    <strong>Best Case Scenario:</strong> The tenant leaves on or before {{format_date notice_expiry_date}}. You avoid tribunal proceedings, save money, and regain possession quickly.
+  </div>
+
+  <h3>What to Do:</h3>
+  <ul>
+    <li><strong>Arrange final inspection:</strong> Schedule with tenant if possible (gives them chance to clean/repair)</li>
+    <li><strong>Check inventory:</strong> Compare move-out condition to move-in inventory</li>
+    <li><strong>Take photos:</strong> Document property condition thoroughly</li>
+    <li><strong>Collect keys:</strong> Get all keys, fobs, garage remotes, etc.</li>
+    <li><strong>Check utilities:</strong> Take final meter readings, close accounts if in your name</li>
+    <li><strong>Return deposit:</strong> Within 30 working days through approved deposit scheme</li>
+    <li><strong>Handle deductions:</strong> If deducting for damages, follow deposit scheme dispute process</li>
+  </ul>
+
+  <div class="warning">
+    ⚠️ <strong>Deposit Deductions:</strong> You can only deduct for legitimate damages or unpaid rent. Normal wear and tear is NOT deductible. If you make unfair deductions, the tenant can challenge through the deposit scheme and you could lose plus face penalties.
+  </div>
+
+  <h2>Scenario 2: Tenant Doesn't Leave ❌</h2>
+
+  <div class="critical">
+    ⚠️ <strong>CRITICAL:</strong> If the tenant is still in the property after {{format_date notice_expiry_date}}, DO NOT change the locks, remove their belongings, or cut off utilities. This is illegal eviction and you could face criminal charges, unlimited fines, and the tenant could sue you for damages.
+  </div>
+
+  <h3>What to Do Instead:</h3>
+  <p>You MUST apply to the First-tier Tribunal for Scotland (Housing and Property Chamber) for an eviction order. Here's how:</p>
+
+  <h3>Step 1: Check Pre-Action Requirements</h3>
+
+  {{#if (includes selected_grounds 1)}}
+    <div class="critical">
+      ⚠️ <strong>GROUND 1 (RENT ARREARS) - MANDATORY PRE-ACTION:</strong> Before applying to tribunal for rent arrears, you MUST have completed all Pre-Action Requirements (PAR). See the "Pre-Action Checklist" document included in this pack.
+    </div>
+    <p><strong>Pre-Action Requirements Summary:</strong></p>
+    <ul>
+      <li>✓ Sent written notice of arrears to tenant</li>
+      <li>✓ Signposted tenant to advice services (debt advice, housing advice)</li>
+      <li>✓ Gave reasonable opportunity to pay (at least 28 days)</li>
+      <li>✓ Considered any payment arrangement proposals</li>
+      <li>✓ Can evidence all of the above</li>
+    </ul>
+    <p><strong>Tribunal will reject your application if you haven't completed PAR.</strong></p>
+  {{else}}
+    <div class="info-box">
+      ℹ️ <strong>No Pre-Action Protocol Required:</strong> Your selected ground(s) ({{#each selected_grounds}}Ground {{this}}{{#unless @last}}, {{/unless}}{{/each}}) do not require specific pre-action protocol. However, ensure you have all evidence ready (see Pre-Action Checklist document).
+    </div>
+  {{/if}}
+
+  <h3>Step 2: Gather Required Documents</h3>
+  <p>You'll need to submit the following with your tribunal application:</p>
+  <ul>
+    <li>✓ Completed tribunal application form</li>
+    <li>✓ Copy of tenancy agreement</li>
+    <li>✓ Copy of Notice to Leave you served</li>
+    <li>✓ Certificate of Service (proof you served the notice)</li>
+    <li>✓ Landlord registration certificate</li>
+    <li>✓ Deposit protection certificate (if applicable)</li>
+    <li>✓ Gas safety certificate (if property has gas)</li>
+    <li>✓ EICR certificate</li>
+    {{#if (includes selected_grounds 1)}}
+      <li>✓ Complete rent account ledger showing arrears</li>
+      <li>✓ Arrears notice letters sent to tenant</li>
+      <li>✓ Proof you signposted to advice services</li>
+      <li>✓ Correspondence about payment arrangements</li>
+    {{/if}}
+    {{#if (includes selected_grounds 12)}}
+      <li>✓ Evidence of anti-social behaviour (witness statements, police reports, etc.)</li>
+    {{/if}}
+    <li>✓ Any other evidence supporting your application</li>
+  </ul>
+
+  <h3>Step 3: Complete Application Form</h3>
+
+  <div class="info-box">
+    <strong>Application Form:</strong> You need to complete the tribunal's eviction application form. This can be done online or by paper.
+    <ul>
+      <li><strong>Online:</strong> <a href="https://www.housingandpropertychamber.scot/">https://www.housingandpropertychamber.scot/</a></li>
+      <li><strong>Paper:</strong> Download form from tribunal website</li>
+    </ul>
+  </div>
+
+  <p><strong>What the form asks for:</strong></p>
+  <ul>
+    <li>Your details (landlord/agent)</li>
+    <li>Tenant's details</li>
+    <li>Property address</li>
+    <li>Type of tenancy (Private Residential Tenancy)</li>
+    <li>Ground(s) for eviction ({{#each selected_grounds}}Ground {{this}}{{#unless @last}}, {{/unless}}{{/each}})</li>
+    <li>Notice to Leave details (service date, expiry date)</li>
+    <li>Supporting evidence summary</li>
+  </ul>
+
+  <h3>Step 4: Pay Tribunal Fee</h3>
+
+  <div class="cost-breakdown">
+    <h4>Tribunal Fees (Scotland):</h4>
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Cost</th>
+      </tr>
+      <tr>
+        <td>Eviction application fee</td>
+        <td>£0 (FREE)</td>
+      </tr>
+      <tr>
+        <td>Case management discussion</td>
+        <td>£0 (FREE)</td>
+      </tr>
+      <tr>
+        <td>Tribunal hearing</td>
+        <td>£0 (FREE)</td>
+      </tr>
+      <tr>
+        <td>Eviction order</td>
+        <td>£0 (FREE)</td>
+      </tr>
+      <tr>
+        <td>Sheriff officer eviction (if needed)</td>
+        <td>£150-£300</td>
+      </tr>
+      <tr>
+        <td><strong>Total Cost</strong></td>
+        <td><strong>£0 - £300</strong></td>
+      </tr>
+    </table>
+
+    <p><strong>Important:</strong> Unlike England & Wales (where court fees are £355+), the Scottish tribunal system is FREE for eviction applications. The only cost is if you need sheriff officers to physically evict (£150-£300).</p>
+  </div>
+
+  <h3>Step 5: Submit Application</h3>
+  <ul>
+    <li><strong>Online (Recommended):</strong> Submit via tribunal website - faster processing, automatic confirmations</li>
+    <li><strong>Email:</strong> housingandpropertychamber@scotcourtstribunals.gov.uk</li>
+    <li><strong>Post:</strong> First-tier Tribunal for Scotland (Housing and Property Chamber), George House, 126 George Street, Edinburgh, EH2 4HH</li>
+  </ul>
+
+  <p><strong>Processing Time:</strong> Tribunal usually acknowledges within 1-2 weeks and sets initial case management discussion within 6-12 weeks.</p>
+
+  <h3>Step 6: Case Management Discussion (CMD)</h3>
+
+  <div class="info-box">
+    <strong>What is a CMD?</strong> A Case Management Discussion is a preliminary hearing (usually by phone or video) where the tribunal:
+    <ul>
+      <li>Checks all parties understand the process</li>
+      <li>Identifies what's in dispute</li>
+      <li>Reviews evidence</li>
+      <li>May make directions (orders for more evidence, etc.)</li>
+      <li>Decides if a full hearing is needed or can decide on papers</li>
+    </ul>
+  </div>
+
+  <p><strong>What to expect:</strong></p>
+  <ul>
+    <li>Tribunal member calls you and tenant (usually conference call)</li>
+    <li>Lasts 15-45 minutes</li>
+    <li>Informal discussion of the case</li>
+    <li>Tribunal may ask questions about evidence</li>
+    <li>Tenant may raise defences (e.g., "landlord didn't serve properly", "PAR not followed")</li>
+  </ul>
+
+  <p><strong>Possible Outcomes:</strong></p>
+  <ul>
+    <li><strong>Simple cases:</strong> Tribunal may grant eviction order immediately (no full hearing needed)</li>
+    <li><strong>Complex/disputed cases:</strong> Tribunal schedules full hearing (6-8 weeks later)</li>
+    <li><strong>Issues found:</strong> Tribunal may reject application (you'll need to fix issues and re-apply)</li>
+  </ul>
+
+  <div class="warning">
+    ⚠️ <strong>Must Attend:</strong> You MUST participate in the CMD. If you don't, the tribunal may dismiss your application and you'll have to start over.
+  </div>
+
+  <h3>Step 7: Full Tribunal Hearing (If Required)</h3>
+
+  <p>If the tribunal decides a full hearing is needed, you'll be given a date (usually 6-8 weeks after CMD).</p>
+
+  <p><strong>Hearing Format:</strong></p>
+  <ul>
+    <li>In-person at tribunal office (Edinburgh, Glasgow, or regional centers)</li>
+    <li>OR by video conference (more common since 2020)</li>
+    <li>Lasts 1-2 hours</li>
+    <li>Formal but less strict than court</li>
+  </ul>
+
+  <h4>What to Bring:</h4>
+  <ul>
+    <li>✓ All evidence (original documents + 3 copies)</li>
+    <li>✓ Witness statements (if applicable)</li>
+    <li>✓ Photos of property (if relevant to your ground)</li>
+    <li>✓ Rent account ledger (especially for Ground 1)</li>
+    <li>✓ Copy of Notice to Leave and Certificate of Service</li>
+    <li>✓ All correspondence with tenant</li>
+    <li>✓ Any documents the tribunal specifically requested</li>
+  </ul>
+
+  <h4>What Happens at Hearing:</h4>
+  <ol>
+    <li><strong>Introductions:</strong> Tribunal member(s) introduce themselves, explain procedure</li>
+    <li><strong>Your Evidence:</strong> You present your case (why eviction should be granted)</li>
+    <li><strong>Tenant's Defence:</strong> Tenant presents their defence (if any)</li>
+    <li><strong>Questions:</strong> Tribunal asks questions to both parties</li>
+    <li><strong>Submissions:</strong> Final statements from both sides</li>
+    <li><strong>Decision:</strong> Tribunal may decide on the day OR reserve decision (send written decision later)</li>
+  </ol>
+
+  <div class="info-box">
+    <strong>What the Tribunal Considers:</strong>
+    <ul>
+      <li>Is the Notice to Leave valid and properly served?</li>
+      <li>Has the notice period expired?</li>
+      <li>Are the grounds for eviction proven?</li>
+      <li>Is it reasonable to grant eviction? (for discretionary grounds)</li>
+      <li>Have all procedural requirements been met (e.g., PAR for Ground 1)?</li>
+    </ul>
+  </div>
+
+  <h3>Step 8: Tribunal Decision</h3>
+
+  <p>The tribunal will issue one of these decisions:</p>
+
+  <table>
+    <tr>
+      <th>Decision</th>
+      <th>What It Means</th>
+    </tr>
+    <tr>
+      <td><strong>Eviction Order Granted</strong></td>
+      <td>Tenant must leave within 14 days (or longer if tribunal extends). You can enforce if they don't.</td>
+    </tr>
+    <tr>
+      <td><strong>Eviction Order Refused</strong></td>
+      <td>Tribunal found your application invalid or unreasonable. Tenant stays. You may be able to apply again later.</td>
+    </tr>
+    <tr>
+      <td><strong>Delayed Eviction Order</strong></td>
+      <td>Eviction granted but delayed (e.g., "tenant has 3 months to leave"). Common for hardship cases.</td>
+    </tr>
+    <tr>
+      <td><strong>Conditional Order</strong></td>
+      <td>Eviction will be granted IF tenant doesn't comply with conditions (e.g., "if rent arrears not cleared by X date").</td>
+    </tr>
+  </table>
+
+  <div class="success">
+    <strong>Success Rate:</strong> If you've followed all procedural requirements correctly, provided proper evidence, and served the notice properly, eviction is usually granted for:
+    <ul>
+      <li><strong>Mandatory Grounds:</strong> Tribunal MUST grant if proven (e.g., Ground 1 with 3+ months arrears)</li>
+      <li><strong>Discretionary Grounds:</strong> Tribunal grants if proven AND reasonable (most are granted if evidence solid)</li>
+    </ul>
+  </div>
+
+  <h3>Step 9: After Eviction Order Granted</h3>
+
+  <p>Once the tribunal grants an eviction order, the tenant gets a deadline to leave (usually 14 days, sometimes longer).</p>
+
+  <div class="warning">
+    ⚠️ <strong>Still Can't Force Them Out:</strong> Even with an eviction order, you still can't change locks or force the tenant out yourself. If they don't leave by the deadline, proceed to Step 10.
+  </div>
+
+  <p><strong>What to do during this period:</strong></p>
+  <ul>
+    <li>Wait for the deadline date</li>
+    <li>Tenant may negotiate a later move-out date (you can agree if you want)</li>
+    <li>Tenant may appeal (rare, but possible within 14 days of decision)</li>
+    <li>If tenant leaves, follow voluntary departure checklist (Scenario 1 above)</li>
+  </ul>
+
+  <h3>Step 10: Enforcement (If Tenant Still Doesn't Leave)</h3>
+
+  <p>If the tenant is still in the property after the eviction order deadline:</p>
+
+  <ol>
+    <li><strong>Apply for eviction officer warrant:</strong>
+      <ul>
+        <li>Complete application to tribunal for "Certificate for Sheriff Officer"</li>
+        <li>Tribunal issues certificate (usually within 1 week)</li>
+        <li>No additional fee</li>
+      </ul>
+    </li>
+    <li><strong>Hire a sheriff officer:</strong>
+      <ul>
+        <li>Find local sheriff officer (search "sheriff officer [your area]")</li>
+        <li>Provide them with tribunal's certificate</li>
+        <li>Pay fee (£150-£300 depending on location and difficulty)</li>
+      </ul>
+    </li>
+    <li><strong>Sheriff officer schedules eviction:</strong>
+      <ul>
+        <li>Usually 1-2 weeks after you hire them</li>
+        <li>They give tenant 48 hours notice</li>
+        <li>Must be between 8am-8pm on a weekday</li>
+      </ul>
+    </li>
+    <li><strong>Eviction Day:</strong>
+      <ul>
+        <li>Sheriff officer attends property</li>
+        <li>Physically removes tenant and their belongings</li>
+        <li>Changes locks</li>
+        <li>Hands keys to you</li>
+        <li>Tenant's belongings left outside (unless severe weather - may be stored briefly)</li>
+      </ul>
+    </li>
+  </ol>
+
+  <div class="info-box">
+    ℹ️ <strong>Sheriff Officer Eviction:</strong> Only a sheriff officer with a tribunal certificate can physically evict someone in Scotland. They are professionals experienced in evictions. You should not attend the eviction yourself - let them handle it.
+  </div>
+
+  <h2>Costs Summary</h2>
+
+  <div class="cost-breakdown">
+    <table>
+      <tr>
+        <th>Stage</th>
+        <th>Cost</th>
+        <th>Timeline</th>
+      </tr>
+      <tr>
+        <td>Notice Only Pack</td>
+        <td>£29.99</td>
+        <td>Immediate</td>
+      </tr>
+      <tr>
+        <td>Serve notice & wait</td>
+        <td>£0 - £10</td>
+        <td>28-84 days (depending on ground)</td>
+      </tr>
+      <tr>
+        <td>Tribunal application</td>
+        <td>£0 (FREE)</td>
+        <td>Immediate</td>
+      </tr>
+      <tr>
+        <td>Case Management Discussion</td>
+        <td>£0 (FREE)</td>
+        <td>6-12 weeks</td>
+      </tr>
+      <tr>
+        <td>Full hearing (if needed)</td>
+        <td>£0 (FREE)</td>
+        <td>6-8 weeks after CMD</td>
+      </tr>
+      <tr>
+        <td>Eviction order</td>
+        <td>£0 (FREE)</td>
+        <td>Immediate or 14+ days</td>
+      </tr>
+      <tr>
+        <td>Sheriff officer eviction (if needed)</td>
+        <td>£150-£300</td>
+        <td>1-2 weeks</td>
+      </tr>
+      <tr>
+        <td><strong>Total (if tenant doesn't leave)</strong></td>
+        <td><strong>£29.99 - £339.99</strong></td>
+        <td><strong>10-28 weeks total</strong></td>
+      </tr>
+    </table>
+
+    <p><strong>Comparing to England & Wales:</strong> Scotland's tribunal system is significantly cheaper (FREE vs. £355+ court fees) and often faster due to streamlined process.</p>
+  </div>
+
+  <h2>Upgrade to Complete Pack</h2>
+
+  <div class="info-box">
+    <strong>💡 Need Tribunal Templates?</strong><br>
+    If your tenant doesn't leave voluntarily, you'll benefit from pre-filled tribunal application forms and supporting documents.
+    <br><br>
+    <strong>Complete Pack Includes:</strong>
+    <ul>
+      <li>✓ Everything in Notice Only Pack</li>
+      <li>✓ Pre-filled tribunal application form</li>
+      <li>✓ Witness statement template</li>
+      <li>✓ Rent arrears schedule (for Ground 1)</li>
+      <li>✓ Pre-action requirements letter templates (for Ground 1)</li>
+      <li>✓ Evidence checklist for tribunal</li>
+      <li>✓ Hearing preparation guide</li>
+    </ul>
+    <br>
+    <strong>Price:</strong> £79.99 (save time and ensure tribunal-ready documents)
+  </div>
+
+  <h2>Key Reminders</h2>
+
+  <ul>
+    <li>✓ <strong>Never illegally evict:</strong> No changing locks, removing belongings, or cutting utilities</li>
+    <li>✓ <strong>Follow pre-action requirements:</strong> Mandatory for Ground 1 (rent arrears)</li>
+    <li>✓ <strong>Keep all evidence:</strong> Photos, receipts, correspondence, proof of service</li>
+    <li>✓ <strong>Attend all hearings:</strong> Failure to attend usually means automatic dismissal</li>
+    <li>✓ <strong>Be professional:</strong> Don't argue with tenant, let tribunal handle disputes</li>
+    <li>✓ <strong>Document everything:</strong> Assume you'll need to prove everything at tribunal</li>
+    <li>✓ <strong>Use sheriff officers:</strong> Only they can legally enforce eviction</li>
+  </ul>
+
+  <h2>Common Reasons Tribunal Refuses Eviction</h2>
+
+  <table>
+    <tr>
+      <th>Issue</th>
+      <th>How to Avoid</th>
+    </tr>
+    <tr>
+      <td>Notice to Leave not served properly</td>
+      <td>Follow service instructions exactly, keep proof</td>
+    </tr>
+    <tr>
+      <td>Notice period not met</td>
+      <td>Don't apply until after expiry date</td>
+    </tr>
+    <tr>
+      <td>Pre-action requirements not followed (Ground 1)</td>
+      <td>Complete all PAR steps, keep evidence</td>
+    </tr>
+    <tr>
+      <td>Not registered as landlord</td>
+      <td>Register with local authority before applying</td>
+    </tr>
+    <tr>
+      <td>Deposit not protected</td>
+      <td>Protect deposit within 30 days of receipt</td>
+    </tr>
+    <tr>
+      <td>No gas safety certificate</td>
+      <td>Get annual certificate from Gas Safe engineer</td>
+    </tr>
+    <tr>
+      <td>Property in disrepair</td>
+      <td>Fix all reported issues before applying</td>
+    </tr>
+    <tr>
+      <td>Insufficient evidence</td>
+      <td>Collect comprehensive evidence package</td>
+    </tr>
+  </table>
+
+  <h2>Tribunal Contact Information</h2>
+
+  <p><strong>First-tier Tribunal for Scotland (Housing and Property Chamber)</strong></p>
+  <ul>
+    <li><strong>Website:</strong> <a href="https://www.housingandpropertychamber.scot/">https://www.housingandpropertychamber.scot/</a></li>
+    <li><strong>Email:</strong> housingandpropertychamber@scotcourtstribunals.gov.uk</li>
+    <li><strong>Phone:</strong> 0141 302 5900</li>
+    <li><strong>Address:</strong> George House, 126 George Street, Edinburgh, EH2 4HH</li>
+  </ul>
+
+  <p><strong>Opening Hours:</strong> Monday-Friday, 9am-5pm</p>
+
+  <footer>
+    <p><strong>Legal Basis:</strong> Private Residential Tenancy (Scotland) Act 2016, The First-tier Tribunal for Scotland Housing and Property Chamber (Procedure) Regulations 2017, Pre-Action Requirements for Orders for Possession</p>
+    <p><strong>Generated:</strong> {{format_date metadata.generated_at}}</p>
+    <p><strong>Landlord Heaven Notice Only Pack</strong> | Scotland</p>
+    <p><strong>Support:</strong> For questions or assistance, visit our help center or contact support.</p>
+  </footer>
+</body>
+</html>

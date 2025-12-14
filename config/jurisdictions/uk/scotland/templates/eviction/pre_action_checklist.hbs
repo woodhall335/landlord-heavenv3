@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pre-Action Checklist - Before Applying to Tribunal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 40px;
+      color: #333;
+    }
+    h1 {
+      color: #1a1a1a;
+      border-bottom: 3px solid #8b5cf6;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #8b5cf6;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      color: #1a1a1a;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .info-box {
+      background: #dbeafe;
+      border-left: 4px solid #3b82f6;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .warning {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .critical {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 15px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .success {
+      background: #d1fae5;
+      border-left: 4px solid #10b981;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .check-item {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+    }
+    .status-compliant {
+      background: #d1fae5;
+      border-left: 4px solid #10b981;
+      padding: 10px;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    .status-not-compliant {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 10px;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    .status-warning {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 10px;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: bold;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    li {
+      margin: 8px 0;
+    }
+    .ground-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 15px 0;
+      background: #fafafa;
+    }
+    footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 2px solid #e5e7eb;
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pre-Action Checklist - Before Tribunal Application</h1>
+
+  <p><strong>Property:</strong> {{property.address_line1}}, {{property.address_town}}</p>
+  <p><strong>Tenant:</strong> {{tenant.full_name}}</p>
+  <p><strong>Notice Grounds:</strong>
+    {{#each selected_grounds}}
+      Ground {{this}}{{#unless @last}}, {{/unless}}
+    {{/each}}
+  </p>
+
+  <div class="info-box">
+    ℹ️ <strong>What is This Checklist?</strong> Before applying to the First-tier Tribunal for Scotland (Housing and Property Chamber), you MUST ensure you've completed all required pre-action requirements. The tribunal will reject your application if you haven't followed proper procedures.
+  </div>
+
+  <h2>Overall Status</h2>
+
+  {{#if (includes selected_grounds 1)}}
+    <div class="status-warning">
+      ⚠️ <strong>PRE-ACTION PROTOCOL APPLIES:</strong> You are using Ground 1 (rent arrears). You MUST follow the Pre-Action Requirements for Rent Arrears before applying to tribunal. See detailed requirements below.
+    </div>
+  {{else}}
+    <div class="status-compliant">
+      ✓ <strong>NO PRE-ACTION PROTOCOL:</strong> Your selected ground(s) do not require specific pre-action protocol. However, you should still follow best practices for communication and evidence gathering.
+    </div>
+  {{/if}}
+
+  <h2>Essential Checklist (All Grounds)</h2>
+
+  <div class="check-item">
+    <h3>✓ 1. Notice to Leave Served Correctly</h3>
+
+    <p><strong>Your Status:</strong></p>
+    <ul>
+      <li>Notice Service Date: {{format_date notice_service_date}}</li>
+      <li>Notice Expiry Date: {{format_date notice_expiry_date}}</li>
+      <li>Service Method: {{service_method}}</li>
+    </ul>
+
+    <p><strong>Requirements:</strong></p>
+    <ul>
+      <li>☐ Notice served using approved method (hand delivery, recorded delivery, or sheriff officer)</li>
+      <li>☐ Notice period met (minimum required for your ground)</li>
+      <li>☐ Notice has expired (cannot apply to tribunal before expiry date)</li>
+      <li>☐ Proof of service collected (certificate, photos, Royal Mail receipt, etc.)</li>
+    </ul>
+
+    <div class="warning">
+      ⚠️ <strong>Cannot Apply Until:</strong> You cannot apply to the tribunal until AFTER the notice expiry date ({{format_date notice_expiry_date}}). If you apply too early, the tribunal will reject your application.
+    </div>
+  </div>
+
+  <div class="check-item">
+    <h3>✓ 2. Tenancy Deposit Protection (If Applicable)</h3>
+
+    {{#if deposit.amount}}
+      {{#if deposit.scheme_name}}
+        <div class="status-compliant">
+          ✓ <strong>COMPLIANT:</strong> Deposit protected in {{deposit.scheme_name}}
+        </div>
+        <p><strong>Your Details:</strong></p>
+        <ul>
+          <li>Deposit Amount: £{{deposit.amount}}</li>
+          <li>Scheme: {{deposit.scheme_name}}</li>
+          <li>Protection Date: {{format_date deposit.protection_date}}</li>
+        </ul>
+      {{else}}
+        <div class="status-not-compliant">
+          ❌ <strong>NOT COMPLIANT:</strong> Deposit not protected
+        </div>
+        <div class="critical">
+          ⚠️ <strong>CRITICAL ISSUE:</strong> If you took a deposit, it MUST be protected in an approved scheme (SafeDeposits Scotland, MyDeposits Scotland, or Letting Protection Service Scotland) within 30 working days of receipt. Failure to protect can result in tribunal ordering repayment of up to 3x the deposit amount to the tenant.
+        </div>
+        <p><strong>Action Required:</strong></p>
+        <ul>
+          <li>Protect the deposit NOW in an approved scheme</li>
+          <li>Provide prescribed information to tenant</li>
+          <li>Be prepared for tribunal to potentially penalize you</li>
+        </ul>
+      {{/if}}
+    {{else}}
+      <div class="status-compliant">
+        ✓ <strong>NOT APPLICABLE:</strong> No deposit taken
+      </div>
+    {{/if}}
+
+    <p><strong>Evidence Required for Tribunal:</strong></p>
+    <ul>
+      <li>☐ Deposit protection certificate (if deposit taken)</li>
+      <li>☐ Proof you provided prescribed information to tenant</li>
+      <li>☐ Copy of tenancy agreement showing deposit amount</li>
+    </ul>
+  </div>
+
+  <div class="check-item">
+    <h3>✓ 3. Landlord Registration</h3>
+
+    {{#if landlord.registration_number}}
+      <div class="status-compliant">
+        ✓ <strong>REGISTERED:</strong> Registration Number: {{landlord.registration_number}}
+      </div>
+    {{else}}
+      <div class="status-not-compliant">
+        ❌ <strong>NOT REGISTERED:</strong> No registration number provided
+      </div>
+      <div class="critical">
+        ⚠️ <strong>CRITICAL ISSUE:</strong> ALL landlords in Scotland must be registered with their local authority. Operating as an unregistered landlord is a criminal offence. The tribunal will likely reject your application if you're not registered.
+      </div>
+      <p><strong>Action Required:</strong></p>
+      <ul>
+        <li>Register immediately with your local authority (usually takes 4-6 weeks)</li>
+        <li>Cannot proceed with eviction until registered</li>
+        <li>Check: <a href="https://www.landlordregistrationscotland.gov.uk/">https://www.landlordregistrationscotland.gov.uk/</a></li>
+      </ul>
+    {{/if}}
+
+    <p><strong>Evidence Required for Tribunal:</strong></p>
+    <ul>
+      <li>☐ Copy of landlord registration certificate</li>
+      <li>☐ Proof registration is current and not expired</li>
+    </ul>
+  </div>
+
+  <div class="check-item">
+    <h3>✓ 4. Gas Safety Certificate (If Applicable)</h3>
+
+    {{#if property.has_gas}}
+      {{#if compliance.gas_safety_certificate.provided}}
+        {{#if compliance.gas_safety_certificate.valid}}
+          <div class="status-compliant">
+            ✓ <strong>COMPLIANT:</strong> Valid gas safety certificate
+          </div>
+          <p><strong>Your Details:</strong></p>
+          <ul>
+            <li>Issue Date: {{format_date compliance.gas_safety_certificate.issue_date}}</li>
+            <li>Expiry Date: {{format_date compliance.gas_safety_certificate.expiry_date}}</li>
+          </ul>
+        {{else}}
+          <div class="status-not-compliant">
+            ❌ <strong>EXPIRED:</strong> Gas safety certificate out of date
+          </div>
+          <p><strong>Action Required:</strong></p>
+          <ul>
+            <li>Arrange new gas safety inspection immediately (Gas Safe registered engineer)</li>
+            <li>Provide copy to tenant within 28 days</li>
+            <li>Expired certificate can be used as defence by tenant</li>
+          </ul>
+        {{/if}}
+      {{else}}
+        <div class="status-not-compliant">
+          ❌ <strong>NOT PROVIDED:</strong> No gas safety certificate
+        </div>
+        <p><strong>Action Required:</strong></p>
+        <ul>
+          <li>Obtain gas safety certificate from Gas Safe registered engineer</li>
+          <li>Provide copy to tenant within 28 days</li>
+          <li>Must be renewed annually</li>
+        </ul>
+      {{/if}}
+    {{else}}
+      <div class="status-compliant">
+        ✓ <strong>NOT APPLICABLE:</strong> No gas appliances at property
+      </div>
+    {{/if}}
+
+    <p><strong>Evidence Required for Tribunal:</strong></p>
+    {{#if property.has_gas}}
+      <ul>
+        <li>☐ Copy of current gas safety certificate (must be less than 12 months old)</li>
+        <li>☐ Proof you provided copy to tenant</li>
+      </ul>
+    {{else}}
+      <ul>
+        <li>Not applicable - no gas appliances</li>
+      </ul>
+    {{/if}}
+  </div>
+
+  <div class="check-item">
+    <h3>✓ 5. Electrical Safety Certificate (EICR)</h3>
+
+    {{#if compliance.eicr.provided}}
+      {{#if compliance.eicr.valid}}
+        <div class="status-compliant">
+          ✓ <strong>COMPLIANT:</strong> Valid EICR
+        </div>
+        <p><strong>Your Details:</strong></p>
+        <ul>
+          <li>Issue Date: {{format_date compliance.eicr.issue_date}}</li>
+          <li>Expiry Date: {{format_date compliance.eicr.expiry_date}}</li>
+        </ul>
+      {{else}}
+        <div class="status-warning">
+          ⚠️ <strong>EXPIRED:</strong> EICR out of date
+        </div>
+        <p><strong>Action Required:</strong></p>
+        <ul>
+          <li>Arrange new electrical inspection (must be done by qualified electrician)</li>
+          <li>Valid for 5 years or less if report recommends sooner</li>
+          <li>Provide copy to tenant within 28 days</li>
+        </ul>
+      {{/if}}
+    {{else}}
+      <div class="status-warning">
+        ⚠️ <strong>NOT PROVIDED:</strong> No EICR
+      </div>
+      <p><strong>Action Required:</strong></p>
+      <ul>
+        <li>Obtain EICR from qualified electrician</li>
+        <li>Mandatory for all private residential tenancies in Scotland</li>
+        <li>Provide copy to tenant within 28 days</li>
+      </ul>
+    {{/if}}
+
+    <p><strong>Evidence Required for Tribunal:</strong></p>
+    <ul>
+      <li>☐ Copy of current EICR (must be less than 5 years old)</li>
+      <li>☐ Proof you provided copy to tenant</li>
+    </ul>
+  </div>
+
+  <div class="check-item">
+    <h3>✓ 6. Repairing Standard Compliance</h3>
+
+    <div class="info-box">
+      <strong>What is the Repairing Standard?</strong> Scottish law requires landlords to ensure the property meets minimum standards for safety, repair, and habitability. If the tenant has complained about disrepair and you haven't fixed it, the tribunal may refuse your eviction application.
+    </div>
+
+    {{#if property.repairing_standard_issues}}
+      <div class="status-warning">
+        ⚠️ <strong>ISSUES REPORTED:</strong> Tenant has reported repairing standard issues
+      </div>
+      <p><strong>Action Required:</strong></p>
+      <ul>
+        <li>Address all reported issues immediately</li>
+        <li>Document repairs completed (invoices, photos)</li>
+        <li>Tenant can use disrepair as defence at tribunal</li>
+      </ul>
+    {{else}}
+      <div class="status-compliant">
+        ✓ <strong>NO ISSUES:</strong> No repairing standard issues reported
+      </div>
+    {{/if}}
+
+    <p><strong>Evidence for Tribunal:</strong></p>
+    <ul>
+      <li>☐ Photos showing property in good repair</li>
+      <li>☐ Records of repairs completed</li>
+      <li>☐ Correspondence with tenant about maintenance</li>
+    </ul>
+  </div>
+
+  {{#if (includes selected_grounds 1)}}
+    <h2>PRE-ACTION REQUIREMENTS FOR RENT ARREARS (Ground 1)</h2>
+
+    <div class="critical">
+      ⚠️ <strong>MANDATORY REQUIREMENTS:</strong> Because you are using Ground 1 (rent arrears), you MUST follow the Pre-Action Requirements (PAR) before applying to tribunal. Failure to comply means the tribunal will reject your application.
+    </div>
+
+    <div class="ground-card">
+      <h3>Pre-Action Requirement 1: Written Notice of Arrears</h3>
+
+      <p><strong>What you must do:</strong> Send a formal letter to the tenant informing them of:</p>
+      <ul>
+        <li>The amount of rent owed</li>
+        <li>The period the arrears relate to</li>
+        <li>A breakdown showing how the arrears accrued</li>
+        <li>Information about available support (debt advice, housing advice)</li>
+      </ul>
+
+      <p><strong>When:</strong> At least once before applying to tribunal (ideally multiple times as arrears grow)</p>
+
+      <p><strong>Checklist:</strong></p>
+      <ul>
+        <li>☐ Written letter sent to tenant</li>
+        <li>☐ Letter includes total arrears amount</li>
+        <li>☐ Letter includes breakdown of arrears</li>
+        <li>☐ Letter includes information about debt advice services</li>
+        <li>☐ Copy of letter kept for tribunal</li>
+        <li>☐ Proof of sending (recorded delivery receipt or hand delivery photo)</li>
+      </ul>
+
+      <div class="info-box">
+        <strong>💡 Template Available:</strong> A pre-action arrears letter template is available in the Landlord Heaven Complete Pack (upgrade option).
+      </div>
+    </div>
+
+    <div class="ground-card">
+      <h3>Pre-Action Requirement 2: Signpost to Advice Services</h3>
+
+      <p><strong>What you must do:</strong> Provide tenant with information about:</p>
+      <ul>
+        <li>Local debt advice services (e.g., Citizens Advice Bureau)</li>
+        <li>Local housing advice services</li>
+        <li>Benefits advice (if applicable)</li>
+        <li>National support services</li>
+      </ul>
+
+      <p><strong>Suggested Services to Include:</strong></p>
+      <ul>
+        <li>Citizens Advice Scotland: 0800 028 1456</li>
+        <li>Shelter Scotland: 0808 800 4444</li>
+        <li>StepChange Debt Charity: 0800 138 1111</li>
+        <li>Local authority housing advice team</li>
+      </ul>
+
+      <p><strong>Checklist:</strong></p>
+      <ul>
+        <li>☐ Provided information about debt advice services</li>
+        <li>☐ Provided information about housing advice services</li>
+        <li>☐ Kept copy of what you provided to tenant</li>
+      </ul>
+    </div>
+
+    <div class="ground-card">
+      <h3>Pre-Action Requirement 3: Reasonable Opportunity to Pay</h3>
+
+      <p><strong>What you must do:</strong> Give the tenant reasonable time and opportunity to:</p>
+      <ul>
+        <li>Clear the arrears (full payment)</li>
+        <li>Make a payment arrangement</li>
+        <li>Seek advice and support</li>
+        <li>Apply for benefits or other assistance</li>
+      </ul>
+
+      <p><strong>What is "reasonable"?</strong></p>
+      <ul>
+        <li>At least 28 days after sending arrears notice</li>
+        <li>Ideally 2-3 months of correspondence and negotiation attempts</li>
+        <li>More time if tenant is actively engaging (seeking advice, making partial payments)</li>
+      </ul>
+
+      <p><strong>Checklist:</strong></p>
+      <ul>
+        <li>☐ At least 28 days passed since sending arrears notice</li>
+        <li>☐ Attempted to discuss payment arrangement with tenant</li>
+        <li>☐ Documented all communication attempts</li>
+        <li>☐ Can demonstrate tenant has had reasonable opportunity</li>
+      </ul>
+    </div>
+
+    <div class="ground-card">
+      <h3>Pre-Action Requirement 4: Consider Payment Arrangement</h3>
+
+      <p><strong>What you must do:</strong> Seriously consider any payment arrangement proposed by the tenant, unless it's completely unreasonable.</p>
+
+      <p><strong>What the tribunal expects:</strong></p>
+      <ul>
+        <li>You tried to negotiate in good faith</li>
+        <li>You considered tenant's financial circumstances</li>
+        <li>If you rejected a payment plan, you had good reason</li>
+        <li>You documented all discussions</li>
+      </ul>
+
+      <p><strong>Example of reasonable refusal:</strong></p>
+      <ul>
+        <li>Tenant proposes £10/month on £5,000 arrears (would take 40+ years)</li>
+        <li>Tenant has made and broken multiple payment promises before</li>
+        <li>Tenant's proposed amount is less than ongoing rent (arrears still growing)</li>
+      </ul>
+
+      <p><strong>Checklist:</strong></p>
+      <ul>
+        <li>☐ Discussed payment arrangement with tenant (or attempted to)</li>
+        <li>☐ Documented tenant's proposals (if any)</li>
+        <li>☐ Documented your responses</li>
+        <li>☐ Can justify why any proposals were rejected</li>
+      </ul>
+    </div>
+
+    <div class="ground-card">
+      <h3>Pre-Action Requirement 5: Evidence Bundle</h3>
+
+      <p><strong>What you must provide to tribunal:</strong></p>
+
+      <table>
+        <tr>
+          <th>Document</th>
+          <th>Purpose</th>
+        </tr>
+        <tr>
+          <td>Rent account ledger</td>
+          <td>Shows all rent due, paid, and arrears</td>
+        </tr>
+        <tr>
+          <td>Arrears notice letters</td>
+          <td>Proves you notified tenant</td>
+        </tr>
+        <tr>
+          <td>Advice service signposting</td>
+          <td>Proves you complied with PAR</td>
+        </tr>
+        <tr>
+          <td>Correspondence about payment arrangements</td>
+          <td>Shows you tried to negotiate</td>
+        </tr>
+        <tr>
+          <td>Proof of service of arrears letters</td>
+          <td>Proves tenant received the information</td>
+        </tr>
+      </table>
+
+      <p><strong>Checklist:</strong></p>
+      <ul>
+        <li>☐ Complete rent account ledger prepared</li>
+        <li>☐ All arrears letters collected</li>
+        <li>☐ All correspondence with tenant collected</li>
+        <li>☐ Proof of service for all letters</li>
+        <li>☐ Timeline of events prepared</li>
+      </ul>
+    </div>
+
+    <div class="warning">
+      ⚠️ <strong>Tribunal Will Ask:</strong>
+      <ul>
+        <li>"Did you send arrears letters?" - Show copies and proof of service</li>
+        <li>"Did you signpost to advice services?" - Show what you provided</li>
+        <li>"Did you give them reasonable time to pay?" - Show timeline of events</li>
+        <li>"Did you consider payment arrangements?" - Show correspondence</li>
+        <li>"Why should we grant eviction instead of giving tenant more time?" - Explain why further time won't help</li>
+      </ul>
+    </div>
+  {{/if}}
+
+  <h2>Evidence Checklist for Tribunal Application</h2>
+
+  <div class="check-item">
+    <h3>Essential Documents (All Grounds)</h3>
+    <ul>
+      <li>☐ Copy of tenancy agreement</li>
+      <li>☐ Copy of Notice to Leave you served</li>
+      <li>☐ Certificate of Service (proof you served the notice)</li>
+      <li>☐ Landlord registration certificate</li>
+      <li>☐ Deposit protection certificate (if applicable)</li>
+      <li>☐ Gas safety certificate (if property has gas)</li>
+      <li>☐ EICR certificate</li>
+      <li>☐ Photos of property condition</li>
+    </ul>
+  </div>
+
+  {{#if (includes selected_grounds 1)}}
+    <div class="check-item">
+      <h3>Additional Documents for Ground 1 (Rent Arrears)</h3>
+      <ul>
+        <li>☐ Complete rent account ledger</li>
+        <li>☐ Arrears notice letters sent to tenant</li>
+        <li>☐ Proof of service of arrears letters</li>
+        <li>☐ Information about advice services provided to tenant</li>
+        <li>☐ Correspondence about payment arrangements</li>
+        <li>☐ Bank statements showing rent payments (or lack thereof)</li>
+      </ul>
+    </div>
+  {{/if}}
+
+  {{#if (includes selected_grounds 12)}}
+    <div class="check-item">
+      <h3>Additional Documents for Ground 12 (Anti-Social Behaviour)</h3>
+      <ul>
+        <li>☐ Witness statements from neighbors</li>
+        <li>☐ Police reports or crime reference numbers</li>
+        <li>☐ Environmental health complaints</li>
+        <li>☐ Videos/photos of incidents</li>
+        <li>☐ Letters of complaint sent to tenant</li>
+        <li>☐ Noise monitoring reports (if applicable)</li>
+      </ul>
+    </div>
+  {{/if}}
+
+  <h2>Final Pre-Flight Check</h2>
+
+  <p><strong>Before submitting your tribunal application, confirm ALL of the following:</strong></p>
+
+  <table>
+    <tr>
+      <th>Requirement</th>
+      <th>Status</th>
+    </tr>
+    <tr>
+      <td>Notice to Leave served correctly and has expired</td>
+      <td>☐ Confirmed</td>
+    </tr>
+    <tr>
+      <td>Registered as a landlord with local authority</td>
+      <td>☐ Confirmed</td>
+    </tr>
+    <tr>
+      <td>Deposit protected (if applicable)</td>
+      <td>☐ Confirmed</td>
+    </tr>
+    <tr>
+      <td>Gas safety certificate current (if applicable)</td>
+      <td>☐ Confirmed</td>
+    </tr>
+    <tr>
+      <td>EICR current</td>
+      <td>☐ Confirmed</td>
+    </tr>
+    <tr>
+      <td>Property meets repairing standard</td>
+      <td>☐ Confirmed</td>
+    </tr>
+    {{#if (includes selected_grounds 1)}}
+      <tr>
+        <td>Pre-action requirements for rent arrears completed</td>
+        <td>☐ Confirmed</td>
+      </tr>
+    {{/if}}
+    <tr>
+      <td>All evidence collected and organized</td>
+      <td>☐ Confirmed</td>
+    </tr>
+  </table>
+
+  <div class="success">
+    <strong>✓ Ready to Apply:</strong> Once all items above are confirmed, you can proceed to apply to the First-tier Tribunal for Scotland (Housing and Property Chamber). See the "Tribunal Application Guide" for detailed instructions on how to apply.
+  </div>
+
+  <footer>
+    <p><strong>Legal Basis:</strong> Private Residential Tenancy (Scotland) Act 2016, The First-tier Tribunal for Scotland (Housing and Property Chamber) Rules of Procedure Amendment (Coronavirus) (Scotland) Regulations 2020, Pre-Action Requirements for Orders for Possession</p>
+    <p><strong>Generated:</strong> {{format_date metadata.generated_at}}</p>
+    <p><strong>Landlord Heaven Notice Only Pack</strong> | Scotland</p>
+    <p><strong>Support:</strong> For questions or assistance, visit our help center or contact support.</p>
+  </footer>
+</body>
+</html>

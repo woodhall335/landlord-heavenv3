@@ -654,23 +654,17 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
     );
 
     // ============================================================================
-    // SMART GUIDANCE: Initialize response data container
+    // AUTOMATIC ROUTE SELECTION FOR NOTICE_ONLY (after deposit_and_compliance)
     // ============================================================================
-    const responseData: any = {};
-
-    // ============================================================================
-    // SMART GUIDANCE: ROUTE RECOMMENDATION (after deposit_and_compliance)
-    // ============================================================================
-    // Phase 2.1: Route Recommendation with UI Display Data
-    // Triggered after deposit_and_compliance question in Notice Only (England & Wales)
+    // For notice_only product in England/Wales, automatically select route based
+    // on decision engine eligibility after deposit/compliance questions are answered.
+    // This eliminates the manual route selection question.
     if (
       product === 'notice_only' &&
       caseRow.jurisdiction === 'england-wales' &&
       question_id === 'deposit_and_compliance'
     ) {
       try {
-        console.log('[SMART-GUIDANCE] Running route recommendation after deposit_and_compliance');
-
         // Run decision engine to determine route eligibility
         const caseFacts = wizardFactsToCaseFacts(mergedFacts);
         const decisionInput: DecisionInput = {
@@ -681,187 +675,52 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
         };
         const decision = runDecisionEngine(decisionInput);
 
-        // Build route recommendation for UI display
-        const route_recommendation = {
-          recommended_route: decision.recommended_routes[0] || 'section_8',
-          reasoning: decision.route_explanations?.[decision.recommended_routes[0]] ||
-                     'Based on your compliance status, this is the most suitable route.',
-          blocked_routes: decision.blocked_routes,
-          blocking_issues: decision.blocking_issues
-            .filter(b => b.severity === 'blocking')
-            .map(b => ({
-              route: b.route,
-              issue: b.issue,
-              description: b.description,
-              action_required: b.action_required,
-              legal_basis: b.legal_basis,
-            })),
-          warnings: decision.warnings || [],
-          allowed_routes: decision.allowed_routes,
-          recommended_routes_all: decision.recommended_routes,
-        };
+        let selected_notice_route: string;
+        let route_override: {
+          from?: string;
+          to: string;
+          reason: string;
+          blocking_issues?: string[];
+        } | null = null;
 
-        // Auto-select route (user can override later if they choose)
-        let selected_notice_route = route_recommendation.recommended_route;
+        // If Section 21 is blocked, force Section 8
+        if (decision.blocked_routes.includes('section_21')) {
+          selected_notice_route = 'section_8';
+
+          const blockingIssues = decision.blocking_issues
+            .filter(b => b.route === 'section_21' && b.severity === 'blocking')
+            .map(b => b.description);
+
+          const routeExplanation = decision.route_explanations?.section_21 ||
+            'Section 21 is not available due to compliance issues. Your case will automatically use Section 8.';
+
+          route_override = {
+            from: 'section_21',
+            to: 'section_8',
+            reason: routeExplanation,
+            blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
+          };
+        } else if (decision.recommended_routes.length > 0) {
+          // Use decision engine recommendation (typically Section 21 if allowed)
+          selected_notice_route = decision.recommended_routes[0];
+        } else if (decision.allowed_routes.length > 0) {
+          // Fallback to first allowed route
+          selected_notice_route = decision.allowed_routes[0];
+        } else {
+          // Ultimate fallback to Section 8
+          selected_notice_route = 'section_8';
+        }
 
         // Persist route selection in wizard facts
         mergedFacts = setFactPath(mergedFacts, 'selected_notice_route', selected_notice_route);
-        mergedFacts = setFactPath(mergedFacts, 'route_recommendation', route_recommendation);
+        if (route_override) {
+          mergedFacts = setFactPath(mergedFacts, 'route_override', route_override);
+        }
 
-        // Return recommendation to frontend for display
-        responseData.route_recommendation = route_recommendation;
-
-        console.log(`[SMART-GUIDANCE] Route recommended: ${selected_notice_route}`, {
-          blocked: route_recommendation.blocked_routes,
-          warnings: route_recommendation.warnings.length,
-        });
+        console.log(`[AUTO-ROUTE] notice_only: selected_notice_route=${selected_notice_route}`, route_override);
       } catch (routeErr) {
-        console.error('[SMART-GUIDANCE] Route recommendation failed:', routeErr);
-        // Non-fatal - user can still proceed
-      }
-    }
-
-    // ============================================================================
-    // SMART GUIDANCE: GROUND RECOMMENDATIONS (after arrears_summary)
-    // ============================================================================
-    // Phase 2.2: Ground Recommendations for Section 8
-    // Triggered after arrears_summary question in Notice Only (England & Wales)
-    if (
-      product === 'notice_only' &&
-      caseRow.jurisdiction === 'england-wales' &&
-      question_id === 'arrears_summary'
-    ) {
-      try {
-        console.log('[SMART-GUIDANCE] Running ground recommendations after arrears_summary');
-
-        const caseFacts = wizardFactsToCaseFacts(mergedFacts);
-        const decisionInput: DecisionInput = {
-          jurisdiction: 'england-wales',
-          product: 'notice_only',
-          case_type: 'eviction',
-          facts: caseFacts,
-        };
-        const decision = runDecisionEngine(decisionInput);
-
-        // Format ground recommendations for frontend
-        const ground_recommendations = decision.recommended_grounds?.map(g => ({
-          code: g.code || g.ground_number,
-          title: g.title || g.ground_title,
-          type: g.mandatory ? 'mandatory' : 'discretionary',
-          notice_period_days: g.notice_period_days,
-          success_probability: g.success_probability || 'medium',
-          reasoning: g.reasoning || g.explanation,
-          required_evidence: g.required_evidence || [],
-          legal_basis: g.legal_basis,
-        })) || [];
-
-        // Pre-populate section8_grounds with recommended codes (user can adjust)
-        if (ground_recommendations.length > 0) {
-          const recommended_codes = ground_recommendations.map(g =>
-            `Ground ${g.code} - ${g.title.split(' - ')[0]}`
-          );
-
-          // Only pre-fill if user hasn't selected grounds yet
-          if (!mergedFacts.section8_grounds || mergedFacts.section8_grounds.length === 0) {
-            mergedFacts = setFactPath(mergedFacts, 'section8_grounds', recommended_codes);
-          }
-
-          // Always store recommendations for reference
-          mergedFacts = setFactPath(mergedFacts, 'ground_recommendations', ground_recommendations);
-        }
-
-        // Return to frontend for display
-        responseData.ground_recommendations = ground_recommendations;
-
-        console.log(`[SMART-GUIDANCE] Recommended ${ground_recommendations.length} grounds:`,
-          ground_recommendations.map(g => `Ground ${g.code} (${g.type})`).join(', '));
-      } catch (groundErr) {
-        console.error('[SMART-GUIDANCE] Ground recommendation failed:', groundErr);
-        // Non-fatal - user can still proceed
-      }
-    }
-
-    // ============================================================================
-    // SMART GUIDANCE: DATE AUTO-CALCULATION (after notice_service)
-    // ============================================================================
-    // Phase 2.3: Auto-calculate notice expiry date
-    // Triggered after notice_service question (when notice_service_date is entered)
-    if (
-      product === 'notice_only' &&
-      caseRow.jurisdiction === 'england-wales' &&
-      question_id === 'notice_service'
-    ) {
-      try {
-        console.log('[SMART-GUIDANCE] Running date auto-calculation after notice_service');
-
-        // Import date calculator
-        const { calculateSection8ExpiryDate } = await import('@/lib/documents/notice-date-calculator');
-
-        const notice_service_date = normalizedAnswer?.notice_service_date;
-
-        if (notice_service_date) {
-          const selected_route = mergedFacts.selected_notice_route ||
-                                mergedFacts.route_recommendation?.recommended_route ||
-                                'section_8';
-
-          let calculated_result;
-
-          if (selected_route === 'section_8') {
-            // Extract ground codes from section8_grounds array
-            const grounds = mergedFacts.section8_grounds || [];
-            const groundObjects = grounds.map((groundStr: string) => {
-              const match = groundStr.match(/Ground\s+(\d+)/i);
-              const code = match ? parseInt(match[1]) : 0;
-              const mandatory = ['1', '2', '3', '4', '5', '6', '7', '8'].includes(code.toString());
-              return { code, mandatory };
-            });
-
-            calculated_result = calculateSection8ExpiryDate({
-              service_date: notice_service_date,
-              grounds: groundObjects,
-              tenancy_start_date: mergedFacts.tenancy_start_date,
-              fixed_term: mergedFacts.is_fixed_term,
-              fixed_term_end_date: mergedFacts.fixed_term_end_date,
-            });
-          } else if (selected_route === 'section_21') {
-            // For Section 21, need to calculate based on rent period
-            const { calculateSection21ExpiryDate } = await import('@/lib/documents/notice-date-calculator');
-
-            calculated_result = calculateSection21ExpiryDate({
-              service_date: notice_service_date,
-              tenancy_start_date: mergedFacts.tenancy_start_date,
-              fixed_term: mergedFacts.is_fixed_term,
-              fixed_term_end_date: mergedFacts.fixed_term_end_date,
-              rent_period: mergedFacts.rent_frequency || 'monthly',
-            });
-          }
-
-          if (calculated_result) {
-            // Store calculated date (user can override if needed)
-            mergedFacts = setFactPath(mergedFacts, 'calculated_expiry_date', calculated_result.earliest_valid_date);
-            mergedFacts = setFactPath(mergedFacts, 'date_calculation_explanation', calculated_result.explanation);
-
-            // Pre-fill notice_expiry_date if user hasn't entered it yet
-            if (!normalizedAnswer?.notice_expiry_date && !mergedFacts.notice_expiry_date) {
-              mergedFacts = setFactPath(mergedFacts, 'notice_expiry_date', calculated_result.earliest_valid_date);
-            }
-
-            // Return to frontend for display
-            responseData.calculated_date = {
-              date: calculated_result.earliest_valid_date,
-              notice_period_days: calculated_result.notice_period_days,
-              explanation: calculated_result.explanation,
-              legal_basis: 'Housing Act 1988',
-              warnings: calculated_result.warnings || [],
-            };
-
-            console.log(`[SMART-GUIDANCE] Calculated expiry date: ${calculated_result.earliest_valid_date} ` +
-              `(${calculated_result.notice_period_days} days notice period)`);
-          }
-        }
-      } catch (dateErr) {
-        console.error('[SMART-GUIDANCE] Date calculation failed:', dateErr);
-        // Non-fatal - user can still enter date manually
+        console.error('[AUTO-ROUTE] Failed to auto-select route, will fall back to decision engine in analyze:', routeErr);
+        // Non-fatal - analyze endpoint will handle route selection as backup
       }
     }
 
@@ -988,12 +847,6 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
             evidence_suggestions: enhanced.evidence_suggestions,
           }
         : undefined,
-      // ============================================================================
-      // SMART GUIDANCE: Include all recommendation data in response
-      // ============================================================================
-      route_recommendation: responseData.route_recommendation ?? null,
-      ground_recommendations: responseData.ground_recommendations ?? null,
-      calculated_date: responseData.calculated_date ?? null,
       next_question: nextQuestion ?? null,
       is_complete: isComplete,
       progress: isComplete ? 100 : progress,

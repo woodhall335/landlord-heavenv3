@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Next Steps Guide - After Serving Notice</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 40px;
+      color: #333;
+    }
+    h1 {
+      color: #1a1a1a;
+      border-bottom: 3px solid #8b5cf6;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #8b5cf6;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      color: #1a1a1a;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .timeline {
+      background: #f3f4f6;
+      padding: 20px;
+      border-left: 4px solid #8b5cf6;
+      margin: 20px 0;
+    }
+    .timeline-step {
+      margin: 15px 0;
+      padding-left: 30px;
+      position: relative;
+    }
+    .timeline-step::before {
+      content: "●";
+      position: absolute;
+      left: 0;
+      color: #8b5cf6;
+      font-size: 20px;
+    }
+    .info-box {
+      background: #dbeafe;
+      border-left: 4px solid #3b82f6;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .warning {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .critical {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 15px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .success {
+      background: #d1fae5;
+      border-left: 4px solid #10b981;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .cost-breakdown {
+      background: #fff;
+      border: 2px solid #e5e7eb;
+      padding: 15px;
+      margin: 20px 0;
+      border-radius: 5px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: bold;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    li {
+      margin: 8px 0;
+    }
+    footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 2px solid #e5e7eb;
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <h1>Next Steps Guide - After Serving Your Notice</h1>
+
+  <p><strong>Notice Type:</strong> {{#if (eq notice_route "section_21")}}Section 21 (No-Fault Eviction){{else}}Section 8 (Fault-Based Eviction){{/if}}</p>
+  <p><strong>Service Date:</strong> {{format_date notice_service_date}}</p>
+  <p><strong>Notice Expiry Date:</strong> {{format_date notice_expiry_date}}</p>
+  <p><strong>Property:</strong> {{property.address_line1}}, {{property.address_town}}</p>
+
+  <div class="info-box">
+    ℹ️ <strong>What Happens Next:</strong> You've served your notice. Now you wait until the expiry date. If the tenant doesn't leave voluntarily, you'll need to apply to court for a possession order. This guide explains the complete timeline and process.
+  </div>
+
+  <h2>Complete Timeline</h2>
+
+  <div class="timeline">
+    <div class="timeline-step">
+      <strong>NOW → {{format_date notice_expiry_date}}</strong>: Waiting period. Tenant should leave voluntarily.
+    </div>
+    <div class="timeline-step">
+      <strong>{{format_date notice_expiry_date}}</strong>: Notice expiry date. Tenant should vacate by end of this day.
+    </div>
+    <div class="timeline-step">
+      <strong>Day After Expiry</strong>: If tenant hasn't left, you can apply to court (do NOT change locks).
+    </div>
+    <div class="timeline-step">
+      <strong>2-3 Weeks Later</strong>: Court hearing date set.
+    </div>
+    <div class="timeline-step">
+      <strong>4-8 Weeks Later</strong>: Court hearing. Judge makes decision.
+    </div>
+    <div class="timeline-step">
+      <strong>2 Weeks After Hearing</strong>: If possession granted, tenant gets 14 days to leave (or 28 days if judge extends).
+    </div>
+    <div class="timeline-step">
+      <strong>If Still There</strong>: Apply for bailiff warrant (£130 fee). Bailiff evicts tenant.
+    </div>
+  </div>
+
+  <p><strong>Total Timeline Estimate:</strong> 8-16 weeks from notice expiry to tenant physically removed (if they don't leave voluntarily).</p>
+
+  <h2>Scenario 1: Tenant Leaves Voluntarily ✓</h2>
+
+  <div class="success">
+    <strong>Best Case Scenario:</strong> The tenant leaves on or before {{format_date notice_expiry_date}}. You avoid court proceedings, save money, and regain possession quickly.
+  </div>
+
+  <h3>What to Do:</h3>
+  <ul>
+    <li><strong>Arrange final inspection:</strong> Schedule with tenant if possible (gives them chance to clean/repair)</li>
+    <li><strong>Check inventory:</strong> Compare move-out condition to move-in inventory</li>
+    <li><strong>Take photos:</strong> Document property condition thoroughly</li>
+    <li><strong>Collect keys:</strong> Get all keys, fobs, garage remotes, etc.</li>
+    <li><strong>Check utilities:</strong> Take final meter readings, close accounts if in your name</li>
+    <li><strong>Return deposit:</strong> Within 10 days if deposit protected, or immediately if not</li>
+    <li><strong>Handle deductions:</strong> If deducting for damages, follow deposit scheme dispute process</li>
+  </ul>
+
+  <div class="warning">
+    ⚠️ <strong>Deposit Deductions:</strong> You can only deduct for legitimate damages or unpaid rent. Normal wear and tear is NOT deductible. If you make unfair deductions, the tenant can challenge you through the deposit scheme and you could lose.
+  </div>
+
+  <h2>Scenario 2: Tenant Doesn't Leave ❌</h2>
+
+  <div class="critical">
+    ⚠️ <strong>CRITICAL:</strong> If the tenant is still in the property after {{format_date notice_expiry_date}}, DO NOT change the locks, remove their belongings, or cut off utilities. This is illegal eviction and you could face criminal charges, fines up to £50,000, and the tenant could sue you for damages.
+  </div>
+
+  <h3>What to Do Instead:</h3>
+  <p>You MUST apply to court for a possession order. Here's how:</p>
+
+  <h3>Step 1: Choose Your Court Form</h3>
+
+  {{#if (eq notice_route "section_21")}}
+    <div class="info-box">
+      <strong>Section 21 - Two Options:</strong>
+      <ul>
+        <li><strong>Option A: Accelerated Procedure (Form N5B)</strong> - Faster, no hearing, but stricter requirements. Best if all compliance perfect.</li>
+        <li><strong>Option B: Standard Procedure (Form N5)</strong> - Slower, requires hearing, but more flexible. Use if unsure about compliance.</li>
+      </ul>
+    </div>
+
+    <p><strong>Recommended:</strong> Try accelerated procedure first (Form N5B). If court rejects it due to compliance issues, you can re-apply using standard procedure (Form N5).</p>
+  {{else}}
+    <div class="info-box">
+      <strong>Section 8 - Standard Procedure Only:</strong>
+      <p>You must use Form N5 (standard possession claim). There is no accelerated procedure for Section 8.</p>
+    </div>
+  {{/if}}
+
+  <h3>Step 2: Gather Required Documents</h3>
+  <p>You'll need to submit the following with your court application:</p>
+  <ul>
+    <li>✓ Completed court form (N5 or N5B)</li>
+    <li>✓ Copy of tenancy agreement</li>
+    <li>✓ Copy of the notice you served (Section 8 or Section 21)</li>
+    <li>✓ Proof of service (photos, witness statement, recorded delivery receipt)</li>
+    <li>✓ Rent account showing arrears (if Section 8 for rent arrears)</li>
+    {{#if (eq notice_route "section_21")}}
+      <li>✓ Deposit protection certificate</li>
+      <li>✓ Proof you served prescribed information</li>
+      <li>✓ Copy of gas safety certificate</li>
+      <li>✓ Copy of EPC</li>
+      <li>✓ Proof you served "How to Rent" guide</li>
+    {{/if}}
+    <li>✓ Any other evidence supporting your claim</li>
+  </ul>
+
+  <h3>Step 3: Pay Court Fees</h3>
+
+  <div class="cost-breakdown">
+    <h4>Court Fees (England & Wales):</h4>
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Cost</th>
+      </tr>
+      <tr>
+        <td>Possession claim (Form N5)</td>
+        <td>£355</td>
+      </tr>
+      <tr>
+        <td>Accelerated procedure (Form N5B)</td>
+        <td>£355</td>
+      </tr>
+      <tr>
+        <td>Bailiff warrant (if needed later)</td>
+        <td>£130</td>
+      </tr>
+      <tr>
+        <td><strong>Total Estimate</strong></td>
+        <td><strong>£355 - £485</strong></td>
+      </tr>
+    </table>
+
+    <p><strong>Note:</strong> You can claim these fees back from the tenant if you win, but actually collecting them may be difficult if they have no money.</p>
+  </div>
+
+  <h3>Step 4: Submit to Court</h3>
+  <ul>
+    <li><strong>Online:</strong> Some courts accept online submissions via HMCTS portal</li>
+    <li><strong>Post:</strong> Send to your local county court (find via <a href="https://www.gov.uk/find-court-tribunal">gov.uk/find-court-tribunal</a>)</li>
+    <li><strong>In Person:</strong> Hand deliver to court office during business hours</li>
+  </ul>
+
+  <p><strong>Processing Time:</strong> Court will usually acknowledge within 2-5 working days and set a hearing date within 4-8 weeks.</p>
+
+  <h3>Step 5: Prepare for Court Hearing</h3>
+
+  {{#if (eq notice_route "section_21")}}
+    {{#if accelerated_procedure}}
+      <div class="info-box">
+        <strong>Accelerated Procedure:</strong> Usually no hearing. Judge reviews paperwork only. If everything perfect, you get possession order by post within 6-8 weeks. If issues, judge may call a hearing or reject outright.
+      </div>
+    {{else}}
+      <p>Your hearing will be scheduled 4-8 weeks after application. You MUST attend (or have a representative attend).</p>
+    {{/if}}
+  {{else}}
+    <p>Section 8 hearings are usually scheduled 4-8 weeks after application. You MUST attend (or have a representative attend).</p>
+  {{/if}}
+
+  <h4>What to Bring to Hearing:</h4>
+  <ul>
+    <li>✓ All evidence (original documents + 3 copies)</li>
+    <li>✓ Witness statements (if applicable)</li>
+    <li>✓ Photos of property damage (if claiming for that)</li>
+    <li>✓ Rent account ledger showing arrears</li>
+    <li>✓ Copy of notice and proof of service</li>
+    <li>✓ Any correspondence with tenant</li>
+  </ul>
+
+  <h4>What Happens at Hearing:</h4>
+  <ol>
+    <li>Judge reviews your evidence</li>
+    <li>Tenant can defend (rare, but they might claim you didn't serve properly or notice invalid)</li>
+    <li>Judge asks questions</li>
+    <li>Judge makes decision (usually same day)</li>
+  </ol>
+
+  <div class="success">
+    <strong>Success Rate:</strong> If you've followed all steps correctly and have proper evidence, possession is usually granted. {{#if (eq notice_route "section_8")}}For mandatory grounds (like Ground 8 with 2+ months arrears), judge MUST grant possession if proven.{{/if}}
+  </div>
+
+  <h3>Step 6: After Possession Order Granted</h3>
+
+  <p>If judge grants possession, the tenant gets:</p>
+  <ul>
+    <li><strong>14 days to leave</strong> (standard)</li>
+    <li><strong>28 days to leave</strong> (if judge grants extended time due to hardship)</li>
+    <li><strong>42 days maximum</strong> (in exceptional circumstances)</li>
+  </ul>
+
+  <div class="warning">
+    ⚠️ <strong>Still Can't Force Them Out:</strong> Even with a possession order, you still can't change locks or force the tenant out yourself. If they don't leave by the court-ordered date, proceed to Step 7.
+  </div>
+
+  <h3>Step 7: Apply for Bailiff Warrant (If Needed)</h3>
+
+  <p>If tenant still hasn't left after the possession order deadline:</p>
+  <ul>
+    <li><strong>Fill in Form N325:</strong> Request for bailiff warrant</li>
+    <li><strong>Pay £130 fee</strong></li>
+    <li><strong>Submit to court</strong></li>
+    <li><strong>Wait 2-4 weeks:</strong> Bailiff appointment scheduled</li>
+    <li><strong>Eviction Day:</strong> County court bailiff physically removes tenant and their belongings</li>
+  </ul>
+
+  <div class="info-box">
+    ℹ️ <strong>Bailiff Eviction:</strong> Only a county court bailiff can physically evict someone. They will attend the property, remove the tenant and possessions, change the locks, and hand keys to you. The tenant's belongings are typically left on the street (unless weather is very bad, in which case they may be stored for a short period).
+  </div>
+
+  <h2>Costs Summary</h2>
+
+  <div class="cost-breakdown">
+    <table>
+      <tr>
+        <th>Stage</th>
+        <th>Cost</th>
+        <th>Timeline</th>
+      </tr>
+      <tr>
+        <td>Notice Only Pack</td>
+        <td>£29.99</td>
+        <td>Immediate</td>
+      </tr>
+      <tr>
+        <td>Serve notice & wait</td>
+        <td>£0</td>
+        <td>2-8 weeks (depending on ground)</td>
+      </tr>
+      <tr>
+        <td>Court application (N5/N5B)</td>
+        <td>£355</td>
+        <td>4-8 weeks to hearing</td>
+      </tr>
+      <tr>
+        <td>Bailiff warrant (if needed)</td>
+        <td>£130</td>
+        <td>2-4 weeks to eviction</td>
+      </tr>
+      <tr>
+        <td><strong>Total (if tenant doesn't leave)</strong></td>
+        <td><strong>£514.99</strong></td>
+        <td><strong>8-20 weeks total</strong></td>
+      </tr>
+    </table>
+
+    <p><strong>Can you claim costs back?</strong> Yes, you can request the court orders the tenant to pay your costs. However, actually collecting is difficult if they have no money. Don't rely on recovering costs.</p>
+  </div>
+
+  <h2>Upgrade to Complete Pack</h2>
+
+  <div class="info-box">
+    <strong>💡 Need Court Forms?</strong><br>
+    If your tenant doesn't leave voluntarily, you'll need court forms (N5, N5B, N119) and additional documents (witness statements, particulars of claim, etc.).
+    <br><br>
+    <strong>Complete Pack Includes:</strong>
+    <ul>
+      <li>✓ Everything in Notice Only Pack</li>
+      <li>✓ N5 claim form (pre-filled)</li>
+      <li>✓ N5B accelerated procedure form (pre-filled, Section 21 only)</li>
+      <li>✓ N119 particulars of claim</li>
+      <li>✓ Witness statement template</li>
+      <li>✓ Evidence checklist for court</li>
+      <li>✓ Hearing preparation guide</li>
+    </ul>
+    <br>
+    <strong>Price:</strong> £79.99 (save time and ensure court-ready documents)
+  </div>
+
+  <h2>Key Reminders</h2>
+
+  <ul>
+    <li>✓ <strong>Never illegally evict:</strong> No changing locks, removing belongings, or cutting utilities</li>
+    <li>✓ <strong>Keep all evidence:</strong> Photos, receipts, correspondence, proof of service</li>
+    <li>✓ <strong>Attend all court hearings:</strong> Failure to attend usually means automatic loss</li>
+    <li>✓ <strong>Follow court timelines:</strong> Miss a deadline and you may have to start over</li>
+    <li>✓ <strong>Be professional:</strong> Don't argue with tenant, let court handle it</li>
+    <li>✓ <strong>Document everything:</strong> Assume you'll need to prove everything in court</li>
+  </ul>
+
+  <footer>
+    <p><strong>Legal Basis:</strong> Housing Act 1988, Civil Procedure Rules, Protection from Eviction Act 1977</p>
+    <p><strong>Generated:</strong> {{format_date metadata.generated_at}}</p>
+    <p><strong>Landlord Heaven Notice Only Pack</strong> | England & Wales</p>
+    <p><strong>Support:</strong> For questions or assistance, visit our help center or contact support.</p>
+  </footer>
+</body>
+</html>
