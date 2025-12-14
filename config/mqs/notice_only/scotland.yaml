@@ -21,39 +21,130 @@ jurisdiction: scotland
 version: "2.0.0"
 
 questions:
-  - id: case_overview
-    section: Case Overview
-    question: "Briefly describe the situation and what you need"
-    inputType: textarea
-    helperText: "Include key dates, what has gone wrong, and what outcome you want from the tribunal."
-    validation:
-      required: true
-    suggestion_prompt: >
-      Rewrite the landlord's description into a clear, factual summary suitable for a Notice to Leave and tribunal forms.
-      Focus on dates, events, and amounts. Avoid speculation or emotional wording.
+  # 1. Landlord details
+  - id: landlord_details
+    section: Landlord Details
+    question: Your details
+    inputType: group
+    helperText: "We need your details to complete the Notice to Leave correctly."
+    fields:
+      - id: landlord_full_name
+        label: Full name
+        inputType: text
+        placeholder: "Jane Landlord"
+        validation:
+          required: true
+        width: full
+      - id: landlord_address
+        label: Your address (for service)
+        inputType: textarea
+        placeholder: "Building and street\nTown/City\nPostcode"
+        validation:
+          required: true
+        width: full
+      - id: landlord_email
+        label: Email address
+        inputType: email
+        placeholder: "you@example.com"
+        validation:
+          required: true
+        width: half
+      - id: landlord_phone
+        label: Phone number
+        inputType: tel
+        placeholder: "07700 900000"
+        validation:
+          required: true
+        width: half
     maps_to:
-      - issues.other_breaches.description
+      - landlord_full_name
+      - landlord_address
+      - landlord_email
+      - landlord_phone
 
-  - id: tenancy_type
-    section: Tenancy Type
-    question: "Confirm this is a Private Residential Tenancy (PRT)"
-    inputType: select
-    options:
-      - "Private Residential Tenancy (PRT)"
-      - "Other / unsure"
-    validation:
-      required: true
+  # 2. Tenant details
+  - id: tenant_details
+    section: Tenant Details
+    question: Tenant details
+    inputType: group
+    helperText: "Main tenant(s) named on the Private Residential Tenancy agreement."
+    fields:
+      - id: tenant_full_name
+        label: Main tenant full name
+        inputType: text
+        placeholder: "John Tenant"
+        validation:
+          required: true
+        width: full
+      - id: tenant_2_name
+        label: Second tenant (if any)
+        inputType: text
+        placeholder: "Second tenant full name"
+        width: full
+    maps_to:
+      - tenant_full_name
+      - tenant_2_name
+
+  # 3. Property address
+  - id: property_details
+    section: Property
+    question: Property address
+    inputType: group
+    helperText: "The rented property this Notice to Leave relates to."
+    fields:
+      - id: property_address_line1
+        label: Address line 1
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: property_address_line2
+        label: Address line 2 (optional)
+        inputType: text
+        width: full
+      - id: property_address_town
+        label: Town or city
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: property_postcode
+        label: Postcode
+        inputType: text
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - property.address_line1
+      - property.address_line2
+      - property.city
+      - property.postcode
+
+  # 4. Tenancy type and dates
+  - id: tenancy_type_and_dates
+    section: Tenancy Details
+    question: Tenancy type and start date
+    inputType: group
+    helperText: "Confirm this is a Private Residential Tenancy and provide the start date."
+    fields:
+      - id: tenancy_type
+        label: "Tenancy type"
+        inputType: select
+        options:
+          - "Private Residential Tenancy (PRT)"
+          - "Other / unsure"
+        validation:
+          required: true
+        width: half
+      - id: tenancy_start_date
+        label: "When did the tenancy start?"
+        inputType: date
+        helperText: "Use the date from the PRT agreement."
+        validation:
+          required: true
+        width: half
     maps_to:
       - tenancy.tenancy_type
-
-  - id: tenancy_dates
-    section: Tenancy Details
-    question: "When did the tenancy start?"
-    inputType: date
-    helperText: "Use the date from the PRT agreement."
-    validation:
-      required: true
-    maps_to:
       - tenancy.start_date
 
   - id: rent_terms
@@ -255,63 +346,6 @@ questions:
       - notice.expiry_date
       - notice.service_method
       - notice.served_by
-
-  - id: property_details
-    section: Property Details
-    question: "Property address"
-    inputType: group
-    helperText: "Address of the let property"
-    fields:
-      - id: address_line1
-        label: "Address line 1"
-        inputType: text
-        validation:
-          required: true
-      - id: address_line2
-        label: "Address line 2"
-        inputType: text
-      - id: city
-        label: "Town or city"
-        inputType: text
-        validation:
-          required: true
-      - id: postcode
-        label: "Postcode"
-        inputType: text
-        validation:
-          required: true
-    maps_to:
-      - property.address_line1
-      - property.address_line2
-      - property.city
-      - property.postcode
-      - property.country
-    suggestion_prompt: >
-      Confirm the address exactly matches the tenancy agreement and utility bills.
-
-  - id: tenant_details
-    section: Tenant Details
-    question: "Main tenant details"
-    inputType: group
-    helperText: "For additional tenants, add them after creating the case."
-    fields:
-      - id: tenant_name
-        label: "Tenant full name"
-        inputType: text
-        validation:
-          required: true
-      - id: tenant_email
-        label: "Tenant email"
-        inputType: email
-      - id: tenant_phone
-        label: "Tenant phone"
-        inputType: tel
-    maps_to:
-      - parties.tenants.0.name
-      - parties.tenants.0.email
-      - parties.tenants.0.phone
-    suggestion_prompt: >
-      Ensure the tenant's contact details are correct for service and tribunal paperwork.
 
   - id: evidence_uploads
     section: Evidence
