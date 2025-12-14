@@ -17,11 +17,11 @@ export default function NoticeOnlyPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Most Popular</span>
+              <span className="text-sm font-semibold text-primary">☁️ Ask Heaven Smart Guidance</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Notice Only</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Notice Only with Ask Heaven Smart Guidance</h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Court-Ready Eviction Notices for UK Landlords
+              AI-powered route selection + Court-Ready Eviction Notices
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">£29.99</span>
@@ -34,6 +34,151 @@ export default function NoticeOnlyPage() {
               Get Your Notice Now →
             </Link>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Ask Heaven Smart Guidance Section */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="text-6xl mb-4">☁️</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
+                Ask Heaven Smart Guidance (Included!)
+              </h2>
+              <p className="text-xl text-gray-700 mb-2">
+                AI-powered recommendations to maximize your success
+              </p>
+              <p className="text-gray-600">
+                Ask Heaven analyzes your case and provides expert guidance at every step
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Route Recommendation */}
+              <div className="bg-white rounded-xl border-2 border-blue-200 p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-3xl">☁️</span>
+                  <h3 className="text-xl font-bold text-charcoal">Smart Route Recommendation</h3>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  Ask Heaven analyzes your case and recommends the optimal eviction route:
+                </p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Section 8 vs Section 21 recommendation</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Compliance blockers identified</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Detailed reasoning for each route</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Fix compliance issues before serving</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Ground Recommendations */}
+              <div className="bg-white rounded-xl border-2 border-green-200 p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-3xl">☁️</span>
+                  <h3 className="text-xl font-bold text-charcoal">Ground Recommendations</h3>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  Ask Heaven pre-selects the strongest legal grounds for your case:
+                </p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span>Success probability for each ground</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span>Required evidence checklist</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span>Notice period auto-calculated</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span>Legal basis explanation</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Auto-Calculated Dates */}
+              <div className="bg-white rounded-xl border-2 border-purple-200 p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-3xl">☁️</span>
+                  <h3 className="text-xl font-bold text-charcoal">Auto-Calculated Dates</h3>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  Ask Heaven calculates critical dates to ensure legal compliance:
+                </p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>Notice period calculation</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>Earliest possession date</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>Section 21 timing warnings</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>Jurisdiction-specific rules applied</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Compliance Checks */}
+              <div className="bg-white rounded-xl border-2 border-orange-200 p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-3xl">☁️</span>
+                  <h3 className="text-xl font-bold text-charcoal">Compliance Verification</h3>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  Ask Heaven checks critical compliance requirements:
+                </p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-600 font-bold">✓</span>
+                    <span>Deposit protection status</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-600 font-bold">✓</span>
+                    <span>Gas safety certificate check</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-600 font-bold">✓</span>
+                    <span>EPC and How to Rent guide</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-orange-600 font-bold">✓</span>
+                    <span>Section 21 blocker warnings</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Value Callout */}
+            <div className="mt-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-6 text-center">
+              <p className="text-lg">
+                <strong className="font-bold">Ask Heaven Smart Guidance saves hours of research</strong> and prevents costly mistakes like serving invalid notices or choosing weak grounds
+              </p>
+            </div>
           </div>
         </Container>
       </section>
@@ -180,8 +325,8 @@ export default function NoticeOnlyPage() {
               {/* Bonus Features */}
               <div className="bg-primary-subtle rounded-lg border border-primary/20 p-6">
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">✨</span>
-                  <h3 className="text-xl font-semibold text-charcoal">Bonus Features</h3>
+                  <span className="text-2xl">☁️</span>
+                  <h3 className="text-xl font-semibold text-charcoal">Ask Heaven Features</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
@@ -192,7 +337,7 @@ export default function NoticeOnlyPage() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span className="text-gray-700">Professionally curated case analysis</span>
+                    <span className="text-gray-700">Ask Heaven Smart Guidance (route, grounds, dates)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">

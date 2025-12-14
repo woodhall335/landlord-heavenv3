@@ -180,11 +180,14 @@ export default function WizardPreviewPage() {
                   'Lifetime access to all pack documents',
                 ]
               : [
-                  'Section 8 and/or Section 21 notice (auto-selected based on eligibility)',
+                  '☁️ Ask Heaven-drafted witness statement (saves £200-500)',
+                  '☁️ Ask Heaven compliance audit (8 critical checks)',
+                  '☁️ Ask Heaven risk assessment report',
+                  'Section 8 and/or Section 21 notice (auto-selected)',
                   'Court claim forms (N5, N119, N5B where eligible)',
                   'Rent arrears schedule & payment history log',
-                  'Step-by-step eviction roadmap & filing guide',
                   'Evidence checklist & proof of service templates',
+                  'Step-by-step eviction roadmap & filing guide',
                   'Lifetime access to all pack documents',
                 ],
           },
@@ -200,10 +203,12 @@ export default function WizardPreviewPage() {
               ? 'Simple Procedure money claim bundle with Form 3A and pre-action letter.'
               : 'Recover rent arrears and damages in England & Wales.',
             features: [
+              isScotland ? '☁️ Ask Heaven-drafted Simple Procedure claim (saves £300-600)' : '☁️ Ask Heaven-drafted Particulars of Claim (saves £300-600)',
               isScotland ? 'Simple Procedure Form 3A (sheriff court)' : 'Money claim form (N1) & particulars',
-              'Rent arrears calculation & interest breakdown',
+              isScotland ? '☁️ Ask Heaven-drafted pre-action letter' : '☁️ Ask Heaven-drafted Letter Before Action',
+              'Rent arrears calculation & interest breakdown (8% statutory)',
               'Deposit deduction breakdown (where applicable)',
-              isScotland ? 'Pre-action demand letter' : 'Letter before action',
+              'Evidence index & exhibit references',
               isScotland ? 'Sheriff Court filing guide & timeline' : 'Filing guide for County Court / MCOL',
               'Lifetime access to all pack documents',
             ],

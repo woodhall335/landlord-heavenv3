@@ -16,11 +16,11 @@ export default function MoneyClaimPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Recover Your Money</span>
+              <span className="text-sm font-semibold text-primary">☁️ Ask Heaven-Powered</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Money Claim Pack</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Ask Heaven Money Claim Pack</h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Claim Unpaid Rent Through UK Courts
+              AI-drafted claim documents + UK Court claim forms
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">£179.99</span>
@@ -41,6 +41,115 @@ export default function MoneyClaimPage() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England &amp; Wales or Scotland</p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Ask Heaven Features Section */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="text-6xl mb-4">☁️</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
+                Ask Heaven AI Drafting (Included!)
+              </h2>
+              <p className="text-xl text-gray-700 mb-2">
+                Professional legal documents drafted by AI - saves £300-600
+              </p>
+              <p className="text-gray-600">
+                Ask Heaven analyzes your arrears and damages to write compelling court documents
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              {/* Particulars of Claim */}
+              <div className="bg-white rounded-xl border-2 border-blue-200 p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-3xl">☁️</span>
+                  <h3 className="text-xl font-bold text-charcoal">Ask Heaven-Drafted Particulars of Claim</h3>
+                </div>
+                <div className="mb-4">
+                  <span className="inline-block bg-green-100 text-green-800 font-bold text-sm px-3 py-1 rounded-full">
+                    Saves £300-600
+                  </span>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  Ask Heaven drafts a professional Particulars of Claim document for your money claim, including:
+                </p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Tenancy agreement details and terms</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Arrears breakdown with dates and amounts</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Interest calculation (8% statutory rate)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Damages claims (if applicable)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Legal formatting ready for court submission</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Letter Before Action */}
+              <div className="bg-white rounded-xl border-2 border-purple-200 p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-3xl">☁️</span>
+                  <h3 className="text-xl font-bold text-charcoal">Ask Heaven Letter Before Action</h3>
+                </div>
+                <div className="mb-4">
+                  <span className="inline-block bg-green-100 text-green-800 font-bold text-sm px-3 py-1 rounded-full">
+                    PAP-DEBT Compliant
+                  </span>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  Ask Heaven drafts a Pre-Action Protocol compliant Letter Before Action:
+                </p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>PAP-DEBT compliance (required for England & Wales)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>Clear breakdown of debt owed</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>30-day notice period</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>Includes all required PAP forms</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>Professional tone to encourage settlement</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Value Callout */}
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 text-center">
+              <h3 className="text-2xl font-bold mb-3">💰 Ask Heaven Saves £300-600 in Legal Fees</h3>
+              <p className="text-lg mb-4">
+                Solicitors charge £300-600 to draft Particulars of Claim and Letters Before Action
+              </p>
+              <p className="text-white/90 text-base">
+                With Ask Heaven at £179.99, you get AI-drafted documents PLUS all court forms, arrears schedules, and filing guides
+              </p>
+            </div>
           </div>
         </Container>
       </section>
@@ -93,7 +202,7 @@ export default function MoneyClaimPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Particulars of Claim</strong> - Detailed statement with interest wording
+                      <strong>☁️ Ask Heaven-Drafted Particulars of Claim</strong> - AI-written statement saving £300-600 in solicitor fees
                     </span>
                   </li>
                   <li className="flex items-start gap-2">

@@ -29,11 +29,11 @@ export default function CompleteEvictionPackPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Complete Solution</span>
+              <span className="text-sm font-semibold text-primary">☁️ Ask Heaven-Powered</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Complete Eviction Pack</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Ask Heaven-Powered Complete Eviction Pack</h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
-              Everything You Need from Notice to Possession Order
+              AI-drafted documents + Everything from Notice to Possession Order
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">£149.99</span>
@@ -48,6 +48,141 @@ export default function CompleteEvictionPackPage() {
             <p className="mt-4 text-sm text-gray-600">
               Court-ready documents • Expert guidance • Lifetime storage
             </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Ask Heaven Features Section */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+        <Container>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="text-6xl mb-4">☁️</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
+                Ask Heaven AI Features (Included!)
+              </h2>
+              <p className="text-xl text-gray-700 mb-2">
+                Get professionally drafted documents worth £650-1,400
+              </p>
+              <p className="text-gray-600">
+                Our AI assistant drafts critical court documents that would cost hundreds if written by a solicitor
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              {/* Witness Statement */}
+              <div className="bg-white rounded-xl border-2 border-blue-200 p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-3xl">☁️</span>
+                  <h3 className="text-xl font-bold text-charcoal">Ask Heaven Witness Statement</h3>
+                </div>
+                <div className="mb-4">
+                  <span className="inline-block bg-green-100 text-green-800 font-bold text-sm px-3 py-1 rounded-full">
+                    Saves £200-500
+                  </span>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  Ask Heaven analyzes your case details and drafts a professional witness statement for court proceedings. Includes:
+                </p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Chronological timeline of events</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Legal formatting and structure</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Ground-specific evidence references</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-blue-600 font-bold">✓</span>
+                    <span>Ready for court submission</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Compliance Audit */}
+              <div className="bg-white rounded-xl border-2 border-purple-200 p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-3xl">☁️</span>
+                  <h3 className="text-xl font-bold text-charcoal">Compliance Audit Report</h3>
+                </div>
+                <div className="mb-4">
+                  <span className="inline-block bg-green-100 text-green-800 font-bold text-sm px-3 py-1 rounded-full">
+                    Saves £150-400
+                  </span>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  Ask Heaven checks 8 critical compliance requirements to prevent case dismissal. Covers:
+                </p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>Deposit protection verification</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>Gas safety certificate checks</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>EPC and How to Rent compliance</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-purple-600 font-bold">✓</span>
+                    <span>Fix issues BEFORE filing</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Risk Assessment */}
+              <div className="bg-white rounded-xl border-2 border-green-200 p-6 shadow-lg">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-3xl">☁️</span>
+                  <h3 className="text-xl font-bold text-charcoal">Case Risk Assessment</h3>
+                </div>
+                <div className="mb-4">
+                  <span className="inline-block bg-green-100 text-green-800 font-bold text-sm px-3 py-1 rounded-full">
+                    Saves £300-500
+                  </span>
+                </div>
+                <p className="text-gray-700 mb-4">
+                  Ask Heaven evaluates your case strength and provides strategic recommendations:
+                </p>
+                <ul className="space-y-2 text-sm text-gray-700">
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span>Success probability analysis</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span>Weakness identification</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span>Evidence strength rating</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-green-600 font-bold">✓</span>
+                    <span>Timeline risk factors</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Value Callout */}
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 text-center">
+              <h3 className="text-2xl font-bold mb-3">💰 Total Ask Heaven Value: £650-1,400</h3>
+              <p className="text-lg mb-4">
+                These three AI-drafted documents alone would cost £650-1,400 if written by a solicitor
+              </p>
+              <p className="text-white/90 text-base">
+                With the Complete Pack at £149.99, you also get all court forms, notices, checklists, and guides - making this an incredible value
+              </p>
+            </div>
           </div>
         </Container>
       </section>
