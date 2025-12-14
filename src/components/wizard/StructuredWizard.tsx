@@ -1523,6 +1523,59 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           {/* Smart Guidance panels for Notice Only (eviction) - sticky sidebar */}
           {caseType === 'eviction' && product === 'notice_only' && (
             <div className="hidden lg:block sticky top-24 space-y-4">
+              {/* Placeholder panel when no Smart Guidance data exists yet */}
+              {!routeRecommendation && !groundRecommendations && !calculatedDate && (
+                <Card className="p-6 bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200">
+                  <div className="text-center mb-4">
+                    <div className="text-5xl mb-3">☁️</div>
+                    <h3 className="text-lg font-bold text-purple-900 mb-2">
+                      Smart Guidance
+                    </h3>
+                    <p className="text-sm text-purple-800 mb-4">
+                      AI-powered legal guidance will appear here as you answer questions
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-blue-200">
+                      <div className="text-2xl">💡</div>
+                      <div className="flex-1">
+                        <p className="text-xs font-semibold text-blue-900">Route Recommendation</p>
+                        <p className="text-xs text-blue-700">
+                          We'll analyze your compliance and recommend Section 8 or Section 21
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-green-200">
+                      <div className="text-2xl">⚖️</div>
+                      <div className="flex-1">
+                        <p className="text-xs font-semibold text-green-900">Ground Recommendations</p>
+                        <p className="text-xs text-green-700">
+                          We'll suggest the strongest legal grounds for your case
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3 p-3 bg-white rounded-lg border border-purple-200">
+                      <div className="text-2xl">📅</div>
+                      <div className="flex-1">
+                        <p className="text-xs font-semibold text-purple-900">Auto-calculated Dates</p>
+                        <p className="text-xs text-purple-700">
+                          We'll calculate the earliest valid notice expiry date
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 p-3 bg-purple-100 rounded-lg border border-purple-300">
+                    <p className="text-xs text-purple-900 text-center">
+                      <strong>💎 Smart Guidance is included</strong> with your Notice Only pack
+                    </p>
+                  </div>
+                </Card>
+              )}
+
               {/* ROUTE RECOMMENDATION PANEL */}
               {routeRecommendation && (
                 <div className="p-5 bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 rounded-r-lg shadow-md">
