@@ -29,6 +29,13 @@ export interface GroundRecommendation {
   reasoning: string;
   success_probability: 'very_high' | 'high' | 'medium' | 'low' | 'none';
   red_flags?: string[];
+  // Alternative property names for compatibility
+  ground_number?: number | string;
+  ground_title?: string;
+  mandatory?: boolean;
+  explanation?: string;
+  required_evidence?: string[];
+  legal_basis?: string;
 }
 
 export interface BlockingIssue {
@@ -37,6 +44,7 @@ export interface BlockingIssue {
   description: string;
   action_required: string;
   severity: 'blocking' | 'warning';
+  legal_basis?: string;
 }
 
 export interface DecisionOutput {

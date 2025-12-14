@@ -4,16 +4,9 @@
  * Provides helper functions for tracking events in GA4
  */
 
-declare global {
-  interface Window {
-    gtag?: (
-      command: 'config' | 'event' | 'js' | 'set',
-      targetId: string | Date,
-      config?: Record<string, any>
-    ) => void;
-    dataLayer?: any[];
-  }
-}
+// Type definitions are in src/types/gtag.d.ts
+type GtagCommand = 'config' | 'event' | 'js' | 'set';
+type GtagEventParams = Record<string, any>;
 
 /**
  * Track a custom event in Google Analytics
