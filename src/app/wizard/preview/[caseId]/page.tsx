@@ -140,25 +140,27 @@ export default function WizardPreviewPage() {
         return [
           {
             productType: 'notice_only',
-            name: isScotland ? 'Notice to Leave' : 'Notice Only',
+            name: isScotland ? 'Notice to Leave Pack' : 'Notice Only Pack',
             price: formatPrice(PRICING.NOTICE_ONLY), // ✅ Fixed: £29.99 from config (was £69.99!)
             description: isScotland
-              ? 'Serve a legally valid Notice to Leave for Scotland.'
-              : 'Serve the right notice (Section 8 or Section 21) with proof of service.',
+              ? 'Complete pack: Notice to Leave + 3 professional guidance documents. Everything you need to serve notice correctly.'
+              : 'Complete pack: Official notice + 3 professional guidance documents. Everything you need to serve notice correctly.',
             features: isScotland
               ? [
-                  'Notice to Leave (Private Residential Tenancy)',
-                  'Ground-specific notice period calculation (28 or 84 days)',
-                  'Pre-action requirements checklist (where applicable)',
-                  'Proof of service templates',
-                  'First-tier Tribunal roadmap',
+                  'Notice to Leave with auto-calculated notice period (28-84 days by ground)',
+                  'Service Instructions - How to serve legally (no first class post in Scotland!)',
+                  'Pre-Action Checklist - Mandatory PAR for Ground 1 + tribunal requirements',
+                  'Tribunal Guide - Complete First-tier Tribunal process (FREE vs England £355)',
+                  'Smart guidance for grounds, evidence, and notice periods',
+                  'All documents in one convenient PDF pack',
                 ]
               : [
-                  'Section 8 or Section 21 notice (auto-selected based on eligibility)',
-                  'Legally valid expiry date (auto-calculated from service date)',
-                  'Route decisioning and timing guidance',
-                  'Proof of service templates and checklist',
-                  'Evidence checklist tailored to your grounds',
+                  'Section 8 or Section 21 notice (auto-selected based on compliance)',
+                  'Service Instructions - How to serve legally with proof of service templates',
+                  'Compliance Checklist - Verify deposit, gas cert, EPC, How to Rent guide',
+                  'Next Steps Guide - Complete court process timeline (N5/N5B, bailiffs, costs)',
+                  'Smart route recommendation based on your situation',
+                  'Auto-calculated expiry dates and notice periods',
                 ],
           },
           {
@@ -374,15 +376,20 @@ export default function WizardPreviewPage() {
         }
 
         // Generate preview document
-        const previewResponse = await fetch('/api/documents/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            case_id: caseId,
-            document_type: documentType,
-            is_preview: true,
-          }),
-        });
+        // For Notice Only, use the new merged preview API that includes all documents
+        const isNoticeOnly = inferredProduct === 'notice_only';
+
+        const previewResponse = isNoticeOnly
+          ? await fetch(`/api/notice-only/preview/${caseId}`)
+          : await fetch('/api/documents/generate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                case_id: caseId,
+                document_type: documentType,
+                is_preview: true,
+              }),
+            });
 
         if (!previewResponse.ok) {
           const errorData = await previewResponse.json().catch(() => ({}));
@@ -406,17 +413,26 @@ export default function WizardPreviewPage() {
           throw new Error(errorMessage);
         }
 
-        const previewResult = await previewResponse.json();
+        // Handle preview response
+        if (isNoticeOnly) {
+          // Notice Only returns PDF directly - create blob URL
+          const pdfBlob = await previewResponse.blob();
+          const blobUrl = URL.createObjectURL(pdfBlob);
+          setPreviewUrl(blobUrl);
+        } else {
+          // Other products return JSON with document ID
+          const previewResult = await previewResponse.json();
 
-        // Get signed URL for preview
-        if (previewResult.document?.id) {
-          const signedUrlResponse = await fetch(
-            `/api/documents/preview/${previewResult.document.id}`
-          );
+          // Get signed URL for preview
+          if (previewResult.document?.id) {
+            const signedUrlResponse = await fetch(
+              `/api/documents/preview/${previewResult.document.id}`
+            );
 
-          if (signedUrlResponse.ok) {
-            const signedUrlResult = await signedUrlResponse.json();
-            setPreviewUrl(signedUrlResult.preview_url);
+            if (signedUrlResponse.ok) {
+              const signedUrlResult = await signedUrlResponse.json();
+              setPreviewUrl(signedUrlResult.preview_url);
+            }
           }
         }
 
@@ -631,6 +647,25 @@ export default function WizardPreviewPage() {
                 {isEviction ? '📦 Eviction Pack Preview' : '📄 Document Preview'}
               </h3>
 
+              {/* Notice Only - Show special message about merged preview */}
+              {effectiveProduct === 'notice_only' && (
+                <div className="mb-4 p-4 bg-gradient-to-r from-purple-50 to-blue-50 border-l-4 border-purple-600 rounded-r-lg">
+                  <div className="flex items-start gap-3">
+                    <div className="text-2xl">📦</div>
+                    <div>
+                      <h4 className="font-semibold text-purple-900 text-sm mb-1">
+                        Complete Notice Only Pack Preview
+                      </h4>
+                      <p className="text-sm text-purple-800">
+                        This preview shows your complete pack: the official notice plus 3 professional guidance documents
+                        ({isScotlandEviction ? 'service instructions, pre-action checklist, and tribunal guide' : 'service instructions, compliance checklist, and next steps guide'}).
+                        All documents are merged into one convenient PDF for you to review.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {previewUrl ? (
                 <div className="relative bg-white border-2 border-gray-200 rounded-lg overflow-hidden">
                   <div className="absolute top-0 left-0 right-0 bg-yellow-50 border-b border-yellow-200 px-4 py-2 z-10">
@@ -677,21 +712,23 @@ export default function WizardPreviewPage() {
                       {/* NOTICE_ONLY product - notice-specific features */}
                       {effectiveProduct === 'notice_only' && isScotlandEviction && (
                         <>
-                          <li>✅ Notice to Leave with auto-calculated leaving date</li>
-                          <li>✅ Service guidance & proof of service templates</li>
-                          <li>✅ Evidence checklist for your selected grounds</li>
-                          <li>✅ Pre-tribunal preparation guide</li>
-                          <li>✅ Explanation of why this route was selected</li>
+                          <li>✅ Notice to Leave with auto-calculated leaving date and notice period</li>
+                          <li>✅ Service Instructions - How to serve legally (hand delivery, recorded delivery, sheriff officer)</li>
+                          <li>✅ Pre-Action Checklist - Mandatory requirements for Ground 1 + tribunal preparation</li>
+                          <li>✅ Tribunal Guide - Complete First-tier Tribunal process (FREE tribunal vs England £355!)</li>
+                          <li>✅ Smart guidance for grounds, notice periods, and evidence requirements</li>
+                          <li>✅ All documents in one convenient PDF pack</li>
                         </>
                       )}
 
                       {effectiveProduct === 'notice_only' && !isScotlandEviction && (
                         <>
                           <li>✅ {caseData.recommended_route === 'section_21' ? 'Section 21 notice (Form 6A)' : 'Section 8 notice (Form 3)'} with auto-calculated expiry date</li>
-                          <li>✅ Service guidance & certificates of service</li>
-                          <li>✅ Evidence checklist tailored to your situation</li>
-                          <li>✅ Route explanation (why Section 8 or 21 was chosen)</li>
-                          <li>✅ Pre-court preparation guide</li>
+                          <li>✅ Service Instructions - How to serve legally (hand delivery, first class, recorded delivery)</li>
+                          <li>✅ Compliance Checklist - Pre-service verification (deposit, gas, EPC, How to Rent)</li>
+                          <li>✅ Next Steps Guide - Complete timeline after serving notice (court process, N5/N5B forms, bailiffs)</li>
+                          <li>✅ Smart guidance recommendations based on your answers</li>
+                          <li>✅ All documents in one convenient PDF pack</li>
                         </>
                       )}
 
