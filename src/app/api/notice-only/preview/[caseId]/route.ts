@@ -290,8 +290,8 @@ export async function GET(
 
     console.log('[NOTICE-PREVIEW-API] Preview generated successfully');
 
-    // Return PDF
-    return new Response(previewPdf, {
+    // Return PDF (convert Buffer to Uint8Array for Response API)
+    return new Response(new Uint8Array(previewPdf), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': 'inline; filename="notice-only-preview.pdf"',
