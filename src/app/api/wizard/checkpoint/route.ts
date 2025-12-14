@@ -22,7 +22,7 @@ import { getLawProfile } from '@/lib/law-profile';
 const checkpointSchema = z.object({
   case_id: z.string().uuid(),
   // Optional: can still accept direct facts for stateless usage (testing)
-  facts: z.record(z.any()).optional(),
+  facts: z.record(z.string(), z.any()).optional(),
   jurisdiction: z.string().optional(),
   product: z.string().optional(),
   case_type: z.string().optional(),

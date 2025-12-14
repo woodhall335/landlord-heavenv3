@@ -10,10 +10,12 @@ interface AIUsageLog {
   id: string;
   operation: string;
   model: string;
-  input_tokens: number;
-  output_tokens: number;
-  total_cost_usd: number;
+  input_tokens: number | null;
+  output_tokens: number | null;
+  total_cost_usd: number | null;
   created_at: string;
+  user_id?: string | null;
+  case_id?: string | null;
 }
 
 interface AIUsageStats {
@@ -59,12 +61,14 @@ export default function AdminAIUsagePage() {
     const supabase = getSupabaseBrowserClient();
     try {
       // Fetch all AI usage logs
-      const { data: logs, error } = await supabase
+      const { data, error } = await supabase
         .from("ai_usage_logs")
         .select("*")
         .order("created_at", { ascending: false });
 
       if (error) throw error;
+
+      const logs = (data || []) as AIUsageLog[];
 
       // Calculate date ranges
       const now = new Date();
@@ -73,27 +77,27 @@ export default function AdminAIUsagePage() {
       const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
       // Calculate stats
-      const totalCostAllTime = logs?.reduce((sum, log) => sum + (log.total_cost_usd || 0), 0) || 0;
+      const totalCostAllTime = logs.reduce((sum, log) => sum + (log.total_cost_usd || 0), 0);
       const totalCostToday = logs
-        ?.filter((log) => new Date(log.created_at) >= startOfToday)
-        .reduce((sum, log) => sum + (log.total_cost_usd || 0), 0) || 0;
+        .filter((log) => new Date(log.created_at) >= startOfToday)
+        .reduce((sum, log) => sum + (log.total_cost_usd || 0), 0);
       const totalCostThisWeek = logs
-        ?.filter((log) => new Date(log.created_at) >= startOfWeek)
-        .reduce((sum, log) => sum + (log.total_cost_usd || 0), 0) || 0;
+        .filter((log) => new Date(log.created_at) >= startOfWeek)
+        .reduce((sum, log) => sum + (log.total_cost_usd || 0), 0);
       const totalCostThisMonth = logs
-        ?.filter((log) => new Date(log.created_at) >= startOfMonth)
-        .reduce((sum, log) => sum + (log.total_cost_usd || 0), 0) || 0;
+        .filter((log) => new Date(log.created_at) >= startOfMonth)
+        .reduce((sum, log) => sum + (log.total_cost_usd || 0), 0);
 
-      const totalTokens = logs?.reduce(
+      const totalTokens = logs.reduce(
         (sum, log) => sum + (log.input_tokens || 0) + (log.output_tokens || 0),
         0
-      ) || 0;
+      );
 
-      const avgCostPerOperation = logs && logs.length > 0 ? totalCostAllTime / logs.length : 0;
+      const avgCostPerOperation = logs.length > 0 ? totalCostAllTime / logs.length : 0;
 
       // Calculate costs by operation
       const costsByOperation: Record<string, { count: number; totalCost: number }> = {};
-      logs?.forEach((log) => {
+      logs.forEach((log) => {
         if (!costsByOperation[log.operation]) {
           costsByOperation[log.operation] = { count: 0, totalCost: 0 };
         }
@@ -109,7 +113,7 @@ export default function AdminAIUsagePage() {
         totalTokens,
         avgCostPerOperation,
         costsByOperation,
-        recentLogs: logs?.slice(0, 50) || [],
+        recentLogs: logs.slice(0, 50),
       });
     } catch (error) {
       console.error("Error loading AI usage stats:", error);

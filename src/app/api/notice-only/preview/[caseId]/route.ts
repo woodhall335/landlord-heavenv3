@@ -11,8 +11,6 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/documents/notice-only-preview-merger';
 import { generateDocument } from '@/lib/documents/generator';
-import { fillSection8Form } from '@/lib/documents/official-forms-filler';
-import { fillSection21Form } from '@/lib/documents/official-forms-filler';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -76,24 +74,38 @@ export async function GET(
       if (selected_route === 'section_8') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 8 notice');
         try {
-          const section8Pdf = await fillSection8Form(caseFacts);
-          documents.push({
-            title: 'Section 8 Notice (Form 3)',
-            category: 'notice',
-            pdf: section8Pdf,
+          const section8Doc = await generateDocument({
+            templatePath: 'uk/england-wales/templates/eviction/section8_form3.hbs',
+            data: caseFacts,
+            outputFormat: 'pdf',
+            isPreview: true,
           });
+          if (section8Doc.pdf) {
+            documents.push({
+              title: 'Section 8 Notice (Form 3)',
+              category: 'notice',
+              pdf: section8Doc.pdf,
+            });
+          }
         } catch (err) {
           console.error('[NOTICE-PREVIEW-API] Section 8 generation failed:', err);
         }
       } else if (selected_route === 'section_21') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 21 notice');
         try {
-          const section21Pdf = await fillSection21Form(caseFacts);
-          documents.push({
-            title: 'Section 21 Notice (Form 6A)',
-            category: 'notice',
-            pdf: section21Pdf,
+          const section21Doc = await generateDocument({
+            templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
+            data: caseFacts,
+            outputFormat: 'pdf',
+            isPreview: true,
           });
+          if (section21Doc.pdf) {
+            documents.push({
+              title: 'Section 21 Notice (Form 6A)',
+              category: 'notice',
+              pdf: section21Doc.pdf,
+            });
+          }
         } catch (err) {
           console.error('[NOTICE-PREVIEW-API] Section 21 generation failed:', err);
         }

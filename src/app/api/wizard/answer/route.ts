@@ -682,9 +682,10 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
         const decision = runDecisionEngine(decisionInput);
 
         // Build route recommendation for UI display
+        const recommendedRoute = decision.recommended_routes[0] || 'section_8';
         const route_recommendation = {
-          recommended_route: decision.recommended_routes[0] || 'section_8',
-          reasoning: decision.route_explanations?.[decision.recommended_routes[0]] ||
+          recommended_route: recommendedRoute,
+          reasoning: decision.route_explanations?.[recommendedRoute as keyof typeof decision.route_explanations] ||
                      'Based on your compliance status, this is the most suitable route.',
           blocked_routes: decision.blocked_routes,
           blocking_issues: decision.blocking_issues
@@ -694,7 +695,7 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
               issue: b.issue,
               description: b.description,
               action_required: b.action_required,
-              legal_basis: b.legal_basis,
+              legal_basis: b.legal_basis || '',
             })),
           warnings: decision.warnings || [],
           allowed_routes: decision.allowed_routes,
@@ -758,7 +759,7 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
         // Pre-populate section8_grounds with recommended codes (user can adjust)
         if (ground_recommendations.length > 0) {
           const recommended_codes = ground_recommendations.map(g =>
-            `Ground ${g.code} - ${g.title.split(' - ')[0]}`
+            `Ground ${g.code} - ${(g.title || '').split(' - ')[0]}`
           );
 
           // Only pre-fill if user hasn't selected grounds yet
