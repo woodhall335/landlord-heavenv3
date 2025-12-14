@@ -78,6 +78,21 @@ export const ReviewSection: React.FC<SectionProps> = ({
         your complete money-claim pack as a ZIP file.
       </p>
 
+      {/* Ask Heaven Features Banner */}
+      <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+        <div className="flex items-start">
+          <div className="text-3xl mr-3">☁️</div>
+          <div>
+            <h4 className="font-semibold text-charcoal mb-1">
+              Ask Heaven Legal Drafting Included
+            </h4>
+            <p className="text-sm text-gray-600">
+              Your Particulars of Claim and Letter Before Action will be professionally drafted by Ask Heaven, saving you £300-600 in solicitor fees. Generation takes 2-3 minutes.
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
@@ -94,7 +109,7 @@ export const ReviewSection: React.FC<SectionProps> = ({
           disabled={downloading}
           className="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700 disabled:opacity-60"
         >
-          {downloading ? 'Generating pack…' : 'Generate & download premium pack'}
+          {downloading ? 'Ask Heaven is drafting your Particulars of Claim…' : 'Generate Ask Heaven-drafted claim pack'}
         </button>
       </div>
     </div>
