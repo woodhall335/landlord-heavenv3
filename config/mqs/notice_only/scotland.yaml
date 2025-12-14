@@ -101,7 +101,7 @@ questions:
     section: Rent Arrears
     question: "Total arrears outstanding"
     inputType: currency
-    helperText: "If none, enter 0."
+    helperText: "If none, enter 0. Our smart guidance system will help you understand which grounds apply and ensure you meet pre-action requirements for Ground 1."
     validation:
       required: true
       min: 0
@@ -190,7 +190,7 @@ questions:
     section: Grounds for Eviction
     question: "Which grounds for eviction apply?"
     inputType: multiselect
-    helperText: "Select all PRT grounds that apply to this case."
+    helperText: "Select all PRT grounds that apply to this case. Our smart guidance system will help you understand notice periods, evidence requirements, and tribunal success probabilities for each ground."
     options:
       - "Ground 1 - Rent arrears (3+ months)"
       - "Ground 2 - Breach of tenancy"
@@ -229,7 +229,7 @@ questions:
     section: Notice Service
     question: "Notice details"
     inputType: group
-    helperText: "We need these for the Notice to Leave."
+    helperText: "We need these for the Notice to Leave. Our smart guidance system will automatically calculate the correct notice period and expiry date based on your selected grounds."
     fields:
       - id: notice_date
         label: "Date notice will be served"
@@ -321,7 +321,7 @@ questions:
       - tenancy_agreement_uploaded
       - rent_schedule_uploaded
       - correspondence_uploaded
-    helperText: "Add tenancy agreement/PRT, rent schedule, correspondence and photos to strengthen your notice."
+    helperText: "Add tenancy agreement/PRT, rent schedule, correspondence and photos to strengthen your notice. Once you complete this wizard, you'll see a complete preview of your Notice Only pack (Notice to Leave, service instructions, pre-action checklist, and tribunal guide) before purchasing."
     evidence_types:
       - tenancy_agreement
       - rent_schedule

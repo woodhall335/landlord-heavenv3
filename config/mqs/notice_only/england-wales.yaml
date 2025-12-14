@@ -200,7 +200,7 @@ questions:
     inputType: group
     routes:
       - section_21
-    helperText: "These answers determine whether Section 21 is valid."
+    helperText: "These answers determine whether Section 21 is valid. Our smart guidance system will analyze your compliance and recommend the best route (Section 8 or Section 21) based on your situation."
     fields:
       - id: deposit_amount
         label: "Deposit amount (or 0 if none)"
@@ -317,7 +317,7 @@ questions:
     inputType: group
     routes:
       - section_8
-    helperText: "Provide current arrears figures."
+    helperText: "Provide current arrears figures. Our smart guidance system will analyze your arrears and recommend the most appropriate grounds (Ground 8, 10, or 11) with success probabilities and required evidence."
     dependsOn:
       questionId: section8_grounds
       value:
@@ -384,7 +384,7 @@ questions:
     section: Notice Service
     question: "Notice service details"
     inputType: group
-    helperText: "How and when you will serve the notice."
+    helperText: "How and when you will serve the notice. Our smart guidance system will automatically calculate the correct expiry date based on your grounds, notice period, and service date."
     fields:
       - id: notice_service_date
         label: "Date you will serve (or served) the notice"
@@ -436,7 +436,7 @@ questions:
       - tenancy_agreement_uploaded
       - rent_schedule_uploaded
       - correspondence_uploaded
-    helperText: "These will support your notice if the tenant challenges it."
+    helperText: "These will support your notice if the tenant challenges it. Once you complete this wizard, you'll see a complete preview of your Notice Only pack (notice, service instructions, compliance checklist, and next steps guide) before purchasing."
     evidence_types:
       - tenancy_agreement
       - rent_schedule
