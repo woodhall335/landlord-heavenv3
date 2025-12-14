@@ -1071,6 +1071,108 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   }
 
   if (isComplete) {
+    // Ask Heaven-branded loading modal for Complete Pack
+    if (product === 'complete_pack') {
+      const [currentStep, setCurrentStep] = useState(0);
+
+      const steps = [
+        'Ask Heaven Drafting Witness Statement',
+        'Ask Heaven Analyzing Compliance',
+        'Ask Heaven Calculating Risk Assessment',
+        'Filling Official Court Forms',
+      ];
+
+      // Auto-advance through steps
+      useEffect(() => {
+        const interval = setInterval(() => {
+          setCurrentStep((prev) => {
+            if (prev < steps.length - 1) {
+              return prev + 1;
+            }
+            return prev;
+          });
+        }, 1500); // Change step every 1.5 seconds
+
+        return () => clearInterval(interval);
+      }, []);
+
+      return (
+        <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-3xl">☁️</span>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                Ask Heaven is Preparing Your Pack
+              </h2>
+              <p className="text-gray-600">
+                Creating your complete eviction documentation...
+              </p>
+            </div>
+
+            {/* Progress Steps */}
+            <div className="space-y-3 mb-6">
+              {steps.map((step, index) => (
+                <div
+                  key={index}
+                  className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
+                    index === currentStep
+                      ? 'bg-purple-50 border-2 border-purple-500'
+                      : index < currentStep
+                      ? 'bg-green-50 border border-green-200'
+                      : 'bg-gray-50 border border-gray-200'
+                  }`}
+                >
+                  {index < currentStep ? (
+                    <div className="flex-shrink-0 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-4 h-4 text-white"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  ) : index === currentStep ? (
+                    <div className="flex-shrink-0 w-6 h-6 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <div className="flex-shrink-0 w-6 h-6 bg-gray-300 rounded-full" />
+                  )}
+                  <span
+                    className={`text-sm font-medium ${
+                      index === currentStep
+                        ? 'text-purple-900'
+                        : index < currentStep
+                        ? 'text-green-900'
+                        : 'text-gray-500'
+                    }`}
+                  >
+                    {step}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Did You Know Tip */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-sm font-semibold text-blue-900 mb-1">💡 Did you know?</p>
+              <p className="text-sm text-blue-800">
+                Ask Heaven-drafted witness statements typically save landlords{' '}
+                <span className="font-bold">£200-500</span> in solicitor fees while ensuring
+                legal compliance.
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Simple completion for other products
     return (
       <div className="max-w-3xl mx-auto p-6 text-center">
         <div className="text-6xl mb-4">✓</div>
