@@ -68,7 +68,7 @@ export default function AdminAIUsagePage() {
 
       if (error) throw error;
 
-      const logs = (data || []) as AIUsageLog[];
+      const logs = (data || []) as unknown as AIUsageLog[];
 
       // Calculate date ranges
       const now = new Date();
