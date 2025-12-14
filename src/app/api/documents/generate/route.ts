@@ -223,6 +223,26 @@ export async function POST(request: Request) {
 
         case 'section21_notice': {
           // ✅ ELIGIBILITY CHECK: Verify Section 21 is allowed before generating
+          // First check if wizard has auto-selected a different route
+          const selectedNoticeRoute = (wizardFacts as any).selected_notice_route;
+          const routeOverride = (wizardFacts as any).route_override;
+
+          if (selectedNoticeRoute === 'section_8') {
+            // Wizard has auto-selected Section 8 due to S21 being blocked
+            return NextResponse.json(
+              {
+                error: 'Section 21 is not available for this case',
+                code: 'SECTION_21_BLOCKED',
+                explanation: routeOverride?.reason || 'Section 21 eligibility requirements not met. Your case has been automatically routed to Section 8.',
+                blocking_issues: routeOverride?.blocking_issues || [],
+                alternative_routes: ['section_8'],
+                suggested_action: 'Use Section 8 notice instead or fix the compliance issues listed in blocking_issues',
+              },
+              { status: 403 } // 403 Forbidden (not just unprocessable - legally forbidden)
+            );
+          }
+
+          // Run decision engine as additional safety check
           const caseFacts = wizardFactsToCaseFacts(wizardFacts);
           const decisionInput: DecisionInput = {
             jurisdiction: jurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',

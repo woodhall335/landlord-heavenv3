@@ -64,9 +64,10 @@ function deriveRoutesFromFacts(
   const answers = facts || {};
   const routes: string[] = [];
 
-  // IMPORTANT: Check all possible route field names (including eviction_route_intent from Notice Only YAML)
+  // IMPORTANT: Check all possible route field names
+  // Priority: selected_notice_route (auto-selected) > eviction_route > notice_type (legacy)
   const routeAnswer =
-    (answers as any).eviction_route_intent ||
+    (answers as any).selected_notice_route ||
     (answers as any).eviction_route ||
     (answers as any).notice_type;
 

@@ -780,31 +780,17 @@ export async function POST(request: Request) {
         // Use decision engine recommendation
         finalRecommendedRoute = recommendedRoute;
 
-        // Check if user had stored a different preference (for informational override message only)
-        const userRouteIntent =
-          (wizardFacts as any).eviction_route_intent ||
-          (wizardFacts as any).eviction_route ||
-          null;
+        // Check if wizard has already auto-selected a route (selected_notice_route)
+        // This would be set by the answer endpoint after deposit_and_compliance
+        const wizardSelectedRoute = (wizardFacts as any).selected_notice_route || null;
 
-        let userPreferredRoute: string | null = null;
-        if (userRouteIntent && typeof userRouteIntent === 'string') {
-          const lower = userRouteIntent.toLowerCase();
-          if (lower.includes('section_21') || lower.includes('section 21')) {
-            userPreferredRoute = 'section_21';
-          } else if (lower.includes('section_8') || lower.includes('section 8')) {
-            userPreferredRoute = 'section_8';
-          } else if (lower.includes('notice_to_leave')) {
-            userPreferredRoute = 'notice_to_leave';
-          }
-        }
-
-        // If user had a different preference, note the override (informational only)
-        if (userPreferredRoute && userPreferredRoute !== recommendedRoute) {
+        // If wizard already selected a route that differs from decision engine, note the override
+        if (wizardSelectedRoute && wizardSelectedRoute !== recommendedRoute) {
           const routeExplanation = decisionEngineOutput.route_explanations?.[recommendedRoute as keyof typeof decisionEngineOutput.route_explanations] ||
             `Based on your case details, ${recommendedRoute.replace('_', ' ')} is the legally valid route.`;
 
           route_override = {
-            from: userPreferredRoute,
+            from: wizardSelectedRoute,
             to: recommendedRoute,
             reason: routeExplanation,
           };
