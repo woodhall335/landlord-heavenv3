@@ -147,7 +147,7 @@ export function FreeToolLayout({
               </Link>
 
               <p className="mt-4 text-center text-xs text-gray-600">
-                Instant download • Money-back guarantee
+                Instant download • Court-ready format
               </p>
             </div>
           </div>
