@@ -1327,196 +1327,6 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             </div>
           )}
 
-          {/* ================================================================================== */}
-          {/* SMART GUIDANCE PANELS (Phase 3) */}
-          {/* ================================================================================== */}
-
-          {/* ROUTE RECOMMENDATION PANEL */}
-          {routeRecommendation && (
-            <div className="mb-6 p-6 bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 rounded-r-lg shadow-md">
-              <div className="flex items-start gap-4">
-                <div className="text-4xl">💡</div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-blue-900 text-xl mb-2">
-                    Smart Route Recommendation
-                  </h3>
-
-                  <div className="bg-white rounded-lg p-4 mb-4 border border-blue-200">
-                    <p className="text-lg font-semibold text-blue-900 mb-2">
-                      We recommend:{' '}
-                      <span className="text-blue-600">
-                        {routeRecommendation.recommended_route === 'section_8'
-                          ? 'Section 8 (Fault-Based)'
-                          : 'Section 21 (No-Fault)'}
-                      </span>
-                    </p>
-                    <p className="text-blue-800">{routeRecommendation.reasoning}</p>
-                  </div>
-
-                  {routeRecommendation.blocking_issues.length > 0 && (
-                    <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-4 mb-4">
-                      <p className="font-semibold text-yellow-900 mb-2 flex items-center gap-2">
-                        <span className="text-xl">⚠️</span>
-                        Legal Compliance Issues Detected
-                      </p>
-                      <div className="space-y-3">
-                        {routeRecommendation.blocking_issues.map((issue, i) => (
-                          <div key={i} className="bg-white rounded p-3">
-                            <p className="font-semibold text-gray-900 text-sm">
-                              {issue.route === 'section_21' ? 'Section 21' : issue.route} cannot be used:
-                            </p>
-                            <p className="text-gray-700 text-sm mt-1">
-                              <strong>Issue:</strong> {issue.description}
-                            </p>
-                            <p className="text-gray-600 text-sm mt-1">
-                              <strong>What you need to do:</strong> {issue.action_required}
-                            </p>
-                            <p className="text-gray-500 text-xs mt-1">
-                              <strong>Legal basis:</strong> {issue.legal_basis}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                    <p className="text-sm font-semibold text-blue-900 mb-2">Why this matters:</p>
-                    <ul className="text-sm text-blue-800 space-y-1">
-                      <li>✓ Following this recommendation ensures legal validity</li>
-                      <li>✓ Reduces risk of court rejection</li>
-                      <li>✓ Saves time and money on wasted proceedings</li>
-                    </ul>
-                  </div>
-
-                  <p className="text-xs text-blue-600 mt-3">
-                    💡 This is expert guidance based on your compliance status. You always have final control.
-                  </p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* GROUND RECOMMENDATIONS PANEL */}
-          {groundRecommendations && groundRecommendations.length > 0 && (
-            <div className="mb-6 p-6 bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-600 rounded-r-lg shadow-md">
-              <div className="flex items-start gap-4">
-                <div className="text-4xl">⚖️</div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-green-900 text-xl mb-2">
-                    Recommended Grounds for Section 8
-                  </h3>
-                  <p className="text-green-800 mb-4">
-                    Based on your situation, we recommend these grounds for the strongest legal case:
-                  </p>
-
-                  <div className="space-y-3">
-                    {groundRecommendations.map((ground) => (
-                      <div key={ground.code} className="bg-white rounded-lg p-4 border border-green-200">
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="font-semibold text-green-900 text-lg">
-                            Ground {ground.code}: {ground.title}
-                          </div>
-                          <div className="flex gap-2 flex-shrink-0">
-                            {ground.type === 'mandatory' && (
-                              <span className="text-xs bg-green-600 text-white px-3 py-1 rounded-full font-bold">
-                                MANDATORY
-                              </span>
-                            )}
-                            {ground.success_probability && (
-                              <span className="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full font-semibold">
-                                {ground.success_probability} success
-                              </span>
-                            )}
-                          </div>
-                        </div>
-
-                        <p className="text-green-800 mb-3 text-sm">{ground.reasoning}</p>
-
-                        <div className="bg-green-50 rounded p-3 text-sm">
-                          <p className="font-semibold text-green-900 mb-1">Why we recommend this:</p>
-                          <ul className="text-green-700 space-y-1">
-                            <li>• Strong legal basis for your situation</li>
-                            {ground.type === 'mandatory' && (
-                              <li>• Court must grant possession if proven</li>
-                            )}
-                            <li>• Notice period: {ground.notice_period_days} days</li>
-                          </ul>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-4 bg-green-50 rounded-lg p-4 border border-green-200">
-                    <p className="text-sm text-green-800">
-                      <strong>Next step:</strong> These grounds have been pre-selected in the next
-                      question. You can adjust them if you have additional grounds to add, but we
-                      recommend keeping these selections for the strongest case.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* CALCULATED DATE PANEL */}
-          {calculatedDate && (
-            <div className="mb-6 p-6 bg-gradient-to-r from-purple-50 to-purple-100 border-l-4 border-purple-600 rounded-r-lg shadow-md">
-              <div className="flex items-start gap-4">
-                <div className="text-4xl">📅</div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-purple-900 text-xl mb-2">
-                    Notice Period Calculated
-                  </h3>
-
-                  <div className="bg-white rounded-lg p-6 mb-4 border border-purple-200">
-                    <p className="text-sm text-purple-600 mb-1">Earliest Legal Expiry Date:</p>
-                    <p className="text-4xl font-bold text-purple-900 mb-2">
-                      {new Date(calculatedDate.date).toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                      })}
-                    </p>
-                    <p className="text-purple-700">
-                      Notice Period: <strong>{calculatedDate.notice_period_days} days</strong>
-                    </p>
-                  </div>
-
-                  <div className="bg-purple-50 rounded-lg p-4 mb-4 border border-purple-200">
-                    <p className="font-semibold text-purple-900 mb-2">How we calculated this:</p>
-                    <p className="text-purple-800 text-sm leading-relaxed">
-                      {calculatedDate.explanation}
-                    </p>
-                  </div>
-
-                  {calculatedDate.warnings && calculatedDate.warnings.length > 0 && (
-                    <div className="bg-yellow-50 rounded-lg p-4 mb-4 border border-yellow-300">
-                      <p className="font-semibold text-yellow-900 mb-2 flex items-center gap-2">
-                        <span>⚠️</span> Important Notes:
-                      </p>
-                      <ul className="text-yellow-800 text-sm space-y-1">
-                        {calculatedDate.warnings.map((warning, i) => (
-                          <li key={i}>• {warning}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
-                    <p className="text-sm text-purple-800">
-                      <strong>Legal Basis:</strong> {calculatedDate.legal_basis}
-                    </p>
-                    <p className="text-xs text-purple-600 mt-2">
-                      This date ensures your notice meets all statutory requirements and won't be
-                      rejected by the court.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* Question Card */}
           <Card className="p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">{currentQuestion.question}</h2>
@@ -1710,6 +1520,179 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
         {/* RIGHT: Side panels – Ask Heaven + case-specific widgets */}
         <aside className="space-y-4">
+          {/* Smart Guidance panels for Notice Only (eviction) - sticky sidebar */}
+          {caseType === 'eviction' && product === 'notice_only' && (
+            <div className="hidden lg:block sticky top-24 space-y-4">
+              {/* ROUTE RECOMMENDATION PANEL */}
+              {routeRecommendation && (
+                <div className="p-5 bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 rounded-r-lg shadow-md">
+                  <div className="flex items-start gap-3">
+                    <div className="text-3xl">💡</div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-blue-900 text-base mb-2">
+                        Smart Route Recommendation
+                      </h3>
+
+                      <div className="bg-white rounded-lg p-3 mb-3 border border-blue-200">
+                        <p className="text-sm font-semibold text-blue-900 mb-1">
+                          We recommend:{' '}
+                          <span className="text-blue-600">
+                            {routeRecommendation.recommended_route === 'section_8'
+                              ? 'Section 8 (Fault-Based)'
+                              : routeRecommendation.recommended_route === 'section_21'
+                              ? 'Section 21 (No-Fault)'
+                              : 'Notice to Leave'}
+                          </span>
+                        </p>
+                        <p className="text-xs text-blue-800">{routeRecommendation.reasoning}</p>
+                      </div>
+
+                      {routeRecommendation.blocking_issues.length > 0 && (
+                        <div className="bg-yellow-50 border border-yellow-300 rounded-lg p-3 mb-3">
+                          <p className="font-semibold text-yellow-900 mb-2 flex items-center gap-2 text-xs">
+                            <span className="text-lg">⚠️</span>
+                            Compliance Issues
+                          </p>
+                          <div className="space-y-2">
+                            {routeRecommendation.blocking_issues.slice(0, 2).map((issue, i) => (
+                              <div key={i} className="bg-white rounded p-2">
+                                <p className="font-semibold text-gray-900 text-xs">
+                                  {issue.route === 'section_21' ? 'Section 21' : issue.route} blocked:
+                                </p>
+                                <p className="text-gray-700 text-xs mt-1">
+                                  {issue.description}
+                                </p>
+                                <p className="text-gray-600 text-xs mt-1">
+                                  <strong>Action:</strong> {issue.action_required}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                        <p className="text-xs font-semibold text-blue-900 mb-1">Why this matters:</p>
+                        <ul className="text-xs text-blue-800 space-y-0.5">
+                          <li>✓ Ensures legal validity</li>
+                          <li>✓ Reduces court rejection risk</li>
+                          <li>✓ Saves time and money</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* GROUND RECOMMENDATIONS PANEL */}
+              {groundRecommendations && groundRecommendations.length > 0 && (
+                <div className="p-5 bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-600 rounded-r-lg shadow-md">
+                  <div className="flex items-start gap-3">
+                    <div className="text-3xl">⚖️</div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-green-900 text-base mb-2">
+                        Recommended Grounds
+                      </h3>
+                      <p className="text-xs text-green-800 mb-3">
+                        Based on your situation, we recommend:
+                      </p>
+
+                      <div className="space-y-2">
+                        {groundRecommendations.slice(0, 3).map((ground) => (
+                          <div key={ground.code} className="bg-white rounded-lg p-3 border border-green-200">
+                            <div className="flex items-start justify-between mb-1">
+                              <div className="font-semibold text-green-900 text-xs flex-1">
+                                Ground {ground.code}: {ground.title}
+                              </div>
+                              {ground.type === 'mandatory' && (
+                                <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded-full font-bold ml-2 flex-shrink-0">
+                                  MANDATORY
+                                </span>
+                              )}
+                            </div>
+
+                            <p className="text-green-800 text-xs mb-2">{ground.reasoning}</p>
+
+                            <div className="bg-green-50 rounded p-2 text-xs">
+                              <p className="text-green-700">
+                                <strong>Notice period:</strong> {ground.notice_period_days} days
+                              </p>
+                              {ground.success_probability && (
+                                <p className="text-green-700">
+                                  <strong>Success rate:</strong> {ground.success_probability}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mt-3 bg-green-50 rounded-lg p-3 border border-green-200">
+                        <p className="text-xs text-green-800">
+                          <strong>Next step:</strong> These grounds have been pre-selected. You can adjust if needed.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* CALCULATED DATE PANEL */}
+              {calculatedDate && (
+                <div className="p-5 bg-gradient-to-r from-purple-50 to-purple-100 border-l-4 border-purple-600 rounded-r-lg shadow-md">
+                  <div className="flex items-start gap-3">
+                    <div className="text-3xl">📅</div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-purple-900 text-base mb-2">
+                        Notice Period Calculated
+                      </h3>
+
+                      <div className="bg-white rounded-lg p-4 mb-3 border border-purple-200">
+                        <p className="text-xs text-purple-600 mb-1">Earliest Legal Expiry Date:</p>
+                        <p className="text-2xl font-bold text-purple-900 mb-1">
+                          {new Date(calculatedDate.date).toLocaleDateString('en-GB', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                          })}
+                        </p>
+                        <p className="text-xs text-purple-700">
+                          Notice Period: <strong>{calculatedDate.notice_period_days} days</strong>
+                        </p>
+                      </div>
+
+                      <div className="bg-purple-50 rounded-lg p-3 mb-3 border border-purple-200">
+                        <p className="font-semibold text-purple-900 mb-1 text-xs">How we calculated this:</p>
+                        <p className="text-purple-800 text-xs leading-relaxed">
+                          {calculatedDate.explanation}
+                        </p>
+                      </div>
+
+                      {calculatedDate.warnings && calculatedDate.warnings.length > 0 && (
+                        <div className="bg-yellow-50 rounded-lg p-3 mb-3 border border-yellow-300">
+                          <p className="font-semibold text-yellow-900 mb-1 flex items-center gap-1 text-xs">
+                            <span>⚠️</span> Important:
+                          </p>
+                          <ul className="text-yellow-800 text-xs space-y-0.5">
+                            {calculatedDate.warnings.slice(0, 2).map((warning, i) => (
+                              <li key={i}>• {warning}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      <div className="bg-purple-50 rounded-lg p-3 border border-purple-200">
+                        <p className="text-xs text-purple-800">
+                          <strong>Legal Basis:</strong> {calculatedDate.legal_basis}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Ask Heaven sidebar – stays in view on larger screens */}
           {currentQuestion?.inputType === 'textarea' && (
             <div className="hidden lg:block sticky top-24">
