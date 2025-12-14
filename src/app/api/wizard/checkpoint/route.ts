@@ -169,42 +169,18 @@ export async function POST(request: NextRequest) {
     // Get law profile for version tracking and legal metadata
     const law_profile = getLawProfile(jurisdiction, effectiveCaseType);
 
-    // ROUTE INTENT PRIORITY LOGIC:
-    // For notice_only product, explicit user route selection (eviction_route_intent) takes precedence
-    // over decision engine "smart recommend". Complete pack can still use smart recommend.
-    const userRouteIntent =
-      (wizardFacts as any).eviction_route_intent ||
-      (wizardFacts as any).eviction_route ||
-      null;
+    // ROUTE SELECTION LOGIC:
+    // For notice_only product, route is automatically selected by the wizard (stored as selected_notice_route).
+    // For complete_pack, use decision engine recommendation.
+    const selectedNoticeRoute = (wizardFacts as any).selected_notice_route || null;
 
     let finalRecommendedRoute: string | null = null;
 
-    if (effectiveProduct === 'notice_only' && userRouteIntent) {
-      // For notice_only: User intent wins
-      if (Array.isArray(userRouteIntent)) {
-        // User selected multiple routes - use first one (or prioritize section_8)
-        const normalized = userRouteIntent.map((r) =>
-          String(r).toLowerCase().includes('section_8') || String(r).toLowerCase().includes('section 8')
-            ? 'section_8'
-            : String(r).toLowerCase().includes('section_21') || String(r).toLowerCase().includes('section 21')
-            ? 'section_21'
-            : r
-        );
-        finalRecommendedRoute = normalized.includes('section_8')
-          ? 'section_8'
-          : normalized[0] || null;
-      } else if (typeof userRouteIntent === 'string') {
-        const lower = userRouteIntent.toLowerCase();
-        if (lower.includes('section_8') || lower.includes('section 8')) {
-          finalRecommendedRoute = 'section_8';
-        } else if (lower.includes('section_21') || lower.includes('section 21')) {
-          finalRecommendedRoute = 'section_21';
-        } else {
-          finalRecommendedRoute = userRouteIntent;
-        }
-      }
+    if (effectiveProduct === 'notice_only' && selectedNoticeRoute) {
+      // For notice_only: Use the automatically selected route from wizard
+      finalRecommendedRoute = selectedNoticeRoute;
     } else {
-      // For complete_pack or when no explicit user intent: Decision engine wins
+      // For complete_pack or when no route selected yet: Use decision engine recommendation
       finalRecommendedRoute =
         decision.recommended_routes.length > 0 ? decision.recommended_routes[0] : null;
     }

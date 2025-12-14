@@ -285,25 +285,7 @@ questions:
       - hmo_license_required
       - hmo_license_valid
 
-  # 7. Route selection (Section 8 / Section 21)
-  # IMPORTANT: Canonical values for decision engine (section_8, section_21)
-  - id: eviction_route_intent
-    section: Legal Route
-    question: "Which notice route do you want to use?"
-    inputType: multi_select
-    helperText: "Choose all that apply. We will validate your eligibility based on compliance."
-    options:
-      - "section_8"
-      - "section_21"
-    validation:
-      required: true
-    suggestion_prompt: >
-      Help the landlord understand the difference between Section 8 (fault-based, requires grounds)
-      and Section 21 (no-fault, but requires full compliance with deposit, gas, EPC, How to Rent, and licensing rules).
-    maps_to:
-      - eviction_route_intent
-
-  # 8. Section 8 grounds selection
+  # 7. Section 8 grounds selection
   - id: section8_grounds
     section: Section 8 Grounds
     question: "Which grounds under Section 8 apply?"
@@ -312,7 +294,7 @@ questions:
       - section_8
     helperText: "Select all grounds that match your situation."
     dependsOn:
-      questionId: eviction_route_intent
+      questionId: selected_notice_route
       value: "section_8"
     validation:
       required: true

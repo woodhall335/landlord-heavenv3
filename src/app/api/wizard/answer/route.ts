@@ -653,6 +653,77 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
       normalizedAnswer,
     );
 
+    // ============================================================================
+    // AUTOMATIC ROUTE SELECTION FOR NOTICE_ONLY (after deposit_and_compliance)
+    // ============================================================================
+    // For notice_only product in England/Wales, automatically select route based
+    // on decision engine eligibility after deposit/compliance questions are answered.
+    // This eliminates the manual route selection question.
+    if (
+      product === 'notice_only' &&
+      caseRow.jurisdiction === 'england-wales' &&
+      question_id === 'deposit_and_compliance'
+    ) {
+      try {
+        // Run decision engine to determine route eligibility
+        const caseFacts = wizardFactsToCaseFacts(mergedFacts);
+        const decisionInput: DecisionInput = {
+          jurisdiction: 'england-wales',
+          product: 'notice_only',
+          case_type: 'eviction',
+          facts: caseFacts,
+        };
+        const decision = runDecisionEngine(decisionInput);
+
+        let selected_notice_route: string;
+        let route_override: {
+          from?: string;
+          to: string;
+          reason: string;
+          blocking_issues?: string[];
+        } | null = null;
+
+        // If Section 21 is blocked, force Section 8
+        if (decision.blocked_routes.includes('section_21')) {
+          selected_notice_route = 'section_8';
+
+          const blockingIssues = decision.blocking_issues
+            .filter(b => b.route === 'section_21' && b.severity === 'blocking')
+            .map(b => b.description);
+
+          const routeExplanation = decision.route_explanations?.section_21 ||
+            'Section 21 is not available due to compliance issues. Your case will automatically use Section 8.';
+
+          route_override = {
+            from: 'section_21',
+            to: 'section_8',
+            reason: routeExplanation,
+            blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
+          };
+        } else if (decision.recommended_routes.length > 0) {
+          // Use decision engine recommendation (typically Section 21 if allowed)
+          selected_notice_route = decision.recommended_routes[0];
+        } else if (decision.allowed_routes.length > 0) {
+          // Fallback to first allowed route
+          selected_notice_route = decision.allowed_routes[0];
+        } else {
+          // Ultimate fallback to Section 8
+          selected_notice_route = 'section_8';
+        }
+
+        // Persist route selection in wizard facts
+        mergedFacts = setFactPath(mergedFacts, 'selected_notice_route', selected_notice_route);
+        if (route_override) {
+          mergedFacts = setFactPath(mergedFacts, 'route_override', route_override);
+        }
+
+        console.log(`[AUTO-ROUTE] notice_only: selected_notice_route=${selected_notice_route}`, route_override);
+      } catch (routeErr) {
+        console.error('[AUTO-ROUTE] Failed to auto-select route, will fall back to decision engine in analyze:', routeErr);
+        // Non-fatal - analyze endpoint will handle route selection as backup
+      }
+    }
+
     const newFacts = await updateWizardFacts(supabase, case_id, () => mergedFacts, {
       meta: (collectedFacts as any).__meta,
     });
