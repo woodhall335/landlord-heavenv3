@@ -1,0 +1,316 @@
+/**
+ * Notice Only Pack Preview Merger
+ *
+ * Merges all Notice Only documents into a single watermarked PDF for preview.
+ * Used to show users exactly what they're purchasing before payment.
+ */
+
+import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
+
+// ============================================================================
+// TYPES
+// ============================================================================
+
+export interface NoticeOnlyDocument {
+  title: string;
+  category: 'notice' | 'guidance' | 'checklist';
+  pdf?: Buffer;
+  html?: string;
+}
+
+export interface NoticeOnlyPreviewOptions {
+  jurisdiction: 'england-wales' | 'scotland';
+  notice_type?: 'section_8' | 'section_21' | 'notice_to_leave';
+  watermarkText?: string;
+  includeTableOfContents?: boolean;
+}
+
+// ============================================================================
+// MAIN GENERATOR
+// ============================================================================
+
+/**
+ * Generate a complete Notice Only pack preview
+ *
+ * @param documents - Array of documents to merge (notice, service instructions, etc.)
+ * @param options - Preview generation options
+ * @returns Buffer containing merged, watermarked PDF
+ */
+export async function generateNoticeOnlyPreview(
+  documents: NoticeOnlyDocument[],
+  options: NoticeOnlyPreviewOptions
+): Promise<Buffer> {
+  console.log('[NOTICE-PREVIEW] Starting preview generation');
+  console.log('[NOTICE-PREVIEW] Document count:', documents.length);
+  console.log('[NOTICE-PREVIEW] Jurisdiction:', options.jurisdiction);
+  console.log('[NOTICE-PREVIEW] Notice type:', options.notice_type);
+
+  // Create merged PDF
+  const mergedPdf = await PDFDocument.create();
+  const font = await mergedPdf.embedFont(StandardFonts.HelveticaBold);
+  const regularFont = await mergedPdf.embedFont(StandardFonts.Helvetica);
+
+  // Add table of contents if requested
+  if (options.includeTableOfContents) {
+    console.log('[NOTICE-PREVIEW] Adding table of contents');
+    await addTableOfContents(mergedPdf, documents, options, font, regularFont);
+  }
+
+  // Merge all document PDFs
+  let totalPages = options.includeTableOfContents ? 1 : 0;
+
+  for (const doc of documents) {
+    if (!doc.pdf) {
+      console.warn('[NOTICE-PREVIEW] Skipping document without PDF:', doc.title);
+      continue;
+    }
+
+    try {
+      const docPdf = await PDFDocument.load(doc.pdf);
+      const pageCount = docPdf.getPageCount();
+      const copiedPages = await mergedPdf.copyPages(docPdf, docPdf.getPageIndices());
+
+      copiedPages.forEach((page) => {
+        mergedPdf.addPage(page);
+      });
+
+      totalPages += pageCount;
+
+      console.log('[NOTICE-PREVIEW] Added:', doc.title, `(${pageCount} pages)`);
+    } catch (err) {
+      console.error('[NOTICE-PREVIEW] Failed to merge:', doc.title, err);
+    }
+  }
+
+  // Add watermark to EVERY page
+  const watermarkText = options.watermarkText || 'PREVIEW - Complete Purchase to Download';
+  console.log('[NOTICE-PREVIEW] Adding watermarks to', mergedPdf.getPageCount(), 'pages');
+
+  const pages = mergedPdf.getPages();
+
+  for (let i = 0; i < pages.length; i++) {
+    const page = pages[i];
+    const { width, height } = page.getSize();
+
+    // Add diagonal watermark in center
+    page.drawText(watermarkText, {
+      x: width / 2 - 200,
+      y: height / 2,
+      size: 48,
+      font: font,
+      color: rgb(0.85, 0.85, 0.85),
+      rotate: degrees(45),
+      opacity: 0.3,
+    });
+
+    // Add small footer watermark
+    page.drawText('PREVIEW ONLY', {
+      x: 20,
+      y: 20,
+      size: 10,
+      font: regularFont,
+      color: rgb(0.7, 0.7, 0.7),
+      opacity: 0.5,
+    });
+
+    // Add page numbers (except TOC)
+    if (i > 0 || !options.includeTableOfContents) {
+      const pageNum = options.includeTableOfContents ? i : i + 1;
+      page.drawText(`Page ${pageNum} of ${pages.length}`, {
+        x: width - 100,
+        y: 20,
+        size: 10,
+        font: regularFont,
+        color: rgb(0.5, 0.5, 0.5),
+      });
+    }
+  }
+
+  console.log('[NOTICE-PREVIEW] Watermarked', pages.length, 'pages');
+
+  // Save and return
+  const pdfBytes = await mergedPdf.save();
+  console.log('[NOTICE-PREVIEW] Complete. Total size:', (pdfBytes.length / 1024).toFixed(2), 'KB');
+
+  return Buffer.from(pdfBytes);
+}
+
+// ============================================================================
+// TABLE OF CONTENTS
+// ============================================================================
+
+async function addTableOfContents(
+  mergedPdf: PDFDocument,
+  documents: NoticeOnlyDocument[],
+  options: NoticeOnlyPreviewOptions,
+  font: any,
+  regularFont: any
+): Promise<void> {
+  const tocPage = mergedPdf.addPage([595, 842]); // A4 size
+  const { width, height } = tocPage.getSize();
+
+  let yPos = height - 60;
+
+  // Title
+  tocPage.drawText('NOTICE ONLY PACK - PREVIEW', {
+    x: 50,
+    y: yPos,
+    size: 24,
+    font: font,
+    color: rgb(0, 0, 0),
+  });
+  yPos -= 40;
+
+  // Jurisdiction
+  const jurisdictionLabel =
+    options.jurisdiction === 'england-wales' ? 'England & Wales' : 'Scotland';
+
+  tocPage.drawText(`Jurisdiction: ${jurisdictionLabel}`, {
+    x: 50,
+    y: yPos,
+    size: 14,
+    font: regularFont,
+    color: rgb(0.3, 0.3, 0.3),
+  });
+  yPos -= 25;
+
+  // Notice type
+  if (options.notice_type) {
+    const noticeLabel =
+      options.notice_type === 'section_8'
+        ? 'Section 8 Notice (Fault-Based)'
+        : options.notice_type === 'section_21'
+        ? 'Section 21 Notice (No-Fault)'
+        : 'Notice to Leave (PRT)';
+
+    tocPage.drawText(`Notice Type: ${noticeLabel}`, {
+      x: 50,
+      y: yPos,
+      size: 14,
+      font: regularFont,
+      color: rgb(0.3, 0.3, 0.3),
+    });
+    yPos -= 40;
+  } else {
+    yPos -= 20;
+  }
+
+  // Document list header
+  tocPage.drawText('DOCUMENTS INCLUDED:', {
+    x: 50,
+    y: yPos,
+    size: 16,
+    font: font,
+    color: rgb(0, 0, 0),
+  });
+  yPos -= 30;
+
+  // List documents with estimated page numbers
+  let currentPage = 2; // TOC is page 1
+
+  documents.forEach((doc, idx) => {
+    if (yPos < 100) {
+      // If running out of space, add note
+      tocPage.drawText('... (see remaining documents in pack)', {
+        x: 60,
+        y: yPos,
+        size: 12,
+        font: regularFont,
+        color: rgb(0.5, 0.5, 0.5),
+      });
+      return;
+    }
+
+    tocPage.drawText(`${idx + 1}. ${doc.title}`, {
+      x: 60,
+      y: yPos,
+      size: 12,
+      font: regularFont,
+      color: rgb(0, 0, 0),
+    });
+
+    tocPage.drawText(`Page ${currentPage}`, {
+      x: 450,
+      y: yPos,
+      size: 12,
+      font: regularFont,
+      color: rgb(0.5, 0.5, 0.5),
+    });
+
+    // Estimate pages based on category
+    const estimatedPages = doc.category === 'notice' ? 3 : 2;
+    currentPage += estimatedPages;
+    yPos -= 25;
+  });
+
+  // Value proposition section
+  yPos -= 20;
+
+  if (yPos > 150) {
+    tocPage.drawText('WHAT YOU GET:', {
+      x: 50,
+      y: yPos,
+      size: 14,
+      font: font,
+      color: rgb(0, 0, 0),
+    });
+    yPos -= 25;
+
+    const benefits = [
+      '✓ Court-ready legal documents',
+      '✓ Professional service instructions',
+      '✓ Pre-service compliance checklist',
+      '✓ Next steps guidance',
+      '✓ Lifetime dashboard access',
+      '✓ Free regeneration anytime',
+    ];
+
+    benefits.forEach((benefit) => {
+      if (yPos > 100) {
+        tocPage.drawText(benefit, {
+          x: 60,
+          y: yPos,
+          size: 11,
+          font: regularFont,
+          color: rgb(0.2, 0.5, 0.2),
+        });
+        yPos -= 20;
+      }
+    });
+  }
+
+  // Important notice at bottom
+  yPos = 120;
+
+  tocPage.drawText('IMPORTANT: This is a PREVIEW ONLY', {
+    x: 50,
+    y: yPos,
+    size: 14,
+    font: font,
+    color: rgb(0.8, 0, 0),
+  });
+  yPos -= 20;
+
+  tocPage.drawText('Complete purchase (£29.99) to download full unredacted documents.', {
+    x: 50,
+    y: yPos,
+    size: 11,
+    font: regularFont,
+    color: rgb(0.5, 0, 0),
+  });
+  yPos -= 20;
+
+  tocPage.drawText('All documents are editable and can be regenerated anytime.', {
+    x: 50,
+    y: yPos,
+    size: 10,
+    font: regularFont,
+    color: rgb(0.4, 0.4, 0.4),
+  });
+}
+
+// ============================================================================
+// EXPORT
+// ============================================================================
+
+export default generateNoticeOnlyPreview;
