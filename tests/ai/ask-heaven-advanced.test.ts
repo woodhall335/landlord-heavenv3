@@ -34,6 +34,8 @@ const asbQuestion = {
 // Mock decision engine output with Section 21 blocked
 const s21BlockedDecision: DecisionOutput = {
   recommended_routes: ['section_8'],
+  allowed_routes: ['section_8'],
+  blocked_routes: ['section_21'],
   recommended_grounds: [
     {
       code: '8',
@@ -60,6 +62,10 @@ const s21BlockedDecision: DecisionOutput = {
   notice_period_suggestions: {
     section_8: 14,
   },
+  route_explanations: {
+    section_21: 'Section 21 is NOT available because: deposit_not_protected. You must use Section 8 instead.',
+    section_8: 'Section 8 (fault-based eviction) is available using Ground 8 for serious rent arrears.',
+  },
   pre_action_requirements: {
     required: false,
     met: null,
@@ -70,6 +76,8 @@ const s21BlockedDecision: DecisionOutput = {
 // Mock decision engine output for Scotland
 const scotlandDecision: DecisionOutput = {
   recommended_routes: ['notice_to_leave'],
+  allowed_routes: ['notice_to_leave'],
+  blocked_routes: [],
   recommended_grounds: [
     {
       code: '1',
@@ -86,6 +94,9 @@ const scotlandDecision: DecisionOutput = {
   analysis_summary: 'Ground 1 available with pre-action compliance',
   notice_period_suggestions: {
     notice_to_leave: 28,
+  },
+  route_explanations: {
+    notice_to_leave: 'Notice to Leave is available using Ground 1 for rent arrears. Pre-action requirements have been met.',
   },
   pre_action_requirements: {
     required: true,
