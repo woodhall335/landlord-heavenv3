@@ -1,0 +1,251 @@
+{{! Section 173 Landlord's Notice - Renting Homes (Wales) Act 2016 }}
+{{! This template must comply with Renting Homes (Wales) Act 2016 and associated regulations }}
+{{! Generated: {{generation_date}} }}
+
+LANDLORD'S NOTICE UNDER SECTION 173
+
+Renting Homes (Wales) Act 2016, Section 173
+
+---
+
+TO: {{contract_holder_full_name}}{{#if tenant_2_name}} and {{tenant_2_name}}{{/if}}
+
+OF: {{property_address}}
+
+FROM: {{landlord_full_name}}{{#if landlord_2_name}} and {{landlord_2_name}}{{/if}}
+
+ADDRESS: {{landlord_address}}
+
+---
+
+## 1. DETAILS OF THE DWELLING
+
+The dwelling which is the subject of this notice is:
+
+**{{property_address}}**
+
+---
+
+## 2. DETAILS OF THE OCCUPATION CONTRACT
+
+This notice relates to the occupation contract which began on **{{contract_start_date}}**.
+
+{{#if fixed_term}}
+The contract was granted for a fixed term which {{#if fixed_term_expired}}expired{{else}}expires{{/if}} on **{{fixed_term_end_date}}**.
+{{else}}
+The contract is a periodic contract.
+{{/if}}
+
+**Contract Category:** {{wales_contract_category}}
+
+The current rent is **£{{rent_amount}}** payable **{{rent_frequency}}**.
+
+---
+
+## 3. NOTICE TO CONTRACT HOLDER
+
+**I/WE GIVE YOU NOTICE** under Section 173 of the Renting Homes (Wales) Act 2016 that I/we require possession of the dwelling described above.
+
+---
+
+## 4. NOTICE PERIOD AND POSSESSION DATE
+
+This notice was served on: **{{service_date}}**
+
+**You must give up possession of the dwelling on or after: {{expiry_date}}**
+
+This notice provides you with the minimum statutory notice period required under Section 173 of the Renting Homes (Wales) Act 2016.
+
+---
+
+## 5. IMPORTANT INFORMATION FOR CONTRACT HOLDERS
+
+### What This Notice Means
+
+This is a formal legal notice that I/we intend to apply to the court for a possession order requiring you to give up possession of the dwelling.
+
+Under a standard occupation contract, a landlord can serve a Section 173 notice without providing a reason for possession.
+
+### What You Should Do
+
+1. **Read this notice carefully** - It tells you when you must leave the property.
+
+2. **Seek advice immediately** - Contact one or more of the following:
+   - Citizens Advice Cymru
+   - Shelter Cymru (housing charity)
+   - A solicitor (you may qualify for Legal Aid)
+   - Your local council housing department
+
+3. **Do not ignore this notice** - If you do nothing, court proceedings will be started and you may have to pay the costs as well as giving up possession of your home.
+
+4. **Respond** - If you believe this notice is not valid or you have concerns, get legal advice immediately.
+
+---
+
+## 6. COMPLIANCE REQUIREMENTS
+
+### Rent Smart Wales Registration
+
+{{#if rent_smart_wales_registered}}
+✅ The landlord confirms they are registered with Rent Smart Wales.
+{{else}}
+⚠️ **Warning:** All landlords in Wales must be registered with Rent Smart Wales. A Section 173 notice may be invalid if the landlord is not registered.
+{{/if}}
+
+### Deposit Protection
+
+{{#if deposit_taken}}
+{{#if deposit_protected}}
+✅ Your deposit of £{{deposit_amount}} is protected {{#if deposit_scheme}}in {{deposit_scheme}}{{/if}}.
+{{else}}
+⚠️ **Warning:** The deposit must be protected in an approved scheme in Wales. An unprotected deposit may affect the validity of this notice.
+{{/if}}
+{{else}}
+No deposit was taken for this tenancy.
+{{/if}}
+
+---
+
+## 7. PROHIBITED PERIOD (FIRST 6 MONTHS)
+
+**Important:** Under Section 173, a landlord cannot serve a Section 173 notice within the first 6 months of a standard occupation contract (the "prohibited period").
+
+Contract Start Date: **{{contract_start_date}}**
+
+Service Date: **{{service_date}}**
+
+{{#if prohibited_period_violation}}
+⚠️ **WARNING:** This notice may have been served during the prohibited period and may not be valid.
+{{else}}
+✅ This notice was served after the prohibited period ended.
+{{/if}}
+
+---
+
+## 8. WHERE TO GET HELP
+
+**Citizens Advice Cymru:**
+- Website: www.citizensadvice.org.uk/cymraeg/
+- Phone: 0800 702 2020
+
+**Shelter Cymru (Housing Charity):**
+- Website: www.sheltercymru.org.uk
+- Phone: 0345 075 5005
+
+**National Debtline:**
+- Website: www.nationaldebtline.org
+- Phone: 0808 808 4000
+
+**Local Council Housing Department:**
+{{#if council_name}}
+- Council: {{council_name}}
+- Phone: {{council_phone}}
+{{else}}
+- Contact your local council for advice on homelessness prevention
+{{/if}}
+
+**Rent Smart Wales:**
+- Website: www.rentsmart.gov.wales
+- Phone: 03000 133 344
+
+---
+
+## 9. COURT PROCEEDINGS
+
+If you do not leave the property by the date specified in Section 4, I/we may apply to the court for a possession order.
+
+You will be sent:
+- A copy of the court claim
+- A defence form
+- Information about the court hearing
+
+**You have the right to:**
+- Attend the court hearing
+- Present your case to the judge
+- Be represented by a solicitor (legal aid may be available)
+- Ask for more time to leave if possession is granted
+
+### Court Costs
+
+If possession is granted, you may be ordered to pay:
+- The landlord's court fees
+- The landlord's legal costs
+- Any rent arrears
+
+---
+
+## 10. AFTER A POSSESSION ORDER
+
+If the court grants a possession order:
+
+1. **Outright Possession Order** - You must leave by the date specified by the court
+
+2. **Suspended Possession Order** - You can stay if you keep to the conditions set by the court
+
+3. **If you don't leave** - The landlord can apply for a bailiff's warrant to evict you
+
+4. **Illegal eviction** - Your landlord cannot evict you without a court order and bailiff. It is a criminal offence for a landlord to force you to leave without following the proper legal process.
+
+---
+
+## 11. WELSH LANGUAGE RIGHTS
+
+You have the right to receive this notice and all court documents in Welsh. If you wish to receive documents in Welsh or conduct court proceedings in Welsh, please inform the court.
+
+Mae gennych yr hawl i dderbyn y rhybudd hwn a'r holl ddogfennau llys yn Gymraeg. Os hoffech dderbyn dogfennau yn Gymraeg neu gynnal achosion llys yn Gymraeg, rhowch wybod i'r llys.
+
+---
+
+## 12. DECLARATION
+
+I/We declare that the information given in this notice is correct to the best of my/our knowledge and belief.
+
+**Signed:** _________________________
+
+**Name:** {{landlord_full_name}}
+
+{{#if landlord_2_name}}
+**Signed:** _________________________
+
+**Name:** {{landlord_2_name}}
+{{/if}}
+
+**Date:** {{service_date}}
+
+---
+
+## 13. NOTES FOR LANDLORDS
+
+This notice must be served correctly to be valid:
+
+1. **Personal service** - Hand it to the contract holder personally
+2. **Substituted service** - Leave it at the property in a sealed envelope addressed to the contract holder
+3. **Postal service** - Send by first class post to the contract holder's last known address
+
+**Important:**
+- Keep proof of service (certificate of posting, witness statement, etc.)
+- The notice period runs from the date the notice is served, not from the date it is prepared
+- You must be registered with Rent Smart Wales for this notice to be valid
+- This notice cannot be served within the first 6 months of a standard occupation contract
+- Consider whether Alternative Dispute Resolution might resolve the issue without court proceedings
+
+---
+
+**END OF NOTICE**
+
+---
+
+{{! Footer - Generation Information }}
+{{#if is_preview}}
+**PREVIEW DOCUMENT - NOT FOR LEGAL USE**
+This is a preview generated by Landlord Heaven. A final, legally binding version will be provided upon payment.
+{{else}}
+Document generated by {{site_name}} ({{site_domain}})
+Generated: {{generation_timestamp}}
+Document ID: {{document_id}}
+{{/if}}
+
+---
+
+{{! Legal Disclaimer }}
+**Legal Disclaimer:** This notice has been generated based on the information provided. While every effort has been made to ensure accuracy and compliance with the Renting Homes (Wales) Act 2016, this service does not constitute legal advice. You should seek independent legal advice before taking any action based on this document. Landlord Heaven is not responsible for any consequences arising from the use of this document.

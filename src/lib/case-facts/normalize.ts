@@ -1608,3 +1608,450 @@ export function normalizeCaseFacts(
 
   return base;
 }
+
+// =============================================================================
+// NOTICE ONLY TEMPLATE DATA MAPPER (TASK C)
+// =============================================================================
+
+/**
+ * Maps wizard facts to a unified Notice Only template data object.
+ *
+ * This function creates ONE consistent flattened object that works for ALL
+ * Notice Only templates:
+ * - Section 8 Notice (England/Wales)
+ * - Section 21 Notice (England/Wales)
+ * - Wales Section 173 Landlord's Notice
+ * - Scotland Notice to Leave
+ *
+ * All fields are flattened and normalized with consistent naming.
+ * Jurisdiction-specific fields (e.g., contract_holder_full_name for Wales)
+ * are mapped alongside standard fields (tenant_full_name).
+ *
+ * @param wizard - Flat wizard facts from MQS
+ * @returns Flattened template data object for Notice Only PDFs
+ */
+export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
+  if (!wizard || typeof wizard !== 'object') {
+    return {};
+  }
+
+  // Helper to extract string value recursively from objects
+  const extractString = (value: any): string | null => {
+    if (value === null || value === undefined) return null;
+    if (typeof value === 'string') return value.trim() || null;
+    if (typeof value === 'number') return String(value);
+    if (typeof value === 'boolean') return String(value);
+
+    if (typeof value === 'object' && !Array.isArray(value)) {
+      const extracted = value.value ?? value.label ?? value.text ?? value.content;
+      if (extracted !== null && extracted !== undefined) {
+        return extractString(extracted);
+      }
+    }
+
+    return null;
+  };
+
+  const templateData: Record<string, any> = {};
+
+  // =============================================================================
+  // LANDLORD DETAILS
+  // =============================================================================
+  templateData.landlord_full_name = extractString(
+    getFirstValue(wizard, [
+      'landlord_full_name',
+      'landlord.name',
+      'landlord_name',
+      'parties.landlord.name',
+      'claimant_full_name',
+    ])
+  );
+
+  templateData.landlord_2_name = extractString(
+    getFirstValue(wizard, [
+      'landlord_2_name',
+      'landlord_secondary_name',
+      'landlord_co_claimant',
+    ])
+  );
+
+  // Landlord address - flat fields
+  const landlordAddressLine1 = extractString(
+    getFirstValue(wizard, [
+      'landlord_address_line1',
+      'landlord.address_line1',
+      'landlord_address',
+    ])
+  );
+  const landlordAddressLine2 = extractString(
+    getFirstValue(wizard, ['landlord_address_line2', 'landlord.address_line2'])
+  );
+  const landlordCity = extractString(
+    getFirstValue(wizard, [
+      'landlord_address_town',
+      'landlord_city',
+      'landlord.city',
+    ])
+  );
+  const landlordPostcode = extractString(
+    getFirstValue(wizard, [
+      'landlord_address_postcode',
+      'landlord_postcode',
+      'landlord.postcode',
+    ])
+  );
+
+  // Concatenate landlord address
+  const landlordAddressParts = [
+    landlordAddressLine1,
+    landlordAddressLine2,
+    landlordCity,
+    landlordPostcode,
+  ].filter(Boolean);
+
+  templateData.landlord_address = landlordAddressParts.join('\n') || null;
+  templateData.landlord_address_line1 = landlordAddressLine1;
+  templateData.landlord_address_line2 = landlordAddressLine2;
+  templateData.landlord_city = landlordCity;
+  templateData.landlord_postcode = landlordPostcode;
+
+  templateData.landlord_email = extractString(
+    getFirstValue(wizard, ['landlord_email', 'landlord.email'])
+  );
+  templateData.landlord_phone = extractString(
+    getFirstValue(wizard, ['landlord_phone', 'landlord.phone'])
+  );
+
+  // Scotland-specific
+  templateData.landlord_reg_number = extractString(
+    getWizardValue(wizard, 'landlord_reg_number')
+  );
+
+  // =============================================================================
+  // TENANT DETAILS
+  // =============================================================================
+  templateData.tenant_full_name = extractString(
+    getFirstValue(wizard, [
+      'tenant_full_name',
+      'tenant1_name',
+      'contract_holder_full_name', // Wales
+      'parties.tenants.0.name',
+    ])
+  );
+
+  templateData.tenant_2_name = extractString(
+    getFirstValue(wizard, [
+      'tenant_2_name',
+      'tenant2_name',
+      'tenant_secondary_name',
+    ])
+  );
+
+  // Wales-specific: contract_holder_full_name
+  templateData.contract_holder_full_name = extractString(
+    getFirstValue(wizard, [
+      'contract_holder_full_name',
+      'tenant_full_name', // Fallback to tenant_full_name
+    ])
+  );
+
+  // =============================================================================
+  // PROPERTY ADDRESS
+  // =============================================================================
+  const propertyAddressLine1 = extractString(
+    getFirstValue(wizard, [
+      'property_address_line1',
+      'property.address_line1',
+      'property_address',
+    ])
+  );
+  const propertyAddressLine2 = extractString(
+    getFirstValue(wizard, ['property_address_line2', 'property.address_line2'])
+  );
+  const propertyCity = extractString(
+    getFirstValue(wizard, [
+      'property_address_town',
+      'property_city',
+      'property.city',
+    ])
+  );
+  const propertyPostcode = extractString(
+    getFirstValue(wizard, [
+      'property_address_postcode',
+      'property_postcode',
+      'property.postcode',
+    ])
+  );
+
+  // Concatenate property address
+  const propertyAddressParts = [
+    propertyAddressLine1,
+    propertyAddressLine2,
+    propertyCity,
+    propertyPostcode,
+  ].filter(Boolean);
+
+  templateData.property_address = propertyAddressParts.join('\n') || null;
+  templateData.property_address_line1 = propertyAddressLine1;
+  templateData.property_address_line2 = propertyAddressLine2;
+  templateData.property_city = propertyCity;
+  templateData.property_postcode = propertyPostcode;
+
+  // =============================================================================
+  // TENANCY/CONTRACT DATES
+  // =============================================================================
+  templateData.tenancy_start_date = extractString(
+    getFirstValue(wizard, [
+      'tenancy_start_date',
+      'contract_start_date', // Wales
+      'start_date',
+    ])
+  );
+
+  // Wales-specific
+  templateData.contract_start_date = extractString(
+    getFirstValue(wizard, [
+      'contract_start_date',
+      'tenancy_start_date', // Fallback
+    ])
+  );
+
+  templateData.fixed_term = coerceBoolean(
+    getFirstValue(wizard, ['is_fixed_term', 'fixed_term', 'tenancy_fixed_term'])
+  );
+
+  templateData.fixed_term_end_date = extractString(
+    getFirstValue(wizard, ['fixed_term_end_date', 'tenancy_end_date'])
+  );
+
+  templateData.periodic_tenancy_start = extractString(
+    getWizardValue(wizard, 'periodic_tenancy_start')
+  );
+
+  // =============================================================================
+  // RENT DETAILS
+  // =============================================================================
+  const rentAmount = getFirstValue(wizard, ['rent_amount']);
+  templateData.rent_amount = rentAmount !== null ? Number(rentAmount) || null : null;
+
+  templateData.rent_frequency = extractString(
+    getFirstValue(wizard, ['rent_frequency', 'rent_period'])
+  ) as any;
+
+  const paymentDate = getFirstValue(wizard, ['payment_date', 'rent_due_day']);
+  templateData.payment_date = paymentDate !== null ? Number(paymentDate) || null : null;
+
+  templateData.next_payment_due = extractString(
+    getWizardValue(wizard, 'next_payment_due')
+  );
+
+  // =============================================================================
+  // NOTICE DATES
+  // =============================================================================
+  templateData.service_date = extractString(
+    getFirstValue(wizard, [
+      'notice_service_date',
+      'service_date',
+      'notice_date', // Scotland
+    ])
+  );
+
+  templateData.notice_date = extractString(
+    getFirstValue(wizard, [
+      'notice_date',
+      'notice_service_date',
+      'service_date',
+    ])
+  );
+
+  templateData.expiry_date = extractString(
+    getFirstValue(wizard, [
+      'notice_expiry_date',
+      'expiry_date',
+    ])
+  );
+
+  // Scotland-specific
+  templateData.earliest_leaving_date = extractString(
+    getWizardValue(wizard, 'earliest_leaving_date')
+  );
+  templateData.earliest_tribunal_date = extractString(
+    getWizardValue(wizard, 'earliest_tribunal_date')
+  );
+  const noticePeriodDays = getWizardValue(wizard, 'notice_period_days');
+  templateData.notice_period_days = noticePeriodDays !== null ? Number(noticePeriodDays) || null : null;
+
+  // =============================================================================
+  // NOTICE SERVICE
+  // =============================================================================
+  templateData.notice_service_method = extractString(
+    getFirstValue(wizard, ['notice_service_method', 'service_method'])
+  );
+
+  templateData.notice_served_by = extractString(
+    getFirstValue(wizard, ['notice_served_by', 'served_by'])
+  );
+
+  // =============================================================================
+  // DEPOSIT & COMPLIANCE
+  // =============================================================================
+  templateData.deposit_taken = coerceBoolean(
+    getFirstValue(wizard, ['deposit_taken', 'deposit_taken_wales', 'deposit_taken_fault'])
+  );
+
+  templateData.deposit_protected = coerceBoolean(
+    getFirstValue(wizard, ['deposit_protected', 'deposit_protected_wales', 'deposit_protected_fault'])
+  );
+
+  const depositAmount = getFirstValue(wizard, ['deposit_amount']);
+  templateData.deposit_amount = depositAmount !== null ? Number(depositAmount) || null : null;
+
+  templateData.deposit_scheme = extractString(
+    getFirstValue(wizard, [
+      'deposit_scheme',
+      'deposit_scheme_wales_s173',
+      'deposit_scheme_fault',
+    ])
+  );
+
+  templateData.deposit_reference = extractString(
+    getWizardValue(wizard, 'deposit_reference')
+  );
+
+  templateData.deposit_protection_date = extractString(
+    getWizardValue(wizard, 'deposit_protection_date')
+  );
+
+  templateData.prescribed_info_given = coerceBoolean(
+    getWizardValue(wizard, 'prescribed_info_given')
+  );
+
+  templateData.gas_certificate_provided = coerceBoolean(
+    getFirstValue(wizard, ['gas_certificate_provided', 'gas_safety_cert_provided'])
+  );
+
+  templateData.gas_safety_cert_provided = coerceBoolean(
+    getFirstValue(wizard, ['gas_safety_cert_provided', 'gas_certificate_provided'])
+  );
+
+  templateData.how_to_rent_provided = coerceBoolean(
+    getFirstValue(wizard, ['how_to_rent_provided', 'how_to_rent_given'])
+  );
+
+  templateData.how_to_rent_given = coerceBoolean(
+    getFirstValue(wizard, ['how_to_rent_given', 'how_to_rent_provided'])
+  );
+
+  templateData.epc_provided = coerceBoolean(
+    getWizardValue(wizard, 'epc_provided')
+  );
+
+  templateData.epc_rating = extractString(
+    getWizardValue(wizard, 'epc_rating')
+  );
+
+  templateData.hmo_license_required = coerceBoolean(
+    getWizardValue(wizard, 'hmo_license_required')
+  );
+
+  templateData.hmo_license_valid = coerceBoolean(
+    getWizardValue(wizard, 'hmo_license_valid')
+  );
+
+  // =============================================================================
+  // WALES-SPECIFIC COMPLIANCE
+  // =============================================================================
+  templateData.wales_contract_category = extractString(
+    getWizardValue(wizard, 'wales_contract_category')
+  );
+
+  templateData.rent_smart_wales_registered = coerceBoolean(
+    getWizardValue(wizard, 'rent_smart_wales_registered')
+  );
+
+  // =============================================================================
+  // ROUTE & GROUNDS
+  // =============================================================================
+  templateData.selected_notice_route = extractString(
+    getFirstValue(wizard, ['selected_notice_route', 'eviction_route', 'route_intent'])
+  );
+
+  // Section 8 grounds
+  const section8Grounds = getWizardValue(wizard, 'section8_grounds');
+  if (Array.isArray(section8Grounds)) {
+    templateData.section8_grounds = section8Grounds;
+  } else if (section8Grounds && typeof section8Grounds === 'string') {
+    templateData.section8_grounds = [section8Grounds];
+  }
+
+  // Wales fault-based section
+  templateData.wales_fault_based_section = extractString(
+    getWizardValue(wizard, 'wales_fault_based_section')
+  );
+
+  // =============================================================================
+  // ARREARS DATA
+  // =============================================================================
+  const totalArrears = getFirstValue(wizard, ['total_arrears', 'rent_arrears_amount']);
+  templateData.total_arrears = totalArrears !== null ? Number(totalArrears) || null : null;
+
+  const arrearsAtNoticeDate = getWizardValue(wizard, 'arrears_at_notice_date');
+  templateData.arrears_at_notice_date = arrearsAtNoticeDate !== null ? Number(arrearsAtNoticeDate) || null : null;
+
+  const arrearsDurationMonths = getWizardValue(wizard, 'arrears_duration_months');
+  templateData.arrears_duration_months = arrearsDurationMonths !== null ? Number(arrearsDurationMonths) || null : null;
+
+  templateData.last_payment_date = extractString(
+    getWizardValue(wizard, 'last_payment_date')
+  );
+
+  const lastPaymentAmount = getWizardValue(wizard, 'last_payment_amount');
+  templateData.last_payment_amount = lastPaymentAmount !== null ? Number(lastPaymentAmount) || null : null;
+
+  // =============================================================================
+  // ASB & BREACH DETAILS
+  // =============================================================================
+  templateData.asb_description = extractString(
+    getFirstValue(wizard, ['asb_description', 'section8_other_grounds_narrative'])
+  );
+
+  templateData.breach_description = extractString(
+    getFirstValue(wizard, ['breach_description', 'section8_other_grounds_narrative'])
+  );
+
+  templateData.section8_grounds_narrative = extractString(
+    getWizardValue(wizard, 'section8_other_grounds_narrative')
+  );
+
+  // =============================================================================
+  // HELP INFORMATION
+  // =============================================================================
+  templateData.council_phone = extractString(
+    getWizardValue(wizard, 'council_phone')
+  );
+
+  // =============================================================================
+  // METADATA
+  // =============================================================================
+  templateData.jurisdiction = extractString(
+    getFirstValue(wizard, ['jurisdiction', '__meta.jurisdiction'])
+  );
+
+  templateData.product = extractString(
+    getFirstValue(wizard, ['product', '__meta.product'])
+  );
+
+  // =============================================================================
+  // GROUNDS ARRAY (for Section 8 and Scotland)
+  // This will be populated by the generator functions
+  // =============================================================================
+  templateData.grounds = [];
+
+  console.log('[mapNoticeOnlyFacts] Mapped Notice Only template data');
+  console.log('[mapNoticeOnlyFacts] Landlord:', templateData.landlord_full_name);
+  console.log('[mapNoticeOnlyFacts] Tenant:', templateData.tenant_full_name);
+  console.log('[mapNoticeOnlyFacts] Property address parts:', propertyAddressParts.length);
+  console.log('[mapNoticeOnlyFacts] Route:', templateData.selected_notice_route);
+
+  return templateData;
+}

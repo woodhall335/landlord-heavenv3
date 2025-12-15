@@ -613,7 +613,7 @@ export async function generateNoticeToLeave(
 
   // Generate from template
   return generateDocument({
-    templatePath: 'uk/scotland/templates/notice_to_leave.hbs',
+    templatePath: 'uk/scotland/templates/eviction/notice_to_leave.hbs',
     data: enrichedData,
     isPreview,
     outputFormat,

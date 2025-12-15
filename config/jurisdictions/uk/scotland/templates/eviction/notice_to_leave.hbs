@@ -1,44 +1,584 @@
+{{! Notice to Leave - Scotland }}
+{{! Private Housing (Tenancies) (Scotland) Act 2016 }}
+{{! Generated: {{generation_date}} }}
+
+# NOTICE TO LEAVE
+
+**Private Housing (Tenancies) (Scotland) Act 2016**
+
 ---
-title: Notice to Leave (Private Residential Tenancy)
-category: notice
-description: Statutory Notice to Leave served under the Private Housing (Tenancies) (Scotland) Act 2016
-filename: notice_to_leave.pdf
+
+## TO THE TENANT(S)
+
+**Name:** {{tenant_full_name}}{{#if tenant_2_name}} and {{tenant_2_name}}{{/if}}
+
+**Address:** {{property_address}}
+
 ---
 
-NOTICE TO LEAVE
-Private Housing (Tenancies) (Scotland) Act 2016
+## FROM THE LANDLORD
 
-PROPERTY
-- Address: {{property_address}}
+**Name:** {{landlord_full_name}}{{#if landlord_2_name}} and {{landlord_2_name}}{{/if}}
 
-TENANT(S)
-- Name(s): {{tenant_full_name}}{{#if tenant_2_name}} and {{tenant_2_name}}{{/if}}
+**Address:** {{landlord_address}}
 
-LANDLORD DETAILS
-- Name: {{landlord_full_name}}{{#if landlord_2_name}} and {{landlord_2_name}}{{/if}}
-- Address: {{landlord_address}}
-{{#if landlord_phone}}- Phone: {{landlord_phone}}{{/if}}
-{{#if landlord_email}}- Email: {{landlord_email}}{{/if}}
-{{#if landlord_registration_number}}- Landlord Registration Number: {{landlord_registration_number}}{{/if}}
+{{#if landlord_email}}**Email:** {{landlord_email}}{{/if}}
+{{#if landlord_phone}}**Phone:** {{landlord_phone}}{{/if}}
 
-TENANCY DETAILS
-- Tenancy start date: {{format_date tenancy_start_date 'DD/MM/YYYY'}}
-- Rent: £{{rent_amount}} per {{rent_frequency}}
+{{#if landlord_reg_number}}**Landlord Registration Number:** {{landlord_reg_number}}{{/if}}
 
-NOTICE DETAILS
-- Date notice served: {{format_date notice_date 'DD/MM/YYYY'}}
-- Earliest date you must leave: {{format_date leaving_date 'DD/MM/YYYY'}}
+---
 
-GROUNDS FOR EVICTION
-The landlord is applying on the following ground(s):
+## NOTICE TO LEAVE THE PROPERTY
+
+I/We give you notice that I/we require you to leave the property specified above.
+
+**Date of this notice:** {{notice_date}}
+
+**Earliest date you can be required to leave:** {{earliest_leaving_date}}
+
+---
+
+## GROUNDS FOR REQUIRING YOU TO LEAVE
+
+I/we are applying to the First-tier Tribunal for Scotland (Housing and Property Chamber) for an eviction order on the following ground(s):
+
 {{#each grounds}}
-- {{code}} — {{title}}
-  Particulars: {{particulars}}
+### Ground {{this.number}}: {{this.title}}
+
+{{this.legal_basis}}
+
+**Particulars:**
+
+{{this.particulars}}
+
+{{#if this.supporting_evidence}}
+**Evidence:**
+
+{{this.supporting_evidence}}
+{{/if}}
+
+---
 {{/each}}
 
-SIGNATURE
-I/we confirm this Notice to Leave has been served in accordance with the Private Housing (Tenancies) (Scotland) Act 2016.
+{{! GROUND-SPECIFIC SECTIONS }}
 
-Signature: ________________________________
-Name: {{landlord_full_name}}
-Date: {{format_date notice_date 'DD/MM/YYYY'}}
+{{#if ground_1_claimed}}
+## PARTICULARS OF GROUND 1 - RENT ARREARS
+
+**Current rent:** £{{rent_amount}} per {{rent_period}}
+
+**Total arrears:** £{{total_arrears}} as of {{arrears_date}}
+
+**Duration of arrears:** {{arrears_duration_months}} months ({{arrears_duration_days}} days)
+
+### Breakdown of Arrears:
+
+| Period | Rent Due | Rent Paid | Balance |
+|--------|----------|-----------|---------|
+{{#each arrears_breakdown}}
+| {{this.period}} | £{{this.amount_due}} | £{{this.amount_paid}} | £{{this.balance}} |
+{{/each}}
+
+**Total owed:** £{{total_arrears}}
+
+{{#if last_payment_date}}
+Last payment received: £{{last_payment_amount}} on {{last_payment_date}}
+{{/if}}
+
+### Pre-Action Requirements
+
+As required by the Pre-Action Requirements (Notice to Leave and Notice of Proceedings) (Scotland) Regulations 2020, I/we have:
+
+✓ Provided you with a clear rent statement
+✓ Given you information about rent arrears and their consequences
+✓ Provided information on sources of advice and assistance
+✓ Given you reasonable time to pay or discuss the arrears
+✓ Considered any payment arrangement proposals you made
+✓ Made reasonable attempts to agree a payment plan
+
+{{#if pre_action_evidence}}
+**Evidence of pre-action steps:** {{pre_action_evidence}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_2_claimed}}
+## PARTICULARS OF GROUND 2 - BREACH OF TENANCY
+
+**Tenancy clause breached:** {{tenancy_clause}}
+
+**Nature of breach:** {{breach_type}}
+
+**Description:**
+
+{{breach_description}}
+
+{{#if breach_date}}**Date of breach:** {{breach_date}}{{/if}}
+
+{{#if breach_continuing}}
+The breach is ongoing and has not been remedied.
+{{else}}
+The breach occurred on {{breach_date}} and has {{#if breach_remedied}}been remedied{{else}}not been remedied{{/if}}.
+{{/if}}
+
+{{#if warnings_given}}
+### Warnings Given:
+
+{{#each warnings_list}}
+- **{{this.date}}** - {{this.method}}: {{this.description}}
+{{/each}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_3_claimed}}
+## PARTICULARS OF GROUND 3 - ANTISOCIAL BEHAVIOUR
+
+**Type of behaviour:** {{asb_type}}
+
+**Description:**
+
+{{asb_description}}
+
+### Incidents:
+
+{{#each asb_incidents}}
+**{{this.date}}{{#if this.time}} at {{this.time}}{{/if}}**
+
+{{this.description}}
+
+{{#if this.witnesses}}
+Witnesses: {{join this.witnesses ", "}}
+{{/if}}
+
+---
+{{/each}}
+
+{{#if police_involved}}
+**Police involvement:** The police have been called on {{police_call_count}} occasion(s).
+
+Crime Reference Numbers: {{join police_crime_numbers ", "}}
+{{/if}}
+
+{{#if council_involved}}
+**Local authority involvement:** Complaints have been made to {{council_name}}.
+
+Reference: {{council_reference}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_4_claimed}}
+## PARTICULARS OF GROUND 4 - LANDLORD INTENDS TO OCCUPY
+
+I/we require the property as my/our only or principal home (or for my/our spouse or civil partner).
+
+**Reason for requiring the property:**
+
+{{reason_for_occupying}}
+
+{{#if current_residence}}
+**My/our current address:** {{current_residence}}
+{{/if}}
+
+{{#if occupation_timescale}}
+**Intended occupation date:** {{occupation_timescale}}
+{{/if}}
+
+**IMPORTANT:** Under section 19 of the Act, if I/we do not occupy the property as my/our only or principal home (or that of my/our spouse/civil partner) for at least 3 months beginning no later than 3 months after you leave, you may apply to the Tribunal for wrongful termination order. If granted, the Tribunal may order me/us to pay you up to 6 months' rent.
+
+{{/if}}
+
+{{#if ground_5_claimed}}
+## PARTICULARS OF GROUND 5 - LANDLORD INTENDS TO SELL
+
+I/we intend to sell the property.
+
+**Details of sale intention:**
+
+{{sale_intention_details}}
+
+{{#if estate_agent}}
+**Estate agent instructed:** {{estate_agent_name}}
+Date instructed: {{estate_agent_date}}
+{{/if}}
+
+{{#if marketing_planned}}
+**Marketing plans:** {{marketing_details}}
+{{/if}}
+
+**IMPORTANT:** Under section 19 of the Act, if the property is not marketed for sale within 3 months of you leaving, you may apply to the Tribunal for a wrongful termination order. If granted, the Tribunal may order me/us to pay you up to 6 months' rent.
+
+{{/if}}
+
+{{#if ground_6_claimed}}
+## PARTICULARS OF GROUND 6 - REFURBISHMENT
+
+I/we intend to carry out substantial refurbishment works on the property which cannot be carried out with you in occupation.
+
+**Description of works:**
+
+{{refurbishment_description}}
+
+**Why vacant possession is required:**
+
+{{vacant_possession_reason}}
+
+{{#if planning_permission}}
+**Planning permission:** Obtained on {{planning_permission_date}}
+Planning reference: {{planning_reference}}
+{{/if}}
+
+{{#if building_warrant}}
+**Building warrant:** {{building_warrant_details}}
+{{/if}}
+
+{{#if contractor}}
+**Contractor:** {{contractor_name}}
+Estimated start date: {{works_start_date}}
+Estimated duration: {{works_duration}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_11_claimed}}
+## PARTICULARS OF GROUND 11 - NOT OCCUPYING AS PRINCIPAL HOME
+
+You are not occupying the property as your only or principal home.
+
+**Evidence of non-occupation:**
+
+{{non_occupation_evidence}}
+
+{{#if duration_not_occupying}}
+**Period of non-occupation:** {{duration_not_occupying}}
+{{/if}}
+
+{{#if alternative_residence}}
+**You appear to be residing at:** {{alternative_residence}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_12_claimed}}
+## PARTICULARS OF GROUND 12 - CRIMINAL CONVICTION
+
+{{#if tenant_convicted}}You have{{else}}A person residing with you or visiting the property has{{/if}} been convicted of using the property, or using it for allowing it to be used, for immoral or illegal purposes, or {{#if tenant_convicted}}you have{{else}}they have{{/if}} been convicted of an offence punishable by imprisonment committed in or in the locality of the property.
+
+**Details of conviction:**
+
+{{conviction_details}}
+
+**Court:** {{court_name}}
+**Date of conviction:** {{conviction_date}}
+**Offence:** {{offence_description}}
+**Sentence:** {{sentence}}
+
+{{#if connection_to_property}}
+**Connection to property:** {{property_connection}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_13_claimed}}
+## PARTICULARS OF GROUND 13 - MORTGAGE LENDER REQUIRING POSSESSION
+
+The property is subject to a mortgage which was granted before the start of the tenancy and the lender intends to sell the property.
+
+**Lender:** {{lender_name}}
+**Mortgage date:** {{mortgage_date}}
+**Tenancy start date:** {{tenancy_start_date}}
+
+{{#if lender_notice}}
+The lender has served notice requiring vacant possession.
+
+Date of lender's notice: {{lender_notice_date}}
+{{/if}}
+
+{{/if}}
+
+{{#if ground_18_claimed}}
+## PARTICULARS OF GROUND 18 - FALSE STATEMENT
+
+You made a false statement in order to obtain the tenancy.
+
+**False statement made:**
+
+{{false_statement}}
+
+**When/where made:** {{statement_context}}
+
+**True facts:**
+
+{{true_facts}}
+
+**How this was material:**
+
+{{materiality_explanation}}
+
+I/we would not have granted the tenancy had we known the true facts.
+
+{{/if}}
+
+---
+
+## WHAT THIS NOTICE MEANS
+
+This Notice to Leave means that I/we intend to apply to the First-tier Tribunal for Scotland (Housing and Property Chamber) for an eviction order.
+
+**You do not have to leave the property when this notice expires.** I/we cannot make you leave without obtaining an eviction order from the Tribunal.
+
+However, **you should take this notice seriously** and seek advice immediately.
+
+---
+
+## WHEN CAN EVICTION PROCEEDINGS START?
+
+{{#eq notice_period_days 28}}
+I/we cannot apply to the Tribunal for an eviction order until at least **28 days** after this notice is served on you.
+{{/eq}}
+
+{{#eq notice_period_days 84}}
+I/we cannot apply to the Tribunal for an eviction order until at least **84 days** (approximately 12 weeks) after this notice is served on you.
+{{/eq}}
+
+The earliest date I/we can apply to the Tribunal is: **{{earliest_tribunal_date}}**
+
+---
+
+## WHAT YOU SHOULD DO NOW
+
+### 1. Get Advice Immediately
+
+**Do not ignore this notice.** Contact one or more of the following for free, confidential advice:
+
+**Shelter Scotland:**
+- Website: scotland.shelter.org.uk
+- Phone: 0808 800 4444 (Mon-Fri 9am-5pm)
+
+**Citizens Advice Scotland:**
+- Website: www.citizensadvice.org.scot
+- Find your local bureau: www.cas.org.uk/bureaux
+
+**Local Authority Housing Department:**
+{{#if council_name}}
+- Council: {{council_name}}
+- Housing advice: {{council_phone}}
+{{else}}
+- Contact your local council's housing options team
+{{/if}}
+
+**Solicitor:**
+- You may be entitled to legal aid
+- Find a solicitor: www.slab.org.uk
+
+### 2. Check the Notice is Valid
+
+A Notice to Leave must:
+- Be in writing
+- Be properly served
+- Give the correct notice period for the ground(s) stated
+- Specify the ground(s) for eviction
+- Include sufficient particulars of the ground(s)
+
+If you think the notice is invalid, seek legal advice immediately.
+
+### 3. Respond to the Grounds
+
+{{#if ground_1_claimed}}
+**If this is about rent arrears:**
+- Contact me/us immediately to discuss payment
+- Check if you're entitled to benefits (Universal Credit, Housing Benefit)
+- Make a payment plan offer
+- Even if you clear the arrears after this notice, I/we may still proceed with Tribunal application
+
+{{/if}}
+
+{{#if ground_2_claimed}}
+**If this is about a breach of tenancy:**
+- Stop the breach immediately
+- Remedy any damage or issues
+- Contact me/us to discuss
+- Keep evidence of steps you've taken
+
+{{/if}}
+
+{{#if ground_3_claimed}}
+**If this is about antisocial behaviour:**
+- Stop the behaviour immediately
+- Get support if needed
+- Engage with any agencies involved
+- Seek mediation if appropriate
+
+{{/if}}
+
+### 4. Consider Your Options
+
+- **Stay and defend:** You have the right to contest the application at the Tribunal
+- **Negotiate:** Contact me/us to discuss possible solutions
+- **Leave voluntarily:** If you choose to leave, get this in writing to protect your rights
+
+---
+
+## TRIBUNAL PROCESS
+
+If I/we apply to the Tribunal for an eviction order:
+
+1. **You will receive notice** of the Tribunal application and hearing date
+2. **You can submit a response** setting out your position
+3. **You can attend the hearing** (in person, by phone, or video)
+4. **You can be represented** by a solicitor or other representative
+5. **The Tribunal will decide** whether to grant an eviction order
+
+The Tribunal has full discretion on whether to grant eviction, even if the ground is proven.
+
+The Tribunal will consider:
+- Whether it is reasonable to grant eviction
+- Your personal circumstances
+- Availability of alternative accommodation
+- Human rights and proportionality
+- My/our conduct as landlord
+- All relevant factors
+
+---
+
+## HELP WITH RENT AND HOUSING COSTS
+
+{{#if ground_1_claimed}}
+If you're struggling with rent, you may be entitled to help:
+
+**Universal Credit:** Includes help with housing costs
+- Apply: www.gov.uk/universal-credit
+- Phone: 0800 328 5644
+
+**Discretionary Housing Payment:** Your local council may provide additional help
+- Contact: {{council_name}} housing benefit team
+
+**Scottish Welfare Fund:** For emergency assistance
+- Contact your local council
+
+**Debt advice:**
+- StepChange: www.stepchange.org | 0800 138 1111
+- National Debtline: 0808 808 4000
+
+{{/if}}
+
+---
+
+## YOUR DEPOSIT
+
+{{#if deposit_protected}}
+Your deposit of £{{deposit_amount}} is protected in the {{deposit_scheme}} scheme.
+
+**Scheme details:** {{deposit_scheme_details}}
+**Deposit reference:** {{deposit_reference}}
+{{else}}
+{{#if deposit_amount}}
+A deposit of £{{deposit_amount}} was paid at the start of the tenancy.
+{{/if}}
+{{/if}}
+
+At the end of the tenancy, any disputed deductions from your deposit will be resolved through the deposit scheme's dispute resolution service.
+
+---
+
+## IMPORTANT LEGAL INFORMATION
+
+### Illegal Eviction
+
+It is a criminal offence for me/us to evict you without a Tribunal eviction order. I/we cannot:
+- Change the locks
+- Remove your belongings
+- Cut off utilities
+- Harass you to leave
+- Use violence or threats
+
+If you are illegally evicted, contact the police and get legal advice immediately.
+
+### Homelessness
+
+If you become homeless, your local council has a duty to assess your situation and may have a duty to provide accommodation.
+
+**Apply as homeless before leaving the property.** Once you have a valid Notice to Leave, you may be considered at risk of homelessness.
+
+Contact: {{council_name}} Homelessness Team{{#if council_phone}} on {{council_phone}}{{/if}}
+
+---
+
+## LANDLORD'S DECLARATION
+
+I/We declare that the information in this Notice to Leave is correct to the best of my/our knowledge and belief.
+
+{{#if ground_4_claimed}}
+I/We confirm that I/we intend to occupy the property as my/our (or my/our spouse's/civil partner's) only or principal home within 3 months of the tenant leaving, and for at least 3 months thereafter.
+{{/if}}
+
+{{#if ground_5_claimed}}
+I/We confirm that I/we intend to market the property for sale within 3 months of the tenant leaving.
+{{/if}}
+
+**Signed:** _________________________
+
+**Name:** {{landlord_full_name}}
+
+{{#if landlord_2_name}}
+**Signed:** _________________________
+
+**Name:** {{landlord_2_name}}
+{{/if}}
+
+**Date:** {{notice_date}}
+
+---
+
+## NOTES FOR LANDLORDS
+
+### Service of Notice
+
+This notice must be properly served on the tenant. Methods of service:
+1. **Personal service** - handed to the tenant
+2. **Postal service** - sent by recorded delivery or registered post
+3. **Email** (if tenant agreed to email service in the tenancy agreement)
+4. **Deposited** in the property in a sealed envelope addressed to the tenant
+
+**Keep proof of service** - This will be required for any Tribunal application.
+
+### Before Applying to Tribunal
+
+{{#if ground_1_claimed}}
+**For rent arrears (Ground 1):** You MUST complete all pre-action requirements and provide evidence to the Tribunal. Failure to do so will result in the application being refused.
+{{/if}}
+
+- Ensure notice period has expired
+- Ensure you meet all requirements for the ground(s)
+- Gather all evidence
+- Consider alternative dispute resolution
+- Check your landlord registration is current
+
+### After Notice Expires
+
+If the tenant does not leave, you must apply to the First-tier Tribunal. You cannot evict without a Tribunal order.
+
+Application details: www.housingandpropertychamber.scot
+
+---
+
+**END OF NOTICE**
+
+---
+
+{{#if is_preview}}
+**PREVIEW DOCUMENT - NOT FOR LEGAL USE**
+
+This is a preview generated by Landlord Heaven. A final, legally binding version will be provided upon payment.
+{{else}}
+**Document generated by Landlord Heaven** ({{site_domain}})
+
+Generated: {{generation_timestamp}}
+Document ID: {{document_id}}
+{{/if}}
+
+---
+
+**LEGAL DISCLAIMER:** This notice has been generated based on the information provided. While every effort has been made to ensure accuracy and compliance with the Private Housing (Tenancies) (Scotland) Act 2016, this does not constitute legal advice. You should seek independent legal advice before serving this notice or taking any legal action. Landlord Heaven is not responsible for any consequences arising from the use of this document.
