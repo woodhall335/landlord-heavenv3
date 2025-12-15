@@ -87,20 +87,29 @@ export function calculateSection8NoticePeriod(
   let explanation: string;
   let legal_basis: string;
 
-  // If ANY ground is discretionary, use 2 months for safety
-  if (discretionaryGrounds.length > 0) {
+  // CRITICAL FIX: Prioritize mandatory grounds!
+  // If ANY mandatory ground is selected, you only need 14 days (even if discretionary grounds also selected)
+  if (mandatoryGrounds.length > 0 || hasGround14) {
+    notice_period_days = 14;
+    if (discretionaryGrounds.length > 0) {
+      explanation =
+        'You have selected at least one mandatory ground (Ground 1-8 or 14/14A). ' +
+        'This allows a minimum notice period of just 2 weeks (14 days), even though you also selected discretionary grounds. ' +
+        'If the mandatory ground is proven, the court MUST grant possession.';
+    } else {
+      explanation =
+        'You have selected only mandatory grounds. The minimum legal notice period is 2 weeks (14 days). ' +
+        'If proven at the hearing, the court MUST grant possession.';
+    }
+    legal_basis = 'Housing Act 1988, Section 8(4)(a) - Mandatory grounds minimum 2 weeks';
+  }
+  // Only discretionary grounds (no mandatory)
+  else if (discretionaryGrounds.length > 0) {
     notice_period_days = 60;
     explanation =
-      'You have selected discretionary grounds, which require a minimum of 2 months notice (60 days). ' +
-      'This gives the court flexibility and demonstrates reasonableness.';
+      'You have selected only discretionary grounds, which require a minimum of 2 months notice (60 days). ' +
+      'The court has discretion whether to grant possession.';
     legal_basis = 'Housing Act 1988, Section 8(4)(b) - Discretionary grounds require reasonable notice';
-  }
-  // Only mandatory grounds
-  else if (mandatoryGrounds.length > 0 || hasGround14) {
-    notice_period_days = 14;
-    explanation =
-      'You have selected only mandatory grounds. The minimum legal notice period is 2 weeks (14 days).';
-    legal_basis = 'Housing Act 1988, Section 8(4)(a) - Mandatory grounds minimum 2 weeks';
   } else {
     // Fallback to 60 days for safety
     notice_period_days = 60;
