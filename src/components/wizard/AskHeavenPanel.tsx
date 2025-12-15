@@ -229,7 +229,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
     : null;
 
   const renderPanelContent = () => (
-    <Card className="p-6 pt-8 shadow-xl border border-primary/20 bg-white/95 backdrop-blur">
+    <Card className="px-6 py-6 pt-10 shadow-xl border border-primary/20 bg-white/95 backdrop-blur">
       {/* Header */}
       <div className="flex items-start gap-3 mb-4">
         <div className="mt-0.5">
