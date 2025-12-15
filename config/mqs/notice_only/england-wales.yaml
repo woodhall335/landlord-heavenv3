@@ -415,9 +415,10 @@ questions:
         inputType: date
         helperText: "This is the expiry date for Section 21. Must end on the last day of a tenancy period and be at least 2 months from service date."
         width: half
+        dependsOn:
+          questionId: selected_notice_route
+          value: section_21
         # Only show this field if user selected Section 21 route
-        # Note: This is a field-level dependsOn within the notice_service group
-        # The wizard will check if the user's answer to eviction_route includes "Section 21"
       - id: notice_service_method
         label: "How will you serve the notice?"
         inputType: select

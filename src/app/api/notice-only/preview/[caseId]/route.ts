@@ -74,9 +74,58 @@ export async function GET(
       if (selected_route === 'section_8') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 8 notice');
         try {
+          // Flatten nested caseFacts for template (template expects flat field names)
+          const templateData = {
+            // Landlord details
+            landlord_full_name: caseFacts.parties.landlord?.name || wizardFacts.landlord_details?.landlord_full_name || '',
+            landlord_address: caseFacts.parties.landlord?.address || wizardFacts.landlord_details?.landlord_address || '',
+            landlord_email: caseFacts.parties.landlord?.email || wizardFacts.landlord_details?.landlord_email || '',
+            landlord_phone: caseFacts.parties.landlord?.phone || wizardFacts.landlord_details?.landlord_phone || '',
+
+            // Tenant details
+            tenant_full_name: caseFacts.parties.tenants?.[0]?.name || wizardFacts.tenant_details?.tenant_full_name || '',
+            tenant_2_name: caseFacts.parties.tenants?.[1]?.name || wizardFacts.tenant_details?.tenant_2_name || '',
+
+            // Property details
+            property_address: [
+              caseFacts.property.address_line1 || wizardFacts.property_details?.property_address_line1,
+              caseFacts.property.address_line2 || wizardFacts.property_details?.property_address_line2,
+              caseFacts.property.city || wizardFacts.property_details?.property_address_town,
+              caseFacts.property.postcode || wizardFacts.property_details?.property_postcode,
+            ].filter(Boolean).join(', '),
+
+            // Tenancy details
+            tenancy_start_date: caseFacts.tenancy.start_date || wizardFacts.tenancy_details?.tenancy_start_date || '',
+            fixed_term: caseFacts.tenancy.is_fixed_term || wizardFacts.tenancy_details?.is_fixed_term || false,
+            fixed_term_end_date: caseFacts.tenancy.fixed_term_end_date || wizardFacts.tenancy_details?.fixed_term_end_date || '',
+
+            // Rent details
+            rent_amount: caseFacts.tenancy.rent_amount || wizardFacts.rent_details?.rent_amount || '',
+            rent_frequency: caseFacts.tenancy.rent_frequency || wizardFacts.rent_details?.rent_frequency || 'monthly',
+            payment_date: caseFacts.tenancy.rent_due_day || wizardFacts.rent_details?.payment_date || 1,
+
+            // Grounds and route
+            selected_route: wizardFacts.selected_notice_route || 'section_8',
+            grounds: wizardFacts.section8_grounds || [],
+
+            // Service details
+            notice_service_date: wizardFacts.notice_service?.notice_service_date || '',
+            notice_service_method: wizardFacts.notice_service?.notice_service_method || '',
+            notice_served_by: wizardFacts.notice_service?.notice_served_by || '',
+
+            // Arrears (if applicable)
+            total_arrears: caseFacts.issues.rent_arrears.total_arrears || wizardFacts.arrears_summary?.total_arrears || 0,
+            arrears_at_notice_date: wizardFacts.arrears_summary?.arrears_at_notice_date || 0,
+            arrears_duration_months: wizardFacts.arrears_summary?.arrears_duration_months || 0,
+
+            // Pass through entire objects for complex templates
+            caseFacts,
+            wizardFacts,
+          };
+
           const section8Doc = await generateDocument({
             templatePath: 'uk/england-wales/templates/eviction/section8_notice.hbs',
-            data: caseFacts,
+            data: templateData,
             outputFormat: 'pdf',
             isPreview: true,
           });
