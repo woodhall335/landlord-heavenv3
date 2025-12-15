@@ -771,6 +771,56 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         );
       }
 
+      case 'radio': {
+        // Handle options with nested structure (value, label, helperText)
+        const options = currentQuestion.options?.map((opt) => {
+          if (typeof opt === 'string') {
+            return { value: opt, label: opt, helperText: undefined };
+          }
+          return opt;
+        }) || [];
+
+        return (
+          <div className="space-y-3">
+            {options.map((option: any) => {
+              const optionValue = option.value || option;
+              const optionLabel = option.label || option;
+              const optionHelper = option.helperText;
+
+              return (
+                <label
+                  key={optionValue}
+                  className={`
+                    flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-all
+                    ${value === optionValue
+                      ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
+                      : 'border-gray-300 hover:border-primary/50 hover:bg-gray-50'
+                    }
+                    ${loading ? 'opacity-50 cursor-not-allowed' : ''}
+                  `}
+                >
+                  <input
+                    type="radio"
+                    name={currentQuestion.id}
+                    value={optionValue}
+                    checked={value === optionValue}
+                    onChange={(e) => setCurrentAnswer(e.target.value)}
+                    className="w-4 h-4 mt-1 text-primary focus:ring-2 focus:ring-primary"
+                    disabled={loading}
+                  />
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-900">{optionLabel}</div>
+                    {optionHelper && (
+                      <div className="text-sm text-gray-600 mt-1">{optionHelper}</div>
+                    )}
+                  </div>
+                </label>
+              );
+            })}
+          </div>
+        );
+      }
+
       case 'currency':
         return (
           <div className="relative">
