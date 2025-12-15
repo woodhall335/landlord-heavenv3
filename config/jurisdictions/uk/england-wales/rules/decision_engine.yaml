@@ -228,6 +228,26 @@ rules:
     notice_period: "2_months"
     reasoning: "Section 21 provides quickest route if all requirements met."
 
+  # WALES SECTION 8 WARNING
+  - rule_id: "wales_section8_terminology_warning"
+    name: "Wales - Section 8 Terminology Warning"
+    priority: 2
+    conditions:
+      property.location: "wales"
+    warnings:
+      - level: "high"
+        message: |
+          Section 8 is an England-only legal concept under Housing Act 1988.
+
+          Wales uses Renting Homes (Wales) Act 2016 with different:
+          - Occupation contracts (not ASTs)
+          - Notice types (not Section 8)
+          - Grounds terminology
+
+          Documents generated may not be valid in Wales.
+          Strongly recommend consulting Welsh property law solicitor.
+    action: "warn_only"
+
 # Red Flag Detection
 red_flags:
   deposit_not_protected:
