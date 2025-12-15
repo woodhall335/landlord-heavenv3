@@ -1409,7 +1409,30 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
       base.property.address_line2,
       base.property.city,
       base.property.postcode,
-    ].filter((part) => part && part.trim()); // Remove empty/null parts
+    ]
+      .map((part) => {
+        // Handle any type: string, number, boolean, object, null, undefined
+        if (part === null || part === undefined) return '';
+        if (typeof part === 'string') return part.trim();
+        if (typeof part === 'number') return String(part).trim();
+        if (typeof part === 'boolean') return String(part).trim();
+        // Handle objects with value/label/text/content properties
+        if (typeof part === 'object') {
+          const value =
+            (part as any).value ??
+            (part as any).label ??
+            (part as any).text ??
+            (part as any).content;
+          if (value !== null && value !== undefined) {
+            return String(value).trim();
+          }
+          // Fallback: don't include [object Object]
+          console.warn('[Normalize] Non-string address part detected, skipping:', typeof part);
+          return '';
+        }
+        return String(part).trim();
+      })
+      .filter(Boolean); // Remove empty strings
 
     // Add concatenated address for templates that expect property_address
     (base as any).property_address = addressParts.join('\n');
