@@ -286,19 +286,13 @@ questions:
       - hmo_license_valid
 
   # 7. Route selection (after Smart Guidance recommendation)
-  # CLAUDE CODE FIX: Hidden for notice_only - decision engine auto-determines route
   - id: selected_notice_route
     section: Notice Route
     question: "Which eviction route do you want to use?"
     inputType: radio
     helperText: "💡 Check the Smart Route Recommendation panel on the right for AI-powered guidance based on your compliance status and situation."
     validation:
-      required: false  # Not required - decision engine sets automatically
-    # HIDE: Decision engine determines Section 8 vs 21 automatically for notice_only
-    # This question should never show (impossible condition)
-    dependsOn:
-      questionId: __never_show_this__
-      value: true
+      required: true
     options:
       - value: section_8
         label: "Section 8 (Fault-Based Eviction)"
