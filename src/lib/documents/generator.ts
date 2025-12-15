@@ -548,6 +548,20 @@ export async function htmlToPdf(
     .page-break {
       page-break-after: always;
     }
+    .page-break-before {
+      page-break-before: always;
+      break-before: page;
+    }
+    .avoid-break {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .ground-block {
+      page-break-before: always;
+      break-before: page;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
     @page {
       size: ${options?.pageSize || 'A4'};
       margin: ${options?.margins?.top || '2cm'} ${options?.margins?.right || '2cm'} ${options?.margins?.bottom || '2cm'} ${options?.margins?.left || '2cm'};
