@@ -149,3 +149,11 @@ a:hover {
   scrollbar-width: thin;
   scrollbar-color: #7C3AED #f1f1f1;
 }
+
+/* Ask Heaven panel consistent padding override */
+.ask-heaven-panel {
+  padding-left: 1.5rem !important;  /* 24px */
+  padding-right: 1.5rem !important; /* 24px */
+  padding-bottom: 1.5rem !important; /* 24px */
+  padding-top: 3rem !important; /* 48px */
+}
