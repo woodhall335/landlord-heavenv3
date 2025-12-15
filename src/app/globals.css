@@ -150,10 +150,19 @@ a:hover {
   scrollbar-color: #7C3AED #f1f1f1;
 }
 
-/* Ask Heaven panel consistent padding override */
+/* Ask Heaven panel consistent padding override - Maximum specificity */
+div.ask-heaven-panel,
 .ask-heaven-panel {
-  padding-left: 1.5rem !important;  /* 24px */
-  padding-right: 1.5rem !important; /* 24px */
-  padding-bottom: 1.5rem !important; /* 24px */
-  padding-top: 3rem !important; /* 48px */
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  padding-bottom: 24px !important;
+  padding-top: 48px !important;
+}
+
+/* Ensure no conflicts with Card component padding */
+.ask-heaven-panel.bg-white {
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  padding-bottom: 24px !important;
+  padding-top: 48px !important;
 }

@@ -1522,7 +1522,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         <aside className="space-y-4">
           {/* Smart Guidance panels for Notice Only (eviction) - sticky sidebar */}
           {caseType === 'eviction' && product === 'notice_only' && (
-            <div className="hidden lg:block sticky top-24 space-y-4">
+            <div className="hidden lg:block sticky top-32 space-y-4">
               {/* Placeholder panel when no Smart Guidance data exists yet */}
               {!routeRecommendation && !groundRecommendations && !calculatedDate && (
                 <Card className="p-6 bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200">
@@ -1748,7 +1748,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
           {/* Ask Heaven sidebar – stays in view on larger screens */}
           {currentQuestion?.inputType === 'textarea' && (
-            <div className="hidden lg:block sticky top-24">
+            <div className="hidden lg:block sticky top-32">
               <AskHeavenPanel
                 caseId={caseId}
                 caseType={caseType}
