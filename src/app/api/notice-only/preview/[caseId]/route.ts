@@ -75,7 +75,7 @@ export async function GET(
         console.log('[NOTICE-PREVIEW-API] Generating Section 8 notice');
         try {
           const section8Doc = await generateDocument({
-            templatePath: 'uk/england-wales/templates/eviction/section8_form3.hbs',
+            templatePath: 'uk/england-wales/templates/eviction/section8_notice.hbs',
             data: caseFacts,
             outputFormat: 'pdf',
             isPreview: true,
