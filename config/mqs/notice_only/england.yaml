@@ -83,7 +83,6 @@ questions:
 
   # ========================================
   # NOTICE TYPE SELECTION
-  # CLAUDE CODE FIX: Hidden for notice_only - decision engine auto-determines route
   # ========================================
 
   - id: selected_notice_route
@@ -91,12 +90,7 @@ questions:
     question: "Which type of notice do you want to serve?"
     inputType: radio
     validation:
-      required: false  # Not required - decision engine sets automatically
-    # HIDE: Decision engine determines Section 8 vs 21 automatically for notice_only
-    # This question should never show (impossible condition)
-    dependsOn:
-      questionId: __never_show_this__
-      value: true
+      required: true
     options:
       - value: "section_21"
         label: "Section 21 - No-fault eviction"

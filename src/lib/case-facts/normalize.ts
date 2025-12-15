@@ -1403,41 +1403,58 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // PROPERTY ADDRESS CONCATENATION
   // Ensure templates receive a single concatenated property_address field
   // =============================================================================
-  if (base.property.address_line1) {
+
+  // Helper to recursively extract string value from nested objects
+  const extractStringValue = (part: any): string => {
+    if (part === null || part === undefined) return '';
+    if (typeof part === 'string') return part.trim();
+    if (typeof part === 'number') return String(part).trim();
+    if (typeof part === 'boolean') return String(part).trim();
+
+    // Handle objects - try common property names
+    if (typeof part === 'object' && !Array.isArray(part)) {
+      // Try nested value properties first
+      const value = part.value ?? part.label ?? part.text ?? part.content;
+      if (value !== null && value !== undefined) {
+        // Recursively extract if value is also an object
+        return extractStringValue(value);
+      }
+      // If object has no recognizable properties, try JSON.stringify
+      try {
+        const keys = Object.keys(part);
+        if (keys.length > 0) {
+          // Return first non-null value found
+          for (const key of keys) {
+            const extracted = extractStringValue(part[key]);
+            if (extracted) return extracted;
+          }
+        }
+      } catch (e) {
+        // Fallback - skip this part
+      }
+    }
+
+    return '';
+  };
+
+  if (base.property.address_line1 || base.property.address_line2 || base.property.city || base.property.postcode) {
     const addressParts = [
       base.property.address_line1,
       base.property.address_line2,
       base.property.city,
       base.property.postcode,
     ]
-      .map((part) => {
-        // Handle any type: string, number, boolean, object, null, undefined
-        if (part === null || part === undefined) return '';
-        if (typeof part === 'string') return part.trim();
-        if (typeof part === 'number') return String(part).trim();
-        if (typeof part === 'boolean') return String(part).trim();
-        // Handle objects with value/label/text/content properties
-        if (typeof part === 'object') {
-          const value =
-            (part as any).value ??
-            (part as any).label ??
-            (part as any).text ??
-            (part as any).content;
-          if (value !== null && value !== undefined) {
-            return String(value).trim();
-          }
-          // Fallback: don't include [object Object]
-          console.warn('[Normalize] Non-string address part detected, skipping:', typeof part);
-          return '';
-        }
-        return String(part).trim();
-      })
+      .map(extractStringValue)
       .filter(Boolean); // Remove empty strings
 
     // Add concatenated address for templates that expect property_address
     (base as any).property_address = addressParts.join('\n');
 
-    console.log('[Normalize] Property address concatenated:', addressParts.length, 'parts');
+    if (addressParts.length === 0) {
+      console.warn('[Normalize] Property address parts found but all extracted as empty');
+    } else {
+      console.log('[Normalize] Property address concatenated:', addressParts.length, 'parts');
+    }
   }
 
   // =============================================================================
