@@ -451,7 +451,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
     <>
       {/* Desktop / large screens – sticky in the wizard column only */}
       <div className="hidden lg:block">
-        <div className="sticky top-24">
+        <div className="sticky top-32">
           {renderPanelContent()}
         </div>
       </div>
