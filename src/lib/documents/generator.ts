@@ -171,12 +171,49 @@ registerHandlebarsHelpers();
 
 /**
  * Load a Handlebars template from the file system
+ *
+ * SINGLE SOURCE OF TRUTH: All templates must come from /config/jurisdictions
+ * This function enforces the contract that templatePath is relative to config/jurisdictions/
  */
 export function loadTemplate(templatePath: string): string {
+  // ============================================================================
+  // RUNTIME GUARD: Prevent loading from legacy /public/official-forms
+  // ============================================================================
+  if (templatePath.includes('official-forms') || templatePath.startsWith('public/')) {
+    throw new Error(
+      `[TEMPLATE GUARD] Attempted to load legacy template: ${templatePath}\n` +
+      `BLOCKED: All templates must come from /config/jurisdictions\n` +
+      `This is a legacy path and must not be used for generation.\n` +
+      `Template paths must be relative to config/jurisdictions/ (e.g., "uk/england/templates/...")`
+    );
+  }
+
+  // Prevent absolute paths
+  if (templatePath.startsWith('/')) {
+    throw new Error(
+      `[TEMPLATE GUARD] Template path must be relative to config/jurisdictions/\n` +
+      `Received absolute path: ${templatePath}\n` +
+      `Use relative paths like "uk/england/templates/eviction/section8_notice.hbs"`
+    );
+  }
+
+  // Prevent directory traversal attempts
+  if (templatePath.includes('..')) {
+    throw new Error(
+      `[TEMPLATE GUARD] Directory traversal not allowed in template paths.\n` +
+      `Received: ${templatePath}\n` +
+      `Templates must be within config/jurisdictions/`
+    );
+  }
+
+  // ============================================================================
+  // LOAD TEMPLATE from /config/jurisdictions
+  // ============================================================================
   const fullPath = join(process.cwd(), 'config', 'jurisdictions', templatePath);
 
   try {
     const templateContent = readFileSync(fullPath, 'utf-8');
+    console.log(`[TEMPLATE] ✅ Loading from: ${fullPath}`);
     return templateContent;
   } catch (error: any) {
     throw new Error(`Failed to load template ${templatePath}: ${error.message}`);
