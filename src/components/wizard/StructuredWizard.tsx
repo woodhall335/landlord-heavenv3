@@ -1748,18 +1748,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
           {/* Ask Heaven sidebar – stays in view on larger screens */}
           {currentQuestion?.inputType === 'textarea' && (
-            <div className="hidden lg:block sticky top-32">
-              <AskHeavenPanel
-                caseId={caseId}
-                caseType={caseType}
-                jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
-                product={product}
-                currentQuestionId={currentQuestion.id}
-                currentQuestionText={currentQuestion.question}
-                currentAnswer={typeof currentAnswer === 'string' ? currentAnswer : null}
-                onApplySuggestion={handleApplySuggestion}
-              />
-            </div>
+            <AskHeavenPanel
+              caseId={caseId}
+              caseType={caseType}
+              jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
+              product={product}
+              currentQuestionId={currentQuestion.id}
+              currentQuestionText={currentQuestion.question}
+              currentAnswer={typeof currentAnswer === 'string' ? currentAnswer : null}
+              onApplySuggestion={handleApplySuggestion}
+            />
           )}
 
           {/* Case health & readiness (money claims only) */}
