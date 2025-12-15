@@ -1377,6 +1377,33 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             </div>
           )}
 
+          {/* Wales Section 8 Warning */}
+          {jurisdiction === 'wales' &&
+           caseType === 'eviction' &&
+           (caseFacts.selected_notice_route === 'section_8' ||
+            caseFacts.notice_type === 'section_8' ||
+            currentQuestion?.section?.toLowerCase()?.includes('section 8') ||
+            currentQuestion?.section?.toLowerCase()?.includes('grounds')) && (
+            <div className="mb-6 p-4 bg-warning-50 border-l-4 border-warning-500 rounded">
+              <div className="flex items-start gap-3">
+                <div className="text-2xl flex-shrink-0 mt-0.5">⚠️</div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-warning-900 mb-1">
+                    Wales: Section 8 Terminology Warning
+                  </h4>
+                  <p className="text-sm text-warning-800 mb-2">
+                    "Section 8" applies to England only (Housing Act 1988).
+                    Wales uses Renting Homes (Wales) Act 2016 with different grounds and notice types.
+                  </p>
+                  <p className="text-sm text-warning-800 font-medium">
+                    <strong>Documents generated may not be valid in Wales.</strong>
+                    We strongly recommend consulting a Welsh property law solicitor.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Question Card */}
           <Card className="p-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">{currentQuestion.question}</h2>
