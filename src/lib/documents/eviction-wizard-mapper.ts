@@ -3,6 +3,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { GroundClaim, EvictionCase } from './eviction-pack-generator';
 import type { CaseData } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
+import { GROUND_DEFINITIONS } from './section8-generator';
 
 function buildAddress(...parts: Array<string | null | undefined>): string {
   return parts.filter(Boolean).join('\n');
@@ -24,17 +25,25 @@ function deriveCaseType(evictionRoute: any): EvictionCase['case_type'] {
   return 'rent_arrears';
 }
 
-function parseGround(option: string): { code: string; title: string } {
+function parseGround(option: string): { code: string; codeNum: number | '14A'; title: string } {
   const match = option.match(/ground\s*([0-9a-z]+)/i);
-  const code = match ? `Ground ${match[1].toUpperCase()}` : option.trim();
+  const codeStr = match ? match[1].toUpperCase() : '';
+  const codeNum = (codeStr === '14A' ? '14A' : parseInt(codeStr)) as number | '14A';
+  const code = codeStr ? `Ground ${codeStr}` : option.trim();
   const title = option.includes('-') ? option.split('-')[1].trim() : option.trim();
-  return { code, title };
+  return { code, codeNum, title };
 }
 
 function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
   const selections = facts.issues.section8_grounds.selected_grounds || [];
   return selections.map((selection) => {
-    const { code, title } = parseGround(selection);
+    const { code, codeNum, title } = parseGround(selection);
+
+    // ✅ FIX: Look up ground definition to get legal_basis and mandatory status
+    const groundDef = GROUND_DEFINITIONS[codeNum];
+    const legal_basis = groundDef?.legal_basis || 'Housing Act 1988, Schedule 2';
+    const mandatory = groundDef?.mandatory || false;
+
     let particulars = '';
 
     if (['Ground 8', 'Ground 10', 'Ground 11'].includes(code)) {
@@ -56,9 +65,10 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
 
     return {
       code,
-      title,
+      title: groundDef?.title || title,  // Use canonical title from definitions
+      legal_basis,  // ✅ FIX: Add legal_basis
       particulars,
-      mandatory: code === 'Ground 8',
+      mandatory,  // ✅ FIX: Use correct mandatory status from definitions
     };
   });
 }

@@ -144,6 +144,7 @@ export interface EvictionCase {
 export interface GroundClaim {
   code: string; // 'Ground 1', 'Ground 8', etc.
   title: string;
+  legal_basis?: string; // 'Housing Act 1988, Schedule 2, Ground X'
   particulars: string;
   evidence?: string;
   mandatory?: boolean;
