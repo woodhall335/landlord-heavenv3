@@ -1,0 +1,360 @@
+# ============================================================================
+# ENGLAND NOTICE ONLY - Master Question Set
+# Housing Act 1988 - WITH ALL CLAUDE CODE FIXES APPLIED
+# ============================================================================
+
+jurisdiction: england
+legal_framework: "Housing Act 1988"
+tenancy_type: "Assured Shorthold Tenancy (AST)"
+
+questions:
+  # ========================================
+  # BASIC INFORMATION
+  # ========================================
+
+  - id: landlord_full_name
+    section: Landlord Details
+    question: "Your full name (as landlord)"
+    inputType: text
+    validation:
+      required: true
+    maps_to:
+      - landlord_full_name
+
+  - id: tenant_full_name
+    section: Tenant Details
+    question: "Tenant's full name"
+    inputType: text
+    validation:
+      required: true
+    maps_to:
+      - tenant_full_name
+
+  - id: property_address
+    section: Property Details
+    question: "Property address"
+    inputType: textarea
+    validation:
+      required: true
+    helperText: "Full address including postcode"
+    maps_to:
+      - property_address
+
+  - id: tenancy_start_date
+    section: Tenancy Details
+    question: "When did the tenancy start?"
+    inputType: date
+    validation:
+      required: true
+    maps_to:
+      - tenancy_start_date
+
+  - id: is_fixed_term
+    section: Tenancy Details
+    question: "Is this a fixed term tenancy?"
+    inputType: yes_no
+    validation:
+      required: true
+    helperText: "Fixed term has a specific end date (e.g., 12 months)"
+    maps_to:
+      - is_fixed_term
+
+  - id: fixed_term_end_date
+    section: Tenancy Details
+    question: "Fixed term end date"
+    inputType: date
+    dependsOn:
+      questionId: is_fixed_term
+      value: true
+    validation:
+      required: true
+    maps_to:
+      - fixed_term_end_date
+
+  - id: rent_amount
+    section: Rent Details
+    question: "Monthly rent amount"
+    inputType: currency
+    validation:
+      required: true
+      min: 0
+    maps_to:
+      - rent_amount
+
+  # ========================================
+  # NOTICE TYPE SELECTION
+  # ========================================
+
+  - id: selected_notice_route
+    section: Notice Type
+    question: "Which type of notice do you want to serve?"
+    inputType: radio
+    validation:
+      required: true
+    options:
+      - value: "section_21"
+        label: "Section 21 - No-fault eviction"
+        helperText: "2 months notice, strict compliance required"
+      - value: "section_8"
+        label: "Section 8 - Grounds-based eviction"
+        helperText: "14+ days notice, specific grounds required"
+    width: full
+    maps_to:
+      - selected_notice_route
+
+  # ========================================
+  # SECTION 21 APPLICABILITY GATING
+  # ========================================
+
+  - id: section21_intro
+    section: Section 21 Compliance
+    question: "Section 21 Requirements"
+    inputType: info
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_21
+    content: |
+      **Section 21 has strict compliance requirements.**
+
+      We'll check which requirements apply to your situation.
+
+  - id: deposit_taken
+    section: Section 21 Compliance
+    question: "Did you take a deposit from the tenant?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_21
+    validation:
+      required: true
+    helperText: "Deposit protection only required if you took a deposit"
+    maps_to:
+      - deposit_taken
+
+  - id: has_gas_appliances
+    section: Section 21 Compliance
+    question: "Does the property have gas appliances?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_21
+    validation:
+      required: true
+    helperText: "Gas boiler, gas hob, gas fire, etc."
+    maps_to:
+      - has_gas_appliances
+
+  # ========================================
+  # CONDITIONAL COMPLIANCE CHECKS
+  # ========================================
+
+  - id: deposit_protected_scheme
+    section: Section 21 Compliance
+    question: "Is the deposit protected in an approved scheme?"
+    inputType: yes_no
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: section_21
+        - questionId: deposit_taken
+          value: true
+    validation:
+      required: true
+    helperText: |
+      **CRITICAL: Section 21 INVALID without this**
+
+      Approved schemes:
+      • Deposit Protection Service (DPS)
+      • MyDeposits
+      • Tenancy Deposit Scheme (TDS)
+    maps_to:
+      - deposit_protected
+
+  - id: prescribed_info_given
+    section: Section 21 Compliance
+    question: "Was prescribed information given within 30 days?"
+    inputType: yes_no
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: section_21
+        - questionId: deposit_taken
+          value: true
+    validation:
+      required: true
+    helperText: "Required information about deposit protection scheme"
+    maps_to:
+      - prescribed_info_given
+
+  - id: gas_safety_certificate
+    section: Section 21 Compliance
+    question: "Was a valid gas safety certificate provided?"
+    inputType: yes_no
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: section_21
+        - questionId: has_gas_appliances
+          value: true
+    validation:
+      required: true
+    helperText: "Must be provided and renewed annually"
+    maps_to:
+      - gas_certificate_provided
+
+  # ========================================
+  # EPC (CLAUDE CODE FIX #6 - EXPLICIT PRODUCT CONSTRAINT)
+  # ========================================
+
+  - id: epc_provided
+    section: Section 21 Compliance
+    question: "Was an EPC provided before tenancy started?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_21
+    validation:
+      required: true
+    helperText: |
+      **PRODUCT CONSTRAINT: System assumes EPC required**
+
+      This system enforces EPC compliance for all Section 21 notices.
+
+      **Legal exemptions exist but are not supported:**
+      • Listed buildings
+      • Buildings to be demolished
+      • Temporary structures
+      • Certain holiday accommodations
+
+      **If you believe your property is EPC exempt:**
+      Do not use automated Section 21 generation.
+      Consult a solicitor for manual preparation.
+    maps_to:
+      - epc_provided
+
+  # ========================================
+  # HOW TO RENT (CLAUDE CODE FIX #5 - OPTIONAL, API-ENFORCED)
+  # ========================================
+
+  - id: how_to_rent_info
+    section: Section 21 Compliance
+    question: "How to Rent Guide"
+    inputType: info
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_21
+    content: |
+      **How to Rent guide requirement:**
+
+      System automatically determines if required based on
+      tenancy start date.
+
+      • Before Oct 1, 2015: Not required
+      • On or after Oct 1, 2015: Required
+
+      **System calculates requirement automatically.**
+      You'll be blocked if required and not provided.
+
+  - id: how_to_rent_provided
+    section: Section 21 Compliance
+    question: "Was the 'How to Rent' guide provided?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_21
+    validation:
+      required: false  # CLAUDE CODE FIX #5: Not required in UI, enforced in API
+    helperText: |
+      Answer based on whether you provided the guide.
+      **System checks if it was required for your tenancy start date.**
+    maps_to:
+      - how_to_rent_provided
+
+  - id: property_licensing
+    section: Section 21 Compliance
+    question: "Property licensing status"
+    inputType: select
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_21
+    validation:
+      required: true
+    options:
+      - "not_required"
+      - "licensed"
+      - "unlicensed"
+    maps_to:
+      - property_licensing_status
+
+  - id: recent_repair_complaints_s21
+    section: Section 21 Compliance
+    question: "Has tenant made repair complaints in last 6 months?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_21
+    validation:
+      required: true
+    maps_to:
+      - recent_repair_complaints
+
+  # ========================================
+  # SECTION 8 GROUNDS
+  # ========================================
+
+  - id: section8_grounds_selection
+    section: Section 8 Grounds
+    question: "Select grounds for eviction"
+    inputType: multi_select
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_8
+    validation:
+      required: true
+    options:
+      - "Ground 1 - Landlord previously occupied"
+      - "Ground 8 - Serious rent arrears (2+ months)"
+      - "Ground 10 - Some rent arrears"
+      - "Ground 11 - Persistent late payment"
+      - "Ground 12 - Breach of tenancy"
+      - "Ground 13 - Property deterioration"
+      - "Ground 14 - Antisocial behaviour"
+      - "Ground 14A - Domestic violence"
+    helperText: "You can select multiple grounds"
+    maps_to:
+      - section8_grounds
+
+  - id: ground14_severity
+    section: Section 8 Grounds
+    question: "How severe is the antisocial behaviour?"
+    inputType: select
+    dependsOn:
+      questionId: section8_grounds_selection
+      valueContains: "Ground 14"
+    validation:
+      required: true
+    options:
+      - value: "serious"
+        label: "Serious (violence, threats, drug dealing)"
+      - value: "moderate"
+        label: "Moderate (noise, minor nuisance)"
+    maps_to:
+      - ground14_severity
+
+  - id: notice_strategy
+    section: Section 8 Grounds
+    question: "Notice period strategy"
+    inputType: select
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_8
+    validation:
+      required: true
+    options:
+      - value: "minimum"
+        label: "Minimum legal period (14 days)"
+      - value: "recommended"
+        label: "Recommended period (60 days for discretionary grounds)"
+    helperText: "Recommended period improves court success probability"
+    maps_to:
+      - notice_strategy

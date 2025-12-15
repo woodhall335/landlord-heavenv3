@@ -63,6 +63,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [caseFacts, setCaseFacts] = useState<Record<string, any>>({});
 
   // ====================================================================================
+  // PHASE 2: PRE-STEP GATE + ROUTE GUARD STATE
+  // ====================================================================================
+  const [mqsLocked, setMqsLocked] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<'england' | 'wales' | null>(null);
+  const previousRouteRef = React.useRef<string | null>(null);
+  const routeGuardTriggeredRef = React.useRef(false);
+
+  // ====================================================================================
   // SMART GUIDANCE STATE (Phase 3)
   // ====================================================================================
   const [routeRecommendation, setRouteRecommendation] = useState<{
@@ -278,6 +286,51 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   }, [caseId, handleComplete, initializeQuestion]);
 
+  // ====================================================================================
+  // PHASE 2: MQS LOADING FUNCTION
+  // ====================================================================================
+  const loadWizardWithMQS = useCallback(async (location: 'england' | 'wales') => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch('/api/wizard/mqs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          caseId,
+          propertyLocation: location,
+          jurisdiction: 'england-wales',
+          product: 'notice_only',
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to load MQS');
+
+      const mqs = await response.json();
+
+      setCaseFacts((prev) => ({
+        ...prev,
+        property_location: location,
+        legal_framework: mqs.legal_framework,
+        tenancy_type: mqs.tenancy_type,
+      }));
+
+      setMqsLocked(true);
+      setSelectedLocation(location);
+
+      console.log(`[Wizard] Loaded ${mqs.file_loaded} for ${location}`);
+
+      // Load first question
+      await loadNextQuestion();
+    } catch (error: any) {
+      console.error('[Wizard] MQS error:', error);
+      setError('Failed to load wizard');
+    } finally {
+      setLoading(false);
+    }
+  }, [caseId, loadNextQuestion]);
+
   // Load first question after intro or when no initial question was provided
   useEffect(() => {
     if (initialQuestion && !currentQuestion) {
@@ -308,6 +361,66 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       void fetchCaseFacts();
     }
   }, [currentQuestion, caseId]);
+
+  // ====================================================================================
+  // PHASE 2: ROUTE GUARD (CLAUDE CODE FIX #4 + #7 WITH LOOP PROTECTION)
+  // ====================================================================================
+  useEffect(() => {
+    // Only for Wales
+    if (caseFacts.property_location !== 'wales') return;
+
+    const currentRoute = caseFacts.selected_notice_route;
+    const previousRoute = previousRouteRef.current;
+
+    // Update previous route tracker
+    previousRouteRef.current = currentRoute;
+
+    // Check if route guard should run
+    if (currentRoute === 'wales_section_173') {
+      const contractCategory = caseFacts.wales_contract_category;
+
+      // If contract doesn't support Section 173
+      if (contractCategory === 'supported_standard' || contractCategory === 'secure') {
+        // CLAUDE CODE FIX #7: Check if we already triggered guard
+        if (routeGuardTriggeredRef.current && previousRoute === 'wales_fault_based') {
+          // Already switched, don't run again
+          return;
+        }
+
+        // CLAUDE CODE FIX #7: Only run once per invalid selection
+        routeGuardTriggeredRef.current = true;
+
+        // Auto-switch to fault-based
+        setCaseFacts((prev) => {
+          return {
+            ...prev,
+            selected_notice_route: 'wales_fault_based',
+          };
+        });
+
+        // Notify user (if toast is available)
+        console.warn(
+          '[Route Guard] Section 173 not available for contract type. Switched to fault-based.',
+        );
+
+        console.log(
+          `[Route Guard] Auto-switched from Section 173 to fault-based (contract: ${contractCategory})`,
+        );
+      } else {
+        // Valid contract type, reset trigger
+        routeGuardTriggeredRef.current = false;
+      }
+    } else {
+      // Not Section 173 route, reset trigger
+      routeGuardTriggeredRef.current = false;
+    }
+  }, [caseFacts.selected_notice_route, caseFacts.wales_contract_category, caseFacts.property_location]);
+
+  // Reset route guard trigger when location changes
+  useEffect(() => {
+    routeGuardTriggeredRef.current = false;
+    previousRouteRef.current = null;
+  }, [caseFacts.property_location]);
 
   // Optional: kick off an early analysis once the wizard starts (money claims only)
   useEffect(() => {
@@ -1228,6 +1341,61 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         <div className="text-6xl mb-4">✓</div>
         <h2 className="text-2xl font-bold mb-2">Wizard Complete!</h2>
         <p className="text-gray-600">Redirecting to preview...</p>
+      </div>
+    );
+  }
+
+  // ====================================================================================
+  // PHASE 2: PRE-STEP LOCATION GATE
+  // ====================================================================================
+  if (!mqsLocked && !selectedLocation && jurisdiction === 'england-wales') {
+    return (
+      <div className="max-w-2xl mx-auto p-8">
+        <Card className="p-8">
+          <h2 className="text-2xl font-bold mb-4">Property Location</h2>
+          <p className="text-gray-700 mb-6">
+            England and Wales have different legal frameworks for evictions. Select your property location to continue.
+          </p>
+
+          <div className="space-y-4">
+            <button
+              onClick={() => void loadWizardWithMQS('england')}
+              className="w-full p-6 border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all text-left"
+            >
+              <div className="font-bold text-lg mb-1">🏴󠁧󠁢󠁥󠁮󠁧󠁿 England</div>
+              <div className="text-sm text-gray-600 mb-2">Housing Act 1988</div>
+              <div className="text-xs text-gray-500">
+                • Section 21 (no-fault) + Section 8 (grounds-based)
+                <br />• Assured Shorthold Tenancies (ASTs)
+              </div>
+            </button>
+
+            <button
+              onClick={() => void loadWizardWithMQS('wales')}
+              className="w-full p-6 border-2 border-gray-200 rounded-lg hover:border-red-500 hover:bg-red-50 transition-all text-left"
+            >
+              <div className="font-bold text-lg mb-1">🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales</div>
+              <div className="text-sm text-gray-600 mb-2">Renting Homes (Wales) Act 2016</div>
+              <div className="text-xs text-gray-500">
+                • Section 173 (no-fault) + fault-based notices
+                <br />• Occupation Contracts
+              </div>
+            </button>
+          </div>
+
+          {loading && (
+            <div className="mt-6 flex items-center justify-center">
+              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+              <span className="ml-3 text-gray-600">Loading wizard...</span>
+            </div>
+          )}
+
+          {error && (
+            <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded">
+              <p className="text-red-800 text-sm">{error}</p>
+            </div>
+          )}
+        </Card>
       </div>
     );
   }
