@@ -1610,6 +1610,227 @@ export function normalizeCaseFacts(
 }
 
 // =============================================================================
+// GROUND DEFINITIONS (for Section 8 / England & Wales)
+// =============================================================================
+
+/**
+ * Official Section 8 ground definitions
+ */
+const SECTION8_GROUND_DEFINITIONS: Record<number | string, {
+  code: number;
+  title: string;
+  mandatory: boolean;
+  legal_basis: string;
+  full_text: string;
+}> = {
+  1: {
+    code: 1,
+    title: 'Landlord previously occupied as only or principal home',
+    mandatory: true,
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 1',
+    full_text: 'Not later than the beginning of the tenancy, the landlord gave notice that possession might be recovered on this ground; and at some time before the beginning of the tenancy, the landlord (or one of joint landlords) occupied the dwelling-house as his only or principal home.',
+  },
+  2: {
+    code: 2,
+    title: 'Mortgage lender requires possession',
+    mandatory: true,
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 2',
+    full_text: 'The dwelling-house is subject to a mortgage granted before the beginning of the tenancy and the mortgagee is entitled to exercise a power of sale and requires possession for the purpose of disposing of the dwelling-house.',
+  },
+  8: {
+    code: 8,
+    title: 'Serious rent arrears (at least 8 weeks or 2 months)',
+    mandatory: true,
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
+    full_text: 'At the date of the service of the notice and at the date of the hearing, at least eight weeks\' rent is unpaid if the rent is payable weekly or fortnightly, at least two months\' rent is unpaid if the rent is payable monthly, at least one quarter\'s rent is more than three months in arrears if the rent is payable quarterly, or at least three months\' rent is more than three months in arrears if the rent is payable yearly.',
+  },
+  10: {
+    code: 10,
+    title: 'Some rent arrears (unpaid at notice and hearing)',
+    mandatory: false,
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 10',
+    full_text: 'Some rent lawfully due from the tenant is unpaid on the date on which proceedings for possession are begun and was in arrears at the date of service of the notice.',
+  },
+  11: {
+    code: 11,
+    title: 'Persistent delay in paying rent',
+    mandatory: false,
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 11',
+    full_text: 'Whether or not any rent is in arrears on the date on which proceedings for possession are begun, the tenant has persistently delayed paying rent which has become lawfully due.',
+  },
+  12: {
+    code: 12,
+    title: 'Breach of tenancy obligation',
+    mandatory: false,
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 12',
+    full_text: 'Any obligation of the tenancy (other than one related to the payment of rent) has been broken or not performed.',
+  },
+  13: {
+    code: 13,
+    title: 'Deterioration of dwelling',
+    mandatory: false,
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 13',
+    full_text: 'The condition of the dwelling-house or any of the common parts has deteriorated owing to acts of waste by, or the neglect or default of, the tenant or any other person residing in the dwelling-house.',
+  },
+  14: {
+    code: 14,
+    title: 'Nuisance or annoyance to neighbours',
+    mandatory: false,  // Note: Ground 14 is discretionary, NOT mandatory
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 14',
+    full_text: 'The tenant or a person residing in or visiting the dwelling-house has been guilty of conduct causing or likely to cause a nuisance or annoyance to a person residing, visiting or otherwise engaging in a lawful activity in the locality, or has been convicted of using the dwelling-house or allowing it to be used for immoral or illegal purposes, or an arrestable offence committed in, or in the locality of, the dwelling-house.',
+  },
+  '14A': {
+    code: 14,
+    title: 'Domestic violence',
+    mandatory: false,
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 14A',
+    full_text: 'The dwelling-house was occupied by a married couple or a couple living together as husband and wife and one or both of the partners is a tenant of the dwelling-house, and the partner who is not a tenant has left because of violence or threats of violence by the other partner.',
+  },
+  15: {
+    code: 15,
+    title: 'Deterioration of furniture',
+    mandatory: false,
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 15',
+    full_text: 'The condition of any furniture provided for use under the tenancy has deteriorated owing to ill-treatment by the tenant or any other person residing in the dwelling-house.',
+  },
+  17: {
+    code: 17,
+    title: 'False statement induced grant of tenancy',
+    mandatory: false,
+    legal_basis: 'Housing Act 1988, Schedule 2, Ground 17',
+    full_text: 'The tenancy was granted on the basis of a false statement knowingly or recklessly made by the tenant or a person acting at the tenant\'s instigation.',
+  },
+};
+
+/**
+ * Build grounds array from wizard facts with proper structure for Form 3 compliance
+ */
+function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any>): any[] {
+  const selectedGrounds = getWizardValue(wizard, 'section8_grounds');
+
+  if (!selectedGrounds || (Array.isArray(selectedGrounds) && selectedGrounds.length === 0)) {
+    return [];
+  }
+
+  const groundsList = Array.isArray(selectedGrounds) ? selectedGrounds : [selectedGrounds];
+
+  return groundsList.map((groundStr: string) => {
+    // Parse ground number from string like "Ground 8 - Serious rent arrears"
+    const match = groundStr.match(/ground\s*([0-9]+a?)/i);
+    const groundNumStr = match ? match[1].toUpperCase() : '';
+    const groundNum = groundNumStr === '14A' ? '14A' : parseInt(groundNumStr);
+
+    // Look up ground definition
+    const groundDef = SECTION8_GROUND_DEFINITIONS[groundNum];
+
+    if (!groundDef) {
+      console.warn(`[buildGroundsArray] Unknown ground: ${groundStr}`);
+      return {
+        code: groundNumStr,
+        mandatory: false,
+        title: groundStr,
+        legal_basis: 'Housing Act 1988, Schedule 2',
+        full_text: '',
+        explanation: '',
+        particulars: '',
+      };
+    }
+
+    // Build explanation and particulars based on ground type
+    let explanation = '';
+    let particulars = '';
+
+    if (groundNum === 8) {
+      // Ground 8: Serious rent arrears
+      const arrears = templateData.arrears_at_notice_date || templateData.total_arrears || 0;
+      const rentAmount = templateData.rent_amount || 0;
+      const rentFreq = templateData.rent_frequency || 'monthly';
+
+      // Calculate threshold
+      let threshold = 0;
+      let thresholdDescription = '';
+      if (rentFreq === 'weekly') {
+        threshold = rentAmount * 8;
+        thresholdDescription = '8 weeks';
+      } else if (rentFreq === 'fortnightly') {
+        threshold = rentAmount * 4; // 8 weeks = 4 fortnights
+        thresholdDescription = '8 weeks (4 fortnightly payments)';
+      } else if (rentFreq === 'monthly') {
+        threshold = rentAmount * 2;
+        thresholdDescription = '2 months';
+      } else if (rentFreq === 'quarterly') {
+        threshold = rentAmount * 1;
+        thresholdDescription = '1 quarter';
+      }
+
+      // Only include Ground 8 explanation if threshold is met
+      if (arrears >= threshold) {
+        explanation = `The tenant currently owes £${arrears.toFixed(2)} in rent arrears. The rent is £${rentAmount} payable ${rentFreq}. At the date of service of this notice, the arrears amount to ${thresholdDescription} of rent or more. This satisfies the threshold for Ground 8 under Schedule 2 of the Housing Act 1988 (as amended).`;
+        particulars = `Rent arrears at date of notice: £${arrears.toFixed(2)}\nRent amount: £${rentAmount} (${rentFreq})\nThreshold for Ground 8: £${threshold.toFixed(2)} (${thresholdDescription})\n\nGround 8 is a MANDATORY ground. If the arrears still meet the threshold at the date of the hearing, the court MUST grant possession.`;
+      } else {
+        explanation = `WARNING: The current arrears of £${arrears.toFixed(2)} do not meet the Ground 8 threshold of ${thresholdDescription} (£${threshold.toFixed(2)}). Ground 8 cannot be relied upon unless the arrears increase before the hearing.`;
+        particulars = `Current arrears: £${arrears.toFixed(2)}\nRequired threshold: £${threshold.toFixed(2)} (${thresholdDescription})\n\nGround 8 is NOT satisfied at this time.`;
+      }
+    } else if (groundNum === 10 || groundNum === 11) {
+      // Grounds 10/11: Other arrears grounds
+      const arrears = templateData.total_arrears || 0;
+      explanation = `The tenant owes £${arrears.toFixed(2)} in rent arrears.`;
+      particulars = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+                   getWizardValue(wizard, 'section8_grounds_narrative') ||
+                   `Rent arrears outstanding: £${arrears.toFixed(2)}`;
+
+      if (groundNum === 10) {
+        particulars += `\n\nGround 10 is a DISCRETIONARY ground. The court will consider all circumstances when deciding whether to grant possession.`;
+      } else {
+        particulars += `\n\nGround 11 is a DISCRETIONARY ground. The court will consider the pattern of late payments when deciding whether to grant possession.`;
+      }
+    } else if (groundNum === 12) {
+      // Ground 12: Breach of tenancy
+      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+                   getWizardValue(wizard, 'section8_grounds_narrative') ||
+                   'The tenant has breached one or more terms of the tenancy agreement.';
+      particulars = explanation + '\n\nGround 12 is a DISCRETIONARY ground. The court will consider the nature and severity of the breach.';
+    } else if (groundNum === 13 || groundNum === 15) {
+      // Grounds 13/15: Property damage
+      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+                   getWizardValue(wizard, 'section8_grounds_narrative') ||
+                   'The condition of the property has deteriorated.';
+      particulars = explanation + `\n\nGround ${groundNum} is a DISCRETIONARY ground. The court will assess the extent of deterioration.`;
+    } else if (groundNum === 14 || groundNumStr === '14A') {
+      // Grounds 14/14A: Nuisance/ASB
+      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+                   getWizardValue(wizard, 'section8_grounds_narrative') ||
+                   'The tenant or persons at the property have caused nuisance or annoyance.';
+      particulars = explanation + `\n\nGround ${groundNumStr} is a DISCRETIONARY ground. The court will consider evidence of nuisance or anti-social behaviour.`;
+    } else if (groundNum === 17) {
+      // Ground 17: False statement
+      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+                   getWizardValue(wizard, 'section8_grounds_narrative') ||
+                   'The tenancy was granted based on a false statement.';
+      particulars = explanation + '\n\nGround 17 is a DISCRETIONARY ground. The court will consider whether the false statement was material to the grant of the tenancy.';
+    } else {
+      // Other grounds
+      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+                   getWizardValue(wizard, 'section8_grounds_narrative') ||
+                   '';
+      particulars = explanation;
+    }
+
+    return {
+      code: groundDef.code,
+      number: String(groundDef.code),
+      mandatory: groundDef.mandatory,
+      title: groundDef.title,
+      legal_basis: groundDef.legal_basis,
+      full_text: groundDef.full_text,
+      explanation,
+      particulars,
+      type: groundDef.mandatory ? 'MANDATORY' : 'DISCRETIONARY',
+    };
+  });
+}
+
+// =============================================================================
 // NOTICE ONLY TEMPLATE DATA MAPPER (TASK C)
 // =============================================================================
 
@@ -1895,32 +2116,52 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   // =============================================================================
   // DEPOSIT & COMPLIANCE
   // =============================================================================
-  templateData.deposit_taken = coerceBoolean(
+  const depositTaken = coerceBoolean(
     getFirstValue(wizard, ['deposit_taken', 'deposit_taken_wales', 'deposit_taken_fault'])
   );
+  templateData.deposit_taken = depositTaken;
 
-  templateData.deposit_protected = coerceBoolean(
+  const depositProtected = coerceBoolean(
     getFirstValue(wizard, ['deposit_protected', 'deposit_protected_wales', 'deposit_protected_fault'])
   );
+  templateData.deposit_protected = depositProtected;
 
   const depositAmount = getFirstValue(wizard, ['deposit_amount']);
-  templateData.deposit_amount = depositAmount !== null ? Number(depositAmount) || null : null;
+  const depositAmountNum = depositAmount !== null && depositAmount !== undefined ? Number(depositAmount) || 0 : 0;
 
-  templateData.deposit_scheme = extractString(
-    getFirstValue(wizard, [
-      'deposit_scheme',
-      'deposit_scheme_wales_s173',
-      'deposit_scheme_fault',
-    ])
-  );
+  // Only set deposit_amount if a deposit was actually taken
+  if (depositTaken === false) {
+    templateData.deposit_amount = 0;
+    templateData.deposit_scheme = null;
+    templateData.deposit_reference = null;
+    templateData.deposit_protection_date = null;
+  } else {
+    templateData.deposit_amount = depositAmountNum;
 
-  templateData.deposit_reference = extractString(
-    getWizardValue(wizard, 'deposit_reference')
-  );
+    // Only set scheme details if deposit is protected
+    if (depositProtected === true) {
+      templateData.deposit_scheme = extractString(
+        getFirstValue(wizard, [
+          'deposit_scheme',
+          'deposit_scheme_name',
+          'deposit_scheme_wales_s173',
+          'deposit_scheme_fault',
+        ])
+      );
 
-  templateData.deposit_protection_date = extractString(
-    getWizardValue(wizard, 'deposit_protection_date')
-  );
+      templateData.deposit_reference = extractString(
+        getWizardValue(wizard, 'deposit_reference')
+      );
+
+      templateData.deposit_protection_date = extractString(
+        getWizardValue(wizard, 'deposit_protection_date')
+      );
+    } else {
+      templateData.deposit_scheme = null;
+      templateData.deposit_reference = null;
+      templateData.deposit_protection_date = null;
+    }
+  }
 
   templateData.prescribed_info_given = coerceBoolean(
     getWizardValue(wizard, 'prescribed_info_given')
@@ -2043,15 +2284,34 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
 
   // =============================================================================
   // GROUNDS ARRAY (for Section 8 and Scotland)
-  // This will be populated by the generator functions
   // =============================================================================
-  templateData.grounds = [];
+  templateData.grounds = buildGroundsArray(wizard, templateData);
+
+  // =============================================================================
+  // DATES: Ensure notice_date, service_date, earliest_possession_date are always set
+  // =============================================================================
+  if (!templateData.notice_date && !templateData.service_date) {
+    // Default to today if no date provided
+    templateData.notice_date = new Date().toISOString().split('T')[0];
+    templateData.service_date = templateData.notice_date;
+  }
+
+  // Calculate earliest_possession_date if not provided
+  if (!templateData.earliest_possession_date && templateData.service_date) {
+    const noticePeriodDays = templateData.notice_period_days || 14;
+    const serviceDate = new Date(templateData.service_date);
+    const earliestDate = new Date(serviceDate.getTime() + noticePeriodDays * 24 * 60 * 60 * 1000);
+    templateData.earliest_possession_date = earliestDate.toISOString().split('T')[0];
+  }
 
   console.log('[mapNoticeOnlyFacts] Mapped Notice Only template data');
   console.log('[mapNoticeOnlyFacts] Landlord:', templateData.landlord_full_name);
+  console.log('[mapNoticeOnlyFacts] Landlord address:', templateData.landlord_address ? 'SET' : 'MISSING');
   console.log('[mapNoticeOnlyFacts] Tenant:', templateData.tenant_full_name);
-  console.log('[mapNoticeOnlyFacts] Property address parts:', propertyAddressParts.length);
-  console.log('[mapNoticeOnlyFacts] Route:', templateData.selected_notice_route);
+  console.log('[mapNoticeOnlyFacts] Property address:', templateData.property_address ? 'SET' : 'MISSING');
+  console.log('[mapNoticeOnlyFacts] Grounds:', templateData.grounds.length);
+  console.log('[mapNoticeOnlyFacts] Dates - notice:', templateData.notice_date, 'service:', templateData.service_date, 'earliest:', templateData.earliest_possession_date);
+  console.log('[mapNoticeOnlyFacts] Deposit - amount:', templateData.deposit_amount, 'protected:', templateData.deposit_protected, 'scheme:', templateData.deposit_scheme);
 
   return templateData;
 }
