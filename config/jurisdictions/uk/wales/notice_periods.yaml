@@ -1,0 +1,47 @@
+# ============================================================================
+# Wales Notice Periods - Renting Homes (Wales) Act 2016
+# VERSIONED for legal changes
+#
+# CLAUDE CODE FIX #3: No redundant current_rule - single source of truth
+# ============================================================================
+
+section_173_no_fault:
+  description: "Section 173 Landlord's Notice (no-fault eviction)"
+
+  rules:
+    - effective_from: "2016-12-01"
+      period_months: 2
+      period_days: 60
+      notes: "Initial 2016 implementation"
+      legal_reference: "Renting Homes (Wales) Act 2016, s.173 (original)"
+
+    - effective_from: "2022-12-01"
+      period_months: 6
+      period_days: 180
+      notes: "Increased to 6 months (2022 amendment)"
+      legal_reference: "Renting Homes (Wales) Act 2016, s.173 (as amended 2022)"
+
+prohibited_period:
+  months: 6
+  notes: "Cannot serve Section 173 in first 6 months of standard contract"
+
+fault_based_sections:
+  section_157:
+    period_days: 14
+    description: "Serious rent arrears (at least 2 months unpaid)"
+    legal_reference: "Renting Homes (Wales) Act 2016, s.157"
+
+  section_159:
+    period_days: 30
+    description: "Some rent arrears (less than 2 months)"
+    legal_reference: "Renting Homes (Wales) Act 2016, s.159"
+
+  section_161:
+    period_days: 14
+    description: "Anti-social behaviour (serious)"
+    legal_reference: "Renting Homes (Wales) Act 2016, s.161"
+
+  section_162:
+    period_days: 30
+    description: "Breach of occupation contract"
+    legal_reference: "Renting Homes (Wales) Act 2016, s.162"
