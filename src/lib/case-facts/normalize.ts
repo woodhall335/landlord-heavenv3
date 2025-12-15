@@ -1399,6 +1399,112 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     };
   }
 
+  // =============================================================================
+  // PROPERTY ADDRESS CONCATENATION
+  // Ensure templates receive a single concatenated property_address field
+  // =============================================================================
+  if (base.property.address_line1) {
+    const addressParts = [
+      base.property.address_line1,
+      base.property.address_line2,
+      base.property.city,
+      base.property.postcode,
+    ].filter((part) => part && part.trim()); // Remove empty/null parts
+
+    // Add concatenated address for templates that expect property_address
+    (base as any).property_address = addressParts.join('\n');
+
+    console.log('[Normalize] Property address concatenated:', addressParts.length, 'parts');
+  }
+
+  // =============================================================================
+  // TENANT/LANDLORD NAME NORMALIZATION
+  // Ensure flat fields exist for templates that expect them
+  // =============================================================================
+  if (base.parties.tenants.length > 0 && base.parties.tenants[0]?.name) {
+    (base as any).tenant_full_name = base.parties.tenants[0].name;
+    console.log('[Normalize] Tenant name:', base.parties.tenants[0].name);
+  }
+
+  if (base.parties.landlord.name) {
+    (base as any).landlord_full_name = base.parties.landlord.name;
+    console.log('[Normalize] Landlord name:', base.parties.landlord.name);
+  }
+
+  // =============================================================================
+  // OBJECT TO STRING FLATTENING (PRESERVE ASK HEAVEN FIELDS)
+  // Prevents [object Object] in templates
+  // =============================================================================
+  Object.keys(base).forEach((key) => {
+    const value = (base as any)[key];
+
+    // If it's an object but not Date/Array, flatten it
+    if (
+      value &&
+      typeof value === 'object' &&
+      !Array.isArray(value) &&
+      !(value instanceof Date)
+    ) {
+      // Check if this is a known nested structure (parties, property, tenancy, etc.)
+      // We don't want to flatten these, only unexpected objects
+      const knownStructures = [
+        'parties',
+        'property',
+        'tenancy',
+        'issues',
+        'compliance',
+        'money_claim',
+        'court',
+        'evidence',
+        'eviction',
+        'meta',
+        'case_health',
+      ];
+
+      if (knownStructures.includes(key)) {
+        // Skip known nested structures
+        return;
+      }
+
+      console.warn(`[Normalize] Found unexpected object for key "${key}", flattening...`);
+
+      // Special handling for Ask Heaven narrative fields
+      if (
+        key.includes('particulars') ||
+        key.includes('narrative') ||
+        key.includes('explanation') ||
+        key.includes('summary') ||
+        key.includes('description')
+      ) {
+        // Ask Heaven fields: preserve the full value if it has text content
+        if (value.text && typeof value.text === 'string') {
+          (base as any)[key] = value.text;
+        } else if (value.value && typeof value.value === 'string') {
+          (base as any)[key] = value.value;
+        } else if (value.content && typeof value.content === 'string') {
+          (base as any)[key] = value.content;
+        } else {
+          // Fallback: try to stringify meaningfully
+          (base as any)[key] = JSON.stringify(value);
+        }
+      } else {
+        // Non-narrative fields: standard flattening
+        if (value.value !== undefined) {
+          (base as any)[key] = value.value;
+        } else if (value.label !== undefined) {
+          (base as any)[key] = value.label;
+        } else if (value.text !== undefined) {
+          (base as any)[key] = value.text;
+        } else {
+          // Last resort: JSON stringify
+          (base as any)[key] = JSON.stringify(value);
+        }
+      }
+    }
+  });
+
+  console.log('[Normalize] Case facts normalization complete');
+
   // ---------------------------------------------------------------------------
   // CASE HEALTH - compute contradictions, missing evidence, compliance warnings
   // ---------------------------------------------------------------------------
