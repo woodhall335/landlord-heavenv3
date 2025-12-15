@@ -192,7 +192,7 @@ export interface Section8NoticeData {
 // GROUND DEFINITIONS
 // ============================================================================
 
-const GROUND_DEFINITIONS: Record<number | '14A', Omit<Section8Ground, 'particulars' | 'supporting_evidence'>> = {
+export const GROUND_DEFINITIONS: Record<number | '14A', Omit<Section8Ground, 'particulars' | 'supporting_evidence'>> = {
   1: {
     code: 1,
     title: 'Landlord previously occupied as only or principal home',
