@@ -62,7 +62,25 @@ questions:
       - landlord_email
       - landlord_phone
 
-  # 2. Tenant details
+  # 2. TASK B: Route selection EARLY (before route-dependent questions)
+  - id: selected_notice_route
+    section: Notice Route
+    question: "Which eviction route do you want to use?"
+    inputType: radio
+    helperText: "💡 Select your route first. The system will then ask relevant questions for that route and provide AI-powered guidance."
+    validation:
+      required: true
+    options:
+      - value: section_8
+        label: "Section 8 (Fault-Based Eviction)"
+        helperText: "Use when tenant has breached tenancy terms (arrears, ASB, damage, etc.)"
+      - value: section_21
+        label: "Section 21 (No-Fault Eviction)"
+        helperText: "Use to end tenancy without proving fault (requires full compliance)"
+    maps_to:
+      - selected_notice_route
+
+  # 3. Tenant details
   - id: tenant_details
     section: Tenant Details
     question: Tenant details
@@ -289,25 +307,7 @@ questions:
       - hmo_license_required
       - hmo_license_valid
 
-  # 7. Route selection (after Smart Guidance recommendation)
-  - id: selected_notice_route
-    section: Notice Route
-    question: "Which eviction route do you want to use?"
-    inputType: radio
-    helperText: "💡 Check the Smart Route Recommendation panel on the right for AI-powered guidance based on your compliance status and situation."
-    validation:
-      required: true
-    options:
-      - value: section_8
-        label: "Section 8 (Fault-Based Eviction)"
-        helperText: "Use when tenant has breached tenancy terms (arrears, ASB, damage, etc.)"
-      - value: section_21
-        label: "Section 21 (No-Fault Eviction)"
-        helperText: "Use to end tenancy without proving fault (requires full compliance)"
-    maps_to:
-      - selected_notice_route
-
-  # 8. Section 8 grounds selection
+  # 7. Section 8 grounds selection
   - id: section8_grounds
     section: Section 8 Grounds
     question: "Which grounds under Section 8 apply?"

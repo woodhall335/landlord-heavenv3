@@ -21,6 +21,25 @@ questions:
     maps_to:
       - landlord_full_name
 
+  # TASK B: Route selection EARLY (before route-dependent questions)
+  - id: selected_notice_route
+    section: Notice Type
+    question: "Which type of notice do you want to serve?"
+    inputType: radio
+    validation:
+      required: true
+    helperText: "Select your notice type first. The system will then ask relevant questions for that type."
+    options:
+      - value: "section_21"
+        label: "Section 21 - No-fault eviction"
+        helperText: "2 months notice, strict compliance required"
+      - value: "section_8"
+        label: "Section 8 - Grounds-based eviction"
+        helperText: "14+ days notice, specific grounds required"
+    width: full
+    maps_to:
+      - selected_notice_route
+
   - id: tenant_full_name
     section: Tenant Details
     question: "Tenant's full name"
@@ -80,27 +99,6 @@ questions:
       min: 0
     maps_to:
       - rent_amount
-
-  # ========================================
-  # NOTICE TYPE SELECTION
-  # ========================================
-
-  - id: selected_notice_route
-    section: Notice Type
-    question: "Which type of notice do you want to serve?"
-    inputType: radio
-    validation:
-      required: true
-    options:
-      - value: "section_21"
-        label: "Section 21 - No-fault eviction"
-        helperText: "2 months notice, strict compliance required"
-      - value: "section_8"
-        label: "Section 8 - Grounds-based eviction"
-        helperText: "14+ days notice, specific grounds required"
-    width: full
-    maps_to:
-      - selected_notice_route
 
   # ========================================
   # DEPOSIT & COMPLIANCE (TASK A: COLLECT FOR BOTH ROUTES)

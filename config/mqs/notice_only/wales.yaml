@@ -22,6 +22,24 @@ questions:
     maps_to:
       - landlord_full_name
 
+  # TASK B: Route selection EARLY (before route-dependent questions)
+  - id: selected_notice_route
+    section: Notice Type
+    question: "Which type of notice?"
+    inputType: radio
+    validation:
+      required: true
+    helperText: "Select your notice type first. System will ask relevant questions based on your selection."
+    options:
+      - value: "wales_section_173"
+        label: "Section 173 - No-fault"
+        helperText: "Minimum statutory period, no reason"
+      - value: "wales_fault_based"
+        label: "Fault-based - Grounds required"
+        helperText: "14-30 days, specific sections"
+    maps_to:
+      - selected_notice_route
+
   - id: contract_holder_full_name
     section: Contract Holder Details
     question: "Contract holder's full name"
@@ -89,31 +107,6 @@ questions:
       Supported/Secure: Fault-based only ❌
     maps_to:
       - wales_contract_category
-
-  # ========================================
-  # NOTICE TYPE SELECTION (CLAUDE CODE FIX #4)
-  # ========================================
-
-  - id: selected_notice_route
-    section: Notice Type
-    question: "Which type of notice?"
-    inputType: radio
-    validation:
-      required: true
-    options:
-      - value: "wales_section_173"
-        label: "Section 173 - No-fault"
-        helperText: "Minimum statutory period, no reason"
-      - value: "wales_fault_based"
-        label: "Fault-based - Grounds required"
-        helperText: "14-30 days, specific sections"
-    helperText: |
-      **Section 173:** No reason, longer notice (standard contracts only)
-      **Fault-based:** Specific grounds (all contract types)
-
-      **Note:** System will auto-redirect if Section 173 not available.
-    maps_to:
-      - selected_notice_route
 
   # ========================================
   # ROUTE GUARD BACKUP (INFO PANEL)
