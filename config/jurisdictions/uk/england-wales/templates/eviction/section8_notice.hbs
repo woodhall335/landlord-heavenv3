@@ -28,10 +28,10 @@ The property which is the subject of this notice is:
 
 ## 2. DETAILS OF THE TENANCY
 
-This notice relates to the tenancy which began on **{{tenancy_start_date}}**.
+This notice relates to the tenancy which began on **{{format_date tenancy_start_date}}**.
 
 {{#if fixed_term}}
-The tenancy was granted for a fixed term which {{#if fixed_term_expired}}expired{{else}}expires{{/if}} on **{{fixed_term_end_date}}**.
+The tenancy was granted for a fixed term which {{#if fixed_term_expired}}expired{{else}}expires{{/if}} on **{{format_date fixed_term_end_date}}**.
 {{else}}
 The tenancy is a periodic tenancy.
 {{/if}}
@@ -51,6 +51,8 @@ The current rent is **£{{rent_amount}}** payable **{{rent_frequency}}** on the 
 I/we are seeking possession on the following ground(s) set out in Schedule 2 to the Housing Act 1988 (as amended by the Housing Act 1996):
 
 {{#each grounds}}
+<div class="ground-block">
+
 ### Ground {{this.code}}{{#if this.mandatory}} (MANDATORY){{else}} (DISCRETIONARY){{/if}}
 
 **{{this.title}}**
@@ -65,6 +67,8 @@ I/we are seeking possession on the following ground(s) set out in Schedule 2 to 
 #### Evidence:
 {{this.supporting_evidence}}
 {{/if}}
+
+</div>
 
 ---
 {{/each}}
@@ -366,7 +370,7 @@ I/we are relying on one or more **mandatory grounds** for possession. The court 
 {{#if any_mandatory_ground}}Additionally, I/we are also relying on one or more **discretionary grounds**.{{else}}I/we are relying on **discretionary grounds** for possession.{{/if}} The court will grant possession only if it considers it reasonable to do so.
 
 {{/if}}
-**The earliest date on which a court may make an order for possession is: {{earliest_possession_date}}**
+**The earliest date on which a court may make an order for possession is: {{format_date earliest_possession_date}}**
 
 This is calculated as {{notice_period_days}} days from the date of service of this notice.
 
@@ -447,7 +451,7 @@ If you are having difficulty paying your rent:
 
 ## 7. COURT PROCEEDINGS
 
-If you do not leave the property by {{earliest_possession_date}}, I/we may apply to the court for a possession order.
+If you do not leave the property by {{format_date earliest_possession_date}}, I/we may apply to the court for a possession order.
 
 You will be sent:
 - A copy of the court claim
@@ -520,7 +524,7 @@ I/We declare that the information given in this notice is correct to the best of
 **Name:** {{landlord_2_name}}
 {{/if}}
 
-**Date:** {{notice_date}}
+**Date:** {{format_date notice_date}}
 
 ---
 
