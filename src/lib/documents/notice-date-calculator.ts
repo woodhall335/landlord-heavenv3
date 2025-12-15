@@ -583,6 +583,142 @@ export function validateNoticeToLeaveDate(
 }
 
 // ============================================================================
+// WALES DATE CALCULATION (RENTING HOMES ACT 2016)
+// ============================================================================
+
+/**
+ * Wales Section 173 Date Params
+ *
+ * CLAUDE CODE FIX #1: Rule data passed in, not loaded
+ * Server-side config loader provides rule data
+ */
+export interface WalesSection173DateParams {
+  service_date: string;
+  contract_start_date: string;
+  // Rule data (loaded server-side, passed in)
+  notice_period_months: number;
+  notice_period_days: number;
+  prohibited_period_months: number;
+  legal_reference: string;
+  effective_from: string;
+}
+
+/**
+ * Wales Section 173 Date Calculator
+ *
+ * CLAUDE CODE FIX #1: Pure function, no fs operations
+ * Rule data passed in from server-side config loader
+ *
+ * Validates prohibited period and calculates expiry date
+ */
+export function calculateWalesSection173ExpiryDate(
+  params: WalesSection173DateParams
+): DateCalculationResult {
+  const {
+    service_date,
+    contract_start_date,
+    notice_period_months,
+    notice_period_days,
+    prohibited_period_months,
+    legal_reference,
+    effective_from,
+  } = params;
+
+  const serviceDateObj = parseUTCDate(service_date);
+  const contractStartObj = parseUTCDate(contract_start_date);
+
+  // Automatic prohibited period calculation
+  const prohibitedUntil = new Date(contractStartObj);
+  prohibitedUntil.setUTCMonth(prohibitedUntil.getUTCMonth() + prohibited_period_months);
+
+  if (serviceDateObj < prohibitedUntil) {
+    const earliestServiceStr = toISODateString(prohibitedUntil);
+    const earliestExpiryObj = new Date(prohibitedUntil);
+    earliestExpiryObj.setUTCMonth(earliestExpiryObj.getUTCMonth() + notice_period_months);
+    const earliestExpiryStr = toISODateString(earliestExpiryObj);
+
+    throw new Error(
+      `WALES_SECTION173_PROHIBITED_PERIOD: ` +
+        `Section 173 cannot be served within first ${prohibited_period_months} months. ` +
+        `Contract started: ${contract_start_date}. ` +
+        `Earliest service: ${earliestServiceStr}. ` +
+        `Earliest expiry: ${earliestExpiryStr}.`
+    );
+  }
+
+  // Calculate expiry (add months, not days)
+  const expiryDateObj = new Date(serviceDateObj);
+  expiryDateObj.setUTCMonth(expiryDateObj.getUTCMonth() + notice_period_months);
+  const earliest_expiry_date = toISODateString(expiryDateObj);
+
+  const explanation =
+    `Wales Section 173: ${notice_period_months} months from ${service_date} = ${earliest_expiry_date}. ` +
+    `Rule effective from: ${effective_from}.`;
+
+  return {
+    earliest_valid_date: earliest_expiry_date,
+    notice_period_days: notice_period_days,
+    explanation,
+    legal_basis: legal_reference,
+    warnings: [
+      `Wales uses Occupation Contracts (not ASTs)`,
+      `Cannot serve within first ${prohibited_period_months} months`,
+      `Rule effective from: ${effective_from}`,
+    ],
+    minimum_legal_days: notice_period_days,
+    used_days: notice_period_days,
+    policy_flags: {
+      has_discretionary: false,
+      has_ground14: false,
+    },
+  };
+}
+
+/**
+ * Wales Fault-Based Notice Calculator
+ *
+ * Uses fixed periods from config:
+ * - Section 157: 14 days (serious rent arrears)
+ * - Section 159: 30 days (some rent arrears)
+ * - Section 161: 14 days (antisocial behaviour)
+ * - Section 162: 30 days (breach of contract)
+ */
+export interface WalesFaultBasedDateParams {
+  service_date: string;
+  section_number: number; // 157, 159, 161, 162
+  period_days: number; // From server config
+  description: string; // From server config
+  legal_reference: string; // From server config
+}
+
+export function calculateWalesFaultBasedExpiryDate(
+  params: WalesFaultBasedDateParams
+): DateCalculationResult {
+  const { service_date, section_number, period_days, description, legal_reference } = params;
+
+  const serviceDateObj = parseUTCDate(service_date);
+  const expiryDateObj = addUTCDays(serviceDateObj, period_days);
+  const earliest_expiry_date = toISODateString(expiryDateObj);
+
+  const explanation =
+    `Wales Section ${section_number} (${description}): ${period_days} days from ${service_date} = ${earliest_expiry_date}.`;
+
+  return {
+    earliest_valid_date: earliest_expiry_date,
+    notice_period_days: period_days,
+    explanation,
+    legal_basis: legal_reference,
+    warnings: [`Wales uses Occupation Contracts (not ASTs)`, `Contract holder = tenant`],
+    minimum_legal_days: period_days,
+    used_days: period_days,
+    policy_flags: {
+      has_discretionary: false,
+      has_ground14: false,
+    },
+  };
+}
+
+// ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
 
