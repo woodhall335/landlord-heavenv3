@@ -103,44 +103,36 @@ questions:
       - selected_notice_route
 
   # ========================================
-  # SECTION 21 APPLICABILITY GATING
+  # DEPOSIT & COMPLIANCE (TASK A: COLLECT FOR BOTH ROUTES)
   # ========================================
 
   - id: section21_intro
-    section: Section 21 Compliance
-    question: "Section 21 Requirements"
+    section: Deposit & Compliance
+    question: "Compliance Requirements"
     inputType: info
-    dependsOn:
-      questionId: selected_notice_route
-      value: section_21
     content: |
-      **Section 21 has strict compliance requirements.**
+      **Compliance requirements for eviction notices:**
 
-      We'll check which requirements apply to your situation.
+      We'll check your compliance status. This is critical for Section 21 validity,
+      and helps establish your position for Section 8 cases too.
 
   - id: deposit_taken
-    section: Section 21 Compliance
+    section: Deposit & Compliance
     question: "Did you take a deposit from the tenant?"
     inputType: yes_no
-    dependsOn:
-      questionId: selected_notice_route
-      value: section_21
     validation:
       required: true
-    helperText: "Deposit protection only required if you took a deposit"
+    helperText: "Deposit protection is critical for Section 21 and important for Section 8"
     maps_to:
       - deposit_taken
 
   - id: has_gas_appliances
-    section: Section 21 Compliance
+    section: Deposit & Compliance
     question: "Does the property have gas appliances?"
     inputType: yes_no
-    dependsOn:
-      questionId: selected_notice_route
-      value: section_21
     validation:
       required: true
-    helperText: "Gas boiler, gas hob, gas fire, etc."
+    helperText: "Gas boiler, gas hob, gas fire, etc. Compliance required for Section 21"
     maps_to:
       - has_gas_appliances
 
@@ -149,15 +141,12 @@ questions:
   # ========================================
 
   - id: deposit_protected_scheme
-    section: Section 21 Compliance
+    section: Deposit & Compliance
     question: "Is the deposit protected in an approved scheme?"
     inputType: yes_no
     dependsOn:
-      allOf:
-        - questionId: selected_notice_route
-          value: section_21
-        - questionId: deposit_taken
-          value: true
+      questionId: deposit_taken
+      value: true
     validation:
       required: true
     helperText: |
@@ -171,34 +160,28 @@ questions:
       - deposit_protected
 
   - id: prescribed_info_given
-    section: Section 21 Compliance
+    section: Deposit & Compliance
     question: "Was prescribed information given within 30 days?"
     inputType: yes_no
     dependsOn:
-      allOf:
-        - questionId: selected_notice_route
-          value: section_21
-        - questionId: deposit_taken
-          value: true
+      questionId: deposit_taken
+      value: true
     validation:
       required: true
-    helperText: "Required information about deposit protection scheme"
+    helperText: "Required information about deposit protection scheme (critical for Section 21)"
     maps_to:
       - prescribed_info_given
 
   - id: gas_safety_certificate
-    section: Section 21 Compliance
+    section: Deposit & Compliance
     question: "Was a valid gas safety certificate provided?"
     inputType: yes_no
     dependsOn:
-      allOf:
-        - questionId: selected_notice_route
-          value: section_21
-        - questionId: has_gas_appliances
-          value: true
+      questionId: has_gas_appliances
+      value: true
     validation:
       required: true
-    helperText: "Must be provided and renewed annually"
+    helperText: "Must be provided and renewed annually (required for Section 21)"
     maps_to:
       - gas_certificate_provided
 
@@ -207,16 +190,13 @@ questions:
   # ========================================
 
   - id: epc_provided
-    section: Section 21 Compliance
+    section: Deposit & Compliance
     question: "Was an EPC provided before tenancy started?"
     inputType: yes_no
-    dependsOn:
-      questionId: selected_notice_route
-      value: section_21
     validation:
       required: true
     helperText: |
-      **PRODUCT CONSTRAINT: System assumes EPC required**
+      **EPC required for Section 21**
 
       This system enforces EPC compliance for all Section 21 notices.
 
@@ -227,7 +207,6 @@ questions:
       • Certain holiday accommodations
 
       **If you believe your property is EPC exempt:**
-      Do not use automated Section 21 generation.
       Consult a solicitor for manual preparation.
     maps_to:
       - epc_provided
@@ -237,12 +216,9 @@ questions:
   # ========================================
 
   - id: how_to_rent_info
-    section: Section 21 Compliance
+    section: Deposit & Compliance
     question: "How to Rent Guide"
     inputType: info
-    dependsOn:
-      questionId: selected_notice_route
-      value: section_21
     content: |
       **How to Rent guide requirement:**
 
@@ -250,20 +226,16 @@ questions:
       tenancy start date.
 
       • Before Oct 1, 2015: Not required
-      • On or after Oct 1, 2015: Required
+      • On or after Oct 1, 2015: Required (for Section 21)
 
       **System calculates requirement automatically.**
-      You'll be blocked if required and not provided.
 
   - id: how_to_rent_provided
-    section: Section 21 Compliance
+    section: Deposit & Compliance
     question: "Was the 'How to Rent' guide provided?"
     inputType: yes_no
-    dependsOn:
-      questionId: selected_notice_route
-      value: section_21
     validation:
-      required: false  # CLAUDE CODE FIX #5: Not required in UI, enforced in API
+      required: false  # Not required in UI, enforced in API for Section 21
     helperText: |
       Answer based on whether you provided the guide.
       **System checks if it was required for your tenancy start date.**
@@ -271,30 +243,26 @@ questions:
       - how_to_rent_provided
 
   - id: property_licensing
-    section: Section 21 Compliance
+    section: Deposit & Compliance
     question: "Property licensing status"
     inputType: select
-    dependsOn:
-      questionId: selected_notice_route
-      value: section_21
     validation:
       required: true
     options:
       - "not_required"
       - "licensed"
       - "unlicensed"
+    helperText: "HMO or selective licensing (required for Section 21)"
     maps_to:
       - property_licensing_status
 
   - id: recent_repair_complaints_s21
-    section: Section 21 Compliance
+    section: Deposit & Compliance
     question: "Has tenant made repair complaints in last 6 months?"
     inputType: yes_no
-    dependsOn:
-      questionId: selected_notice_route
-      value: section_21
     validation:
       required: true
+    helperText: "Retaliatory eviction rules may apply (affects Section 21)"
     maps_to:
       - recent_repair_complaints
 

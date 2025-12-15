@@ -193,14 +193,18 @@ questions:
       - payment_date
       - next_payment_due
 
-  # 6. Deposit & compliance (critical for Section 21)
+  # 6. Deposit & compliance (TASK A: COLLECT FOR BOTH ROUTES)
+  # This data is needed for BOTH Section 8 and Section 21:
+  # - Section 21 requires full compliance for validity
+  # - Section 8 PDFs should show deposit/compliance status too
   - id: deposit_and_compliance
     section: Deposit & Compliance
     question: "Deposit and compliance checklist"
     inputType: group
     routes:
+      - section_8
       - section_21
-    helperText: "These answers determine whether Section 21 is valid. Our smart guidance system will analyze your compliance and recommend the best route (Section 8 or Section 21) based on your situation."
+    helperText: "These answers help determine the best eviction route and ensure your notice complies with legal requirements. Deposit protection is critical for Section 21 validity."
     fields:
       - id: deposit_amount
         label: "Deposit amount (or 0 if none)"

@@ -167,6 +167,7 @@ questions:
     maps_to:
       - rent_smart_wales_registered
 
+  # TASK A2: Deposit questions for Section 173
   - id: deposit_taken_wales
     section: Section 173 Compliance
     question: "Did you take a deposit?"
@@ -191,9 +192,29 @@ questions:
           value: true
     validation:
       required: true
-    helperText: "Wales requires deposit protection"
+    helperText: "Wales requires deposit protection under Renting Homes (Wales) Act 2016"
     maps_to:
       - deposit_protected
+
+  - id: deposit_scheme_wales_s173
+    section: Section 173 Compliance
+    question: "Which deposit protection scheme?"
+    inputType: select
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_section_173
+        - questionId: deposit_taken_wales
+          value: true
+    validation:
+      required: false
+    options:
+      - "Deposit Protection Service (DPS) Custodial"
+      - "MyDeposits Wales"
+      - "Tenancy Deposit Scheme (TDS)"
+      - "Other / not sure"
+    maps_to:
+      - deposit_scheme
 
   # ========================================
   # FAULT-BASED SECTIONS
@@ -216,6 +237,56 @@ questions:
     helperText: "Select the section that matches your situation"
     maps_to:
       - wales_fault_based_section
+
+  # TASK A2: Deposit questions for fault-based route
+  - id: deposit_taken_fault
+    section: Fault-Based Grounds
+    question: "Did you take a deposit?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_fault_based
+    validation:
+      required: true
+    helperText: "Deposit compliance info helps strengthen your case"
+    maps_to:
+      - deposit_taken
+
+  - id: deposit_protected_fault
+    section: Fault-Based Grounds
+    question: "Is the deposit protected?"
+    inputType: yes_no
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_fault_based
+        - questionId: deposit_taken_fault
+          value: true
+    validation:
+      required: true
+    helperText: "Wales requires deposit protection under Renting Homes (Wales) Act 2016"
+    maps_to:
+      - deposit_protected
+
+  - id: deposit_scheme_fault
+    section: Fault-Based Grounds
+    question: "Which deposit protection scheme?"
+    inputType: select
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_fault_based
+        - questionId: deposit_taken_fault
+          value: true
+    validation:
+      required: false
+    options:
+      - "Deposit Protection Service (DPS) Custodial"
+      - "MyDeposits Wales"
+      - "Tenancy Deposit Scheme (TDS)"
+      - "Other / not sure"
+    maps_to:
+      - deposit_scheme
 
   - id: rent_arrears_amount
     section: Fault-Based Grounds
