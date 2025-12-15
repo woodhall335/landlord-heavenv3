@@ -6,8 +6,10 @@
 
 import {
   calculateSection8ExpiryDate,
+  calculateSection8NoticePeriod,
   calculateSection21ExpiryDate,
   calculateNoticeToLeaveDate,
+  calculateScotlandNoticeToLeaveExpiryDate,
   validateSection8ExpiryDate,
   validateSection21ExpiryDate,
   validateNoticeToLeaveDate,
@@ -122,52 +124,65 @@ describe('Section 8 Ground-Based Calculations', () => {
 
     expect(result.earliest_valid_date).toBe('2025-01-29');
     expect(result.notice_period_days).toBe(14);
-    expect(result.explanation).toContain('mandatory');
+    expect(result.explanation).toContain('14 days');
   });
 
-  test('Discretionary ground only = 60 days', () => {
+  test('Discretionary ground only = 14 days (NEW POLICY: all grounds 14 days minimum)', () => {
     const result = calculateSection8ExpiryDate({
       service_date: '2025-01-15',
       grounds: [{ code: 10, mandatory: false }],
+      strategy: 'minimum', // Use minimum
+    });
+
+    expect(result.earliest_valid_date).toBe('2025-01-29');
+    expect(result.notice_period_days).toBe(14);
+    expect(result.minimum_legal_days).toBe(14);
+    expect(result.recommended_days).toBe(60); // Has recommendation
+  });
+
+  test('Discretionary ground with recommended strategy = 60 days', () => {
+    const result = calculateSection8ExpiryDate({
+      service_date: '2025-01-15',
+      grounds: [{ code: 10, mandatory: false }],
+      strategy: 'recommended', // Use recommended
     });
 
     expect(result.earliest_valid_date).toBe('2025-03-16');
     expect(result.notice_period_days).toBe(60);
-    expect(result.explanation).toContain('discretionary');
+    expect(result.used_days).toBe(60);
   });
 
-  test('Mixed grounds use longest period (60 days)', () => {
+  test('Mixed grounds use minimum period (14 days) by default', () => {
     const result = calculateSection8ExpiryDate({
       service_date: '2025-01-15',
       grounds: [
-        { code: 8, mandatory: true }, // Would be 14 days
-        { code: 10, mandatory: false }, // Would be 60 days
+        { code: 8, mandatory: true }, // 14 days
+        { code: 10, mandatory: false }, // 14 minimum, 60 recommended
       ],
+      strategy: 'minimum',
     });
 
-    expect(result.notice_period_days).toBe(60); // Longest wins
-  });
-
-  test('Fixed term respected even with short notice period', () => {
-    const result = calculateSection8ExpiryDate({
-      service_date: '2025-01-15',
-      grounds: [{ code: 8, mandatory: true }], // 14 days
-      fixed_term: true,
-      fixed_term_end_date: '2025-06-01',
-    });
-
-    // 14 days from Jan 15 = Jan 29
-    // But fixed term ends Jun 1, so should be Jun 1
-    expect(result.earliest_valid_date).toBe('2025-06-01');
-    expect(result.warnings.length).toBeGreaterThan(0);
+    expect(result.notice_period_days).toBe(14);
   });
 });
 
 describe('Scotland Notice to Leave Calculations', () => {
-  test('Ground 1 (Rent Arrears) = 28 days', () => {
+  test('Ground 1 (Rent Arrears) without pre-action = 84 days', () => {
     const result = calculateNoticeToLeaveDate({
       service_date: '2025-01-15',
       grounds: [{ number: 1 }],
+      pre_action_completed: false,
+    });
+
+    expect(result.earliest_valid_date).toBe('2025-04-09');
+    expect(result.notice_period_days).toBe(84);
+  });
+
+  test('Ground 1 (Rent Arrears) with pre-action = 28 days', () => {
+    const result = calculateNoticeToLeaveDate({
+      service_date: '2025-01-15',
+      grounds: [{ number: 1 }],
+      pre_action_completed: true,
     });
 
     expect(result.earliest_valid_date).toBe('2025-02-12');
@@ -184,17 +199,32 @@ describe('Scotland Notice to Leave Calculations', () => {
     expect(result.notice_period_days).toBe(84);
   });
 
-  test('Mixed grounds use longest period (84 days)', () => {
+  test('Mixed grounds use SHORTEST period (NEW POLICY: Math.min)', () => {
     const result = calculateNoticeToLeaveDate({
       service_date: '2025-01-15',
       grounds: [
-        { number: 1 }, // 28 days
+        { number: 1 }, // 84 days without pre-action
         { number: 4 }, // 84 days
       ],
+      pre_action_completed: false,
     });
 
-    expect(result.notice_period_days).toBe(84); // Longest wins
+    expect(result.notice_period_days).toBe(84); // Both 84, so 84
     expect(result.earliest_valid_date).toBe('2025-04-09');
+  });
+
+  test('Mixed grounds with pre-action use SHORTEST (28 days)', () => {
+    const result = calculateNoticeToLeaveDate({
+      service_date: '2025-01-15',
+      grounds: [
+        { number: 1 }, // 28 days with pre-action
+        { number: 4 }, // 84 days
+      ],
+      pre_action_completed: true,
+    });
+
+    expect(result.notice_period_days).toBe(28); // Shortest wins
+    expect(result.earliest_valid_date).toBe('2025-02-12');
   });
 
   test('Validation rejects date too early', () => {
@@ -227,13 +257,14 @@ describe('Edge Cases and Error Handling', () => {
     }).toThrow('At least one ground is required');
   });
 
-  test('Invalid ground number for Scotland throws error', () => {
-    expect(() => {
-      calculateNoticeToLeaveDate({
-        service_date: '2025-01-15',
-        grounds: [{ number: 99 }], // Invalid ground
-      });
-    }).toThrow('Invalid Scotland ground number');
+  test('Unknown ground number for Scotland defaults to 84 days', () => {
+    // NEW POLICY: Unknown grounds default to 84 days instead of throwing
+    const result = calculateNoticeToLeaveDate({
+      service_date: '2025-01-15',
+      grounds: [{ number: 99 }], // Unknown ground
+    });
+
+    expect(result.notice_period_days).toBe(84);
   });
 
   test('Leap year handling (Feb 29) with fixed term', () => {
@@ -320,6 +351,193 @@ describe('DST-Safe UTC Date Calculations', () => {
     });
 
     expect(result.earliest_valid_date).toBe('2025-04-03');
+    expect(result.notice_period_days).toBe(14);
+  });
+});
+
+// ============================================================================
+// NEW UNIFIED LOGIC TESTS (Production-Grade)
+// ============================================================================
+
+describe('Section 8 Unified Notice Periods', () => {
+  test('Ground 14A: 14 days minimum, 60 recommended with disclaimer', () => {
+    const result = calculateSection8NoticePeriod({
+      grounds: [{ code: '14A', mandatory: false }],
+      strategy: 'minimum',
+    });
+
+    expect(result.minimum_legal_days).toBe(14);
+    expect(result.recommended_days).toBe(60);
+    expect(result.used_days).toBe(14);
+    expect(result.explanation_recommended).toContain('not legally required');
+    expect(result.explanation_recommended).toContain('Courts may still grant possession');
+  });
+
+  test('Ground 14A: Uses recommended when strategy=recommended', () => {
+    const result = calculateSection8NoticePeriod({
+      grounds: [{ code: '14A', mandatory: false }],
+      strategy: 'recommended',
+    });
+
+    expect(result.used_days).toBe(60);
+    expect(result.recommended_days).toBe(60);
+  });
+
+  test('Ground 14 serious ASB: 0 days (immediate)', () => {
+    const result = calculateSection8NoticePeriod({
+      grounds: [{ code: 14, mandatory: false }],
+      severity: 'serious',
+    });
+
+    expect(result.minimum_legal_days).toBe(0);
+    expect(result.used_days).toBe(0);
+    expect(result.recommended_days).toBeUndefined();
+    expect(result.explanation_minimum).toContain('immediate court proceedings');
+    expect(result.explanation_minimum).toContain('violence');
+  });
+
+  test('Ground 14 moderate ASB: 14 days minimum, 60 recommended', () => {
+    const result = calculateSection8NoticePeriod({
+      grounds: [{ code: 14, mandatory: false }],
+      severity: 'moderate',
+    });
+
+    expect(result.minimum_legal_days).toBe(14);
+    expect(result.recommended_days).toBe(60);
+    expect(result.used_days).toBe(14);
+    expect(result.explanation_minimum).toContain('noise complaints');
+  });
+
+  test('All other mandatory grounds: 14 days, no recommended', () => {
+    const result = calculateSection8NoticePeriod({
+      grounds: [{ code: 8, mandatory: true }],
+    });
+
+    expect(result.minimum_legal_days).toBe(14);
+    expect(result.recommended_days).toBeUndefined();
+    expect(result.used_days).toBe(14);
+  });
+
+  test('Discretionary grounds: 14 days minimum, 60 recommended', () => {
+    const result = calculateSection8NoticePeriod({
+      grounds: [{ code: 10, mandatory: false }],
+    });
+
+    expect(result.minimum_legal_days).toBe(14);
+    expect(result.recommended_days).toBe(60);
+    expect(result.used_days).toBe(14);
+    expect(result.explanation_recommended).toContain('not legally required');
+  });
+
+  test('Wales Section 8: Generates warning', () => {
+    const result = calculateSection8NoticePeriod({
+      grounds: [{ code: 8, mandatory: true }],
+      jurisdiction: 'wales',
+    });
+
+    expect(result.warnings.length).toBeGreaterThan(0);
+    expect(result.warnings[0]).toContain('England only');
+    expect(result.warnings[0]).toContain('Renting Homes (Wales) Act 2016');
+    expect(result.warnings[0]).toContain('may not be valid in Wales');
+  });
+
+  test('England Section 8: No warnings', () => {
+    const result = calculateSection8NoticePeriod({
+      grounds: [{ code: 8, mandatory: true }],
+      jurisdiction: 'england',
+    });
+
+    expect(result.warnings.length).toBe(0);
+  });
+});
+
+describe('Scotland Mixed Grounds (Math.min)', () => {
+  test('Ground 1 (84 days) + Ground 14 (28 days) = 28 days (shortest)', () => {
+    const result = calculateScotlandNoticeToLeaveExpiryDate({
+      service_date: '2025-01-15',
+      grounds: [{ number: 1 }, { number: 14 }],
+      pre_action_completed: false,
+    });
+
+    expect(result.notice_period_days).toBe(28); // Shortest wins
+    expect(result.explanation).toContain('Shortest applicable period');
+  });
+
+  test('Ground 1 with pre-action (28) + Ground 4 (84) = 28 days', () => {
+    const result = calculateScotlandNoticeToLeaveExpiryDate({
+      service_date: '2025-01-15',
+      grounds: [{ number: 1 }, { number: 4 }],
+      pre_action_completed: true,
+    });
+
+    expect(result.notice_period_days).toBe(28);
+    expect(result.explanation).toContain('pre-action');
+  });
+
+  test('Ground 1 without pre-action = 84 days', () => {
+    const result = calculateScotlandNoticeToLeaveExpiryDate({
+      service_date: '2025-01-15',
+      grounds: [{ number: 1 }],
+      pre_action_completed: false,
+    });
+
+    expect(result.notice_period_days).toBe(84);
+    expect(result.explanation).toContain('without pre-action: 84 days');
+  });
+
+  test('Ground 1 with pre-action = 28 days', () => {
+    const result = calculateScotlandNoticeToLeaveExpiryDate({
+      service_date: '2025-01-15',
+      grounds: [{ number: 1 }],
+      pre_action_completed: true,
+    });
+
+    expect(result.notice_period_days).toBe(28);
+    expect(result.explanation).toContain('with pre-action: 28 days');
+  });
+
+  test('Ground 12 with pre-action = 28 days', () => {
+    const result = calculateScotlandNoticeToLeaveExpiryDate({
+      service_date: '2025-01-15',
+      grounds: [{ number: 12 }],
+      pre_action_completed: true,
+    });
+
+    expect(result.notice_period_days).toBe(28);
+  });
+
+  test('Ground 13 (ASB) = 28 days', () => {
+    const result = calculateScotlandNoticeToLeaveExpiryDate({
+      service_date: '2025-01-15',
+      grounds: [{ number: 13 }],
+    });
+
+    expect(result.notice_period_days).toBe(28);
+    expect(result.explanation).toContain('antisocial behaviour');
+  });
+
+  test('Multiple 28-day grounds = 28 days (Math.min)', () => {
+    const result = calculateScotlandNoticeToLeaveExpiryDate({
+      service_date: '2025-01-15',
+      grounds: [{ number: 2 }, { number: 3 }, { number: 13 }],
+    });
+
+    expect(result.notice_period_days).toBe(28);
+  });
+});
+
+describe('Section 8 Fixed Term Handling', () => {
+  test('Section 8 does NOT extend to fixed term end', () => {
+    const result = calculateSection8ExpiryDate({
+      service_date: '2025-01-15',
+      grounds: [{ code: 8, mandatory: true }],
+      fixed_term: true,
+      fixed_term_end_date: '2025-06-01',
+    });
+
+    // Section 8 should NOT extend to fixed term end
+    // 14 days from Jan 15 = Jan 29
+    expect(result.earliest_valid_date).toBe('2025-01-29');
     expect(result.notice_period_days).toBe(14);
   });
 });

@@ -257,12 +257,12 @@ async function addTableOfContents(
     yPos -= 25;
 
     const benefits = [
-      '✓ Court-ready legal documents',
-      '✓ Professional service instructions',
-      '✓ Pre-service compliance checklist',
-      '✓ Next steps guidance',
-      '✓ Lifetime dashboard access',
-      '✓ Free regeneration anytime',
+      '* Court-ready legal documents',
+      '* Professional service instructions',
+      '* Pre-service compliance checklist',
+      '* Next steps guidance',
+      '* Lifetime dashboard access',
+      '* Free regeneration anytime',
     ];
 
     benefits.forEach((benefit) => {

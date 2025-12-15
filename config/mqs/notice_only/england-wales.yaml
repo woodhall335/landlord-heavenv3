@@ -285,7 +285,25 @@ questions:
       - hmo_license_required
       - hmo_license_valid
 
-  # 7. Section 8 grounds selection
+  # 7. Route selection (after Smart Guidance recommendation)
+  - id: selected_notice_route
+    section: Notice Route
+    question: "Which eviction route do you want to use?"
+    inputType: radio
+    helperText: "💡 Check the Smart Route Recommendation panel on the right for AI-powered guidance based on your compliance status and situation."
+    validation:
+      required: true
+    options:
+      - value: section_8
+        label: "Section 8 (Fault-Based Eviction)"
+        helperText: "Use when tenant has breached tenancy terms (arrears, ASB, damage, etc.)"
+      - value: section_21
+        label: "Section 21 (No-Fault Eviction)"
+        helperText: "Use to end tenancy without proving fault (requires full compliance)"
+    maps_to:
+      - selected_notice_route
+
+  # 8. Section 8 grounds selection
   - id: section8_grounds
     section: Section 8 Grounds
     question: "Which grounds under Section 8 apply?"
@@ -397,9 +415,10 @@ questions:
         inputType: date
         helperText: "This is the expiry date for Section 21. Must end on the last day of a tenancy period and be at least 2 months from service date."
         width: half
+        dependsOn:
+          questionId: selected_notice_route
+          value: section_21
         # Only show this field if user selected Section 21 route
-        # Note: This is a field-level dependsOn within the notice_service group
-        # The wizard will check if the user's answer to eviction_route includes "Section 21"
       - id: notice_service_method
         label: "How will you serve the notice?"
         inputType: select

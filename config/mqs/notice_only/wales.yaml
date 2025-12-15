@@ -1,0 +1,259 @@
+# ============================================================================
+# WALES NOTICE ONLY - Master Question Set
+# WITH CLAUDE CODE FIX #4: Route guard for Section 173
+# ============================================================================
+
+jurisdiction: wales
+legal_framework: "Renting Homes (Wales) Act 2016"
+tenancy_type: "Occupation Contract"
+
+questions:
+  # ========================================
+  # BASIC INFORMATION
+  # ========================================
+
+  - id: landlord_full_name
+    section: Contract Holder Details
+    question: "Your full name (as landlord)"
+    inputType: text
+    validation:
+      required: true
+    helperText: "In Wales, you're the 'landlord' - tenants are 'contract holders'"
+    maps_to:
+      - landlord_full_name
+
+  - id: contract_holder_full_name
+    section: Contract Holder Details
+    question: "Contract holder's full name"
+    inputType: text
+    validation:
+      required: true
+    helperText: "Contract holder = tenant in Wales terminology"
+    maps_to:
+      - contract_holder_full_name
+
+  - id: property_address
+    section: Property Details
+    question: "Property address"
+    inputType: textarea
+    validation:
+      required: true
+    helperText: "Full address including postcode"
+    maps_to:
+      - property_address
+
+  - id: contract_start_date
+    section: Contract Details
+    question: "When did the occupation contract start?"
+    inputType: date
+    validation:
+      required: true
+    helperText: "Wales uses 'occupation contracts' not 'tenancies'"
+    maps_to:
+      - contract_start_date
+
+  - id: rent_amount
+    section: Rent Details
+    question: "Monthly rent amount"
+    inputType: currency
+    validation:
+      required: true
+      min: 0
+    maps_to:
+      - rent_amount
+
+  # ========================================
+  # CONTRACT CATEGORY (CRITICAL FOR ROUTE GUARD)
+  # ========================================
+
+  - id: wales_contract_category
+    section: Contract Details
+    question: "What type of occupation contract?"
+    inputType: radio
+    validation:
+      required: true
+    options:
+      - value: "standard"
+        label: "Standard occupation contract"
+        helperText: "Private rental - most common"
+      - value: "supported_standard"
+        label: "Supported standard contract"
+        helperText: "Social housing with support"
+      - value: "secure"
+        label: "Secure contract"
+        helperText: "Local authority/housing association"
+    helperText: |
+      **CRITICAL: Affects which notices available**
+
+      Standard: Section 173 + fault-based ✅
+      Supported/Secure: Fault-based only ❌
+    maps_to:
+      - wales_contract_category
+
+  # ========================================
+  # NOTICE TYPE SELECTION (CLAUDE CODE FIX #4)
+  # ========================================
+
+  - id: selected_notice_route
+    section: Notice Type
+    question: "Which type of notice?"
+    inputType: radio
+    validation:
+      required: true
+    options:
+      - value: "wales_section_173"
+        label: "Section 173 - No-fault"
+        helperText: "Minimum statutory period, no reason"
+      - value: "wales_fault_based"
+        label: "Fault-based - Grounds required"
+        helperText: "14-30 days, specific sections"
+    helperText: |
+      **Section 173:** No reason, longer notice (standard contracts only)
+      **Fault-based:** Specific grounds (all contract types)
+
+      **Note:** System will auto-redirect if Section 173 not available.
+    maps_to:
+      - selected_notice_route
+
+  # ========================================
+  # ROUTE GUARD BACKUP (INFO PANEL)
+  # ========================================
+
+  - id: wales_section173_blocked_info
+    section: Notice Type
+    question: "⚠️ Section 173 Not Available"
+    inputType: info
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_section_173
+        - questionId: wales_contract_category
+          valueContains:
+            - "supported_standard"
+            - "secure"
+    content: |
+      ⚠️ **Section 173 not available for your contract type**
+
+      Section 173 is only valid for standard occupation contracts.
+
+      System will switch you to fault-based notices.
+
+  # ========================================
+  # SECTION 173 COMPLIANCE
+  # ========================================
+
+  - id: rent_smart_wales_info
+    section: Section 173 Compliance
+    question: "Rent Smart Wales Registration"
+    inputType: info
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_section_173
+    content: |
+      **Rent Smart Wales registration is mandatory**
+
+      All landlords in Wales must register with Rent Smart Wales.
+
+  - id: rent_smart_wales_registered
+    section: Section 173 Compliance
+    question: "Are you registered with Rent Smart Wales?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_section_173
+    validation:
+      required: true
+    helperText: "CRITICAL: Section 173 invalid without registration"
+    maps_to:
+      - rent_smart_wales_registered
+
+  - id: deposit_taken_wales
+    section: Section 173 Compliance
+    question: "Did you take a deposit?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_section_173
+    validation:
+      required: true
+    maps_to:
+      - deposit_taken
+
+  - id: deposit_protected_wales
+    section: Section 173 Compliance
+    question: "Is the deposit protected?"
+    inputType: yes_no
+    dependsOn:
+      allOf:
+        - questionId: selected_notice_route
+          value: wales_section_173
+        - questionId: deposit_taken_wales
+          value: true
+    validation:
+      required: true
+    helperText: "Wales requires deposit protection"
+    maps_to:
+      - deposit_protected
+
+  # ========================================
+  # FAULT-BASED SECTIONS
+  # ========================================
+
+  - id: wales_fault_based_section
+    section: Fault-Based Grounds
+    question: "Which section applies?"
+    inputType: select
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_fault_based
+    validation:
+      required: true
+    options:
+      - "Section 157 - Serious rent arrears (2+ months)"
+      - "Section 159 - Some rent arrears (less than 2 months)"
+      - "Section 161 - Antisocial behaviour (serious)"
+      - "Section 162 - Breach of contract"
+    helperText: "Select the section that matches your situation"
+    maps_to:
+      - wales_fault_based_section
+
+  - id: rent_arrears_amount
+    section: Fault-Based Grounds
+    question: "Total rent arrears"
+    inputType: currency
+    dependsOn:
+      questionId: wales_fault_based_section
+      valueContains:
+        - "Section 157"
+        - "Section 159"
+    validation:
+      required: true
+      min: 0
+    maps_to:
+      - rent_arrears_amount
+
+  - id: asb_description
+    section: Fault-Based Grounds
+    question: "Describe the antisocial behaviour"
+    inputType: textarea
+    dependsOn:
+      questionId: wales_fault_based_section
+      valueContains: "Section 161"
+    validation:
+      required: true
+    helperText: "Provide specific examples and dates"
+    maps_to:
+      - asb_description
+
+  - id: breach_description
+    section: Fault-Based Grounds
+    question: "Describe the breach of contract"
+    inputType: textarea
+    dependsOn:
+      questionId: wales_fault_based_section
+      valueContains: "Section 162"
+    validation:
+      required: true
+    helperText: "Specify which contract term was breached and how"
+    maps_to:
+      - breach_description
