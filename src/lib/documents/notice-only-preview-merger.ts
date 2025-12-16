@@ -19,8 +19,8 @@ export interface NoticeOnlyDocument {
 }
 
 export interface NoticeOnlyPreviewOptions {
-  jurisdiction: 'england-wales' | 'scotland';
-  notice_type?: 'section_8' | 'section_21' | 'notice_to_leave';
+  jurisdiction: 'england' | 'wales' | 'scotland' | 'england-wales';
+  notice_type?: 'section_8' | 'section_21' | 'notice_to_leave' | 'wales_section_173' | 'wales_fault_based';
   watermarkText?: string;
   includeTableOfContents?: boolean;
 }
@@ -174,7 +174,13 @@ async function addTableOfContents(
 
   // Jurisdiction
   const jurisdictionLabel =
-    options.jurisdiction === 'england-wales' ? 'England & Wales' : 'Scotland';
+    options.jurisdiction === 'england-wales' || options.jurisdiction === 'england'
+      ? 'England'
+      : options.jurisdiction === 'wales'
+      ? 'Wales'
+      : options.jurisdiction === 'scotland'
+      ? 'Scotland'
+      : 'England & Wales';
 
   tocPage.drawText(`Jurisdiction: ${jurisdictionLabel}`, {
     x: 50,
@@ -192,7 +198,13 @@ async function addTableOfContents(
         ? 'Section 8 Notice (Fault-Based)'
         : options.notice_type === 'section_21'
         ? 'Section 21 Notice (No-Fault)'
-        : 'Notice to Leave (PRT)';
+        : options.notice_type === 'wales_section_173'
+        ? 'Section 173 Notice (No-Fault)'
+        : options.notice_type === 'wales_fault_based'
+        ? 'Wales Fault-Based Notice'
+        : options.notice_type === 'notice_to_leave'
+        ? 'Notice to Leave (PRT)'
+        : 'Notice';
 
     tocPage.drawText(`Notice Type: ${noticeLabel}`, {
       x: 50,
