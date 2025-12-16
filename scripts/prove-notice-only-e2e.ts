@@ -4,85 +4,116 @@
  *
  * This script proves Notice Only works end-to-end for ALL supported routes:
  * - England: section_8, section_21
- * - Wales: wales_section_173
+ * - Wales: wales_section_173, wales_fault_based
  * - Scotland: notice_to_leave
  *
  * For each route:
- * 1. Creates a case
+ * 1. Creates a case (Supabase)
  * 2. Submits minimal valid wizard answers
  * 3. Calls preview API to generate PDF
  * 4. Writes PDF to artifacts/notice_only/<jurisdiction>/<route>.pdf
  * 5. Validates:
  *    - File exists
  *    - File size > minimum threshold
- *    - Text contains jurisdiction-specific phrases
- *    - No "undefined" or blank critical fields
+ *    - (Optional) Text contains jurisdiction-specific phrases (if pdf-parse installed)
+ *    - No obvious template failures ("undefined", "{{", etc.)
  *
  * Exit code 0 = ALL routes work
  * Exit code 1 = At least one route failed
+ *
+ * Notes:
+ * - This script explicitly loads .env.local (Next.js does this automatically; tsx scripts do not).
+ * - pdf-parse is OPTIONAL. If installed, we do full text validation. If not, we do fallback validation.
  */
 
-import { createClient } from '@supabase/supabase-js';
 import fs from 'fs/promises';
 import path from 'path';
+import dotenv from 'dotenv';
+import { createClient } from '@supabase/supabase-js';
+import { createRequire } from 'module';
+
+// Explicitly load .env.local for tsx/node scripts
+dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
+
+const require = createRequire(import.meta.url);
 
 // ============================================================================
 // ENVIRONMENT VALIDATION
 // ============================================================================
 
+function getEnvVar(...names: string[]): string | undefined {
+  for (const name of names) {
+    const v = process.env[name];
+    if (v && v.trim().length > 0) return v;
+  }
+  return undefined;
+}
+
 function validateEnvironment(): void {
-  const missingVars: string[] = [];
+  const missing: string[] = [];
 
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    missingVars.push('NEXT_PUBLIC_SUPABASE_URL');
-  }
-  if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    missingVars.push('NEXT_PUBLIC_SUPABASE_ANON_KEY');
-  }
+  const supabaseUrl = getEnvVar('NEXT_PUBLIC_SUPABASE_URL', 'SUPABASE_URL');
+  const supabaseAnon = getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'SUPABASE_ANON_KEY');
 
-  if (missingVars.length > 0) {
+  if (!supabaseUrl) missing.push('NEXT_PUBLIC_SUPABASE_URL (or SUPABASE_URL)');
+  if (!supabaseAnon) missing.push('NEXT_PUBLIC_SUPABASE_ANON_KEY (or SUPABASE_ANON_KEY)');
+
+  if (missing.length > 0) {
     console.error('╔═══════════════════════════════════════════════════════════════╗');
     console.error('║                    CONFIGURATION ERROR                        ║');
     console.error('╚═══════════════════════════════════════════════════════════════╝');
     console.error('');
-    console.error('❌ Missing required environment variables:');
+    console.error('❌ Missing required environment variables:\n');
+    missing.forEach((m) => console.error(`   • ${m}`));
     console.error('');
-    missingVars.forEach((varName) => {
-      console.error(`   • ${varName}`);
-    });
-    console.error('');
-    console.error('This script requires Supabase to be configured.');
-    console.error('');
+    console.error('This script requires Supabase to be configured.\n');
     console.error('To fix this:');
-    console.error('  1. Copy .env.example to .env.local');
-    console.error('  2. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY');
-    console.error('  3. Run this script again');
+    console.error('  1. Ensure .env.local exists in repo root');
+    console.error('  2. Ensure it contains NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    console.error('  3. Re-run: npx tsx scripts/prove-notice-only-e2e.ts');
     console.error('');
     process.exit(1);
   }
 }
 
-// Validate before proceeding
 validateEnvironment();
 
 // Environment
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const API_BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:5000';
+const SUPABASE_URL = getEnvVar('NEXT_PUBLIC_SUPABASE_URL', 'SUPABASE_URL')!;
+const SUPABASE_ANON_KEY = getEnvVar('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'SUPABASE_ANON_KEY')!;
+
+// Prefer NEXT_PUBLIC_APP_URL (you said localhost:5000); fallback to NEXT_PUBLIC_SITE_URL; then default
+const API_BASE_URL =
+  getEnvVar('NEXT_PUBLIC_APP_URL', 'NEXT_PUBLIC_SITE_URL') || 'http://localhost:5000';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Artifacts directory
 const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts', 'notice_only');
 
-// Test routes
+// ============================================================================
+// TYPES
+// ============================================================================
+
 interface TestRoute {
   jurisdiction: 'england' | 'wales' | 'scotland';
   route: string;
-  minimalAnswers: Record<string, any>;
+  minimalAnswers: Record<string, unknown>;
   expectedPhrases: string[];
   forbiddenPhrases: string[];
 }
+
+type RouteResult = {
+  success: boolean;
+  caseId: string;
+  pdfPath: string;
+  errors: string[];
+  warnings: string[];
+};
+
+// ============================================================================
+// TEST ROUTES
+// ============================================================================
 
 const TEST_ROUTES: TestRoute[] = [
   // England - Section 8
@@ -113,7 +144,8 @@ const TEST_ROUTES: TestRoute[] = [
       property_licensing: 'not_required',
       recent_repair_complaints_s21: false,
       section8_grounds_selection: ['Ground 8 - Serious rent arrears (2+ months)'],
-      ground_particulars: 'Tenant owes £2,400 in rent arrears covering 2 months (January-February 2025). Last payment received was December 2024. Rent is due monthly on the 1st. Tenant has been contacted multiple times but has not responded.',
+      ground_particulars:
+        'Tenant owes £2,400 in rent arrears covering 2 months (January-February 2025). Last payment received was December 2024. Rent is due monthly on the 1st. Tenant has been contacted multiple times but has not responded.',
       notice_strategy: 'minimum',
     },
     expectedPhrases: [
@@ -126,14 +158,7 @@ const TEST_ROUTES: TestRoute[] = [
       '456 Tenant Road',
       'E1 6AN',
     ],
-    forbiddenPhrases: [
-      'undefined',
-      '{{',
-      'NULL',
-      'contract holder',
-      'Section 173',
-      'Notice to Leave',
-    ],
+    forbiddenPhrases: ['undefined', '{{', 'NULL', 'contract holder', 'Section 173', 'Notice to Leave'],
   },
 
   // England - Section 21
@@ -175,13 +200,7 @@ const TEST_ROUTES: TestRoute[] = [
       'M2 3PQ',
       'two months',
     ],
-    forbiddenPhrases: [
-      'undefined',
-      '{{',
-      'Ground 8',
-      'contract holder',
-      'Section 173',
-    ],
+    forbiddenPhrases: ['undefined', '{{', 'Ground 8', 'contract holder', 'Section 173'],
   },
 
   // Wales - Section 173 (no-fault)
@@ -253,7 +272,8 @@ const TEST_ROUTES: TestRoute[] = [
       deposit_scheme_wales_fault: 'Deposit Protection Service Wales',
       wales_breach_type: 'rent_arrears',
       rent_arrears_amount: 1500,
-      breach_details: 'Contract holder owes £1,500 in rent arrears covering 2 months (November-December 2024). Rent is due monthly on the 1st. Multiple payment reminders have been sent but arrears remain unpaid.',
+      breach_details:
+        'Contract holder owes £1,500 in rent arrears covering 2 months (November-December 2024). Rent is due monthly on the 1st. Multiple payment reminders have been sent but arrears remain unpaid.',
     },
     expectedPhrases: [
       'Renting Homes (Wales) Act 2016',
@@ -304,7 +324,8 @@ const TEST_ROUTES: TestRoute[] = [
       safety_checks: 'Yes',
       asb_details: 'No',
       eviction_grounds: ['Ground 1 - Rent arrears (3+ months)'],
-      ground_particulars: 'The tenant owes £3,500 in rent arrears covering over 3 months. Pre-action requirements have been completed including written notice to the tenant and signposting to debt advice services. Despite multiple contact attempts, the arrears remain unpaid.',
+      ground_particulars:
+        'The tenant owes £3,500 in rent arrears covering over 3 months. Pre-action requirements have been completed including written notice to the tenant and signposting to debt advice services. Despite multiple contact attempts, the arrears remain unpaid.',
       notice_date: '2025-01-15',
       notice_expiry: '2025-02-12',
       service_method: 'Recorded delivery',
@@ -338,25 +359,34 @@ const TEST_ROUTES: TestRoute[] = [
   },
 ];
 
-// Helpers
+// ============================================================================
+// HELPERS
+// ============================================================================
+
 async function ensureDirectoryExists(dirPath: string): Promise<void> {
-  try {
-    await fs.mkdir(dirPath, { recursive: true });
-  } catch (error: any) {
-    if (error.code !== 'EEXIST') {
-      throw error;
-    }
-  }
+  await fs.mkdir(dirPath, { recursive: true });
 }
 
-async function createTestCase(jurisdiction: string, product: string = 'notice_only'): Promise<string> {
+async function createTestCase(
+  jurisdiction: string,
+  product: string = 'notice_only'
+): Promise<string> {
+  // DB schema expects "england-wales" (not separate england/wales) for non-Scotland
+  const dbJurisdiction = jurisdiction === 'scotland' ? 'scotland' : 'england-wales';
+
   const { data, error } = await supabase
     .from('cases')
     .insert({
-      jurisdiction,
-      product,
+      jurisdiction: dbJurisdiction,
+      case_type: 'eviction',
       status: 'in_progress',
-      wizard_facts: {},
+      collected_facts: {
+        __meta: {
+          product,
+        },
+      },
+      // created_at is in schema; but it's usually server-managed.
+      // If your DB allows client set, you can keep it; otherwise remove it.
       created_at: new Date().toISOString(),
     })
     .select('id')
@@ -366,15 +396,38 @@ async function createTestCase(jurisdiction: string, product: string = 'notice_on
     throw new Error(`Failed to create case: ${error?.message || 'Unknown error'}`);
   }
 
-  return data.id;
+  return data.id as string;
 }
 
-async function submitWizardAnswers(caseId: string, answers: Record<string, any>): Promise<void> {
+async function submitWizardAnswers(caseId: string, answers: Record<string, unknown>): Promise<void> {
+  const { data: existing, error: readErr } = await supabase
+    .from('cases')
+    .select('collected_facts')
+    .eq('id', caseId)
+    .single();
+
+  if (readErr) {
+    throw new Error(`Failed to read existing facts: ${readErr.message}`);
+  }
+
+  const existingFacts =
+    (existing?.collected_facts as Record<string, unknown> | null | undefined) ?? {};
+
   const { error } = await supabase
     .from('cases')
     .update({
-      wizard_facts: answers,
+      collected_facts: {
+        ...existingFacts,
+        ...answers,
+        __meta: {
+          ...(typeof existingFacts.__meta === 'object' && existingFacts.__meta
+            ? (existingFacts.__meta as Record<string, unknown>)
+            : {}),
+          product: 'notice_only',
+        },
+      },
       status: 'completed',
+      wizard_completed_at: new Date().toISOString(),
     })
     .eq('id', caseId);
 
@@ -401,13 +454,18 @@ async function generatePreviewPDF(caseId: string): Promise<Buffer> {
 }
 
 /**
- * Try to dynamically import pdf-parse (optional dependency)
+ * Try to load pdf-parse (optional dependency).
+ * Uses require() to avoid TS2307 when pdf-parse isn't installed / typed.
  */
-async function tryImportPdfParse(): Promise<any | null> {
+async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<any>) | null> {
   try {
-    const pdfParseModule = await import('pdf-parse');
-    return pdfParseModule.default || pdfParseModule;
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const mod: any = require('pdf-parse');
+    const fn = mod?.default ?? mod;
+    if (typeof fn !== 'function') return null;
+    return fn as (data: Buffer) => Promise<any>;
+  } catch (_error) {
+    // Not installed — fine.
     return null;
   }
 }
@@ -419,76 +477,63 @@ async function validatePDF(
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  // Check file size - minimum threshold for a real PDF with content
-  const MIN_PDF_SIZE = 40 * 1024; // 40KB - a reasonable minimum for a notice with formatting
-  const TINY_PDF_SIZE = 5000; // 5KB - definitely too small
+  const MIN_PDF_SIZE = 40 * 1024; // 40KB
+  const TINY_PDF_SIZE = 5000; // 5KB
 
   if (pdfBuffer.length < TINY_PDF_SIZE) {
     errors.push(`PDF too small (${pdfBuffer.length} bytes) - likely generation error`);
   } else if (pdfBuffer.length < MIN_PDF_SIZE) {
-    warnings.push(`PDF smaller than expected (${pdfBuffer.length} bytes, expected >${MIN_PDF_SIZE}) - may be missing content`);
+    warnings.push(
+      `PDF smaller than expected (${pdfBuffer.length} bytes, expected >${MIN_PDF_SIZE}) - may be missing content`
+    );
   }
 
-  // Check PDF header (all PDFs should start with %PDF-)
   const pdfHeader = pdfBuffer.slice(0, 5).toString('utf-8');
   if (!pdfHeader.startsWith('%PDF-')) {
     errors.push(`Invalid PDF header: "${pdfHeader}" - not a valid PDF file`);
     return { valid: false, errors, warnings };
   }
 
-  // Try to parse PDF text if pdf-parse is available
-  const pdfParse = await tryImportPdfParse();
+  const pdfParse = await tryLoadPdfParse();
 
   if (pdfParse) {
-    // Full validation with text extraction
     console.log('    ℹ️  pdf-parse available - performing full text validation');
+
     let pdfText = '';
     try {
       const pdfData = await pdfParse(pdfBuffer);
-      pdfText = pdfData.text;
-    } catch (error: any) {
-      errors.push(`PDF parse error: ${error.message}`);
+      pdfText = String(pdfData?.text ?? '');
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      errors.push(`PDF parse error: ${msg}`);
       return { valid: false, errors, warnings };
     }
 
-    // Check expected phrases
     for (const phrase of route.expectedPhrases) {
       if (!pdfText.includes(phrase)) {
         errors.push(`Missing expected phrase: "${phrase}"`);
       }
     }
 
-    // Check forbidden phrases
     for (const phrase of route.forbiddenPhrases) {
       if (pdfText.includes(phrase)) {
         errors.push(`Found forbidden phrase: "${phrase}"`);
       }
     }
   } else {
-    // Fallback validation without text extraction
     console.log('    ℹ️  pdf-parse not available - using fallback validation');
-    warnings.push('pdf-parse not installed - text validation skipped (install with: npm install pdf-parse)');
+    warnings.push('pdf-parse not installed - text validation skipped (optional: npm install pdf-parse)');
 
-    // Sanity check: Search for critical forbidden patterns in raw PDF bytes
-    // PDFs store text as strings, so we can do a naive search for "undefined"
+    // Naive scan of first 100KB for obvious template/render failures
     const pdfString = pdfBuffer.toString('utf-8', 0, Math.min(pdfBuffer.length, 100000));
 
-    // Check for template variable failures (these would appear literally in PDF)
-    const templateErrors = [
-      'undefined',
-      '{{',
-      '}}',
-      'NULL',
-      '[object Object]',
-    ];
-
+    const templateErrors = ['undefined', '{{', '}}', 'NULL', '[object Object]'];
     for (const pattern of templateErrors) {
       if (pdfString.includes(pattern)) {
         errors.push(`Found template error pattern in PDF: "${pattern}"`);
       }
     }
 
-    // File size is our main indicator of success
     if (pdfBuffer.length >= MIN_PDF_SIZE) {
       warnings.push(`PDF size looks good (${pdfBuffer.length} bytes) - likely valid`);
     }
@@ -497,13 +542,7 @@ async function validatePDF(
   return { valid: errors.length === 0, errors, warnings };
 }
 
-async function testRoute(route: TestRoute): Promise<{
-  success: boolean;
-  caseId: string;
-  pdfPath: string;
-  errors: string[];
-  warnings: string[];
-}> {
+async function testRoute(route: TestRoute): Promise<RouteResult> {
   console.log(`\n🧪 Testing ${route.jurisdiction}/${route.route}...`);
 
   const errors: string[] = [];
@@ -512,52 +551,53 @@ async function testRoute(route: TestRoute): Promise<{
   let pdfPath = '';
 
   try {
-    // Step 1: Create case
     console.log('  📝 Creating case...');
     caseId = await createTestCase(route.jurisdiction);
     console.log(`  ✅ Case created: ${caseId}`);
 
-    // Step 2: Submit answers
     console.log('  📋 Submitting wizard answers...');
     await submitWizardAnswers(caseId, route.minimalAnswers);
     console.log('  ✅ Answers submitted');
 
-    // Step 3: Generate PDF
     console.log('  📄 Generating preview PDF...');
     const pdfBuffer = await generatePreviewPDF(caseId);
     console.log(`  ✅ PDF generated (${pdfBuffer.length} bytes)`);
 
-    // Step 4: Save PDF
     const jurisdictionDir = path.join(ARTIFACTS_DIR, route.jurisdiction);
     await ensureDirectoryExists(jurisdictionDir);
+
     pdfPath = path.join(jurisdictionDir, `${route.route}.pdf`);
     await fs.writeFile(pdfPath, pdfBuffer);
     console.log(`  💾 PDF saved: ${pdfPath}`);
 
-    // Step 5: Validate PDF
     console.log('  🔍 Validating PDF content...');
     const validation = await validatePDF(pdfBuffer, route);
 
     if (validation.warnings.length > 0) {
       warnings.push(...validation.warnings);
-      validation.warnings.forEach((warn) => console.log(`  ⚠️  ${warn}`));
+      validation.warnings.forEach((w) => console.log(`  ⚠️  ${w}`));
     }
 
     if (!validation.valid) {
       errors.push(...validation.errors);
       console.log('  ❌ Validation failed:');
-      validation.errors.forEach((err) => console.log(`     - ${err}`));
+      validation.errors.forEach((e) => console.log(`     - ${e}`));
     } else {
       console.log('  ✅ PDF validation passed');
     }
 
     return { success: errors.length === 0, caseId, pdfPath, errors, warnings };
-  } catch (error: any) {
-    errors.push(`Exception: ${error.message}`);
-    console.log(`  ❌ Error: ${error.message}`);
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    errors.push(`Exception: ${msg}`);
+    console.log(`  ❌ Error: ${msg}`);
     return { success: false, caseId, pdfPath, errors, warnings };
   }
 }
+
+// ============================================================================
+// MAIN
+// ============================================================================
 
 async function main(): Promise<void> {
   console.log('╔═══════════════════════════════════════════════════════════════╗');
@@ -571,21 +611,15 @@ async function main(): Promise<void> {
   console.log(`🗄️  Supabase URL: ${SUPABASE_URL}`);
   console.log('');
 
-  // Ensure artifacts directory exists
   await ensureDirectoryExists(ARTIFACTS_DIR);
 
-  // Test all routes
-  const results: Array<{
-    route: TestRoute;
-    result: Awaited<ReturnType<typeof testRoute>>;
-  }> = [];
+  const results: Array<{ route: TestRoute; result: RouteResult }> = [];
 
   for (const route of TEST_ROUTES) {
     const result = await testRoute(route);
     results.push({ route, result });
   }
 
-  // Summary
   console.log('\n');
   console.log('╔═══════════════════════════════════════════════════════════════╗');
   console.log('║                    TEST SUMMARY                               ║');
@@ -595,19 +629,22 @@ async function main(): Promise<void> {
   const successCount = results.filter((r) => r.result.success).length;
   const totalCount = results.length;
 
-  results.forEach(({ route, result }) => {
+  for (const { route, result } of results) {
     const status = result.success ? '✅ PASS' : '❌ FAIL';
-    console.log(`${status} | ${route.jurisdiction.padEnd(10)} | ${route.route.padEnd(20)} | Case: ${result.caseId}`);
+    console.log(
+      `${status} | ${route.jurisdiction.padEnd(10)} | ${route.route.padEnd(20)} | Case: ${result.caseId || '—'}`
+    );
+
     if (!result.success && result.errors.length > 0) {
       result.errors.forEach((err) => console.log(`       └─ ❌ ${err}`));
     }
-    if (result.warnings && result.warnings.length > 0) {
+    if (result.warnings.length > 0) {
       result.warnings.forEach((warn) => console.log(`       └─ ⚠️  ${warn}`));
     }
     if (result.pdfPath) {
       console.log(`       📄 PDF: ${result.pdfPath}`);
     }
-  });
+  }
 
   console.log('');
   console.log('─'.repeat(70));
@@ -619,29 +656,30 @@ async function main(): Promise<void> {
     console.log('🎉 SUCCESS: All Notice Only routes work end-to-end!');
     console.log('');
     console.log('✅ All PDFs generated successfully');
-    console.log('✅ All validation checks passed');
-    console.log('✅ No undefined or blank fields detected');
-    console.log('✅ Jurisdiction-specific content verified');
+    console.log('✅ All validation checks passed (or fallback checks if pdf-parse missing)');
+    console.log('✅ No obvious undefined/template failures detected');
+    console.log('✅ Jurisdiction-specific content verified where possible');
     console.log('');
     console.log(`📂 Review generated PDFs in: ${ARTIFACTS_DIR}`);
     console.log('');
     process.exit(0);
-  } else {
-    console.log('');
-    console.log('❌ FAILURE: Some routes failed');
-    console.log('');
-    console.log('Review errors above and check:');
-    console.log('  - MSQ question IDs match mapper expectations');
-    console.log('  - Decision engine computes dates correctly');
-    console.log('  - Templates reference correct variables');
-    console.log('  - Preview API returns valid PDFs');
-    console.log('');
-    process.exit(1);
   }
+
+  console.log('');
+  console.log('❌ FAILURE: Some routes failed');
+  console.log('');
+  console.log('Review errors above and check:');
+  console.log('  - MSQ question IDs match mapper expectations');
+  console.log('  - Decision engine computes dates correctly');
+  console.log('  - Templates reference correct variables');
+  console.log('  - Preview API returns valid PDFs');
+  console.log('');
+  process.exit(1);
 }
 
 // Run
-main().catch((error) => {
-  console.error('Fatal error:', error);
+main().catch((e: unknown) => {
+  const msg = e instanceof Error ? e.message : String(e);
+  console.error('Fatal error:', msg);
   process.exit(1);
 });

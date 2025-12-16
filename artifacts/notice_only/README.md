@@ -25,7 +25,7 @@ artifacts/notice_only/
    ```bash
    npm run dev
    ```
-   The script expects the API to be available at `http://localhost:3000` (or set `NEXT_PUBLIC_SITE_URL`).
+   The script expects the API to be available at `http://localhost:5000` (or set `NEXT_PUBLIC_SITE_URL`).
 
 2. **Supabase Running**:
    ```bash
