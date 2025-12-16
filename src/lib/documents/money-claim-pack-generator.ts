@@ -14,7 +14,9 @@ import { buildServiceContact } from '@/lib/documents/service-contact';
 import { generateMoneyClaimAskHeavenDrafts } from './money-claim-askheaven';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 
-export type MoneyClaimJurisdiction = 'england-wales';
+import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
+
+export type MoneyClaimJurisdiction = Exclude<CanonicalJurisdiction, 'northern-ireland'>; // england, wales, scotland
 
 export interface ArrearsEntry {
   period: string;

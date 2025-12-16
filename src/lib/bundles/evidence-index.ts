@@ -138,7 +138,9 @@ function mapEventCategory(category: string): TimelineEntry['category'] {
  */
 function getTimelineTitle(jurisdiction: string): string {
   switch (jurisdiction.toLowerCase()) {
-    case 'england-wales':
+    case 'england':
+    case 'wales':
+    case 'england-wales': // Legacy compatibility
     case 'england':
     case 'wales':
       return 'Chronology of Events';

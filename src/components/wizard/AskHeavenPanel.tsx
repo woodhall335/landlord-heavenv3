@@ -5,7 +5,7 @@ import { Button, Card } from '@/components/ui';
 import { Sparkles, MessageCircle, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
-type Jurisdiction = 'england-wales' | 'scotland' | 'northern-ireland';
+type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 
 interface AskHeavenPanelProps {

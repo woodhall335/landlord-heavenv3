@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-type Jurisdiction = 'england-wales' | 'scotland';
+type Jurisdiction = 'england' | 'wales' | 'scotland';
 
 interface SectionProps {
   // We don’t currently use facts in this section, so make it optional

@@ -14,7 +14,7 @@ import { MoneyClaimSectionFlow } from '@/components/wizard/flows/MoneyClaimSecti
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
-type Jurisdiction = 'england-wales' | 'scotland' | 'northern-ireland' | null;
+type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
 type AskHeavenProduct = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 
 function WizardFlowContent() {

@@ -32,7 +32,9 @@ import path from 'path';
 // TYPES
 // ============================================================================
 
-export type Jurisdiction = 'england-wales' | 'scotland';
+import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
+
+export type Jurisdiction = CanonicalJurisdiction;
 
 export interface EvictionCase {
   // Jurisdiction
@@ -179,16 +181,29 @@ export interface CompleteEvictionPack {
 // ============================================================================
 
 /**
- * Load eviction grounds for jurisdiction
+ * Load eviction grounds for jurisdiction (using canonical jurisdiction values)
  */
 export async function loadEvictionGrounds(jurisdiction: Jurisdiction): Promise<any> {
+  // Map to appropriate grounds file
+  // England and Wales share Housing Act grounds, but Wales has additional Renting Homes Act grounds
+  let groundsFile = '';
+
+  if (jurisdiction === 'england') {
+    groundsFile = 'england/eviction_grounds.json';
+  } else if (jurisdiction === 'wales') {
+    groundsFile = 'wales/eviction_grounds.json';
+  } else if (jurisdiction === 'scotland') {
+    groundsFile = 'scotland/eviction_grounds.json';
+  } else if (jurisdiction === 'northern-ireland') {
+    groundsFile = 'northern-ireland/eviction_grounds.json';
+  }
+
   const groundsPath = path.join(
     process.cwd(),
     'config',
     'jurisdictions',
     'uk',
-    jurisdiction,
-    'eviction_grounds.json'
+    groundsFile
   );
 
   try {
@@ -222,12 +237,14 @@ async function generateEvictionRoadmap(
   const jurisdiction = evictionCase.jurisdiction;
 
   let templatePath = '';
-  if (jurisdiction === 'england-wales') {
-    templatePath = 'uk/england-wales/templates/eviction/eviction_roadmap.hbs';
+  if (jurisdiction === 'england') {
+    templatePath = 'uk/england/templates/eviction/eviction_roadmap.hbs';
+  } else if (jurisdiction === 'wales') {
+    templatePath = 'uk/wales/templates/eviction/eviction_roadmap.hbs';
   } else if (jurisdiction === 'scotland') {
-    templatePath = 'uk/scotland/templates/eviction_roadmap.hbs';
+    templatePath = 'uk/scotland/templates/eviction/eviction_roadmap.hbs';
   } else {
-    // Fallback to a shared roadmap template if we ever support NI / others
+    // Northern Ireland / fallback
     templatePath = 'shared/templates/eviction_roadmap.hbs';
   }
 
@@ -333,6 +350,7 @@ async function generateExpertGuidance(
   groundsData: any
 ): Promise<EvictionPackDocument> {
   const jurisdiction = evictionCase.jurisdiction;
+  // Use canonical jurisdiction for template path
   const templatePath = `uk/${jurisdiction}/templates/eviction/expert_guidance.hbs`;
 
   const data = {
@@ -426,7 +444,7 @@ function calculateEstimatedTimeline(evictionCase: EvictionCase): {
   let courtDays = baseDaysCourt;
   let enforcementDays = baseDaysEnforcement;
 
-  if (jurisdiction === 'england-wales') {
+  if (jurisdiction === 'england' || jurisdiction === 'wales') {
     // Section 8 mandatory arrears / strong grounds often resolve a bit faster
     if (hasMandatoryGround) {
       courtDays -= 14;
@@ -476,14 +494,15 @@ function calculateEstimatedTimeline(evictionCase: EvictionCase): {
 /**
  * Generate England & Wales Eviction Pack
  */
-async function generateEnglandWalesEvictionPack(
+async function generateEnglandOrWalesEvictionPack(
   evictionCase: EvictionCase,
   caseData: CaseData,
   groundsData: any
 ): Promise<EvictionPackDocument[]> {
   const documents: EvictionPackDocument[] = [];
+  const jurisdiction = evictionCase.jurisdiction; // 'england' or 'wales'
 
-    // 1. Section 8 Notice (if fault-based grounds)
+  // 1. Section 8 Notice (if fault-based grounds)
   if (evictionCase.grounds.length > 0) {
     const noticePeriodDays = 14; // baseline; templates can explain nuances
     const earliestPossessionDate = calculateLeavingDate(noticePeriodDays);
@@ -523,10 +542,18 @@ async function generateEnglandWalesEvictionPack(
     });
   }
 
-  // 2. Section 21 Notice (if no-fault)
+  // 2. Section 21 Notice (if no-fault) - ENGLAND ONLY
   if (evictionCase.case_type === 'no_fault') {
+    // Section 21 is ONLY valid in England
+    if (jurisdiction !== 'england') {
+      throw new Error(
+        `Section 21 (no-fault eviction) is not available in ${jurisdiction}. ` +
+        `${jurisdiction === 'wales' ? 'Wales uses Section 173 notices under the Renting Homes (Wales) Act 2016.' : ''}`
+      );
+    }
+
     const section21Doc = await generateDocument({
-      templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
+      templatePath: 'uk/england/templates/eviction/section21_form6a.hbs',
       data: evictionCase,
       isPreview: false,
       outputFormat: 'both',
@@ -534,7 +561,7 @@ async function generateEnglandWalesEvictionPack(
 
     documents.push({
       title: 'Section 21 Notice - Form 6A',
-      description: 'Official no-fault eviction notice (2 months)',
+      description: 'Official no-fault eviction notice (2 months) - England only',
       category: 'notice',
       html: section21Doc.html,
       pdf: section21Doc.pdf,
@@ -694,14 +721,26 @@ export async function generateCompleteEvictionPack(
   wizardFacts: any
 ): Promise<CompleteEvictionPack> {
   const caseId = wizardFacts?.__meta?.case_id || wizardFacts?.case_id || `EVICT-${Date.now()}`;
-  const jurisdiction =
-    wizardFacts?.__meta?.jurisdiction || wizardFacts?.jurisdiction || ('england-wales' as Jurisdiction);
+
+  // Get jurisdiction - must be canonical
+  let jurisdiction = wizardFacts?.__meta?.jurisdiction || wizardFacts?.jurisdiction;
+
+  // Migrate legacy values
+  if (jurisdiction === 'england-wales') {
+    const propertyLocation = wizardFacts?.property_location;
+    jurisdiction = propertyLocation === 'wales' ? 'wales' : 'england';
+    console.warn(`[MIGRATION] Converted legacy jurisdiction "england-wales" to "${jurisdiction}"`);
+  }
+
+  if (!jurisdiction || !['england', 'wales', 'scotland', 'northern-ireland'].includes(jurisdiction)) {
+    throw new Error(`Invalid jurisdiction: ${jurisdiction}. Must be one of: england, wales, scotland, northern-ireland`);
+  }
 
   console.log(`\n📦 Generating Complete Eviction Pack for ${jurisdiction}...`);
   console.log('='.repeat(80));
 
   // Load jurisdiction-specific grounds
-  const groundsData = await loadEvictionGrounds(jurisdiction);
+  const groundsData = await loadEvictionGrounds(jurisdiction as Jurisdiction);
 
   // Initialize documents array
   const documents: EvictionPackDocument[] = [];
@@ -711,14 +750,16 @@ export async function generateCompleteEvictionPack(
 
   let evictionCase: EvictionCase;
 
-  if (jurisdiction === 'england-wales') {
+  if (jurisdiction === 'england' || jurisdiction === 'wales') {
     const { evictionCase: ewCase, caseData } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
-    evictionCase = ewCase;
-    regionDocs = await generateEnglandWalesEvictionPack(evictionCase, caseData, groundsData);
-  } else {
+    evictionCase = { ...ewCase, jurisdiction: jurisdiction as Jurisdiction };
+    regionDocs = await generateEnglandOrWalesEvictionPack(evictionCase, caseData, groundsData);
+  } else if (jurisdiction === 'scotland') {
     const { scotlandCaseData } = wizardFactsToScotlandEviction(caseId, wizardFacts);
     evictionCase = buildScotlandEvictionCase(caseId, scotlandCaseData);
     regionDocs = await generateScotlandEvictionPack(evictionCase, scotlandCaseData);
+  } else {
+    throw new Error(`Eviction packs not yet supported for ${jurisdiction}`);
   }
 
   documents.push(...regionDocs);
@@ -894,27 +935,49 @@ export async function generateNoticeOnlyPack(
   wizardFacts: any
 ): Promise<CompleteEvictionPack> {
   const caseId = wizardFacts?.__meta?.case_id || wizardFacts?.case_id || `EVICT-NOTICE-${Date.now()}`;
-  const jurisdiction =
-    wizardFacts?.__meta?.jurisdiction || wizardFacts?.jurisdiction || ('england-wales' as Jurisdiction);
+
+  // Get jurisdiction - must be canonical
+  let jurisdiction = wizardFacts?.__meta?.jurisdiction || wizardFacts?.jurisdiction;
+
+  // Migrate legacy values
+  if (jurisdiction === 'england-wales') {
+    const propertyLocation = wizardFacts?.property_location;
+    jurisdiction = propertyLocation === 'wales' ? 'wales' : 'england';
+    console.warn(`[MIGRATION] Converted legacy jurisdiction "england-wales" to "${jurisdiction}" for notice pack`);
+  }
+
+  if (!jurisdiction || !['england', 'wales', 'scotland', 'northern-ireland'].includes(jurisdiction)) {
+    throw new Error(`Invalid jurisdiction: ${jurisdiction}. Must be one of: england, wales, scotland, northern-ireland`);
+  }
 
   console.log(`\n📄 Generating Notice Only Pack for ${jurisdiction}...`);
 
-  const groundsData = await loadEvictionGrounds(jurisdiction);
+  const groundsData = await loadEvictionGrounds(jurisdiction as Jurisdiction);
   const documents: EvictionPackDocument[] = [];
 
-  if (jurisdiction === 'england-wales') {
+  if (jurisdiction === 'england' || jurisdiction === 'wales') {
     const { evictionCase } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
+    evictionCase.jurisdiction = jurisdiction as Jurisdiction;
+
     // Section 8 or Section 21
     if (evictionCase.case_type === 'no_fault') {
+      // Section 21 is England-only
+      if (jurisdiction !== 'england') {
+        throw new Error(
+          `Section 21 (no-fault eviction) is not available in ${jurisdiction}. ` +
+          `${jurisdiction === 'wales' ? 'Wales uses Section 173 notices under the Renting Homes (Wales) Act 2016.' : ''}`
+        );
+      }
+
       const section21Doc = await generateDocument({
-        templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
+        templatePath: 'uk/england/templates/eviction/section21_form6a.hbs',
         data: evictionCase,
         isPreview: false,
         outputFormat: 'both',
       });
       documents.push({
         title: 'Section 21 Notice - Form 6A',
-        description: 'No-fault eviction notice',
+        description: 'No-fault eviction notice (England only)',
         category: 'notice',
         html: section21Doc.html,
         pdf: section21Doc.pdf,

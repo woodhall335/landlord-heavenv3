@@ -24,7 +24,7 @@ export interface BundleMetadata {
   case_id: string;
 
   /** Jurisdiction */
-  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
+  jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland';
 
   /** Bundle type */
   type: 'court' | 'tribunal';

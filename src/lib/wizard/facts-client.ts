@@ -9,7 +9,7 @@
 
 // What the checkpoint route needs (mirrors the route’s Zod schema)
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement' | null;
-type Jurisdiction = 'england-wales' | 'scotland' | 'northern-ireland' | null;
+type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
 type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement' | null;
 
 interface SaveFactsMeta {

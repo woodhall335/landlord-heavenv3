@@ -3,7 +3,7 @@
 
 import React, { useCallback, useState } from 'react';
 
-type Jurisdiction = 'england-wales' | 'scotland' | 'northern-ireland';
+type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 

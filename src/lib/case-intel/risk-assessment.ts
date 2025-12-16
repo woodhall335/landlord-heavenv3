@@ -55,7 +55,7 @@ export function computeRiskAssessment(facts: CaseFacts): RiskAssessment {
   }
 
   // Check electrical safety (England & Wales)
-  if (jurisdiction === 'england-wales') {
+  if (jurisdiction === 'england' || jurisdiction === 'wales') {
     if (!property.electrical_cert_date) {
       compliance_issues.push('No electrical safety certificate (EICR) - required since June 2020');
       score -= 10;
@@ -81,7 +81,7 @@ export function computeRiskAssessment(facts: CaseFacts): RiskAssessment {
   }
 
   // Check How to Rent (England & Wales)
-  if (jurisdiction === 'england-wales') {
+  if (jurisdiction === 'england' || jurisdiction === 'wales') {
     if (tenancy.how_to_rent_provided === false) {
       red_flags.push('How to Rent guide not provided - blocks Section 21');
       score -= 10;
@@ -146,7 +146,7 @@ export function computeRiskAssessment(facts: CaseFacts): RiskAssessment {
   }
 
   // Check retaliatory eviction risk (England & Wales)
-  if (jurisdiction === 'england-wales' && eviction?.tenant_complained) {
+  if (jurisdiction === 'england' || jurisdiction === 'wales' && eviction?.tenant_complained) {
     if (eviction.complaint_date && eviction.notice_served_date) {
       const complaintDate = new Date(eviction.complaint_date);
       const noticeDate = new Date(eviction.notice_served_date);

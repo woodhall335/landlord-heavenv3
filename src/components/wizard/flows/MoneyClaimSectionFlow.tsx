@@ -19,7 +19,7 @@ import { EvidenceSection } from '@/components/wizard/money-claim/EvidenceSection
 import { EnforcementSection } from '@/components/wizard/money-claim/EnforcementSection';
 import { ReviewSection } from '@/components/wizard/money-claim/ReviewSection';
 
-type Jurisdiction = 'england-wales' | 'scotland';
+type Jurisdiction = 'england' | 'wales' | 'scotland';
 
 interface MoneyClaimSectionFlowProps {
   caseId: string;

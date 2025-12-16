@@ -53,13 +53,13 @@ export async function analyzeCase(
     throw new Error('CaseFacts is required for case analysis');
   }
 
-  const jurisdiction = facts.meta.jurisdiction || 'england-wales';
+  const jurisdiction = facts.meta.jurisdiction || 'england';
   const product = facts.meta.product || 'notice_only';
   const case_type = 'eviction'; // Could be parameterized later
 
   // Step 1: Run decision engine (source of truth for legal rules)
   const decisionInput: DecisionInput = {
-    jurisdiction: jurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+    jurisdiction: jurisdiction as 'england' | 'scotland' | 'northern-ireland',
     product: product as 'notice_only' | 'complete_pack' | 'money_claim',
     case_type: case_type as 'eviction' | 'money_claim' | 'tenancy_agreement',
     facts,
@@ -142,11 +142,11 @@ export function quickScoreCase(
   rating: string;
   key_issues: string[];
 } {
-  const jurisdiction = facts.meta.jurisdiction || 'england-wales';
+  const jurisdiction = facts.meta.jurisdiction || 'england';
   const product = facts.meta.product || 'notice_only';
 
   const decisionInput: DecisionInput = {
-    jurisdiction: jurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+    jurisdiction: jurisdiction as 'england' | 'scotland' | 'northern-ireland',
     product: product as 'notice_only' | 'complete_pack' | 'money_claim',
     case_type: 'eviction',
     facts,
@@ -197,11 +197,11 @@ export function isCaseReadyForSubmission(
   blockers: string[];
   warnings: string[];
 } {
-  const jurisdiction = facts.meta.jurisdiction || 'england-wales';
+  const jurisdiction = facts.meta.jurisdiction || 'england';
   const product = facts.meta.product || 'notice_only';
 
   const decisionInput: DecisionInput = {
-    jurisdiction: jurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+    jurisdiction: jurisdiction as 'england' | 'scotland' | 'northern-ireland',
     product: product as 'notice_only' | 'complete_pack' | 'money_claim',
     case_type: 'eviction',
     facts,

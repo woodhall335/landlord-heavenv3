@@ -4,7 +4,7 @@ import React from 'react';
 import { Input } from '@/components/ui';
 import type { ChangeEvent } from 'react';
 
-type Jurisdiction = 'england-wales' | 'scotland';
+type Jurisdiction = 'england' | 'wales' | 'scotland';
 
 interface SectionProps {
   facts: any;

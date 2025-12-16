@@ -17,7 +17,7 @@ import { UploadField, type EvidenceFileSummary } from '@/components/wizard/field
 interface StructuredWizardProps {
   caseId: string;
   caseType: 'eviction' | 'money_claim' | 'tenancy_agreement';
-  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland' | null;
+  jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
   product: 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
   initialQuestion?: ExtendedWizardQuestion | null;
   onComplete: (caseId: string) => void;
@@ -150,7 +150,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   };
 
   const getJurisdictionName = () => {
-    if (jurisdiction === 'england-wales') return 'England & Wales';
+    if (jurisdiction === 'england') return 'England';
+    if (jurisdiction === 'wales') return 'Wales';
     if (jurisdiction === 'scotland') return 'Scotland';
     if (jurisdiction === 'northern-ireland') return 'Northern Ireland';
     return 'your area';
@@ -300,7 +301,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         body: JSON.stringify({
           caseId,
           propertyLocation: location,
-          jurisdiction: 'england-wales',
+          jurisdiction: location, // Use canonical jurisdiction (england or wales)
           product: 'notice_only',
         }),
       });
@@ -485,7 +486,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (
       currentQuestion?.id === 'safety_compliance' &&
       currentAnswer?.epc_rating &&
-      jurisdiction === 'england-wales'
+      (jurisdiction === 'england' || jurisdiction === 'wales')
     ) {
       const epcRating = currentAnswer.epc_rating;
       if (epcRating === 'F' || epcRating === 'G') {
@@ -506,7 +507,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       currentQuestion?.id === 'ast_suitability' &&
       currentAnswer &&
       caseType === 'tenancy_agreement' &&
-      jurisdiction === 'england-wales'
+      (jurisdiction === 'england' || jurisdiction === 'wales')
     ) {
       const warnings: string[] = [];
 
@@ -1348,7 +1349,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // ====================================================================================
   // PHASE 2: PRE-STEP LOCATION GATE
   // ====================================================================================
-  if (!mqsLocked && !selectedLocation && jurisdiction === 'england-wales') {
+  // This gate should only show if jurisdiction somehow got through as null
+  // In normal flow, jurisdiction should already be set to 'england' or 'wales'
+  if (!mqsLocked && !selectedLocation && !jurisdiction) {
     return (
       <div className="max-w-2xl mx-auto p-8">
         <Card className="p-8">
@@ -1446,8 +1449,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   }
 
   // Narrow jurisdiction for GuidanceTips to avoid TS errors with Northern Ireland
-  const guidanceJurisdiction: 'england-wales' | 'scotland' | undefined =
-    jurisdiction === 'england-wales' || jurisdiction === 'scotland'
+  const guidanceJurisdiction: 'england' | 'wales' | 'scotland' | undefined =
+    jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland'
       ? jurisdiction
       : undefined;
 
@@ -1465,6 +1468,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       ? 'Scottish Private Residential Tenancy'
       : jurisdiction === 'northern-ireland'
       ? 'Northern Ireland Private Tenancy'
+      : jurisdiction === 'wales'
+      ? 'Occupation Contract (Wales)'
       : 'Assured Shorthold Tenancy (AST)');
 
   const productLabel = (() => {
@@ -1996,7 +2001,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             <AskHeavenPanel
               caseId={caseId}
               caseType={caseType}
-              jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
+              jurisdiction={(jurisdiction || 'england') as 'england' | 'wales' | 'scotland' | 'northern-ireland'}
               product={product}
               currentQuestionId={currentQuestion.id}
               currentQuestionText={currentQuestion.question}
