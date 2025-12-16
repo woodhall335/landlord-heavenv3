@@ -26,10 +26,49 @@ import { createClient } from '@supabase/supabase-js';
 import fs from 'fs/promises';
 import path from 'path';
 
+// ============================================================================
+// ENVIRONMENT VALIDATION
+// ============================================================================
+
+function validateEnvironment(): void {
+  const missingVars: string[] = [];
+
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    missingVars.push('NEXT_PUBLIC_SUPABASE_URL');
+  }
+  if (!process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    missingVars.push('NEXT_PUBLIC_SUPABASE_ANON_KEY');
+  }
+
+  if (missingVars.length > 0) {
+    console.error('╔═══════════════════════════════════════════════════════════════╗');
+    console.error('║                    CONFIGURATION ERROR                        ║');
+    console.error('╚═══════════════════════════════════════════════════════════════╝');
+    console.error('');
+    console.error('❌ Missing required environment variables:');
+    console.error('');
+    missingVars.forEach((varName) => {
+      console.error(`   • ${varName}`);
+    });
+    console.error('');
+    console.error('This script requires Supabase to be configured.');
+    console.error('');
+    console.error('To fix this:');
+    console.error('  1. Copy .env.example to .env.local');
+    console.error('  2. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY');
+    console.error('  3. Run this script again');
+    console.error('');
+    process.exit(1);
+  }
+}
+
+// Validate before proceeding
+validateEnvironment();
+
 // Environment
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'http://localhost:54321';
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const API_BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const API_BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:5000';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -524,6 +563,8 @@ async function main(): Promise<void> {
   console.log('╔═══════════════════════════════════════════════════════════════╗');
   console.log('║       NOTICE ONLY E2E PROOF - ALL ROUTES                     ║');
   console.log('╚═══════════════════════════════════════════════════════════════╝');
+  console.log('');
+  console.log('✅ Supabase live mode - using real database');
   console.log('');
   console.log(`📁 Artifacts directory: ${ARTIFACTS_DIR}`);
   console.log(`🌐 API Base URL: ${API_BASE_URL}`);
