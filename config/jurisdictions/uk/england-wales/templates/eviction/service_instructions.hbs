@@ -80,8 +80,8 @@
   <h1>Service Instructions for {{notice_type}} Notice</h1>
 
   <div class="section">
-    <p><strong>Property:</strong> {{property.address_line1}}, {{property.address_town}}, {{property.postcode}}</p>
-    <p><strong>Tenant:</strong> {{tenant.full_name}}{{#if tenant.name_2}}, {{tenant.name_2}}{{/if}}</p>
+    <p><strong>Property:</strong> {{property_address}}</p>
+    <p><strong>Tenant:</strong> {{tenant_full_name}}{{#if tenant.name_2}}, {{tenant_2_name}}{{/if}}</p>
     <p><strong>Notice Type:</strong> {{notice_type}}</p>
     <p><strong>Service Date:</strong> {{format_date notice_service_date}}</p>
     <p><strong>Expiry Date:</strong> {{format_date notice_expiry_date}}</p>
@@ -97,7 +97,7 @@
 
     <h3>✅ RECOMMENDED METHOD: Hand Delivery</h3>
     <ul>
-      <li><strong>Hand-deliver through the letterbox</strong> at {{property.address_line1}}</li>
+      <li><strong>Hand-deliver through the letterbox</strong> at {{property_address_line1}}</li>
       <li><strong>Date:</strong> Deliver on or after {{format_date notice_service_date}}</li>
       <li><strong>Witness:</strong> Take a witness with you who can confirm delivery</li>
       <li><strong>Evidence:</strong> Take a photo of the letterbox with the notice visible (or being pushed through)</li>
