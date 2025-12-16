@@ -92,15 +92,26 @@ export async function generateNoticeOnlyPreview(
     const page = pages[i];
     const { width, height } = page.getSize();
 
-    // Add diagonal watermark in center
+    // Add diagonal watermark in center - reduced size and opacity to prevent overlap with content
+    // Position carefully to avoid text blocks
     page.drawText(watermarkText, {
-      x: width / 2 - 200,
-      y: height / 2,
-      size: 48,
+      x: width / 2 - 180,
+      y: height / 2 - 50, // Shift down slightly to avoid header areas
+      size: 36, // Reduced from 48 to be less intrusive
       font: font,
-      color: rgb(0.85, 0.85, 0.85),
+      color: rgb(0.88, 0.88, 0.88), // Lighter gray
       rotate: degrees(45),
-      opacity: 0.3,
+      opacity: 0.15, // Reduced from 0.3 for less interference
+    });
+
+    // Add header watermark band (non-overlapping)
+    page.drawText('PREVIEW - NOT FOR COURT USE', {
+      x: width / 2 - 120,
+      y: height - 15,
+      size: 11,
+      font: regularFont,
+      color: rgb(0.75, 0.75, 0.75),
+      opacity: 0.6,
     });
 
     // Add small footer watermark

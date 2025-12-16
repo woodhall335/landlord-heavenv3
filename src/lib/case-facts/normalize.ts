@@ -2059,6 +2059,20 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     getFirstValue(wizard, ['rent_frequency', 'rent_period'])
   ) as any;
 
+  // Derive rent_period_description from rent_frequency
+  const rentFreq = templateData.rent_frequency?.toLowerCase();
+  if (rentFreq === 'monthly') {
+    templateData.rent_period_description = 'month';
+  } else if (rentFreq === 'weekly') {
+    templateData.rent_period_description = 'week';
+  } else if (rentFreq === 'quarterly') {
+    templateData.rent_period_description = 'quarter';
+  } else if (rentFreq === 'annually' || rentFreq === 'yearly') {
+    templateData.rent_period_description = 'year';
+  } else {
+    templateData.rent_period_description = rentFreq || 'month'; // default to month
+  }
+
   const paymentDate = getFirstValue(wizard, ['payment_date', 'rent_due_day']);
   templateData.payment_date = paymentDate !== null ? Number(paymentDate) || null : null;
 
@@ -2174,6 +2188,9 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   templateData.gas_safety_cert_provided = coerceBoolean(
     getFirstValue(wizard, ['gas_safety_cert_provided', 'gas_certificate_provided'])
   );
+
+  // Alias for templates that use gas_cert_provided
+  templateData.gas_cert_provided = templateData.gas_certificate_provided || templateData.gas_safety_cert_provided;
 
   templateData.how_to_rent_provided = coerceBoolean(
     getFirstValue(wizard, ['how_to_rent_provided', 'how_to_rent_given'])
@@ -2304,11 +2321,78 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     templateData.earliest_possession_date = earliestDate.toISOString().split('T')[0];
   }
 
+  // =============================================================================
+  // ADD NESTED OBJECTS FOR TEMPLATE COMPATIBILITY
+  // =============================================================================
+  // Templates expect nested property object
+  templateData.property = {
+    address_line1: propertyAddressLine1,
+    address_line2: propertyAddressLine2,
+    address_town: propertyCity,
+    city: propertyCity,
+    postcode: propertyPostcode,
+    address: templateData.property_address,
+  };
+
+  // Templates expect nested tenant object
+  templateData.tenant = {
+    full_name: templateData.tenant_full_name,
+    name_2: templateData.tenant_2_name,
+  };
+
+  // Templates expect nested tenancy object
+  templateData.tenancy = {
+    start_date: templateData.tenancy_start_date,
+    end_date: templateData.fixed_term_end_date,
+  };
+
+  // Templates expect nested deposit object
+  templateData.deposit = {
+    taken: templateData.deposit_taken,
+    protected: templateData.deposit_protected,
+    amount: templateData.deposit_amount,
+    scheme: templateData.deposit_scheme,
+    scheme_name: templateData.deposit_scheme,
+    reference: templateData.deposit_reference,
+    protection_date: templateData.deposit_protection_date,
+    prescribed_info_given: templateData.prescribed_info_given,
+  };
+
+  // Templates expect nested compliance object
+  templateData.compliance = {
+    gas_cert_provided: templateData.gas_certificate_provided || templateData.gas_safety_cert_provided,
+    gas_cert_expiry: null, // Can be added if we have this data
+    epc_provided: templateData.epc_provided,
+    epc_rating: templateData.epc_rating,
+    how_to_rent_given: templateData.how_to_rent_given || templateData.how_to_rent_provided,
+    hmo_license_required: templateData.hmo_license_required,
+    hmo_license_valid: templateData.hmo_license_valid,
+  };
+
+  // Templates expect notice_service_date and notice_expiry_date (in addition to service_date and expiry_date)
+  templateData.notice_service_date = templateData.service_date || templateData.notice_date;
+  templateData.notice_expiry_date = templateData.expiry_date;
+
+  // Templates expect metadata.generated_at for generation timestamp
+  const now = new Date();
+  templateData.metadata = {
+    generated_at: now.toISOString(),
+    generated_date: now.toISOString().split('T')[0],
+    jurisdiction: templateData.jurisdiction,
+    product: templateData.product,
+  };
+
+  // Also provide flat generation fields for backward compatibility
+  templateData.generation_timestamp = now.toISOString();
+  templateData.generation_date = now.toISOString().split('T')[0];
+
   console.log('[mapNoticeOnlyFacts] Mapped Notice Only template data');
   console.log('[mapNoticeOnlyFacts] Landlord:', templateData.landlord_full_name);
   console.log('[mapNoticeOnlyFacts] Landlord address:', templateData.landlord_address ? 'SET' : 'MISSING');
   console.log('[mapNoticeOnlyFacts] Tenant:', templateData.tenant_full_name);
   console.log('[mapNoticeOnlyFacts] Property address:', templateData.property_address ? 'SET' : 'MISSING');
+  console.log('[mapNoticeOnlyFacts] Property object:', templateData.property ? 'SET' : 'MISSING');
+  console.log('[mapNoticeOnlyFacts] Tenant object:', templateData.tenant ? 'SET' : 'MISSING');
   console.log('[mapNoticeOnlyFacts] Grounds:', templateData.grounds.length);
   console.log('[mapNoticeOnlyFacts] Dates - notice:', templateData.notice_date, 'service:', templateData.service_date, 'earliest:', templateData.earliest_possession_date);
   console.log('[mapNoticeOnlyFacts] Deposit - amount:', templateData.deposit_amount, 'protected:', templateData.deposit_protected, 'scheme:', templateData.deposit_scheme);

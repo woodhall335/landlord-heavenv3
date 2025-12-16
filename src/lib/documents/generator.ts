@@ -562,6 +562,36 @@ export async function htmlToPdf(
       page-break-inside: avoid;
       break-inside: avoid;
     }
+    /* Prevent ugly page splits for key content blocks */
+    table {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    h2, h3, h4 {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+    h2 + p, h3 + p, h4 + p, h2 + ul, h3 + ul, h4 + ul {
+      page-break-before: avoid;
+      break-before: avoid;
+    }
+    .section, .warning, .critical, .info-box, .success, .checklist, .evidence-item {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .ground, .ground-detail, .clause {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .timeline, .timeline-step, .cost-breakdown, .checklist-item {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    /* Ensure arrears tables don't split */
+    .arrears-table, .arrears-breakdown {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
     @page {
       size: ${options?.pageSize || 'A4'};
       margin: ${options?.margins?.top || '2cm'} ${options?.margins?.right || '2cm'} ${options?.margins?.bottom || '2cm'} ${options?.margins?.left || '2cm'};
