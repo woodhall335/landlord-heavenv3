@@ -74,6 +74,31 @@ export async function GET(
       // ground normalization, deposit logic, and date handling
       const templateData = mapNoticeOnlyFacts(wizardFacts);
 
+      // JURISDICTION VALIDATION: Block Section 8/21 for Wales
+      // Section 8 and Section 21 only exist in England (Housing Act 1988)
+      // Wales uses Renting Homes (Wales) Act 2016 with different sections
+      const actualJurisdiction = templateData.jurisdiction?.toLowerCase();
+      if (actualJurisdiction === 'wales' || actualJurisdiction === 'cym') {
+        if (selected_route === 'section_8') {
+          return NextResponse.json(
+            {
+              error: 'Section 8 notices do not exist in Wales',
+              details: 'Wales uses the Renting Homes (Wales) Act 2016. Please use Section 173 (no-fault) or fault-based sections (157, 159, 161, 162) instead.',
+            },
+            { status: 400 }
+          );
+        }
+        if (selected_route === 'section_21') {
+          return NextResponse.json(
+            {
+              error: 'Section 21 notices do not exist in Wales',
+              details: 'Wales uses the Renting Homes (Wales) Act 2016, Section 173 for no-fault evictions.',
+            },
+            { status: 400 }
+          );
+        }
+      }
+
       // DATE FORMATTING HELPER - UK legal format
       const formatUKDate = (dateString: string): string => {
         if (!dateString) return '';
