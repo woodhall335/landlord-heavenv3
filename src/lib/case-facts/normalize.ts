@@ -2037,6 +2037,7 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   templateData.property_address_line1 = propertyAddressLine1;
   templateData.property_address_line2 = propertyAddressLine2;
   templateData.property_city = propertyCity;
+  templateData.property_address_town = propertyCity; // Alias for templates that use property_address_town
   templateData.property_postcode = propertyPostcode;
 
   // =============================================================================

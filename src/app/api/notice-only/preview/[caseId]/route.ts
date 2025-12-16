@@ -274,11 +274,28 @@ export async function GET(
       } else if (selected_route === 'section_21') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 21 notice');
         try {
+          // Calculate first anniversary date if tenancy start date is available
+          let firstAnniversaryDate = null;
+          let firstAnniversaryDateFormatted = null;
+          if (templateData.tenancy_start_date) {
+            try {
+              const tenancyStart = new Date(templateData.tenancy_start_date);
+              const anniversary = new Date(tenancyStart);
+              anniversary.setFullYear(anniversary.getFullYear() + 1);
+              firstAnniversaryDate = anniversary.toISOString().split('T')[0];
+              firstAnniversaryDateFormatted = formatUKDate(firstAnniversaryDate);
+            } catch (e) {
+              console.error('[NOTICE-PREVIEW-API] Failed to calculate first anniversary:', e);
+            }
+          }
+
           // FIX: Use templateData (enriched with formatted addresses/dates) instead of caseFacts
           const section21Data = {
             ...templateData,
             // Section 21 requires possession_date (2 months from service)
             possession_date: templateData.earliest_possession_date_formatted || templateData.earliest_possession_date,
+            // Add first anniversary date
+            first_anniversary_date: firstAnniversaryDateFormatted || firstAnniversaryDate,
           };
 
           const section21Doc = await generateDocument({
@@ -423,9 +440,19 @@ export async function GET(
       if (selected_route === 'wales_section_173') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 173 notice');
         try {
+          // Calculate expiry date (6 months from service for Section 173)
+          let expiryDate = templateData.earliest_possession_date;
+          if (!expiryDate && (templateData.service_date || templateData.notice_date)) {
+            const serviceDate = new Date(templateData.service_date || templateData.notice_date);
+            const expiry = new Date(serviceDate);
+            expiry.setMonth(expiry.getMonth() + 6);
+            expiryDate = expiry.toISOString().split('T')[0];
+          }
+
           const section173Data = {
             ...templateData,
             is_wales_section_173: true,
+            expiry_date: formatUKDate(expiryDate || ''),
             // Calculate prohibited period (first 6 months)
             prohibited_period_violation: false, // TODO: Calculate based on dates
           };
@@ -453,10 +480,18 @@ export async function GET(
           const breachType = wizardFacts.wales_breach_type || 'breach_of_contract';
           const isRentArrears = breachType === 'rent_arrears' || breachType.toLowerCase().includes('arrears');
 
+          // Convert breach type enum to human-friendly display
+          const breachTypeDisplay = breachType === 'rent_arrears' ? 'Rent Arrears' :
+                                   breachType === 'anti_social_behaviour' ? 'Anti-Social Behaviour' :
+                                   breachType === 'property_damage' ? 'Property Damage' :
+                                   breachType === 'unauthorised_occupants' ? 'Unauthorised Occupants' :
+                                   breachType === 'breach_of_contract' ? 'Breach of Contract' :
+                                   breachType;
+
           const faultBasedData = {
             ...templateData,
             is_wales_fault_based: true,
-            wales_breach_type: breachType,
+            wales_breach_type: breachTypeDisplay,
             wales_breach_type_rent_arrears: isRentArrears,
             rent_arrears_amount: wizardFacts.rent_arrears_amount,
             breach_details: wizardFacts.breach_details || templateData.ground_particulars,
@@ -643,6 +678,19 @@ export async function GET(
 
       templateData.grounds = processedGrounds;
       templateData.ground_1_claimed = hasGround1;
+
+      // Add arrears details for Ground 1
+      if (hasGround1) {
+        templateData.total_arrears = wizardFacts.arrears_amount || 0;
+        templateData.arrears_date = formatUKDate(noticeDate);
+        // Calculate arrears duration (assume 3+ months for Ground 1)
+        const arrearsAmount = wizardFacts.arrears_amount || 0;
+        const monthlyRent = templateData.rent_amount || 1000;
+        const arrearsMonths = Math.floor(arrearsAmount / monthlyRent);
+        const arrearsDays = Math.floor((arrearsAmount / monthlyRent) * 30);
+        templateData.arrears_duration_months = arrearsMonths;
+        templateData.arrears_duration_days = arrearsDays;
+      }
 
       // Pass through full facts for templates that need them
       templateData.caseFacts = caseFacts;
