@@ -523,10 +523,10 @@ async function generateEnglandWalesEvictionPack(
     });
   }
 
-  // 2. Section 21 Notice (if no-fault)
+  // 2. Section 21 Notice (if no-fault) - England only
   if (evictionCase.case_type === 'no_fault') {
     const section21Doc = await generateDocument({
-      templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
+      templatePath: 'uk/england/templates/eviction/section21_form6a.hbs',
       data: evictionCase,
       isPreview: false,
       outputFormat: 'both',
@@ -904,22 +904,14 @@ export async function generateNoticeOnlyPack(
 
   if (jurisdiction === 'england-wales') {
     const { evictionCase } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
-    // Section 8 or Section 21
+
+    // JURISDICTION GUARD: Section 21 is England-only
     if (evictionCase.case_type === 'no_fault') {
-      const section21Doc = await generateDocument({
-        templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
-        data: evictionCase,
-        isPreview: false,
-        outputFormat: 'both',
-      });
-      documents.push({
-        title: 'Section 21 Notice - Form 6A',
-        description: 'No-fault eviction notice',
-        category: 'notice',
-        html: section21Doc.html,
-        pdf: section21Doc.pdf,
-        file_name: 'section21_form6a.pdf',
-      });
+      throw new Error(
+        'Section 21 is not available for england-wales jurisdiction. ' +
+        'Section 21 (no-fault eviction) is England-only. ' +
+        'For england-wales jurisdiction, use Section 8 (fault-based) instead.'
+      );
     } else {
       const section8Doc = await generateSection8Notice(
         {
