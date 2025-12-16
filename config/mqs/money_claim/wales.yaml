@@ -1,0 +1,301 @@
+# config/mqs/money_claim/wales.yaml
+#
+# WALES Money Claim (County Court Process)
+# Split from england-wales.yaml as part of canonical jurisdiction implementation
+# Version 2.0.0 - Wales jurisdiction
+
+__meta:
+  version: "2.0.0"
+  effective_from: "2025-12-16"
+  last_updated: "2025-12-16"
+  legal_review_date: "2025-12-16"
+  jurisdiction: "wales"
+  product: "money_claim"
+
+id: money_claim_wales_v2
+product: money_claim
+jurisdiction: wales
+version: "2.0.0"
+
+questions:
+  # 1. Basis of claim
+  - id: basis_of_claim
+    section: Claim Basis
+    question: "What is the basis of your money claim?"
+    inputType: multiselect
+    options:
+      - "Rent arrears"
+      - "Property damage"
+      - "Unpaid utilities or council tax"
+      - "Cleaning and repairs"
+      - "Other contractual debt"
+    helperText: "Select all that apply to your claim"
+    validation:
+      required: true
+    maps_to:
+      - basis_of_claim
+
+  # 2. Claim amount
+  - id: total_claim_amount
+    section: Claim Amount
+    question: "Total amount you are claiming (£)"
+    inputType: currency
+    helperText: "The total amount owed, including all debts listed above"
+    validation:
+      required: true
+      min: 1
+    maps_to:
+      - total_claim_amount
+
+  # 3. Rent arrears breakdown (if applicable)
+  - id: rent_arrears_details
+    section: Rent Arrears
+    question: "Rent arrears breakdown"
+    inputType: group
+    dependsOn:
+      questionId: basis_of_claim
+      value: "Rent arrears"
+    fields:
+      - id: monthly_rent
+        label: "Monthly rent (£)"
+        inputType: currency
+        validation:
+          required: true
+        width: half
+      - id: arrears_amount
+        label: "Total arrears (£)"
+        inputType: currency
+        validation:
+          required: true
+        width: half
+      - id: arrears_from_date
+        label: "Arrears started on"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: last_payment_date
+        label: "Last payment received"
+        inputType: date
+        width: half
+    maps_to:
+      - monthly_rent
+      - arrears_amount
+      - arrears_from_date
+      - last_payment_date
+
+  # 4. Property damage details (if applicable)
+  - id: property_damage_details
+    section: Property Damage
+    question: "Property damage claim details"
+    inputType: group
+    dependsOn:
+      questionId: basis_of_claim
+      value: "Property damage"
+    fields:
+      - id: damage_description
+        label: "Describe the damage"
+        inputType: textarea
+        placeholder: "E.g., Broken kitchen appliances, holes in walls, carpet stains"
+        validation:
+          required: true
+        width: full
+      - id: damage_cost
+        label: "Cost to repair/replace (£)"
+        inputType: currency
+        validation:
+          required: true
+        width: half
+      - id: quotes_obtained
+        label: "Have you obtained repair quotes?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - damage_description
+      - damage_cost
+      - quotes_obtained
+
+  # 5. Property details
+  - id: property_address
+    section: Property
+    question: "Property address"
+    inputType: group
+    helperText: "The rental property related to this claim"
+    fields:
+      - id: property_address_line1
+        label: "Building and street"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: property_address_town
+        label: "Town/City"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: property_address_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - property_address_line1
+      - property_address_town
+      - property_address_postcode
+
+  # 6. Defendant (contract holder) details
+  - id: defendant_details
+    section: Defendant
+    question: "Defendant (contract holder) details"
+    inputType: group
+    helperText: "The person who owes you money (called 'contract holder' in Wales)"
+    fields:
+      - id: tenant_full_name
+        label: "Full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: tenant_address_line1
+        label: "Current address (if known)"
+        inputType: text
+        helperText: "Use last known address if they've moved"
+        validation:
+          required: true
+        width: full
+      - id: tenant_address_town
+        label: "Town/City"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: tenant_address_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - tenant_full_name
+      - tenant_address_line1
+      - tenant_address_town
+      - tenant_address_postcode
+
+  # 7. Claimant (landlord) details
+  - id: claimant_details
+    section: Claimant
+    question: "Claimant (your) details"
+    inputType: group
+    fields:
+      - id: landlord_full_name
+        label: "Full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_line1
+        label: "Address line 1"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_town
+        label: "Town/City"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: landlord_address_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: landlord_phone
+        label: "Phone"
+        inputType: tel
+        validation:
+          required: true
+        width: half
+      - id: landlord_email
+        label: "Email"
+        inputType: email
+        validation:
+          required: true
+        width: half
+      - id: landlord_registration_number
+        label: "Rent Smart Wales registration number"
+        inputType: text
+        helperText: "All landlords in Wales must be registered with Rent Smart Wales"
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - landlord_full_name
+      - landlord_address_line1
+      - landlord_address_town
+      - landlord_address_postcode
+      - landlord_phone
+      - landlord_email
+      - landlord_registration_number
+
+  # 8. Pre-action protocol compliance
+  - id: pre_action_compliance
+    section: Pre-Action Protocol
+    question: "Pre-action protocol compliance"
+    inputType: group
+    helperText: "Before filing a money claim in Wales, you must follow the Pre-Action Protocol"
+    fields:
+      - id: letter_before_claim_sent
+        label: "Have you sent a Letter Before Claim?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: letter_sent_date
+        label: "Date letter sent"
+        inputType: date
+        dependsOn:
+          questionId: letter_before_claim_sent
+          value: true
+        width: half
+      - id: response_deadline_passed
+        label: "Has the response deadline passed (14 days)?"
+        inputType: yes_no
+        dependsOn:
+          questionId: letter_before_claim_sent
+          value: true
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - pre_action.letter_before_claim_sent
+      - pre_action.letter_sent_date
+      - pre_action.response_deadline_passed
+
+  # 9. Court selection
+  - id: preferred_court
+    section: Court
+    question: "Preferred County Court in Wales"
+    inputType: text
+    helperText: "Usually the court nearest to the defendant's address. Wales county courts include Cardiff, Swansea, Newport, Wrexham, and others."
+    placeholder: "E.g., Cardiff Civil and Family Justice Centre"
+    validation:
+      required: true
+    maps_to:
+      - preferred_court
+
+  # 10. Evidence
+  - id: evidence_uploads
+    section: Evidence
+    question: "Upload supporting evidence"
+    inputType: upload
+    helperText: "Occupation contract, rent statements, damage photos, repair quotes, correspondence, Rent Smart Wales registration, etc."
+    validation:
+      required: false
+    maps_to:
+      - evidence.money_claim_evidence_uploaded

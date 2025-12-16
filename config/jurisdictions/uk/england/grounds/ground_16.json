@@ -1,0 +1,133 @@
+{
+  "ground": "16",
+  "type": "discretionary",
+  "category": "employee_letting",
+  "name": "Former Employee of Landlord",
+  "short_description": "Dwelling let to employee, employment has ended",
+  "legal_basis": {
+    "act": "Housing Act 1988",
+    "section": "Schedule 2, Ground 16",
+    "statute_year": "1988"
+  },
+  "requirements": {
+    "employment_letting": {
+      "original_letting": "Dwelling let to tenant as consequence of employment",
+      "employer": "By landlord seeking possession or former landlord",
+      "cessation": "Employment has ceased"
+    },
+    "employer_need": {
+      "requirement": "Landlord reasonably requires dwelling for another employee",
+      "or": "For self to live in relation to employment"
+    }
+  },
+  "notice_period": {
+    "section_8_notice": "2 months minimum",
+    "court_proceedings": "Can be started after 2 months"
+  },
+  "evidence_required": [
+    "Employment contract showing accommodation provided",
+    "Tenancy agreement showing let as consequence of employment",
+    "Evidence of employment cessation (resignation letter, dismissal notice, retirement)",
+    "Evidence of need for new employee (job posting, contract)",
+    "New employee's details and start date",
+    "Statement explaining need for accommodation for new employee"
+  ],
+  "employment_letting_types": {
+    "strong_cases": [
+      "Live-in caretaker/porter accommodation",
+      "Farm worker cottage",
+      "Estate worker housing",
+      "School accommodation for teachers",
+      "Pub manager accommodation",
+      "Hotel staff accommodation"
+    ],
+    "key_factor": "Accommodation essential to employment, not just benefit"
+  },
+  "success_factors": {
+    "high_probability": [
+      "Clear employment contract linking accommodation to job",
+      "Employment definitely ended",
+      "Genuine need for accommodation for new employee",
+      "New employee identified and starting soon",
+      "Accommodation essential for new role",
+      "Similar employment requiring same accommodation",
+      "Reasonable to grant possession"
+    ],
+    "medium_probability": [
+      "Employment link clear but new need less urgent",
+      "New employee not yet hired but role advertised",
+      "Accommodation useful but not essential for new role"
+    ],
+    "low_probability": [
+      "Weak link between accommodation and employment",
+      "No genuine need for new employee",
+      "Long delay since employment ended",
+      "Accommodation not essential to any role",
+      "Alternative accommodation available for new employee",
+      "Dismissal was unfair",
+      "Not reasonable to grant possession"
+    ]
+  },
+  "red_flags": [
+    "Accommodation not mentioned in employment contract",
+    "Employment link is weak or incidental",
+    "No new employee needed",
+    "Long time since employment ended",
+    "Landlord has other accommodation for new employee",
+    "Unfair dismissal",
+    "Retaliatory eviction",
+    "Tenant never actually worked for landlord"
+  ],
+  "typical_timeline": {
+    "notice_period": "2 months",
+    "court_proceedings": "6-10 months",
+    "total": "8-12 months"
+  },
+  "costs": {
+    "court_fee": 355,
+    "bailiff_fee": 130,
+    "legal_costs": "£1,500-£3,000"
+  },
+  "tenant_defenses": [
+    "Accommodation not let as consequence of employment",
+    "Employment has not actually ceased",
+    "No genuine need for new employee",
+    "Alternative accommodation available",
+    "Landlord has no current employment business",
+    "Unfair dismissal proceedings",
+    "Not reasonable to grant possession",
+    "Tenant has nowhere else to go and new employee not imminent"
+  ],
+  "related_grounds": [],
+  "notes": "Ground 16 is DISCRETIONARY and rarely used. Requires clear link between accommodation and employment. Court considers reasonableness including tenant's circumstances and genuine need for new employee. Common in agriculture, hospitality, education sectors.",
+  "case_law": [
+    "Elvidge v Coventry CC [2000] - Must show accommodation let for better performance of duties",
+    "Royal Philanthropic Society v County [1985] - Link between accommodation and employment essential",
+    "Skinner v Geary [1931] - Employment must be reason for letting"
+  ],
+  "court_considerations": [
+    "Was accommodation let as consequence of employment?",
+    "Has employment genuinely ceased?",
+    "Is there genuine need for accommodation for new employee?",
+    "Is new employee identified and starting?",
+    "Is accommodation essential for the new role?",
+    "What is tenant's personal situation?",
+    "Does tenant have alternative accommodation?",
+    "Is possession reasonable and proportionate?",
+    "How long since employment ended?"
+  ],
+  "employment_cessation": {
+    "resignation": "Clear cessation",
+    "dismissal": "Clear cessation (but unfair dismissal may affect reasonableness)",
+    "redundancy": "Clear cessation",
+    "retirement": "Clear cessation",
+    "still_employed": "Ground 16 not available",
+    "suspension": "Usually not cessation"
+  },
+  "service_occupancy": {
+    "note": "Different from Ground 16",
+    "definition": "Occupier is still employee and has service occupancy license (not tenancy)",
+    "possession": "Simpler process if license not tenancy",
+    "key_difference": "Ground 16 for tenancies; license claims are not under Housing Act"
+  }
+}

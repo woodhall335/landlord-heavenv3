@@ -416,7 +416,7 @@ export async function generateSection8Notice(
   }
 
   return generateDocument({
-    templatePath: 'uk/england-wales/templates/eviction/section8_notice.hbs',
+    templatePath: 'uk/england/templates/eviction/section8_notice.hbs',
     data,
     isPreview,
     outputFormat: 'both',

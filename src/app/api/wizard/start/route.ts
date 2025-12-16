@@ -34,7 +34,7 @@ const startWizardSchema = z.object({
     'ast_standard',
     'ast_premium',
   ]),
-  jurisdiction: z.enum(['england-wales', 'scotland', 'northern-ireland']),
+  jurisdiction: z.enum(['england', 'wales', 'scotland', 'northern-ireland']),
   case_id: z.string().uuid().optional(),
 });
 
@@ -69,7 +69,7 @@ const productToCaseType = (product: StartProduct) => {
  */
 const resolveProductTier = (
   product: StartProduct,
-  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland',
+  jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland',
 ): string | null => {
   switch (product) {
     case 'ast_standard':
@@ -100,7 +100,8 @@ const normalizeProduct = (product: StartProduct): ProductType => {
 };
 
 function resolveJurisdiction(product: StartProduct, requested: string): string {
-  if (product === 'money_claim_england_wales') return 'england-wales';
+  // Legacy product routing: money_claim_england_wales defaults to England
+  if (product === 'money_claim_england_wales') return 'england';
   if (product === 'money_claim_scotland') return 'scotland';
   return requested;
 }
@@ -131,7 +132,7 @@ export async function POST(request: Request) {
     // Tier label here is *jurisdiction-aware* (AST vs PRT vs NI tenancy wording)
     const tierLabel = resolveProductTier(
       product as StartProduct,
-      effectiveJurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+      effectiveJurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland',
     );
 
     if (!resolvedCaseType) {
@@ -151,7 +152,8 @@ export async function POST(request: Request) {
             'Full NI support is planned for V2 (Q2 2026).',
           supported: {
             'northern-ireland': ['tenancy_agreement'],
-            'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            wales: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
             scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
           },
         },

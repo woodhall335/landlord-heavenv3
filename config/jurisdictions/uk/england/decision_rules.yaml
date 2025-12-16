@@ -1,0 +1,463 @@
+# England & Wales Housing Law - Decision Rules
+# Based on Housing Act 1988 (as amended by Housing Act 1996)
+# Updated: November 2024
+
+jurisdiction:
+  name: "England & Wales"
+  primary_law: "Housing Act 1988"
+  tenancy_type: "Assured Shorthold Tenancy (AST)"
+
+# SECTION 8 GROUNDS (Fault-based eviction)
+section_8_grounds:
+
+  # MANDATORY GROUNDS (Court must grant possession if proven)
+  mandatory:
+
+    ground_8:
+      title: "Serious rent arrears"
+      notice_period_days: 14
+      court_type: "mandatory"
+      description: "At least 8 weeks' (2 months') rent arrears at both notice and hearing"
+      required_facts:
+        - rent_amount_monthly
+        - arrears_amount
+        - arrears_duration_months
+        - current_arrears_amount
+      eligibility_rules:
+        - "arrears_amount >= (rent_amount_monthly * 2)"
+        - "arrears at time of notice >= 8 weeks rent"
+        - "arrears at time of hearing >= 8 weeks rent"
+      success_probability: 95
+      statute: "Housing Act 1988, Schedule 2, Ground 8"
+
+    ground_1:
+      title: "Landlord previously occupied as only or principal home"
+      notice_period_days: 14
+      court_type: "mandatory"
+      description: "Property was landlord's home before letting"
+      required_facts:
+        - landlord_previous_residence
+        - notice_given_before_tenancy
+      eligibility_rules:
+        - "landlord lived in property before tenancy"
+        - "written notice given to tenant before/at start of tenancy"
+      success_probability: 90
+      statute: "Housing Act 1988, Schedule 2, Ground 1"
+
+    ground_2:
+      title: "Mortgage lender requires possession"
+      notice_period_days: 14
+      court_type: "mandatory"
+      description: "Property is mortgaged and lender requires possession for default"
+      required_facts:
+        - mortgage_exists
+        - lender_demands_possession
+        - notice_given_before_tenancy
+      eligibility_rules:
+        - "property is subject to mortgage granted before tenancy"
+        - "lender is entitled to exercise power of sale"
+        - "lender requires possession to dispose of property"
+        - "written notice given to tenant before/at start of tenancy"
+      success_probability: 85
+      statute: "Housing Act 1988, Schedule 2, Ground 2"
+
+    ground_3:
+      title: "Out of season holiday letting"
+      notice_period_days: 14
+      court_type: "mandatory"
+      description: "Property is let for holiday purposes during off-season"
+      required_facts:
+        - property_type_holiday
+        - seasonal_letting
+        - notice_given_before_tenancy
+      eligibility_rules:
+        - "tenancy is for fixed term not exceeding 8 months"
+        - "property was occupied for holiday purposes in previous 12 months"
+        - "written notice given to tenant before/at start of tenancy"
+      success_probability: 85
+      statute: "Housing Act 1988, Schedule 2, Ground 3"
+
+    ground_4:
+      title: "Out of season student letting"
+      notice_period_days: 14
+      court_type: "mandatory"
+      description: "Property normally let to students, now in vacation period"
+      required_facts:
+        - property_type_student
+        - educational_institution
+        - notice_given_before_tenancy
+      eligibility_rules:
+        - "tenancy is for fixed term not exceeding 12 months"
+        - "property was let to student in previous 12 months"
+        - "written notice given to tenant before/at start of tenancy"
+      success_probability: 85
+      statute: "Housing Act 1988, Schedule 2, Ground 4"
+
+    ground_5:
+      title: "Property required for minister of religion"
+      notice_period_days: 14
+      court_type: "mandatory"
+      description: "Property is held for occupation by minister of religion"
+      required_facts:
+        - property_purpose_religious
+        - minister_requires_residence
+        - notice_given_before_tenancy
+      eligibility_rules:
+        - "property held for occupation by minister of religion"
+        - "possession required for such occupation"
+        - "written notice given to tenant before/at start of tenancy"
+      success_probability: 85
+      statute: "Housing Act 1988, Schedule 2, Ground 5"
+
+    ground_6:
+      title: "Intention to demolish or reconstruct"
+      notice_period_days: 14
+      court_type: "mandatory"
+      description: "Landlord intends to demolish, reconstruct or carry out substantial works"
+      required_facts:
+        - demolition_or_reconstruction_planned
+        - works_description
+        - works_cannot_be_done_with_tenant
+        - notice_given_before_tenancy
+      eligibility_rules:
+        - "landlord intends to demolish or reconstruct building or substantial part"
+        - "OR landlord intends to carry out substantial works"
+        - "work cannot reasonably be carried out without tenant giving up possession"
+        - "written notice given to tenant before/at start of tenancy"
+      success_probability: 80
+      statute: "Housing Act 1988, Schedule 2, Ground 6"
+
+    ground_7:
+      title: "Death of periodic tenant (within 12 months)"
+      notice_period_days: 14
+      court_type: "mandatory"
+      description: "Tenant has died and proceedings begun within 12 months"
+      required_facts:
+        - tenant_deceased
+        - death_date
+        - proceedings_date
+      eligibility_rules:
+        - "tenancy is periodic"
+        - "tenant has died"
+        - "proceedings begun within 12 months of death"
+        - "OR within 12 months of landlord becoming aware of death"
+      success_probability: 90
+      statute: "Housing Act 1988, Schedule 2, Ground 7"
+
+  # DISCRETIONARY GROUNDS (Court may grant possession if reasonable)
+  discretionary:
+
+    ground_10:
+      title: "Rent arrears (some arrears)"
+      notice_period_days: 14
+      court_type: "discretionary"
+      description: "Some rent is unpaid at notice and hearing"
+      required_facts:
+        - rent_amount_monthly
+        - arrears_amount
+        - arrears_duration_months
+      eligibility_rules:
+        - "some rent lawfully due is unpaid at date of notice"
+        - "some rent lawfully due is unpaid at date of hearing"
+      success_probability: 70
+      statute: "Housing Act 1988, Schedule 2, Ground 10"
+      notes: "Requires court to find it reasonable to grant possession"
+
+    ground_11:
+      title: "Persistent delay in paying rent"
+      notice_period_days: 14
+      court_type: "discretionary"
+      description: "Tenant persistently delays paying rent"
+      required_facts:
+        - payment_history
+        - late_payment_instances
+        - late_payment_duration
+      eligibility_rules:
+        - "tenant has persistently delayed paying rent"
+        - "whether or not rent is in arrears at notice/hearing"
+      success_probability: 65
+      statute: "Housing Act 1988, Schedule 2, Ground 11"
+
+    ground_12:
+      title: "Breach of tenancy obligation"
+      notice_period_days: 14
+      court_type: "discretionary"
+      description: "Tenant has broken term of tenancy (other than rent)"
+      required_facts:
+        - breach_type
+        - breach_description
+        - breach_evidence
+        - tenancy_clause_breached
+      eligibility_rules:
+        - "tenant has broken obligation of tenancy"
+        - "OR tenant has failed to perform obligation"
+      success_probability: 70
+      statute: "Housing Act 1988, Schedule 2, Ground 12"
+
+    ground_13:
+      title: "Deterioration of dwelling"
+      notice_period_days: 14
+      court_type: "discretionary"
+      description: "Condition of dwelling has deteriorated due to waste, neglect or default"
+      required_facts:
+        - property_condition
+        - deterioration_description
+        - tenant_responsibility
+        - photographic_evidence
+      eligibility_rules:
+        - "condition of dwelling has deteriorated"
+        - "due to acts of waste by tenant or person residing/lodging"
+        - "OR due to neglect or default of tenant or such person"
+        - "if person other than tenant: tenant has not taken reasonable steps to remove them"
+      success_probability: 75
+      statute: "Housing Act 1988, Schedule 2, Ground 13"
+
+    ground_14:
+      title: "Nuisance or annoyance to neighbors"
+      notice_period_days: 14
+      court_type: "discretionary"
+      description: "Tenant or person residing causing nuisance or convicted of illegal/immoral use"
+      required_facts:
+        - nuisance_type
+        - nuisance_description
+        - affected_parties
+        - evidence_witnesses
+        - police_involvement
+      eligibility_rules:
+        - "tenant or person residing/visiting has been guilty of conduct causing nuisance/annoyance to adjoining occupiers"
+        - "OR tenant or such person convicted of using premises for immoral or illegal purposes"
+        - "OR convicted of arrestable offence in locality"
+      success_probability: 80
+      statute: "Housing Act 1988, Schedule 2, Ground 14"
+
+    ground_14a:
+      title: "Domestic violence"
+      notice_period_days: 14
+      court_type: "discretionary"
+      description: "Dwelling occupied by married couple/civil partners and one partner has left due to violence"
+      required_facts:
+        - relationship_type
+        - violence_occurred
+        - partner_left_property
+        - evidence_of_violence
+      eligibility_rules:
+        - "dwelling was let to married couple or civil partners"
+        - "one partner has left because of violence from other partner"
+        - "court satisfied leaving partner unlikely to return"
+      success_probability: 85
+      statute: "Housing Act 1988, Schedule 2, Ground 14A"
+
+    ground_15:
+      title: "Deterioration of furniture"
+      notice_period_days: 14
+      court_type: "discretionary"
+      description: "Condition of furniture has deteriorated due to ill-treatment"
+      required_facts:
+        - furniture_condition
+        - deterioration_description
+        - tenant_responsibility
+      eligibility_rules:
+        - "condition of furniture has deteriorated"
+        - "due to ill-treatment by tenant or person residing/lodging"
+        - "if person other than tenant: tenant has not taken reasonable steps to remove them"
+      success_probability: 70
+      statute: "Housing Act 1988, Schedule 2, Ground 15"
+
+    ground_17:
+      title: "False statement induced grant of tenancy"
+      notice_period_days: 14
+      court_type: "discretionary"
+      description: "Tenancy obtained by false statement made knowingly or recklessly by tenant"
+      required_facts:
+        - false_statement_description
+        - statement_made_by
+        - material_influence
+      eligibility_rules:
+        - "tenancy was granted on basis of false statement"
+        - "made knowingly or recklessly by tenant or person acting at tenant's instigation"
+      success_probability: 80
+      statute: "Housing Act 1988, Schedule 2, Ground 17"
+
+# SECTION 21 (No-fault eviction - being phased out)
+section_21:
+  title: "No-fault possession (Section 21)"
+  description: "Landlord can end tenancy without giving reason after fixed term"
+  notice_period_days: 60
+  form_required: "Form 6A"
+
+  eligibility_requirements:
+    deposit_protection:
+      rule: "Deposit must be protected in government scheme"
+      check: "deposit_protected == true"
+      check_date: "within 30 days of receipt"
+
+    prescribed_information:
+      rule: "Tenant must have been given prescribed information"
+      check: "prescribed_info_given == true"
+      check_date: "within 30 days of deposit receipt"
+
+    gas_safety:
+      rule: "Gas Safety Certificate provided at start of tenancy"
+      check: "gas_safety_cert_provided == true"
+      applicable_if: "property has gas appliances"
+
+    epc:
+      rule: "Energy Performance Certificate provided"
+      check: "epc_provided == true"
+      minimum_rating: "E"
+
+    how_to_rent:
+      rule: "How to Rent guide provided at start of tenancy"
+      check: "how_to_rent_guide_provided == true"
+
+    licensing:
+      rule: "Property properly licensed if HMO or selective licensing area"
+      check: "property_licensed == true OR license_not_required == true"
+
+    prohibited_fees:
+      rule: "No prohibited fees charged (Tenant Fees Act 2019)"
+      check: "no_prohibited_fees == true"
+      check_date: "from 1 June 2019"
+
+    retaliatory_eviction:
+      rule: "Not within 6 months of tenant requesting repairs or complaining to local authority"
+      check: "not retaliatory == true"
+
+    timing:
+      rule: "Cannot be served in first 4 months of tenancy"
+      check: "tenancy_duration_months >= 4"
+
+  compliance_checklist:
+    - "Deposit protected in scheme"
+    - "Prescribed information given"
+    - "Gas Safety Certificate provided"
+    - "EPC provided (rating E or above)"
+    - "How to Rent guide provided"
+    - "Property licensed if required"
+    - "No prohibited fees charged"
+    - "Not retaliatory eviction"
+    - "At least 4 months since start of tenancy"
+    - "At least 2 months notice given"
+
+  red_flags:
+    - name: "Unprotected deposit"
+      severity: "critical"
+      consequence: "Section 21 invalid - tenant can claim 1-3x deposit"
+
+    - name: "No prescribed information"
+      severity: "critical"
+      consequence: "Section 21 invalid"
+
+    - name: "Unlicensed HMO"
+      severity: "critical"
+      consequence: "Section 21 invalid + criminal offence + rent repayment order"
+
+    - name: "EPC below E rating"
+      severity: "critical"
+      consequence: "Section 21 invalid + cannot legally let"
+
+    - name: "Retaliatory eviction"
+      severity: "critical"
+      consequence: "Section 21 invalid for 6 months"
+
+# NOTICE PERIOD CALCULATIONS
+notice_periods:
+  section_8:
+    mandatory_grounds: 14  # 2 weeks for mandatory grounds
+    discretionary_grounds: 14  # 2 weeks for discretionary grounds
+    ground_14_14a: 14  # Can use Procedure for Possession under Ground 14/14A (immediate notice in extreme cases)
+
+  section_21:
+    standard: 60  # 2 months for Section 21
+    periodic_tenancy: 60  # Must be at least one rental period if monthly
+
+# COURT PROCEDURES
+court_procedures:
+  accelerated_possession:
+    applicable_to: "Section 21 only"
+    requirements:
+      - "AST tenancy"
+      - "Valid Section 21 notice"
+      - "All compliance requirements met"
+      - "Tenant has not left"
+    timeline_days: 42
+    form: "N5B"
+    benefits: "No court hearing required if tenant doesn't respond"
+
+  standard_possession:
+    applicable_to: "Section 8 and Section 21"
+    form: "N5"
+    hearing_timeline_days: 56
+    requires_hearing: true
+
+# HMO LICENSING
+hmo_licensing:
+  mandatory_licensing:
+    trigger: "3+ storeys AND 5+ occupants forming 2+ households"
+    statute: "Housing Act 2004, Part 2"
+
+  additional_licensing:
+    trigger: "Council-specific scheme for HMOs not covered by mandatory"
+    check: "council_data.additional_licensing == true"
+
+  selective_licensing:
+    trigger: "Council-specific scheme for all private rented properties in area"
+    check: "council_data.selective_licensing == true"
+
+  consequences_unlicensed:
+    - "Unlimited fine"
+    - "Rent Repayment Order (up to 12 months rent)"
+    - "Cannot serve Section 21 notice"
+    - "Cannot evict tenant"
+    - "Criminal record"
+
+# COMPLIANCE REQUIREMENTS
+compliance:
+  right_to_rent:
+    description: "Immigration checks required before granting tenancy"
+    statute: "Immigration Act 2014"
+    deadline: "Before tenancy starts"
+    penalty: "£3,000 per illegal occupant"
+
+  electrical_safety:
+    description: "Electrical Installation Condition Report required"
+    frequency_years: 5
+    statute: "Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020"
+    deadline: "From 1 June 2020"
+
+  smoke_alarms:
+    description: "Working smoke alarm on each storey"
+    statute: "Smoke and Carbon Monoxide Alarm (England) Regulations 2015"
+
+  carbon_monoxide:
+    description: "CO alarm in any room with solid fuel appliance"
+    statute: "Smoke and Carbon Monoxide Alarm (England) Regulations 2015"
+
+  deposit_protection:
+    description: "Deposit must be protected in government scheme within 30 days"
+    schemes:
+      - "Deposit Protection Service (DPS)"
+      - "MyDeposits"
+      - "Tenancy Deposit Scheme (TDS)"
+    deadline_days: 30
+    penalty: "1-3x deposit amount"
+
+# EVICTION TIMELINE
+typical_timelines:
+  section_8_rent_arrears:
+    notice_period: 14
+    court_process: 56
+    bailiff_wait: 28
+    total_days: 98
+
+  section_21_accelerated:
+    notice_period: 60
+    court_process: 42
+    bailiff_wait: 28
+    total_days: 130
+
+  section_21_standard:
+    notice_period: 60
+    court_process: 56
+    bailiff_wait: 28
+    total_days: 144

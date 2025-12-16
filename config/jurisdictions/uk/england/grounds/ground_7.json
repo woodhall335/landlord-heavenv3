@@ -1,0 +1,98 @@
+{
+  "ground": "7",
+  "type": "discretionary",
+  "category": "death_of_tenant",
+  "name": "Death of Periodic Tenant",
+  "short_description": "Tenancy inherited on death but landlord seeks possession",
+  "legal_basis": {
+    "act": "Housing Act 1988",
+    "section": "Schedule 2, Ground 7",
+    "statute_year": "1988"
+  },
+  "requirements": {
+    "tenancy_type": {
+      "must_be": "Periodic assured tenancy",
+      "cannot_be": "Fixed term"
+    },
+    "death_inheritance": {
+      "original_tenant": "Has died",
+      "current_occupier": "Inherited tenancy by succession",
+      "timing": "Proceedings must start within 12 months of death or landlord's knowledge"
+    },
+    "notice_timing": {
+      "maximum": "Proceedings must begin within 12 months of death",
+      "or": "12 months from when landlord became aware of death"
+    }
+  },
+  "notice_period": {
+    "section_8_notice": "2 months minimum",
+    "court_proceedings": "Must be within 12 months of death/knowledge"
+  },
+  "evidence_required": [
+    "Death certificate of original tenant",
+    "Proof of succession (family relationship, evidence of residence)",
+    "Tenancy agreement showing periodic tenancy",
+    "Date landlord became aware of death",
+    "Evidence of who succeeded to tenancy"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Proceedings started within 12 months",
+      "Clear evidence of death and succession",
+      "Successor has alternative accommodation",
+      "Property unsuitable for successor",
+      "Landlord has genuine need for property"
+    ],
+    "medium_probability": [
+      "Timing borderline (close to 12 months)",
+      "Successor has some ties to property",
+      "Reasonableness balanced"
+    ],
+    "low_probability": [
+      "Proceedings started after 12 months",
+      "Successor has strong ties to property",
+      "Successor has no alternative accommodation",
+      "Successor is vulnerable (elderly, disabled)",
+      "Court considers it unreasonable to grant possession"
+    ]
+  },
+  "red_flags": [
+    "More than 12 months since death/knowledge",
+    "Successor has lived there for many years",
+    "Successor is elderly or vulnerable",
+    "No genuine reason for seeking possession",
+    "Successor has nowhere else to go"
+  ],
+  "typical_timeline": {
+    "notice_period": "2 months",
+    "court_proceedings": "4-8 months",
+    "total": "6-10 months",
+    "deadline": "Must start within 12 months of death"
+  },
+  "costs": {
+    "court_fee": 355,
+    "bailiff_fee": 130,
+    "legal_costs": "£1,500-£3,000"
+  },
+  "tenant_defenses": [
+    "More than 12 months has passed",
+    "Not reasonable to grant possession",
+    "Successor has strong ties to property",
+    "No alternative accommodation available",
+    "Personal circumstances (age, health, disability)",
+    "Landlord has no pressing need"
+  ],
+  "related_grounds": [],
+  "notes": "Ground 7 is DISCRETIONARY - court must consider if reasonable to grant possession. Time limit is strict - claims fail if outside 12 months. Courts sympathetic to vulnerable successors.",
+  "case_law": [
+    "Tickner v Hearn [1960] - Reasonableness must be considered",
+    "Battlespring Ltd v Gates [1983] - 12 month limit strictly applied"
+  ],
+  "court_considerations": [
+    "When did death occur and when did landlord know?",
+    "Has 12 month limit been exceeded?",
+    "What is successor's personal situation?",
+    "Does successor have alternative accommodation?",
+    "Is it reasonable to grant possession given all circumstances?"
+  ]
+}

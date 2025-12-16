@@ -9,9 +9,9 @@ import { setFactPath } from '@/lib/case-facts/mapping';
 export type ProductType = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 
 export interface MasterQuestionSet {
-  id: string; // e.g. "notice_only_england_wales"
+  id: string; // e.g. "notice_only_england"
   product: ProductType;
-  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
+  jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland';
   version: string; // e.g. "1.0.0"
   questions: ExtendedWizardQuestion[];
 }

@@ -1,0 +1,298 @@
+{{! N5 Possession Claim Form - County Court }}
+{{! For use in England & Wales }}
+
+CLAIM FORM
+For possession of property
+
+In the {{court_name}} County Court
+Claim No: {{claim_number}}
+
+---
+
+## CLAIMANT (Landlord)
+**Name:** {{landlord_full_name}}
+**Address:** {{landlord_address}}
+{{#if landlord_phone}}**Phone:** {{landlord_phone}}{{/if}}
+{{#if landlord_email}}**Email:** {{landlord_email}}{{/if}}
+
+{{#if agent_name}}
+**Claimant's Solicitor/Agent:**
+**Name:** {{agent_name}}
+**Address:** {{agent_address}}
+**Ref:** {{agent_reference}}
+**Phone:** {{agent_phone}}
+**Email:** {{agent_email}}
+{{/if}}
+
+---
+
+## DEFENDANT (Tenant)
+**Name:** {{tenant_full_name}}
+**Address:** {{property_address}}
+
+---
+
+## PROPERTY
+The claimant claims possession of:
+
+**{{property_address}}**
+
+which the defendant occupies.
+
+---
+
+## TENANCY DETAILS
+
+**Type of tenancy:** {{tenancy_type}}
+{{#if is_assured_shorthold}}Assured Shorthold Tenancy{{/if}}
+{{#if is_assured}}Assured Tenancy{{/if}}
+
+**Tenancy start date:** {{tenancy_start_date}}
+
+{{#if is_fixed_term}}
+**Fixed term:** From {{fixed_term_start}} to {{fixed_term_end}}
+{{#if fixed_term_expired}}(Expired - now periodic){{/if}}
+{{else}}
+**Periodic tenancy:** {{rent_period}}
+{{/if}}
+
+**Rent:** £{{rent_amount}} per {{rent_period}}
+**Payment due:** {{rent_due_day}}
+
+{{#if deposit_amount}}
+**Deposit:** £{{deposit_amount}}
+{{#if deposit_protected}}Protected with {{deposit_scheme}}{{/if}}
+{{/if}}
+
+---
+
+## GROUNDS FOR POSSESSION
+
+The claimant seeks possession on the following ground(s):
+
+{{#each grounds}}
+### Ground {{this.number}}: {{this.name}}
+{{#if this.is_mandatory}}**(MANDATORY GROUND)**{{else}}**(DISCRETIONARY GROUND)**{{/if}}
+
+**Particulars:**
+{{this.particulars}}
+
+**Evidence:**
+{{this.evidence}}
+
+---
+{{/each}}
+
+{{#if section_21_used}}
+### Section 21 Notice
+A valid Section 21 notice was served on {{section_21_date}} requiring possession on {{section_21_expiry_date}}.
+{{/if}}
+
+{{#if section_8_used}}
+### Section 8 Notice
+A Section 8 notice was served on {{section_8_date}} citing Ground(s) {{section_8_grounds}} and expiring on {{section_8_expiry_date}}.
+{{/if}}
+
+---
+
+## RENT ARREARS (if applicable)
+
+{{#if rent_arrears}}
+**Current arrears:** £{{current_arrears}} as of {{arrears_date}}
+
+**Breakdown:**
+{{#each arrears_breakdown}}
+- {{this.period}}: £{{this.amount}}
+{{/each}}
+
+**Total arrears:** £{{total_arrears}}
+
+**Less any payments made:** £{{payments_made}}
+**Net arrears claimed:** £{{net_arrears}}
+{{/if}}
+
+---
+
+## WHAT THE CLAIMANT WANTS
+
+The claimant asks the court to order that:
+
+1. **Possession** of the property at {{property_address}}
+
+{{#if rent_arrears}}
+2. **Payment** of rent arrears of £{{net_arrears}}
+
+3. **Payment** of ongoing rent (mesne profits) from {{arrears_date}} until possession at the rate of £{{rent_amount}} per {{rent_period}}
+{{/if}}
+
+4. **Costs** of this claim
+
+{{#if other_relief}}
+5. {{other_relief}}
+{{/if}}
+
+---
+
+## PARTICULARS OF CLAIM
+
+### 1. The Tenancy
+{{particulars_tenancy}}
+
+### 2. The Rent
+{{particulars_rent}}
+
+{{#if rent_arrears}}
+### 3. Rent Arrears
+{{particulars_arrears}}
+
+The defendant has failed to pay rent due under the tenancy agreement. Despite demands for payment, the arrears remain outstanding.
+
+A rent schedule showing the arrears is attached as Schedule 1.
+{{/if}}
+
+{{#if breach_of_tenancy}}
+### 4. Breach of Tenancy
+{{particulars_breach}}
+{{/if}}
+
+{{#if antisocial_behavior}}
+### 5. Antisocial Behaviour
+{{particulars_asb}}
+{{/if}}
+
+### {{next_paragraph_number}}. Notice
+{{particulars_notice}}
+
+{{#if section_21_used}}
+A valid Section 21 notice was served in accordance with the Housing Act 1988. All statutory requirements were met including deposit protection, provision of How to Rent guide, gas safety certificate, and EPC. The notice period has expired.
+{{/if}}
+
+{{#if section_8_used}}
+A Section 8 notice was served in accordance with the Housing Act 1988 Section 8. The notice specified the grounds for possession and gave the required notice period. The notice period has expired.
+{{/if}}
+
+### {{final_paragraph_number}}. Relief Sought
+For the reasons set out above, the claimant seeks an order for possession and {{#if rent_arrears}}payment of arrears and {{/if}}costs.
+
+---
+
+## STATEMENT OF TRUTH
+
+I believe that the facts stated in these particulars of claim are true. I understand that proceedings for contempt of court may be brought against anyone who makes, or causes to be made, a false statement in a document verified by a statement of truth without an honest belief in its truth.
+
+**Signed:** _________________________
+
+{{#if agent_name}}
+**Position:** Solicitor/Agent for the Claimant
+**Name:** {{agent_name}}
+**Date:** {{claim_date}}
+{{else}}
+**Position:** Claimant
+**Name:** {{landlord_full_name}}
+**Date:** {{claim_date}}
+{{/if}}
+
+---
+
+## COURT FEE
+
+**Court fee paid:** £{{court_fee}}
+**Payment method:** {{payment_method}}
+**Payment reference:** {{payment_reference}}
+
+---
+
+## DEFENDANT'S NAME AND ADDRESS FOR SERVICE
+
+**Name:** {{tenant_full_name}}
+**Address:** {{property_address}}
+
+---
+
+## SCHEDULES
+
+### Schedule 1: Rent Account
+
+| Period | Rent Due | Rent Paid | Arrears | Running Total |
+|--------|----------|-----------|---------|---------------|
+{{#each rent_schedule}}
+| {{this.period}} | £{{this.due}} | £{{this.paid}} | £{{this.arrears}} | £{{this.total}} |
+{{/each}}
+
+**Total arrears as of {{arrears_date}}: £{{total_arrears}}**
+
+---
+
+### Schedule 2: Supporting Documents
+
+The following documents are attached or will be filed:
+
+1. {{#if tenancy_agreement}}☑{{else}}☐{{/if}} Tenancy Agreement
+2. {{#if section_8_notice}}☑{{else}}☐{{/if}} Section 8 Notice (with proof of service)
+3. {{#if section_21_notice}}☑{{else}}☐{{/if}} Section 21 Notice (with proof of service)
+4. {{#if rent_statements}}☑{{else}}☐{{/if}} Rent statements/ledger
+5. {{#if deposit_protection}}☑{{else}}☐{{/if}} Deposit protection certificate
+6. {{#if gas_safety}}☑{{else}}☐{{/if}} Gas safety certificate
+7. {{#if epc}}☑{{else}}☐{{/if}} Energy Performance Certificate
+8. {{#if how_to_rent}}☑{{else}}☐{{/if}} How to Rent guide (proof of service)
+{{#if additional_evidence}}
+9. {{additional_evidence}}
+{{/if}}
+
+---
+
+## HEARING INFORMATION
+
+**The court will send you a notice of the hearing date.**
+
+**Defendant:** If you wish to defend this claim, you must complete the defence form and return it to the court within 14 days of service of this claim.
+
+**Standard possession hearing time:** 10 minutes (unless defendant files defence requiring longer hearing)
+
+---
+
+## NOTES FOR DEFENDANT
+
+### You must act quickly
+
+If you do not respond to this claim within 14 days, the claimant may obtain a possession order without a hearing.
+
+### Get advice
+
+Contact Shelter (0808 800 4444) or Citizens Advice (0800 144 8848) immediately. You may be entitled to free legal advice.
+
+### File a defence
+
+If you dispute the claim, complete Form N11 (Defence) and return it to the court within 14 days. Send a copy to the claimant's solicitor/agent.
+
+### Continue paying rent
+
+Keep paying rent. If you stop, the arrears will increase and strengthen the claimant's case.
+
+### Attend the hearing
+
+If a hearing is listed, you MUST attend. If you don't, the court may make an order in your absence.
+
+### Possible outcomes
+
+The court may:
+- Grant immediate possession
+- Grant suspended possession (allowing you to stay if you meet conditions like paying arrears)
+- Dismiss the claim
+- Adjourn for further evidence
+
+---
+
+**This claim was generated by Landlord Heaven ({{site_domain}})**
+**Document Reference:** {{document_id}}
+**Generated:** {{generation_timestamp}}
+**QA Score:** {{qa_score}}/100
+
+---
+
+**LEGAL REFERENCES:**
+- Civil Procedure Rules Part 55 (Possession Claims)
+- Housing Act 1988 (Assured and Assured Shorthold Tenancies)
+- Practice Direction 55A
+
+**COURT FORM:** This is based on Form N5 for possession claims

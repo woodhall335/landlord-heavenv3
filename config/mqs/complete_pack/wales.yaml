@@ -1,0 +1,248 @@
+# config/mqs/complete_pack/wales.yaml
+#
+# WALES-ONLY Eviction Pack (Renting Homes Wales Act 2016 - Section 173)
+# Split from england-wales.yaml as part of canonical jurisdiction implementation
+# Version 2.0.0 - Wales jurisdiction
+
+__meta:
+  version: "2.0.0"
+  effective_from: "2025-12-16"
+  last_updated: "2025-12-16"
+  legal_review_date: "2025-12-16"
+  jurisdiction: "wales"
+  product: "complete_pack"
+
+id: complete_pack_wales_v2
+product: complete_pack
+jurisdiction: wales
+version: "2.0.0"
+
+questions:
+  # 1. Eviction route selection (Wales: Section 173 or fault-based)
+  - id: eviction_route
+    section: Eviction Type
+    question: "Which eviction route are you using?"
+    inputType: select
+    options:
+      - "Section 173 (no-fault notice)"
+      - "Breach of contract (fault-based)"
+    helperText: "Wales uses Section 173 notices under the Renting Homes (Wales) Act 2016. Section 21 does NOT apply in Wales."
+    validation:
+      required: true
+    maps_to:
+      - selected_notice_route
+
+  # ============================================================
+  # SECTION 173 QUESTIONS (WALES NO-FAULT)
+  # ============================================================
+
+  - id: section173_compliance
+    section: Section 173 Compliance
+    question: "Section 173 compliance checks"
+    inputType: group
+    routes:
+      - wales_section_173
+    dependsOn:
+      questionId: eviction_route
+      value: "Section 173 (no-fault notice)"
+    helperText: "All must be YES to use Section 173 no-fault possession."
+    fields:
+      - id: deposit_protected
+        label: "Deposit protected within 30 days?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: prescribed_info_served
+        label: "Prescribed information served?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: written_statement_provided
+        label: "Written statement of contract provided?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: fitness_for_habitation
+        label: "Property meets fitness for human habitation?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: six_month_minimum_passed
+        label: "At least 6 months since occupation began?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - wales_section173.deposit_protected
+      - wales_section173.prescribed_info_served
+      - wales_section173.written_statement_provided
+      - wales_section173.fitness_for_habitation
+      - wales_section173.six_month_minimum_passed
+
+  # ============================================================
+  # FAULT-BASED QUESTIONS (WALES)
+  # ============================================================
+
+  - id: wales_breach_grounds
+    section: Breach Grounds
+    question: "What breach of contract are you relying on?"
+    inputType: multiselect
+    routes:
+      - wales_fault_based
+    dependsOn:
+      questionId: eviction_route
+      value: "Breach of contract (fault-based)"
+    options:
+      - "Rent arrears (2 months or more)"
+      - "Persistent rent arrears"
+      - "Breach of contract terms"
+      - "Anti-social behavior"
+      - "Damage to property"
+      - "False statement to obtain tenancy"
+    helperText: "Select all breach grounds that apply under Renting Homes (Wales) Act 2016."
+    validation:
+      required: true
+    maps_to:
+      - wales_breach_grounds
+
+  - id: wales_breach_details
+    section: Breach Evidence
+    question: "Provide details for your breach grounds"
+    inputType: textarea
+    routes:
+      - wales_fault_based
+    dependsOn:
+      questionId: eviction_route
+      value: "Breach of contract (fault-based)"
+    helperText: "Describe the facts supporting each breach. Be specific with dates and evidence."
+    placeholder: "E.g., Rent arrears: £2,400 owed, representing 8 weeks unpaid rent. Last payment 01/11/2025."
+    validation:
+      required: true
+    maps_to:
+      - wales_breach_details
+
+  # ============================================================
+  # COMMON EVICTION PACK QUESTIONS
+  # ============================================================
+
+  - id: property_address
+    section: Property
+    question: "Property address"
+    inputType: group
+    helperText: "The rental property being repossessed"
+    fields:
+      - id: property_address_line1
+        label: "Building and street"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: property_address_town
+        label: "Town/City"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: property_address_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - property_address_line1
+      - property_address_town
+      - property_address_postcode
+
+  - id: tenancy_start_date
+    section: Tenancy
+    question: "Occupation contract start date"
+    inputType: date
+    helperText: "When the current occupation contract began"
+    validation:
+      required: true
+    maps_to:
+      - tenancy_start_date
+
+  - id: contract_holder_details
+    section: Contract Holder
+    question: "Lead contract holder details"
+    inputType: group
+    helperText: "In Wales, tenants are called 'contract holders'"
+    fields:
+      - id: tenant_full_name
+        label: "Full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: tenant_email
+        label: "Email"
+        inputType: email
+        width: half
+      - id: tenant_phone
+        label: "Phone"
+        inputType: tel
+        width: half
+    maps_to:
+      - tenant_full_name
+      - tenant_email
+      - tenant_phone
+
+  - id: landlord_details
+    section: Landlord
+    question: "Landlord details"
+    inputType: group
+    fields:
+      - id: landlord_full_name
+        label: "Full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_line1
+        label: "Address line 1"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_town
+        label: "Town/City"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: landlord_address_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: landlord_registration_number
+        label: "Rent Smart Wales registration number"
+        inputType: text
+        helperText: "All landlords in Wales must be registered with Rent Smart Wales"
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - landlord_full_name
+      - landlord_address_line1
+      - landlord_address_town
+      - landlord_address_postcode
+      - landlord_registration_number
+
+  - id: evidence_uploads
+    section: Evidence
+    question: "Upload supporting documents"
+    inputType: upload
+    helperText: "Occupation contract, notice served, deposit certificate, rent statements, Rent Smart Wales registration, etc."
+    validation:
+      required: false
+    maps_to:
+      - evidence.pack_documents_uploaded
