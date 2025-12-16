@@ -73,11 +73,38 @@ export async function GET(
     console.log('[NOTICE-PREVIEW-API] Selected route:', wizardFacts.selected_notice_route);
 
     // Determine jurisdiction and notice type
-    const jurisdiction = caseRow.jurisdiction as 'england' | 'wales' | 'scotland' | 'england-wales';
-    const selected_route =
+    let jurisdiction = caseRow.jurisdiction as 'england' | 'wales' | 'scotland' | 'england-wales';
+
+    // Determine selected route with jurisdiction-aware fallback
+    let selected_route =
       wizardFacts.selected_notice_route ||
-      wizardFacts.route_recommendation?.recommended_route ||
-      'section_8';
+      wizardFacts.route_recommendation?.recommended_route;
+
+    // Apply jurisdiction-aware default if no route specified
+    if (!selected_route) {
+      if (jurisdiction === 'scotland') {
+        selected_route = 'notice_to_leave';
+      } else if (jurisdiction === 'wales') {
+        selected_route = 'wales_section_173';
+      } else {
+        selected_route = 'section_8';
+      }
+      console.log(`[NOTICE-PREVIEW-API] No route specified, using jurisdiction default: ${selected_route}`);
+    }
+
+    // DEFENSIVE FALLBACK: Fix jurisdiction based on selected_route
+    // (In case E2E test or wizard created case with wrong jurisdiction)
+    if (selected_route?.startsWith('wales_')) {
+      if (jurisdiction !== 'wales') {
+        console.warn(`[NOTICE-PREVIEW-API] Jurisdiction mismatch: selected_route is ${selected_route} but jurisdiction is ${jurisdiction}. Overriding to 'wales'.`);
+        jurisdiction = 'wales';
+      }
+    } else if (selected_route === 'notice_to_leave') {
+      if (jurisdiction !== 'scotland') {
+        console.warn(`[NOTICE-PREVIEW-API] Jurisdiction mismatch: selected_route is ${selected_route} but jurisdiction is ${jurisdiction}. Overriding to 'scotland'.`);
+        jurisdiction = 'scotland';
+      }
+    }
 
     const documents: NoticeOnlyDocument[] = [];
 

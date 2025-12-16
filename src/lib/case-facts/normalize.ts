@@ -749,6 +749,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   const section8Grounds = getFirstValue(wizard, [
     'case_facts.issues.section8_grounds.selected_grounds',
     'section8_grounds',
+    'section8_grounds_selection',
     'selected_grounds',
   ]);
   if (Array.isArray(section8Grounds)) {
@@ -1706,7 +1707,12 @@ const SECTION8_GROUND_DEFINITIONS: Record<number | string, {
  * Build grounds array from wizard facts with proper structure for Form 3 compliance
  */
 function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any>): any[] {
-  const selectedGrounds = getWizardValue(wizard, 'section8_grounds');
+  const selectedGrounds = getFirstValue(wizard, [
+    'case_facts.issues.section8_grounds.selected_grounds',
+    'section8_grounds',
+    'section8_grounds_selection',
+    'selected_grounds',
+  ]);
 
   if (!selectedGrounds || (Array.isArray(selectedGrounds) && selectedGrounds.length === 0)) {
     return [];
