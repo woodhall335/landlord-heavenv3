@@ -405,6 +405,12 @@ async function submitWizardAnswers(caseId: string, answers: Record<string, unkno
 
   const existingFacts = (existing?.collected_facts as Record<string, unknown> | null | undefined) ?? {};
 
+  const existingMeta =
+    typeof (existingFacts as Record<string, unknown>).__meta === 'object' &&
+    (existingFacts as Record<string, unknown>).__meta !== null
+      ? ((existingFacts as Record<string, unknown>).__meta as Record<string, unknown>)
+      : {};
+
   const { error } = await supabase
     .from('cases')
     .update({
@@ -412,9 +418,7 @@ async function submitWizardAnswers(caseId: string, answers: Record<string, unkno
         ...existingFacts,
         ...answers,
         __meta: {
-          ...(typeof (existingFacts as any).__meta === 'object' && (existingFacts as any).__meta
-            ? ((existingFacts as any).__meta as Record<string, unknown>)
-            : {}),
+          ...existingMeta,
           product: 'notice_only',
         },
       },
@@ -447,13 +451,111 @@ async function generatePreviewPDF(caseId: string): Promise<Buffer> {
 
 /**
  * Try to load pdf-parse (optional dependency).
- * IMPORTANT: pdf-parse v2+ is ESM-only, so we must use dynamic import().
+ * Supports:
+ *  - classic function export (older pdf-parse)
+ *  - class export (PDFParse) with load()/getText() across different builds
  */
-async function tryLoadPdfParse(): Promise<((data: Buffer | Uint8Array) => Promise<any>) | null> {
+async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: string }>) | null> {
   try {
     const mod: any = await import('pdf-parse');
-    const fn = mod?.default ?? mod;
-    return typeof fn === 'function' ? (fn as (data: Buffer | Uint8Array) => Promise<any>) : null;
+
+    // ---------------------------
+    // Shape A: classic function export
+    // ---------------------------
+    const fnCandidates = [mod?.default, mod, mod?.default?.default];
+    const fn = fnCandidates.find((c) => typeof c === 'function');
+    if (fn) {
+      return async (data: Buffer) => fn(data);
+    }
+
+    // ---------------------------
+    // Shape B: class export (your current install)
+    // ---------------------------
+    if (typeof mod?.PDFParse === 'function') {
+      return async (data: Buffer) => {
+        const verbosity =
+          mod?.VerbosityLevel?.ERRORS ??
+          mod?.VerbosityLevel?.WARNINGS ??
+          mod?.VerbosityLevel?.SILENT ??
+          0;
+
+        const parser = new mod.PDFParse({ verbosity });
+
+        const uint8 = data instanceof Uint8Array ? data : new Uint8Array(data);
+
+        // Helper: try a call, but if it fails with “no url parameter”, keep trying shapes.
+        const tryCall = async (label: string, f: () => Promise<any>) => {
+          try {
+            return await f();
+          } catch (e: any) {
+            const msg = e?.message ? String(e.message) : String(e);
+            // rethrow with label for debugging
+            throw new Error(`${label}: ${msg}`);
+          }
+        };
+
+        // 1) Some builds support getText(input) directly (no load step)
+        if (typeof parser.getText === 'function' && parser.getText.length >= 1) {
+          const shapes = [
+            uint8,
+            data,
+            { data: uint8 },
+            { data },
+            { buffer: uint8 },
+            { buffer: data },
+          ];
+
+          for (const shape of shapes) {
+            try {
+              const out = await tryCall('PDFParse.getText(arg)', async () => parser.getText(shape));
+              return { text: String(out ?? '') };
+            } catch {
+              // keep trying
+            }
+          }
+        }
+
+        // 2) Otherwise: load(...) then getText()
+        if (typeof parser.load !== 'function') {
+          throw new Error('pdf-parse: PDFParse.load() not found');
+        }
+
+        const loadShapes = [
+          uint8,
+          data,
+          { data: uint8 },
+          { data },
+          { buffer: uint8 },
+          { buffer: data },
+        ];
+
+        let lastLoadErr: Error | null = null;
+
+        for (const shape of loadShapes) {
+          try {
+            await tryCall('PDFParse.load(arg)', async () => parser.load(shape));
+            lastLoadErr = null;
+            break;
+          } catch (e: any) {
+            lastLoadErr = e instanceof Error ? e : new Error(String(e));
+          }
+        }
+
+        if (lastLoadErr) {
+          // Surface the most informative error we got.
+          throw lastLoadErr;
+        }
+
+        if (typeof parser.getText !== 'function') {
+          throw new Error('pdf-parse: PDFParse.getText() not found');
+        }
+
+        const text = await tryCall('PDFParse.getText()', async () => parser.getText());
+        return { text: String(text ?? '') };
+      };
+    }
+
+    return null;
   } catch {
     return null;
   }
@@ -502,6 +604,11 @@ async function validatePDF(
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
       warnings.push(`pdf-parse failed (${msg}) - falling back to size/header-only validation`);
+      // fall back instead of failing the whole route
+      if (pdfBuffer.length >= MIN_PDF_SIZE) {
+        warnings.push(`PDF size looks good (${pdfBuffer.length} bytes) - likely valid`);
+      }
+      return { valid: errors.length === 0, errors, warnings };
     }
 
     // Only perform text validation if parsing succeeded
@@ -520,21 +627,14 @@ async function validatePDF(
         }
       }
 
-      // Additional common template-leak patterns (text-only, safe)
-      const leakPatterns = ['{{', '}}', 'undefined', 'NULL', '[object Object]', '****'];
-      for (const pattern of leakPatterns) {
-        if (pdfText.includes(pattern)) {
-          errors.push(`Found template/leak pattern in extracted text: "${pattern}"`);
-        }
-      }
-    } else {
-      // pdf-parse failed, use size-based validation as fallback
-      if (pdfBuffer.length >= MIN_PDF_SIZE) {
-        warnings.push(`PDF size looks good (${pdfBuffer.length} bytes) - likely valid`);
+    // Common template leaks / rendering failures (text-only, safe)
+    const leakPatterns = ['{{', '}}', 'undefined', 'NULL', '[object Object]', '****'];
+    for (const pattern of leakPatterns) {
+      if (pdfText.includes(pattern)) {
+        errors.push(`Found template/leak pattern in extracted text: "${pattern}"`);
       }
     }
   } else {
-    // If pdf-parse isn't available, don't attempt raw-byte scanning for handlebars tokens.
     console.log('    ℹ️  pdf-parse not available - using size/header-only validation');
     warnings.push('pdf-parse not available - text validation skipped (install: npm i -D pdf-parse)');
 
@@ -660,7 +760,7 @@ async function main(): Promise<void> {
     console.log('🎉 SUCCESS: All Notice Only routes work end-to-end!');
     console.log('');
     console.log('✅ All PDFs generated successfully');
-    console.log('✅ All extracted-text validation checks passed');
+    console.log('✅ All extracted-text validation checks passed (when pdf-parse is available)');
     console.log('✅ No obvious undefined/template failures detected');
     console.log('✅ Jurisdiction-specific content verified');
     console.log('');
