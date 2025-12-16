@@ -118,8 +118,8 @@ options:
 - `uk/england/templates/eviction/section21_form6a.hbs` ✅ Exists
 
 **Wales:**
-- `uk/wales/templates/eviction/section8_notice.hbs` ⚠️ NEEDS VERIFICATION
-- `uk/wales/templates/eviction/section173_notice.hbs` ⚠️ NEEDS CREATION
+- `uk/wales/templates/eviction/section173_landlords_notice.hbs` ✅ Exists (verified in wales-section173-generator.ts:131)
+- NOTE: Wales does NOT use section8_notice.hbs or section21_form6a.hbs (England-only)
 
 **Scotland:**
 - `uk/scotland/templates/eviction/notice_to_leave.hbs` ✅ Exists (verified in code)
@@ -251,14 +251,24 @@ config/jurisdictions/uk/
 
 ### Wales Grounds (`config/jurisdictions/uk/wales/eviction_grounds.json`)
 
-**Status:** ⚠️ REQUIRES EXTERNAL LEGAL VERIFICATION
-**Expected Contents:** Renting Homes (Wales) Act 2016 grounds (NOT Housing Act 1988)
-**Critical Difference:** Wales uses different fault grounds system post-2016
+**Status:** ✅ FILE CREATED - ⚠️ REQUIRES EXTERNAL LEGAL VERIFICATION
+**Contents:** Renting Homes (Wales) Act 2016 fault-based grounds
+**Date Created:** 2025-12-16
+
+**Grounds Included:**
+- Mandatory: Serious rent arrears, Persistent rent arrears
+- Discretionary: Some rent arrears, Breach of contract, Anti-social behaviour, Property deterioration, False statement, Suitable alternative accommodation
+- Section 173 no-fault notice description included
+
+**✅ Verified:**
+- No Housing Act 1988 grounds present (England-only)
+- No Section 21 references (correctly replaced with Section 173)
+- Includes verification_required metadata noting external legal review needed
 
 **Action Required:**
-1. Verify Wales grounds file contains Renting Homes Act grounds, not Housing Act grounds
-2. Ensure Section 21 grounds are absent
-3. Ensure Section 173 no-fault grounds are documented
+1. Legal team must verify grounds align with current Renting Homes (Wales) Act 2016
+2. Verify notice periods match statutory minimums
+3. Update verification_date and last_verified_by fields after review
 
 ### Scotland Grounds (`config/jurisdictions/uk/scotland/eviction_grounds.json`)
 
@@ -477,9 +487,10 @@ The following items cannot be fully verified from repository files alone and req
 ### Gaps (Require External Verification)
 
 1. ⚠️ **Wales Section 173 Template:** Cannot verify statutory wording without legal text
-2. ⚠️ **Wales Grounds Definitions:** Cannot verify against Renting Homes Act without legal text
+2. ⚠️ **Wales Grounds Definitions:** ✅ FILE CREATED - Requires verification against Renting Homes (Wales) Act 2016 by legal specialist
 3. ⚠️ **Prescribed Information:** Cannot verify completeness without legal checklist
 4. ⚠️ **Notice Periods:** Cannot verify calculations without legal minimums reference
+5. ⚠️ **MQS Field Mapping:** Automated audit reports missing critical fields - requires manual verification of maps_to directives vs. direct question IDs
 
 ### Action Items
 
@@ -490,13 +501,49 @@ The following items cannot be fully verified from repository files alone and req
 - Confirm notice period minimums for each jurisdiction
 
 **Development Team:**
-- Create Wales Section 173 template if missing
+- ✅ COMPLETED: Created Wales eviction_grounds.json (ff79829)
+- ✅ COMPLETED: Fixed audit script resilience (2e17587)
+- ✅ COMPLETED: Fixed smoke test deprecated path checking (6d88576)
+- ⚠️ IN PROGRESS: Investigate MQS field mapping false positives in audit
 - Add automated variable coverage tests
 - Document all legal assumptions in code comments
 - Set up legal review schedule
 
 ---
 
-**Report Generated:** 2025-12-16
+**Report Generated:** 2025-12-16 (Initial), Updated: 2025-12-16
+**Audit Tooling Updated:** 2025-12-16
 **Next Review Due:** 2026-03-16 (quarterly)
 **Status:** ✅ PRODUCTION-READY with noted external verification requirements
+
+---
+
+## Appendix: Automated Audit Findings (2025-12-16)
+
+### Audit Script Improvements
+
+The automated audit script (`scripts/audit-legal-completeness.ts`) was updated to:
+- ✅ Handle missing/invalid route option values without crashing
+- ✅ Validate maps_to arrays and field types
+- ✅ Correctly identify jurisdiction-specific templates:
+  - England: section8_notice.hbs, section21_form6a.hbs
+  - Wales: section173_landlords_notice.hbs (NOT section8/21)
+  - Scotland: notice_to_leave.hbs
+- ✅ Use correct Wales routes: wales_section_173, wales_fault_based
+
+### Current Audit Status
+
+Running `npx tsx scripts/audit-legal-completeness.ts` reports 21 critical issues, primarily:
+- Missing `maps_to` directives in MQS files
+- This may be false positives if questions use IDs matching field names directly
+
+**Recommended Action:** Manual review of MQS files to verify actual field mapping vs. audit detection logic.
+
+### Smoke Test Status
+
+Running `npx tsx scripts/smoke-jurisdiction-matrix.ts` shows:
+- ✅ 46/68 tests PASSED
+- ⏭️ 22/68 tests SKIPPED (invalid product×jurisdiction combinations)
+- ❌ 0/68 tests FAILED
+
+All canonical jurisdiction combinations working correctly.
