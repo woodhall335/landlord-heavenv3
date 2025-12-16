@@ -222,6 +222,20 @@ export async function POST(request: Request) {
         }
 
         case 'section21_notice': {
+          // ✅ JURISDICTION CHECK: Section 21 is England-only
+          if (jurisdiction === 'england-wales' || jurisdiction === 'wales') {
+            return NextResponse.json(
+              {
+                error: 'Section 21 not available for this jurisdiction',
+                code: 'INVALID_JURISDICTION',
+                explanation: 'Section 21 (no-fault eviction) is only available in England. For England-Wales jurisdiction, use Section 8 (fault-based eviction) instead.',
+                jurisdiction: jurisdiction,
+                suggested_action: jurisdiction === 'england-wales' ? 'Use Section 8 notice instead' : 'Use Wales-specific notice types (Section 173 or fault-based)',
+              },
+              { status: 400 }
+            );
+          }
+
           // ✅ ELIGIBILITY CHECK: Verify Section 21 is allowed before generating
           // First check if wizard has auto-selected a different route
           const selectedNoticeRoute = (wizardFacts as any).selected_notice_route;

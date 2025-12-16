@@ -142,7 +142,7 @@ export async function generateSection21Notice(
   }
 
   return generateDocument({
-    templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
+    templatePath: 'uk/england/templates/eviction/section21_form6a.hbs',
     data,
     isPreview,
     outputFormat: 'both',
