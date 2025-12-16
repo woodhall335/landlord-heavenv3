@@ -138,6 +138,32 @@ function registerHandlebarsHelpers() {
     return Array.isArray(array) && array.includes(value);
   });
 
+  // Array/string includes (alias for contains with string support)
+  Handlebars.registerHelper('includes', function (haystack, needle) {
+    if (Array.isArray(haystack)) {
+      return haystack.includes(needle);
+    }
+    if (typeof haystack === 'string' && typeof needle === 'string') {
+      return haystack.includes(needle);
+    }
+    return false;
+  });
+
+  // Add days to a date (returns ISO format YYYY-MM-DD)
+  Handlebars.registerHelper('add_days', function (dateString, days) {
+    if (!dateString) return '';
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) return '';
+
+      date.setDate(date.getDate() + Number(days));
+      return date.toISOString().split('T')[0];
+    } catch (error) {
+      console.error('[add_days] Error adding days:', error);
+      return '';
+    }
+  });
+
   // Calculate days between dates
   Handlebars.registerHelper('days_between', function (date1, date2) {
     const d1 = new Date(date1);

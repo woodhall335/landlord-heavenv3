@@ -302,6 +302,7 @@ const TEST_ROUTES: TestRoute[] = [
     jurisdiction: 'scotland',
     route: 'notice_to_leave',
     minimalAnswers: {
+      selected_notice_route: 'notice_to_leave',
       landlord_full_name: 'Angus Landlord',
       landlord_address: '50 Edinburgh Way\nEdinburgh\nEH1 1AA',
       landlord_email: 'angus@example.com',
@@ -371,8 +372,11 @@ async function createTestCase(
   jurisdiction: string,
   product: string = 'notice_only'
 ): Promise<string> {
-  // DB schema expects "england-wales" (not separate england/wales) for non-Scotland
-  const dbJurisdiction = jurisdiction === 'scotland' ? 'scotland' : 'england-wales';
+  // DB schema: scotland -> scotland, wales -> wales, england -> england-wales
+  const dbJurisdiction =
+    jurisdiction === 'scotland' ? 'scotland' :
+    jurisdiction === 'wales' ? 'wales' :
+    'england-wales';
 
   const { data, error } = await supabase
     .from('cases')
