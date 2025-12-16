@@ -46,8 +46,6 @@ function getDocumentTypeName(caseType: string, product?: string): string {
       case 'complete_pack':
         return 'Complete Eviction Pack';
       case 'money_claim':
-      case 'money_claim_england_wales':
-      case 'money_claim_scotland':
         return 'Money Claim Pack';
       case 'ast_standard':
         return 'Standard AST';
@@ -87,7 +85,7 @@ interface CollectedFact {
 
 interface WizardContainerProps {
   caseType: 'eviction' | 'money_claim' | 'tenancy_agreement';
-  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
+  jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland';
   product?: string; // Specific product: notice_only, complete_pack, money_claim, ast_standard, ast_premium
   editCaseId?: string; // Optional: Case ID to edit existing answers
   onComplete: (caseId: string, analysis: any) => void;
@@ -153,8 +151,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
 
   const getWelcomeMessage = useCallback((type: string, jur: string): string => {
     const jurName =
-      jur === 'england-wales'
-        ? 'England & Wales'
+      jur === 'england'
+        ? 'England'
+        : jur === 'wales'
+        ? 'Wales'
         : jur === 'scotland'
         ? 'Scotland'
         : 'Northern Ireland';
@@ -884,8 +884,10 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
                   <div className="flex-1">
                     <div className="text-sm font-medium text-charcoal">Location</div>
                     <div className="text-sm text-gray-600">
-                      {jurisdiction === 'england-wales'
-                        ? 'England & Wales'
+                      {jurisdiction === 'england'
+                        ? 'England'
+                        : jurisdiction === 'wales'
+                        ? 'Wales'
                         : jurisdiction === 'scotland'
                         ? 'Scotland'
                         : 'Northern Ireland'}

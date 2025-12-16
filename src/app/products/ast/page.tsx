@@ -6,7 +6,7 @@ import Image from "next/image";
 export const metadata: Metadata = {
   title: "Tenancy Agreements - AST, PRT, NI | Landlord Heaven",
   description:
-    "Legally compliant tenancy agreements for UK landlords. Curated by Landlord Heaven. Standard (£39.99) or Premium (£59.00). Covers England & Wales, Scotland, Northern Ireland.",
+    "Legally compliant tenancy agreements for UK landlords. Curated by Landlord Heaven. Standard (£39.99) or Premium (£59.00). Covers England, Wales, Scotland, and Northern Ireland.",
 };
 
 export default function ASTPage() {
@@ -41,7 +41,7 @@ export default function ASTPage() {
                 Premium - £59.00 →
               </Link>
             </div>
-            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England & Wales, Scotland or NI</p>
+            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England, Wales, Scotland, or Northern Ireland</p>
           </div>
         </Container>
       </section>
@@ -302,7 +302,8 @@ export default function ASTPage() {
               </p>
               <p className="text-gray-700">
                 Both Standard and Premium work across the UK:
-                <br />• <strong>England & Wales:</strong> Assured Shorthold Tenancy (AST)
+                <br />• <strong>England:</strong> Assured Shorthold Tenancy (AST)
+                <br />• <strong>Wales:</strong> Occupation Contract (Renting Homes Act 2016)
                 <br />• <strong>Scotland:</strong> Private Residential Tenancy (PRT)
                 <br />• <strong>Northern Ireland:</strong> Private Tenancy Agreement
                 <br />
@@ -465,8 +466,7 @@ export default function ASTPage() {
               <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <Image src="/gb-eng.svg" alt="England" width={32} height={32} className="w-8 h-8" />
-                  <Image src="/gb-wls.svg" alt="Wales" width={32} height={32} className="w-8 h-8" />
-                  <h3 className="text-xl font-semibold text-charcoal">England & Wales - AST</h3>
+                  <h3 className="text-xl font-semibold text-charcoal">England - AST</h3>
                 </div>
                 <p className="text-gray-700 mb-3">
                   Assured Shorthold Tenancy (AST) under Housing Act 1988. Includes all mandatory requirements:
@@ -476,6 +476,22 @@ export default function ASTPage() {
                   <li>✓ How to Rent guide (mandatory for Section 21)</li>
                   <li>✓ Right to Rent check reminders</li>
                   <li>✓ Deposit protection scheme details</li>
+                </ul>
+              </div>
+
+              <div className="bg-white border-2 border-gray-200 rounded-lg p-6">
+                <div className="flex items-center gap-3 mb-4">
+                  <Image src="/gb-wls.svg" alt="Wales" width={32} height={32} className="w-8 h-8" />
+                  <h3 className="text-xl font-semibold text-charcoal">Wales - Occupation Contract</h3>
+                </div>
+                <p className="text-gray-700 mb-3">
+                  Standard Occupation Contract under Renting Homes (Wales) Act 2016. Includes:
+                </p>
+                <ul className="text-sm text-gray-700 space-y-2">
+                  <li>✓ Section 173 notice provisions (Wales no-fault notice)</li>
+                  <li>✓ Contract-holder rights under Welsh law</li>
+                  <li>✓ Deposit protection scheme (Wales-specific)</li>
+                  <li>✓ Fitness for Human Habitation requirements</li>
                 </ul>
               </div>
 

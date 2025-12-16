@@ -14,7 +14,7 @@ interface GuidanceTip {
 
 interface GuidanceTipsProps {
   questionId: string;
-  jurisdiction?: 'england-wales' | 'scotland' | 'northern-ireland';
+  jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland';
   caseType?: 'eviction' | 'money_claim' | 'tenancy_agreement';
 }
 

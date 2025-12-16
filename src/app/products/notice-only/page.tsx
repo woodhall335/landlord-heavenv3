@@ -6,7 +6,7 @@ import Image from "next/image";
 export const metadata: Metadata = {
   title: "Notice Only - Section 8 & 21 Eviction Notices | Landlord Heaven",
   description:
-    "Generate court-ready Section 8 and Section 21 eviction notices in minutes. £29.99 one-time payment. Instant download. Covers England & Wales, Scotland, Northern Ireland.",
+    "Generate court-ready eviction notices for England, Wales, and Scotland in minutes. £29.99 one-time payment. Instant download. Section 8, Section 21, Section 173, and Notice to Leave.",
 };
 
 export default function NoticeOnlyPage() {
@@ -280,47 +280,6 @@ export default function NoticeOnlyPage() {
                 </ul>
               </div>
 
-              {/* Northern Ireland */}
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <Image src="/gb-nir.svg" alt="Northern Ireland" width={28} height={28} className="w-7 h-7" />
-                  <h3 className="text-xl font-semibold text-charcoal">Northern Ireland</h3>
-                </div>
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">
-                      <strong>Notice to Quit</strong> - For fixed-term tenancies
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">All statutory grounds included</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span className="text-gray-700">County court format</span>
-                  </li>
-                </ul>
-              </div>
 
               {/* Bonus Features */}
               <div className="bg-primary-subtle rounded-lg border border-primary/20 p-6">
@@ -450,10 +409,9 @@ export default function NoticeOnlyPage() {
                 <div className="mb-3">
                   <Image src="/lgb.svg" alt="UK Coverage" width={48} height={48} className="w-12 h-12" />
                 </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">100% UK Coverage</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">England, Wales & Scotland Coverage</h3>
                 <p className="text-gray-700">
-                  Only service covering England & Wales, Scotland, AND Northern Ireland. Perfect for landlords with
-                  multi-jurisdiction portfolios.
+                  Comprehensive eviction notice service covering England, Wales, and Scotland. Each jurisdiction has its own legal requirements and notice types, all included.
                 </p>
               </div>
 
