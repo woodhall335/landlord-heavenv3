@@ -58,3 +58,4 @@ sample-*.pdf
 test-*.pdf
 sample-*.html
 test-*.html
+artifacts/notice_only/_reports/

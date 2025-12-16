@@ -2,7 +2,7 @@
 /**
  * NOTICE ONLY PDF AUDIT SCRIPT
  *
- * Recursively scans artifacts/notice_only/**/*.pdf and performs:
+ * Recursively scans artifacts/notice_only/ for all PDF files and performs:
  * 1. Text extraction (using pdf-parse)
  * 2. Issue detection:
  *    - Missing fields (dates, names, addresses)
