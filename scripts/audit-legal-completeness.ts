@@ -96,46 +96,62 @@ function extractTemplateVariables(templateContent: string): Set<string> {
 }
 
 /**
- * Find all templates used by a product×jurisdiction
+ * Find all templates used by a product×jurisdiction based on actual generator usage
  */
 function findProductTemplates(product: ProductType, jurisdiction: CanonicalJurisdiction): string[] {
   const templates: string[] = [];
 
-  // Base template paths per product
-  const templatePaths = {
-    notice_only: [
-      `config/jurisdictions/uk/${jurisdiction}/templates/eviction/section8_notice.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/eviction/section21_form6a.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/eviction/notice_to_leave.hbs`,
-    ],
-    complete_pack: [
-      `config/jurisdictions/uk/${jurisdiction}/templates/eviction/section8_notice.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/eviction/section21_form6a.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/eviction/notice_to_leave.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/eviction/eviction_roadmap.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/eviction/expert_guidance.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/eviction/witness-statement.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/eviction/compliance-audit.hbs`,
-      `config/jurisdictions/shared/templates/evidence_collection_checklist.hbs`,
-      `config/jurisdictions/shared/templates/proof_of_service.hbs`,
-    ],
-    money_claim: [
-      `config/jurisdictions/uk/${jurisdiction}/templates/money_claims/pack_cover.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/money_claims/schedule_of_arrears.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/money_claims/interest_calculation.hbs`,
-    ],
-    tenancy_agreement: [
-      `config/jurisdictions/uk/${jurisdiction}/templates/ast_agreement.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/ast_agreement_premium.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/prt_agreement.hbs`,
-      `config/jurisdictions/uk/${jurisdiction}/templates/prt_agreement_premium.hbs`,
-    ],
-  };
+  // Jurisdiction-specific eviction templates
+  if (product === 'notice_only' || product === 'complete_pack') {
+    if (jurisdiction === 'england') {
+      templates.push(`config/jurisdictions/uk/england/templates/eviction/section8_notice.hbs`);
+      templates.push(`config/jurisdictions/uk/england/templates/eviction/section21_form6a.hbs`);
+    } else if (jurisdiction === 'wales') {
+      // Wales uses Section 173, not Section 8/21
+      templates.push(`config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs`);
+    } else if (jurisdiction === 'scotland') {
+      templates.push(`config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs`);
+    }
 
-  const paths = templatePaths[product] || [];
+    // Complete pack includes additional supporting documents
+    if (product === 'complete_pack') {
+      templates.push(`config/jurisdictions/uk/${jurisdiction}/templates/eviction/eviction_roadmap.hbs`);
+      templates.push(`config/jurisdictions/uk/${jurisdiction}/templates/eviction/expert_guidance.hbs`);
+      templates.push(`config/jurisdictions/uk/${jurisdiction}/templates/eviction/witness-statement.hbs`);
+      templates.push(`config/jurisdictions/uk/${jurisdiction}/templates/eviction/compliance-audit.hbs`);
+      templates.push(`config/jurisdictions/shared/templates/evidence_collection_checklist.hbs`);
+      templates.push(`config/jurisdictions/shared/templates/proof_of_service.hbs`);
+    }
+  }
+
+  // Money claim templates
+  if (product === 'money_claim') {
+    templates.push(`config/jurisdictions/uk/${jurisdiction}/templates/money_claims/pack_cover.hbs`);
+    templates.push(`config/jurisdictions/uk/${jurisdiction}/templates/money_claims/schedule_of_arrears.hbs`);
+    if (jurisdiction === 'scotland') {
+      templates.push(`config/jurisdictions/uk/scotland/templates/money_claims/simple_procedure_particulars.hbs`);
+    } else {
+      templates.push(`config/jurisdictions/uk/${jurisdiction}/templates/money_claims/interest_calculation.hbs`);
+    }
+  }
+
+  // Tenancy agreement templates
+  if (product === 'tenancy_agreement') {
+    if (jurisdiction === 'scotland') {
+      templates.push(`config/jurisdictions/uk/scotland/templates/prt_agreement.hbs`);
+      templates.push(`config/jurisdictions/uk/scotland/templates/prt_agreement_premium.hbs`);
+    } else if (jurisdiction === 'northern-ireland') {
+      templates.push(`config/jurisdictions/uk/northern-ireland/templates/private_tenancy_agreement.hbs`);
+      templates.push(`config/jurisdictions/uk/northern-ireland/templates/private_tenancy_premium.hbs`);
+    } else {
+      // England and Wales use AST
+      templates.push(`config/jurisdictions/uk/${jurisdiction}/templates/ast_agreement.hbs`);
+      templates.push(`config/jurisdictions/uk/${jurisdiction}/templates/ast_agreement_premium.hbs`);
+    }
+  }
 
   // Filter to only existing files
-  return paths.filter(p => {
+  return templates.filter(p => {
     try {
       return fs.existsSync(path.join(process.cwd(), p));
     } catch {
@@ -179,7 +195,7 @@ function buildRequirementsChecklist(
     if (jurisdiction === 'england') {
       routes.push('section_8', 'section_21');
     } else if (jurisdiction === 'wales') {
-      routes.push('section_8', 'section_173'); // Wales uses Section 173, not 21
+      routes.push('wales_section_173', 'wales_fault_based'); // Wales uses Section 173, not 21
     } else if (jurisdiction === 'scotland') {
       routes.push('notice_to_leave');
     }
@@ -274,7 +290,23 @@ function auditMQSCompleteness(
 
   // Check route options match jurisdiction
   if (routeQuestion?.options) {
-    const availableRoutes = routeQuestion.options.map(o => o.value.toLowerCase());
+    const availableRoutes = routeQuestion.options
+      .filter((o, idx) => {
+        if (!o || typeof o.value !== 'string') {
+          logIssue({
+            severity: 'warning',
+            category: 'mqs',
+            product,
+            jurisdiction,
+            issue: `Route option at index ${idx} has missing or invalid value`,
+            file: `config/mqs/${product}/${jurisdiction}.yaml`,
+            suggestion: 'Ensure all route options have a value field',
+          });
+          return false;
+        }
+        return true;
+      })
+      .map(o => o.value.toLowerCase());
 
     // Check for invalid routes
     if (jurisdiction === 'wales' && availableRoutes.includes('section_21')) {
@@ -316,9 +348,35 @@ function auditMQSCompleteness(
 
   // Check for required variable coverage
   const mappedFields = new Set<string>();
-  mqs.questions.forEach(q => {
+  mqs.questions.forEach((q, qIdx) => {
     if (q.maps_to) {
-      q.maps_to.forEach(field => mappedFields.add(field));
+      if (!Array.isArray(q.maps_to)) {
+        logIssue({
+          severity: 'warning',
+          category: 'mqs',
+          product,
+          jurisdiction,
+          issue: `Question "${q.id || `at index ${qIdx}`}" has invalid maps_to (not an array)`,
+          file: `config/mqs/${product}/${jurisdiction}.yaml`,
+          suggestion: 'Ensure maps_to is an array of strings',
+        });
+        return;
+      }
+      q.maps_to.forEach((field, fIdx) => {
+        if (typeof field === 'string') {
+          mappedFields.add(field);
+        } else {
+          logIssue({
+            severity: 'warning',
+            category: 'mqs',
+            product,
+            jurisdiction,
+            issue: `Question "${q.id || `at index ${qIdx}`}" has invalid field in maps_to at index ${fIdx}`,
+            file: `config/mqs/${product}/${jurisdiction}.yaml`,
+            suggestion: 'Ensure all maps_to values are strings',
+          });
+        }
+      });
     }
   });
 
