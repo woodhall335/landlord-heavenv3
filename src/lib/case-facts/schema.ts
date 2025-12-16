@@ -15,7 +15,7 @@ export interface WizardFactsMeta {
   product: string | null;
   original_product: string | null;
   product_tier?: string | null;
-  jurisdiction?: 'england-wales' | 'scotland' | 'northern-ireland' | null;
+  jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
   case_id?: string | null;
 }
 
@@ -61,7 +61,7 @@ export interface PropertyFacts {
   address_line2: string | null;
   city: string | null;
   postcode: string | null;
-  country: 'england-wales' | 'scotland' | 'northern-ireland' | null;
+  country: 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
   is_hmo: boolean | null;
   // Legacy/alternative nested address shape used by some bundles/case-intel
   address?: PropertyAddress;
@@ -245,7 +245,7 @@ export interface MetaFacts {
   product: string | null;
   original_product: string | null;
   product_tier?: string | null;
-  jurisdiction?: 'england-wales' | 'scotland' | 'northern-ireland' | null;
+  jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
   case_id?: string | null;
 }
 

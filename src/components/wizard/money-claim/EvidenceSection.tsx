@@ -3,7 +3,7 @@
 import React from 'react';
 import { UploadField, EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 
-type Jurisdiction = 'england-wales' | 'scotland';
+type Jurisdiction = 'england' | 'wales' | 'scotland';
 
 interface SectionProps {
   facts: any;

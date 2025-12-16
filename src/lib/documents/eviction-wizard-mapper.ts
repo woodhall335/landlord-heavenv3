@@ -94,9 +94,17 @@ function buildEvictionCaseFromFacts(
   const caseType = deriveCaseType(evictionRoute || facts.notice.notice_type);
   const grounds = mapSection8Grounds(facts);
 
+  // Ensure canonical jurisdiction
+  let jurisdiction = (facts.meta.jurisdiction as any) || 'england';
+  if (jurisdiction === 'england-wales') {
+    // Migrate based on property_location if available
+    const propertyLocation = (wizardFacts as any)?.property_location;
+    jurisdiction = propertyLocation === 'wales' ? 'wales' : 'england';
+  }
+
   const evictionCase: EvictionCase = {
     case_id: caseId,
-    jurisdiction: (facts.meta.jurisdiction as any) || 'england-wales',
+    jurisdiction: jurisdiction as any,
     case_type: caseType,
     case_summary: facts.court.particulars_of_claim || facts.issues.section8_grounds.arrears_breakdown || '',
     landlord_full_name: facts.parties.landlord.name || '',

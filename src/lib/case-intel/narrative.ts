@@ -626,7 +626,9 @@ function buildBreachFactsContext(facts: CaseFacts): string {
 
 function getJurisdictionContext(jurisdiction: string): string {
   switch (jurisdiction.toLowerCase()) {
-    case 'england-wales':
+    case 'england':
+    case 'wales':
+    case 'england-wales': // Legacy compatibility
     case 'england':
     case 'wales':
       return `CONTEXT: England & Wales eviction law. Use Section 8/Section 21 terminology where appropriate.`;

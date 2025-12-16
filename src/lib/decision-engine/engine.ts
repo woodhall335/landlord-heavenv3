@@ -321,6 +321,28 @@ function detectGroundSpecificRedFlags(groundNumber: number, facts: CaseFacts): R
  * Check Section 21 eligibility
  */
 function checkSection21Eligibility(facts: CaseFacts): Section21Recommendation {
+  // CRITICAL GUARD: Section 21 is ONLY available in England
+  // Wales abolished it via Renting Homes (Wales) Act 2016
+  // Scotland uses Notice to Leave
+  const jurisdiction = normalizeJurisdiction(facts.jurisdiction);
+
+  if (jurisdiction !== 'england') {
+    return {
+      available: false,
+      can_use_accelerated: false,
+      blocking_reasons: [
+        `Section 21 (no-fault eviction) is not available in ${jurisdiction}`,
+        jurisdiction === 'wales'
+          ? 'Wales uses Section 173 notices under the Renting Homes (Wales) Act 2016'
+          : jurisdiction === 'scotland'
+          ? 'Scotland uses Notice to Leave under the Private Housing (Tenancies) (Scotland) Act 2016'
+          : 'This jurisdiction does not support Section 21'
+      ],
+      red_flags: [],
+    };
+  }
+
+  // Continue with England-specific Section 21 checks
   const complianceChecks: ComplianceCheck[] = [];
   const redFlags: RedFlag[] = [];
 

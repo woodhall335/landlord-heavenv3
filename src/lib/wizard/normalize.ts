@@ -1,6 +1,6 @@
 import type { ExtendedWizardQuestion, WizardField } from './types';
 
-type Jurisdiction = 'england-wales' | 'scotland' | 'northern-ireland' | string;
+type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | string;
 
 const ADDRESS_FIELD_IDS = ['address_line1', 'address_line2', 'city', 'postcode', 'country'];
 

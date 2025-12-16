@@ -53,7 +53,7 @@ export async function generateCourtBundle(
       };
     }
 
-    if (jurisdiction !== 'england-wales') {
+    if (jurisdiction !== 'england' && jurisdiction !== 'wales' && jurisdiction !== 'england-wales') {
       return {
         success: false,
         error: 'generateCourtBundle is for England & Wales only. Use generateTribunalBundle for Scotland.',
@@ -66,7 +66,7 @@ export async function generateCourtBundle(
 
     // Step 1: Run decision engine
     const decisionInput: DecisionInput = {
-      jurisdiction: 'england-wales',
+      jurisdiction: jurisdiction === 'wales' ? 'wales' : 'england', // Use canonical
       product: (caseFacts.meta.product as any) || 'complete_pack',
       case_type: 'eviction',
       facts: caseFacts,
