@@ -490,7 +490,10 @@ async function validatePDF(
 
     let pdfText = '';
     try {
-      const pdfData = await pdfParse(pdfBuffer);
+      // Convert Buffer to Uint8Array for pdf-parse v2 compatibility
+      // pdf-parse uses PDF.js internally which expects Uint8Array, not Buffer
+      const uint8Array = new Uint8Array(pdfBuffer);
+      const pdfData = await pdfParse(uint8Array);
       pdfText = String(pdfData?.text ?? '');
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
