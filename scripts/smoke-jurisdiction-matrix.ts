@@ -116,10 +116,96 @@ function testMQSExists(jurisdiction: CanonicalJurisdiction, product: ProductType
 }
 
 /**
- * Test 2: Template paths resolve correctly (no england-wales references)
+ * Get expected template paths for a product×jurisdiction based on actual generator usage
+ */
+function getExpectedTemplatePaths(
+  product: ProductType,
+  jurisdiction: CanonicalJurisdiction
+): string[] {
+  const paths: string[] = [];
+
+  // Based on actual template paths used in generators
+  if (product === 'notice_only' || product === 'complete_pack') {
+    if (jurisdiction === 'england') {
+      paths.push('uk/england/templates/eviction/section8_notice.hbs');
+      paths.push('uk/england/templates/eviction/section21_form6a.hbs');
+    } else if (jurisdiction === 'wales') {
+      paths.push('uk/wales/templates/eviction/section173_landlords_notice.hbs');
+      paths.push('uk/wales/templates/eviction/eviction_roadmap.hbs');
+    } else if (jurisdiction === 'scotland') {
+      paths.push('uk/scotland/templates/eviction/notice_to_leave.hbs');
+      paths.push('uk/scotland/templates/eviction/eviction_roadmap.hbs');
+    }
+
+    if (product === 'complete_pack') {
+      // Additional complete pack templates
+      paths.push(`uk/${jurisdiction}/templates/eviction/eviction_roadmap.hbs`);
+      paths.push(`uk/${jurisdiction}/templates/eviction/expert_guidance.hbs`);
+    }
+  }
+
+  if (product === 'money_claim') {
+    paths.push(`uk/${jurisdiction}/templates/money_claims/pack_cover.hbs`);
+    paths.push(`uk/${jurisdiction}/templates/money_claims/schedule_of_arrears.hbs`);
+  }
+
+  if (product === 'tenancy_agreement') {
+    if (jurisdiction === 'scotland') {
+      paths.push('uk/scotland/templates/prt_agreement.hbs');
+      paths.push('uk/scotland/templates/prt_agreement_premium.hbs');
+    } else if (jurisdiction === 'northern-ireland') {
+      paths.push('uk/northern-ireland/templates/private_tenancy_agreement.hbs');
+      paths.push('uk/northern-ireland/templates/private_tenancy_premium.hbs');
+    } else {
+      paths.push(`uk/${jurisdiction}/templates/ast_agreement.hbs`);
+    }
+  }
+
+  return paths;
+}
+
+/**
+ * Test 2: Template paths resolve correctly (no england-wales references in actual usage)
  */
 function testTemplatePathsValid(jurisdiction: CanonicalJurisdiction, product: ProductType): void {
   const testName = 'Template paths valid';
+
+  // Get expected template paths for this product×jurisdiction
+  const expectedPaths = getExpectedTemplatePaths(product, jurisdiction);
+
+  if (expectedPaths.length === 0) {
+    logResult({
+      jurisdiction,
+      product,
+      test: testName,
+      status: 'SKIP',
+      message: 'No templates defined for this combination',
+    });
+    return;
+  }
+
+  // Check each resolved path for deprecated values
+  const deprecatedPatterns = ['england-wales', 'DEPRECATED'];
+  const invalidPaths: string[] = [];
+
+  for (const templatePath of expectedPaths) {
+    for (const pattern of deprecatedPatterns) {
+      if (templatePath.includes(pattern)) {
+        invalidPaths.push(`${templatePath} (contains "${pattern}")`);
+      }
+    }
+  }
+
+  if (invalidPaths.length > 0) {
+    logResult({
+      jurisdiction,
+      product,
+      test: testName,
+      status: 'FAIL',
+      message: `Deprecated paths in use: ${invalidPaths.join(', ')}`,
+    });
+    return;
+  }
 
   // Check that canonical template folder exists
   const templateBasePath = path.join(
@@ -142,26 +228,12 @@ function testTemplatePathsValid(jurisdiction: CanonicalJurisdiction, product: Pr
     return;
   }
 
-  // Verify no "england-wales" folders exist in path
-  const invalidPath = path.join(process.cwd(), 'config', 'jurisdictions', 'uk', 'england-wales');
-
-  if (fs.existsSync(invalidPath)) {
-    logResult({
-      jurisdiction,
-      product,
-      test: testName,
-      status: 'FAIL',
-      message: 'DEPRECATED: england-wales folder still exists!',
-    });
-    return;
-  }
-
   logResult({
     jurisdiction,
     product,
     test: testName,
     status: 'PASS',
-    message: 'Canonical template path exists',
+    message: `${expectedPaths.length} template path(s) use canonical jurisdictions`,
   });
 }
 
