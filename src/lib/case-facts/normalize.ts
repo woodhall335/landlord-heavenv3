@@ -2321,24 +2321,6 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     templateData.earliest_possession_date = earliestDate.toISOString().split('T')[0];
   }
 
-  // Section 21 Form 6A: possession_date (from notice_expiry_date or earliest_possession_date)
-  templateData.possession_date = extractString(
-    getFirstValue(wizard, ['possession_date', 'notice_expiry_date', 'leave_by_date'])
-  ) || templateData.expiry_date || templateData.earliest_possession_date;
-
-  // Section 21 Form 6A: first_anniversary_date (one year after tenancy_start_date)
-  if (templateData.tenancy_start_date) {
-    try {
-      const startDate = new Date(templateData.tenancy_start_date);
-      const anniversaryDate = new Date(startDate);
-      anniversaryDate.setFullYear(anniversaryDate.getFullYear() + 1);
-      templateData.first_anniversary_date = anniversaryDate.toISOString().split('T')[0];
-    } catch (error) {
-      console.error('[mapNoticeOnlyFacts] Error calculating first_anniversary_date:', error);
-      templateData.first_anniversary_date = null;
-    }
-  }
-
   // =============================================================================
   // ADD NESTED OBJECTS FOR TEMPLATE COMPATIBILITY
   // =============================================================================

@@ -63,8 +63,6 @@ questions:
       - landlord_phone
 
   # 2. TASK B: Route selection EARLY (before route-dependent questions)
-  # NOTE: Section 21 removed - England & Wales jurisdiction only supports Section 8
-  # Section 21 is England-only (use england.yaml for Section 21)
   - id: selected_notice_route
     section: Notice Route
     question: "Which eviction route do you want to use?"
@@ -76,6 +74,9 @@ questions:
       - value: section_8
         label: "Section 8 (Fault-Based Eviction)"
         helperText: "Use when tenant has breached tenancy terms (arrears, ASB, damage, etc.)"
+      - value: section_21
+        label: "Section 21 (No-Fault Eviction)"
+        helperText: "Use to end tenancy without proving fault (requires full compliance)"
     maps_to:
       - selected_notice_route
 
@@ -210,15 +211,18 @@ questions:
       - payment_date
       - next_payment_due
 
-  # 6. Deposit & compliance
-  # This data is needed for Section 8 notices to show deposit/compliance status
+  # 6. Deposit & compliance (TASK A: COLLECT FOR BOTH ROUTES)
+  # This data is needed for BOTH Section 8 and Section 21:
+  # - Section 21 requires full compliance for validity
+  # - Section 8 PDFs should show deposit/compliance status too
   - id: deposit_and_compliance
     section: Deposit & Compliance
     question: "Deposit and compliance checklist"
     inputType: group
     routes:
       - section_8
-    helperText: "These answers help ensure your notice complies with legal requirements and strengthen your Section 8 case."
+      - section_21
+    helperText: "These answers help determine the best eviction route and ensure your notice complies with legal requirements. Deposit protection is critical for Section 21 validity."
     fields:
       - id: deposit_amount
         label: "Deposit amount (or 0 if none)"
@@ -287,8 +291,9 @@ questions:
         inputType: yes_no
         width: half
     suggestion_prompt: >
-      Be honest about deposit protection, prescribed information, gas safety, EPC, How to Rent guide, and licensing.
-      These factors can strengthen your Section 8 case and show compliance with legal obligations.
+      Be brutally honest about deposit protection, prescribed information, gas safety, EPC, How to Rent guide, and licensing.
+      These directly affect whether Section 21 is valid.
+      If anything is missing or was provided late, Section 21 may fail.
     maps_to:
       - deposit_amount
       - deposit_protected
@@ -409,6 +414,15 @@ questions:
         validation:
           required: true
         width: half
+      - id: notice_expiry_date
+        label: "Date after which tenant must leave (for Section 21 Form 6A)"
+        inputType: date
+        helperText: "This is the expiry date for Section 21. Must end on the last day of a tenancy period and be at least 2 months from service date."
+        width: half
+        dependsOn:
+          questionId: selected_notice_route
+          value: section_21
+        # Only show this field if user selected Section 21 route
       - id: notice_service_method
         label: "How will you serve the notice?"
         inputType: select
@@ -427,7 +441,8 @@ questions:
         placeholder: "Your name or process server name"
         width: half
     suggestion_prompt: >
-      Ensure the landlord understands the correct notice periods for Section 8 (usually 2 weeks or 2 months depending on ground).
+      Ensure the landlord understands the correct notice periods for Section 8 (usually 2 weeks or 2 months depending on ground)
+      and Section 21 (2 months minimum, and must end on last day of a tenancy period).
       Remind them to keep proof of service.
     maps_to:
       - notice_service_date
