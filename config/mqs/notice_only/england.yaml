@@ -12,14 +12,46 @@ questions:
   # BASIC INFORMATION
   # ========================================
 
-  - id: landlord_full_name
+  - id: landlord_details
     section: Landlord Details
-    question: "Your full name (as landlord)"
-    inputType: text
-    validation:
-      required: true
+    question: "Your details"
+    inputType: group
+    helperText: "We need your full details to complete the notice correctly."
+    fields:
+      - id: landlord_full_name
+        label: "Full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_line1
+        label: "Address line 1"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_line2
+        label: "Address line 2 (optional)"
+        inputType: text
+        width: full
+      - id: landlord_city
+        label: "Town or city"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: landlord_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
     maps_to:
       - landlord_full_name
+      - landlord_address_line1
+      - landlord_address_line2
+      - landlord_city
+      - landlord_postcode
 
   # TASK B: Route selection EARLY (before route-dependent questions)
   - id: selected_notice_route
@@ -49,15 +81,39 @@ questions:
     maps_to:
       - tenant_full_name
 
-  - id: property_address
+  - id: property_details
     section: Property Details
     question: "Property address"
-    inputType: textarea
-    validation:
-      required: true
-    helperText: "Full address including postcode"
+    inputType: group
+    helperText: "The property this notice relates to"
+    fields:
+      - id: property_address_line1
+        label: "Address line 1"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: property_address_line2
+        label: "Address line 2 (optional)"
+        inputType: text
+        width: full
+      - id: property_city
+        label: "Town or city"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: property_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
     maps_to:
-      - property_address
+      - property_address_line1
+      - property_address_line2
+      - property_city
+      - property_postcode
 
   - id: tenancy_start_date
     section: Tenancy Details
@@ -90,15 +146,43 @@ questions:
     maps_to:
       - fixed_term_end_date
 
-  - id: rent_amount
+  - id: rent_terms
     section: Rent Details
-    question: "Monthly rent amount"
-    inputType: currency
-    validation:
-      required: true
-      min: 0
+    question: "Rent details"
+    inputType: group
+    helperText: "We need this for the notice and arrears calculations"
+    fields:
+      - id: rent_amount
+        label: "Rent amount"
+        inputType: currency
+        validation:
+          required: true
+          min: 0
+        width: half
+      - id: rent_frequency
+        label: "Rent frequency"
+        inputType: select
+        options:
+          - "weekly"
+          - "monthly"
+          - "quarterly"
+          - "yearly"
+        validation:
+          required: true
+        width: half
+      - id: payment_date
+        label: "Day of month rent is due"
+        inputType: number
+        helperText: "E.g., 1 for 1st, 15 for 15th"
+        validation:
+          required: true
+          min: 1
+          max: 31
+        width: half
     maps_to:
       - rent_amount
+      - rent_frequency
+      - payment_date
 
   # ========================================
   # DEPOSIT & COMPLIANCE (TASK A: COLLECT FOR BOTH ROUTES)
@@ -306,6 +390,27 @@ questions:
         label: "Moderate (noise, minor nuisance)"
     maps_to:
       - ground14_severity
+
+  - id: ground_particulars
+    section: Section 8 Grounds
+    question: "Provide specific details for each ground selected"
+    inputType: textarea
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_8
+    validation:
+      required: true
+    helperText: "For each ground, provide: dates, amounts (if arrears), specific incidents, evidence available. Be factual and specific."
+    suggestion_prompt: >
+      Draft clear, factual particulars for Section 8 Notice. For each ground selected, provide:
+      - Dates when incidents occurred or breaches started
+      - Amounts (if rent arrears)
+      - Specific examples and evidence
+      - Witnesses or documentation available
+      Keep professional and court-ready. Focus on facts, not opinions.
+    maps_to:
+      - ground_particulars
+      - section_8_particulars
 
   - id: notice_strategy
     section: Section 8 Grounds
