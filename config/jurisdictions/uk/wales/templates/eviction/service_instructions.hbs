@@ -1,0 +1,266 @@
+{{! Service Instructions for Wales Eviction Notices }}
+{{! Renting Homes (Wales) Act 2016 }}
+
+# SERVICE INSTRUCTIONS
+
+## Serving Your {{notice_type}} Notice in Wales
+
+---
+
+## IMPORTANT: WALES-SPECIFIC REQUIREMENTS
+
+This guidance is for serving eviction notices under the **Renting Homes (Wales) Act 2016**.
+
+⚠️ **This is NOT the same as England** - Wales has different laws and procedures. Do not use English guidance or forms.
+
+---
+
+## 1. BEFORE YOU SERVE THE NOTICE
+
+### Check Your Compliance
+
+You **MUST** have complied with all legal requirements before serving any notice:
+
+✅ **Rent Smart Wales Registration**
+- All landlords and letting agents in Wales must be registered with Rent Smart Wales
+- Check: www.rentsmart.gov.wales
+- Penalty: Serving a notice while unregistered may invalidate the notice
+
+✅ **Deposit Protection (if deposit taken)**
+- Must be protected in a Welsh government-approved scheme:
+  - Deposit Protection Service Wales
+  - MyDeposits Wales
+  - Tenancy Deposit Scheme Wales
+- Must have provided prescribed information within 30 days
+- Penalty: Cannot serve Section 173 notice if deposit not protected
+
+✅ **Written Statement of Contract**
+- Must have provided contract-holder with written statement within 14 days of occupation
+- Penalty: Cannot serve possession notice until provided
+
+✅ **Gas Safety (if applicable)**
+- Annual gas safety check by Gas Safe engineer
+- Copy given to contract-holder
+
+✅ **Electrical Safety**
+- Electrical Installation Condition Report (EICR) within last 5 years
+- Copy given to contract-holder
+
+✅ **Smoke and Carbon Monoxide Alarms**
+- Working smoke alarms on each storey
+- Carbon monoxide alarms in rooms with solid fuel appliances
+- Tested at start of contract
+
+{{#if is_wales_section_173}}
+✅ **Prohibited Period (Section 173 only)**
+- Cannot serve Section 173 notice in first 6 months of contract
+- Contract start: {{contract_start_date}}
+- Earliest service date: 6 months after contract start
+{{/if}}
+
+{{#if is_wales_fault_based}}
+✅ **Retaliatory Eviction Protection**
+- Cannot serve notice within 6 months of contract-holder making a legitimate complaint
+- Cannot serve notice if local authority is investigating the property
+{{/if}}
+
+---
+
+## 2. METHODS OF SERVICE
+
+Under Welsh law, you can serve a notice by:
+
+### Option 1: Personal Service (RECOMMENDED)
+- Hand the notice directly to the contract-holder
+- Get them to sign a copy confirming receipt
+- If they refuse to sign, have a witness present
+
+### Option 2: Leaving at the Dwelling
+- Leave the notice at the dwelling in a sealed envelope
+- Address it to the contract-holder
+- Put it through the letterbox or hand it to an adult at the property
+
+### Option 3: Postal Service
+- Send by First Class post to the dwelling address
+- **RECOMMENDED:** Use Royal Mail Signed For or Special Delivery
+- Keep proof of postage (certificate of posting or tracking number)
+- Notice is deemed served when it would be delivered in ordinary course of post (usually 2 working days)
+
+### Option 4: Email (Only If Agreed in Contract)
+- Can only use email if the contract specifically allows it
+- Keep a copy of the sent email and any read receipts
+- Follow up with postal or personal service to be safe
+
+---
+
+## 3. PROOF OF SERVICE
+
+**CRITICAL:** You will need to prove service when applying to court.
+
+Keep ALL of the following:
+- ✅ Original copy of the notice (for your records)
+- ✅ Copy showing date of service
+- ✅ Proof of service:
+  - Personal service: Signed acknowledgment or witness statement
+  - Postal service: Certificate of posting or tracking receipt
+  - Email: Sent email with timestamp and read receipt
+
+### Create a Service Pack
+Make a file containing:
+1. Copy of the notice served
+2. Proof of service
+3. Certificate of Service (template below)
+4. Witness statement (if applicable)
+
+---
+
+## 4. CERTIFICATE OF SERVICE TEMPLATE
+
+You can use this template to record service:
+
+```
+CERTIFICATE OF SERVICE
+
+Property: {{property_address}}
+
+Contract-Holder(s): {{contract_holder_full_name}}{{#if tenant_2_name}} and {{tenant_2_name}}{{/if}}
+
+I certify that on [DATE], I served the {{notice_type}} dated [NOTICE DATE] by:
+
+[✓] Personal service - handed to contract-holder at [TIME] on [DATE]
+[ ] Left at dwelling - left in sealed envelope at [TIME] on [DATE]
+[ ] Postal service - sent by [METHOD] on [DATE], tracking/reference: [REF]
+[ ] Email - sent to [EMAIL] at [TIME] on [DATE]
+
+Served by: ___________________________
+
+Signature: ___________________________
+
+Date: ___________________________
+
+Witness (if applicable):
+Name: ___________________________
+Signature: ___________________________
+Date: ___________________________
+```
+
+---
+
+## 5. AFTER SERVING THE NOTICE
+
+### Wait for the Notice Period to Expire
+
+{{#if is_wales_section_173}}
+**Section 173 Notice Period:**
+- Minimum 2 months from service date
+- Cannot apply to court before this date
+{{/if}}
+
+{{#if is_wales_fault_based}}
+**Breach Notice Period:**
+- Rent arrears: Minimum 14 days
+- Other breaches: 14 days to 1 month depending on severity
+{{/if}}
+
+### If Contract-Holder Does Not Leave
+
+You **CANNOT**:
+- ❌ Change the locks
+- ❌ Remove their belongings
+- ❌ Cut off utilities
+- ❌ Harass or threaten them
+- ❌ Enter without permission
+
+**These are criminal offences in Wales**
+
+You **MUST**:
+- ✅ Apply to the county court for a possession order
+- ✅ Wait for the court hearing
+- ✅ Only evict with a court order and bailiff
+
+---
+
+## 6. APPLYING TO COURT (IF NEEDED)
+
+If the contract-holder does not leave after the notice expires:
+
+1. **Complete Court Forms:**
+   - Form N5 (Claim for Possession)
+   - Particulars of Claim
+   - Copy of the tenancy agreement
+   - Copy of the notice with proof of service
+   - Evidence of compliance (deposit protection, gas safety, etc.)
+
+2. **Pay Court Fee:**
+   - Online: www.gov.uk/make-court-claim-for-money
+   - Current fee: Check www.gov.uk/government/publications/fees-in-the-civil-and-family-courts
+
+3. **Serve Court Papers:**
+   - Court will serve the papers on the contract-holder
+   - Or you can arrange service yourself
+
+4. **Attend Court Hearing:**
+   - Bring all evidence
+   - Be prepared to answer questions from the judge
+
+---
+
+## 7. COMMON MISTAKES TO AVOID
+
+❌ **Wrong notice period** - Check the minimum period for your notice type
+
+❌ **Wrong dates** - Ensure all dates are calculated correctly
+
+❌ **Not registered with Rent Smart Wales** - Register before serving
+
+❌ **Deposit not protected** - Protect deposit before serving Section 173
+
+❌ **Prohibited period** - Cannot serve Section 173 in first 6 months
+
+❌ **Retaliatory eviction** - Cannot serve within 6 months of legitimate complaint
+
+❌ **Poor proof of service** - Always get proof
+
+❌ **Self-help eviction** - Never change locks or remove belongings without court order
+
+---
+
+## 8. GET LEGAL ADVICE
+
+⚠️ **This is not legal advice** - These are instructions for serving a notice only.
+
+Consider getting advice from:
+- **Shelter Cymru Landlord Advisory Service:** 0300 124 0021
+- **Solicitor specializing in Welsh housing law**
+- **Landlord association** (e.g., Residential Landlords Association Wales)
+
+---
+
+## 9. USEFUL CONTACTS
+
+**Rent Smart Wales:**
+- Website: www.rentsmart.gov.wales
+- Phone: 03000 133 344
+
+**HM Courts & Tribunals Service:**
+- Website: www.gov.uk/government/organisations/hm-courts-and-tribunals-service
+- Phone: 0300 123 1372
+
+**Shelter Cymru (for contract-holder rights):**
+- Website: www.sheltercymru.org.uk
+- Phone: 0345 075 5005
+
+**Citizens Advice Cymru:**
+- Website: www.citizensadvice.org.uk/cymraeg/
+- Phone: 0800 702 2020
+
+---
+
+{{#if is_preview}}
+**PREVIEW DOCUMENT - NOT FOR LEGAL USE**
+{{else}}
+Document generated by {{site_name}} ({{site_domain}})
+Generated: {{generation_timestamp}}
+{{/if}}
+
+**LEGAL DISCLAIMER:** This guidance is for information only and does not constitute legal advice. You should seek independent legal advice before serving any notice or taking legal action. Landlord Heaven is not responsible for any consequences arising from the use of this guidance.

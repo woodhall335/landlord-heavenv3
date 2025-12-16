@@ -172,15 +172,20 @@ async function addTableOfContents(
   });
   yPos -= 40;
 
-  // Jurisdiction
-  const jurisdictionLabel =
-    options.jurisdiction === 'england-wales' || options.jurisdiction === 'england'
-      ? 'England'
-      : options.jurisdiction === 'wales'
-      ? 'Wales'
-      : options.jurisdiction === 'scotland'
-      ? 'Scotland'
-      : 'England & Wales';
+  // Jurisdiction - FIX: Properly determine jurisdiction from options and notice_type
+  let jurisdictionLabel = 'England';
+  if (options.jurisdiction === 'wales') {
+    jurisdictionLabel = 'Wales';
+  } else if (options.jurisdiction === 'scotland') {
+    jurisdictionLabel = 'Scotland';
+  } else if (options.jurisdiction === 'england-wales' || options.jurisdiction === 'england') {
+    // For england-wales, check notice_type to determine actual jurisdiction
+    if (options.notice_type === 'wales_section_173' || options.notice_type === 'wales_fault_based') {
+      jurisdictionLabel = 'Wales';
+    } else {
+      jurisdictionLabel = 'England';
+    }
+  }
 
   tocPage.drawText(`Jurisdiction: ${jurisdictionLabel}`, {
     x: 50,
@@ -191,19 +196,19 @@ async function addTableOfContents(
   });
   yPos -= 25;
 
-  // Notice type
+  // Notice type - FIX: Ensure correct labels for each jurisdiction
   if (options.notice_type) {
     const noticeLabel =
       options.notice_type === 'section_8'
-        ? 'Section 8 Notice (Fault-Based)'
+        ? 'Section 8 Notice (Fault-Based) - England'
         : options.notice_type === 'section_21'
-        ? 'Section 21 Notice (No-Fault)'
+        ? 'Section 21 Notice (No-Fault) - England'
         : options.notice_type === 'wales_section_173'
-        ? 'Section 173 Notice (No-Fault)'
+        ? 'Section 173 Notice (No-Fault) - Wales'
         : options.notice_type === 'wales_fault_based'
-        ? 'Wales Fault-Based Notice'
+        ? 'Fault-Based Notice - Wales (Renting Homes Act 2016)'
         : options.notice_type === 'notice_to_leave'
-        ? 'Notice to Leave (PRT)'
+        ? 'Notice to Leave - Scotland (PRT)'
         : 'Notice';
 
     tocPage.drawText(`Notice Type: ${noticeLabel}`, {
