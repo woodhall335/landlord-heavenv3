@@ -1,0 +1,151 @@
+{
+  "ground": "12",
+  "type": "discretionary",
+  "category": "breach_of_tenancy",
+  "name": "Breach of Tenancy Obligation",
+  "short_description": "Tenant breached obligation of tenancy (other than rent)",
+  "legal_basis": {
+    "act": "Housing Act 1988",
+    "section": "Schedule 2, Ground 12",
+    "statute_year": "1988"
+  },
+  "requirements": {
+    "breach_type": {
+      "obligation": "Any obligation of tenancy agreement",
+      "excluding": "Non-payment of rent (use Grounds 8, 10, 11 instead)",
+      "examples": [
+        "Keeping pets when prohibited",
+        "Subletting without permission",
+        "Running business from property",
+        "Causing damage beyond fair wear and tear",
+        "Not maintaining garden",
+        "Unauthorized alterations",
+        "Breach of occupancy terms"
+      ]
+    },
+    "breach_evidence": {
+      "requirement": "Clear evidence breach has occurred",
+      "continuing": "Breach must have occurred or be continuing"
+    }
+  },
+  "notice_period": {
+    "section_8_notice": "2 months minimum",
+    "court_proceedings": "Can be started after 2 months"
+  },
+  "evidence_required": [
+    "Tenancy agreement showing the obligation",
+    "Clear evidence of breach (photos, videos, witness statements)",
+    "Section 8 notice specifying the breach",
+    "Any warnings or correspondence about breach",
+    "Tenant's response (if any)",
+    "Expert evidence if needed (e.g., damage assessment)"
+  ],
+  "common_breaches": {
+    "unauthorized_pets": {
+      "evidence": "Photos, neighbor statements, vet records",
+      "strength": "Strong if clear prohibition and clear evidence"
+    },
+    "unauthorized_subletting": {
+      "evidence": "Different occupants, tenant living elsewhere, utility changes, neighbor statements",
+      "strength": "Very strong - serious breach"
+    },
+    "damage_beyond_fair_wear": {
+      "evidence": "Photos, inventory comparison, surveyor report, repair quotes",
+      "strength": "Strong if significant damage shown"
+    },
+    "running_business": {
+      "evidence": "Commercial signage, client visits, business registration, advertising",
+      "strength": "Strong if clear commercial use"
+    },
+    "noise_nuisance": {
+      "evidence": "Noise logs, neighbor complaints, council noise reports, recordings",
+      "strength": "Moderate - needs substantial evidence"
+    },
+    "not_maintaining": {
+      "evidence": "Photos, inspection reports",
+      "strength": "Weak unless severe neglect"
+    }
+  },
+  "success_factors": {
+    "high_probability": [
+      "Clear breach of specific tenancy term",
+      "Strong evidence (photos, witnesses, expert reports)",
+      "Serious breach (subletting, significant damage, illegal use)",
+      "Breach continuing despite warnings",
+      "Tenant admits breach",
+      "Reasonable to grant possession"
+    ],
+    "medium_probability": [
+      "Breach occurred but remedied",
+      "Moderate severity",
+      "Some evidence but could be stronger",
+      "First occurrence but serious",
+      "Tenant disputes but evidence supports landlord"
+    ],
+    "low_probability": [
+      "Minor breach (e.g., small pet, minor damage)",
+      "Weak evidence",
+      "Breach remedied before proceedings",
+      "Ambiguous tenancy clause",
+      "No warnings given",
+      "Not reasonable to grant possession",
+      "Breach caused by landlord's failure (e.g., disrepair)"
+    ]
+  },
+  "red_flags": [
+    "Tenancy agreement unclear or doesn't prohibit the action",
+    "Weak or insufficient evidence",
+    "Breach already remedied",
+    "Minor breach with no real impact",
+    "No prior warnings given",
+    "Retaliatory eviction context",
+    "Landlord consented to the action previously",
+    "Landlord in breach themselves (disrepair)"
+  ],
+  "typical_timeline": {
+    "notice_period": "2 months",
+    "court_proceedings": "6-10 months",
+    "total": "8-12 months"
+  },
+  "costs": {
+    "court_fee": 355,
+    "bailiff_fee": 130,
+    "legal_costs": "£1,500-£3,500",
+    "expert_reports": "£300-£1,000 if needed"
+  },
+  "tenant_defenses": [
+    "No breach occurred",
+    "Tenancy agreement doesn't prohibit action",
+    "Breach remedied",
+    "Landlord gave permission",
+    "Landlord waived the breach by past conduct",
+    "Minor breach - not reasonable for possession",
+    "Landlord in breach of obligations (disrepair)",
+    "Retaliatory eviction",
+    "Human rights (Article 8) - possession disproportionate"
+  ],
+  "related_grounds": ["13", "14", "15"],
+  "notes": "Ground 12 is DISCRETIONARY - catch-all for breaches. Court considers severity, impact, whether remedied, warnings given, and reasonableness. Often combined with other grounds. Subletting and serious damage are strongest cases.",
+  "case_law": [
+    "Holloway v Povey [1984] - Breach must be established on evidence",
+    "Hussein v Mehlman [1992] - Minor breaches unlikely to justify possession",
+    "Florent v Horez [1983] - Court considers if breach remedied",
+    "Cobstone Investments v Maxim [1985] - Reasonableness essential"
+  ],
+  "court_considerations": [
+    "Has breach been proved?",
+    "Is there a clear tenancy obligation that was breached?",
+    "How serious is the breach?",
+    "Has breach been remedied?",
+    "What warnings were given?",
+    "What is the impact of the breach?",
+    "Is tenant in vulnerable situation?",
+    "Is possession reasonable and proportionate?",
+    "Could a suspended order address the issue?"
+  ],
+  "suspended_possession_orders": {
+    "common": "Yes - court may suspend if breach can be remedied",
+    "conditions": "E.g., remove pet, repair damage, stop business use",
+    "benefit": "Gives tenant chance to comply without losing home"
+  }
+}

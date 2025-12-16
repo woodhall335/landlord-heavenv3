@@ -2384,8 +2384,7 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     if (jur === 'wales' || jur === 'cym') return 'Wales';
     if (jur === 'scotland' || jur === 'sco') return 'Scotland';
     if (jur === 'northern-ireland' || jur === 'ni') return 'Northern Ireland';
-    // Legacy: default england-wales to England (Section 8/21 only exist in England)
-    if (jur === 'england-wales' || jur === 'england & wales') return 'England';
+    // No aliasing: all runtime jurisdictions must be canonical
     return jurisdiction;
   };
 

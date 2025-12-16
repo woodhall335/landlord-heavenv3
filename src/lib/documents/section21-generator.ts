@@ -1,8 +1,10 @@
 /**
  * Section 21 Notice Generator
  *
- * Generates Housing Act 1988 Section 21 notices (no-fault eviction)
- * for England & Wales.
+ * ENGLAND-ONLY: Generates Housing Act 1988 Section 21 notices (no-fault eviction)
+ *
+ * IMPORTANT: Section 21 applies ONLY in England. Wales uses Section 173.
+ * This generator will throw an error if called for non-England jurisdictions.
  *
  * Form 6A is used for most assured shorthold tenancies.
  */
@@ -142,7 +144,7 @@ export async function generateSection21Notice(
   }
 
   return generateDocument({
-    templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
+    templatePath: 'uk/england/templates/eviction/section21_form6a.hbs',
     data,
     isPreview,
     outputFormat: 'both',

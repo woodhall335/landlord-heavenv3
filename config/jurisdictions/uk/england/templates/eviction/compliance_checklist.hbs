@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Compliance Checklist - Pre-Service Checks</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 40px;
+      color: #333;
+    }
+    h1 {
+      color: #1a1a1a;
+      border-bottom: 3px solid #10b981;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #10b981;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+    .intro {
+      background: #d1fae5;
+      border-left: 4px solid #10b981;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .critical {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .checklist-item {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 5px;
+    }
+    .checklist-item h3 {
+      margin-top: 0;
+      color: #1a1a1a;
+    }
+    .status-pass {
+      color: #10b981;
+      font-weight: bold;
+    }
+    .status-fail {
+      color: #dc2626;
+      font-weight: bold;
+    }
+    .status-unknown {
+      color: #f59e0b;
+      font-weight: bold;
+    }
+    .checkbox {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #333;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    li {
+      margin: 8px 0;
+    }
+    footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 2px solid #e5e7eb;
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <h1>Compliance Checklist - Pre-Service Checks</h1>
+
+  <div class="intro">
+    ✓ <strong>Pre-Service Compliance Check</strong><br>
+    Complete this checklist BEFORE serving your notice. Missing any of these requirements could invalidate your notice and waste months of time and court fees.
+  </div>
+
+  <p><strong>Property:</strong> {{property.address_line1}}, {{property.address_town}}</p>
+  <p><strong>Tenancy Start Date:</strong> {{format_date tenancy.start_date}}</p>
+  <p><strong>Notice Type:</strong> {{#if (eq selected_notice_route "section_21")}}Section 21 (No-Fault){{else}}Section 8 (Fault-Based){{/if}}</p>
+
+  <h2>Critical Compliance Requirements</h2>
+
+  {{!-- Deposit Protection --}}
+  <div class="checklist-item">
+    <h3>1. Deposit Protection</h3>
+    {{#if deposit.protected}}
+      <p class="status-pass">✓ COMPLIANT</p>
+      <p><strong>Deposit Amount:</strong> £{{deposit.amount}}</p>
+      <p><strong>Protection Scheme:</strong> {{deposit.scheme_name}}</p>
+      <p><strong>Protection Date:</strong> {{format_date deposit.protection_date}}</p>
+      <p><strong>Prescribed Info Given:</strong> {{#if deposit.prescribed_info_given}}Yes ✓{{else}}No ✗{{/if}}</p>
+
+      {{#if (eq selected_notice_route "section_21")}}
+        <div style="background: #d1fae5; padding: 10px; margin-top: 10px; border-radius: 3px;">
+          ✓ Section 21 requirement met - deposit is protected and prescribed information given within 30 days of receiving deposit.
+        </div>
+      {{/if}}
+    {{else}}
+      {{#if (eq selected_notice_route "section_21")}}
+        <p class="status-fail">✗ NOT COMPLIANT - BLOCKS SECTION 21</p>
+        <div class="critical">
+          <strong>⚠️ CRITICAL ISSUE:</strong> Section 21 notices are INVALID if the deposit is not protected in an approved scheme (DPS, TDS, or MyDeposits). You MUST:
+          <ul>
+            <li>Protect the deposit in an approved scheme IMMEDIATELY</li>
+            <li>Serve prescribed information to the tenant within 30 days of protection</li>
+            <li>Wait 6 months before serving Section 21 (or use Section 8 instead)</li>
+          </ul>
+        </div>
+      {{else}}
+        <p class="status-pass">✓ Not a blocker for Section 8</p>
+        <p><strong>Note:</strong> Deposit not protected, but this doesn't prevent Section 8 proceedings. However, you should still protect it to avoid fines (up to 3x deposit amount).</p>
+      {{/if}}
+    {{/if}}
+
+    <p><strong>Evidence Required:</strong></p>
+    <ul>
+      <li>Certificate of deposit protection from scheme</li>
+      <li>Copy of prescribed information served to tenant</li>
+      <li>Proof of service (email or letter with proof of posting)</li>
+    </ul>
+  </div>
+
+  {{!-- Gas Safety Certificate --}}
+  <div class="checklist-item">
+    <h3>2. Gas Safety Certificate</h3>
+    {{#if compliance.gas_cert_provided}}
+      <p class="status-pass">✓ COMPLIANT</p>
+      <p><strong>Gas Certificate Provided:</strong> Yes</p>
+      {{#if compliance.gas_cert_expiry}}
+        <p><strong>Expires:</strong> {{format_date compliance.gas_cert_expiry}}</p>
+      {{/if}}
+
+      {{#if (eq selected_notice_route "section_21")}}
+        <div style="background: #d1fae5; padding: 10px; margin-top: 10px; border-radius: 3px;">
+          ✓ Section 21 requirement met - gas safety certificate provided within last 12 months.
+        </div>
+      {{/if}}
+    {{else}}
+      {{#if (eq selected_notice_route "section_21")}}
+        <p class="status-fail">✗ NOT COMPLIANT - BLOCKS SECTION 21</p>
+        <div class="critical">
+          <strong>⚠️ CRITICAL ISSUE:</strong> Section 21 notices are INVALID if you haven't provided a current gas safety certificate. You MUST:
+          <ul>
+            <li>Arrange a Gas Safe registered engineer inspection</li>
+            <li>Obtain a valid gas safety certificate (valid for 12 months)</li>
+            <li>Serve a copy to the tenant</li>
+            <li>Keep evidence of service</li>
+          </ul>
+        </div>
+      {{else}}
+        <p class="status-unknown">⚠️ Should be compliant</p>
+        <p><strong>Note:</strong> Gas safety certificates are legally required regardless of eviction route. Ensure you have one and have served it to the tenant.</p>
+      {{/if}}
+    {{/if}}
+
+    <p><strong>Evidence Required:</strong></p>
+    <ul>
+      <li>Copy of gas safety certificate (issued within last 12 months)</li>
+      <li>Proof you served it to the tenant (email or letter with proof of posting)</li>
+    </ul>
+  </div>
+
+  {{!-- Energy Performance Certificate (EPC) --}}
+  <div class="checklist-item">
+    <h3>3. Energy Performance Certificate (EPC)</h3>
+    {{#if compliance.epc_provided}}
+      <p class="status-pass">✓ PROVIDED</p>
+      <p><strong>EPC Rating:</strong> {{compliance.epc_rating}}</p>
+
+      {{#if (contains (array "F" "G") compliance.epc_rating)}}
+        <div class="critical">
+          <strong>⚠️ WARNING:</strong> Your EPC rating ({{compliance.epc_rating}}) is below the minimum energy efficiency standard (E). Letting properties with F or G ratings is illegal unless you have an exemption. This could block both Section 8 and Section 21.
+        </div>
+      {{/if}}
+
+      {{#if (eq selected_notice_route "section_21")}}
+        <div style="background: #d1fae5; padding: 10px; margin-top: 10px; border-radius: 3px;">
+          ✓ Section 21 requirement met - valid EPC provided.
+        </div>
+      {{/if}}
+    {{else}}
+      {{#if (eq selected_notice_route "section_21")}}
+        <p class="status-fail">✗ NOT COMPLIANT - BLOCKS SECTION 21</p>
+        <div class="critical">
+          <strong>⚠️ CRITICAL ISSUE:</strong> Section 21 notices are INVALID if you haven't provided a valid EPC. You MUST:
+          <ul>
+            <li>Arrange an EPC assessment (valid for 10 years)</li>
+            <li>Ensure rating is at least E (F and G are illegal)</li>
+            <li>Serve a copy to the tenant</li>
+          </ul>
+        </div>
+      {{else}}
+        <p class="status-unknown">⚠️ Should have been provided</p>
+        <p><strong>Note:</strong> EPCs are legally required before any new tenancy. Ensure you have one.</p>
+      {{/if}}
+    {{/if}}
+
+    <p><strong>Evidence Required:</strong></p>
+    <ul>
+      <li>Copy of valid EPC (issued within last 10 years)</li>
+      <li>Proof you served it to the tenant</li>
+    </ul>
+  </div>
+
+  {{!-- How to Rent Guide --}}
+  <div class="checklist-item">
+    <h3>4. "How to Rent" Guide</h3>
+    {{#if compliance.how_to_rent_given}}
+      <p class="status-pass">✓ PROVIDED</p>
+      <p><strong>How to Rent Guide Given:</strong> Yes</p>
+
+      {{#if (eq selected_notice_route "section_21")}}
+        <div style="background: #d1fae5; padding: 10px; margin-top: 10px; border-radius: 3px;">
+          ✓ Section 21 requirement met.
+        </div>
+      {{/if}}
+    {{else}}
+      {{#if (eq selected_notice_route "section_21")}}
+        <p class="status-fail">✗ NOT PROVIDED - BLOCKS SECTION 21</p>
+        <div class="critical">
+          <strong>⚠️ CRITICAL ISSUE:</strong> Section 21 notices are INVALID if you haven't provided the government's "How to Rent" guide. You MUST:
+          <ul>
+            <li>Download the latest version from gov.uk</li>
+            <li>Serve it to the tenant (email or hand delivery)</li>
+            <li>Keep proof of service</li>
+          </ul>
+        </div>
+      {{else}}
+        <p class="status-unknown">⚠️ Should have been provided</p>
+        <p><strong>Note:</strong> The "How to Rent" guide should have been given at the start of the tenancy. Download from: <a href="https://www.gov.uk/government/publications/how-to-rent">gov.uk</a></p>
+      {{/if}}
+    {{/if}}
+
+    <p><strong>Evidence Required:</strong></p>
+    <ul>
+      <li>Copy of the How to Rent guide (version given to tenant)</li>
+      <li>Proof of service (email or letter with proof of posting)</li>
+    </ul>
+  </div>
+
+  {{!-- HMO License --}}
+  {{#if compliance.hmo_license_required}}
+    <div class="checklist-item">
+      <h3>5. HMO License (Required for This Property)</h3>
+      {{#if compliance.hmo_license_valid}}
+        <p class="status-pass">✓ COMPLIANT</p>
+        <p><strong>HMO License:</strong> Valid</p>
+
+        <div style="background: #d1fae5; padding: 10px; margin-top: 10px; border-radius: 3px;">
+          ✓ HMO requirements met.
+        </div>
+      {{else}}
+        <p class="status-fail">✗ NOT LICENSED - MAY BLOCK PROCEEDINGS</p>
+        <div class="critical">
+          <strong>⚠️ CRITICAL ISSUE:</strong> This property requires an HMO license. Operating without one is a criminal offense and may prevent you from serving valid notices. You MUST:
+          <ul>
+            <li>Apply for an HMO license from your local council immediately</li>
+            <li>Be aware that courts may refuse possession claims for unlicensed HMOs</li>
+            <li>Expect fines of up to £30,000 for operating without a license</li>
+          </ul>
+        </div>
+      {{/if}}
+
+      <p><strong>Evidence Required:</strong></p>
+      <ul>
+        <li>Copy of valid HMO license from local authority</li>
+        <li>Proof all HMO conditions are being met</li>
+      </ul>
+    </div>
+  {{/if}}
+
+  <h2>Pre-Service Checklist Summary</h2>
+
+  <div style="background: #f9fafb; padding: 20px; border-radius: 5px; margin: 20px 0;">
+    <p><strong>Before serving your {{#if (eq selected_notice_route "section_21")}}Section 21{{else}}Section 8{{/if}} notice, confirm:</strong></p>
+    <ul style="list-style: none;">
+      <li><span class="checkbox"></span> Deposit is protected (and prescribed info served) {{#if (eq selected_notice_route "section_21")}}<strong>(REQUIRED for Section 21)</strong>{{/if}}</li>
+      <li><span class="checkbox"></span> Gas safety certificate is current and served {{#if (eq selected_notice_route "section_21")}}<strong>(REQUIRED for Section 21)</strong>{{/if}}</li>
+      <li><span class="checkbox"></span> EPC is valid (rating E or above) and served {{#if (eq selected_notice_route "section_21")}}<strong>(REQUIRED for Section 21)</strong>{{/if}}</li>
+      <li><span class="checkbox"></span> "How to Rent" guide was served {{#if (eq selected_notice_route "section_21")}}<strong>(REQUIRED for Section 21)</strong>{{/if}}</li>
+      {{#if compliance.hmo_license_required}}
+        <li><span class="checkbox"></span> HMO license is valid</li>
+      {{/if}}
+      <li><span class="checkbox"></span> All evidence of service is saved and accessible</li>
+      <li><span class="checkbox"></span> Tenancy agreement is signed and valid</li>
+      <li><span class="checkbox"></span> Notice is filled out correctly with accurate dates</li>
+    </ul>
+  </div>
+
+  <div class="critical">
+    <strong>⚠️ FINAL CHECK:</strong> If ANY of the above requirements are not met for Section 21, DO NOT serve the notice. It will be invalid and you'll waste time and court fees. Either fix the compliance issues first, or use Section 8 instead (which has fewer compliance requirements).
+  </div>
+
+  <footer>
+    <p><strong>Legal Basis:</strong> Housing Act 1988, Housing Act 2004 (HMOs), Energy Efficiency Regulations 2015, Tenancy Deposit Protection Regulations 2007</p>
+    <p><strong>Generated:</strong> {{format_date metadata.generated_at}}</p>
+    <p><strong>Landlord Heaven Notice Only Pack</strong> | {{#if jurisdiction_display}}{{jurisdiction_display}}{{else}}England{{/if}}</p>
+  </footer>
+</body>
+</html>

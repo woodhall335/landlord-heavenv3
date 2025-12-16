@@ -1,0 +1,537 @@
+{{! Form N119 - Particulars of claim for possession (rented residential premises) }}
+{{! This template replicates the exact structure of the official HMCTS Form N119 }}
+{{! Must be served with Form N5 }}
+{{! Last updated format: October 2020 }}
+
+{{#if pdf_generation}}
+<style>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    margin: 0;
+    padding: 20mm 25mm;
+    line-height: 1.4;
+  }
+  .form-header {
+    border-bottom: 2px solid black;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  .royal-arms {
+    float: left;
+    width: 50mm;
+    height: 50mm;
+    margin-right: 10mm;
+  }
+  .court-stamp {
+    float: right;
+    width: 60mm;
+    height: 50mm;
+    border: 2px solid black;
+    text-align: center;
+    padding-top: 15mm;
+    font-size: 9pt;
+  }
+  .section-heading {
+    background-color: #000000;
+    color: white;
+    padding: 5px 10px;
+    font-weight: bold;
+    font-size: 11pt;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  .subsection-heading {
+    font-weight: bold;
+    font-size: 10pt;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    text-decoration: underline;
+  }
+  .field-label {
+    font-weight: bold;
+    font-size: 9pt;
+  }
+  .fill-box {
+    border-bottom: 1px solid black;
+    min-height: 20px;
+    margin-bottom: 5px;
+    display: inline-block;
+    min-width: 200px;
+  }
+  .notes-box {
+    border: 1px solid #666;
+    padding: 10px;
+    background-color: #f5f5f5;
+    font-size: 9pt;
+    margin: 10px 0;
+  }
+  .checkbox {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    border: 1.5px solid black;
+    margin-right: 6px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .checkbox.checked::before {
+    content: "✓";
+    font-weight: bold;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+  }
+  table, th, td {
+    border: 1px solid black;
+  }
+  th {
+    background-color: #e0e0e0;
+    font-weight: bold;
+    padding: 8px;
+  }
+  td {
+    padding: 8px;
+  }
+</style>
+{{/if}}
+
+<!-- HEADER WITH ROYAL ARMS -->
+<div class="form-header">
+  <div class="royal-arms">
+    {{! This should be the official HM Courts & Tribunals Service Royal Arms logo }}
+    {{#if royal_arms_image}}
+    <img src="{{royal_arms_image}}" style="width: 100%; height: 100%;" alt="Royal Arms" />
+    {{else}}
+    <div style="border: 1px solid #ccc; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 8pt; color: #999;">
+      Royal Arms
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="court-stamp">
+    <div style="font-size: 8pt; margin-bottom: 8mm; font-weight: bold;">Seal</div>
+    <div style="font-size: 9pt;">Claim No.</div>
+    <div style="border-top: 1px solid black; margin: 8mm 15mm; padding-top: 3mm; font-size: 11pt; font-weight: bold;">
+      {{#if claim_number}}{{claim_number}}{{else}}&nbsp;{{/if}}
+    </div>
+  </div>
+
+  <div style="clear: both; margin-top: 10px;">
+    <div style="font-size: 16pt; font-weight: bold;">Particulars of claim</div>
+    <div style="font-size: 12pt; margin-top: 5px;">for possession</div>
+    <div style="font-size: 11pt; margin-top: 3px;">(rented residential premises)</div>
+  </div>
+</div>
+
+<div style="text-align: right; font-size: 20pt; font-weight: bold; margin-bottom: 15px;">N119</div>
+
+<!-- CLAIMANT AND DEFENDANT -->
+<table style="margin-bottom: 20px;">
+  <tr>
+    <th style="width: 15%;">Claimant</th>
+    <td style="width: 35%;">
+      {{landlord_full_name}}{{#if landlord_2_name}}<br>{{landlord_2_name}}{{/if}}
+    </td>
+    <th style="width: 15%;">Defendant</th>
+    <td style="width: 35%;">
+      {{tenant_full_name}}{{#if tenant_2_name}}<br>{{tenant_2_name}}{{/if}}
+    </td>
+  </tr>
+</table>
+
+<!-- NOTES BOX -->
+<div class="notes-box">
+  <strong>Notes for completing this form</strong>
+  <ul style="margin: 5px 0; padding-left: 20px;">
+    <li>Use this form to give full particulars of your claim for possession of rented residential premises</li>
+    <li>You must complete all relevant sections</li>
+    <li>If you need more space, continue on a separate sheet</li>
+    <li>This form must be served with Form N5</li>
+  </ul>
+</div>
+
+<!-- SECTION 1: THE PROPERTY -->
+<div class="section-heading">1. The property</div>
+
+<div style="margin: 10px 0;">
+  <span class="field-label">Full address of the property:</span>
+  <div style="margin-left: 20px; margin-top: 5px;">
+    <div class="fill-box" style="width: 90%;">{{property_address}}</div>
+    <div class="fill-box" style="width: 90%;">{{property_postcode}}</div>
+  </div>
+</div>
+
+<div style="margin: 15px 0;">
+  <span class="field-label">The property is:</span>
+  <div style="margin-left: 20px; margin-top: 5px;">
+    <div>
+      <span class="checkbox{{#if property_type_house}} checked{{/if}}"></span>
+      a house
+    </div>
+    <div>
+      <span class="checkbox{{#if property_type_flat}} checked{{/if}}"></span>
+      a flat
+    </div>
+    <div>
+      <span class="checkbox{{#if property_type_room}} checked{{/if}}"></span>
+      a room
+    </div>
+    <div>
+      <span class="checkbox{{#if property_type_other}} checked{{/if}}"></span>
+      other (specify): <span class="fill-box">{{property_type_other_details}}</span>
+    </div>
+  </div>
+</div>
+
+<!-- SECTION 2: THE TENANCY -->
+<div class="section-heading">2. The tenancy</div>
+
+<div style="margin: 10px 0;">
+  <span class="field-label">Type of tenancy:</span>
+  <div style="margin-left: 20px; margin-top: 5px;">
+    <div>
+      <span class="checkbox{{#if tenancy_type_ast}} checked{{/if}}"></span>
+      Assured shorthold tenancy
+    </div>
+    <div>
+      <span class="checkbox{{#if tenancy_type_assured}} checked{{/if}}"></span>
+      Assured tenancy
+    </div>
+    <div>
+      <span class="checkbox{{#if tenancy_type_regulated}} checked{{/if}}"></span>
+      Regulated tenancy
+    </div>
+    <div>
+      <span class="checkbox{{#if tenancy_type_other}} checked{{/if}}"></span>
+      Other (specify): <span class="fill-box">{{tenancy_type_other_details}}</span>
+    </div>
+  </div>
+</div>
+
+<div style="margin: 15px 0;">
+  <div style="display: inline-block; width: 45%;">
+    <span class="field-label">The tenancy started on:</span>
+    <div class="fill-box" style="width: 60%;">{{tenancy_start_date}}</div>
+  </div>
+  <div style="display: inline-block; width: 45%; margin-left: 5%;">
+    {{#if fixed_term}}
+    <span class="field-label">Fixed term ended/ends on:</span>
+    <div class="fill-box" style="width: 60%;">{{fixed_term_end_date}}</div>
+    {{/if}}
+  </div>
+</div>
+
+<div style="margin: 15px 0;">
+  <span class="field-label">The tenancy agreement is:</span>
+  <div style="margin-left: 20px; margin-top: 5px;">
+    <div>
+      <span class="checkbox{{#if agreement_written}} checked{{/if}}"></span>
+      in writing (a copy is attached)
+    </div>
+    <div>
+      <span class="checkbox{{#if agreement_oral}} checked{{/if}}"></span>
+      oral
+    </div>
+  </div>
+</div>
+
+<div style="margin: 15px 0;">
+  <div>
+    <span class="field-label">Current rent:</span>
+    <span class="fill-box" style="width: 150px;">£{{rent_amount}}</span>
+    <span class="field-label" style="margin-left: 20px;">payable:</span>
+    <span class="fill-box" style="width: 150px;">{{rent_frequency}}</span>
+  </div>
+</div>
+
+<!-- SECTION 3: GROUNDS FOR POSSESSION -->
+<div class="section-heading">3. Grounds for possession</div>
+
+<div style="margin: 10px 0;">
+  <span class="field-label">The claimant is claiming possession under:</span>
+</div>
+
+{{#if section_8_claim}}
+<div class="subsection-heading">Section 8 of the Housing Act 1988</div>
+
+<div style="margin: 10px 0;">
+  <span class="field-label">Ground(s) relied upon:</span>
+  <div class="fill-box" style="width: 80%;">{{ground_numbers}}</div>
+</div>
+
+<div style="margin: 15px 0;">
+  <span class="field-label">Date Section 8 notice served:</span>
+  <div class="fill-box" style="width: 200px;">{{section_8_notice_date}}</div>
+</div>
+
+<div style="margin: 15px 0;">
+  <span class="field-label">Date possession required:</span>
+  <div class="fill-box" style="width: 200px;">{{section_8_possession_date}}</div>
+</div>
+
+<div style="margin: 10px 0;">
+  <div>
+    <span class="checkbox checked"></span>
+    A copy of the Section 8 notice is attached
+  </div>
+</div>
+{{/if}}
+
+{{#if section_21_claim}}
+<div class="subsection-heading">Section 21 of the Housing Act 1988</div>
+
+<div style="margin: 10px 0;">
+  <span class="field-label">Date Section 21 notice served:</span>
+  <div class="fill-box" style="width: 200px;">{{section_21_notice_date}}</div>
+</div>
+
+<div style="margin: 15px 0;">
+  <span class="field-label">Date possession required:</span>
+  <div class="fill-box" style="width: 200px;">{{section_21_possession_date}}</div>
+</div>
+
+<div style="margin: 10px 0;">
+  <div>
+    <span class="checkbox checked"></span>
+    A copy of the Section 21 notice (Form 6A) is attached
+  </div>
+</div>
+{{/if}}
+
+<!-- SECTION 4: PARTICULARS OF EACH GROUND -->
+<div class="section-heading">4. Particulars of each ground</div>
+
+<div class="notes-box">
+  <strong>Give full details of the facts relied upon for each ground claimed.</strong> You must provide sufficient detail for the defendant to understand the case against them.
+</div>
+
+<div style="border: 1px solid black; padding: 15px; margin: 15px 0; min-height: 300px;">
+{{#each grounds}}
+<div class="subsection-heading">Ground {{this.code}}: {{this.title}}</div>
+
+<div style="margin: 10px 0; line-height: 1.6;">
+{{this.detailed_particulars}}
+</div>
+
+{{#if this.evidence_list}}
+<div style="margin: 10px 0;">
+  <strong>Evidence:</strong>
+  <ul style="margin: 5px 0; padding-left: 25px;">
+  {{#each this.evidence_list}}
+    <li>{{this}}</li>
+  {{/each}}
+  </ul>
+</div>
+{{/if}}
+
+{{#unless @last}}<hr style="margin: 20px 0; border: none; border-top: 1px dashed #666;" />{{/unless}}
+{{/each}}
+
+{{#if rent_arrears_details}}
+<div class="subsection-heading">Rent Arrears Schedule</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Period</th>
+      <th>Rent Due</th>
+      <th>Paid</th>
+      <th>Balance</th>
+    </tr>
+  </thead>
+  <tbody>
+  {{#each arrears_schedule}}
+    <tr>
+      <td>{{this.period}}</td>
+      <td style="text-align: right;">£{{this.rent_due}}</td>
+      <td style="text-align: right;">£{{this.paid}}</td>
+      <td style="text-align: right;">£{{this.balance}}</td>
+    </tr>
+  {{/each}}
+  </tbody>
+  <tfoot>
+    <tr style="font-weight: bold;">
+      <td colspan="3" style="text-align: right;">Total Arrears:</td>
+      <td style="text-align: right;">£{{total_arrears}}</td>
+    </tr>
+  </tfoot>
+</table>
+
+<div style="margin-top: 10px; font-size: 9pt; font-style: italic;">
+  The claimant reserves the right to update this figure at the hearing to reflect further arrears accrued.
+</div>
+{{/if}}
+</div>
+
+<!-- SECTION 5: DEPOSIT INFORMATION -->
+{{#if deposit_amount}}
+<div class="section-heading">5. Tenancy deposit</div>
+
+<div style="margin: 10px 0;">
+  <div>
+    <span class="field-label">Deposit amount:</span>
+    <span class="fill-box">£{{deposit_amount}}</span>
+  </div>
+</div>
+
+<div style="margin: 15px 0;">
+  <div>
+    <span class="field-label">Deposit protected in:</span>
+    <span class="fill-box" style="width: 300px;">{{deposit_scheme}}</span>
+  </div>
+</div>
+
+<div style="margin: 15px 0;">
+  <div>
+    <span class="field-label">Protection reference:</span>
+    <span class="fill-box" style="width: 300px;">{{deposit_reference}}</span>
+  </div>
+</div>
+
+<div style="margin: 15px 0;">
+  <div>
+    <span class="field-label">Date protected:</span>
+    <span class="fill-box">{{deposit_protection_date}}</span>
+  </div>
+</div>
+{{else}}
+<div class="section-heading">5. Tenancy deposit</div>
+
+<div style="margin: 10px 0;">
+  <div>
+    <span class="checkbox checked"></span>
+    No deposit was taken for this tenancy
+  </div>
+</div>
+{{/if}}
+
+<!-- SECTION 6: COMPLIANCE -->
+{{#if section_21_claim}}
+<div class="section-heading">6. Compliance with legal requirements</div>
+
+<div style="margin: 15px 0;">
+  <div>
+    <span class="checkbox{{#if gas_safety_compliant}} checked{{/if}}"></span>
+    Gas Safety Certificate provided (if applicable)
+  </div>
+  <div style="margin-top: 5px;">
+    <span class="checkbox{{#if epc_compliant}} checked{{/if}}"></span>
+    Energy Performance Certificate provided (rating E or above)
+  </div>
+  <div style="margin-top: 5px;">
+    <span class="checkbox{{#if how_to_rent_compliant}} checked{{/if}}"></span>
+    How to Rent guide provided
+  </div>
+  <div style="margin-top: 5px;">
+    <span class="checkbox{{#if licensing_compliant}} checked{{/if}}"></span>
+    Property properly licensed (if required)
+  </div>
+  <div style="margin-top: 5px;">
+    <span class="checkbox{{#if no_prohibited_fees}} checked{{/if}}"></span>
+    No prohibited fees charged
+  </div>
+  <div style="margin-top: 5px;">
+    <span class="checkbox{{#if not_retaliatory}} checked{{/if}}"></span>
+    Not a retaliatory eviction
+  </div>
+</div>
+{{/if}}
+
+<!-- SECTION 7: WHAT THE COURT IS ASKED TO ORDER -->
+<div class="section-heading">{{#if section_21_claim}}7{{else}}6{{/if}}. What the court is asked to order</div>
+
+<div style="margin: 15px 0;">
+  <div>
+    <span class="checkbox checked"></span>
+    An order for possession of the property
+  </div>
+  {{#if claiming_rent_arrears}}
+  <div style="margin-top: 5px;">
+    <span class="checkbox checked"></span>
+    Payment of rent arrears of £{{total_arrears}}
+  </div>
+  {{/if}}
+  {{#if claiming_mesne_profits}}
+  <div style="margin-top: 5px;">
+    <span class="checkbox checked"></span>
+    Mesne profits (use and occupation charges) from date of possession to date of actual vacation
+  </div>
+  {{/if}}
+  <div style="margin-top: 5px;">
+    <span class="checkbox checked"></span>
+    Costs of this claim
+  </div>
+</div>
+
+<!-- STATEMENT OF TRUTH -->
+<div class="section-heading">Statement of Truth</div>
+
+<div class="notes-box">
+  <strong>*[I believe] [The claimant believes] that the facts stated in these particulars of claim are true.</strong>
+  <div style="margin-top: 5px; font-size: 8pt;">
+    *I am duly authorised by the claimant to sign this statement
+  </div>
+  <div style="margin-top: 5px; font-size: 8pt; font-style: italic;">
+    Delete as appropriate
+  </div>
+</div>
+
+<div style="margin: 20px 0;">
+  <table style="border: none;">
+    <tr>
+      <td style="border: none; width: 60%;">
+        <div class="field-label">Full name</div>
+        <div class="fill-box" style="width: 90%;">{{signatory_name}}</div>
+      </td>
+      <td style="border: none; width: 40%;">
+        <div class="field-label">Name of claimant's solicitor's firm</div>
+        <div class="fill-box" style="width: 90%;">{{solicitor_firm}}</div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div style="margin: 20px 0;">
+  <table style="border: none;">
+    <tr>
+      <td style="border: none; width: 70%;">
+        <div class="field-label">Signed</div>
+        <div style="margin-top: 25px; border-bottom: 2px solid black; min-height: 35px;">
+          {{#if signature_image}}
+          <img src="{{signature_image}}" style="max-height: 30px;" />
+          {{/if}}
+        </div>
+        <div style="font-size: 8pt; margin-top: 3px; font-style: italic;">
+          *(Claimant)(Litigation friend)(Claimant's solicitor)
+        </div>
+        <div style="font-size: 8pt; font-style: italic;">
+          *Delete as appropriate
+        </div>
+      </td>
+      <td style="border: none; width: 30%; vertical-align: bottom;">
+        <div class="field-label">Date</div>
+        <div class="fill-box" style="width: 90%;">{{signature_date}}</div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- FOOTER -->
+<div style="margin-top: 40px; border-top: 2px solid black; padding-top: 10px; font-size: 8pt; color: #666;">
+  <div style="float: left;">Form N119 Particulars of claim for possession (rented residential premises) (10.20)</div>
+  <div style="float: right;">© Crown copyright 2020</div>
+  <div style="clear: both;"></div>
+</div>
+
+{{#if is_preview}}
+<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 72pt; color: rgba(255, 0, 0, 0.1); font-weight: bold; z-index: 9999; pointer-events: none;">
+  PREVIEW
+</div>
+{{/if}}

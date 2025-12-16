@@ -1,0 +1,246 @@
+# config/mqs/complete_pack/england.yaml
+#
+# ENGLAND-ONLY Eviction Pack (Section 8 + Section 21)
+# Split from england-wales.yaml as part of canonical jurisdiction implementation
+# Version 2.0.0 - England jurisdiction
+
+__meta:
+  version: "2.0.0"
+  effective_from: "2025-12-16"
+  last_updated: "2025-12-16"
+  legal_review_date: "2025-12-16"
+  jurisdiction: "england"
+  product: "complete_pack"
+
+id: complete_pack_england_v2
+product: complete_pack
+jurisdiction: england
+version: "2.0.0"
+
+questions:
+  # 1. Eviction route selection (England: Section 8 or Section 21)
+  - id: eviction_route
+    section: Eviction Type
+    question: "Which eviction route are you using?"
+    inputType: select
+    options:
+      - "Section 8 (fault-based)"
+      - "Section 21 (no-fault)"
+    helperText: "Section 8 requires grounds. Section 21 (England only) does not require a reason."
+    validation:
+      required: true
+    maps_to:
+      - selected_notice_route
+
+  # ============================================================
+  # SECTION 8 QUESTIONS
+  # ============================================================
+
+  - id: section8_grounds
+    section: Section 8 Grounds
+    question: "Which grounds for possession are you relying on?"
+    inputType: multiselect
+    routes:
+      - section_8
+    dependsOn:
+      questionId: eviction_route
+      value: "Section 8 (fault-based)"
+    options:
+      - "Ground 1 - Landlord occupation"
+      - "Ground 2 - Mortgage lender requiring possession"
+      - "Ground 7 - Tenant death, no succession"
+      - "Ground 7A - Conviction for serious offense"
+      - "Ground 8 - 8+ weeks rent arrears"
+      - "Ground 10 - Rent arrears"
+      - "Ground 11 - Persistent delay in paying rent"
+      - "Ground 12 - Breach of tenancy agreement"
+      - "Ground 13 - Waste or neglect"
+      - "Ground 14 - Nuisance or annoyance"
+      - "Ground 14A - Domestic violence"
+      - "Ground 15 - Damaged furniture"
+      - "Ground 17 - False statement"
+    helperText: "Select all grounds that apply. Grounds 8, 10-15, 17 are mandatory; Grounds 1, 2, 7, 7A are discretionary."
+    validation:
+      required: true
+    maps_to:
+      - section8_grounds
+
+  - id: section8_details
+    section: Section 8 Evidence
+    question: "Provide details for your selected grounds"
+    inputType: textarea
+    routes:
+      - section_8
+    dependsOn:
+      questionId: eviction_route
+      value: "Section 8 (fault-based)"
+    helperText: "Describe the facts supporting each ground. Be specific with dates and evidence."
+    placeholder: "E.g., Ground 8: Rent arrears currently stand at £3,200, representing 10 weeks of unpaid rent. Last payment received 15/10/2025."
+    validation:
+      required: true
+    maps_to:
+      - section8_details
+
+  # ============================================================
+  # SECTION 21 QUESTIONS (ENGLAND ONLY)
+  # ============================================================
+
+  - id: section21_compliance
+    section: Section 21 Compliance
+    question: "Section 21 compliance checks"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "Section 21 (no-fault)"
+    helperText: "All must be YES to use Section 21."
+    fields:
+      - id: deposit_protected
+        label: "Deposit protected within 30 days?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: prescribed_info_served
+        label: "Prescribed information served?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: how_to_rent_served
+        label: "'How to Rent' guide served?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: epc_gas_cert_served
+        label: "EPC & Gas Safety cert served?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: no_retaliatory_notice
+        label: "No retaliatory eviction (6 months after complaint)?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - section21.deposit_protected
+      - section21.prescribed_info_served
+      - section21.how_to_rent_served
+      - section21.epc_gas_cert_served
+      - section21.no_retaliatory_notice
+
+  # ============================================================
+  # COMMON EVICTION PACK QUESTIONS
+  # ============================================================
+
+  - id: property_address
+    section: Property
+    question: "Property address"
+    inputType: group
+    helperText: "The rental property being repossessed"
+    fields:
+      - id: property_address_line1
+        label: "Building and street"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: property_address_town
+        label: "Town/City"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: property_address_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - property_address_line1
+      - property_address_town
+      - property_address_postcode
+
+  - id: tenancy_start_date
+    section: Tenancy
+    question: "Tenancy start date"
+    inputType: date
+    helperText: "When the current tenancy began"
+    validation:
+      required: true
+    maps_to:
+      - tenancy_start_date
+
+  - id: tenant_details
+    section: Tenant
+    question: "Lead tenant details"
+    inputType: group
+    fields:
+      - id: tenant_full_name
+        label: "Full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: tenant_email
+        label: "Email"
+        inputType: email
+        width: half
+      - id: tenant_phone
+        label: "Phone"
+        inputType: tel
+        width: half
+    maps_to:
+      - tenant_full_name
+      - tenant_email
+      - tenant_phone
+
+  - id: landlord_details
+    section: Landlord
+    question: "Landlord details"
+    inputType: group
+    fields:
+      - id: landlord_full_name
+        label: "Full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_line1
+        label: "Address line 1"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: landlord_address_town
+        label: "Town/City"
+        inputType: text
+        validation:
+          required: true
+        width: half
+      - id: landlord_address_postcode
+        label: "Postcode"
+        inputType: text
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - landlord_full_name
+      - landlord_address_line1
+      - landlord_address_town
+      - landlord_address_postcode
+
+  - id: evidence_uploads
+    section: Evidence
+    question: "Upload supporting documents"
+    inputType: upload
+    helperText: "Tenancy agreement, notice served, deposit certificate, rent statements, etc."
+    validation:
+      required: false
+    maps_to:
+      - evidence.pack_documents_uploaded

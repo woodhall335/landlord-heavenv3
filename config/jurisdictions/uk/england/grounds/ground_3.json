@@ -1,0 +1,98 @@
+{
+  "ground": "3",
+  "type": "mandatory",
+  "category": "holiday_letting",
+  "name": "Out of Season Holiday Let",
+  "short_description": "Dwelling let during off-season (tenancy not exceeding 8 months)",
+  "legal_basis": {
+    "act": "Housing Act 1988",
+    "section": "Schedule 2, Ground 3",
+    "statute_year": "1988"
+  },
+  "requirements": {
+    "notice_requirement": {
+      "type": "written_notice",
+      "timing": "Before or at start of tenancy",
+      "content": "Notice must state possession may be recovered under Ground 3",
+      "exception": "Court may dispense if just and equitable"
+    },
+    "prior_use": {
+      "period": "Within 12 months before tenancy began",
+      "use": "Occupied for holiday purposes",
+      "proof_required": "Evidence of holiday letting"
+    },
+    "tenancy_duration": {
+      "maximum": "8 months",
+      "type": "Fixed term assured shorthold tenancy"
+    },
+    "future_use": {
+      "requirement": "Landlord requires possession for holiday letting",
+      "timing": "Must be for future holiday season"
+    }
+  },
+  "notice_period": {
+    "section_8_notice": "2 months minimum",
+    "court_proceedings": "Can be started after notice expires"
+  },
+  "evidence_required": [
+    "Written notice given at tenancy start",
+    "Tenancy agreement (8 months or less)",
+    "Evidence of prior holiday letting (booking confirmations, holiday let website, council tourism registration)",
+    "Evidence of intended future holiday use (advance bookings, marketing materials)",
+    "Proof property was used for holidays within 12 months before tenancy"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Clear written notice at tenancy start",
+      "Strong evidence of prior holiday use",
+      "Tenancy is 8 months or less",
+      "Genuine intention to resume holiday letting",
+      "Peak holiday season approaching",
+      "Advance holiday bookings in place"
+    ],
+    "medium_probability": [
+      "Notice given but informal",
+      "Some evidence of holiday use but limited",
+      "Intention to resume holiday letting is genuine but no firm bookings"
+    ],
+    "low_probability": [
+      "No notice given and court refuses to dispense",
+      "Tenancy exceeds 8 months",
+      "Cannot prove holiday use within prior 12 months",
+      "No genuine intention to resume holiday letting",
+      "Property not suitable for holiday lets"
+    ]
+  },
+  "red_flags": [
+    "No written notice given at start",
+    "Tenancy exceeds 8 months",
+    "No evidence of prior holiday use",
+    "Property never used for holidays",
+    "Landlord has multiple ASTs suggesting not genuine holiday let",
+    "No holiday letting license (if required by council)"
+  ],
+  "typical_timeline": {
+    "notice_period": "2 months",
+    "court_proceedings": "4-6 months",
+    "total": "6-8 months",
+    "seasonal_note": "Often timed to regain possession before summer holiday season"
+  },
+  "costs": {
+    "court_fee": 355,
+    "bailiff_fee": 130,
+    "legal_costs": "£1,000-£2,500 if represented"
+  },
+  "tenant_defenses": [
+    "No notice given and no good reason to dispense",
+    "Tenancy exceeds 8 months",
+    "Property not used for holidays in prior 12 months",
+    "No genuine intention to resume holiday letting",
+    "Landlord using ground as pretext for eviction"
+  ],
+  "related_grounds": ["4"],
+  "notes": "Ground 3 is MANDATORY but rarely used. Most common in coastal areas. Landlords must prove genuine holiday letting history and intention to resume.",
+  "case_law": [
+    "Blancett v Rhondda Cynon Taff County Borough Council [2001] - Holiday use must be proved",
+    "R (on the application of Woolfe) v Wigan MBC [2003] - Intention to resume holiday letting must be genuine"
+  ]
+}
