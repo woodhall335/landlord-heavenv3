@@ -591,12 +591,16 @@ async function validatePDF(
     console.log('    ℹ️  pdf-parse available - performing full text validation');
 
     let pdfText = '';
+    let parseSuccess = false;
+
     try {
-      // Convert Buffer to Uint8Array for pdf-parse v2 compatibility
-      // pdf-parse uses PDF.js internally which expects Uint8Array, not Buffer
-      const uint8Array = new Uint8Array(pdfBuffer);
-      const pdfData = await pdfParse(uint8Array);
+      // pdf-parse v2 uses PDF.js internally which expects Uint8Array
+      // Node.js Buffer is a subclass of Uint8Array, but PDF.js may not recognize it correctly
+      // Convert to pure Uint8Array for maximum compatibility
+      const uint8Data = Uint8Array.from(pdfBuffer);
+      const pdfData = await pdfParse(uint8Data);
       pdfText = String(pdfData?.text ?? '');
+      parseSuccess = true;
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
       warnings.push(`pdf-parse failed (${msg}) - falling back to size/header-only validation`);
@@ -607,19 +611,21 @@ async function validatePDF(
       return { valid: errors.length === 0, errors, warnings };
     }
 
-    // Expected phrases
-    for (const phrase of route.expectedPhrases) {
-      if (!pdfText.includes(phrase)) {
-        errors.push(`Missing expected phrase: "${phrase}"`);
+    // Only perform text validation if parsing succeeded
+    if (parseSuccess) {
+      // Expected phrases
+      for (const phrase of route.expectedPhrases) {
+        if (!pdfText.includes(phrase)) {
+          errors.push(`Missing expected phrase: "${phrase}"`);
+        }
       }
-    }
 
-    // Forbidden phrases
-    for (const phrase of route.forbiddenPhrases) {
-      if (pdfText.includes(phrase)) {
-        errors.push(`Found forbidden phrase: "${phrase}"`);
+      // Forbidden phrases
+      for (const phrase of route.forbiddenPhrases) {
+        if (pdfText.includes(phrase)) {
+          errors.push(`Found forbidden phrase: "${phrase}"`);
+        }
       }
-    }
 
     // Common template leaks / rendering failures (text-only, safe)
     const leakPatterns = ['{{', '}}', 'undefined', 'NULL', '[object Object]', '****'];
