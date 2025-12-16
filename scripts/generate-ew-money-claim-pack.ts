@@ -2,7 +2,7 @@ import { generateMoneyClaimPack } from '../src/lib/documents/money-claim-pack-ge
 import { savePackPreview } from './helpers/save-pack.ts';
 
 const sampleCase = {
-  jurisdiction: 'england-wales' as const,
+  jurisdiction: 'england' as const,
   case_id: 'case-money-cli-1',
   landlord_full_name: 'Alice Landlord',
   landlord_address: '1 High Street\nLondon',
@@ -31,7 +31,7 @@ async function main() {
   process.env.DISABLE_MONEY_CLAIM_AI = 'true';
 
   const pack = await generateMoneyClaimPack(sampleCase);
-  await savePackPreview('E&W Money Claim Pack', 'ew-money-claim', pack.documents);
+  await savePackPreview('England Money Claim Pack', 'england-money-claim', pack.documents);
 }
 
 main().catch((error) => {

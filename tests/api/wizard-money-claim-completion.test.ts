@@ -90,7 +90,7 @@ describe('Money claim completion gating', () => {
     const caseRow = {
       id: 'case-mc-1',
       case_type: 'money_claim',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       collected_facts: createEmptyWizardFacts(),
       user_id: null,
       wizard_progress: 0,
@@ -138,7 +138,7 @@ describe('Money claim completion gating', () => {
     const caseRow = {
       id: 'case-mc-2',
       case_type: 'money_claim',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       collected_facts: facts,
       user_id: null,
       wizard_progress: 90,

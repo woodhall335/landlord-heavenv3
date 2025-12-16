@@ -183,7 +183,7 @@ describe('AST Wizard Flow - Integration Tests', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           product: 'ast_standard',
-          jurisdiction: 'england-wales',
+          jurisdiction: 'england',
         }),
       });
 
@@ -192,7 +192,7 @@ describe('AST Wizard Flow - Integration Tests', () => {
 
       const startData = await startResponse.json();
       expect(startData.case_id).toBeDefined();
-      expect(startData.jurisdiction).toBe('england-wales');
+      expect(startData.jurisdiction).toBe('england');
       expect(startData.next_question).toBeDefined();
 
       const caseId = startData.case_id;
@@ -201,7 +201,7 @@ describe('AST Wizard Flow - Integration Tests', () => {
       const caseRecord = mockDb.cases.get(caseId);
       expect(caseRecord).toBeDefined();
       expect(caseRecord.case_type).toBe('tenancy_agreement');
-      expect(caseRecord.jurisdiction).toBe('england-wales');
+      expect(caseRecord.jurisdiction).toBe('england');
 
       // ------------------------------------------------
       // 2. Answer a sample question (first question from MQS)
@@ -299,7 +299,7 @@ describe('AST Wizard Flow - Integration Tests', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           product: 'ast_premium',
-          jurisdiction: 'england-wales',
+          jurisdiction: 'england',
         }),
       });
 

@@ -262,7 +262,7 @@ describe('enhanceAnswer - England & Wales', () => {
       const result = await enhanceAnswer({
         question: textareaQuestion as any,
         rawAnswer: 'Tenant owes £4500 in rent from last 3 months',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         product: 'notice_only',
         caseType: 'eviction',
         decisionContext: s21BlockedDecision,
@@ -287,7 +287,7 @@ describe('enhanceAnswer - England & Wales', () => {
         question: textareaQuestion as any,
         rawAnswer:
           'The tenant has not paid rent for 3 months totaling £4500',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         product: 'notice_only',
         caseType: 'eviction',
         decisionContext: s21BlockedDecision,
@@ -308,7 +308,7 @@ describe('enhanceAnswer - England & Wales', () => {
       const result = await enhanceAnswer({
         question: textareaQuestion as any,
         rawAnswer: 'Tenant hasnt paid since September',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         product: 'notice_only',
         caseType: 'eviction',
         decisionContext: s21BlockedDecision,
@@ -331,7 +331,7 @@ describe('enhanceAnswer - England & Wales', () => {
       const result = await enhanceAnswer({
         question: textareaQuestion as any,
         rawAnswer: 'Tenant owes money',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         product: 'notice_only',
         caseType: 'eviction',
         decisionContext: s21BlockedDecision,
@@ -439,7 +439,7 @@ describe('enhanceAnswer - Consistency Checks', () => {
         question: textareaQuestion as any,
         rawAnswer:
           'Tenant has paid rent regularly but owes £4500',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         product: 'notice_only',
         caseType: 'eviction',
         decisionContext: s21BlockedDecision,
@@ -467,7 +467,7 @@ describe('enhanceAnswer - Consistency Checks', () => {
       const result = await enhanceAnswer({
         question: dateQuestion as any,
         rawAnswer: 'Notice served on 2024-01-01',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         product: 'notice_only',
         caseType: 'eviction',
         caseIntelContext: caseIntelWithIssues,
@@ -492,7 +492,7 @@ describe('enhanceAnswer - Consistency Checks', () => {
         question: textareaQuestion as any,
         rawAnswer:
           'No arrears until March but tenant owes money from January',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         product: 'notice_only',
         caseType: 'eviction',
         caseIntelContext: caseIntelWithIssues,
@@ -520,7 +520,7 @@ describe('enhanceAnswer - Safety Tests (Legal Rules)', () => {
       const result = await enhanceAnswer({
         question: textareaQuestion as any,
         rawAnswer: 'Tenant owes £1800',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         product: 'notice_only',
         caseType: 'eviction',
         decisionContext: s21BlockedDecision,
@@ -549,7 +549,7 @@ describe('enhanceAnswer - Safety Tests (Legal Rules)', () => {
       const result = await enhanceAnswer({
         question: textareaQuestion as any,
         rawAnswer: 'I want to use Section 21',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         product: 'notice_only',
         caseType: 'eviction',
         decisionContext: s21BlockedDecision,
@@ -571,7 +571,7 @@ describe('enhanceAnswer - Safety Tests (Legal Rules)', () => {
       const result = await enhanceAnswer({
         question: textareaQuestion as any,
         rawAnswer: 'Tenant breached tenancy and has arrears',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         product: 'notice_only',
         caseType: 'eviction',
         decisionContext: {
@@ -616,7 +616,7 @@ describe('enhanceAnswer - Non-Free-Text Filtering', () => {
       const result = await enhanceAnswer({
         question: selectQuestion as any,
         rawAnswer: 'section_8',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         product: 'notice_only',
         caseType: 'eviction',
       });

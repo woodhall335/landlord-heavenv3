@@ -160,7 +160,7 @@ describe('Money claim wizard integration', () => {
       new Request('http://localhost/api/wizard/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ product: 'money_claim', jurisdiction: 'england-wales' }),
+        body: JSON.stringify({ product: 'money_claim', jurisdiction: 'england' }),
       })
     );
 
@@ -184,7 +184,7 @@ describe('Money claim wizard integration', () => {
       address_line2: '',
       city: 'London',
       postcode: 'N2 2BB',
-      country: 'england-wales',
+      country: 'england',
     });
     await answerQuestion(caseId, 'tenancy_start_date', '2024-01-01');
     await answerQuestion(caseId, 'rent_amount', 750);

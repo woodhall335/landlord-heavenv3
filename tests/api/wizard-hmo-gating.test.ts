@@ -67,7 +67,7 @@ describe('HMO Pro gating (V1 scope enforcement)', () => {
         method: 'POST',
         body: JSON.stringify({
           product: 'hmo_pro',
-          jurisdiction: 'england-wales',
+          jurisdiction: 'england',
         }),
       })
     );
@@ -87,7 +87,7 @@ describe('HMO Pro gating (V1 scope enforcement)', () => {
         method: 'POST',
         body: JSON.stringify({
           product: 'hmo_standard',
-          jurisdiction: 'england-wales',
+          jurisdiction: 'england',
         }),
       })
     );
@@ -124,7 +124,7 @@ describe('HMO Pro gating (V1 scope enforcement)', () => {
         method: 'POST',
         body: JSON.stringify({
           product: 'invalid_product',
-          jurisdiction: 'england-wales',
+          jurisdiction: 'england',
         }),
       })
     );
@@ -152,7 +152,7 @@ describe('HMO Pro gating (V1 scope enforcement)', () => {
         data: {
           id: `case-${product}`,
           case_type: product,
-          jurisdiction: 'england-wales',
+          jurisdiction: 'england',
           status: 'draft',
         },
         error: null,
@@ -172,7 +172,7 @@ describe('HMO Pro gating (V1 scope enforcement)', () => {
           method: 'POST',
           body: JSON.stringify({
             product,
-            jurisdiction: 'england-wales',
+            jurisdiction: 'england',
           }),
         })
       );

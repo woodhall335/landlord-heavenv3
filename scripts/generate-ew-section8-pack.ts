@@ -2,9 +2,9 @@ import { generateCompleteEvictionPack } from '../src/lib/documents/eviction-pack
 import { __setTestJsonAIClient } from '../src/lib/ai/openai-client.ts';
 import { savePackPreview } from './helpers/save-pack.ts';
 
-function buildEnglandWalesFacts() {
+function buildEnglandFacts() {
   return {
-    __meta: { case_id: 'EVICT-CLI-SEC8', jurisdiction: 'england-wales' },
+    __meta: { case_id: 'EVICT-CLI-SEC8', jurisdiction: 'england' },
     landlord_name: 'Alex Landlord',
     landlord_address_line1: '1 High Street',
     landlord_city: 'London',
@@ -56,8 +56,8 @@ async function main() {
     },
   } as any);
 
-  const pack = await generateCompleteEvictionPack(buildEnglandWalesFacts());
-  await savePackPreview('E&W Section 8 Complete Eviction Pack', 'ew-section8', pack.documents);
+  const pack = await generateCompleteEvictionPack(buildEnglandFacts());
+  await savePackPreview('England Section 8 Complete Eviction Pack', 'england-section8', pack.documents);
 }
 
 main().catch((error) => {

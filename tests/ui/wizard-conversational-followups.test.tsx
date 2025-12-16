@@ -75,7 +75,7 @@ describe('Conversational wizard follow-up handling', () => {
     render(
       <WizardContainer
         caseType="eviction"
-        jurisdiction="england-wales"
+        jurisdiction="england"
         onComplete={() => undefined}
       />,
     );

@@ -45,13 +45,13 @@ describe('Money claim MQS - England & Wales PAP-DEBT coverage', () => {
   let mqs: MasterQuestionSet | null;
 
   beforeAll(() => {
-    mqs = loadMQS('money_claim', 'england-wales');
+    mqs = loadMQS('money_claim', 'england');
   });
 
   test('loads the money claim MQS for England & Wales', () => {
     expect(mqs).not.toBeNull();
     expect(mqs?.product).toBe('money_claim');
-    expect(mqs?.jurisdiction).toBe('england-wales');
+    expect(mqs?.jurisdiction).toBe('england');
   });
 
   test('includes PAP-DEBT, court route, evidence, and enforcement questions', () => {

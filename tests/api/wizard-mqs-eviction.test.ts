@@ -105,7 +105,7 @@ describe('MQS eviction flow (England & Wales)', () => {
     const mockCase = {
       id: 'case-1',
       case_type: 'eviction',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       collected_facts: { __meta: { product: 'notice_only', mqs_version: null } },
       user_id: null,
       wizard_progress: 0,
@@ -163,7 +163,7 @@ describe('MQS eviction flow (England & Wales)', () => {
     const mockCase = {
       id: 'case-2',
       case_type: 'eviction',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       collected_facts: { __meta: { product: 'money_claim', mqs_version: null } },
       user_id: null,
       wizard_progress: 0,
@@ -232,7 +232,7 @@ describe('MQS eviction flow (England & Wales)', () => {
     const mockCase = {
       id: 'case-3',
       case_type: 'eviction',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       collected_facts: { __meta: { product: 'notice_only', mqs_version: null } },
       user_id: null,
       wizard_progress: 0,
@@ -241,7 +241,7 @@ describe('MQS eviction flow (England & Wales)', () => {
     (mqsLoader.loadMQS as unknown as Mock).mockReturnValueOnce({
       id: 'custom',
       product: 'notice_only',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       version: '1.0.0',
       questions: [
         {

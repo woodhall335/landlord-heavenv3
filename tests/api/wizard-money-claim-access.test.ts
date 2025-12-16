@@ -75,7 +75,7 @@ describe('Money claim access controls', () => {
       data: {
         id: 'case-456',
         case_type: 'money_claim',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         status: 'in_progress',
         collected_facts: {},
         user_id: null,
@@ -86,7 +86,7 @@ describe('Money claim access controls', () => {
     const response = await startWizard(
       new Request('http://localhost/api/wizard/start', {
         method: 'POST',
-        body: JSON.stringify({ product: 'money_claim', jurisdiction: 'england-wales' }),
+        body: JSON.stringify({ product: 'money_claim', jurisdiction: 'england' }),
       }),
     );
 

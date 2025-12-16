@@ -15,7 +15,7 @@ vi.mock('@/lib/documents/generator', async () => {
 
 function buildEnglandWalesFacts() {
   return {
-    __meta: { case_id: 'EVICT-TEST-01', jurisdiction: 'england-wales' },
+    __meta: { case_id: 'EVICT-TEST-01', jurisdiction: 'england' },
     landlord_name: 'Alex Landlord',
     landlord_address_line1: '1 High Street',
     landlord_city: 'London',

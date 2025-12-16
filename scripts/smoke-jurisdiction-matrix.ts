@@ -408,6 +408,82 @@ function testNoDeprecatedYAMLLoaded(jurisdiction: CanonicalJurisdiction, product
   });
 }
 
+/**
+ * Test 6: Wales jurisdiction is fully supported (no "Unsupported jurisdiction" errors)
+ */
+function testWalesSupported(jurisdiction: CanonicalJurisdiction, product: ProductType): void {
+  const testName = 'Wales support';
+
+  if (jurisdiction !== 'wales') {
+    logResult({
+      jurisdiction,
+      product,
+      test: testName,
+      status: 'SKIP',
+      message: 'N/A (not Wales)',
+    });
+    return;
+  }
+
+  try {
+    const mqs = loadMQS(product, jurisdiction);
+
+    if (!mqs) {
+      logResult({
+        jurisdiction,
+        product,
+        test: testName,
+        status: 'FAIL',
+        message: 'MQS returned null - Wales may not be supported',
+      });
+      return;
+    }
+
+    // Check that the jurisdiction is correctly set to 'wales', not 'england' or 'england-wales'
+    if (mqs.jurisdiction !== 'wales') {
+      logResult({
+        jurisdiction,
+        product,
+        test: testName,
+        status: 'FAIL',
+        message: `MQS jurisdiction mismatch: expected 'wales', got '${mqs.jurisdiction}'`,
+      });
+      return;
+    }
+
+    logResult({
+      jurisdiction,
+      product,
+      test: testName,
+      status: 'PASS',
+      message: 'Wales is fully supported with correct jurisdiction',
+    });
+  } catch (error: any) {
+    const errorMsg = error.message || String(error);
+
+    // Specific check for "Unsupported jurisdiction" error
+    if (errorMsg.toLowerCase().includes('unsupported jurisdiction')) {
+      logResult({
+        jurisdiction,
+        product,
+        test: testName,
+        status: 'FAIL',
+        message: `Wales should be supported but got error: ${errorMsg}`,
+      });
+      return;
+    }
+
+    // Other errors might be legitimate (e.g., file not found for invalid combo)
+    logResult({
+      jurisdiction,
+      product,
+      test: testName,
+      status: 'FAIL',
+      message: `Unexpected error: ${errorMsg}`,
+    });
+  }
+}
+
 // ============================================================================
 // MAIN TEST RUNNER
 // ============================================================================
@@ -441,6 +517,7 @@ async function runSmokeTests() {
       testSection21Guard(jurisdiction, product);
       testNorthernIrelandGuard(jurisdiction, product);
       testNoDeprecatedYAMLLoaded(jurisdiction, product);
+      testWalesSupported(jurisdiction, product);
     }
   }
 

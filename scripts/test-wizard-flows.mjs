@@ -252,22 +252,22 @@ async function main() {
 
   // You can comment/uncomment flows as needed.
 
-  // 1) England & Wales - notice_only
+  // 1) England - notice_only
   try {
     results.push(
-      await runFlow({ product: 'notice_only', jurisdiction: 'england-wales', maxQuestions: 60 })
+      await runFlow({ product: 'notice_only', jurisdiction: 'england', maxQuestions: 60 })
     );
   } catch (err) {
-    console.error(`❌ E&W notice_only flow failed:`, err.message);
+    console.error(`❌ England notice_only flow failed:`, err.message);
   }
 
-  // 2) England & Wales - complete_pack
+  // 2) Wales - notice_only
   try {
     results.push(
-      await runFlow({ product: 'complete_pack', jurisdiction: 'england-wales', maxQuestions: 80 })
+      await runFlow({ product: 'notice_only', jurisdiction: 'wales', maxQuestions: 60 })
     );
   } catch (err) {
-    console.error(`❌ E&W complete_pack flow failed:`, err.message);
+    console.error(`❌ Wales notice_only flow failed:`, err.message);
   }
 
   // 3) Scotland - notice_only (Notice to Leave)
@@ -279,16 +279,25 @@ async function main() {
     console.error(`❌ Scotland notice_only flow failed:`, err.message);
   }
 
-  // 4) England & Wales - money_claim
+  // 4) England - complete_pack
   try {
     results.push(
-      await runFlow({ product: 'money_claim', jurisdiction: 'england-wales', maxQuestions: 60 })
+      await runFlow({ product: 'complete_pack', jurisdiction: 'england', maxQuestions: 80 })
     );
   } catch (err) {
-    console.error(`❌ E&W money_claim flow failed:`, err.message);
+    console.error(`❌ England complete_pack flow failed:`, err.message);
   }
 
-  // 5) Scotland - money_claim (Simple Procedure)
+  // 5) England - money_claim
+  try {
+    results.push(
+      await runFlow({ product: 'money_claim', jurisdiction: 'england', maxQuestions: 60 })
+    );
+  } catch (err) {
+    console.error(`❌ England money_claim flow failed:`, err.message);
+  }
+
+  // 6) Scotland - money_claim (Simple Procedure)
   try {
     results.push(
       await runFlow({ product: 'money_claim', jurisdiction: 'scotland', maxQuestions: 60 })

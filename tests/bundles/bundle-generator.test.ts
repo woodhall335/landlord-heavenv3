@@ -16,7 +16,7 @@ import { __setTestJsonAIClient } from '@/lib/ai/openai-client';
 // Minimal valid England & Wales case
 const minimalEnglandWalesCase: CaseFacts = {
   meta: {
-    jurisdiction: 'england-wales',
+    jurisdiction: 'england',
     product: 'complete_pack',
     case_id: 'test-case-ew-001',
   },
@@ -251,7 +251,7 @@ describe('generateCourtBundle (England & Wales)', () => {
 
     expect(result.success).toBe(true);
     expect(result.metadata).toBeDefined();
-    expect(result.metadata?.jurisdiction).toBe('england-wales');
+    expect(result.metadata?.jurisdiction).toBe('england');
     expect(result.metadata?.type).toBe('court');
     expect(result.metadata?.sections.length).toBeGreaterThan(0);
   }, 30000); // 30s timeout for AI calls

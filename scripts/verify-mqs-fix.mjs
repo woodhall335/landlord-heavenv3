@@ -11,7 +11,7 @@ const rootDir = path.join(__dirname, '..');
 console.log('🔍 Verifying MQS Fix...\n');
 
 // Load the MQS file
-const mqsPath = path.join(rootDir, 'config/mqs/complete_pack/england-wales.yaml');
+const mqsPath = path.join(rootDir, 'config/mqs/complete_pack/england.yaml');
 const mqsContent = fs.readFileSync(mqsPath, 'utf8');
 const mqs = yaml.load(mqsContent);
 

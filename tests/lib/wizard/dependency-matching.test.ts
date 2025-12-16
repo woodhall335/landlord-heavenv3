@@ -22,7 +22,7 @@ describe('Dependency Matching: Array vs Scalar', () => {
     const mqs: MasterQuestionSet = {
       id: 'test_mqs',
       product: 'notice_only',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       version: '1.0.0',
       questions: [
         {
@@ -67,7 +67,7 @@ describe('Dependency Matching: Array vs Scalar', () => {
     const mqs: MasterQuestionSet = {
       id: 'test_mqs',
       product: 'notice_only',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       version: '1.0.0',
       questions: [
         {
@@ -110,7 +110,7 @@ describe('Dependency Matching: Array vs Scalar', () => {
     const mqs: MasterQuestionSet = {
       id: 'test_mqs',
       product: 'notice_only',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       version: '1.0.0',
       questions: [
         {
@@ -153,7 +153,7 @@ describe('Dependency Matching: Array vs Scalar', () => {
     const mqs: MasterQuestionSet = {
       id: 'test_mqs',
       product: 'notice_only',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       version: '1.0.0',
       questions: [
         {
@@ -193,10 +193,10 @@ describe('Dependency Matching: Array vs Scalar', () => {
    * Integration test with real MQS data
    */
   it('should work with real Notice Only MQS for section8_grounds', () => {
-    const mqs = loadMQS('notice_only', 'england-wales');
+    const mqs = loadMQS('notice_only', 'england');
 
     if (!mqs) {
-      throw new Error('Failed to load notice_only MQS for england-wales');
+      throw new Error('Failed to load notice_only MQS for england');
     }
 
     const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds');
@@ -220,10 +220,10 @@ describe('Dependency Matching: Array vs Scalar', () => {
    * Test with both routes selected
    */
   it('should show section8_grounds when both section_8 and section_21 are selected', () => {
-    const mqs = loadMQS('notice_only', 'england-wales');
+    const mqs = loadMQS('notice_only', 'england');
 
     if (!mqs) {
-      throw new Error('Failed to load notice_only MQS for england-wales');
+      throw new Error('Failed to load notice_only MQS for england');
     }
 
     const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds');
@@ -247,10 +247,10 @@ describe('Dependency Matching: Array vs Scalar', () => {
    * Test section8_grounds should NOT show when only section_21 selected
    */
   it('should NOT show section8_grounds when only section_21 is selected', () => {
-    const mqs = loadMQS('notice_only', 'england-wales');
+    const mqs = loadMQS('notice_only', 'england');
 
     if (!mqs) {
-      throw new Error('Failed to load notice_only MQS for england-wales');
+      throw new Error('Failed to load notice_only MQS for england');
     }
 
     const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds');
