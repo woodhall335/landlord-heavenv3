@@ -2371,14 +2371,31 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
 
   // Templates expect notice_service_date and notice_expiry_date (in addition to service_date and expiry_date)
   templateData.notice_service_date = templateData.service_date || templateData.notice_date;
-  templateData.notice_expiry_date = templateData.expiry_date;
+  templateData.notice_expiry_date = templateData.expiry_date || templateData.earliest_possession_date;
 
   // Templates expect metadata.generated_at for generation timestamp
   const now = new Date();
+
+  // Convert jurisdiction code to display name
+  const getJurisdictionDisplay = (jurisdiction: string | null): string => {
+    if (!jurisdiction) return '';
+    const jur = jurisdiction.toLowerCase().trim();
+    if (jur === 'england' || jur === 'eng') return 'England';
+    if (jur === 'wales' || jur === 'cym') return 'Wales';
+    if (jur === 'scotland' || jur === 'sco') return 'Scotland';
+    if (jur === 'northern-ireland' || jur === 'ni') return 'Northern Ireland';
+    // Legacy: default england-wales to England (Section 8/21 only exist in England)
+    if (jur === 'england-wales' || jur === 'england & wales') return 'England';
+    return jurisdiction;
+  };
+
+  templateData.jurisdiction_display = getJurisdictionDisplay(templateData.jurisdiction);
+
   templateData.metadata = {
     generated_at: now.toISOString(),
     generated_date: now.toISOString().split('T')[0],
     jurisdiction: templateData.jurisdiction,
+    jurisdiction_display: templateData.jurisdiction_display,
     product: templateData.product,
   };
 
@@ -2396,6 +2413,18 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   console.log('[mapNoticeOnlyFacts] Grounds:', templateData.grounds.length);
   console.log('[mapNoticeOnlyFacts] Dates - notice:', templateData.notice_date, 'service:', templateData.service_date, 'earliest:', templateData.earliest_possession_date);
   console.log('[mapNoticeOnlyFacts] Deposit - amount:', templateData.deposit_amount, 'protected:', templateData.deposit_protected, 'scheme:', templateData.deposit_scheme);
+
+  // PACK DOCUMENT DEBUG - Log what pack templates will receive
+  console.log('[mapNoticeOnlyFacts] === PACK DOCUMENT DATA ===');
+  console.log('[mapNoticeOnlyFacts] property.address_line1:', templateData.property?.address_line1);
+  console.log('[mapNoticeOnlyFacts] property.address_town:', templateData.property?.address_town);
+  console.log('[mapNoticeOnlyFacts] property.postcode:', templateData.property?.postcode);
+  console.log('[mapNoticeOnlyFacts] tenant.full_name:', templateData.tenant?.full_name);
+  console.log('[mapNoticeOnlyFacts] tenancy.start_date:', templateData.tenancy?.start_date);
+  console.log('[mapNoticeOnlyFacts] notice_service_date:', templateData.notice_service_date);
+  console.log('[mapNoticeOnlyFacts] notice_expiry_date:', templateData.notice_expiry_date);
+  console.log('[mapNoticeOnlyFacts] jurisdiction_display:', templateData.jurisdiction_display);
+  console.log('[mapNoticeOnlyFacts] ===========================');
 
   return templateData;
 }
