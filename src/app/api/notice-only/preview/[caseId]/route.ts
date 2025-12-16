@@ -74,7 +74,7 @@ export async function GET(
       // ground normalization, deposit logic, and date handling
       const templateData = mapNoticeOnlyFacts(wizardFacts);
 
-      // JURISDICTION VALIDATION: Block Section 8/21 for Wales, Section 21 for England-Wales
+      // JURISDICTION VALIDATION: Block Section 8/21 for Wales
       // Section 8 and Section 21 only exist in England (Housing Act 1988)
       // Wales uses Renting Homes (Wales) Act 2016 with different sections
       const actualJurisdiction = templateData.jurisdiction?.toLowerCase();
@@ -97,18 +97,6 @@ export async function GET(
             { status: 400 }
           );
         }
-      }
-
-      // JURISDICTION VALIDATION: Block Section 21 for England-Wales
-      // Section 21 is England-only. England-Wales jurisdiction should use Section 8 for fault-based evictions.
-      if (jurisdiction === 'england-wales' && selected_route === 'section_21') {
-        return NextResponse.json(
-          {
-            error: 'Section 21 not available for England-Wales jurisdiction',
-            details: 'Section 21 (no-fault eviction) is only available when jurisdiction is set to "England". For England-Wales jurisdiction, use Section 8 (fault-based eviction) instead. If you are in England and want to use Section 21, please select "England" as your jurisdiction.',
-          },
-          { status: 400 }
-        );
       }
 
       // DATE FORMATTING HELPER - UK legal format
@@ -214,11 +202,11 @@ export async function GET(
           console.error('[NOTICE-PREVIEW-API] Section 8 generation failed:', err);
         }
       } else if (selected_route === 'section_21') {
-        console.log('[NOTICE-PREVIEW-API] Generating Section 21 notice (England only)');
+        console.log('[NOTICE-PREVIEW-API] Generating Section 21 notice');
         try {
           const section21Doc = await generateDocument({
-            templatePath: 'uk/england/templates/eviction/section21_form6a.hbs',
-            data: templateData,
+            templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
+            data: caseFacts,
             outputFormat: 'pdf',
             isPreview: true,
           });
