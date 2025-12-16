@@ -167,13 +167,15 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
         <div>
           <h1 className="text-2xl font-bold">Final Case Analysis</h1>
           <p className="text-sm text-gray-600 mt-1">
-            We’ve analysed your answers against the current rules for{' '}
+            We've analysed your answers against the current rules for{' '}
             <span className="font-medium">
-              {jurisdiction === 'england-wales'
-                ? 'England & Wales'
+              {jurisdiction === 'england'
+                ? 'England'
+                : jurisdiction === 'wales'
+                ? 'Wales'
                 : jurisdiction === 'scotland'
                 ? 'Scotland'
-                : jurisdiction}
+                : 'Northern Ireland'}
             </span>
             .
           </p>
