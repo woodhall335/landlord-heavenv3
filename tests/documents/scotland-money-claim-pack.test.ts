@@ -88,7 +88,7 @@ describe('Scotland money claim pack generator', () => {
     await expect(
       generateScotlandMoneyClaim({
         ...sampleCase,
-        jurisdiction: 'england-wales' as any,
+        jurisdiction: 'england' as any,
       }),
     ).rejects.toThrow('Scotland');
   });

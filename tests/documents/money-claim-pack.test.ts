@@ -41,7 +41,7 @@ vi.mock('@/lib/documents/generator', () => ({
 }));
 
 const sampleCase = {
-  jurisdiction: 'england-wales' as const,
+  jurisdiction: 'england' as const,
   case_id: 'case-money-1',
   landlord_full_name: 'Alice Landlord',
   landlord_address: '1 High Street\nLondon',

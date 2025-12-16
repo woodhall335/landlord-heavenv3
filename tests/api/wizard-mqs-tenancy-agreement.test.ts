@@ -9,13 +9,13 @@ describe('Tenancy Agreement MQS - All Jurisdictions', () => {
     let mqs: MasterQuestionSet | null;
 
     beforeAll(() => {
-      mqs = loadMQS('tenancy_agreement', 'england-wales');
+      mqs = loadMQS('tenancy_agreement', 'england');
     });
 
-    test('should load england-wales MQS successfully', () => {
+    test('should load England MQS successfully', () => {
       expect(mqs).not.toBeNull();
       expect(mqs?.product).toBe('tenancy_agreement');
-      expect(mqs?.jurisdiction).toBe('england-wales');
+      expect(mqs?.jurisdiction).toBe('england');
     });
 
     test('should have questions with valid structure', () => {
@@ -184,7 +184,7 @@ describe('Tenancy Agreement MQS - All Jurisdictions', () => {
     });
 
     test('should have similar section count to E&W', () => {
-      const ewMqs = loadMQS('tenancy_agreement', 'england-wales');
+      const ewMqs = loadMQS('tenancy_agreement', 'england');
 
       // Scotland should have a reasonable number of questions (rough parity)
       // England & Wales has more premium features, so Scotland might have slightly fewer
@@ -269,7 +269,7 @@ describe('Tenancy Agreement MQS - All Jurisdictions', () => {
     });
 
     test('should have similar section count to E&W', () => {
-      const ewMqs = loadMQS('tenancy_agreement', 'england-wales');
+      const ewMqs = loadMQS('tenancy_agreement', 'england');
 
       // NI should have a reasonable number of questions (rough parity)
       expect(mqs!.questions.length).toBeGreaterThan(20);
@@ -283,7 +283,7 @@ describe('Tenancy Agreement MQS - All Jurisdictions', () => {
   // Cross-jurisdiction tests
   describe('Cross-Jurisdiction Validation', () => {
     test('all jurisdictions should have product tier as first question', () => {
-      const ewMqs = loadMQS('tenancy_agreement', 'england-wales');
+      const ewMqs = loadMQS('tenancy_agreement', 'england');
       const scotMqs = loadMQS('tenancy_agreement', 'scotland');
       const niMqs = loadMQS('tenancy_agreement', 'northern-ireland');
 
@@ -297,7 +297,7 @@ describe('Tenancy Agreement MQS - All Jurisdictions', () => {
     });
 
     test('all jurisdictions should have core sections', () => {
-      const jurisdictions = ['england-wales', 'scotland', 'northern-ireland'];
+      const jurisdictions = ['england', 'scotland', 'northern-ireland'];
       const coreSections = [
         'property',
         'landlord',
@@ -324,7 +324,7 @@ describe('Tenancy Agreement MQS - All Jurisdictions', () => {
     });
 
     test('no questions should have label/value object options', () => {
-      const jurisdictions = ['england-wales', 'scotland', 'northern-ireland'];
+      const jurisdictions = ['england', 'scotland', 'northern-ireland'];
 
       jurisdictions.forEach((jurisdiction) => {
         const mqs = loadMQS('tenancy_agreement', jurisdiction);

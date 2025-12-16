@@ -306,7 +306,7 @@ function auditMQSCompleteness(
         }
         return true;
       })
-      .map(o => o.value.toLowerCase());
+      .map(o => (o.value as string).toLowerCase());
 
     // Check for invalid routes
     if (jurisdiction === 'wales' && availableRoutes.includes('section_21')) {

@@ -7,7 +7,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 
 function buildWizardFacts(overrides: Record<string, any> = {}) {
   return {
-    __meta: { case_id: 'FALLBACK-1', jurisdiction: 'england-wales' },
+    __meta: { case_id: 'FALLBACK-1', jurisdiction: 'england' },
     landlord_name: 'Fallback Landlord',
     landlord_address_line1: '1 Safety Road',
     landlord_city: 'Bristol',

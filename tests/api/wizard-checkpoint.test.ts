@@ -49,7 +49,7 @@ vi.mock('@/lib/case-facts/normalize', () => ({
     },
     property: {
       address_line1: facts.property_address_line1 || '',
-      country: 'england-wales',
+      country: 'england',
     },
     tenancy: {
       start_date: facts.tenancy_start_date || null,
@@ -130,7 +130,7 @@ vi.mock('@/lib/decision-engine', () => ({
 
 vi.mock('@/lib/law-profile', () => ({
   getLawProfile: vi.fn(() => ({
-    jurisdiction: 'england-wales',
+    jurisdiction: 'england',
     case_type: 'eviction',
     version: '1.0.0',
   })),
@@ -142,7 +142,7 @@ describe('Wizard API Checkpoint', () => {
     supabaseClientMock.single.mockResolvedValue({
       data: {
         id: 'case-123',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         case_type: 'eviction',
         user_id: null,
         wizard_progress: 50,
@@ -225,7 +225,7 @@ describe('Wizard API Checkpoint', () => {
     supabaseClientMock.single.mockResolvedValue({
       data: {
         id: 'case-123',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         case_type: 'money_claim',
         user_id: null,
         wizard_progress: 50,

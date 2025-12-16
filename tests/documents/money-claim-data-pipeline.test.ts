@@ -45,7 +45,7 @@ describe('Money claim data pipeline (wizard → caseFacts → pack)', () => {
         'property_address.address_line2': '',
         'property_address.city': 'London',
         'property_address.postcode': 'N2 2BB',
-        'property_address.country': 'england-wales',
+        'property_address.country': 'england',
         tenancy_start_date: '2024-01-01',
         rent_amount: 750,
         rent_frequency: 'monthly',

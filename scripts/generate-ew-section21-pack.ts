@@ -4,7 +4,7 @@ import { savePackPreview } from './helpers/save-pack.ts';
 
 function buildSection21Facts() {
   return {
-    __meta: { case_id: 'EVICT-CLI-SEC21', jurisdiction: 'england-wales' },
+    __meta: { case_id: 'EVICT-CLI-SEC21', jurisdiction: 'england' },
     landlord_name: 'Alex Landlord',
     landlord_address_line1: '1 High Street',
     landlord_city: 'London',
@@ -56,7 +56,7 @@ async function main() {
   } as any);
 
   const pack = await generateCompleteEvictionPack(buildSection21Facts());
-  await savePackPreview('E&W Section 21 Complete Eviction Pack', 'ew-section21', pack.documents);
+  await savePackPreview('England Section 21 Complete Eviction Pack', 'england-section21', pack.documents);
 }
 
 main().catch((error) => {
