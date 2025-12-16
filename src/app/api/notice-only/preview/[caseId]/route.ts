@@ -11,6 +11,7 @@ import { wizardFactsToCaseFacts, mapNoticeOnlyFacts } from '@/lib/case-facts/nor
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/documents/notice-only-preview-merger';
 import { generateDocument } from '@/lib/documents/generator';
+import { validateNoticeOnlyJurisdiction, formatValidationErrors } from '@/lib/jurisdictions/validator';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -104,6 +105,31 @@ export async function GET(
         console.warn(`[NOTICE-PREVIEW-API] Jurisdiction mismatch: selected_route is ${selected_route} but jurisdiction is ${jurisdiction}. Overriding to 'scotland'.`);
         jurisdiction = 'scotland';
       }
+    }
+
+    // ============================================================================
+    // VALIDATE JURISDICTION CONFIGURATION
+    // ============================================================================
+    console.log('[NOTICE-PREVIEW-API] Validating jurisdiction configuration:', jurisdiction);
+    const validationResult = validateNoticeOnlyJurisdiction(jurisdiction);
+
+    if (!validationResult.valid) {
+      const errorMessage = formatValidationErrors(validationResult);
+      console.error('[NOTICE-PREVIEW-API] Jurisdiction validation failed:\n', errorMessage);
+      return NextResponse.json(
+        {
+          error: 'Jurisdiction configuration error',
+          details: errorMessage,
+          jurisdiction,
+          missingPaths: validationResult.errors.flatMap(e => e.missingPaths),
+        },
+        { status: 500 }
+      );
+    }
+
+    // Log warnings if any
+    if (validationResult.warnings.length > 0) {
+      console.warn('[NOTICE-PREVIEW-API] Jurisdiction warnings:\n', formatValidationErrors(validationResult));
     }
 
     const documents: NoticeOnlyDocument[] = [];
