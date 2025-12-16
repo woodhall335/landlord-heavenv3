@@ -1,0 +1,264 @@
+{{! Fault-Based Notice - Renting Homes (Wales) Act 2016 }}
+{{! This template covers breach of contract notices under Sections 157, 159, 161, 162 }}
+{{! Generated: {{generation_date}} }}
+
+LANDLORD'S BREACH OF CONTRACT NOTICE
+
+Renting Homes (Wales) Act 2016, Sections 157-162
+
+---
+
+TO: {{contract_holder_full_name}}{{#if tenant_2_name}} and {{tenant_2_name}}{{/if}}
+
+OF: {{property_address}}
+
+FROM: {{landlord_full_name}}{{#if landlord_2_name}} and {{landlord_2_name}}{{/if}}
+
+ADDRESS: {{landlord_address}}
+
+---
+
+## 1. DETAILS OF THE DWELLING
+
+The dwelling which is the subject of this notice is:
+
+**{{property_address}}**
+
+---
+
+## 2. DETAILS OF THE OCCUPATION CONTRACT
+
+This notice relates to the occupation contract which began on **{{contract_start_date}}**.
+
+{{#if fixed_term}}
+The contract was granted for a fixed term which {{#if fixed_term_expired}}expired{{else}}expires{{/if}} on **{{fixed_term_end_date}}**.
+{{else}}
+The contract is a periodic contract.
+{{/if}}
+
+**Contract Category:** {{wales_contract_category}}
+
+The current rent is **£{{rent_amount}}** payable **{{rent_frequency}}**.
+
+---
+
+## 3. NOTICE OF BREACH OF CONTRACT
+
+**I/WE GIVE YOU NOTICE** that you have breached the terms of your occupation contract and I/we intend to apply to the court for a possession order.
+
+---
+
+## 4. BREACH DETAILS
+
+### Type of Breach
+
+**{{wales_breach_type}}**
+
+### Particulars of the Breach
+
+{{breach_details}}
+
+{{#if breach_start_date}}
+**Date breach commenced:** {{breach_start_date}}
+{{/if}}
+
+{{#if breach_ongoing}}
+**Status:** This breach is ongoing.
+{{else}}
+**Status:** This breach occurred but is not ongoing.
+{{/if}}
+
+---
+
+{{#if wales_breach_type_rent_arrears}}
+## 5. RENT ARREARS DETAILS
+
+{{#if rent_arrears_amount}}
+**Total arrears owed:** £{{rent_arrears_amount}}
+{{/if}}
+
+**Current rent:** £{{rent_amount}} per {{rent_period_description}}
+
+{{#if arrears_breakdown}}
+### Breakdown of Arrears:
+
+| Period | Rent Due | Rent Paid | Balance |
+|--------|----------|-----------|---------|
+{{#each arrears_breakdown}}
+| {{this.period}} | £{{this.amount_due}} | £{{this.amount_paid}} | £{{this.balance}} |
+{{/each}}
+
+**Total owed:** £{{rent_arrears_amount}}
+{{/if}}
+
+{{#if last_payment_date}}
+Last payment received: £{{last_payment_amount}} on {{last_payment_date}}
+{{/if}}
+
+### Steps Taken to Resolve Arrears
+
+I/we have contacted you regarding the arrears on the following occasions:
+
+{{#if contact_attempts}}
+{{#each contact_attempts}}
+- **{{this.date}}**: {{this.method}} - {{this.description}}
+{{/each}}
+{{else}}
+- Multiple attempts have been made to contact you to discuss the arrears.
+{{/if}}
+
+{{/if}}
+
+---
+
+## 6. LEGAL BASIS FOR POSSESSION
+
+Under the Renting Homes (Wales) Act 2016, the landlord may apply to the court for a possession order on the following grounds:
+
+{{#if wales_breach_type_rent_arrears}}
+**Rent Arrears Grounds:**
+- Section 157 - At least 2 months' rent arrears (mandatory ground if arrears exist at notice date and court hearing)
+- Section 159 - Persistent rent arrears
+
+The breach described above constitutes grounds for possession under the Renting Homes (Wales) Act 2016.
+{{else}}
+**Breach of Contract Grounds:**
+- Section 161 - Breach of contract by contract-holder (standard contracts)
+- Section 162 - Serious breach of contract (immediate possession may be ordered)
+
+The breach described above constitutes grounds for possession under the Renting Homes (Wales) Act 2016.
+{{/if}}
+
+---
+
+## 7. NOTICE PERIOD AND POSSESSION DATE
+
+This notice was served on: **{{service_date}}**
+
+{{#if expiry_date}}
+**Earliest date possession may be required: {{expiry_date}}**
+{{/if}}
+
+{{#if wales_breach_type_rent_arrears}}
+**Notice period:** 14 days (for rent arrears grounds)
+{{else}}
+**Notice period:** 14 days or one month (depending on breach type)
+{{/if}}
+
+---
+
+## 8. COMPLIANCE REQUIREMENTS
+
+### Rent Smart Wales Registration
+
+{{#if rent_smart_wales_registered}}
+✅ The landlord confirms they are registered with Rent Smart Wales.
+{{else}}
+⚠️ **Warning:** All landlords in Wales must be registered with Rent Smart Wales. A possession notice may be invalid if the landlord is not registered.
+{{/if}}
+
+### Deposit Protection
+
+{{#if deposit_taken_wales}}
+{{#if deposit_protected_wales}}
+✅ Your deposit of £{{deposit_amount}} is protected {{#if deposit_scheme_wales_fault}}in {{deposit_scheme_wales_fault}}{{/if}}.
+{{else}}
+⚠️ **Warning:** The deposit must be protected in an approved scheme in Wales. An unprotected deposit may affect the validity of this notice.
+{{/if}}
+{{else}}
+No deposit was taken for this contract.
+{{/if}}
+
+---
+
+## 9. WHAT THIS NOTICE MEANS
+
+This is a formal legal notice that:
+
+1. You have breached the terms of your occupation contract
+2. I/we intend to apply to the court for a possession order
+3. You must take immediate action to remedy the breach or seek legal advice
+
+### What You Should Do
+
+1. **If the breach is rent arrears:**
+   - Pay the arrears immediately
+   - Contact us to discuss a payment plan
+   - Seek advice from a debt counselor
+
+2. **If the breach is another type:**
+   - Stop the breach immediately
+   - Remedy any damage or issues caused
+   - Contact us to discuss the matter
+
+3. **Seek legal advice immediately** - Contact one or more of the following:
+   - Citizens Advice Cymru: 0800 702 2020
+   - Shelter Cymru: 0345 075 5005
+   - A solicitor (you may qualify for Legal Aid)
+   - Your local council housing department
+
+4. **Do not ignore this notice** - If you do nothing, court proceedings will be started and you may have to pay the costs as well as giving up possession of your home.
+
+---
+
+## 10. WHERE TO GET HELP
+
+**Citizens Advice Cymru:**
+- Website: www.citizensadvice.org.uk/cymraeg/
+- Phone: 0800 702 2020
+
+**Shelter Cymru (Housing Charity):**
+- Website: www.sheltercymru.org.uk
+- Phone: 0345 075 5005
+
+**National Debtline (for rent arrears):**
+- Website: www.nationaldebtline.org
+- Phone: 0808 808 4000
+
+**Local Council Housing Department:**
+{{#if council_name}}
+- Council: {{council_name}}
+- Phone: {{council_phone}}
+{{else}}
+- Contact your local council for advice on homelessness prevention
+{{/if}}
+
+**Rent Smart Wales:**
+- Website: www.rentsmart.gov.wales
+- Phone: 03000 133 344
+
+---
+
+## 11. LANDLORD'S DECLARATION
+
+I/We declare that the information given in this notice is correct to the best of my/our knowledge and belief.
+
+**Signed:** _________________________
+
+**Name:** {{landlord_full_name}}
+
+{{#if landlord_2_name}}
+**Signed:** _________________________
+
+**Name:** {{landlord_2_name}}
+{{/if}}
+
+**Date:** {{service_date}}
+
+---
+
+{{! Footer - Generation Information }}
+{{#if is_preview}}
+**PREVIEW DOCUMENT - NOT FOR LEGAL USE**
+
+This is a preview generated by Landlord Heaven. A final, legally binding version will be provided upon payment.
+{{else}}
+**Document generated by Landlord Heaven** ({{site_domain}})
+
+Generated: {{generation_timestamp}}
+Document ID: {{document_id}}
+{{/if}}
+
+---
+
+**LEGAL DISCLAIMER:** This notice has been generated based on the information provided. While every effort has been made to ensure accuracy and compliance with the Renting Homes (Wales) Act 2016, this does not constitute legal advice. You should seek independent legal advice before serving this notice or taking any legal action. Landlord Heaven is not responsible for any consequences arising from the use of this document.

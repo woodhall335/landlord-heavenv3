@@ -1896,45 +1896,60 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
     ])
   );
 
-  // Landlord address - flat fields
-  const landlordAddressLine1 = extractString(
-    getFirstValue(wizard, [
-      'landlord_address_line1',
-      'landlord.address_line1',
-      'landlord_address',
-    ])
-  );
-  const landlordAddressLine2 = extractString(
-    getFirstValue(wizard, ['landlord_address_line2', 'landlord.address_line2'])
-  );
-  const landlordCity = extractString(
-    getFirstValue(wizard, [
-      'landlord_address_town',
-      'landlord_city',
-      'landlord.city',
-    ])
-  );
-  const landlordPostcode = extractString(
-    getFirstValue(wizard, [
-      'landlord_address_postcode',
-      'landlord_postcode',
-      'landlord.postcode',
-    ])
-  );
+  // Landlord address - handle both pre-formatted and separate fields
+  // Scotland often provides landlord_address as a complete multi-line string
+  const preConcatenatedLandlordAddress = extractString(getWizardValue(wizard, 'landlord_address'));
 
-  // Concatenate landlord address
-  const landlordAddressParts = [
-    landlordAddressLine1,
-    landlordAddressLine2,
-    landlordCity,
-    landlordPostcode,
-  ].filter(Boolean);
+  // Check if we have a pre-formatted address (contains newlines) - Scotland style
+  if (preConcatenatedLandlordAddress && preConcatenatedLandlordAddress.includes('\n')) {
+    templateData.landlord_address = preConcatenatedLandlordAddress;
+    // Extract individual components from the pre-formatted address if needed
+    const addressLines = preConcatenatedLandlordAddress.split('\n').filter(Boolean);
+    templateData.landlord_address_line1 = addressLines[0] || null;
+    templateData.landlord_address_line2 = addressLines[1] || null;
+    templateData.landlord_city = addressLines[2] || null;
+    templateData.landlord_postcode = addressLines[3] || null;
+  } else {
+    // Build from separate fields - England/Wales style
+    const landlordAddressLine1 = extractString(
+      getFirstValue(wizard, [
+        'landlord_address_line1',
+        'landlord.address_line1',
+        'landlord_address',
+      ])
+    );
+    const landlordAddressLine2 = extractString(
+      getFirstValue(wizard, ['landlord_address_line2', 'landlord.address_line2'])
+    );
+    const landlordCity = extractString(
+      getFirstValue(wizard, [
+        'landlord_address_town',
+        'landlord_city',
+        'landlord.city',
+      ])
+    );
+    const landlordPostcode = extractString(
+      getFirstValue(wizard, [
+        'landlord_address_postcode',
+        'landlord_postcode',
+        'landlord.postcode',
+      ])
+    );
 
-  templateData.landlord_address = landlordAddressParts.join('\n') || null;
-  templateData.landlord_address_line1 = landlordAddressLine1;
-  templateData.landlord_address_line2 = landlordAddressLine2;
-  templateData.landlord_city = landlordCity;
-  templateData.landlord_postcode = landlordPostcode;
+    // Concatenate landlord address
+    const landlordAddressParts = [
+      landlordAddressLine1,
+      landlordAddressLine2,
+      landlordCity,
+      landlordPostcode,
+    ].filter(Boolean);
+
+    templateData.landlord_address = landlordAddressParts.join('\n') || null;
+    templateData.landlord_address_line1 = landlordAddressLine1;
+    templateData.landlord_address_line2 = landlordAddressLine2;
+    templateData.landlord_city = landlordCity;
+    templateData.landlord_postcode = landlordPostcode;
+  }
 
   templateData.landlord_email = extractString(
     getFirstValue(wizard, ['landlord_email', 'landlord.email'])
