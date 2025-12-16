@@ -333,14 +333,27 @@ function getJurisdictionGuidance(jurisdiction: string, caseType: string): string
   switch (jurisdiction.toLowerCase()) {
     case 'england-wales':
     case 'england':
-    case 'wales':
       return `
-JURISDICTION-SPECIFIC CONTEXT (England & Wales):
+JURISDICTION-SPECIFIC CONTEXT (England):
 - Section 21 (no-fault evictions) requires strict compliance: deposit protection, prescribed information, gas safety certificate, EPC, "How to Rent" guide provided at start, and valid HMO/selective license if required.
 - Section 8 (fault-based evictions) uses numbered grounds: Ground 8 (serious arrears, 2+ months) is mandatory if threshold met at notice AND hearing; Grounds 10/11 (lesser arrears, persistent late payment) are discretionary; Ground 14 (ASB/nuisance); Ground 12 (tenancy breach).
 - Courts require clear evidence: dated records, payment histories, witness statements, photographs, correspondence logs.
 - Notice periods: Section 21 requires 2 months; Section 8 can be 2 weeks (serious grounds) or 2 months.
+- Terminology: tenant, assured shorthold tenancy (AST), Housing Act 1988.
 - Emphasize facts that support the ground being used, and note any compliance issues that could block Section 21.
+`.trim();
+
+    case 'wales':
+      return `
+JURISDICTION-SPECIFIC CONTEXT (Wales):
+- Wales uses the Renting Homes (Wales) Act 2016 - NOT Housing Act 1988.
+- Terminology: "contract holder" (not tenant), "occupation contract" (not tenancy), "landlord" remains the same.
+- Section 173 (no-fault possession) is ONLY available for standard occupation contracts. Requires 6 months notice and strict compliance: Rent Smart Wales registration, deposit protection, all safety certificates.
+- Section 173 is BLOCKED for supported standard and secure contracts - must use fault-based routes instead.
+- Fault-based notices: Section 157 (serious rent arrears, 2+ months), Section 159 (some rent arrears), Section 161 (antisocial behaviour), Section 162 (breach of contract).
+- Courts require clear evidence: dated records, payment histories, witness statements, photographs, correspondence logs.
+- NEVER suggest Section 21 or Section 8 in Wales - these are England-only routes.
+- Emphasize Rent Smart Wales compliance and use correct Welsh terminology (contract holder, occupation contract).
 `.trim();
 
     case 'scotland':

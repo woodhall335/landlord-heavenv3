@@ -68,7 +68,7 @@ export default function NoticeOnlyPage() {
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li className="flex items-start gap-2">
                     <span className="text-blue-600 font-bold">✓</span>
-                    <span>Section 8 vs Section 21 recommendation</span>
+                    <span>Optimal route for your jurisdiction (England, Wales, or Scotland)</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-blue-600 font-bold">✓</span>
@@ -134,7 +134,7 @@ export default function NoticeOnlyPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-purple-600 font-bold">✓</span>
-                    <span>Section 21 timing warnings</span>
+                    <span>Route-specific timing warnings</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-purple-600 font-bold">✓</span>
@@ -159,15 +159,15 @@ export default function NoticeOnlyPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-orange-600 font-bold">✓</span>
-                    <span>Gas safety certificate check</span>
+                    <span>Safety certificate checks</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-orange-600 font-bold">✓</span>
-                    <span>EPC and How to Rent guide</span>
+                    <span>Jurisdiction-specific compliance</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-orange-600 font-bold">✓</span>
-                    <span>Section 21 blocker warnings</span>
+                    <span>Route blocker warnings</span>
                   </li>
                 </ul>
               </div>
@@ -193,12 +193,11 @@ export default function NoticeOnlyPage() {
             </p>
 
             <div className="grid md:grid-cols-2 gap-6">
-              {/* England & Wales */}
+              {/* England */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Image src="/gb-eng.svg" alt="England" width={28} height={28} className="w-7 h-7" />
-                  <Image src="/gb-wls.svg" alt="Wales" width={28} height={28} className="w-7 h-7" />
-                  <h3 className="text-xl font-semibold text-charcoal">England & Wales</h3>
+                  <h3 className="text-xl font-semibold text-charcoal">England</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
@@ -210,7 +209,7 @@ export default function NoticeOnlyPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Section 8 Notice</strong> - For rent arrears, breach of tenancy, anti-social behaviour
+                      <strong>Section 8 Notice</strong> - Rent arrears, breach, antisocial behaviour
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -222,7 +221,7 @@ export default function NoticeOnlyPage() {
                       />
                     </svg>
                     <span className="text-gray-700">
-                      <strong>Section 21 Notice</strong> - No-fault eviction for ASTs
+                      <strong>Section 21 Notice (Form 6A)</strong> - No-fault eviction
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -233,7 +232,51 @@ export default function NoticeOnlyPage() {
                         clipRule="evenodd"
                       />
                     </svg>
-                    <span className="text-gray-700">Official Form 6A format</span>
+                    <span className="text-gray-700">Housing Act 1988 - AST framework</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Wales */}
+              <div className="bg-white rounded-lg border border-gray-200 p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Image src="/gb-wls.svg" alt="Wales" width={28} height={28} className="w-7 h-7" />
+                  <h3 className="text-xl font-semibold text-charcoal">Wales</h3>
+                </div>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">
+                      <strong>Section 173 Notice</strong> - No-fault possession
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">
+                      <strong>Fault-Based Notices</strong> - Rent arrears, breach, ASB
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <span className="text-gray-700">Renting Homes (Wales) Act 2016 - Occupation contracts</span>
                   </li>
                 </ul>
               </div>
@@ -409,9 +452,9 @@ export default function NoticeOnlyPage() {
                 <div className="mb-3">
                   <Image src="/lgb.svg" alt="UK Coverage" width={48} height={48} className="w-12 h-12" />
                 </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">England, Wales & Scotland Coverage</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">Full UK Coverage - Separate Frameworks</h3>
                 <p className="text-gray-700">
-                  Comprehensive eviction notice service covering England, Wales, and Scotland. Each jurisdiction has its own legal requirements and notice types, all included.
+                  England (Housing Act 1988), Wales (Renting Homes Act 2016), and Scotland (Private Housing Tenancies Act 2016). Each jurisdiction has distinct legal requirements - never combined.
                 </p>
               </div>
 

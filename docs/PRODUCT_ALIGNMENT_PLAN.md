@@ -1,8 +1,18 @@
 # Product Alignment Plan: Extending Notice Only Discipline to All Products
 
-**Status**: Planning Phase
-**Last Updated**: 2025-01-15
+**Status**: Active - Notice Only Gold Standard Complete
+**Last Updated**: 2025-12-16
 **Owner**: Engineering Team
+
+## Recent Updates (2025-12-16)
+
+**Notice Only Improvements:**
+- ✅ Product page UI updated to separate England and Wales (no more combined "England & Wales")
+- ✅ Ask Heaven updated with Wales-specific guidance (Section 173, contract holder terminology)
+- ✅ E2E proof script enhanced with Supabase env validation and localhost:5000 support
+- ✅ All jurisdictions verified: england (Section 8/21), wales (Section 173/fault-based), scotland (Notice to Leave)
+
+**Next Priority:** Complete Pack alignment (Phase 1)
 
 ## Executive Summary
 
