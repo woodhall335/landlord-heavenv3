@@ -140,45 +140,8 @@ export async function GET(
       templateData.caseFacts = caseFacts;
       templateData.wizardFacts = wizardFacts;
 
-      // Build nested objects for templates that expect them (service_instructions, compliance_checklist, next_steps)
-      templateData.property = {
-        address_line1: templateData.property_address_line1,
-        address_line2: templateData.property_address_line2,
-        address_town: templateData.property_city,
-        city: templateData.property_city,
-        postcode: templateData.property_postcode,
-      };
-
-      templateData.tenant = {
-        full_name: templateData.tenant_full_name,
-        name_2: templateData.tenant_2_name,
-      };
-
-      templateData.tenancy = {
-        start_date: templateData.tenancy_start_date,
-      };
-
-      templateData.deposit = {
-        protected: templateData.deposit_protected,
-        amount: templateData.deposit_amount,
-        scheme_name: templateData.deposit_scheme,
-        protection_date: templateData.deposit_protection_date,
-        prescribed_info_given: templateData.prescribed_info_given,
-      };
-
-      templateData.compliance = {
-        gas_cert_provided: templateData.gas_cert_provided,
-        gas_cert_expiry: templateData.gas_cert_expiry,
-        epc_provided: templateData.epc_provided,
-        epc_rating: templateData.epc_rating,
-        how_to_rent_given: templateData.how_to_rent_given,
-        hmo_license_required: templateData.hmo_license_required,
-        hmo_license_valid: templateData.hmo_license_valid,
-      };
-
-      // Ensure flat date fields are also available
-      templateData.notice_service_date = templateData.service_date || templateData.notice_date;
-      templateData.notice_expiry_date = templateData.expiry_date || templateData.earliest_possession_date;
+      // Note: mapNoticeOnlyFacts() already creates nested objects (property, tenant, tenancy, deposit, compliance, metadata)
+      // No need to duplicate that work here
 
       console.log('[PDF] Template data ready:', {
         landlord: templateData.landlord_full_name,
