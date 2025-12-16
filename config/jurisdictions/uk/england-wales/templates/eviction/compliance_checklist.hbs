@@ -300,12 +300,14 @@
     </ul>
   </div>
 
+  {{#unless is_wales}}
   <div class="critical">
     <strong>⚠️ FINAL CHECK:</strong> If ANY of the above requirements are not met for Section 21, DO NOT serve the notice. It will be invalid and you'll waste time and court fees. Either fix the compliance issues first, or use Section 8 instead (which has fewer compliance requirements).
   </div>
+  {{/unless}}
 
   <footer>
-    <p><strong>Legal Basis:</strong> Housing Act 1988, Housing Act 2004 (HMOs), Energy Efficiency Regulations 2015, Tenancy Deposit Protection Regulations 2007</p>
+    <p><strong>Legal Basis:</strong> {{#if is_wales}}Renting Homes (Wales) Act 2016, Housing Act 2004 (HMOs), Energy Efficiency Regulations 2015{{else}}Housing Act 1988, Housing Act 2004 (HMOs), Energy Efficiency Regulations 2015, Tenancy Deposit Protection Regulations 2007{{/if}}</p>
     <p><strong>Generated:</strong> {{format_date metadata.generated_at}}</p>
     <p><strong>Landlord Heaven Notice Only Pack</strong> | {{#if jurisdiction_display}}{{jurisdiction_display}}{{else}}England{{/if}}</p>
   </footer>
