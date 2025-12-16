@@ -87,7 +87,7 @@
     Complete this checklist BEFORE serving your notice. Missing any of these requirements could invalidate your notice and waste months of time and court fees.
   </div>
 
-  <p><strong>Property:</strong> {{property.address_line1}}, {{property.address_town}}</p>
+  <p><strong>Property:</strong> {{property_address_line1}}, {{property_address_town}}</p>
   <p><strong>Tenancy Start Date:</strong> {{format_date tenancy.start_date}}</p>
   <p><strong>Notice Type:</strong> {{#if (eq selected_notice_route "section_21")}}Section 21 (No-Fault){{else}}Section 8 (Fault-Based){{/if}}</p>
 
@@ -182,7 +182,7 @@
 
       {{#if (contains (array "F" "G") compliance.epc_rating)}}
         <div class="critical">
-          <strong>⚠️ WARNING:</strong> Your EPC rating ({{compliance.epc_rating}}) is below the minimum energy efficiency standard (E). Letting properties with F or G ratings is illegal unless you have an exemption. This could block both Section 8 and Section 21.
+          <strong>⚠️ WARNING:</strong> Your EPC rating ({{compliance.epc_rating}}) is below the minimum energy efficiency standard (E). Letting properties with F or G ratings is illegal unless you have an exemption. This could block your possession claim.
         </div>
       {{/if}}
 
