@@ -15,6 +15,23 @@ import { generateDocument } from '@/lib/documents/generator';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+/**
+ * Helper: Get Scotland eviction ground legal basis
+ */
+function getScotlandGroundLegalBasis(groundNumber: number): string {
+  const grounds: Record<number, string> = {
+    1: 'Rent arrears for 3 consecutive months or more (Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 1)',
+    2: 'Persistent rent arrears (Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 2)',
+    3: 'Criminal behaviour (Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 3)',
+    4: 'Anti-social behaviour (Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 4)',
+    5: 'Landlord intends to sell (Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 5)',
+    6: 'Landlord intends to refurbish (Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 6)',
+    7: 'Landlord intends to live in property (Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 7)',
+    8: 'Landlord needs property for family member (Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 8)',
+  };
+  return grounds[groundNumber] || `Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground ${groundNumber}`;
+}
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ caseId: string }> }
@@ -204,9 +221,16 @@ export async function GET(
       } else if (selected_route === 'section_21') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 21 notice');
         try {
+          // FIX: Use templateData (enriched with formatted addresses/dates) instead of caseFacts
+          const section21Data = {
+            ...templateData,
+            // Section 21 requires possession_date (2 months from service)
+            possession_date: templateData.earliest_possession_date_formatted || templateData.earliest_possession_date,
+          };
+
           const section21Doc = await generateDocument({
             templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
-            data: caseFacts,
+            data: section21Data,
             outputFormat: 'pdf',
             isPreview: true,
           });
@@ -346,9 +370,16 @@ export async function GET(
       if (selected_route === 'wales_section_173') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 173 notice');
         try {
+          const section173Data = {
+            ...templateData,
+            is_wales_section_173: true,
+            // Calculate prohibited period (first 6 months)
+            prohibited_period_violation: false, // TODO: Calculate based on dates
+          };
+
           const section173Doc = await generateDocument({
             templatePath: 'uk/wales/templates/eviction/section173_landlords_notice.hbs',
-            data: templateData,
+            data: section173Data,
             outputFormat: 'pdf',
             isPreview: true,
           });
@@ -364,27 +395,58 @@ export async function GET(
         }
       } else if (selected_route === 'wales_fault_based') {
         console.log('[NOTICE-PREVIEW-API] Generating Wales fault-based notice');
-        // TODO: Create fault-based notice templates for Wales
-        // For now, add a placeholder document
-        console.warn('[NOTICE-PREVIEW-API] Wales fault-based notice templates not yet implemented');
+        try {
+          // Determine if the breach is rent arrears
+          const breachType = wizardFacts.wales_breach_type || 'breach_of_contract';
+          const isRentArrears = breachType === 'rent_arrears' || breachType.toLowerCase().includes('arrears');
+
+          const faultBasedData = {
+            ...templateData,
+            is_wales_fault_based: true,
+            wales_breach_type: breachType,
+            wales_breach_type_rent_arrears: isRentArrears,
+            rent_arrears_amount: wizardFacts.rent_arrears_amount,
+            breach_details: wizardFacts.breach_details || templateData.ground_particulars,
+          };
+
+          const faultDoc = await generateDocument({
+            templatePath: 'uk/wales/templates/eviction/fault_based_notice.hbs',
+            data: faultBasedData,
+            outputFormat: 'pdf',
+            isPreview: true,
+          });
+
+          if (faultDoc.pdf) {
+            documents.push({
+              title: 'Fault-Based Breach Notice (Wales)',
+              category: 'notice',
+              pdf: faultDoc.pdf,
+            });
+          }
+        } catch (err) {
+          console.error('[NOTICE-PREVIEW-API] Wales fault-based generation failed:', err);
+        }
       }
 
-      // 2. Generate service instructions (reuse England/Wales template for now)
-      console.log('[NOTICE-PREVIEW-API] Generating service instructions');
+      // 2. Generate service instructions (Wales-specific)
+      console.log('[NOTICE-PREVIEW-API] Generating Wales service instructions');
       try {
+        const serviceData = {
+          ...templateData,
+          notice_type: selected_route === 'wales_section_173' ? 'Section 173' : 'Fault-Based Breach Notice',
+          is_wales_section_173: selected_route === 'wales_section_173',
+          is_wales_fault_based: selected_route === 'wales_fault_based',
+        };
+
         const serviceDoc = await generateDocument({
-          templatePath: 'uk/england-wales/templates/eviction/service_instructions.hbs',
-          data: {
-            ...templateData,
-            notice_type: selected_route === 'wales_section_173' ? 'Section 173' : 'Fault-based notice',
-            jurisdiction: 'Wales',
-          },
+          templatePath: 'uk/wales/templates/eviction/service_instructions.hbs',
+          data: serviceData,
           outputFormat: 'pdf',
         });
 
         if (serviceDoc.pdf) {
           documents.push({
-            title: 'Service Instructions',
+            title: 'Service Instructions (Wales)',
             category: 'guidance',
             pdf: serviceDoc.pdf,
           });
@@ -393,7 +455,7 @@ export async function GET(
         console.error('[NOTICE-PREVIEW-API] Service instructions generation failed:', err);
       }
 
-      // 3. Generate compliance checklist (reuse England/Wales template for now)
+      // 3. Generate compliance checklist (use England/Wales with Wales flag)
       console.log('[NOTICE-PREVIEW-API] Generating compliance checklist');
       try {
         const complianceDoc = await generateDocument({
@@ -408,7 +470,7 @@ export async function GET(
 
         if (complianceDoc.pdf) {
           documents.push({
-            title: 'Compliance Checklist',
+            title: 'Compliance Checklist (Wales)',
             category: 'checklist',
             pdf: complianceDoc.pdf,
           });
@@ -417,7 +479,7 @@ export async function GET(
         console.error('[NOTICE-PREVIEW-API] Compliance checklist generation failed:', err);
       }
 
-      // 4. Generate next steps guide (reuse England/Wales template for now)
+      // 4. Generate next steps guide (use England/Wales with Wales flag)
       console.log('[NOTICE-PREVIEW-API] Generating next steps guide');
       try {
         const nextStepsDoc = await generateDocument({
@@ -433,7 +495,7 @@ export async function GET(
 
         if (nextStepsDoc.pdf) {
           documents.push({
-            title: 'Next Steps Guide',
+            title: 'Next Steps Guide (Wales)',
             category: 'guidance',
             pdf: nextStepsDoc.pdf,
           });
@@ -449,13 +511,108 @@ export async function GET(
     else if (jurisdiction === 'scotland') {
       console.log('[NOTICE-PREVIEW-API] Generating Scotland pack');
 
+      // Use mapNoticeOnlyFacts() to build template data
+      const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+      // DATE FORMATTING HELPER - UK legal format
+      const formatUKDate = (dateString: string): string => {
+        if (!dateString) return '';
+        try {
+          const date = new Date(dateString);
+          const day = date.getDate();
+          const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+          ];
+          const month = months[date.getMonth()];
+          const year = date.getFullYear();
+          return `${day} ${month} ${year}`;
+        } catch (error) {
+          console.error('[PDF] Date formatting error:', error);
+          return dateString;
+        }
+      };
+
+      // Calculate Scotland-specific dates
+      // For Notice to Leave, minimum notice period is 28 days for PRT (84 days for rent arrears - Ground 1)
+      const noticeDate = templateData.notice_date || templateData.service_date || new Date().toISOString().split('T')[0];
+      templateData.notice_date = noticeDate;
+
+      // Determine notice period based on grounds
+      const evictionGrounds = wizardFacts.eviction_grounds || [];
+      const hasGround1 = evictionGrounds.some((g: any) =>
+        String(g).includes('Ground 1') || String(g).includes('rent arrears')
+      );
+
+      const noticePeriodDays = hasGround1 ? 84 : 28; // 84 days for rent arrears, 28 for others
+
+      // Calculate earliest leaving date (notice_date + notice_period)
+      if (noticeDate) {
+        const noticeDateObj = new Date(noticeDate);
+        const earliestLeavingDateObj = new Date(noticeDateObj);
+        earliestLeavingDateObj.setDate(earliestLeavingDateObj.getDate() + noticePeriodDays);
+        const earliestLeavingDate = earliestLeavingDateObj.toISOString().split('T')[0];
+
+        templateData.earliest_leaving_date = earliestLeavingDate;
+        templateData.earliest_leaving_date_formatted = formatUKDate(earliestLeavingDate);
+
+        // Earliest tribunal date is same as leaving date
+        templateData.earliest_tribunal_date = earliestLeavingDate;
+        templateData.earliest_tribunal_date_formatted = formatUKDate(earliestLeavingDate);
+
+        templateData.notice_period_days = noticePeriodDays;
+      }
+
+      // Format dates for display
+      templateData.notice_date_formatted = formatUKDate(noticeDate);
+      templateData.generated_date = formatUKDate(new Date().toISOString().split('T')[0]);
+
+      // Process grounds for Scotland
+      const processedGrounds = evictionGrounds.map((ground: any, index: number) => {
+        const groundStr = String(ground);
+        let number = index + 1;
+        let title = groundStr;
+
+        // Extract ground number if present
+        const match = groundStr.match(/Ground (\d+)/i);
+        if (match) {
+          number = parseInt(match[1]);
+          title = groundStr.replace(/Ground \d+\s*-?\s*/i, '');
+        }
+
+        return {
+          number,
+          title,
+          particulars: templateData.ground_particulars || wizardFacts.ground_particulars || '',
+          legal_basis: getScotlandGroundLegalBasis(number),
+        };
+      });
+
+      templateData.grounds = processedGrounds;
+      templateData.ground_1_claimed = hasGround1;
+
+      // Pass through full facts for templates that need them
+      templateData.caseFacts = caseFacts;
+      templateData.wizardFacts = wizardFacts;
+
+      console.log('[PDF] Scotland template data ready:', {
+        landlord: templateData.landlord_full_name,
+        landlord_address: templateData.landlord_address ? 'SET' : 'MISSING',
+        tenant: templateData.tenant_full_name,
+        property_address: templateData.property_address ? 'SET' : 'MISSING',
+        notice_date: templateData.notice_date,
+        earliest_leaving_date: templateData.earliest_leaving_date,
+        notice_period_days: templateData.notice_period_days,
+      });
+
       // 1. Generate Notice to Leave
       console.log('[NOTICE-PREVIEW-API] Generating Notice to Leave');
       try {
         const noticeDoc = await generateDocument({
           templatePath: 'uk/scotland/templates/eviction/notice_to_leave.hbs',
-          data: caseFacts,
+          data: templateData,
           outputFormat: 'pdf',
+          isPreview: true,
         });
 
         if (noticeDoc.pdf) {
@@ -474,7 +631,7 @@ export async function GET(
       try {
         const serviceDoc = await generateDocument({
           templatePath: 'uk/scotland/templates/eviction/service_instructions.hbs',
-          data: caseFacts,
+          data: templateData,
           outputFormat: 'pdf',
         });
 
@@ -490,13 +647,12 @@ export async function GET(
       }
 
       // 3. Generate pre-action checklist (if Ground 1 - rent arrears)
-      const grounds = wizardFacts.eviction_grounds || [];
-      if (grounds.includes('Ground 1') || grounds.includes('1')) {
+      if (hasGround1) {
         console.log('[NOTICE-PREVIEW-API] Generating pre-action checklist (Ground 1)');
         try {
           const preActionDoc = await generateDocument({
             templatePath: 'uk/scotland/templates/eviction/pre_action_checklist.hbs',
-            data: caseFacts,
+            data: templateData,
             outputFormat: 'pdf',
           });
 
@@ -517,7 +673,7 @@ export async function GET(
       try {
         const tribunalDoc = await generateDocument({
           templatePath: 'uk/scotland/templates/eviction/tribunal_guide.hbs',
-          data: caseFacts,
+          data: templateData,
           outputFormat: 'pdf',
         });
 
