@@ -113,62 +113,91 @@ function shouldSkipForProduct(question: ExtendedWizardQuestion, product: Product
   return false;
 }
 
+/**
+ * Helper function to evaluate a single dependency condition
+ */
+function evaluateSingleDependency(
+  condition: any,
+  mqs: MasterQuestionSet,
+  facts: Record<string, any>
+): boolean {
+  if (!condition || !condition.questionId) return true;
+
+  // Find the dependency question to get its mapped path
+  const dependency = mqs.questions.find((dep) => dep.id === condition.questionId);
+  let depValue: any;
+
+  // Try to get value from mapped paths first
+  if (dependency?.maps_to?.length) {
+    depValue = dependency.maps_to
+      .map((path) => getValueAtPath(facts, path))
+      .find((v) => v !== undefined);
+  }
+
+  // Fallback to direct fact key
+  if (depValue === undefined) {
+    depValue = facts[condition.questionId];
+  }
+
+  // Handle different condition types
+  if (condition.valueContains !== undefined) {
+    // valueContains: check if depValue is IN the array
+    const allowedValues = Array.isArray(condition.valueContains)
+      ? condition.valueContains
+      : [condition.valueContains];
+
+    return allowedValues.includes(depValue);
+  }
+
+  if (condition.value !== undefined) {
+    // Standard value check
+    if (Array.isArray(condition.value)) {
+      // condition.value is array: check if depValue matches any
+      if (Array.isArray(depValue)) {
+        return depValue.some((val) => condition.value.includes(val));
+      } else {
+        return condition.value.includes(depValue);
+      }
+    } else {
+      // condition.value is scalar
+      if (Array.isArray(depValue)) {
+        return depValue.includes(condition.value);
+      } else {
+        return depValue === condition.value;
+      }
+    }
+  }
+
+  return true;
+}
+
 function questionIsApplicable(
   mqs: MasterQuestionSet,
   question: ExtendedWizardQuestion,
   facts: CaseFacts | Record<string, any>
 ): boolean {
   const dependsOn = (question as any).depends_on || question.dependsOn;
-  if (dependsOn?.questionId) {
-    const dependency = mqs.questions.find((dep) => dep.id === dependsOn.questionId);
-    let depValue: any;
-    if (dependency?.maps_to?.length) {
-      depValue = dependency.maps_to
-        .map((path) => getValueAtPath(facts as Record<string, any>, path))
-        .find((v) => v !== undefined);
-    }
-    if (depValue === undefined) {
-      depValue = (facts as Record<string, any>)[dependsOn.questionId];
-    }
 
-    // Debug logging for section8_grounds dependency check
-    if (question.id === 'section8_grounds') {
-      console.log('[DEBUG] section8_grounds dependency check:', {
-        questionId: question.id,
-        dependsOn,
-        depValue,
-        depValueType: Array.isArray(depValue) ? 'array' : typeof depValue,
-        dependsOnValueType: Array.isArray(dependsOn.value) ? 'array' : typeof dependsOn.value,
-      });
-    }
+  // Handle allOf (all conditions must be true)
+  if (dependsOn?.allOf && Array.isArray(dependsOn.allOf)) {
+    const allMatch = dependsOn.allOf.every((condition: any) =>
+      evaluateSingleDependency(condition, mqs, facts as Record<string, any>)
+    );
+    if (!allMatch) return false;
+  }
 
-    if (Array.isArray(dependsOn.value)) {
-      // dependsOn.value is array: check if any match
-      if (Array.isArray(depValue)) {
-        const hasMatch = depValue.some((val) => dependsOn.value.includes(val));
-        if (!hasMatch) {
-          if (question.id === 'section8_grounds') console.log('[DEBUG] section8_grounds: NO MATCH (array-array)');
-          return false;
-        }
-      } else if (!dependsOn.value.includes(depValue)) {
-        if (question.id === 'section8_grounds') console.log('[DEBUG] section8_grounds: NO MATCH (scalar not in array)');
-        return false;
-      }
-    } else {
-      // dependsOn.value is scalar
-      if (Array.isArray(depValue)) {
-        // But user's answer is array (multi-select): check if it includes the scalar value
-        if (!depValue.includes(dependsOn.value)) {
-          if (question.id === 'section8_grounds') console.log('[DEBUG] section8_grounds: NO MATCH (array does not include scalar)');
-          return false;
-        } else {
-          if (question.id === 'section8_grounds') console.log('[DEBUG] section8_grounds: MATCH! (array includes scalar)');
-        }
-      } else if (depValue !== dependsOn.value) {
-        if (question.id === 'section8_grounds') console.log('[DEBUG] section8_grounds: NO MATCH (scalar !== scalar)');
-        return false;
-      }
-    }
+  // Handle anyOf (at least one condition must be true)
+  else if (dependsOn?.anyOf && Array.isArray(dependsOn.anyOf)) {
+    const anyMatch = dependsOn.anyOf.some((condition: any) =>
+      evaluateSingleDependency(condition, mqs, facts as Record<string, any>)
+    );
+    if (!anyMatch) return false;
+  }
+
+  // Handle simple single condition (legacy format)
+  else if (dependsOn?.questionId) {
+    const matches = evaluateSingleDependency(dependsOn, mqs, facts as Record<string, any>);
+    if (!matches) return false;
   }
 
   if (shouldSkipForProduct(question, mqs.product)) return false;

@@ -56,7 +56,7 @@ export async function GET(
     console.log('[NOTICE-PREVIEW-API] Selected route:', wizardFacts.selected_notice_route);
 
     // Determine jurisdiction and notice type
-    const jurisdiction = caseRow.jurisdiction as 'england-wales' | 'scotland';
+    const jurisdiction = caseRow.jurisdiction as 'england' | 'wales' | 'scotland' | 'england-wales';
     const selected_route =
       wizardFacts.selected_notice_route ||
       wizardFacts.route_recommendation?.recommended_route ||
@@ -273,6 +273,160 @@ export async function GET(
           data: {
             ...templateData,
             notice_route: selected_route,
+          },
+          outputFormat: 'pdf',
+        });
+
+        if (nextStepsDoc.pdf) {
+          documents.push({
+            title: 'Next Steps Guide',
+            category: 'guidance',
+            pdf: nextStepsDoc.pdf,
+          });
+        }
+      } catch (err) {
+        console.error('[NOTICE-PREVIEW-API] Next steps guide generation failed:', err);
+      }
+    }
+
+    // ===========================================================================
+    // WALES NOTICE ONLY PACK
+    // ===========================================================================
+    else if (jurisdiction === 'wales') {
+      console.log('[NOTICE-PREVIEW-API] Generating Wales pack');
+
+      // Use mapNoticeOnlyFacts() to build template data
+      const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+      // DATE FORMATTING HELPER - UK legal format
+      const formatUKDate = (dateString: string): string => {
+        if (!dateString) return '';
+        try {
+          const date = new Date(dateString);
+          const day = date.getDate();
+          const months = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+          ];
+          const month = months[date.getMonth()];
+          const year = date.getFullYear();
+          return `${day} ${month} ${year}`;
+        } catch (error) {
+          console.error('[PDF] Date formatting error:', error);
+          return dateString;
+        }
+      };
+
+      // Add formatted date versions for display
+      templateData.service_date_formatted = formatUKDate(templateData.service_date || '');
+      templateData.notice_date_formatted = formatUKDate(templateData.notice_date || '');
+      templateData.earliest_possession_date_formatted = formatUKDate(templateData.earliest_possession_date || '');
+      templateData.generated_date = formatUKDate(new Date().toISOString().split('T')[0]);
+
+      // Add convenience flags
+      templateData.is_wales_section_173 = selected_route === 'wales_section_173';
+      templateData.is_wales_fault_based = selected_route === 'wales_fault_based';
+      templateData.contract_holder_full_name = wizardFacts.contract_holder_full_name || templateData.tenant_full_name;
+      templateData.landlord_full_name = wizardFacts.landlord_full_name || templateData.landlord_full_name;
+
+      // Pass through full facts for templates that need them
+      templateData.caseFacts = caseFacts;
+      templateData.wizardFacts = wizardFacts;
+
+      console.log('[PDF] Wales template data ready:', {
+        landlord: templateData.landlord_full_name,
+        contract_holder: templateData.contract_holder_full_name,
+        property_address: templateData.property_address ? 'SET' : 'MISSING',
+        selected_route,
+        service_date: templateData.service_date,
+        deposit_protected: templateData.deposit_protected,
+      });
+
+      // 1. Generate notice (Section 173 or fault-based)
+      if (selected_route === 'wales_section_173') {
+        console.log('[NOTICE-PREVIEW-API] Generating Section 173 notice');
+        try {
+          const section173Doc = await generateDocument({
+            templatePath: 'uk/wales/templates/eviction/section173_landlords_notice.hbs',
+            data: templateData,
+            outputFormat: 'pdf',
+            isPreview: true,
+          });
+          if (section173Doc.pdf) {
+            documents.push({
+              title: 'Section 173 Landlord\'s Notice (Wales)',
+              category: 'notice',
+              pdf: section173Doc.pdf,
+            });
+          }
+        } catch (err) {
+          console.error('[NOTICE-PREVIEW-API] Section 173 generation failed:', err);
+        }
+      } else if (selected_route === 'wales_fault_based') {
+        console.log('[NOTICE-PREVIEW-API] Generating Wales fault-based notice');
+        // TODO: Create fault-based notice templates for Wales
+        // For now, add a placeholder document
+        console.warn('[NOTICE-PREVIEW-API] Wales fault-based notice templates not yet implemented');
+      }
+
+      // 2. Generate service instructions (reuse England/Wales template for now)
+      console.log('[NOTICE-PREVIEW-API] Generating service instructions');
+      try {
+        const serviceDoc = await generateDocument({
+          templatePath: 'uk/england-wales/templates/eviction/service_instructions.hbs',
+          data: {
+            ...templateData,
+            notice_type: selected_route === 'wales_section_173' ? 'Section 173' : 'Fault-based notice',
+            jurisdiction: 'Wales',
+          },
+          outputFormat: 'pdf',
+        });
+
+        if (serviceDoc.pdf) {
+          documents.push({
+            title: 'Service Instructions',
+            category: 'guidance',
+            pdf: serviceDoc.pdf,
+          });
+        }
+      } catch (err) {
+        console.error('[NOTICE-PREVIEW-API] Service instructions generation failed:', err);
+      }
+
+      // 3. Generate compliance checklist (reuse England/Wales template for now)
+      console.log('[NOTICE-PREVIEW-API] Generating compliance checklist');
+      try {
+        const complianceDoc = await generateDocument({
+          templatePath: 'uk/england-wales/templates/eviction/compliance_checklist.hbs',
+          data: {
+            ...templateData,
+            jurisdiction: 'Wales',
+            is_wales: true,
+          },
+          outputFormat: 'pdf',
+        });
+
+        if (complianceDoc.pdf) {
+          documents.push({
+            title: 'Compliance Checklist',
+            category: 'checklist',
+            pdf: complianceDoc.pdf,
+          });
+        }
+      } catch (err) {
+        console.error('[NOTICE-PREVIEW-API] Compliance checklist generation failed:', err);
+      }
+
+      // 4. Generate next steps guide (reuse England/Wales template for now)
+      console.log('[NOTICE-PREVIEW-API] Generating next steps guide');
+      try {
+        const nextStepsDoc = await generateDocument({
+          templatePath: 'uk/england-wales/templates/eviction/next_steps_guide.hbs',
+          data: {
+            ...templateData,
+            notice_route: selected_route,
+            jurisdiction: 'Wales',
+            is_wales: true,
           },
           outputFormat: 'pdf',
         });

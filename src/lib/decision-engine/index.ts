@@ -14,7 +14,7 @@ import type { CaseFacts } from '../case-facts/schema';
 // ============================================================================
 
 export interface DecisionInput {
-  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
+  jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland' | 'england-wales'; // england-wales for backward compatibility
   product: 'notice_only' | 'complete_pack' | 'money_claim';
   case_type: 'eviction' | 'money_claim' | 'tenancy_agreement';
   facts: Partial<CaseFacts>;
@@ -301,6 +301,187 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
 }
 
 // ============================================================================
+// WALES DECISION LOGIC
+// ============================================================================
+
+function analyzeWales(input: DecisionInput): DecisionOutput {
+  const { facts } = input;
+  const output: DecisionOutput = {
+    recommended_routes: [],
+    allowed_routes: [],
+    blocked_routes: [],
+    recommended_grounds: [],
+    notice_period_suggestions: {},
+    pre_action_requirements: { required: false, met: null, details: [] },
+    blocking_issues: [],
+    warnings: [],
+    analysis_summary: '',
+    route_explanations: {},
+  };
+
+  // Get contract category from facts
+  const contractCategory = (facts as any).wales_contract_category ||
+                          (facts as any).contract_category ||
+                          null;
+
+  // Check Section 173 eligibility (Wales no-fault notice)
+  const s173Blocks: BlockingIssue[] = [];
+
+  // Section 173 is ONLY available for standard occupation contracts
+  if (contractCategory === 'supported_standard' || contractCategory === 'secure') {
+    s173Blocks.push({
+      route: 'wales_section_173',
+      issue: 'contract_type_incompatible',
+      description: 'Section 173 is only available for standard occupation contracts',
+      action_required: 'Use fault-based notice routes (Section 157, 159, 161, or 162) instead',
+      severity: 'blocking',
+    });
+  }
+
+  // Rent Smart Wales registration (CRITICAL for Section 173)
+  const rentSmartRegistered = (facts as any).rent_smart_wales_registered;
+  if (rentSmartRegistered === false) {
+    s173Blocks.push({
+      route: 'wales_section_173',
+      issue: 'rent_smart_not_registered',
+      description: 'Not registered with Rent Smart Wales',
+      action_required: 'Register with Rent Smart Wales before serving Section 173 notice',
+      severity: 'blocking',
+    });
+  }
+
+  // Deposit protection (CRITICAL if deposit taken)
+  const depositTaken = (facts as any).deposit_taken;
+  const depositProtected = (facts as any).deposit_protected;
+  if (depositTaken === true && depositProtected !== true) {
+    s173Blocks.push({
+      route: 'wales_section_173',
+      issue: 'deposit_not_protected',
+      description: 'Deposit not protected in approved scheme',
+      action_required: 'Protect deposit in approved Wales scheme before serving Section 173',
+      severity: 'blocking',
+    });
+  }
+
+  output.blocking_issues = s173Blocks;
+
+  // Determine if Section 173 is allowed
+  if (contractCategory === 'standard') {
+    if (s173Blocks.length === 0) {
+      output.allowed_routes.push('wales_section_173');
+      output.recommended_routes.push('wales_section_173'); // Primary route for standard contracts
+      output.notice_period_suggestions['wales_section_173'] = 180; // 6 months
+      output.route_explanations['wales_section_173'] =
+        'Section 173 (no-fault notice) is available for standard occupation contracts. ' +
+        'This requires 6 months notice and all compliance requirements must be met.';
+    } else {
+      output.blocked_routes.push('wales_section_173');
+      const blockReasons = s173Blocks.map(b => b.issue).join(', ');
+      output.route_explanations['wales_section_173'] =
+        `Section 173 is currently BLOCKED: ${blockReasons}. You must use fault-based notices instead.`;
+    }
+  } else {
+    // For supported_standard and secure contracts, Section 173 is not available
+    output.blocked_routes.push('wales_section_173');
+    output.route_explanations['wales_section_173'] =
+      'Section 173 is NOT available for supported standard or secure contracts. ' +
+      'You must use fault-based notice routes (Section 157, 159, 161, or 162).';
+  }
+
+  // Fault-based routes are ALWAYS available in Wales (all contract types)
+  output.allowed_routes.push('wales_fault_based');
+
+  // Only recommend fault-based if Section 173 is blocked or unavailable
+  if (!output.allowed_routes.includes('wales_section_173')) {
+    output.recommended_routes.push('wales_fault_based');
+  }
+
+  output.route_explanations['wales_fault_based'] =
+    'Fault-based notices (Section 157, 159, 161, 162) are available for all contract types. ' +
+    'These require specific grounds such as rent arrears or breach of contract.';
+
+  // Analyze fault-based grounds
+  const faultGrounds: GroundRecommendation[] = [];
+
+  // Section 157: Serious rent arrears (2+ months)
+  const totalArrears = facts.issues?.rent_arrears?.total_arrears ?? 0;
+  const rentAmount = facts.tenancy?.rent_amount ?? 0;
+
+  if (totalArrears > 0 && rentAmount > 0) {
+    const arrearsMonths = totalArrears / rentAmount;
+
+    if (arrearsMonths >= 2) {
+      faultGrounds.push({
+        code: '157',
+        title: 'Section 157 - Serious Rent Arrears',
+        type: 'mandatory',
+        weight: 'high',
+        notice_period_days: 14,
+        reasoning: 'At least 2 months rent unpaid - can proceed with 14 days notice',
+        success_probability: 'very_high',
+      });
+    } else if (arrearsMonths > 0) {
+      faultGrounds.push({
+        code: '159',
+        title: 'Section 159 - Some Rent Arrears',
+        type: 'discretionary',
+        weight: 'medium',
+        notice_period_days: 28,
+        reasoning: 'Some rent unpaid - requires 1 month notice',
+        success_probability: 'medium',
+      });
+    }
+  }
+
+  // Section 161: Antisocial behaviour
+  if (facts.issues?.asb?.has_asb === true) {
+    faultGrounds.push({
+      code: '161',
+      title: 'Section 161 - Antisocial Behaviour',
+      type: 'discretionary',
+      weight: 'high',
+      notice_period_days: 14,
+      reasoning: 'ASB - can use 14 day notice in serious cases',
+      success_probability: 'high',
+    });
+  }
+
+  // Section 162: Breach of contract
+  if (facts.issues?.other_breaches?.has_breaches === true) {
+    faultGrounds.push({
+      code: '162',
+      title: 'Section 162 - Breach of Contract',
+      type: 'discretionary',
+      weight: 'medium',
+      notice_period_days: 28,
+      reasoning: 'Material breach of occupation contract terms',
+      success_probability: 'medium',
+    });
+  }
+
+  output.recommended_grounds = faultGrounds;
+
+  // Generate analysis summary
+  if (contractCategory === 'standard') {
+    if (s173Blocks.length > 0) {
+      output.analysis_summary = `Wales: Section 173 is currently BLOCKED due to ${s173Blocks.length} compliance issue(s). `;
+    } else {
+      output.analysis_summary = `Wales: Section 173 is AVAILABLE (all compliance requirements met). `;
+    }
+  } else {
+    output.analysis_summary = `Wales: Section 173 NOT available for ${contractCategory || 'this'} contract type. `;
+  }
+
+  if (faultGrounds.length > 0) {
+    output.analysis_summary += `Fault-based notices available with ${faultGrounds.length} potential ground(s).`;
+  } else {
+    output.analysis_summary += `Fault-based notices available (no specific grounds identified yet).`;
+  }
+
+  return output;
+}
+
+// ============================================================================
 // SCOTLAND DECISION LOGIC
 // ============================================================================
 
@@ -429,8 +610,17 @@ export function runDecisionEngine(input: DecisionInput): DecisionOutput {
     throw new Error('Decision engine requires jurisdiction');
   }
 
-  switch (input.jurisdiction) {
+  // Normalize jurisdiction to handle both canonical and legacy values
+  const jurisdiction = input.jurisdiction.toLowerCase();
+
+  switch (jurisdiction) {
+    case 'england':
+      return analyzeEnglandWales(input);
+    case 'wales':
+      return analyzeWales(input);
     case 'england-wales':
+      // Legacy value - default to England analysis
+      console.warn('[DECISION ENGINE] Using legacy england-wales jurisdiction - defaulting to England rules');
       return analyzeEnglandWales(input);
     case 'scotland':
       return analyzeScotland(input);
