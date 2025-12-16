@@ -3,12 +3,14 @@
  * NOTICE ONLY PDF AUDIT SCRIPT
  *
  * Recursively scans artifacts/notice_only/ for all PDF files and performs:
- * 1. Text extraction (using pdf-parse)
+ * 1. Text extraction (using pdfjs-dist)
  * 2. Issue detection:
  *    - Missing fields (dates, names, addresses)
  *    - Template leaks ({{, }}, undefined, null)
  *    - Jurisdiction contamination
  *    - Logic red flags (notice periods, deposit contradictions, etc.)
+ *    - PHRASE_RULES enforcement (required & forbidden phrases)
+ *    - Global forbidden patterns (all PDFs)
  * 3. Report generation (JSON + Markdown)
  *
  * Usage:
@@ -33,7 +35,8 @@ interface PDFIssue {
     | 'jurisdiction_contamination'
     | 'logic_red_flag'
     | 'forbidden_phrase'
-    | 'missing_required_phrase';
+    | 'missing_required_phrase'
+    | 'global_forbidden_pattern';
   severity: 'critical' | 'warning' | 'info';
   message: string;
   snippet?: string;
@@ -62,6 +65,142 @@ interface AuditReport {
 }
 
 // ============================================================================
+// PHRASE RULES (Task 2)
+// ============================================================================
+
+export const PHRASE_RULES: Record<
+  string,
+  {
+    required: string[];
+    forbidden: string[];
+    forbiddenPatterns?: RegExp[];
+    logicChecks?: Array<{
+      name: string;
+      test: (text: string) => boolean;
+      message: string;
+      severity: "warning" | "critical";
+    }>;
+  }
+> = {
+  "england/section_21": {
+    required: [
+      "Form 6A",
+      "Section 21",
+      "Housing Act 1988"
+    ],
+    forbidden: [
+      "Renting Homes (Wales) Act 2016",
+      "contract holder",
+      "First-tier Tribunal",
+      "NOTICE TO LEAVE",
+      "Section 8"
+    ],
+    forbiddenPatterns: [
+      /\*{4,}/g, // ****
+      /The first anniversary is:\s*\*{4,}/g
+    ]
+  },
+
+  "england/section_8": {
+    required: [
+      "NOTICE SEEKING POSSESSION",
+      "Housing Act 1988",
+      "Section 8"
+    ],
+    forbidden: [
+      "Form 6A",
+      "Section 21",
+      "Renting Homes (Wales) Act 2016",
+      "contract holder",
+      "First-tier Tribunal"
+    ],
+    logicChecks: [
+      {
+        name: "ground_8_threshold",
+        test: (text) =>
+          text.includes("Ground 8") &&
+          /Current arrears:\s*£0\.00/.test(text),
+        message:
+          "Ground 8 included but arrears show £0.00 — threshold not satisfied",
+        severity: "warning"
+      }
+    ]
+  },
+
+  "wales/wales_section_173": {
+    required: [
+      "Renting Homes (Wales) Act 2016",
+      "Section 173",
+      "contract holder",
+      "Rent Smart Wales"
+    ],
+    forbidden: [
+      "Housing Act 1988",
+      "Form 6A",
+      "Section 21",
+      "NOTICE SEEKING POSSESSION",
+      "Notice Type: Section 8",
+      "Landlord Heaven Notice Only Pack | England"
+    ],
+    forbiddenPatterns: [
+      /\bon or after:\s*($|\n)/gi
+    ]
+  },
+
+  "wales/wales_fault_based": {
+    required: [
+      "Renting Homes (Wales) Act 2016",
+      "contract holder",
+      "Rent Smart Wales"
+    ],
+    forbidden: [
+      "Housing Act 1988",
+      "Form 6A",
+      "Section 21",
+      "Notice Type: Section 8",
+      "Landlord Heaven Notice Only Pack | England"
+    ],
+    forbiddenPatterns: [
+      /\brent_arrears\b/g
+    ]
+  },
+
+  "scotland/notice_to_leave": {
+    required: [
+      "NOTICE TO LEAVE",
+      "Private Housing (Tenancies) (Scotland) Act 2016",
+      "First-tier Tribunal"
+    ],
+    forbidden: [
+      "Housing Act 1988",
+      "Form 6A",
+      "Section 21",
+      "Renting Homes (Wales) Act 2016",
+      "contract holder"
+    ],
+    forbiddenPatterns: [
+      /Total arrears:\s*£\s*as of/gi,
+      /Total owed:\s*£\s*$/gi
+    ]
+  }
+};
+
+// ============================================================================
+// GLOBAL FORBIDDEN PATTERNS (Task 3)
+// ============================================================================
+
+const GLOBAL_FORBIDDEN_PATTERNS = [
+  { pattern: /\{\{/g, message: 'Handlebars template leak ({{)' },
+  { pattern: /\}\}/g, message: 'Handlebars template leak (}})' },
+  { pattern: /\*{4,}/g, message: 'Placeholder asterisks (****)' },
+  { pattern: /\bundefined\b/gi, message: 'JavaScript undefined leaked' },
+  { pattern: /\bnull\b/gi, message: 'Null value leaked' },
+  { pattern: /\[object\s+Object\]/gi, message: 'Object toString leak' },
+  { pattern: /Property:\s*,(?:\s*,)?/gi, message: 'Empty property field (Property: , or Property: , ,)' },
+  { pattern: /Tenant:\s*(?:\n|$)/gi, message: 'Tenant: followed by blank content' },
+];
+
+// ============================================================================
 // CONFIGURATION
 // ============================================================================
 
@@ -84,86 +223,6 @@ const TEMPLATE_PATTERNS = {
   'Tribunal Guide': /Tribunal.*Guide|First-tier\s+Tribunal/i,
   'Pre-Action': /Pre-Action\s+Requirements/i,
   'Witness Statement': /Witness\s+Statement/i,
-};
-
-// Missing field patterns
-const MISSING_FIELD_PATTERNS = [
-  { pattern: /as\s+of\s*:?\s*$/im, message: 'Missing date after "as of"' },
-  { pattern: /on\s+or\s+after\s*:?\s*$/im, message: 'Missing date after "on or after"' },
-  { pattern: /\*\*\*\*/g, message: 'Placeholder asterisks (****)' },
-  { pattern: /\{\{/g, message: 'Handlebars template leak ({{)' },
-  { pattern: /\}\}/g, message: 'Handlebars template leak (}})' },
-  { pattern: /\bundefined\b/gi, message: 'JavaScript undefined leaked' },
-  { pattern: /\bnull\b/gi, message: 'Null value leaked' },
-  { pattern: /\[object\s+Object\]/gi, message: 'Object toString leak' },
-  {
-    pattern: /The\s+first\s+anniversary\s+is\s*:?\s*\*\*\*\*/i,
-    message: 'Missing anniversary date',
-  },
-];
-
-// Jurisdiction contamination patterns
-const CONTAMINATION_PATTERNS = {
-  england: {
-    forbidden: [
-      { pattern: /Renting\s+Homes.*Wales/i, phrase: 'Renting Homes (Wales) Act' },
-      { pattern: /contract\s+holder/gi, phrase: 'contract holder' },
-      { pattern: /occupation\s+contract/gi, phrase: 'occupation contract' },
-      { pattern: /First-tier\s+Tribunal/i, phrase: 'First-tier Tribunal (Scotland)' },
-      { pattern: /Private\s+Housing.*Scotland/i, phrase: 'Private Housing (Scotland) Act' },
-    ],
-  },
-  wales: {
-    forbidden: [
-      { pattern: /Housing\s+Act\s+1988/i, phrase: 'Housing Act 1988' },
-      { pattern: /Form\s+6A/i, phrase: 'Form 6A' },
-      { pattern: /Form\s+3/i, phrase: 'Form 3' },
-      { pattern: /assured\s+shorthold/gi, phrase: 'assured shorthold tenancy' },
-      { pattern: /\btenant\b(?!\s+fees)/gi, phrase: 'tenant (should be contract holder)' },
-    ],
-  },
-  scotland: {
-    forbidden: [
-      { pattern: /Housing\s+Act\s+1988/i, phrase: 'Housing Act 1988' },
-      { pattern: /Form\s+6A/i, phrase: 'Form 6A' },
-      { pattern: /Form\s+3/i, phrase: 'Form 3' },
-      { pattern: /Section\s+21/i, phrase: 'Section 21' },
-      { pattern: /Section\s+8.*Housing\s+Act/i, phrase: 'Section 8 (Housing Act)' },
-      { pattern: /possession\s+order/gi, phrase: 'possession order (should be eviction order)' },
-    ],
-  },
-};
-
-// Required phrases by jurisdiction and notice type
-const REQUIRED_PHRASES = {
-  england: {
-    section_8: [
-      'NOTICE SEEKING POSSESSION',
-      'Housing Act 1988',
-      'Section 8',
-      'Ground',
-    ],
-    section_21: ['Section 21', 'Housing Act 1988', 'two months'],
-  },
-  wales: {
-    wales_section_173: [
-      'Section 173',
-      'Renting Homes (Wales) Act 2016',
-      'contract holder',
-    ],
-    wales_fault_based: [
-      'Renting Homes (Wales) Act 2016',
-      'contract holder',
-      'breach',
-    ],
-  },
-  scotland: {
-    notice_to_leave: [
-      'NOTICE TO LEAVE',
-      'Private Housing (Tenancies) (Scotland) Act 2016',
-      'First-tier Tribunal',
-    ],
-  },
 };
 
 // ============================================================================
@@ -190,8 +249,81 @@ async function findPDFs(dir: string, results: string[] = []): Promise<string[]> 
 }
 
 // ============================================================================
-// PDF PARSING
+// PDF PARSING (Task 1 - Reliable extraction using pdfjs-dist)
 // ============================================================================
+
+async function extractPDFText(pdfPath: string): Promise<{ text: string; error?: string }> {
+  try {
+    const pdfBuffer = await fs.readFile(pdfPath);
+
+    // Validate PDF header
+    const header = pdfBuffer.slice(0, 5).toString('utf-8');
+    if (!header.startsWith('%PDF-')) {
+      return { text: '', error: 'Invalid PDF header' };
+    }
+
+    // Try pdfjs-dist with canvas polyfill
+    try {
+      // Polyfill DOM APIs for pdfjs-dist in Node.js
+      const canvas = await import('canvas');
+      if (!globalThis.DOMMatrix) {
+        globalThis.DOMMatrix = canvas.DOMMatrix as any;
+      }
+
+      const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
+
+      // Load the PDF document
+      const loadingTask = pdfjsLib.getDocument({
+        data: new Uint8Array(pdfBuffer),
+        useSystemFonts: true,
+        verbosity: 0,
+      });
+
+      const pdf = await loadingTask.promise;
+      const textParts: string[] = [];
+
+      // Extract text from each page
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        const page = await pdf.getPage(pageNum);
+        const textContent = await page.getTextContent();
+
+        // Concatenate all text items
+        const pageText = textContent.items
+          .map((item: any) => item.str || '')
+          .join(' ');
+
+        textParts.push(pageText);
+      }
+
+      const fullText = textParts.join('\n');
+      return { text: fullText };
+
+    } catch (pdfjsError: unknown) {
+      // Fallback to pdf-parse
+      try {
+        const pdfParse = await tryLoadPdfParse();
+        if (!pdfParse) {
+          return { text: '', error: 'Neither pdfjs-dist nor pdf-parse available' };
+        }
+
+        const result = await pdfParse(pdfBuffer);
+        return { text: String(result?.text ?? '') };
+
+      } catch (parseError: unknown) {
+        const pdfjsMsg = pdfjsError instanceof Error ? pdfjsError.message : String(pdfjsError);
+        const parseMsg = parseError instanceof Error ? parseError.message : String(parseError);
+        return {
+          text: '',
+          error: `pdfjs-dist failed: ${pdfjsMsg}; pdf-parse failed: ${parseMsg}`
+        };
+      }
+    }
+
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return { text: '', error: `File read failed: ${msg}` };
+  }
+}
 
 async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: string }>) | null> {
   try {
@@ -255,35 +387,6 @@ async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: st
   }
 }
 
-async function extractPDFText(pdfPath: string): Promise<{ text: string; error?: string }> {
-  try {
-    const pdfBuffer = await fs.readFile(pdfPath);
-
-    // Validate PDF header
-    const header = pdfBuffer.slice(0, 5).toString('utf-8');
-    if (!header.startsWith('%PDF-')) {
-      return { text: '', error: 'Invalid PDF header' };
-    }
-
-    // Try pdf-parse
-    const pdfParse = await tryLoadPdfParse();
-    if (!pdfParse) {
-      return { text: '', error: 'pdf-parse not available' };
-    }
-
-    try {
-      const result = await pdfParse(pdfBuffer);
-      return { text: String(result?.text ?? '') };
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
-      return { text: '', error: `pdf-parse failed: ${msg}` };
-    }
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : String(e);
-    return { text: '', error: `File read failed: ${msg}` };
-  }
-}
-
 // ============================================================================
 // ISSUE DETECTION
 // ============================================================================
@@ -298,15 +401,15 @@ function detectTemplates(text: string): string[] {
   return detected;
 }
 
-function detectMissingFields(text: string): PDFIssue[] {
+function detectGlobalForbiddenPatterns(text: string): PDFIssue[] {
   const issues: PDFIssue[] = [];
 
-  for (const { pattern, message } of MISSING_FIELD_PATTERNS) {
+  for (const { pattern, message } of GLOBAL_FORBIDDEN_PATTERNS) {
     const matches = text.matchAll(pattern);
     for (const match of matches) {
       const snippet = extractSnippet(text, match.index ?? 0);
       issues.push({
-        type: 'missing_field',
+        type: 'global_forbidden_pattern',
         severity: 'critical',
         message,
         snippet,
@@ -317,45 +420,19 @@ function detectMissingFields(text: string): PDFIssue[] {
   return issues;
 }
 
-function detectJurisdictionContamination(
-  text: string,
-  jurisdiction: string
-): PDFIssue[] {
-  const issues: PDFIssue[] = [];
-  const rules = CONTAMINATION_PATTERNS[jurisdiction as keyof typeof CONTAMINATION_PATTERNS];
-
-  if (!rules) return issues;
-
-  for (const { pattern, phrase } of rules.forbidden) {
-    if (pattern.test(text)) {
-      const match = text.match(pattern);
-      const snippet = match ? extractSnippet(text, text.indexOf(match[0])) : undefined;
-      issues.push({
-        type: 'jurisdiction_contamination',
-        severity: 'critical',
-        message: `Found ${jurisdiction}-forbidden phrase: "${phrase}"`,
-        snippet,
-      });
-    }
-  }
-
-  return issues;
-}
-
-function detectMissingRequiredPhrases(
+function detectPhraseRuleViolations(
   text: string,
   jurisdiction: string,
   noticeType: string
 ): PDFIssue[] {
   const issues: PDFIssue[] = [];
-  const rules = REQUIRED_PHRASES[jurisdiction as keyof typeof REQUIRED_PHRASES];
+  const ruleKey = `${jurisdiction}/${noticeType}`;
+  const rules = PHRASE_RULES[ruleKey];
 
   if (!rules) return issues;
 
-  const required = rules[noticeType as keyof typeof rules];
-  if (!required) return issues;
-
-  for (const phrase of required) {
+  // Check required phrases
+  for (const phrase of rules.required) {
     if (!text.includes(phrase)) {
       issues.push({
         type: 'missing_required_phrase',
@@ -365,45 +442,47 @@ function detectMissingRequiredPhrases(
     }
   }
 
-  return issues;
-}
+  // Check forbidden phrases
+  for (const phrase of rules.forbidden) {
+    if (text.includes(phrase)) {
+      const index = text.indexOf(phrase);
+      const snippet = extractSnippet(text, index);
+      issues.push({
+        type: 'forbidden_phrase',
+        severity: 'critical',
+        message: `Found forbidden phrase: "${phrase}"`,
+        snippet,
+      });
+    }
+  }
 
-function detectLogicRedFlags(text: string, jurisdiction: string, noticeType: string): PDFIssue[] {
-  const issues: PDFIssue[] = [];
-
-  // Section 21 notice period check
-  if (noticeType === 'section_21') {
-    if (text.match(/notice.*date.*possession.*date/is)) {
-      // Try to extract dates and check if they're < 2 months apart
-      // This is a heuristic - would need actual date parsing for accuracy
-      if (text.match(/\b(1|2[0-9]|3[0-1])\s+days?\b/i)) {
+  // Check forbidden patterns
+  if (rules.forbiddenPatterns) {
+    for (const pattern of rules.forbiddenPatterns) {
+      const matches = text.matchAll(pattern);
+      for (const match of matches) {
+        const snippet = extractSnippet(text, match.index ?? 0);
         issues.push({
-          type: 'logic_red_flag',
-          severity: 'warning',
-          message: 'Possible Section 21 notice period < 2 months',
+          type: 'forbidden_phrase',
+          severity: 'critical',
+          message: `Found forbidden pattern: ${pattern.toString()}`,
+          snippet,
         });
       }
     }
   }
 
-  // Ground 8 arrears check
-  if (noticeType === 'section_8' && text.includes('Ground 8')) {
-    if (text.match(/arrears.*£0|£0.*arrears/i)) {
-      issues.push({
-        type: 'logic_red_flag',
-        severity: 'critical',
-        message: 'Ground 8 (serious arrears) included with £0 arrears',
-      });
+  // Run logic checks
+  if (rules.logicChecks) {
+    for (const check of rules.logicChecks) {
+      if (check.test(text)) {
+        issues.push({
+          type: 'logic_red_flag',
+          severity: check.severity,
+          message: check.message,
+        });
+      }
     }
-  }
-
-  // Deposit contradictions
-  if (text.match(/deposit.*protected/i) && text.match(/no\s+deposit.*taken/i)) {
-    issues.push({
-      type: 'logic_red_flag',
-      severity: 'warning',
-      message: 'Contradictory deposit statements (protected + not taken)',
-    });
   }
 
   return issues;
@@ -457,7 +536,7 @@ async function auditPDF(pdfPath: string): Promise<PDFAuditResult> {
   if (error) {
     issues.push({
       type: 'missing_field',
-      severity: 'warning',
+      severity: 'critical',
       message: `Text extraction failed: ${error}`,
     });
   }
@@ -466,10 +545,8 @@ async function auditPDF(pdfPath: string): Promise<PDFAuditResult> {
 
   // Run issue detection if extraction succeeded
   if (extractionSuccess && text) {
-    issues.push(...detectMissingFields(text));
-    issues.push(...detectJurisdictionContamination(text, jurisdiction));
-    issues.push(...detectMissingRequiredPhrases(text, jurisdiction, noticeType));
-    issues.push(...detectLogicRedFlags(text, jurisdiction, noticeType));
+    issues.push(...detectGlobalForbiddenPatterns(text));
+    issues.push(...detectPhraseRuleViolations(text, jurisdiction, noticeType));
   }
 
   // Get text sample for debugging
@@ -621,8 +698,9 @@ async function main(): Promise<void> {
     results.push(result);
 
     const issueCount = result.issues.length;
-    const icon = issueCount === 0 ? '✅' : issueCount < 3 ? '⚠️ ' : '❌';
-    console.log(`   ${icon} ${issueCount} issue(s) found`);
+    const criticalCount = result.issues.filter(i => i.severity === 'critical').length;
+    const icon = criticalCount > 0 ? '❌' : issueCount > 0 ? '⚠️ ' : '✅';
+    console.log(`   ${icon} ${issueCount} issue(s) found (${criticalCount} critical)`);
   }
 
   console.log('');
@@ -669,6 +747,7 @@ async function main(): Promise<void> {
   console.log(`  Warnings:        ${warningIssues}`);
   console.log('');
 
+  // Task 5: Exit non-zero on critical issues
   if (criticalIssues > 0) {
     console.log('❌ CRITICAL ISSUES FOUND - Review the report for details');
     process.exit(1);

@@ -627,11 +627,12 @@ async function validatePDF(
         }
       }
 
-    // Common template leaks / rendering failures (text-only, safe)
-    const leakPatterns = ['{{', '}}', 'undefined', 'NULL', '[object Object]', '****'];
-    for (const pattern of leakPatterns) {
-      if (pdfText.includes(pattern)) {
-        errors.push(`Found template/leak pattern in extracted text: "${pattern}"`);
+      // Common template leaks / rendering failures (text-only, safe)
+      const leakPatterns = ['{{', '}}', 'undefined', 'NULL', '[object Object]', '****'];
+      for (const pattern of leakPatterns) {
+        if (pdfText.includes(pattern)) {
+          errors.push(`Found template/leak pattern in extracted text: "${pattern}"`);
+        }
       }
     }
   } else {
