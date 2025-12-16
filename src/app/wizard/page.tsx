@@ -23,7 +23,7 @@ interface DocumentOption {
 }
 
 interface JurisdictionOption {
-  value: 'england-wales' | 'scotland' | 'northern-ireland';
+  value: 'england' | 'wales' | 'scotland' | 'northern-ireland';
   label: string;
   flag: string;
 }
@@ -53,11 +53,30 @@ const documentOptions: DocumentOption[] = [
   },
 ];
 
-const jurisdictions: JurisdictionOption[] = [
-  { value: 'england-wales', label: 'England & Wales', flag: '/gb-eng.svg' },
+// All available jurisdictions (canonical)
+const allJurisdictions: JurisdictionOption[] = [
+  { value: 'england', label: 'England', flag: '/gb-eng.svg' },
+  { value: 'wales', label: 'Wales', flag: '/gb-wls.svg' },
   { value: 'scotland', label: 'Scotland', flag: '/gb-sct.svg' },
   { value: 'northern-ireland', label: 'Northern Ireland', flag: '/gb-nir.svg' },
 ];
+
+// Get available jurisdictions based on document type
+function getAvailableJurisdictions(
+  documentType: DocumentOption['type'] | null
+): JurisdictionOption[] {
+  if (!documentType) {
+    return allJurisdictions;
+  }
+
+  // Northern Ireland is only supported for tenancy agreements
+  if (documentType === 'tenancy_agreement') {
+    return allJurisdictions;
+  }
+
+  // Eviction and money claim: England, Wales, Scotland only
+  return allJurisdictions.filter((j) => j.value !== 'northern-ireland');
+}
 
 // Map product parameter to document type
 function mapProductToDocumentType(
@@ -68,23 +87,10 @@ function mapProductToDocumentType(
     case 'notice_only':
       return 'eviction';
     case 'money_claim':
-    case 'money_claim_england_wales':
-    case 'money_claim_scotland':
       return 'money_claim';
     case 'ast_standard':
     case 'ast_premium':
       return 'tenancy_agreement';
-    default:
-      return null;
-  }
-}
-
-function mapProductToJurisdiction(product: string): JurisdictionOption['value'] | null {
-  switch (product) {
-    case 'money_claim_england_wales':
-      return 'england-wales';
-    case 'money_claim_scotland':
-      return 'scotland';
     default:
       return null;
   }
@@ -95,9 +101,6 @@ function normalizeProductForWizard(
   documentType: DocumentOption['type']
 ): string | null {
   if (documentType === 'money_claim') {
-    if (product === 'money_claim_england_wales' || product === 'money_claim_scotland') {
-      return 'money_claim';
-    }
     return product ?? 'money_claim';
   }
 
@@ -121,61 +124,22 @@ function WizardPageInner() {
     return docType ? documentOptions.find((d) => d.type === docType) ?? null : null;
   }, [productParam]);
 
-  const preselectedJurisdiction = useMemo(() => {
-    if (!productParam) return null;
-    const mapped = mapProductToJurisdiction(productParam);
-    return mapped ? jurisdictions.find((j) => j.value === mapped) ?? null : null;
-  }, [productParam]);
-
   const [selectedDocument, setSelectedDocument] =
     useState<DocumentOption | null>(preselectedDocument);
   const [selectedJurisdiction, setSelectedJurisdiction] =
-    useState<JurisdictionOption | null>(preselectedJurisdiction);
+    useState<JurisdictionOption | null>(null);
   const [step, setStep] = useState<1 | 2>(preselectedDocument ? 2 : 1);
 
+  // Get available jurisdictions for current document type
+  const availableJurisdictions = useMemo(
+    () => getAvailableJurisdictions(selectedDocument?.type ?? null),
+    [selectedDocument]
+  );
+
+  // All jurisdictions shown should be supported (filtered by getAvailableJurisdictions)
   const isJurisdictionSupported = (jur: JurisdictionOption) => {
-    if (!selectedDocument) return true;
-
-    // Money claims: Available in England & Wales and Scotland, NOT in Northern Ireland
-    if (selectedDocument.type === 'money_claim' && jur.value === 'northern-ireland') {
-      return false;
-    }
-
-    // Evictions: NOT available in Northern Ireland
-    if (selectedDocument.type !== 'tenancy_agreement' && jur.value === 'northern-ireland') {
-      return false;
-    }
-
-    return true;
+    return availableJurisdictions.some((j) => j.value === jur.value);
   };
-
-  const selectedComboUnsupported =
-    !!selectedDocument &&
-    !!selectedJurisdiction &&
-    ((selectedDocument.type === 'money_claim' &&
-      selectedJurisdiction.value === 'northern-ireland') ||
-      (selectedDocument.type !== 'tenancy_agreement' &&
-        selectedJurisdiction.value === 'northern-ireland'));
-
-  const getUnsupportedCopy = (jur: JurisdictionOption) => {
-    // Money claim: differentiate Scotland vs Northern Ireland
-    if (selectedDocument?.type === 'money_claim' && jur.value === 'northern-ireland') {
-      return 'Eviction and money claim flows are unavailable here. Tenancy agreements only.';
-    }
-
-    // Non-tenancy flows in Northern Ireland (eviction etc.)
-    if (
-      selectedDocument &&
-      selectedDocument.type !== 'tenancy_agreement' &&
-      jur.value === 'northern-ireland'
-    ) {
-      return 'Eviction and money claim flows are unavailable here. Tenancy agreements only.';
-    }
-
-    return '';
-  };
-
-  const selectedUnsupportedCopy = selectedJurisdiction ? getUnsupportedCopy(selectedJurisdiction) : '';
 
   const handleDocumentSelect = (doc: DocumentOption) => {
     setSelectedDocument(doc);
@@ -188,8 +152,6 @@ function WizardPageInner() {
 
   const handleStart = () => {
     if (selectedDocument && selectedJurisdiction) {
-      if (selectedComboUnsupported) return;
-
       // Get product parameter to pass through
       const productParam = searchParams.get('product');
       const normalizedProduct = normalizeProductForWizard(productParam, selectedDocument.type);
@@ -201,15 +163,6 @@ function WizardPageInner() {
 
       if (normalizedProduct) {
         urlParams.set('product', normalizedProduct);
-      }
-
-      if (
-        selectedDocument.type === 'money_claim' &&
-        productParam &&
-        (productParam === 'money_claim_england_wales' || productParam === 'money_claim_scotland') &&
-        normalizedProduct !== productParam
-      ) {
-        urlParams.set('product_variant', productParam);
       }
 
       const url = `/wizard/flow?${urlParams.toString()}`;
@@ -336,15 +289,13 @@ function WizardPageInner() {
             </p>
 
             <div className="space-y-4">
-              {jurisdictions.map((jur) => (
+              {availableJurisdictions.map((jur) => (
                 <button
                   key={jur.value}
-                  onClick={() => isJurisdictionSupported(jur) && handleJurisdictionSelect(jur)}
-                  disabled={!isJurisdictionSupported(jur)}
+                  onClick={() => handleJurisdictionSelect(jur)}
                   className={clsx(
                     'w-full p-6 rounded-xl border-2 transition-all duration-200 text-left',
                     'flex items-center gap-4',
-                    !isJurisdictionSupported(jur) && 'opacity-60 cursor-not-allowed',
                     selectedJurisdiction?.value === jur.value
                       ? 'border-primary bg-primary-subtle shadow-md'
                       : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
@@ -355,9 +306,6 @@ function WizardPageInner() {
                   </div>
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-charcoal">{jur.label}</h3>
-                    {!isJurisdictionSupported(jur) && (
-                      <p className="text-sm text-red-600 mt-1">{getUnsupportedCopy(jur)}</p>
-                    )}
                   </div>
                   {selectedJurisdiction?.value === jur.value && (
                     <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
@@ -377,17 +325,9 @@ function WizardPageInner() {
             {/* Start Button */}
             {selectedJurisdiction && (
               <div className="mt-8 text-center">
-                <Button
-                  variant="primary"
-                  size="large"
-                  onClick={handleStart}
-                  disabled={selectedComboUnsupported}
-                >
+                <Button variant="primary" size="large" onClick={handleStart}>
                   Start Wizard →
                 </Button>
-                {selectedComboUnsupported && (
-                  <p className="text-sm text-red-600 mt-3">{selectedUnsupportedCopy}</p>
-                )}
                 <p className="text-sm text-gray-600 mt-3">
                   This will take about 5-10 minutes
                 </p>

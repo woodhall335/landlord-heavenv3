@@ -40,12 +40,8 @@ function WizardFlowContent() {
     }
   }, [hasRequiredParams, router]);
 
-  // Normalise money-claim product variants to a single Ask Heaven / wizard product label
-  const normalizedProduct =
-    type === 'money_claim' &&
-    (product === 'money_claim_england_wales' || product === 'money_claim_scotland')
-      ? 'money_claim'
-      : product;
+  // Normalize product for Ask Heaven / wizard
+  const normalizedProduct = product;
 
   // Derive a coarse product label for Ask Heaven (its Product union)
   const askHeavenProduct: AskHeavenProduct | null = (() => {
@@ -86,16 +82,8 @@ function WizardFlowContent() {
       let startProduct: string;
 
       if (type === 'money_claim') {
-        // Money-claim flows: honour specific product variants first
-        if (
-          rawProduct === 'money_claim_england_wales' ||
-          rawProduct === 'money_claim_scotland' ||
-          rawProduct === 'money_claim'
-        ) {
-          startProduct = rawProduct;
-        } else {
-          startProduct = 'money_claim';
-        }
+        // Money claim flows: use money_claim product
+        startProduct = rawProduct === 'money_claim' ? rawProduct : 'money_claim';
       } else if (type === 'tenancy_agreement') {
         // Tenancy flows: keep AST tiers if provided
         if (
@@ -209,16 +197,11 @@ function WizardFlowContent() {
 
   // 🟦 NEW: For money_claim, use the section-based premium flow
   if (type === 'money_claim') {
-    // We only support money claims for England & Wales + Scotland
-    const sectionJurisdiction =
-      jurisdiction === 'england-wales' || jurisdiction === 'scotland'
-        ? jurisdiction
-        : 'england-wales';
-
+    // We support money claims for England, Wales, and Scotland
     return (
       <MoneyClaimSectionFlow
         caseId={caseId}
-        jurisdiction={sectionJurisdiction}
+        jurisdiction={jurisdiction as 'england' | 'wales' | 'scotland'}
       />
     );
   }
