@@ -140,6 +140,7 @@ const TEST_ROUTES: TestRoute[] = [
       property_licensing: 'not_required',
       recent_repair_complaints_s21: false,
       section8_grounds_selection: ['Ground 8 - Serious rent arrears (2+ months)'],
+      rent_arrears_amount: 2400,
       ground_particulars:
         'Tenant owes £2,400 in rent arrears covering 2 months (January-February 2025). Last payment received was December 2024. Rent is due monthly on the 1st. Tenant has been contacted multiple times but has not responded.',
       notice_strategy: 'minimum',

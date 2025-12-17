@@ -143,24 +143,23 @@ export default function WizardPreviewPage() {
             name: isScotland ? 'Notice to Leave Pack' : 'Notice Only Pack',
             price: formatPrice(PRICING.NOTICE_ONLY), // ✅ Fixed: £29.99 from config (was £69.99!)
             description: isScotland
-              ? 'Complete pack: Notice to Leave + 3 professional guidance documents. Everything you need to serve notice correctly.'
-              : 'Complete pack: Official notice + 3 professional guidance documents. Everything you need to serve notice correctly.',
+              ? 'Complete pack: Notice to Leave + professional guidance documents. Everything you need to serve notice correctly.'
+              : 'Complete pack: Official notice + professional guidance documents. Everything you need to serve notice correctly.',
             features: isScotland
               ? [
                   'Notice to Leave with auto-calculated notice period (28-84 days by ground)',
-                  'Service Instructions - How to serve legally (no first class post in Scotland!)',
-                  'Pre-Action Checklist - Mandatory PAR for Ground 1 + tribunal requirements',
-                  'Tribunal Guide - Complete First-tier Tribunal process (FREE vs England £355)',
+                  'Service Instructions - How to serve legally in Scotland',
+                  'Service & Validity Checklist - Scotland route-specific verification',
                   'Smart guidance for grounds, evidence, and notice periods',
-                  'All documents in one convenient PDF pack',
+                  'All documents merged into one PDF pack',
                 ]
               : [
-                  'Section 8 or Section 21 notice (auto-selected based on compliance)',
+                  'Section 8 notice (Form 3) OR Section 21 notice (Form 6A)',
                   'Service Instructions - How to serve legally with proof of service templates',
-                  'Compliance Checklist - Verify deposit, gas cert, EPC, How to Rent guide',
-                  'Next Steps Guide - Complete court process timeline (N5/N5B, bailiffs, costs)',
+                  'Service & Validity Checklist - Route-specific compliance verification',
                   'Smart route recommendation based on your situation',
                   'Auto-calculated expiry dates and notice periods',
+                  'All documents merged into one PDF pack',
                 ],
           },
           {
@@ -662,8 +661,8 @@ export default function WizardPreviewPage() {
                         Complete Notice Only Pack Preview
                       </h4>
                       <p className="text-sm text-purple-800">
-                        This preview shows your complete pack: the official notice plus 3 professional guidance documents
-                        ({isScotlandEviction ? 'service instructions, pre-action checklist, and tribunal guide' : 'service instructions, compliance checklist, and next steps guide'}).
+                        This preview shows your complete pack: the official notice plus professional guidance documents
+                        ({isScotlandEviction ? 'service instructions and service & validity checklist' : 'service instructions and service & validity checklist'}).
                         All documents are merged into one convenient PDF for you to review.
                       </p>
                     </div>
@@ -717,23 +716,21 @@ export default function WizardPreviewPage() {
                       {/* NOTICE_ONLY product - notice-specific features */}
                       {effectiveProduct === 'notice_only' && isScotlandEviction && (
                         <>
-                          <li>✅ Notice to Leave with auto-calculated leaving date and notice period</li>
-                          <li>✅ Service Instructions - How to serve legally (hand delivery, recorded delivery, sheriff officer)</li>
-                          <li>✅ Pre-Action Checklist - Mandatory requirements for Ground 1 + tribunal preparation</li>
-                          <li>✅ Tribunal Guide - Complete First-tier Tribunal process (FREE tribunal vs England £355!)</li>
-                          <li>✅ Smart guidance for grounds, notice periods, and evidence requirements</li>
-                          <li>✅ All documents in one convenient PDF pack</li>
+                          <li>✅ Notice to Leave (PRT)</li>
+                          <li>✅ Service Instructions (Scotland)</li>
+                          <li>✅ Service & Validity Checklist (Scotland route-specific)</li>
+                          <li>✅ Smart guidance features (grounds, notice periods, compliance verification)</li>
+                          <li>✅ One merged PDF pack</li>
                         </>
                       )}
 
                       {effectiveProduct === 'notice_only' && !isScotlandEviction && (
                         <>
-                          <li>✅ {caseData.recommended_route === 'section_21' ? 'Section 21 notice (Form 6A)' : 'Section 8 notice (Form 3)'} with auto-calculated expiry date</li>
-                          <li>✅ Service Instructions - How to serve legally (hand delivery, first class, recorded delivery)</li>
-                          <li>✅ Compliance Checklist - Pre-service verification (deposit, gas, EPC, How to Rent)</li>
-                          <li>✅ Next Steps Guide - Complete timeline after serving notice (court process, N5/N5B forms, bailiffs)</li>
-                          <li>✅ Smart guidance recommendations based on your answers</li>
-                          <li>✅ All documents in one convenient PDF pack</li>
+                          <li>✅ {caseData.recommended_route === 'section_21' ? 'Section 21 notice (Form 6A)' : 'Section 8 notice (Form 3)'}</li>
+                          <li>✅ Service Instructions (how to serve legally)</li>
+                          <li>✅ Service & Validity Checklist (route-specific)</li>
+                          <li>✅ Smart guidance features (route/grounds/dates/compliance verification)</li>
+                          <li>✅ All documents merged into one PDF pack</li>
                         </>
                       )}
 
