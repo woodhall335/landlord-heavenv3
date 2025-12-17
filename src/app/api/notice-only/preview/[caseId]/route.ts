@@ -192,6 +192,7 @@ export async function GET(
       templateData.service_date_formatted = formatUKDate(templateData.service_date || '');
       templateData.notice_date_formatted = formatUKDate(templateData.notice_date || '');
       templateData.earliest_possession_date_formatted = formatUKDate(templateData.earliest_possession_date || '');
+      templateData.tenancy_start_date_formatted = formatUKDate(templateData.tenancy_start_date || '');
       templateData.generated_date = formatUKDate(new Date().toISOString().split('T')[0]);
 
       // Calculate dates if needed using the date calculator
@@ -316,11 +317,11 @@ export async function GET(
         }
       }
 
-      // 2. Generate service instructions
+      // 2. Generate service instructions (England-specific)
       console.log('[NOTICE-PREVIEW-API] Generating service instructions');
       try {
         const serviceDoc = await generateDocument({
-          templatePath: 'uk/england-wales/templates/eviction/service_instructions.hbs',
+          templatePath: 'uk/england/templates/eviction/service_instructions.hbs',
           data: {
             ...templateData,
             notice_type: selected_route === 'section_8' ? 'Section 8' : 'Section 21',
@@ -339,47 +340,25 @@ export async function GET(
         console.error('[NOTICE-PREVIEW-API] Service instructions generation failed:', err);
       }
 
-      // 3. Generate compliance checklist
-      console.log('[NOTICE-PREVIEW-API] Generating compliance checklist');
+      // 3. Generate route-specific checklist (Section 8 or Section 21)
+      const checklistRoute = selected_route === 'section_8' ? 'section_8' : 'section_21';
+      console.log(`[NOTICE-PREVIEW-API] Generating ${checklistRoute} checklist`);
       try {
-        const complianceDoc = await generateDocument({
-          templatePath: 'uk/england-wales/templates/eviction/compliance_checklist.hbs',
+        const checklistDoc = await generateDocument({
+          templatePath: `uk/england/templates/eviction/checklist_${checklistRoute}.hbs`,
           data: templateData,
           outputFormat: 'pdf',
         });
 
-        if (complianceDoc.pdf) {
+        if (checklistDoc.pdf) {
           documents.push({
-            title: 'Compliance Checklist',
+            title: `Service and Validity Checklist`,
             category: 'checklist',
-            pdf: complianceDoc.pdf,
+            pdf: checklistDoc.pdf,
           });
         }
       } catch (err) {
-        console.error('[NOTICE-PREVIEW-API] Compliance checklist generation failed:', err);
-      }
-
-      // 4. Generate next steps guide
-      console.log('[NOTICE-PREVIEW-API] Generating next steps guide');
-      try {
-        const nextStepsDoc = await generateDocument({
-          templatePath: 'uk/england-wales/templates/eviction/next_steps_guide.hbs',
-          data: {
-            ...templateData,
-            notice_route: selected_route,
-          },
-          outputFormat: 'pdf',
-        });
-
-        if (nextStepsDoc.pdf) {
-          documents.push({
-            title: 'Next Steps Guide',
-            category: 'guidance',
-            pdf: nextStepsDoc.pdf,
-          });
-        }
-      } catch (err) {
-        console.error('[NOTICE-PREVIEW-API] Next steps guide generation failed:', err);
+        console.error(`[NOTICE-PREVIEW-API] ${checklistRoute} checklist generation failed:`, err);
       }
     }
 
@@ -416,6 +395,10 @@ export async function GET(
       templateData.notice_date_formatted = formatUKDate(templateData.notice_date || '');
       templateData.earliest_possession_date_formatted = formatUKDate(templateData.earliest_possession_date || '');
       templateData.generated_date = formatUKDate(new Date().toISOString().split('T')[0]);
+
+      // Add contract start date (Wales-specific)
+      const contractStartDate = wizardFacts.contract_start_date || templateData.tenancy_start_date || templateData.tenancy?.start_date;
+      templateData.contract_start_date_formatted = formatUKDate(contractStartDate || '');
 
       // Add convenience flags
       templateData.is_wales_section_173 = selected_route === 'wales_section_173';
@@ -543,53 +526,25 @@ export async function GET(
         console.error('[NOTICE-PREVIEW-API] Service instructions generation failed:', err);
       }
 
-      // 3. Generate compliance checklist (use England/Wales with Wales flag)
-      console.log('[NOTICE-PREVIEW-API] Generating compliance checklist');
+      // 3. Generate route-specific checklist (Section 173 or Fault-Based)
+      const checklistRoute = selected_route === 'wales_section_173' ? 'section_173' : 'fault_based';
+      console.log(`[NOTICE-PREVIEW-API] Generating Wales ${checklistRoute} checklist`);
       try {
-        const complianceDoc = await generateDocument({
-          templatePath: 'uk/england-wales/templates/eviction/compliance_checklist.hbs',
-          data: {
-            ...templateData,
-            jurisdiction: 'Wales',
-            is_wales: true,
-          },
+        const checklistDoc = await generateDocument({
+          templatePath: `uk/wales/templates/eviction/checklist_${checklistRoute}.hbs`,
+          data: templateData,
           outputFormat: 'pdf',
         });
 
-        if (complianceDoc.pdf) {
+        if (checklistDoc.pdf) {
           documents.push({
-            title: 'Compliance Checklist (Wales)',
+            title: 'Service and Validity Checklist (Wales)',
             category: 'checklist',
-            pdf: complianceDoc.pdf,
+            pdf: checklistDoc.pdf,
           });
         }
       } catch (err) {
-        console.error('[NOTICE-PREVIEW-API] Compliance checklist generation failed:', err);
-      }
-
-      // 4. Generate next steps guide (use England/Wales with Wales flag)
-      console.log('[NOTICE-PREVIEW-API] Generating next steps guide');
-      try {
-        const nextStepsDoc = await generateDocument({
-          templatePath: 'uk/england-wales/templates/eviction/next_steps_guide.hbs',
-          data: {
-            ...templateData,
-            notice_route: selected_route,
-            jurisdiction: 'Wales',
-            is_wales: true,
-          },
-          outputFormat: 'pdf',
-        });
-
-        if (nextStepsDoc.pdf) {
-          documents.push({
-            title: 'Next Steps Guide (Wales)',
-            category: 'guidance',
-            pdf: nextStepsDoc.pdf,
-          });
-        }
-      } catch (err) {
-        console.error('[NOTICE-PREVIEW-API] Next steps guide generation failed:', err);
+        console.error(`[NOTICE-PREVIEW-API] Wales ${checklistRoute} checklist generation failed:`, err);
       }
     }
 
@@ -653,6 +608,7 @@ export async function GET(
 
       // Format dates for display
       templateData.notice_date_formatted = formatUKDate(noticeDate);
+      templateData.tenancy_start_date_formatted = formatUKDate(templateData.tenancy_start_date || '');
       templateData.generated_date = formatUKDate(new Date().toISOString().split('T')[0]);
 
       // Process grounds for Scotland
@@ -727,8 +683,8 @@ export async function GET(
         console.error('[NOTICE-PREVIEW-API] Notice to Leave generation failed:', err);
       }
 
-      // 2. Generate service instructions
-      console.log('[NOTICE-PREVIEW-API] Generating service instructions');
+      // 2. Generate service instructions (Scotland-specific)
+      console.log('[NOTICE-PREVIEW-API] Generating Scotland service instructions');
       try {
         const serviceDoc = await generateDocument({
           templatePath: 'uk/scotland/templates/eviction/service_instructions.hbs',
@@ -747,46 +703,24 @@ export async function GET(
         console.error('[NOTICE-PREVIEW-API] Service instructions generation failed:', err);
       }
 
-      // 3. Generate pre-action checklist (if Ground 1 - rent arrears)
-      if (hasGround1) {
-        console.log('[NOTICE-PREVIEW-API] Generating pre-action checklist (Ground 1)');
-        try {
-          const preActionDoc = await generateDocument({
-            templatePath: 'uk/scotland/templates/eviction/pre_action_checklist.hbs',
-            data: templateData,
-            outputFormat: 'pdf',
-          });
-
-          if (preActionDoc.pdf) {
-            documents.push({
-              title: 'Pre-Action Requirements Checklist',
-              category: 'checklist',
-              pdf: preActionDoc.pdf,
-            });
-          }
-        } catch (err) {
-          console.error('[NOTICE-PREVIEW-API] Pre-action checklist generation failed:', err);
-        }
-      }
-
-      // 4. Generate tribunal guide
-      console.log('[NOTICE-PREVIEW-API] Generating tribunal guide');
+      // 3. Generate Notice to Leave checklist
+      console.log('[NOTICE-PREVIEW-API] Generating Notice to Leave checklist');
       try {
-        const tribunalDoc = await generateDocument({
-          templatePath: 'uk/scotland/templates/eviction/tribunal_guide.hbs',
+        const checklistDoc = await generateDocument({
+          templatePath: 'uk/scotland/templates/eviction/checklist_notice_to_leave.hbs',
           data: templateData,
           outputFormat: 'pdf',
         });
 
-        if (tribunalDoc.pdf) {
+        if (checklistDoc.pdf) {
           documents.push({
-            title: 'Tribunal Process Guide',
-            category: 'guidance',
-            pdf: tribunalDoc.pdf,
+            title: 'Service and Validity Checklist',
+            category: 'checklist',
+            pdf: checklistDoc.pdf,
           });
         }
       } catch (err) {
-        console.error('[NOTICE-PREVIEW-API] Tribunal guide generation failed:', err);
+        console.error('[NOTICE-PREVIEW-API] Notice to Leave checklist generation failed:', err);
       }
     }
 
