@@ -360,7 +360,13 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
   // SCOTLAND – NOTICE TO LEAVE
   // ---------------------------------------------------------------------------
   if (route === 'notice-only/scotland/notice-to-leave') {
-    const grounds: Array<number> = (wizardFacts.scotland_ground_codes || [])
+    const rawGrounds = Array.isArray(wizardFacts.scotland_ground_codes)
+      ? wizardFacts.scotland_ground_codes
+      : wizardFacts.scotland_ground_codes
+        ? [wizardFacts.scotland_ground_codes]
+        : [];
+
+    const grounds: Array<number> = rawGrounds
       .map((ground: number | string) => Number(ground))
       .filter((ground) => !Number.isNaN(ground));
     const preActionConfirmed = wizardFacts?.issues?.rent_arrears?.pre_action_confirmed;
