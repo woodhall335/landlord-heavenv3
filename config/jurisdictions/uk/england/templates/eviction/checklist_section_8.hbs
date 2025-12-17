@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Section 8 Notice - Service and Validity Checklist</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 40px;
+      color: #333;
+    }
+    h1 {
+      color: #1a1a1a;
+      border-bottom: 3px solid #2563eb;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #2563eb;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      color: #1a1a1a;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .section {
+      margin: 25px 0;
+    }
+    .info-box {
+      background: #f3f4f6;
+      border-left: 4px solid #2563eb;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .warning {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .checklist {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 20px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+    .checkbox {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #333;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    ul {
+      margin-left: 20px;
+      list-style: none;
+    }
+    li {
+      margin: 12px 0;
+    }
+    .field-label {
+      font-weight: bold;
+      color: #1a1a1a;
+    }
+    footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 2px solid #e5e7eb;
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <h1>Section 8 Notice - Service and Validity Checklist</h1>
+
+  <div class="info-box">
+    <strong>Purpose:</strong> Use this checklist to verify your Section 8 notice was served correctly and meets all validity requirements. Keep this checklist with your evidence file.
+  </div>
+
+  <div class="section">
+    <h2>Notice Details</h2>
+    <p><span class="field-label">Landlord:</span> {{landlord_full_name}}</p>
+    {{#if landlord_address}}
+    <p><span class="field-label">Landlord Address:</span> {{landlord_address}}</p>
+    {{/if}}
+    <p><span class="field-label">Tenant:</span> {{tenant_full_name}}</p>
+    <p><span class="field-label">Property Address:</span> {{property_address}}</p>
+    <p><span class="field-label">Tenancy Start Date:</span> {{tenancy_start_date_formatted}}</p>
+    <p><span class="field-label">Notice Service Date:</span> {{service_date_formatted}}</p>
+    <p><span class="field-label">Earliest Possession Date:</span> {{earliest_possession_date_formatted}}</p>
+    {{#if grounds}}
+    <p><span class="field-label">Grounds:</span> {{ground_numbers}}</p>
+    {{/if}}
+  </div>
+
+  <div class="section">
+    <h2>Service Evidence Checklist</h2>
+    <div class="checklist">
+      <p><strong>Confirm you have collected and retained the following evidence of service:</strong></p>
+      <ul>
+        <li><span class="checkbox"></span> Original signed Section 8 notice (Form 3)</li>
+        <li><span class="checkbox"></span> Copy of the notice served to tenant</li>
+        <li><span class="checkbox"></span> Date and time of service recorded</li>
+        <li><span class="checkbox"></span> Method of service documented (hand delivery / first class post / recorded delivery)</li>
+        <li><span class="checkbox"></span> Proof of service:
+          <ul style="margin-left: 30px; margin-top: 8px;">
+            <li>If hand delivered: Photo of letterbox with notice visible, witness statement</li>
+            <li>If posted: Proof of postage receipt from Royal Mail</li>
+            <li>If recorded delivery: Tracking number and delivery confirmation</li>
+          </ul>
+        </li>
+        <li><span class="checkbox"></span> Witness details recorded (name, address, signature) if applicable</li>
+        <li><span class="checkbox"></span> Any correspondence from tenant acknowledging receipt</li>
+      </ul>
+    </div>
+
+    <div class="warning">
+      <strong>Keep All Evidence:</strong> You must prove service in court. Without clear evidence, your claim may be dismissed even if the notice is otherwise valid.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Validity Requirements (Housing Act 1988, Section 8)</h2>
+    <div class="checklist">
+      <p><strong>Verify your notice meets these validity requirements:</strong></p>
+      <ul>
+        <li><span class="checkbox"></span> Notice uses correct form (Form 3 or substantially similar)</li>
+        <li><span class="checkbox"></span> All mandatory fields completed (landlord name/address, tenant name, property address)</li>
+        <li><span class="checkbox"></span> Ground(s) for possession clearly stated with particulars</li>
+        <li><span class="checkbox"></span> Notice period is sufficient for the grounds claimed:
+          <ul style="margin-left: 30px; margin-top: 8px;">
+            <li>Grounds 1, 2, 5-7, 9, 16: Two weeks notice minimum</li>
+            <li>Ground 8 (serious rent arrears): Two weeks notice minimum</li>
+            <li>Ground 14 (ASB), Ground 14A (serious ASB): Immediate notice possible if not periodic</li>
+            <li>Other grounds: Two months notice minimum</li>
+          </ul>
+        </li>
+        {{#if is_fixed_term}}
+        <li><span class="checkbox"></span> Fixed term tenancy: Notice only valid if tenancy agreement allows possession during fixed term, or fixed term has ended</li>
+        {{else}}
+        <li><span class="checkbox"></span> Periodic tenancy: Notice period calculated correctly from rent payment date</li>
+        {{/if}}
+        <li><span class="checkbox"></span> Notice signed and dated by landlord or landlord's agent</li>
+        {{#if has_mandatory_ground}}
+        <li><span class="checkbox"></span> Mandatory ground claimed: Court must grant possession if ground is proven (Grounds 1-8)</li>
+        {{else}}
+        <li><span class="checkbox"></span> Discretionary ground(s) claimed: Court will consider reasonableness (Grounds 9-17)</li>
+        {{/if}}
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>After Service</h2>
+    <div class="checklist">
+      <p><strong>Post-service actions:</strong></p>
+      <ul>
+        <li><span class="checkbox"></span> Wait until possession date has passed: <strong>{{earliest_possession_date_formatted}}</strong></li>
+        <li><span class="checkbox"></span> Do not change locks or remove tenant belongings (illegal eviction)</li>
+        <li><span class="checkbox"></span> Do not harass tenant or cut off utilities</li>
+        <li><span class="checkbox"></span> If tenant remains after possession date, apply to court using Form N5 or N5B</li>
+        <li><span class="checkbox"></span> Keep proof of service readily accessible for court</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>Legal Basis:</strong> Housing Act 1988, Section 8 and Schedule 2</p>
+    <p><strong>Generated:</strong> {{generated_date}}</p>
+    <p><strong>Landlord Heaven Notice Only Pack</strong> | England</p>
+  </footer>
+</body>
+</html>

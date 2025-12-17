@@ -455,7 +455,7 @@ async function generatePreviewPDF(caseId: string): Promise<Buffer> {
  *  - classic function export (older pdf-parse)
  *  - class export (PDFParse) with load()/getText() across different builds
  */
-async function tryLoadPdfParse(): Promise<((data: Buffer | Uint8Array) => Promise<{ text?: string }>) | null> {
+async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: string }>) | null> {
   try {
     const mod: any = await import('pdf-parse');
 
@@ -465,10 +465,9 @@ async function tryLoadPdfParse(): Promise<((data: Buffer | Uint8Array) => Promis
     const fnCandidates = [mod?.default, mod, mod?.default?.default];
     const fn = fnCandidates.find((c) => typeof c === 'function');
     if (fn) {
-      return async (data: Buffer | Uint8Array) => {
-        // normalize to Buffer to satisfy older signatures
-        const buf = Buffer.isBuffer(data) ? data : Buffer.from(data);
-        return fn(buf);
+      return async (data: Buffer) => {
+        // data is already Buffer
+        return fn(data);
       };
     }
 
@@ -476,7 +475,7 @@ async function tryLoadPdfParse(): Promise<((data: Buffer | Uint8Array) => Promis
     // Shape B: class export
     // ---------------------------
     if (typeof mod?.PDFParse === 'function') {
-      return async (data: Buffer | Uint8Array) => {
+      return async (data: Buffer) => {
         const verbosity =
           mod?.VerbosityLevel?.ERRORS ??
           mod?.VerbosityLevel?.WARNINGS ??
@@ -485,8 +484,8 @@ async function tryLoadPdfParse(): Promise<((data: Buffer | Uint8Array) => Promis
 
         const parser = new mod.PDFParse({ verbosity });
 
-        // normalize to Uint8Array for PDF.js internals
-        const u8: Uint8Array = Buffer.isBuffer(data) ? new Uint8Array(data) : data;
+        // normalize Buffer to Uint8Array for PDF.js internals
+        const u8: Uint8Array = new Uint8Array(data);
 
         const tryCall = async (label: string, f: () => Promise<any>) => {
           try {

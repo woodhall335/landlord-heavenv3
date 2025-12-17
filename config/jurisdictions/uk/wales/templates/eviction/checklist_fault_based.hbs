@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wales Fault-Based Notice - Service and Validity Checklist</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 40px;
+      color: #333;
+    }
+    h1 {
+      color: #1a1a1a;
+      border-bottom: 3px solid #dc2626;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #dc2626;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      color: #1a1a1a;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .section {
+      margin: 25px 0;
+    }
+    .info-box {
+      background: #fef2f2;
+      border-left: 4px solid #dc2626;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .warning {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .critical {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 15px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .checklist {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 20px;
+      border-radius: 5px;
+      margin: 20px 0;
+    }
+    .checkbox {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #333;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    ul {
+      margin-left: 20px;
+      list-style: none;
+    }
+    li {
+      margin: 12px 0;
+    }
+    .field-label {
+      font-weight: bold;
+      color: #1a1a1a;
+    }
+    footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 2px solid #e5e7eb;
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <h1>Wales Fault-Based Breach Notice - Service and Validity Checklist</h1>
+
+  <div class="info-box">
+    <strong>Purpose:</strong> Use this checklist to verify your fault-based breach notice was served correctly under the Renting Homes (Wales) Act 2016. Keep this checklist with your evidence file.
+  </div>
+
+  <div class="section">
+    <h2>Notice Details</h2>
+    <p><span class="field-label">Landlord:</span> {{landlord_full_name}}</p>
+    {{#if landlord_address}}
+    <p><span class="field-label">Landlord Address:</span> {{landlord_address}}</p>
+    {{/if}}
+    <p><span class="field-label">Contract-Holder:</span> {{contract_holder_full_name}}</p>
+    <p><span class="field-label">Property Address:</span> {{property_address}}</p>
+    <p><span class="field-label">Occupation Contract Start Date:</span> {{contract_start_date_formatted}}</p>
+    <p><span class="field-label">Notice Service Date:</span> {{service_date_formatted}}</p>
+    {{#if wales_breach_type}}
+    <p><span class="field-label">Breach Type:</span> {{wales_breach_type}}</p>
+    {{/if}}
+    {{#if rent_arrears_amount}}
+    <p><span class="field-label">Rent Arrears Amount:</span> £{{rent_arrears_amount}}</p>
+    {{/if}}
+  </div>
+
+  <div class="section">
+    <h2>Service Evidence Checklist</h2>
+    <div class="checklist">
+      <p><strong>Confirm you have collected and retained the following evidence of service:</strong></p>
+      <ul>
+        <li><span class="checkbox"></span> Original signed fault-based breach notice</li>
+        <li><span class="checkbox"></span> Copy of the notice served to contract-holder</li>
+        <li><span class="checkbox"></span> Date and time of service recorded</li>
+        <li><span class="checkbox"></span> Method of service documented (hand delivery / first class post / recorded delivery)</li>
+        <li><span class="checkbox"></span> Proof of service:
+          <ul style="margin-left: 30px; margin-top: 8px;">
+            <li>If hand delivered: Photo of letterbox with notice visible, witness statement</li>
+            <li>If posted: Proof of postage receipt (Royal Mail certificate of posting)</li>
+            <li>If recorded delivery: Tracking number and delivery confirmation</li>
+          </ul>
+        </li>
+        <li><span class="checkbox"></span> Witness details recorded (name, address, signature) if applicable</li>
+        <li><span class="checkbox"></span> Any correspondence from contract-holder acknowledging receipt</li>
+        <li><span class="checkbox"></span> Evidence of the breach (photos, rent statements, correspondence, etc.)</li>
+      </ul>
+    </div>
+
+    <div class="warning">
+      <strong>Keep All Evidence:</strong> You must prove both service of the notice and the breach itself. Document everything thoroughly.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Validity Requirements (Renting Homes (Wales) Act 2016)</h2>
+    <div class="checklist">
+      <p><strong>Verify your notice meets these validity requirements:</strong></p>
+      <ul>
+        <li><span class="checkbox"></span> Notice is in writing and contains required information (landlord, contract-holder, property address)</li>
+        <li><span class="checkbox"></span> Notice clearly states the breach or ground for possession</li>
+        <li><span class="checkbox"></span> Breach details provided with sufficient particulars</li>
+        <li><span class="checkbox"></span> Contract is a standard occupation contract (not secure or prohibited)</li>
+        <li><span class="checkbox"></span> Appropriate notice period given:
+          <ul style="margin-left: 30px; margin-top: 8px;">
+            <li>Rent arrears (serious breach): 14 days minimum</li>
+            <li>Anti-social behaviour (serious breach): 14 days minimum</li>
+            <li>Other breaches: Check specific section requirements</li>
+          </ul>
+        </li>
+        <li><span class="checkbox"></span> Notice signed and dated by landlord or landlord's agent</li>
+        <li><span class="checkbox"></span> Landlord is registered with Rent Smart Wales (legally required)</li>
+        {{#if wales_breach_type_rent_arrears}}
+        <li><span class="checkbox"></span> Rent arrears breach: Evidence of arrears and amount owed documented</li>
+        {{/if}}
+      </ul>
+    </div>
+
+    <div class="critical">
+      ⚠️ <strong>CRITICAL WALES-SPECIFIC REQUIREMENTS:</strong>
+      <ul style="margin-top: 10px;">
+        <li>You must be registered with Rent Smart Wales - unlicensed landlords cannot serve valid notices</li>
+        <li>The breach must be genuine and provable with evidence</li>
+        <li>Notice period varies by breach type - ensure you've given sufficient notice</li>
+        <li>For serious breaches (rent arrears, ASB), 14 days notice is typically required</li>
+        <li>Court will assess reasonableness - ensure breach is substantial</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>After Service</h2>
+    <div class="checklist">
+      <p><strong>Post-service actions:</strong></p>
+      <ul>
+        <li><span class="checkbox"></span> Wait until notice period has expired</li>
+        <li><span class="checkbox"></span> Do not change locks or remove contract-holder belongings (illegal eviction)</li>
+        <li><span class="checkbox"></span> Do not harass contract-holder or cut off utilities</li>
+        <li><span class="checkbox"></span> Continue documenting the breach if it persists</li>
+        <li><span class="checkbox"></span> If contract-holder remains after notice expires, apply to court for possession order</li>
+        <li><span class="checkbox"></span> Keep proof of service, breach evidence, and Rent Smart Wales registration readily accessible for court</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <p><strong>Legal Basis:</strong> Renting Homes (Wales) Act 2016, Sections 157, 159, 161, 162 (breach-based grounds)</p>
+    <p><strong>Rent Smart Wales:</strong> All landlords in Wales must be registered</p>
+    <p><strong>Generated:</strong> {{generated_date}}</p>
+    <p><strong>Landlord Heaven Notice Only Pack</strong> | Wales</p>
+  </footer>
+</body>
+</html>

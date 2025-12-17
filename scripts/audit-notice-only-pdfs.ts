@@ -86,14 +86,18 @@ export const PHRASE_RULES: Record<
     required: [
       "Form 6A",
       "Section 21",
-      "Housing Act 1988"
+      "Housing Act 1988",
+      "Service Instructions",
+      "Service and Validity Checklist"
     ],
     forbidden: [
       "Renting Homes (Wales) Act 2016",
       "contract holder",
       "First-tier Tribunal",
       "NOTICE TO LEAVE",
-      "Section 8"
+      "Section 8",
+      "Next Steps",
+      "Compliance Checklist"
     ],
     forbiddenPatterns: [
       /\*{4,}/g, // ****
@@ -105,14 +109,18 @@ export const PHRASE_RULES: Record<
     required: [
       "NOTICE SEEKING POSSESSION",
       "Housing Act 1988",
-      "Section 8"
+      "Section 8",
+      "Service Instructions",
+      "Service and Validity Checklist"
     ],
     forbidden: [
       "Form 6A",
       "Section 21",
       "Renting Homes (Wales) Act 2016",
       "contract holder",
-      "First-tier Tribunal"
+      "First-tier Tribunal",
+      "Next Steps",
+      "Compliance Checklist"
     ],
     logicChecks: [
       {
@@ -132,7 +140,9 @@ export const PHRASE_RULES: Record<
       "Renting Homes (Wales) Act 2016",
       "Section 173",
       "contract holder",
-      "Rent Smart Wales"
+      "Rent Smart Wales",
+      "Service Instructions",
+      "Service and Validity Checklist"
     ],
     forbidden: [
       "Housing Act 1988",
@@ -140,7 +150,10 @@ export const PHRASE_RULES: Record<
       "Section 21",
       "NOTICE SEEKING POSSESSION",
       "Notice Type: Section 8",
-      "Landlord Heaven Notice Only Pack | England"
+      "Landlord Heaven Notice Only Pack | England",
+      "Next Steps",
+      "tenant",
+      "assured shorthold"
     ],
     forbiddenPatterns: [
       /\bon or after:\s*($|\n)/gi
@@ -151,14 +164,20 @@ export const PHRASE_RULES: Record<
     required: [
       "Renting Homes (Wales) Act 2016",
       "contract holder",
-      "Rent Smart Wales"
+      "Rent Smart Wales",
+      "Service Instructions",
+      "Service and Validity Checklist"
     ],
     forbidden: [
       "Housing Act 1988",
       "Form 6A",
       "Section 21",
       "Notice Type: Section 8",
-      "Landlord Heaven Notice Only Pack | England"
+      "Landlord Heaven Notice Only Pack | England",
+      "Next Steps",
+      "tenant",
+      "assured shorthold",
+      "Section 173"
     ],
     forbiddenPatterns: [
       /\brent_arrears\b/g
@@ -169,14 +188,19 @@ export const PHRASE_RULES: Record<
     required: [
       "NOTICE TO LEAVE",
       "Private Housing (Tenancies) (Scotland) Act 2016",
-      "First-tier Tribunal"
+      "First-tier Tribunal",
+      "Service Instructions",
+      "Service and Validity Checklist"
     ],
     forbidden: [
       "Housing Act 1988",
       "Form 6A",
       "Section 21",
       "Renting Homes (Wales) Act 2016",
-      "contract holder"
+      "contract holder",
+      "possession order",
+      "Tribunal Process Guide",
+      "Next Steps"
     ],
     forbiddenPatterns: [
       /Total arrears:\s*£\s*as of/gi,
@@ -218,10 +242,7 @@ const TEMPLATE_PATTERNS = {
   'Section 173': /Section\s+173|Landlord'?s\s+Notice/i,
   'Renting Homes (Wales) Act': /Renting\s+Homes.*Wales.*Act\s+2016/i,
   'Service Instructions': /Service\s+Instructions/i,
-  'Compliance Checklist': /Compliance\s+Checklist/i,
-  'Next Steps': /Next\s+Steps/i,
-  'Tribunal Guide': /Tribunal.*Guide|First-tier\s+Tribunal/i,
-  'Pre-Action': /Pre-Action\s+Requirements/i,
+  'Service and Validity Checklist': /Service\s+(and|&)\s+Validity\s+Checklist/i,
   'Witness Statement': /Witness\s+Statement/i,
 };
 
