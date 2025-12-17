@@ -198,7 +198,7 @@
     </ul>
 
     <div class="warning">
-      ⚠️ <strong>Court Application:</strong> You'll need to use Form N5 (standard possession claim) or Form N5B (accelerated procedure for Section 21 only). If you purchased the Complete Pack, these forms are included. Otherwise, you'll need to upgrade or obtain them separately.
+      ⚠️ <strong>Court Application:</strong> You'll need to use Form N5 (standard possession claim){{#if (eq notice_type "Section 21")}} or Form N5B (accelerated procedure){{/if}}. If you purchased the Complete Pack, these forms are included. Otherwise, you'll need to upgrade or obtain them separately.
     </div>
   </div>
 
@@ -210,7 +210,9 @@
       <li>❌ Not keeping evidence of service</li>
       <li>❌ Serving by email when the tenancy doesn't allow it</li>
       <li>❌ Changing locks before getting a court order (illegal eviction)</li>
-      <li>❌ Not protecting the deposit before serving Section 21</li>
+      {{#if (eq notice_type "Section 21")}}
+      <li>❌ Not protecting the deposit before serving the notice</li>
+      {{/if}}
       <li>❌ Missing compliance requirements (gas cert, EPC, How to Rent, etc.)</li>
     </ul>
   </div>

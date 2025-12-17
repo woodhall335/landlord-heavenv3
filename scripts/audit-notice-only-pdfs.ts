@@ -139,7 +139,7 @@ export const PHRASE_RULES: Record<
     required: [
       "Renting Homes (Wales) Act 2016",
       "Section 173",
-      "contract holder",
+      "contract-holder",
       "Rent Smart Wales",
       "Service Instructions",
       "Service and Validity Checklist"
@@ -163,7 +163,7 @@ export const PHRASE_RULES: Record<
   "wales/wales_fault_based": {
     required: [
       "Renting Homes (Wales) Act 2016",
-      "contract holder",
+      "contract-holder",
       "Rent Smart Wales",
       "Service Instructions",
       "Service and Validity Checklist"

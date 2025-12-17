@@ -32,7 +32,11 @@ You **MUST** have complied with all legal requirements before serving any notice
   - MyDeposits Wales
   - Tenancy Deposit Scheme Wales
 - Must have provided prescribed information within 30 days
+{{#if is_wales_section_173}}
 - Penalty: Cannot serve Section 173 notice if deposit not protected
+{{else}}
+- Penalty: May affect validity of breach notice
+{{/if}}
 
 ✅ **Written Statement of Contract**
 - Must have provided contract-holder with written statement within 14 days of occupation
@@ -213,9 +217,15 @@ If the contract-holder does not leave after the notice expires:
 
 ❌ **Not registered with Rent Smart Wales** - Register before serving
 
+{{#if is_wales_section_173}}
 ❌ **Deposit not protected** - Protect deposit before serving Section 173
 
 ❌ **Prohibited period** - Cannot serve Section 173 in first 6 months
+{{else}}
+❌ **Deposit not protected** - Protect deposit before serving notice
+
+❌ **Insufficient breach evidence** - Document breach thoroughly before serving
+{{/if}}
 
 ❌ **Retaliatory eviction** - Cannot serve within 6 months of legitimate complaint
 
