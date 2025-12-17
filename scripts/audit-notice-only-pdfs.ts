@@ -262,21 +262,45 @@ async function extractPDFText(pdfPath: string): Promise<{ text: string; error?: 
       return { text: '', error: 'Invalid PDF header' };
     }
 
-    // Try pdfjs-dist with canvas polyfill
+    // Try pdfjs-dist with canvas factory for Node
     try {
-      // Polyfill DOM APIs for pdfjs-dist in Node.js
-      const canvas = await import('canvas');
-      if (!globalThis.DOMMatrix) {
-        globalThis.DOMMatrix = canvas.DOMMatrix as any;
-      }
-
+      // Import canvas for Node.js compatibility
+      const { createCanvas } = await import('canvas');
       const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
 
-      // Load the PDF document
+      // Set up canvas factory for Node.js environment
+      class NodeCanvasFactory {
+        create(width: number, height: number) {
+          const canvas = createCanvas(width, height);
+          const context = canvas.getContext('2d');
+          return { canvas, context };
+        }
+        reset(canvasAndContext: any, width: number, height: number) {
+          canvasAndContext.canvas.width = width;
+          canvasAndContext.canvas.height = height;
+        }
+        destroy(canvasAndContext: any) {
+          canvasAndContext.canvas.width = 0;
+          canvasAndContext.canvas.height = 0;
+          canvasAndContext.canvas = null;
+          canvasAndContext.context = null;
+        }
+      }
+
+      // Disable worker (not needed for text extraction in Node)
+      // Use empty string or null to disable worker completely
+      if (!(pdfjsLib as any).GlobalWorkerOptions.workerSrc) {
+        (pdfjsLib as any).GlobalWorkerOptions.workerSrc = '';
+      }
+
+      // Load the PDF document with canvas factory
       const loadingTask = pdfjsLib.getDocument({
         data: new Uint8Array(pdfBuffer),
         useSystemFonts: true,
         verbosity: 0,
+        canvasFactory: new NodeCanvasFactory() as any,
+        useWorkerFetch: false,
+        isEvalSupported: false,
       });
 
       const pdf = await loadingTask.promise;
@@ -299,11 +323,12 @@ async function extractPDFText(pdfPath: string): Promise<{ text: string; error?: 
       return { text: fullText };
 
     } catch (pdfjsError: unknown) {
-      // Fallback to pdf-parse
+      // pdfjs failed - only try pdf-parse if it's available and callable
       try {
         const pdfParse = await tryLoadPdfParse();
         if (!pdfParse) {
-          return { text: '', error: 'Neither pdfjs-dist nor pdf-parse available' };
+          const pdfjsMsg = pdfjsError instanceof Error ? pdfjsError.message : String(pdfjsError);
+          return { text: '', error: `pdfjs-dist failed (${pdfjsMsg}); pdf-parse not available` };
         }
 
         const result = await pdfParse(pdfBuffer);
