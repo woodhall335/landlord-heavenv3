@@ -134,34 +134,34 @@ export async function GET(
     }
 
     // Log warnings if any
-    if (validationResult.warnings.length > 0) {
-      console.warn('[NOTICE-PREVIEW-API] Jurisdiction warnings:\n', formatValidationErrors(validationResult));
-    }
+      if (validationResult.warnings.length > 0) {
+        console.warn('[NOTICE-PREVIEW-API] Jurisdiction warnings:\n', formatValidationErrors(validationResult));
+      }
 
-    // ========================================================================
-    // FINAL COMPLIANCE CHECK BEFORE GENERATION
-    // ========================================================================
-    const compliance = evaluateNoticeCompliance({
-      jurisdiction,
-      product: 'notice_only',
-      selected_route,
-      wizardFacts,
-    });
+      // ========================================================================
+      // FINAL COMPLIANCE CHECK BEFORE GENERATION
+      // ========================================================================
+      const compliance = evaluateNoticeCompliance({
+        jurisdiction,
+        product: 'notice_only',
+        selected_route,
+        wizardFacts,
+      });
 
-    if (compliance.hardFailures.length > 0) {
-      return NextResponse.json(
-        {
-          error: 'NOTICE_NONCOMPLIANT',
-          failures: compliance.hardFailures,
-          warnings: compliance.warnings,
-          computed: compliance.computed ?? null,
-          block_next_question: true,
-        },
-        { status: 422 },
-      );
-    }
+      if (compliance.hardFailures.length > 0) {
+        return NextResponse.json(
+          {
+            error: 'NOTICE_NONCOMPLIANT',
+            failures: compliance.hardFailures,
+            warnings: compliance.warnings,
+            computed: compliance.computed ?? null,
+            block_next_question: true,
+          },
+          { status: 422 },
+        );
+      }
 
-    const documents: NoticeOnlyDocument[] = [];
+      const documents: NoticeOnlyDocument[] = [];
 
     // ===========================================================================
     // ENGLAND & WALES NOTICE ONLY PACK

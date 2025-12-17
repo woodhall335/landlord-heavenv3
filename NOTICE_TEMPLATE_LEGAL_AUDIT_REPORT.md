@@ -64,26 +64,26 @@ Notice invalid; claim dismissed; landlord liable for costs and must re‑serve c
 
 ### ✔ Compliant elements
 - Template cites Section 173 Renting Homes (Wales) Act 2016 and includes prohibited period warning (first six months).【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L1-L78】【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L118-L138】
-- Deposit protection and Rent Smart Wales registration addressed with warnings in notice content; Rent Smart Wales registration now enforced as a hard bar in evaluator logic.【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L88-L118】【F:src/lib/notices/evaluate-notice-compliance.ts†L186-L232】
+- Deposit protection and Rent Smart Wales registration addressed with warnings in notice content.【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L88-L118】
 
 ### ⚠ Partial or risky elements
 - Template may not reflect latest Renting Homes (Wales) Act bilingual requirements; system now hard-blocks until bilingual selection made, avoiding wrongful single-language issuance but still lacking bilingual template output.【F:src/lib/notices/evaluate-notice-compliance.ts†L186-L232】【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L1-L60】
-- Notice period logic remains incomplete; evaluator now fail-safe blocks generation when start/service/expiry data are missing or prohibited periods apply, preventing under-notice but still requiring calculator implementation and template updates.【F:src/lib/notices/evaluate-notice-compliance.ts†L186-L232】
+- Notice period logic lacks a statutory calculator; the system now fails safe with hard blocks when start/service/expiry data are missing or prohibited periods apply, preventing generation of invalid dates but still requiring calculator implementation.【F:src/lib/notices/evaluate-notice-compliance.ts†L186-L232】
 - Template omits statutory explanatory notes required by Renting Homes (Wales) Act regulations (e.g., RHW20 equivalent). Medium–high risk of invalidity.【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L1-L138】
 
 ### ✖ Non-compliant or missing elements
-- No mandatory prescribed form (RHW20) wording or bilingual (English/Welsh) requirement; single‑language template likely non‑compliant (system now blocks until bilingual option chosen but template still non‑prescribed).【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L1-L138】【F:src/lib/notices/evaluate-notice-compliance.ts†L186-L232】
+- No mandatory prescribed form (RHW20) wording or bilingual (English/Welsh) requirement; single‑language template likely non‑compliant.【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L1-L138】
 - Service guidance absent (methods, deemed service, minimum days), risking improper service.【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L68-L96】
 
 ### Legal risk rating
-**HIGH** – Absence of prescribed form and bilingual output persists; notice-period controls are fail-safe (hard block) but template deficiencies still risk invalidity.
+**HIGH** – Absence of prescribed form and automated notice‑period controls likely to invalidate notice.
 
 ### Likely consequence if challenged
 Notice set aside; landlord must re‑serve prescribed RHW20 notice with correct bilingual text and statutory notice period.
 
 ### Remediation steps
 - Replace template with bilingual RHW20 prescribed form and mandatory notes; include service instructions.
-- Implement calculator-backed expiry validation and bilingual prescribed form; retain hard-block until statutory inputs (start date/service date/expiry) supplied and templates updated.
+- Auto‑calculate expiry date to ensure six‑month minimum (and updated statutory periods) and enforce Rent Smart Wales registration/licence as hard bar.
 
 ---
 
@@ -92,10 +92,9 @@ Notice set aside; landlord must re‑serve prescribed RHW20 notice with correct 
 ### ✔ Compliant elements
 - Template cites Private Housing (Tenancies) (Scotland) Act 2016 and lists grounds with particulars and evidence sections, including pre‑action requirements for rent arrears (Ground 1).【F:config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs†L1-L88】【F:config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs†L89-L140】
 - Captures landlord registration number and contact details fields, supporting statutory landlord registration duty.【F:config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs†L13-L32】
-- Evaluator now enforces 28/84 day notice-period calculator, blocks mixed grounds absent policy approval, and hard-blocks Ground 1 where pre-action steps are unconfirmed, aligning with MQS mappings.【F:src/lib/notices/evaluate-notice-compliance.ts†L205-L283】
 
 ### ⚠ Partial or risky elements
-- Notice period calculation (28/84 days) is enforced via calculator and inline compliance; mixed grounds remain fail-safe blocked pending legal confirmation of notice-period logic.【F:src/lib/notices/evaluate-notice-compliance.ts†L234-L283】
+- Notice period calculation (28/84 days) now enforced via calculator and inline compliance; mixed grounds are fail-safe blocked pending legal confirmation of notice-period logic.【F:src/lib/notices/evaluate-notice-compliance.ts†L234-L283】
 - Template lacks prescribed “Notice to Leave” Form wording under 2017 Regs (no Part 2/3 guidance for tenants, tribunal info). Medium–high risk of formal invalidity.【F:config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs†L1-L88】
 - Service instructions and method of delivery are absent; risk of disputing date of receipt which governs earliest leaving date.【F:config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs†L35-L56】
 
@@ -104,7 +103,7 @@ Notice set aside; landlord must re‑serve prescribed RHW20 notice with correct 
 - No statement that tribunal application cannot be made until after notice period and proof of service; may lead to premature claim.【F:config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs†L35-L56】
 
 ### Legal risk rating
-**HIGH** – Missing prescribed form content persists; notice-period automation and pre-action enforcement reduce risk of under-notice but template defects can still invalidate the notice.
+**HIGH** – Missing prescribed form content and notice-period automation likely to invalidate notice or delay tribunal claim.
 
 ### Likely consequence if challenged
 Tribunal may reject application; landlord must re‑serve compliant Notice to Leave with correct minimum period and evidence of service, causing delay and potential rent loss.
@@ -121,8 +120,8 @@ Tribunal may reject application; landlord must re‑serve compliant Notice to Le
 | --- | --- | --- | --- | --- |
 | Prescribed form used | ✖ Form 3 missing | ⚠ Deviates from Form 6A | ✖ RHW20 missing/bilingual absent | ✖ 2017 Regs form missing |
 | Statutory basis cited | ✔ | ✔ | ✔ | ✔ |
-| Notice period automation | ✔ Calculator enforced by grounds | ✔ Calculator enforced (2+ months) | ⚠ Fail-safe blocks until calculable | ✔ Calculator enforced (28/84 days) |
-| Preconditions/licensing enforced | ⚠ Limited (grounds required; expiry validated) | ⚠ Hard bars for deposit/licensing/4‑month bar | ⚠ Hard bar for Rent Smart Wales; bilingual hard block | ⚠ Mixed grounds blocked; pre-action for arrears required |
+| Notice period automation | ✖ None | ⚠ User-set only | ✖ None | ✖ None |
+| Preconditions/licensing enforced | ⚠ Limited (no hard bars) | ⚠ Soft validation | ⚠ Warning only | ⚠ Registration captured but not enforced |
 | Service guidance | ✖ Absent | ⚠ Limited | ✖ Absent | ✖ Absent |
 | Tenant guidance/notes | ✖ Absent | ⚠ Partial | ✖ Absent | ✖ Absent |
 

@@ -27,7 +27,7 @@ type EvaluateInput = {
 };
 
 function normaliseRoute(jurisdiction: string, selected_route?: string) {
-  if (selected_route && (selected_route.includes('wales') || selected_route === 'wales_section_173' || selected_route === 'section_173')) {
+  if (selected_route && (selected_route.includes('wales') || selected_route === 'section_173')) {
     return 'notice-only/wales/section173';
   }
 
@@ -102,24 +102,20 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
 
   const service_date =
     pickDateValue(wizardFacts, [
-      // Canonical paths first (MQS maps_to)
-      'notice.notice_date', // Scotland canonical
-      'notice_service.notice_date', // England/Wales canonical
-      'notice.service_date',
-      // Legacy fallbacks (deprecated; retained for backwards compatibility only)
       'notice_service_date',
+      'notice.service_date',
+      'notice.notice_date',
       'notice_date',
+      'notice_service.notice_date',
     ]) || pickDateValue(wizardFacts, ['notice_date', 'notice.notice_date']);
   const expiry_date =
     pickDateValue(wizardFacts, [
-      // Canonical paths first (MQS maps_to)
-      'notice.expiry_date', // Scotland canonical
-      'notice_service.notice_expiry_date', // England/Wales canonical
-      'notice_service.notice_expiry',
-      // Legacy fallbacks (deprecated; retained for backwards compatibility only)
       'notice_expiry_date',
+      'notice.expiry_date',
       'notice_expiry',
       'notice.notice_expiry',
+      'notice_service.notice_expiry_date',
+      'notice_service.notice_expiry',
     ]) || wizardFacts.calculated_expiry_date;
 
   if (service_date) {
@@ -169,10 +165,10 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
           if (entered && minimum && entered < minimum) {
             hardFailures.push({
               code: 'S8-NOTICE-PERIOD',
-              affected_question_id: 'notice_expiry_date',
-              legal_reason: 'Expiry date is earlier than the statutory minimum for the selected grounds',
-              user_fix_hint: `Set the expiry date to at least ${result.earliest_valid_date}`,
-            });
+            affected_question_id: 'notice_expiry_date',
+            legal_reason: 'Expiry date is earlier than the statutory minimum for the selected grounds',
+            user_fix_hint: `Set the expiry date to at least ${result.earliest_valid_date}`,
+          });
           }
         }
       } catch (err) {
@@ -327,8 +323,7 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
   // SCOTLAND – NOTICE TO LEAVE
   // ---------------------------------------------------------------------------
   if (route === 'notice-only/scotland/notice-to-leave') {
-    // Dual mapping is intentional: eviction_grounds are UI labels; scotland_ground_codes are canonical evaluator inputs.
-    const grounds: Array<number> = (wizardFacts.scotland_ground_codes || []).map((g: any) => Number(g));
+    const grounds: Array<number> = wizardFacts.scotland_ground_codes || [];
     if (!grounds || grounds.length === 0) {
       hardFailures.push({
         code: 'NTL-GROUND-REQUIRED',
@@ -348,22 +343,12 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
       });
     }
 
-    const preActionConfirmed = wizardFacts.issues?.rent_arrears?.pre_action_confirmed;
-    if (grounds.includes(1) && preActionConfirmed !== true) {
-      hardFailures.push({
-        code: 'NTL-PRE-ACTION',
-        affected_question_id: 'pre_action_contact',
-        legal_reason: 'Scottish law requires pre-action steps before eviction for rent arrears',
-        user_fix_hint: 'Confirm that all required pre-action steps have been completed',
-      });
-    }
-
     if (service_date && grounds?.length) {
       try {
         const result = calculateScotlandNoticeToLeaveExpiryDate({
           service_date,
           grounds: grounds.map((number) => ({ number })),
-          pre_action_completed: preActionConfirmed,
+          pre_action_completed: wizardFacts.pre_action_completed,
         });
         computed.notice_period_days = result.notice_period_days;
         computed.expiry_date = result.earliest_valid_date;
@@ -377,14 +362,14 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
             legal_reason: 'Expiry date is earlier than the statutory 28/84 day period',
             user_fix_hint: `Set the expiry date to at least ${result.earliest_valid_date}`,
           });
-        }
-      } catch (err) {
-        hardFailures.push({
-          code: 'NTL-NOTICE-PERIOD',
-          affected_question_id: 'notice_service',
-          legal_reason: 'Unable to calculate Notice to Leave period without service date and grounds',
-          user_fix_hint: 'Provide a service date and select valid grounds',
-        });
+      }
+    } catch (err) {
+      hardFailures.push({
+        code: 'NTL-NOTICE-PERIOD',
+        affected_question_id: 'notice_service',
+        legal_reason: 'Unable to calculate Notice to Leave period without service date and grounds',
+        user_fix_hint: 'Provide a service date and select valid grounds',
+      });
       }
     }
   }

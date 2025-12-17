@@ -309,7 +309,7 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'NTL-PRE-ACTION',
         legal_reason: 'Pre-action requirements apply for rent arrears',
         user_fix_hint: 'Confirm pre-action steps completed before serving notice',
-        affected_question_id: 'pre_action_contact',
+        affected_question_id: 'ground_particulars',
       },
       {
         code: 'NTL-MIXED-GROUNDS',
