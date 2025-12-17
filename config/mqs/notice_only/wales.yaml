@@ -233,6 +233,24 @@ questions:
     maps_to:
       - rent_smart_wales_registered
 
+  - id: language_choice
+    section: Section 173 Compliance
+    question: "Do you need the notice bilingually (Welsh & English)?"
+    inputType: select
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_section_173
+    validation:
+      required: true
+    options:
+      - value: bilingual
+        label: "Yes – bilingual notice required"
+      - value: english_only
+        label: "English only (lawful agreement in place)"
+    helperText: "Section 173 notices should be bilingual unless both parties agree otherwise."
+    maps_to:
+      - language_choice
+
   # TASK A2: Deposit questions for Section 173
   - id: deposit_taken_wales
     section: Section 173 Compliance
@@ -281,6 +299,40 @@ questions:
       - "Other / not sure"
     maps_to:
       - deposit_scheme
+
+  # ========================================
+  # NOTICE SERVICE + EXPIRY (needed for compliance checks)
+  # ========================================
+
+  - id: notice_service
+    section: Notice Details
+    question: "Notice service and expiry"
+    inputType: group
+    dependsOn:
+      questionId: selected_notice_route
+      value: wales_section_173
+    helperText: "These dates are required to enforce the statutory minimum notice period."
+    fields:
+      - id: notice_service_date
+        label: "Date the notice will be served"
+        inputType: date
+        validation:
+          required: true
+      - id: notice_expiry_date
+        label: "Date the notice should expire"
+        inputType: date
+        validation:
+          required: true
+      - id: service_method
+        label: "How will you serve the notice?"
+        inputType: select
+        options: ["Post", "By hand", "Email (agreed)", "Other"]
+        validation:
+          required: true
+    maps_to:
+      - notice_service.notice_date
+      - notice_service.notice_expiry_date
+      - notice_service.service_method
 
   # ========================================
   # FAULT-BASED SECTIONS

@@ -12,6 +12,7 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/documents/notice-only-preview-merger';
 import { generateDocument } from '@/lib/documents/generator';
 import { validateNoticeOnlyJurisdiction, formatValidationErrors } from '@/lib/jurisdictions/validator';
+import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -133,11 +134,34 @@ export async function GET(
     }
 
     // Log warnings if any
-    if (validationResult.warnings.length > 0) {
-      console.warn('[NOTICE-PREVIEW-API] Jurisdiction warnings:\n', formatValidationErrors(validationResult));
-    }
+      if (validationResult.warnings.length > 0) {
+        console.warn('[NOTICE-PREVIEW-API] Jurisdiction warnings:\n', formatValidationErrors(validationResult));
+      }
 
-    const documents: NoticeOnlyDocument[] = [];
+      // ========================================================================
+      // FINAL COMPLIANCE CHECK BEFORE GENERATION
+      // ========================================================================
+      const compliance = evaluateNoticeCompliance({
+        jurisdiction,
+        product: 'notice_only',
+        selected_route,
+        wizardFacts,
+      });
+
+      if (compliance.hardFailures.length > 0) {
+        return NextResponse.json(
+          {
+            error: 'NOTICE_NONCOMPLIANT',
+            failures: compliance.hardFailures,
+            warnings: compliance.warnings,
+            computed: compliance.computed ?? null,
+            block_next_question: true,
+          },
+          { status: 422 },
+        );
+      }
+
+      const documents: NoticeOnlyDocument[] = [];
 
     // ===========================================================================
     // ENGLAND & WALES NOTICE ONLY PACK
