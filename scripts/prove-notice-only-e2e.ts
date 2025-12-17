@@ -30,6 +30,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import dotenv from 'dotenv';
 import { createClient } from '@supabase/supabase-js';
+import { Buffer } from 'node:buffer';
 
 // Explicitly load .env.local for tsx/node scripts
 dotenv.config({ path: path.resolve(process.cwd(), '.env.local') });
@@ -106,6 +107,9 @@ type RouteResult = {
   errors: string[];
   warnings: string[];
 };
+
+type PdfParseInput = Buffer | Uint8Array;
+type PdfParseResult = { text?: string };
 
 // ============================================================================
 // TEST ROUTES
@@ -455,7 +459,7 @@ async function generatePreviewPDF(caseId: string): Promise<Buffer> {
  *  - classic function export (older pdf-parse)
  *  - class export (PDFParse) with load()/getText() across different builds
  */
-async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: string }>) | null> {
+async function tryLoadPdfParse(): Promise<((data: PdfParseInput) => Promise<PdfParseResult>) | null> {
   try {
     const mod: any = await import('pdf-parse');
 
@@ -465,14 +469,17 @@ async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: st
     const fnCandidates = [mod?.default, mod, mod?.default?.default];
     const fn = fnCandidates.find((c) => typeof c === 'function');
     if (fn) {
-      return async (data: Buffer) => fn(data);
+      return async (data: PdfParseInput) => {
+        const buf = Buffer.isBuffer(data) ? data : Buffer.from(data);
+        return fn(buf);
+      };
     }
 
     // ---------------------------
     // Shape B: class export (your current install)
     // ---------------------------
     if (typeof mod?.PDFParse === 'function') {
-      return async (data: Buffer) => {
+      return async (data: PdfParseInput) => {
         const verbosity =
           mod?.VerbosityLevel?.ERRORS ??
           mod?.VerbosityLevel?.WARNINGS ??
@@ -481,29 +488,23 @@ async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: st
 
         const parser = new mod.PDFParse({ verbosity });
 
-        const uint8 = data instanceof Uint8Array ? data : new Uint8Array(data);
+        // Normalize to Buffer for consistent handling; Buffer is also a Uint8Array.
+        const buf = Buffer.isBuffer(data) ? data : Buffer.from(data);
+        const uint8 = buf;
 
-        // Helper: try a call, but if it fails with “no url parameter”, keep trying shapes.
+        // Helper: try a call, but if it fails, keep trying shapes.
         const tryCall = async (label: string, f: () => Promise<any>) => {
           try {
             return await f();
           } catch (e: any) {
             const msg = e?.message ? String(e.message) : String(e);
-            // rethrow with label for debugging
             throw new Error(`${label}: ${msg}`);
           }
         };
 
         // 1) Some builds support getText(input) directly (no load step)
         if (typeof parser.getText === 'function' && parser.getText.length >= 1) {
-          const shapes = [
-            uint8,
-            data,
-            { data: uint8 },
-            { data },
-            { buffer: uint8 },
-            { buffer: data },
-          ];
+          const shapes = [uint8, buf, { data: uint8 }, { data: buf }, { buffer: uint8 }, { buffer: buf }];
 
           for (const shape of shapes) {
             try {
@@ -520,14 +521,7 @@ async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: st
           throw new Error('pdf-parse: PDFParse.load() not found');
         }
 
-        const loadShapes = [
-          uint8,
-          data,
-          { data: uint8 },
-          { data },
-          { buffer: uint8 },
-          { buffer: data },
-        ];
+        const loadShapes = [uint8, buf, { data: uint8 }, { data: buf }, { buffer: uint8 }, { buffer: buf }];
 
         let lastLoadErr: Error | null = null;
 
@@ -542,7 +536,6 @@ async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: st
         }
 
         if (lastLoadErr) {
-          // Surface the most informative error we got.
           throw lastLoadErr;
         }
 
@@ -594,9 +587,7 @@ async function validatePDF(
     let parseSuccess = false;
 
     try {
-      // pdf-parse v2 uses PDF.js internally which expects Uint8Array
-      // Node.js Buffer is a subclass of Uint8Array, but PDF.js may not recognize it correctly
-      // Convert to pure Uint8Array for maximum compatibility
+      // Convert to pure Uint8Array for maximum compatibility with PDF.js-based parsers
       const uint8Data = Uint8Array.from(pdfBuffer);
       const pdfData = await pdfParse(uint8Data);
       pdfText = String(pdfData?.text ?? '');
@@ -604,30 +595,25 @@ async function validatePDF(
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e);
       warnings.push(`pdf-parse failed (${msg}) - falling back to size/header-only validation`);
-      // fall back instead of failing the whole route
       if (pdfBuffer.length >= MIN_PDF_SIZE) {
         warnings.push(`PDF size looks good (${pdfBuffer.length} bytes) - likely valid`);
       }
       return { valid: errors.length === 0, errors, warnings };
     }
 
-    // Only perform text validation if parsing succeeded
     if (parseSuccess) {
-      // Expected phrases
       for (const phrase of route.expectedPhrases) {
         if (!pdfText.includes(phrase)) {
           errors.push(`Missing expected phrase: "${phrase}"`);
         }
       }
 
-      // Forbidden phrases
       for (const phrase of route.forbiddenPhrases) {
         if (pdfText.includes(phrase)) {
           errors.push(`Found forbidden phrase: "${phrase}"`);
         }
       }
 
-      // Common template leaks / rendering failures (text-only, safe)
       const leakPatterns = ['{{', '}}', 'undefined', 'NULL', '[object Object]', '****'];
       for (const pattern of leakPatterns) {
         if (pdfText.includes(pattern)) {
