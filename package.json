@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:pdf": "RUN_PDF_TESTS=true vitest run",
+    "test:notice-compliance": "vitest run notice-compliance",
     "law-monitor": "ts-node --esm scripts/law-monitor-run.ts"
   },
   "dependencies": {

@@ -21,6 +21,7 @@ import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { runDecisionEngine, type DecisionInput, type DecisionOutput } from '@/lib/decision-engine';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -653,6 +654,39 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
       normalizedAnswer,
     );
 
+    let complianceWarnings: any[] = [];
+
+    // ========================================================================
+    // INLINE COMPLIANCE VALIDATION (NOTICE ONLY)
+    // ========================================================================
+    if (product === 'notice_only') {
+      const compliance = evaluateNoticeCompliance({
+        jurisdiction: caseRow.jurisdiction,
+        product,
+        selected_route:
+          mergedFacts.selected_notice_route ||
+          mergedFacts.route_recommendation?.recommended_route ||
+          mergedFacts.selected_route,
+        wizardFacts: mergedFacts,
+        question_id,
+      });
+
+      if (compliance.hardFailures.length > 0) {
+        return NextResponse.json(
+          {
+            error: 'NOTICE_NONCOMPLIANT',
+            failures: compliance.hardFailures,
+            warnings: compliance.warnings,
+            computed: compliance.computed ?? null,
+            block_next_question: true,
+          },
+          { status: 422 },
+        );
+      }
+
+      complianceWarnings = compliance.warnings;
+    }
+
     // ============================================================================
     // SMART GUIDANCE: Initialize response data container
     // ============================================================================
@@ -995,6 +1029,7 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
       route_recommendation: responseData.route_recommendation ?? null,
       ground_recommendations: responseData.ground_recommendations ?? null,
       calculated_date: responseData.calculated_date ?? null,
+      compliance_warnings: complianceWarnings,
       next_question: nextQuestion ?? null,
       is_complete: isComplete,
       progress: isComplete ? 100 : progress,

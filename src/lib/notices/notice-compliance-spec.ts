@@ -49,13 +49,13 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'S8-GROUNDS-REQUIRED',
         legal_reason: 'At least one statutory ground must be stated with particulars',
         user_fix_hint: 'Select the applicable ground(s) and provide factual particulars',
-        affected_question_id: 'grounds',
+        affected_question_id: 'section8_grounds_selection',
       },
       {
         code: 'S8-NOTICE-PERIOD',
         legal_reason: 'Notice expiry must reflect the longest statutory period from selected grounds',
         user_fix_hint: 'Adjust the possession date to meet the minimum notice period',
-        affected_question_id: 'possession-date',
+        affected_question_id: 'notice_expiry_date',
       },
     ],
     soft_warnings: [
@@ -63,7 +63,7 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'S8-ARREARS-EVIDENCE',
         legal_reason: 'Courts expect arrears schedule for Grounds 8/10/11',
         user_fix_hint: 'Upload or summarise rent schedule to evidence arrears history',
-        affected_question_id: 'arrears_amount',
+        affected_question_id: 'ground_particulars',
       },
     ],
     inline_validation_rules: [
@@ -71,13 +71,13 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'S8-GROUND8-TWO-MONTHS',
         legal_reason: 'Ground 8 requires at least two months’ arrears at service date',
         user_fix_hint: 'Update arrears to confirm at least two months unpaid rent on service date',
-        affected_question_id: 'arrears_amount',
+        affected_question_id: 'ground_particulars',
       },
       {
         code: 'S8-GROUNDS-MATCH-NOTICE-PERIOD',
         legal_reason: 'Selected grounds determine statutory notice period',
         user_fix_hint: 'Review grounds or adjust proposed possession date',
-        affected_question_id: 'grounds',
+        affected_question_id: 'section8_grounds_selection',
       },
     ],
     correction_prompts: [
@@ -85,7 +85,7 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'S8-DATE-TOO-SOON',
         legal_reason: 'Proposed possession date falls before statutory minimum',
         user_fix_hint: 'Set the date to on or after the computed expiry date',
-        affected_question_id: 'possession-date',
+        affected_question_id: 'notice_expiry_date',
       },
     ],
     service_rules: [
@@ -128,19 +128,19 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'S21-DEPOSIT-NONCOMPLIANT',
         legal_reason: 'Deposit must be protected and prescribed information served before service',
         user_fix_hint: 'Protect deposit and serve prescribed information before generating notice',
-        affected_question_id: 'deposit_scheme',
+        affected_question_id: 'deposit_protected_scheme',
       },
       {
         code: 'S21-FOUR-MONTH-BAR',
         legal_reason: 'Section 21 may not be served within first four months of tenancy',
         user_fix_hint: 'Adjust service date to after the four-month period',
-        affected_question_id: 'tenancy_start',
+        affected_question_id: 'tenancy_start_date',
       },
       {
         code: 'S21-LICENSING',
         legal_reason: 'Unlicensed property cannot use section 21 while unlicensed',
         user_fix_hint: 'Obtain and record licence number or resolve exemption before continuing',
-        affected_question_id: 'licensing_status',
+        affected_question_id: 'property_licensing',
       },
     ],
     soft_warnings: [
