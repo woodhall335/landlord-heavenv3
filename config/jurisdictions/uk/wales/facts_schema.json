@@ -1,0 +1,95 @@
+{
+  "jurisdiction": "wales",
+  "name": "Wales",
+  "statute": "Renting Homes (Wales) Act 2016",
+  "last_updated": "2025-01-10",
+  "contract_types": {
+    "standard_contract": {
+      "description": "Default occupation contract for most private renters",
+      "possession_routes": ["section_173", "section_157", "section_159"],
+      "notice_forms": ["RHW23 (section 173)", "Fault-based written notice"],
+      "notes": "Section 173 cannot be used in first 6 months of occupation and requires 6 months' notice for periodic contracts."
+    },
+    "fixed_term_standard": {
+      "description": "Fixed term occupation contract",
+      "possession_routes": ["section_157", "section_159"],
+      "notice_forms": ["Fault-based written notice"],
+      "notes": "Section 173 is not available during the fixed term unless a landlord's break clause applies."
+    }
+  },
+  "required_facts": {
+    "parties": {
+      "landlord_name": { "type": "string", "required": true },
+      "landlord_address": { "type": "string", "required": true },
+      "contract_holder_name": { "type": "string", "required": true },
+      "contract_holder_address": { "type": "string", "required": true }
+    },
+    "property": {
+      "address_line1": { "type": "string", "required": true },
+      "address_line2": { "type": "string", "required": false },
+      "city": { "type": "string", "required": true },
+      "postcode": { "type": "string", "required": true }
+    },
+    "contract": {
+      "contract_start_date": { "type": "date", "required": true },
+      "is_fixed_term": { "type": "boolean", "required": true },
+      "fixed_term_end_date": { "type": "date", "required_if": "is_fixed_term == true" },
+      "rent_amount": { "type": "currency", "required": true },
+      "rent_frequency": { "type": "string", "enum": ["weekly", "monthly", "quarterly", "yearly"], "required": true },
+      "payment_day": { "type": "integer", "required": true, "constraints": { "min": 1, "max": 31 } },
+      "serious_rent_arrears_amount": { "type": "currency", "required_if": "route == section_157_serious_arrears" },
+      "arrears_history": { "type": "array", "items": "currency", "required_if": "route in [section_157_serious_arrears, section_157_persistent_arrears, section_159_some_arrears]" },
+      "breach_particulars": { "type": "string", "required_if": "route == section_159_breach" },
+      "asb_particulars": { "type": "string", "required_if": "route == section_159_asb" },
+      "alternative_accommodation_details": { "type": "string", "required_if": "route == section_159_alternative" }
+    },
+    "compliance": {
+      "deposit_taken": { "type": "boolean", "required": true },
+      "deposit_protected": { "type": "boolean", "required_if": "deposit_taken == true" },
+      "deposit_scheme_name": { "type": "string", "required_if": "deposit_protected == true" },
+      "prescribed_info_served": { "type": "boolean", "required_if": "deposit_taken == true" },
+      "electrical_safety_certificate": { "type": "boolean", "required": true },
+      "smoke_alarm_fitted": { "type": "boolean", "required": true },
+      "carbon_monoxide_alarm": { "type": "boolean", "required": true },
+      "fitness_housing_health_safety_rating": { "type": "string", "required": false },
+      "licensing_status": { "type": "string", "enum": ["not_required", "licensed", "unlicensed"], "required": true }
+    },
+    "service": {
+      "intended_service_date": { "type": "date", "required": true },
+      "service_method": { "type": "string", "required": true },
+      "proof_of_service": { "type": "array", "items": "string", "required": true }
+    }
+  },
+  "conditional_rules": [
+    {
+      "id": "section_173_eligibility",
+      "description": "No-fault notice cannot be served in first 6 months and requires minimum 6 months' notice for periodic contracts",
+      "conditions": ["contract_duration_months >= 6", "intended_notice_period_days >= 182"],
+      "applies_to": "section_173"
+    },
+    {
+      "id": "deposit_protection_block",
+      "description": "Fault-based and section 173 notices risk challenge if deposit was not protected and prescribed information not served",
+      "conditions": ["deposit_taken == true", "deposit_protected == false"],
+      "consequence": "notice_vulnerability"
+    },
+    {
+      "id": "serious_arrears_threshold",
+      "description": "Serious rent arrears requires >= 2 months' rent (monthly) or 8 weeks' rent (weekly) at notice and hearing",
+      "conditions": ["serious_rent_arrears_amount >= rent_amount * 2"],
+      "applies_to": "section_157_serious_arrears"
+    },
+    {
+      "id": "persistent_arrears_pattern",
+      "description": "Persistent arrears requires threshold reached at least 3 times in 3 years",
+      "conditions": ["count(arrears_history >= rent_amount * 2) >= 3"],
+      "applies_to": "section_157_persistent_arrears"
+    }
+  ],
+  "verification": {
+    "status": "needs_review",
+    "review_notes": "Aligns with Renting Homes (Wales) Act 2016; requires specialist sign-off before production use.",
+    "recommended_reviewer": "Welsh housing law solicitor",
+    "review_cycle_months": 6
+  }
+}

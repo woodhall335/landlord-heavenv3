@@ -1,0 +1,29 @@
+{
+  "ground": "property_deterioration",
+  "type": "discretionary",
+  "category": "condition",
+  "name": "Deterioration of Property",
+  "short_description": "Condition has deteriorated due to acts or neglect",
+  "legal_basis": {
+    "act": "Renting Homes (Wales) Act 2016",
+    "section": "Section 159, Schedule 9 Ground 13",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "damage": "Dwelling deteriorated because of contract-holder or household",
+    "exclusion": "Normal wear and tear does not qualify"
+  },
+  "notice_period": {
+    "minimum_days": 56,
+    "reference": "Section 159 discretionary ground"
+  },
+  "evidence_required": [
+    "Photos showing damage",
+    "Inventory comparison (check-in vs current)",
+    "Contract clauses on care of property",
+    "Repair invoices or inspection reports"
+  ],
+  "success_factors": {
+    "considerations": ["Extent of damage", "Proof of responsibility", "Opportunities to remedy offered"]
+  }
+}

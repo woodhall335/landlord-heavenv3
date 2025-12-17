@@ -1,0 +1,87 @@
+{
+  "jurisdiction": "wales",
+  "name": "Wales",
+  "legal_system": "Renting Homes (Wales) Act 2016",
+  "contract_types": {
+    "periodic_standard_contract": {
+      "default": true,
+      "created_after": "2022-12-01",
+      "possession_routes": ["section_173", "section_157", "section_159"],
+      "notice_procedures": ["Section 173 no-fault", "Fault-based grounds (Schedule 8/9)"]
+    },
+    "fixed_term_standard_contract": {
+      "default": false,
+      "possession_routes": ["section_157", "section_159"],
+      "notice_procedures": ["Fault-based grounds (Schedule 8/9)"]
+    }
+  },
+  "possession_routes": {
+    "section_173": {
+      "name": "Section 173 (no-fault) notice",
+      "applies_to": "periodic standard contracts",
+      "notice_form": "RHW23",
+      "minimum_notice_period": "6 months",
+      "minimum_occupation_before_service": "6 months",
+      "notes": "Replaces Section 21 for Wales; landlord break clauses required in fixed terms."
+    },
+    "section_157": {
+      "name": "Serious or persistent rent arrears",
+      "grounds_available": ["serious_rent_arrears", "persistent_rent_arrears"],
+      "notice_form": "Written notice citing Section 157 ground",
+      "minimum_notice_period": "14 days",
+      "notes": "Mandatory style grounds where arrears meet statutory thresholds."
+    },
+    "section_159": {
+      "name": "Discretionary fault-based grounds",
+      "grounds_available": ["some_rent_arrears", "breach_of_contract", "antisocial_behaviour", "property_deterioration", "false_statement", "suitable_alternative_accommodation"],
+      "notice_form": "Written notice citing Section 159 ground",
+      "minimum_notice_period": "56 days (except where statute allows shorter for ASB)",
+      "notes": "Court assesses reasonableness for Schedule 9 grounds."
+    }
+  },
+  "grounds": {
+    "files": {
+      "serious_rent_arrears": "grounds/serious_rent_arrears.json",
+      "persistent_rent_arrears": "grounds/persistent_rent_arrears.json",
+      "some_rent_arrears": "grounds/some_rent_arrears.json",
+      "breach_of_contract": "grounds/breach_of_contract.json",
+      "antisocial_behaviour": "grounds/antisocial_behaviour.json",
+      "property_deterioration": "grounds/property_deterioration.json",
+      "false_statement": "grounds/false_statement.json",
+      "suitable_alternative_accommodation": "grounds/suitable_alternative_accommodation.json"
+    }
+  },
+  "court_system": {
+    "court": "County Court (Wales)",
+    "forms": {
+      "claim_form": "N5 (adapted for Wales)",
+      "particulars": "N119",
+      "defence": "N11W"
+    },
+    "notes": "Possession claims follow Welsh procedure rules with Renting Homes terminology (contract-holder)."
+  },
+  "key_legislation": [
+    {
+      "act": "Renting Homes (Wales) Act 2016",
+      "key_sections": ["Section 157 (serious/persistent arrears)", "Section 159 (Schedule 9 discretionary grounds)", "Section 173 (no-fault notice)", "Schedules 8 and 9 (grounds)"]
+    },
+    {
+      "act": "Renting Homes (Amendment) (Wales) Act 2021",
+      "key_sections": ["Extended section 173 notice to 6 months", "Fitness for human habitation duties"]
+    }
+  ],
+  "deposit_protection": {
+    "required": true,
+    "schemes": ["Deposit Protection Service (Custodial/Insured)", "MyDeposits", "Tenancy Deposit Scheme"],
+    "deadline": "30 days from receipt",
+    "maximum": "5 weeks' rent cap (Tenant Fees Act 2019 as applied)",
+    "notes": "Prescribed information must be served; non-compliance undermines possession claims."
+  },
+  "licensing": {
+    "rent_smart_wales": "Landlords and agents must be registered/licensed with Rent Smart Wales",
+    "hmo": "Mandatory and additional licensing mirrors England but enforced by Welsh authorities"
+  },
+  "eviction_ban": {
+    "note": "Eviction without court order is unlawful; Protection from Eviction Act 1977 still applies"
+  }
+}

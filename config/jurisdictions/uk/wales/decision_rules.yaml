@@ -1,0 +1,104 @@
+# Wales Housing Law - Decision Rules
+# Based on Renting Homes (Wales) Act 2016 (as amended 2021)
+# Updated: January 2025
+
+jurisdiction:
+  name: "Wales"
+  primary_law: "Renting Homes (Wales) Act 2016"
+  contract_type: "Standard occupation contract"
+
+section_157_grounds:
+  mandatory:
+    serious_rent_arrears:
+      title: "Serious rent arrears"
+      notice_period_days: 14
+      court_type: "mandatory-style"
+      description: "At least 2 months' (8 weeks') arrears at notice and hearing"
+      required_facts:
+        - rent_amount
+        - serious_rent_arrears_amount
+        - arrears_schedule
+      eligibility_rules:
+        - "serious_rent_arrears_amount >= rent_amount * 2"
+        - "arrears at notice and hearing meet threshold"
+      statute: "Renting Homes (Wales) Act 2016, Schedule 8, Ground 8"
+
+    persistent_rent_arrears:
+      title: "Persistent rent arrears"
+      notice_period_days: 14
+      court_type: "mandatory-style"
+      description: "Threshold arrears reached 3+ times in past 3 years"
+      required_facts:
+        - rent_amount
+        - arrears_history
+      eligibility_rules:
+        - "count(arrears_history >= rent_amount * 2) >= 3"
+      statute: "Renting Homes (Wales) Act 2016, Schedule 8, Ground 8A"
+
+section_159_grounds:
+  discretionary:
+    some_rent_arrears:
+      title: "Some rent arrears"
+      notice_period_days: 56
+      court_type: "discretionary"
+      description: "Arrears exist but below serious threshold"
+      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 10"
+    breach_of_contract:
+      title: "Breach of occupation contract"
+      notice_period_days: 56
+      court_type: "discretionary"
+      description: "Non-rent breach of a contract term"
+      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 12"
+    antisocial_behaviour:
+      title: "Anti-social behaviour / criminal conduct"
+      notice_period_days: 56
+      court_type: "discretionary"
+      description: "Nuisance/annoyance or relevant conviction"
+      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 14"
+    property_deterioration:
+      title: "Deterioration of dwelling"
+      notice_period_days: 56
+      court_type: "discretionary"
+      description: "Damage or neglect beyond wear and tear"
+      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 13"
+    false_statement:
+      title: "False statement induced contract"
+      notice_period_days: 56
+      court_type: "discretionary"
+      description: "Contract granted on basis of false statement"
+      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 17"
+    suitable_alternative_accommodation:
+      title: "Suitable alternative accommodation"
+      notice_period_days: 56
+      court_type: "discretionary"
+      description: "Suitable alternative accommodation available"
+      statute: "Renting Homes (Wales) Act 2016, Schedule 9, Ground 9"
+
+notice_periods:
+  section_157:
+    mandatory_grounds: 14
+  section_159:
+    discretionary_grounds: 56
+  section_173:
+    standard: 182  # 6 months
+    earliest_service: 182  # cannot serve in first 6 months
+
+compliance:
+  deposit_protection:
+    description: "Deposit must be protected within 30 days and prescribed information served"
+    penalty: "1-3x deposit and potential rent repayment order"
+  rent_smart_wales:
+    description: "Landlords/agents must be registered and licensed"
+  fitness_for_human_habitation:
+    description: "FFHH duties apply to all occupation contracts"
+
+red_flags:
+  - name: "Unprotected deposit"
+    severity: "critical"
+    consequence: "Risk of claim failure and financial penalties"
+  - name: "No Rent Smart Wales licence"
+    severity: "high"
+    consequence: "Enforcement action and credibility issues in court"
+  - name: "Insufficient notice period"
+    severity: "critical"
+    consequence: "Notice invalid; timeline resets"

@@ -1,0 +1,115 @@
+# Decision Engine Rules - Wales
+# Maps collected facts to recommended grounds for possession under Renting Homes (Wales) Act 2016
+
+version: "1.0"
+jurisdiction: "wales"
+last_updated: "2025-01-10"
+
+metadata:
+  effective_from: "2024-12-01"
+  effective_to: null
+  source:
+    - "Renting Homes (Wales) Act 2016"
+    - "Renting Homes (Amendment) (Wales) Act 2021"
+  last_reviewed: "2025-01-10"
+  reviewed_by: "Legal content team (pending Welsh counsel sign-off)"
+  notes: "Reflects 6-month section 173 notice and current Schedule 8/9 grounds."
+
+evaluation_order:
+  - section_173
+  - section_157_mandatory
+  - section_159_discretionary
+
+rules:
+  - rule_id: "wales_nf_173"
+    name: "Section 173 no-fault eligibility"
+    priority: 1
+    conditions:
+      contract_duration_months: ">= 6"
+      intended_notice_period_days: ">= 182"
+      deposit_protection_ok: true
+    recommended_route: "section_173"
+    warnings:
+      - "Section 173 unavailable in first 6 months of occupation"
+      - "Ensure any break clause in fixed term permits service"
+
+  - rule_id: "wales_arrears_serious"
+    name: "Serious rent arrears (mandatory)"
+    priority: 2
+    conditions:
+      arrears_multiple: ">= 2"
+      arrears_at_notice: true
+      arrears_at_hearing_likely: true
+    recommended_grounds: ["serious_rent_arrears"]
+    success_probability: "high"
+
+  - rule_id: "wales_arrears_persistent"
+    name: "Persistent rent arrears pattern"
+    priority: 3
+    conditions:
+      arrears_threshold_reached_times: ">= 3"
+      arrears_window_years: "<= 3"
+    recommended_grounds: ["persistent_rent_arrears"]
+    success_probability: "medium"
+
+  - rule_id: "wales_arrears_some"
+    name: "Some rent arrears (discretionary)"
+    priority: 4
+    conditions:
+      arrears_positive: true
+      arrears_multiple: "< 2"
+    recommended_grounds: ["some_rent_arrears"]
+    success_probability: "medium"
+
+  - rule_id: "wales_breach"
+    name: "Breach of contract (non-rent)"
+    priority: 5
+    conditions:
+      breach_identified: true
+    recommended_grounds: ["breach_of_contract"]
+    success_probability: "medium"
+
+  - rule_id: "wales_asb"
+    name: "Anti-social behaviour"
+    priority: 6
+    conditions:
+      asb_reported: true
+    recommended_grounds: ["antisocial_behaviour"]
+    success_probability: "variable"
+    notes:
+      - "Consider seeking shorter notice only where statute permits for serious ASB"
+
+  - rule_id: "wales_property_damage"
+    name: "Property deterioration"
+    priority: 7
+    conditions:
+      damage_beyond_wear_and_tear: true
+    recommended_grounds: ["property_deterioration"]
+    success_probability: "medium"
+
+  - rule_id: "wales_false_statement"
+    name: "False statement induced contract"
+    priority: 8
+    conditions:
+      false_statement_material: true
+    recommended_grounds: ["false_statement"]
+    success_probability: "medium"
+
+  - rule_id: "wales_alt_accommodation"
+    name: "Suitable alternative accommodation"
+    priority: 9
+    conditions:
+      alternative_accommodation_ready: true
+    recommended_grounds: ["suitable_alternative_accommodation"]
+    success_probability: "low"
+
+red_flags:
+  - name: "Unprotected deposit"
+    severity: "critical"
+    consequence: "Notice vulnerable and potential penalty of 1-3x deposit"
+  - name: "Missing electrical safety evidence"
+    severity: "high"
+    consequence: "Fitness duties may undermine possession claim"
+  - name: "Unlicensed property"
+    severity: "high"
+    consequence: "Rent Smart Wales or HMO licensing breach may block or delay claim"
