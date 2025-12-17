@@ -50,5 +50,30 @@ describe('evaluateNoticeCompliance', () => {
 
     expect(result.hardFailures.find((f) => f.code === 'S21-DATE-TOO-SOON')).toBeTruthy();
   });
+
+  it('normalises Wales route even when jurisdiction is england-wales', () => {
+    const result = evaluateNoticeCompliance({
+      jurisdiction: 'england-wales',
+      product: 'notice_only',
+      selected_route: 'wales_section_173',
+      wizardFacts: { rent_smart_wales_registered: false },
+    });
+
+    expect(result.hardFailures.find((f) => f.code === 'S173-LICENSING')).toBeTruthy();
+  });
+
+  it('hard blocks Wales Section 173 when notice period cannot be determined', () => {
+    const result = evaluateNoticeCompliance({
+      jurisdiction: 'wales',
+      product: 'notice_only',
+      selected_route: 'wales_section_173',
+      wizardFacts: {
+        rent_smart_wales_registered: true,
+        language_choice: 'bilingual',
+      },
+    });
+
+    expect(result.hardFailures.find((f) => f.code === 'S173-NOTICE-PERIOD-UNDETERMINED')).toBeTruthy();
+  });
 });
 

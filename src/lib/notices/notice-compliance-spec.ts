@@ -148,7 +148,7 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'S21-RETALIATORY',
         legal_reason: 'Retaliatory eviction risk where disrepair complaint outstanding',
         user_fix_hint: 'Confirm no outstanding improvement notice or complaint before serving',
-        affected_question_id: 'retaliatory',
+        affected_question_id: 'recent_repair_complaints_s21',
       },
     ],
     inline_validation_rules: [
@@ -156,13 +156,13 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'S21-MINIMUM-NOTICE',
         legal_reason: 'Expiry must be at least two months after deemed service',
         user_fix_hint: 'Update expiry date to at least two months plus service allowance',
-        affected_question_id: 'expiry_date',
+        affected_question_id: 'notice_expiry_date',
       },
       {
         code: 'S21-DOCUMENTS-SERVED',
         legal_reason: 'Gas safety, EPC, and How to Rent must be served before notice',
         user_fix_hint: 'Confirm and record service dates for required documents',
-        affected_question_id: 'gas_safety',
+        affected_question_id: 'gas_safety_certificate',
       },
     ],
     correction_prompts: [
@@ -170,7 +170,7 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'S21-DATE-TOO-SOON',
         legal_reason: 'Proposed expiry date before statutory minimum',
         user_fix_hint: 'Use the computed minimum expiry date based on service and tenancy start',
-        affected_question_id: 'expiry_date',
+        affected_question_id: 'notice_expiry_date',
       },
     ],
     service_rules: [
@@ -197,9 +197,10 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
     prescribed_form_version: 'Section 173 Landlord’s Notice (Renting Homes (Wales) Act 2016)',
     required_inputs: [
       { id: 'occupation_contract_type', label: 'Standard or periodic occupation contract type', required: true },
-      { id: 'rent_smart_wales', label: 'Rent Smart Wales registration/licence', required: true },
-      { id: 'notice_period', label: 'Notice period applicable (minimum 6 months unless exception)', required: true },
-      { id: 'service_method', label: 'Service method', required: true },
+      { id: 'rent_smart_wales_registered', label: 'Rent Smart Wales registration/licence', required: true },
+      { id: 'contract_start_date', label: 'Occupation contract start date', required: true },
+      { id: 'notice_service', label: 'Notice service details', required: true },
+      { id: 'notice_expiry_date', label: 'Proposed expiry date', required: true },
       { id: 'language_choice', label: 'Welsh/English bilingual preference', required: true },
     ],
     computed_fields: [
@@ -211,13 +212,25 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'S173-PERIOD-BAR',
         legal_reason: 'Notice cannot be served during initial 6 months of contract',
         user_fix_hint: 'Adjust service date to after the initial prohibition period',
-        affected_question_id: 'notice_period',
+        affected_question_id: 'notice_service_date',
       },
       {
         code: 'S173-LICENSING',
         legal_reason: 'Landlord must hold Rent Smart Wales registration/licence',
         user_fix_hint: 'Record valid registration/licence details before continuing',
-        affected_question_id: 'rent_smart_wales',
+        affected_question_id: 'rent_smart_wales_registered',
+      },
+      {
+        code: 'S173-NOTICE-PERIOD-UNDETERMINED',
+        legal_reason: 'System must be able to calculate the statutory minimum notice period',
+        user_fix_hint: 'Provide contract start date, service date, and expiry date',
+        affected_question_id: 'notice_service',
+      },
+      {
+        code: 'S173-BILINGUAL-REQUIRED',
+        legal_reason: 'Section 173 notices should be bilingual unless an agreed exception applies',
+        user_fix_hint: 'Select bilingual output or confirm lawful single-language agreement',
+        affected_question_id: 'language_choice',
       },
     ],
     soft_warnings: [
@@ -233,7 +246,7 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'S173-NOTICE-MINIMUM',
         legal_reason: 'Expiry must meet or exceed statutory minimum notice period',
         user_fix_hint: 'Extend the expiry date to meet the calculated minimum',
-        affected_question_id: 'expiry_date',
+        affected_question_id: 'notice_expiry_date',
       },
     ],
     correction_prompts: [
@@ -241,7 +254,7 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'S173-DATE-TOO-SOON',
         legal_reason: 'Expiry date before statutory minimum',
         user_fix_hint: 'Update expiry to at least the computed minimum',
-        affected_question_id: 'expiry_date',
+        affected_question_id: 'notice_expiry_date',
       },
     ],
     service_rules: [
@@ -266,8 +279,9 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
     jurisdiction: 'scotland',
     route: 'notice-only/scotland/notice-to-leave',
     prescribed_form_version: 'Notice to Leave (Private Residential Tenancy) – statutory form',
+    allow_mixed_grounds: false,
     required_inputs: [
-      { id: 'eviction_ground', label: 'Schedule 3 eviction ground', required: true },
+      { id: 'eviction_grounds', label: 'Schedule 3 eviction ground', required: true },
       { id: 'supporting_evidence', label: 'Supporting evidence for selected ground', required: true },
       { id: 'service_method', label: 'Service method', required: true },
       { id: 'notice_period', label: 'Calculated 28/84 day period', required: true },
@@ -283,19 +297,25 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'NTL-GROUND-REQUIRED',
         legal_reason: 'Schedule 3 ground must be stated with evidence',
         user_fix_hint: 'Select a ground and upload or describe supporting evidence',
-        affected_question_id: 'eviction_ground',
+        affected_question_id: 'eviction_grounds',
       },
       {
         code: 'NTL-NOTICE-PERIOD',
         legal_reason: 'Notice period must match 28/84 day rule',
         user_fix_hint: 'Align expiry date with the calculated statutory period',
-        affected_question_id: 'notice_period',
+        affected_question_id: 'notice_expiry',
       },
       {
         code: 'NTL-PRE-ACTION',
         legal_reason: 'Pre-action requirements apply for rent arrears',
         user_fix_hint: 'Confirm pre-action steps completed before serving notice',
-        affected_question_id: 'supporting_evidence',
+        affected_question_id: 'ground_particulars',
+      },
+      {
+        code: 'NTL-MIXED-GROUNDS',
+        legal_reason: 'Mixed grounds notice periods require explicit confirmation',
+        user_fix_hint: 'Select a single ground or obtain legal approval for mixed notice periods',
+        affected_question_id: 'eviction_grounds',
       },
     ],
     soft_warnings: [
@@ -311,7 +331,7 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'NTL-EXPIRY-MINIMUM',
         legal_reason: 'Expiry must not fall before statutory minimum period',
         user_fix_hint: 'Adjust expiry date to match 28/84 day calculation',
-        affected_question_id: 'expiry_date',
+        affected_question_id: 'notice_expiry',
       },
     ],
     correction_prompts: [
@@ -319,7 +339,7 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'NTL-DATE-TOO-SOON',
         legal_reason: 'Expiry date earlier than statutory period',
         user_fix_hint: 'Use the computed expiry date aligned with the notice period',
-        affected_question_id: 'expiry_date',
+        affected_question_id: 'notice_expiry',
       },
     ],
     service_rules: [

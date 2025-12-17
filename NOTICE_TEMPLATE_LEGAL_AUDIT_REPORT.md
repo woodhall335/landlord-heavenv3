@@ -8,8 +8,8 @@
 
 ### ⚠ Partial or risky elements
 - Template lacks prescribed Form 3 layout/wording (no official headings, notes to tenant, or statutory instruction blocks). Risk that court treats notice as non‑prescribed and defective.【F:config/jurisdictions/uk/england-wales/templates/eviction/section8_notice.hbs†L1-L39】
-- Notice period logic not enforced in template or wizard (no calculation for 2 weeks vs 4+ weeks for specific grounds, or pandemic-era variations). Likelihood of incorrect possession date if user miscalculates manually.【F:config/jurisdictions/uk/england-wales/templates/eviction/section8_notice.hbs†L40-L118】
-- No field to state service date or date notice takes effect; “notice date” used only within ground particulars, risking absence of required date of service on notice itself.【F:config/jurisdictions/uk/england-wales/templates/eviction/section8_notice.hbs†L40-L74】
+- Notice period is now calculated and enforced via inline checks, but template still lacks prescribed statutory guidance text and may mislead on service/expiry presentation.【F:src/lib/notices/evaluate-notice-compliance.ts†L62-L124】【F:config/jurisdictions/uk/england-wales/templates/eviction/section8_notice.hbs†L40-L118】
+- Service and expiry dates are now mandatory in the wizard, but template still does not clearly state them in prescribed format; risk remains that PDF output omits required service information.【F:config/mqs/notice_only/england.yaml†L336-L370】
 - Wizard permits Section 8 route without validating mandatory preconditions (HMO licensing, deposit protection, gas safety). These are collected for Section 21 but not enforced to block Section 8, risking unmanaged defences and CPR 55 duty issues.【F:config/mqs/notice_only/england.yaml†L200-L268】
 
 ### ✖ Non-compliant or missing elements
@@ -39,9 +39,9 @@ Notice struck out; costs wasted; need to re‑serve compliant Form 3 and re‑st
 
 ### ⚠ Partial or risky elements
 - Template deviates from prescribed Form 6A layout (additional headings, altered language, optional periodic alignment logic), risking non‑prescribed form argument (medium–high).【F:config/jurisdictions/uk/england-wales/templates/eviction/section21_form6a.hbs†L1-L120】
-- Possession date is user‑supplied; no automated calculation ensuring two‑month minimum or alignment with rental periods (for pre‑abolition periodic requirements). Risk of incorrect date.【F:config/jurisdictions/uk/england-wales/templates/eviction/section21_form6a.hbs†L59-L120】
-- Wizard collects compliance data but does not state whether non‑compliance blocks notice generation; “How to Rent” marked non‑required in UI. Potential to generate invalid notices.【F:config/mqs/notice_only/england.yaml†L234-L268】
-- Template states “notice may not be valid” if deposit unprotected but allows generation regardless—no hard stop despite statutory bar.【F:config/jurisdictions/uk/england-wales/templates/eviction/section21_form6a.hbs†L115-L170】
+- Notice period and four-month bar now enforced with inline compliance checks; template still may not mirror the prescribed Form 6A notes in full, so residual wording risk remains.【F:src/lib/notices/evaluate-notice-compliance.ts†L126-L186】【F:config/jurisdictions/uk/england-wales/templates/eviction/section21_form6a.hbs†L1-L94】
+- Service method and service/expiry dates are now captured and required in wizard but the template still relies on user-entered dates without guaranteed prescribed presentation.【F:config/mqs/notice_only/england.yaml†L336-L370】【F:config/jurisdictions/uk/england-wales/templates/eviction/section21_form6a.hbs†L92-L170】
+- Retaliatory eviction bar, licensing bar, gas/EPC/How to Rent compliance are collected and enforced with hard blocks/warnings, but template still lacks explicit confirmation of compliant documents served; evidential risk remains.【F:src/lib/notices/evaluate-notice-compliance.ts†L126-L186】【F:config/mqs/notice_only/england.yaml†L200-L268】
 
 ### ✖ Non-compliant or missing elements
 - Lacks mandatory Form 6A footer wording and notes to tenant prescribed by 2015 Regulations; significant deviation likely invalid.【F:config/jurisdictions/uk/england-wales/templates/eviction/section21_form6a.hbs†L1-L222】
@@ -67,8 +67,8 @@ Notice invalid; claim dismissed; landlord liable for costs and must re‑serve c
 - Deposit protection and Rent Smart Wales registration addressed with warnings in notice content.【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L88-L118】
 
 ### ⚠ Partial or risky elements
-- Notice period fields rely on user-supplied expiry date; no statutory calculation for minimum six months (or 12 months for converted contracts post‑June 2023) or additional 2‑month bar after break clauses. Risk of under‑notice.【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L68-L96】
-- No evidence of wizard enforcement of Rent Smart Wales licensing/registration as hard precondition; warning only in template.【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L88-L118】
+- Template may not reflect latest Renting Homes (Wales) Act bilingual requirements; system now hard-blocks until bilingual selection made, avoiding wrongful single-language issuance but still lacking bilingual template output.【F:src/lib/notices/evaluate-notice-compliance.ts†L186-L232】【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L1-L60】
+- Notice period logic lacks a statutory calculator; the system now fails safe with hard blocks when start/service/expiry data are missing or prohibited periods apply, preventing generation of invalid dates but still requiring calculator implementation.【F:src/lib/notices/evaluate-notice-compliance.ts†L186-L232】
 - Template omits statutory explanatory notes required by Renting Homes (Wales) Act regulations (e.g., RHW20 equivalent). Medium–high risk of invalidity.【F:config/jurisdictions/uk/wales/templates/eviction/section173_landlords_notice.hbs†L1-L138】
 
 ### ✖ Non-compliant or missing elements
@@ -94,7 +94,7 @@ Notice set aside; landlord must re‑serve prescribed RHW20 notice with correct 
 - Captures landlord registration number and contact details fields, supporting statutory landlord registration duty.【F:config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs†L13-L32】
 
 ### ⚠ Partial or risky elements
-- Earliest leaving date is user-provided; no automated calculation for 28/84‑day notice periods based on ground and tenancy duration. Risk of insufficient notice.【F:config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs†L35-L56】
+- Notice period calculation (28/84 days) now enforced via calculator and inline compliance; mixed grounds are fail-safe blocked pending legal confirmation of notice-period logic.【F:src/lib/notices/evaluate-notice-compliance.ts†L234-L283】
 - Template lacks prescribed “Notice to Leave” Form wording under 2017 Regs (no Part 2/3 guidance for tenants, tribunal info). Medium–high risk of formal invalidity.【F:config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs†L1-L88】
 - Service instructions and method of delivery are absent; risk of disputing date of receipt which governs earliest leaving date.【F:config/jurisdictions/uk/scotland/templates/eviction/notice_to_leave.hbs†L35-L56】
 

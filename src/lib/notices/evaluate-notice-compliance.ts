@@ -27,16 +27,28 @@ type EvaluateInput = {
 };
 
 function normaliseRoute(jurisdiction: string, selected_route?: string) {
-  if (jurisdiction === 'wales' && selected_route === 'wales_section_173') {
+  if (selected_route && (selected_route.includes('wales') || selected_route === 'section_173')) {
     return 'notice-only/wales/section173';
   }
 
-  if (jurisdiction === 'scotland' || selected_route === 'notice_to_leave') {
+  if (selected_route === 'notice_to_leave' || selected_route?.includes('notice-to-leave')) {
     return 'notice-only/scotland/notice-to-leave';
   }
 
   if (selected_route === 'section_21') {
     return 'notice-only/england/section21';
+  }
+
+  if (selected_route === 'section_8') {
+    return 'notice-only/england/section8';
+  }
+
+  if (jurisdiction === 'wales') {
+    return 'notice-only/wales/section173';
+  }
+
+  if (jurisdiction === 'scotland') {
+    return 'notice-only/scotland/notice-to-leave';
   }
 
   return 'notice-only/england/section8';
@@ -89,11 +101,22 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
   }
 
   const service_date =
-    pickDateValue(wizardFacts, ['notice_service_date', 'notice.service_date', 'notice.notice_date', 'notice_date']) ||
-    pickDateValue(wizardFacts, ['notice_date', 'notice.notice_date']);
+    pickDateValue(wizardFacts, [
+      'notice_service_date',
+      'notice.service_date',
+      'notice.notice_date',
+      'notice_date',
+      'notice_service.notice_date',
+    ]) || pickDateValue(wizardFacts, ['notice_date', 'notice.notice_date']);
   const expiry_date =
-    pickDateValue(wizardFacts, ['notice_expiry_date', 'notice.expiry_date', 'notice_expiry', 'notice.notice_expiry']) ||
-    wizardFacts.calculated_expiry_date;
+    pickDateValue(wizardFacts, [
+      'notice_expiry_date',
+      'notice.expiry_date',
+      'notice_expiry',
+      'notice.notice_expiry',
+      'notice_service.notice_expiry_date',
+      'notice_service.notice_expiry',
+    ]) || wizardFacts.calculated_expiry_date;
 
   if (service_date) {
     computed.service_date = service_date;
@@ -142,10 +165,10 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
           if (entered && minimum && entered < minimum) {
             hardFailures.push({
               code: 'S8-NOTICE-PERIOD',
-              affected_question_id: 'notice_expiry_date',
-              legal_reason: 'Expiry date is earlier than the statutory minimum for the selected grounds',
-              user_fix_hint: `Set the expiry date to at least ${result.earliest_valid_date}`,
-            });
+            affected_question_id: 'notice_expiry_date',
+            legal_reason: 'Expiry date is earlier than the statutory minimum for the selected grounds',
+            user_fix_hint: `Set the expiry date to at least ${result.earliest_valid_date}`,
+          });
           }
         }
       } catch (err) {
@@ -252,6 +275,48 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
         user_fix_hint: 'Confirm active registration or licence to proceed',
       });
     }
+
+    const contractStart = toDate(wizardFacts.contract_start_date);
+    const service = toDate(service_date);
+
+    if (!contractStart || !service) {
+      hardFailures.push({
+        code: 'S173-NOTICE-PERIOD-UNDETERMINED',
+        affected_question_id: !contractStart ? 'contract_start_date' : 'notice_service_date',
+        legal_reason: 'System cannot calculate the statutory minimum notice period without the contract start date and service date',
+        user_fix_hint: 'Provide the contract start date and intended service date so we can calculate a valid expiry',
+      });
+    }
+
+    if (contractStart && service) {
+      const prohibitedEnd = addMonths(contractStart, 6);
+      if (service < prohibitedEnd) {
+        hardFailures.push({
+          code: 'S173-PERIOD-BAR',
+          affected_question_id: 'notice_service_date',
+          legal_reason: 'Section 173 cannot be served in the first six months of the occupation contract',
+          user_fix_hint: 'Set the service date after the initial six months of the contract',
+        });
+      }
+
+      if (!expiry_date) {
+        hardFailures.push({
+          code: 'S173-NOTICE-PERIOD-UNDETERMINED',
+          affected_question_id: 'notice_expiry_date',
+          legal_reason: 'Expiry date required to confirm compliance with statutory minimum notice period',
+          user_fix_hint: 'Enter an expiry date at least the statutory minimum after service',
+        });
+      }
+    }
+
+    if (wizardFacts.language_choice !== 'bilingual') {
+      hardFailures.push({
+        code: 'S173-BILINGUAL-REQUIRED',
+        affected_question_id: 'language_choice',
+        legal_reason: 'Section 173 notices must be provided bilingually unless a lawful exception is recorded',
+        user_fix_hint: 'Select bilingual notice output to proceed',
+      });
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -262,9 +327,19 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
     if (!grounds || grounds.length === 0) {
       hardFailures.push({
         code: 'NTL-GROUND-REQUIRED',
-        affected_question_id: 'scotland_ground_codes',
+        affected_question_id: 'eviction_grounds',
         legal_reason: 'A valid Schedule 3 ground must be selected',
         user_fix_hint: 'Select the ground that applies to your Notice to Leave',
+      });
+    }
+
+    const specGroundsMixAllowed = spec?.allow_mixed_grounds !== false;
+    if (grounds.length > 1 && !specGroundsMixAllowed) {
+      hardFailures.push({
+        code: 'NTL-MIXED-GROUNDS',
+        affected_question_id: 'eviction_grounds',
+        legal_reason: 'Mixed grounds require confirmed statutory notice period approach; system is configured to block until guidance is confirmed',
+        user_fix_hint: 'Select a single ground or obtain legal approval for mixed grounds notice periods',
       });
     }
 
@@ -287,14 +362,14 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
             legal_reason: 'Expiry date is earlier than the statutory 28/84 day period',
             user_fix_hint: `Set the expiry date to at least ${result.earliest_valid_date}`,
           });
-        }
-      } catch (err) {
-        hardFailures.push({
-          code: 'NTL-NOTICE-PERIOD',
-          affected_question_id: 'notice_service',
-          legal_reason: 'Unable to calculate Notice to Leave period without service date and grounds',
-          user_fix_hint: 'Provide a service date and select valid grounds',
-        });
+      }
+    } catch (err) {
+      hardFailures.push({
+        code: 'NTL-NOTICE-PERIOD',
+        affected_question_id: 'notice_service',
+        legal_reason: 'Unable to calculate Notice to Leave period without service date and grounds',
+        user_fix_hint: 'Provide a service date and select valid grounds',
+      });
       }
     }
   }

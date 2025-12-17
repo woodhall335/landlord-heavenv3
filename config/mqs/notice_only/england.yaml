@@ -349,6 +349,47 @@ questions:
       - recent_repair_complaints
 
   # ========================================
+  # NOTICE SERVICE + EXPIRY (needed for compliance checks)
+  # ========================================
+
+  - id: notice_service
+    section: Notice Details
+    question: "Notice service and expiry"
+    inputType: group
+    dependsOn:
+      anyOf:
+        - questionId: selected_notice_route
+          value: section_8
+        - questionId: selected_notice_route
+          value: section_21
+    helperText: "We need these dates to calculate the minimum notice period and check statutory bars."
+    fields:
+      - id: notice_service_date
+        label: "Date the notice will be served"
+        inputType: date
+        validation:
+          required: true
+      - id: notice_expiry_date
+        label: "Date the notice should expire"
+        inputType: date
+        validation:
+          required: true
+      - id: service_method
+        label: "How will you serve the notice?"
+        inputType: select
+        options: ["Post", "By hand", "Email (agreed)", "Other"]
+        validation:
+          required: true
+      - id: served_by
+        label: "Who will serve the notice?"
+        inputType: text
+    maps_to:
+      - notice_service.notice_date
+      - notice_service.notice_expiry_date
+      - notice_service.service_method
+      - notice_service.served_by
+
+  # ========================================
   # SECTION 8 GROUNDS
   # ========================================
 
