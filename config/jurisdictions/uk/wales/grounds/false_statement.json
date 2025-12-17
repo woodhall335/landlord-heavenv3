@@ -1,0 +1,28 @@
+{
+  "ground": "false_statement",
+  "type": "discretionary",
+  "category": "fraud",
+  "name": "False Statement Induced Grant",
+  "short_description": "Occupation contract granted based on false statement",
+  "legal_basis": {
+    "act": "Renting Homes (Wales) Act 2016",
+    "section": "Section 159, Schedule 9 Ground 17",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "false_statement": "Statement was false, made knowingly or recklessly",
+    "materiality": "Statement was material to granting the contract"
+  },
+  "notice_period": {
+    "minimum_days": 56,
+    "reference": "Section 159 discretionary ground"
+  },
+  "evidence_required": [
+    "Application or reference containing false information",
+    "Evidence of true facts",
+    "Proof statement influenced decision to grant contract"
+  ],
+  "success_factors": {
+    "considerations": ["Clarity of misrepresentation", "Documentation showing reliance"]
+  }
+}
