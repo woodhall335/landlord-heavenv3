@@ -75,5 +75,36 @@ describe('evaluateNoticeCompliance', () => {
 
     expect(result.hardFailures.find((f) => f.code === 'S173-NOTICE-PERIOD-UNDETERMINED')).toBeTruthy();
   });
+
+  it('requires pre-action confirmation for Scotland ground 1 rent arrears', () => {
+    const result = evaluateNoticeCompliance({
+      jurisdiction: 'scotland',
+      product: 'notice_only',
+      selected_route: 'notice_to_leave',
+      wizardFacts: {
+        scotland_ground_codes: [1],
+        issues: { rent_arrears: { pre_action_confirmed: false } },
+        notice_service_date: '2024-01-10',
+      },
+    });
+
+    expect(result.hardFailures.find((f) => f.code === 'NTL-PRE-ACTION')).toBeTruthy();
+  });
+
+  it('does not raise pre-action failure when Scotland ground 1 steps are confirmed', () => {
+    const result = evaluateNoticeCompliance({
+      jurisdiction: 'scotland',
+      product: 'notice_only',
+      selected_route: 'notice_to_leave',
+      wizardFacts: {
+        scotland_ground_codes: [1],
+        issues: { rent_arrears: { pre_action_confirmed: true } },
+        notice_service_date: '2024-01-10',
+        notice_expiry_date: '2024-02-10',
+      },
+    });
+
+    expect(result.hardFailures.find((f) => f.code === 'NTL-PRE-ACTION')).toBeFalsy();
+  });
 });
 
