@@ -21,9 +21,21 @@
  * Exit code 0 = ALL routes work
  * Exit code 1 = At least one route failed
  *
+ * USAGE:
+ *
+ * Run all routes:
+ *   npx tsx scripts/prove-notice-only-e2e.ts
+ *
+ * Single-route mode (for debugging):
+ *   NOTICE_ONLY_ROUTE=wales_fault_based NOTICE_ONLY_JURISDICTION=wales npx tsx scripts/prove-notice-only-e2e.ts
+ *
+ * Error artifacts are saved to:
+ *   artifacts/notice_only/_reports/preview-error-<jurisdiction>-<route>-<caseId>.<ext>
+ *
  * Notes:
  * - This script explicitly loads .env.local (Next.js does this automatically; tsx scripts do not).
  * - pdf-parse is optional, but if installed we validate via extracted text (recommended).
+ * - Preview API failures are retried up to 3 times for transient errors (500/502/503/504, manifest issues).
  */
 
 import fs from 'fs/promises';
@@ -86,6 +98,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Artifacts directory
 const ARTIFACTS_DIR = path.join(process.cwd(), 'artifacts', 'notice_only');
+const REPORTS_DIR = path.join(ARTIFACTS_DIR, '_reports');
 
 // ============================================================================
 // TYPES
@@ -433,21 +446,119 @@ async function submitWizardAnswers(caseId: string, answers: Record<string, unkno
   }
 }
 
-async function generatePreviewPDF(caseId: string): Promise<Buffer> {
-  const response = await fetch(`${API_BASE_URL}/api/notice-only/preview/${caseId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/pdf',
-    },
-  });
+/**
+ * Helper: Sleep for specified milliseconds
+ */
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Preview API failed: ${response.status} - ${text}`);
+/**
+ * Helper: Check if error is a transient server error that should be retried
+ */
+function isTransientError(status: number, body: string): boolean {
+  // Retry on 5xx server errors
+  if ([500, 502, 503, 504].includes(status)) return true;
+
+  // Retry on Next.js manifest errors (common in dev mode)
+  if (body.includes('Unexpected end of JSON input') || body.includes('loadManifest')) {
+    return true;
   }
 
-  const arrayBuffer = await response.arrayBuffer();
-  return Buffer.from(arrayBuffer);
+  return false;
+}
+
+/**
+ * Helper: Save error artifact for debugging
+ */
+async function saveErrorArtifact(
+  jurisdiction: string,
+  route: string,
+  caseId: string,
+  status: number,
+  contentType: string,
+  body: string
+): Promise<string> {
+  await ensureDirectoryExists(REPORTS_DIR);
+
+  const isHtml = contentType.includes('text/html');
+  const ext = isHtml ? 'html' : 'txt';
+  const filename = `preview-error-${jurisdiction}-${route}-${caseId}.${ext}`;
+  const filepath = path.join(REPORTS_DIR, filename);
+
+  const header = `HTTP ${status} Error\nContent-Type: ${contentType}\nTimestamp: ${new Date().toISOString()}\n\n`;
+  await fs.writeFile(filepath, header + body);
+
+  return filepath;
+}
+
+async function generatePreviewPDF(
+  caseId: string,
+  jurisdiction: string = '',
+  route: string = ''
+): Promise<Buffer> {
+  const MAX_RETRIES = 3;
+  const RETRY_DELAYS = [500, 1500, 3500]; // exponential backoff
+
+  let lastError: Error | null = null;
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/notice-only/preview/${caseId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/pdf',
+        },
+      });
+
+      if (!response.ok) {
+        const status = response.status;
+        const contentType = response.headers.get('content-type') || 'unknown';
+        const text = await response.text();
+
+        // Check if this is a transient error that should be retried
+        const shouldRetry = isTransientError(status, text);
+
+        if (shouldRetry && attempt < MAX_RETRIES) {
+          const delay = RETRY_DELAYS[attempt - 1];
+          console.log(`  ⚠️  Preview API failed (${status}), retrying in ${delay}ms (attempt ${attempt}/${MAX_RETRIES})...`);
+
+          // Print remediation hint for manifest errors
+          if (text.includes('loadManifest') && text.includes('Unexpected end of JSON input')) {
+            console.log(`  💡 Hint: This is usually a corrupted .next manifest in dev mode.`);
+            console.log(`      Try: stop server → delete .next → restart "npm run dev" → rerun E2E.`);
+          }
+
+          await sleep(delay);
+          continue; // retry
+        }
+
+        // Save error artifact
+        const errorPath = await saveErrorArtifact(jurisdiction, route, caseId, status, contentType, text);
+        throw new Error(`Preview API failed: ${status} - Error saved to: ${errorPath}`);
+      }
+
+      // Success
+      const arrayBuffer = await response.arrayBuffer();
+      return Buffer.from(arrayBuffer);
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+
+      // If it's a network error or fetch failure, retry
+      if (attempt < MAX_RETRIES && !lastError.message.includes('Error saved to:')) {
+        const delay = RETRY_DELAYS[attempt - 1];
+        console.log(`  ⚠️  Network error, retrying in ${delay}ms (attempt ${attempt}/${MAX_RETRIES})...`);
+        await sleep(delay);
+        continue;
+      }
+
+      // No more retries
+      throw lastError;
+    }
+  }
+
+  // Should never reach here, but just in case
+  throw lastError || new Error('Preview API failed after retries');
 }
 
 /**
@@ -657,7 +768,7 @@ async function testRoute(route: TestRoute): Promise<RouteResult> {
     console.log('  ✅ Answers submitted');
 
     console.log('  📄 Generating preview PDF...');
-    const pdfBuffer = await generatePreviewPDF(caseId);
+    const pdfBuffer = await generatePreviewPDF(caseId, route.jurisdiction, route.route);
     console.log(`  ✅ PDF generated (${pdfBuffer.length} bytes)`);
 
     const jurisdictionDir = path.join(ARTIFACTS_DIR, route.jurisdiction);
@@ -696,6 +807,33 @@ async function testRoute(route: TestRoute): Promise<RouteResult> {
 // MAIN
 // ============================================================================
 
+/**
+ * Helper: Preflight check to warm up Next.js dev server
+ */
+async function devServerPreflight(): Promise<void> {
+  console.log('🔧 Running dev server preflight check...');
+
+  try {
+    // Try health endpoint first
+    const healthUrl = `${API_BASE_URL}/api/health`;
+    try {
+      const healthResponse = await fetch(healthUrl, { method: 'GET' });
+      console.log(`  ✅ Health endpoint responded: ${healthResponse.status}`);
+    } catch {
+      // Health endpoint doesn't exist, try a quick invalid preview request
+      const previewUrl = `${API_BASE_URL}/api/notice-only/preview/00000000-0000-0000-0000-000000000000`;
+      const previewResponse = await fetch(previewUrl, { method: 'GET' });
+      console.log(`  ✅ Preview endpoint warmed up: ${previewResponse.status}`);
+    }
+
+    // Wait for Next.js to finish compiling routes
+    await sleep(500);
+    console.log('  ✅ Preflight complete\n');
+  } catch (err) {
+    console.log(`  ⚠️  Preflight check failed (non-fatal): ${err instanceof Error ? err.message : String(err)}\n`);
+  }
+}
+
 async function main(): Promise<void> {
   console.log('╔═══════════════════════════════════════════════════════════════╗');
   console.log('║       NOTICE ONLY E2E PROOF - ALL ROUTES                     ║');
@@ -706,13 +844,47 @@ async function main(): Promise<void> {
   console.log(`📁 Artifacts directory: ${ARTIFACTS_DIR}`);
   console.log(`🌐 API Base URL: ${API_BASE_URL}`);
   console.log(`🗄️  Supabase URL: ${SUPABASE_URL}`);
+
+  // Check for single-route mode
+  const filterRoute = process.env.NOTICE_ONLY_ROUTE;
+  const filterJurisdiction = process.env.NOTICE_ONLY_JURISDICTION;
+
+  if (filterRoute || filterJurisdiction) {
+    console.log('');
+    console.log('🔍 SINGLE-ROUTE MODE ENABLED:');
+    if (filterJurisdiction) console.log(`   Jurisdiction filter: ${filterJurisdiction}`);
+    if (filterRoute) console.log(`   Route filter: ${filterRoute}`);
+  }
+
   console.log('');
 
   await ensureDirectoryExists(ARTIFACTS_DIR);
 
+  // Run preflight check to warm up dev server
+  await devServerPreflight();
+
+  // Filter routes if in single-route mode
+  let routesToTest = TEST_ROUTES;
+  if (filterJurisdiction || filterRoute) {
+    routesToTest = TEST_ROUTES.filter((r) => {
+      if (filterJurisdiction && r.jurisdiction !== filterJurisdiction) return false;
+      if (filterRoute && r.route !== filterRoute) return false;
+      return true;
+    });
+
+    if (routesToTest.length === 0) {
+      console.error('❌ No routes match the specified filters!');
+      console.error(`   Available jurisdictions: england, wales, scotland`);
+      console.error(`   Available routes: ${TEST_ROUTES.map((r) => r.route).join(', ')}`);
+      process.exit(1);
+    }
+
+    console.log(`📋 Testing ${routesToTest.length} route(s) matching filters\n`);
+  }
+
   const results: Array<{ route: TestRoute; result: RouteResult }> = [];
 
-  for (const route of TEST_ROUTES) {
+  for (const route of routesToTest) {
     const result = await testRoute(route);
     results.push({ route, result });
   }

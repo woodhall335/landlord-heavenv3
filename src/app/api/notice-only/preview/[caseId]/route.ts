@@ -37,8 +37,13 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ caseId: string }> }
 ) {
+  let caseId = '';
+  let jurisdiction: string | undefined;
+  let selected_route: string | undefined;
+
   try {
-    const { caseId } = await params;
+    const resolvedParams = await params;
+    caseId = resolvedParams.caseId;
     console.log('[NOTICE-PREVIEW-API] Generating preview for case:', caseId);
 
     const supabase = await createServerSupabaseClient();
@@ -70,16 +75,16 @@ export async function GET(
     const wizardFacts = caseRow.wizard_facts || caseRow.collected_facts || caseRow.facts || {};
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
 
-    console.log('[NOTICE-PREVIEW-API] Jurisdiction:', caseRow.jurisdiction);
-    console.log('[NOTICE-PREVIEW-API] Selected route:', wizardFacts.selected_notice_route);
+    // Determine jurisdiction and notice type (assign to outer scope for error handling)
+    jurisdiction = caseRow.jurisdiction as 'england' | 'wales' | 'scotland' | 'england-wales';
 
-    // Determine jurisdiction and notice type
-    let jurisdiction = caseRow.jurisdiction as 'england' | 'wales' | 'scotland' | 'england-wales';
-
-    // Determine selected route with jurisdiction-aware fallback
-    let selected_route =
+    // Determine selected route with jurisdiction-aware fallback (assign to outer scope for error handling)
+    selected_route =
       wizardFacts.selected_notice_route ||
       wizardFacts.route_recommendation?.recommended_route;
+
+    console.log('[NOTICE-PREVIEW-API] Jurisdiction:', jurisdiction);
+    console.log('[NOTICE-PREVIEW-API] Selected route:', selected_route);
 
     // Apply jurisdiction-aware default if no route specified
     if (!selected_route) {
@@ -749,9 +754,27 @@ export async function GET(
     });
   } catch (err: any) {
     console.error('[NOTICE-PREVIEW-API] Error:', err);
-    return NextResponse.json(
-      { error: 'Failed to generate preview', details: err.message },
-      { status: 500 }
-    );
+
+    // Build structured JSON error response
+    const errorResponse: Record<string, any> = {
+      error: true,
+      message: err?.message || 'Failed to generate preview',
+      caseId: caseId || 'unknown',
+    };
+
+    // Add jurisdiction and route if available
+    if (jurisdiction) {
+      errorResponse.jurisdiction = jurisdiction;
+    }
+    if (selected_route) {
+      errorResponse.route = selected_route;
+    }
+
+    // Add stack trace in development
+    if (process.env.NODE_ENV === 'development' && err?.stack) {
+      errorResponse.stack = err.stack;
+    }
+
+    return NextResponse.json(errorResponse, { status: 500 });
   }
 }
