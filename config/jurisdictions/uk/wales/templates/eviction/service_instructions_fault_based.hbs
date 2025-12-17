@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Service Instructions - Fault-Based Breach Notice (Wales)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 40px;
+      color: #333;
+    }
+    h1 {
+      color: #1a1a1a;
+      border-bottom: 3px solid #059669;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #059669;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      color: #1a1a1a;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .section {
+      margin: 30px 0;
+    }
+    .warning {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .critical {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 15px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .success {
+      background: #d1fae5;
+      border-left: 4px solid #10b981;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .info {
+      background: #dbeafe;
+      border-left: 4px solid #3b82f6;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    li {
+      margin: 10px 0;
+    }
+    .checklist {
+      background: #f3f4f6;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 15px 0;
+    }
+    .evidence-item {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 3px;
+    }
+    footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 2px solid #e5e7eb;
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <h1>Service Instructions for Fault-Based Breach Notice</h1>
+
+  <div class="section">
+    <p><strong>Property:</strong> {{property_address}}</p>
+    <p><strong>Contract-Holder:</strong> {{contract_holder_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</p>
+    <p><strong>Notice Type:</strong> Fault-Based Breach Notice</p>
+    <p><strong>Service Date:</strong> {{service_date_formatted}}</p>
+  </div>
+
+  <div class="info">
+    ℹ️ <strong>IMPORTANT: WALES-SPECIFIC NOTICE</strong><br>
+    This guidance is for serving fault-based breach notices under the <strong>Renting Homes (Wales) Act 2016</strong>. Wales has different laws from England. Do not use English guidance or forms.
+  </div>
+
+  <div class="critical">
+    ⚠️ <strong>CRITICAL:</strong> You must serve this notice correctly or it will be invalid. Incorrect service is the most common reason for court rejection.
+  </div>
+
+  <div class="section">
+    <h2>Before You Serve - Compliance Requirements</h2>
+    <p>You <strong>MUST</strong> have complied with all legal requirements before serving any notice:</p>
+
+    <h3>✅ Rent Smart Wales Registration</h3>
+    <ul>
+      <li>All landlords and letting agents in Wales must be registered with Rent Smart Wales</li>
+      <li>Check: www.rentsmart.gov.wales</li>
+      <li>Penalty: Serving a notice while unregistered may invalidate the notice</li>
+    </ul>
+
+    <h3>✅ Deposit Protection (if deposit taken)</h3>
+    <ul>
+      <li>Must be protected in a Welsh government-approved scheme:
+        <ul>
+          <li>Deposit Protection Service Wales</li>
+          <li>MyDeposits Wales</li>
+          <li>Tenancy Deposit Scheme Wales</li>
+        </ul>
+      </li>
+      <li>Must have provided prescribed information within 30 days</li>
+      <li>Penalty: May affect validity of breach notice</li>
+    </ul>
+
+    <h3>✅ Written Statement of Contract</h3>
+    <ul>
+      <li>Must have provided contract-holder with written statement within 14 days of occupation</li>
+      <li>Penalty: Cannot serve possession notice until provided</li>
+    </ul>
+
+    <h3>✅ Gas Safety (if applicable)</h3>
+    <ul>
+      <li>Annual gas safety check by Gas Safe engineer</li>
+      <li>Copy given to contract-holder</li>
+    </ul>
+
+    <h3>✅ Electrical Safety</h3>
+    <ul>
+      <li>Electrical Installation Condition Report (EICR) within last 5 years</li>
+      <li>Copy given to contract-holder</li>
+    </ul>
+
+    <h3>✅ Smoke and Carbon Monoxide Alarms</h3>
+    <ul>
+      <li>Working smoke alarms on each storey</li>
+      <li>Carbon monoxide alarms in rooms with solid fuel appliances</li>
+      <li>Tested at start of contract</li>
+    </ul>
+
+    <h3>✅ Retaliatory Eviction Protection</h3>
+    <ul>
+      <li>Cannot serve notice within 6 months of contract-holder making a legitimate complaint</li>
+      <li>Cannot serve notice if local authority is investigating the property</li>
+    </ul>
+
+    <h3>✅ Evidence of Breach</h3>
+    <ul>
+      <li>Must have clear evidence of the breach you're claiming</li>
+      <li>Document everything: dates, times, witnesses, photos, correspondence</li>
+      <li>For rent arrears: Keep detailed rent payment records</li>
+      <li>For anti-social behaviour: Police reports, witness statements, complaint logs</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>How to Serve This Notice</h2>
+    <p>Under Welsh law, you can serve a notice by:</p>
+
+    <h3>✅ RECOMMENDED METHOD: Personal Service</h3>
+    <ul>
+      <li>Hand the notice directly to the contract-holder</li>
+      <li>Get them to sign a copy confirming receipt</li>
+      <li>If they refuse to sign, have a witness present</li>
+      <li>Take a photo of the handover</li>
+    </ul>
+
+    <div class="success">
+      ✓ <strong>Why this is best:</strong> Clear proof that the contract-holder received the notice. If they dispute service, you have witness testimony and photographic evidence.
+    </div>
+
+    <h3>Alternative Method 1: Leaving at the Dwelling</h3>
+    <ul>
+      <li>Leave the notice at the dwelling in a sealed envelope</li>
+      <li>Address it to the contract-holder</li>
+      <li>Put it through the letterbox or hand it to an adult at the property</li>
+      <li>Take a photo as evidence</li>
+    </ul>
+
+    <h3>Alternative Method 2: Postal Service</h3>
+    <ul>
+      <li>Send by First Class post to the dwelling address</li>
+      <li><strong>RECOMMENDED:</strong> Use Royal Mail Signed For or Special Delivery</li>
+      <li>Keep proof of postage (certificate of posting or tracking number)</li>
+      <li>Notice is deemed served when it would be delivered in ordinary course of post (usually 2 working days)</li>
+    </ul>
+
+    <div class="warning">
+      ⚠️ <strong>Note:</strong> If using postal service, add extra days to be safe. The contract-holder can claim non-receipt.
+    </div>
+
+    <h3>Alternative Method 3: Email (Only If Agreed in Contract)</h3>
+    <ul>
+      <li>Can only use email if the contract specifically allows it</li>
+      <li>Keep a copy of the sent email and any read receipts</li>
+      <li>Follow up with postal or personal service to be safe</li>
+    </ul>
+
+    <div class="warning">
+      ⚠️ <strong>Risk:</strong> Most contracts do NOT allow email service. Check your contract carefully before using this method.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Evidence You Must Keep</h2>
+    <p><strong>CRITICAL:</strong> You will need to prove service when applying to court.</p>
+
+    <div class="checklist">
+      <h3>Service Evidence Checklist:</h3>
+      <ul>
+        <li>✓ Original copy of the notice (for your records)</li>
+        <li>✓ Copy showing date of service</li>
+        <li>✓ Proof of service:
+          <ul>
+            <li>Personal service: Signed acknowledgment or witness statement</li>
+            <li>Postal service: Certificate of posting or tracking receipt</li>
+            <li>Email: Sent email with timestamp and read receipt</li>
+          </ul>
+        </li>
+        <li>✓ Evidence of breach:
+          <ul>
+            <li>Rent arrears: Full rent payment history</li>
+            <li>Anti-social behaviour: Police reports, witness statements</li>
+            <li>Property damage: Photos, repair quotes</li>
+            <li>Other breaches: Relevant documentation</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="evidence-item">
+      <h3>Certificate of Service Template:</h3>
+      <p><strong>CERTIFICATE OF SERVICE</strong></p>
+      <p>Property: {{property_address}}</p>
+      <p>Contract-Holder(s): {{contract_holder_full_name}}{{#if tenant_2_name}} and {{tenant_2_name}}{{/if}}</p>
+      <p>I certify that on [DATE], I served the Fault-Based Breach Notice dated [NOTICE DATE] by:</p>
+      <p>
+        [✓] Personal service - handed to contract-holder at [TIME] on [DATE]<br>
+        [ ] Left at dwelling - left in sealed envelope at [TIME] on [DATE]<br>
+        [ ] Postal service - sent by [METHOD] on [DATE], tracking/reference: [REF]<br>
+        [ ] Email - sent to [EMAIL] at [TIME] on [DATE]
+      </p>
+      <p>Served by: ___________________________</p>
+      <p>Signature: ___________________________</p>
+      <p>Date: ___________________________</p>
+      <p>Witness (if applicable):<br>
+      Name: ___________________________<br>
+      Signature: ___________________________<br>
+      Date: ___________________________</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>What Happens After Service?</h2>
+
+    <h3>Waiting Period</h3>
+    <p><strong>Breach Notice Period:</strong></p>
+    <ul>
+      <li>Rent arrears: Minimum 14 days</li>
+      <li>Other breaches: 14 days to 1 month depending on severity</li>
+    </ul>
+    <p>You cannot apply to court before this date expires.</p>
+
+    <h3>If Breach is Remedied</h3>
+    <p>If the contract-holder fixes the breach during the notice period:</p>
+    <ul>
+      <li>For rent arrears: They pay all outstanding rent</li>
+      <li>For other breaches: They stop the behaviour or fix the problem</li>
+      <li>The notice may no longer be valid - consult a solicitor before proceeding</li>
+    </ul>
+
+    <h3>If Contract-Holder Does Not Leave</h3>
+    <p>You <strong>CANNOT:</strong></p>
+    <ul>
+      <li>❌ Change the locks</li>
+      <li>❌ Remove their belongings</li>
+      <li>❌ Cut off utilities</li>
+      <li>❌ Harass or threaten them</li>
+      <li>❌ Enter without permission</li>
+    </ul>
+
+    <div class="critical">
+      <strong>These are criminal offences in Wales</strong>
+    </div>
+
+    <p>You <strong>MUST:</strong></p>
+    <ul>
+      <li>✓ Apply to the county court for a possession order</li>
+      <li>✓ Provide evidence of the breach</li>
+      <li>✓ Wait for the court hearing</li>
+      <li>✓ Only evict with a court order and bailiff</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Common Mistakes to Avoid</h2>
+    <ul>
+      <li>❌ Wrong notice period - check minimum period for your breach type</li>
+      <li>❌ Not registered with Rent Smart Wales</li>
+      <li>❌ Insufficient breach evidence - document everything thoroughly</li>
+      <li>❌ Retaliatory eviction - cannot serve within 6 months of legitimate complaint</li>
+      <li>❌ Poor proof of service - always get evidence</li>
+      <li>❌ Self-help eviction - never change locks without court order</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Useful Contacts</h2>
+    <p><strong>Rent Smart Wales:</strong></p>
+    <ul>
+      <li>Website: www.rentsmart.gov.wales</li>
+      <li>Phone: 03000 133 344</li>
+    </ul>
+
+    <p><strong>HM Courts & Tribunals Service:</strong></p>
+    <ul>
+      <li>Website: www.gov.uk/government/organisations/hm-courts-and-tribunals-service</li>
+      <li>Phone: 0300 123 1372</li>
+    </ul>
+
+    <p><strong>Shelter Cymru:</strong></p>
+    <ul>
+      <li>Website: www.sheltercymru.org.uk</li>
+      <li>Phone: 0345 075 5005</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Legal Basis</h2>
+    <p><strong>Service Requirements:</strong> Renting Homes (Wales) Act 2016</p>
+    <p><strong>Deposit Protection:</strong> Renting Homes (Wales) Act 2016</p>
+    <p><strong>Illegal Eviction:</strong> Protection from Eviction Act 1977</p>
+  </div>
+
+  <footer>
+    <p><strong>Important:</strong> This is guidance only and does not constitute legal advice. If you're unsure about any step, consult a solicitor or legal advisor.</p>
+    <p><strong>Generated:</strong> {{generated_date}}</p>
+    <p><strong>Landlord Heaven Notice Only Pack</strong> | Wales</p>
+  </footer>
+</body>
+</html>

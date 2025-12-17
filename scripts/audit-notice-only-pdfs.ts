@@ -479,7 +479,18 @@ function detectPhraseRuleViolations(
 
   // Check required phrases
   for (const phrase of rules.required) {
-    if (!text.includes(phrase)) {
+    // Special case for Wales: accept both "contract-holder" and "contract holder"
+    if (jurisdiction === 'wales' && phrase === 'contract-holder') {
+      const hasHyphenated = text.includes('contract-holder');
+      const hasUnhyphenated = text.includes('contract holder');
+      if (!hasHyphenated && !hasUnhyphenated) {
+        issues.push({
+          type: 'missing_required_phrase',
+          severity: 'critical',
+          message: `Missing required phrase: "${phrase}" (or "contract holder")`,
+        });
+      }
+    } else if (!text.includes(phrase)) {
       issues.push({
         type: 'missing_required_phrase',
         severity: 'critical',
