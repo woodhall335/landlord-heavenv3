@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Notice to Leave - Service Instructions</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 40px;
+      color: #333;
+    }
+    h1 {
+      color: #1a1a1a;
+      border-bottom: 3px solid #8b5cf6;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #8b5cf6;
+      margin-top: 30px;
+      margin-bottom: 15px;
+    }
+    h3 {
+      color: #1a1a1a;
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+    .info-box {
+      background: #dbeafe;
+      border-left: 4px solid #3b82f6;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .warning {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .critical {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 15px;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .success {
+      background: #d1fae5;
+      border-left: 4px solid #10b981;
+      padding: 15px;
+      margin: 20px 0;
+    }
+    .method-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      background: #fafafa;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: bold;
+    }
+    ul {
+      margin-left: 20px;
+    }
+    li {
+      margin: 8px 0;
+    }
+    .checklist {
+      background: #f9fafb;
+      padding: 15px;
+      border-radius: 5px;
+      margin: 15px 0;
+    }
+    footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 2px solid #e5e7eb;
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <h1>How to Serve Your Notice to Leave</h1>
+
+  <p><strong>Property:</strong> {{property_address}}</p>
+  <p><strong>Tenant:</strong> {{tenant_full_name}}</p>
+  <p><strong>Notice Period:</strong> {{notice_period_days}} days</p>
+
+  <div class="critical">
+    ⚠️ <strong>CRITICAL:</strong> Service is the most important step. If you serve incorrectly, your Notice to Leave will be invalid and you'll have to start over. Follow these instructions exactly.
+  </div>
+
+  <h2>What is "Service"?</h2>
+
+  <p>"Service" means officially delivering the Notice to Leave to your tenant in one of the legally approved methods. The law is VERY strict about this. You can't just hand it to them casually or send a text message.</p>
+
+  <div class="info-box">
+    ℹ️ <strong>Key Principle:</strong> Under the Private Residential Tenancy (Scotland) Act 2016, you must serve the Notice to Leave using one of the prescribed methods. The notice period starts from the date of service, NOT the date you filled out the form.
+  </div>
+
+  <h2>Three Approved Service Methods</h2>
+
+  <p>You MUST use one of these three methods. Any other method (email, WhatsApp, leaving under door, etc.) is NOT valid.</p>
+
+  <div class="method-card">
+    <h3>✅ Method 1: Hand Delivery (RECOMMENDED)</h3>
+
+    <p><strong>How it works:</strong> You (or someone over 18) personally hand the Notice to Leave to the tenant.</p>
+
+    <h4>Step-by-Step Instructions:</h4>
+    <ol>
+      <li><strong>Print the Notice:</strong> Use the official Notice to Leave form included in this pack</li>
+      <li><strong>Choose your delivery person:</strong>
+        <ul>
+          <li>You can deliver yourself</li>
+          <li>OR someone over 18 can deliver on your behalf (friend, relative, professional process server)</li>
+          <li>The person delivering MUST be prepared to testify in tribunal if needed</li>
+        </ul>
+      </li>
+      <li><strong>Find the tenant:</strong> Go to the property at a time the tenant is likely home</li>
+      <li><strong>Hand the Notice directly to the tenant:</strong>
+        <ul>
+          <li>Say clearly: "I'm serving you with a Notice to Leave"</li>
+          <li>Hand them the physical document</li>
+          <li>If they refuse to take it, you can place it at their feet while saying "This is your Notice to Leave"</li>
+        </ul>
+      </li>
+      <li><strong>Take a photo/video:</strong> Immediately after service, take a photo showing:
+        <ul>
+          <li>The tenant holding the notice (if possible)</li>
+          <li>OR the notice at their feet if they refused</li>
+          <li>The property address visible in background</li>
+          <li>Timestamp visible on your phone</li>
+        </ul>
+      </li>
+      <li><strong>Complete Certificate of Service:</strong> Fill out the certificate (included in this pack) immediately while memory is fresh</li>
+    </ol>
+
+    <div class="success">
+      <strong>Proof Required:</strong>
+      <ul>
+        <li>✓ Photo/video of service moment</li>
+        <li>✓ Completed Certificate of Service (signed and dated)</li>
+        <li>✓ Witness statement if someone delivered on your behalf</li>
+      </ul>
+    </div>
+
+    <p><strong>When does notice period start?</strong> The day AFTER the date you handed it to them.</p>
+    <p><strong>Example:</strong> Hand delivered on Monday 1st May → notice period starts Tuesday 2nd May → {{notice_period_days}}-day period expires {{earliest_leaving_date_formatted}}</p>
+  </div>
+
+  <div class="method-card">
+    <h3>✅ Method 2: Recorded Delivery Post</h3>
+
+    <p><strong>How it works:</strong> Send via Royal Mail Recorded Delivery (signed for). You get proof of delivery.</p>
+
+    <h4>Step-by-Step Instructions:</h4>
+    <ol>
+      <li><strong>Print and seal:</strong> Print the Notice to Leave, place in envelope addressed to tenant at property address</li>
+      <li><strong>Go to Post Office:</strong> Take to Post Office counter (cannot use post box)</li>
+      <li><strong>Request "Recorded Delivery":</strong>
+        <ul>
+          <li>NOT "Signed For" or "Special Delivery" - must be "Recorded Delivery"</li>
+          <li>Cost: ~£1.80 (as of 2025)</li>
+        </ul>
+      </li>
+      <li><strong>Keep the receipt:</strong> Royal Mail gives you a receipt with tracking number - DO NOT LOSE THIS</li>
+      <li><strong>Track delivery:</strong> Use tracking number on Royal Mail website to confirm delivery</li>
+      <li><strong>Download proof of delivery:</strong>
+        <ul>
+          <li>Go to Royal Mail tracking website</li>
+          <li>Enter tracking number</li>
+          <li>Download/screenshot the delivery confirmation showing:
+            <ul>
+              <li>Tracking number</li>
+              <li>Delivery date</li>
+              <li>Signature (if available)</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><strong>Complete Certificate of Service:</strong> Fill out certificate with posting date and tracking number</li>
+    </ol>
+
+    <div class="warning">
+      ⚠️ <strong>Important:</strong> Service date is the day the tenant RECEIVES it (delivery date), NOT the day you posted it. If Royal Mail shows "attempted delivery" but not delivered, the notice is NOT served yet.
+    </div>
+
+    <div class="success">
+      <strong>Proof Required:</strong>
+      <ul>
+        <li>✓ Royal Mail receipt with tracking number</li>
+        <li>✓ Proof of delivery from Royal Mail website (screenshot/download)</li>
+        <li>✓ Completed Certificate of Service</li>
+      </ul>
+    </div>
+
+    <p><strong>When does notice period start?</strong> The day AFTER the delivery date confirmed by Royal Mail.</p>
+    <p><strong>Example:</strong> Posted Monday 1st May → delivered Wednesday 3rd May → notice period starts Thursday 4th May</p>
+  </div>
+
+  <div class="method-card">
+    <h3>✅ Method 3: Sheriff Officer Service (Professional Service)</h3>
+
+    <p><strong>How it works:</strong> Hire a sheriff officer (Scottish equivalent of bailiff) to serve the notice professionally.</p>
+
+    <p><strong>Cost:</strong> £50-£150 depending on location</p>
+
+    <p><strong>Advantages:</strong>
+    <ul>
+      <li>Professional proof of service (accepted by tribunal without question)</li>
+      <li>Useful if tenant is avoiding you or being difficult</li>
+      <li>Sheriff officer provides sworn execution of service certificate</li>
+    </ul>
+    </p>
+
+    <h4>Step-by-Step Instructions:</h4>
+    <ol>
+      <li><strong>Find a sheriff officer:</strong> Search "sheriff officer [your area]" or check Society of Messengers-at-Arms and Sheriff Officers website</li>
+      <li><strong>Provide them with:</strong>
+        <ul>
+          <li>Copy of Notice to Leave</li>
+          <li>Tenant's name and property address</li>
+          <li>Any information about tenant's work schedule/when they're home</li>
+        </ul>
+      </li>
+      <li><strong>Pay the fee:</strong> Usually £50-£150</li>
+      <li><strong>Sheriff officer serves:</strong> They will attend property and serve using hand delivery method</li>
+      <li><strong>Receive execution certificate:</strong> Sheriff officer provides you with official certificate of service</li>
+    </ol>
+
+    <div class="success">
+      <strong>Proof Required:</strong>
+      <ul>
+        <li>✓ Execution of service certificate from sheriff officer</li>
+        <li>✓ Receipt showing payment to sheriff officer</li>
+      </ul>
+    </div>
+
+    <p><strong>When does notice period start?</strong> The day AFTER the date the sheriff officer served it.</p>
+  </div>
+
+  <h2>What About First Class Post? ❌</h2>
+
+  <div class="critical">
+    ❌ <strong>DO NOT USE FIRST CLASS POST:</strong> Unlike in England & Wales, ordinary first class post is NOT a valid service method for Notice to Leave in Scotland. You MUST use one of the three methods above (hand delivery, recorded delivery, or sheriff officer).
+  </div>
+
+  <h2>Service Date vs. Notice Period Start Date</h2>
+
+  <p>This is crucial to understand:</p>
+
+  <table>
+    <tr>
+      <th>Service Date</th>
+      <th>Notice Period Starts</th>
+      <th>Notice Period Expires</th>
+    </tr>
+    <tr>
+      <td>The day you serve the notice</td>
+      <td>The day AFTER service date</td>
+      <td>{{notice_period_days}} days after notice period starts</td>
+    </tr>
+  </table>
+
+  <h2>Evidence Checklist</h2>
+
+  <div class="checklist">
+    <p><strong>After serving the notice, you MUST have ALL of the following:</strong></p>
+
+    <h4>For Hand Delivery:</h4>
+    <ul>
+      <li>☐ Copy of Notice to Leave that was served (keep original)</li>
+      <li>☐ Photo/video of service moment (showing tenant receiving it)</li>
+      <li>☐ Completed Certificate of Service (signed and dated)</li>
+      <li>☐ Witness statement (if someone else delivered on your behalf)</li>
+    </ul>
+
+    <h4>For Recorded Delivery:</h4>
+    <ul>
+      <li>☐ Copy of Notice to Leave that was sent</li>
+      <li>☐ Royal Mail receipt with tracking number</li>
+      <li>☐ Proof of delivery from Royal Mail (screenshot/download)</li>
+      <li>☐ Completed Certificate of Service</li>
+    </ul>
+
+    <h4>For Sheriff Officer:</h4>
+    <ul>
+      <li>☐ Copy of Notice to Leave</li>
+      <li>☐ Execution of service certificate from sheriff officer</li>
+      <li>☐ Receipt for payment to sheriff officer</li>
+    </ul>
+  </div>
+
+  <div class="warning">
+    ⚠️ <strong>Why This Matters:</strong> If you don't have proper proof of service, the tribunal will reject your application and you'll have to serve the notice again, losing months of time. Don't skip the evidence collection!
+  </div>
+
+  <h2>Common Mistakes to Avoid</h2>
+
+  <table>
+    <tr>
+      <th>Mistake</th>
+      <th>Why It's Wrong</th>
+      <th>Correct Approach</th>
+    </tr>
+    <tr>
+      <td>❌ Sent by ordinary first class post</td>
+      <td>Not a valid service method in Scotland</td>
+      <td>✓ Use Recorded Delivery</td>
+    </tr>
+    <tr>
+      <td>❌ Emailed or texted notice</td>
+      <td>Not legally valid</td>
+      <td>✓ Use one of three prescribed methods</td>
+    </tr>
+    <tr>
+      <td>❌ Left notice under door</td>
+      <td>Not valid hand delivery</td>
+      <td>✓ Must hand directly to tenant</td>
+    </tr>
+    <tr>
+      <td>❌ Gave to tenant's friend</td>
+      <td>Must be given to tenant personally</td>
+      <td>✓ Serve tenant directly</td>
+    </tr>
+    <tr>
+      <td>❌ No proof kept</td>
+      <td>Can't prove service to tribunal</td>
+      <td>✓ Follow evidence checklist above</td>
+    </tr>
+    <tr>
+      <td>❌ Notice period starts from date filled out</td>
+      <td>Starts from day after service</td>
+      <td>✓ Count from day after service date</td>
+    </tr>
+  </table>
+
+  <h2>What Happens After You Serve the Notice</h2>
+
+  <div class="info-box">
+    <h4>Immediate Actions (Within 24 Hours):</h4>
+    <ol>
+      <li>✓ Complete Certificate of Service</li>
+      <li>✓ Collect and organize all proof (photos, receipts, tracking info)</li>
+      <li>✓ Store copies in safe place (you'll need for tribunal)</li>
+      <li>✓ Send a copy to yourself by email as backup</li>
+    </ol>
+
+    <h4>During Notice Period ({{notice_period_days}} days):</h4>
+    <ul>
+      <li>✓ Wait - do NOT harass tenant or try to force them out</li>
+      <li>✓ Tenant should leave voluntarily by {{earliest_leaving_date_formatted}}</li>
+      <li>✓ If tenant contacts you to discuss, be professional and factual</li>
+      <li>✓ Continue accepting rent if tenant pays (doesn't affect notice)</li>
+    </ul>
+
+    <h4>After Notice Expires:</h4>
+    <ul>
+      <li>✓ If tenant left: arrange final inspection, return deposit</li>
+      <li>✓ If tenant still there: apply to First-tier Tribunal for Scotland (Housing and Property Chamber)</li>
+      <li>✓ DO NOT change locks or force tenant out - this is illegal</li>
+    </ul>
+  </div>
+
+  <h2>Special Circumstances</h2>
+
+  <h3>What if tenant refuses to accept hand delivery?</h3>
+  <p>If you attempt hand delivery and the tenant refuses to take the notice:</p>
+  <ul>
+    <li>Say clearly: "This is your Notice to Leave"</li>
+    <li>Place the notice at their feet or on a surface in their immediate vicinity</li>
+    <li>Take photo/video showing the notice and the tenant refusing it</li>
+    <li>This counts as valid service</li>
+  </ul>
+
+  <h3>What if tenant is never home?</h3>
+  <p>If you cannot find the tenant at home for hand delivery:</p>
+  <ul>
+    <li><strong>Option 1:</strong> Use Recorded Delivery instead (doesn't require them to be home)</li>
+    <li><strong>Option 2:</strong> Hire a sheriff officer (they're experienced at tracking people down)</li>
+    <li>DO NOT just leave it under the door - this is not valid service</li>
+  </ul>
+
+  <h3>What if Recorded Delivery comes back undelivered?</h3>
+  <p>If Royal Mail cannot deliver (e.g., "attempted delivery, not answered"):</p>
+  <ul>
+    <li>The notice is NOT served yet</li>
+    <li>Try again with a different method (hand delivery or sheriff officer)</li>
+    <li>Do NOT count the posting date as service date</li>
+  </ul>
+
+  <h3>What if there are multiple tenants?</h3>
+  <p>If there are joint tenants (multiple names on tenancy agreement):</p>
+  <ul>
+    <li>You must serve ALL tenants</li>
+    <li>You can use different methods for each (e.g., hand delivery to one, recorded delivery to another)</li>
+    <li>The notice period starts from the LATEST service date (day after you served the last tenant)</li>
+  </ul>
+
+  <h2>Certificate of Service</h2>
+
+  <p>A Certificate of Service is a simple form that you (or the person who delivered) fill out stating:</p>
+  <ul>
+    <li>Who served the notice</li>
+    <li>Who it was served to (tenant's name)</li>
+    <li>When it was served (exact date)</li>
+    <li>How it was served (hand delivery, recorded delivery, sheriff officer)</li>
+    <li>Where it was served (property address)</li>
+  </ul>
+
+  <p>This certificate MUST be signed and dated by the person who did the serving.</p>
+
+  <div class="info-box">
+    ℹ️ <strong>Template Included:</strong> A Certificate of Service template is included in this Notice Only pack. Simply fill in the blanks and sign it after serving the notice.
+  </div>
+
+  <h2>Final Checklist Before Tribunal Application</h2>
+
+  <p>If the tenant doesn't leave voluntarily and you need to apply to the tribunal, you'll need to prove service. Before applying, make sure you have:</p>
+
+  <div class="checklist">
+    <ul>
+      <li>☐ Copy of the exact Notice to Leave you served</li>
+      <li>☐ Certificate of Service (completed and signed)</li>
+      <li>☐ Proof of service method:
+        <ul>
+          <li>Hand delivery: Photo/video evidence</li>
+          <li>Recorded Delivery: Royal Mail receipt + proof of delivery</li>
+          <li>Sheriff Officer: Execution certificate</li>
+        </ul>
+      </li>
+      <li>☐ All documents stored safely in one folder (physical + digital backup)</li>
+    </ul>
+  </div>
+
+  <footer>
+    <p><strong>Legal Basis:</strong> Private Residential Tenancy (Scotland) Act 2016, The Private Residential Tenancy (Prescribed Notices and Forms) (Scotland) Regulations 2017</p>
+    <p><strong>Generated:</strong> {{generated_date}}</p>
+    <p><strong>Landlord Heaven Notice Only Pack</strong> | Scotland</p>
+    <p><strong>Support:</strong> For questions or assistance, visit our help center or contact support.</p>
+  </footer>
+</body>
+</html>

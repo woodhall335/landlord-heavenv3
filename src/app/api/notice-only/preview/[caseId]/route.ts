@@ -317,15 +317,13 @@ export async function GET(
         }
       }
 
-      // 2. Generate service instructions (England-specific)
-      console.log('[NOTICE-PREVIEW-API] Generating service instructions');
+      // 2. Generate route-specific service instructions (England)
+      const serviceInstructionsRoute = selected_route === 'section_8' ? 'section_8' : 'section_21';
+      console.log(`[NOTICE-PREVIEW-API] Generating ${serviceInstructionsRoute} service instructions`);
       try {
         const serviceDoc = await generateDocument({
-          templatePath: 'uk/england/templates/eviction/service_instructions.hbs',
-          data: {
-            ...templateData,
-            notice_type: selected_route === 'section_8' ? 'Section 8' : 'Section 21',
-          },
+          templatePath: `uk/england/templates/eviction/service_instructions_${serviceInstructionsRoute}.hbs`,
+          data: templateData,
           outputFormat: 'pdf',
         });
 
@@ -499,19 +497,13 @@ export async function GET(
         }
       }
 
-      // 2. Generate service instructions (Wales-specific)
-      console.log('[NOTICE-PREVIEW-API] Generating Wales service instructions');
+      // 2. Generate route-specific service instructions (Wales)
+      const walesServiceRoute = selected_route === 'wales_section_173' ? 'section_173' : 'fault_based';
+      console.log(`[NOTICE-PREVIEW-API] Generating Wales ${walesServiceRoute} service instructions`);
       try {
-        const serviceData = {
-          ...templateData,
-          notice_type: selected_route === 'wales_section_173' ? 'Section 173' : 'Fault-Based Breach Notice',
-          is_wales_section_173: selected_route === 'wales_section_173',
-          is_wales_fault_based: selected_route === 'wales_fault_based',
-        };
-
         const serviceDoc = await generateDocument({
-          templatePath: 'uk/wales/templates/eviction/service_instructions.hbs',
-          data: serviceData,
+          templatePath: `uk/wales/templates/eviction/service_instructions_${walesServiceRoute}.hbs`,
+          data: templateData,
           outputFormat: 'pdf',
         });
 
@@ -683,11 +675,11 @@ export async function GET(
         console.error('[NOTICE-PREVIEW-API] Notice to Leave generation failed:', err);
       }
 
-      // 2. Generate service instructions (Scotland-specific)
-      console.log('[NOTICE-PREVIEW-API] Generating Scotland service instructions');
+      // 2. Generate route-specific service instructions (Scotland - Notice to Leave)
+      console.log('[NOTICE-PREVIEW-API] Generating Scotland notice_to_leave service instructions');
       try {
         const serviceDoc = await generateDocument({
-          templatePath: 'uk/scotland/templates/eviction/service_instructions.hbs',
+          templatePath: 'uk/scotland/templates/eviction/service_instructions_notice_to_leave.hbs',
           data: templateData,
           outputFormat: 'pdf',
         });
