@@ -14,6 +14,7 @@
   - No legal promises or guarantees
   - Variable names match mapNoticeOnlyFacts() output
   - Users can edit the HTML after payment; HTML is stored and later rendered to PDF
+  - Uses shared Print Design System from config/jurisdictions/_shared/print/
 --}}
 
 <!DOCTYPE html>
@@ -22,76 +23,7 @@
   <meta charset="UTF-8">
   <title>Form 3 - Section 8 Notice Seeking Possession</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 12pt;
-      line-height: 1.4;
-      max-width: 8.5in;
-      margin: 0 auto;
-      padding: 0.5in;
-    }
-    h1 {
-      font-size: 14pt;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin: 0 0 0.5em 0;
-      text-align: center;
-    }
-    h2 {
-      font-size: 12pt;
-      font-weight: bold;
-      text-align: center;
-      margin: 0 0 1em 0;
-    }
-    h3 {
-      font-size: 12pt;
-      font-weight: bold;
-      margin: 1em 0 0.5em 0;
-    }
-    .info-box {
-      border: 2px solid #000;
-      padding: 1em;
-      margin: 1em 0;
-      background-color: #f9f9f9;
-    }
-    .section {
-      margin: 1em 0;
-      page-break-inside: avoid;
-    }
-    .field-label {
-      font-weight: bold;
-      margin-top: 0.5em;
-    }
-    .field-value {
-      margin-left: 0.25in;
-      border-bottom: 1px dotted #666;
-      min-height: 1.5em;
-    }
-    .signature-block {
-      margin-top: 2em;
-      page-break-inside: avoid;
-    }
-    .checkbox {
-      display: inline-block;
-      width: 1em;
-      height: 1em;
-      border: 1px solid #000;
-      margin-right: 0.5em;
-      vertical-align: middle;
-    }
-    .avoid-break {
-      page-break-inside: avoid;
-    }
-    .ground-block {
-      margin: 1em 0 1em 0.25in;
-      padding: 0.5em;
-      border-left: 3px solid #666;
-    }
-    .link {
-      color: #0066cc;
-      text-decoration: underline;
-      word-break: break-all;
-    }
+    {{{print_css}}}
   </style>
 </head>
 <body>
@@ -212,7 +144,7 @@
   <p><strong>6.</strong> If your landlord / licensor does not apply to the court within a given timeframe this notice will lapse. The latest date for court proceedings to begin is <strong>12 months</strong> from the date of service of this notice, subject to any extension in accordance with the Debt Respite Scheme (Breathing Space Moratorium and Mental Health Crisis Moratorium) (England and Wales) Regulations 2020.</p>
 </div>
 
-<div class="signature-block avoid-break">
+<div class="signature-block">
   <p class="field-label">7. Name and address of landlord, licensor or landlord's agent:</p>
   <p style="margin-left: 0.25in; font-style: italic; font-size: 10pt; margin-bottom: 1em;">(To be completed in full by the landlord, licensor, or, in the case of joint landlords / licensors, at least one of the joint landlords / licensors, or by someone authorised to give notice on the landlord's / licensor's behalf.)</p>
 
@@ -278,10 +210,10 @@
   </div>
 </div>
 
-<div class="section" style="margin-top: 2em; page-break-before: auto;">
+<div class="guidance-section">
   <h3>Service Instructions</h3>
   <p>This notice must be properly served on the tenant(s) named in section 1. You may serve this notice by:</p>
-  <ul style="margin-left: 1.5em;">
+  <ul>
     <li><strong>Hand delivery:</strong> Delivering the notice to the tenant personally</li>
     <li><strong>Leaving at the property:</strong> Leaving the notice at the property in a place where it is likely to come to the tenant's attention</li>
     <li><strong>First class post:</strong> Posting it by first class post to the tenant's last known address (allow for postal delivery time)</li>
@@ -291,10 +223,10 @@
   <p><strong>Important:</strong> The date in section 7 should be the date you serve the notice, not a future date.</p>
 </div>
 
-<div class="section" style="margin-top: 2em; page-break-before: auto;">
+<div class="guidance-section">
   <h3>Service and Validity Checklist</h3>
   <p>Before serving this notice, ensure you have satisfied all of the following requirements:</p>
-  <ul style="margin-left: 1.5em;">
+  <ul>
     <li>The tenancy is an assured or assured shorthold tenancy under the Housing Act 1988</li>
     <li>All details in sections 1-7 are complete and accurate</li>
     <li>The ground(s) specified are applicable to your circumstances</li>

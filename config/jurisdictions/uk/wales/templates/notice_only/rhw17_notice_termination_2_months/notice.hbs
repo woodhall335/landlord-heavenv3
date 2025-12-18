@@ -14,6 +14,7 @@
   - No legal promises or guarantees
   - Variable names match mapNoticeOnlyFacts() output
   - Users can edit the HTML after payment; HTML is stored and later rendered to PDF
+  - Uses shared Print Design System from config/jurisdictions/_shared/print/
 
   NOTE: This is ENGLISH-ONLY. Bilingual output requires Welsh-language official source.
 --}}
@@ -24,49 +25,7 @@
   <meta charset="UTF-8">
   <title>Form RHW17 - Landlord's Notice of Termination (2-month notice period)</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 12pt;
-      line-height: 1.4;
-      max-width: 8.5in;
-      margin: 0 auto;
-      padding: 0.5in;
-    }
-    h1 {
-      font-size: 14pt;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin: 0 0 1em 0;
-      text-align: center;
-    }
-    h2 {
-      font-size: 11pt;
-      font-weight: bold;
-      margin: 1.5em 0 0.5em 0;
-    }
-    .part-label {
-      font-weight: bold;
-      margin-top: 1em;
-      margin-bottom: 0.3em;
-    }
-    .field-value {
-      margin-left: 0.25in;
-      border-bottom: 1px dotted #666;
-      min-height: 1.5em;
-    }
-    .section {
-      margin: 1em 0;
-      page-break-inside: avoid;
-    }
-    .guidance-section {
-      margin-top: 2em;
-      padding-top: 1em;
-      border-top: 2px solid #000;
-      page-break-before: always;
-    }
-    .avoid-break {
-      page-break-inside: avoid;
-    }
+    {{{print_css}}}
   </style>
 </head>
 <body>
@@ -172,21 +131,21 @@
 
   <h2>Restrictions on giving this notice</h2>
 
-  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">First four/six months of occupation</h3>
+  <h3>First four/six months of occupation</h3>
   <p>In accordance with section 175 of the Renting Homes (Wales) Act 2016, this notice may not be given within the first six months of the occupation date of the contract.</p>
 
-  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">Breaches of statutory obligations</h3>
+  <h3>Breaches of statutory obligations</h3>
   <p>In accordance with section 176 of the Renting Homes (Wales) Act 2016, this notice may not be given at a time when there is a breach of any statutory obligations listed in Schedule 9A to that Act.</p>
 
-  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">Withdrawal of previous notice</h3>
+  <h3>Withdrawal of previous notice</h3>
   <p>In accordance with section 177 of the Renting Homes (Wales) Act 2016, if the landlord has previously given a notice under section 173 of that Act and has subsequently withdrawn it, the landlord may not give the contract-holder(s) a further notice of termination under section 173 of that Act within six months of the date that the notice was withdrawn.</p>
 
-  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">Retaliatory possession claim</h3>
+  <h3>Retaliatory possession claim</h3>
   <p>A contract-holder may enforce or rely upon the landlord's obligations in relation to fitness for human habitation and to keep the dwelling in repair under sections 91 and 92 of the Renting Homes (Wales) Act 2016. If the landlord issues this notice in response, a court may consider that the landlord is making a possession claim to avoid complying with those obligations (a retaliatory claim). In accordance with section 217 of that Act, the court may refuse to make an order for possession if it considers that the possession claim is a retaliatory claim.</p>
 
   <h2>Restrictions on bringing a possession claim</h2>
 
-  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">Time limits</h3>
+  <h3>Time limits</h3>
   <p>In accordance with section 179 of the Renting Homes (Wales) Act 2016, the landlord may not make a possession claim before the date listed in Part D of this notice or after two months of that date.</p>
 </div>
 
