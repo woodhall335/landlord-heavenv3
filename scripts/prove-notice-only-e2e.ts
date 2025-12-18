@@ -571,7 +571,9 @@ async function generatePreviewPDF(
   route: string = ''
 ): Promise<Buffer> {
   const MAX_RETRIES = 3;
-  const RETRY_DELAYS = [500, 1500, 3500]; // exponential backoff
+  // Increased initial retry delay from 500ms to 2000ms to give dev server more time
+  // to warm up and compile routes on first request (reduces manifest flake)
+  const RETRY_DELAYS = [2000, 3500, 5000]; // exponential backoff with longer initial delay
 
   let lastError: Error | null = null;
 
@@ -636,123 +638,95 @@ async function generatePreviewPDF(
 
 /**
  * Try to load pdf-parse (optional dependency).
- * Supports:
- *  - classic function export (older pdf-parse)
- *  - class export (PDFParse) with load()/getText() across different builds
+ *
+ * pdf-parse v2.x uses a class-based API (PDFParse) that requires either:
+ *  1. A `url` parameter (string or file:// URL), OR
+ *  2. A `data` parameter (Buffer, Uint8Array, ArrayBuffer, etc.)
+ *
+ * This function:
+ *  - Attempts to load pdf-parse using both ESM and CJS approaches (handles module mismatch)
+ *  - Creates a wrapper function that accepts Buffer and returns parsed text
+ *  - Performs a self-check with a minimal test PDF to ensure parsing actually works
+ *  - Returns null if pdf-parse is unavailable or the self-check fails
+ *
+ * Why we use the `data` parameter approach:
+ *  - We receive PDF data as in-memory Buffers from the API
+ *  - Using `data` parameter avoids writing temp files for URL-based loading
+ *  - The PDFParse constructor accepts data directly and handles it correctly
  */
 async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: string }>) | null> {
   try {
-    const mod: any = await import('pdf-parse');
+    // Attempt 1: Try ESM import (may fail with CJS-only packages)
+    let pdfParseModule: any = null;
 
-    // ---------------------------
-    // Shape A: classic function export
-    // ---------------------------
-    const fnCandidates = [mod?.default, mod, mod?.default?.default];
-    const fn = fnCandidates.find((c) => typeof c === 'function');
-    if (fn) {
-      return async (data: Buffer) => {
-        // Ensure data is a proper Buffer (not a path string or other format)
-        // Some versions of pdf-parse/PDF.js expect specific options
-        try {
-          return await fn(data, {
-            // PDF.js options to ensure compatibility
-            max: 0, // Parse all pages
-          });
-        } catch (e: any) {
-          // Retry without options if first attempt fails
-          if (e?.message?.includes('url') || e?.message?.includes('getDocument')) {
-            // Try providing data in alternative format for PDF.js compatibility
-            return await fn(data);
-          }
-          throw e;
-        }
-      };
+    try {
+      pdfParseModule = await import('pdf-parse');
+    } catch (esmError) {
+      // Attempt 2: Fall back to CJS require (handles ESM/CJS mismatch)
+      try {
+        // Use createRequire for compatibility with ESM context
+        const { createRequire } = await import('module');
+        const require = createRequire(import.meta.url);
+        pdfParseModule = require('pdf-parse');
+      } catch (cjsError) {
+        // Both approaches failed - pdf-parse not available
+        return null;
+      }
     }
 
-    // ---------------------------
-    // Shape B: class export
-    // ---------------------------
-    if (typeof mod?.PDFParse === 'function') {
-      return async (data: Buffer) => {
-        const verbosity =
-          mod?.VerbosityLevel?.ERRORS ??
-          mod?.VerbosityLevel?.WARNINGS ??
-          mod?.VerbosityLevel?.SILENT ??
-          0;
-
-        const parser = new mod.PDFParse({ verbosity });
-
-        // normalize Buffer to Uint8Array for PDF.js internals
-        const u8: Uint8Array = new Uint8Array(data);
-
-        const tryCall = async (label: string, f: () => Promise<any>) => {
-          try {
-            return await f();
-          } catch (e: any) {
-            const msg = e?.message ? String(e.message) : String(e);
-            throw new Error(`${label}: ${msg}`);
-          }
-        };
-
-        // 1) Some builds support getText(input) directly
-        if (typeof parser.getText === 'function' && parser.getText.length >= 1) {
-          const shapes = [
-            u8,
-            { data: u8 },
-            { buffer: u8 },
-            // some builds also accept ArrayBuffer
-            u8.buffer,
-            { data: u8.buffer },
-          ];
-
-          for (const shape of shapes) {
-            try {
-              const out = await tryCall('PDFParse.getText(arg)', async () => parser.getText(shape));
-              return { text: String(out ?? '') };
-            } catch {
-              // keep trying
-            }
-          }
-        }
-
-        // 2) Otherwise: load(...) then getText()
-        if (typeof parser.load !== 'function') {
-          throw new Error('pdf-parse: PDFParse.load() not found');
-        }
-
-        const loadShapes = [
-          u8,
-          { data: u8 },
-          { buffer: u8 },
-          u8.buffer,
-          { data: u8.buffer },
-        ];
-
-        let lastLoadErr: Error | null = null;
-
-        for (const shape of loadShapes) {
-          try {
-            await tryCall('PDFParse.load(arg)', async () => parser.load(shape));
-            lastLoadErr = null;
-            break;
-          } catch (e: any) {
-            lastLoadErr = e instanceof Error ? e : new Error(String(e));
-          }
-        }
-
-        if (lastLoadErr) throw lastLoadErr;
-
-        if (typeof parser.getText !== 'function') {
-          throw new Error('pdf-parse: PDFParse.getText() not found');
-        }
-
-        const text = await tryCall('PDFParse.getText()', async () => parser.getText());
-        return { text: String(text ?? '') };
-      };
+    // Verify we got the PDFParse class (pdf-parse v2.x)
+    if (typeof pdfParseModule?.PDFParse !== 'function') {
+      // Unsupported pdf-parse version or shape
+      return null;
     }
 
-    return null;
+    // Extract the PDFParse class and VerbosityLevel
+    const { PDFParse, VerbosityLevel } = pdfParseModule;
+    const verbosity = VerbosityLevel?.ERRORS ?? 0;
+
+    // Create wrapper function that accepts Buffer and returns parsed text
+    const parseFunction = async (pdfBuffer: Buffer): Promise<{ text: string }> => {
+      // Create parser with data parameter (not url)
+      // PDFParse constructor automatically handles Buffer -> Uint8Array conversion
+      const parser = new PDFParse({
+        data: pdfBuffer,
+        verbosity,
+      });
+
+      // Call getText() directly - no need to call load() when using data parameter
+      const result = await parser.getText();
+
+      // Destroy parser to free resources
+      await parser.destroy();
+
+      // Return normalized result
+      return {
+        text: String(result?.text ?? ''),
+      };
+    };
+
+    // Self-check: verify parsing works with a minimal test PDF
+    // This ensures we don't claim "pdf-parse available" if it will fail for every PDF
+    const minimalTestPDF = Buffer.from(
+      '%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj 2 0 obj<</Type/Pages/Kids[3 0 R]/Count 1>>endobj 3 0 obj<</Type/Page/MediaBox[0 0 612 792]/Parent 2 0 R/Resources<<>>>>endobj\nxref\n0 4\n0000000000 65535 f\n0000000009 00000 n\n0000000058 00000 n\n0000000115 00000 n\ntrailer<</Size 4/Root 1 0 R>>\nstartxref\n206\n%%EOF',
+      'utf-8'
+    );
+
+    try {
+      const testResult = await parseFunction(minimalTestPDF);
+      // Verify we got some text back (even if empty for minimal PDF)
+      if (typeof testResult.text !== 'string') {
+        throw new Error('Self-check failed: text is not a string');
+      }
+      // Self-check passed - return the working parse function
+      return parseFunction;
+    } catch (selfCheckError) {
+      // Self-check failed - pdf-parse is broken or incompatible
+      // Better to return null than to fail on every PDF
+      return null;
+    }
   } catch {
+    // Any unexpected error during setup
     return null;
   }
 }
@@ -895,6 +869,13 @@ async function testRoute(route: TestRoute): Promise<RouteResult> {
 
 /**
  * Helper: Preflight check to warm up Next.js dev server
+ *
+ * This function makes a warm-up request to force Next.js to:
+ *  - Load and compile API routes
+ *  - Initialize the build manifest
+ *  - Prepare the dev server for real requests
+ *
+ * Without this, the first real request often fails with manifest errors in dev mode.
  */
 async function devServerPreflight(): Promise<void> {
   console.log('🔧 Running dev server preflight check...');
@@ -907,13 +888,15 @@ async function devServerPreflight(): Promise<void> {
       console.log(`  ✅ Health endpoint responded: ${healthResponse.status}`);
     } catch {
       // Health endpoint doesn't exist, try a quick invalid preview request
+      // This forces Next.js to compile the preview API route
       const previewUrl = `${API_BASE_URL}/api/notice-only/preview/00000000-0000-0000-0000-000000000000`;
       const previewResponse = await fetch(previewUrl, { method: 'GET' });
       console.log(`  ✅ Preview endpoint warmed up: ${previewResponse.status}`);
     }
 
-    // Wait for Next.js to finish compiling routes
-    await sleep(500);
+    // Increased wait time from 500ms to 1500ms to give Next.js more time
+    // to finish compiling routes and stabilize the manifest (reduces flake)
+    await sleep(1500);
     console.log('  ✅ Preflight complete\n');
   } catch (err) {
     console.log(`  ⚠️  Preflight check failed (non-fatal): ${err instanceof Error ? err.message : String(err)}\n`);
