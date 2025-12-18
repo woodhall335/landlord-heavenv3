@@ -1,0 +1,95 @@
+{{!--
+  ============================================================================
+  WALES - FAULT-BASED BREACH NOTICE
+  Renting Homes (Wales) Act 2016 - Fault-Based Grounds
+  Sections 157, 159, 161, 162 (depending on breach type)
+  ============================================================================
+
+  TODO: Replace with exact prescribed wording for fault-based notices
+
+  IMPORTANT: This is PLACEHOLDER SCAFFOLDING ONLY
+  - Must match the prescribed format for the specific breach type
+  - Shorter notice periods (14-30 days depending on breach)
+  - No legal promises or guarantees
+  - Variable names match mapNoticeOnlyFacts() output
+
+  Official source: https://gov.wales/renting-homes-wales
+--}}
+
+<h1>Fault-Based Breach Notice / Hysbysiad Torri Contract ar Fai</h1>
+
+<h2>Renting Homes (Wales) Act 2016 / Deddf Rhentu Cartrefi (Cymru) 2016</h2>
+
+<div class="section">
+  <h3>To / I: {{contract_holder_full_name}}</h3>
+  <p>
+    <strong>Dwelling / Annedd:</strong><br>
+    {{#if property_address}}
+      {{{property_address}}}
+    {{else}}
+      [PROPERTY ADDRESS MISSING / CYFEIRIAD EIDDO AR GOLL]
+    {{/if}}
+  </p>
+</div>
+
+<div class="section">
+  <h3>From / Oddi wrth: {{landlord_full_name}}</h3>
+  <p>
+    <strong>Landlord's Address / Cyfeiriad y Landlord:</strong><br>
+    {{#if landlord_address}}
+      {{{landlord_address}}}
+    {{else}}
+      [LANDLORD ADDRESS MISSING / CYFEIRIAD LANDLORD AR GOLL]
+    {{/if}}
+  </p>
+</div>
+
+<div class="section">
+  <h3>Breach Details / Manylion Torri'r Contract</h3>
+
+  <p><strong>TODO:</strong> Replace with prescribed bilingual wording for breach types</p>
+
+  <p>
+    <strong>Breach Type / Math o Doriad:</strong> {{wales_breach_type}}
+  </p>
+
+  {{#if wales_breach_type_rent_arrears}}
+    <p>
+      <strong>Rent Arrears Amount / Swm Ôl-ddyledion Rhent:</strong> £{{rent_arrears_amount}}
+    </p>
+  {{/if}}
+
+  <p>
+    <strong>Breach Details / Manylion y Toriad:</strong><br>
+    {{breach_details}}
+  </p>
+</div>
+
+<div class="section">
+  <h3>Notice Period / Cyfnod Hysbysiad</h3>
+
+  <p><strong>TODO:</strong> Add prescribed bilingual fields for notice period based on breach type</p>
+
+  <p>
+    <strong>Service Date / Dyddiad Gwasanaeth:</strong> {{service_date}}<br>
+    <strong>Expiry Date / Dyddiad Dod i Ben:</strong> {{expiry_date}}
+  </p>
+</div>
+
+<div class="section">
+  <h3>Landlord's Signature / Llofnod y Landlord</h3>
+
+  <p><strong>TODO:</strong> Add signature block per prescribed bilingual form</p>
+
+  <p>
+    Signed / Llofnodwyd: ___________________________<br>
+    Date / Dyddiad: ___________________________
+  </p>
+</div>
+
+<div class="section avoid-break">
+  <h3>Notes for Contract Holder / Nodiadau i Ddeiliaid Contract</h3>
+  <p><strong>TODO:</strong> Add prescribed bilingual notes specific to fault-based notices</p>
+  <p><em>This is a placeholder template. Replace with exact prescribed bilingual form content.</em></p>
+  <p><em>Mae hwn yn dempled dros dro. Amnewid gyda chynnwys ffurflen ragnodedig union.</em></p>
+</div>

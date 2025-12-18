@@ -1,0 +1,92 @@
+{{!--
+  ============================================================================
+  ENGLAND - FORM 6A (SECTION 21 NOTICE)
+  Housing Act 1988, Section 21 - Prescribed Form
+  Assured Shorthold Tenancy Notices and Prescribed Requirements Regulations 2015
+  ============================================================================
+
+  TODO: Replace with exact prescribed wording from official Form 6A
+
+  IMPORTANT: This is PLACEHOLDER SCAFFOLDING ONLY
+  - Must match the exact layout and wording of the official prescribed form
+  - No legal promises or guarantees
+  - Variable names match mapNoticeOnlyFacts() output
+
+  Official source: https://www.gov.uk/government/publications/section-8-and-section-21-notices
+--}}
+
+<h1>Form 6A: Notice Seeking Possession of a Property Let on an Assured Shorthold Tenancy</h1>
+
+<h2>Housing Act 1988 Section 21(1) or (4) as amended by section 194 and paragraph 103 of Schedule 11 to the Local Government and Housing Act 1989 and section 98(2) and (3) of the Housing Act 1996</h2>
+
+<div class="section">
+  <h3>To: {{tenant_full_name}}</h3>
+  <p>
+    <strong>Property:</strong><br>
+    {{#if property_address}}
+      {{{property_address}}}
+    {{else}}
+      [PROPERTY ADDRESS MISSING]
+    {{/if}}
+  </p>
+</div>
+
+<div class="section">
+  <h3>From: {{landlord_full_name}}</h3>
+  <p>
+    <strong>Landlord's Address:</strong><br>
+    {{#if landlord_address}}
+      {{{landlord_address}}}
+    {{else}}
+      [LANDLORD ADDRESS MISSING]
+    {{/if}}
+  </p>
+</div>
+
+<div class="section">
+  <h3>Notice Period</h3>
+
+  <p><strong>TODO:</strong> Replace with prescribed form wording for notice period</p>
+
+  <p>
+    I give you notice that I require possession of the dwelling-house known as:<br>
+    <strong>{{property_address}}</strong>
+  </p>
+
+  <p>
+    after: <strong>{{possession_date}}</strong>
+  </p>
+
+  <p>
+    <strong>Date of Service:</strong> {{service_date}}
+  </p>
+</div>
+
+<div class="section">
+  <h3>Additional Information</h3>
+
+  <p><strong>TODO:</strong> Add prescribed form fields for:</p>
+  <ul>
+    <li>Tenancy start date confirmation</li>
+    <li>Fixed term expiry (if applicable)</li>
+    <li>Deposit protection details</li>
+    <li>Prescribed information confirmation</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h3>Landlord's Signature</h3>
+
+  <p><strong>TODO:</strong> Add signature block per prescribed form</p>
+
+  <p>
+    Signed: ___________________________<br>
+    Date: ___________________________
+  </p>
+</div>
+
+<div class="section avoid-break">
+  <h3>Notes for Tenant</h3>
+  <p><strong>TODO:</strong> Add prescribed form notes and warnings</p>
+  <p><em>This is a placeholder template. Replace with exact prescribed form content.</em></p>
+</div>
