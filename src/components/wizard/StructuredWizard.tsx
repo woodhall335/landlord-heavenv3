@@ -117,6 +117,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     legal_basis: string;
   }> | null>(null);
 
+  // ====================================================================================
+  // GROUNDS SELECTOR STATE
+  // ====================================================================================
+  const [availableGrounds, setAvailableGrounds] = useState<Array<{
+    ground: string;
+    name: string;
+    short_description: string;
+    category: string;
+    type?: string;
+  }> | null>(null);
+  const [loadingGrounds, setLoadingGrounds] = useState(false);
+
   const [calculatedDate, setCalculatedDate] = useState<{
     date: string;
     notice_period_days: number;
@@ -591,11 +603,52 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   }, [currentAnswer, currentQuestion]);
 
+  // ====================================================================================
+  // FETCH GROUNDS FOR GROUNDS SELECTION QUESTIONS
+  // ====================================================================================
+  useEffect(() => {
+    const isGroundsQuestion =
+      currentQuestion?.id === 'section8_grounds_selection' || // England
+      currentQuestion?.id === 'eviction_grounds' || // Scotland
+      currentQuestion?.id === 'wales_fault_based_section'; // Wales (not technically "grounds" but similar)
+
+    if (isGroundsQuestion && jurisdiction && !availableGrounds && !loadingGrounds) {
+      const fetchGrounds = async () => {
+        setLoadingGrounds(true);
+        try {
+          const response = await fetch(`/api/grounds/${jurisdiction}`);
+          if (response.ok) {
+            const data = await response.json();
+            setAvailableGrounds(data.grounds);
+          } else {
+            console.error('Failed to fetch grounds:', response.status);
+          }
+        } catch (error) {
+          console.error('Error fetching grounds:', error);
+        } finally {
+          setLoadingGrounds(false);
+        }
+      };
+
+      void fetchGrounds();
+    }
+
+    // Reset grounds when question changes to non-grounds question
+    if (!isGroundsQuestion && availableGrounds) {
+      setAvailableGrounds(null);
+    }
+  }, [currentQuestion, jurisdiction, availableGrounds, loadingGrounds]);
+
   const isCurrentAnswerValid = (): boolean => {
     if (!currentQuestion) return false;
 
     const resolvedInputType =
       currentQuestion.inputType === 'address' ? 'group' : currentQuestion.inputType;
+
+    // Info questions are always valid - they don't require an answer
+    if (resolvedInputType === 'info') {
+      return true;
+    }
 
     if (resolvedInputType === 'upload' || resolvedInputType === 'file_upload') {
       if (currentQuestion.validation?.required && uploadFilesForCurrentQuestion.length === 0) {
@@ -717,6 +770,27 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
     setError(null);
     setLoading(true);
+
+    // For info questions, skip saving answer and go directly to next question
+    if (currentQuestion.inputType === 'info') {
+      try {
+        // Save to history before moving forward
+        if (currentQuestion) {
+          setQuestionHistory((prev) => [
+            ...prev,
+            { question: currentQuestion, answer: null, uploads: [] },
+          ]);
+        }
+
+        // Load next question directly without saving
+        await loadNextQuestion();
+      } catch (err: any) {
+        setError(err.message || 'Failed to load next question');
+        console.error('Load next question error:', err);
+        setLoading(false);
+      }
+      return;
+    }
 
     try {
       // Save answer to backend
@@ -895,8 +969,73 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           </div>
         );
 
-      case 'multi_select': {
+      case 'multi_select':
+      case 'multiselect': {
         const selectedValues = Array.isArray(value) ? value : [];
+
+        // Special handling for grounds selection questions
+        const isGroundsQuestion =
+          currentQuestion.id === 'section8_grounds_selection' || // England
+          currentQuestion.id === 'eviction_grounds'; // Scotland
+
+        if (isGroundsQuestion && availableGrounds && availableGrounds.length > 0) {
+          // Render grounds selector with detailed information from config
+          return (
+            <div className="space-y-3">
+              {loadingGrounds && (
+                <div className="text-sm text-gray-500">Loading grounds...</div>
+              )}
+              {availableGrounds.map((ground) => {
+                const groundId = `ground_${ground.ground}`;
+                const isSelected = selectedValues.includes(groundId) || selectedValues.includes(ground.ground);
+
+                return (
+                  <label
+                    key={ground.ground}
+                    className={`
+                      flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-all
+                      ${isSelected
+                        ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
+                        : 'border-gray-300 hover:border-primary/50 hover:bg-gray-50'
+                      }
+                      ${loading ? 'opacity-50 cursor-not-allowed' : ''}
+                    `}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={(e) => {
+                        const newValues = e.target.checked
+                          ? [...selectedValues, groundId]
+                          : selectedValues.filter((v: string) => v !== groundId && v !== ground.ground);
+                        setCurrentAnswer(newValues);
+                      }}
+                      className="w-4 h-4 mt-1 text-primary"
+                      disabled={loading}
+                    />
+                    <div className="flex-1">
+                      <div className="font-medium text-gray-900">
+                        Ground {ground.ground}: {ground.name}
+                      </div>
+                      <div className="text-sm text-gray-600 mt-1">
+                        {ground.short_description}
+                      </div>
+                      {ground.type && (
+                        <div className="text-xs text-gray-500 mt-1">
+                          {ground.type === 'mandatory' || ground.type === 'mandatory_with_conditions'
+                            ? '⚖️ Mandatory ground'
+                            : '⚠️ Discretionary ground'}
+                        </div>
+                      )}
+                    </div>
+                  </label>
+                );
+              })}
+            </div>
+          );
+        }
+
+        // Default multi-select rendering for non-grounds questions
         return (
           <div className="space-y-2">
             {currentQuestion.options?.map((option) => (
@@ -1212,6 +1351,34 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           </div>
         );
 
+      case 'info':
+        // Render read-only informational content
+        const content = (currentQuestion as any).content || '';
+        return (
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
+            <div className="flex items-start">
+              <div className="flex-shrink-0">
+                <svg
+                  className="h-6 w-6 text-blue-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div className="ml-3 flex-1">
+                <div className="text-sm text-blue-700 whitespace-pre-wrap">{content}</div>
+              </div>
+            </div>
+          </div>
+        );
+
       default:
         return (
           <Input
@@ -1230,6 +1397,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // ------------------------------
   const isUploadQuestion =
     currentQuestion?.inputType === 'upload' || currentQuestion?.inputType === 'file_upload';
+  const isInfoQuestion = currentQuestion?.inputType === 'info';
   const uploadRequiredMissing = !!(
     isUploadQuestion &&
     currentQuestion?.validation?.required &&
@@ -1239,7 +1407,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     loading ||
     uploadingEvidence ||
     uploadRequiredMissing ||
-    (!isUploadQuestion && (currentAnswer === null || currentAnswer === undefined));
+    (!isUploadQuestion && !isInfoQuestion && (currentAnswer === null || currentAnswer === undefined));
 
   // ------------------------------
   // Intro + completion states
