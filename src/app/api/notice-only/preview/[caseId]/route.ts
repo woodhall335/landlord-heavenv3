@@ -488,23 +488,51 @@ export async function GET(
         try {
           // Map fault-based section to breach particulars
           const faultBasedSection = wizardFacts.wales_fault_based_section || '';
+
+          // Detect breach type from multiple possible fields
+          const breachType = wizardFacts.wales_breach_type || wizardFacts.breach_or_ground || '';
+          const isRentArrears =
+            breachType === 'rent_arrears' ||
+            breachType === 'arrears' ||
+            faultBasedSection.includes('Section 157') ||
+            faultBasedSection.includes('Section 159');
+
           let breachParticulars = '';
 
-          // Build breach particulars based on section type
+          // Build breach particulars based on section type or breach type
           if (faultBasedSection.includes('Section 157')) {
-            const arrearsAmount = wizardFacts.rent_arrears_amount || 0;
-            breachParticulars = `Breach of contract (section 157)\n\nSerious rent arrears (2+ months)\n\nTotal arrears: £${arrearsAmount}`;
+            // Serious rent arrears (2+ months) - Section 157
+            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
+            breachParticulars = `Breach of contract (section 157)\n\nSerious rent arrears (2+ months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
           } else if (faultBasedSection.includes('Section 159')) {
-            const arrearsAmount = wizardFacts.rent_arrears_amount || 0;
-            breachParticulars = `Breach of contract (section 159)\n\nRent arrears (less than 2 months)\n\nTotal arrears: £${arrearsAmount}`;
+            // Rent arrears (less than 2 months) - Section 159
+            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
+            breachParticulars = `Breach of contract (section 159)\n\nRent arrears (less than 2 months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
           } else if (faultBasedSection.includes('Section 161')) {
-            breachParticulars = `Breach of contract (section 161)\n\nAnti-social behaviour\n\n${wizardFacts.asb_description || wizardFacts.breach_description || ''}`;
+            // Anti-social behaviour - Section 161
+            breachParticulars = `Breach of contract (section 161)\n\nAnti-social behaviour\n\n${wizardFacts.asb_description || wizardFacts.breach_description || wizardFacts.breach_details || ''}`;
           } else if (faultBasedSection.includes('Section 162')) {
-            breachParticulars = `Breach of contract (section 162)\n\n${wizardFacts.breach_description || ''}`;
+            // Other breach - Section 162
+            breachParticulars = `Breach of contract (section 162)\n\n${wizardFacts.breach_description || wizardFacts.breach_details || ''}`;
+          } else if (isRentArrears) {
+            // Fallback: Detected rent arrears without specific section
+            // Default to Section 157 (serious arrears)
+            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
+            breachParticulars = `Breach of contract (section 157)\n\nSerious rent arrears (2+ months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
+            console.log(`[NOTICE-PREVIEW-API] Wales fault-based: Detected rent arrears (${arrearsAmount}), defaulting to Section 157`);
           } else {
-            // Fallback
-            breachParticulars = wizardFacts.breach_description || wizardFacts.asb_description || '';
+            // Final fallback: Use breach_description or breach_details as-is
+            breachParticulars = wizardFacts.breach_description || wizardFacts.breach_details || wizardFacts.asb_description || '';
           }
+
+          // Log the computed breach particulars for debugging
+          console.log('[NOTICE-PREVIEW-API] Wales fault-based breach particulars:', {
+            faultBasedSection,
+            breachType,
+            arrearsAmount: wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount,
+            breach_particulars_length: breachParticulars.length,
+            breach_particulars_preview: breachParticulars.substring(0, 100),
+          });
 
           const faultBasedData = {
             ...templateData,

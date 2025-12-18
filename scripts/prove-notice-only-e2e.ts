@@ -108,7 +108,7 @@ interface TestRoute {
   jurisdiction: 'england' | 'wales' | 'scotland';
   route: string;
   minimalAnswers: Record<string, unknown>;
-  expectedPhrases: string[];
+  expectedPhrases: (string | RegExp)[];
   forbiddenPhrases: string[];
 }
 
@@ -328,7 +328,9 @@ const TEST_ROUTES: TestRoute[] = [
     },
     expectedPhrases: [
       'Renting Homes (Wales) Act 2016',
-      'contract holder',
+      // REGEX: Match "contract holder" with flexible hyphenation/whitespace
+      // Handles: "contract holder", "contract-holder", "contractholder", "contract- holder"
+      /contract\s*-?\s*holder/i,
       'breach',
       'Gareth Landlord',
       'Megan ContractHolder',
@@ -854,8 +856,22 @@ async function validatePDF(
 
       // Check expected phrases with normalized matching
       for (const phrase of route.expectedPhrases) {
+        // Handle RegExp patterns directly
+        if (phrase instanceof RegExp) {
+          if (!matchesNormalized(pdfText, phrase)) {
+            errors.push(`Missing expected pattern: ${phrase}`);
+            console.log(`      🔍 Debug: Expected pattern ${phrase} not found`);
+            console.log(`      📄 PDF snippet (first 200 chars): ${normalizePdfText(pdfText).substring(0, 200)}...`);
+
+            // Wales fault-based specific debugging: show contract-holder variations
+            if (route.route === 'wales_fault_based' && phrase.source?.includes('contract')) {
+              const contractSnippet = extractSnippet(pdfText, 'contract', 300);
+              console.log(`      🔍 Wales-specific: Snippet around "contract":\n      ${contractSnippet}`);
+            }
+          }
+        }
         // Special handling for currency amounts (e.g., "£1,500")
-        if (phrase.match(/^£[\d,\s]+(\.\d{2})?$/)) {
+        else if (phrase.match(/^£[\d,\s]+(\.\d{2})?$/)) {
           // Currency pattern: match with flexible formatting
           // Convert "£1,500" to regex that matches "£1500", "£1,500", "£1 500", etc.
           const digits = phrase.replace(/[£,\s]/g, '');
@@ -864,6 +880,14 @@ async function validatePDF(
             errors.push(`Missing expected phrase: "${phrase}"`);
             console.log(`      🔍 Debug: Expected currency "${phrase}" not found`);
             console.log(`      📄 PDF snippet: ${extractSnippet(pdfText, phrase, 150)}`);
+
+            // Wales fault-based specific debugging: show currency area
+            if (route.route === 'wales_fault_based') {
+              const currencySnippet = extractSnippet(pdfText, '£', 300);
+              console.log(`      🔍 Wales-specific: Snippet around "£":\n      ${currencySnippet}`);
+              const arrearsSnippet = extractSnippet(pdfText, 'arrears', 300);
+              console.log(`      🔍 Wales-specific: Snippet around "arrears":\n      ${arrearsSnippet}`);
+            }
           }
         } else {
           // Standard normalized text matching
