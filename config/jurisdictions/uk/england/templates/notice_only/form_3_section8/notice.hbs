@@ -4,88 +4,277 @@
   Housing Act 1988, Section 8 - Prescribed Form
   ============================================================================
 
-  TODO: Replace with exact prescribed wording from official Form 3
+  Based on official Form 3 from:
+  https://www.gov.uk/government/publications/section-8-and-section-21-notices
 
-  IMPORTANT: This is PLACEHOLDER SCAFFOLDING ONLY
-  - Must match the exact layout and wording of the official prescribed form
+  Source reference: config/jurisdictions/uk/_official_form_sources/england/form3_section8.odt
+
+  IMPORTANT:
+  - This template matches the exact prescribed form wording
   - No legal promises or guarantees
   - Variable names match mapNoticeOnlyFacts() output
-
-  Official source: https://www.gov.uk/government/publications/section-8-and-section-21-notices
+  - Users can edit the HTML after payment; HTML is stored and later rendered to PDF
 --}}
 
-<h1>Form 3: Notice Seeking Possession of a Property Let on an Assured Tenancy or an Assured Agricultural Occupancy</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Form 3 - Section 8 Notice Seeking Possession</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12pt;
+      line-height: 1.4;
+      max-width: 8.5in;
+      margin: 0 auto;
+      padding: 0.5in;
+    }
+    h1 {
+      font-size: 14pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 0 0 0.5em 0;
+      text-align: center;
+    }
+    h2 {
+      font-size: 12pt;
+      font-weight: bold;
+      text-align: center;
+      margin: 0 0 1em 0;
+    }
+    h3 {
+      font-size: 12pt;
+      font-weight: bold;
+      margin: 1em 0 0.5em 0;
+    }
+    .info-box {
+      border: 2px solid #000;
+      padding: 1em;
+      margin: 1em 0;
+      background-color: #f9f9f9;
+    }
+    .section {
+      margin: 1em 0;
+      page-break-inside: avoid;
+    }
+    .field-label {
+      font-weight: bold;
+      margin-top: 0.5em;
+    }
+    .field-value {
+      margin-left: 0.25in;
+      border-bottom: 1px dotted #666;
+      min-height: 1.5em;
+    }
+    .signature-block {
+      margin-top: 2em;
+      page-break-inside: avoid;
+    }
+    .checkbox {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      border: 1px solid #000;
+      margin-right: 0.5em;
+      vertical-align: middle;
+    }
+    .avoid-break {
+      page-break-inside: avoid;
+    }
+    .ground-block {
+      margin: 1em 0 1em 0.25in;
+      padding: 0.5em;
+      border-left: 3px solid #666;
+    }
+    .link {
+      color: #0066cc;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
 
-<h2>Housing Act 1988 Section 8 as amended by Section 151 of the Housing Act 1996</h2>
+<h1>Notice of Intention to Begin Proceedings for Possession of a Property in England Let on an Assured Tenancy or an Assured Agricultural Occupancy</h1>
+
+<h2>Form No. 3</h2>
+<h2>Housing Act 1988 section 8 (as amended)</h2>
+
+<div class="info-box">
+  <h3>INFORMATION FOR THE TENANT</h3>
+  <p>This notice tells you that your landlord intends to begin proceedings for possession of the property identified in section 2. <strong>You should read it carefully and seek advice about your circumstances as quickly as possible.</strong></p>
+
+  <p>The earliest date on which possession proceedings can begin will depend on the ground(s) on which possession is sought and is given in section 5 of the notice.</p>
+
+  <p>If you are worried about this notice, and what you should do about it, take it immediately to <strong>Citizens Advice, a housing advice centre, a law centre or a solicitor.</strong></p>
+
+  <p>If you are a debtor and you are in a 'breathing space', you should inform your debt advisor.</p>
+
+  <p>If you believe you are at risk of homelessness as a result of receiving this notice, you should contact your local authority for support.</p>
+
+  <p>Free independent advice is also available from Shelterline on <strong>0808 800 4444</strong> or via the Shelter website at:<br>
+  <span class="link">https://www.shelter.org.uk/</span></p>
+
+  <p>Further information about this notice and the possession process can be found at:<br>
+  <span class="link">https://www.gov.uk/government/publications/understanding-the-possession-action-process-guidance-for-landlords-and-tenants</span></p>
+</div>
 
 <div class="section">
-  <h3>To: {{tenant_full_name}}</h3>
-  <p>
-    <strong>Property:</strong><br>
+  <p class="field-label">1. To:</p>
+  <p class="field-value">
+    {{#if tenant_full_name}}
+      {{tenant_full_name}}
+    {{else}}
+      <em>(insert full name(s) of tenant(s) / licensee(s))</em>
+    {{/if}}
+  </p>
+</div>
+
+<div class="section">
+  <p class="field-label">2. Your landlord / licensor intends to apply to the court for an order requiring you to give up possession of:</p>
+  <p class="field-value">
     {{#if property_address}}
       {{{property_address}}}
     {{else}}
-      [PROPERTY ADDRESS MISSING]
+      <em>(insert address of property)</em>
     {{/if}}
   </p>
 </div>
 
 <div class="section">
-  <h3>From: {{landlord_full_name}}</h3>
-  <p>
-    <strong>Landlord's Address:</strong><br>
-    {{#if landlord_address}}
-      {{{landlord_address}}}
+  <p class="field-label">3. Your landlord / licensor intends to seek possession on ground(s):</p>
+  <p class="field-value">
+    {{#if grounds}}
+      {{#each grounds}}
+        <strong>Ground {{this.code}}</strong>{{#unless @last}}, {{/unless}}
+      {{/each}}
     {{else}}
-      [LANDLORD ADDRESS MISSING]
+      <em>(insert relevant ground(s))</em>
     {{/if}}
   </p>
-</div>
-
-<div class="section">
-  <h3>Grounds for Possession</h3>
-
-  <p><strong>TODO:</strong> Replace with prescribed form wording for grounds section</p>
+  <p style="margin-top: 0.5em;">in Schedule 2 to the Housing Act 1988 (as amended), which read(s):</p>
+  <p style="margin-left: 0.25in; font-style: italic; margin-bottom: 0.5em;">Give the full text (as set out in Schedule 2 of the Housing Act 1988 (as amended)) of each ground which is being relied on.</p>
 
   {{#if grounds}}
     {{#each grounds}}
       <div class="ground-block">
-        <h4>Ground {{this.code}}: {{this.title}}</h4>
-        <p><strong>Particulars:</strong> {{this.particulars}}</p>
-        {{#if this.legal_basis}}
-          <p><em>{{this.legal_basis}}</em></p>
+        <p><strong>Ground {{this.code}}: {{this.title}}</strong></p>
+        {{#if this.statutory_text}}
+          <p style="margin-top: 0.5em;">{{this.statutory_text}}</p>
         {{/if}}
       </div>
     {{/each}}
   {{else}}
-    <p>[NO GROUNDS SPECIFIED]</p>
+    <div class="field-value" style="min-height: 3em;"></div>
   {{/if}}
+
+  <p style="margin-left: 0.25in; font-style: italic; font-size: 10pt;">(Continue on a separate sheet if necessary.)</p>
 </div>
 
 <div class="section">
-  <h3>Notice Period and Dates</h3>
+  <p class="field-label">4. Give a full explanation of why each ground is being relied on:</p>
 
-  <p><strong>TODO:</strong> Replace with prescribed form wording for notice period</p>
+  {{#if grounds}}
+    {{#each grounds}}
+      <div class="ground-block">
+        <p><strong>Ground {{this.code}} particulars:</strong></p>
+        {{#if this.particulars}}
+          <p>{{{this.particulars}}}</p>
+        {{else}}
+          <p style="border-bottom: 1px dotted #666; min-height: 2em;"></p>
+        {{/if}}
+      </div>
+    {{/each}}
+  {{else}}
+    <div class="field-value" style="min-height: 3em;"></div>
+  {{/if}}
 
-  <p>
-    <strong>Date of Service:</strong> {{service_date}}<br>
-    <strong>Earliest Date Proceedings May Start:</strong> {{earliest_possession_date}}
+  <p style="margin-left: 0.25in; font-style: italic; font-size: 10pt;">(Continue on a separate sheet if necessary.)</p>
+</div>
+
+<div class="section">
+  <p class="field-label">5. The court proceedings will not begin earlier than:</p>
+  <p class="field-value">
+    {{#if earliest_possession_date}}
+      <strong>{{format_date earliest_possession_date 'long'}}</strong>
+    {{else if notice_expiry_date}}
+      <strong>{{format_date notice_expiry_date 'long'}}</strong>
+    {{else}}
+      <em>(insert a calendar date in accordance with the notice period required for the ground(s) being relied on as set out in section 8 Housing Act 1988 (as amended))</em>
+    {{/if}}
   </p>
 </div>
 
 <div class="section">
-  <h3>Landlord's Signature</h3>
-
-  <p><strong>TODO:</strong> Add signature block per prescribed form</p>
-
-  <p>
-    Signed: ___________________________<br>
-    Date: ___________________________
-  </p>
+  <p><strong>6.</strong> If your landlord / licensor does not apply to the court within a given timeframe this notice will lapse. The latest date for court proceedings to begin is <strong>12 months</strong> from the date of service of this notice, subject to any extension in accordance with the Debt Respite Scheme (Breathing Space Moratorium and Mental Health Crisis Moratorium) (England and Wales) Regulations 2020.</p>
 </div>
 
-<div class="section avoid-break">
-  <h3>Notes</h3>
-  <p><strong>TODO:</strong> Add prescribed form notes and warnings</p>
-  <p><em>This is a placeholder template. Replace with exact prescribed form content.</em></p>
+<div class="signature-block avoid-break">
+  <p class="field-label">7. Name and address of landlord, licensor or landlord's agent:</p>
+  <p style="margin-left: 0.25in; font-style: italic; font-size: 10pt; margin-bottom: 1em;">(To be completed in full by the landlord, licensor, or, in the case of joint landlords / licensors, at least one of the joint landlords / licensors, or by someone authorised to give notice on the landlord's / licensor's behalf.)</p>
+
+  <div style="margin-left: 0.25in; margin-top: 1em;">
+    <p><strong>Signed:</strong> _________________________________________________</p>
+
+    <p style="margin-top: 1em;"><strong>Name:</strong></p>
+    <p class="field-value">
+      {{#if landlord_full_name}}
+        {{landlord_full_name}}
+      {{else}}
+        <span style="min-height: 1.5em; display: block;"></span>
+      {{/if}}
+    </p>
+
+    <p style="margin-top: 1em;"><strong>Address:</strong></p>
+    <p class="field-value">
+      {{#if landlord_address}}
+        {{{landlord_address}}}
+      {{else}}
+        <span style="min-height: 3em; display: block;"></span>
+      {{/if}}
+    </p>
+
+    <p style="margin-top: 1em;"><strong>Telephone number:</strong></p>
+    <p class="field-value">
+      {{#if landlord_phone}}
+        {{landlord_phone}}
+      {{else}}
+        <span style="min-height: 1.5em; display: block;"></span>
+      {{/if}}
+    </p>
+
+    <div style="margin-top: 1em;">
+      <p style="margin-top: 1em;"><strong>Signed:</strong> _________________________________________________</p>
+
+      <p style="margin-top: 1em;"><strong>Name:</strong> _______________________________________________</p>
+
+      <p style="margin-top: 1em;"><strong>Address:</strong> _______________________________________________</p>
+
+      <p style="margin-top: 1em;"><strong>Telephone number:</strong> _______________________________________________</p>
+    </div>
+
+    <div style="margin-top: 1.5em;">
+      <p><strong>Capacity</strong> (please tick):</p>
+      <p style="margin-left: 1em; margin-top: 0.5em;">
+        <span class="checkbox"></span> landlord / licensor<br>
+        <span class="checkbox"></span> joint landlord(s) / licensor(s)<br>
+        <span class="checkbox"></span> landlord's / licensor's agent
+      </p>
+    </div>
+
+    <p style="margin-top: 1.5em;"><strong>Date:</strong></p>
+    <p class="field-value">
+      {{#if service_date}}
+        {{format_date service_date 'long'}}
+      {{else if notice_service_date}}
+        {{format_date notice_service_date 'long'}}
+      {{else}}
+        <span style="min-height: 1.5em; display: block;"></span>
+      {{/if}}
+    </p>
+  </div>
 </div>
+
+</body>
+</html>

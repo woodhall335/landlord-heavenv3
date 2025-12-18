@@ -5,124 +5,246 @@
   Statutory Form - Parts 1, 2, 3
   ============================================================================
 
-  TODO: Replace with exact prescribed wording from statutory Notice to Leave form
+  Based on statutory Notice to Leave form (Parts 1-3)
+  Source reference: config/jurisdictions/uk/_official_form_sources/scotland/notice_to_leave_parts_1_3.pdf
 
-  IMPORTANT: This is PLACEHOLDER SCAFFOLDING ONLY
-  - Must match the exact 3-part statutory form layout
+  IMPORTANT:
+  - This template follows the statutory 3-part form structure
   - Part 1: Notice details and dates
   - Part 2: Eviction grounds
   - Part 3: Tenant's rights and notes
   - No legal promises or guarantees
   - Variable names match mapNoticeOnlyFacts() output
+  - Users can edit the HTML after payment; HTML is stored and later rendered to PDF
 
-  Official source: https://www.mygov.scot/landlord-eviction
+  Official guidance: https://www.mygov.scot/landlord-eviction
 --}}
 
-<h1>Notice to Leave</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Notice to Leave - Private Residential Tenancy</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12pt;
+      line-height: 1.4;
+      max-width: 8.5in;
+      margin: 0 auto;
+      padding: 0.5in;
+    }
+    h1 {
+      font-size: 16pt;
+      font-weight: bold;
+      margin: 0 0 0.5em 0;
+      text-align: center;
+    }
+    h2 {
+      font-size: 13pt;
+      font-weight: bold;
+      text-align: center;
+      margin: 0 0 1em 0;
+    }
+    h3 {
+      font-size: 12pt;
+      font-weight: bold;
+      margin: 1.5em 0 0.5em 0;
+      background-color: #f0f0f0;
+      padding: 0.5em;
+      border-left: 4px solid #333;
+    }
+    .section {
+      margin: 1em 0;
+      page-break-inside: avoid;
+    }
+    .field-label {
+      font-weight: bold;
+      margin-top: 0.5em;
+    }
+    .field-value {
+      margin-left: 0.25in;
+      border-bottom: 1px dotted #666;
+      min-height: 1.5em;
+    }
+    .ground-block {
+      margin: 1em 0;
+      padding: 0.75em;
+      border: 1px solid #ccc;
+      background-color: #fafafa;
+    }
+    .info-box {
+      border: 2px solid #000;
+      padding: 1em;
+      margin: 1em 0;
+      background-color: #f9f9f9;
+    }
+    .avoid-break {
+      page-break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
 
+<h1>Notice to Leave</h1>
 <h2>Private Housing (Tenancies) (Scotland) Act 2016</h2>
 
+<!-- PART 1: NOTICE DETAILS -->
+<h3>Part 1: Notice Details</h3>
+
 <div class="section">
-  <h3>Part 1: Notice Details</h3>
-
-  <p><strong>TODO:</strong> Replace with prescribed wording for Part 1</p>
-
-  <p>
-    <strong>To:</strong> {{tenant_full_name}}
-    {{#if tenant_2_name}}
-      and {{tenant_2_name}}
+  <p class="field-label">To (tenant's name and address):</p>
+  <p class="field-value">
+    {{#if tenant_full_name}}
+      {{tenant_full_name}}
+    {{else}}
+      <span style="min-height: 1.5em; display: block;"></span>
     {{/if}}
   </p>
-
-  <p>
-    <strong>Property:</strong><br>
+  {{#if tenant_2_name}}
+    <p class="field-value">{{tenant_2_name}}</p>
+  {{/if}}
+  <p class="field-value">
     {{#if property_address}}
       {{{property_address}}}
     {{else}}
-      [PROPERTY ADDRESS MISSING]
+      <span style="min-height: 2em; display: block;"></span>
     {{/if}}
   </p>
+</div>
 
-  <p>
-    <strong>From:</strong> {{landlord_full_name}}<br>
-    <strong>Landlord's Address:</strong><br>
+<div class="section">
+  <p class="field-label">From (landlord's name, address and registration number):</p>
+  <p class="field-value">
+    {{#if landlord_full_name}}
+      {{landlord_full_name}}
+    {{else}}
+      <span style="min-height: 1.5em; display: block;"></span>
+    {{/if}}
+  </p>
+  <p class="field-value">
     {{#if landlord_address}}
       {{{landlord_address}}}
     {{else}}
-      [LANDLORD ADDRESS MISSING]
+      <span style="min-height: 2em; display: block;"></span>
+    {{/if}}
+  </p>
+  <p style="margin-top: 0.5em;"><strong>Landlord Registration Number:</strong></p>
+  <p class="field-value">
+    {{#if landlord_reg_number}}
+      {{landlord_reg_number}}
+    {{else}}
+      <span style="min-height: 1.5em; display: block;"></span>
+    {{/if}}
+  </p>
+</div>
+
+<div class="section">
+  <p><strong>This is formal notice that you must leave the property by:</strong></p>
+  <p class="field-value" style="font-size: 14pt; font-weight: bold;">
+    {{#if notice_expiry_date}}
+      {{format_date notice_expiry_date 'long'}}
+    {{else if expiry_date}}
+      {{format_date expiry_date 'long'}}
+    {{else if earliest_leaving_date}}
+      {{format_date earliest_leaving_date 'long'}}
+    {{else}}
+      <span style="min-height: 1.5em; display: block;"></span>
     {{/if}}
   </p>
 
-  {{#if landlord_reg_number}}
-    <p><strong>Landlord Registration Number:</strong> {{landlord_reg_number}}</p>
-  {{/if}}
-</div>
-
-<div class="section">
-  <h3>Notice Dates</h3>
-
-  <p>
-    <strong>Date of Notice:</strong> {{notice_date}}<br>
-    <strong>Earliest Date You Must Leave:</strong> {{earliest_leaving_date}}<br>
-    <strong>Notice Period:</strong> {{notice_period_days}} days
+  <p style="margin-top: 1em;"><strong>Date this notice was sent to you:</strong></p>
+  <p class="field-value">
+    {{#if service_date}}
+      {{format_date service_date 'long'}}
+    {{else if notice_service_date}}
+      {{format_date notice_service_date 'long'}}
+    {{else if notice_date}}
+      {{format_date notice_date 'long'}}
+    {{else}}
+      <span style="min-height: 1.5em; display: block;"></span>
+    {{/if}}
   </p>
 </div>
 
-<div class="section">
-  <h3>Part 2: Eviction Grounds</h3>
+<!-- PART 2: EVICTION GROUNDS -->
+<h3>Part 2: Grounds for Eviction</h3>
 
-  <p><strong>TODO:</strong> Replace with prescribed wording for Part 2 (grounds section)</p>
+<div class="section">
+  <p>Your landlord is giving you notice to leave the property for the following reason(s) (eviction ground(s)) under Schedule 3 of the Private Housing (Tenancies) (Scotland) Act 2016:</p>
 
   {{#if grounds}}
     {{#each grounds}}
       <div class="ground-block">
-        <h4>Ground {{this.number}}: {{this.title}}</h4>
-        <p><strong>Legal Basis:</strong> {{this.legal_basis}}</p>
-        <p><strong>Particulars:</strong> {{this.particulars}}</p>
+        <p><strong>Ground {{this.number}}{{#if this.code}} ({{this.code}}){{/if}}: {{this.title}}</strong></p>
+        {{#if this.statutory_text}}
+          <p style="margin-top: 0.5em; font-style: italic;">{{this.statutory_text}}</p>
+        {{/if}}
+        <p style="margin-top: 0.75em;"><strong>Supporting Evidence/Particulars:</strong></p>
+        {{#if this.particulars}}
+          <p>{{{this.particulars}}}</p>
+        {{else}}
+          <p class="field-value" style="min-height: 3em;"></p>
+        {{/if}}
       </div>
     {{/each}}
   {{else}}
-    <p>[NO GROUNDS SPECIFIED]</p>
-  {{/if}}
-
-  {{#if ground_1_claimed}}
-    <div class="arrears-breakdown">
-      <h4>Rent Arrears Details (Ground 1)</h4>
-      <p><strong>TODO:</strong> Add prescribed format for arrears breakdown</p>
-      <p>
-        <strong>Total Arrears:</strong> £{{total_arrears}}<br>
-        <strong>As at Date:</strong> {{arrears_date}}
-      </p>
+    <div class="field-value" style="min-height: 4em;">
+      <p style="font-style: italic;">(Eviction ground(s) to be specified)</p>
     </div>
   {{/if}}
 </div>
 
-<div class="section">
-  <h3>Part 3: Your Rights and What Happens Next</h3>
+<!-- PART 3: TENANT'S RIGHTS -->
+<h3>Part 3: Your Rights and What Happens Next</h3>
 
-  <p><strong>TODO:</strong> Replace with prescribed wording for Part 3 (tenant's rights)</p>
+<div class="info-box">
+  <h4 style="font-weight: bold; margin-top: 0;">What this notice means</h4>
+  <p>This notice tells you that your landlord wants you to leave the property. You should read it carefully and seek advice about your rights and what you should do.</p>
 
+  <h4 style="font-weight: bold; margin-top: 1em;">If you don't leave</h4>
+  <p>If you do not leave the property by the date given in Part 1, your landlord can apply to the First-tier Tribunal for Scotland (Housing and Property Chamber) for an eviction order. The Tribunal will only grant an eviction order if it is satisfied that:</p>
   <ul>
-    <li>First Tier Tribunal rights</li>
-    <li>Time limits for applications</li>
-    <li>Where to get advice</li>
-    <li>What happens if you don't leave</li>
+    <li>the eviction ground(s) stated in Part 2 apply, and</li>
+    <li>it is reasonable to grant the eviction order</li>
   </ul>
+
+  <h4 style="font-weight: bold; margin-top: 1em;">Your right to challenge this notice</h4>
+  <p>You have the right to apply to the First-tier Tribunal to have this notice considered. The Tribunal can decide whether the notice is valid. You must make your application before the date you are required to leave, as stated in Part 1.</p>
+
+  <p><strong>Important:</strong> Even if you apply to the Tribunal to have this notice considered, you should still prepare to leave by the date in Part 1 unless the Tribunal tells you otherwise.</p>
+
+  <h4 style="font-weight: bold; margin-top: 1em;">Getting help and advice</h4>
+  <p>If you need help or advice about this notice, you can contact:</p>
+  <ul>
+    <li><strong>Shelter Scotland</strong> - 0808 800 4444 (free) or visit shelterscotland.org</li>
+    <li><strong>Citizens Advice Scotland</strong> - visit cas.org.uk</li>
+    <li>Your local authority's housing advice service</li>
+    <li>A solicitor or legal advice centre</li>
+  </ul>
+
+  <h4 style="font-weight: bold; margin-top: 1em;">Homelessness assistance</h4>
+  <p>If you think you may become homeless as a result of this notice, contact your local authority's housing options service as soon as possible.</p>
+
+  <h4 style="font-weight: bold; margin-top: 1em;">Further information</h4>
+  <p>For more information about private residential tenancies and the eviction process, visit: <strong>mygov.scot/private-rental-tenancies</strong></p>
 </div>
 
-<div class="section">
-  <h3>Landlord's Signature</h3>
+<div class="section avoid-break" style="margin-top: 2em;">
+  <p class="field-label">Landlord's signature:</p>
+  <p>_____________________________________________________________</p>
 
-  <p><strong>TODO:</strong> Add signature block per statutory form</p>
-
-  <p>
-    Signed: ___________________________<br>
-    Date: ___________________________
+  <p style="margin-top: 1em;" class="field-label">Date:</p>
+  <p class="field-value">
+    {{#if service_date}}
+      {{format_date service_date 'long'}}
+    {{else if notice_service_date}}
+      {{format_date notice_service_date 'long'}}
+    {{else}}
+      <span style="min-height: 1.5em; display: block;"></span>
+    {{/if}}
   </p>
 </div>
 
-<div class="section avoid-break">
-  <h3>Notes</h3>
-  <p><strong>TODO:</strong> Add statutory form notes</p>
-  <p><em>This is a placeholder template. Replace with exact statutory form content (Parts 1-3).</em></p>
-</div>
+</body>
+</html>
