@@ -659,6 +659,8 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
     // ========================================================================
     // INLINE COMPLIANCE VALIDATION (NOTICE ONLY)
     // ========================================================================
+    // Only hard-block at specific checkpoint questions to avoid false-positive blocks
+    // early in the flow. For other questions, downgrade hardFailures to warnings.
     if (product === 'notice_only') {
       const compliance = evaluateNoticeCompliance({
         jurisdiction: caseRow.jurisdiction,
@@ -671,7 +673,42 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
         question_id,
       });
 
+      // Define checkpoint questions where we enforce hard blocking
+      const COMPLIANCE_CHECKPOINTS = [
+        'deposit_and_compliance',
+        'deposit_protection',
+        'deposit_protected_scheme', // Section 21 deposit compliance
+        'prescribed_info_given', // Section 21 prescribed information
+        'section8_grounds_selection',
+        'eviction_grounds',
+        'notice_service',
+        'notice_dates',
+        'pre_action_contact',
+        'property_licensing',
+        'rent_smart_wales_registered', // Wales Section 173 licensing
+      ];
+
+      const isCheckpoint = COMPLIANCE_CHECKPOINTS.includes(question_id);
+
+      // Log compliance issues for debugging
       if (compliance.hardFailures.length > 0) {
+        console.log('[NOTICE_COMPLIANCE]', {
+          case_id,
+          question_id,
+          selected_route: mergedFacts.selected_notice_route || mergedFacts.selected_route || 'none',
+          hardFailures: compliance.hardFailures.map((f) => f.code),
+          isCheckpoint,
+        });
+      }
+
+      // Only hard-block at checkpoint questions
+      if (compliance.hardFailures.length > 0 && isCheckpoint) {
+        console.warn('[NOTICE_COMPLIANCE] Blocking progression:', {
+          case_id,
+          question_id,
+          failures: compliance.hardFailures,
+        });
+
         return NextResponse.json(
           {
             error: 'NOTICE_NONCOMPLIANT',
@@ -684,7 +721,22 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
         );
       }
 
-      complianceWarnings = compliance.warnings;
+      // For non-checkpoint questions, downgrade hardFailures to warnings
+      if (compliance.hardFailures.length > 0 && !isCheckpoint) {
+        console.log('[NOTICE_COMPLIANCE] Downgrading hardFailures to warnings (not at checkpoint)', {
+          case_id,
+          question_id,
+        });
+        complianceWarnings = [
+          ...compliance.warnings,
+          ...compliance.hardFailures.map((f) => ({
+            ...f,
+            user_fix_hint: `[Will be checked later] ${f.user_fix_hint}`,
+          })),
+        ];
+      } else {
+        complianceWarnings = compliance.warnings;
+      }
     }
 
     // ============================================================================
