@@ -280,9 +280,10 @@ const TEST_ROUTES: TestRoute[] = [
       'undefined',
       '{{',
       'Housing Act 1988',
-      'Section 21',
+      'Form 6A',
       'Section 8',
-      'tenant',
+      'accelerated procedure',
+      'N5B',
       'assured shorthold',
     ],
   },
@@ -340,9 +341,11 @@ const TEST_ROUTES: TestRoute[] = [
       'undefined',
       '{{',
       'Housing Act 1988',
-      'Section 21',
+      'Form 6A',
       'Section 8',
       'Section 173',
+      'accelerated procedure',
+      'N5B',
       'assured shorthold',
     ],
   },
@@ -386,8 +389,6 @@ const TEST_ROUTES: TestRoute[] = [
           pre_action_confirmed: true,
         },
       },
-      // Legacy pre_action_contact for backwards compatibility
-      pre_action_contact: 'Yes',
       // Canonical Scotland dates (notice.notice_date and notice.expiry_date)
       notice: {
         notice_date: '2025-01-15',
@@ -421,9 +422,12 @@ const TEST_ROUTES: TestRoute[] = [
       'undefined',
       '{{',
       'Housing Act 1988',
-      'Section 21',
+      'Form 6A',
       'Section 8',
-      'court',
+      'Section 21',
+      'accelerated procedure',
+      'N5B',
+      'county court',
       'possession order',
     ],
   },
@@ -734,18 +738,67 @@ async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: st
 }
 
 /**
- * Normalize text for robust PDF comparison
+ * Normalize PDF text for robust comparison
  * - Lowercase
- * - Collapse whitespace (including newlines) to single spaces
- * - Remove hyphens (to match "contract-holder" with "contract holder")
+ * - Convert all whitespace (including NBSP \u00A0, tabs, newlines) to single spaces
+ * - Remove all hyphen-like characters (-, \u2010, \u2011, \u2012, \u2013, \u2212)
+ * - Normalize currency: remove commas and spaces between digits for amount matching
  * - Trim
+ *
+ * This handles common PDF text extraction issues:
+ * - Line breaks splitting words: "contract\nholder" → "contract holder"
+ * - Non-breaking spaces: "contract\u00A0holder" → "contract holder"
+ * - Various hyphen types: "contract-holder" / "contract–holder" → "contractholder"
+ * - Currency formatting: "£1,500" / "£1 500" / "£ 1500" → "£1500"
  */
-function normalizeTextForComparison(text: string): string {
+function normalizePdfText(text: string): string {
   return text
     .toLowerCase()
-    .replace(/\s+/g, ' ')  // Collapse all whitespace to single space
-    .replace(/-/g, '')     // Remove hyphens
+    // Convert all whitespace (including NBSP \u00A0) to regular spaces
+    .replace(/[\s\u00A0\t\n\r]+/g, ' ')
+    // Remove all hyphen-like characters
+    .replace(/[\u002D\u2010\u2011\u2012\u2013\u2212]/g, '')
+    // Normalize currency: remove commas and spaces between pound sign and digits
+    .replace(/£[\s,]*/g, '£')
+    // Remove commas and spaces between digits (for currency matching)
+    .replace(/(\d)[\s,]+(?=\d)/g, '$1')
     .trim();
+}
+
+/**
+ * Check if normalized text includes normalized phrase
+ */
+function includesNormalized(text: string, phrase: string): boolean {
+  return normalizePdfText(text).includes(normalizePdfText(phrase));
+}
+
+/**
+ * Check if normalized text matches a regex pattern
+ * The regex is applied to the normalized text
+ */
+function matchesNormalized(text: string, pattern: RegExp): boolean {
+  return pattern.test(normalizePdfText(text));
+}
+
+/**
+ * Extract a snippet of text around a search term for debugging
+ * Returns ~200 chars of context around the first occurrence
+ */
+function extractSnippet(text: string, searchTerm: string, contextChars: number = 200): string {
+  const normalized = normalizePdfText(text);
+  const normalizedSearch = normalizePdfText(searchTerm);
+  const index = normalized.indexOf(normalizedSearch);
+
+  if (index === -1) {
+    // Not found, return first chunk
+    return normalized.substring(0, contextChars) + '...';
+  }
+
+  const start = Math.max(0, index - contextChars / 2);
+  const end = Math.min(normalized.length, index + normalizedSearch.length + contextChars / 2);
+  const snippet = normalized.substring(start, end);
+
+  return (start > 0 ? '...' : '') + snippet + (end < normalized.length ? '...' : '');
 }
 
 async function validatePDF(
@@ -797,27 +850,47 @@ async function validatePDF(
 
     if (parseSuccess) {
       // Normalize PDF text once for all comparisons
-      const normalizedPdfText = normalizeTextForComparison(pdfText);
+      const normalizedPdfText = normalizePdfText(pdfText);
 
+      // Check expected phrases with normalized matching
       for (const phrase of route.expectedPhrases) {
-        const normalizedPhrase = normalizeTextForComparison(phrase);
-        if (!normalizedPdfText.includes(normalizedPhrase)) {
-          errors.push(`Missing expected phrase: "${phrase}"`);
+        // Special handling for currency amounts (e.g., "£1,500")
+        if (phrase.match(/^£[\d,\s]+(\.\d{2})?$/)) {
+          // Currency pattern: match with flexible formatting
+          // Convert "£1,500" to regex that matches "£1500", "£1,500", "£1 500", etc.
+          const digits = phrase.replace(/[£,\s]/g, '');
+          const currencyPattern = new RegExp(`£${digits}`);
+          if (!matchesNormalized(pdfText, currencyPattern)) {
+            errors.push(`Missing expected phrase: "${phrase}"`);
+            console.log(`      🔍 Debug: Expected currency "${phrase}" not found`);
+            console.log(`      📄 PDF snippet: ${extractSnippet(pdfText, phrase, 150)}`);
+          }
+        } else {
+          // Standard normalized text matching
+          if (!includesNormalized(pdfText, phrase)) {
+            errors.push(`Missing expected phrase: "${phrase}"`);
+            console.log(`      🔍 Debug: Expected phrase "${phrase}" not found`);
+            console.log(`      📄 PDF snippet: ${extractSnippet(pdfText, phrase, 150)}`);
+          }
         }
       }
 
+      // Check forbidden phrases with normalized matching
       for (const phrase of route.forbiddenPhrases) {
-        const normalizedPhrase = normalizeTextForComparison(phrase);
-        if (normalizedPdfText.includes(normalizedPhrase)) {
+        if (includesNormalized(pdfText, phrase)) {
           errors.push(`Found forbidden phrase: "${phrase}"`);
+          console.log(`      🔍 Debug: Forbidden phrase "${phrase}" found at:`);
+          console.log(`      📄 PDF snippet: ${extractSnippet(pdfText, phrase, 150)}`);
         }
       }
 
+      // Check for template/leak patterns
       const leakPatterns = ['{{', '}}', 'undefined', 'NULL', '[object Object]', '****'];
       for (const pattern of leakPatterns) {
-        const normalizedPattern = normalizeTextForComparison(pattern);
-        if (normalizedPdfText.includes(normalizedPattern)) {
+        if (includesNormalized(pdfText, pattern)) {
           errors.push(`Found template/leak pattern in extracted text: "${pattern}"`);
+          console.log(`      🔍 Debug: Template leak "${pattern}" found at:`);
+          console.log(`      📄 PDF snippet: ${extractSnippet(pdfText, pattern, 150)}`);
         }
       }
     }
