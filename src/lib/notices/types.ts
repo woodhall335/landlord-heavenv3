@@ -7,6 +7,7 @@ export type NoticeRoute =
   | 'notice-only/england/section8'
   | 'notice-only/england/section21'
   | 'notice-only/wales/section173'
+  | 'notice-only/wales/fault-based'
   | 'notice-only/scotland/notice-to-leave';
 
 export interface RequiredInput {
@@ -56,4 +57,6 @@ export interface NoticeComplianceSpec {
   template_paths: string[];
   required_phrases: string[];
   forbidden_phrases: string[];
+  allow_mixed_grounds?: boolean;
+  notes?: string;
 }

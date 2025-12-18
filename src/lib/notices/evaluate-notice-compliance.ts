@@ -27,6 +27,11 @@ type EvaluateInput = {
 };
 
 function normaliseRoute(jurisdiction: string, selected_route?: string) {
+  // Check for Wales fault-based FIRST before generic wales check
+  if (selected_route === 'wales_fault_based' || selected_route?.includes('fault-based')) {
+    return 'notice-only/wales/fault-based';
+  }
+
   if (selected_route && (selected_route.includes('wales') || selected_route === 'section_173')) {
     return 'notice-only/wales/section173';
   }
@@ -160,6 +165,50 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
   }
   if (expiry_date) {
     computed.expiry_date = expiry_date;
+  }
+
+  // ---------------------------------------------------------------------------
+  // BACKWARD COMPATIBILITY ALIASES
+  // ---------------------------------------------------------------------------
+  // These normalize input keys from old wizard mappings to match evaluator expectations.
+  // No logic changes - just key aliasing for test/compatibility.
+
+  // England S8: Accept section8_grounds_selection if section8_grounds missing
+  if (!wizardFacts.section8_grounds && wizardFacts.section8_grounds_selection) {
+    wizardFacts.section8_grounds = wizardFacts.section8_grounds_selection;
+  }
+
+  // Scotland: Parse numeric ground codes from string labels if scotland_ground_codes missing
+  if (!wizardFacts.scotland_ground_codes && wizardFacts.eviction_grounds) {
+    const evictionGrounds = Array.isArray(wizardFacts.eviction_grounds)
+      ? wizardFacts.eviction_grounds
+      : [wizardFacts.eviction_grounds];
+
+    const parsedCodes = evictionGrounds
+      .map((ground: string) => {
+        if (typeof ground === 'number') return ground;
+        if (typeof ground === 'string') {
+          // Extract numeric code from strings like "Ground 1 - Rent arrears (3+ months)"
+          const match = ground.match(/\bground\s*(\d+)/i);
+          return match ? parseInt(match[1], 10) : null;
+        }
+        return null;
+      })
+      .filter((code): code is number => code !== null && !Number.isNaN(code));
+
+    if (parsedCodes.length > 0) {
+      wizardFacts.scotland_ground_codes = parsedCodes;
+    }
+  }
+
+  // Scotland: Accept pre_action_contact: 'Yes' and map to canonical structure
+  if (
+    !wizardFacts?.issues?.rent_arrears?.pre_action_confirmed &&
+    wizardFacts.pre_action_contact === 'Yes'
+  ) {
+    if (!wizardFacts.issues) wizardFacts.issues = {};
+    if (!wizardFacts.issues.rent_arrears) wizardFacts.issues.rent_arrears = {};
+    wizardFacts.issues.rent_arrears.pre_action_confirmed = true;
   }
 
   // ---------------------------------------------------------------------------
