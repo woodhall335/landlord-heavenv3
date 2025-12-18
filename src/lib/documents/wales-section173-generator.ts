@@ -132,25 +132,10 @@ export async function generateWalesSection173Notice(
   }
 
   // ============================================================================
-  // BILINGUAL HARD-BLOCK
+  // ENGLISH-ONLY OUTPUT (BILINGUAL SUPPORT REMOVED)
   // ============================================================================
-  // Wales Section 173 notices should be bilingual unless an exception applies.
-  // However, our official sources are English-only. Hard-block bilingual output
-  // until Welsh-language official source is available.
-
-  const languageChoice = data.language_choice || 'bilingual';
-
-  if (languageChoice === 'bilingual') {
-    throw new Error(
-      `LEGAL_COMPLIANCE_ERROR: WALES_BILINGUAL_SOURCE_NOT_AVAILABLE - ` +
-      `Bilingual Welsh/English notice requires official Welsh-language prescribed form source. ` +
-      `The current templates are English-only based on official downloads. ` +
-      `To proceed: (1) Select "English only" if a lawful exception applies, or ` +
-      `(2) Upload the official bilingual Welsh prescribed form source file. ` +
-      `Affected question: language_choice`
-    );
-  }
-
+  // Our official sources are English-only. System now defaults to English output.
+  // Bilingual option has been removed from MQS and compliance checks.
   // ============================================================================
   // DYNAMIC TEMPLATE SELECTION: RHW16 vs RHW17
   // ============================================================================

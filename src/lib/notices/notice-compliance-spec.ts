@@ -201,7 +201,6 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
       { id: 'contract_start_date', label: 'Occupation contract start date', required: true },
       { id: 'notice_service', label: 'Notice service details', required: true },
       { id: 'notice_expiry_date', label: 'Proposed expiry date', required: true },
-      { id: 'language_choice', label: 'Welsh/English bilingual preference', required: true },
     ],
     computed_fields: [
       { id: 'expiry_date', description: 'Must be at least the statutory minimum from service' },
@@ -226,21 +225,8 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         user_fix_hint: 'Provide contract start date, service date, and expiry date',
         affected_question_id: 'notice_service',
       },
-      {
-        code: 'S173-BILINGUAL-REQUIRED',
-        legal_reason: 'Section 173 notices should be bilingual unless an agreed exception applies',
-        user_fix_hint: 'Select bilingual output or confirm lawful single-language agreement',
-        affected_question_id: 'language_choice',
-      },
     ],
-    soft_warnings: [
-      {
-        code: 'S173-BILINGUAL',
-        legal_reason: 'Notices should be bilingual unless parties agree otherwise',
-        user_fix_hint: 'Select bilingual option or confirm agreement for single-language notice',
-        affected_question_id: 'language_choice',
-      },
-    ],
+    soft_warnings: [],
     inline_validation_rules: [
       {
         code: 'S173-NOTICE-MINIMUM',
