@@ -271,9 +271,55 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         enforcement: 'hard',
       },
     ],
-    template_paths: ['config/jurisdictions/uk/wales/templates/notice_only/rhw20_section173_bilingual/notice.hbs'],
+    template_paths: [
+      'config/jurisdictions/uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs',
+      'config/jurisdictions/uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs',
+    ],
     required_phrases: ['Renting Homes (Wales) Act 2016'],
     forbidden_phrases: ['Section 21'],
+    notes: 'Dynamic template selection: RHW16 (>=6 months notice) or RHW17 (<6 months notice) based on computed notice period',
+  },
+  {
+    jurisdiction: 'wales',
+    route: 'notice-only/wales/fault-based',
+    prescribed_form_version: 'RHW23 - Notice Before Making a Possession Claim (Renting Homes Wales Act 2016)',
+    required_inputs: [
+      { id: 'breach_or_ground', label: 'Breach of contract or estate management ground', required: true },
+      { id: 'breach_particulars', label: 'Particulars of breach or ground', required: true },
+      { id: 'service_method', label: 'Service method', required: true },
+    ],
+    computed_fields: [
+      { id: 'notice_period_days', description: 'Notice period based on ground type (immediate, 14 days, or 1 month)' },
+      { id: 'expiry_date', description: 'Earliest date possession claim can be made' },
+    ],
+    hard_bars: [
+      {
+        code: 'RHW23-GROUND-REQUIRED',
+        legal_reason: 'Must specify valid breach or estate management ground',
+        user_fix_hint: 'Select applicable ground and provide detailed particulars',
+        affected_question_id: 'breach_or_ground',
+      },
+    ],
+    soft_warnings: [],
+    inline_validation_rules: [],
+    correction_prompts: [],
+    service_rules: [
+      {
+        description: 'Service method must be documented for notice validity',
+        statutory_basis: 'Renting Homes (Wales) Act 2016 guidance on service',
+        enforcement: 'hard',
+      },
+    ],
+    notice_period_rules: [
+      {
+        description: 'Notice period varies by ground: immediate for ASB (s55), 1 month for other breaches, 1 month for estate management',
+        statutory_basis: 'Renting Homes (Wales) Act 2016 sections 157-192',
+        enforcement: 'hard',
+      },
+    ],
+    template_paths: ['config/jurisdictions/uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs'],
+    required_phrases: ['Renting Homes (Wales) Act 2016', 'RHW23'],
+    forbidden_phrases: ['Section 173'],
   },
   {
     jurisdiction: 'scotland',

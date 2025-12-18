@@ -1,92 +1,224 @@
 {{!--
   ============================================================================
-  ENGLAND - FORM 6A (SECTION 21 NOTICE)
+  ENGLAND - FORM 6A (SECTION 21 NOTICE REQUIRING POSSESSION)
   Housing Act 1988, Section 21 - Prescribed Form
-  Assured Shorthold Tenancy Notices and Prescribed Requirements Regulations 2015
   ============================================================================
 
-  TODO: Replace with exact prescribed wording from official Form 6A
+  Based on official Form 6A from:
+  https://www.gov.uk/government/publications/section-8-and-section-21-notices
 
-  IMPORTANT: This is PLACEHOLDER SCAFFOLDING ONLY
-  - Must match the exact layout and wording of the official prescribed form
+  Source reference: config/jurisdictions/uk/_official_form_sources/england/form6a_section21.odt
+
+  IMPORTANT:
+  - This template matches the exact prescribed form wording
   - No legal promises or guarantees
   - Variable names match mapNoticeOnlyFacts() output
-
-  Official source: https://www.gov.uk/government/publications/section-8-and-section-21-notices
+  - Users can edit the HTML after payment; HTML is stored and later rendered to PDF
 --}}
 
-<h1>Form 6A: Notice Seeking Possession of a Property Let on an Assured Shorthold Tenancy</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Form 6A - Section 21 Notice Requiring Possession</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12pt;
+      line-height: 1.4;
+      max-width: 8.5in;
+      margin: 0 auto;
+      padding: 0.5in;
+    }
+    h1 {
+      font-size: 14pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 0 0 0.5em 0;
+      text-align: center;
+    }
+    h2 {
+      font-size: 12pt;
+      font-weight: bold;
+      text-align: center;
+      margin: 0 0 1em 0;
+    }
+    h3 {
+      font-size: 12pt;
+      font-weight: bold;
+      margin: 1em 0 0.5em 0;
+    }
+    .info-box {
+      border: 2px solid #000;
+      padding: 1em;
+      margin: 1em 0;
+      background-color: #f9f9f9;
+    }
+    .section {
+      margin: 1em 0;
+      page-break-inside: avoid;
+    }
+    .field-label {
+      font-weight: bold;
+      margin-top: 0.5em;
+    }
+    .field-value {
+      margin-left: 0.25in;
+      border-bottom: 1px dotted #666;
+      min-height: 1.5em;
+    }
+    .signature-block {
+      margin-top: 2em;
+      page-break-inside: avoid;
+    }
+    .checkbox {
+      display: inline-block;
+      width: 1em;
+      height: 1em;
+      border: 1px solid #000;
+      margin-right: 0.5em;
+      vertical-align: middle;
+    }
+    .avoid-break {
+      page-break-inside: avoid;
+    }
+    .link {
+      color: #0066cc;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
 
-<h2>Housing Act 1988 Section 21(1) or (4) as amended by section 194 and paragraph 103 of Schedule 11 to the Local Government and Housing Act 1989 and section 98(2) and (3) of the Housing Act 1996</h2>
+<h1>Notice Requiring Possession of a Property in England Let on an Assured Shorthold Tenancy</h1>
+
+<h2>Form No. 6A</h2>
+<h2>Housing Act 1988 section 21(1) and (4) (as amended)</h2>
+
+<div class="info-box">
+  <h3>INFORMATION FOR THE TENANT</h3>
+  <p>This notice tells you that your landlord requires possession of your home. <strong>You should read it carefully and seek advice about your circumstances as quickly as possible.</strong></p>
+
+  <p>You are entitled to at least two months' notice before being required to give up possession of your home. In some circumstances a longer notice period may be required.</p>
+
+  <p>If you do not leave your home by the date given in section 2, your landlord may apply to the court for an order under Section 21(1) or (4) of the Housing Act 1988 requiring you to give up possession.</p>
+
+  <p>If you are worried about this notice, and what you should do about it, take it immediately to <strong>Citizens Advice, a housing advice centre, a law centre or a solicitor.</strong></p>
+
+  <p>If you are a debtor and you are in a 'breathing space', you should inform your debt advisor.</p>
+
+  <p>If you believe you are at risk of homelessness as a result of receiving this notice, you should contact your local authority for support.</p>
+
+  <p>Free independent advice is also available from Shelterline on <strong>0808 800 4444</strong> or via the Shelter website at:<br>
+  <span class="link">https://www.shelter.org.uk/</span></p>
+
+  <p>Further information about this notice and the possession process can be found at:<br>
+  <span class="link">https://www.gov.uk/government/publications/understanding-the-possession-action-process-guidance-for-landlords-and-tenants</span></p>
+</div>
 
 <div class="section">
-  <h3>To: {{tenant_full_name}}</h3>
-  <p>
-    <strong>Property:</strong><br>
+  <p class="field-label">1. To:</p>
+  <p class="field-value">
+    {{#if tenant_full_name}}
+      {{tenant_full_name}}
+    {{else}}
+      <em>(insert full name(s) of tenant(s))</em>
+    {{/if}}
+  </p>
+</div>
+
+<div class="section">
+  <p class="field-label">2. You are required to leave the below address after:</p>
+  <p class="field-value">
+    {{#if notice_expiry_date}}
+      <strong>{{format_date notice_expiry_date 'long'}}</strong>
+    {{else if earliest_possession_date}}
+      <strong>{{format_date earliest_possession_date 'long'}}</strong>
+    {{else}}
+      <em>(insert calendar date)</em>
+    {{/if}}
+  </p>
+
+  <p style="margin-top: 1em;">If you do not leave, your landlord may apply to the court for an order under Section 21(1) or (4) of the Housing Act 1988 requiring you to give up possession of:</p>
+  <p class="field-value">
     {{#if property_address}}
       {{{property_address}}}
     {{else}}
-      [PROPERTY ADDRESS MISSING]
+      <em>(insert address of the property)</em>
     {{/if}}
   </p>
 </div>
 
 <div class="section">
-  <h3>From: {{landlord_full_name}}</h3>
-  <p>
-    <strong>Landlord's Address:</strong><br>
-    {{#if landlord_address}}
-      {{{landlord_address}}}
-    {{else}}
-      [LANDLORD ADDRESS MISSING]
-    {{/if}}
-  </p>
+  <p><strong>3.</strong> If your landlord does not apply to the court within a given timeframe this notice will lapse. If you are entitled to more than 2 months' notice your landlord can rely on this notice to apply to the court during the period of 4 months commencing from the date specified in section 2 above. In all other cases, your landlord can rely on this notice to apply to the court during the period of 6 months commencing from the date this notice is given to you.</p>
 </div>
 
-<div class="section">
-  <h3>Notice Period</h3>
+<div class="signature-block avoid-break">
+  <p class="field-label">4. Name and address of landlord or landlord's agent:</p>
+  <p style="margin-left: 0.25in; font-style: italic; font-size: 10pt; margin-bottom: 1em;">(To be completed in full by the landlord, or, in the case of joint landlords, at least one of the joint landlords, or by someone authorised to give notice on the landlord's behalf.)</p>
 
-  <p><strong>TODO:</strong> Replace with prescribed form wording for notice period</p>
+  <div style="margin-left: 0.25in; margin-top: 1em;">
+    <p><strong>Signed:</strong> _________________________________________________</p>
 
-  <p>
-    I give you notice that I require possession of the dwelling-house known as:<br>
-    <strong>{{property_address}}</strong>
-  </p>
+    <p style="margin-top: 1em;"><strong>Name:</strong></p>
+    <p class="field-value">
+      {{#if landlord_full_name}}
+        {{landlord_full_name}}
+      {{else}}
+        <span style="min-height: 1.5em; display: block;"></span>
+      {{/if}}
+    </p>
 
-  <p>
-    after: <strong>{{possession_date}}</strong>
-  </p>
+    <p style="margin-top: 1em;"><strong>Address:</strong></p>
+    <p class="field-value">
+      {{#if landlord_address}}
+        {{{landlord_address}}}
+      {{else}}
+        <span style="min-height: 3em; display: block;"></span>
+      {{/if}}
+    </p>
 
-  <p>
-    <strong>Date of Service:</strong> {{service_date}}
-  </p>
+    <p style="margin-top: 1em;"><strong>Telephone number:</strong></p>
+    <p class="field-value">
+      {{#if landlord_phone}}
+        {{landlord_phone}}
+      {{else}}
+        <span style="min-height: 1.5em; display: block;"></span>
+      {{/if}}
+    </p>
+
+    <div style="margin-top: 1em;">
+      <p style="margin-top: 1em;"><strong>Signed:</strong> _________________________________________________</p>
+
+      <p style="margin-top: 1em;"><strong>Name:</strong> _______________________________________________</p>
+
+      <p style="margin-top: 1em;"><strong>Address:</strong> _______________________________________________</p>
+
+      <p style="margin-top: 1em;"><strong>Telephone number:</strong> _______________________________________________</p>
+    </div>
+
+    <div style="margin-top: 1.5em;">
+      <p><strong>Capacity</strong> (please tick):</p>
+      <p style="margin-left: 1em; margin-top: 0.5em;">
+        <span class="checkbox"></span> landlord<br>
+        <span class="checkbox"></span> joint landlord(s)<br>
+        <span class="checkbox"></span> landlord's agent
+      </p>
+    </div>
+
+    <p style="margin-top: 1.5em;"><strong>Date:</strong></p>
+    <p class="field-value">
+      {{#if service_date}}
+        {{format_date service_date 'long'}}
+      {{else if notice_service_date}}
+        {{format_date notice_service_date 'long'}}
+      {{else}}
+        <span style="min-height: 1.5em; display: block;"></span>
+      {{/if}}
+    </p>
+  </div>
 </div>
 
-<div class="section">
-  <h3>Additional Information</h3>
-
-  <p><strong>TODO:</strong> Add prescribed form fields for:</p>
-  <ul>
-    <li>Tenancy start date confirmation</li>
-    <li>Fixed term expiry (if applicable)</li>
-    <li>Deposit protection details</li>
-    <li>Prescribed information confirmation</li>
-  </ul>
-</div>
-
-<div class="section">
-  <h3>Landlord's Signature</h3>
-
-  <p><strong>TODO:</strong> Add signature block per prescribed form</p>
-
-  <p>
-    Signed: ___________________________<br>
-    Date: ___________________________
-  </p>
-</div>
-
-<div class="section avoid-break">
-  <h3>Notes for Tenant</h3>
-  <p><strong>TODO:</strong> Add prescribed form notes and warnings</p>
-  <p><em>This is a placeholder template. Replace with exact prescribed form content.</em></p>
-</div>
+</body>
+</html>

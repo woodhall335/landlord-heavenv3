@@ -15,18 +15,23 @@ import { getWalesSection173Rule } from '@/server/config/wales-notice-periods';
 
 export interface WalesSection173NoticeData {
   landlord_full_name: string;
+  landlord_address?: string;
   contract_holder_full_name: string;
   property_address: string;
   contract_start_date: string;
   rent_amount: number;
   rent_frequency: 'weekly' | 'fortnightly' | 'monthly' | 'quarterly';
   service_date?: string;
+  notice_service_date?: string;
   expiry_date?: string;
+  notice_expiry_date?: string;
   // Compliance fields
   wales_contract_category?: 'standard' | 'supported_standard' | 'secure';
   rent_smart_wales_registered?: boolean;
   deposit_taken?: boolean;
   deposit_protected?: boolean;
+  // Language choice
+  language_choice?: 'bilingual' | 'english_only';
 }
 
 /**
@@ -126,11 +131,65 @@ export async function generateWalesSection173Notice(
     }
   }
 
+  // ============================================================================
+  // BILINGUAL HARD-BLOCK
+  // ============================================================================
+  // Wales Section 173 notices should be bilingual unless an exception applies.
+  // However, our official sources are English-only. Hard-block bilingual output
+  // until Welsh-language official source is available.
+
+  const languageChoice = data.language_choice || 'bilingual';
+
+  if (languageChoice === 'bilingual') {
+    throw new Error(
+      `LEGAL_COMPLIANCE_ERROR: WALES_BILINGUAL_SOURCE_NOT_AVAILABLE - ` +
+      `Bilingual Welsh/English notice requires official Welsh-language prescribed form source. ` +
+      `The current templates are English-only based on official downloads. ` +
+      `To proceed: (1) Select "English only" if a lawful exception applies, or ` +
+      `(2) Upload the official bilingual Welsh prescribed form source file. ` +
+      `Affected question: language_choice`
+    );
+  }
+
+  // ============================================================================
+  // DYNAMIC TEMPLATE SELECTION: RHW16 vs RHW17
+  // ============================================================================
+  // RHW16 = 6-month minimum notice period (>=183 days)
+  // RHW17 = 2-month minimum notice period (<183 days / ~60 days)
+  //
+  // Determination:
+  // 1. Preferred: Use computed notice period days from compliance calculator
+  // 2. Fallback: Calculate days between service_date and expiry_date
+
+  let noticePeriodDays = 0;
+  const actualServiceDate = data.service_date || data.notice_service_date || serviceDate;
+  const actualExpiryDate = data.expiry_date || data.notice_expiry_date;
+
+  if (actualExpiryDate && actualServiceDate) {
+    const serviceMs = new Date(actualServiceDate).getTime();
+    const expiryMs = new Date(actualExpiryDate).getTime();
+    noticePeriodDays = Math.ceil((expiryMs - serviceMs) / (1000 * 60 * 60 * 24));
+  }
+
+  // Select template based on notice period
+  // RHW16 requires >= 6 months (183 days)
+  // RHW17 requires >= 2 months (typically 60 days)
+  const templatePath = noticePeriodDays >= 183
+    ? 'uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs'
+    : 'uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs';
+
+  console.log(
+    `[Wales S173 Generator] Template selection: ` +
+    `${noticePeriodDays} days -> ${noticePeriodDays >= 183 ? 'RHW16 (6-month)' : 'RHW17 (2-month)'}`
+  );
+
   // Generate document
   return generateDocument({
-    templatePath: 'uk/wales/templates/notice_only/rhw20_section173_bilingual/notice.hbs',
+    templatePath,
     data: {
       ...data,
+      // Ensure both field names are available for templates
+      tenant_full_name: data.contract_holder_full_name,
       // Wales-specific terminology
       landlord_title: 'Landlord',
       tenant_title: 'Contract Holder',

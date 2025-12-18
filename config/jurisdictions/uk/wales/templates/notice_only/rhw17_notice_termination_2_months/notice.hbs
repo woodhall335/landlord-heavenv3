@@ -1,0 +1,194 @@
+{{!--
+  ============================================================================
+  WALES - FORM RHW17 (LANDLORD'S NOTICE OF TERMINATION - 2 MONTH MINIMUM)
+  Renting Homes (Wales) Act 2016, Section 173 - Prescribed Form
+  ============================================================================
+
+  Based on official Form RHW17 from:
+  https://gov.wales/renting-homes-wales
+
+  Source reference: config/jurisdictions/uk/_official_form_sources/wales/rhw17_notice_termination_2_months.docx
+
+  IMPORTANT:
+  - This template matches the exact prescribed form wording (English-only)
+  - No legal promises or guarantees
+  - Variable names match mapNoticeOnlyFacts() output
+  - Users can edit the HTML after payment; HTML is stored and later rendered to PDF
+
+  NOTE: This is ENGLISH-ONLY. Bilingual output requires Welsh-language official source.
+--}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Form RHW17 - Landlord's Notice of Termination (2-month notice period)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 12pt;
+      line-height: 1.4;
+      max-width: 8.5in;
+      margin: 0 auto;
+      padding: 0.5in;
+    }
+    h1 {
+      font-size: 14pt;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin: 0 0 1em 0;
+      text-align: center;
+    }
+    h2 {
+      font-size: 11pt;
+      font-weight: bold;
+      margin: 1.5em 0 0.5em 0;
+    }
+    .part-label {
+      font-weight: bold;
+      margin-top: 1em;
+      margin-bottom: 0.3em;
+    }
+    .field-value {
+      margin-left: 0.25in;
+      border-bottom: 1px dotted #666;
+      min-height: 1.5em;
+    }
+    .section {
+      margin: 1em 0;
+      page-break-inside: avoid;
+    }
+    .guidance-section {
+      margin-top: 2em;
+      padding-top: 1em;
+      border-top: 2px solid #000;
+      page-break-before: always;
+    }
+    .avoid-break {
+      page-break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+
+<h1>FORM RHW17</h1>
+<h1>Landlord's Notice of Termination: Periodic Standard Contract with Two-Month Minimum Notice Period (Other Than Introductory Standard Contract or Prohibited Conduct Standard Contract)</h1>
+
+<p style="margin-top: 1em; font-size: 10pt;">This form is for use by a landlord to give notice to a periodic standard contract-holder entitled to a two-month minimum notice period (except those holding an introductory standard contract or prohibited conduct standard contract) under section 173(1) of the Renting Homes (Wales) Act 2016 that he or she must give up possession of the dwelling on a specified date.</p>
+
+<div class="section">
+  <p class="part-label">Part A: Landlord</p>
+  <p><strong>Name:</strong></p>
+  <p class="field-value">
+    {{#if landlord_full_name}}
+      {{landlord_full_name}}
+    {{else}}
+      <span style="min-height: 1.5em; display: block;"></span>
+    {{/if}}
+  </p>
+
+  <p style="margin-top: 1em;"><strong>Address:</strong></p>
+  <p class="field-value">
+    {{#if landlord_address}}
+      {{{landlord_address}}}
+    {{else}}
+      <span style="min-height: 3em; display: block;"></span>
+    {{/if}}
+  </p>
+</div>
+
+<div class="section">
+  <p class="part-label">Part B: Contract-Holder(s)</p>
+  <p><strong>Name(s):</strong></p>
+  <p class="field-value">
+    {{#if contract_holder_full_name}}
+      {{contract_holder_full_name}}
+    {{else if tenant_full_name}}
+      {{tenant_full_name}}
+    {{else}}
+      <span style="min-height: 1.5em; display: block;"></span>
+    {{/if}}
+  </p>
+</div>
+
+<div class="section">
+  <p class="part-label">Part C: Dwelling</p>
+  <p><strong>Address:</strong></p>
+  <p class="field-value">
+    {{#if property_address}}
+      {{{property_address}}}
+    {{else}}
+      <span style="min-height: 3em; display: block;"></span>
+    {{/if}}
+  </p>
+</div>
+
+<div class="section avoid-break">
+  <p class="part-label">Part D: Notice to Give Up Possession</p>
+  <p>In accordance with section 173 of the Renting Homes (Wales) Act 2016, the landlord gives notice to you, the contract-holder(s), that you must give up possession of the dwelling above on [date]</p>
+  <p class="field-value" style="margin-top: 0.5em;">
+    {{#if notice_expiry_date}}
+      <strong>{{format_date notice_expiry_date 'long'}}</strong>
+    {{else if expiry_date}}
+      <strong>{{format_date expiry_date 'long'}}</strong>
+    {{else}}
+      <span style="min-height: 1.5em; display: block;"></span>
+    {{/if}}
+  </p>
+
+  <p style="margin-top: 1em;">If you, the contract-holder(s), do not give up possession of the dwelling on the date specified above, the landlord may make a possession claim to the court.</p>
+
+  <p style="margin-top: 0.5em; font-style: italic; font-size: 10pt;"><strong>Note:</strong> The specified date must not be less than two months after the day on which this notice is given to the contract-holder(s).</p>
+</div>
+
+<div class="section avoid-break" style="margin-top: 2em;">
+  <p class="part-label">Part E: Signature</p>
+  <p>Signed by, or on behalf of, the landlord: _________________________________________________</p>
+  <p style="margin-top: 1em;">Date:</p>
+  <p class="field-value">
+    {{#if service_date}}
+      {{format_date service_date 'long'}}
+    {{else if notice_service_date}}
+      {{format_date notice_service_date 'long'}}
+    {{else}}
+      <span style="min-height: 1.5em; display: block;"></span>
+    {{/if}}
+  </p>
+</div>
+
+<div class="guidance-section">
+  <h2>Use of this form</h2>
+  <p>This form should only be used where the periodic standard contract has a two-month minimum notice period and is not an introductory standard contract or prohibited conduct standard contract. If the periodic standard contract has a six-month minimum notice period, Form RHW16 should be used. If the periodic standard contract is an introductory standard contract or prohibited conduct standard contract, Form RHW18 should be used, regardless of the length of the notice period.</p>
+
+  <h2>Guidance notes for contract-holders</h2>
+  <p>This notice is the first step requiring you to give up possession of the dwelling identified at Part C. You should read it very carefully. If you do not give up possession by the date given in Part D, your landlord may apply to the court for an order requiring you to give up possession.</p>
+
+  <p>If you are in any doubt or need advice about any aspect of this notice, you should first contact your landlord. Many problems can be resolved quickly by raising them when they first arise. If you are unable to reach an agreement with your landlord, you may wish to contact an advice agency (such as Citizens Advice Cymru or Shelter Cymru) or independent legal advisors. Disputes regarding your contract may ultimately be settled through the county courts.</p>
+
+  <p>If you believe you are at risk of homelessness as a result of receiving this notice, you should contact your local authority for support.</p>
+
+  <h2>Two-month minimum notice period</h2>
+  <p>An occupation contract may have a two-month minimum notice period because the occupation contract falls within Schedule 8A to the Renting Homes (Wales) Act (section 174A of that Act).</p>
+
+  <h2>Restrictions on giving this notice</h2>
+
+  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">First four/six months of occupation</h3>
+  <p>In accordance with section 175 of the Renting Homes (Wales) Act 2016, this notice may not be given within the first six months of the occupation date of the contract.</p>
+
+  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">Breaches of statutory obligations</h3>
+  <p>In accordance with section 176 of the Renting Homes (Wales) Act 2016, this notice may not be given at a time when there is a breach of any statutory obligations listed in Schedule 9A to that Act.</p>
+
+  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">Withdrawal of previous notice</h3>
+  <p>In accordance with section 177 of the Renting Homes (Wales) Act 2016, if the landlord has previously given a notice under section 173 of that Act and has subsequently withdrawn it, the landlord may not give the contract-holder(s) a further notice of termination under section 173 of that Act within six months of the date that the notice was withdrawn.</p>
+
+  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">Retaliatory possession claim</h3>
+  <p>A contract-holder may enforce or rely upon the landlord's obligations in relation to fitness for human habitation and to keep the dwelling in repair under sections 91 and 92 of the Renting Homes (Wales) Act 2016. If the landlord issues this notice in response, a court may consider that the landlord is making a possession claim to avoid complying with those obligations (a retaliatory claim). In accordance with section 217 of that Act, the court may refuse to make an order for possession if it considers that the possession claim is a retaliatory claim.</p>
+
+  <h2>Restrictions on bringing a possession claim</h2>
+
+  <h3 style="font-size: 11pt; font-weight: bold; margin-top: 1em;">Time limits</h3>
+  <p>In accordance with section 179 of the Renting Homes (Wales) Act 2016, the landlord may not make a possession claim before the date listed in Part D of this notice or after two months of that date.</p>
+</div>
+
+</body>
+</html>
