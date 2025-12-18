@@ -734,7 +734,7 @@ function parseUTCDate(isoDate: string): Date {
 /**
  * Convert Date to ISO date string (YYYY-MM-DD) using UTC
  */
-function toISODateString(date: Date): string {
+export function toISODateString(date: Date): string {
   const year = date.getUTCFullYear();
   const month = String(date.getUTCMonth() + 1).padStart(2, '0');
   const day = String(date.getUTCDate()).padStart(2, '0');
