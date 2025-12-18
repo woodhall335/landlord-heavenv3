@@ -254,6 +254,7 @@ const TEST_ROUTES: TestRoute[] = [
       rent_smart_wales_registered: true,
       deposit_taken_wales: true,
       deposit_protected_wales: true,
+      deposit_amount: 1600,
       deposit_scheme_wales_s173: 'MyDeposits Wales',
       // Canonical E&W service/expiry dates (notice_service object)
       notice_service: {
@@ -307,6 +308,7 @@ const TEST_ROUTES: TestRoute[] = [
       rent_smart_wales_registered: true,
       deposit_taken_wales: true,
       deposit_protected_wales: true,
+      deposit_amount: 1500,
       deposit_scheme_wales_fault: 'Deposit Protection Service Wales',
       wales_breach_type: 'rent_arrears',
       // Spec expects breach_or_ground (alias for compatibility)
@@ -731,6 +733,21 @@ async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: st
   }
 }
 
+/**
+ * Normalize text for robust PDF comparison
+ * - Lowercase
+ * - Collapse whitespace (including newlines) to single spaces
+ * - Remove hyphens (to match "contract-holder" with "contract holder")
+ * - Trim
+ */
+function normalizeTextForComparison(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/\s+/g, ' ')  // Collapse all whitespace to single space
+    .replace(/-/g, '')     // Remove hyphens
+    .trim();
+}
+
 async function validatePDF(
   pdfBuffer: Buffer,
   route: TestRoute
@@ -779,21 +796,27 @@ async function validatePDF(
     }
 
     if (parseSuccess) {
+      // Normalize PDF text once for all comparisons
+      const normalizedPdfText = normalizeTextForComparison(pdfText);
+
       for (const phrase of route.expectedPhrases) {
-        if (!pdfText.includes(phrase)) {
+        const normalizedPhrase = normalizeTextForComparison(phrase);
+        if (!normalizedPdfText.includes(normalizedPhrase)) {
           errors.push(`Missing expected phrase: "${phrase}"`);
         }
       }
 
       for (const phrase of route.forbiddenPhrases) {
-        if (pdfText.includes(phrase)) {
+        const normalizedPhrase = normalizeTextForComparison(phrase);
+        if (normalizedPdfText.includes(normalizedPhrase)) {
           errors.push(`Found forbidden phrase: "${phrase}"`);
         }
       }
 
       const leakPatterns = ['{{', '}}', 'undefined', 'NULL', '[object Object]', '****'];
       for (const pattern of leakPatterns) {
-        if (pdfText.includes(pattern)) {
+        const normalizedPattern = normalizeTextForComparison(pattern);
+        if (normalizedPdfText.includes(normalizedPattern)) {
           errors.push(`Found template/leak pattern in extracted text: "${pattern}"`);
         }
       }
