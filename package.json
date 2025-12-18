@@ -14,7 +14,9 @@
     "audit:notice-only": "npx tsx scripts/audit-notice-only-pdfs.ts",
     "audit:notice-only:layout": "npx tsx scripts/audit-notice-only-layout.ts",
     "audit:notice-only:visual": "npx tsx scripts/render-notice-only-snapshots.ts && npx tsx scripts/audit-notice-only-layout.ts",
-    "audit:notice-only:all": "npx tsx scripts/audit-notice-only-pdfs.ts && npx tsx scripts/render-notice-only-snapshots.ts && npx tsx scripts/audit-notice-only-layout.ts"
+    "audit:notice-only:all": "npx tsx scripts/audit-notice-only-pdfs.ts && npx tsx scripts/render-notice-only-snapshots.ts && npx tsx scripts/audit-notice-only-layout.ts",
+    "prove:notice-only:e2e": "npx tsx scripts/prove-notice-only-e2e.ts",
+    "prove:notice-only:editable": "npx tsx scripts/prove-notice-only-editable-html.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",
