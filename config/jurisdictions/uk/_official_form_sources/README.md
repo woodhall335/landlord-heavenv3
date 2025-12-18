@@ -18,8 +18,9 @@ _official_form_sources/
 │   ├── form3_section8.docx          # Housing Act 1988 Form 3 (Section 8)
 │   └── form6a_section21.docx        # Housing Act 1988 Form 6A (Section 21)
 ├── wales/
-│   ├── rhw20_section173_bilingual.docx  # RHW20 Section 173 bilingual
-│   └── fault_based_prescribed.docx      # Prescribed fault-based forms
+│   ├── rhw16_notice_termination_6_months.docx  # RHW16 Section 173 (6-month) English-only
+│   ├── rhw17_notice_termination_2_months.docx  # RHW17 Section 173 (2-month) English-only
+│   └── rhw23_notice_before_possession_claim.docx  # RHW23 fault-based English-only
 └── scotland/
     └── notice_to_leave_parts_1_3.docx   # PRT Notice to Leave (statutory form)
 ```

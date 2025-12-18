@@ -13,9 +13,8 @@ import path from 'path';
 
 const TEMPLATES_TO_CONVERT = [
   'config/jurisdictions/uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs',
-  'config/jurisdictions/uk/wales/templates/notice_only/rhw20_section173_bilingual/notice.hbs',
+  'config/jurisdictions/uk/wales/templates/notice_only/rhw17_notice_termination_2_months/notice.hbs',
   'config/jurisdictions/uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs',
-  'config/jurisdictions/uk/wales/templates/notice_only/fault_based/notice.hbs',
   'config/jurisdictions/uk/scotland/templates/notice_only/notice_to_leave_prt_2017/notice.hbs',
 ];
 

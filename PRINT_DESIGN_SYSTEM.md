@@ -77,12 +77,10 @@ Reusable layout components (11 partials):
 - ✅ `form_3_section8/notice.hbs` - Section 8 Notice
 - ✅ `form_6a_section21/notice.hbs` - Section 21 Notice
 
-**Wales (3 active + 2 placeholder):**
-- ✅ `rhw17_notice_termination_2_months/notice.hbs`
-- ✅ `rhw16_notice_termination_6_months/notice.hbs`
-- ✅ `rhw23_notice_before_possession_claim/notice.hbs`
-- ⏸️ `rhw20_section173_bilingual/notice.hbs` (placeholder - will use system when completed)
-- ⏸️ `fault_based/notice.hbs` (placeholder - will use system when completed)
+**Wales (3 templates):**
+- ✅ `rhw16_notice_termination_6_months/notice.hbs` - Section 173 (6-month)
+- ✅ `rhw17_notice_termination_2_months/notice.hbs` - Section 173 (2-month)
+- ✅ `rhw23_notice_before_possession_claim/notice.hbs` - Fault-based notices
 
 **Scotland (1 template):**
 - ✅ `notice_to_leave_prt_2017/notice.hbs`

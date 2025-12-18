@@ -450,29 +450,29 @@ export async function GET(
       if (selected_route === 'wales_section_173') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 173 notice');
         try {
-          // Calculate expiry date (6 months from service for Section 173)
-          let expiryDate = templateData.earliest_possession_date;
-          if (!expiryDate && (templateData.service_date || templateData.notice_date)) {
-            const serviceDate = new Date(templateData.service_date || templateData.notice_date);
-            const expiry = new Date(serviceDate);
-            expiry.setMonth(expiry.getMonth() + 6);
-            expiryDate = expiry.toISOString().split('T')[0];
-          }
+          // Use the wales-section173-generator which automatically selects RHW16 or RHW17
+          const { generateWalesSection173Notice } = await import('@/lib/documents/wales-section173-generator');
 
+          // Prepare data for generator (it handles date calculations and template selection)
           const section173Data = {
-            ...templateData,
-            is_wales_section_173: true,
-            expiry_date: formatUKDate(expiryDate || ''),
-            // Calculate prohibited period (first 6 months)
-            prohibited_period_violation: false, // TODO: Calculate based on dates
+            landlord_full_name: templateData.landlord_full_name,
+            landlord_address: templateData.landlord_address,
+            contract_holder_full_name: templateData.contract_holder_full_name || templateData.tenant_full_name,
+            property_address: templateData.property_address,
+            contract_start_date: contractStartDate || templateData.tenancy_start_date,
+            rent_amount: templateData.rent_amount || 0,
+            rent_frequency: (templateData.rent_frequency || 'monthly') as 'weekly' | 'fortnightly' | 'monthly' | 'quarterly',
+            service_date: templateData.service_date || templateData.notice_date,
+            notice_service_date: templateData.notice_date || templateData.service_date,
+            expiry_date: templateData.earliest_possession_date,
+            notice_expiry_date: templateData.earliest_possession_date,
+            wales_contract_category: wizardFacts.wales_contract_category || 'standard',
+            rent_smart_wales_registered: wizardFacts.rent_smart_wales_registered,
+            deposit_taken: wizardFacts.deposit_taken || templateData.deposit_taken,
+            deposit_protected: wizardFacts.deposit_protected || templateData.deposit_protected,
           };
 
-          const section173Doc = await generateDocument({
-            templatePath: 'uk/wales/templates/notice_only/rhw20_section173_bilingual/notice.hbs',
-            data: section173Data,
-            outputFormat: 'pdf',
-            isPreview: true,
-          });
+          const section173Doc = await generateWalesSection173Notice(section173Data, true);
           if (section173Doc.pdf) {
             documents.push({
               title: 'Section 173 Landlord\'s Notice (Wales)',
@@ -484,31 +484,35 @@ export async function GET(
           console.error('[NOTICE-PREVIEW-API] Section 173 generation failed:', err);
         }
       } else if (selected_route === 'wales_fault_based') {
-        console.log('[NOTICE-PREVIEW-API] Generating Wales fault-based notice');
+        console.log('[NOTICE-PREVIEW-API] Generating Wales fault-based notice (RHW23)');
         try {
-          // Determine if the breach is rent arrears
-          const breachType = wizardFacts.wales_breach_type || 'breach_of_contract';
-          const isRentArrears = breachType === 'rent_arrears' || breachType.toLowerCase().includes('arrears');
+          // Map fault-based section to breach particulars
+          const faultBasedSection = wizardFacts.wales_fault_based_section || '';
+          let breachParticulars = '';
 
-          // Convert breach type enum to human-friendly display
-          const breachTypeDisplay = breachType === 'rent_arrears' ? 'Rent Arrears' :
-                                   breachType === 'anti_social_behaviour' ? 'Anti-Social Behaviour' :
-                                   breachType === 'property_damage' ? 'Property Damage' :
-                                   breachType === 'unauthorised_occupants' ? 'Unauthorised Occupants' :
-                                   breachType === 'breach_of_contract' ? 'Breach of Contract' :
-                                   breachType;
+          // Build breach particulars based on section type
+          if (faultBasedSection.includes('Section 157')) {
+            const arrearsAmount = wizardFacts.rent_arrears_amount || 0;
+            breachParticulars = `Breach of contract (section 157)\n\nSerious rent arrears (2+ months)\n\nTotal arrears: £${arrearsAmount}`;
+          } else if (faultBasedSection.includes('Section 159')) {
+            const arrearsAmount = wizardFacts.rent_arrears_amount || 0;
+            breachParticulars = `Breach of contract (section 159)\n\nRent arrears (less than 2 months)\n\nTotal arrears: £${arrearsAmount}`;
+          } else if (faultBasedSection.includes('Section 161')) {
+            breachParticulars = `Breach of contract (section 161)\n\nAnti-social behaviour\n\n${wizardFacts.asb_description || wizardFacts.breach_description || ''}`;
+          } else if (faultBasedSection.includes('Section 162')) {
+            breachParticulars = `Breach of contract (section 162)\n\n${wizardFacts.breach_description || ''}`;
+          } else {
+            // Fallback
+            breachParticulars = wizardFacts.breach_description || wizardFacts.asb_description || '';
+          }
 
           const faultBasedData = {
             ...templateData,
-            is_wales_fault_based: true,
-            wales_breach_type: breachTypeDisplay,
-            wales_breach_type_rent_arrears: isRentArrears,
-            rent_arrears_amount: wizardFacts.rent_arrears_amount,
-            breach_details: wizardFacts.breach_details || templateData.ground_particulars,
+            breach_particulars: breachParticulars,
           };
 
           const faultDoc = await generateDocument({
-            templatePath: 'uk/wales/templates/notice_only/fault_based/notice.hbs',
+            templatePath: 'uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs',
             data: faultBasedData,
             outputFormat: 'pdf',
             isPreview: true,
@@ -516,7 +520,7 @@ export async function GET(
 
           if (faultDoc.pdf) {
             documents.push({
-              title: 'Fault-Based Breach Notice (Wales)',
+              title: 'Notice Before Making a Possession Claim (RHW23)',
               category: 'notice',
               pdf: faultDoc.pdf,
             });
