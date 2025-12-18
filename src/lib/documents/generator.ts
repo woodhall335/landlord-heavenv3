@@ -192,6 +192,69 @@ function registerHandlebarsHelpers() {
 registerHandlebarsHelpers();
 
 // ============================================================================
+// PRINT DESIGN SYSTEM
+// ============================================================================
+
+/**
+ * Load and cache the centralized print.css stylesheet
+ */
+let cachedPrintCss: string | null = null;
+
+export function loadPrintCss(): string {
+  if (cachedPrintCss) {
+    return cachedPrintCss;
+  }
+
+  try {
+    const printCssPath = join(process.cwd(), 'config', 'jurisdictions', '_shared', 'print', 'print.css');
+    cachedPrintCss = readFileSync(printCssPath, 'utf-8');
+    console.log('[PRINT SYSTEM] ✅ Loaded print.css');
+    return cachedPrintCss;
+  } catch (error: any) {
+    console.warn('[PRINT SYSTEM] ⚠️  Could not load print.css:', error.message);
+    return ''; // Graceful fallback - templates will use inline styles
+  }
+}
+
+/**
+ * Register print component partials (from components.hbs)
+ * These partials provide reusable layout components for notices
+ */
+let partialsRegistered = false;
+
+export function registerPrintPartials(): void {
+  if (partialsRegistered) {
+    return; // Only register once
+  }
+
+  try {
+    const componentsPath = join(process.cwd(), 'config', 'jurisdictions', '_shared', 'print', 'components.hbs');
+    const componentsContent = readFileSync(componentsPath, 'utf-8');
+
+    // Parse and register all inline partials defined in components.hbs
+    // Handlebars {{#*inline "name"}} syntax defines partials that can be registered
+    const partialPattern = /\{\{#\*inline "([^"]+)"\}\}([\s\S]*?)\{\{\/inline\}\}/g;
+    let match;
+    let count = 0;
+
+    while ((match = partialPattern.exec(componentsContent)) !== null) {
+      const [, partialName, partialContent] = match;
+      Handlebars.registerPartial(partialName, partialContent);
+      count++;
+    }
+
+    partialsRegistered = true;
+    console.log(`[PRINT SYSTEM] ✅ Registered ${count} print component partials`);
+  } catch (error: any) {
+    console.warn('[PRINT SYSTEM] ⚠️  Could not load components.hbs:', error.message);
+    // Graceful fallback - templates will work without partials if they don't use them
+  }
+}
+
+// Initialize print system on module load
+registerPrintPartials();
+
+// ============================================================================
 // TEMPLATE LOADER
 // ============================================================================
 
@@ -333,7 +396,7 @@ export function safeText(value: any): string {
  */
 export function compileTemplate(templateContent: string, data: Record<string, any>): string {
   try {
-    // Add generation metadata + site config
+    // Add generation metadata + site config + print system
     const enrichedData = {
       ...data,
       generation_date: new Date().toISOString().split('T')[0],
@@ -344,6 +407,8 @@ export function compileTemplate(templateContent: string, data: Record<string, an
       site_name: SITE_CONFIG.name,
       site_url: SITE_CONFIG.url,
       support_email: SITE_CONFIG.support_email,
+      // Print Design System CSS (for templates that use {{> print_head}} or {{{print_css}}})
+      print_css: loadPrintCss(),
     };
 
     // Safe-convert all data values to prevent [object Object] leaks

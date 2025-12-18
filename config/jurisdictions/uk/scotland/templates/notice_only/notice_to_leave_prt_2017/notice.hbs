@@ -18,6 +18,7 @@
   - Users can edit the HTML after payment; HTML is stored and later rendered to PDF
 
   Official guidance: https://www.mygov.scot/landlord-eviction
+  - Uses shared Print Design System from config/jurisdictions/_shared/print/
 --}}
 
 <!DOCTYPE html>
@@ -26,62 +27,7 @@
   <meta charset="UTF-8">
   <title>Notice to Leave - Private Residential Tenancy</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 12pt;
-      line-height: 1.4;
-      max-width: 8.5in;
-      margin: 0 auto;
-      padding: 0.5in;
-    }
-    h1 {
-      font-size: 16pt;
-      font-weight: bold;
-      margin: 0 0 0.5em 0;
-      text-align: center;
-    }
-    h2 {
-      font-size: 13pt;
-      font-weight: bold;
-      text-align: center;
-      margin: 0 0 1em 0;
-    }
-    h3 {
-      font-size: 12pt;
-      font-weight: bold;
-      margin: 1.5em 0 0.5em 0;
-      background-color: #f0f0f0;
-      padding: 0.5em;
-      border-left: 4px solid #333;
-    }
-    .section {
-      margin: 1em 0;
-      page-break-inside: avoid;
-    }
-    .field-label {
-      font-weight: bold;
-      margin-top: 0.5em;
-    }
-    .field-value {
-      margin-left: 0.25in;
-      border-bottom: 1px dotted #666;
-      min-height: 1.5em;
-    }
-    .ground-block {
-      margin: 1em 0;
-      padding: 0.75em;
-      border: 1px solid #ccc;
-      background-color: #fafafa;
-    }
-    .info-box {
-      border: 2px solid #000;
-      padding: 1em;
-      margin: 1em 0;
-      background-color: #f9f9f9;
-    }
-    .avoid-break {
-      page-break-inside: avoid;
-    }
+    {{{print_css}}}
   </style>
 </head>
 <body>

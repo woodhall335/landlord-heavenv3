@@ -16,6 +16,7 @@
   - Users can edit the HTML after payment; HTML is stored and later rendered to PDF
 
   NOTE: This is ENGLISH-ONLY. Bilingual output requires Welsh-language official source.
+  - Uses shared Print Design System from config/jurisdictions/_shared/print/
 --}}
 
 <!DOCTYPE html>
@@ -24,49 +25,7 @@
   <meta charset="UTF-8">
   <title>Form RHW16 - Landlord's Notice of Termination (6-month notice period)</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      font-size: 12pt;
-      line-height: 1.4;
-      max-width: 8.5in;
-      margin: 0 auto;
-      padding: 0.5in;
-    }
-    h1 {
-      font-size: 14pt;
-      font-weight: bold;
-      text-transform: uppercase;
-      margin: 0 0 1em 0;
-      text-align: center;
-    }
-    h2 {
-      font-size: 11pt;
-      font-weight: bold;
-      margin: 1.5em 0 0.5em 0;
-    }
-    .part-label {
-      font-weight: bold;
-      margin-top: 1em;
-      margin-bottom: 0.3em;
-    }
-    .field-value {
-      margin-left: 0.25in;
-      border-bottom: 1px dotted #666;
-      min-height: 1.5em;
-    }
-    .section {
-      margin: 1em 0;
-      page-break-inside: avoid;
-    }
-    .guidance-section {
-      margin-top: 2em;
-      padding-top: 1em;
-      border-top: 2px solid #000;
-      page-break-before: always;
-    }
-    .avoid-break {
-      page-break-inside: avoid;
-    }
+    {{{print_css}}}
   </style>
 </head>
 <body>
