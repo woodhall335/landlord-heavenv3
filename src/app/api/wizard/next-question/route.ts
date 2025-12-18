@@ -235,8 +235,35 @@ export async function POST(request: Request) {
     const docIntel = applyDocumentIntelligence(facts);
     const hydratedFacts = normalizeAskOnceFacts(docIntel.facts, mqs);
 
-    const nextQuestion = getNextMQSQuestion(mqs, hydratedFacts);
+    let nextQuestion = getNextMQSQuestion(mqs, hydratedFacts);
     const progress = computeProgress(mqs, hydratedFacts);
+
+    // Auto-mark info-type questions as "viewed" so they don't get returned again
+    if (nextQuestion && nextQuestion.inputType === 'info') {
+      const { updateWizardFacts } = await import('@/lib/case-facts/store');
+
+      // Mark this info question as viewed by setting a marker in facts
+      await updateWizardFacts(
+        supabase,
+        case_id,
+        (currentFacts) => ({
+          ...currentFacts,
+          [nextQuestion!.id]: '_info_viewed',
+        }),
+        {}
+      );
+
+      // Since we just marked it as viewed, get the NEXT question after this info page
+      // This allows the current info page to be displayed once, then skipped on next call
+      const updatedFacts = {
+        ...hydratedFacts,
+        [nextQuestion.id]: '_info_viewed',
+      };
+      const questionAfterInfo = getNextMQSQuestion(mqs, updatedFacts);
+
+      // Return the info question this time (so it gets displayed)
+      // But next time /next-question is called, it will skip to questionAfterInfo
+    }
 
     if (!nextQuestion) {
       // MQS thinks we're done – for money claim, sanity-check essentials first
