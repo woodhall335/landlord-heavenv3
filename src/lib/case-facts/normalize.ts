@@ -2296,7 +2296,7 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   );
 
   templateData.breach_description = extractString(
-    getFirstValue(wizard, ['breach_description', 'section8_other_grounds_narrative'])
+    getFirstValue(wizard, ['breach_description', 'breach_details', 'section8_other_grounds_narrative'])
   );
 
   templateData.section8_grounds_narrative = extractString(
