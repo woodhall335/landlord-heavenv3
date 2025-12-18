@@ -277,6 +277,37 @@ export function loadTemplate(templatePath: string): string {
     );
   }
 
+  // ============================================================================
+  // WALES TEMPLATE GUARD: Block deleted bilingual/legacy templates
+  // ============================================================================
+  if (templatePath.includes('rhw20_section173_bilingual')) {
+    throw new Error(
+      `[TEMPLATE GUARD] Attempted to load deleted Wales bilingual template: ${templatePath}\n` +
+      `BLOCKED: Wales bilingual templates have been removed.\n` +
+      `Use English-only prescribed forms:\n` +
+      `  - For Section 173: Use generateWalesSection173Notice() (auto-selects RHW16 or RHW17)\n` +
+      `  - For fault-based: Use 'uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs'`
+    );
+  }
+
+  if (templatePath.includes('uk/wales/templates/notice_only/fault_based/notice.hbs') ||
+      templatePath.includes('/wales/templates/notice_only/fault_based/')) {
+    throw new Error(
+      `[TEMPLATE GUARD] Attempted to load deleted Wales legacy fault-based template: ${templatePath}\n` +
+      `BLOCKED: Legacy Wales fault-based templates have been removed.\n` +
+      `Use the prescribed form RHW23:\n` +
+      `  'uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs'`
+    );
+  }
+
+  if (templatePath.toLowerCase().includes('bilingual') && templatePath.includes('/wales/')) {
+    throw new Error(
+      `[TEMPLATE GUARD] Attempted to load bilingual Wales template: ${templatePath}\n` +
+      `BLOCKED: Bilingual templates are not available.\n` +
+      `Wales templates are English-only prescribed forms (RHW16, RHW17, RHW23).`
+    );
+  }
+
   // Prevent absolute paths
   if (templatePath.startsWith('/')) {
     throw new Error(

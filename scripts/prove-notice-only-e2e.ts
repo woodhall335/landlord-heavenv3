@@ -651,8 +651,21 @@ async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: st
     const fn = fnCandidates.find((c) => typeof c === 'function');
     if (fn) {
       return async (data: Buffer) => {
-        // data is already Buffer
-        return fn(data);
+        // Ensure data is a proper Buffer (not a path string or other format)
+        // Some versions of pdf-parse/PDF.js expect specific options
+        try {
+          return await fn(data, {
+            // PDF.js options to ensure compatibility
+            max: 0, // Parse all pages
+          });
+        } catch (e: any) {
+          // Retry without options if first attempt fails
+          if (e?.message?.includes('url') || e?.message?.includes('getDocument')) {
+            // Try providing data in alternative format for PDF.js compatibility
+            return await fn(data);
+          }
+          throw e;
+        }
       };
     }
 
