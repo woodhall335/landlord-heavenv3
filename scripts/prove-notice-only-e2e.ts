@@ -202,6 +202,7 @@ const TEST_ROUTES: TestRoute[] = [
       rent_frequency: 'monthly',
       payment_date: 15,
       deposit_taken: true,
+      deposit_protected: true,
       deposit_protected_scheme: true,
       prescribed_info_given: true,
       has_gas_appliances: true,
@@ -213,11 +214,11 @@ const TEST_ROUTES: TestRoute[] = [
       // Canonical E&W service/expiry dates (notice_service object)
       notice_service: {
         notice_date: '2025-01-15',
-        notice_expiry_date: '2025-03-30',
+        notice_expiry_date: '2025-04-01',
       },
       // Legacy fallbacks for backwards compatibility
       notice_service_date: '2025-01-15',
-      notice_expiry_date: '2025-03-30',
+      notice_expiry_date: '2025-04-01',
     },
     expectedPhrases: [
       'Form 6A',
