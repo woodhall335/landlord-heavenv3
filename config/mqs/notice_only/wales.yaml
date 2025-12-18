@@ -233,24 +233,6 @@ questions:
     maps_to:
       - rent_smart_wales_registered
 
-  - id: language_choice
-    section: Section 173 Compliance
-    question: "Do you need the notice bilingually (Welsh & English)?"
-    inputType: select
-    dependsOn:
-      questionId: selected_notice_route
-      value: wales_section_173
-    validation:
-      required: true
-    options:
-      - value: bilingual
-        label: "Yes – bilingual notice required"
-      - value: english_only
-        label: "English only (lawful agreement in place)"
-    helperText: "Section 173 notices should be bilingual unless both parties agree otherwise."
-    maps_to:
-      - language_choice
-
   # TASK A2: Deposit questions for Section 173
   - id: deposit_taken_wales
     section: Section 173 Compliance

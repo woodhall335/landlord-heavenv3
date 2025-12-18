@@ -345,15 +345,6 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
         });
       }
     }
-
-    if (wizardFacts.language_choice !== 'bilingual') {
-      hardFailures.push({
-        code: 'S173-BILINGUAL-REQUIRED',
-        affected_question_id: 'language_choice',
-        legal_reason: 'Section 173 notices must be provided bilingually unless a lawful exception is recorded',
-        user_fix_hint: 'Select bilingual notice output to proceed',
-      });
-    }
   }
 
   // ---------------------------------------------------------------------------
