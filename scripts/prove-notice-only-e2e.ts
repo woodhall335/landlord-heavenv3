@@ -152,11 +152,22 @@ const TEST_ROUTES: TestRoute[] = [
       how_to_rent_provided: true,
       property_licensing: 'not_required',
       recent_repair_complaints_s21: false,
+      // Evaluator-compatible grounds field (canonical)
+      section8_grounds: ['Ground 8 - Serious rent arrears (2+ months)'],
+      // Legacy field for backwards compatibility
       section8_grounds_selection: ['Ground 8 - Serious rent arrears (2+ months)'],
       rent_arrears_amount: 2400,
       ground_particulars:
         'Tenant owes £2,400 in rent arrears covering 2 months (January-February 2025). Last payment received was December 2024. Rent is due monthly on the 1st. Tenant has been contacted multiple times but has not responded.',
       notice_strategy: 'minimum',
+      // Canonical E&W service/expiry dates (notice_service object)
+      notice_service: {
+        notice_date: '2025-01-15',
+        notice_expiry_date: '2025-01-29',
+      },
+      // Legacy fallbacks for backwards compatibility
+      notice_service_date: '2025-01-15',
+      notice_expiry_date: '2025-01-29',
     },
     expectedPhrases: [
       'NOTICE SEEKING POSSESSION',
@@ -199,6 +210,14 @@ const TEST_ROUTES: TestRoute[] = [
       how_to_rent_provided: true,
       property_licensing: 'licensed',
       recent_repair_complaints_s21: false,
+      // Canonical E&W service/expiry dates (notice_service object)
+      notice_service: {
+        notice_date: '2025-01-15',
+        notice_expiry_date: '2025-03-30',
+      },
+      // Legacy fallbacks for backwards compatibility
+      notice_service_date: '2025-01-15',
+      notice_expiry_date: '2025-03-30',
     },
     expectedPhrases: [
       'Form 6A',
@@ -235,6 +254,14 @@ const TEST_ROUTES: TestRoute[] = [
       deposit_taken_wales: true,
       deposit_protected_wales: true,
       deposit_scheme_wales_s173: 'MyDeposits Wales',
+      // Canonical E&W service/expiry dates (notice_service object)
+      notice_service: {
+        notice_date: '2025-01-15',
+        notice_expiry_date: '2025-07-30',
+      },
+      // Legacy fallbacks for backwards compatibility
+      notice_service_date: '2025-01-15',
+      notice_expiry_date: '2025-07-30',
     },
     expectedPhrases: [
       'Section 173',
@@ -281,9 +308,19 @@ const TEST_ROUTES: TestRoute[] = [
       deposit_protected_wales: true,
       deposit_scheme_wales_fault: 'Deposit Protection Service Wales',
       wales_breach_type: 'rent_arrears',
+      // Spec expects breach_or_ground (alias for compatibility)
+      breach_or_ground: 'rent_arrears',
       rent_arrears_amount: 1500,
       breach_details:
         'Contract holder owes £1,500 in rent arrears covering 2 months (November-December 2024). Rent is due monthly on the 1st. Multiple payment reminders have been sent but arrears remain unpaid.',
+      // Canonical E&W service/expiry dates (notice_service object)
+      notice_service: {
+        notice_date: '2025-01-15',
+        notice_expiry_date: '2025-02-15',
+      },
+      // Legacy fallbacks for backwards compatibility
+      notice_service_date: '2025-01-15',
+      notice_expiry_date: '2025-02-15',
     },
     expectedPhrases: [
       'Renting Homes (Wales) Act 2016',
@@ -334,11 +371,30 @@ const TEST_ROUTES: TestRoute[] = [
       deposit_scheme_name: 'SafeDeposits Scotland',
       safety_checks: 'Yes',
       asb_details: 'No',
+      // Canonical numeric ground codes (evaluator expects this)
+      scotland_ground_codes: [1],
+      // Legacy string labels for backwards compatibility
       eviction_grounds: ['Ground 1 - Rent arrears (3+ months)'],
       ground_particulars:
         'The tenant owes £3,500 in rent arrears covering over 3 months. Pre-action requirements have been completed including written notice to the tenant and signposting to debt advice services. Despite multiple contact attempts, the arrears remain unpaid.',
+      // Canonical pre-action confirmation (evaluator expects this structure)
+      issues: {
+        rent_arrears: {
+          pre_action_confirmed: true,
+        },
+      },
+      // Legacy pre_action_contact for backwards compatibility
+      pre_action_contact: 'Yes',
+      // Canonical Scotland dates (notice.notice_date and notice.expiry_date)
+      notice: {
+        notice_date: '2025-01-15',
+        expiry_date: '2025-04-15',
+      },
+      // Legacy fallbacks for backwards compatibility
       notice_date: '2025-01-15',
-      notice_expiry: '2025-02-12',
+      notice_expiry: '2025-04-15',
+      notice_service_date: '2025-01-15',
+      notice_expiry_date: '2025-04-15',
       service_method: 'Recorded delivery',
       served_by: 'Angus Landlord',
       service_name: 'Angus Landlord',
@@ -481,13 +537,29 @@ async function saveErrorArtifact(
 ): Promise<string> {
   await ensureDirectoryExists(REPORTS_DIR);
 
-  const isHtml = contentType.includes('text/html');
-  const ext = isHtml ? 'html' : 'txt';
+  // Determine file extension and format the body
+  let ext = 'txt';
+  let formattedBody = body;
+
+  if (contentType.includes('application/json')) {
+    ext = 'json';
+    try {
+      // Try to parse and pretty-print JSON
+      const parsed = JSON.parse(body);
+      formattedBody = JSON.stringify(parsed, null, 2);
+    } catch {
+      // If JSON parsing fails, save as-is
+      formattedBody = body;
+    }
+  } else if (contentType.includes('text/html')) {
+    ext = 'html';
+  }
+
   const filename = `preview-error-${jurisdiction}-${route}-${caseId}.${ext}`;
   const filepath = path.join(REPORTS_DIR, filename);
 
   const header = `HTTP ${status} Error\nContent-Type: ${contentType}\nTimestamp: ${new Date().toISOString()}\n\n`;
-  await fs.writeFile(filepath, header + body);
+  await fs.writeFile(filepath, header + formattedBody);
 
   return filepath;
 }
