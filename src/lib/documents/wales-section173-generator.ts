@@ -128,7 +128,7 @@ export async function generateWalesSection173Notice(
 
   // Generate document
   return generateDocument({
-    templatePath: 'uk/wales/templates/eviction/section173_landlords_notice.hbs',
+    templatePath: 'uk/wales/templates/notice_only/rhw20_section173_bilingual/notice.hbs',
     data: {
       ...data,
       // Wales-specific terminology

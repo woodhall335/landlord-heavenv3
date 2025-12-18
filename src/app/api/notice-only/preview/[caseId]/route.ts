@@ -134,34 +134,34 @@ export async function GET(
     }
 
     // Log warnings if any
-      if (validationResult.warnings.length > 0) {
-        console.warn('[NOTICE-PREVIEW-API] Jurisdiction warnings:\n', formatValidationErrors(validationResult));
-      }
+    if (validationResult.warnings.length > 0) {
+      console.warn('[NOTICE-PREVIEW-API] Jurisdiction warnings:\n', formatValidationErrors(validationResult));
+    }
 
-      // ========================================================================
-      // FINAL COMPLIANCE CHECK BEFORE GENERATION
-      // ========================================================================
-      const compliance = evaluateNoticeCompliance({
-        jurisdiction,
-        product: 'notice_only',
-        selected_route,
-        wizardFacts,
-      });
+    // ========================================================================
+    // FINAL COMPLIANCE CHECK BEFORE GENERATION
+    // ========================================================================
+    const compliance = evaluateNoticeCompliance({
+      jurisdiction,
+      product: 'notice_only',
+      selected_route,
+      wizardFacts,
+    });
 
-      if (compliance.hardFailures.length > 0) {
-        return NextResponse.json(
-          {
-            error: 'NOTICE_NONCOMPLIANT',
-            failures: compliance.hardFailures,
-            warnings: compliance.warnings,
-            computed: compliance.computed ?? null,
-            block_next_question: true,
-          },
-          { status: 422 },
-        );
-      }
+    if (compliance.hardFailures.length > 0) {
+      return NextResponse.json(
+        {
+          error: 'NOTICE_NONCOMPLIANT',
+          failures: compliance.hardFailures,
+          warnings: compliance.warnings,
+          computed: compliance.computed ?? null,
+          block_next_question: true,
+        },
+        { status: 422 },
+      );
+    }
 
-      const documents: NoticeOnlyDocument[] = [];
+    const documents: NoticeOnlyDocument[] = [];
 
     // ===========================================================================
     // ENGLAND & WALES NOTICE ONLY PACK
@@ -286,7 +286,7 @@ export async function GET(
         console.log('[NOTICE-PREVIEW-API] Generating Section 8 notice');
         try {
           const section8Doc = await generateDocument({
-            templatePath: 'uk/england-wales/templates/eviction/section8_notice.hbs',
+            templatePath: 'uk/england/templates/notice_only/form_3_section8/notice.hbs',
             data: templateData,
             outputFormat: 'pdf',
             isPreview: true,
@@ -329,7 +329,7 @@ export async function GET(
           };
 
           const section21Doc = await generateDocument({
-            templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
+            templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
             data: section21Data,
             outputFormat: 'pdf',
             isPreview: true,
@@ -468,7 +468,7 @@ export async function GET(
           };
 
           const section173Doc = await generateDocument({
-            templatePath: 'uk/wales/templates/eviction/section173_landlords_notice.hbs',
+            templatePath: 'uk/wales/templates/notice_only/rhw20_section173_bilingual/notice.hbs',
             data: section173Data,
             outputFormat: 'pdf',
             isPreview: true,
@@ -508,7 +508,7 @@ export async function GET(
           };
 
           const faultDoc = await generateDocument({
-            templatePath: 'uk/wales/templates/eviction/fault_based_notice.hbs',
+            templatePath: 'uk/wales/templates/notice_only/fault_based/notice.hbs',
             data: faultBasedData,
             outputFormat: 'pdf',
             isPreview: true,
@@ -687,7 +687,7 @@ export async function GET(
       console.log('[NOTICE-PREVIEW-API] Generating Notice to Leave');
       try {
         const noticeDoc = await generateDocument({
-          templatePath: 'uk/scotland/templates/eviction/notice_to_leave.hbs',
+          templatePath: 'uk/scotland/templates/notice_only/notice_to_leave_prt_2017/notice.hbs',
           data: templateData,
           outputFormat: 'pdf',
           isPreview: true,
