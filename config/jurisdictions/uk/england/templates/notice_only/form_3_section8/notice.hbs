@@ -1,0 +1,91 @@
+{{!--
+  ============================================================================
+  ENGLAND - FORM 3 (SECTION 8 NOTICE SEEKING POSSESSION)
+  Housing Act 1988, Section 8 - Prescribed Form
+  ============================================================================
+
+  TODO: Replace with exact prescribed wording from official Form 3
+
+  IMPORTANT: This is PLACEHOLDER SCAFFOLDING ONLY
+  - Must match the exact layout and wording of the official prescribed form
+  - No legal promises or guarantees
+  - Variable names match mapNoticeOnlyFacts() output
+
+  Official source: https://www.gov.uk/government/publications/section-8-and-section-21-notices
+--}}
+
+<h1>Form 3: Notice Seeking Possession of a Property Let on an Assured Tenancy or an Assured Agricultural Occupancy</h1>
+
+<h2>Housing Act 1988 Section 8 as amended by Section 151 of the Housing Act 1996</h2>
+
+<div class="section">
+  <h3>To: {{tenant_full_name}}</h3>
+  <p>
+    <strong>Property:</strong><br>
+    {{#if property_address}}
+      {{{property_address}}}
+    {{else}}
+      [PROPERTY ADDRESS MISSING]
+    {{/if}}
+  </p>
+</div>
+
+<div class="section">
+  <h3>From: {{landlord_full_name}}</h3>
+  <p>
+    <strong>Landlord's Address:</strong><br>
+    {{#if landlord_address}}
+      {{{landlord_address}}}
+    {{else}}
+      [LANDLORD ADDRESS MISSING]
+    {{/if}}
+  </p>
+</div>
+
+<div class="section">
+  <h3>Grounds for Possession</h3>
+
+  <p><strong>TODO:</strong> Replace with prescribed form wording for grounds section</p>
+
+  {{#if grounds}}
+    {{#each grounds}}
+      <div class="ground-block">
+        <h4>Ground {{this.code}}: {{this.title}}</h4>
+        <p><strong>Particulars:</strong> {{this.particulars}}</p>
+        {{#if this.legal_basis}}
+          <p><em>{{this.legal_basis}}</em></p>
+        {{/if}}
+      </div>
+    {{/each}}
+  {{else}}
+    <p>[NO GROUNDS SPECIFIED]</p>
+  {{/if}}
+</div>
+
+<div class="section">
+  <h3>Notice Period and Dates</h3>
+
+  <p><strong>TODO:</strong> Replace with prescribed form wording for notice period</p>
+
+  <p>
+    <strong>Date of Service:</strong> {{service_date}}<br>
+    <strong>Earliest Date Proceedings May Start:</strong> {{earliest_possession_date}}
+  </p>
+</div>
+
+<div class="section">
+  <h3>Landlord's Signature</h3>
+
+  <p><strong>TODO:</strong> Add signature block per prescribed form</p>
+
+  <p>
+    Signed: ___________________________<br>
+    Date: ___________________________
+  </p>
+</div>
+
+<div class="section avoid-break">
+  <h3>Notes</h3>
+  <p><strong>TODO:</strong> Add prescribed form notes and warnings</p>
+  <p><em>This is a placeholder template. Replace with exact prescribed form content.</em></p>
+</div>
