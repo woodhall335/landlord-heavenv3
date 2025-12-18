@@ -144,7 +144,7 @@ export async function generateSection21Notice(
   }
 
   return generateDocument({
-    templatePath: 'uk/england/templates/eviction/section21_form6a.hbs',
+    templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
     data,
     isPreview,
     outputFormat: 'both',
