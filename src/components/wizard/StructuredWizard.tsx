@@ -63,6 +63,24 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [caseFacts, setCaseFacts] = useState<Record<string, any>>({});
 
   // ====================================================================================
+  // NOTICE COMPLIANCE ERROR STATE
+  // ====================================================================================
+  const [noticeComplianceError, setNoticeComplianceError] = useState<{
+    failures: Array<{
+      code: string;
+      affected_question_id: string;
+      legal_reason: string;
+      user_fix_hint: string;
+    }>;
+    warnings: Array<{
+      code: string;
+      affected_question_id: string;
+      legal_reason: string;
+      user_fix_hint: string;
+    }>;
+  } | null>(null);
+
+  // ====================================================================================
   // PHASE 2: PRE-STEP GATE + ROUTE GUARD STATE
   // ====================================================================================
   const [mqsLocked, setMqsLocked] = useState(false);
@@ -125,6 +143,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setCurrentQuestion(question);
     setUploadFilesForCurrentQuestion([]);
     setStepFlags(null);
+    setNoticeComplianceError(null); // Clear compliance error when question changes
 
     if (question.inputType === 'group' && question.fields) {
       const defaults: Record<string, any> = {};
@@ -713,10 +732,26 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+
+        // Handle NOTICE_NONCOMPLIANT (422) gracefully - don't crash the wizard
+        if (response.status === 422 && errorData.error === 'NOTICE_NONCOMPLIANT') {
+          setNoticeComplianceError({
+            failures: errorData.failures || [],
+            warnings: errorData.warnings || [],
+          });
+          setError('Notice may be non-compliant. Please review the issues below and update your answers.');
+          setLoading(false);
+          return; // Stay on current question, don't advance
+        }
+
+        // Other errors - throw as before
         throw new Error(errorData.error || `Failed to save answer: ${response.status}`);
       }
 
       const data = await response.json();
+
+      // Clear any previous compliance errors on successful save
+      setNoticeComplianceError(null);
 
       // Check for validation errors from AST generator
       if (data.error && data.error.includes('validation failed')) {
@@ -1727,6 +1762,86 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
                 <p className="text-sm text-red-800">{error}</p>
+              </div>
+            )}
+
+            {/* Notice Compliance Error Panel */}
+            {noticeComplianceError && (
+              <div className="bg-orange-50 border-2 border-orange-400 rounded-lg p-5 mb-6 shadow-md">
+                <div className="flex items-start gap-3 mb-4">
+                  <div className="text-3xl flex-shrink-0">⚠️</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-orange-900 mb-1">
+                      Notice May Be Non-Compliant
+                    </h3>
+                    <p className="text-sm text-orange-800">
+                      We've detected potential compliance issues with this notice. Please review and fix the
+                      issues below before continuing.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Blocking Issues */}
+                {noticeComplianceError.failures.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-bold text-red-900 mb-2 flex items-center gap-2">
+                      <span>🚫</span>
+                      Blocking Issues (must fix to continue):
+                    </h4>
+                    <div className="space-y-2">
+                      {noticeComplianceError.failures.map((failure, idx) => (
+                        <div key={idx} className="bg-white border border-red-300 rounded-lg p-3">
+                          <p className="text-xs font-semibold text-red-900 mb-1">
+                            {failure.code}
+                          </p>
+                          <p className="text-sm text-red-800 mb-2">
+                            <strong>Legal Reason:</strong> {failure.legal_reason}
+                          </p>
+                          <p className="text-sm text-red-700">
+                            <strong>How to fix:</strong> {failure.user_fix_hint}
+                          </p>
+                          {failure.affected_question_id && (
+                            <p className="text-xs text-red-600 mt-1">
+                              Affected field: {failure.affected_question_id}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Warnings */}
+                {noticeComplianceError.warnings.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-bold text-yellow-900 mb-2 flex items-center gap-2">
+                      <span>⚠️</span>
+                      Warnings (review carefully):
+                    </h4>
+                    <div className="space-y-2">
+                      {noticeComplianceError.warnings.map((warning, idx) => (
+                        <div key={idx} className="bg-white border border-yellow-300 rounded-lg p-3">
+                          <p className="text-xs font-semibold text-yellow-900 mb-1">
+                            {warning.code}
+                          </p>
+                          <p className="text-sm text-yellow-800 mb-2">
+                            <strong>Legal Reason:</strong> {warning.legal_reason}
+                          </p>
+                          <p className="text-sm text-yellow-700">
+                            <strong>Recommendation:</strong> {warning.user_fix_hint}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <p className="text-xs text-blue-900">
+                    <strong>Next step:</strong> Update your answers above to resolve the blocking issues.
+                    Once fixed, try clicking "Next" again.
+                  </p>
+                </div>
               </div>
             )}
 

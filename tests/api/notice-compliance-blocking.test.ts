@@ -88,7 +88,7 @@ describe('wizard answer compliance blocking', () => {
     supabaseClientMock.update.mockReturnValue(supabaseClientMock);
   });
 
-  it('returns 422 with failures and no next_question when noncompliant', async () => {
+  it('returns 422 with failures and no next_question when noncompliant at checkpoint', async () => {
     const mockCase = {
       id: 'case-123',
       case_type: 'eviction',
@@ -105,7 +105,7 @@ describe('wizard answer compliance blocking', () => {
         method: 'POST',
         body: JSON.stringify({
           case_id: mockCase.id,
-          question_id: 'deposit_protected_scheme',
+          question_id: 'deposit_protected_scheme', // This is a checkpoint question
           answer: false,
         }),
       }),
@@ -113,8 +113,46 @@ describe('wizard answer compliance blocking', () => {
 
     const body = await response.json();
     expect(response.status).toBe(422);
+    expect(body.error).toBe('NOTICE_NONCOMPLIANT');
+    expect(body.failures).toBeDefined();
+    expect(body.failures.length).toBeGreaterThan(0);
     expect(body.failures?.[0]?.affected_question_id).toBe('deposit_protected_scheme');
-    expect(body.next_question).toBeUndefined();
+    expect(body.block_next_question).toBe(true);
+  });
+
+  it('allows non-checkpoint questions to pass even with compliance issues (downgrades to warnings)', async () => {
+    const mockCase = {
+      id: 'case-456',
+      case_type: 'eviction',
+      jurisdiction: 'england-wales',
+      collected_facts: { __meta: { product: 'notice_only', mqs_version: null } },
+      user_id: null,
+      wizard_progress: 0,
+    };
+
+    supabaseClientMock.single.mockResolvedValue({ data: mockCase, error: null });
+
+    // Mock a non-checkpoint question (e.g., 'tenant_full_name')
+    const response = await saveAnswer(
+      new Request('http://localhost/api/wizard/answer', {
+        method: 'POST',
+        body: JSON.stringify({
+          case_id: mockCase.id,
+          question_id: 'tenant_full_name', // NOT a checkpoint question
+          answer: 'John Doe',
+        }),
+      }),
+    );
+
+    const body = await response.json();
+    // Should NOT return 422, even if there are compliance failures
+    // Instead, compliance failures are downgraded to warnings
+    expect(response.status).toBe(200);
+    expect(body.answer_saved).toBe(true);
+    // Compliance warnings may be present but shouldn't block
+    if (body.compliance_warnings) {
+      expect(Array.isArray(body.compliance_warnings)).toBe(true);
+    }
   });
 });
 
