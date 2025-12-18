@@ -268,7 +268,10 @@ const TEST_ROUTES: TestRoute[] = [
     expectedPhrases: [
       'Section 173',
       'Renting Homes (Wales) Act 2016',
-      'contract holder',
+      // REGEX: Match "contract holder" with flexible hyphenation/whitespace
+      // Handles: "contract holder", "contract-holder", "contractholder", line breaks
+      // (hyphens are removed during normalization, so \s* matches zero spaces for "contractholder")
+      /contract\s*holder/i,
       'occupation contract',
       'Dafydd Landlord',
       'Bethan ContractHolder',
@@ -329,8 +332,9 @@ const TEST_ROUTES: TestRoute[] = [
     expectedPhrases: [
       'Renting Homes (Wales) Act 2016',
       // REGEX: Match "contract holder" with flexible hyphenation/whitespace
-      // Handles: "contract holder", "contract-holder", "contractholder", "contract- holder"
-      /contract\s*-?\s*holder/i,
+      // Handles: "contract holder", "contract-holder", "contractholder", line breaks
+      // (hyphens are removed during normalization, so \s* matches zero spaces for "contractholder")
+      /contract\s*holder/i,
       'breach',
       'Gareth Landlord',
       'Megan ContractHolder',
