@@ -774,6 +774,8 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
           reasoning: decision.route_explanations?.[recommendedRoute as keyof typeof decision.route_explanations] ||
                      'Based on your compliance status, this is the most suitable route.',
           blocked_routes: decision.blocked_routes,
+          // CRITICAL FIX: Store ALL blocking issues (unfiltered) for route comparison,
+          // but they should only be shown for their specific routes, not for all routes
           blocking_issues: decision.blocking_issues
             .filter(b => b.severity === 'blocking')
             .map(b => ({
