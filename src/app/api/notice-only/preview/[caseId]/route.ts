@@ -168,19 +168,22 @@ export async function GET(
       selectedRoute: selected_route,
     });
 
-    if ((validationOutcome.blocking?.length ?? 0) > 0) {
+    const blockingIssues = validationOutcome.blocking ?? [];
+    const warnings = validationOutcome.warnings ?? [];
+
+    if (blockingIssues.length > 0) {
       const userMessage = 'Cannot generate preview: jurisdiction rules are not satisfied';
       const blockingPayload = {
         code: 'LEGAL_BLOCK',
         error: 'LEGAL_BLOCK',
         user_message: userMessage,
-        blocking_issues: validationOutcome.blocking ?? [],
-        warnings: validationOutcome.warnings ?? [],
+        blocking_issues: blockingIssues,
+        warnings,
       };
 
       console.warn('[NOTICE-PREVIEW-API] Validation blocked preview:', {
         case_id: caseId,
-        blocking: (validationOutcome.blocking ?? []).map((b) => b.code),
+        blocking: blockingIssues.map((b) => b.code),
         payload: blockingPayload,
       });
 
