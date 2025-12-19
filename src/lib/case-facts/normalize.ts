@@ -1718,49 +1718,164 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
     return [];
   }
 
+  const groundParticulars = getWizardValue(wizard, 'ground_particulars');
+
+  const formatCurrency = (value: any): string | null => {
+    if (value === null || value === undefined) return null;
+    const num = typeof value === 'number' ? value : parseFloat(value);
+    if (Number.isNaN(num)) return null;
+    return `£${num.toFixed(2)}`;
+  };
+
+  const formatMultiline = (value: any): string | null => {
+    if (!value) return null;
+    if (typeof value === 'string') {
+      return value.trim().replace(/\n/g, '<br>');
+    }
+    if (Array.isArray(value)) {
+      return value.map(v => (typeof v === 'string' ? v : String(v))).join('<br>');
+    }
+    if (typeof value === 'object') {
+      const maybeValue = (value as any).text || (value as any).summary || (value as any).details;
+      if (maybeValue) return formatMultiline(maybeValue);
+    }
+    return String(value);
+  };
+
+  const normalizeGroundCode = (input: string | number): string | null => {
+    if (typeof input === 'number') return String(input);
+    if (!input) return null;
+    const trimmed = input.trim();
+    const explicitMatch = trimmed.match(/ground[_\s-]*([0-9]+a?)/i);
+    if (explicitMatch) return explicitMatch[1].toUpperCase();
+    const numericOnly = trimmed.match(/^([0-9]+a?)$/i);
+    if (numericOnly) return numericOnly[1].toUpperCase();
+    const looseMatch = trimmed.match(/([0-9]+a?)/i);
+    return looseMatch ? looseMatch[1].toUpperCase() : null;
+  };
+
+  const pickParticularEntry = (code: string | number) => {
+    if (!groundParticulars || typeof groundParticulars !== 'object' || Array.isArray(groundParticulars)) return null;
+    const normalized = normalizeGroundCode(code)?.toLowerCase();
+    const possibleKeys = [
+      normalized ? `ground_${normalized}` : null,
+      normalized,
+      typeof code === 'string' ? code : null,
+    ].filter(Boolean) as string[];
+
+    for (const key of possibleKeys) {
+      if ((groundParticulars as any)[key]) {
+        return (groundParticulars as any)[key];
+      }
+    }
+    return null;
+  };
+
+  const renderParticulars = (
+    groundDef: (typeof SECTION8_GROUND_DEFINITIONS)[keyof typeof SECTION8_GROUND_DEFINITIONS] | undefined,
+    groundCode: string | number | null,
+  ) => {
+    const particularsEntry = pickParticularEntry(groundCode || '');
+    const defaultNarrative =
+      getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+      getWizardValue(wizard, 'section8_grounds_narrative') ||
+      (typeof groundParticulars === 'string' ? groundParticulars : null);
+
+    const facts: string[] = [];
+
+    const arrearsAmount =
+      particularsEntry?.total_amount_owed ??
+      particularsEntry?.arrears_amount ??
+      (groundParticulars as any)?.total_amount_owed ??
+      templateData.arrears_at_notice_date ??
+      templateData.total_arrears;
+    const arrearsPeriod =
+      particularsEntry?.period_of_arrears ??
+      particularsEntry?.arrears_period ??
+      (groundParticulars && typeof groundParticulars === 'object'
+        ? (groundParticulars as any).period_of_arrears
+        : null) ??
+      (groundParticulars && typeof groundParticulars === 'object'
+        ? (groundParticulars as any).arrears_period
+        : null) ??
+      (templateData.arrears_duration_months !== null && templateData.arrears_duration_months !== undefined
+        ? `${templateData.arrears_duration_months} month period`
+        : null);
+
+    const factualSummary =
+      particularsEntry?.factual_summary ||
+      particularsEntry?.summary ||
+      particularsEntry?.details ||
+      particularsEntry?.particulars ||
+      particularsEntry?.narrative ||
+      defaultNarrative;
+
+    if (arrearsAmount !== null && arrearsAmount !== undefined && groundDef && [8, 10, 11].includes(groundDef.code)) {
+      const formattedAmount = formatCurrency(arrearsAmount) || arrearsAmount;
+      facts.push(`<strong>Total amount owed:</strong> ${formattedAmount}`);
+    }
+
+    if (arrearsPeriod) {
+      facts.push(`<strong>Period of arrears:</strong> ${arrearsPeriod}`);
+    }
+
+    if (factualSummary) {
+      facts.push(`<strong>Factual summary:</strong> ${formatMultiline(factualSummary)}`);
+    }
+
+    const evidenceText =
+      particularsEntry?.evidence ||
+      particularsEntry?.evidence_available ||
+      particularsEntry?.supporting_evidence ||
+      (groundParticulars && typeof groundParticulars === 'object' ? (groundParticulars as any).evidence : null);
+
+    const rendered = facts.filter(Boolean).join('<br>');
+
+    return {
+      particulars: rendered || formatMultiline(defaultNarrative) || '',
+      evidence: evidenceText ? formatMultiline(evidenceText) : null,
+    };
+  };
+
   const groundsList = Array.isArray(selectedGrounds) ? selectedGrounds : [selectedGrounds];
 
   return groundsList.map((groundStr: string) => {
-    // Parse ground number from string like "Ground 8 - Serious rent arrears"
-    const match = groundStr.match(/ground\s*([0-9]+a?)/i);
-    const groundNumStr = match ? match[1].toUpperCase() : '';
-    const groundNum = groundNumStr === '14A' ? '14A' : parseInt(groundNumStr);
-
-    // Look up ground definition
-    const groundDef = SECTION8_GROUND_DEFINITIONS[groundNum];
+    const groundNumStr = normalizeGroundCode(groundStr) || '';
+    const groundKey = groundNumStr === '14A' ? '14A' : parseInt(groundNumStr, 10);
+    const groundDef = SECTION8_GROUND_DEFINITIONS[groundKey] || SECTION8_GROUND_DEFINITIONS[groundNumStr];
 
     if (!groundDef) {
       console.warn(`[buildGroundsArray] Unknown ground: ${groundStr}`);
       return {
-        code: groundNumStr,
+        code: groundNumStr || groundStr,
         mandatory: false,
         title: groundStr,
         legal_basis: 'Housing Act 1988, Schedule 2',
         full_text: '',
-        statutory_text: '', // Template expects statutory_text
+        statutory_text: '',
         explanation: '',
         particulars: '',
+        type: 'DISCRETIONARY',
+        type_label: 'Discretionary',
       };
     }
 
     // Build explanation and particulars based on ground type
     let explanation = '';
-    let particulars = '';
+    const particularLines: string[] = [];
 
-    if (groundNum === 8) {
-      // Ground 8: Serious rent arrears
+    if (groundDef.code === 8) {
       const arrears = templateData.arrears_at_notice_date || templateData.total_arrears || 0;
       const rentAmount = templateData.rent_amount || 0;
       const rentFreq = templateData.rent_frequency || 'monthly';
 
-      // Calculate threshold
       let threshold = 0;
       let thresholdDescription = '';
       if (rentFreq === 'weekly') {
         threshold = rentAmount * 8;
         thresholdDescription = '8 weeks';
       } else if (rentFreq === 'fortnightly') {
-        threshold = rentAmount * 4; // 8 weeks = 4 fortnights
+        threshold = rentAmount * 4;
         thresholdDescription = '8 weeks (4 fortnightly payments)';
       } else if (rentFreq === 'monthly') {
         threshold = rentAmount * 2;
@@ -1770,58 +1885,69 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
         thresholdDescription = '1 quarter';
       }
 
-      // Only include Ground 8 explanation if threshold is met
       if (arrears >= threshold) {
         explanation = `The tenant currently owes £${arrears.toFixed(2)} in rent arrears. The rent is £${rentAmount} payable ${rentFreq}. At the date of service of this notice, the arrears amount to ${thresholdDescription} of rent or more. This satisfies the threshold for Ground 8 under Schedule 2 of the Housing Act 1988 (as amended).`;
-        particulars = `Rent arrears at date of notice: £${arrears.toFixed(2)}\nRent amount: £${rentAmount} (${rentFreq})\nThreshold for Ground 8: £${threshold.toFixed(2)} (${thresholdDescription})\n\nGround 8 is a MANDATORY ground. If the arrears still meet the threshold at the date of the hearing, the court MUST grant possession.`;
+        particularLines.push(`Rent arrears at date of notice: £${arrears.toFixed(2)}`);
+        particularLines.push(`Threshold for Ground 8: £${threshold.toFixed(2)} (${thresholdDescription})`);
+        particularLines.push('Ground 8 is a MANDATORY ground. If the arrears still meet the threshold at the date of the hearing, the court MUST grant possession.');
       } else {
         explanation = `WARNING: The current arrears of £${arrears.toFixed(2)} do not meet the Ground 8 threshold of ${thresholdDescription} (£${threshold.toFixed(2)}). Ground 8 cannot be relied upon unless the arrears increase before the hearing.`;
-        particulars = `Current arrears: £${arrears.toFixed(2)}\nRequired threshold: £${threshold.toFixed(2)} (${thresholdDescription})\n\nGround 8 is NOT satisfied at this time.`;
+        particularLines.push(`Current arrears: £${arrears.toFixed(2)}`);
+        particularLines.push(`Required threshold: £${threshold.toFixed(2)} (${thresholdDescription})`);
+        particularLines.push('Ground 8 is NOT satisfied at this time.');
       }
-    } else if (groundNum === 10 || groundNum === 11) {
-      // Grounds 10/11: Other arrears grounds
+    } else if (groundDef.code === 10 || groundDef.code === 11) {
       const arrears = templateData.total_arrears || 0;
       explanation = `The tenant owes £${arrears.toFixed(2)} in rent arrears.`;
-      particulars = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   `Rent arrears outstanding: £${arrears.toFixed(2)}`;
-
-      if (groundNum === 10) {
-        particulars += `\n\nGround 10 is a DISCRETIONARY ground. The court will consider all circumstances when deciding whether to grant possession.`;
-      } else {
-        particulars += `\n\nGround 11 is a DISCRETIONARY ground. The court will consider the pattern of late payments when deciding whether to grant possession.`;
-      }
-    } else if (groundNum === 12) {
-      // Ground 12: Breach of tenancy
-      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   'The tenant has breached one or more terms of the tenancy agreement.';
-      particulars = explanation + '\n\nGround 12 is a DISCRETIONARY ground. The court will consider the nature and severity of the breach.';
-    } else if (groundNum === 13 || groundNum === 15) {
-      // Grounds 13/15: Property damage
-      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   'The condition of the property has deteriorated.';
-      particulars = explanation + `\n\nGround ${groundNum} is a DISCRETIONARY ground. The court will assess the extent of deterioration.`;
-    } else if (groundNum === 14 || groundNumStr === '14A') {
-      // Grounds 14/14A: Nuisance/ASB
-      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   'The tenant or persons at the property have caused nuisance or annoyance.';
-      particulars = explanation + `\n\nGround ${groundNumStr} is a DISCRETIONARY ground. The court will consider evidence of nuisance or anti-social behaviour.`;
-    } else if (groundNum === 17) {
-      // Ground 17: False statement
-      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   'The tenancy was granted based on a false statement.';
-      particulars = explanation + '\n\nGround 17 is a DISCRETIONARY ground. The court will consider whether the false statement was material to the grant of the tenancy.';
+      particularLines.push(`Rent arrears outstanding: £${arrears.toFixed(2)}`);
+      particularLines.push(
+        groundDef.code === 10
+          ? 'Ground 10 is a DISCRETIONARY ground. The court will consider all circumstances when deciding whether to grant possession.'
+          : 'Ground 11 is a DISCRETIONARY ground. The court will consider the pattern of late payments when deciding whether to grant possession.'
+      );
+    } else if (groundDef.code === 12) {
+      explanation =
+        getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+        getWizardValue(wizard, 'section8_grounds_narrative') ||
+        'The tenant has breached one or more terms of the tenancy agreement.';
+      particularLines.push(explanation);
+      particularLines.push('Ground 12 is a DISCRETIONARY ground. The court will consider the nature and severity of the breach.');
+    } else if (groundDef.code === 13 || groundDef.code === 15) {
+      explanation =
+        getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+        getWizardValue(wizard, 'section8_grounds_narrative') ||
+        'The condition of the property has deteriorated.';
+      particularLines.push(explanation);
+      particularLines.push(`Ground ${groundDef.code} is a DISCRETIONARY ground. The court will assess the extent of deterioration.`);
+    } else if (groundDef.code === 14 || groundNumStr === '14A') {
+      explanation =
+        getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+        getWizardValue(wizard, 'section8_grounds_narrative') ||
+        'The tenant or persons at the property have caused nuisance or annoyance.';
+      particularLines.push(explanation);
+      particularLines.push(`Ground ${groundNumStr} is a DISCRETIONARY ground. The court will consider evidence of nuisance or anti-social behaviour.`);
+    } else if (groundDef.code === 17) {
+      explanation =
+        getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+        getWizardValue(wizard, 'section8_grounds_narrative') ||
+        'The tenancy was granted based on a false statement.';
+      particularLines.push(explanation);
+      particularLines.push('Ground 17 is a DISCRETIONARY ground. The court will consider whether the false statement was material to the grant of the tenancy.');
     } else {
-      // Other grounds
-      explanation = getWizardValue(wizard, 'section8_other_grounds_narrative') ||
-                   getWizardValue(wizard, 'section8_grounds_narrative') ||
-                   '';
-      particulars = explanation;
+      explanation =
+        getWizardValue(wizard, 'section8_other_grounds_narrative') ||
+        getWizardValue(wizard, 'section8_grounds_narrative') ||
+        '';
     }
+
+    const { particulars: userParticulars, evidence } = renderParticulars(groundDef, groundNumStr || groundStr);
+    const combinedParticulars = [
+      ...particularLines.filter(Boolean),
+      userParticulars,
+    ]
+      .filter(Boolean)
+      .map(p => formatMultiline(p) || '')
+      .join('<br>');
 
     return {
       code: groundDef.code,
@@ -1832,8 +1958,11 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
       full_text: groundDef.full_text,
       statutory_text: groundDef.full_text, // Template expects statutory_text
       explanation,
-      particulars,
+      particulars: combinedParticulars,
+      evidence,
       type: groundDef.mandatory ? 'MANDATORY' : 'DISCRETIONARY',
+      type_label: groundDef.mandatory ? 'Mandatory' : 'Discretionary',
+      display_heading: `Ground ${groundDef.code} – ${groundDef.title}`,
     };
   });
 }
@@ -2257,6 +2386,9 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   templateData.selected_notice_route = extractString(
     getFirstValue(wizard, ['selected_notice_route', 'eviction_route', 'route_intent'])
   );
+
+  // Preserve raw particulars map for downstream templates
+  templateData.ground_particulars = getWizardValue(wizard, 'ground_particulars');
 
   // Section 8 grounds
   const section8Grounds = getWizardValue(wizard, 'section8_grounds');

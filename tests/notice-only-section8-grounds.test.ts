@@ -204,6 +204,56 @@ describe('Section 8 Notice Only - Grounds Rendering', () => {
     expect(ground12.mandatory).toBe(false);
     expect(ground12.type).toBe('DISCRETIONARY');
   });
+
+  it('normalizes internal ground ids and maps structured particulars', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['ground_8', 'ground_11'],
+      ground_particulars: {
+        ground_8: {
+          factual_summary: 'Tenant owes two months of rent across June and July.',
+          evidence: 'Bank statements and rent ledger',
+          total_amount_owed: 2500,
+          period_of_arrears: 'June 2024 - July 2024',
+        },
+        ground_11: {
+          factual_summary: 'Repeated late payments every month for six months.',
+          evidence_available: 'WhatsApp reminders and receipts',
+        },
+        total_amount_owed: 2500,
+      },
+      landlord_full_name: 'Landlord',
+      tenant_full_name: 'Tenant',
+      property_address: '123 Main Street',
+      total_arrears: 2500,
+      rent_amount: 1250,
+      rent_frequency: 'monthly',
+      notice_service_date: '2024-02-01',
+    };
+
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    expect(templateData.grounds.length).toBe(2);
+    const ground8 = templateData.grounds.find((g: any) => g.code === 8);
+    const ground11 = templateData.grounds.find((g: any) => g.code === 11);
+
+    expect(ground8.title).toContain('Serious rent arrears');
+    expect(ground8.type_label).toBe('Mandatory');
+    expect(ground8.particulars).toContain('Total amount owed');
+    expect(ground8.particulars).toContain('June 2024 - July 2024');
+    expect(ground8.particulars).toContain('Factual summary');
+    expect(ground8.evidence).toContain('Bank statements');
+
+    expect(ground11.title).toContain('Persistent delay');
+    expect(ground11.type_label).toBe('Discretionary');
+    expect(ground11.particulars).toContain('Factual summary');
+    expect(ground11.evidence).toContain('WhatsApp');
+
+    const serialized = JSON.stringify(templateData.grounds).toLowerCase();
+    expect(serialized).not.toContain('ground_8');
+    expect(serialized).not.toContain('ground_11');
+  });
 });
 
 describe('Section 8 Notice Only - Preview Route Integration', () => {
@@ -244,5 +294,40 @@ describe('Section 8 Notice Only - Preview Route Integration', () => {
     expect(ground8.code).toBe(8);
     expect(ground8.title).not.toContain('ground_8');
     expect(ground8.title).toContain('rent arrears');
+  });
+
+  it('assembles preview-friendly strings for grounds 8 and 11 with particulars', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['ground_8', 'ground_11'],
+      ground_particulars: {
+        ground_8: {
+          factual_summary: 'Missed payments in July and August.',
+          evidence: 'Ledger extract',
+          total_amount_owed: 2600,
+          period_of_arrears: 'July 2024 - August 2024',
+        },
+      },
+      landlord_full_name: 'John Doe',
+      tenant_full_name: 'Jane Smith',
+      property_address: '123 Test Street',
+      total_arrears: 2600,
+      rent_amount: 1300,
+      rent_frequency: 'monthly',
+      notice_service_date: '2024-03-01',
+    };
+
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    const description = templateData.grounds
+      .map((g: any) => `Ground ${g.code} – ${g.title}`)
+      .join(', ');
+
+    expect(description).toContain('Ground 8 – Serious rent arrears');
+    expect(description).toContain('Ground 11 – Persistent delay');
+    expect(description).not.toContain('ground_8');
+    expect(description).not.toContain('Ground ,');
+    expect(templateData.grounds[0].evidence).toContain('Ledger');
   });
 });
