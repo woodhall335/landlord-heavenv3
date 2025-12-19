@@ -14,6 +14,7 @@ import { GuidanceTips } from '@/components/wizard/GuidanceTips';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 import { formatGroundTitle, getGroundTypeBadgeClasses, type GroundMetadata } from '@/lib/grounds/format-ground-title';
+import { apiUrl } from '@/lib/api';
 
 // ====================================================================================
 // OPTION NORMALIZATION HELPER (FIX FOR [object Object] REACT ERRORS)
@@ -338,7 +339,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setAnalysisError(null);
 
     try {
-      const response = await fetch('/api/wizard/analyze', {
+      const response = await fetch(apiUrl('/api/wizard/analyze'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -377,7 +378,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (!caseId || caseType !== 'eviction') return;
 
     try {
-      const response = await fetch('/api/wizard/checkpoint', {
+      const response = await fetch(apiUrl('/api/wizard/checkpoint'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ case_id: caseId }),
@@ -448,7 +449,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setAskHeavenResult(null);
 
     try {
-      const response = await fetch('/api/wizard/next-question', {
+      const response = await fetch(apiUrl('/api/wizard/next-question'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -505,7 +506,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setError(null);
 
     try {
-      const response = await fetch('/api/wizard/mqs', {
+      const response = await fetch(apiUrl('/api/wizard/mqs'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -561,7 +562,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   useEffect(() => {
     const fetchCaseFacts = async () => {
       try {
-        const response = await fetch(`/api/cases/${caseId}`);
+        const response = await fetch(apiUrl(`/api/cases/${caseId}`));
         if (response.ok) {
           const data = await response.json();
           setCaseFacts(data.case?.collected_facts || {});
@@ -816,7 +817,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         setLoadingGrounds(true);
         setGroundsFetchError(null);
         try {
-          const response = await fetch(`/api/grounds/${jurisdiction}`);
+          const response = await fetch(apiUrl(`/api/grounds/${jurisdiction}`));
           if (response.ok) {
             const data = await response.json();
             setAvailableGrounds(data.grounds);
@@ -1071,7 +1072,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
     try {
       // Save answer to backend
-      const response = await fetch('/api/wizard/answer', {
+      const response = await fetch(apiUrl('/api/wizard/answer'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
