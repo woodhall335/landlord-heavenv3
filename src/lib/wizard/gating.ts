@@ -8,6 +8,11 @@
  */
 
 import type { ProductType } from './mqs-loader';
+import {
+  getFactValue as resolveFactValue,
+  validateJurisdictionCompliance,
+} from '@/lib/jurisdictions/validators';
+import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
 
 // ============================================================================
 // TYPES
@@ -19,6 +24,8 @@ export interface GateBlockingIssue {
   fields?: string[];
   legal_basis?: string;
   user_fix_hint?: string;
+  user_message?: string;
+  internal_reason?: string;
 }
 
 export interface GateWarning {
@@ -43,23 +50,6 @@ export interface WizardGateInput {
 // ============================================================================
 // HELPERS
 // ============================================================================
-
-/**
- * Get value from facts, handling both flat and nested paths
- */
-function getFactValue(facts: Record<string, any>, path: string): any {
-  if (Object.prototype.hasOwnProperty.call(facts, path)) {
-    return facts[path];
-  }
-
-  return path
-    .split('.')
-    .filter(Boolean)
-    .reduce((acc: any, key) => {
-      if (acc === undefined || acc === null) return undefined;
-      return acc[key];
-    }, facts);
-}
 
 /**
  * Calculate arrears in months from arrears amount and rent
@@ -119,8 +109,8 @@ function extractGroundCodes(section8Grounds: any[]): number[] {
  */
 function hasParticularsForGround(facts: Record<string, any>, groundCode: number): boolean {
   // Check structured particulars: ground_particulars.ground_8.summary or section_8_particulars.ground_8
-  const structuredPath1 = getFactValue(facts, `ground_particulars.ground_${groundCode}.summary`);
-  const structuredPath2 = getFactValue(facts, `section_8_particulars.ground_${groundCode}`);
+  const structuredPath1 = resolveFactValue(facts, `ground_particulars.ground_${groundCode}.summary`);
+  const structuredPath2 = resolveFactValue(facts, `section_8_particulars.ground_${groundCode}`);
 
   if (structuredPath1 && typeof structuredPath1 === 'string' && structuredPath1.trim().length > 0) {
     return true;
@@ -131,7 +121,7 @@ function hasParticularsForGround(facts: Record<string, any>, groundCode: number)
   }
 
   // Check legacy flat field: ground_particulars (contains all grounds in one text blob)
-  const flatParticulars = getFactValue(facts, 'ground_particulars');
+  const flatParticulars = resolveFactValue(facts, 'ground_particulars');
   if (flatParticulars && typeof flatParticulars === 'string' && flatParticulars.trim().length > 0) {
     // If it mentions "Ground {code}" assume it has particulars for that ground
     const regex = new RegExp(`Ground\\s+${groundCode}\\b`, 'i');
@@ -150,33 +140,61 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
   const blocking: GateBlockingIssue[] = [];
   const warnings: GateWarning[] = [];
 
-  if (jurisdiction !== 'england' && jurisdiction !== 'england-wales' && jurisdiction !== 'wales') {
-    // Scotland/NI have different rules - skip for now
-    return { blocking, warnings };
-  }
+  const jurisdictionKey = (jurisdiction as JurisdictionKey) || 'england';
 
   // ============================================================================
   // GATE 1: Section 8 Ground 8 Threshold
   // ============================================================================
 
-  const selectedRoute = getFactValue(facts, 'selected_notice_route') ||
-                       getFactValue(facts, 'eviction_route') ||
-                       getFactValue(facts, 'notice_type');
+  const selectedRoute = resolveFactValue(facts, 'selected_notice_route') ||
+                       resolveFactValue(facts, 'eviction_route') ||
+                       resolveFactValue(facts, 'notice_type');
 
-  const section8Grounds = getFactValue(facts, 'section8_grounds') || [];
+  const section8Grounds = resolveFactValue(facts, 'section8_grounds') || [];
   const groundCodes = extractGroundCodes(section8Grounds);
+
+  // ============================================================================
+  // CONFIG-DRIVEN VALIDATION (all jurisdictions)
+  // ============================================================================
+  const jurisdictionValidation = validateJurisdictionCompliance({
+    jurisdiction: jurisdictionKey,
+    facts,
+    selectedGroundCodes: groundCodes,
+  });
+
+  if (jurisdictionValidation.blocking.length > 0) {
+    blocking.push(
+      ...jurisdictionValidation.blocking.map((issue) => ({
+        code: issue.code,
+        message: issue.user_message || issue.code,
+        user_message: issue.user_message,
+        internal_reason: issue.internal_reason,
+        fields: issue.fields,
+      }))
+    );
+  }
+
+  if (jurisdictionValidation.warnings.length > 0) {
+    warnings.push(
+      ...jurisdictionValidation.warnings.map((issue) => ({
+        code: issue.code,
+        message: issue.user_message || issue.code,
+        fields: issue.fields,
+      }))
+    );
+  }
 
   if (groundCodes.indexOf(8) !== -1) {
     // User has selected Ground 8 - check threshold
-    const rentAmount = getFactValue(facts, 'rent_amount') ||
-                      getFactValue(facts, 'tenancy.rent_amount') || 0;
-    const rentFrequency = getFactValue(facts, 'rent_frequency') ||
-                         getFactValue(facts, 'tenancy.rent_frequency') || 'monthly';
+    const rentAmount = resolveFactValue(facts, 'rent_amount') ||
+                      resolveFactValue(facts, 'tenancy.rent_amount') || 0;
+    const rentFrequency = resolveFactValue(facts, 'rent_frequency') ||
+                         resolveFactValue(facts, 'tenancy.rent_frequency') || 'monthly';
 
     // Check multiple possible arrears fields
-    const arrearsAmount = getFactValue(facts, 'arrears_amount') ||
-                         getFactValue(facts, 'arrears_total') ||
-                         getFactValue(facts, 'issues.rent_arrears.total_arrears') || 0;
+    const arrearsAmount = resolveFactValue(facts, 'arrears_amount') ||
+                         resolveFactValue(facts, 'arrears_total') ||
+                         resolveFactValue(facts, 'issues.rent_arrears.total_arrears') || 0;
 
     // Validate we have the data to evaluate threshold
     if (rentAmount <= 0) {
@@ -232,12 +250,12 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
   // GATE 2: Deposit Questions - Consistency
   // ============================================================================
 
-  const depositTaken = getFactValue(facts, 'deposit_taken');
-  const depositAmount = getFactValue(facts, 'deposit_amount') ||
-                       getFactValue(facts, 'tenancy.deposit_amount');
-  const depositProtected = getFactValue(facts, 'deposit_protected') ||
-                          getFactValue(facts, 'tenancy.deposit_protected');
-  const prescribedInfoGiven = getFactValue(facts, 'prescribed_info_given');
+  const depositTaken = resolveFactValue(facts, 'deposit_taken');
+  const depositAmount = resolveFactValue(facts, 'deposit_amount') ||
+                       resolveFactValue(facts, 'tenancy.deposit_amount');
+  const depositProtected = resolveFactValue(facts, 'deposit_protected') ||
+                          resolveFactValue(facts, 'tenancy.deposit_protected');
+  const prescribedInfoGiven = resolveFactValue(facts, 'prescribed_info_given');
 
   // If deposit taken, must have deposit_amount
   if (depositTaken === true) {
@@ -308,9 +326,9 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     }
 
     // Gas safety certificate (if property has gas appliances)
-    const hasGasAppliances = getFactValue(facts, 'has_gas_appliances');
-    const gasCertProvided = getFactValue(facts, 'gas_certificate_provided') ||
-                           getFactValue(facts, 'gas_safety_cert_provided');
+    const hasGasAppliances = resolveFactValue(facts, 'has_gas_appliances');
+    const gasCertProvided = resolveFactValue(facts, 'gas_certificate_provided') ||
+                           resolveFactValue(facts, 'gas_safety_cert_provided');
 
     if (hasGasAppliances === true && gasCertProvided === false) {
       blocking.push({
@@ -323,7 +341,7 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     }
 
     // EPC
-    const epcProvided = getFactValue(facts, 'epc_provided');
+    const epcProvided = resolveFactValue(facts, 'epc_provided');
     if (epcProvided === false) {
       blocking.push({
         code: 'SECTION_21_EPC_MISSING',
@@ -335,7 +353,7 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     }
 
     // Property licensing
-    const propertyLicensingStatus = getFactValue(facts, 'property_licensing_status');
+    const propertyLicensingStatus = resolveFactValue(facts, 'property_licensing_status');
     if (propertyLicensingStatus === 'unlicensed') {
       blocking.push({
         code: 'SECTION_21_UNLICENSED_PROPERTY',
@@ -396,8 +414,8 @@ function evaluateMoneyClaimGating(input: WizardGateInput): WizardGateResult {
   const warnings: GateWarning[] = [];
 
   // Basic validation: must have claim amount
-  const claimAmount = getFactValue(facts, 'claim_amount') ||
-                     getFactValue(facts, 'total_claim_amount');
+  const claimAmount = resolveFactValue(facts, 'claim_amount') ||
+                     resolveFactValue(facts, 'total_claim_amount');
 
   if (claimAmount === undefined || claimAmount === null || claimAmount <= 0) {
     blocking.push({
@@ -409,8 +427,8 @@ function evaluateMoneyClaimGating(input: WizardGateInput): WizardGateResult {
   }
 
   // Must have defendant details
-  const defendantName = getFactValue(facts, 'defendant_name') ||
-                       getFactValue(facts, 'tenant_full_name');
+  const defendantName = resolveFactValue(facts, 'defendant_name') ||
+                       resolveFactValue(facts, 'tenant_full_name');
 
   if (!defendantName || (typeof defendantName === 'string' && defendantName.trim().length === 0)) {
     blocking.push({
@@ -434,8 +452,8 @@ function evaluateTenancyAgreementGating(input: WizardGateInput): WizardGateResul
   const warnings: GateWarning[] = [];
 
   // Validate deposit consistency for tenancy agreements too
-  const depositTaken = getFactValue(facts, 'deposit_taken');
-  const depositAmount = getFactValue(facts, 'deposit_amount');
+  const depositTaken = resolveFactValue(facts, 'deposit_taken');
+  const depositAmount = resolveFactValue(facts, 'deposit_amount');
 
   if (depositTaken === true) {
     if (depositAmount === undefined || depositAmount === null) {
