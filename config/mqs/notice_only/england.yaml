@@ -204,7 +204,7 @@ questions:
     inputType: yes_no
     validation:
       required: true
-    helperText: "Deposit protection is critical for Section 21 and important for Section 8"
+    helperText: "Deposit protection is a legal requirement for Section 21 notices. For Section 8, it's not required but good practice."
     maps_to:
       - deposit_taken
 
@@ -214,7 +214,7 @@ questions:
     inputType: yes_no
     validation:
       required: true
-    helperText: "Gas boiler, gas hob, gas fire, etc. Compliance required for Section 21"
+    helperText: "Gas boiler, gas hob, gas fire, etc. Gas safety certification is required for Section 21 but good practice for all notices."
     maps_to:
       - has_gas_appliances
 
@@ -232,7 +232,7 @@ questions:
     validation:
       required: true
     helperText: |
-      **CRITICAL: Section 21 INVALID without this**
+      Deposit protection is a legal requirement for Section 21 notices. For Section 8, it's not required but may be relevant for your records.
 
       Approved schemes:
       • Deposit Protection Service (DPS)
@@ -250,7 +250,7 @@ questions:
       value: true
     validation:
       required: true
-    helperText: "Required information about deposit protection scheme (critical for Section 21)"
+    helperText: "Prescribed information about the deposit protection scheme. This is a legal requirement for Section 21 notices, but not required for Section 8."
     maps_to:
       - prescribed_info_given
 
@@ -263,7 +263,7 @@ questions:
       value: true
     validation:
       required: true
-    helperText: "Must be provided and renewed annually (required for Section 21)"
+    helperText: "Must be provided and renewed annually. This is a legal requirement for Section 21 notices."
     maps_to:
       - gas_certificate_provided
 
@@ -278,9 +278,9 @@ questions:
     validation:
       required: true
     helperText: |
-      **EPC required for Section 21**
+      Energy Performance Certificate (EPC) must be provided to tenants.
 
-      This system enforces EPC compliance for all Section 21 notices.
+      This is a legal requirement for Section 21 notices.
 
       **Legal exemptions exist but are not supported:**
       • Listed buildings
@@ -334,7 +334,7 @@ questions:
       - "not_required"
       - "licensed"
       - "unlicensed"
-    helperText: "HMO or selective licensing (required for Section 21)"
+    helperText: "HMO or selective licensing status. If required and unlicensed, Section 21 notices cannot be served."
     maps_to:
       - property_licensing_status
 
@@ -344,7 +344,7 @@ questions:
     inputType: yes_no
     validation:
       required: true
-    helperText: "Retaliatory eviction rules may apply (affects Section 21)"
+    helperText: "Retaliatory eviction rules may apply to Section 21 notices if tenant has made recent repair complaints."
     maps_to:
       - recent_repair_complaints
 
