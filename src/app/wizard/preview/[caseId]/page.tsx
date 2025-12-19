@@ -319,6 +319,16 @@ export default function WizardPreviewPage() {
 
         const caseResult = await caseResponse.json();
         const fetchedCase: CaseData = caseResult.case;
+
+        // Ensure recommended_route is set from wizard facts if not already set
+        if (!fetchedCase.recommended_route && fetchedCase.collected_facts) {
+          const wizardFacts = fetchedCase.collected_facts as any;
+          fetchedCase.recommended_route =
+            wizardFacts.selected_notice_route ||
+            wizardFacts.route_recommendation?.recommended_route ||
+            wizardFacts.recommended_route;
+        }
+
         setCaseData(fetchedCase);
 
         const factsMeta = (fetchedCase.collected_facts as any)?.meta || {};
@@ -660,7 +670,11 @@ export default function WizardPreviewPage() {
           <div>
             <Card>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                {isEviction ? '📦 Eviction Pack Preview' : '📄 Document Preview'}
+                {isEviction && effectiveProduct === 'notice_only'
+                  ? '📦 Notice Only Pack Preview'
+                  : isEviction
+                  ? '📦 Eviction Pack Preview'
+                  : '📄 Document Preview'}
               </h3>
 
               {/* Notice Only - Show special message about merged preview */}
