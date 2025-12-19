@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
           missingFields: ['case_id'],
           reason: 'case_id is required and must be a valid UUID',
         },
-        { status: 400 }
+        { status: 422 }
       );
     }
 
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
           missingFields: ['jurisdiction'],
           reason: 'Cannot determine jurisdiction from case or request',
         },
-        { status: 400 }
+        { status: 422 }
       );
     }
 
@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
         missingFields: [],
         reason: `jurisdiction must be one of: england-wales, scotland, northern-ireland (got: ${jurisdiction})`,
       },
-      { status: 400 }
+      { status: 422 }
     );
   }
 
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
           scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
         },
       },
-      { status: 400 }
+      { status: 422 }
     );
   }
 

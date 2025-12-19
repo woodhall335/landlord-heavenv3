@@ -757,6 +757,28 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         return false;
       }
 
+      // Check if any arrears grounds are selected
+      const hasArrearsGrounds = groundIds.some((id: string) =>
+        id === 'ground_8' || id === 'ground_10' || id === 'ground_11'
+      );
+
+      // Validate shared arrears if any arrears ground is selected
+      if (hasArrearsGrounds) {
+        const sharedArrears = currentAnswer.shared_arrears;
+        if (!sharedArrears || !sharedArrears.amount || !sharedArrears.period) {
+          setError('Please provide the total amount owed and period of arrears in the shared arrears section');
+          return false;
+        }
+        if (Number(sharedArrears.amount) <= 0) {
+          setError('Arrears amount must be greater than zero');
+          return false;
+        }
+        if (sharedArrears.period.trim() === '') {
+          setError('Please specify the period of arrears');
+          return false;
+        }
+      }
+
       // Validate each ground has a summary
       for (const groundId of groundIds) {
         const groundParticulars = currentAnswer[groundId];
@@ -885,6 +907,13 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           setError('Notice may be non-compliant. Please review the issues below and update your answers.');
           setLoading(false);
           return; // Stay on current question, don't advance
+        }
+
+        // Handle case not found (404) gracefully
+        if (response.status === 404 && errorData.code === 'CASE_NOT_FOUND') {
+          setError('Your session has expired or the case could not be found. Please restart the wizard from the beginning.');
+          setLoading(false);
+          return;
         }
 
         // Other errors - throw as before
@@ -1267,8 +1296,80 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             );
           }
 
+          // Check if any arrears grounds are selected
+          const hasArrearsGrounds = groundIds.some((id: string) =>
+            id === 'ground_8' || id === 'ground_10' || id === 'ground_11'
+          );
+
           return (
             <div className="space-y-6">
+              {/* Shared arrears section for grounds 8, 10, 11 */}
+              {hasArrearsGrounds && (
+                <div className="p-5 border-2 border-blue-300 rounded-lg bg-blue-50">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="text-2xl">💰</div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-blue-900 mb-1">
+                        Shared Arrears Information
+                      </h3>
+                      <p className="text-sm text-blue-800 mb-3">
+                        This section applies to all arrears-related grounds you've selected (8, 10, 11).
+                        Enter the overall arrears information once here.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-blue-900 mb-1">
+                        Total amount owed (£) <span className="text-red-500">*</span>
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-3 text-gray-500">£</span>
+                        <input
+                          type="number"
+                          value={structuredValue.shared_arrears?.amount || ''}
+                          onChange={(e) => setCurrentAnswer({
+                            ...structuredValue,
+                            shared_arrears: {
+                              ...structuredValue.shared_arrears,
+                              amount: e.target.value
+                            }
+                          })}
+                          className="w-full pl-8 p-2 border border-blue-300 rounded-lg"
+                          placeholder="e.g., 3000"
+                          disabled={loading}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-blue-900 mb-1">
+                        Period of arrears <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={structuredValue.shared_arrears?.period || ''}
+                        onChange={(e) => setCurrentAnswer({
+                          ...structuredValue,
+                          shared_arrears: {
+                            ...structuredValue.shared_arrears,
+                            period: e.target.value
+                          }
+                        })}
+                        className="w-full p-2 border border-blue-300 rounded-lg"
+                        placeholder="e.g., October 2025 – December 2025"
+                        disabled={loading}
+                      />
+                      <p className="text-xs text-blue-700 mt-1">
+                        Example formats: "Oct-Dec 2025", "1 October 2025 to 31 December 2025"
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Individual ground panels */}
               {groundIds.map((groundId: string) => {
                 // Extract ground number for display
                 const groundNum = groundId.replace('ground_', '').toUpperCase();
@@ -1279,6 +1380,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 // Get current particulars for this ground
                 const groundParticulars = structuredValue[groundId] || {};
 
+                // Determine if this is an arrears ground
+                const isArrearsGround = groundId === 'ground_8' || groundId === 'ground_10' || groundId === 'ground_11';
+
                 return (
                   <div
                     key={groundId}
@@ -1286,44 +1390,32 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   >
                     <h3 className="font-semibold text-gray-900 mb-3">
                       Ground {groundNum}
-                      {groundMeta && ` - ${groundMeta.name}`}
+                      {groundMeta && ` – ${groundMeta.name}`}
+                      {groundMeta && groundMeta.type && (
+                        <span className={`ml-2 text-xs px-2 py-0.5 rounded-full ${
+                          groundMeta.type === 'mandatory' || groundMeta.type === 'mandatory_with_conditions'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-blue-100 text-blue-800'
+                        }`}>
+                          {groundMeta.type === 'mandatory' || groundMeta.type === 'mandatory_with_conditions' ? 'Mandatory' : 'Discretionary'}
+                        </span>
+                      )}
                     </h3>
 
-                    {/* Special fields for rent arrears grounds (8, 10, 11) */}
-                    {(groundId === 'ground_8' || groundId === 'ground_10' || groundId === 'ground_11') && (
-                      <div className="space-y-3 mb-3">
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Amount owed (£)
-                          </label>
-                          <input
-                            type="number"
-                            value={groundParticulars.arrears_amount || ''}
-                            onChange={(e) => setCurrentAnswer({
-                              ...structuredValue,
-                              [groundId]: { ...groundParticulars, arrears_amount: e.target.value }
-                            })}
-                            className="w-full p-2 border border-gray-300 rounded-lg"
-                            placeholder="e.g., 1500"
-                            disabled={loading}
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">
-                            Period of arrears
-                          </label>
-                          <input
-                            type="text"
-                            value={groundParticulars.arrears_period || ''}
-                            onChange={(e) => setCurrentAnswer({
-                              ...structuredValue,
-                              [groundId]: { ...groundParticulars, arrears_period: e.target.value }
-                            })}
-                            className="w-full p-2 border border-gray-300 rounded-lg"
-                            placeholder="e.g., December 2024 - February 2025"
-                            disabled={loading}
-                          />
-                        </div>
+                    {/* Show shared arrears summary for arrears grounds */}
+                    {isArrearsGround && structuredValue.shared_arrears && (
+                      <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <p className="text-sm font-medium text-blue-900 mb-1">Shared Arrears Information:</p>
+                        <p className="text-sm text-blue-800">
+                          <strong>Amount owed:</strong> £{structuredValue.shared_arrears.amount || '0'}
+                        </p>
+                        <p className="text-sm text-blue-800">
+                          <strong>Period:</strong> {structuredValue.shared_arrears.period || 'Not specified'}
+                        </p>
+                        <p className="text-xs text-blue-700 mt-1 italic">
+                          This information applies to all arrears-related grounds (8, 10, 11).
+                          You can edit it in the shared arrears section above.
+                        </p>
                       </div>
                     )}
 
@@ -1332,6 +1424,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Factual summary <span className="text-red-500">*</span>
                       </label>
+                      <p className="text-xs text-gray-600 mb-2">
+                        Provide specific details for Ground {groundNum}. Include dates, incidents, and factual evidence.
+                      </p>
                       <textarea
                         value={groundParticulars.summary || ''}
                         onChange={(e) => setCurrentAnswer({
@@ -2064,22 +2159,6 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               </div>
             )}
 
-            {/* Ask Heaven Panel - inline on mobile (below the answer box) */}
-            {currentQuestion.inputType === 'textarea' && (
-              <div className="mb-6 lg:hidden">
-                <AskHeavenPanel
-                  caseId={caseId}
-                  caseType={caseType}
-                  jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
-                  product={product}
-                  currentQuestionId={currentQuestion.id}
-                  currentQuestionText={currentQuestion.question}
-                  currentAnswer={typeof currentAnswer === 'string' ? currentAnswer : null}
-                  onApplySuggestion={handleApplySuggestion}
-                />
-              </div>
-            )}
-
             {/* Contextual guidance helper – eviction, money claim, tenancy */}
             <GuidanceTips
               questionId={currentQuestion.id}
@@ -2264,9 +2343,25 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               </Button>
             </div>
           </Card>
+
+          {/* Ask Heaven Panel - below wizard for all screen sizes */}
+          {currentQuestion?.inputType === 'textarea' && (
+            <div className="mt-6">
+              <AskHeavenPanel
+                caseId={caseId}
+                caseType={caseType}
+                jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
+                product={product}
+                currentQuestionId={currentQuestion.id}
+                currentQuestionText={currentQuestion.question}
+                currentAnswer={typeof currentAnswer === 'string' ? currentAnswer : null}
+                onApplySuggestion={handleApplySuggestion}
+              />
+            </div>
+          )}
         </div>
 
-        {/* RIGHT: Side panels – Ask Heaven + case-specific widgets */}
+        {/* RIGHT: Side panels – case-specific widgets */}
         <aside className="space-y-4">
           {/* Smart Guidance panels for Notice Only (eviction) - sticky sidebar */}
           {caseType === 'eviction' && product === 'notice_only' && (
@@ -2492,20 +2587,6 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 </div>
               )}
             </div>
-          )}
-
-          {/* Ask Heaven sidebar – stays in view on larger screens */}
-          {currentQuestion?.inputType === 'textarea' && (
-            <AskHeavenPanel
-              caseId={caseId}
-              caseType={caseType}
-              jurisdiction={(jurisdiction || 'england') as 'england' | 'wales' | 'scotland' | 'northern-ireland'}
-              product={product}
-              currentQuestionId={currentQuestion.id}
-              currentQuestionText={currentQuestion.question}
-              currentAnswer={typeof currentAnswer === 'string' ? currentAnswer : null}
-              onApplySuggestion={handleApplySuggestion}
-            />
           )}
 
           {/* Case health & readiness (money claims only) */}
