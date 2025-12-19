@@ -268,7 +268,7 @@ describe('Wizard API Checkpoint', () => {
     const response = await checkpointWizard(request);
     const body = await response.json();
 
-    expect(response.status).toBe(422);
+    expect(response.status).toBe(400);
     expect(body.ok).toBe(false);
     expect(body.error).toBe('NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED');
   });
@@ -378,6 +378,6 @@ describe('Wizard API Checkpoint', () => {
     expect(response.status).toBe(422);
     expect(body.ok).toBe(false);
     expect(body.error).toBe('Invalid jurisdiction');
-    expect(body.reason).toBeDefined();
+    expect(body.reason).toContain('invalid');
   });
 });
