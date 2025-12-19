@@ -14,6 +14,32 @@ import { GuidanceTips } from '@/components/wizard/GuidanceTips';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 
+// ====================================================================================
+// OPTION NORMALIZATION HELPER (FIX FOR [object Object] REACT ERRORS)
+// ====================================================================================
+type MQSOption = string | { value: string; label?: string; [k: string]: any };
+
+interface NormalizedOption {
+  key: string;
+  value: string;
+  label: string;
+}
+
+/**
+ * Normalizes options to a consistent format, handling both string[] and object[] options.
+ * Prevents React key conflicts and [object Object] rendering errors.
+ */
+function normalizeOptions(options?: MQSOption[]): NormalizedOption[] {
+  return (options ?? []).map((opt) => {
+    if (typeof opt === "string") {
+      return { key: opt, value: opt, label: opt };
+    }
+    const value = String(opt.value ?? opt.id ?? "");
+    const label = String(opt.label ?? opt.name ?? value);
+    return { key: value, value, label };
+  }).filter(o => o.value);
+}
+
 interface StructuredWizardProps {
   caseId: string;
   caseType: 'eviction' | 'money_claim' | 'tenancy_agreement';
@@ -711,6 +737,39 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       return true;
     }
 
+    // ====================================================================================
+    // SPECIAL VALIDATION: Ground-specific particulars (Problem 1 fix)
+    // ====================================================================================
+    if (currentQuestion.id === 'ground_particulars' && currentQuestion.validation?.required) {
+      // Get selected grounds from case facts
+      const selectedGrounds = caseFacts.section8_grounds || [];
+
+      // Extract ground IDs
+      const groundIds = selectedGrounds.map((g: string) => {
+        if (g.startsWith('ground_')) return g;
+        const match = g.match(/Ground (\d+[A-Za-z]?)/i);
+        return match ? `ground_${match[1].toLowerCase()}` : g;
+      });
+
+      // Ensure answer is an object
+      if (typeof currentAnswer !== 'object' || currentAnswer === null) {
+        setError('Please provide details for each selected ground');
+        return false;
+      }
+
+      // Validate each ground has a summary
+      for (const groundId of groundIds) {
+        const groundParticulars = currentAnswer[groundId];
+        if (!groundParticulars || !groundParticulars.summary || groundParticulars.summary.trim() === '') {
+          const groundNum = groundId.replace('ground_', '').toUpperCase();
+          setError(`Please provide a factual summary for Ground ${groundNum}`);
+          return false;
+        }
+      }
+
+      return true;
+    }
+
     // For single inputs
     // Note: Must check for null/undefined specifically, not falsy values (false is valid for yes_no)
     if (
@@ -942,7 +1001,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       currentQuestion.inputType === 'address' ? 'group' : currentQuestion.inputType;
 
     switch (inputType) {
-      case 'select':
+      case 'select': {
+        const options = normalizeOptions(currentQuestion.options as MQSOption[]);
         return (
           <select
             value={value}
@@ -951,13 +1011,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             disabled={loading}
           >
             <option value="">-- Select an option --</option>
-            {currentQuestion.options?.map((option) => (
-              <option key={option} value={option}>
-                {option}
+            {options.map((option) => (
+              <option key={option.key} value={option.value}>
+                {option.label}
               </option>
             ))}
           </select>
         );
+      }
 
       case 'yes_no':
         return (
@@ -1047,6 +1108,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
         // Default multi-select rendering for non-grounds questions
         // OR for grounds questions where API fetch failed
+        const options = normalizeOptions(currentQuestion.options as MQSOption[]);
         return (
           <div className="space-y-2">
             {groundsFetchError && isGroundsQuestion && (
@@ -1059,21 +1121,21 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 </div>
               </div>
             )}
-            {currentQuestion.options?.map((option) => (
-              <label key={option} className="flex items-center gap-2 cursor-pointer">
+            {options.map((option) => (
+              <label key={option.key} className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={selectedValues.includes(option)}
+                  checked={selectedValues.includes(option.value)}
                   onChange={(e) => {
                     const newValues = e.target.checked
-                      ? [...selectedValues, option]
-                      : selectedValues.filter((v: string) => v !== option);
+                      ? [...selectedValues, option.value]
+                      : selectedValues.filter((v: string) => v !== option.value);
                     setCurrentAnswer(newValues);
                   }}
                   className="w-4 h-4 text-primary"
                   disabled={loading}
                 />
-                <span>{option}</span>
+                <span>{option.label}</span>
               </label>
             ))}
           </div>
@@ -1082,26 +1144,24 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
       case 'radio': {
         // Handle options with nested structure (value, label, helperText)
-        const options = currentQuestion.options?.map((opt) => {
-          if (typeof opt === 'string') {
-            return { value: opt, label: opt, helperText: undefined };
-          }
-          return opt;
-        }) || [];
+        const normalizedOptions = normalizeOptions(currentQuestion.options as MQSOption[]);
+
+        // Preserve helperText from original options if they were objects
+        const optionsWithHelpers = normalizedOptions.map((normalized, idx) => {
+          const original = currentQuestion.options?.[idx];
+          const helperText = typeof original === 'object' && 'helperText' in original ? original.helperText : undefined;
+          return { ...normalized, helperText };
+        });
 
         return (
           <div className="space-y-3">
-            {options.map((option: any) => {
-              const optionValue = option.value || option;
-              const optionLabel = option.label || option;
-              const optionHelper = option.helperText;
-
+            {optionsWithHelpers.map((option) => {
               return (
                 <label
-                  key={optionValue}
+                  key={option.key}
                   className={`
                     flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-all
-                    ${value === optionValue
+                    ${value === option.value
                       ? 'border-primary bg-primary/5 ring-2 ring-primary/20'
                       : 'border-gray-300 hover:border-primary/50 hover:bg-gray-50'
                     }
@@ -1111,16 +1171,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   <input
                     type="radio"
                     name={currentQuestion.id}
-                    value={optionValue}
-                    checked={value === optionValue}
+                    value={option.value}
+                    checked={value === option.value}
                     onChange={(e) => setCurrentAnswer(e.target.value)}
                     className="w-4 h-4 mt-1 text-primary focus:ring-2 focus:ring-primary"
                     disabled={loading}
                   />
                   <div className="flex-1">
-                    <div className="font-medium text-gray-900">{optionLabel}</div>
-                    {optionHelper && (
-                      <div className="text-sm text-gray-600 mt-1">{optionHelper}</div>
+                    <div className="font-medium text-gray-900">{option.label}</div>
+                    {option.helperText && (
+                      <div className="text-sm text-gray-600 mt-1">{option.helperText}</div>
                     )}
                   </div>
                 </label>
@@ -1179,7 +1239,140 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           />
         );
 
-      case 'textarea':
+      case 'textarea': {
+        // ====================================================================================
+        // SPECIAL HANDLING: Ground-specific particulars (Problem 1 fix)
+        // ====================================================================================
+        if (currentQuestion.id === 'ground_particulars') {
+          // Get selected grounds from case facts
+          const selectedGrounds = caseFacts.section8_grounds || [];
+
+          // Extract ground IDs from selected grounds (e.g., "ground_8" from "ground_8" or from "Ground 8 - ...")
+          const groundIds = selectedGrounds.map((g: string) => {
+            // If already in format "ground_8", use as-is
+            if (g.startsWith('ground_')) return g;
+            // If in format "Ground 8 - ...", extract the number
+            const match = g.match(/Ground (\d+[A-Za-z]?)/i);
+            return match ? `ground_${match[1].toLowerCase()}` : g;
+          });
+
+          // Initialize structured answer if needed
+          const structuredValue = typeof value === 'object' && value !== null ? value : {};
+
+          if (groundIds.length === 0) {
+            return (
+              <div className="text-sm text-gray-500 italic">
+                No grounds selected. Please go back and select at least one ground.
+              </div>
+            );
+          }
+
+          return (
+            <div className="space-y-6">
+              {groundIds.map((groundId: string) => {
+                // Extract ground number for display
+                const groundNum = groundId.replace('ground_', '').toUpperCase();
+
+                // Find ground metadata if available
+                const groundMeta = availableGrounds?.find(g => `ground_${g.ground}` === groundId);
+
+                // Get current particulars for this ground
+                const groundParticulars = structuredValue[groundId] || {};
+
+                return (
+                  <div
+                    key={groundId}
+                    className="p-4 border border-gray-300 rounded-lg bg-gray-50"
+                  >
+                    <h3 className="font-semibold text-gray-900 mb-3">
+                      Ground {groundNum}
+                      {groundMeta && ` - ${groundMeta.name}`}
+                    </h3>
+
+                    {/* Special fields for rent arrears grounds (8, 10, 11) */}
+                    {(groundId === 'ground_8' || groundId === 'ground_10' || groundId === 'ground_11') && (
+                      <div className="space-y-3 mb-3">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Amount owed (£)
+                          </label>
+                          <input
+                            type="number"
+                            value={groundParticulars.arrears_amount || ''}
+                            onChange={(e) => setCurrentAnswer({
+                              ...structuredValue,
+                              [groundId]: { ...groundParticulars, arrears_amount: e.target.value }
+                            })}
+                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            placeholder="e.g., 1500"
+                            disabled={loading}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Period of arrears
+                          </label>
+                          <input
+                            type="text"
+                            value={groundParticulars.arrears_period || ''}
+                            onChange={(e) => setCurrentAnswer({
+                              ...structuredValue,
+                              [groundId]: { ...groundParticulars, arrears_period: e.target.value }
+                            })}
+                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            placeholder="e.g., December 2024 - February 2025"
+                            disabled={loading}
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Factual summary (required for all grounds) */}
+                    <div className="mb-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Factual summary <span className="text-red-500">*</span>
+                      </label>
+                      <textarea
+                        value={groundParticulars.summary || ''}
+                        onChange={(e) => setCurrentAnswer({
+                          ...structuredValue,
+                          [groundId]: { ...groundParticulars, summary: e.target.value }
+                        })}
+                        className="w-full p-2 border border-gray-300 rounded-lg min-h-[100px]"
+                        placeholder="Provide specific dates, incidents, and factual details..."
+                        disabled={loading}
+                        rows={4}
+                      />
+                    </div>
+
+                    {/* Evidence available */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Evidence available
+                      </label>
+                      <input
+                        type="text"
+                        value={groundParticulars.evidence || ''}
+                        onChange={(e) => setCurrentAnswer({
+                          ...structuredValue,
+                          [groundId]: { ...groundParticulars, evidence: e.target.value }
+                        })}
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                        placeholder="e.g., rent schedule, photographs, witness statements"
+                        disabled={loading}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+              <p className="text-xs text-gray-500 italic mt-2">
+                Each selected ground must have a factual summary to continue.
+              </p>
+            </div>
+          );
+        }
+
+        // Default textarea rendering
         return (
           <textarea
             value={value}
@@ -1190,6 +1383,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             rows={4}
           />
         );
+      }
 
       case 'upload':
       case 'file_upload':
