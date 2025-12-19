@@ -264,6 +264,8 @@ export async function GET(
       templateData.grounds_count = templateData.grounds.length;
       templateData.has_mandatory_ground = templateData.grounds.some((g: any) => g.mandatory === true);
       templateData.ground_numbers = templateData.grounds.map((g: any) => g.code).join(', ');
+      // Ground descriptions for checklist (e.g., "Ground 8 – Serious rent arrears, Ground 11 – Persistent delay in paying rent")
+      templateData.ground_descriptions = templateData.grounds.map((g: any) => `Ground ${g.code} – ${g.title}`).join(', ');
 
       // Pass through full facts for templates that need them
       templateData.caseFacts = caseFacts;

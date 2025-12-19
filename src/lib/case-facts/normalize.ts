@@ -1737,6 +1737,7 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
         title: groundStr,
         legal_basis: 'Housing Act 1988, Schedule 2',
         full_text: '',
+        statutory_text: '', // Template expects statutory_text
         explanation: '',
         particulars: '',
       };
@@ -1829,6 +1830,7 @@ function buildGroundsArray(wizard: WizardFacts, templateData: Record<string, any
       title: groundDef.title,
       legal_basis: groundDef.legal_basis,
       full_text: groundDef.full_text,
+      statutory_text: groundDef.full_text, // Template expects statutory_text
       explanation,
       particulars,
       type: groundDef.mandatory ? 'MANDATORY' : 'DISCRETIONARY',
