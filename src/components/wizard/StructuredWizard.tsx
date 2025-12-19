@@ -716,6 +716,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   useEffect(() => {
     const isGroundsQuestion =
       currentQuestion?.id === 'section8_grounds_selection' || // England
+      currentQuestion?.id === 'ground_particulars' || // England particulars (needs metadata too)
       currentQuestion?.id === 'eviction_grounds' || // Scotland
       currentQuestion?.id === 'wales_fault_based_section'; // Wales (not technically "grounds" but similar)
 
