@@ -241,6 +241,7 @@ describe('Scotland Notice to Leave Calculations', () => {
     const validation = validateNoticeToLeaveDate('2025-02-12', {
       service_date: '2025-01-15',
       grounds: [{ number: 1 }],
+      pre_action_completed: true, // Ground 1 with pre-action = 28 days (Jan 15 + 28 = Feb 12)
     });
 
     expect(validation.valid).toBe(true);
