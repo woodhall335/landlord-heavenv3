@@ -61,12 +61,9 @@ const runPdf = process.env.RUN_PDF_TESTS === 'true' || process.env.RUN_PDF_TESTS
     expect(pdfData.slice(0, 4).toString()).toBe('%PDF');
 
     const pdfBuffer = new Uint8Array(pdfData);
-    const { getDocument, GlobalWorkerOptions } = await import('pdfjs-dist/legacy/build/pdf.mjs');
-    const { createRequire } = await import('module');
-    const require = createRequire(import.meta.url);
-    GlobalWorkerOptions.workerSrc = require.resolve('pdfjs-dist/build/pdf.worker.min.mjs');
+    const { getDocument } = await import('pdfjs-dist/legacy/build/pdf.mjs');
 
-    const pdf = await getDocument({ data: pdfBuffer }).promise;
+    const pdf = await getDocument({ data: pdfBuffer, disableWorker: true }).promise;
     let text = '';
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);
