@@ -61,21 +61,37 @@ const allJurisdictions: JurisdictionOption[] = [
   { value: 'northern-ireland', label: 'Northern Ireland', flag: '/gb-nir.svg' },
 ];
 
-// Get available jurisdictions based on document type
-function getAvailableJurisdictions(
+// Check if a jurisdiction is enabled for a document type
+function isJurisdictionEnabled(
+  jurisdiction: string,
   documentType: DocumentOption['type'] | null
-): JurisdictionOption[] {
+): boolean {
   if (!documentType) {
-    return allJurisdictions;
+    return true;
   }
 
   // Northern Ireland is only supported for tenancy agreements
-  if (documentType === 'tenancy_agreement') {
-    return allJurisdictions;
+  if (jurisdiction === 'northern-ireland') {
+    return documentType === 'tenancy_agreement';
   }
 
-  // Eviction and money claim: England, Wales, Scotland only
-  return allJurisdictions.filter((j) => j.value !== 'northern-ireland');
+  return true;
+}
+
+// Get disabled reason for a jurisdiction
+function getDisabledReason(
+  jurisdiction: string,
+  documentType: DocumentOption['type'] | null
+): string | null {
+  if (!documentType) {
+    return null;
+  }
+
+  if (jurisdiction === 'northern-ireland' && documentType !== 'tenancy_agreement') {
+    return 'Eviction and money claim flows are unavailable here. Tenancy agreements only.';
+  }
+
+  return null;
 }
 
 // Map product parameter to document type
@@ -130,16 +146,8 @@ function WizardPageInner() {
     useState<JurisdictionOption | null>(null);
   const [step, setStep] = useState<1 | 2>(preselectedDocument ? 2 : 1);
 
-  // Get available jurisdictions for current document type
-  const availableJurisdictions = useMemo(
-    () => getAvailableJurisdictions(selectedDocument?.type ?? null),
-    [selectedDocument]
-  );
-
-  // All jurisdictions shown should be supported (filtered by getAvailableJurisdictions)
-  const isJurisdictionSupported = (jur: JurisdictionOption) => {
-    return availableJurisdictions.some((j) => j.value === jur.value);
-  };
+  // All jurisdictions are shown, but some may be disabled
+  const availableJurisdictions = allJurisdictions;
 
   const handleDocumentSelect = (doc: DocumentOption) => {
     setSelectedDocument(doc);
@@ -289,37 +297,56 @@ function WizardPageInner() {
             </p>
 
             <div className="space-y-4">
-              {availableJurisdictions.map((jur) => (
-                <button
-                  key={jur.value}
-                  onClick={() => handleJurisdictionSelect(jur)}
-                  className={clsx(
-                    'w-full p-6 rounded-xl border-2 transition-all duration-200 text-left',
-                    'flex items-center gap-4',
-                    selectedJurisdiction?.value === jur.value
-                      ? 'border-primary bg-primary-subtle shadow-md'
-                      : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
-                  )}
-                >
-                  <div>
-                    <Image src={jur.flag} alt={jur.label} width={48} height={48} className="w-12 h-12" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-charcoal">{jur.label}</h3>
-                  </div>
-                  {selectedJurisdiction?.value === jur.value && (
-                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
+              {availableJurisdictions.map((jur) => {
+                const enabled = isJurisdictionEnabled(jur.value, selectedDocument?.type ?? null);
+                const disabledReason = getDisabledReason(jur.value, selectedDocument?.type ?? null);
+
+                return (
+                  <div key={jur.value}>
+                    <button
+                      onClick={() => enabled && handleJurisdictionSelect(jur)}
+                      disabled={!enabled}
+                      className={clsx(
+                        'w-full p-6 rounded-xl border-2 transition-all duration-200 text-left',
+                        'flex items-center gap-4',
+                        !enabled && 'opacity-50 cursor-not-allowed',
+                        enabled && selectedJurisdiction?.value === jur.value
+                          ? 'border-primary bg-primary-subtle shadow-md'
+                          : enabled
+                            ? 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
+                            : 'border-gray-300 bg-gray-50'
+                      )}
+                    >
+                      <div>
+                        <Image
+                          src={jur.flag}
+                          alt={jur.label}
+                          width={48}
+                          height={48}
+                          className="w-12 h-12"
                         />
-                      </svg>
-                    </div>
-                  )}
-                </button>
-              ))}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-charcoal">{jur.label}</h3>
+                      </div>
+                      {enabled && selectedJurisdiction?.value === jur.value && (
+                        <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                    </button>
+                    {!enabled && disabledReason && (
+                      <p className="text-sm text-gray-600 mt-2 ml-4">{disabledReason}</p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Start Button */}

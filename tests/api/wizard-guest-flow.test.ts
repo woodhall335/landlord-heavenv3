@@ -62,7 +62,7 @@ describe('Guest Wizard Flow', () => {
       data: {
         id: 'guest-case-123',
         case_type: 'eviction',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england',
         status: 'in_progress',
         collected_facts: {},
         user_id: null, // Guest case
@@ -87,7 +87,7 @@ describe('Guest Wizard Flow', () => {
     const guestCase = {
       id: 'guest-case-123',
       case_type: 'eviction',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       status: 'in_progress',
       collected_facts: mockGuestFacts,
       user_id: null, // Guest case
@@ -115,7 +115,7 @@ describe('Guest Wizard Flow', () => {
     const guestCase = {
       id: 'guest-case-456',
       case_type: 'eviction',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       collected_facts: mockGuestFacts,
       user_id: null, // Guest case
       wizard_progress: 25,

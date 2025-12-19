@@ -51,9 +51,9 @@ describe('evaluateNoticeCompliance', () => {
     expect(result.hardFailures.find((f) => f.code === 'S21-DATE-TOO-SOON')).toBeTruthy();
   });
 
-  it('normalises Wales route even when jurisdiction is england-wales', () => {
+  it('validates Wales Section 173 route with canonical wales jurisdiction', () => {
     const result = evaluateNoticeCompliance({
-      jurisdiction: 'england-wales',
+      jurisdiction: 'wales',
       product: 'notice_only',
       selected_route: 'wales_section_173',
       wizardFacts: { rent_smart_wales_registered: false },

@@ -33,7 +33,7 @@ vi.mock('@/lib/wizard/mqs-loader', async () => {
     loadMQS: vi.fn(() => ({
       id: 'notice_only',
       product: 'notice_only',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       version: '1.0.0',
       questions: [
         {
@@ -92,7 +92,7 @@ describe('wizard answer compliance blocking', () => {
     const mockCase = {
       id: 'case-123',
       case_type: 'eviction',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       collected_facts: { __meta: { product: 'notice_only', mqs_version: null } },
       user_id: null,
       wizard_progress: 0,
@@ -124,7 +124,7 @@ describe('wizard answer compliance blocking', () => {
     const mockCase = {
       id: 'case-456',
       case_type: 'eviction',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       collected_facts: { __meta: { product: 'notice_only', mqs_version: null } },
       user_id: null,
       wizard_progress: 0,

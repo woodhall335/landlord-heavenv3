@@ -246,6 +246,7 @@ describe('jurisdiction gating enforcement', () => {
           wizard_facts: {
             selected_notice_route: 'section_8',
             section8_grounds: ['ground_8'],
+            property_location: 'england', // Required for migration from legacy england-wales
           },
         },
         error: null,
