@@ -13,7 +13,7 @@ export interface LegalValidationResult {
   warnings: LegalValidationIssue[];
 }
 
-export function getFactValue(facts: Record<string, any>, path: string): any {
+export function resolveFactValue(facts: Record<string, any>, path: string): any {
   if (Object.prototype.hasOwnProperty.call(facts, path)) {
     return facts[path];
   }
@@ -27,8 +27,8 @@ export function getFactValue(facts: Record<string, any>, path: string): any {
     }, facts);
 }
 
-// Alias used across gating modules to avoid duplicate helper implementations
-export const resolveFactValue = getFactValue;
+// Backwards-compatible alias used across gating modules to avoid duplicate helper implementations
+export const getFactValue = resolveFactValue;
 
 function isMissing(value: any): boolean {
   if (value === null || value === undefined) return true;
@@ -67,7 +67,7 @@ function evaluateExpression(
   const values: any[] = [];
 
   for (const variable of variables) {
-    const value = getFactValue(facts, variable);
+    const value = resolveFactValue(facts, variable);
     if (value === undefined) {
       return { ok: false, reason: `Missing fact for rule: ${variable}`, evaluated: false };
     }
@@ -137,7 +137,7 @@ export function validateGroundsFromConfig(params: {
     const requiredFacts: string[] = cfg.required_facts || [];
 
     for (const factName of requiredFacts) {
-      const value = getFactValue(facts, factName);
+      const value = resolveFactValue(facts, factName);
       if (isMissing(value)) {
         blocking.push({
           code: 'GROUND_REQUIRED_FACT_MISSING',
@@ -200,7 +200,7 @@ export function validateDepositCompliance(params: {
   const blocking: LegalValidationIssue[] = [];
   const warnings: LegalValidationIssue[] = [];
 
-  const depositTaken = getFactValue(facts, 'deposit_taken');
+  const depositTaken = resolveFactValue(facts, 'deposit_taken');
 
   // If the user explicitly confirmed no deposit was taken, skip deposit compliance checks
   // to avoid failing required_if expressions that only apply when a deposit exists.
@@ -232,9 +232,9 @@ export function validateDepositCompliance(params: {
     const isRequired = requiredFlag || requiredIfFlag;
     if (!isRequired) continue;
 
-    const value = getFactValue(facts, field.path);
+    const value = resolveFactValue(facts, field.path);
     const fallbackValue = field.path.includes('.')
-      ? getFactValue(facts, field.path.split('.').pop() as string)
+      ? resolveFactValue(facts, field.path.split('.').pop() as string)
       : undefined;
     const resolvedValue = value === undefined ? fallbackValue : value;
 
@@ -249,7 +249,7 @@ export function validateDepositCompliance(params: {
   }
 
   if (depositTaken === true) {
-    const depositProtected = getFactValue(facts, 'deposit_protected');
+    const depositProtected = resolveFactValue(facts, 'deposit_protected');
     if (depositProtected === false || depositProtected === undefined) {
       blocking.push({
         code: 'DEPOSIT_NOT_PROTECTED',
@@ -259,9 +259,9 @@ export function validateDepositCompliance(params: {
     }
 
     const prescribed =
-      getFactValue(facts, 'prescribed_info_given') ??
-      getFactValue(facts, 'prescribed_info_provided') ??
-      getFactValue(facts, 'prescribed_info_served');
+      resolveFactValue(facts, 'prescribed_info_given') ??
+      resolveFactValue(facts, 'prescribed_info_provided') ??
+      resolveFactValue(facts, 'prescribed_info_served');
     if (isMissing(prescribed)) {
       blocking.push({
         code: 'PRESCRIBED_INFO_MISSING',
