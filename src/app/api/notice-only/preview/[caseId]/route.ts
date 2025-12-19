@@ -168,7 +168,7 @@ export async function GET(
       selectedRoute: selected_route,
     });
 
-    if (validationOutcome.blocking.length > 0) {
+    if ((validationOutcome.blocking?.length ?? 0) > 0) {
       const userMessage = 'Cannot generate preview: jurisdiction rules are not satisfied';
       const blockingPayload = {
         code: 'LEGAL_BLOCK',
