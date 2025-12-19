@@ -180,7 +180,7 @@ export async function GET(
 
       console.warn('[NOTICE-PREVIEW-API] Validation blocked preview:', {
         case_id: caseId,
-        blocking: validationOutcome.blocking.map((b) => b.code),
+        payload: blockingPayload,
       });
 
       return NextResponse.json(blockingPayload, { status: 422 });
