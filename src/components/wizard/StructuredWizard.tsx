@@ -927,7 +927,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       const selectedGrounds = caseFacts.section8_grounds || [];
 
       // Extract ground IDs and deduplicate (caseFacts may contain duplicates or mixed formats)
-      const groundIds = Array.from(new Set(selectedGrounds.map((g: string) => {
+      const groundIds: string[] = Array.from(new Set<string>(selectedGrounds.map((g: string) => {
         if (g.startsWith('ground_')) return g;
         const match = g.match(/Ground (\d+[A-Za-z]?)/i);
         return match ? `ground_${match[1].toLowerCase()}` : g;
@@ -1468,7 +1468,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
           // Extract ground IDs from selected grounds and deduplicate
           // (caseFacts may contain duplicates or mixed formats like ["ground_8", "Ground 8 - ..."])
-          const groundIds = Array.from(new Set(selectedGrounds.map((g: string) => {
+          const groundIds: string[] = Array.from(new Set<string>(selectedGrounds.map((g: string) => {
             // If already in format "ground_8", use as-is
             if (g.startsWith('ground_')) return g;
             // If in format "Ground 8 - ...", extract the number
