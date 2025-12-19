@@ -24,6 +24,61 @@
   <title>Form 3 - Section 8 Notice Seeking Possession</title>
   <style>
     {{{print_css}}}
+    /* Section 8 layout refinements */
+    body {
+      line-height: 1.4;
+    }
+
+    .section {
+      margin: 1.1em 0;
+    }
+
+    p {
+      margin-bottom: 0.5em;
+      line-height: 1.4;
+    }
+
+    .ground-block {
+      margin: 0.75em 0 0.75em 0.2in;
+      padding: 0.6em 0.65em;
+    }
+
+    .ground-heading-line {
+      margin: 0 0 0.35em 0;
+      line-height: 1.3;
+    }
+
+    .ground-type-badge {
+      font-size: 10pt;
+      font-weight: bold;
+      margin-left: 0.35em;
+      padding: 0.1em 0.3em;
+      border: 1px solid #444;
+    }
+
+    .ground-list {
+      list-style: none;
+      margin: 0;
+      padding-left: 0;
+    }
+
+    .ground-list li {
+      margin: 0 0 0.35em 0;
+      line-height: 1.35;
+    }
+
+    .field-value-text {
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .ground-particulars {
+      margin-top: 0.25em;
+    }
+
+    .statute-text {
+      margin: 0 0 0.4em 0;
+    }
   </style>
 </head>
 <body>
@@ -78,24 +133,29 @@
 
 <div class="section">
   <p class="field-label">3. Your landlord / licensor intends to seek possession on ground(s):</p>
-  <p class="field-value">
+  <div class="field-value" style="border-bottom: none; padding: 0; margin-left: 0.25in;">
     {{#if grounds}}
-      {{#each grounds}}
-        <strong>Ground {{this.code}}</strong>{{#unless @last}}, {{/unless}}
-      {{/each}}
+      <ul class="ground-list">
+        {{#each grounds}}
+          <li>
+            <strong>Ground {{this.code}} – {{this.title}}</strong>
+            {{#if this.type_label}}<span class="ground-type-badge">{{this.type_label}}</span>{{/if}}
+          </li>
+        {{/each}}
+      </ul>
     {{else}}
       <em>(insert relevant ground(s))</em>
     {{/if}}
-  </p>
+  </div>
   <p style="margin-top: 0.5em;">in Schedule 2 to the Housing Act 1988 (as amended), which read(s):</p>
   <p style="margin-left: 0.25in; font-style: italic; margin-bottom: 0.5em;">Give the full text (as set out in Schedule 2 of the Housing Act 1988 (as amended)) of each ground which is being relied on.</p>
 
   {{#if grounds}}
     {{#each grounds}}
       <div class="ground-block">
-        <p><strong>Ground {{this.code}}: {{this.title}}</strong></p>
+        <p class="ground-heading-line"><strong>Ground {{this.code}} – {{this.title}}</strong>{{#if this.type_label}} <span class="ground-type-badge">{{this.type_label}}</span>{{/if}}</p>
         {{#if this.statutory_text}}
-          <p style="margin-top: 0.5em;">{{this.statutory_text}}</p>
+          <p class="statute-text">{{this.statutory_text}}</p>
         {{/if}}
       </div>
     {{/each}}
@@ -112,11 +172,20 @@
   {{#if grounds}}
     {{#each grounds}}
       <div class="ground-block">
-        <p><strong>Ground {{this.code}} particulars:</strong></p>
+        <p class="ground-heading-line"><strong>Ground {{this.code}} – {{this.title}}</strong>{{#if this.type_label}} <span class="ground-type-badge">{{this.type_label}}</span>{{/if}}</p>
         {{#if this.particulars}}
-          <p>{{{this.particulars}}}</p>
+          <div class="ground-particulars">
+            <p class="field-label" style="margin-top: 0;">Ground particulars:</p>
+            <p class="field-value-text">{{{this.particulars}}}</p>
+          </div>
         {{else}}
           <p style="border-bottom: 1px dotted #666; min-height: 2em;"></p>
+        {{/if}}
+        {{#if this.evidence}}
+          <div class="ground-particulars">
+            <p class="field-label" style="margin-top: 0.5em;">Evidence available:</p>
+            <p class="field-value-text">{{{this.evidence}}}</p>
+          </div>
         {{/if}}
       </div>
     {{/each}}

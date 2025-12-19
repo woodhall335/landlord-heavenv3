@@ -267,6 +267,17 @@ export async function GET(
       // Ground descriptions for checklist (e.g., "Ground 8 – Serious rent arrears, Ground 11 – Persistent delay in paying rent")
       templateData.ground_descriptions = templateData.grounds.map((g: any) => `Ground ${g.code} – ${g.title}`).join(', ');
 
+      console.log('[NOTICE-PREVIEW-API] Section 8 ground payload:',
+        templateData.grounds.map((g: any) => ({
+          code: g.code,
+          title: g.title,
+          type: g.type || g.type_label,
+          statutory_text: g.statutory_text?.slice(0, 120) || '',
+          particulars: g.particulars,
+          evidence: g.evidence,
+        }))
+      );
+
       // Pass through full facts for templates that need them
       templateData.caseFacts = caseFacts;
       templateData.wizardFacts = wizardFacts;
