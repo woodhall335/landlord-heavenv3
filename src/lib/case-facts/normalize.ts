@@ -60,6 +60,31 @@ function coerceBoolean(value: any): boolean | null {
   return Boolean(value);
 }
 
+function parseCurrencyAmount(value: any): number | null {
+  if (value === null || value === undefined) return null;
+  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+
+  if (typeof value === 'string') {
+    const cleaned = value.replace(/[^0-9,.-]/g, '').replace(/,/g, '');
+    if (!cleaned.trim()) return null;
+    const parsed = Number.parseFloat(cleaned);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  if (typeof value === 'object') {
+    const nestedValue =
+      (value as any).amount ??
+      (value as any).value ??
+      (value as any).label ??
+      (value as any).text;
+    if (nestedValue !== undefined && nestedValue !== null) {
+      return parseCurrencyAmount(nestedValue);
+    }
+  }
+
+  return null;
+}
+
 /**
  * Helper to set nested values on CaseFacts using paths like
  * "parties.landlord.name" or "issues.rent_arrears.arrears_items.0".
@@ -254,6 +279,17 @@ function extractTenants(wizard: WizardFacts): PartyDetails[] {
     });
 
   return tenants;
+}
+
+function extractSharedArrearsAmount(wizard: WizardFacts): number | null {
+  const sharedArrearsRaw = getFirstValue(wizard, [
+    'ground_particulars.shared_arrears.amount',
+    'ground_particulars.shared_arrears.total_amount_owed',
+    'section_8_particulars.shared_arrears.amount',
+    'section_8_particulars.shared_arrears.total_amount_owed',
+  ]);
+
+  return parseCurrencyAmount(sharedArrearsRaw);
 }
 
 
@@ -679,22 +715,62 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // =============================================================================
   // ISSUES - Arrears, ASB, other breaches, Section 8 grounds, AST verification
   // =============================================================================
+  const sharedArrearsAmount = extractSharedArrearsAmount(wizard);
+
   base.issues.rent_arrears.has_arrears ??= getFirstValue(wizard, [
     'case_facts.issues.rent_arrears.has_arrears',
     'has_rent_arrears',
     'rent_arrears.has_arrears',
   ]);
-  base.issues.rent_arrears.total_arrears ??= getFirstValue(wizard, [
-    'case_facts.issues.rent_arrears.total_arrears',
-    'total_arrears',
-    'arrears_total',
-    'rent_arrears.total_arrears',
-  ]);
-  base.issues.rent_arrears.arrears_at_notice_date ??= getFirstValue(wizard, [
-    'case_facts.issues.rent_arrears.arrears_at_notice_date',
-    'arrears_at_notice_date',
-    'arrears_summary.arrears_at_notice_date',
-  ]);
+
+  const totalArrearsRaw =
+    base.issues.rent_arrears.total_arrears ??
+    getFirstValue(wizard, [
+      'case_facts.issues.rent_arrears.total_arrears',
+      'total_arrears',
+      'arrears_total',
+      'rent_arrears.total_arrears',
+    ]);
+  const parsedTotalArrears = parseCurrencyAmount(totalArrearsRaw);
+  if (parsedTotalArrears !== null) {
+    base.issues.rent_arrears.total_arrears = parsedTotalArrears;
+  } else if (
+    (base.issues.rent_arrears.total_arrears === null || base.issues.rent_arrears.total_arrears === undefined) &&
+    sharedArrearsAmount !== null
+  ) {
+    base.issues.rent_arrears.total_arrears = sharedArrearsAmount;
+  }
+
+  const arrearsAtNoticeRaw =
+    base.issues.rent_arrears.arrears_at_notice_date ??
+    getFirstValue(wizard, [
+      'case_facts.issues.rent_arrears.arrears_at_notice_date',
+      'arrears_at_notice_date',
+      'arrears_summary.arrears_at_notice_date',
+    ]);
+  const parsedArrearsAtNotice = parseCurrencyAmount(arrearsAtNoticeRaw);
+  if (parsedArrearsAtNotice !== null) {
+    base.issues.rent_arrears.arrears_at_notice_date = parsedArrearsAtNotice;
+  } else if (
+    (base.issues.rent_arrears.arrears_at_notice_date === null ||
+      base.issues.rent_arrears.arrears_at_notice_date === undefined) &&
+    sharedArrearsAmount !== null
+  ) {
+    base.issues.rent_arrears.arrears_at_notice_date = sharedArrearsAmount;
+  }
+
+  if (
+    base.issues.rent_arrears.has_arrears === null ||
+    base.issues.rent_arrears.has_arrears === undefined
+  ) {
+    const derivedArrears =
+      base.issues.rent_arrears.arrears_at_notice_date ??
+      base.issues.rent_arrears.total_arrears ??
+      sharedArrearsAmount;
+    if (derivedArrears !== null && derivedArrears !== undefined) {
+      base.issues.rent_arrears.has_arrears = derivedArrears > 0;
+    }
+  }
   if (!base.issues.rent_arrears.arrears_items.length) {
     const arrearsItems = getFirstValue(wizard, [
       'case_facts.issues.rent_arrears.arrears_items',
@@ -2406,11 +2482,16 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   // =============================================================================
   // ARREARS DATA
   // =============================================================================
-  const totalArrears = getFirstValue(wizard, ['total_arrears', 'rent_arrears_amount']);
-  templateData.total_arrears = totalArrears !== null ? Number(totalArrears) || null : null;
+  const sharedArrearsAmount = extractSharedArrearsAmount(wizard);
+  const totalArrearsRaw = getFirstValue(wizard, ['total_arrears', 'rent_arrears_amount']);
+  const parsedTotalArrears = parseCurrencyAmount(totalArrearsRaw);
+  const normalizedTotalArrears = parsedTotalArrears ?? sharedArrearsAmount;
+  templateData.total_arrears = normalizedTotalArrears !== null ? normalizedTotalArrears : null;
 
   const arrearsAtNoticeDate = getWizardValue(wizard, 'arrears_at_notice_date');
-  templateData.arrears_at_notice_date = arrearsAtNoticeDate !== null ? Number(arrearsAtNoticeDate) || null : null;
+  const parsedArrearsAtNotice = parseCurrencyAmount(arrearsAtNoticeDate);
+  templateData.arrears_at_notice_date =
+    parsedArrearsAtNotice ?? normalizedTotalArrears ?? null;
 
   const arrearsDurationMonths = getWizardValue(wizard, 'arrears_duration_months');
   templateData.arrears_duration_months = arrearsDurationMonths !== null ? Number(arrearsDurationMonths) || null : null;

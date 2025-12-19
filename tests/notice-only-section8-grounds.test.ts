@@ -46,6 +46,43 @@ describe('Section 8 Notice Only - Grounds Rendering', () => {
     expect(ground11.mandatory).toBe(false);
   });
 
+  it('derives arrears totals from shared arrears particulars when canonical fields are missing', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['ground_8', 'ground_11'],
+      ground_particulars: {
+        shared_arrears: {
+          amount: '£3,000',
+          period: 'October 2025 - December 2025',
+        },
+        ground_8: {
+          summary: 'tenant owes £3000 in rent',
+        },
+        ground_11: {
+          summary: 'repeated late payment narrative',
+        },
+      },
+      landlord_full_name: 'John Doe',
+      tenant_full_name: 'Jane Smith',
+      property_address: '123 Test Street',
+      rent_amount: '1000',
+      rent_frequency: 'monthly',
+      notice_service_date: '2025-12-15',
+    };
+
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    expect(templateData.total_arrears).toBe(3000);
+    expect(templateData.arrears_at_notice_date).toBe(3000);
+
+    const ground8 = templateData.grounds.find((g: any) => g.code === 8);
+    const ground11 = templateData.grounds.find((g: any) => g.code === 11);
+
+    expect(ground8?.particulars).toContain('Rent arrears at date of notice: £3000.00');
+    expect(ground11?.particulars).toContain('Rent arrears outstanding: £3000.00');
+  });
+
   it('maps ground particulars for Section 4 from wizard facts', () => {
     const wizardFacts = {
       jurisdiction: 'england',
