@@ -931,8 +931,10 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
             mergedFacts = setFactPath(mergedFacts, 'date_calculation_explanation', calculated_result.explanation);
 
             // Pre-fill notice_expiry_date if user hasn't entered it yet
-            if (!normalizedAnswer?.notice_expiry_date && !mergedFacts.notice_expiry_date) {
+            // Save to BOTH legacy flat field AND nested MQS field for compatibility
+            if (!normalizedAnswer?.notice_expiry_date && !mergedFacts.notice_expiry_date && !mergedFacts.notice_service?.notice_expiry_date) {
               mergedFacts = setFactPath(mergedFacts, 'notice_expiry_date', calculated_result.earliest_valid_date);
+              mergedFacts = setFactPath(mergedFacts, 'notice_service.notice_expiry_date', calculated_result.earliest_valid_date);
             }
 
             // Return to frontend for display
