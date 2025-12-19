@@ -219,14 +219,16 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
 
     // CRITICAL FIX: Only enforce grounds requirement at or after the grounds selection question.
     // Don't block users before they've had a chance to select grounds.
-    // If question_id is not provided (e.g., in tests or final validation), always check grounds.
-    // If question_id is provided, only check if we've reached the grounds question or checkpoint questions after it.
+    // Since grounds now come BEFORE notice_service in the flow, we only check grounds at:
+    // - The grounds selection step itself (section8_grounds_selection)
+    // - Follow-up questions about grounds (ground14_severity, ground_particulars, notice_strategy)
+    // - Final validation when no question_id is provided (tests, final submission)
+    // We do NOT check at notice_service anymore since grounds are collected earlier.
     const shouldCheckGrounds = !input.question_id || // No question_id = full validation (tests, final submission)
                                 input.question_id === 'section8_grounds_selection' ||
                                 input.question_id === 'ground14_severity' ||
                                 input.question_id === 'ground_particulars' ||
-                                input.question_id === 'notice_service' ||
-                                input.question_id === 'notice_dates';
+                                input.question_id === 'notice_strategy';
 
     if ((!grounds || grounds.length === 0) && shouldCheckGrounds) {
       hardFailures.push({
