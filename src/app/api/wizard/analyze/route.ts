@@ -14,6 +14,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { runDecisionEngine, checkEPCForSection21, type DecisionOutput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
+import { normalizeJurisdiction } from '@/lib/types/jurisdiction';
 
 const analyzeSchema = z.object({
   case_id: z.string().min(1),
@@ -611,8 +612,34 @@ export async function POST(request: Request) {
       wizard_progress: number | null;
     };
 
+    let canonicalJurisdiction = normalizeJurisdiction(caseData.jurisdiction);
+
+    // Load flat WizardFacts from DB and convert to nested CaseFacts for analysis
+    const wizardFacts = await getOrCreateWizardFacts(supabase, case_id);
+    const facts = wizardFactsToCaseFacts(wizardFacts);
+
+    if (!canonicalJurisdiction) {
+      canonicalJurisdiction =
+        normalizeJurisdiction((caseData as any)?.property_location) ||
+        normalizeJurisdiction(facts.property.country as string | null);
+    }
+
+    if (canonicalJurisdiction === 'england' && facts.property.country === 'wales') {
+      canonicalJurisdiction = 'wales';
+    }
+
+    if (!canonicalJurisdiction) {
+      return NextResponse.json(
+        {
+          error: 'INVALID_JURISDICTION',
+          message: 'Jurisdiction must be one of england, wales, scotland, or northern-ireland.',
+        },
+        { status: 400 }
+      );
+    }
+
     // Northern Ireland gating: only tenancy agreements are supported
-    if (caseData.jurisdiction === 'northern-ireland' && caseData.case_type !== 'tenancy_agreement') {
+    if (canonicalJurisdiction === 'northern-ireland' && caseData.case_type !== 'tenancy_agreement') {
       return NextResponse.json(
         {
           // IMPORTANT: stable machine-readable code (no imports inside the handler)
@@ -621,17 +648,14 @@ export async function POST(request: Request) {
             'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
           supported: {
             'northern-ireland': ['tenancy_agreement'],
-            'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            wales: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
             scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
           },
         },
         { status: 400 }
       );
     }
-
-    // Load flat WizardFacts from DB and convert to nested CaseFacts for analysis
-    const wizardFacts = await getOrCreateWizardFacts(supabase, case_id);
-    const facts = wizardFactsToCaseFacts(wizardFacts);
 
     const evidence = normaliseEvidence(facts);
     facts.evidence.tenancy_agreement_uploaded = evidence.tenancy_agreement_uploaded;
@@ -649,24 +673,24 @@ export async function POST(request: Request) {
       files: evidence.files,
     };
 
-    const route = computeRoute(facts, caseData.jurisdiction, caseData.case_type);
+    const route = computeRoute(facts, canonicalJurisdiction, caseData.case_type);
     const product =
       (facts.meta?.product as string | undefined) ||
       (facts.meta?.original_product as string | undefined) ||
       (caseData as any)?.product ||
       (caseData.case_type === 'eviction' ? 'complete_pack' : caseData.case_type);
     const { score, red_flags, compliance } = computeStrength(facts);
-    const summary = buildCaseSummary(facts, caseData.jurisdiction);
+    const summary = buildCaseSummary(facts, canonicalJurisdiction);
     const askHeavenAnswer = craftAskHeavenAnswer(
       question,
       facts,
-      caseData.jurisdiction
+      canonicalJurisdiction
     );
 
     // NEW: compute structured case_health block for the UI (money-claim aware)
     const caseHealth = buildCaseHealth(
       facts,
-      caseData.jurisdiction,
+      canonicalJurisdiction,
       caseData.case_type,
       score,
       summary,
@@ -680,7 +704,7 @@ export async function POST(request: Request) {
     if (caseData.case_type === 'eviction') {
       try {
         decisionEngineOutput = runDecisionEngine({
-          jurisdiction: caseData.jurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+          jurisdiction: canonicalJurisdiction,
           product: facts.meta.product as any || 'notice_only',
           case_type: 'eviction',
           facts,
@@ -760,7 +784,12 @@ export async function POST(request: Request) {
 
       // If S21 is blocked, auto-route to S8/Notice to Leave
       if (blockedRoutes.includes('section_21')) {
-        const fallbackRoute = caseData.jurisdiction === 'scotland' ? 'notice_to_leave' : 'section_8';
+        const fallbackRoute =
+          canonicalJurisdiction === 'scotland'
+            ? 'notice_to_leave'
+            : canonicalJurisdiction === 'wales'
+            ? 'wales_section_173'
+            : 'section_8';
         finalRecommendedRoute = fallbackRoute;
 
         const blockingIssues = decisionEngineOutput.blocking_issues
@@ -800,7 +829,12 @@ export async function POST(request: Request) {
         finalRecommendedRoute = allowedRoutes[0];
       } else {
         // Ultimate fallback
-        finalRecommendedRoute = caseData.jurisdiction === 'scotland' ? 'notice_to_leave' : 'section_8';
+        finalRecommendedRoute =
+          canonicalJurisdiction === 'scotland'
+            ? 'notice_to_leave'
+            : canonicalJurisdiction === 'wales'
+            ? 'wales_section_173'
+            : 'section_8';
       }
     } else if (decisionEngineOutput) {
       // For complete_pack: Use decision engine recommendation
@@ -830,7 +864,7 @@ export async function POST(request: Request) {
 
     if (caseData.case_type === 'eviction') {
       const isNoticeOnly = product === 'notice_only';
-      if (caseData.jurisdiction === 'scotland') {
+      if (canonicalJurisdiction === 'scotland') {
         previewDocuments.push(
           { id: 'notice_to_leave', document_type: 'notice', document_title: 'Notice to Leave' },
           {
@@ -843,6 +877,24 @@ export async function POST(request: Request) {
             id: 'guidance',
             document_type: 'guidance',
             document_title: 'Eviction roadmap & service checklist',
+          },
+        );
+      } else if (canonicalJurisdiction === 'wales') {
+        previewDocuments.push(
+          {
+            id: 'rhw16_or_rhw17',
+            document_type: 'notice',
+            document_title: 'Section 173 notice (RHW16/17)',
+          },
+          {
+            id: 'rhw23',
+            document_type: 'notice',
+            document_title: 'RHW23 breach notice',
+          },
+          {
+            id: 'service_proofs',
+            document_type: 'guidance',
+            document_title: 'Service checklist & certificates of service',
           },
         );
       } else {
@@ -884,7 +936,7 @@ export async function POST(request: Request) {
     }
 
         // Get law profile for version tracking and legal metadata
-    const law_profile = getLawProfile(caseData.jurisdiction, caseData.case_type);
+    const law_profile = getLawProfile(canonicalJurisdiction, caseData.case_type);
 
     // Derived fields for final analysis UI (non-blocking, informative only)
     const case_strength_band =
@@ -896,7 +948,7 @@ export async function POST(request: Request) {
 
     // Human-friendly route labels for the UI
     if (caseData.case_type === 'eviction') {
-      if (caseData.jurisdiction === 'england-wales') {
+      if (canonicalJurisdiction === 'england') {
         if (route === 'section_21') {
           recommended_route_label =
             'Section 21 possession (accelerated or standard, depending on compliance)';
@@ -907,7 +959,13 @@ export async function POST(request: Request) {
         } else if (route === 'standard_possession') {
           recommended_route_label = 'Standard possession (N5 + N119)';
         }
-      } else if (caseData.jurisdiction === 'scotland') {
+      } else if (canonicalJurisdiction === 'wales') {
+        if (route === 'wales_section_173') {
+          recommended_route_label = 'Section 173 notice (no fault)';
+        } else if (route === 'wales_fault_based') {
+          recommended_route_label = 'Section 157/159 breach notice (RHW23)';
+        }
+      } else if (canonicalJurisdiction === 'scotland') {
         if (route === 'notice_to_leave') {
           recommended_route_label = 'Notice to Leave + Form E (First-tier Tribunal)';
         }

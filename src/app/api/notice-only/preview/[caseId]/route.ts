@@ -114,10 +114,10 @@ export async function GET(
     if (jurisdiction === 'northern-ireland') {
       return NextResponse.json(
         {
-          error: 'JURISDICTION_EVICTION_UNSUPPORTED',
-          details: 'Eviction notices are not supported in Northern Ireland.',
+          error: 'NI_NOTICE_PREVIEW_UNSUPPORTED',
+          details: 'Eviction notices are not supported in Northern Ireland. Tenancy agreements remain available.',
         },
-        { status: 400 },
+        { status: 422 },
       );
     }
 

@@ -1,13 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
+import type { CanonicalJurisdiction } from '../types/jurisdiction';
 
-export type JurisdictionKey =
-  | 'england'
-  | 'england-wales'
-  | 'wales'
-  | 'scotland'
-  | 'northern-ireland';
+export type JurisdictionKey = CanonicalJurisdiction;
 
 export interface DecisionRules {
   jurisdiction?: {
@@ -36,7 +32,6 @@ export interface JurisdictionRuleBundle {
 
 const JURISDICTION_PATHS: Record<JurisdictionKey, string> = {
   england: 'england',
-  'england-wales': 'england-wales',
   wales: 'wales',
   scotland: 'scotland',
   'northern-ireland': 'northern-ireland',

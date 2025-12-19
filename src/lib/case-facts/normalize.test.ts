@@ -31,7 +31,7 @@ describe('wizardFactsToCaseFacts', () => {
 
       const result = wizardFactsToCaseFacts(wizard);
 
-      expect(result.property.country).toBe('england-wales');
+      expect(result.property.country).toBe('england');
     });
 
     test('should fallback to jurisdiction field for country', () => {
@@ -52,7 +52,7 @@ describe('wizardFactsToCaseFacts', () => {
 
       const result = wizardFactsToCaseFacts(wizard);
 
-      expect(result.property.country).toBe('england-wales');
+      expect(result.property.country).toBe('england');
     });
 
     test('should map HMO status', () => {
@@ -493,7 +493,7 @@ describe('wizardFactsToCaseFacts', () => {
       // Verify property
       expect(result.property.address_line1).toBe('123 High Street');
       expect(result.property.postcode).toBe('SW1A 1AA');
-      expect(result.property.country).toBe('england-wales');
+      expect(result.property.country).toBe('england');
       expect(result.property.is_hmo).toBe(false);
 
       // Verify tenancy
