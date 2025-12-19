@@ -31,7 +31,7 @@ const answerSchema = z.object({
   case_id: z.string().min(1),
   question_id: z.string(),
   answer: z.any(),
-  mode: z.enum(['default', 'edit']).optional(),
+  mode: z.enum(['default', 'edit', 'enhance_only']).optional(),
   include_answered: z.boolean().optional(),
   review_mode: z.boolean().optional(),
   current_question_id: z.string().optional(),
@@ -527,7 +527,9 @@ export async function POST(request: Request) {
 
     const { case_id, question_id, answer, mode, include_answered, review_mode, current_question_id } =
       validationResult.data;
-    const isReviewMode = mode === 'edit' || include_answered === true || review_mode === true;
+    const isEnhanceOnly = mode === 'enhance_only';
+    const isReviewMode =
+      !isEnhanceOnly && (mode === 'edit' || include_answered === true || review_mode === true);
 
     // Create properly typed Supabase client
     const supabase = await createServerSupabaseClient();
@@ -634,12 +636,86 @@ export async function POST(request: Request) {
 
     const normalizedAnswer = normalizeAnswer(question, answer);
 
-// For conversational eviction flows, skip strict MQS per-question validation.
-// The eviction wizard uses a looser, AI-driven flow and may send simple strings
-// to questions that are modelled as groups in the MQS.
-if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnswer)) {
-  return NextResponse.json({ error: 'Answer failed validation' }, { status: 400 });
-}
+    // For conversational eviction flows, skip strict MQS per-question validation.
+    // The eviction wizard uses a looser, AI-driven flow and may send simple strings
+    // to questions that are modelled as groups in the MQS.
+    if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnswer)) {
+      return NextResponse.json({ error: 'Answer failed validation' }, { status: 400 });
+    }
+
+    const rawAnswerText =
+      typeof normalizedAnswer === 'string'
+        ? normalizedAnswer
+        : JSON.stringify(normalizedAnswer);
+
+    // ========================================================================
+    // ENHANCE-ONLY MODE: return Ask Heaven suggestions without side effects
+    // ========================================================================
+    if (isEnhanceOnly) {
+      let decisionContext: DecisionOutput | undefined = undefined;
+      try {
+        if (
+          caseRow.case_type === 'eviction' &&
+          collectedFacts &&
+          Object.keys(collectedFacts).length > 5
+        ) {
+          const caseFacts = wizardFactsToCaseFacts(collectedFacts);
+
+          const decisionInput: DecisionInput = {
+            jurisdiction: caseRow.jurisdiction as any,
+            product: product as any,
+            case_type: 'eviction',
+            facts: caseFacts,
+          };
+
+          decisionContext = runDecisionEngine(decisionInput);
+        }
+      } catch (decisionErr) {
+        console.warn('Decision engine failed in answer route (enhance_only):', decisionErr);
+        // Continue without decision context
+      }
+
+      let enhanced: Awaited<ReturnType<typeof enhanceAnswer>> | null = null;
+      try {
+        enhanced = await enhanceAnswer({
+          question,
+          rawAnswer: rawAnswerText,
+          jurisdiction: caseRow.jurisdiction,
+          product,
+          caseType: caseRow.case_type,
+          decisionContext,
+          wizardFacts: collectedFacts,
+        });
+      } catch (enhErr) {
+        console.error('enhanceAnswer failed in enhance_only mode:', enhErr);
+        enhanced = null;
+      }
+
+      return NextResponse.json({
+        case_id,
+        question_id,
+        answer_saved: false,
+        ask_heaven: enhanced
+          ? {
+              suggested_wording: enhanced.suggested_wording,
+              missing_information: enhanced.missing_information,
+              evidence_suggestions: enhanced.evidence_suggestions,
+              consistency_flags: enhanced.consistency_flags,
+            }
+          : null,
+        suggested_wording: enhanced?.suggested_wording ?? null,
+        missing_information: enhanced?.missing_information ?? [],
+        evidence_suggestions: enhanced?.evidence_suggestions ?? [],
+        enhanced_answer: enhanced
+          ? {
+              raw: rawAnswerText,
+              suggested: enhanced.suggested_wording,
+              missing_information: enhanced.missing_information,
+              evidence_suggestions: enhanced.evidence_suggestions,
+            }
+          : undefined,
+      });
+    }
 
 
     // ---------------------------------------
@@ -968,10 +1044,6 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
     // ---------------------------------------
     // 4. Log conversation (user + assistant)
     // ---------------------------------------
-    const rawAnswerText =
-      typeof normalizedAnswer === 'string'
-        ? normalizedAnswer
-        : JSON.stringify(normalizedAnswer);
 
     try {
       await supabase.from('conversations').insert({
