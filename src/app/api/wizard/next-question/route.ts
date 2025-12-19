@@ -179,17 +179,19 @@ export async function POST(request: Request) {
     // Create properly typed Supabase client
     const supabase = await createServerSupabaseClient();
 
-    let query = supabase.from('cases').select('*').eq('id', case_id);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    } else {
-      query = query.is('user_id', null);
-    }
-
-    const { data, error: caseError } = await query.single();
+    // RLS policies handle access control - no need for manual user_id filtering
+    const { data, error: caseError } = await supabase
+      .from('cases')
+      .select('*')
+      .eq('id', case_id)
+      .single();
 
     if (caseError || !data) {
-      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+      const { handleCaseFetchError } = await import('@/lib/api/error-handling');
+      const errorResponse = handleCaseFetchError(caseError, data, 'wizard/next-question', case_id);
+      if (errorResponse) {
+        return errorResponse;
+      }
     }
 
     const caseRow = data as CaseRow;

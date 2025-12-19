@@ -533,29 +533,27 @@ export async function POST(request: Request) {
     const supabase = await createServerSupabaseClient();
 
     // ---------------------------------------
-    // 1. Load case with RLS-respecting query
+    // 1. Load case - RLS policies handle access control
+    //    No need for manual user_id filtering
     // ---------------------------------------
-    let query = supabase.from('cases').select('*').eq('id', case_id);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    } else {
-      query = query.is('user_id', null);
-    }
+    const { data, error: fetchError } = await supabase
+      .from('cases')
+      .select('*')
+      .eq('id', case_id)
+      .single();
 
-    const { data, error: fetchError } = await query.single();
-
+    // Properly classify errors: 404 vs 5xx vs auth errors
     if (fetchError || !data) {
-      if (process.env.NODE_ENV !== 'test') {
-        console.warn('Case not found in wizard answer route', {
-          caseId: case_id,
-          error: fetchError?.message ?? fetchError,
-        });
-      }
-
-      return NextResponse.json(
-        { error: 'Case not found', code: 'CASE_NOT_FOUND' },
-        { status: 404 },
+      const { handleCaseFetchError } = await import('@/lib/api/error-handling');
+      const errorResponse = handleCaseFetchError(
+        fetchError,
+        data,
+        'wizard/answer',
+        case_id
       );
+      if (errorResponse) {
+        return errorResponse;
+      }
     }
 
     const caseRow = data as {

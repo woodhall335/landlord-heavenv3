@@ -168,18 +168,21 @@ export async function POST(request: Request) {
 
     // ------------------------------------------------
     // 1. Resume existing case if case_id supplied
+    //    RLS policies handle access control
     // ------------------------------------------------
     if (case_id) {
-      let query = supabase.from('cases').select('*').eq('id', case_id);
-      if (user) {
-        query = query.eq('user_id', user.id);
-      } else {
-        query = query.is('user_id', null);
-      }
+      const { data, error } = await supabase
+        .from('cases')
+        .select('*')
+        .eq('id', case_id)
+        .single();
 
-      const { data, error } = await query.single();
       if (error || !data) {
-        return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+        const { handleCaseFetchError } = await import('@/lib/api/error-handling');
+        const errorResponse = handleCaseFetchError(error, data, 'wizard/start', case_id);
+        if (errorResponse) {
+          return errorResponse;
+        }
       }
 
       // Type assertion: we know data exists after the null check
