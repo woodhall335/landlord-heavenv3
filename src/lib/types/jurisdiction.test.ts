@@ -2,9 +2,10 @@ import { describe, expect, test } from 'vitest';
 import { normalizeJurisdiction, renderingJurisdictionKey } from './jurisdiction';
 
 describe('jurisdiction helpers', () => {
-  test('normalizeJurisdiction maps legacy england-wales to england', () => {
-    expect(normalizeJurisdiction('england-wales')).toBe('england');
-    expect(normalizeJurisdiction('England & Wales')).toBe('england');
+  test('normalizeJurisdiction FAILS CLOSED for legacy england-wales (returns undefined)', () => {
+    // IMPORTANT: Do NOT map to england - requires explicit migration with property_location
+    expect(normalizeJurisdiction('england-wales')).toBeUndefined();
+    expect(normalizeJurisdiction('England & Wales')).toBeUndefined();
   });
 
   test('normalizeJurisdiction returns canonical values and rejects invalid entries', () => {

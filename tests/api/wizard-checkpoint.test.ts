@@ -333,6 +333,9 @@ describe('Wizard API Checkpoint', () => {
         case_type: 'eviction',
         user_id: null,
         wizard_progress: 50,
+        collected_facts: {
+          property_location: 'england', // Required for migration from legacy england-wales
+        },
       },
       error: null,
     });

@@ -31,6 +31,9 @@ describe('evaluateWizardGate (eviction jurisdiction gating)', () => {
     const result = evaluateWizardGate({
       ...baseInput,
       jurisdiction: 'england-wales',
+      facts: {
+        property_location: 'england', // Required for migration from legacy england-wales
+      },
     });
 
     const codes = result.blocking.map((b) => b.code);

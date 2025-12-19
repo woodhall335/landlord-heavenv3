@@ -27,7 +27,7 @@ export type AnyJurisdiction = CanonicalJurisdiction | LegacyJurisdiction;
 
 /**
  * Normalize a raw jurisdiction value to the canonical key.
- * - Maps legacy "england-wales" to "england" (temporary shim)
+ * - FAIL CLOSED: Legacy "england-wales" returns undefined (caller must handle)
  * - Returns undefined for invalid or missing values
  */
 export function normalizeJurisdiction(
@@ -43,12 +43,17 @@ export function normalizeJurisdiction(
 
   if (normalized === 'northern-ireland') return 'northern-ireland';
 
+  // FAIL CLOSED: Legacy england-wales requires migration via migrateToCanonicalJurisdiction with property_location
   if (
     normalized === 'england-wales' ||
     normalized === 'england & wales' ||
     normalized === 'england and wales'
-  )
-    return 'england';
+  ) {
+    console.error(
+      `[JURISDICTION] Legacy jurisdiction "${raw}" detected. Use migrateToCanonicalJurisdiction with property_location.`
+    );
+    return undefined;
+  }
 
   return undefined;
 }
@@ -91,12 +96,13 @@ export function migrateToCanonicalJurisdiction(
     if (propertyLocation === 'wales') return 'wales';
     if (propertyLocation === 'england') return 'england';
 
-    // Default to England (safest assumption for Section 21 compatibility)
-    console.warn(
-      `[MIGRATION] Converting legacy jurisdiction "${jurisdiction}" to "england". ` +
-      `To target Wales, use jurisdiction="wales" explicitly.`
+    // FAIL CLOSED: Cannot resolve without property location
+    // Do NOT default to england - this could apply wrong legal framework
+    console.error(
+      `[MIGRATION] Cannot migrate legacy jurisdiction "${jurisdiction}" without property_location hint. ` +
+      `Legacy england-wales cases must provide explicit property_location.`
     );
-    return 'england';
+    return null;
   }
 
   // Unrecognized value

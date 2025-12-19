@@ -26,7 +26,7 @@ describe('wizardFactsToCaseFacts', () => {
 
     test('should map property country from property_country field', () => {
       const wizard: WizardFacts = {
-        property_country: 'england-wales',
+        property_country: 'england',
       };
 
       const result = wizardFactsToCaseFacts(wizard);
@@ -46,13 +46,13 @@ describe('wizardFactsToCaseFacts', () => {
 
     test('should prefer property_country over jurisdiction', () => {
       const wizard: WizardFacts = {
-        property_country: 'england-wales',
+        property_country: 'wales',
         jurisdiction: 'scotland',
       };
 
       const result = wizardFactsToCaseFacts(wizard);
 
-      expect(result.property.country).toBe('england');
+      expect(result.property.country).toBe('wales');
     });
 
     test('should map HMO status', () => {
@@ -452,7 +452,7 @@ describe('wizardFactsToCaseFacts', () => {
         property_address_line2: 'Flat 4B',
         property_city: 'London',
         property_postcode: 'SW1A 1AA',
-        property_country: 'england-wales',
+        property_country: 'england',
         property_is_hmo: false,
 
         // Tenancy
@@ -487,13 +487,13 @@ describe('wizardFactsToCaseFacts', () => {
 
       // Verify meta
       expect(result.meta.product).toBe('tenancy_agreement');
-      expect(result.meta.original_product).toBe('tenancy_agreement/england-wales');
+      expect(result.meta.original_product).toBe('tenancy_agreement/england-wales'); // Keep as-is - this is historical metadata
       expect(result.meta.product_tier).toBe('standard');
 
       // Verify property
       expect(result.property.address_line1).toBe('123 High Street');
       expect(result.property.postcode).toBe('SW1A 1AA');
-      expect(result.property.country).toBe('england');
+      expect(result.property.country).toBe('england'); // Now using canonical england
       expect(result.property.is_hmo).toBe(false);
 
       // Verify tenancy
@@ -521,7 +521,7 @@ describe('wizardFactsToCaseFacts', () => {
 
         property_address_line1: '789 Main Road',
         property_postcode: 'EC1A 1BB',
-        property_country: 'england-wales',
+        property_country: 'england',
         property_is_hmo: true,
 
         tenancy_type: 'ast',

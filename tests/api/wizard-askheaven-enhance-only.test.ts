@@ -49,7 +49,7 @@ vi.mock('@/lib/wizard/mqs-loader', async () => {
 
   const mockMQS: any = {
     product: 'notice_only',
-    jurisdiction: 'england-wales',
+    jurisdiction: 'england',
     questions: [
       {
         id: 'grounds_particulars',
@@ -90,7 +90,7 @@ describe('wizard answer route - enhance_only mode', () => {
     const caseRow = {
       id: 'case-enhance-only',
       case_type: 'eviction',
-      jurisdiction: 'england-wales',
+      jurisdiction: 'england',
       collected_facts: mockFacts,
       user_id: null,
       wizard_progress: 45,

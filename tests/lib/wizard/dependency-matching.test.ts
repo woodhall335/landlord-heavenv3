@@ -26,12 +26,12 @@ describe('Dependency Matching: Array vs Scalar', () => {
       version: '1.0.0',
       questions: [
         {
-          id: 'eviction_route_intent',
+          id: 'selected_notice_route',
           section: 'Route',
           question: 'Which route?',
           inputType: 'multi_select',
           options: ['section_8', 'section_21'],
-          maps_to: ['eviction_route_intent'],
+          maps_to: ['selected_notice_route'],
         },
         {
           id: 'section8_grounds',
@@ -40,7 +40,7 @@ describe('Dependency Matching: Array vs Scalar', () => {
           inputType: 'multi_select',
           options: ['Ground 8', 'Ground 10'],
           dependsOn: {
-            questionId: 'eviction_route_intent',
+            questionId: 'selected_notice_route',
             value: 'section_8', // Scalar dependency
           },
           routes: ['section_8'],
@@ -50,7 +50,7 @@ describe('Dependency Matching: Array vs Scalar', () => {
     };
 
     const facts = {
-      eviction_route_intent: ['section_8'], // Array answer from multi-select
+      selected_notice_route: ['section_8'], // Array answer from multi-select
     };
 
     const question = mqs.questions.find((q) => q.id === 'section8_grounds')!;
@@ -199,15 +199,16 @@ describe('Dependency Matching: Array vs Scalar', () => {
       throw new Error('Failed to load notice_only MQS for england');
     }
 
-    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds');
+    // After migration: section8_grounds is now section8_grounds_selection (maps_to section8_grounds)
+    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds_selection');
 
     if (!section8GroundsQuestion) {
-      throw new Error('section8_grounds question not found in MQS');
+      throw new Error('section8_grounds_selection question not found in MQS');
     }
 
     // Simulate user selecting Section 8 route (multi-select answer)
     const facts = {
-      eviction_route_intent: ['section_8'],
+      selected_notice_route: ['section_8'], // Updated to match current MQS
     };
 
     const result = questionIsApplicable(mqs, section8GroundsQuestion, facts);
@@ -226,15 +227,16 @@ describe('Dependency Matching: Array vs Scalar', () => {
       throw new Error('Failed to load notice_only MQS for england');
     }
 
-    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds');
+    // After migration: section8_grounds is now section8_grounds_selection
+    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds_selection');
 
     if (!section8GroundsQuestion) {
-      throw new Error('section8_grounds question not found in MQS');
+      throw new Error('section8_grounds_selection question not found in MQS');
     }
 
     // User selecting both routes
     const facts = {
-      eviction_route_intent: ['section_8', 'section_21'],
+      selected_notice_route: ['section_8', 'section_21'], // Updated to match current MQS
     };
 
     const result = questionIsApplicable(mqs, section8GroundsQuestion, facts);
@@ -253,14 +255,15 @@ describe('Dependency Matching: Array vs Scalar', () => {
       throw new Error('Failed to load notice_only MQS for england');
     }
 
-    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds');
+    // After migration: section8_grounds is now section8_grounds_selection
+    const section8GroundsQuestion = mqs.questions.find((q) => q.id === 'section8_grounds_selection');
 
     if (!section8GroundsQuestion) {
-      throw new Error('section8_grounds question not found in MQS');
+      throw new Error('section8_grounds_selection question not found in MQS');
     }
 
     const facts = {
-      eviction_route_intent: ['section_21'], // Only Section 21
+      selected_notice_route: ['section_21'], // Only Section 21, updated to match current MQS
     };
 
     const result = questionIsApplicable(mqs, section8GroundsQuestion, facts);
