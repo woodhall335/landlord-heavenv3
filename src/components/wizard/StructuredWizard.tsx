@@ -215,13 +215,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // ====================================================================================
   // GROUNDS SELECTOR STATE
   // ====================================================================================
-  const [availableGrounds, setAvailableGrounds] = useState<Array<{
-    ground: string;
-    name: string;
-    short_description: string;
-    category: string;
-    type?: string;
-  }> | null>(null);
+  const [availableGrounds, setAvailableGrounds] = useState<GroundMetadata[] | null>(null);
   const [loadingGrounds, setLoadingGrounds] = useState(false);
   const [groundsFetchError, setGroundsFetchError] = useState<string | null>(null);
 
@@ -820,7 +814,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           const response = await fetch(apiUrl(`/api/grounds/${jurisdiction}`));
           if (response.ok) {
             const data = await response.json();
-            setAvailableGrounds(data.grounds);
+            // API returns grounds with proper GroundMetadata shape
+            setAvailableGrounds(data.grounds as GroundMetadata[]);
             setGroundsFetchError(null);
           } else {
             const errorMessage = `Failed to load ground descriptions (status ${response.status})`;
@@ -1372,8 +1367,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
         // Preserve helperText from original options if they were objects
         const optionsWithHelpers = normalizedOptions.map((normalized, idx) => {
-          const original = currentQuestion.options?.[idx];
-          const helperText = typeof original === 'object' && 'helperText' in original ? original.helperText : undefined;
+          const original = (currentQuestion.options as MQSOption[])?.[idx];
+          const helperText = typeof original === 'object' && original !== null && 'helperText' in original ? original.helperText : undefined;
           return { ...normalized, helperText };
         });
 
@@ -1636,7 +1631,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       <AskHeavenPanel
                         caseId={caseId}
                         caseType={caseType}
-                        jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
+                        jurisdiction={jurisdiction || 'england-wales'}
                         product={product}
                         currentQuestionId={currentQuestion.id}
                         currentQuestionText={currentQuestion.question}
@@ -1691,7 +1686,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               <AskHeavenPanel
                 caseId={caseId}
                 caseType={caseType}
-                jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
+                jurisdiction={jurisdiction || 'england-wales'}
                 product={product}
                 currentQuestionId={currentQuestion.id}
                 currentQuestionText={currentQuestion.question}
@@ -1876,7 +1871,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                         <AskHeavenPanel
                           caseId={caseId}
                           caseType={caseType}
-                          jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
+                          jurisdiction={jurisdiction || 'england-wales'}
                           product={product}
                           currentQuestionId={currentQuestion.id}
                           currentQuestionText={currentQuestion.question}

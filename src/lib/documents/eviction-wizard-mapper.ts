@@ -97,9 +97,9 @@ function buildEvictionCaseFromFacts(
   // Ensure canonical jurisdiction
   let jurisdiction = (facts.meta.jurisdiction as any) || 'england';
   if (jurisdiction === 'england-wales') {
-    // Migrate based on property_location if available
-    const propertyLocation = (wizardFacts as any)?.property_location;
-    jurisdiction = propertyLocation === 'wales' ? 'wales' : 'england';
+    // Migrate based on property country if available
+    const propertyCountry = facts.property.country;
+    jurisdiction = propertyCountry === 'wales' ? 'wales' : 'england';
   }
 
   const evictionCase: EvictionCase = {

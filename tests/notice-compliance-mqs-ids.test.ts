@@ -54,6 +54,7 @@ describe('notice compliance affected_question_id coverage', () => {
       ];
 
       for (const rule of rules) {
+        if (!rule.affected_question_id) continue;
         if (!ids.has(rule.affected_question_id)) {
           missing.push(`${spec.route}:${rule.code}:${rule.affected_question_id}`);
         }

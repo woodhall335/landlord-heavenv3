@@ -140,6 +140,7 @@ export interface Section21Recommendation {
   compliance_checks: ComplianceCheck[];
   red_flags?: RedFlag[];
   can_use_accelerated?: boolean;
+  blocking_reasons?: string[];
 }
 
 /**

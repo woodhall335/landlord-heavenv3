@@ -2,8 +2,8 @@
 'use client';
 
 import React, { useCallback, useState } from 'react';
+import type { Jurisdiction } from '@/lib/jurisdiction/types';
 
-type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 

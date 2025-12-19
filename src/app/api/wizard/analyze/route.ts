@@ -182,7 +182,7 @@ function computeStrength(facts: CaseFacts): { score: number; red_flags: string[]
     }
 
     // 5. Jurisdiction sanity checks – E&W small-claims style
-    if (facts.property.country === 'england-wales') {
+    if (facts.property.country === 'england' || facts.property.country === 'wales') {
       if (arrears > 10000) {
         red_flags.push(
           'Total claim appears to be above £10,000 – this may fall outside the small-claims track. Check whether this product is suitable.'

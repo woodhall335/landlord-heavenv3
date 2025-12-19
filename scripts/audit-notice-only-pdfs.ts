@@ -315,14 +315,15 @@ async function extractPDFText(pdfPath: string): Promise<{ text: string; error?: 
       }
 
       // Load the PDF document with canvas factory
+      // Cast to any because pdfjs legacy build types don't match runtime options (script-only)
       const loadingTask = pdfjsLib.getDocument({
         data: new Uint8Array(pdfBuffer),
         useSystemFonts: true,
         verbosity: 0,
-        canvasFactory: new NodeCanvasFactory() as any,
+        canvasFactory: new NodeCanvasFactory(),
         useWorkerFetch: false,
         isEvalSupported: false,
-      });
+      } as any);
 
       const pdf = await loadingTask.promise;
       const textParts: string[] = [];

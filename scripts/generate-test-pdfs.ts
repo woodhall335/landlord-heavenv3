@@ -174,7 +174,7 @@ async function generateTestPDF(
     const caseFacts = wizardFactsToCaseFacts(answers) as CaseFacts;
 
     // Map to template data (same as preview API does)
-    const templateData = mapNoticeOnlyFacts(caseFacts, answers);
+    const templateData = mapNoticeOnlyFacts(answers);
 
     // Add metadata
     templateData.is_preview = true;

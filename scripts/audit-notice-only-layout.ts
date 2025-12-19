@@ -110,11 +110,11 @@ async function extractPDFText(pdfPath: string): Promise<{ text: string; error?: 
         verbosity: 0,
       });
 
-      const pdf = await loadingTask.promise;
+      const pdfDoc = await loadingTask.promise;
       const textParts: string[] = [];
 
-      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-        const page = await page.getPage(pageNum);
+      for (let pageNum = 1; pageNum <= pdfDoc.numPages; pageNum++) {
+        const page = await pdfDoc.getPage(pageNum);
         const textContent = await page.getTextContent();
         const pageText = textContent.items.map((item: any) => item.str || '').join(' ');
         textParts.push(pageText);

@@ -51,19 +51,24 @@ const runPdf = process.env.RUN_PDF_TESTS === 'true' || process.env.RUN_PDF_TESTS
       throw error;
     }
 
+    if (!doc.pdf) {
+      throw new Error('PDF data is undefined');
+    }
+
     const pdfData =
       typeof doc.pdf === 'string'
         ? Buffer.from(doc.pdf, 'base64')
         : Buffer.isBuffer(doc.pdf)
           ? (doc.pdf as Buffer)
-          : Buffer.from(doc.pdf as Uint8Array);
+          : Buffer.from(doc.pdf as unknown as Uint8Array);
 
     expect(pdfData.slice(0, 4).toString()).toBe('%PDF');
 
     const pdfBuffer = new Uint8Array(pdfData);
     const { getDocument } = await import('pdfjs-dist/legacy/build/pdf.mjs');
 
-    const pdf = await getDocument({ data: pdfBuffer, disableWorker: true }).promise;
+    // Cast to any because pdfjs legacy types don't include disableWorker (test-only)
+    const pdf = await getDocument({ data: pdfBuffer, disableWorker: true } as any).promise;
     let text = '';
     for (let i = 1; i <= pdf.numPages; i++) {
       const page = await pdf.getPage(i);

@@ -14,6 +14,7 @@ export interface WizardField {
   };
   width?: 'full' | 'half' | 'third';
   defaultValue?: any;
+  maps_to?: string[];
 }
 
 export interface ExtendedWizardQuestion {

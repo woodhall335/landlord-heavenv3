@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { Button, Card } from '@/components/ui';
 import { Sparkles, MessageCircle, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import type { Jurisdiction } from '@/lib/jurisdiction/types';
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
-type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 
 interface AskHeavenPanelProps {
@@ -64,6 +64,8 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
 
   const jurisdictionLabel: string =
     {
+      england: 'England',
+      wales: 'Wales',
       'england-wales': 'England & Wales',
       scotland: 'Scotland',
       'northern-ireland': 'Northern Ireland',

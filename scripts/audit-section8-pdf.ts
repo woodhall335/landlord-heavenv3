@@ -1,11 +1,11 @@
 import fs from 'fs';
-import pdf from 'pdf-parse';
+import * as pdfParse from 'pdf-parse';
 
 const targetPath = process.argv[2] || '/mnt/data/ed3842d0-1960-461d-bd43-6962b9f633bf.pdf';
 
 async function extractPdfText(filePath: string) {
   const buffer = fs.readFileSync(filePath);
-  return pdf(buffer);
+  return pdfParse(buffer);
 }
 
 function printSection(lines: string[], matcher: (line: string) => boolean, context = 3, label?: string) {
@@ -39,7 +39,7 @@ function printSection(lines: string[], matcher: (line: string) => boolean, conte
   const data = await extractPdfText(targetPath);
   const lines = data.text
     .split(/\r?\n/)
-    .map(l => l.trim())
+    .map((l: string) => l.trim())
     .filter(Boolean);
 
   printSection(
