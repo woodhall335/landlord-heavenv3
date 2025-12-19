@@ -167,6 +167,10 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
   const handleApplySuggestion = () => {
     if (writingResult?.suggested_wording && onApplySuggestion) {
       onApplySuggestion(writingResult.suggested_wording);
+
+      // Reset Ask Heaven state after applying so user can reuse for another field
+      setWritingResult(null);
+      setWritingError(null);
     }
   };
 

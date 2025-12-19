@@ -13,6 +13,7 @@ import type { ExtendedWizardQuestion, StepFlags } from '@/lib/wizard/types';
 import { GuidanceTips } from '@/components/wizard/GuidanceTips';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
+import { formatGroundTitle, getGroundTypeBadgeClasses, type GroundMetadata } from '@/lib/grounds/format-ground-title';
 
 // ====================================================================================
 // OPTION NORMALIZATION HELPER (FIX FOR [object Object] REACT ERRORS)
@@ -1181,6 +1182,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               {availableGrounds.map((ground) => {
                 const groundId = `ground_${ground.ground}`;
                 const isSelected = selectedValues.includes(groundId) || selectedValues.includes(ground.ground);
+                const titleInfo = formatGroundTitle(ground.ground, availableGrounds);
 
                 return (
                   <label
@@ -1207,19 +1209,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       disabled={loading}
                     />
                     <div className="flex-1">
-                      <div className="font-medium text-gray-900">
-                        Ground {ground.ground}: {ground.name}
+                      <div className="font-medium text-gray-900 flex items-center gap-2">
+                        <span>Ground {titleInfo.groundNum} – {titleInfo.name || ground.name}</span>
+                        {titleInfo.type && (
+                          <span className={`text-xs px-2 py-0.5 rounded-full ${getGroundTypeBadgeClasses(titleInfo.type)}`}>
+                            {titleInfo.type === 'mandatory' ? 'Mandatory' : 'Discretionary'}
+                          </span>
+                        )}
                       </div>
                       <div className="text-sm text-gray-600 mt-1">
                         {ground.short_description}
                       </div>
-                      {ground.type && (
-                        <div className="text-xs text-gray-500 mt-1">
-                          {ground.type === 'mandatory' || ground.type === 'mandatory_with_conditions'
-                            ? '⚖️ Mandatory ground'
-                            : '⚠️ Discretionary ground'}
-                        </div>
-                      )}
                     </div>
                   </label>
                 );
@@ -1467,8 +1467,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 // Extract ground number for display
                 const groundNum = groundId.replace('ground_', '').toUpperCase();
 
-                // Find ground metadata if available
-                const groundMeta = availableGrounds?.find(g => `ground_${g.ground}` === groundId);
+                // Find ground metadata and format title using shared helper
+                const titleInfo = formatGroundTitle(groundNum, availableGrounds);
 
                 // Get current particulars for this ground
                 const groundParticulars = structuredValue[groundId] || {};
@@ -1481,16 +1481,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                     key={groundId}
                     className="p-4 border border-gray-300 rounded-lg bg-gray-50"
                   >
-                    <h3 className="font-semibold text-gray-900 mb-3">
-                      Ground {groundNum}
-                      {groundMeta && ` – ${groundMeta.name}`}
-                      {groundMeta && groundMeta.type && (
-                        <span className={`ml-2 text-xs px-2 py-0.5 rounded-full ${
-                          groundMeta.type === 'mandatory' || groundMeta.type === 'mandatory_with_conditions'
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-blue-100 text-blue-800'
-                        }`}>
-                          {groundMeta.type === 'mandatory' || groundMeta.type === 'mandatory_with_conditions' ? 'Mandatory' : 'Discretionary'}
+                    <h3 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                      <span>
+                        Ground {titleInfo.groundNum}
+                        {titleInfo.name && ` – ${titleInfo.name}`}
+                      </span>
+                      {titleInfo.type && (
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${getGroundTypeBadgeClasses(titleInfo.type)}`}>
+                          {titleInfo.type === 'mandatory' ? 'Mandatory' : 'Discretionary'}
                         </span>
                       )}
                     </h3>
