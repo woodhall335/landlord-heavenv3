@@ -1,25 +1,27 @@
 // @vitest-environment jsdom
-import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
+import { describe, expect, it, beforeAll, afterAll, beforeEach, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { StructuredWizard } from '@/components/wizard/StructuredWizard';
-
-const originalFetch = global.fetch;
 
 describe('StructuredWizard edit mode', () => {
   const fetchMock = vi.fn();
 
-  beforeEach(() => {
-    fetchMock.mockResolvedValue({
-      ok: true,
-      json: async () => ({ next_question: null, is_complete: true, progress: 100 }),
-    } as any);
-    // @ts-expect-error - mock fetch for tests
-    global.fetch = fetchMock;
+  beforeAll(() => {
+    vi.stubGlobal('fetch', fetchMock);
   });
 
-  afterEach(() => {
+  afterAll(() => {
+    vi.unstubAllGlobals();
+  });
+
+  beforeEach(() => {
     fetchMock.mockReset();
-    global.fetch = originalFetch;
+    fetchMock.mockResolvedValue(
+      new Response(
+        JSON.stringify({ next_question: null, is_complete: true, progress: 100 }),
+        { status: 200 },
+      ),
+    );
   });
 
   it('does not auto-redirect when a completed case is opened in edit mode', async () => {
