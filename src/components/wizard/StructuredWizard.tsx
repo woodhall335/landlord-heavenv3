@@ -40,6 +40,60 @@ function normalizeOptions(options?: MQSOption[]): NormalizedOption[] {
   }).filter(o => o.value);
 }
 
+// ====================================================================================
+// NESTED PATH HELPER FOR ASK HEAVEN (Task A)
+// ====================================================================================
+
+/**
+ * Sets a value at a nested path in an object, creating intermediate objects as needed.
+ * Example: setValueAtPath({}, "ground_particulars.ground_8.summary", "text")
+ *   => { ground_particulars: { ground_8: { summary: "text" } } }
+ *
+ * For ground_particulars, the path format is "ground_8.summary" or "ground_11.summary"
+ * which maps to the structure: { ground_8: { summary: "..." }, ground_11: { summary: "..." } }
+ */
+function setValueAtPath(obj: any, path: string, value: string): any {
+  if (!path) return obj;
+
+  const parts = path.split('.');
+  const result = typeof obj === 'object' && obj !== null ? { ...obj } : {};
+
+  let current = result;
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i];
+    if (typeof current[part] !== 'object' || current[part] === null) {
+      current[part] = {};
+    } else {
+      current[part] = { ...current[part] };
+    }
+    current = current[part];
+  }
+
+  current[parts[parts.length - 1]] = value;
+  return result;
+}
+
+/**
+ * Gets a value at a nested path in an object.
+ * Example: getValueAtPath({ ground_8: { summary: "text" } }, "ground_8.summary") => "text"
+ */
+function getValueAtPath(obj: any, path: string): string | null {
+  if (!path || !obj || typeof obj !== 'object') return null;
+
+  const parts = path.split('.');
+  let current = obj;
+
+  for (const part of parts) {
+    if (current && typeof current === 'object' && part in current) {
+      current = current[part];
+    } else {
+      return null;
+    }
+  }
+
+  return typeof current === 'string' ? current : null;
+}
+
 interface StructuredWizardProps {
   caseId: string;
   caseType: 'eviction' | 'money_claim' | 'tenancy_agreement';
@@ -87,6 +141,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [epcWarning, setEpcWarning] = useState<string | null>(null);
   const [astSuitabilityWarning, setAstSuitabilityWarning] = useState<string | null>(null);
   const [caseFacts, setCaseFacts] = useState<Record<string, any>>({});
+
+  // ====================================================================================
+  // ACTIVE FIELD TRACKING FOR ASK HEAVEN (Task A)
+  // ====================================================================================
+  const [activeTextFieldPath, setActiveTextFieldPath] = useState<string | null>(null);
+
+  // ====================================================================================
+  // NOTICE EXPIRY DATE OVERRIDE STATE (Task B)
+  // ====================================================================================
+  const [expiryDateOverride, setExpiryDateOverride] = useState(false);
 
   // ====================================================================================
   // NOTICE COMPLIANCE ERROR STATE
@@ -183,6 +247,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setUploadFilesForCurrentQuestion([]);
     setStepFlags(null);
     setNoticeComplianceError(null); // Clear compliance error when question changes
+    setActiveTextFieldPath(null); // Clear active field when question changes (Task A)
+    setExpiryDateOverride(false); // Reset expiry date override when question changes (Task B)
 
     if (question.inputType === 'group' && question.fields) {
       const defaults: Record<string, any> = {};
@@ -283,11 +349,24 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
   const handleApplySuggestion = useCallback(
     (newText: string) => {
-      if (currentQuestion?.inputType === 'textarea') {
+      // Use active field path to determine where to write the text
+      if (activeTextFieldPath) {
+        // For ground_particulars fields with paths like "ground_8.summary"
+        if (currentQuestion?.id === 'ground_particulars') {
+          const structuredValue = typeof currentAnswer === 'object' && currentAnswer !== null ? currentAnswer : {};
+          const updatedValue = setValueAtPath(structuredValue, activeTextFieldPath, newText);
+          setCurrentAnswer(updatedValue);
+        } else {
+          // For other nested fields (future-proofing)
+          const updatedValue = setValueAtPath(currentAnswer || {}, activeTextFieldPath, newText);
+          setCurrentAnswer(updatedValue);
+        }
+      } else if (currentQuestion?.inputType === 'textarea') {
+        // Fallback: simple textarea (original behavior)
         setCurrentAnswer(newText);
       }
     },
-    [currentQuestion],
+    [currentQuestion, activeTextFieldPath, currentAnswer],
   );
 
   const handleComplete = useCallback(
@@ -698,6 +777,20 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (resolvedInputType === 'group' && currentQuestion.fields) {
       for (const field of currentQuestion.fields) {
         const fieldValue = currentAnswer?.[field.id];
+
+        // ====================================================================================
+        // SPECIAL VALIDATION: Notice expiry date (Task B)
+        // Skip validation if auto-calc is available and override is OFF
+        // ====================================================================================
+        if (
+          field.id === 'notice_expiry_date' &&
+          currentQuestion.id === 'notice_service' &&
+          !expiryDateOverride &&
+          calculatedDate
+        ) {
+          // Auto-calc is being used, skip validation
+          continue;
+        }
 
         // Check for required fields - must handle boolean false as valid
         if (
@@ -1433,6 +1526,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                           ...structuredValue,
                           [groundId]: { ...groundParticulars, summary: e.target.value }
                         })}
+                        onFocus={() => setActiveTextFieldPath(`${groundId}.summary`)}
                         className="w-full p-2 border border-gray-300 rounded-lg min-h-[100px]"
                         placeholder="Provide specific dates, incidents, and factual details..."
                         disabled={loading}
@@ -1472,6 +1566,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           <textarea
             value={value}
             onChange={(e) => setCurrentAnswer(e.target.value)}
+            onFocus={() => setActiveTextFieldPath(currentQuestion.id)}
             placeholder={currentQuestion.placeholder}
             disabled={loading}
             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-[120px]"
@@ -1641,6 +1736,72 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-20"
                       rows={3}
                     />
+                  ) : field.id === 'notice_expiry_date' && currentQuestion.id === 'notice_service' ? (
+                    // ====================================================================================
+                    // SPECIAL HANDLING: Notice expiry date with auto-calc and override (Task B)
+                    // ====================================================================================
+                    <div className="space-y-3">
+                      {/* Show calculated date if available and override is OFF */}
+                      {calculatedDate && !expiryDateOverride && (
+                        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                          <div className="flex items-center gap-2 mb-1">
+                            <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span className="text-sm font-semibold text-blue-900">
+                              Auto-calculated: {new Date(calculatedDate.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            </span>
+                          </div>
+                          <p className="text-xs text-blue-700">
+                            Based on your grounds and service date ({calculatedDate.notice_period_days} days notice)
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Override toggle */}
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={expiryDateOverride}
+                          onChange={(e) => {
+                            const isOverriding = e.target.checked;
+                            setExpiryDateOverride(isOverriding);
+
+                            // If turning off override, clear the manual value and use calculated date
+                            if (!isOverriding && calculatedDate) {
+                              setCurrentAnswer({
+                                ...groupValue,
+                                [field.id]: calculatedDate.date
+                              });
+                            }
+                          }}
+                          className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-2 focus:ring-primary"
+                          disabled={loading}
+                        />
+                        <span className="text-sm text-gray-700">
+                          Override expiry date (advanced)
+                        </span>
+                      </label>
+
+                      {/* Editable input when override is ON */}
+                      {expiryDateOverride && (
+                        <div>
+                          <Input
+                            type="date"
+                            value={fieldValue}
+                            onChange={(e) =>
+                              setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
+                            }
+                            placeholder={field.placeholder}
+                            disabled={loading}
+                            className="w-full"
+                          />
+                          <p className="text-xs text-yellow-600 mt-1">
+                            ⚠️ Ensure the date complies with statutory notice period requirements
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <Input
                       type={field.inputType}
@@ -2354,7 +2515,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 product={product}
                 currentQuestionId={currentQuestion.id}
                 currentQuestionText={currentQuestion.question}
-                currentAnswer={typeof currentAnswer === 'string' ? currentAnswer : null}
+                currentAnswer={
+                  // For nested fields (like ground_particulars), use the active field value
+                  activeTextFieldPath
+                    ? getValueAtPath(currentAnswer, activeTextFieldPath)
+                    : typeof currentAnswer === 'string'
+                    ? currentAnswer
+                    : null
+                }
                 onApplySuggestion={handleApplySuggestion}
               />
             </div>
