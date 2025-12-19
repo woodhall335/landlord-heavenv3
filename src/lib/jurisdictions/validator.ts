@@ -46,7 +46,8 @@ export function validateNoticeOnlyJurisdiction(
   // Map jurisdiction to folder name
   const jurisdictionMap: Record<string, string> = {
     'england': 'england',
-    'england-wales': 'england-wales',
+    // Legacy combined jurisdiction for backwards compatibility: reuse England assets
+    'england-wales': 'england',
     'wales': 'wales',
     'scotland': 'scotland',
     'northern-ireland': 'northern-ireland',

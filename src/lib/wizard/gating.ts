@@ -137,7 +137,20 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
   const blocking: GateBlockingIssue[] = [];
   const warnings: GateWarning[] = [];
 
-  if (jurisdiction === 'northern-ireland') {
+  const normalizedInput = typeof jurisdiction === 'string' ? jurisdiction.trim().toLowerCase() : '';
+
+  if (!normalizedInput) {
+    blocking.push({
+      code: 'JURISDICTION_REQUIRED',
+      message: 'Jurisdiction is required for legal gating',
+      fields: ['jurisdiction'],
+      user_fix_hint: 'Select the correct jurisdiction to run legal validation',
+    });
+
+    return { blocking, warnings };
+  }
+
+  if (normalizedInput === 'northern-ireland') {
     blocking.push({
       code: 'JURISDICTION_EVICTION_UNSUPPORTED',
       message: 'Eviction notices are not supported in Northern Ireland',
@@ -148,22 +161,22 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     return { blocking, warnings };
   }
 
-  const allowedJurisdictions: JurisdictionKey[] = [
-    'england',
-    'wales',
-    'scotland',
-  ];
-  const normalizedJurisdiction = jurisdiction === 'england-wales' ? 'england' : jurisdiction;
-  const jurisdictionKey = allowedJurisdictions.includes(normalizedJurisdiction as JurisdictionKey)
-    ? (normalizedJurisdiction as JurisdictionKey)
-    : undefined;
+  let jurisdictionKey: JurisdictionKey | undefined;
+
+  if (normalizedInput === 'england-wales') {
+    // Legacy migration shim: old cases stored "england-wales". Treat as England until data is fully migrated.
+    // TODO: Remove this normalization once no cases use the deprecated combined jurisdiction.
+    jurisdictionKey = 'england';
+  } else if (normalizedInput === 'england' || normalizedInput === 'wales' || normalizedInput === 'scotland') {
+    jurisdictionKey = normalizedInput as JurisdictionKey;
+  }
 
   if (!jurisdictionKey) {
     blocking.push({
-      code: 'JURISDICTION_REQUIRED',
-      message: 'Jurisdiction is required for legal gating',
+      code: 'JURISDICTION_INVALID',
+      message: 'Jurisdiction is invalid or unsupported for eviction',
       fields: ['jurisdiction'],
-      user_fix_hint: 'Select the correct jurisdiction to run legal validation',
+      user_fix_hint: 'Choose a supported jurisdiction (England, Wales, or Scotland).',
     });
 
     return { blocking, warnings };
