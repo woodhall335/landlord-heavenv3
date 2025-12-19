@@ -926,12 +926,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       // Get selected grounds from case facts
       const selectedGrounds = caseFacts.section8_grounds || [];
 
-      // Extract ground IDs
-      const groundIds = selectedGrounds.map((g: string) => {
+      // Extract ground IDs and deduplicate (caseFacts may contain duplicates or mixed formats)
+      const groundIds = Array.from(new Set(selectedGrounds.map((g: string) => {
         if (g.startsWith('ground_')) return g;
         const match = g.match(/Ground (\d+[A-Za-z]?)/i);
         return match ? `ground_${match[1].toLowerCase()}` : g;
-      });
+      })));
 
       // Ensure answer is an object
       if (typeof currentAnswer !== 'object' || currentAnswer === null) {
@@ -1466,14 +1466,15 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           // Get selected grounds from case facts
           const selectedGrounds = caseFacts.section8_grounds || [];
 
-          // Extract ground IDs from selected grounds (e.g., "ground_8" from "ground_8" or from "Ground 8 - ...")
-          const groundIds = selectedGrounds.map((g: string) => {
+          // Extract ground IDs from selected grounds and deduplicate
+          // (caseFacts may contain duplicates or mixed formats like ["ground_8", "Ground 8 - ..."])
+          const groundIds = Array.from(new Set(selectedGrounds.map((g: string) => {
             // If already in format "ground_8", use as-is
             if (g.startsWith('ground_')) return g;
             // If in format "Ground 8 - ...", extract the number
             const match = g.match(/Ground (\d+[A-Za-z]?)/i);
             return match ? `ground_${match[1].toLowerCase()}` : g;
-          });
+          })));
 
           // Initialize structured answer if needed
           const structuredValue = typeof value === 'object' && value !== null ? value : {};
