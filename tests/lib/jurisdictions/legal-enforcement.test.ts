@@ -232,7 +232,7 @@ describe('jurisdiction gating enforcement', () => {
     await expect(generateNoticeOnlyPack(facts as any)).rejects.toThrow(/NOTICE_ONLY_VALIDATION_FAILED/);
   });
 
-  it('validates England preview using England rules even when rendering as england-wales', async () => {
+  it('migrates legacy England & Wales cases to England rules during preview validation', async () => {
     const caseId = 'case-england';
     const queryBuilder = {
       select: vi.fn().mockReturnThis(),
@@ -242,7 +242,7 @@ describe('jurisdiction gating enforcement', () => {
       single: vi.fn().mockResolvedValue({
         data: {
           id: caseId,
-          jurisdiction: 'england',
+          jurisdiction: 'england-wales',
           wizard_facts: {
             selected_notice_route: 'section_8',
             section8_grounds: ['ground_8'],

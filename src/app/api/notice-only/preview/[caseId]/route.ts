@@ -15,6 +15,10 @@ import { validateNoticeOnlyJurisdiction, formatValidationErrors } from '@/lib/ju
 import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
 import { validateNoticeOnlyBeforeRender } from '@/lib/documents/noticeOnly';
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
+import {
+  migrateToCanonicalJurisdiction,
+  type CanonicalJurisdiction,
+} from '@/lib/types/jurisdiction';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -41,7 +45,7 @@ export async function GET(
   { params }: { params: Promise<{ caseId: string }> }
 ) {
   let caseId = '';
-  let jurisdiction: 'england' | 'wales' | 'scotland' | 'england-wales' | undefined;
+  let jurisdiction: CanonicalJurisdiction | undefined;
   let validationJurisdiction: JurisdictionKey | undefined;
   let selected_route: string | undefined;
 
@@ -92,11 +96,32 @@ export async function GET(
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
 
     // Determine jurisdiction and notice type (assign to outer scope for error handling)
-    jurisdiction = caseRow.jurisdiction as 'england' | 'wales' | 'scotland' | 'england-wales';
-    validationJurisdiction =
-      jurisdiction === 'england-wales'
-        ? 'england'
-        : (jurisdiction as JurisdictionKey | undefined);
+    jurisdiction = migrateToCanonicalJurisdiction(
+      caseRow.jurisdiction,
+      caseRow.property_location
+    ) as CanonicalJurisdiction | null | undefined;
+
+    if (!jurisdiction) {
+      return NextResponse.json(
+        {
+          error: 'Invalid or missing jurisdiction',
+          details: 'A supported jurisdiction is required to generate a preview.',
+        },
+        { status: 400 },
+      );
+    }
+
+    if (jurisdiction === 'northern-ireland') {
+      return NextResponse.json(
+        {
+          error: 'JURISDICTION_EVICTION_UNSUPPORTED',
+          details: 'Eviction notices are not supported in Northern Ireland.',
+        },
+        { status: 400 },
+      );
+    }
+
+    validationJurisdiction = jurisdiction as JurisdictionKey;
 
     // Determine selected route with jurisdiction-aware fallback (assign to outer scope for error handling)
     selected_route =
@@ -132,16 +157,9 @@ export async function GET(
         jurisdiction = 'scotland';
         validationJurisdiction = 'scotland';
       }
-    } else if (jurisdiction === 'england') {
-      // Normalize 'england' to 'england-wales' for preview generation (England uses Housing Act 1988)
-      console.log(`[NOTICE-PREVIEW-API] Normalizing jurisdiction 'england' → 'england-wales' for pack generation`);
-      jurisdiction = 'england-wales';
-      validationJurisdiction = 'england';
     }
 
-    validationJurisdiction =
-      validationJurisdiction ||
-      ((jurisdiction === 'england-wales' ? 'england' : jurisdiction) as JurisdictionKey | undefined);
+    validationJurisdiction = validationJurisdiction || (jurisdiction as JurisdictionKey | undefined);
 
     // ============================================================================
     // VALIDATE JURISDICTION CONFIGURATION
@@ -228,10 +246,10 @@ export async function GET(
     const documents: NoticeOnlyDocument[] = [];
 
     // ===========================================================================
-    // ENGLAND & WALES NOTICE ONLY PACK
+    // ENGLAND NOTICE ONLY PACK
     // ===========================================================================
-    if (jurisdiction === 'england-wales') {
-      console.log('[NOTICE-PREVIEW-API] Generating England & Wales pack');
+    if (jurisdiction === 'england') {
+      console.log('[NOTICE-PREVIEW-API] Generating England pack');
 
       // Use mapNoticeOnlyFacts() to build template data with proper address concatenation,
       // ground normalization, deposit logic, and date handling
