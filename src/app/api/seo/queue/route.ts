@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
         content_type: params.contentType,
         target_keyword: params.targetKeyword,
         location: params.location,
-        jurisdiction: params.jurisdiction || 'england-wales',
+        jurisdiction: params.jurisdiction || 'england',
         word_count_target: params.wordCountTarget || 1500,
         priority: params.priority || 5,
         scheduled_for: params.scheduledFor || new Date().toISOString(),

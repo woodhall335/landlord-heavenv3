@@ -2,7 +2,7 @@
 # Maps collected facts to recommended grounds for possession
 
 version: "1.0"
-jurisdiction: "england-wales"
+jurisdiction: "england"
 last_updated: "2025-11-21"
 
 # Legal Change Framework Metadata
