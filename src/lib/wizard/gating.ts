@@ -8,10 +8,7 @@
  */
 
 import type { ProductType } from './mqs-loader';
-import {
-  getFactValue as resolveFactValue,
-  validateJurisdictionCompliance,
-} from '@/lib/jurisdictions/validators';
+import { resolveFactValue, validateJurisdictionCompliance } from '@/lib/jurisdictions/validators';
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
 
 // ============================================================================
@@ -132,7 +129,7 @@ function hasParticularsForGround(facts: Record<string, any>, groundCode: number)
 }
 
 // ============================================================================
-// EVICTION GATING RULES (England & Wales)
+// EVICTION GATING RULES
 // ============================================================================
 
 function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
@@ -140,7 +137,27 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
   const blocking: GateBlockingIssue[] = [];
   const warnings: GateWarning[] = [];
 
-  const jurisdictionKey = (jurisdiction as JurisdictionKey) || 'england';
+  const allowedJurisdictions: JurisdictionKey[] = [
+    'england',
+    'england-wales',
+    'wales',
+    'scotland',
+    'northern-ireland',
+  ];
+  const jurisdictionKey = allowedJurisdictions.includes(jurisdiction as JurisdictionKey)
+    ? (jurisdiction as JurisdictionKey)
+    : undefined;
+
+  if (!jurisdictionKey) {
+    blocking.push({
+      code: 'JURISDICTION_REQUIRED',
+      message: 'Jurisdiction is required for legal gating',
+      fields: ['jurisdiction'],
+      user_fix_hint: 'Select the correct jurisdiction to run legal validation',
+    });
+
+    return { blocking, warnings };
+  }
 
   // ============================================================================
   // GATE 1: Section 8 Ground 8 Threshold

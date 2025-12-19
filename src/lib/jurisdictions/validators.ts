@@ -27,6 +27,9 @@ export function getFactValue(facts: Record<string, any>, path: string): any {
     }, facts);
 }
 
+// Alias used across gating modules to avoid duplicate helper implementations
+export const resolveFactValue = getFactValue;
+
 function isMissing(value: any): boolean {
   if (value === null || value === undefined) return true;
   if (typeof value === 'string' && value.trim().length === 0) return true;
