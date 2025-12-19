@@ -16,6 +16,8 @@ interface AskHeavenPanelProps {
   currentQuestionId?: string;
   currentQuestionText?: string;
   currentAnswer?: string | null;
+  variant?: 'panel' | 'inline';
+  onImproveClick?: () => void;
   /**
    * Optional: allows Ask Heaven to push improved wording
    * straight back into the current answer field.
@@ -43,6 +45,8 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
   currentQuestionId,
   currentQuestionText,
   currentAnswer,
+  variant = 'panel',
+  onImproveClick,
   onApplySuggestion,
 }) => {
   // Writing helper state
@@ -126,6 +130,10 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
    */
   const handleImprove = async () => {
     if (!caseId || !currentQuestionId || !hasAnswerText) return;
+
+    if (onImproveClick) {
+      onImproveClick();
+    }
 
     setWritingLoading(true);
     setWritingError(null);
@@ -453,17 +461,84 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
 
   return (
     <>
-      {/* Desktop / large screens – sticky in the wizard column only */}
-      <div className="hidden lg:block">
-        <div className="sticky top-32">
-          {renderPanelContent()}
-        </div>
-      </div>
+      {variant === 'inline' ? (
+        <div className="space-y-2 text-right">
+          <Button
+            type="button"
+            size="small"
+            variant="ghost"
+            className="text-xs font-semibold text-primary hover:text-primary/80"
+            onClick={handleImprove}
+            disabled={writingLoading || !hasAnswerText || !currentQuestionId}
+          >
+            {writingLoading ? (
+              <>
+                <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                Improving…
+              </>
+            ) : (
+              <>
+                <Sparkles className="mr-2 h-3.5 w-3.5" />
+                Improve with Ask Heaven
+              </>
+            )}
+          </Button>
 
-      {/* Mobile / small screens – inline below the wizard content */}
-      <div className="mt-6 lg:hidden">
-        {renderPanelContent()}
-      </div>
+          {writingError && (
+            <div className="flex items-start justify-end gap-2 text-xs text-red-600">
+              <AlertCircle className="h-3.5 w-3.5" />
+              <span>{writingError}</span>
+            </div>
+          )}
+
+          {writingResult && (
+            <div className="rounded-md border border-blue-100 bg-blue-50/60 p-3 text-left">
+              <div className="flex items-center gap-2 mb-1">
+                <CheckCircle2 className="h-4 w-4 text-blue-600" />
+                <span className="text-xs font-semibold text-blue-900">
+                  Suggested wording
+                </span>
+              </div>
+              <p className="text-xs text-blue-900 whitespace-pre-wrap mb-2">
+                {writingResult.suggested_wording}
+              </p>
+              <div className="flex gap-2 justify-end">
+                <Button
+                  type="button"
+                  size="small"
+                  variant="primary"
+                  onClick={handleApplySuggestion}
+                  disabled={!onApplySuggestion}
+                >
+                  Use this wording
+                </Button>
+                <Button
+                  type="button"
+                  size="small"
+                  variant="ghost"
+                  onClick={() => setWritingResult(null)}
+                >
+                  Dismiss
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <>
+          {/* Desktop / large screens – sticky in the wizard column only */}
+          <div className="hidden lg:block">
+            <div className="sticky top-32">
+              {renderPanelContent()}
+            </div>
+          </div>
+
+          {/* Mobile / small screens – inline below the wizard content */}
+          <div className="mt-6 lg:hidden">
+            {renderPanelContent()}
+          </div>
+        </>
+      )}
     </>
   );
 };

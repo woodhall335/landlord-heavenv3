@@ -652,7 +652,7 @@ export default function WizardPreviewPage() {
             <Button
               onClick={() =>
                 router.push(
-                  `/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}${
+                  `/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}&mode=edit${
                     effectiveProduct ? `&product=${effectiveProduct}` : ''
                   }`
                 )

@@ -102,6 +102,7 @@ interface StructuredWizardProps {
   product: 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
   initialQuestion?: ExtendedWizardQuestion | null;
   onComplete: (caseId: string) => void;
+  mode?: 'default' | 'edit';
 }
 
 interface CaseAnalysisState {
@@ -119,6 +120,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   product,
   initialQuestion,
   onComplete,
+  mode = 'default',
 }) => {
   const [currentQuestion, setCurrentQuestion] = useState<ExtendedWizardQuestion | null>(
     initialQuestion ?? null,
@@ -238,6 +240,48 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [analysis, setAnalysis] = useState<CaseAnalysisState | null>(null);
   const [analysisLoading, setAnalysisLoading] = useState(false);
   const [analysisError, setAnalysisError] = useState<string | null>(null);
+
+  const deriveAnswerFromFacts = useCallback(
+    (question: ExtendedWizardQuestion | null, facts: Record<string, any>) => {
+      if (!question) return null;
+
+      const resolveValue = (paths: string[]): any => {
+        for (const path of paths) {
+          const value = getValueAtPath(facts, path);
+          if (value !== null && value !== undefined) {
+            return value;
+          }
+        }
+        return null;
+      };
+
+      if (question.inputType === 'group' && question.fields) {
+        const hydrated: Record<string, any> = {};
+
+        question.fields.forEach((field: any) => {
+          const fieldPaths =
+            (field.maps_to && Array.isArray(field.maps_to) && field.maps_to.length > 0
+              ? field.maps_to
+              : [field.id]
+            ).filter(Boolean);
+          const value = resolveValue(fieldPaths as string[]);
+          if (value !== null) {
+            hydrated[field.id] = value;
+          }
+        });
+
+        return Object.keys(hydrated).length > 0 ? hydrated : null;
+      }
+
+      const questionPaths =
+        (question.maps_to && question.maps_to.length > 0 ? question.maps_to : [question.id]).filter(
+          Boolean,
+        );
+
+      return resolveValue(questionPaths as string[]);
+    },
+    [],
+  );
 
   // Checkpoint state for live validation
   const [checkpoint, setCheckpoint] = useState<any>(null);
@@ -371,12 +415,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   );
 
   const handleComplete = useCallback(
-    async () => {
+    async (shouldRedirect = true) => {
       try {
         setLoading(true);
 
         // Final analysis before redirect (non-blocking for UX, but awaited here)
         await refreshAnalysis();
+
+        if (mode === 'edit' && !shouldRedirect) {
+          setLoading(false);
+          return;
+        }
 
         onComplete(caseId);
       } catch (err: any) {
@@ -384,7 +433,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         setLoading(false);
       }
     },
-    [caseId, onComplete, refreshAnalysis],
+    [caseId, mode, onComplete, refreshAnalysis],
   );
 
   const loadNextQuestion = useCallback(async () => {
@@ -399,7 +448,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       const response = await fetch('/api/wizard/next-question', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ case_id: caseId }),
+        body: JSON.stringify({ case_id: caseId, mode }),
       });
 
       if (!response.ok) {
@@ -409,7 +458,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       const data = await response.json();
 
       if (data.is_complete) {
+        setProgress(data.progress || 100);
         setIsComplete(true);
+        if (mode === 'edit') {
+          setLoading(false);
+          return;
+        }
         await handleComplete();
       } else if (data.next_question) {
         initializeQuestion(data.next_question);
@@ -423,7 +477,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     } finally {
       setLoading(false);
     }
-  }, [caseId, handleComplete, initializeQuestion]);
+  }, [caseId, handleComplete, initializeQuestion, mode]);
 
   // ====================================================================================
   // PHASE 2: MQS LOADING FUNCTION
@@ -500,6 +554,22 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       void fetchCaseFacts();
     }
   }, [currentQuestion, caseId]);
+
+  useEffect(() => {
+    if (!currentQuestion) return;
+
+    const hydrated = deriveAnswerFromFacts(currentQuestion, caseFacts);
+
+    const shouldHydrate =
+      hydrated !== null &&
+      (currentAnswer === null ||
+        currentAnswer === undefined ||
+        (typeof currentAnswer === 'string' && currentAnswer.trim().length === 0));
+
+    if (shouldHydrate) {
+      setCurrentAnswer(hydrated);
+    }
+  }, [caseFacts, currentAnswer, currentQuestion, deriveAnswerFromFacts]);
 
   // ====================================================================================
   // PHASE 2: ROUTE GUARD (CLAUDE CODE FIX #4 + #7 WITH LOOP PROTECTION)
@@ -1519,21 +1589,35 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       <p className="text-xs text-gray-600 mb-2">
                         Provide specific details for Ground {groundNum}. Include dates, incidents, and factual evidence.
                       </p>
-                      <textarea
-                        value={groundParticulars.summary || ''}
-                        onChange={(e) => setCurrentAnswer({
-                          ...structuredValue,
-                          [groundId]: { ...groundParticulars, summary: e.target.value }
-                        })}
-                        onFocus={() => setActiveTextFieldPath(`${groundId}.summary`)}
-                        className="w-full p-2 border border-gray-300 rounded-lg min-h-[100px]"
-                        placeholder="Provide specific dates, incidents, and factual details..."
-                        disabled={loading}
-                        rows={4}
+                    <textarea
+                      value={groundParticulars.summary || ''}
+                      onChange={(e) => setCurrentAnswer({
+                        ...structuredValue,
+                        [groundId]: { ...groundParticulars, summary: e.target.value }
+                      })}
+                      onFocus={() => setActiveTextFieldPath(`${groundId}.summary`)}
+                      className="w-full p-2 border border-gray-300 rounded-lg min-h-[100px]"
+                      placeholder="Provide specific dates, incidents, and factual details..."
+                      disabled={loading}
+                      rows={4}
+                    />
+                    <div className="mt-2 flex justify-end">
+                      <AskHeavenPanel
+                        caseId={caseId}
+                        caseType={caseType}
+                        jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
+                        product={product}
+                        currentQuestionId={currentQuestion.id}
+                        currentQuestionText={currentQuestion.question}
+                        currentAnswer={groundParticulars.summary || ''}
+                        variant="inline"
+                        onImproveClick={() => setActiveTextFieldPath(`${groundId}.summary`)}
+                        onApplySuggestion={handleApplySuggestion}
                       />
                     </div>
+                  </div>
 
-                    {/* Evidence available */}
+                  {/* Evidence available */}
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Evidence available
@@ -1562,15 +1646,31 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
         // Default textarea rendering
         return (
-          <textarea
-            value={value}
-            onChange={(e) => setCurrentAnswer(e.target.value)}
-            onFocus={() => setActiveTextFieldPath(currentQuestion.id)}
-            placeholder={currentQuestion.placeholder}
-            disabled={loading}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-[120px]"
-            rows={4}
-          />
+          <div className="space-y-2">
+            <textarea
+              value={value}
+              onChange={(e) => setCurrentAnswer(e.target.value)}
+              onFocus={() => setActiveTextFieldPath(currentQuestion.id)}
+              placeholder={currentQuestion.placeholder}
+              disabled={loading}
+              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-[120px]"
+              rows={4}
+            />
+            <div className="flex justify-end">
+              <AskHeavenPanel
+                caseId={caseId}
+                caseType={caseType}
+                jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
+                product={product}
+                currentQuestionId={currentQuestion.id}
+                currentQuestionText={currentQuestion.question}
+                currentAnswer={typeof value === 'string' ? value : ''}
+                variant="inline"
+                onImproveClick={() => setActiveTextFieldPath(currentQuestion.id)}
+                onApplySuggestion={handleApplySuggestion}
+              />
+            </div>
+          </div>
         );
       }
 
@@ -1725,16 +1825,41 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       />
                     </div>
                   ) : field.inputType === 'textarea' ? (
-                    <textarea
-                      value={fieldValue}
-                      onChange={(e) =>
-                        setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
-                      }
-                      placeholder={field.placeholder}
-                      disabled={loading}
-                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-20"
-                      rows={3}
-                    />
+                    <div className="space-y-2">
+                      <textarea
+                        value={fieldValue}
+                        onChange={(e) =>
+                          setCurrentAnswer({ ...groupValue, [field.id]: e.target.value })
+                        }
+                        onFocus={() =>
+                          setActiveTextFieldPath(
+                            (field.maps_to && field.maps_to[0]) || field.id,
+                          )
+                        }
+                        placeholder={field.placeholder}
+                        disabled={loading}
+                        className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent min-h-20"
+                        rows={3}
+                      />
+                      <div className="flex justify-end">
+                        <AskHeavenPanel
+                          caseId={caseId}
+                          caseType={caseType}
+                          jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
+                          product={product}
+                          currentQuestionId={currentQuestion.id}
+                          currentQuestionText={currentQuestion.question}
+                          currentAnswer={fieldValue || ''}
+                          variant="inline"
+                          onImproveClick={() =>
+                            setActiveTextFieldPath(
+                              (field.maps_to && field.maps_to[0]) || field.id,
+                            )
+                          }
+                          onApplySuggestion={handleApplySuggestion}
+                        />
+                      </div>
+                    </div>
                   ) : field.id === 'notice_expiry_date' && currentQuestion.id === 'notice_service' ? (
                     // ====================================================================================
                     // SPECIAL HANDLING: Notice expiry date with auto-calc and override (Task B)
@@ -2504,28 +2629,6 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             </div>
           </Card>
 
-          {/* Ask Heaven Panel - below wizard for all screen sizes */}
-          {currentQuestion?.inputType === 'textarea' && (
-            <div className="mt-6">
-              <AskHeavenPanel
-                caseId={caseId}
-                caseType={caseType}
-                jurisdiction={(jurisdiction || 'england-wales') as 'england-wales' | 'scotland' | 'northern-ireland'}
-                product={product}
-                currentQuestionId={currentQuestion.id}
-                currentQuestionText={currentQuestion.question}
-                currentAnswer={
-                  // For nested fields (like ground_particulars), use the active field value
-                  activeTextFieldPath
-                    ? getValueAtPath(currentAnswer, activeTextFieldPath)
-                    : typeof currentAnswer === 'string'
-                    ? currentAnswer
-                    : null
-                }
-                onApplySuggestion={handleApplySuggestion}
-              />
-            </div>
-          )}
         </div>
 
         {/* RIGHT: Side panels – case-specific widgets */}

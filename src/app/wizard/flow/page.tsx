@@ -31,6 +31,7 @@ function WizardFlowContent() {
   const product = searchParams.get('product'); // Specific product (notice_only, complete_pack, etc.)
   const productVariant = searchParams.get('product_variant'); // e.g. money_claim_england_wales
   const editCaseId = searchParams.get('case_id'); // Case ID to edit
+  const mode = searchParams.get('mode');
 
   const hasRequiredParams = Boolean(type && jurisdiction);
 
@@ -73,6 +74,7 @@ function WizardFlowContent() {
       // Resume existing case if editing
       if (editCaseId) {
         setCaseId(editCaseId);
+        setLoading(false);
         return;
       }
 
@@ -221,6 +223,7 @@ function WizardFlowContent() {
         }
         initialQuestion={initialQuestion ?? undefined}
         onComplete={handleComplete}
+        mode={mode === 'edit' ? 'edit' : 'default'}
       />
     );
   }

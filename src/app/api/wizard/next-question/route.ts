@@ -168,7 +168,8 @@ function getMoneyClaimMissingEssentials(
 export async function POST(request: Request) {
   try {
     const user = await getServerUser().catch(() => null);
-    const { case_id } = await request.json();
+    const { case_id, mode } = await request.json();
+    const isEditMode = mode === 'edit';
 
     if (!case_id || typeof case_id !== 'string') {
       return NextResponse.json({ error: 'Invalid case_id' }, { status: 400 });
@@ -263,6 +264,10 @@ export async function POST(request: Request) {
 
       // Return the info question this time (so it gets displayed)
       // But next time /next-question is called, it will skip to questionAfterInfo
+    }
+
+    if (!nextQuestion && isEditMode && mqs) {
+      nextQuestion = mqs.questions.find((q) => questionIsApplicable(mqs, q, hydratedFacts)) || null;
     }
 
     if (!nextQuestion) {
