@@ -128,6 +128,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     type?: string;
   }> | null>(null);
   const [loadingGrounds, setLoadingGrounds] = useState(false);
+  const [groundsFetchError, setGroundsFetchError] = useState<string | null>(null);
 
   const [calculatedDate, setCalculatedDate] = useState<{
     date: string;
@@ -615,15 +616,21 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (isGroundsQuestion && jurisdiction && !availableGrounds && !loadingGrounds) {
       const fetchGrounds = async () => {
         setLoadingGrounds(true);
+        setGroundsFetchError(null);
         try {
           const response = await fetch(`/api/grounds/${jurisdiction}`);
           if (response.ok) {
             const data = await response.json();
             setAvailableGrounds(data.grounds);
+            setGroundsFetchError(null);
           } else {
+            const errorMessage = `Failed to load ground descriptions (status ${response.status})`;
+            setGroundsFetchError(errorMessage);
             console.error('Failed to fetch grounds:', response.status);
           }
         } catch (error) {
+          const errorMessage = 'Failed to load ground descriptions';
+          setGroundsFetchError(errorMessage);
           console.error('Error fetching grounds:', error);
         } finally {
           setLoadingGrounds(false);
@@ -637,7 +644,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (!isGroundsQuestion && availableGrounds) {
       setAvailableGrounds(null);
     }
-  }, [currentQuestion, jurisdiction, availableGrounds, loadingGrounds]);
+    if (!isGroundsQuestion && groundsFetchError) {
+      setGroundsFetchError(null);
+    }
+  }, [currentQuestion, jurisdiction, availableGrounds, loadingGrounds, groundsFetchError]);
 
   const isCurrentAnswerValid = (): boolean => {
     if (!currentQuestion) return false;
@@ -1036,8 +1046,19 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         }
 
         // Default multi-select rendering for non-grounds questions
+        // OR for grounds questions where API fetch failed
         return (
           <div className="space-y-2">
+            {groundsFetchError && isGroundsQuestion && (
+              <div className="mb-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <span className="text-yellow-600">⚠️</span>
+                  <div className="flex-1 text-sm text-yellow-800">
+                    <strong>Warning:</strong> {groundsFetchError}. You can still select grounds below, but detailed descriptions may not be available.
+                  </div>
+                </div>
+              </div>
+            )}
             {currentQuestion.options?.map((option) => (
               <label key={option} className="flex items-center gap-2 cursor-pointer">
                 <input

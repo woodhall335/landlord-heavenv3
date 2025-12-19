@@ -8,10 +8,10 @@ import path from 'path';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { jurisdiction: string } }
+  { params }: { params: Promise<{ jurisdiction: string }> }
 ) {
   try {
-    const { jurisdiction } = params;
+    const { jurisdiction } = await params;
 
     // Validate jurisdiction
     const validJurisdictions = ['england', 'wales', 'scotland'];
@@ -56,10 +56,10 @@ export async function GET(
         return aNum - bNum;
       });
 
-    return NextResponse.json({
-      jurisdiction,
-      grounds,
-    });
+    return NextResponse.json(
+      { grounds },
+      { status: 200 }
+    );
   } catch (error: any) {
     console.error('Error fetching grounds:', error);
     return NextResponse.json(
