@@ -174,8 +174,8 @@ export async function GET(
         code: 'LEGAL_BLOCK',
         error: 'LEGAL_BLOCK',
         user_message: userMessage,
-        blocking_issues: validationOutcome.blocking,
-        warnings: validationOutcome.warnings,
+        blocking_issues: validationOutcome.blocking ?? [],
+        warnings: validationOutcome.warnings ?? [],
       };
 
       console.warn('[NOTICE-PREVIEW-API] Validation blocked preview:', {

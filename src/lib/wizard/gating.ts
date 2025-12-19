@@ -129,7 +129,7 @@ function hasParticularsForGround(facts: Record<string, any>, groundCode: number)
 }
 
 // ============================================================================
-// EVICTION GATING RULES (England & Wales)
+// EVICTION GATING RULES
 // ============================================================================
 
 function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
