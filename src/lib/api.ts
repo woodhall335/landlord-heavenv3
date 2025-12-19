@@ -1,17 +1,17 @@
 export function apiUrl(path: string): string {
-  const isNodeLike = typeof process !== 'undefined' && !!process.versions?.node;
-  const isMockedFetch =
-    typeof fetch === 'function' && typeof (fetch as any).mock === 'object';
+  const isNode = typeof process !== 'undefined' && !!process.versions?.node;
 
   // Use relative paths in the browser to preserve Next.js routing behaviour
-  if ((!isNodeLike && typeof window !== 'undefined') || isMockedFetch) {
+  if (!isNode && typeof window !== 'undefined') {
     return path;
   }
 
   // In Node/SSR, build an absolute URL so fetch has a valid base
-  const base =
-    (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_BASE_URL) ||
-    'http://localhost:3000';
+  const base = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
+  if (/^https?:\/\//i.test(path)) {
+    return path;
+  }
 
   return new URL(path, base).toString();
 }
