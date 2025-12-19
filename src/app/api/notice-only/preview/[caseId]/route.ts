@@ -111,6 +111,10 @@ export async function GET(
         console.warn(`[NOTICE-PREVIEW-API] Jurisdiction mismatch: selected_route is ${selected_route} but jurisdiction is ${jurisdiction}. Overriding to 'scotland'.`);
         jurisdiction = 'scotland';
       }
+    } else if (jurisdiction === 'england') {
+      // Normalize 'england' to 'england-wales' for preview generation (England uses Housing Act 1988)
+      console.log(`[NOTICE-PREVIEW-API] Normalizing jurisdiction 'england' → 'england-wales' for pack generation`);
+      jurisdiction = 'england-wales';
     }
 
     // ============================================================================
