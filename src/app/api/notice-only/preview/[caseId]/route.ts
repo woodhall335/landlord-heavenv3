@@ -42,6 +42,7 @@ export async function GET(
 ) {
   let caseId = '';
   let jurisdiction: 'england' | 'wales' | 'scotland' | 'england-wales' | undefined;
+  let validationJurisdiction: JurisdictionKey | undefined;
   let selected_route: string | undefined;
 
   const extractGroundCodes = (section8Grounds: any[]): number[] => {
@@ -92,6 +93,10 @@ export async function GET(
 
     // Determine jurisdiction and notice type (assign to outer scope for error handling)
     jurisdiction = caseRow.jurisdiction as 'england' | 'wales' | 'scotland' | 'england-wales';
+    validationJurisdiction =
+      jurisdiction === 'england-wales'
+        ? 'england'
+        : (jurisdiction as JurisdictionKey | undefined);
 
     // Determine selected route with jurisdiction-aware fallback (assign to outer scope for error handling)
     selected_route =
@@ -119,17 +124,24 @@ export async function GET(
       if (jurisdiction !== 'wales') {
         console.warn(`[NOTICE-PREVIEW-API] Jurisdiction mismatch: selected_route is ${selected_route} but jurisdiction is ${jurisdiction}. Overriding to 'wales'.`);
         jurisdiction = 'wales';
+        validationJurisdiction = 'wales';
       }
     } else if (selected_route === 'notice_to_leave') {
       if (jurisdiction !== 'scotland') {
         console.warn(`[NOTICE-PREVIEW-API] Jurisdiction mismatch: selected_route is ${selected_route} but jurisdiction is ${jurisdiction}. Overriding to 'scotland'.`);
         jurisdiction = 'scotland';
+        validationJurisdiction = 'scotland';
       }
     } else if (jurisdiction === 'england') {
       // Normalize 'england' to 'england-wales' for preview generation (England uses Housing Act 1988)
       console.log(`[NOTICE-PREVIEW-API] Normalizing jurisdiction 'england' → 'england-wales' for pack generation`);
       jurisdiction = 'england-wales';
+      validationJurisdiction = 'england';
     }
+
+    validationJurisdiction =
+      validationJurisdiction ||
+      ((jurisdiction === 'england-wales' ? 'england' : jurisdiction) as JurisdictionKey | undefined);
 
     // ============================================================================
     // VALIDATE JURISDICTION CONFIGURATION
@@ -162,7 +174,7 @@ export async function GET(
     // CONFIG-DRIVEN VALIDATION (blocking + warnings)
     // ========================================================================
     const validationOutcome = validateNoticeOnlyBeforeRender({
-      jurisdiction: jurisdiction as JurisdictionKey,
+      jurisdiction: validationJurisdiction as JurisdictionKey,
       facts: wizardFacts,
       selectedGroundCodes: groundCodes,
       selectedRoute: selected_route,

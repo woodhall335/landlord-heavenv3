@@ -137,15 +137,25 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
   const blocking: GateBlockingIssue[] = [];
   const warnings: GateWarning[] = [];
 
+  if (jurisdiction === 'northern-ireland') {
+    blocking.push({
+      code: 'JURISDICTION_EVICTION_UNSUPPORTED',
+      message: 'Eviction notices are not supported in Northern Ireland',
+      user_message: 'Eviction notices for Northern Ireland are not yet supported.',
+      fields: ['jurisdiction'],
+    });
+
+    return { blocking, warnings };
+  }
+
   const allowedJurisdictions: JurisdictionKey[] = [
     'england',
-    'england-wales',
     'wales',
     'scotland',
-    'northern-ireland',
   ];
-  const jurisdictionKey = allowedJurisdictions.includes(jurisdiction as JurisdictionKey)
-    ? (jurisdiction as JurisdictionKey)
+  const normalizedJurisdiction = jurisdiction === 'england-wales' ? 'england' : jurisdiction;
+  const jurisdictionKey = allowedJurisdictions.includes(normalizedJurisdiction as JurisdictionKey)
+    ? (normalizedJurisdiction as JurisdictionKey)
     : undefined;
 
   if (!jurisdictionKey) {
