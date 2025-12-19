@@ -8,6 +8,7 @@
 import type { WizardFacts, CaseFacts, PartyDetails } from './schema';
 import { createEmptyCaseFacts } from './schema';
 import { normalizeRoutes, getPrimaryRoute, routeToDocumentType } from '../wizard/route-normalizer';
+import { normalizeJurisdiction } from '../types/jurisdiction';
 
 /**
  * Helper to safely get a value from flat wizard facts using dot notation.
@@ -443,6 +444,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
 
   const base = createEmptyCaseFacts();
 
+
   // Apply any MQS answers that map directly to case_facts.* paths
   Object.entries(wizard).forEach(([key, value]) => {
     if (!key.startsWith('case_facts.')) return;
@@ -502,6 +504,9 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'property_country',
     'jurisdiction',
   ]) as any;
+
+  const normalizedCountry = normalizeJurisdiction(base.property.country as any);
+  base.property.country = normalizedCountry ?? null;
   const propertyIsHmo = getFirstValue(wizard, [
     'case_facts.property.is_hmo',
     'property_is_hmo',
@@ -915,6 +920,19 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // NOTICE - Section 8, Section 21, etc.
   // =============================================================================
 
+  const rawNoticeType = (wizard as any).notice_type;
+  const rawNoticeDate = (wizard as any).notice_date;
+  const rawNoticeExpiry = (wizard as any).notice_expiry_date ?? (wizard as any).expiry_date;
+  const rawNoticeServiceMethod = (wizard as any).notice_service_method;
+  const rawNoticeServedBy = (wizard as any).notice_served_by;
+
+
+  if (rawNoticeType) base.notice.notice_type = rawNoticeType as any;
+  if (rawNoticeDate) base.notice.notice_date = rawNoticeDate as any;
+  if (rawNoticeExpiry) base.notice.expiry_date = rawNoticeExpiry as any;
+  if (rawNoticeServiceMethod) base.notice.service_method = rawNoticeServiceMethod as any;
+  if (rawNoticeServedBy) base.notice.served_by = rawNoticeServedBy as any;
+
   // ROUTE NORMALIZATION: Convert user's route intent to canonical format
   // Handles legacy human-readable labels (e.g., "Section 8 - rent arrears / breach")
   // and new canonical values (e.g., "section_8")
@@ -968,6 +986,20 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'notice_served_by',
     'served_by',
   ]);
+
+  // Defensive fallback: ensure simple keys populate notice block even if normalization above misses them
+  if (!base.notice.notice_type && typeof (wizard as any).notice_type === 'string') {
+    base.notice.notice_type = (wizard as any).notice_type as any;
+  }
+  if (!base.notice.notice_date && typeof (wizard as any).notice_date === 'string') {
+    base.notice.notice_date = (wizard as any).notice_date as any;
+  }
+  if (!base.notice.expiry_date && typeof (wizard as any).notice_expiry_date === 'string') {
+    base.notice.expiry_date = (wizard as any).notice_expiry_date as any;
+  }
+  if (!base.notice.expiry_date && typeof (wizard as any).expiry_date === 'string') {
+    base.notice.expiry_date = (wizard as any).expiry_date as any;
+  }
 
   // =============================================================================
   // COURT - Claim amounts and form requirements
@@ -1150,6 +1182,16 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'service_contact.service_phone',
     'service_phone',
   ]);
+
+  if (!base.service_contact.service_name && typeof (wizard as any)['service_contact.service_name'] === 'string') {
+    base.service_contact.service_name = (wizard as any)['service_contact.service_name'];
+  }
+  if (!base.service_contact.service_email && typeof (wizard as any)['service_contact.service_email'] === 'string') {
+    base.service_contact.service_email = (wizard as any)['service_contact.service_email'];
+  }
+  if (!base.service_contact.service_phone && typeof (wizard as any)['service_contact.service_phone'] === 'string') {
+    base.service_contact.service_phone = (wizard as any)['service_contact.service_phone'];
+  }
 
   // =============================================================================
   // MONEY CLAIM - Claim breakdown, interest, pre-action
@@ -1627,7 +1669,25 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // ---------------------------------------------------------------------------
   base.case_health = computeCaseHealth(base);
 
-  return base;
+  const result = JSON.parse(JSON.stringify(base));
+
+  if (typeof (result as any).notice === 'string') {
+    try {
+      (result as any).notice = JSON.parse((result as any).notice);
+    } catch {
+      // Leave as-is if parsing fails
+    }
+  }
+
+  if (typeof (result as any).service_contact === 'string') {
+    try {
+      (result as any).service_contact = JSON.parse((result as any).service_contact);
+    } catch {
+      // Leave as-is if parsing fails
+    }
+  }
+
+  return result as CaseFacts;
 }
 
 /**

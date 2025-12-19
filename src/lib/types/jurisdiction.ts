@@ -26,6 +26,44 @@ export type LegacyJurisdiction = 'england-wales' | 'england & wales';
 export type AnyJurisdiction = CanonicalJurisdiction | LegacyJurisdiction;
 
 /**
+ * Normalize a raw jurisdiction value to the canonical key.
+ * - Maps legacy "england-wales" to "england" (temporary shim)
+ * - Returns undefined for invalid or missing values
+ */
+export function normalizeJurisdiction(
+  raw: string | null | undefined
+): CanonicalJurisdiction | undefined {
+  if (!raw || typeof raw !== 'string') return undefined;
+
+  const normalized = raw.toLowerCase().trim();
+
+  if (normalized === 'england' || normalized === 'wales' || normalized === 'scotland') {
+    return normalized as CanonicalJurisdiction;
+  }
+
+  if (normalized === 'northern-ireland') return 'northern-ireland';
+
+  if (
+    normalized === 'england-wales' ||
+    normalized === 'england & wales' ||
+    normalized === 'england and wales'
+  )
+    return 'england';
+
+  return undefined;
+}
+
+/**
+ * Render a jurisdiction key for template selection.
+ * Only allows individual canonical countries (no combined keys).
+ */
+export function renderingJurisdictionKey(
+  jurisdiction: Exclude<CanonicalJurisdiction, 'northern-ireland'>
+): 'england' | 'wales' | 'scotland' {
+  return jurisdiction;
+}
+
+/**
  * Migrate legacy jurisdiction to canonical value
  * If england-wales is provided without property_location context, defaults to 'england'
  */

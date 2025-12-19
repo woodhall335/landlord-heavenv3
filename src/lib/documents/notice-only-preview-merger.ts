@@ -6,6 +6,7 @@
  */
 
 import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
+import type { CanonicalJurisdiction } from '../types/jurisdiction';
 
 // ============================================================================
 // TYPES
@@ -19,7 +20,7 @@ export interface NoticeOnlyDocument {
 }
 
 export interface NoticeOnlyPreviewOptions {
-  jurisdiction: 'england' | 'wales' | 'scotland' | 'england-wales';
+  jurisdiction: Extract<CanonicalJurisdiction, 'england' | 'wales' | 'scotland'>;
   notice_type?: 'section_8' | 'section_21' | 'notice_to_leave' | 'wales_section_173' | 'wales_fault_based';
   watermarkText?: string;
   includeTableOfContents?: boolean;
@@ -178,13 +179,6 @@ async function addTableOfContents(
     jurisdictionLabel = 'Wales';
   } else if (options.jurisdiction === 'scotland') {
     jurisdictionLabel = 'Scotland';
-  } else if (options.jurisdiction === 'england-wales' || options.jurisdiction === 'england') {
-    // For england-wales, check notice_type to determine actual jurisdiction
-    if (options.notice_type === 'wales_section_173' || options.notice_type === 'wales_fault_based') {
-      jurisdictionLabel = 'Wales';
-    } else {
-      jurisdictionLabel = 'England';
-    }
   }
 
   tocPage.drawText(`Jurisdiction: ${jurisdictionLabel}`, {

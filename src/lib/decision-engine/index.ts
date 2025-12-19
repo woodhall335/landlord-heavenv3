@@ -8,13 +8,14 @@
  */
 
 import type { CaseFacts } from '../case-facts/schema';
+import { normalizeJurisdiction, type CanonicalJurisdiction, type LegacyJurisdiction } from '../types/jurisdiction';
 
 // ============================================================================
 // TYPES
 // ============================================================================
 
 export interface DecisionInput {
-  jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland' | 'england-wales'; // england-wales for backward compatibility
+  jurisdiction: CanonicalJurisdiction | LegacyJurisdiction; // england-wales allowed for backward compatibility only
   product: 'notice_only' | 'complete_pack' | 'money_claim';
   case_type: 'eviction' | 'money_claim' | 'tenancy_agreement';
   facts: Partial<CaseFacts>;
@@ -603,17 +604,17 @@ export function runDecisionEngine(input: DecisionInput): DecisionOutput {
   }
 
   // Normalize jurisdiction to handle both canonical and legacy values
-  const jurisdiction = input.jurisdiction.toLowerCase();
+  const jurisdiction = normalizeJurisdiction(input.jurisdiction);
+
+  if (!jurisdiction) {
+    throw new Error(`Unsupported jurisdiction: ${input.jurisdiction}`);
+  }
 
   switch (jurisdiction) {
     case 'england':
       return analyzeEnglandWales(input);
     case 'wales':
       return analyzeWales(input);
-    case 'england-wales':
-      // Legacy value - default to England analysis
-      console.warn('[DECISION ENGINE] Using legacy england-wales jurisdiction - defaulting to England rules');
-      return analyzeEnglandWales(input);
     case 'scotland':
       return analyzeScotland(input);
     case 'northern-ireland':

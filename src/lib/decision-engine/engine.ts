@@ -20,6 +20,7 @@ import {
   getGroundDefinitions,
   getCostEstimates,
 } from './config-loader';
+import { normalizeJurisdiction, type CanonicalJurisdiction } from '../types/jurisdiction';
 
 // ============================================================================
 // MAIN ENGINE
@@ -29,11 +30,7 @@ import {
  * Analyze a case and return comprehensive recommendations
  */
 export async function analyzeCase(facts: CaseFacts): Promise<DecisionResult> {
-  const jurisdiction = normalizeJurisdiction(facts.jurisdiction);
-
-  if (jurisdiction === 'northern-ireland') {
-    throw new Error('Decision engine does not support Northern Ireland eviction or money claim analysis');
-  }
+  const jurisdiction = resolveJurisdiction(facts);
 
   // Load configuration
   const engineRules = loadDecisionEngine(jurisdiction);
@@ -324,7 +321,7 @@ function checkSection21Eligibility(facts: CaseFacts): Section21Recommendation {
   // CRITICAL GUARD: Section 21 is ONLY available in England
   // Wales abolished it via Renting Homes (Wales) Act 2016
   // Scotland uses Notice to Leave
-  const jurisdiction = normalizeJurisdiction(facts.jurisdiction);
+  const jurisdiction = resolveJurisdiction(facts);
 
   if (jurisdiction !== 'england') {
     return {
@@ -777,24 +774,20 @@ function generateWarnings(redFlags: RedFlag[], complianceChecks: ComplianceCheck
 // UTILITIES
 // ============================================================================
 
-/**
- * Normalize jurisdiction string
- */
-function normalizeJurisdiction(jurisdiction: string): string {
-  const normalized = jurisdiction.toLowerCase().replace(/[^a-z-]/g, '');
+function resolveJurisdiction(facts: CaseFacts): CanonicalJurisdiction {
+  const fromFacts = normalizeJurisdiction(facts.jurisdiction) || normalizeJurisdiction((facts as any)?.property?.country);
 
-  if (normalized.includes('england') || normalized.includes('wales')) {
-    return 'england-wales';
+  if (!fromFacts) {
+    throw new Error('Decision engine requires a canonical jurisdiction');
   }
 
-  if (normalized.includes('scotland')) {
-    return 'scotland';
+  if (fromFacts === 'england' && (facts as any)?.property?.country === 'wales') {
+    return 'wales';
   }
 
-  if (normalized.includes('northern') && normalized.includes('ireland')) {
-    return 'northern-ireland';
+  if (fromFacts === 'northern-ireland') {
+    throw new Error('Decision engine does not support Northern Ireland eviction or money claim analysis');
   }
 
-  // Default to England & Wales
-  return 'england-wales';
+  return fromFacts;
 }
