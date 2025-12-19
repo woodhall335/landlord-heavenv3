@@ -80,7 +80,7 @@ export const PreActionSection: React.FC<SectionProps> = ({
         />
       </div>
 
-      {jurisdiction === 'england-wales' && (
+      {(jurisdiction === 'england' || jurisdiction === 'wales') && (
         <div className="space-y-1">
           <label className="text-sm font-medium text-charcoal">
             Have you sent the Pre-Action Protocol information pack?

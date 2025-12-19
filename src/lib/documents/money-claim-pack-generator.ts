@@ -581,7 +581,9 @@ export async function generateMoneyClaimPack(
   claim: MoneyClaimCase,
   caseFacts?: CaseFacts
 ): Promise<MoneyClaimPack> {
-  if (claim.jurisdiction !== 'england-wales') {
+  const isEnglandWales = claim.jurisdiction === 'england' || claim.jurisdiction === 'wales';
+
+  if (!isEnglandWales) {
     throw new Error(
       'Money claim pack generation is currently available only for England & Wales.'
     );

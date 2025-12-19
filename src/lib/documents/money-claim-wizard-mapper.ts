@@ -33,8 +33,14 @@ export function mapCaseFactsToMoneyClaimCase(facts: CaseFacts): MoneyClaimCase {
     facts.property.city
   );
 
+  // Derive jurisdiction from property country or default to england
+  const jurisdiction: MoneyClaimCase['jurisdiction'] =
+    facts.property.country === 'wales' ? 'wales' :
+    facts.property.country === 'scotland' ? 'scotland' :
+    'england';
+
   return {
-    jurisdiction: 'england-wales',
+    jurisdiction,
     landlord_full_name: facts.parties.landlord.name || '',
     landlord_2_name: facts.parties.landlord.co_claimant || undefined,
     landlord_address: landlordAddress,

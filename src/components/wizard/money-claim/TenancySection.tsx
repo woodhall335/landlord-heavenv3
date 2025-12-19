@@ -42,7 +42,7 @@ export const TenancySection: React.FC<SectionProps> = ({
     <div className="space-y-4">
       <p className="text-sm text-gray-600">
         We use these details to map your claim to the correct court forms and rules for{' '}
-        {jurisdiction === 'england-wales' ? 'England & Wales' : 'Scotland'}.
+        {(jurisdiction === 'england' || jurisdiction === 'wales') ? 'England & Wales' : 'Scotland'}.
       </p>
 
       {/* Full property address */}

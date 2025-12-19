@@ -1,5 +1,8 @@
 import fs from 'fs';
-import * as pdfParse from 'pdf-parse';
+import * as pdfParseModule from 'pdf-parse';
+
+// Normalize pdf-parse import for CommonJS/ESM compatibility
+const pdfParse = (pdfParseModule as unknown as { default?: (b: Buffer) => Promise<any> }).default ?? (pdfParseModule as unknown as (b: Buffer) => Promise<any>);
 
 const targetPath = process.argv[2] || '/mnt/data/ed3842d0-1960-461d-bd43-6962b9f633bf.pdf';
 
