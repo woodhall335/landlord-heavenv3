@@ -1,8 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { validateNoticeOnlyBeforeRender } from '@/lib/documents/noticeOnly';
 import { generateNoticeOnlyPack } from '@/lib/documents/eviction-pack-generator';
 import { evaluateWizardGate } from '@/lib/wizard/gating';
+import { GET as noticeOnlyPreview } from '@/app/api/notice-only/preview/[caseId]/route';
+import * as supabaseServer from '@/lib/supabase/server';
+import * as noticeOnlyModule from '@/lib/documents/noticeOnly';
 
 const baseDepositFacts = {
   deposit_taken: true,
@@ -153,8 +156,7 @@ describe('jurisdiction gating enforcement', () => {
     });
 
     const niCodes = northernIreland.blocking.map((b) => b.code);
-    expect(niCodes).toContain('FACTS_SCHEMA_MISSING');
-    expect(niCodes).toContain('JURISDICTION_EVICTION_UNSUPPORTED');
+    expect(niCodes).toEqual(['JURISDICTION_EVICTION_UNSUPPORTED']);
   });
 
   it('re-runs validation at render time and blocks mutated answers', () => {
@@ -228,5 +230,63 @@ describe('jurisdiction gating enforcement', () => {
     };
 
     await expect(generateNoticeOnlyPack(facts as any)).rejects.toThrow(/NOTICE_ONLY_VALIDATION_FAILED/);
+  });
+
+  it('validates England preview using England rules even when rendering as england-wales', async () => {
+    const caseId = 'case-england';
+    const queryBuilder = {
+      select: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      or: vi.fn().mockReturnThis(),
+      is: vi.fn().mockReturnThis(),
+      single: vi.fn().mockResolvedValue({
+        data: {
+          id: caseId,
+          jurisdiction: 'england',
+          wizard_facts: {
+            selected_notice_route: 'section_8',
+            section8_grounds: ['ground_8'],
+          },
+        },
+        error: null,
+      }),
+    } as any;
+
+    const supabaseClient = {
+      auth: {
+        getUser: vi.fn().mockResolvedValue({ data: { user: null } }),
+      },
+      from: vi.fn().mockReturnValue(queryBuilder),
+    } as any;
+
+    vi.spyOn(supabaseServer, 'createServerSupabaseClient').mockResolvedValue(supabaseClient);
+
+    const validationSpy = vi
+      .spyOn(noticeOnlyModule, 'validateNoticeOnlyBeforeRender')
+      .mockReturnValue({
+        blocking: [
+          {
+            code: 'TEST_BLOCK',
+            message: 'blocked',
+            fields: [],
+          },
+        ],
+        warnings: [],
+      });
+
+    const response = await noticeOnlyPreview(new Request('http://example.com'), {
+      params: Promise.resolve({ caseId }),
+    });
+
+    expect(response.status).toBe(422);
+    const payload = await response.json();
+    expect(payload.blocking_issues).toBeDefined();
+    expect(Array.isArray(payload.blocking_issues)).toBe(true);
+    expect(validationSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ jurisdiction: 'england' })
+    );
+
+    validationSpy.mockRestore();
+    vi.restoreAllMocks();
   });
 });
