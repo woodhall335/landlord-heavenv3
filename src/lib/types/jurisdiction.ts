@@ -105,6 +105,32 @@ export function migrateToCanonicalJurisdiction(
 }
 
 /**
+ * Derive a canonical jurisdiction using any available hints from stored facts.
+ *
+ * - Accepts legacy inputs ("england-wales", "england & wales", etc.) but
+ *   always returns a canonical key.
+ * - Prefers explicit property location hints when present (wizard facts or
+ *   nested case facts may expose `property_location` or `property.country`).
+ */
+export function deriveCanonicalJurisdiction(
+  jurisdiction: string | null | undefined,
+  facts?: Record<string, any> | null
+): CanonicalJurisdiction | null {
+  const propertyLocation =
+    (facts as any)?.property_location ||
+    (facts as any)?.property?.country ||
+    (facts as any)?.property?.jurisdiction ||
+    null;
+
+  return migrateToCanonicalJurisdiction(
+    jurisdiction,
+    propertyLocation === 'wales' || propertyLocation === 'england'
+      ? propertyLocation
+      : null,
+  );
+}
+
+/**
  * Get human-readable jurisdiction name
  */
 export function getJurisdictionName(jurisdiction: CanonicalJurisdiction | null): string {

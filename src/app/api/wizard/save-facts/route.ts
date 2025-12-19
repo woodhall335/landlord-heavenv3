@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
       // Case doesn't exist - need to create it
       // Extract metadata from facts to set up the case
       const meta = facts?.__meta || {};
-      const jurisdiction = meta.jurisdiction || 'england-wales';
+      const jurisdiction = meta.jurisdiction || 'england';
       const caseType = meta.case_type || 'money_claim';
 
       // Allow anonymous case creation (user_id can be null for "try before you buy")

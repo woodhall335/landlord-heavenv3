@@ -24,6 +24,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
 import { getReviewNavigation } from '@/lib/wizard/review-navigation';
 import { evaluateWizardGate } from '@/lib/wizard/gating';
+import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -566,11 +567,24 @@ export async function POST(request: Request) {
       collected_facts: any;
     };
 
+    const collectedFacts = (caseRow.collected_facts as Record<string, any>) || {};
+    const canonicalJurisdiction = deriveCanonicalJurisdiction(caseRow.jurisdiction, collectedFacts);
+
+    if (!canonicalJurisdiction) {
+      return NextResponse.json(
+        {
+          error: 'INVALID_JURISDICTION',
+          message: 'Jurisdiction must be one of england, wales, scotland, or northern-ireland.',
+        },
+        { status: 400 },
+      );
+    }
+
     // ---------------------------------------
     // 1a. Northern Ireland gating
     // ---------------------------------------
     if (
-      caseRow.jurisdiction === 'northern-ireland' &&
+      canonicalJurisdiction === 'northern-ireland' &&
       caseRow.case_type !== 'tenancy_agreement'
     ) {
       return NextResponse.json(
@@ -581,7 +595,13 @@ export async function POST(request: Request) {
             'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
           supported: {
             'northern-ireland': ['tenancy_agreement'],
-            'england-wales': [
+            england: [
+              'notice_only',
+              'complete_pack',
+              'money_claim',
+              'tenancy_agreement',
+            ],
+            wales: [
               'notice_only',
               'complete_pack',
               'money_claim',
@@ -602,7 +622,7 @@ export async function POST(request: Request) {
       question_id,
       answer,
       caseRow.case_type,
-      caseRow.jurisdiction,
+      canonicalJurisdiction,
     );
 
     if (!criticalValidation.ok) {
@@ -615,12 +635,13 @@ export async function POST(request: Request) {
       );
     }
 
+    const isEnglandOrWales = canonicalJurisdiction === 'england' || canonicalJurisdiction === 'wales';
+
     // ---------------------------------------
     // 2. Load MQS and question
     // ---------------------------------------
-    const collectedFacts = (caseRow.collected_facts as Record<string, any>) || {};
     const product = deriveProduct(caseRow.case_type, collectedFacts);
-    const mqs = loadMQS(product, caseRow.jurisdiction);
+    const mqs = loadMQS(product, canonicalJurisdiction);
 
     if (!mqs) {
       return NextResponse.json(
@@ -863,7 +884,7 @@ export async function POST(request: Request) {
     // Triggered after deposit_and_compliance question in Notice Only (England & Wales)
     if (
       product === 'notice_only' &&
-      caseRow.jurisdiction === 'england-wales' &&
+      isEnglandOrWales &&
       question_id === 'deposit_and_compliance'
     ) {
       try {
@@ -872,7 +893,7 @@ export async function POST(request: Request) {
         // Run decision engine to determine route eligibility
         const caseFacts = wizardFactsToCaseFacts(mergedFacts);
         const decisionInput: DecisionInput = {
-          jurisdiction: 'england-wales',
+          jurisdiction: canonicalJurisdiction,
           product: 'notice_only',
           case_type: 'eviction',
           facts: caseFacts,
@@ -929,7 +950,7 @@ export async function POST(request: Request) {
     // Triggered after arrears_summary question in Notice Only (England & Wales)
     if (
       product === 'notice_only' &&
-      caseRow.jurisdiction === 'england-wales' &&
+      isEnglandOrWales &&
       question_id === 'arrears_summary'
     ) {
       try {
@@ -937,7 +958,7 @@ export async function POST(request: Request) {
 
         const caseFacts = wizardFactsToCaseFacts(mergedFacts);
         const decisionInput: DecisionInput = {
-          jurisdiction: 'england-wales',
+          jurisdiction: canonicalJurisdiction,
           product: 'notice_only',
           case_type: 'eviction',
           facts: caseFacts,
@@ -989,7 +1010,7 @@ export async function POST(request: Request) {
     // Triggered after notice_service question (when notice_service_date is entered)
     if (
       product === 'notice_only' &&
-      caseRow.jurisdiction === 'england-wales' &&
+      isEnglandOrWales &&
       question_id === 'notice_service'
     ) {
       try {

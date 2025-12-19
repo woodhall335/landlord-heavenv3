@@ -30,6 +30,7 @@ import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wiza
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
+import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -162,21 +163,35 @@ export async function POST(request: Request) {
       collected_facts?: any;
     };
 
-    const jurisdiction = caseRow.jurisdiction;
-
     // Load WizardFacts (source of truth) + fallback to collected_facts if present
     const wizardFactsFromStore = await getOrCreateWizardFacts(supabase, case_id);
     const wizardFacts = (wizardFactsFromStore && Object.keys(wizardFactsFromStore).length > 0)
       ? wizardFactsFromStore
       : (caseRow.collected_facts ?? {});
 
+    const canonicalJurisdiction =
+      deriveCanonicalJurisdiction(caseRow.jurisdiction, wizardFacts) ||
+      deriveCanonicalJurisdiction(caseRow.jurisdiction, caseRow.collected_facts);
+
+    if (!canonicalJurisdiction) {
+      return NextResponse.json({
+        error: 'INVALID_JURISDICTION',
+        code: 'INVALID_JURISDICTION',
+        message: 'Jurisdiction must be one of england, wales, scotland, or northern-ireland.',
+      }, { status: 400 });
+    }
+
     // Guard: NI only supports tenancy documents
     if (
-      jurisdiction === 'northern-ireland' &&
+      canonicalJurisdiction === 'northern-ireland' &&
       !['private_tenancy', 'private_tenancy_premium'].includes(document_type)
     ) {
       return NextResponse.json(
-        { error: 'Northern Ireland only supports tenancy agreement documents' },
+        {
+          error: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
+          code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
+          message: 'Northern Ireland eviction and money claim document previews are blocked until legal review completes.',
+        },
         { status: 400 }
       );
     }
@@ -245,7 +260,7 @@ export async function POST(request: Request) {
           // Run decision engine as additional safety check
           const caseFacts = wizardFactsToCaseFacts(wizardFacts);
           const decisionInput: DecisionInput = {
-            jurisdiction: jurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+            jurisdiction: canonicalJurisdiction,
             product: 'notice_only', // This route handles notice generation
             case_type: 'eviction',
             facts: caseFacts,
@@ -288,8 +303,10 @@ export async function POST(request: Request) {
             );
           }
 
+          const templateJurisdiction = canonicalJurisdiction === 'wales' ? 'wales' : 'england';
+
           generatedDoc = await generateDocument({
-            templatePath: `uk/${jurisdiction}/templates/eviction/section21_form6a.hbs`,
+            templatePath: `uk/${templateJurisdiction}/templates/eviction/section21_form6a.hbs`,
             data: safeCaseData as any,
             isPreview: is_preview,
             outputFormat: 'both',
@@ -446,7 +463,7 @@ export async function POST(request: Request) {
         case_id,
         document_type,
         document_title: documentTitle,
-        jurisdiction: caseRow.jurisdiction,
+        jurisdiction: canonicalJurisdiction,
         html_content: generatedDoc?.html || null,
         pdf_url: pdfUrl,
         is_preview,

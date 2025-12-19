@@ -23,6 +23,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 import { getReviewNavigation } from '@/lib/wizard/review-navigation';
+import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -130,7 +131,7 @@ function getMoneyClaimMissingEssentials(
   if (!hasArrayValue(facts.money_claim.lba_method)) {
     missing.push('pre_action_service_method');
   }
-  if (jurisdiction === 'england-wales' && !hasArrayValue(facts.money_claim.pap_documents_sent)) {
+  if ((jurisdiction === 'england' || jurisdiction === 'wales') && !hasArrayValue(facts.money_claim.pap_documents_sent)) {
     missing.push('pap_documents_sent');
   }
   if (jurisdiction === 'scotland' && facts.money_claim.pre_action_deadline_confirmation === null) {
@@ -196,8 +197,20 @@ export async function POST(request: Request) {
 
     const caseRow = data as CaseRow;
 
+    const canonicalJurisdiction = deriveCanonicalJurisdiction(
+      caseRow.jurisdiction,
+      caseRow.collected_facts,
+    );
+
+    if (!canonicalJurisdiction) {
+      return NextResponse.json({
+        error: 'INVALID_JURISDICTION',
+        message: 'Jurisdiction must be one of england, wales, scotland, or northern-ireland.',
+      }, { status: 400 });
+    }
+
     // Northern Ireland gating: only tenancy agreements are supported
-    if (caseRow.jurisdiction === 'northern-ireland' && caseRow.case_type !== 'tenancy_agreement') {
+    if (canonicalJurisdiction === 'northern-ireland' && caseRow.case_type !== 'tenancy_agreement') {
       return NextResponse.json(
         {
           // IMPORTANT: keep this a stable machine-readable code (do NOT import constants inside the function)
@@ -206,7 +219,8 @@ export async function POST(request: Request) {
             'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
           supported: {
             'northern-ireland': ['tenancy_agreement'],
-            'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+            wales: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
             scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
           },
         },
@@ -218,14 +232,14 @@ export async function POST(request: Request) {
       caseRow.case_type,
       (caseRow.collected_facts as Record<string, any>) || {}
     );
-    const mqs = product ? loadMQS(product, caseRow.jurisdiction) : null;
+    const mqs = product ? loadMQS(product, canonicalJurisdiction) : null;
 
     const facts = await getOrCreateWizardFacts(supabase, case_id);
 
     if (!mqs) {
       const aiResponse = await getNextAIQuestion({
         case_type: caseRow.case_type as any,
-        jurisdiction: caseRow.jurisdiction as any,
+        jurisdiction: canonicalJurisdiction,
         collected_facts: facts,
       });
 

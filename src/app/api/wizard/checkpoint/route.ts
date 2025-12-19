@@ -18,7 +18,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
-import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 const checkpointSchema = z.object({
   case_id: z.string().uuid(),
@@ -98,30 +98,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-  // Accept both canonical jurisdictions (england, wales, scotland, northern-ireland)
-  // and legacy values (england-wales) for backwards compatibility
-  const validJurisdictions = ['england', 'wales', 'england-wales', 'scotland', 'northern-ireland'];
-  if (!validJurisdictions.includes(jurisdiction)) {
+  const canonicalJurisdiction = deriveCanonicalJurisdiction(
+    jurisdiction,
+    providedFacts || (caseData as any)?.collected_facts || null,
+  );
+
+  if (!canonicalJurisdiction) {
     return NextResponse.json(
       {
         ok: false,
         error: 'Invalid jurisdiction',
         missingFields: [],
-        reason: `jurisdiction must be one of: ${validJurisdictions.join(', ')} (got: ${jurisdiction})`,
+        reason: 'jurisdiction must be one of england, wales, scotland, or northern-ireland',
       },
       { status: 422 }
     );
   }
 
-  // Normalize jurisdiction for backwards compatibility with DB and decision engine
-  // england-wales is the combined jurisdiction format used by the decision engine
-  const normalizedJurisdiction = (jurisdiction === 'england' || jurisdiction === 'wales')
-    ? 'england-wales'
-    : jurisdiction;
-
   // Northern Ireland gating: only tenancy agreements are supported for V1
   if (
-    jurisdiction === 'northern-ireland' &&
+    canonicalJurisdiction === 'northern-ireland' &&
     case_type !== 'tenancy_agreement' &&
     product !== 'tenancy_agreement'
   ) {
@@ -135,7 +131,8 @@ export async function POST(request: NextRequest) {
           'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
         supported: {
           'northern-ireland': ['tenancy_agreement'],
-          'england-wales': ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+          england: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
+          wales: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
           scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
         },
       },
@@ -168,7 +165,7 @@ export async function POST(request: NextRequest) {
 
     // Run decision engine with partial data
     const decisionInput: DecisionInput = {
-      jurisdiction: normalizedJurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+      jurisdiction: canonicalJurisdiction as CanonicalJurisdiction,
       product: effectiveProduct as 'notice_only' | 'complete_pack' | 'money_claim',
       case_type: effectiveCaseType as 'eviction' | 'money_claim' | 'tenancy_agreement',
       facts: caseFacts,
@@ -177,7 +174,7 @@ export async function POST(request: NextRequest) {
     const decision = runDecisionEngine(decisionInput);
 
     // Get law profile for version tracking and legal metadata
-    const law_profile = getLawProfile(normalizedJurisdiction, effectiveCaseType);
+    const law_profile = getLawProfile(canonicalJurisdiction, effectiveCaseType);
 
     // ROUTE SELECTION LOGIC:
     // For notice_only product, route is automatically selected by the wizard (stored as selected_notice_route).
@@ -277,7 +274,7 @@ function getCompletenessHint(
   ];
 
   // Add jurisdiction-specific critical fields
-  if (jurisdiction === 'england-wales') {
+  if (jurisdiction === 'england' || jurisdiction === 'wales') {
     criticalFields.push(
       { path: 'tenancy.deposit_protected', label: 'Deposit protection status' },
       { path: 'tenancy.deposit_amount', label: 'Deposit amount' }
