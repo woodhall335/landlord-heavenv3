@@ -22,6 +22,7 @@ import { getNextQuestion as getNextAIQuestion } from '@/lib/ai';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
+import { getReviewNavigation } from '@/lib/wizard/review-navigation';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -168,8 +169,8 @@ function getMoneyClaimMissingEssentials(
 export async function POST(request: Request) {
   try {
     const user = await getServerUser().catch(() => null);
-    const { case_id, mode } = await request.json();
-    const isEditMode = mode === 'edit';
+    const { case_id, mode, include_answered, review_mode, current_question_id } = await request.json();
+    const isReviewMode = mode === 'edit' || include_answered === true || review_mode === true;
 
     if (!case_id || typeof case_id !== 'string') {
       return NextResponse.json({ error: 'Invalid case_id' }, { status: 400 });
@@ -235,9 +236,28 @@ export async function POST(request: Request) {
 
     const docIntel = applyDocumentIntelligence(facts);
     const hydratedFacts = normalizeAskOnceFacts(docIntel.facts, mqs);
+    const progress = computeProgress(mqs, hydratedFacts);
+
+    if (isReviewMode && mqs) {
+      const { nextQuestion: reviewQuestion, isComplete: reviewComplete } = getReviewNavigation(
+        mqs,
+        hydratedFacts,
+        current_question_id,
+      );
+
+      await supabase
+        .from('cases')
+        .update({ wizard_progress: progress } as any)
+        .eq('id', case_id);
+
+      return NextResponse.json({
+        next_question: reviewQuestion,
+        is_complete: reviewComplete,
+        progress,
+      });
+    }
 
     let nextQuestion = getNextMQSQuestion(mqs, hydratedFacts);
-    const progress = computeProgress(mqs, hydratedFacts);
 
     // Auto-mark info-type questions as "viewed" so they don't get returned again
     if (nextQuestion && nextQuestion.inputType === 'info') {
@@ -264,10 +284,6 @@ export async function POST(request: Request) {
 
       // Return the info question this time (so it gets displayed)
       // But next time /next-question is called, it will skip to questionAfterInfo
-    }
-
-    if (!nextQuestion && isEditMode && mqs) {
-      nextQuestion = mqs.questions.find((q) => questionIsApplicable(mqs, q, hydratedFacts)) || null;
     }
 
     if (!nextQuestion) {

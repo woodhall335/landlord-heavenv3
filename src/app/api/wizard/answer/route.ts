@@ -22,6 +22,7 @@ import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { runDecisionEngine, type DecisionInput, type DecisionOutput } from '@/lib/decision-engine';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
+import { getReviewNavigation } from '@/lib/wizard/review-navigation';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -30,6 +31,10 @@ const answerSchema = z.object({
   case_id: z.string().min(1),
   question_id: z.string(),
   answer: z.any(),
+  mode: z.enum(['default', 'edit']).optional(),
+  include_answered: z.boolean().optional(),
+  review_mode: z.boolean().optional(),
+  current_question_id: z.string().optional(),
 });
 
 // ============================================================================
@@ -520,7 +525,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const { case_id, question_id, answer } = validationResult.data;
+    const { case_id, question_id, answer, mode, include_answered, review_mode, current_question_id } =
+      validationResult.data;
+    const isReviewMode = mode === 'edit' || include_answered === true || review_mode === true;
 
     // Create properly typed Supabase client
     const supabase = await createServerSupabaseClient();
@@ -1044,17 +1051,30 @@ if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnsw
     // ---------------------------------------
     // 7. Determine next question + progress
     // ---------------------------------------
-    const nextQuestion = getNextMQSQuestion(mqs, newFacts);
     const progress = computeProgress(mqs, newFacts);
-    const isComplete = !nextQuestion;
+    const cursorId = current_question_id || question_id;
 
-    await supabase
-      .from('cases')
-      .update({
-        wizard_progress: isComplete ? 100 : progress,
-        wizard_completed_at: isComplete ? new Date().toISOString() : null,
-      } as any)
-      .eq('id', case_id);
+    let nextQuestion: ExtendedWizardQuestion | null = null;
+    let isComplete = false;
+
+    if (isReviewMode) {
+      const reviewNav = getReviewNavigation(mqs, newFacts, cursorId);
+      nextQuestion = reviewNav.nextQuestion;
+      isComplete = reviewNav.isComplete;
+    } else {
+      nextQuestion = getNextMQSQuestion(mqs, newFacts);
+      isComplete = !nextQuestion;
+    }
+
+    const updatePayload: Record<string, any> = {
+      wizard_progress: isComplete ? 100 : progress,
+    };
+
+    if (!isReviewMode) {
+      updatePayload.wizard_completed_at = isComplete ? new Date().toISOString() : null;
+    }
+
+    await supabase.from('cases').update(updatePayload as any).eq('id', case_id);
 
     return NextResponse.json({
       case_id,

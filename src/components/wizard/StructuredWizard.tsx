@@ -130,6 +130,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
+  const [reviewStepIndex, setReviewStepIndex] = useState(0);
   const [askHeavenSuggestion, setAskHeavenSuggestion] = useState<string | null>(null);
   const [askHeavenResult, setAskHeavenResult] = useState<{
     suggested_wording: string;
@@ -415,7 +416,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   );
 
   const handleComplete = useCallback(
-    async (shouldRedirect = true) => {
+    async (options?: { redirect?: boolean }) => {
+      const shouldRedirect = options?.redirect ?? mode !== 'edit';
+
       try {
         setLoading(true);
 
@@ -436,7 +439,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     [caseId, mode, onComplete, refreshAnalysis],
   );
 
-  const loadNextQuestion = useCallback(async () => {
+  const loadNextQuestion = useCallback(async (opts?: { currentQuestionId?: string }) => {
     if (!caseId) return;
 
     setLoading(true);
@@ -448,7 +451,13 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       const response = await fetch('/api/wizard/next-question', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ case_id: caseId, mode }),
+        body: JSON.stringify({
+          case_id: caseId,
+          mode,
+          include_answered: mode === 'edit',
+          review_mode: mode === 'edit',
+          current_question_id: opts?.currentQuestionId ?? null,
+        }),
       });
 
       if (!response.ok) {
@@ -461,11 +470,20 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         setProgress(data.progress || 100);
         setIsComplete(true);
         if (mode === 'edit') {
+          if (opts?.currentQuestionId) {
+            setReviewStepIndex((prev) => prev + 1);
+          }
+          setCurrentQuestion(null);
+          setCurrentAnswer(null);
+          setUploadFilesForCurrentQuestion([]);
           setLoading(false);
           return;
         }
         await handleComplete();
       } else if (data.next_question) {
+        if (mode === 'edit') {
+          setReviewStepIndex((prev) => (opts?.currentQuestionId ? prev + 1 : 0));
+        }
         initializeQuestion(data.next_question);
         setProgress(data.progress || 0);
       } else {
@@ -527,6 +545,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // Load first question after intro or when no initial question was provided
   useEffect(() => {
     if (initialQuestion && !currentQuestion) {
+      if (mode === 'edit') {
+        setReviewStepIndex(0);
+      }
       initializeQuestion(initialQuestion);
       return;
     }
@@ -534,7 +555,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (!showIntro && !currentQuestion) {
       void loadNextQuestion();
     }
-  }, [currentQuestion, initialQuestion, initializeQuestion, loadNextQuestion, showIntro]);
+  }, [currentQuestion, initialQuestion, initializeQuestion, loadNextQuestion, mode, showIntro]);
 
   // Fetch case facts when question changes (for validation and side panels)
   useEffect(() => {
@@ -1039,7 +1060,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         }
 
         // Load next question directly without saving
-        await loadNextQuestion();
+        await loadNextQuestion({ currentQuestionId: currentQuestion.id });
       } catch (err: any) {
         setError(err.message || 'Failed to load next question');
         console.error('Load next question error:', err);
@@ -1057,6 +1078,10 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           case_id: caseId,
           question_id: currentQuestion.id,
           answer: currentAnswer,
+          mode,
+          include_answered: mode === 'edit',
+          review_mode: mode === 'edit',
+          current_question_id: currentQuestion.id,
         }),
       });
 
@@ -1156,10 +1181,15 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       // Check if complete
       if (data.is_complete) {
         setIsComplete(true);
+        if (mode === 'edit') {
+          setReviewStepIndex((prev) => prev + 1);
+          setLoading(false);
+          return;
+        }
         await handleComplete();
       } else {
         // Load next question
-        await loadNextQuestion();
+        await loadNextQuestion({ currentQuestionId: currentQuestion.id });
       }
     } catch (err: any) {
       setError(err.message || 'Failed to save answer');
@@ -2027,6 +2057,39 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           <Button onClick={handleIntroContinue} variant="primary" size="large" className="w-full md:w-auto">
             Continue →
           </Button>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isComplete && mode === 'edit') {
+    return (
+      <div className="max-w-3xl mx-auto p-6">
+        <Card className="p-8 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-xl">
+              ✓
+            </div>
+            <div>
+              <p className="text-sm uppercase tracking-wide text-green-700 font-semibold mb-1">Review complete</p>
+              <h2 className="text-2xl font-bold text-gray-900">Your answers have been updated</h2>
+            </div>
+          </div>
+
+          <p className="text-gray-700">
+            Step through the full flow is complete. Choose whether to regenerate your preview now or just save your changes.
+          </p>
+
+          <div className="flex flex-wrap gap-3">
+            <Button onClick={() => void handleComplete({ redirect: true })} variant="primary" size="large">
+              Regenerate preview
+            </Button>
+            <Button onClick={() => void handleComplete({ redirect: false })} variant="secondary" size="large">
+              Save and exit
+            </Button>
+          </div>
+
+          <p className="text-sm text-gray-500">Reviewed steps: {reviewStepIndex}</p>
         </Card>
       </div>
     );
