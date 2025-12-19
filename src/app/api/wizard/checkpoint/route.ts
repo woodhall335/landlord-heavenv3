@@ -18,6 +18,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
+import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 const checkpointSchema = z.object({
   case_id: z.string().uuid(),
@@ -97,17 +98,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
-  if (!['england-wales', 'scotland', 'northern-ireland'].includes(jurisdiction)) {
+  // Accept both canonical jurisdictions (england, wales, scotland, northern-ireland)
+  // and legacy values (england-wales) for backwards compatibility
+  const validJurisdictions = ['england', 'wales', 'england-wales', 'scotland', 'northern-ireland'];
+  if (!validJurisdictions.includes(jurisdiction)) {
     return NextResponse.json(
       {
         ok: false,
         error: 'Invalid jurisdiction',
         missingFields: [],
-        reason: `jurisdiction must be one of: england-wales, scotland, northern-ireland (got: ${jurisdiction})`,
+        reason: `jurisdiction must be one of: ${validJurisdictions.join(', ')} (got: ${jurisdiction})`,
       },
       { status: 422 }
     );
   }
+
+  // Normalize jurisdiction for backwards compatibility with DB and decision engine
+  // england-wales is the combined jurisdiction format used by the decision engine
+  const normalizedJurisdiction = (jurisdiction === 'england' || jurisdiction === 'wales')
+    ? 'england-wales'
+    : jurisdiction;
 
   // Northern Ireland gating: only tenancy agreements are supported for V1
   if (
@@ -158,7 +168,7 @@ export async function POST(request: NextRequest) {
 
     // Run decision engine with partial data
     const decisionInput: DecisionInput = {
-      jurisdiction: jurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
+      jurisdiction: normalizedJurisdiction as 'england-wales' | 'scotland' | 'northern-ireland',
       product: effectiveProduct as 'notice_only' | 'complete_pack' | 'money_claim',
       case_type: effectiveCaseType as 'eviction' | 'money_claim' | 'tenancy_agreement',
       facts: caseFacts,
@@ -167,7 +177,7 @@ export async function POST(request: NextRequest) {
     const decision = runDecisionEngine(decisionInput);
 
     // Get law profile for version tracking and legal metadata
-    const law_profile = getLawProfile(jurisdiction, effectiveCaseType);
+    const law_profile = getLawProfile(normalizedJurisdiction, effectiveCaseType);
 
     // ROUTE SELECTION LOGIC:
     // For notice_only product, route is automatically selected by the wizard (stored as selected_notice_route).
@@ -226,7 +236,7 @@ export async function POST(request: NextRequest) {
       // Include minimal metadata for UI context
       jurisdiction,
       product: effectiveProduct,
-      completeness_hint: getCompletenessHint(caseFacts, jurisdiction),
+      completeness_hint: getCompletenessHint(caseFacts, normalizedJurisdiction),
       // Legal change framework metadata
       law_profile,
     };
