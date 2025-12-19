@@ -329,6 +329,10 @@ function checkSection21Eligibility(facts: CaseFacts): Section21Recommendation {
   if (jurisdiction !== 'england') {
     return {
       available: false,
+      success_probability: 'none',
+      notice_period_days: 0,
+      reasoning: `Section 21 is not available in ${jurisdiction}`,
+      compliance_checks: [],
       can_use_accelerated: false,
       blocking_reasons: [
         `Section 21 (no-fault eviction) is not available in ${jurisdiction}`,

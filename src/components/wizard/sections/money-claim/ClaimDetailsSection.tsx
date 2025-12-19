@@ -55,7 +55,7 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
         This section gives the court a clear overview of what your money claim is about
         and why the tenant owes you money. We&apos;ll use this to draft the legal
         summary and particulars of claim for{' '}
-        {jurisdiction === 'england-wales' ? 'England & Wales' : 'Scotland'}.
+        {(jurisdiction === 'england' || jurisdiction === 'wales') ? 'England & Wales' : 'Scotland'}.
       </p>
 
       {/* Primary issue */}

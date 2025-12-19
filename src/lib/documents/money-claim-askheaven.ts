@@ -100,10 +100,13 @@ export async function generateMoneyClaimAskHeavenDrafts(
     jurisdiction?: 'england-wales' | 'scotland';
   }
 ): Promise<MoneyClaimDrafts> {
-  const jurisdiction = options?.jurisdiction || ('jurisdiction' in moneyClaimCase ? moneyClaimCase.jurisdiction : 'england-wales');
+  const rawJurisdiction = options?.jurisdiction || ('jurisdiction' in moneyClaimCase ? moneyClaimCase.jurisdiction : 'england-wales');
+
+  // Normalize jurisdiction for LLM helpers (england and wales both map to 'england-wales')
+  const llmJurisdiction: 'england-wales' | 'scotland' = rawJurisdiction === 'scotland' ? 'scotland' : 'england-wales';
 
   // Start with fallback content as a baseline (ensures we never return incomplete data)
-  const fallbackDrafts = generateFallbackDrafts(caseFacts, moneyClaimCase, jurisdiction, options);
+  const fallbackDrafts = generateFallbackDrafts(caseFacts, moneyClaimCase, llmJurisdiction, options);
 
   // Check if AI is disabled via env var (allows safe rollout)
   if (process.env.DISABLE_MONEY_CLAIM_AI === 'true') {
@@ -119,10 +122,10 @@ export async function generateMoneyClaimAskHeavenDrafts(
 
   try {
     // Build comprehensive prompt for the AI
-    const prompt = buildMoneyClaimDraftingPrompt(caseFacts, moneyClaimCase, jurisdiction);
+    const prompt = buildMoneyClaimDraftingPrompt(caseFacts, moneyClaimCase, llmJurisdiction);
 
     // Call the LLM to generate AI drafts
-    const aiDrafts = await callMoneyClaimLLM(prompt, jurisdiction, options);
+    const aiDrafts = await callMoneyClaimLLM(prompt, llmJurisdiction, options);
 
     // Merge AI content with fallback (AI takes precedence, fallback fills gaps)
     return mergeAIDraftsWithFallback(aiDrafts, fallbackDrafts);
