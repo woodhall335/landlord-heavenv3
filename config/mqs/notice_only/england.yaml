@@ -208,6 +208,20 @@ questions:
     maps_to:
       - deposit_taken
 
+  - id: deposit_amount
+    section: Deposit & Compliance
+    question: "Deposit amount"
+    inputType: currency
+    dependsOn:
+      questionId: deposit_taken
+      value: true
+    validation:
+      required: true
+      min: 0
+    helperText: "The total deposit amount collected from the tenant. Required for compliance checking."
+    maps_to:
+      - deposit_amount
+
   - id: has_gas_appliances
     section: Deposit & Compliance
     question: "Does the property have gas appliances?"
@@ -347,6 +361,51 @@ questions:
     helperText: "Retaliatory eviction rules may apply to Section 21 notices if tenant has made recent repair complaints."
     maps_to:
       - recent_repair_complaints
+
+  # ========================================
+  # SECTION 8 ARREARS DETAILS (CRITICAL FOR GROUND 8 VALIDATION)
+  # ========================================
+
+  - id: has_rent_arrears
+    section: Section 8 Grounds
+    question: "Are there currently any rent arrears?"
+    inputType: yes_no
+    dependsOn:
+      questionId: selected_notice_route
+      value: section_8
+    validation:
+      required: true
+    helperText: "Select 'Yes' if the tenant owes any unpaid rent. This is required to validate Ground 8, 10, or 11."
+    maps_to:
+      - has_rent_arrears
+
+  - id: arrears_details
+    section: Section 8 Grounds
+    question: "Arrears details"
+    inputType: group
+    dependsOn:
+      questionId: has_rent_arrears
+      value: true
+    validation:
+      required: true
+    helperText: "We need these details to validate Ground 8 (mandatory) threshold and calculate notice periods."
+    fields:
+      - id: arrears_total
+        label: "Total arrears amount (£)"
+        inputType: currency
+        validation:
+          required: true
+          min: 0
+        width: half
+        helperText: "Total amount of rent currently owed"
+      - id: arrears_from_date
+        label: "Arrears started from (optional)"
+        inputType: date
+        width: half
+        helperText: "When did arrears first start accruing?"
+    maps_to:
+      - arrears_total
+      - arrears_from_date
 
   # ========================================
   # SECTION 8 GROUNDS (must come BEFORE notice_service for proper flow)

@@ -23,6 +23,7 @@ import { runDecisionEngine, type DecisionInput, type DecisionOutput } from '@/li
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
 import { getReviewNavigation } from '@/lib/wizard/review-navigation';
+import { evaluateWizardGate } from '@/lib/wizard/gating';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -735,7 +736,37 @@ export async function POST(request: Request) {
       normalizedAnswer,
     );
 
-    let complianceWarnings: any[] = [];
+    // ============================================================================
+    // WIZARD GATING: Apply deterministic blocking/warning rules
+    // ============================================================================
+    const gatingResult = evaluateWizardGate({
+      case_type: caseRow.case_type,
+      product,
+      jurisdiction: caseRow.jurisdiction,
+      facts: mergedFacts,
+      current_question_id: question_id,
+    });
+
+    // If there are blocking issues, return 422 and DO NOT save the answer
+    if (gatingResult.blocking.length > 0) {
+      console.warn('[WIZARD_GATING] Blocking progression:', {
+        case_id,
+        question_id,
+        blocking: gatingResult.blocking.map((b) => b.code),
+      });
+
+      return NextResponse.json(
+        {
+          error: 'WIZARD_GATING_BLOCKED',
+          blocking_issues: gatingResult.blocking,
+          warnings: gatingResult.warnings,
+          block_next_question: true,
+        },
+        { status: 422 },
+      );
+    }
+
+    let complianceWarnings: any[] = [...gatingResult.warnings];
 
     // ========================================================================
     // INLINE COMPLIANCE VALIDATION (NOTICE ONLY)

@@ -13,6 +13,7 @@ import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/docume
 import { generateDocument } from '@/lib/documents/generator';
 import { validateNoticeOnlyJurisdiction, formatValidationErrors } from '@/lib/jurisdictions/validator';
 import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
+import { evaluateWizardGate } from '@/lib/wizard/gating';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -140,6 +141,33 @@ export async function GET(
     // Log warnings if any
     if (validationResult.warnings.length > 0) {
       console.warn('[NOTICE-PREVIEW-API] Jurisdiction warnings:\n', formatValidationErrors(validationResult));
+    }
+
+    // ========================================================================
+    // WIZARD GATING: Deterministic rule-based validation (blocking)
+    // ========================================================================
+    const gatingResult = evaluateWizardGate({
+      case_type: 'eviction',
+      product: 'notice_only',
+      jurisdiction,
+      facts: wizardFacts,
+    });
+
+    if (gatingResult.blocking.length > 0) {
+      console.warn('[NOTICE-PREVIEW-API] Wizard gating blocked preview:', {
+        case_id: caseId,
+        blocking: gatingResult.blocking.map((b) => b.code),
+      });
+
+      return NextResponse.json(
+        {
+          error: 'WIZARD_GATING_BLOCKED',
+          blocking_issues: gatingResult.blocking,
+          warnings: gatingResult.warnings,
+          message: 'Cannot generate preview: required fields or legal thresholds not met',
+        },
+        { status: 422 },
+      );
     }
 
     // ========================================================================
