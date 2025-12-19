@@ -231,9 +231,9 @@ export async function POST(request: NextRequest) {
       pre_action_requirements: decision.pre_action_requirements,
       summary: decision.analysis_summary,
       // Include minimal metadata for UI context
-      jurisdiction,
+      jurisdiction: canonicalJurisdiction,
       product: effectiveProduct,
-      completeness_hint: getCompletenessHint(caseFacts, normalizedJurisdiction),
+      completeness_hint: getCompletenessHint(caseFacts, canonicalJurisdiction),
       // Legal change framework metadata
       law_profile,
     };

@@ -49,8 +49,8 @@ const RULESET_MAP: Record<AnyJurisdiction, string> = {
   wales: 'wales',
   scotland: 'scotland',
   'northern-ireland': 'northern-ireland',
-  'england-wales': 'england-wales', // legacy shim for stored cases only
-  'england & wales': 'england-wales',
+  'england-wales': 'england', // legacy shim: map to england (no combined config exists)
+  'england & wales': 'england',
 };
 
 // ============================================================================
