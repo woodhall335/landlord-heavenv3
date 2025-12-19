@@ -13,7 +13,8 @@ import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/docume
 import { generateDocument } from '@/lib/documents/generator';
 import { validateNoticeOnlyJurisdiction, formatValidationErrors } from '@/lib/jurisdictions/validator';
 import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
-import { evaluateWizardGate } from '@/lib/wizard/gating';
+import { validateNoticeOnlyBeforeRender } from '@/lib/documents/noticeOnly';
+import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -42,6 +43,18 @@ export async function GET(
   let caseId = '';
   let jurisdiction: 'england' | 'wales' | 'scotland' | 'england-wales' | undefined;
   let selected_route: string | undefined;
+
+  const extractGroundCodes = (section8Grounds: any[]): number[] => {
+    if (!Array.isArray(section8Grounds)) return [];
+    return section8Grounds
+      .map((g) => {
+        if (typeof g === 'number') return g;
+        if (typeof g !== 'string') return null;
+        const match = g.match(/Ground\s+(\d+)/i) || g.match(/ground[_\s](\d+)/i);
+        return match ? parseInt(match[1], 10) : null;
+      })
+      .filter((code): code is number => code !== null && !Number.isNaN(code));
+  };
 
   try {
     const resolvedParams = await params;
@@ -143,31 +156,38 @@ export async function GET(
       console.warn('[NOTICE-PREVIEW-API] Jurisdiction warnings:\n', formatValidationErrors(validationResult));
     }
 
+    const groundCodes = extractGroundCodes(wizardFacts.section8_grounds || []);
+
     // ========================================================================
-    // WIZARD GATING: Deterministic rule-based validation (blocking)
+    // CONFIG-DRIVEN VALIDATION (blocking + warnings)
     // ========================================================================
-    const gatingResult = evaluateWizardGate({
-      case_type: 'eviction',
-      product: 'notice_only',
-      jurisdiction,
+    const validationOutcome = validateNoticeOnlyBeforeRender({
+      jurisdiction: jurisdiction as JurisdictionKey,
       facts: wizardFacts,
+      selectedGroundCodes: groundCodes,
+      selectedRoute: selected_route,
     });
 
-    if (gatingResult.blocking.length > 0) {
-      console.warn('[NOTICE-PREVIEW-API] Wizard gating blocked preview:', {
+    const blockingIssues = validationOutcome.blocking ?? [];
+    const warnings = validationOutcome.warnings ?? [];
+
+    if (blockingIssues.length > 0) {
+      const userMessage = 'Cannot generate preview: jurisdiction rules are not satisfied';
+      const blockingPayload = {
+        code: 'LEGAL_BLOCK',
+        error: 'LEGAL_BLOCK',
+        user_message: userMessage,
+        blocking_issues: blockingIssues,
+        warnings,
+      };
+
+      console.warn('[NOTICE-PREVIEW-API] Validation blocked preview:', {
         case_id: caseId,
-        blocking: gatingResult.blocking.map((b) => b.code),
+        blocking: blockingIssues.map((b) => b.code),
+        payload: blockingPayload,
       });
 
-      return NextResponse.json(
-        {
-          error: 'WIZARD_GATING_BLOCKED',
-          blocking_issues: gatingResult.blocking,
-          warnings: gatingResult.warnings,
-          message: 'Cannot generate preview: required fields or legal thresholds not met',
-        },
-        { status: 422 },
-      );
+      return NextResponse.json(blockingPayload, { status: 422 });
     }
 
     // ========================================================================

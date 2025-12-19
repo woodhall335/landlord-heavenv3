@@ -13,6 +13,7 @@
  */
 
 import { generateDocument } from './generator';
+import { assertNoticeOnlyValid } from './noticeOnly';
 import { generateSection8Notice, Section8NoticeData } from './section8-generator';
 import { fillN5Form, fillN119Form, CaseData, fillN5BForm } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
@@ -27,6 +28,7 @@ import { generateComplianceAudit, extractComplianceAuditContext } from '@/lib/ai
 import { computeRiskAssessment } from '@/lib/case-intel/risk-assessment';
 import fs from 'fs/promises';
 import path from 'path';
+import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
 
 // ============================================================================
 // TYPES
@@ -141,6 +143,19 @@ export interface EvictionCase {
 
   // Additional data
   [key: string]: any;
+}
+
+function extractGroundCodes(section8Grounds: any[]): number[] {
+  if (!Array.isArray(section8Grounds)) return [];
+
+  return section8Grounds
+    .map((g) => {
+      if (typeof g === 'number') return g;
+      if (typeof g !== 'string') return null;
+      const match = g.match(/Ground\s+(\d+)/i) || g.match(/ground[_\s](\d+)/i);
+      return match ? parseInt(match[1], 10) : null;
+    })
+    .filter((code): code is number => code !== null && !Number.isNaN(code));
 }
 
 export interface GroundClaim {
@@ -951,6 +966,21 @@ export async function generateNoticeOnlyPack(
   }
 
   console.log(`\n📄 Generating Notice Only Pack for ${jurisdiction}...`);
+
+  const selectedGroundCodes = extractGroundCodes(
+    wizardFacts?.section8_grounds || wizardFacts?.grounds || []
+  );
+
+  try {
+    assertNoticeOnlyValid({
+      jurisdiction: jurisdiction as JurisdictionKey,
+      facts: wizardFacts || {},
+      selectedGroundCodes,
+    });
+  } catch (err) {
+    const reason = (err as Error).message;
+    throw new Error(reason.startsWith('NOTICE_ONLY_VALIDATION_FAILED') ? reason : `NOTICE_ONLY_VALIDATION_FAILED: ${reason}`);
+  }
 
   const groundsData = await loadEvictionGrounds(jurisdiction as Jurisdiction);
   const documents: EvictionPackDocument[] = [];
