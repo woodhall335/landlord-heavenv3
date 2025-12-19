@@ -343,10 +343,10 @@ export default function WizardPreviewPage() {
               body: JSON.stringify({ case_id: caseId }),
             });
 
-            if (checkpointResponse.ok) {
-              const checkpointData = await checkpointResponse.json();
-              console.log('Checkpoint response:', checkpointData);
+            const checkpointData = await checkpointResponse.json();
+            console.log('Checkpoint response:', checkpointData);
 
+            if (checkpointResponse.ok && checkpointData.ok) {
               // If checkpoint returned a recommendation, refetch the case
               if (checkpointData.recommended_route) {
                 const refetchResponse = await fetch(`/api/cases/${caseId}`);
@@ -356,17 +356,29 @@ export default function WizardPreviewPage() {
                   setCaseData(refetchedCase);
                   documentType = getDocumentType(refetchedCase.case_type, refetchedCase);
                 }
-              } else if (!checkpointData.ok && checkpointData.missingFields) {
-                // Checkpoint returned structured missing fields - show helpful error
+              }
+            } else if (checkpointResponse.status === 422 || !checkpointData.ok) {
+              // Checkpoint returned validation errors (422) or not ok - show helpful error
+              const missingFields = checkpointData.missingFields || [];
+              const reason = checkpointData.reason || 'Please complete the wizard and try again.';
+
+              if (missingFields.length > 0) {
                 throw new Error(
-                  `Cannot generate preview: Missing required information - ${checkpointData.missingFields.join(', ')}. ` +
-                  `${checkpointData.reason || 'Please complete the wizard and try again.'}`
+                  `Cannot generate preview: Missing required information - ${missingFields.join(', ')}. ${reason}`
+                );
+              } else {
+                throw new Error(
+                  `Cannot generate preview: ${checkpointData.error || 'The wizard is incomplete'}. ${reason}`
                 );
               }
             }
           } catch (checkpointError) {
             console.error('Checkpoint failed:', checkpointError);
-            // Continue to show generic error below if checkpoint itself failed
+            // Re-throw to show error to user
+            if (checkpointError instanceof Error) {
+              throw checkpointError;
+            }
+            throw new Error('Failed to validate wizard completion. Please try again.');
           }
         }
 
