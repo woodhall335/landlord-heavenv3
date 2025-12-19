@@ -18,7 +18,7 @@ async function main() {
   console.log('📋 Test 1: Serious Rent Arrears (£3,600 - 3 months)\n');
 
   const case1: CaseFacts = {
-    jurisdiction: 'england',
+    jurisdiction: 'england-wales',
     tenancy_type: 'AST',
     rent_amount_monthly: 1200,
     rent_payment_period: 'monthly',
@@ -87,7 +87,7 @@ async function main() {
   console.log('📋 Test 2: Section 21 - No Fault Eviction (All Compliant)\n');
 
   const case2: CaseFacts = {
-    jurisdiction: 'england',
+    jurisdiction: 'england-wales',
     tenancy_type: 'AST',
     rent_amount_monthly: 950,
 
@@ -135,7 +135,7 @@ async function main() {
   console.log('📋 Test 3: Unlicensed HMO with Rent Arrears (Critical Issues)\n');
 
   const case3: CaseFacts = {
-    jurisdiction: 'england',
+    jurisdiction: 'england-wales',
     tenancy_type: 'AST',
     rent_amount_monthly: 600,
 
@@ -184,7 +184,7 @@ async function main() {
   console.log('📋 Test 4: Antisocial Behaviour (Noise Nuisance)\n');
 
   const case4: CaseFacts = {
-    jurisdiction: 'england',
+    jurisdiction: 'england-wales',
     tenancy_type: 'AST',
     rent_amount_monthly: 1100,
 
@@ -231,7 +231,7 @@ async function main() {
   console.log('📋 Test 5: Multiple Issues (Arrears + Breach + ASB)\n');
 
   const case5: CaseFacts = {
-    jurisdiction: 'england',
+    jurisdiction: 'england-wales',
     tenancy_type: 'AST',
     rent_amount_monthly: 1400,
 

@@ -121,7 +121,7 @@ const TEST_CASES: TestCase[] = [
         property_address: '456 Tenant Road\nLondon\nE1 6AN',
         tenancy_start_date: '2020-06-01',
         service_date: '2025-01-15',
-        possession_date: '2025-04-01',
+        expiry_date: '2025-04-01',
         rent_amount: 950,
         rent_frequency: 'monthly',
       });

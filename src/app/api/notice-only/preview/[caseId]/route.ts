@@ -39,7 +39,7 @@ export async function GET(
   { params }: { params: Promise<{ caseId: string }> }
 ) {
   let caseId = '';
-  let jurisdiction: string | undefined;
+  let jurisdiction: 'england' | 'wales' | 'scotland' | 'england-wales' | undefined;
   let selected_route: string | undefined;
 
   try {

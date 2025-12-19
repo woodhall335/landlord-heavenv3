@@ -52,11 +52,7 @@ export interface DecisionOutput {
   allowed_routes: string[]; // ['section_21', 'section_8'] - Legally permitted routes (no blocking issues)
   blocked_routes: string[]; // ['section_21'] - Routes that are legally blocked
   recommended_grounds: GroundRecommendation[];
-  notice_period_suggestions: {
-    section_8?: number;
-    section_21?: number;
-    notice_to_leave?: number;
-  };
+  notice_period_suggestions: Record<string, number>; // Allows any route key (section_8, section_21, notice_to_leave, wales_section_173, etc.)
   pre_action_requirements: {
     required: boolean;
     met: boolean | null;
@@ -65,11 +61,7 @@ export interface DecisionOutput {
   blocking_issues: BlockingIssue[]; // All blocking issues, grouped by route
   warnings: string[];
   analysis_summary: string;
-  route_explanations: {
-    section_8?: string;
-    section_21?: string;
-    notice_to_leave?: string;
-  };
+  route_explanations: Record<string, string>; // Allows any route key (section_8, section_21, notice_to_leave, wales_section_173, wales_fault_based, etc.)
 }
 
 // ============================================================================
