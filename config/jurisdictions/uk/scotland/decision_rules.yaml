@@ -44,9 +44,13 @@ section_8_grounds:
         evidence: "Must provide evidence to Tribunal that these were followed"
         failure: "Tribunal likely to refuse eviction if not followed"
       required_facts:
-        - rent_arrears_months
-        - arrears_amount
-        - pre_action_requirements_met
+        # Using MQS canonical facts - validator derives arrears_months
+        - rent_amount
+        - rent_frequency
+        - arrears_total
+        - pre_action_confirmed
+      optional_facts:
+        - arrears_from_date
       success_probability: 70
 
     # BREACH OF TENANCY
@@ -58,6 +62,9 @@ section_8_grounds:
       description: "Tenant has breached a term of the tenancy"
       statute: "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 2"
       required_facts:
+        # Using MQS canonical facts - details in ground_particulars
+        - ground_particulars
+      optional_facts:
         - breach_type
         - breach_description
         - breach_evidence
@@ -72,7 +79,9 @@ section_8_grounds:
       description: "Tenant or associate engaged in antisocial behaviour"
       statute: "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 3"
       required_facts:
-        - antisocial_behavior
+        # Using MQS canonical facts - details in ground_particulars
+        - ground_particulars
+      optional_facts:
         - asb_evidence
         - asb_severity
       success_probability: 70
@@ -261,6 +270,9 @@ section_8_grounds:
       description: "Tenant made false statement to obtain tenancy"
       statute: "Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 18"
       required_facts:
+        # Using MQS canonical facts - details in ground_particulars
+        - ground_particulars
+      optional_facts:
         - false_statement
         - false_statement_evidence
       success_probability: 75

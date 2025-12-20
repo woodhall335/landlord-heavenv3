@@ -205,7 +205,7 @@ export function validateDepositCompliance(params: {
   route?: string | null;
   stage?: ValidationStage;
 }): LegalValidationResult {
-  const { factsSchema, facts, jurisdiction, stage = 'wizard', product = 'unknown' } = params;
+  const { factsSchema, facts, jurisdiction, stage = 'wizard', product = 'unknown', route = null } = params;
   const blocking: LegalValidationIssue[] = [];
   const warnings: LegalValidationIssue[] = [];
 
@@ -220,6 +220,23 @@ export function validateDepositCompliance(params: {
   if (depositTaken === false) {
     return { blocking, warnings };
   }
+
+  // ============================================================================
+  // ROUTE-AWARE DEPOSIT COMPLIANCE
+  //
+  // Section 21 REQUIRES deposit protection and prescribed info - BLOCKING
+  // Section 8 does NOT require deposit protection - WARNING only
+  // Wales Section 173 REQUIRES deposit protection - BLOCKING
+  // Wales fault-based does NOT require deposit protection - WARNING only
+  // Scotland Notice to Leave does NOT require deposit protection - WARNING only
+  // ============================================================================
+  const isSection21 = route === 'section_21';
+  const isWalesSection173 = route === 'wales_section_173';
+  const requiresDepositCompliance = isSection21 || isWalesSection173;
+
+  // For Section 8, wales_fault_based, notice_to_leave: deposit issues are warnings, not blocking
+  // This prevents DEPOSIT_NOT_PROTECTED from blocking Section 8 preview/generate
+  const downgradeToWarning = !requiresDepositCompliance;
 
   const schemaRoot = (factsSchema as any).common_facts ?? factsSchema;
   const relevantFields = collectSchemaFields(schemaRoot).filter((f) =>
@@ -247,7 +264,7 @@ export function validateDepositCompliance(params: {
         user_fix_hint: 'Answer the prerequisite deposit questions so we can apply the required_if rule.',
       };
 
-      if (stage === 'wizard' || downgradeMissing) {
+      if (stage === 'wizard' || downgradeMissing || downgradeToWarning) {
         warnings.push(issue);
       } else {
         blocking.push(issue);
@@ -273,7 +290,7 @@ export function validateDepositCompliance(params: {
         internal_reason: `Required by facts_schema for ${jurisdiction}`,
       };
 
-      if (stage === 'wizard' || downgradeMissing) {
+      if (stage === 'wizard' || downgradeMissing || downgradeToWarning) {
         warnings.push(issue);
       } else {
         blocking.push(issue);
@@ -286,13 +303,16 @@ export function validateDepositCompliance(params: {
     if (depositProtected === false || depositProtected === undefined) {
       const issue: LegalValidationIssue = {
         code: 'DEPOSIT_NOT_PROTECTED',
-        user_message: 'Deposit must be protected in an approved scheme before notice can be served',
+        user_message: requiresDepositCompliance
+          ? 'Deposit must be protected in an approved scheme before notice can be served'
+          : 'Deposit protection is recommended but not legally required for this notice type',
         fields: ['deposit_protected'],
         affected_question_id: 'deposit_protected_scheme',
         user_fix_hint: 'Protect the deposit in an approved scheme and confirm the protection details.',
       };
 
-      if (stage === 'wizard') {
+      // Section 8 / fault-based routes: always warn, never block on deposit
+      if (stage === 'wizard' || downgradeToWarning) {
         warnings.push(issue);
       } else {
         blocking.push(issue);
@@ -309,7 +329,7 @@ export function validateDepositCompliance(params: {
         user_fix_hint: 'Select or enter the approved deposit protection scheme.',
       };
 
-      if (stage === 'wizard' || downgradeMissing) {
+      if (stage === 'wizard' || downgradeMissing || downgradeToWarning) {
         warnings.push(issue);
       } else {
         blocking.push(issue);
@@ -323,13 +343,16 @@ export function validateDepositCompliance(params: {
     if (isMissing(prescribed)) {
       const issue: LegalValidationIssue = {
         code: 'PRESCRIBED_INFO_MISSING',
-        user_message: 'Prescribed information must be served when a deposit was taken',
+        user_message: requiresDepositCompliance
+          ? 'Prescribed information must be served when a deposit was taken'
+          : 'Prescribed information is recommended but not legally required for this notice type',
         fields: ['prescribed_info_given', 'prescribed_info_provided', 'prescribed_info_served'],
         affected_question_id: 'prescribed_info_given',
         user_fix_hint: 'Confirm whether prescribed information was served within 30 days of taking the deposit.',
       };
 
-      if (stage === 'wizard' || downgradeMissing) {
+      // Section 8 / fault-based routes: always warn, never block on prescribed info
+      if (stage === 'wizard' || downgradeToWarning) {
         warnings.push(issue);
       } else {
         blocking.push(issue);
