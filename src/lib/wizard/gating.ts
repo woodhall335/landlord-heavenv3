@@ -200,6 +200,8 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     jurisdiction: jurisdictionKey,
     facts,
     selectedGroundCodes: groundCodes,
+    product: input.product || 'unknown',
+    route: selectedRoute,
     stage,
   });
 
