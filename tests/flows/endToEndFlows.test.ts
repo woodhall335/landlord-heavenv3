@@ -13,7 +13,7 @@ import {
   simulatePreviewValidation,
   simulateGenerateValidation,
   allIssuesHaveQuestionId,
-  removeOneFact,
+  removeOneRequiredFact,
   type FlowDefinition,
 } from '../../src/testutils/flowHarness';
 
@@ -73,7 +73,7 @@ describe('End-to-End Flow Tests', () => {
       describe(`${flow.jurisdiction}/${flow.product}/${flow.route} - missing fact`, () => {
         it('should block at preview with missing required fact', () => {
           const compliantFacts = getMinimalCompliantFacts(flow);
-          const { facts: incompleteFacts, removedKey } = removeOneFact(compliantFacts);
+          const { facts: incompleteFacts, removedKey } = removeOneRequiredFact(flow, 'preview', compliantFacts);
 
           const result = simulatePreviewValidation(flow, incompleteFacts);
 
@@ -103,7 +103,7 @@ describe('End-to-End Flow Tests', () => {
 
         it('should block at generate with missing required fact', () => {
           const compliantFacts = getMinimalCompliantFacts(flow);
-          const { facts: incompleteFacts } = removeOneFact(compliantFacts);
+          const { facts: incompleteFacts } = removeOneRequiredFact(flow, 'generate', compliantFacts);
 
           const result = simulateGenerateValidation(flow, incompleteFacts);
 

@@ -7,6 +7,8 @@
 
 import { getCapabilityMatrix, type Jurisdiction, type Product } from '../lib/jurisdictions/capabilities/matrix';
 import type { ValidationIssue } from '../lib/jurisdictions/requirementsValidator';
+import { getRequirements } from '../lib/jurisdictions/requirements';
+import { validateFlow } from '../lib/validation/validateFlow';
 
 /**
  * Flow definition from capability matrix
@@ -81,69 +83,151 @@ export function getAllUnsupportedFlows(): FlowDefinition[] {
 }
 
 /**
+ * Generate a sensible placeholder value for a fact key
+ */
+function generateFactValue(factKey: string, jurisdiction: Jurisdiction, product: Product, route: string): any {
+  // Dates
+  if (factKey.includes('_date') || factKey.includes('_start') || factKey.includes('_end')) {
+    return '2024-01-01';
+  }
+
+  // Postcodes (jurisdiction-specific)
+  if (factKey.includes('postcode')) {
+    if (jurisdiction === 'scotland') return 'EH1 1AA';
+    if (jurisdiction === 'wales') return 'CF10 1AA';
+    if (jurisdiction === 'northern-ireland') return 'BT1 1AA';
+    return 'SW1A 1AA'; // England default
+  }
+
+  // City/town (jurisdiction-specific)
+  if (factKey.includes('city') || factKey.includes('town')) {
+    if (jurisdiction === 'scotland') return 'Edinburgh';
+    if (jurisdiction === 'wales') return 'Cardiff';
+    if (jurisdiction === 'northern-ireland') return 'Belfast';
+    return 'London';
+  }
+
+  // Amounts and numbers
+  if (factKey.includes('amount') || factKey.includes('rent') || factKey.includes('claim') || factKey.includes('arrears')) {
+    if (factKey.includes('deposit')) return 1500;
+    return 1000;
+  }
+
+  // Email addresses
+  if (factKey.includes('email')) {
+    return 'test@example.com';
+  }
+
+  // Phone numbers
+  if (factKey.includes('phone') || factKey.includes('tel')) {
+    return '07700900000';
+  }
+
+  // Ground codes (route-specific)
+  if (factKey === 'ground_codes' || factKey.includes('grounds')) {
+    if (route === 'section_8') return ['8'];
+    if (route === 'notice_to_leave') return ['1'];
+    if (route.includes('wales')) return ['157'];
+    return ['8'];
+  }
+
+  // Frequency
+  if (factKey.includes('frequency')) {
+    return 'monthly';
+  }
+
+  // Tenancy type
+  if (factKey === 'tenancy_type') {
+    if (jurisdiction === 'scotland') return 'prt';
+    return 'ast';
+  }
+
+  // Product tier
+  if (factKey === 'product_tier') {
+    return 'Premium AST';
+  }
+
+  // Contract category (Wales)
+  if (factKey.includes('contract_category')) {
+    return 'standard';
+  }
+
+  // Claim type
+  if (factKey === 'claim_type' || factKey === 'basis_of_claim') {
+    return 'rent_arrears';
+  }
+
+  // Names (extract type from key)
+  if (factKey.includes('name')) {
+    if (factKey.includes('landlord')) return 'Test Landlord';
+    if (factKey.includes('tenant')) return 'Test Tenant';
+    if (factKey.includes('agent')) return 'Test Agent';
+    return 'Test Name';
+  }
+
+  // Addresses
+  if (factKey.includes('address')) {
+    if (factKey.includes('line1')) return '123 Test Street';
+    if (factKey.includes('line2')) return '';
+    return '123 Test Street';
+  }
+
+  // Default: string
+  return 'Test';
+}
+
+/**
  * Create minimal compliant facts for a flow
- * These are the bare minimum facts needed to pass validation
+ * Derives required facts from requirements engine for stage='generate' (strictest)
  */
 export function getMinimalCompliantFacts(flow: FlowDefinition): Record<string, any> {
   const { jurisdiction, product, route } = flow;
 
-  // Base facts required for all flows
-  const baseFacts: Record<string, any> = {
-    // Landlord details
-    landlord_full_name: 'Test Landlord',
-    landlord_address_line1: '123 Test Street',
-    landlord_city: jurisdiction === 'scotland' ? 'Edinburgh' : jurisdiction === 'wales' ? 'Cardiff' : 'London',
-    landlord_postcode: jurisdiction === 'scotland' ? 'EH1 1AA' : jurisdiction === 'wales' ? 'CF10 1AA' : 'SW1A 1AA',
+  // Start with minimizing toggles to reduce conditional requirements
+  const facts: Record<string, any> = {
+    // Minimize compliance requirements
+    deposit_taken: false,
+    has_gas_appliances: false,
+    is_fixed_term: false,
 
-    // Tenant details
-    tenant_full_name: 'Test Tenant',
+    // Essential pre-action for Scotland if needed
+    pre_action_confirmed: jurisdiction === 'scotland',
 
-    // Property details
-    property_address_line1: '456 Property Street',
-    property_city: jurisdiction === 'scotland' ? 'Edinburgh' : jurisdiction === 'wales' ? 'Cardiff' : 'London',
-    property_postcode: jurisdiction === 'scotland' ? 'EH2 2BB' : jurisdiction === 'wales' ? 'CF10 2BB' : 'SW1A 2BB',
-
-    // Tenancy details
-    tenancy_start_date: '2023-01-01',
-    rent_amount: 1000,
-    rent_frequency: 'monthly',
+    // Wales compliance
+    rent_smart_wales_registered: jurisdiction === 'wales',
   };
 
-  // Product-specific facts
-  if (product === 'notice_only' || product === 'eviction_pack') {
-    baseFacts.notice_expiry_date = '2024-03-01';
+  // Get requirements for this flow at generate stage (strictest)
+  const requirements = getRequirements({
+    jurisdiction,
+    product,
+    route,
+    stage: 'generate',
+    facts: {},
+  });
 
-    // Route-specific facts for eviction
-    if (route === 'section_21') {
-      baseFacts.is_fixed_term = false;
-      baseFacts.deposit_taken = false; // No deposit to avoid compliance requirements
-      baseFacts.has_gas_appliances = false; // No gas to avoid gas safety requirements
-    } else if (route === 'section_8') {
-      baseFacts.ground_codes = ['8']; // Rent arrears ground
-      baseFacts.total_arrears = 3000; // 3 months arrears for Ground 8
-    } else if (route === 'notice_to_leave') {
-      baseFacts.ground_codes = ['Ground 1']; // Rent arrears for Scotland
-      baseFacts.total_arrears = 3500;
-      baseFacts.pre_action_confirmed = true; // Scotland requires pre-action for rent arrears
-    } else if (route === 'wales_section_173') {
-      baseFacts.wales_contract_category = 'standard';
-      baseFacts.deposit_taken = false;
-      baseFacts.rent_smart_wales_registered = true; // Wales compliance
-    } else if (route === 'wales_fault_based') {
-      baseFacts.wales_contract_category = 'standard';
-      baseFacts.ground_codes = ['157']; // Wales rent arrears
-      baseFacts.total_arrears = 2500;
-    }
-  } else if (product === 'money_claim') {
-    baseFacts.claim_amount = 5000;
-    baseFacts.claim_type = 'rent_arrears';
-    baseFacts.total_arrears = 5000;
-  } else if (product === 'tenancy_agreement') {
-    baseFacts.product_tier = 'Premium AST';
-    baseFacts.tenancy_type = 'ast';
+  // If flow is unsupported/misconfigured, return minimal facts
+  if (requirements.status === 'unsupported' || requirements.status === 'misconfigured') {
+    return facts;
   }
 
-  return baseFacts;
+  // For each required fact, generate a sensible value
+  for (const factKey of requirements.requiredNow) {
+    // Skip if already set (e.g., minimizing toggles)
+    if (facts[factKey] !== undefined) {
+      continue;
+    }
+
+    // Skip derived facts (computed, not user-provided)
+    if (requirements.derived.has(factKey)) {
+      continue;
+    }
+
+    // Generate a sensible value for this fact
+    facts[factKey] = generateFactValue(factKey, jurisdiction, product, route);
+  }
+
+  return facts;
 }
 
 /**
@@ -166,10 +250,6 @@ export function simulatePreviewValidation(
   flow: FlowDefinition,
   facts: Record<string, any>
 ): ValidationResult {
-  // This is a placeholder - in real tests this would call the actual API
-  // For now, we'll import validateFlow directly
-  const { validateFlow } = require('../lib/validation/validateFlow');
-
   try {
     const result = validateFlow({
       jurisdiction: flow.jurisdiction,
@@ -203,8 +283,6 @@ export function simulateGenerateValidation(
   flow: FlowDefinition,
   facts: Record<string, any>
 ): ValidationResult {
-  const { validateFlow } = require('../lib/validation/validateFlow');
-
   try {
     const result = validateFlow({
       jurisdiction: flow.jurisdiction,
@@ -245,11 +323,38 @@ export function allIssuesHaveQuestionId(issues: ValidationIssue[]): boolean {
 }
 
 /**
- * Remove one required fact to test validation failure
+ * Remove one required fact deterministically to test validation failure
+ * Picks the first key in sorted(requiredNow) that exists and is NOT derived
  */
-export function removeOneFact(facts: Record<string, any>): { facts: Record<string, any>; removedKey: string } {
-  const keys = Object.keys(facts);
-  const keyToRemove = keys[Math.floor(keys.length / 2)]; // Remove a fact from the middle
+export function removeOneRequiredFact(
+  flow: FlowDefinition,
+  stage: 'preview' | 'generate',
+  facts: Record<string, any>
+): { facts: Record<string, any>; removedKey: string } {
+  // Get requirements for this flow and stage
+  const requirements = getRequirements({
+    jurisdiction: flow.jurisdiction,
+    product: flow.product,
+    route: flow.route,
+    stage,
+    facts,
+  });
+
+  // Find first required fact (sorted alphabetically) that exists and is not derived
+  const sortedRequired = Array.from(requirements.requiredNow).sort();
+  let keyToRemove = '';
+
+  for (const key of sortedRequired) {
+    if (facts[key] !== undefined && !requirements.derived.has(key)) {
+      keyToRemove = key;
+      break;
+    }
+  }
+
+  // If no required fact found, fall back to first key
+  if (!keyToRemove) {
+    keyToRemove = Object.keys(facts)[0] || 'unknown';
+  }
 
   const modifiedFacts = { ...facts };
   delete modifiedFacts[keyToRemove];
