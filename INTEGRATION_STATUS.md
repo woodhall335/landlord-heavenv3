@@ -90,18 +90,20 @@
 
 ## 🚧 REMAINING WORK
 
-### 6. Wizard/Checkpoint Integration (PENDING)
-**TODO**: Wire `validateFlow` into wizard answer and checkpoint endpoints
+### 6. Wizard/Checkpoint Integration ✅ COMPLETE
+**Status**: Integrated and tested
 
 **Files**:
-- `src/app/api/wizard/answer/route.ts` - Inline validation during answers (stage='wizard')
-- `src/app/api/wizard/checkpoint/route.ts` - Checkpoint validation (stage='checkpoint')
+- ✅ `src/app/api/wizard/answer/route.ts` - Inline validation during answers (stage='wizard')
+- ✅ `src/app/api/wizard/checkpoint/route.ts` - Checkpoint validation (stage='checkpoint')
 
-**Requirements**:
-- Wizard: Warn only, don't block on future requirements
-- Checkpoint: Block on checkpoint-required facts
-- Return same standardized payload format
-- Include `affected_question_id` for navigation
+**Achievements**:
+- ✅ Wizard: Warns only, doesn't block on future requirements
+- ✅ Checkpoint: Blocks on checkpoint-required facts with standardized 422
+- ✅ **REMOVED 134 lines of downgrade hacks** from wizard answer endpoint
+- ✅ All validation issues include `affected_question_id`
+- ✅ Converts blocking issues to warnings at wizard stage
+- ✅ No late surprises - users see warnings before reaching checkpoint
 
 ### 7. Decision Engine Integration (PENDING)
 **TODO**: Ensure decision engine uses ValidationContext with stage
@@ -143,18 +145,18 @@
 
 ## 📊 Current Status Summary
 
-**Completed**: 5/9 tasks (56%)
+**Completed**: 6/9 tasks (67%)
 - ✅ Validation orchestrator + tests
 - ✅ Preview/generate helpers
 - ✅ Preview endpoint integration
 - ✅ Generate endpoint integration
 - ✅ Deposit bug regression test
+- ✅ **Wizard/checkpoint integration (REMOVED downgrade hacks)**
 
 **In Progress**: 0/9 tasks
 - (None)
 
-**Pending**: 4/9 tasks
-- 🚧 Wizard/checkpoint integration
+**Pending**: 3/9 tasks
 - 🚧 Decision engine integration
 - 🚧 UI safety
 - 🚧 Flow harness E2E tests
