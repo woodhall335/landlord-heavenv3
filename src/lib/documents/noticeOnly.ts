@@ -6,6 +6,8 @@ export interface NoticeValidationFailure {
   user_message: string;
   internal_reason?: string;
   fields?: string[];
+  affected_question_id?: string;
+  user_fix_hint?: string;
 }
 
 export interface NoticeValidationOutcome {
@@ -18,8 +20,9 @@ export function validateNoticeOnlyBeforeRender(params: {
   facts: Record<string, any>;
   selectedGroundCodes: number[];
   selectedRoute?: string;
+  stage?: 'wizard' | 'preview' | 'generate';
 }): NoticeValidationOutcome {
-  const { jurisdiction, facts, selectedGroundCodes } = params;
+  const { jurisdiction, facts, selectedGroundCodes, stage = 'wizard' } = params;
   const hasGroundsArray = Array.isArray(facts.section8_grounds) && facts.section8_grounds.length > 0;
   const inferredGrounds = selectedGroundCodes.length > 0
     ? selectedGroundCodes.map((code) => `ground_${code}`)
@@ -33,6 +36,7 @@ export function validateNoticeOnlyBeforeRender(params: {
     product: 'notice_only',
     jurisdiction,
     facts: factsWithGrounds,
+    stage,
   });
 
   return {
@@ -41,11 +45,15 @@ export function validateNoticeOnlyBeforeRender(params: {
       user_message: b.user_message ?? b.message,
       internal_reason: b.internal_reason,
       fields: b.fields,
+      affected_question_id: (b as any).affected_question_id,
+      user_fix_hint: b.user_fix_hint,
     })),
     warnings: wizardGate.warnings.map((w) => ({
       code: w.code,
       user_message: w.message,
       fields: w.fields,
+      affected_question_id: (w as any).affected_question_id,
+      user_fix_hint: (w as any).user_fix_hint,
     })),
   };
 }

@@ -8,7 +8,7 @@
  */
 
 import type { ProductType } from './mqs-loader';
-import { resolveFactValue, validateJurisdictionCompliance } from '@/lib/jurisdictions/validators';
+import { resolveFactValue, validateJurisdictionCompliance, type ValidationStage } from '@/lib/jurisdictions/validators';
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
@@ -24,12 +24,15 @@ export interface GateBlockingIssue {
   user_fix_hint?: string;
   user_message?: string;
   internal_reason?: string;
+  affected_question_id?: string;
 }
 
 export interface GateWarning {
   code: string;
   message: string;
   fields?: string[];
+  affected_question_id?: string;
+  user_fix_hint?: string;
 }
 
 export interface WizardGateResult {
@@ -43,6 +46,7 @@ export interface WizardGateInput {
   jurisdiction: string;
   facts: Record<string, any>;
   current_question_id?: string;
+  stage?: ValidationStage;
 }
 
 // ============================================================================
@@ -134,7 +138,7 @@ function hasParticularsForGround(facts: Record<string, any>, groundCode: number)
 // ============================================================================
 
 function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
-  const { facts, jurisdiction } = input;
+  const { facts, jurisdiction, stage = 'wizard' } = input;
   const blocking: GateBlockingIssue[] = [];
   const warnings: GateWarning[] = [];
 
@@ -196,6 +200,7 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     jurisdiction: jurisdictionKey,
     facts,
     selectedGroundCodes: groundCodes,
+    stage,
   });
 
   if (jurisdictionValidation.blocking.length > 0) {
@@ -301,6 +306,7 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
         message: 'Deposit amount must be specified when deposit was taken',
         fields: ['deposit_amount'],
         user_fix_hint: 'Please provide the deposit amount that was collected from the tenant',
+        affected_question_id: 'deposit_amount',
       });
     }
 
@@ -311,7 +317,31 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
         message: 'You must specify whether the deposit is protected in an approved scheme',
         fields: ['deposit_protected'],
         user_fix_hint: 'Indicate whether the deposit is protected in DPS, MyDeposits, or TDS',
+        affected_question_id: 'deposit_protected_scheme',
       });
+    }
+
+    if (depositAmount > 0 && depositProtected === true) {
+      const depositScheme = resolveFactValue(facts, 'deposit_protected_scheme');
+      if (depositScheme === undefined || depositScheme === null || String(depositScheme).trim().length === 0) {
+        blocking.push({
+          code: 'DEPOSIT_FIELD_REQUIRED',
+          message: 'Deposit protection scheme details are required when a deposit is protected',
+          fields: ['deposit_protected_scheme'],
+          user_fix_hint: 'Select the deposit protection scheme used to protect the deposit.',
+          affected_question_id: 'deposit_protected_scheme',
+        });
+      }
+
+      if (prescribedInfoGiven === undefined || prescribedInfoGiven === null) {
+        blocking.push({
+          code: 'PRESCRIBED_INFO_MISSING',
+          message: 'Prescribed information must be confirmed when a deposit is protected',
+          fields: ['prescribed_info_given'],
+          user_fix_hint: 'Answer whether prescribed information was served within 30 days of taking the deposit.',
+          affected_question_id: 'prescribed_info_given',
+        });
+      }
     }
 
     // If deposit protected, must specify if prescribed info given
@@ -320,6 +350,8 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
         code: 'PRESCRIBED_INFO_STATUS_UNCLEAR',
         message: 'For Section 21 notices, prescribed information must have been given within 30 days of taking the deposit',
         fields: ['prescribed_info_given'],
+        affected_question_id: 'prescribed_info_given',
+        user_fix_hint: 'Confirm whether prescribed information has been served to avoid Section 21 risk.',
       });
     }
   }

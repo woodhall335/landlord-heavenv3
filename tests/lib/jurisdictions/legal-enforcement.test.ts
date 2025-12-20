@@ -37,6 +37,7 @@ describe('jurisdiction gating enforcement', () => {
       product: 'notice_only',
       jurisdiction: 'england',
       facts,
+      stage: 'preview',
     });
 
     const codes = gating.blocking.map((b) => b.code);
@@ -56,6 +57,7 @@ describe('jurisdiction gating enforcement', () => {
       product: 'notice_only',
       jurisdiction: 'england',
       facts,
+      stage: 'preview',
     });
 
     const codes = gating.blocking.map((b) => b.code);
@@ -144,6 +146,7 @@ describe('jurisdiction gating enforcement', () => {
       product: 'notice_only',
       jurisdiction: 'scotland',
       facts: scotlandFacts,
+      stage: 'preview',
     });
 
     expect(scotland.blocking.map((b) => b.code)).toContain('GROUND_REQUIRED_FACT_MISSING');
@@ -153,6 +156,7 @@ describe('jurisdiction gating enforcement', () => {
       product: 'notice_only',
       jurisdiction: 'northern-ireland',
       facts: scotlandFacts,
+      stage: 'preview',
     });
 
     const niCodes = northernIreland.blocking.map((b) => b.code);
@@ -177,6 +181,7 @@ describe('jurisdiction gating enforcement', () => {
       facts,
       selectedGroundCodes: [8],
       selectedRoute: 'section_8',
+      stage: 'preview',
     });
 
     const initialCodes = initialValidation.blocking.map((b) => b.code);
@@ -188,6 +193,7 @@ describe('jurisdiction gating enforcement', () => {
       facts: mutatedFacts,
       selectedGroundCodes: [8],
       selectedRoute: 'section_8',
+      stage: 'preview',
     });
 
     expect(mutatedValidation.blocking.map((b) => b.code)).toContain('DEPOSIT_NOT_PROTECTED');

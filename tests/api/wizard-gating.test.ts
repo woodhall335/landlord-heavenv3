@@ -260,7 +260,7 @@ describe('Wizard Gating - Eviction (England)', () => {
           deposit_protected: true,
           prescribed_info_given: true,
           prescribed_info_provided: true, // Jurisdiction validator checks this field
-          deposit_scheme: 'DPS', // Required by England jurisdiction schema
+          deposit_protected_scheme: 'DPS', // Required by England jurisdiction schema
           deposit_protection_date: '2024-01-01', // Required by England jurisdiction schema
           has_gas_appliances: true,
           gas_certificate_provided: true,

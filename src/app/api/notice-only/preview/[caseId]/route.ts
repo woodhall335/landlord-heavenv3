@@ -207,6 +207,7 @@ export async function GET(
       facts: wizardFacts,
       selectedGroundCodes: groundCodes,
       selectedRoute: selected_route,
+      stage: 'preview',
     });
 
     const blockingIssues = validationOutcome.blocking ?? [];
@@ -239,6 +240,7 @@ export async function GET(
       product: 'notice_only',
       selected_route,
       wizardFacts,
+      stage: 'preview',
     });
 
     if (compliance.hardFailures.length > 0) {

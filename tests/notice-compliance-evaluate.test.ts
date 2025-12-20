@@ -14,6 +14,7 @@ describe('evaluateNoticeCompliance', () => {
         tenancy_start_date: '2023-01-01',
         notice_service_date: '2024-01-10',
       },
+      stage: 'generate',
     });
 
     expect(result.hardFailures.some((f) => f.code === 'S21-DEPOSIT-NONCOMPLIANT')).toBe(true);
