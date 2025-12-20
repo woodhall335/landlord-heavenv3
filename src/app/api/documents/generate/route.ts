@@ -31,6 +31,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { validateForGenerate } from '@/lib/validation/previewValidation';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -198,6 +199,50 @@ export async function POST(request: Request) {
         },
         { status: 422 }
       );
+    }
+
+    // ============================================================================
+    // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
+    // ============================================================================
+    // Map document_type to product and route
+    let product: string = 'notice_only';
+    let route: string = 'section_21';
+
+    if (document_type === 'section8_notice') {
+      product = 'notice_only';
+      route = 'section_8';
+    } else if (document_type === 'section21_notice') {
+      product = 'notice_only';
+      route = 'section_21';
+    } else if (['ast_standard', 'ast_premium'].includes(document_type)) {
+      product = 'tenancy_agreement';
+      route = 'tenancy_agreement';
+    } else if (document_type === 'notice_to_leave') {
+      product = 'notice_only';
+      route = 'notice_to_leave';
+    } else if (['prt_agreement', 'prt_premium'].includes(document_type)) {
+      product = 'tenancy_agreement';
+      route = 'tenancy_agreement';
+    } else if (['private_tenancy', 'private_tenancy_premium'].includes(document_type)) {
+      product = 'tenancy_agreement';
+      route = 'tenancy_agreement';
+    }
+
+    console.log('[GENERATE] Running unified validation via validateForGenerate');
+    const validationError = validateForGenerate({
+      jurisdiction: canonicalJurisdiction,
+      product: product as any,
+      route,
+      facts: wizardFacts,
+      caseId: case_id,
+    });
+
+    if (validationError) {
+      console.warn('[GENERATE] Unified validation blocked generation:', {
+        case_id,
+        document_type,
+      });
+      return validationError; // Already a NextResponse with standardized 422 payload
     }
 
     let generatedDoc: any;

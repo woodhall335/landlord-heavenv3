@@ -9,7 +9,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Button, Card, Loading } from '@/components/ui';
+import { Button, Card, Loading, ValidationErrors, type ValidationIssue } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
 import { SignupModal } from '@/components/modals/SignupModal';
 import { PRICING, formatPrice } from '@/config/pricing';
@@ -65,6 +65,7 @@ export default function WizardPreviewPage() {
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{ blocking_issues: ValidationIssue[]; warnings: ValidationIssue[] } | null>(null);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
@@ -367,20 +368,34 @@ export default function WizardPreviewPage() {
                   documentType = getDocumentType(refetchedCase.case_type, refetchedCase);
                 }
               }
-            } else if (checkpointResponse.status === 422 || !checkpointData.ok) {
-              // Checkpoint returned validation errors (422) or not ok - show helpful error
-              const missingFields = checkpointData.missingFields || [];
-              const reason = checkpointData.reason || 'Please complete the wizard and try again.';
-
-              if (missingFields.length > 0) {
-                throw new Error(
-                  `Cannot generate preview: Missing required information - ${missingFields.join(', ')}. ${reason}`
-                );
+            } else if (checkpointResponse.status === 422) {
+              // Checkpoint returned 422 LEGAL_BLOCK - extract structured validation errors
+              if (checkpointData.code === 'LEGAL_BLOCK' && checkpointData.blocking_issues) {
+                setValidationErrors({
+                  blocking_issues: checkpointData.blocking_issues || [],
+                  warnings: checkpointData.warnings || [],
+                });
+                throw new Error('VALIDATION_ERROR'); // Special error to trigger validation UI
               } else {
-                throw new Error(
-                  `Cannot generate preview: ${checkpointData.error || 'The wizard is incomplete'}. ${reason}`
-                );
+                // Old-style 422 error format
+                const missingFields = checkpointData.missingFields || [];
+                const reason = checkpointData.reason || 'Please complete the wizard and try again.';
+
+                if (missingFields.length > 0) {
+                  throw new Error(
+                    `Cannot generate preview: Missing required information - ${missingFields.join(', ')}. ${reason}`
+                  );
+                } else {
+                  throw new Error(
+                    `Cannot generate preview: ${checkpointData.error || 'The wizard is incomplete'}. ${reason}`
+                  );
+                }
               }
+            } else if (!checkpointData.ok) {
+              // Non-422 error
+              throw new Error(
+                `Cannot generate preview: ${checkpointData.error || 'The wizard is incomplete'}.`
+              );
             }
           } catch (checkpointError) {
             console.error('Checkpoint failed:', checkpointError);
@@ -419,9 +434,20 @@ export default function WizardPreviewPage() {
 
         if (!previewResponse.ok) {
           const errorData = await previewResponse.json().catch(() => ({}));
-          const errorMessage = (errorData as any).error || 'Failed to generate preview document';
-          const missingFields = (errorData as any).missing || [];
-          const documentTypeFromError = (errorData as any).documentType || documentType;
+
+          // Check for 422 LEGAL_BLOCK with structured validation errors
+          if (previewResponse.status === 422 && errorData.code === 'LEGAL_BLOCK' && errorData.blocking_issues) {
+            setValidationErrors({
+              blocking_issues: errorData.blocking_issues || [],
+              warnings: errorData.warnings || [],
+            });
+            throw new Error('VALIDATION_ERROR'); // Special error to trigger validation UI
+          }
+
+          // Old-style error handling for backward compatibility
+          const errorMessage = errorData.error || 'Failed to generate preview document';
+          const missingFields = errorData.missing || [];
+          const documentTypeFromError = errorData.documentType || documentType;
 
           console.error('Preview generation error:', errorMessage, {
             documentType: documentTypeFromError,
@@ -559,8 +585,42 @@ export default function WizardPreviewPage() {
     );
   }
 
-  // Error state
+  // Retry function for validation errors
+  const handleRetry = () => {
+    setLoading(true);
+    setError(null);
+    setValidationErrors(null);
+    window.location.reload();
+  };
+
+  // Error state with structured validation errors
   if (error || !caseData) {
+    // Show structured validation errors if available
+    if (error === 'VALIDATION_ERROR' && validationErrors) {
+      return (
+        <div className="min-h-screen bg-gray-50 py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Unable to Generate Preview
+              </h1>
+              <p className="text-gray-600">
+                We need some additional information to complete your documents.
+              </p>
+            </div>
+
+            <ValidationErrors
+              blocking_issues={validationErrors.blocking_issues}
+              warnings={validationErrors.warnings}
+              caseId={caseId}
+              onRetry={handleRetry}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    // Generic error display for non-validation errors
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card className="max-w-md">

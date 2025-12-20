@@ -25,6 +25,7 @@ import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-complian
 import { getReviewNavigation } from '@/lib/wizard/review-navigation';
 import { evaluateWizardGate } from '@/lib/wizard/gating';
 import { deriveCanonicalJurisdiction, normalizeJurisdiction } from '@/lib/types/jurisdiction';
+import { validateFlow } from '@/lib/validation/validateFlow';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -833,144 +834,36 @@ export async function POST(request: Request) {
     );
 
     // ============================================================================
-    // WIZARD GATING: Apply deterministic blocking/warning rules
+    // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE (WIZARD STAGE)
     // ============================================================================
-    let gatingResult = evaluateWizardGate({
-      case_type: caseRow.case_type,
-      product,
-      jurisdiction: canonicalJurisdiction,
-      facts: mergedFacts,
+    // Wizard stage should warn only, not block (prevents late surprises)
+    const selectedRoute = mergedFacts.selected_notice_route ||
+                          mergedFacts.route_recommendation?.recommended_route ||
+                          mergedFacts.selected_route ||
+                          (caseRow.case_type === 'eviction' ? 'section_8' : product);
+
+    console.log('[WIZARD] Running unified validation via validateFlow');
+    const validationResult = validateFlow({
+      jurisdiction: canonicalJurisdiction as any,
+      product: product as any,
+      route: selectedRoute,
       stage: 'wizard',
-      current_question_id: question_id,
+      facts: mergedFacts,
+      caseId: case_id,
     });
 
-    const COMPLIANCE_CHECKPOINTS = [
-      'deposit_and_compliance',
-      'deposit_protection',
-      'deposit_protected_scheme', // Section 21 deposit compliance
-      'prescribed_info_given', // Section 21 prescribed information
-      'section8_grounds_selection',
-      'eviction_grounds',
-      'notice_service',
-      'notice_dates',
-      'pre_action_contact',
-      'property_licensing',
-      'rent_smart_wales_registered', // Wales Section 173 licensing
-    ];
-
-    const isComplianceCheckpoint = COMPLIANCE_CHECKPOINTS.includes(question_id);
-    let complianceWarnings: any[] = [];
-
-    if (product === 'notice_only' && !isComplianceCheckpoint && gatingResult.blocking.length > 0) {
-      console.log('[WIZARD_GATING] Downgrading blocking issues to warnings (non-checkpoint)', {
-        case_id,
-        question_id,
-        blocking: gatingResult.blocking.map((b) => b.code),
-      });
-
-      complianceWarnings = [...gatingResult.warnings, ...gatingResult.blocking];
-      gatingResult = { ...gatingResult, blocking: [] };
-    }
-
-    // If there are blocking issues, return 422 and DO NOT save the answer
-    if (gatingResult.blocking.length > 0) {
-      if (product === 'notice_only') {
-        console.warn('[WIZARD_GATING] Converting blocking issues to warnings for notice_only flow', {
-          case_id,
-          question_id,
-          blocking: gatingResult.blocking.map((b) => b.code),
-        });
-        complianceWarnings = [...complianceWarnings, ...gatingResult.blocking];
-        gatingResult = { ...gatingResult, blocking: [] };
-      } else {
-        console.warn('[WIZARD_GATING] Blocking progression:', {
-          case_id,
-          question_id,
-          blocking: gatingResult.blocking.map((b) => b.code),
-        });
-
-        return NextResponse.json(
-          {
-            error: 'WIZARD_GATING_BLOCKED',
-            blocking_issues: gatingResult.blocking,
-            warnings: gatingResult.warnings,
-            block_next_question: true,
-          },
-          { status: 422 },
-        );
-      }
-    }
-
-    complianceWarnings = complianceWarnings.length > 0 ? complianceWarnings : [...gatingResult.warnings];
-
-    // ========================================================================
-    // INLINE COMPLIANCE VALIDATION (NOTICE ONLY)
-    // ========================================================================
-    // Only hard-block at specific checkpoint questions to avoid false-positive blocks
-    // early in the flow. For other questions, downgrade hardFailures to warnings.
-    if (product === 'notice_only') {
-      const complianceStage = isComplianceCheckpoint ? 'preview' : 'wizard';
-
-      const compliance = evaluateNoticeCompliance({
-        jurisdiction: canonicalJurisdiction,
-        product,
-        selected_route:
-          mergedFacts.selected_notice_route ||
-          mergedFacts.route_recommendation?.recommended_route ||
-          mergedFacts.selected_route,
-        wizardFacts: mergedFacts,
-        question_id,
-        stage: complianceStage,
-      });
-
-      // Log compliance issues for debugging
-      if (compliance.hardFailures.length > 0) {
-        console.log('[NOTICE_COMPLIANCE]', {
-          case_id,
-          question_id,
-          selected_route: mergedFacts.selected_notice_route || mergedFacts.selected_route || 'none',
-          hardFailures: compliance.hardFailures.map((f) => f.code),
-          isCheckpoint: isComplianceCheckpoint,
-        });
-      }
-
-      // Only hard-block at checkpoint questions
-      if (compliance.hardFailures.length > 0 && isComplianceCheckpoint) {
-        console.warn('[NOTICE_COMPLIANCE] Blocking progression:', {
-          case_id,
-          question_id,
-          failures: compliance.hardFailures,
-        });
-
-        return NextResponse.json(
-          {
-            error: 'NOTICE_NONCOMPLIANT',
-            failures: compliance.hardFailures,
-            warnings: compliance.warnings,
-            computed: compliance.computed ?? null,
-            block_next_question: true,
-          },
-          { status: 422 },
-        );
-      }
-
-      // For non-checkpoint questions, downgrade hardFailures to warnings
-      if (compliance.hardFailures.length > 0 && !isComplianceCheckpoint) {
-        console.log('[NOTICE_COMPLIANCE] Downgrading hardFailures to warnings (not at checkpoint)', {
-          case_id,
-          question_id,
-        });
-        complianceWarnings = [
-          ...compliance.warnings,
-          ...compliance.hardFailures.map((f) => ({
-            ...f,
-            user_fix_hint: `[Will be checked later] ${f.user_fix_hint}`,
-          })),
-        ];
-      } else {
-        complianceWarnings = compliance.warnings;
-      }
-    }
+    // Wizard stage warnings (do NOT block progression)
+    const complianceWarnings = [
+      ...validationResult.warnings,
+      ...validationResult.blocking_issues, // Convert blocks to warnings at wizard stage
+    ].map(issue => ({
+      code: issue.code,
+      user_message: issue.user_fix_hint || 'Missing information',
+      fields: issue.fields,
+      affected_question_id: issue.affected_question_id,
+      alternate_question_ids: issue.alternate_question_ids,
+      user_fix_hint: issue.user_fix_hint,
+    }));
 
     // ============================================================================
     // SMART GUIDANCE: Initialize response data container

@@ -14,11 +14,14 @@ import { normalizeJurisdiction, type CanonicalJurisdiction, type LegacyJurisdict
 // TYPES
 // ============================================================================
 
+export type ValidationStage = 'wizard' | 'checkpoint' | 'preview' | 'generate';
+
 export interface DecisionInput {
   jurisdiction: CanonicalJurisdiction | LegacyJurisdiction; // england-wales allowed for backward compatibility only
   product: 'notice_only' | 'complete_pack' | 'money_claim';
   case_type: 'eviction' | 'money_claim' | 'tenancy_agreement';
   facts: Partial<CaseFacts>;
+  stage?: ValidationStage; // Stage-aware validation (wizard=warn, checkpoint/preview/generate=block)
 }
 
 export interface GroundRecommendation {
@@ -70,7 +73,7 @@ export interface DecisionOutput {
 // ============================================================================
 
 function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
-  const { facts } = input;
+  const { facts, stage = 'generate' } = input; // Default to strictest validation
   const output: DecisionOutput = {
     recommended_routes: [],
     allowed_routes: [],
@@ -86,17 +89,23 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
 
   // Check Section 21 eligibility and blocking issues
   const s21Blocks: BlockingIssue[] = [];
+  const isWizardStage = stage === 'wizard';
 
   // Deposit protection (CRITICAL)
   if (facts.tenancy?.deposit_amount && facts.tenancy.deposit_amount > 0) {
     if (facts.tenancy.deposit_protected !== true) {
-      s21Blocks.push({
+      const issue: BlockingIssue = {
         route: 'section_21',
         issue: 'deposit_not_protected',
         description: 'Deposit not protected in approved scheme',
         action_required: 'Protect deposit in DPS, MyDeposits, or TDS before serving Section 21',
-        severity: 'blocking',
-      });
+        severity: isWizardStage ? 'warning' : 'blocking',
+      };
+      if (isWizardStage) {
+        output.warnings.push(issue.description);
+      } else {
+        s21Blocks.push(issue);
+      }
     }
   }
 
@@ -105,64 +114,89 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
     (input.facts as any).prescribed_info_given;
   if (facts.tenancy?.deposit_amount && facts.tenancy.deposit_amount > 0) {
     if (!prescribedInfoGiven) {
-      s21Blocks.push({
+      const issue: BlockingIssue = {
         route: 'section_21',
         issue: 'prescribed_info_not_given',
         description: 'Prescribed information not given to tenant within 30 days',
         action_required: 'Provide prescribed information before Section 21 is valid',
-        severity: 'blocking',
-      });
+        severity: isWizardStage ? 'warning' : 'blocking',
+      };
+      if (isWizardStage) {
+        output.warnings.push(issue.description);
+      } else {
+        s21Blocks.push(issue);
+      }
     }
   }
 
   // Gas safety certificate (CRITICAL)
   const gasCertProvided = (input.facts as any).gas_safety_cert_provided;
   if (gasCertProvided === false) {
-    s21Blocks.push({
+    const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'gas_safety_not_provided',
       description: 'Gas safety certificate not provided before tenancy start',
       action_required: 'Cannot use Section 21 if gas cert not provided at start',
-      severity: 'blocking',
-    });
+      severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s21Blocks.push(issue);
+    }
   }
 
   // How to Rent guide (CRITICAL for England)
   const howToRentGiven = (input.facts as any).how_to_rent_given ||
     (input.facts as any).how_to_rent_guide_provided;
   if (howToRentGiven === false) {
-    s21Blocks.push({
+    const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'how_to_rent_not_provided',
       description: '"How to Rent" guide not provided at start of tenancy',
       action_required: 'Cannot use Section 21 without providing How to Rent guide',
-      severity: 'blocking',
-    });
+      severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s21Blocks.push(issue);
+    }
   }
 
   // EPC provided (CRITICAL)
   const epcProvided = (input.facts as any).epc_provided;
   if (epcProvided === false) {
-    s21Blocks.push({
+    const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'epc_not_provided',
       description: 'Energy Performance Certificate not provided to tenant',
       action_required: 'Provide EPC before Section 21 is valid',
-      severity: 'blocking',
-    });
+      severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s21Blocks.push(issue);
+    }
   }
 
   // HMO licensing (CRITICAL)
   const hmoLicenseRequired = (input.facts as any).hmo_license_required;
   const hmoLicenseValid = (input.facts as any).hmo_license_valid;
   if (hmoLicenseRequired === true && hmoLicenseValid !== true) {
-    s21Blocks.push({
+    const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'hmo_not_licensed',
       description: 'HMO/selective licence required but not in place',
       action_required: 'Obtain HMO/selective licence before serving Section 21',
-      severity: 'blocking',
-    });
+      severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s21Blocks.push(issue);
+    }
   }
 
   output.blocking_issues = s21Blocks;
@@ -298,7 +332,7 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
 // ============================================================================
 
 function analyzeWales(input: DecisionInput): DecisionOutput {
-  const { facts } = input;
+  const { facts, stage = 'generate' } = input; // Default to strictest validation
   const output: DecisionOutput = {
     recommended_routes: [],
     allowed_routes: [],
@@ -319,41 +353,57 @@ function analyzeWales(input: DecisionInput): DecisionOutput {
 
   // Check Section 173 eligibility (Wales no-fault notice)
   const s173Blocks: BlockingIssue[] = [];
+  const isWizardStage = stage === 'wizard';
 
   // Section 173 is ONLY available for standard occupation contracts
   if (contractCategory === 'supported_standard' || contractCategory === 'secure') {
-    s173Blocks.push({
+    const issue: BlockingIssue = {
       route: 'wales_section_173',
       issue: 'contract_type_incompatible',
       description: 'Section 173 is only available for standard occupation contracts',
       action_required: 'Use fault-based notice routes (Section 157, 159, 161, or 162) instead',
-      severity: 'blocking',
-    });
+      severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s173Blocks.push(issue);
+    }
   }
 
   // Rent Smart Wales registration (CRITICAL for Section 173)
   const rentSmartRegistered = (facts as any).rent_smart_wales_registered;
   if (rentSmartRegistered === false) {
-    s173Blocks.push({
+    const issue: BlockingIssue = {
       route: 'wales_section_173',
       issue: 'rent_smart_not_registered',
       description: 'Not registered with Rent Smart Wales',
       action_required: 'Register with Rent Smart Wales before serving Section 173 notice',
-      severity: 'blocking',
-    });
+      severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s173Blocks.push(issue);
+    }
   }
 
   // Deposit protection (CRITICAL if deposit taken)
   const depositTaken = (facts as any).deposit_taken;
   const depositProtected = (facts as any).deposit_protected;
   if (depositTaken === true && depositProtected !== true) {
-    s173Blocks.push({
+    const issue: BlockingIssue = {
       route: 'wales_section_173',
       issue: 'deposit_not_protected',
       description: 'Deposit not protected in approved scheme',
       action_required: 'Protect deposit in approved Wales scheme before serving Section 173',
-      severity: 'blocking',
-    });
+      severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s173Blocks.push(issue);
+    }
   }
 
   output.blocking_issues = s173Blocks;
@@ -479,7 +529,7 @@ function analyzeWales(input: DecisionInput): DecisionOutput {
 // ============================================================================
 
 function analyzeScotland(input: DecisionInput): DecisionOutput {
-  const { facts } = input;
+  const { facts, stage = 'generate' } = input; // Default to strictest validation
   const output: DecisionOutput = {
     recommended_routes: ['notice_to_leave'], // Scotland only has Notice to Leave
     allowed_routes: [], // Will be populated based on pre-action requirements
@@ -494,6 +544,7 @@ function analyzeScotland(input: DecisionInput): DecisionOutput {
   };
 
   const grounds: GroundRecommendation[] = [];
+  const isWizardStage = stage === 'wizard';
 
   // Ground 1: Rent arrears (REQUIRES PRE-ACTION)
   const totalArrears = facts.issues?.rent_arrears?.total_arrears ?? 0;
@@ -520,13 +571,18 @@ function analyzeScotland(input: DecisionInput): DecisionOutput {
           details: ['Pre-action requirements confirmed for rent arrears'],
         };
       } else {
-        output.blocking_issues.push({
+        const issue: BlockingIssue = {
           route: 'notice_to_leave',
           issue: 'pre_action_not_met',
           description: 'Pre-action requirements not completed for rent arrears eviction',
           action_required: 'Contact tenant about arrears, signpost support, attempt resolution before serving Notice',
-          severity: 'blocking',
-        });
+          severity: isWizardStage ? 'warning' : 'blocking',
+        };
+        if (isWizardStage) {
+          output.warnings.push(issue.description);
+        } else {
+          output.blocking_issues.push(issue);
+        }
         output.pre_action_requirements = {
           required: true,
           met: false,
