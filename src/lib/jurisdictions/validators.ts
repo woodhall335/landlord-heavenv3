@@ -202,6 +202,10 @@ export function validateDepositCompliance(params: {
 
   const depositTaken = resolveFactValue(facts, 'deposit_taken');
 
+  if (depositTaken === undefined || depositTaken === null) {
+    return { blocking, warnings };
+  }
+
   // If the user explicitly confirmed no deposit was taken, skip deposit compliance checks
   // to avoid failing required_if expressions that only apply when a deposit exists.
   if (depositTaken === false) {
