@@ -26,18 +26,32 @@ vi.mock('@/lib/supabase/server', () => ({
   getServerUser: vi.fn(async () => null),
 }));
 
+// Minimal compliant facts that work across jurisdictions
+// Manually specified to avoid import issues in mock context
+// Note: Checkpoint stage requires fewer facts than generate stage
+const compliantWizardFacts = {
+  __meta: { product: 'notice_only' },
+  landlord_full_name: 'Test Landlord',
+  landlord_address_line1: '123 Test Street',
+  landlord_city: 'London',
+  landlord_postcode: 'SW1A 1AA',
+  tenant_full_name: 'Test Tenant',
+  property_address_line1: '456 Property St',
+  property_city: 'London',
+  property_postcode: 'SW1A 2BB',
+  tenancy_start_date: '2023-01-01',
+  rent_amount: 1000,
+  rent_frequency: 'monthly',
+  deposit_taken: false,
+  has_gas_appliances: false,
+  how_to_rent_given: true,
+  epc_provided: true,
+  gas_safety_cert_provided: false,
+  rent_smart_wales_registered: true, // Wales-specific compliance
+};
+
 vi.mock('@/lib/case-facts/store', () => ({
-  getOrCreateWizardFacts: vi.fn(async () => ({
-    __meta: { product: 'notice_only' },
-    landlord_full_name: 'Test Landlord',
-    tenant_full_name: 'Test Tenant',
-    property_address_line1: '123 Test Street',
-    tenancy_start_date: '2024-01-01',
-    rent_amount: 1000,
-    deposit_protected: true,
-    deposit_amount: 1000,
-    total_arrears: 2000,
-  })),
+  getOrCreateWizardFacts: vi.fn(async () => compliantWizardFacts),
 }));
 
 vi.mock('@/lib/case-facts/normalize', () => ({
@@ -144,6 +158,7 @@ describe('Wizard API Checkpoint', () => {
         id: '123e4567-e89b-12d3-a456-426614174000',
         jurisdiction: 'england',
         case_type: 'eviction',
+        product: 'notice_only', // Match wizard facts product
         user_id: null,
         wizard_progress: 50,
       },
@@ -279,6 +294,7 @@ describe('Wizard API Checkpoint', () => {
         id: '123e4567-e89b-12d3-a456-426614174000',
         jurisdiction: 'england',
         case_type: 'eviction',
+        product: 'notice_only',
         user_id: null,
         wizard_progress: 50,
       },
@@ -305,11 +321,19 @@ describe('Wizard API Checkpoint', () => {
         id: '123e4567-e89b-12d3-a456-426614174000',
         jurisdiction: 'wales',
         case_type: 'eviction',
+        product: 'notice_only',
         user_id: null,
         wizard_progress: 50,
       },
       error: null,
     });
+
+    // Override wizard facts for Wales with Wales-specific route
+    const { getOrCreateWizardFacts } = await import('@/lib/case-facts/store');
+    vi.mocked(getOrCreateWizardFacts).mockResolvedValueOnce({
+      ...compliantWizardFacts,
+      selected_notice_route: 'wales_section_173', // Wales uses section 173, not section 8
+    } as any);
 
     const request = new Request('http://localhost/api/wizard/checkpoint', {
       method: 'POST',
@@ -331,6 +355,7 @@ describe('Wizard API Checkpoint', () => {
         id: '123e4567-e89b-12d3-a456-426614174000',
         jurisdiction: 'england-wales',
         case_type: 'eviction',
+        product: 'notice_only',
         user_id: null,
         wizard_progress: 50,
         collected_facts: {
