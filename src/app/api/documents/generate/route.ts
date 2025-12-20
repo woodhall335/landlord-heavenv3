@@ -175,10 +175,12 @@ export async function POST(request: Request) {
 
     if (!canonicalJurisdiction) {
       return NextResponse.json({
-        error: 'INVALID_JURISDICTION',
         code: 'INVALID_JURISDICTION',
-        message: 'Jurisdiction must be one of england, wales, scotland, or northern-ireland.',
-      }, { status: 400 });
+        error: 'Invalid or missing jurisdiction',
+        user_message: 'Jurisdiction must be one of england, wales, scotland, or northern-ireland.',
+        blocking_issues: [],
+        warnings: [],
+      }, { status: 422 });
     }
 
     // Guard: NI only supports tenancy documents
@@ -188,11 +190,13 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json(
         {
-          error: 'Northern Ireland only supports tenancy agreement documents',
           code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
-          message: 'Northern Ireland only supports tenancy agreement documents',
+          error: 'Northern Ireland eviction and money claim documents are not yet supported',
+          user_message: 'We currently support tenancy agreements for Northern Ireland. Eviction and money claim support is planned for Q2 2026.',
+          blocking_issues: [],
+          warnings: [],
         },
-        { status: 400 }
+        { status: 422 }
       );
     }
 
@@ -328,14 +332,16 @@ export async function POST(request: Request) {
           if (!suitabilityResult.valid) {
             return NextResponse.json(
               {
-                error:
-                  'AST suitability checks failed: this scenario is not appropriate for an AST. ' +
+                code: 'AST_NOT_SUITABLE',
+                error: 'AST suitability checks failed',
+                user_message:
+                  'This scenario is not appropriate for an AST. ' +
                   suitabilityResult.reasons.join('. ') +
                   '. You may need a lodger or licence agreement instead.',
-                reasons: suitabilityResult.reasons,
-                code: 'AST_NOT_SUITABLE',
+                blocking_issues: suitabilityResult.reasons,
+                warnings: [],
               },
-              { status: 400 }
+              { status: 422 }
             );
           }
 
@@ -353,14 +359,16 @@ export async function POST(request: Request) {
           if (!suitabilityResult.valid) {
             return NextResponse.json(
               {
-                error:
-                  'AST suitability checks failed: this scenario is not appropriate for an AST. ' +
+                code: 'AST_NOT_SUITABLE',
+                error: 'AST suitability checks failed',
+                user_message:
+                  'This scenario is not appropriate for an AST. ' +
                   suitabilityResult.reasons.join('. ') +
                   '. You may need a lodger or licence agreement instead.',
-                reasons: suitabilityResult.reasons,
-                code: 'AST_NOT_SUITABLE',
+                blocking_issues: suitabilityResult.reasons,
+                warnings: [],
               },
-              { status: 400 }
+              { status: 422 }
             );
           }
 

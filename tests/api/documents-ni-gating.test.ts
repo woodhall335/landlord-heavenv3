@@ -91,8 +91,14 @@ describe('Document generation Northern Ireland gating', () => {
     );
 
     const body = await response.json();
-    expect(response.status).toBe(400);
-    expect(body.error).toBe('Northern Ireland only supports tenancy agreement documents');
+    expect(response.status).toBe(422);
+    expect(body.code).toBe('NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED');
+    expect(body.error).toBe('Northern Ireland eviction and money claim documents are not yet supported');
+    expect(body.user_message).toContain('We currently support tenancy agreements for Northern Ireland');
+    expect(body).toHaveProperty('blocking_issues');
+    expect(body).toHaveProperty('warnings');
+    expect(Array.isArray(body.blocking_issues)).toBe(true);
+    expect(Array.isArray(body.warnings)).toBe(true);
     expect(supabaseClientMock.from).toHaveBeenCalledWith('cases');
   });
 });

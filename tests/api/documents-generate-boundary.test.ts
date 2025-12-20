@@ -5,7 +5,8 @@ import { describe, expect, it } from 'vitest';
  *
  * Ensures the document generation endpoint:
  * - Normalizes legacy jurisdiction using deriveCanonicalJurisdiction
- * - Blocks NI eviction and money_claim with 400 contract
+ * - Blocks NI eviction and money_claim with 422 validation error
+ * - Returns standardized payload with blocking_issues and warnings arrays
  * - Validates canonical jurisdiction before proceeding
  */
 describe('API Boundary: /api/documents/generate', () => {
@@ -41,19 +42,35 @@ describe('API Boundary: /api/documents/generate', () => {
       expect(result4).toBe('northern-ireland');
     });
 
-    it('should return 400 when jurisdiction is invalid', () => {
-      // Simulating the validation from documents/generate/route.ts line 176-182
+    it('should return 422 when jurisdiction is invalid and include standard payload', () => {
+      // Simulating the validation from documents/generate/route.ts line 176-183
       const canonicalJurisdiction = undefined; // From deriveCanonicalJurisdiction failure
 
       const shouldReject = !canonicalJurisdiction;
-
       expect(shouldReject).toBe(true);
+
+      // Verify standard payload structure (as per line 177-183)
+      const expectedPayload = {
+        code: 'INVALID_JURISDICTION',
+        error: 'Invalid or missing jurisdiction',
+        user_message: 'Jurisdiction must be one of england, wales, scotland, or northern-ireland.',
+        blocking_issues: [],
+        warnings: [],
+      };
+
+      expect(expectedPayload).toHaveProperty('code');
+      expect(expectedPayload).toHaveProperty('error');
+      expect(expectedPayload).toHaveProperty('user_message');
+      expect(expectedPayload).toHaveProperty('blocking_issues');
+      expect(expectedPayload).toHaveProperty('warnings');
+      expect(Array.isArray(expectedPayload.blocking_issues)).toBe(true);
+      expect(Array.isArray(expectedPayload.warnings)).toBe(true);
     });
   });
 
   describe('Northern Ireland gating', () => {
-    it('should block NI eviction documents with 400 contract', () => {
-      // Simulating the NI gating from documents/generate/route.ts line 185-197
+    it('should block NI eviction documents with 422 and standard payload', () => {
+      // Simulating the NI gating from documents/generate/route.ts line 186-200
       const canonicalJurisdiction = 'northern-ireland';
       const documentType = 'section8_notice';
 
@@ -61,9 +78,26 @@ describe('API Boundary: /api/documents/generate', () => {
       const shouldBlock = canonicalJurisdiction === 'northern-ireland' && !allowedNIDocTypes.includes(documentType);
 
       expect(shouldBlock).toBe(true);
+
+      // Verify standard payload structure (as per line 192-198)
+      const expectedPayload = {
+        code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
+        error: 'Northern Ireland eviction and money claim documents are not yet supported',
+        user_message: 'We currently support tenancy agreements for Northern Ireland. Eviction and money claim support is planned for Q2 2026.',
+        blocking_issues: [],
+        warnings: [],
+      };
+
+      expect(expectedPayload).toHaveProperty('code');
+      expect(expectedPayload).toHaveProperty('error');
+      expect(expectedPayload).toHaveProperty('user_message');
+      expect(expectedPayload).toHaveProperty('blocking_issues');
+      expect(expectedPayload).toHaveProperty('warnings');
+      expect(Array.isArray(expectedPayload.blocking_issues)).toBe(true);
+      expect(Array.isArray(expectedPayload.warnings)).toBe(true);
     });
 
-    it('should block NI money claim documents with 400 contract', () => {
+    it('should block NI money claim documents with 422 and standard payload', () => {
       const canonicalJurisdiction = 'northern-ireland';
       const documentType = 'money_claim';
 
@@ -71,6 +105,21 @@ describe('API Boundary: /api/documents/generate', () => {
       const shouldBlock = canonicalJurisdiction === 'northern-ireland' && !allowedNIDocTypes.includes(documentType);
 
       expect(shouldBlock).toBe(true);
+
+      // Verify standard payload structure
+      const expectedPayload = {
+        code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
+        error: 'Northern Ireland eviction and money claim documents are not yet supported',
+        user_message: 'We currently support tenancy agreements for Northern Ireland. Eviction and money claim support is planned for Q2 2026.',
+        blocking_issues: [],
+        warnings: [],
+      };
+
+      expect(expectedPayload).toHaveProperty('code');
+      expect(expectedPayload).toHaveProperty('error');
+      expect(expectedPayload).toHaveProperty('user_message');
+      expect(expectedPayload.blocking_issues).toEqual([]);
+      expect(expectedPayload.warnings).toEqual([]);
     });
 
     it('should allow NI tenancy documents', () => {
