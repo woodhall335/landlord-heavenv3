@@ -73,15 +73,17 @@ function parseRoutes(
       (q: any) => q?.id === "selected_notice_route" || q?.maps_to?.includes?.("selected_notice_route"),
     );
     if (routeQuestion) {
-      const options = Array.isArray(routeQuestion.options) ? routeQuestion.options : [];
-      const values = options
-        .map((opt) => {
-          if (typeof opt === "string") return opt.trim();
-          if (opt && typeof opt === "object" && opt.value) return String(opt.value).trim();
-          return null;
-        })
-        .filter((v): v is string => !!v);
-      if (values.length) return Array.from(new Set(values));
+    const options: Array<string | { value?: unknown }> = Array.isArray(routeQuestion.options)
+      ? routeQuestion.options
+      : [];
+    const values = options
+      .map((opt) => {
+        if (typeof opt === "string") return opt.trim();
+        if (opt && typeof opt === "object" && "value" in opt && opt.value) return String(opt.value).trim();
+        return null;
+      })
+      .filter((v): v is string => !!v);
+    if (values.length) return Array.from(new Set(values));
     }
 
     issues.push({
