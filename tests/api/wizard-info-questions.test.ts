@@ -72,12 +72,23 @@ describe('Wizard info-type question handling', () => {
     facts.__meta = { product: 'notice_only', mqs_version: null } as any;
 
     // Fill in answers up to (but not including) section21_intro
-    // Based on england.yaml MQS, these are the questions before section21_intro:
-    facts.landlord_name = 'Test Landlord';
-    facts.tenant_name = 'Test Tenant';
-    facts.property_address_line1 = '123 Test St';
-    facts.property_postcode = 'AB1 2CD';
+    // Based on current england.yaml MQS, these are the questions before section21_intro:
+    // 1. landlord_details (group)
+    facts.landlord_full_name = 'Test Landlord';
+    facts.landlord_address_line1 = '123 Landlord St';
+    facts.landlord_postcode = 'LL1 1LL';
+    // 2. selected_notice_route
+    facts.selected_notice_route = 'section_21';
+    // 3. tenant_full_name
+    facts.tenant_full_name = 'Test Tenant';
+    // 4. property_details (group)
+    facts.property_address_line1 = '456 Property Ave';
+    facts.property_postcode = 'PP2 2PP';
+    // 5. tenancy_start_date
     facts.tenancy_start_date = '2023-01-01';
+    // 6. is_fixed_term
+    facts.is_fixed_term = false;
+    // 7. rent_terms (group)
     facts.rent_amount = 1000;
     facts.rent_frequency = 'monthly';
     facts.payment_date = 1;
@@ -139,12 +150,16 @@ describe('Wizard info-type question handling', () => {
     const facts = createEmptyWizardFacts();
     facts.__meta = { product: 'notice_only', mqs_version: null } as any;
 
-    // Set up to reach section21_intro
-    facts.landlord_name = 'Test Landlord';
-    facts.tenant_name = 'Test Tenant';
-    facts.property_address_line1 = '123 Test St';
-    facts.property_postcode = 'AB1 2CD';
+    // Set up to reach section21_intro - must match current MQS field IDs
+    facts.landlord_full_name = 'Test Landlord';
+    facts.landlord_address_line1 = '123 Landlord St';
+    facts.landlord_postcode = 'LL1 1LL';
+    facts.selected_notice_route = 'section_21';
+    facts.tenant_full_name = 'Test Tenant';
+    facts.property_address_line1 = '456 Property Ave';
+    facts.property_postcode = 'PP2 2PP';
     facts.tenancy_start_date = '2023-01-01';
+    facts.is_fixed_term = false;
     facts.rent_amount = 1000;
     facts.rent_frequency = 'monthly';
     facts.payment_date = 1;

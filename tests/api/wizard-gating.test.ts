@@ -259,6 +259,9 @@ describe('Wizard Gating - Eviction (England)', () => {
           deposit_amount: 1500,
           deposit_protected: true,
           prescribed_info_given: true,
+          prescribed_info_provided: true, // Jurisdiction validator checks this field
+          deposit_scheme: 'DPS', // Required by England jurisdiction schema
+          deposit_protection_date: '2024-01-01', // Required by England jurisdiction schema
           has_gas_appliances: true,
           gas_certificate_provided: true,
           epc_provided: true,
@@ -293,13 +296,18 @@ describe('Wizard Gating - Eviction (England)', () => {
         facts: {
           selected_notice_route: 'section_8',
           section8_grounds: ['Ground 8 - Serious rent arrears', 'Ground 11 - Persistent late payment'],
-          // No ground_particulars provided
+          // Provide required facts so jurisdiction validator passes, but no ground_particulars
+          rent_amount_monthly: 1000,
+          arrears_total: 2500,
+          // No ground_particulars provided - this is what we're testing
         },
       });
 
       expect(result.blocking.length).toBeGreaterThan(0);
       expect(result.blocking.some((b) => b.code === 'GROUND_PARTICULARS_INCOMPLETE')).toBe(true);
-      expect(result.blocking[0].message).toContain('Ground(s): 8, 11');
+      // Find the GROUND_PARTICULARS_INCOMPLETE error specifically
+      const particularsError = result.blocking.find((b) => b.code === 'GROUND_PARTICULARS_INCOMPLETE');
+      expect(particularsError?.message).toContain('Ground(s): 8, 11');
     });
 
     it('should allow when ground particulars are provided (flat format)', () => {

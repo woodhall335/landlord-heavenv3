@@ -291,9 +291,9 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
   // ============================================================================
 
   const depositTaken = resolveFactValue(facts, 'deposit_taken');
-  const depositAmount = resolveFactValue(facts, 'deposit_amount') ||
+  const depositAmount = resolveFactValue(facts, 'deposit_amount') ??
                        resolveFactValue(facts, 'tenancy.deposit_amount');
-  const depositProtected = resolveFactValue(facts, 'deposit_protected') ||
+  const depositProtected = resolveFactValue(facts, 'deposit_protected') ??
                           resolveFactValue(facts, 'tenancy.deposit_protected');
   const prescribedInfoGiven = resolveFactValue(facts, 'prescribed_info_given');
 
@@ -367,7 +367,7 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
 
     // Gas safety certificate (if property has gas appliances)
     const hasGasAppliances = resolveFactValue(facts, 'has_gas_appliances');
-    const gasCertProvided = resolveFactValue(facts, 'gas_certificate_provided') ||
+    const gasCertProvided = resolveFactValue(facts, 'gas_certificate_provided') ??
                            resolveFactValue(facts, 'gas_safety_cert_provided');
 
     if (hasGasAppliances === true && gasCertProvided === false) {
