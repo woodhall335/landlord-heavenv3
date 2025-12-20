@@ -19,6 +19,7 @@ import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
 import { getLawProfile } from '@/lib/law-profile';
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { validateFlow, create422Response } from '@/lib/validation/validateFlow';
 
 const checkpointSchema = z.object({
   case_id: z.string().uuid(),
@@ -158,6 +159,35 @@ export async function POST(request: NextRequest) {
     // ADR-001 COMPLIANCE: Load WizardFacts from case_facts.facts (canonical source of truth)
     // Use providedFacts as fallback only for testing/stateless usage
     const wizardFacts = providedFacts || await getOrCreateWizardFacts(supabase, case_id);
+
+    // ============================================================================
+    // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE (CHECKPOINT STAGE)
+    // ============================================================================
+    // Determine route from wizard facts
+    const selectedRoute = (wizardFacts as any).selected_notice_route ||
+                          (wizardFacts as any).route_recommendation?.recommended_route ||
+                          (wizardFacts as any).selected_route ||
+                          (effectiveCaseType === 'eviction' ? 'section_8' : effectiveProduct);
+
+    console.log('[CHECKPOINT] Running unified validation via validateFlow');
+    const validationResult = validateFlow({
+      jurisdiction: canonicalJurisdiction as any,
+      product: effectiveProduct as any,
+      route: selectedRoute,
+      stage: 'checkpoint',
+      facts: wizardFacts,
+      caseId: case_id,
+    });
+
+    // If validation fails, return 422 LEGAL_BLOCK (checkpoint blocks on required facts)
+    if (!validationResult.ok) {
+      console.warn('[CHECKPOINT] Unified validation blocked checkpoint:', {
+        case_id,
+        product: effectiveProduct,
+        route: selectedRoute,
+      });
+      return NextResponse.json(create422Response(validationResult), { status: 422 });
+    }
 
     // Normalize WizardFacts to CaseFacts (domain model)
     // Missing fields will be null, which the decision engine handles gracefully
