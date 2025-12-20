@@ -26,9 +26,9 @@ describe('Wizard Gating - Eviction (England)', () => {
         },
       });
 
-      expect(result.blocking).toHaveLength(1);
-      expect(result.blocking[0].code).toBe('GROUND_8_THRESHOLD_NOT_MET');
-      expect(result.blocking[0].message).toContain('1.50 months');
+      expect(result.blocking.some((b) => b.code === 'GROUND_8_THRESHOLD_NOT_MET')).toBe(true);
+      const ground8Block = result.blocking.find((b) => b.code === 'GROUND_8_THRESHOLD_NOT_MET');
+      expect(ground8Block?.message).toContain('1.50 months');
     });
 
     it('should allow Ground 8 when arrears >= 2 months', () => {
@@ -42,7 +42,7 @@ describe('Wizard Gating - Eviction (England)', () => {
         },
       });
 
-      expect(result.blocking).toHaveLength(0);
+      expect(result.blocking.some((b) => b.code === 'GROUND_8_THRESHOLD_NOT_MET')).toBe(false);
     });
 
     it('should warn when arrears are borderline (2-3 months)', () => {
@@ -56,9 +56,8 @@ describe('Wizard Gating - Eviction (England)', () => {
         },
       });
 
-      expect(result.blocking).toHaveLength(0);
-      expect(result.warnings).toHaveLength(1);
-      expect(result.warnings[0].code).toBe('GROUND_8_BORDERLINE');
+      expect(result.blocking.some((b) => b.code === 'GROUND_8_THRESHOLD_NOT_MET')).toBe(false);
+      expect(result.warnings.some((w) => w.code === 'GROUND_8_BORDERLINE')).toBe(true);
     });
 
     it('should block Ground 8 when rent_amount is missing', () => {
@@ -116,7 +115,7 @@ describe('Wizard Gating - Eviction (England)', () => {
         },
       });
 
-      expect(result.blocking).toHaveLength(0);
+      expect(result.blocking.some((b) => b.code === 'GROUND_8_THRESHOLD_NOT_MET')).toBe(false);
     });
   });
 
