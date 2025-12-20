@@ -9,6 +9,7 @@ const supabaseClientMock = {
   insert: vi.fn(),
   select: vi.fn(),
   single: vi.fn(),
+  maybeSingle: vi.fn(),
   eq: vi.fn(),
   is: vi.fn(),
   update: vi.fn(),
@@ -73,17 +74,19 @@ describe('Wizard info-type question handling', () => {
 
     // Fill in answers up to (but not including) section21_intro
     // Based on current england.yaml MQS, these are the questions before section21_intro:
-    // 1. landlord_details (group) - all required fields
+    // 1. landlord_details (group) - all fields in maps_to array
     facts.landlord_full_name = 'Test Landlord';
     facts.landlord_address_line1 = '123 Landlord St';
+    facts.landlord_address_line2 = 'Suite 100';
     facts.landlord_city = 'London';
     facts.landlord_postcode = 'LL1 1LL';
     // 2. selected_notice_route
     facts.selected_notice_route = 'section_21';
     // 3. tenant_full_name
     facts.tenant_full_name = 'Test Tenant';
-    // 4. property_details (group) - all required fields
+    // 4. property_details (group) - all fields in maps_to array
     facts.property_address_line1 = '456 Property Ave';
+    facts.property_address_line2 = 'Flat 2';
     facts.property_city = 'Manchester';
     facts.property_postcode = 'PP2 2PP';
     // 5. tenancy_start_date
@@ -104,7 +107,9 @@ describe('Wizard info-type question handling', () => {
       wizard_progress: 30,
     };
 
-    supabaseClientMock.single.mockResolvedValue({ data: mockCase, error: null });
+    // Mock returns: first query to 'cases' table uses .single(), second query to 'case_facts' uses .maybeSingle()
+    supabaseClientMock.single.mockResolvedValueOnce({ data: mockCase, error: null });
+    supabaseClientMock.maybeSingle.mockResolvedValueOnce({ data: { facts }, error: null });
 
     // First call: should return section21_intro (info question)
     const response1 = await nextQuestion(
@@ -129,8 +134,9 @@ describe('Wizard info-type question handling', () => {
     const factsWithViewed = { ...facts, section21_intro: '_info_viewed' };
     const mockCaseAfterView = { ...mockCase, collected_facts: factsWithViewed };
 
-    supabaseClientMock.single.mockResolvedValue({ data: mockCaseAfterView, error: null });
-    vi.clearAllMocks(); // Clear the update call from first request
+    vi.clearAllMocks();
+    supabaseClientMock.single.mockResolvedValueOnce({ data: mockCaseAfterView, error: null });
+    supabaseClientMock.maybeSingle.mockResolvedValueOnce({ data: { facts: factsWithViewed }, error: null });
 
     const response2 = await nextQuestion(
       new Request('http://localhost/api/wizard/next-question', {
@@ -155,11 +161,13 @@ describe('Wizard info-type question handling', () => {
     // Set up to reach section21_intro - must match current MQS field IDs
     facts.landlord_full_name = 'Test Landlord';
     facts.landlord_address_line1 = '123 Landlord St';
+    facts.landlord_address_line2 = 'Suite 100';
     facts.landlord_city = 'London';
     facts.landlord_postcode = 'LL1 1LL';
     facts.selected_notice_route = 'section_21';
     facts.tenant_full_name = 'Test Tenant';
     facts.property_address_line1 = '456 Property Ave';
+    facts.property_address_line2 = 'Flat 2';
     facts.property_city = 'Manchester';
     facts.property_postcode = 'PP2 2PP';
     facts.tenancy_start_date = '2023-01-01';
@@ -177,13 +185,15 @@ describe('Wizard info-type question handling', () => {
       wizard_progress: 30,
     };
 
-    supabaseClientMock.single.mockResolvedValue({ data: mockCase, error: null });
-
     // Call next-question multiple times
     const responses: string[] = [];
 
     for (let i = 0; i < 3; i++) {
       vi.clearAllMocks();
+
+      // Each call makes 2 queries: cases table (.single()) and case_facts table (.maybeSingle())
+      supabaseClientMock.single.mockResolvedValueOnce({ data: mockCase, error: null });
+      supabaseClientMock.maybeSingle.mockResolvedValueOnce({ data: { facts: mockCase.collected_facts }, error: null });
 
       const response = await nextQuestion(
         new Request('http://localhost/api/wizard/next-question', {
@@ -203,7 +213,6 @@ describe('Wizard info-type question handling', () => {
           ...mockCase.collected_facts,
           [body.next_question.id]: '_info_viewed',
         };
-        supabaseClientMock.single.mockResolvedValue({ data: mockCase, error: null });
       }
     }
 
