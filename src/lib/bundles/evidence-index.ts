@@ -85,7 +85,7 @@ export function generateEvidenceIndex(
  */
 export function generateBundleTimeline(
   extractedTimeline: TimelineEvent[],
-  jurisdiction: string
+  formatIdentifier: string // Internal format identifier (NOT a jurisdiction)
 ): BundleTimeline {
   const events: TimelineEntry[] = extractedTimeline.map((event) => ({
     date: event.date,
@@ -105,7 +105,7 @@ export function generateBundleTimeline(
   };
 
   return {
-    title: getTimelineTitle(jurisdiction),
+    title: getTimelineTitle(formatIdentifier),
     events,
     date_range: dateRange,
   };
@@ -136,13 +136,12 @@ function mapEventCategory(category: string): TimelineEntry['category'] {
 /**
  * Get jurisdiction-appropriate timeline title
  */
-function getTimelineTitle(jurisdiction: string): string {
-  switch (jurisdiction.toLowerCase()) {
+function getTimelineTitle(formatIdentifier: string): string {
+  switch (formatIdentifier.toLowerCase()) {
     case 'england':
     case 'wales':
-    case 'england-wales': // Legacy compatibility
-    case 'england':
-    case 'wales':
+    case 'ew_bundle_format': // Internal bundle format identifier (NOT a jurisdiction)
+    case 'england-wales': // Legacy compatibility - DEPRECATED
       return 'Chronology of Events';
 
     case 'scotland':
