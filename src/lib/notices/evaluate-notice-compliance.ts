@@ -5,6 +5,8 @@ import {
 } from '@/lib/documents/notice-date-calculator';
 import { getNoticeComplianceSpec } from './notice-compliance-spec';
 
+type NoticeStage = 'wizard' | 'preview' | 'generate';
+
 export type ComplianceResult = {
   ok: boolean;
   hardFailures: Array<{ code: string; affected_question_id: string; legal_reason: string; user_fix_hint: string }>;
@@ -24,6 +26,7 @@ type EvaluateInput = {
   selected_route?: string;
   wizardFacts: Record<string, any>;
   question_id?: string;
+  stage?: NoticeStage;
 };
 
 function normaliseRoute(jurisdiction: string, selected_route?: string) {
@@ -82,7 +85,7 @@ function pickDateValue(facts: Record<string, any>, keys: string[]): string | und
 }
 
 export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult {
-  const { jurisdiction, product, selected_route, wizardFacts } = input;
+  const { jurisdiction, product, selected_route, wizardFacts, stage = 'wizard' } = input;
 
   const hardFailures: ComplianceResult['hardFailures'] = [];
   const warnings: ComplianceResult['warnings'] = [];
@@ -90,6 +93,16 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
 
   if (product !== 'notice_only') {
     return { ok: true, hardFailures, warnings };
+  }
+
+  if (jurisdiction === 'northern-ireland') {
+    hardFailures.push({
+      code: 'NI_NOTICE_UNSUPPORTED',
+      affected_question_id: 'jurisdiction',
+      legal_reason: 'Notice-only eviction flows are not supported in Northern Ireland',
+      user_fix_hint: 'Select a supported jurisdiction or use the tenancy agreement product for Northern Ireland.',
+    });
+    return { ok: false, hardFailures, warnings };
   }
 
   const route = normaliseRoute(jurisdiction, selected_route);
@@ -286,9 +299,20 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
   // ENGLAND – SECTION 21
   // ---------------------------------------------------------------------------
   if (route === 'notice-only/england/section21') {
+    const pushStageIssue = (
+      issue: { code: string; affected_question_id: string; legal_reason: string; user_fix_hint: string },
+      hardWhen: NoticeStage[] = ['preview', 'generate']
+    ) => {
+      if (hardWhen.includes(stage)) {
+        hardFailures.push(issue);
+      } else {
+        warnings.push(issue);
+      }
+    };
+
     if (wizardFacts.deposit_taken === true) {
       if (wizardFacts.deposit_protected === false) {
-        hardFailures.push({
+        pushStageIssue({
           code: 'S21-DEPOSIT-NONCOMPLIANT',
           affected_question_id: 'deposit_protected_scheme',
           legal_reason: 'Deposit must be protected before a Section 21 notice',
@@ -296,30 +320,115 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
         });
       } else if (wizardFacts.deposit_protected === true) {
         if (wizardFacts.prescribed_info_given === false) {
-          hardFailures.push({
+          pushStageIssue({
             code: 'S21-DEPOSIT-NONCOMPLIANT',
             affected_question_id: 'prescribed_info_given',
             legal_reason: 'Prescribed information must be served before a Section 21 notice',
             user_fix_hint: 'Serve the prescribed information and confirm before continuing',
           });
         } else if (wizardFacts.prescribed_info_given === undefined || wizardFacts.prescribed_info_given === null) {
-          warnings.push({
-            code: 'S21-PRESCRIBED-INFO-REQUIRED',
-            affected_question_id: 'prescribed_info_given',
-            legal_reason: 'Prescribed information must be confirmed before generating the notice',
-            user_fix_hint: 'Confirm whether prescribed information has been served before generating the notice',
-          });
+          pushStageIssue(
+            {
+              code: 'S21-PRESCRIBED-INFO-REQUIRED',
+              affected_question_id: 'prescribed_info_given',
+              legal_reason: 'Prescribed information must be confirmed before generating the notice',
+              user_fix_hint: 'Confirm whether prescribed information has been served before generating the notice',
+            },
+            ['generate']
+          );
         }
+      } else {
+        pushStageIssue(
+          {
+            code: 'S21-DEPOSIT-NONCOMPLIANT',
+            affected_question_id: 'deposit_protected_scheme',
+            legal_reason: 'Confirm whether the deposit is protected before generating Section 21',
+            user_fix_hint: 'Answer the deposit protection question to continue',
+          },
+          ['generate']
+        );
       }
     }
 
     if (wizardFacts.property_licensing_status === 'unlicensed') {
-      hardFailures.push({
+      pushStageIssue({
         code: 'S21-LICENSING',
         affected_question_id: 'property_licensing',
         legal_reason: 'Section 21 cannot be used while the property remains unlicensed',
         user_fix_hint: 'Record a valid licence or resolve the licensing position to proceed',
       });
+    } else if (wizardFacts.property_licensing_status === undefined) {
+      pushStageIssue(
+        {
+          code: 'S21-LICENSING',
+          affected_question_id: 'property_licensing',
+          legal_reason: 'Confirm licensing status before generating Section 21',
+          user_fix_hint: 'Answer the licensing question to continue',
+        },
+        ['generate']
+      );
+    }
+
+    if (wizardFacts.has_gas_appliances === true) {
+      if (wizardFacts.gas_certificate_provided === false && wizardFacts.gas_safety_cert_provided === false) {
+        pushStageIssue({
+          code: 'S21-GAS-CERT',
+          affected_question_id: 'gas_safety_certificate',
+          legal_reason: 'Gas safety certificate must be provided before serving Section 21',
+          user_fix_hint: 'Confirm the latest gas safety record before continuing',
+        });
+      } else if (
+        wizardFacts.gas_certificate_provided === undefined &&
+        wizardFacts.gas_safety_cert_provided === undefined
+      ) {
+        pushStageIssue(
+          {
+            code: 'S21-GAS-CERT',
+            affected_question_id: 'gas_safety_certificate',
+            legal_reason: 'Confirm gas safety certificate status',
+            user_fix_hint: 'Answer whether a valid gas safety certificate was provided',
+          },
+          ['generate']
+        );
+      }
+    }
+
+    if (wizardFacts.epc_provided === false) {
+      pushStageIssue({
+        code: 'S21-EPC',
+        affected_question_id: 'epc_provided',
+        legal_reason: 'An EPC must be provided before serving Section 21',
+        user_fix_hint: 'Confirm EPC has been provided to the tenant',
+      });
+    } else if (wizardFacts.epc_provided === undefined) {
+      pushStageIssue(
+        {
+          code: 'S21-EPC',
+          affected_question_id: 'epc_provided',
+          legal_reason: 'Confirm EPC status',
+          user_fix_hint: 'Answer whether an EPC was provided',
+        },
+        ['generate']
+      );
+    }
+
+    if (wizardFacts.how_to_rent_provided === false) {
+      pushStageIssue({
+        code: 'S21-H2R',
+        affected_question_id: 'how_to_rent_provided',
+        legal_reason: 'The latest How to Rent guide must be provided before serving Section 21',
+        user_fix_hint: 'Provide the How to Rent guide and confirm service before continuing',
+      });
+    } else if (wizardFacts.how_to_rent_provided === undefined) {
+      pushStageIssue(
+        {
+          code: 'S21-H2R',
+          affected_question_id: 'how_to_rent_provided',
+          legal_reason: 'Confirm if the How to Rent guide was served',
+          user_fix_hint: 'Answer the How to Rent question before generating the notice',
+        },
+        ['generate']
+      );
     }
 
     if (wizardFacts.recent_repair_complaints === true) {

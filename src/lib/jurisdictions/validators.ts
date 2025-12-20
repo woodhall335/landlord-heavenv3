@@ -1,11 +1,15 @@
 import { type DecisionRules, type FactsSchema, type JurisdictionKey, loadJurisdictionRuleBundle } from './rulesLoader';
 
+export type ValidationStage = 'wizard' | 'preview' | 'generate';
+
 export interface LegalValidationIssue {
   code: string;
   user_message: string;
   internal_reason?: string;
   fields?: string[];
   legal_basis?: string;
+  affected_question_id?: string;
+  user_fix_hint?: string;
 }
 
 export interface LegalValidationResult {
@@ -195,8 +199,9 @@ export function validateDepositCompliance(params: {
   jurisdiction: JurisdictionKey;
   factsSchema: FactsSchema;
   facts: Record<string, any>;
+  stage?: ValidationStage;
 }): LegalValidationResult {
-  const { factsSchema, facts, jurisdiction } = params;
+  const { factsSchema, facts, jurisdiction, stage = 'wizard' } = params;
   const blocking: LegalValidationIssue[] = [];
   const warnings: LegalValidationIssue[] = [];
 
@@ -225,12 +230,20 @@ export function validateDepositCompliance(params: {
     const requiredIfFlag = field.required_if ? requiredIfEvaluation.ok && requiredIfEvaluation.evaluated : false;
 
     if (field.required_if && requiredIfEvaluation.evaluated === false) {
-      blocking.push({
+      const issue: LegalValidationIssue = {
         code: 'REQUIRED_IF_EVALUATION_FAILED',
         user_message: `Cannot evaluate required_if for ${field.path}; missing or invalid facts`,
         fields: [field.path],
         internal_reason: requiredIfEvaluation.reason,
-      });
+        affected_question_id: field.path,
+        user_fix_hint: 'Answer the prerequisite deposit questions so we can apply the required_if rule.',
+      };
+
+      if (stage === 'wizard') {
+        warnings.push(issue);
+      } else {
+        blocking.push(issue);
+      }
     }
 
     const isRequired = requiredFlag || requiredIfFlag;
@@ -243,23 +256,56 @@ export function validateDepositCompliance(params: {
     const resolvedValue = value === undefined ? fallbackValue : value;
 
     if (isMissing(resolvedValue)) {
-      blocking.push({
+      const issue: LegalValidationIssue = {
         code: 'DEPOSIT_FIELD_REQUIRED',
         user_message: `Deposit compliance missing: ${field.path}`,
         fields: [field.path],
+        affected_question_id: field.path,
+        user_fix_hint: 'Complete the deposit details so we can validate Section 21 compliance.',
         internal_reason: `Required by facts_schema for ${jurisdiction}`,
-      });
+      };
+
+      if (stage === 'wizard') {
+        warnings.push(issue);
+      } else {
+        blocking.push(issue);
+      }
     }
   }
 
   if (depositTaken === true) {
     const depositProtected = resolveFactValue(facts, 'deposit_protected');
     if (depositProtected === false || depositProtected === undefined) {
-      blocking.push({
+      const issue: LegalValidationIssue = {
         code: 'DEPOSIT_NOT_PROTECTED',
         user_message: 'Deposit must be protected in an approved scheme before notice can be served',
         fields: ['deposit_protected'],
-      });
+        affected_question_id: 'deposit_protected_scheme',
+        user_fix_hint: 'Protect the deposit in an approved scheme and confirm the protection details.',
+      };
+
+      if (stage === 'wizard') {
+        warnings.push(issue);
+      } else {
+        blocking.push(issue);
+      }
+    }
+
+    const depositScheme = resolveFactValue(facts, 'deposit_protected_scheme');
+    if (depositProtected === true && isMissing(depositScheme)) {
+      const issue: LegalValidationIssue = {
+        code: 'DEPOSIT_FIELD_REQUIRED',
+        user_message: 'Deposit protection scheme details are required for compliance checks',
+        fields: ['deposit_protected_scheme'],
+        affected_question_id: 'deposit_protected_scheme',
+        user_fix_hint: 'Select or enter the approved deposit protection scheme.',
+      };
+
+      if (stage === 'wizard') {
+        warnings.push(issue);
+      } else {
+        blocking.push(issue);
+      }
     }
 
     const prescribed =
@@ -267,11 +313,19 @@ export function validateDepositCompliance(params: {
       resolveFactValue(facts, 'prescribed_info_provided') ??
       resolveFactValue(facts, 'prescribed_info_served');
     if (isMissing(prescribed)) {
-      blocking.push({
+      const issue: LegalValidationIssue = {
         code: 'PRESCRIBED_INFO_MISSING',
         user_message: 'Prescribed information must be served when a deposit was taken',
         fields: ['prescribed_info_given', 'prescribed_info_provided', 'prescribed_info_served'],
-      });
+        affected_question_id: 'prescribed_info_given',
+        user_fix_hint: 'Confirm whether prescribed information was served within 30 days of taking the deposit.',
+      };
+
+      if (stage === 'wizard') {
+        warnings.push(issue);
+      } else {
+        blocking.push(issue);
+      }
     }
   }
 
@@ -282,8 +336,9 @@ export function validateJurisdictionCompliance(params: {
   jurisdiction: JurisdictionKey;
   facts: Record<string, any>;
   selectedGroundCodes: number[];
+  stage?: ValidationStage;
 }): LegalValidationResult {
-  const { jurisdiction, facts, selectedGroundCodes } = params;
+  const { jurisdiction, facts, selectedGroundCodes, stage = 'wizard' } = params;
   let bundle: ReturnType<typeof loadJurisdictionRuleBundle> | null = null;
   try {
     bundle = loadJurisdictionRuleBundle(jurisdiction);
@@ -329,6 +384,7 @@ export function validateJurisdictionCompliance(params: {
     jurisdiction,
     factsSchema: bundle.factsSchema,
     facts,
+    stage,
   });
 
   return {

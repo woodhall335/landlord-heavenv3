@@ -840,6 +840,7 @@ export async function POST(request: Request) {
       product,
       jurisdiction: canonicalJurisdiction,
       facts: mergedFacts,
+      stage: 'wizard',
       current_question_id: question_id,
     });
 
@@ -908,6 +909,8 @@ export async function POST(request: Request) {
     // Only hard-block at specific checkpoint questions to avoid false-positive blocks
     // early in the flow. For other questions, downgrade hardFailures to warnings.
     if (product === 'notice_only') {
+      const complianceStage = isComplianceCheckpoint ? 'preview' : 'wizard';
+
       const compliance = evaluateNoticeCompliance({
         jurisdiction: canonicalJurisdiction,
         product,
@@ -917,9 +920,8 @@ export async function POST(request: Request) {
           mergedFacts.selected_route,
         wizardFacts: mergedFacts,
         question_id,
+        stage: complianceStage,
       });
-
-      const isCheckpoint = COMPLIANCE_CHECKPOINTS.includes(question_id);
 
       // Log compliance issues for debugging
       if (compliance.hardFailures.length > 0) {
@@ -928,12 +930,12 @@ export async function POST(request: Request) {
           question_id,
           selected_route: mergedFacts.selected_notice_route || mergedFacts.selected_route || 'none',
           hardFailures: compliance.hardFailures.map((f) => f.code),
-          isCheckpoint,
+          isCheckpoint: isComplianceCheckpoint,
         });
       }
 
       // Only hard-block at checkpoint questions
-      if (compliance.hardFailures.length > 0 && isCheckpoint) {
+      if (compliance.hardFailures.length > 0 && isComplianceCheckpoint) {
         console.warn('[NOTICE_COMPLIANCE] Blocking progression:', {
           case_id,
           question_id,
@@ -953,7 +955,7 @@ export async function POST(request: Request) {
       }
 
       // For non-checkpoint questions, downgrade hardFailures to warnings
-      if (compliance.hardFailures.length > 0 && !isCheckpoint) {
+      if (compliance.hardFailures.length > 0 && !isComplianceCheckpoint) {
         console.log('[NOTICE_COMPLIANCE] Downgrading hardFailures to warnings (not at checkpoint)', {
           case_id,
           question_id,
