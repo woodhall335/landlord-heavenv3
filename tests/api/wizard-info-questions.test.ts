@@ -73,16 +73,18 @@ describe('Wizard info-type question handling', () => {
 
     // Fill in answers up to (but not including) section21_intro
     // Based on current england.yaml MQS, these are the questions before section21_intro:
-    // 1. landlord_details (group)
+    // 1. landlord_details (group) - all required fields
     facts.landlord_full_name = 'Test Landlord';
     facts.landlord_address_line1 = '123 Landlord St';
+    facts.landlord_city = 'London';
     facts.landlord_postcode = 'LL1 1LL';
     // 2. selected_notice_route
     facts.selected_notice_route = 'section_21';
     // 3. tenant_full_name
     facts.tenant_full_name = 'Test Tenant';
-    // 4. property_details (group)
+    // 4. property_details (group) - all required fields
     facts.property_address_line1 = '456 Property Ave';
+    facts.property_city = 'Manchester';
     facts.property_postcode = 'PP2 2PP';
     // 5. tenancy_start_date
     facts.tenancy_start_date = '2023-01-01';
@@ -153,10 +155,12 @@ describe('Wizard info-type question handling', () => {
     // Set up to reach section21_intro - must match current MQS field IDs
     facts.landlord_full_name = 'Test Landlord';
     facts.landlord_address_line1 = '123 Landlord St';
+    facts.landlord_city = 'London';
     facts.landlord_postcode = 'LL1 1LL';
     facts.selected_notice_route = 'section_21';
     facts.tenant_full_name = 'Test Tenant';
     facts.property_address_line1 = '456 Property Ave';
+    facts.property_city = 'Manchester';
     facts.property_postcode = 'PP2 2PP';
     facts.tenancy_start_date = '2023-01-01';
     facts.is_fixed_term = false;
