@@ -14,13 +14,20 @@ import { normalizeJurisdiction, type CanonicalJurisdiction, type LegacyJurisdict
 // TYPES
 // ============================================================================
 
+/**
+ * DeepPartial utility type for nested optional properties
+ */
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+
 export type ValidationStage = 'wizard' | 'checkpoint' | 'preview' | 'generate';
 
 export interface DecisionInput {
   jurisdiction: CanonicalJurisdiction | LegacyJurisdiction; // england-wales allowed for backward compatibility only
   product: 'notice_only' | 'complete_pack' | 'money_claim';
   case_type: 'eviction' | 'money_claim' | 'tenancy_agreement';
-  facts: Partial<CaseFacts>;
+  facts: DeepPartial<CaseFacts>;
   stage?: ValidationStage; // Stage-aware validation (wizard=warn, checkpoint/preview/generate=block)
 }
 
