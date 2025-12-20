@@ -4,6 +4,16 @@ import { __setTestJsonAIClient } from '@/lib/ai/openai-client';
 import { POST as nextQuestion } from '@/app/api/wizard/next-question/route';
 import { createEmptyWizardFacts } from '@/lib/case-facts/schema';
 
+let currentFacts = createEmptyWizardFacts();
+
+vi.mock('@/lib/case-facts/store', () => ({
+  getOrCreateWizardFacts: vi.fn(async () => currentFacts),
+  updateWizardFacts: vi.fn(async (_supabase: any, _caseId: string, updater: Function) => {
+    currentFacts = updater(currentFacts);
+    return currentFacts;
+  }),
+}));
+
 const supabaseClientMock = {
   from: vi.fn(),
   insert: vi.fn(),
@@ -59,6 +69,7 @@ describe('Wizard info-type question handling', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    currentFacts = createEmptyWizardFacts();
     supabaseClientMock.from.mockReturnValue(supabaseClientMock);
     supabaseClientMock.insert.mockReturnValue(supabaseClientMock);
     supabaseClientMock.select.mockReturnValue(supabaseClientMock);

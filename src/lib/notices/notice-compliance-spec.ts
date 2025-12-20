@@ -283,11 +283,18 @@ export const noticeComplianceSpecs: NoticeComplianceSpec[] = [
         code: 'RHW23-GROUND-REQUIRED',
         legal_reason: 'Must specify valid breach or estate management ground',
         user_fix_hint: 'Select applicable ground and provide detailed particulars',
-        affected_question_id: 'breach_or_ground',
+        affected_question_id: 'wales_fault_based_section',
       },
     ],
     soft_warnings: [],
-    inline_validation_rules: [],
+    inline_validation_rules: [
+      {
+        code: 'RHW23-GROUND-PARTICULARS',
+        legal_reason: 'Particulars must match the chosen breach or estate management ground',
+        user_fix_hint: 'Select the correct ground and provide the matching particulars',
+        affected_question_id: 'wales_fault_based_section',
+      },
+    ],
     correction_prompts: [],
     service_rules: [
       {
