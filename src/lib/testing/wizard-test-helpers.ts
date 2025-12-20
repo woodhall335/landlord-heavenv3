@@ -16,6 +16,17 @@
 
 import { createClient } from '@supabase/supabase-js';
 
+declare global {
+  // Shared in-memory case store for tests; kept lightweight to avoid Supabase dependency
+  // eslint-disable-next-line no-var
+  var __TEST_CASE_STORE__: Map<string, Record<string, any>> | undefined;
+}
+
+const testCaseStore: Map<string, Record<string, any>> =
+  globalThis.__TEST_CASE_STORE__ || new Map();
+
+globalThis.__TEST_CASE_STORE__ = testCaseStore;
+
 /**
  * Get test Supabase client
  * Uses service role for write access to cases table
@@ -60,26 +71,12 @@ export function getTestBaseUrl(): string {
  * Returns case ID for testing
  */
 export async function createTestCase(facts: Record<string, any>): Promise<string> {
-  const supabase = getTestSupabaseClient();
+  // Use in-memory store during tests to avoid external dependencies
+  const id = `test-case-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  testCaseStore.set(id, facts);
 
-  const { data, error } = await supabase
-    .from('cases')
-    .insert({
-      facts,
-      status: 'in_progress',
-      user_id: 'test-user', // Test user ID
-      created_at: new Date().toISOString(),
-    })
-    .select()
-    .single();
-
-  if (error) {
-    console.error('[Test Helper] Failed to create test case:', error);
-    throw error;
-  }
-
-  console.log(`[Test Helper] Created test case: ${data.id}`);
-  return data.id;
+  console.log(`[Test Helper] Created test case: ${id}`);
+  return id;
 }
 
 /**
@@ -87,10 +84,7 @@ export async function createTestCase(facts: Record<string, any>): Promise<string
  * Call in afterEach
  */
 export async function cleanupTestCase(caseId: string) {
-  const supabase = getTestSupabaseClient();
-
-  await supabase.from('cases').delete().eq('id', caseId);
-
+  testCaseStore.delete(caseId);
   console.log(`[Test Helper] Cleaned up test case: ${caseId}`);
 }
 
