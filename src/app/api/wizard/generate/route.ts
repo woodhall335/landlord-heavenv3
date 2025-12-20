@@ -8,18 +8,12 @@
 
 import { NextResponse } from 'next/server';
 import { handleLegalError, LegalComplianceError, ValidationError } from '@/lib/errors/legal-errors';
+import { getCaseFacts } from './getCaseFacts';
 
 // Helper function to parse dates consistently (CLAUDE CODE FIX #2)
 function parseUTCDate(dateStr: string): Date {
   const [year, month, day] = dateStr.split('-').map(Number);
   return new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
-}
-
-// Mock function - replace with actual implementation
-async function getCaseFacts(caseId: string): Promise<Record<string, any>> {
-  // In production, this would fetch from Supabase
-  // For now, return mock data
-  return {};
 }
 
 export async function POST(request: Request) {
