@@ -107,7 +107,8 @@ export default function AskHeavenPage(): React.ReactElement {
             value={jurisdiction}
             onChange={(e) => setJurisdiction(e.target.value as Jurisdiction)}
           >
-            <option value="england-wales">England &amp; Wales</option>
+            <option value="england">England</option>
+            <option value="wales">Wales</option>
             <option value="scotland">Scotland</option>
             <option value="northern-ireland">Northern Ireland</option>
           </select>

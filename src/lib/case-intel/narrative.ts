@@ -438,7 +438,7 @@ function getFactsJurisdiction(facts: CaseFacts): string {
     meta.jurisdiction ||
     meta.case_jurisdiction ||
     meta.jurisdiction_code ||
-    'england-wales'
+    'england' // Default to England (most common jurisdiction)
   );
 }
 
