@@ -98,10 +98,20 @@ export function migrateToCanonicalJurisdiction(
 
     // FAIL CLOSED: Cannot resolve without property location
     // Do NOT default to england - this could apply wrong legal framework
-    console.error(
+    const errorMessage =
       `[MIGRATION] Cannot migrate legacy jurisdiction "${jurisdiction}" without property_location hint. ` +
-      `Legacy england-wales cases must provide explicit property_location.`
-    );
+      `Legacy england-wales cases must provide explicit property_location.`;
+
+    console.error(errorMessage);
+
+    // Development-only: Throw error to catch bugs early
+    if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+      console.error(
+        `⚠️  GUARDRAIL VIOLATION: Attempted to use legacy "england-wales" jurisdiction without property_location. ` +
+        `This will fail in production. Add property_location to your request.`
+      );
+    }
+
     return null;
   }
 
