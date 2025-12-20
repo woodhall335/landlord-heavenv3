@@ -10,6 +10,8 @@ import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import * as aiModule from '@/lib/ai';
 import { createEmptyWizardFacts } from '@/lib/case-facts/schema';
 
+let currentFacts = createEmptyWizardFacts();
+
 const supabaseClientMock = {
   from: vi.fn(),
   insert: vi.fn(),
@@ -44,6 +46,14 @@ vi.mock('@/lib/wizard/mqs-loader', async () => {
 
 vi.mock('@/lib/ai/ask-heaven', () => ({
   enhanceAnswer: vi.fn(),
+}));
+
+vi.mock('@/lib/case-facts/store', () => ({
+  getOrCreateWizardFacts: vi.fn(async () => currentFacts),
+  updateWizardFacts: vi.fn(async (_supabase: any, _caseId: string, updater: Function) => {
+    currentFacts = updater(currentFacts);
+    return currentFacts;
+  }),
 }));
 
 vi.mock('@/lib/ai', async () => {
@@ -93,6 +103,7 @@ describe('MQS eviction flow (England & Wales)', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    currentFacts = createEmptyWizardFacts();
     supabaseClientMock.from.mockReturnValue(supabaseClientMock);
     supabaseClientMock.insert.mockReturnValue(supabaseClientMock);
     supabaseClientMock.select.mockReturnValue(supabaseClientMock);
@@ -264,9 +275,26 @@ describe('MQS eviction flow (England & Wales)', () => {
       evidence_suggestions: ['Tenancy agreement'],
     });
 
+    supabaseClientMock.from.mockImplementation((table: string) => {
+      if (table === 'cases') {
+        return {
+          select: () => ({
+            eq: () => ({ single: async () => ({ data: mockCase, error: null }) }),
+          }),
+          update: (...args: any[]) => supabaseClientMock.update(...args),
+          eq: (...args: any[]) => supabaseClientMock.eq(...args),
+        } as any;
+      }
+
+      return supabaseClientMock;
+    });
+
     supabaseClientMock.single
       .mockResolvedValueOnce({ data: mockCase, error: null })
-      .mockResolvedValueOnce({ data: { ...mockCase, collected_facts: {} }, error: null });
+      .mockResolvedValueOnce({ data: { ...mockCase, collected_facts: {} }, error: null })
+      .mockResolvedValue({ data: mockCase, error: null });
+
+    currentFacts = mockCase.collected_facts as any;
 
     const response = await saveAnswer(
       new Request('http://localhost/api/wizard/answer', {
@@ -281,6 +309,9 @@ describe('MQS eviction flow (England & Wales)', () => {
     );
 
     const body = await response.json();
+    if (response.status !== 200) {
+      console.error('enhanceAnswer response', body);
+    }
     expect(response.status).toBe(200);
     expect((enhanceAnswer as unknown as Mock)).toHaveBeenCalled();
     expect(body.enhanced_answer).toEqual({

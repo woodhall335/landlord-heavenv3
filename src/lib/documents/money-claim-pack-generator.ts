@@ -308,6 +308,8 @@ async function generateEnglandWalesMoneyClaimPack(
   const totals = calculateTotals(claim);
   const generationDate = new Date().toISOString();
   const documents: MoneyClaimPackDocument[] = [];
+  const jurisdictionKey = claim.jurisdiction === 'wales' ? 'wales' : 'england';
+  const templateBase = `uk/${jurisdictionKey}`;
 
   // Generate AI-drafted content for premium pack (LBA, PoC, Evidence Index)
   let askHeavenDrafts;
@@ -316,7 +318,7 @@ async function generateEnglandWalesMoneyClaimPack(
       askHeavenDrafts = await generateMoneyClaimAskHeavenDrafts(caseFacts, claim, {
         includePostIssue: true,
         includeRiskReport: false, // Can be enabled for premium users
-        jurisdiction: 'england-wales',
+        jurisdiction: jurisdictionKey,
       });
     } catch (error) {
       console.error('Failed to generate AI drafts, proceeding without:', error);
@@ -342,7 +344,7 @@ async function generateEnglandWalesMoneyClaimPack(
 
   // PACK COVER
   const packCover = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/pack_cover.hbs',
+    templatePath: `${templateBase}/templates/money_claims/pack_cover.hbs`,
     data: baseTemplateData,
     isPreview: false,
     outputFormat: 'both',
@@ -359,7 +361,7 @@ async function generateEnglandWalesMoneyClaimPack(
 
   // PARTICULARS OF CLAIM
   const particulars = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/particulars_of_claim.hbs',
+    templatePath: `${templateBase}/templates/money_claims/particulars_of_claim.hbs`,
     data: baseTemplateData,
     isPreview: false,
     outputFormat: 'both',
@@ -376,7 +378,7 @@ async function generateEnglandWalesMoneyClaimPack(
 
   // SCHEDULE OF ARREARS
   const arrears = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/schedule_of_arrears.hbs',
+    templatePath: `${templateBase}/templates/money_claims/schedule_of_arrears.hbs`,
     data: baseTemplateData,
     isPreview: false,
     outputFormat: 'both',
@@ -393,7 +395,7 @@ async function generateEnglandWalesMoneyClaimPack(
 
   // INTEREST CALCULATION
   const interest = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/interest_workings.hbs',
+    templatePath: `${templateBase}/templates/money_claims/interest_workings.hbs`,
     data: baseTemplateData,
     isPreview: false,
     outputFormat: 'both',
@@ -410,7 +412,7 @@ async function generateEnglandWalesMoneyClaimPack(
 
   // EVIDENCE INDEX
   const evidence = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/evidence_index.hbs',
+    templatePath: `${templateBase}/templates/money_claims/evidence_index.hbs`,
     data: baseTemplateData,
     isPreview: false,
     outputFormat: 'both',
@@ -427,7 +429,7 @@ async function generateEnglandWalesMoneyClaimPack(
 
   // COURT HEARING PREPARATION SHEET (NEW)
   const hearingPrep = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/hearing_prep_sheet.hbs',
+    templatePath: `${templateBase}/templates/money_claims/hearing_prep_sheet.hbs`,
     data: baseTemplateData,
     isPreview: false,
     outputFormat: 'both',
@@ -451,7 +453,7 @@ async function generateEnglandWalesMoneyClaimPack(
   };
 
   const letterBeforeClaim = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/letter_before_claim.hbs',
+    templatePath: `${templateBase}/templates/money_claims/letter_before_claim.hbs`,
     data: extendedData,
     isPreview: false,
     outputFormat: 'both',
@@ -467,7 +469,7 @@ async function generateEnglandWalesMoneyClaimPack(
   });
 
   const infoSheet = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/information_sheet_for_defendants.hbs',
+    templatePath: `${templateBase}/templates/money_claims/information_sheet_for_defendants.hbs`,
     data: extendedData,
     isPreview: false,
     outputFormat: 'both',
@@ -483,7 +485,7 @@ async function generateEnglandWalesMoneyClaimPack(
   });
 
   const replyForm = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/reply_form.hbs',
+    templatePath: `${templateBase}/templates/money_claims/reply_form.hbs`,
     data: extendedData,
     isPreview: false,
     outputFormat: 'both',
@@ -499,7 +501,7 @@ async function generateEnglandWalesMoneyClaimPack(
   });
 
   const financialStatement = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/financial_statement_form.hbs',
+    templatePath: `${templateBase}/templates/money_claims/financial_statement_form.hbs`,
     data: extendedData,
     isPreview: false,
     outputFormat: 'both',
@@ -516,7 +518,7 @@ async function generateEnglandWalesMoneyClaimPack(
 
   // ENFORCEMENT GUIDE (Post-Issue)
   const enforcementGuide = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/enforcement_guide.hbs',
+    templatePath: `${templateBase}/templates/money_claims/enforcement_guide.hbs`,
     data: baseTemplateData,
     isPreview: false,
     outputFormat: 'both',
@@ -533,7 +535,7 @@ async function generateEnglandWalesMoneyClaimPack(
 
   // FILING GUIDE
   const filingGuide = await generateDocument({
-    templatePath: 'uk/england-wales/templates/money_claims/filing_guide.hbs',
+    templatePath: `${templateBase}/templates/money_claims/filing_guide.hbs`,
     data: extendedData,
     isPreview: false,
     outputFormat: 'both',

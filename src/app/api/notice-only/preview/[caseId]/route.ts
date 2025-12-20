@@ -18,6 +18,7 @@ import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
 import {
   migrateToCanonicalJurisdiction,
   type CanonicalJurisdiction,
+  deriveCanonicalJurisdiction,
 } from '@/lib/types/jurisdiction';
 
 export const dynamic = 'force-dynamic';
@@ -96,26 +97,35 @@ export async function GET(
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
 
     // Determine jurisdiction and notice type (assign to outer scope for error handling)
-    jurisdiction = migrateToCanonicalJurisdiction(
+    jurisdiction = deriveCanonicalJurisdiction(
       caseRow.jurisdiction,
-      caseRow.property_location
+      wizardFacts,
     ) as CanonicalJurisdiction | null | undefined;
 
     if (!jurisdiction) {
       return NextResponse.json(
         {
+          code: 'INVALID_JURISDICTION',
           error: 'Invalid or missing jurisdiction',
+          user_message: 'A supported jurisdiction is required to generate a preview.',
           details: 'A supported jurisdiction is required to generate a preview.',
+          blocking_issues: [],
+          warnings: [],
         },
-        { status: 400 },
+        { status: 422 },
       );
     }
 
     if (jurisdiction === 'northern-ireland') {
       return NextResponse.json(
         {
+          code: 'NI_NOTICE_PREVIEW_UNSUPPORTED',
           error: 'NI_NOTICE_PREVIEW_UNSUPPORTED',
+          user_message:
+            'Eviction notices are not supported in Northern Ireland. Tenancy agreements remain available.',
           details: 'Eviction notices are not supported in Northern Ireland. Tenancy agreements remain available.',
+          blocking_issues: [],
+          warnings: [],
         },
         { status: 422 },
       );

@@ -118,6 +118,8 @@ describe('Wizard info-type question handling', () => {
       wizard_progress: 30,
     };
 
+    currentFacts = facts;
+
     // Mock returns: first query to 'cases' table uses .single(), second query to 'case_facts' uses .maybeSingle()
     supabaseClientMock.single.mockResolvedValueOnce({ data: mockCase, error: null });
     supabaseClientMock.maybeSingle.mockResolvedValueOnce({ data: { facts }, error: null });
@@ -205,6 +207,8 @@ describe('Wizard info-type question handling', () => {
       // Each call makes 2 queries: cases table (.single()) and case_facts table (.maybeSingle())
       supabaseClientMock.single.mockResolvedValueOnce({ data: mockCase, error: null });
       supabaseClientMock.maybeSingle.mockResolvedValueOnce({ data: { facts: mockCase.collected_facts }, error: null });
+
+      currentFacts = mockCase.collected_facts;
 
       const response = await nextQuestion(
         new Request('http://localhost/api/wizard/next-question', {
