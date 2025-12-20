@@ -2,6 +2,8 @@ import { type DecisionRules, type FactsSchema, type JurisdictionKey, loadJurisdi
 
 export type ValidationStage = 'wizard' | 'preview' | 'generate';
 
+export type ProductKey = 'notice_only' | 'eviction_pack' | 'complete_pack' | 'money_claim' | 'tenancy_agreement' | 'unknown';
+
 export interface LegalValidationIssue {
   code: string;
   user_message: string;
@@ -199,9 +201,11 @@ export function validateDepositCompliance(params: {
   jurisdiction: JurisdictionKey;
   factsSchema: FactsSchema;
   facts: Record<string, any>;
+  product?: ProductKey;
+  route?: string | null;
   stage?: ValidationStage;
 }): LegalValidationResult {
-  const { factsSchema, facts, jurisdiction, stage = 'wizard' } = params;
+  const { factsSchema, facts, jurisdiction, stage = 'wizard', product = 'unknown' } = params;
   const blocking: LegalValidationIssue[] = [];
   const warnings: LegalValidationIssue[] = [];
 
@@ -222,6 +226,10 @@ export function validateDepositCompliance(params: {
     f.path.includes('deposit') || f.path.includes('prescribed_info')
   );
 
+  // Notice-only preview should not block on schema-level required flags that are not collected
+  // by the product MQS. We convert them into warnings to avoid LEGAL_BLOCK responses.
+  const downgradeMissing = product === 'notice_only' && stage === 'preview';
+
   for (const field of relevantFields) {
     const requiredFlag = field.required === true;
     const requiredIfEvaluation = field.required_if
@@ -239,7 +247,7 @@ export function validateDepositCompliance(params: {
         user_fix_hint: 'Answer the prerequisite deposit questions so we can apply the required_if rule.',
       };
 
-      if (stage === 'wizard') {
+      if (stage === 'wizard' || downgradeMissing) {
         warnings.push(issue);
       } else {
         blocking.push(issue);
@@ -265,7 +273,7 @@ export function validateDepositCompliance(params: {
         internal_reason: `Required by facts_schema for ${jurisdiction}`,
       };
 
-      if (stage === 'wizard') {
+      if (stage === 'wizard' || downgradeMissing) {
         warnings.push(issue);
       } else {
         blocking.push(issue);
@@ -301,7 +309,7 @@ export function validateDepositCompliance(params: {
         user_fix_hint: 'Select or enter the approved deposit protection scheme.',
       };
 
-      if (stage === 'wizard') {
+      if (stage === 'wizard' || downgradeMissing) {
         warnings.push(issue);
       } else {
         blocking.push(issue);
@@ -321,7 +329,7 @@ export function validateDepositCompliance(params: {
         user_fix_hint: 'Confirm whether prescribed information was served within 30 days of taking the deposit.',
       };
 
-      if (stage === 'wizard') {
+      if (stage === 'wizard' || downgradeMissing) {
         warnings.push(issue);
       } else {
         blocking.push(issue);
@@ -336,9 +344,11 @@ export function validateJurisdictionCompliance(params: {
   jurisdiction: JurisdictionKey;
   facts: Record<string, any>;
   selectedGroundCodes: number[];
+  product?: ProductKey;
+  route?: string | null;
   stage?: ValidationStage;
 }): LegalValidationResult {
-  const { jurisdiction, facts, selectedGroundCodes, stage = 'wizard' } = params;
+  const { jurisdiction, facts, selectedGroundCodes, stage = 'wizard', product = 'unknown', route = null } = params;
   let bundle: ReturnType<typeof loadJurisdictionRuleBundle> | null = null;
   try {
     bundle = loadJurisdictionRuleBundle(jurisdiction);
@@ -384,6 +394,8 @@ export function validateJurisdictionCompliance(params: {
     jurisdiction,
     factsSchema: bundle.factsSchema,
     facts,
+    product,
+    route,
     stage,
   });
 
