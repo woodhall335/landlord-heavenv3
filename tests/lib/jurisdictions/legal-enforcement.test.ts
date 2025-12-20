@@ -268,7 +268,7 @@ describe('jurisdiction gating enforcement', () => {
         blocking: [
           {
             code: 'TEST_BLOCK',
-            message: 'blocked',
+            user_message: 'blocked',
             fields: [],
           },
         ],

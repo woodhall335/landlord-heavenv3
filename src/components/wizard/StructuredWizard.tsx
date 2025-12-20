@@ -1632,7 +1632,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       <AskHeavenPanel
                         caseId={caseId}
                         caseType={caseType}
-                        jurisdiction={jurisdiction || 'england-wales'}
+                        jurisdiction={jurisdiction || 'england'}
                         product={product}
                         currentQuestionId={currentQuestion.id}
                         currentQuestionText={currentQuestion.question}
@@ -1687,7 +1687,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               <AskHeavenPanel
                 caseId={caseId}
                 caseType={caseType}
-                jurisdiction={jurisdiction || 'england-wales'}
+                jurisdiction={jurisdiction || 'england'}
                 product={product}
                 currentQuestionId={currentQuestion.id}
                 currentQuestionText={currentQuestion.question}
@@ -1872,7 +1872,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                         <AskHeavenPanel
                           caseId={caseId}
                           caseType={caseType}
-                          jurisdiction={jurisdiction || 'england-wales'}
+                          jurisdiction={jurisdiction || 'england'}
                           product={product}
                           currentQuestionId={currentQuestion.id}
                           currentQuestionText={currentQuestion.question}

@@ -97,10 +97,11 @@ export async function GET(
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
 
     // Determine jurisdiction and notice type (assign to outer scope for error handling)
-    jurisdiction = deriveCanonicalJurisdiction(
+    const derivedJurisdiction = deriveCanonicalJurisdiction(
       caseRow.jurisdiction,
       wizardFacts,
-    ) as CanonicalJurisdiction | null | undefined;
+    );
+    jurisdiction = derivedJurisdiction ?? undefined;
 
     if (!jurisdiction) {
       return NextResponse.json(

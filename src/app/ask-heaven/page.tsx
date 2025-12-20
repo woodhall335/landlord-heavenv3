@@ -16,7 +16,7 @@ interface ChatMessage {
   createdAt: string;
 }
 
-const defaultJurisdiction: Jurisdiction = 'england-wales';
+const defaultJurisdiction: Jurisdiction = 'england';
 const defaultCaseType: CaseType = 'eviction';
 const defaultProduct: Product = 'notice_only';
 
