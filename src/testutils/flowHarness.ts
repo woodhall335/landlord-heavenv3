@@ -9,6 +9,7 @@ import { getCapabilityMatrix, type Jurisdiction, type Product } from '../lib/jur
 import type { ValidationIssue } from '../lib/jurisdictions/requirementsValidator';
 import { getRequirements } from '../lib/jurisdictions/requirements';
 import { validateFlow } from '../lib/validation/validateFlow';
+import { getFlowMapping } from '../lib/mqs/mapping.generated';
 
 /**
  * Flow definition from capability matrix
@@ -324,7 +325,8 @@ export function allIssuesHaveQuestionId(issues: ValidationIssue[]): boolean {
 
 /**
  * Remove one required fact deterministically to test validation failure
- * Picks the first key in sorted(requiredNow) that exists and is NOT derived
+ * Picks the first key in sorted(requiredNow) that exists, is NOT derived,
+ * and preferentially has an MQS question mapping (so test can verify affected_question_id)
  */
 export function removeOneRequiredFact(
   flow: FlowDefinition,
@@ -340,18 +342,35 @@ export function removeOneRequiredFact(
     facts,
   });
 
-  // Find first required fact (sorted alphabetically) that exists and is not derived
+  // Get MQS mapping to check which facts have question IDs
+  const mapping = getFlowMapping(flow.jurisdiction, flow.product, flow.route);
+
+  // Find first required fact (sorted alphabetically) that exists, is not derived, and has MQS mapping
   const sortedRequired = Array.from(requirements.requiredNow).sort();
   let keyToRemove = '';
 
+  // First pass: try to find a fact with MQS mapping
   for (const key of sortedRequired) {
     if (facts[key] !== undefined && !requirements.derived.has(key)) {
-      keyToRemove = key;
-      break;
+      const questionIds = mapping?.factKeyToQuestionIds[key] || [];
+      if (questionIds.length > 0) {
+        keyToRemove = key;
+        break;
+      }
     }
   }
 
-  // If no required fact found, fall back to first key
+  // Second pass: if no mapped fact found, use any required fact
+  if (!keyToRemove) {
+    for (const key of sortedRequired) {
+      if (facts[key] !== undefined && !requirements.derived.has(key)) {
+        keyToRemove = key;
+        break;
+      }
+    }
+  }
+
+  // If still no required fact found, fall back to first key
   if (!keyToRemove) {
     keyToRemove = Object.keys(facts)[0] || 'unknown';
   }
