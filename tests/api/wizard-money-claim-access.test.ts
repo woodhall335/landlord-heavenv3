@@ -106,8 +106,10 @@ describe('Money claim access controls', () => {
     );
 
     const body = await response.json();
-    expect(response.status).toBe(400);
-expect(body.error).toBe('NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED');
+    expect(response.status).toBe(422);
+    expect(body.error).toBe('NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED');
+    expect(body.blocking_issues).toEqual([]);
+    expect(body.warnings).toEqual([]);
     expect(supabaseClientMock.insert).not.toHaveBeenCalled();
   });
 });
