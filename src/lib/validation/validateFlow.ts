@@ -9,6 +9,10 @@ import { assertFlowSupported, type FlowCapability, type Jurisdiction, type Produ
 import { getRequirements, type ValidationStage } from '../jurisdictions/requirements';
 import { validateRequirements, type ValidationIssue, type ValidationOutput } from '../jurisdictions/requirementsValidator';
 import { collectSchemaKeys } from '../jurisdictions/facts/referenceScanner';
+import { runDecisionEngine, type DecisionInput } from '../decision-engine';
+import { mapDecisionIssuesToValidationIssues } from '../decision-engine/issueMapper';
+import { wizardFactsToCaseFacts } from '../case-facts/normalize';
+import type { CanonicalJurisdiction } from '../types/jurisdiction';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -97,8 +101,10 @@ function validateFactsSchema(
  * 2. Validate facts against schema
  * 3. Get requirements for stage
  * 4. Validate requirements and generate issues
- * 5. Dedupe issues
- * 6. Return standardized result
+ * 5. Run decision engine for compliance checks (eviction flows only)
+ * 6. Merge decision engine issues with requirements issues
+ * 7. Dedupe issues
+ * 8. Return standardized result
  */
 export function validateFlow(input: FlowValidationInput): FlowValidationResult {
   const { jurisdiction, product, route, stage, facts } = input;
@@ -146,20 +152,62 @@ export function validateFlow(input: FlowValidationInput): FlowValidationResult {
   // Step 4: Validate requirements and generate issues
   const validation = validateRequirements(ctx);
 
-  // Step 5: Merge and dedupe issues
+  // Step 5: Run decision engine for compliance checks (eviction flows only)
+  let decisionIssues: ValidationIssue[] = [];
+
+  if (product === 'notice_only' || product === 'complete_pack') {
+    try {
+      // Convert facts to CaseFacts for decision engine
+      const caseFacts = wizardFactsToCaseFacts(facts);
+
+      const decisionInput: DecisionInput = {
+        jurisdiction: jurisdiction as CanonicalJurisdiction,
+        product,
+        case_type: 'eviction',
+        facts: caseFacts,
+        stage, // Pass stage for stage-aware compliance checks
+      };
+
+      const decisionOutput = runDecisionEngine(decisionInput);
+
+      // Convert decision engine BlockingIssue to ValidationIssue
+      decisionIssues = mapDecisionIssuesToValidationIssues(
+        decisionOutput.blocking_issues,
+        { jurisdiction, product, route }
+      );
+
+      // Add decision engine warnings as well
+      const decisionWarnings = decisionOutput.warnings.map(w => ({
+        code: 'DECISION_ENGINE_WARNING',
+        severity: 'warning' as const,
+        fields: [],
+        user_fix_hint: w,
+      }));
+
+      decisionIssues = [...decisionIssues, ...decisionWarnings];
+    } catch (error) {
+      console.error('Decision engine error:', error);
+      // Don't block on decision engine errors - continue with requirements validation only
+    }
+  }
+
+  // Step 6: Merge decision engine issues with requirements issues
   let allBlockingIssues = [
     ...validation.blocking_issues,
+    ...decisionIssues.filter(i => i.severity === 'blocking'),
   ];
 
   let allWarnings = [
     ...validation.warnings,
     ...schemaValidation.issues,
+    ...decisionIssues.filter(i => i.severity === 'warning'),
   ];
 
+  // Step 7: Dedupe issues
   allBlockingIssues = dedupeIssues(allBlockingIssues);
   allWarnings = dedupeIssues(allWarnings);
 
-  // Step 6: Return standardized result
+  // Step 8: Return standardized result
   const hasBlockingIssues = allBlockingIssues.length > 0;
 
   if (hasBlockingIssues) {

@@ -105,18 +105,24 @@
 - ✅ Converts blocking issues to warnings at wizard stage
 - ✅ No late surprises - users see warnings before reaching checkpoint
 
-### 7. Decision Engine Integration (PENDING)
-**TODO**: Ensure decision engine uses ValidationContext with stage
+### 7. Decision Engine Integration ✅ COMPLETE
+**Status**: Integrated into validateFlow with stage-awareness
 
 **Files**:
-- `src/lib/decision-engine/index.ts`
+- ✅ `src/lib/decision-engine/index.ts` - Added stage parameter (wizard/checkpoint/preview/generate)
+- ✅ `src/lib/decision-engine/issueMapper.ts` - Maps BlockingIssue to ValidationIssue with affected_question_id
+- ✅ `src/lib/validation/validateFlow.ts` - Integrates decision engine into validation pipeline
+- ✅ `src/app/api/wizard/checkpoint/route.ts` - Uses stage='generate' for route recommendations
+- ✅ `tests/lib/decisionEngineIntegration.test.ts` - Comprehensive integration tests
 
-**Requirements**:
-- Accept `stage` parameter where relevant
-- Preview must NOT default to generate strictness
-- Merge decision engine issues with requirements issues
-- Use same Issue shape with MQS question id mapping
-- Dedupe merged issues
+**Achievements**:
+- ✅ Decision engine accepts `stage` parameter (wizard/checkpoint/preview/generate)
+- ✅ Wizard stage: Compliance issues become warnings (not blocking)
+- ✅ Checkpoint/preview/generate: Compliance issues block as expected
+- ✅ Decision engine issues converted to ValidationIssue with affected_question_id
+- ✅ Issues merged with requirements engine issues and deduplicated
+- ✅ All jurisdictions (England, Wales, Scotland) are stage-aware
+- ✅ Checkpoint uses stage='generate' for complete route analysis
 
 ### 8. UI Safety (PENDING)
 **TODO**: Update preview page to handle LEGAL_BLOCK gracefully
@@ -145,19 +151,19 @@
 
 ## 📊 Current Status Summary
 
-**Completed**: 6/9 tasks (67%)
+**Completed**: 7/9 tasks (78%)
 - ✅ Validation orchestrator + tests
 - ✅ Preview/generate helpers
 - ✅ Preview endpoint integration
 - ✅ Generate endpoint integration
 - ✅ Deposit bug regression test
 - ✅ **Wizard/checkpoint integration (REMOVED downgrade hacks)**
+- ✅ **Decision engine integration (Stage-aware with MQS mapping)**
 
 **In Progress**: 0/9 tasks
 - (None)
 
-**Pending**: 3/9 tasks
-- 🚧 Decision engine integration
+**Pending**: 2/9 tasks
 - 🚧 UI safety
 - 🚧 Flow harness E2E tests
 

@@ -193,12 +193,17 @@ export async function POST(request: NextRequest) {
     // Missing fields will be null, which the decision engine handles gracefully
     const caseFacts = wizardFactsToCaseFacts(wizardFacts);
 
-    // Run decision engine with partial data
+    // Run decision engine for route recommendations
+    // NOTE: We use stage='generate' here (not 'checkpoint') because we want to show
+    // the user which routes will be available at the FINAL stage, including any
+    // compliance issues that would block at generate time. This provides complete
+    // route guidance even though we only block progression on checkpoint-required facts.
     const decisionInput: DecisionInput = {
       jurisdiction: canonicalJurisdiction as CanonicalJurisdiction,
       product: effectiveProduct as 'notice_only' | 'complete_pack' | 'money_claim',
       case_type: effectiveCaseType as 'eviction' | 'money_claim' | 'tenancy_agreement',
       facts: caseFacts,
+      stage: 'generate', // Show all compliance issues for complete route analysis
     };
 
     const decision = runDecisionEngine(decisionInput);
