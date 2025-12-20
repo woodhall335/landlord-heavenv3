@@ -141,7 +141,6 @@ function getTimelineTitle(formatIdentifier: string): string {
     case 'england':
     case 'wales':
     case 'ew_bundle_format': // Internal bundle format identifier (NOT a jurisdiction)
-    case 'england-wales': // Legacy compatibility - DEPRECATED
       return 'Chronology of Events';
 
     case 'scotland':

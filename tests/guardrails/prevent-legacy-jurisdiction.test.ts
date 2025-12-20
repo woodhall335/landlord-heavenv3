@@ -5,6 +5,11 @@ import { describe, expect, it } from 'vitest';
  * Guardrail test to prevent reintroduction of "england-wales" as a jurisdiction value
  * in code paths that build NEW inputs (CaseFacts creation, decision-engine inputs, etc.)
  *
+ * WHY THIS TEST EXISTS:
+ * This test runs automatically in `npm test` (CI) to protect the codebase from
+ * accidental reintroduction of the legacy "england-wales" jurisdiction after migration.
+ * It ensures all new code uses canonical jurisdictions (england, wales, scotland, northern-ireland).
+ *
  * Allowed occurrences:
  * - Tests (*.test.ts, *.test.tsx, __tests__/)
  * - URL paths and slugs (url:, href=, import paths with /england-wales/)
