@@ -39,7 +39,11 @@ export function classifyDatabaseError(
   const errorCode = error?.code;
 
   // PostgrestError PGRST116: No rows returned (legitimate not found)
-  if (errorCode === 'PGRST116' || errorMessage.includes('No rows')) {
+  if (
+    errorCode === 'PGRST116' ||
+    errorMessage.includes('No rows') ||
+    errorMessage.toLowerCase().includes('not found')
+  ) {
     return {
       type: 'not_found',
       statusCode: 404,
