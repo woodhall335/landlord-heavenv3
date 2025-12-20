@@ -188,9 +188,9 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json(
         {
-          error: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
+          error: 'Northern Ireland only supports tenancy agreement documents',
           code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
-          message: 'Northern Ireland eviction and money claim document previews are blocked until legal review completes.',
+          message: 'Northern Ireland only supports tenancy agreement documents',
         },
         { status: 400 }
       );
