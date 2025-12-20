@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import { describe, expect, it } from "vitest";
 import { getCapabilityMatrix, getSupportedRoutes, isFlowSupported } from "../../src/lib/jurisdictions/capabilities/matrix";
 
@@ -25,5 +27,32 @@ describe("capability matrix", () => {
 
     const walesRoutes = getSupportedRoutes("wales", "notice_only");
     expect(walesRoutes).toContain("wales_section_173");
+  });
+
+  it("links to real MQS files and template paths", () => {
+    const matrix = getCapabilityMatrix();
+
+    for (const jurisdiction of requiredJurisdictions) {
+      const products = matrix[jurisdiction];
+      for (const [product, capability] of Object.entries(products)) {
+        if (jurisdiction === "northern-ireland" && product !== "tenancy_agreement") {
+          expect(capability).toBeNull();
+          continue;
+        }
+        if (!capability) continue;
+
+        expect(capability.routes.length).toBeGreaterThan(0);
+        expect(capability.routes).not.toContain("default");
+        expect(capability.templates.length).toBeGreaterThan(0);
+
+        const mqsPath = path.join(process.cwd(), capability.derivedFrom.mqsFile ?? "");
+        expect(fs.existsSync(mqsPath)).toBe(true);
+
+        for (const template of capability.templates) {
+          const fullTemplatePath = path.join(process.cwd(), "config", "jurisdictions", template);
+          expect(fs.existsSync(fullTemplatePath)).toBe(true);
+        }
+      }
+    }
   });
 });

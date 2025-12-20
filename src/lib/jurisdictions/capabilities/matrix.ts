@@ -2,6 +2,8 @@ import fs from "fs";
 import path from "path";
 import yaml from "js-yaml";
 
+import { getTemplatesForFlow } from "./templateRegistry";
+
 export type Jurisdiction = "england" | "wales" | "scotland" | "northern-ireland";
 export type Product = "notice_only" | "eviction_pack" | "money_claim" | "tenancy_agreement";
 
@@ -20,7 +22,6 @@ export interface FlowCapability {
 export type CapabilityMatrix = Record<Jurisdiction, Record<Product, FlowCapability | null>>;
 
 const MQS_DIR = path.join(process.cwd(), "config", "mqs");
-const TEMPLATES_DIR = path.join(process.cwd(), "config", "jurisdictions", "uk");
 
 const productSlugMap: Record<string, Product> = {
   complete_pack: "eviction_pack",
@@ -33,43 +34,38 @@ function isDeprecated(file: string) {
   return file.toLowerCase().includes("deprecated");
 }
 
-function parseRoutes(doc: any): string[] {
-  if (!doc || typeof doc !== "object") return ["default"];
-  const questions = Array.isArray(doc.questions) ? doc.questions : [];
-  for (const question of questions) {
-    if (!question || typeof question !== "object") continue;
-    const targetIds = [question.id, ...(question.maps_to ?? [])].filter(Boolean);
-    const routeKeywords = ["route", "selected_notice_route", "possession_route", "eviction_route"];
-    if (targetIds.some((id: string) => routeKeywords.some((keyword) => String(id).includes(keyword)))) {
-      const opts = (question.options || []) as any[];
-      const values: string[] = [];
-      for (const opt of opts) {
-        if (typeof opt === "string") {
-          values.push(opt);
-        } else if (opt && typeof opt === "object" && opt.value) {
-          values.push(String(opt.value));
-        }
-      }
-      if (values.length) return values.map((v) => v.trim()).filter(Boolean);
-    }
+function parseJurisdiction(doc: any): Jurisdiction {
+  const explicit = doc?.jurisdiction || doc?.__meta?.jurisdiction;
+  if (!explicit || typeof explicit !== "string") {
+    throw new Error("Missing jurisdiction in MQS YAML");
   }
-  return ["default"];
+  return String(explicit) as Jurisdiction;
 }
 
-function getTemplateCandidates(jurisdiction: Jurisdiction, product: Product): string[] {
-  const jurisdictionTemplateDir = path.join(TEMPLATES_DIR, jurisdiction, "templates");
-  if (!fs.existsSync(jurisdictionTemplateDir)) return [];
-  const entries = fs.readdirSync(jurisdictionTemplateDir);
-  const productHints: Record<Product, string[]> = {
-    notice_only: ["notice", "form6a", "notice_only", "section"],
-    eviction_pack: ["pack", "possession", "eviction"],
-    money_claim: ["money_claim", "n5", "n119", "letter_before_action"],
-    tenancy_agreement: ["ast", "tenancy", "agreement"],
-  };
-  const hints = productHints[product];
-  return entries
-    .filter((name) => hints.some((hint) => name.toLowerCase().includes(hint)))
-    .map((name) => path.join("config", "jurisdictions", "uk", jurisdiction, "templates", name));
+function parseRoutes(product: Product, jurisdiction: Jurisdiction, doc: any): string[] {
+  if (!doc || typeof doc !== "object") return [];
+  const questions = Array.isArray(doc.questions) ? doc.questions : [];
+  if (product === "notice_only" || product === "eviction_pack") {
+    const routeQuestion = questions.find(
+      (q: any) => q?.id === "selected_notice_route" || q?.maps_to?.includes?.("selected_notice_route"),
+    );
+    if (routeQuestion) {
+      const options = Array.isArray(routeQuestion.options) ? routeQuestion.options : [];
+      const values = options
+        .map((opt) => {
+          if (typeof opt === "string") return opt.trim();
+          if (opt && typeof opt === "object" && opt.value) return String(opt.value).trim();
+          return null;
+        })
+        .filter((v): v is string => !!v);
+      if (values.length) return Array.from(new Set(values));
+    }
+
+    if (jurisdiction === "scotland") return ["notice_to_leave"];
+    if (jurisdiction === "wales") return ["wales_section_173"];
+  }
+
+  return [product];
 }
 
 function buildCapabilityMatrix(): CapabilityMatrix {
@@ -86,16 +82,29 @@ function buildCapabilityMatrix(): CapabilityMatrix {
     const fullProductDir = path.join(MQS_DIR, productDir);
     const files = fs.readdirSync(fullProductDir).filter((file) => file.endsWith(".yaml") && !isDeprecated(file));
     for (const file of files) {
-      const jurisdiction = file.replace(/\.yaml$/, "") as Jurisdiction;
-      if (!matrix[jurisdiction]) continue;
+      const jurisdictionFromFile = file.replace(/\.yaml$/, "") as Jurisdiction;
       const raw = fs.readFileSync(path.join(fullProductDir, file), "utf8");
       const doc = yaml.load(raw);
-      const routes = parseRoutes(doc);
-      const templates = getTemplateCandidates(jurisdiction, product);
+      const jurisdictionFromDoc = parseJurisdiction(doc);
+
+      if (jurisdictionFromDoc !== jurisdictionFromFile) {
+        throw new Error(
+          `Jurisdiction mismatch for ${file}: file implies ${jurisdictionFromFile} but YAML declares ${jurisdictionFromDoc}`,
+        );
+      }
+
+      if (!matrix[jurisdictionFromDoc]) continue;
+
+      const routes = parseRoutes(product, jurisdictionFromDoc, doc);
+      const templates = getTemplatesForFlow({ jurisdiction: jurisdictionFromDoc, product, routes });
+      if (templates.length === 0) {
+        matrix[jurisdictionFromDoc][product] = null;
+        continue;
+      }
       const capability: FlowCapability = {
-        jurisdiction,
+        jurisdiction: jurisdictionFromDoc,
         product,
-        routes,
+        routes: routes.length ? routes : [product],
         templates,
         derivedFrom: {
           mqsFile: path.join("config", "mqs", productDir, file),
@@ -103,7 +112,7 @@ function buildCapabilityMatrix(): CapabilityMatrix {
           notes: [],
         },
       };
-      matrix[jurisdiction][product] = capability;
+      matrix[jurisdictionFromDoc][product] = capability;
     }
   }
 
