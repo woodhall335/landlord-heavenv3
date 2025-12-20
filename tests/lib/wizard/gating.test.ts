@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import { evaluateWizardGate } from '@/lib/wizard/gating';
+import type { ProductType } from '@/lib/wizard/mqs-loader';
 
 const baseInput = {
   case_type: 'eviction',
-  product: 'notice_only',
+  product: 'notice_only' as ProductType,
   facts: {},
 };
 

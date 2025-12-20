@@ -25,7 +25,7 @@ export interface WizardQuestion {
 
 export interface FactFinderRequest {
   case_type: 'eviction' | 'money_claim' | 'tenancy_agreement';
-  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
+  jurisdiction: 'england' | 'wales' | 'scotland' | 'northern-ireland';
   collected_facts: Record<string, any>;
   conversation_history?: ChatMessage[];
 }

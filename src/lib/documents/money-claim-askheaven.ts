@@ -97,12 +97,12 @@ export async function generateMoneyClaimAskHeavenDrafts(
   options?: {
     includePostIssue?: boolean;
     includeRiskReport?: boolean;
-    jurisdiction?: 'england-wales' | 'scotland';
+    jurisdiction?: 'england' | 'wales' | 'scotland';
   }
 ): Promise<MoneyClaimDrafts> {
-  const rawJurisdiction = options?.jurisdiction || ('jurisdiction' in moneyClaimCase ? moneyClaimCase.jurisdiction : 'england-wales');
+  const rawJurisdiction = options?.jurisdiction || ('jurisdiction' in moneyClaimCase ? moneyClaimCase.jurisdiction : 'england');
 
-  // Normalize jurisdiction for LLM helpers (england and wales both map to 'england-wales')
+  // Normalize jurisdiction for LLM helpers (england and wales both map to 'england-wales' since they share legal framework)
   const llmJurisdiction: 'england-wales' | 'scotland' = rawJurisdiction === 'scotland' ? 'scotland' : 'england-wales';
 
   // Start with fallback content as a baseline (ensures we never return incomplete data)
