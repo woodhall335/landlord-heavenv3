@@ -1,7 +1,15 @@
 import fs from "fs";
 import path from "path";
 import { describe, expect, it } from "vitest";
-import { getCapabilityMatrix, getSupportedRoutes, isFlowSupported } from "../../src/lib/jurisdictions/capabilities/matrix";
+import {
+  assertFlowSupported,
+  FlowCapabilityError,
+  getCapabilityBuildReport,
+  getCapabilityMatrix,
+  getSupportedRoutes,
+  isFlowSupported,
+} from "../../src/lib/jurisdictions/capabilities/matrix";
+import { writeCapabilityAlignmentReport } from "../../src/lib/jurisdictions/capabilities/alignmentReport";
 
 const requiredJurisdictions = ["england", "wales", "scotland", "northern-ireland"] as const;
 
@@ -36,11 +44,12 @@ describe("capability matrix", () => {
       const products = matrix[jurisdiction];
       for (const [product, capability] of Object.entries(products)) {
         if (jurisdiction === "northern-ireland" && product !== "tenancy_agreement") {
-          expect(capability).toBeNull();
+          expect(capability.status).toBe("unsupported");
           continue;
         }
         if (!capability) continue;
 
+        expect(capability.status).toBe("supported");
         expect(capability.routes.length).toBeGreaterThan(0);
         expect(capability.routes).not.toContain("default");
         expect(capability.templates.length).toBeGreaterThan(0);
@@ -54,5 +63,42 @@ describe("capability matrix", () => {
         }
       }
     }
+  });
+
+  it("fails closed at runtime for unsupported or misconfigured flows", () => {
+    expect(() => assertFlowSupported("northern-ireland", "notice_only")).toThrow(FlowCapabilityError);
+    try {
+      assertFlowSupported("northern-ireland", "notice_only");
+    } catch (error) {
+      const err = error as FlowCapabilityError;
+      expect(err.statusCode).toBe(422);
+      expect(err.payload.code).toBe("FLOW_NOT_SUPPORTED");
+      expect(err.payload.blocking_issues[0].code).toBe("FLOW_NOT_SUPPORTED");
+    }
+
+    const matrix = getCapabilityMatrix();
+    const original = matrix.england.notice_only.status;
+    matrix.england.notice_only.status = "misconfigured";
+    expect(() => assertFlowSupported("england", "notice_only")).toThrow(FlowCapabilityError);
+    try {
+      assertFlowSupported("england", "notice_only");
+    } catch (error) {
+      const err = error as FlowCapabilityError;
+      expect(err.payload.code).toBe("FLOW_MISCONFIGURED");
+    }
+    matrix.england.notice_only.status = original;
+  });
+
+  it("produces no misconfigured flows and writes alignment report", () => {
+    const report = getCapabilityBuildReport();
+    const matrix = getCapabilityMatrix();
+
+    const misconfigured = report.misconfigured;
+    expect(misconfigured, `Misconfigured flows: ${JSON.stringify(misconfigured, null, 2)}`).toHaveLength(0);
+    expect(report.templateRegistryGaps, "Template registry gaps should be empty").toHaveLength(0);
+
+    const outputPath = path.join(process.cwd(), "ALIGNMENT_REPORT.uk_packs.md");
+    writeCapabilityAlignmentReport(matrix, report, outputPath);
+    expect(fs.existsSync(outputPath)).toBe(true);
   });
 });

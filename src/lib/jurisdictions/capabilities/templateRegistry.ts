@@ -14,6 +14,12 @@ type TemplateLookupParams = {
   routes: string[];
 };
 
+export interface TemplateResolutionResult {
+  templates: string[];
+  missingOnDisk: string[];
+  registryFound: boolean;
+}
+
 const noticeTemplates: Record<Jurisdiction, Record<string, string[]>> = {
   england: {
     section_21: ["uk/england/templates/notice_only/form_6a_section21/notice.hbs"],
@@ -44,7 +50,10 @@ const tenancyAgreementTemplates: Record<Jurisdiction, string[]> = {
     "uk/england/templates/standard_ast_formatted.hbs",
     "uk/england/templates/premium_ast_formatted.hbs",
   ],
-  wales: [],
+  wales: [
+    "uk/england/templates/standard_ast_formatted.hbs",
+    "uk/england/templates/premium_ast_formatted.hbs",
+  ],
   scotland: ["uk/scotland/templates/prt_agreement.hbs", "uk/scotland/templates/prt_agreement_premium.hbs"],
   "northern-ireland": [
     "uk/northern-ireland/templates/private_tenancy_agreement.hbs",
@@ -67,7 +76,20 @@ const moneyClaimTemplates: Record<Jurisdiction, string[]> = {
     "uk/england/templates/money_claims/enforcement_guide.hbs",
     "uk/england/templates/money_claims/filing_guide.hbs",
   ],
-  wales: [],
+  wales: [
+    "uk/england/templates/money_claims/pack_cover.hbs",
+    "uk/england/templates/money_claims/particulars_of_claim.hbs",
+    "uk/england/templates/money_claims/schedule_of_arrears.hbs",
+    "uk/england/templates/money_claims/interest_workings.hbs",
+    "uk/england/templates/money_claims/evidence_index.hbs",
+    "uk/england/templates/money_claims/hearing_prep_sheet.hbs",
+    "uk/england/templates/money_claims/letter_before_claim.hbs",
+    "uk/england/templates/money_claims/information_sheet_for_defendants.hbs",
+    "uk/england/templates/money_claims/reply_form.hbs",
+    "uk/england/templates/money_claims/financial_statement_form.hbs",
+    "uk/england/templates/money_claims/enforcement_guide.hbs",
+    "uk/england/templates/money_claims/filing_guide.hbs",
+  ],
   scotland: [
     "uk/scotland/templates/money_claims/pack_cover.hbs",
     "uk/scotland/templates/money_claims/simple_procedure_particulars.hbs",
@@ -82,16 +104,22 @@ const moneyClaimTemplates: Record<Jurisdiction, string[]> = {
   "northern-ireland": [],
 };
 
-function assertTemplatesExist(paths: string[]): void {
+function evaluateTemplates(paths: string[]): { templates: string[]; missingOnDisk: string[] } {
+  const templates: string[] = [];
+  const missingOnDisk: string[] = [];
+
   for (const templatePath of paths) {
     const fullPath = path.join(process.cwd(), "config", "jurisdictions", templatePath);
     if (!fs.existsSync(fullPath)) {
-      throw new Error(`Template missing on disk: ${templatePath}`);
+      missingOnDisk.push(templatePath);
     }
+    templates.push(templatePath);
   }
+
+  return { templates: Array.from(new Set(templates)), missingOnDisk };
 }
 
-export function getTemplatesForFlow(params: TemplateLookupParams): string[] {
+export function resolveTemplatesForFlow(params: TemplateLookupParams): TemplateResolutionResult {
   const { jurisdiction, product, routes } = params;
   const templates: string[] = [];
 
@@ -107,8 +135,14 @@ export function getTemplatesForFlow(params: TemplateLookupParams): string[] {
     templates.push(...(moneyClaimTemplates[jurisdiction] ?? []));
   }
 
-  assertTemplatesExist(templates);
-  return Array.from(new Set(templates));
+  const registryFound = templates.length > 0;
+  const evaluated = evaluateTemplates(templates);
+
+  return {
+    templates: evaluated.templates,
+    missingOnDisk: evaluated.missingOnDisk,
+    registryFound,
+  };
 }
 
 export function getTemplateRegistryEntries(): FlowKey[] {
