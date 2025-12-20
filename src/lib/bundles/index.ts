@@ -98,7 +98,7 @@ export async function generateCourtBundle(
     const bundleResult = await assembleBundlePDF(
       caseId,
       'court',
-      'england-wales',
+      jurisdiction, // Use actual jurisdiction (england or wales)
       sections,
       caseIntel,
       outputDir,

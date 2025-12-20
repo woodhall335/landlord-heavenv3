@@ -59,6 +59,7 @@ describe('Markdown Artifact Prevention', () => {
       earliest_leaving_date: '2025-02-12',
       earliest_tribunal_date: '2025-02-12',
       notice_period_days: 28 as const,
+      pre_action_completed: true, // Required for 28-day notice period with Ground 1
       grounds: [
         {
           number: 1,
