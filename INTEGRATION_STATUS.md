@@ -124,14 +124,23 @@
 - ✅ All jurisdictions (England, Wales, Scotland) are stage-aware
 - ✅ Checkpoint uses stage='generate' for complete route analysis
 
-### 8. UI Safety (PENDING)
-**TODO**: Update preview page to handle LEGAL_BLOCK gracefully
+### 8. UI Safety ✅ COMPLETE
+**Status**: Preview page handles 422 LEGAL_BLOCK gracefully
 
-**Requirements**:
-- Render structured `blocking_issues` + `warnings`
-- Implement "Go to question" navigation using `affected_question_id`
-- Don't crash/throw generic errors on 422
-- Show user-friendly messages from `user_fix_hint`
+**Files**:
+- ✅ `src/components/ui/ValidationErrors.tsx` - Structured validation error component
+- ✅ `src/components/ui/index.ts` - Exported ValidationErrors for easy import
+- ✅ `src/app/wizard/preview/[caseId]/page.tsx` - Integrated ValidationErrors display
+
+**Achievements**:
+- ✅ Renders structured `blocking_issues` and `warnings` from 422 responses
+- ✅ Implements "Go to question" navigation using `affected_question_id`
+- ✅ Supports `alternate_question_ids` for multi-path navigation
+- ✅ No crashes or generic errors on 422 LEGAL_BLOCK
+- ✅ Shows user-friendly messages from `user_fix_hint`
+- ✅ Retry functionality after fixing validation issues
+- ✅ Backward compatible with old-style 422 error formats
+- ✅ Clean UI: red blocks for errors, yellow for warnings
 
 ### 9. Flow Harness E2E Tests (PENDING)
 **TODO**: Create comprehensive end-to-end tests driven by capability matrix
@@ -151,7 +160,7 @@
 
 ## 📊 Current Status Summary
 
-**Completed**: 7/9 tasks (78%)
+**Completed**: 8/9 tasks (89%)
 - ✅ Validation orchestrator + tests
 - ✅ Preview/generate helpers
 - ✅ Preview endpoint integration
@@ -159,12 +168,12 @@
 - ✅ Deposit bug regression test
 - ✅ **Wizard/checkpoint integration (REMOVED downgrade hacks)**
 - ✅ **Decision engine integration (Stage-aware with MQS mapping)**
+- ✅ **UI Safety (ValidationErrors component with navigation)**
 
 **In Progress**: 0/9 tasks
 - (None)
 
-**Pending**: 2/9 tasks
-- 🚧 UI safety
+**Pending**: 1/9 tasks
 - 🚧 Flow harness E2E tests
 
 ---
