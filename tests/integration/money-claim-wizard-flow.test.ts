@@ -190,11 +190,9 @@ describe('Money claim wizard integration', () => {
       landlord_email: 'alice@example.com',
     });
     await answerQuestion(caseId, 'property_address', {
-      address_line1: '2 Rental Road',
-      address_line2: '',
-      city: 'London',
-      postcode: 'N2 2BB',
-      country: 'england',
+      property_address_line1: '2 Rental Road',
+      property_address_town: 'London',
+      property_address_postcode: 'N2 2BB',
     });
     await answerQuestion(caseId, 'tenancy_start_date', '2024-01-01');
     await answerQuestion(caseId, 'rent_amount', 750);
@@ -299,11 +297,11 @@ describe('Money claim wizard integration', () => {
     });
     await answerQuestion(caseId, 'defender_full_name', 'Rob Renter');
     await answerQuestion(caseId, 'property_address', {
-      address_line1: '20 Tenancy Terrace',
-      address_line2: '',
-      city: 'Edinburgh',
-      postcode: 'EH2 2BB',
-      country: 'scotland',
+      property_address_line1: '20 Tenancy Terrace',
+      property_address_line2: '',
+      property_city: 'Edinburgh',
+      property_postcode: 'EH2 2BB',
+      property_country: 'scotland',
     });
     await answerQuestion(caseId, 'tenancy_start_date', '2024-02-01');
     await answerQuestion(caseId, 'rent_amount', 650);

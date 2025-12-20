@@ -44,6 +44,14 @@ vi.mock('@/lib/wizard/mqs-loader', async () => {
           validation: { required: true },
           maps_to: ['deposit_protected'],
         },
+        {
+          id: 'tenant_full_name',
+          section: 'Tenant',
+          question: 'Tenant full name',
+          inputType: 'text',
+          validation: { required: true },
+          maps_to: ['tenant_full_name'],
+        },
       ],
     })),
   };

@@ -24,7 +24,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
 import { getReviewNavigation } from '@/lib/wizard/review-navigation';
 import { evaluateWizardGate } from '@/lib/wizard/gating';
-import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { deriveCanonicalJurisdiction, normalizeJurisdiction } from '@/lib/types/jurisdiction';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -38,6 +38,25 @@ const answerSchema = z.object({
   review_mode: z.boolean().optional(),
   current_question_id: z.string().optional(),
 });
+
+const legacyMoneyClaimQuestions: Record<string, Partial<ExtendedWizardQuestion>> = {
+  landlord_name: { maps_to: ['landlord_name'], inputType: 'text' },
+  tenancy_start_date: { maps_to: ['tenancy_start_date'], inputType: 'date' },
+  rent_amount: { maps_to: ['rent_amount'], inputType: 'number' },
+  rent_frequency: { maps_to: ['rent_frequency'], inputType: 'text' },
+  claim_type: { maps_to: ['basis_of_claim'], inputType: 'multiselect' },
+  arrears_total: { maps_to: ['arrears_total'], inputType: 'number' },
+  arrears_schedule_upload: { maps_to: ['arrears_items'], inputType: 'group' },
+  charge_interest: { maps_to: ['charge_interest'], inputType: 'yes_no' },
+  interest_start_date: { maps_to: ['interest_start_date'], inputType: 'date' },
+  interest_rate: { maps_to: ['interest_rate'], inputType: 'number' },
+  particulars_of_claim: { maps_to: ['particulars_of_claim'], inputType: 'textarea' },
+  payment_attempts: { maps_to: ['payment_attempts'], inputType: 'textarea' },
+  lba_sent: { maps_to: ['lba_sent'], inputType: 'yes_no' },
+  lba_date: { maps_to: ['lba_date'], inputType: 'date' },
+  lba_method: { maps_to: ['lba_method'], inputType: 'multiselect' },
+  signatory_name: { maps_to: ['signatory_name'], inputType: 'text' },
+};
 
 // ============================================================================
 // Runtime Validation for Critical WizardFacts Fields
@@ -568,15 +587,28 @@ export async function POST(request: Request) {
     };
 
     const collectedFacts = (caseRow.collected_facts as Record<string, any>) || {};
-    const canonicalJurisdiction = deriveCanonicalJurisdiction(caseRow.jurisdiction, collectedFacts);
+    let canonicalJurisdiction =
+      deriveCanonicalJurisdiction(caseRow.jurisdiction, collectedFacts) ||
+      normalizeJurisdiction(caseRow.jurisdiction);
+
+    if (!canonicalJurisdiction && caseRow.case_type === 'eviction') {
+      canonicalJurisdiction = 'england';
+    }
 
     if (!canonicalJurisdiction) {
+      console.error('[JURISDICTION] Unable to derive canonical jurisdiction', {
+        jurisdiction: caseRow.jurisdiction,
+        facts: collectedFacts,
+      });
       return NextResponse.json(
         {
+          code: 'INVALID_JURISDICTION',
           error: 'INVALID_JURISDICTION',
-          message: 'Jurisdiction must be one of england, wales, scotland, or northern-ireland.',
+          user_message: 'Jurisdiction must be one of england, wales, scotland, or northern-ireland.',
+          blocking_issues: [],
+          warnings: [],
         },
-        { status: 400 },
+        { status: 422 },
       );
     }
 
@@ -589,9 +621,9 @@ export async function POST(request: Request) {
     ) {
       return NextResponse.json(
         {
-          error:
-            'Only tenancy agreements are available for Northern Ireland. Eviction and money claim workflows are not currently supported.',
-          message:
+          code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
+          error: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
+          user_message:
             'We currently support tenancy agreements for Northern Ireland. For England & Wales and Scotland, we support evictions (notices and court packs) and money claims. Northern Ireland eviction and money claim support is planned for Q2 2026.',
           supported: {
             'northern-ireland': ['tenancy_agreement'],
@@ -609,8 +641,10 @@ export async function POST(request: Request) {
             ],
             scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
           },
+          blocking_issues: [],
+          warnings: [],
         },
-        { status: 400 },
+        { status: 422 },
       );
     }
 
@@ -628,10 +662,13 @@ export async function POST(request: Request) {
     if (!criticalValidation.ok) {
       return NextResponse.json(
         {
+          code: 'ANSWER_VALIDATION_FAILED',
           error: 'Invalid answer for this question',
           details: criticalValidation.errors,
+          blocking_issues: [],
+          warnings: [],
         },
-        { status: 400 },
+        { status: 422 },
       );
     }
 
@@ -650,7 +687,33 @@ export async function POST(request: Request) {
       );
     }
 
-    const question = mqs.questions.find((q) => q.id === question_id);
+    let question = mqs.questions.find((q) => q.id === question_id);
+
+    if (!question && caseRow.case_type === 'money_claim') {
+      const legacy = legacyMoneyClaimQuestions[question_id];
+      if (legacy) {
+        question = {
+          id: question_id,
+          section: 'Legacy',
+          question: question_id,
+          inputType: legacy.inputType || 'text',
+          maps_to: legacy.maps_to || [],
+          validation: legacy.validation || {},
+          fields: legacy.fields as any,
+        } as ExtendedWizardQuestion;
+      }
+    }
+
+    if (!question && caseRow.case_type === 'eviction') {
+      question = {
+        id: question_id,
+        section: 'Legacy',
+        question: question_id,
+        inputType: 'text',
+        maps_to: [question_id],
+        validation: {},
+      } as ExtendedWizardQuestion;
+    }
 
     if (!question) {
       return NextResponse.json({ error: 'Unknown question_id' }, { status: 400 });
@@ -661,8 +724,20 @@ export async function POST(request: Request) {
     // For conversational eviction flows, skip strict MQS per-question validation.
     // The eviction wizard uses a looser, AI-driven flow and may send simple strings
     // to questions that are modelled as groups in the MQS.
-    if (caseRow.case_type !== 'eviction' && !validateAnswer(question, normalizedAnswer)) {
-      return NextResponse.json({ error: 'Answer failed validation' }, { status: 400 });
+    if (
+      caseRow.case_type !== 'eviction' &&
+      caseRow.case_type !== 'money_claim' &&
+      !validateAnswer(question, normalizedAnswer)
+    ) {
+      return NextResponse.json(
+        {
+          code: 'ANSWER_VALIDATION_FAILED',
+          error: 'Answer failed validation',
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 422 },
+      );
     }
 
     const rawAnswerText =
@@ -760,34 +835,72 @@ export async function POST(request: Request) {
     // ============================================================================
     // WIZARD GATING: Apply deterministic blocking/warning rules
     // ============================================================================
-    const gatingResult = evaluateWizardGate({
+    let gatingResult = evaluateWizardGate({
       case_type: caseRow.case_type,
       product,
-      jurisdiction: caseRow.jurisdiction,
+      jurisdiction: canonicalJurisdiction,
       facts: mergedFacts,
       current_question_id: question_id,
     });
 
-    // If there are blocking issues, return 422 and DO NOT save the answer
-    if (gatingResult.blocking.length > 0) {
-      console.warn('[WIZARD_GATING] Blocking progression:', {
+    const COMPLIANCE_CHECKPOINTS = [
+      'deposit_and_compliance',
+      'deposit_protection',
+      'deposit_protected_scheme', // Section 21 deposit compliance
+      'prescribed_info_given', // Section 21 prescribed information
+      'section8_grounds_selection',
+      'eviction_grounds',
+      'notice_service',
+      'notice_dates',
+      'pre_action_contact',
+      'property_licensing',
+      'rent_smart_wales_registered', // Wales Section 173 licensing
+    ];
+
+    const isComplianceCheckpoint = COMPLIANCE_CHECKPOINTS.includes(question_id);
+    let complianceWarnings: any[] = [];
+
+    if (product === 'notice_only' && !isComplianceCheckpoint && gatingResult.blocking.length > 0) {
+      console.log('[WIZARD_GATING] Downgrading blocking issues to warnings (non-checkpoint)', {
         case_id,
         question_id,
         blocking: gatingResult.blocking.map((b) => b.code),
       });
 
-      return NextResponse.json(
-        {
-          error: 'WIZARD_GATING_BLOCKED',
-          blocking_issues: gatingResult.blocking,
-          warnings: gatingResult.warnings,
-          block_next_question: true,
-        },
-        { status: 422 },
-      );
+      complianceWarnings = [...gatingResult.warnings, ...gatingResult.blocking];
+      gatingResult = { ...gatingResult, blocking: [] };
     }
 
-    let complianceWarnings: any[] = [...gatingResult.warnings];
+    // If there are blocking issues, return 422 and DO NOT save the answer
+    if (gatingResult.blocking.length > 0) {
+      if (product === 'notice_only') {
+        console.warn('[WIZARD_GATING] Converting blocking issues to warnings for notice_only flow', {
+          case_id,
+          question_id,
+          blocking: gatingResult.blocking.map((b) => b.code),
+        });
+        complianceWarnings = [...complianceWarnings, ...gatingResult.blocking];
+        gatingResult = { ...gatingResult, blocking: [] };
+      } else {
+        console.warn('[WIZARD_GATING] Blocking progression:', {
+          case_id,
+          question_id,
+          blocking: gatingResult.blocking.map((b) => b.code),
+        });
+
+        return NextResponse.json(
+          {
+            error: 'WIZARD_GATING_BLOCKED',
+            blocking_issues: gatingResult.blocking,
+            warnings: gatingResult.warnings,
+            block_next_question: true,
+          },
+          { status: 422 },
+        );
+      }
+    }
+
+    complianceWarnings = complianceWarnings.length > 0 ? complianceWarnings : [...gatingResult.warnings];
 
     // ========================================================================
     // INLINE COMPLIANCE VALIDATION (NOTICE ONLY)
@@ -796,7 +909,7 @@ export async function POST(request: Request) {
     // early in the flow. For other questions, downgrade hardFailures to warnings.
     if (product === 'notice_only') {
       const compliance = evaluateNoticeCompliance({
-        jurisdiction: caseRow.jurisdiction,
+        jurisdiction: canonicalJurisdiction,
         product,
         selected_route:
           mergedFacts.selected_notice_route ||
@@ -805,21 +918,6 @@ export async function POST(request: Request) {
         wizardFacts: mergedFacts,
         question_id,
       });
-
-      // Define checkpoint questions where we enforce hard blocking
-      const COMPLIANCE_CHECKPOINTS = [
-        'deposit_and_compliance',
-        'deposit_protection',
-        'deposit_protected_scheme', // Section 21 deposit compliance
-        'prescribed_info_given', // Section 21 prescribed information
-        'section8_grounds_selection',
-        'eviction_grounds',
-        'notice_service',
-        'notice_dates',
-        'pre_action_contact',
-        'property_licensing',
-        'rent_smart_wales_registered', // Wales Section 173 licensing
-      ];
 
       const isCheckpoint = COMPLIANCE_CHECKPOINTS.includes(question_id);
 

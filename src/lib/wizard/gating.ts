@@ -10,6 +10,7 @@
 import type { ProductType } from './mqs-loader';
 import { resolveFactValue, validateJurisdictionCompliance } from '@/lib/jurisdictions/validators';
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
+import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 // ============================================================================
 // TYPES
@@ -150,7 +151,21 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     return { blocking, warnings };
   }
 
-  if (normalizedInput === 'northern-ireland') {
+  const canonicalJurisdiction = deriveCanonicalJurisdiction(normalizedInput, facts);
+
+  if (!canonicalJurisdiction) {
+    blocking.push({
+      code: 'JURISDICTION_INVALID',
+      message: 'Jurisdiction is invalid or unsupported for eviction',
+      fields: ['jurisdiction'],
+      user_fix_hint:
+        'Choose a supported jurisdiction (England, Wales, or Scotland) or provide property_location to migrate legacy cases.',
+    });
+
+    return { blocking, warnings };
+  }
+
+  if (canonicalJurisdiction === 'northern-ireland') {
     blocking.push({
       code: 'JURISDICTION_EVICTION_UNSUPPORTED',
       message: 'Eviction notices are not supported in Northern Ireland',
@@ -161,26 +176,7 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     return { blocking, warnings };
   }
 
-  let jurisdictionKey: JurisdictionKey | undefined;
-
-  if (normalizedInput === 'england-wales') {
-    // Legacy migration shim: old cases stored "england-wales". Treat as England until data is fully migrated.
-    // TODO: Remove this normalization once no cases use the deprecated combined jurisdiction.
-    jurisdictionKey = 'england';
-  } else if (normalizedInput === 'england' || normalizedInput === 'wales' || normalizedInput === 'scotland') {
-    jurisdictionKey = normalizedInput as JurisdictionKey;
-  }
-
-  if (!jurisdictionKey) {
-    blocking.push({
-      code: 'JURISDICTION_INVALID',
-      message: 'Jurisdiction is invalid or unsupported for eviction',
-      fields: ['jurisdiction'],
-      user_fix_hint: 'Choose a supported jurisdiction (England, Wales, or Scotland).',
-    });
-
-    return { blocking, warnings };
-  }
+  const jurisdictionKey: JurisdictionKey | undefined = canonicalJurisdiction as JurisdictionKey;
 
   // ============================================================================
   // GATE 1: Section 8 Ground 8 Threshold
