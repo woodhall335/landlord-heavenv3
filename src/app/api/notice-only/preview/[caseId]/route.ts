@@ -220,7 +220,14 @@ export async function GET(
     }
 
     // ========================================================================
-    // LEGACY CONFIG-DRIVEN VALIDATION (keeping for now but should be redundant)
+    // LEGACY CONFIG-DRIVEN VALIDATION
+    //
+    // IMPORTANT: Since unified validation (validateForPreview) already ran and
+    // passed, legacy validation must NOT block. This prevents drift where legacy
+    // validators require fields the MQS doesn't collect.
+    //
+    // Legacy validation is kept for logging purposes only - any blocking issues
+    // are logged as warnings but do NOT block the preview.
     // ========================================================================
     const validationOutcome = validateNoticeOnlyBeforeRender({
       jurisdiction: validationJurisdiction as JurisdictionKey,
@@ -230,26 +237,25 @@ export async function GET(
       stage: 'preview',
     });
 
-    const blockingIssues = validationOutcome.blocking ?? [];
-    const warnings = validationOutcome.warnings ?? [];
+    const legacyBlockingIssues = validationOutcome.blocking ?? [];
+    const legacyWarnings = validationOutcome.warnings ?? [];
 
-    if (blockingIssues.length > 0) {
-      const userMessage = 'Cannot generate preview: jurisdiction rules are not satisfied';
-      const blockingPayload = {
-        code: 'LEGAL_BLOCK',
-        error: 'LEGAL_BLOCK',
-        user_message: userMessage,
-        blocking_issues: blockingIssues,
-        warnings,
-      };
-
-      console.warn('[NOTICE-PREVIEW-API] Legacy validation blocked preview:', {
+    // Log legacy blocking issues for monitoring but do NOT block
+    // This prevents legacy validator drift from blocking compliant cases
+    if (legacyBlockingIssues.length > 0) {
+      console.warn('[NOTICE-PREVIEW-API] Legacy validation would have blocked (suppressed):', {
         case_id: caseId,
-        blocking: blockingIssues.map((b) => b.code),
-        payload: blockingPayload,
+        issues: legacyBlockingIssues.map((b) => b.code),
+        note: 'Unified validation passed - legacy blocking suppressed to prevent drift',
       });
+    }
 
-      return NextResponse.json(blockingPayload, { status: 422 });
+    // Warnings from legacy validation can still be logged
+    if (legacyWarnings.length > 0) {
+      console.log('[NOTICE-PREVIEW-API] Legacy validation warnings:', {
+        case_id: caseId,
+        warnings: legacyWarnings.map((w) => w.code),
+      });
     }
 
     // ========================================================================
