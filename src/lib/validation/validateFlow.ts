@@ -94,9 +94,54 @@ function validateFactsSchema(
 }
 
 /**
+ * Normalize grounds keys to canonical ground_codes
+ * Bridges multiple ground key variants (section8_grounds, section_8_grounds, selected_grounds, etc.)
+ * to the canonical ground_codes key expected by requirements and templates.
+ */
+function normalizeGroundsCodes(facts: Record<string, unknown>): Record<string, unknown> {
+  // If ground_codes already exists, don't overwrite it
+  if (facts.ground_codes) {
+    return facts;
+  }
+
+  // List of known ground key variants used across flows
+  const groundKeyVariants = [
+    'section8_grounds',
+    'section_8_grounds',
+    'selected_grounds',
+    'grounds',
+    'eviction_grounds',
+    'section8_grounds_selection',
+  ];
+
+  // Find first available ground key variant
+  for (const key of groundKeyVariants) {
+    const value = facts[key];
+    if (value !== undefined && value !== null) {
+      // Normalize to array if needed
+      let normalizedValue: string[] = [];
+      if (Array.isArray(value)) {
+        normalizedValue = value;
+      } else if (typeof value === 'string') {
+        normalizedValue = value.split(',').map(v => v.trim()).filter(Boolean);
+      }
+
+      // Set canonical key
+      return {
+        ...facts,
+        ground_codes: normalizedValue,
+      };
+    }
+  }
+
+  return facts;
+}
+
+/**
  * Unified flow validation orchestrator
  *
  * Steps:
+ * 0. Normalize facts (canonicalize ground keys)
  * 1. Assert flow is supported via capability matrix
  * 2. Validate facts against schema
  * 3. Get requirements for stage
@@ -107,7 +152,10 @@ function validateFactsSchema(
  * 8. Return standardized result
  */
 export function validateFlow(input: FlowValidationInput): FlowValidationResult {
-  const { jurisdiction, product, route, stage, facts } = input;
+  const { jurisdiction, product, route, stage } = input;
+
+  // Step 0: Normalize facts (canonicalize grounds)
+  const facts = normalizeGroundsCodes(input.facts);
 
   // Step 1: Assert flow is supported
   let flow: FlowCapability;
@@ -174,10 +222,46 @@ export function validateFlow(input: FlowValidationInput): FlowValidationResult {
       const decisionOutput = runDecisionEngine(decisionInput);
 
       // Convert decision engine BlockingIssue to ValidationIssue
-      decisionIssues = mapDecisionIssuesToValidationIssues(
+      let mappedIssues = mapDecisionIssuesToValidationIssues(
         decisionOutput.blocking_issues,
         { jurisdiction, product, route }
       );
+
+      // Filter issues by route - only apply issues that match the current route
+      // For example, deposit protection issues (route='section_21') should NOT block section_8
+      mappedIssues = mappedIssues.map(issue => {
+        const originalIssue = decisionOutput.blocking_issues.find(
+          bi => bi.issue.toUpperCase() === issue.code
+        );
+
+        if (!originalIssue) {
+          return issue;
+        }
+
+        // If the issue is for a different route, handle appropriately
+        if (originalIssue.route !== route) {
+          // Section 21-specific compliance issues should not block Section 8
+          if (
+            (route === 'section_8' || route === 'wales_fault_based') &&
+            (originalIssue.issue === 'deposit_not_protected' ||
+             originalIssue.issue === 'prescribed_info_not_given')
+          ) {
+            // Filter out entirely - these are not relevant for Section 8
+            return null;
+          }
+
+          // For other route mismatches, downgrade to warning
+          return {
+            ...issue,
+            severity: 'warning' as const,
+            user_fix_hint: `Note: ${issue.user_fix_hint || originalIssue.description}`,
+          };
+        }
+
+        return issue;
+      }).filter((issue): issue is ValidationIssue => issue !== null);
+
+      decisionIssues = mappedIssues;
 
       // Add decision engine warnings as well
       const decisionWarnings = decisionOutput.warnings.map(w => ({
@@ -210,7 +294,11 @@ export function validateFlow(input: FlowValidationInput): FlowValidationResult {
   allBlockingIssues = dedupeIssues(allBlockingIssues);
   allWarnings = dedupeIssues(allWarnings);
 
-  // Step 8: Return standardized result
+  // Step 8: Filter out UNKNOWN_FACT_KEY warnings from user-facing output
+  // These are useful for internal logging but should not be shown to users
+  allWarnings = allWarnings.filter(w => w.code !== 'UNKNOWN_FACT_KEY');
+
+  // Step 9: Return standardized result
   const hasBlockingIssues = allBlockingIssues.length > 0;
 
   if (hasBlockingIssues) {
