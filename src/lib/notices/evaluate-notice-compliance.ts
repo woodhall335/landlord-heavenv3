@@ -286,13 +286,31 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
   // ENGLAND – SECTION 21
   // ---------------------------------------------------------------------------
   if (route === 'notice-only/england/section21') {
-    if (wizardFacts.deposit_taken && (!wizardFacts.deposit_protected || !wizardFacts.prescribed_info_given)) {
-      hardFailures.push({
-        code: 'S21-DEPOSIT-NONCOMPLIANT',
-        affected_question_id: wizardFacts.deposit_protected ? 'prescribed_info_given' : 'deposit_protected_scheme',
-        legal_reason: 'Deposit must be protected and prescribed information served before a Section 21 notice',
-        user_fix_hint: 'Protect the deposit and serve prescribed information before continuing',
-      });
+    if (wizardFacts.deposit_taken === true) {
+      if (wizardFacts.deposit_protected === false) {
+        hardFailures.push({
+          code: 'S21-DEPOSIT-NONCOMPLIANT',
+          affected_question_id: 'deposit_protected_scheme',
+          legal_reason: 'Deposit must be protected before a Section 21 notice',
+          user_fix_hint: 'Protect the deposit in an approved scheme before continuing',
+        });
+      } else if (wizardFacts.deposit_protected === true) {
+        if (wizardFacts.prescribed_info_given === false) {
+          hardFailures.push({
+            code: 'S21-DEPOSIT-NONCOMPLIANT',
+            affected_question_id: 'prescribed_info_given',
+            legal_reason: 'Prescribed information must be served before a Section 21 notice',
+            user_fix_hint: 'Serve the prescribed information and confirm before continuing',
+          });
+        } else if (wizardFacts.prescribed_info_given === undefined || wizardFacts.prescribed_info_given === null) {
+          warnings.push({
+            code: 'S21-PRESCRIBED-INFO-REQUIRED',
+            affected_question_id: 'prescribed_info_given',
+            legal_reason: 'Prescribed information must be confirmed before generating the notice',
+            user_fix_hint: 'Confirm whether prescribed information has been served before generating the notice',
+          });
+        }
+      }
     }
 
     if (wizardFacts.property_licensing_status === 'unlicensed') {

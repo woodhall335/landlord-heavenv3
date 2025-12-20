@@ -193,7 +193,7 @@ describe('jurisdiction gating enforcement', () => {
     expect(mutatedValidation.blocking.map((b) => b.code)).toContain('DEPOSIT_NOT_PROTECTED');
   });
 
-  it('fails closed when required_if cannot be evaluated because facts are missing', () => {
+  it('does not fail closed when deposit facts are not answered yet', () => {
     const facts = {
       ...baseDepositFacts,
       selected_notice_route: 'section_21',
@@ -210,8 +210,7 @@ describe('jurisdiction gating enforcement', () => {
       facts,
     });
 
-    const codes = gating.blocking.map((b) => b.code);
-    expect(codes).toContain('REQUIRED_IF_EVALUATION_FAILED');
+    expect(gating.blocking).toHaveLength(0);
   });
 
   it('fails closed during notice-only pack generation when facts become invalid', async () => {

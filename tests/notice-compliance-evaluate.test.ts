@@ -20,6 +20,24 @@ describe('evaluateNoticeCompliance', () => {
     expect(result.ok).toBe(false);
   });
 
+  it('warns (but does not hard fail) when prescribed info is unanswered', () => {
+    const result = evaluateNoticeCompliance({
+      jurisdiction: 'england',
+      product: 'notice_only',
+      selected_route: 'section_21',
+      wizardFacts: {
+        deposit_taken: true,
+        deposit_protected: true,
+        tenancy_start_date: '2023-01-01',
+        notice_service_date: '2024-01-10',
+      },
+    });
+
+    expect(result.hardFailures).toHaveLength(0);
+    expect(result.warnings.some((w) => w.code === 'S21-PRESCRIBED-INFO-REQUIRED')).toBe(true);
+    expect(result.ok).toBe(true);
+  });
+
   it('blocks Section 8 when no grounds are selected', () => {
     const result = evaluateNoticeCompliance({
       jurisdiction: 'england',

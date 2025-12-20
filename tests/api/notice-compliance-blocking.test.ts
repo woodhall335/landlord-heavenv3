@@ -70,21 +70,6 @@ vi.mock('@/lib/case-facts/store', () => ({
   updateWizardFacts: vi.fn(async (_supabase, _caseId, updater) => updater({} as any)),
 }));
 
-vi.mock('@/lib/notices/evaluate-notice-compliance', () => ({
-  evaluateNoticeCompliance: vi.fn(() => ({
-    ok: false,
-    hardFailures: [
-      {
-        code: 'S21-DEPOSIT-NONCOMPLIANT',
-        affected_question_id: 'deposit_protected_scheme',
-        legal_reason: 'Deposit not protected',
-        user_fix_hint: 'Protect the deposit',
-      },
-    ],
-    warnings: [],
-  })),
-}));
-
 describe('wizard answer compliance blocking', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -126,6 +111,35 @@ describe('wizard answer compliance blocking', () => {
     expect(body.failures.length).toBeGreaterThan(0);
     expect(body.failures?.[0]?.affected_question_id).toBe('deposit_protected_scheme');
     expect(body.block_next_question).toBe(true);
+  });
+
+  it('allows progression when deposit is protected but prescribed info is not answered yet', async () => {
+    const mockCase = {
+      id: 'case-789',
+      case_type: 'eviction',
+      jurisdiction: 'england',
+      collected_facts: { __meta: { product: 'notice_only', mqs_version: null } },
+      user_id: null,
+      wizard_progress: 0,
+    };
+
+    supabaseClientMock.single.mockResolvedValue({ data: mockCase, error: null });
+
+    const response = await saveAnswer(
+      new Request('http://localhost/api/wizard/answer', {
+        method: 'POST',
+        body: JSON.stringify({
+          case_id: mockCase.id,
+          question_id: 'deposit_protected_scheme',
+          answer: true,
+        }),
+      }),
+    );
+
+    const body = await response.json();
+    expect(response.status).toBe(200);
+    expect(body.answer_saved).toBe(true);
+    expect(body.compliance_warnings?.some((w: any) => w.code === 'S21-PRESCRIBED-INFO-REQUIRED')).toBe(true);
   });
 
   it('allows non-checkpoint questions to pass even with compliance issues (downgrades to warnings)', async () => {
