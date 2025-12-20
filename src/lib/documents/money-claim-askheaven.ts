@@ -102,11 +102,12 @@ export async function generateMoneyClaimAskHeavenDrafts(
 ): Promise<MoneyClaimDrafts> {
   const rawJurisdiction = options?.jurisdiction || ('jurisdiction' in moneyClaimCase ? moneyClaimCase.jurisdiction : 'england');
 
-  // Normalize jurisdiction for LLM helpers (england and wales both map to 'england-wales' since they share legal framework)
-  const llmJurisdiction: 'england-wales' | 'scotland' = rawJurisdiction === 'scotland' ? 'scotland' : 'england-wales';
+  // Map to internal legal framework identifier (NOT a jurisdiction)
+  // England and Wales share the same legal framework for money claims
+  const legalFramework: 'ew_shared_framework' | 'scotland' = rawJurisdiction === 'scotland' ? 'scotland' : 'ew_shared_framework';
 
   // Start with fallback content as a baseline (ensures we never return incomplete data)
-  const fallbackDrafts = generateFallbackDrafts(caseFacts, moneyClaimCase, llmJurisdiction, options);
+  const fallbackDrafts = generateFallbackDrafts(caseFacts, moneyClaimCase, legalFramework, options);
 
   // Check if AI is disabled via env var (allows safe rollout)
   if (process.env.DISABLE_MONEY_CLAIM_AI === 'true') {
@@ -122,10 +123,10 @@ export async function generateMoneyClaimAskHeavenDrafts(
 
   try {
     // Build comprehensive prompt for the AI
-    const prompt = buildMoneyClaimDraftingPrompt(caseFacts, moneyClaimCase, llmJurisdiction);
+    const prompt = buildMoneyClaimDraftingPrompt(caseFacts, moneyClaimCase, legalFramework);
 
     // Call the LLM to generate AI drafts
-    const aiDrafts = await callMoneyClaimLLM(prompt, llmJurisdiction, options);
+    const aiDrafts = await callMoneyClaimLLM(prompt, legalFramework, options);
 
     // Merge AI content with fallback (AI takes precedence, fallback fills gaps)
     return mergeAIDraftsWithFallback(aiDrafts, fallbackDrafts);
@@ -143,13 +144,14 @@ export async function generateMoneyClaimAskHeavenDrafts(
 
 /**
  * Builds a comprehensive prompt for AI drafting
+ * @param legalFramework - Internal framework identifier (NOT a jurisdiction): 'ew_shared_framework' | 'scotland'
  */
 function buildMoneyClaimDraftingPrompt(
   caseFacts: CaseFacts,
   moneyClaimCase: MoneyClaimCase | ScotlandMoneyClaimCase,
-  jurisdiction: 'england-wales' | 'scotland'
+  legalFramework: 'ew_shared_framework' | 'scotland'
 ): string {
-  const isScotland = jurisdiction === 'scotland';
+  const isScotland = legalFramework === 'scotland';
 
   return `
 You are a legal drafting assistant specializing in ${isScotland ? 'Scottish Simple Procedure' : 'England & Wales County Court'} money claims for residential rent arrears and related claims.
@@ -192,13 +194,14 @@ Tone: Professional, factual, firm but not aggressive. Cite relevant law where ap
 /**
  * Calls the LLM to generate AI-drafted money claim content
  * Returns structured JSON matching MoneyClaimDrafts interface
+ * @param legalFramework - Internal framework identifier (NOT a jurisdiction): 'ew_shared_framework' | 'scotland'
  */
 async function callMoneyClaimLLM(
   prompt: string,
-  jurisdiction: 'england-wales' | 'scotland',
+  legalFramework: 'ew_shared_framework' | 'scotland',
   options?: { includePostIssue?: boolean; includeRiskReport?: boolean }
 ): Promise<Partial<MoneyClaimDrafts>> {
-  const isScotland = jurisdiction === 'scotland';
+  const isScotland = legalFramework === 'scotland';
 
   // Build system prompt for legal drafting
   const systemPrompt = `
@@ -221,7 +224,7 @@ CRITICAL RULES FOR THIS MODE:
 - Structure content for court/tribunal submission.
 - Use neutral, professional language suitable for legal documents.
 
-Jurisdiction: ${jurisdiction}
+Legal Framework: ${legalFramework}
 ${isScotland ? 'Court: Sheriff Court (Simple Procedure)' : 'Court: County Court'}
 
 STRICT JSON OUTPUT REQUIREMENTS:
@@ -380,14 +383,15 @@ function mergeAIDraftsWithFallback(
 /**
  * Generates fallback content when AI is unavailable
  * This ensures pack generation never fails
+ * @param legalFramework - Internal framework identifier (NOT a jurisdiction): 'ew_shared_framework' | 'scotland'
  */
 function generateFallbackDrafts(
   caseFacts: CaseFacts,
   moneyClaimCase: MoneyClaimCase | ScotlandMoneyClaimCase,
-  jurisdiction: 'england-wales' | 'scotland',
+  legalFramework: 'ew_shared_framework' | 'scotland',
   options?: { includePostIssue?: boolean; includeRiskReport?: boolean }
 ): MoneyClaimDrafts {
-  const isScotland = jurisdiction === 'scotland';
+  const isScotland = legalFramework === 'scotland';
   const tenant = moneyClaimCase.tenant_full_name;
   const property = moneyClaimCase.property_address;
   const arrears = moneyClaimCase.arrears_total || 0;

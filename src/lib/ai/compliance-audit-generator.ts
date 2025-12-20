@@ -50,7 +50,7 @@ export interface ComplianceAuditJSON {
 }
 
 export interface ComplianceAuditContext {
-  jurisdiction: 'england-wales' | 'scotland' | 'northern-ireland';
+  legalFramework: 'ew_shared_framework' | 'scotland' | 'northern-ireland'; // NOT a jurisdiction - internal framework identifier
   notice_type?: string; // 'Section 21', 'Section 8', 'Notice to Leave', etc.
 
   // Deposit
@@ -126,7 +126,7 @@ export async function generateComplianceAudit(
     const prompt = buildComplianceAuditPrompt(caseFacts, context);
 
     // Call LLM
-    const aiAudit = await callComplianceAuditLLM(prompt, context.jurisdiction);
+    const aiAudit = await callComplianceAuditLLM(prompt, context.legalFramework);
 
     // Merge AI with fallback
     return mergeWithFallback(aiAudit, fallbackAudit);
@@ -148,14 +148,14 @@ function buildComplianceAuditPrompt(
   caseFacts: CaseFacts,
   context: ComplianceAuditContext
 ): string {
-  const isEnglandWales = context.jurisdiction === 'england-wales';
+  const isEnglandWales = context.legalFramework === 'ew_shared_framework';
 
   return `
 You are a legal compliance auditor specializing in UK residential tenancy law.
 
 Audit this landlord's compliance for eviction proceedings:
 
-JURISDICTION: ${context.jurisdiction}
+LEGAL FRAMEWORK: ${context.legalFramework}
 NOTICE TYPE: ${context.notice_type || 'Not specified'}
 
 DEPOSIT COMPLIANCE:
@@ -228,10 +228,11 @@ Be STRICT and identify ALL compliance failures. Better to over-flag than miss is
 
 /**
  * Calls LLM to generate compliance audit
+ * @param legalFramework - Internal framework identifier (NOT a jurisdiction): 'ew_shared_framework' | 'scotland' | 'northern-ireland'
  */
 async function callComplianceAuditLLM(
   prompt: string,
-  jurisdiction: string
+  legalFramework: string
 ): Promise<Partial<ComplianceAuditJSON>> {
   const systemPrompt = `
 ${ASK_HEAVEN_BASE_SYSTEM_PROMPT}
@@ -239,7 +240,7 @@ ${ASK_HEAVEN_BASE_SYSTEM_PROMPT}
 You are currently acting in COMPLIANCE AUDIT mode.
 
 Your job:
-- Audit landlord compliance with ${jurisdiction === 'scotland' ? 'Scottish' : 'England & Wales'} tenancy law
+- Audit landlord compliance with ${legalFramework === 'scotland' ? 'Scottish' : 'England & Wales'} tenancy law
 - Identify compliance failures that could block or weaken eviction
 - Provide clear, actionable recommendations
 - Be STRICT - flag all potential issues
@@ -387,7 +388,7 @@ function generateFallbackComplianceAudit(
   caseFacts: CaseFacts,
   context: ComplianceAuditContext
 ): ComplianceAuditJSON {
-  const isEnglandWales = context.jurisdiction === 'england-wales';
+  const isEnglandWales = context.legalFramework === 'ew_shared_framework';
   const critical_actions: string[] = [];
   const recommended_actions: string[] = [];
   const s21_blocking_issues: string[] = [];
@@ -544,7 +545,7 @@ function generateFallbackComplianceAudit(
   // Section 8 Grounds
   const s8_grounds: string[] = [];
   if (context.arrears_amount && context.arrears_amount > 0) {
-    if (context.arrears_amount >= (context.jurisdiction === 'england-wales' ? 2 : 3) * (caseFacts.tenancy.rent_amount || 0)) {
+    if (context.arrears_amount >= (context.legalFramework === 'ew_shared_framework' ? 2 : 3) * (caseFacts.tenancy.rent_amount || 0)) {
       s8_grounds.push('Ground 8 - Serious rent arrears (mandatory)');
     }
     s8_grounds.push('Ground 10 - Some rent arrears (discretionary)');
@@ -614,18 +615,19 @@ const caseJurisdiction =
   (caseFacts as any)?.jurisdiction ??
   (eviction as any)?.jurisdiction ??
   (caseFacts as any)?.property?.jurisdiction ??
-  'england-wales';
+  'england';
 
-const jurisdiction =
+// Map to internal legal framework identifier (NOT a jurisdiction)
+const legalFramework =
   caseJurisdiction === 'scotland'
     ? 'scotland'
     : caseJurisdiction === 'northern-ireland'
     ? 'northern-ireland'
-    : 'england-wales';
+    : 'ew_shared_framework';
 
 
   return {
-    jurisdiction,
+    legalFramework,
     notice_type: eviction?.notice_type,
 
     // Deposit
