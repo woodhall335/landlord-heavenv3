@@ -142,25 +142,28 @@
 - ✅ Backward compatible with old-style 422 error formats
 - ✅ Clean UI: red blocks for errors, yellow for warnings
 
-### 9. Flow Harness E2E Tests (PENDING)
-**TODO**: Create comprehensive end-to-end tests driven by capability matrix
+### 9. Flow Harness E2E Tests ✅ COMPLETE
+**Status**: Comprehensive matrix-driven tests for all flows
 
 **Files**:
-- `src/testutils/flowHarness.ts` - Test harness infrastructure
-- `tests/flows/endToEndFlows.test.ts` - E2E flow tests
+- ✅ `src/testutils/flowHarness.ts` - Test harness infrastructure
+- ✅ `tests/flows/endToEndFlows.test.ts` - E2E flow tests (300+ test cases)
 
-**Requirements**:
-- Iterate all supported (jurisdiction, product, route) combinations
-- PASS: Minimal compliant facts → preview 200 → generate 200
-- FAIL: Remove one required MQS fact → blocks with valid `affected_question_id`
-- Unsupported combos (including NI non-tenancy) always 422
-- No silent skips or matrix modifications to pass tests
+**Achievements**:
+- ✅ Iterates all supported (jurisdiction, product, route) from capability matrix
+- ✅ Tests minimal compliant facts → preview 200 → generate 200
+- ✅ Tests missing required fact → 422 with valid `affected_question_id`
+- ✅ Tests unsupported flows (including NI non-tenancy) always return 422
+- ✅ No silent skips or matrix modifications to pass tests
+- ✅ Conditional requirements tested (deposit_taken, has_gas_appliances)
+- ✅ Stage-aware validation tested (preview vs generate strictness)
+- ✅ Matrix-driven: NO hardcoded flow lists, driven by CAPABILITY_MATRIX
 
 ---
 
 ## 📊 Current Status Summary
 
-**Completed**: 8/9 tasks (89%)
+**🎉 COMPLETE: 9/9 tasks (100%)**
 - ✅ Validation orchestrator + tests
 - ✅ Preview/generate helpers
 - ✅ Preview endpoint integration
@@ -169,12 +172,9 @@
 - ✅ **Wizard/checkpoint integration (REMOVED downgrade hacks)**
 - ✅ **Decision engine integration (Stage-aware with MQS mapping)**
 - ✅ **UI Safety (ValidationErrors component with navigation)**
+- ✅ **Flow Harness E2E Tests (Matrix-driven comprehensive coverage)**
 
-**In Progress**: 0/9 tasks
-- (None)
-
-**Pending**: 1/9 tasks
-- 🚧 Flow harness E2E tests
+**All BLOCKING Requirements Satisfied**
 
 ---
 
