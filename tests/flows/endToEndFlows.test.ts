@@ -67,7 +67,7 @@ describe('End-to-End Flow Tests', () => {
     const supportedFlows = getAllSupportedFlows();
 
     // Test a subset of flows for non-compliant cases to keep test time reasonable
-    const testFlows = supportedFlows.filter((f, index) => index % 2 === 0); // Test every other flow
+    const testFlows = supportedFlows.filter((f: FlowDefinition, index: number) => index % 2 === 0); // Test every other flow
 
     for (const flow of testFlows) {
       describe(`${flow.jurisdiction}/${flow.product}/${flow.route} - missing fact`, () => {
@@ -158,7 +158,7 @@ describe('End-to-End Flow Tests', () => {
     describe('Northern Ireland - Non-Tenancy Products', () => {
       const niUnsupportedFlows: FlowDefinition[] = [
         { jurisdiction: 'northern-ireland', product: 'notice_only', route: 'default', status: 'unsupported' },
-        { jurisdiction: 'northern-ireland', product: 'complete_pack', route: 'default', status: 'unsupported' },
+        { jurisdiction: 'northern-ireland', product: 'eviction_pack', route: 'default', status: 'unsupported' },
         { jurisdiction: 'northern-ireland', product: 'money_claim', route: 'default', status: 'unsupported' },
       ];
 
@@ -202,7 +202,7 @@ describe('End-to-End Flow Tests', () => {
 
         // Should not have any deposit-related issues
         const depositIssues = (result.blocking_issues || []).filter(i =>
-          i.fields.some(f => f.includes('deposit'))
+          i.fields.some((f: string) => f.includes('deposit'))
         );
         expect(depositIssues).toHaveLength(0);
       });
@@ -228,7 +228,7 @@ describe('End-to-End Flow Tests', () => {
 
         // Should have deposit-related issues
         const depositIssues = (result.blocking_issues || []).filter(i =>
-          i.fields.some(f => f.includes('deposit'))
+          i.fields.some((f: string) => f.includes('deposit'))
         );
         expect(depositIssues.length).toBeGreaterThan(0);
 
@@ -258,7 +258,7 @@ describe('End-to-End Flow Tests', () => {
 
         // Should not have gas safety issues
         const gasIssues = (result.blocking_issues || []).filter(i =>
-          i.fields.some(f => f.includes('gas'))
+          i.fields.some((f: string) => f.includes('gas'))
         );
         expect(gasIssues).toHaveLength(0);
       });

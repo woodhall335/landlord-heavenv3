@@ -538,17 +538,17 @@ export async function POST(request: Request) {
   try {
     const user = await getServerUser().catch(() => null);
     const body = await request.json();
-    const validationResult = answerSchema.safeParse(body);
+    const parsedBody = answerSchema.safeParse(body);
 
-    if (!validationResult.success) {
+    if (!parsedBody.success) {
       return NextResponse.json(
-        { error: 'Validation failed', details: validationResult.error.format() },
+        { error: 'Validation failed', details: parsedBody.error.format() },
         { status: 400 },
       );
     }
 
     const { case_id, question_id, answer, mode, include_answered, review_mode, current_question_id } =
-      validationResult.data;
+      parsedBody.data;
     const isEnhanceOnly = mode === 'enhance_only';
     const isReviewMode =
       !isEnhanceOnly && (mode === 'edit' || include_answered === true || review_mode === true);
@@ -843,7 +843,7 @@ export async function POST(request: Request) {
                           (caseRow.case_type === 'eviction' ? 'section_8' : product);
 
     console.log('[WIZARD] Running unified validation via validateFlow');
-    const validationResult = validateFlow({
+    const flowValidation = validateFlow({
       jurisdiction: canonicalJurisdiction as any,
       product: product as any,
       route: selectedRoute,
@@ -854,8 +854,8 @@ export async function POST(request: Request) {
 
     // Wizard stage warnings (do NOT block progression)
     const complianceWarnings = [
-      ...validationResult.warnings,
-      ...validationResult.blocking_issues, // Convert blocks to warnings at wizard stage
+      ...flowValidation.warnings,
+      ...flowValidation.blocking_issues, // Convert blocks to warnings at wizard stage
     ].map(issue => ({
       code: issue.code,
       user_message: issue.user_fix_hint || 'Missing information',

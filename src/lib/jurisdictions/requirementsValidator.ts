@@ -17,6 +17,8 @@ export interface ValidationIssue {
   alternate_question_ids?: string[];
   user_fix_hint: string;
   internal_reason?: string;
+  description?: string;
+  legal_basis?: string;
 }
 
 export interface ValidationOutput {

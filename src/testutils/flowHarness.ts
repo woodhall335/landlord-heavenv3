@@ -5,8 +5,8 @@
  * Driven by capability matrix to ensure complete coverage.
  */
 
-import { CAPABILITY_MATRIX, type Jurisdiction, type Product } from '../src/lib/jurisdictions/capabilities/matrix';
-import type { ValidationIssue } from '../src/lib/jurisdictions/requirementsValidator';
+import { getCapabilityMatrix, type Jurisdiction, type Product } from '../lib/jurisdictions/capabilities/matrix';
+import type { ValidationIssue } from '../lib/jurisdictions/requirementsValidator';
 
 /**
  * Flow definition from capability matrix
@@ -23,24 +23,27 @@ export interface FlowDefinition {
  */
 export function getAllSupportedFlows(): FlowDefinition[] {
   const flows: FlowDefinition[] = [];
+  const matrix = getCapabilityMatrix();
 
-  for (const [jurisdiction, products] of Object.entries(CAPABILITY_MATRIX)) {
-    for (const [product, productConfig] of Object.entries(products)) {
+  for (const jurisdiction of Object.keys(matrix) as Jurisdiction[]) {
+    const products = matrix[jurisdiction];
+    for (const product of Object.keys(products) as Product[]) {
+      const productConfig = products[product];
       if (productConfig.status !== 'supported') {
         continue; // Skip unsupported products
       }
 
       const routes = productConfig.routes;
-      if (!routes || Object.keys(routes).length === 0) {
+      if (!routes || routes.length === 0) {
         continue; // Skip products without routes
       }
 
-      for (const [route, routeConfig] of Object.entries(routes)) {
+      for (const route of routes) {
         flows.push({
-          jurisdiction: jurisdiction as Jurisdiction,
-          product: product as Product,
+          jurisdiction,
+          product,
           route,
-          status: routeConfig.status,
+          status: productConfig.status,
         });
       }
     }
@@ -54,33 +57,22 @@ export function getAllSupportedFlows(): FlowDefinition[] {
  */
 export function getAllUnsupportedFlows(): FlowDefinition[] {
   const flows: FlowDefinition[] = [];
+  const matrix = getCapabilityMatrix();
 
-  for (const [jurisdiction, products] of Object.entries(CAPABILITY_MATRIX)) {
-    for (const [product, productConfig] of Object.entries(products)) {
-      // Product-level unsupported
+  for (const jurisdiction of Object.keys(matrix) as Jurisdiction[]) {
+    const products = matrix[jurisdiction];
+    for (const product of Object.keys(products) as Product[]) {
+      const productConfig = products[product];
+      // Product-level unsupported/misconfigured
       if (productConfig.status === 'unsupported' || productConfig.status === 'misconfigured') {
         flows.push({
-          jurisdiction: jurisdiction as Jurisdiction,
-          product: product as Product,
+          jurisdiction,
+          product,
           route: 'default',
           status: productConfig.status,
         });
-        continue;
-      }
-
-      // Route-level unsupported
-      const routes = productConfig.routes;
-      if (routes) {
-        for (const [route, routeConfig] of Object.entries(routes)) {
-          if (routeConfig.status === 'unsupported' || routeConfig.status === 'misconfigured') {
-            flows.push({
-              jurisdiction: jurisdiction as Jurisdiction,
-              product: product as Product,
-              route,
-              status: routeConfig.status,
-            });
-          }
-        }
+        // Note: In current implementation, status is at product level, not route level
+        // So we don't iterate routes for unsupported products
       }
     }
   }
@@ -118,7 +110,7 @@ export function getMinimalCompliantFacts(flow: FlowDefinition): Record<string, a
   };
 
   // Product-specific facts
-  if (product === 'notice_only' || product === 'complete_pack') {
+  if (product === 'notice_only' || product === 'eviction_pack') {
     baseFacts.notice_expiry_date = '2024-03-01';
 
     // Route-specific facts for eviction
@@ -176,7 +168,7 @@ export function simulatePreviewValidation(
 ): ValidationResult {
   // This is a placeholder - in real tests this would call the actual API
   // For now, we'll import validateFlow directly
-  const { validateFlow } = require('../src/lib/validation/validateFlow');
+  const { validateFlow } = require('../lib/validation/validateFlow');
 
   try {
     const result = validateFlow({
@@ -211,7 +203,7 @@ export function simulateGenerateValidation(
   flow: FlowDefinition,
   facts: Record<string, any>
 ): ValidationResult {
-  const { validateFlow } = require('../src/lib/validation/validateFlow');
+  const { validateFlow } = require('../lib/validation/validateFlow');
 
   try {
     const result = validateFlow({

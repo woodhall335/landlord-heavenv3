@@ -9,7 +9,7 @@
 
 import type { BlockingIssue } from './index';
 import type { ValidationIssue } from '../jurisdictions/requirementsValidator';
-import { getFlowMapping, type FlowMapping } from '../mqs/mapping';
+import { getFlowMapping, type FlowMapping } from '../mqs/mapping.generated';
 import type { Jurisdiction, Product } from '../jurisdictions/capabilities/matrix';
 
 /**

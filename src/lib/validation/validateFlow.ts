@@ -155,14 +155,17 @@ export function validateFlow(input: FlowValidationInput): FlowValidationResult {
   // Step 5: Run decision engine for compliance checks (eviction flows only)
   let decisionIssues: ValidationIssue[] = [];
 
-  if (product === 'notice_only' || product === 'complete_pack') {
+  if (product === 'notice_only' || product === 'eviction_pack') {
     try {
       // Convert facts to CaseFacts for decision engine
       const caseFacts = wizardFactsToCaseFacts(facts);
 
+      // Translate eviction_pack to complete_pack for decision engine compatibility
+      const decisionProduct = product === 'eviction_pack' ? 'complete_pack' : product;
+
       const decisionInput: DecisionInput = {
         jurisdiction: jurisdiction as CanonicalJurisdiction,
-        product,
+        product: decisionProduct,
         case_type: 'eviction',
         facts: caseFacts,
         stage, // Pass stage for stage-aware compliance checks
