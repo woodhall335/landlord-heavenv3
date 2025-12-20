@@ -20,6 +20,7 @@ import {
   type CanonicalJurisdiction,
   deriveCanonicalJurisdiction,
 } from '@/lib/types/jurisdiction';
+import { validateForPreview } from '@/lib/validation/previewValidation';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -199,8 +200,27 @@ export async function GET(
 
     const groundCodes = extractGroundCodes(wizardFacts.section8_grounds || []);
 
+    // ============================================================================
+    // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
+    // ============================================================================
+    console.log('[NOTICE-PREVIEW-API] Running unified validation via validateForPreview');
+    const validationError = validateForPreview({
+      jurisdiction,
+      product: 'notice_only',
+      route: selected_route,
+      facts: wizardFacts,
+      caseId,
+    });
+
+    if (validationError) {
+      console.warn('[NOTICE-PREVIEW-API] Unified validation blocked preview:', {
+        case_id: caseId,
+      });
+      return validationError; // Already a NextResponse with standardized 422 payload
+    }
+
     // ========================================================================
-    // CONFIG-DRIVEN VALIDATION (blocking + warnings)
+    // LEGACY CONFIG-DRIVEN VALIDATION (keeping for now but should be redundant)
     // ========================================================================
     const validationOutcome = validateNoticeOnlyBeforeRender({
       jurisdiction: validationJurisdiction as JurisdictionKey,
@@ -223,7 +243,7 @@ export async function GET(
         warnings,
       };
 
-      console.warn('[NOTICE-PREVIEW-API] Validation blocked preview:', {
+      console.warn('[NOTICE-PREVIEW-API] Legacy validation blocked preview:', {
         case_id: caseId,
         blocking: blockingIssues.map((b) => b.code),
         payload: blockingPayload,
