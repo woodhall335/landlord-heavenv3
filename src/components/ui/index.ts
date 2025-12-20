@@ -43,3 +43,4 @@ export { WizardSidebarPanel } from "./WizardSidebarPanel";
 export { Table } from "./Table";
 export { Tabs } from "./Tabs";
 export { Select } from "./Select";
+export { ValidationErrors, type ValidationErrorsProps, type ValidationIssue } from "./ValidationErrors";
