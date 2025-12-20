@@ -31,6 +31,7 @@ supabaseClientMock.update.mockReturnValue(supabaseClientMock);
 
 const mockGuestFacts = {
   landlord_name: 'Guest Landlord',
+  deposit_taken: false,
   __meta: { product: 'notice_only' },
 };
 

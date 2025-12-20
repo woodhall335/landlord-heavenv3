@@ -167,18 +167,28 @@ describe('Money claim wizard integration', () => {
     expect(startResponse.status).toBe(200);
     const startData = await startResponse.json();
     const caseId = startData.case_id as string;
+
+    const seededFacts = mockDb.case_facts.get(caseId)?.facts || {};
+    mockDb.case_facts.set(caseId, {
+      ...mockDb.case_facts.get(caseId),
+      facts: { ...seededFacts, total_claim_amount: 1, tenant_full_name: 'Placeholder Tenant' },
+    } as any);
     expect(caseId).toBeDefined();
 
-    await answerQuestion(caseId, 'claimant_full_name', 'Alice Landlord');
-    await answerQuestion(caseId, 'claimant_email', 'alice@example.com');
-    await answerQuestion(caseId, 'claimant_phone', '01234567890');
-    await answerQuestion(caseId, 'claimant_address', {
-      address_line1: '1 High Street',
-      address_line2: '',
-      city: 'London',
-      postcode: 'N1 1AA',
+    await answerQuestion(caseId, 'defendant_details', {
+      tenant_full_name: 'Tom Tenant',
+      tenant_address_line1: '2 Rental Road',
+      tenant_address_town: 'London',
+      tenant_address_postcode: 'N2 2BB',
     });
-    await answerQuestion(caseId, 'defendant_full_name', 'Tom Tenant');
+    await answerQuestion(caseId, 'claimant_details', {
+      landlord_full_name: 'Alice Landlord',
+      landlord_address_line1: '1 High Street',
+      landlord_address_town: 'London',
+      landlord_address_postcode: 'N1 1AA',
+      landlord_phone: '01234567890',
+      landlord_email: 'alice@example.com',
+    });
     await answerQuestion(caseId, 'property_address', {
       address_line1: '2 Rental Road',
       address_line2: '',
@@ -190,6 +200,7 @@ describe('Money claim wizard integration', () => {
     await answerQuestion(caseId, 'rent_amount', 750);
     await answerQuestion(caseId, 'rent_frequency', 'monthly');
     await answerQuestion(caseId, 'claim_type', ['rent_arrears']);
+    await answerQuestion(caseId, 'total_claim_amount', 1200);
     await answerQuestion(caseId, 'arrears_total', 1200);
     await answerQuestion(caseId, 'arrears_schedule_upload', {
       rent_schedule_uploaded: true,
@@ -270,6 +281,12 @@ describe('Money claim wizard integration', () => {
     expect(startResponse.status).toBe(200);
     const startData = await startResponse.json();
     const caseId = startData.case_id as string;
+
+    const scotSeedFacts = mockDb.case_facts.get(caseId)?.facts || {};
+    mockDb.case_facts.set(caseId, {
+      ...mockDb.case_facts.get(caseId),
+      facts: { ...scotSeedFacts, total_claim_amount: 1, tenant_full_name: 'Placeholder Tenant' },
+    } as any);
 
     await answerQuestion(caseId, 'pursuer_full_name', 'Sarah Landlord');
     await answerQuestion(caseId, 'pursuer_email', 'sarah@example.com');

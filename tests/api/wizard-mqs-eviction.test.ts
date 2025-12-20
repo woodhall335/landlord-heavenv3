@@ -233,7 +233,10 @@ describe('MQS eviction flow (England & Wales)', () => {
       id: 'case-3',
       case_type: 'eviction',
       jurisdiction: 'england',
-      collected_facts: { __meta: { product: 'notice_only', mqs_version: null } },
+      collected_facts: {
+        __meta: { product: 'notice_only', mqs_version: null },
+        deposit_taken: false,
+      },
       user_id: null,
       wizard_progress: 0,
     };

@@ -17,6 +17,11 @@ import {
   verifyTestEnvironment,
 } from '@/lib/testing/wizard-test-helpers';
 
+process.env.SUPABASE_URL_TEST = process.env.SUPABASE_URL_TEST || 'http://localhost:54321';
+process.env.SUPABASE_SERVICE_ROLE_KEY_TEST =
+  process.env.SUPABASE_SERVICE_ROLE_KEY_TEST || 'test-service-role-key';
+process.env.TEST_BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:3000';
+
 describe('API Enforcement - Real Pattern (Integration)', () => {
   let testCaseId: string;
 
