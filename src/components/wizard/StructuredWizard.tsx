@@ -227,9 +227,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // inline per-step warnings across all notice-only wizards.
   const [previewBlockingIssues, setPreviewBlockingIssues] = useState<WizardValidationIssue[]>([]);
   const [previewWarnings, setPreviewWarnings] = useState<WizardValidationIssue[]>([]);
-  const [wizardWarnings, setWizardWarnings] = useState<WizardValidationIssue[]>([]);
+  const [_wizardWarnings, setWizardWarnings] = useState<WizardValidationIssue[]>([]);
   const [hasBlockingIssues, setHasBlockingIssues] = useState(false);
-  const [isReviewComplete, setIsReviewComplete] = useState(false);
+  const [_isReviewComplete, setIsReviewComplete] = useState(false);
   const [issueCounts, setIssueCounts] = useState<{ blocking: number; warnings: number }>({ blocking: 0, warnings: 0 });
   // Service date validation warning
   const [pastServiceDateWarning, setPastServiceDateWarning] = useState<string | null>(null);
@@ -246,6 +246,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     EvidenceFileSummary[]
   >([]);
   const [uploadingEvidence, setUploadingEvidence] = useState(false);
+
+  // Complete Pack loading animation step
+  const [completePackStep, setCompletePackStep] = useState(0);
 
   // Step 3: money-claim case health / readiness
   const [analysis, setAnalysis] = useState<CaseAnalysisState | null>(null);
@@ -906,6 +909,29 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       setGroundsFetchError(null);
     }
   }, [currentQuestion, jurisdiction, availableGrounds, loadingGrounds, groundsFetchError]);
+
+  // Complete Pack loading animation auto-advance
+  const completePackSteps = [
+    'Ask Heaven Drafting Witness Statement',
+    'Ask Heaven Analyzing Compliance',
+    'Ask Heaven Calculating Risk Assessment',
+    'Filling Official Court Forms',
+  ];
+
+  useEffect(() => {
+    if (!isComplete || product !== 'complete_pack') return;
+
+    const interval = setInterval(() => {
+      setCompletePackStep((prev) => {
+        if (prev < completePackSteps.length - 1) {
+          return prev + 1;
+        }
+        return prev;
+      });
+    }, 1500); // Change step every 1.5 seconds
+
+    return () => clearInterval(interval);
+  }, [isComplete, product, completePackSteps.length]);
 
   const isCurrentAnswerValid = (): boolean => {
     if (!currentQuestion) return false;
@@ -2102,7 +2128,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         return (
           <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
             <div className="flex items-start">
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <svg
                   className="h-6 w-6 text-blue-400"
                   fill="none"
@@ -2305,34 +2331,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   if (isComplete) {
     // Ask Heaven-branded loading modal for Complete Pack
     if (product === 'complete_pack') {
-      const [currentStep, setCurrentStep] = useState(0);
-
-      const steps = [
-        'Ask Heaven Drafting Witness Statement',
-        'Ask Heaven Analyzing Compliance',
-        'Ask Heaven Calculating Risk Assessment',
-        'Filling Official Court Forms',
-      ];
-
-      // Auto-advance through steps
-      useEffect(() => {
-        const interval = setInterval(() => {
-          setCurrentStep((prev) => {
-            if (prev < steps.length - 1) {
-              return prev + 1;
-            }
-            return prev;
-          });
-        }, 1500); // Change step every 1.5 seconds
-
-        return () => clearInterval(interval);
-      }, []);
-
       return (
         <div className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4">
             <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-linear-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-3xl">☁️</span>
               </div>
               <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -2345,19 +2348,19 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
             {/* Progress Steps */}
             <div className="space-y-3 mb-6">
-              {steps.map((step, index) => (
+              {completePackSteps.map((step, index) => (
                 <div
                   key={index}
                   className={`flex items-center gap-3 p-3 rounded-lg transition-all ${
-                    index === currentStep
+                    index === completePackStep
                       ? 'bg-purple-50 border-2 border-purple-500'
-                      : index < currentStep
+                      : index < completePackStep
                       ? 'bg-green-50 border border-green-200'
                       : 'bg-gray-50 border border-gray-200'
                   }`}
                 >
-                  {index < currentStep ? (
-                    <div className="flex-shrink-0 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                  {index < completePackStep ? (
+                    <div className="shrink-0 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
                       <svg
                         className="w-4 h-4 text-white"
                         fill="currentColor"
@@ -2370,16 +2373,16 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                         />
                       </svg>
                     </div>
-                  ) : index === currentStep ? (
-                    <div className="flex-shrink-0 w-6 h-6 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+                  ) : index === completePackStep ? (
+                    <div className="shrink-0 w-6 h-6 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
                   ) : (
-                    <div className="flex-shrink-0 w-6 h-6 bg-gray-300 rounded-full" />
+                    <div className="shrink-0 w-6 h-6 bg-gray-300 rounded-full" />
                   )}
                   <span
                     className={`text-sm font-medium ${
-                      index === currentStep
+                      index === completePackStep
                         ? 'text-purple-900'
-                        : index < currentStep
+                        : index < completePackStep
                         ? 'text-green-900'
                         : 'text-gray-500'
                     }`}
@@ -2391,7 +2394,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             </div>
 
             {/* Did You Know Tip */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-linear-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm font-semibold text-blue-900 mb-1">💡 Did you know?</p>
               <p className="text-sm text-blue-800">
                 Ask Heaven-drafted witness statements typically save landlords{' '}
@@ -2627,7 +2630,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             currentQuestion?.section?.toLowerCase()?.includes('grounds')) && (
             <div className="mb-6 p-4 bg-warning-50 border-l-4 border-warning-500 rounded">
               <div className="flex items-start gap-3">
-                <div className="text-2xl flex-shrink-0 mt-0.5">⚠️</div>
+                <div className="text-2xl shrink-0 mt-0.5">⚠️</div>
                 <div className="flex-1">
                   <h4 className="font-semibold text-warning-900 mb-1">
                     Wales: Section 8 Terminology Warning
@@ -2786,7 +2789,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             {noticeComplianceError && (
               <div className="bg-orange-50 border-2 border-orange-400 rounded-lg p-5 mb-6 shadow-md">
                 <div className="flex items-start gap-3 mb-4">
-                  <div className="text-3xl flex-shrink-0">⚠️</div>
+                  <div className="text-3xl shrink-0">⚠️</div>
                   <div className="flex-1">
                     <h3 className="text-lg font-bold text-orange-900 mb-1">
                       Notice May Be Non-Compliant
@@ -3142,7 +3145,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             <div className="hidden lg:block sticky top-32 space-y-4">
               {/* Placeholder panel when no Smart Guidance data exists yet */}
               {!routeRecommendation && !groundRecommendations && !calculatedDate && (
-                <Card className="p-6 bg-gradient-to-br from-purple-50 to-blue-50 border-2 border-purple-200">
+                <Card className="p-6 bg-linear-to-br from-purple-50 to-blue-50 border-2 border-purple-200">
                   <div className="text-center mb-4">
                     <div className="text-5xl mb-3">☁️</div>
                     <h3 className="text-lg font-bold text-purple-900 mb-2">
@@ -3195,7 +3198,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
               {/* ROUTE RECOMMENDATION PANEL */}
               {routeRecommendation && (
-                <div className="p-5 bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 rounded-r-lg shadow-md">
+                <div className="p-5 bg-linear-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 rounded-r-lg shadow-md">
                   <div className="flex items-start gap-3">
                     <div className="text-3xl">💡</div>
                     <div className="flex-1">
@@ -3256,7 +3259,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
               {/* GROUND RECOMMENDATIONS PANEL */}
               {groundRecommendations && groundRecommendations.length > 0 && (
-                <div className="p-5 bg-gradient-to-r from-green-50 to-green-100 border-l-4 border-green-600 rounded-r-lg shadow-md">
+                <div className="p-5 bg-linear-to-r from-green-50 to-green-100 border-l-4 border-green-600 rounded-r-lg shadow-md">
                   <div className="flex items-start gap-3">
                     <div className="text-3xl">⚖️</div>
                     <div className="flex-1">
@@ -3275,7 +3278,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                                 Ground {ground.code}: {ground.title}
                               </div>
                               {ground.type === 'mandatory' && (
-                                <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded-full font-bold ml-2 flex-shrink-0">
+                                <span className="text-xs bg-green-600 text-white px-2 py-0.5 rounded-full font-bold ml-2 shrink-0">
                                   MANDATORY
                                 </span>
                               )}
@@ -3309,7 +3312,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
               {/* CALCULATED DATE PANEL */}
               {calculatedDate && (
-                <div className="p-5 bg-gradient-to-r from-purple-50 to-purple-100 border-l-4 border-purple-600 rounded-r-lg shadow-md">
+                <div className="p-5 bg-linear-to-r from-purple-50 to-purple-100 border-l-4 border-purple-600 rounded-r-lg shadow-md">
                   <div className="flex items-start gap-3">
                     <div className="text-3xl">📅</div>
                     <div className="flex-1">

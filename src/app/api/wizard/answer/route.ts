@@ -24,7 +24,7 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { getReviewNavigation } from '@/lib/wizard/review-navigation';
 import { deriveCanonicalJurisdiction, normalizeJurisdiction } from '@/lib/types/jurisdiction';
 import { validateFlow } from '@/lib/validation/validateFlow';
-import { filterWizardIssues, transformIssuesWithFriendlyLabels, getIssueCounts } from '@/lib/validation/wizardIssueFilter';
+import { filterWizardIssues } from '@/lib/validation/wizardIssueFilter';
 import type { Jurisdiction, Product } from '@/lib/jurisdictions/capabilities/matrix';
 
 export const dynamic = 'force-dynamic';
@@ -536,7 +536,7 @@ function updateDerivedFacts(
 
 export async function POST(request: Request) {
   try {
-    const _user = await getServerUser().catch(() => null);
+    await getServerUser().catch(() => null);
     const body = await request.json();
     const parsedBody = answerSchema.safeParse(body);
 
