@@ -384,6 +384,32 @@ function markdownToHtml(markdown: string): string {
 }
 
 /**
+ * Detect if HTML content is a full HTML document (with <!DOCTYPE>, <html>, <head>, etc.)
+ * These templates should NOT be processed with markdownToHtml or wrapped in another HTML shell.
+ *
+ * Detection is case-insensitive and based on trimmed content.
+ * Returns true if:
+ *   - starts with <!DOCTYPE or <html
+ *   - OR contains <html and <head> near the top of the document
+ */
+export function isFullHtmlDocument(html: string): boolean {
+  const trimmed = html.trim().toLowerCase();
+
+  // Check if starts with <!doctype or <html
+  if (trimmed.startsWith('<!doctype') || trimmed.startsWith('<html')) {
+    return true;
+  }
+
+  // Check for <html and <head> near the top (within first 500 chars after trimming)
+  const topPortion = trimmed.substring(0, 500);
+  if (topPortion.includes('<html') && topPortion.includes('<head')) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * Safe text helper - converts objects to strings, prevents [object Object]
  */
 export function safeText(value: any): string {
@@ -453,8 +479,12 @@ export function compileTemplate(templateContent: string, data: Record<string, an
     const template = Handlebars.compile(templateContent);
     let html = template(safeData);
 
-    // Convert markdown to HTML for PDF rendering
-    html = markdownToHtml(html);
+    // Skip markdown conversion for full HTML documents (those with <!DOCTYPE>, <html>, <head>)
+    // These templates have their own structure and styles that would be corrupted by markdownToHtml
+    if (!isFullHtmlDocument(html)) {
+      // Convert markdown to HTML for PDF rendering
+      html = markdownToHtml(html);
+    }
 
     return html;
   } catch (error: any) {
@@ -594,8 +624,35 @@ export async function htmlToPdf(
 
     const page = await browser.newPage();
 
-    // Wrap in proper HTML structure with styling
-    const styledHtml = `
+    // Determine what HTML to use for PDF generation
+    let finalHtml: string;
+
+    if (isFullHtmlDocument(html)) {
+      // Full HTML documents already have their own structure and styles
+      // Pass them directly to Puppeteer without wrapping in another HTML shell
+      // Inject @page rules for consistent page size/margins if not already present
+      const pageRules = `
+    @page {
+      size: ${options?.pageSize || 'A4'};
+      margin: ${options?.margins?.top || '2cm'} ${options?.margins?.right || '2cm'} ${options?.margins?.bottom || '2cm'} ${options?.margins?.left || '2cm'};
+    }`;
+
+      // Inject @page rules before </style> or </head> if they exist
+      if (html.includes('</style>')) {
+        finalHtml = html.replace('</style>', `${pageRules}\n  </style>`);
+      } else if (html.toLowerCase().includes('</head>')) {
+        // Inject a style block before </head>
+        finalHtml = html.replace(
+          /<\/head>/i,
+          `<style>${pageRules}\n  </style>\n</head>`
+        );
+      } else {
+        // Fallback: use as-is (rare case)
+        finalHtml = html;
+      }
+    } else {
+      // Wrap non-full HTML in proper HTML structure with styling
+      finalHtml = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -729,9 +786,10 @@ export async function htmlToPdf(
 ${html}
 </body>
 </html>
-    `;
+      `;
+    }
 
-    await page.setContent(styledHtml, { waitUntil: 'networkidle0' });
+    await page.setContent(finalHtml, { waitUntil: 'networkidle0' });
 
     // Add watermark if specified
     if (options?.watermark) {
