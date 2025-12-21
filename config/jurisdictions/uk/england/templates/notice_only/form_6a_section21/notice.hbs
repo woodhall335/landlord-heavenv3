@@ -380,6 +380,17 @@
         page-break-inside: avoid;
       }
     }
+
+    /* Prevent Section 3 from splitting across pages */
+    .keep-together {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .keep-together .legal-notice {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
   </style>
 </head>
 <body>
@@ -450,7 +461,7 @@
 </div>
 
 <!-- Section 3: Court Application Timeframe -->
-<div class="numbered-section">
+<div class="numbered-section keep-together">
   <span class="section-number">3</span>
   <p class="section-text legal-notice">If your landlord does not apply to the court within a given timeframe this notice will lapse. If you are entitled to more than 2 months' notice your landlord can rely on this notice to apply to the court during the period of <strong>4 months</strong> commencing from the date specified in section 2 above. In all other cases, your landlord can rely on this notice to apply to the court during the period of <strong>6 months</strong> commencing from the date this notice is given to you.</p>
 </div>
