@@ -4,7 +4,7 @@
  * Smoke tests to ensure PDFs don't contain raw markdown or [object Object] artifacts
  */
 
-import { compileTemplate, safeText, loadTemplate } from '../generator';
+import { compileTemplate, safeText, loadTemplate, isFullHtmlDocument } from '../generator';
 import { generateSection8Notice } from '../section8-generator';
 import { generateNoticeToLeave } from '../scotland/notice-to-leave-generator';
 
@@ -198,5 +198,157 @@ describe('safeText Helper', () => {
     expect(result).toContain('foo');
     expect(result).toContain('bar');
     expect(result).not.toBe('[object Object]');
+  });
+});
+
+describe('isFullHtmlDocument', () => {
+  test('Detects <!DOCTYPE html> at start', () => {
+    const html = '<!DOCTYPE html><html><head></head><body>Content</body></html>';
+    expect(isFullHtmlDocument(html)).toBe(true);
+  });
+
+  test('Detects <!doctype html> (lowercase) at start', () => {
+    const html = '<!doctype html><html><head></head><body>Content</body></html>';
+    expect(isFullHtmlDocument(html)).toBe(true);
+  });
+
+  test('Detects <html> at start', () => {
+    const html = '<html><head></head><body>Content</body></html>';
+    expect(isFullHtmlDocument(html)).toBe(true);
+  });
+
+  test('Detects <html> and <head> near top', () => {
+    const html = '<!-- comment -->\n<html lang="en">\n<head>\n<title>Test</title>';
+    expect(isFullHtmlDocument(html)).toBe(true);
+  });
+
+  test('Handles whitespace before DOCTYPE', () => {
+    const html = '  \n  <!DOCTYPE html><html><head></head><body></body></html>';
+    expect(isFullHtmlDocument(html)).toBe(true);
+  });
+
+  test('Returns false for plain HTML fragments', () => {
+    const html = '<div><h1>Title</h1><p>Paragraph</p></div>';
+    expect(isFullHtmlDocument(html)).toBe(false);
+  });
+
+  test('Returns false for markdown content', () => {
+    const markdown = '# Heading\n\nThis is a paragraph.';
+    expect(isFullHtmlDocument(markdown)).toBe(false);
+  });
+
+  test('Returns false for partial HTML without structure', () => {
+    const html = '<p>Just a paragraph</p>';
+    expect(isFullHtmlDocument(html)).toBe(false);
+  });
+
+  test('Detects full HTML with Handlebars comments at top', () => {
+    // Similar to real templates that have {{!-- comments --}} before DOCTYPE
+    const html = `{{!-- Template comment --}}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <style>body { color: red; }</style>
+</head>
+<body>Content</body>
+</html>`;
+    // After Handlebars compilation, comments are removed, so the HTML starts with DOCTYPE
+    const compiled = html.replace(/\{\{!--[\s\S]*?--\}\}/g, '').trim();
+    expect(isFullHtmlDocument(compiled)).toBe(true);
+  });
+});
+
+describe('compileTemplate Full HTML Preservation', () => {
+  test('Full HTML template preserves style blocks without markdown corruption', () => {
+    const fullHtmlTemplate = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { color: red; }
+    .info-box { border: 1px solid blue; }
+  </style>
+</head>
+<body>
+  <h1>{{title}}</h1>
+  <p>{{content}}</p>
+</body>
+</html>`;
+
+    const result = compileTemplate(fullHtmlTemplate, { title: 'Test', content: 'Hello' });
+
+    // Style block should be preserved exactly
+    expect(result).toContain('body { color: red; }');
+    expect(result).toContain('.info-box { border: 1px solid blue; }');
+
+    // Should NOT contain markdown-corruption artifacts
+    expect(result).not.toMatch(/<p>body \{ color:/);
+    expect(result).not.toMatch(/<br \/>/);
+
+    // Variables should be replaced
+    expect(result).toContain('<h1>Test</h1>');
+    expect(result).toContain('<p>Hello</p>');
+  });
+
+  test('Full HTML template with complex CSS is not corrupted', () => {
+    const template = `<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    @media print {
+      .no-print { display: none; }
+    }
+    .section::before {
+      content: "Section";
+    }
+  </style>
+</head>
+<body>Content</body>
+</html>`;
+
+    const result = compileTemplate(template, {});
+
+    // Complex CSS should be preserved
+    expect(result).toContain('@media print');
+    expect(result).toContain('.no-print { display: none; }');
+    expect(result).toContain('.section::before');
+    expect(result).toContain('content: "Section"');
+  });
+
+  test('Markdown templates still get converted to HTML', () => {
+    const markdownTemplate = `# {{title}}
+
+This is a **bold** statement.
+
+## Section 2
+
+Another paragraph.`;
+
+    const result = compileTemplate(markdownTemplate, { title: 'Heading' });
+
+    // Markdown should be converted to HTML
+    expect(result).toContain('<h1>');
+    expect(result).toContain('<h2>');
+    expect(result).toContain('<strong>bold</strong>');
+    expect(result).toContain('<p>');
+
+    // Raw markdown should not appear
+    expect(result).not.toContain('# Heading');
+    expect(result).not.toContain('## Section');
+    expect(result).not.toContain('**bold**');
+  });
+
+  test('Partial HTML without DOCTYPE still gets markdown processing', () => {
+    const partialHtml = `<div class="container">
+# Main Title
+
+Some **content** here.
+</div>`;
+
+    const result = compileTemplate(partialHtml, {});
+
+    // Markdown inside should be converted
+    expect(result).toContain('<h1>Main Title</h1>');
+    expect(result).toContain('<strong>content</strong>');
   });
 });
