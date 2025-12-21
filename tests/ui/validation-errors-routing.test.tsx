@@ -3,6 +3,8 @@
  *
  * Tests that "Go to question" preserves case context (type, jurisdiction, mode, product)
  * instead of dropping the case and starting a new flow.
+ *
+ * @vitest-environment jsdom
  */
 
 import { describe, expect, it, vi } from 'vitest';
