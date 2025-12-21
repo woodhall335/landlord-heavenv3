@@ -16,7 +16,6 @@ import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-complian
 import { validateNoticeOnlyBeforeRender } from '@/lib/documents/noticeOnly';
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
 import {
-  migrateToCanonicalJurisdiction,
   type CanonicalJurisdiction,
   deriveCanonicalJurisdiction,
 } from '@/lib/types/jurisdiction';

@@ -21,9 +21,7 @@ import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { runDecisionEngine, type DecisionInput, type DecisionOutput } from '@/lib/decision-engine';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
-import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
 import { getReviewNavigation } from '@/lib/wizard/review-navigation';
-import { evaluateWizardGate } from '@/lib/wizard/gating';
 import { deriveCanonicalJurisdiction, normalizeJurisdiction } from '@/lib/types/jurisdiction';
 import { validateFlow } from '@/lib/validation/validateFlow';
 
@@ -536,7 +534,7 @@ function updateDerivedFacts(
 
 export async function POST(request: Request) {
   try {
-    const user = await getServerUser().catch(() => null);
+    const _user = await getServerUser().catch(() => null);
     const body = await request.json();
     const parsedBody = answerSchema.safeParse(body);
 
