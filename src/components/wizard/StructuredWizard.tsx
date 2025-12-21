@@ -1166,32 +1166,50 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         }),
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+      // Parse response once upfront
+      const data = await response.json().catch(() => ({}));
 
-        // Handle NOTICE_NONCOMPLIANT (422) gracefully - don't crash the wizard
-        if (response.status === 422 && errorData.error === 'NOTICE_NONCOMPLIANT') {
-          setNoticeComplianceError({
-            failures: errorData.failures || [],
-            warnings: errorData.warnings || [],
+      if (!response.ok) {
+        // Handle NOTICE_NONCOMPLIANT (422) gracefully - DO NOT BLOCK navigation
+        // UX Rule: Wizard steps never hard-block based on compliance. Only Preview/Generate is a hard stop.
+        // Capture the compliance issues for inline display, but continue to next question.
+        if (response.status === 422 && data.error === 'NOTICE_NONCOMPLIANT') {
+          console.info('[WIZARD-UX] Notice compliance issues detected, continuing without blocking:', {
+            failures: data.failures?.length || data.blocking_issues?.length || 0,
+            warnings: data.warnings?.length || 0,
           });
-          setError('Notice may be non-compliant. Please review the issues below and update your answers.');
-          setLoading(false);
-          return; // Stay on current question, don't advance
+          // Store compliance issues for inline banner display (non-blocking)
+          setNoticeComplianceError({
+            failures: data.failures || data.blocking_issues || [],
+            warnings: data.warnings || [],
+          });
+          // Continue to load next question despite compliance issues
+          // The issues will be displayed as inline warnings, not blocking the flow
+          await loadNextQuestion({ currentQuestionId: currentQuestion.id });
+          return;
         }
 
-        // Handle case not found (404) gracefully
-        if (response.status === 404 && errorData.code === 'CASE_NOT_FOUND') {
+        // Handle case not found (404) gracefully - this DOES block
+        if (response.status === 404 && data.code === 'CASE_NOT_FOUND') {
           setError('Your session has expired or the case could not be found. Please restart the wizard from the beginning.');
           setLoading(false);
           return;
         }
 
-        // Other errors - throw as before
-        throw new Error(errorData.error || `Failed to save answer: ${response.status}`);
-      }
+        // Handle other validation errors that allow continuation (e.g., LEGAL_BLOCK)
+        if (response.status === 422 && (data.code === 'LEGAL_BLOCK' || data.blocking_issues)) {
+          console.info('[WIZARD-UX] Validation issues detected, continuing without blocking');
+          setPreviewBlockingIssues(data.blocking_issues || []);
+          setPreviewWarnings(data.warnings || []);
+          setHasBlockingIssues((data.blocking_issues?.length || 0) > 0);
+          // Continue to load next question despite validation issues
+          await loadNextQuestion({ currentQuestionId: currentQuestion.id });
+          return;
+        }
 
-      const data = await response.json();
+        // Other errors - throw as before
+        throw new Error(data.error || `Failed to save answer: ${response.status}`);
+      }
 
       // Clear any previous compliance errors on successful save
       setNoticeComplianceError(null);

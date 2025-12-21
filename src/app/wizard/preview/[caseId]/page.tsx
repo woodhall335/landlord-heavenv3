@@ -444,6 +444,45 @@ export default function WizardPreviewPage() {
             throw new Error('VALIDATION_ERROR'); // Special error to trigger validation UI
           }
 
+          // Handle 422 NOTICE_NONCOMPLIANT with structured compliance issues
+          // This is the expected path for notice-only flows with compliance failures
+          // DO NOT treat this as a generic error - render a fixable "Issues" panel
+          if (previewResponse.status === 422 && (errorData.error === 'NOTICE_NONCOMPLIANT' || errorData.code === 'NOTICE_NONCOMPLIANT')) {
+            console.info('[PREVIEW-UX] Notice compliance issues detected - rendering fix panel:', {
+              blocking_count: errorData.blocking_issues?.length || 0,
+              warning_count: errorData.warnings?.length || 0,
+              computed: errorData.computed,
+            });
+
+            // Map the compliance issues to the ValidationIssue format expected by ValidationErrors component
+            const mappedBlockingIssues = (errorData.blocking_issues || []).map((issue: any) => ({
+              code: issue.code,
+              affected_question_id: issue.affected_question_id,
+              fields: issue.affected_question_id ? [issue.affected_question_id] : [],
+              user_message: issue.user_fix_hint || issue.legal_reason,
+              user_fix_hint: issue.user_fix_hint,
+              legal_reason: issue.legal_reason,
+              severity: 'blocking' as const,
+            }));
+
+            const mappedWarnings = (errorData.warnings || []).map((warning: any) => ({
+              code: warning.code,
+              affected_question_id: warning.affected_question_id,
+              fields: warning.affected_question_id ? [warning.affected_question_id] : [],
+              user_message: warning.user_fix_hint || warning.legal_reason,
+              user_fix_hint: warning.user_fix_hint,
+              legal_reason: warning.legal_reason,
+              severity: 'warning' as const,
+            }));
+
+            setValidationErrors({
+              blocking_issues: mappedBlockingIssues,
+              warnings: mappedWarnings,
+            });
+
+            throw new Error('VALIDATION_ERROR'); // Trigger validation UI (NOT "Something went wrong")
+          }
+
           // Old-style error handling for backward compatibility
           const errorMessage = errorData.error || 'Failed to generate preview document';
           const missingFields = errorData.missing || [];
