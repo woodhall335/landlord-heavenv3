@@ -345,5 +345,126 @@ For any `(jurisdiction, route)` combination, we can definitively answer:
 | `src/lib/validation/wizardIssueFilter.ts` | Issue filtering (TO BE DEPRECATED) |
 | `src/lib/validation/validateFlow.ts` | Unified validation orchestrator |
 | `src/lib/validation/previewValidation.ts` | Preview validation |
+| `src/lib/validation/noticeOnlyInlineValidator.ts` | **NEW** Notice-only inline validator |
 | `config/mqs/notice_only/*.yaml` | MSQ definitions |
 | `src/components/wizard/StructuredWizard.tsx` | Wizard UI |
+
+---
+
+## Appendix C: Explicit Answer → Route Invalidation Matrix
+
+**Updated**: 2025-12-21
+**Purpose**: Definitive mapping of which user answers block which routes per jurisdiction.
+
+### ENGLAND
+
+#### Section 21 Route Invalidation
+
+| User Answer | Route Status | Legal Basis | Action Required |
+|------------|--------------|-------------|-----------------|
+| `deposit_taken=true` AND `deposit_protected=false` | **BLOCKED** | Housing Act 2004 s213 | Protect deposit in approved scheme |
+| `deposit_taken=true` AND `deposit_protected=true` AND `prescribed_info_given=false` | **BLOCKED** | Housing Act 2004 s213(6) | Provide prescribed info to tenant |
+| `has_gas_appliances=true` AND `gas_certificate_provided=false` | **BLOCKED** | Gas Safety (Installation and Use) Regulations 1998 | Provide valid gas safety certificate |
+| `epc_provided=false` | **BLOCKED** | Energy Performance of Buildings Regulations 2012 | Provide valid EPC to tenant |
+| `how_to_rent_provided=false` | **BLOCKED** | Deregulation Act 2015 s33 | Provide How to Rent Guide |
+| `property_licensing_status='unlicensed'` (where licence required) | **BLOCKED** | Housing Act 2004 Part 2/3 | Obtain required licence |
+| `notice_service_date < tenancy_start_date + 4 months` | **BLOCKED** | Deregulation Act 2015 s36 | Wait until 4 months from tenancy start |
+| `deposit_amount > 5 weeks' rent` (annual rent ≤ £50k) | **WARNING** | Tenant Fees Act 2019 s3 | Consider refunding excess |
+| `deposit_amount > 6 weeks' rent` (annual rent > £50k) | **WARNING** | Tenant Fees Act 2019 s3 | Consider refunding excess |
+| `recent_repair_complaints=true` | **WARNING** | Deregulation Act 2015 s33 | Section 21 may be retaliatory |
+
+#### Section 8 Route Availability (ALWAYS ALLOWED)
+
+| User Answer | Route Status | Notes |
+|------------|--------------|-------|
+| Any deposit status | **ALLOWED** | Deposit protection does NOT block Section 8 |
+| Any compliance status | **ALLOWED** | Section 8 based on fault grounds, not compliance |
+| `section8_grounds.length === 0` | **BLOCKED** | At least one ground required |
+| Ground 8 selected AND `arrears < 2 months' rent` | **BLOCKED** | Ground 8 threshold not met |
+
+### WALES
+
+#### Section 173 Route Invalidation
+
+| User Answer | Route Status | Legal Basis | Action Required |
+|------------|--------------|-------------|-----------------|
+| `rent_smart_wales_registered=false` | **BLOCKED** | Renting Homes (Wales) Act 2016 s44 | Register with Rent Smart Wales |
+| `wales_contract_category='supported_standard'` | **BLOCKED** | Renting Homes (Wales) Act 2016 s173 | Section 173 not available for supported contracts |
+| `wales_contract_category='secure'` | **BLOCKED** | Renting Homes (Wales) Act 2016 s173 | Section 173 not available for secure contracts |
+| `deposit_taken=true` AND `deposit_protected=false` | **BLOCKED** | Renting Homes (Wales) Act 2016 Sch 4 | Protect deposit |
+| `notice_service_date < contract_start_date + 6 months` | **BLOCKED** | Renting Homes (Wales) Act 2016 s173(1) | Wait until 6 months from contract start |
+
+#### Wales Fault-Based Route (ALWAYS ALLOWED)
+
+| User Answer | Route Status | Notes |
+|------------|--------------|-------|
+| `wales_contract_category='supported_standard'` | **ALLOWED** | Fault-based available for all contract types |
+| `wales_contract_category='secure'` | **ALLOWED** | Fault-based available for all contract types |
+| No fault-based section selected | **BLOCKED** | At least one section required |
+
+### SCOTLAND
+
+#### Notice to Leave Route
+
+| User Answer | Route Status | Legal Basis | Action Required |
+|------------|--------------|-------------|-----------------|
+| `scotland_ground_codes.length === 0` | **BLOCKED** | Private Housing (Tenancies) (Scotland) Act 2016 Sch 3 | Select at least one eviction ground |
+| Ground 1 (rent arrears) AND `pre_action_confirmed=false` | **BLOCKED** | Private Housing (Tenancies) (Scotland) Act 2016 | Complete pre-action requirements |
+| Ground 3 (ASB) selected | **ALLOWED** | 28-day minimum notice period | No pre-action required |
+| Mixed grounds with conflicting notice periods | **WARNING** | Various grounds | Longest notice period applies |
+
+---
+
+## Appendix D: Validation Timing Rules
+
+**Critical UX Principle**: Validation fires ONLY after Save/Next, never while typing.
+
+### When Validation Runs
+
+| Event | Validation Runs? | Notes |
+|-------|-----------------|-------|
+| User types in field | **NO** | Never validate incomplete input |
+| User changes dropdown | **NO** | Wait for Save/Next |
+| User presses Save/Next | **YES** | Full validation runs |
+| Question loads (after save) | **YES** | Show issues for saved data |
+| User navigates back | **NO** | Previous data already validated |
+
+### What Validation Shows
+
+| Stage | What's Shown | Blocking? |
+|-------|-------------|-----------|
+| **Wizard inline** | Guidance for CURRENT step only | Non-blocking |
+| **Wizard inline** | Route suggestion if blocked | Non-blocking |
+| **Preview** | All blocking issues | **BLOCKS** generation |
+| **Generate** | All blocking issues | **BLOCKS** generation |
+
+### Never Shown
+
+- Issues for unanswered questions
+- Issues for future steps
+- Issues for steps not yet visited
+- Validation while typing
+
+---
+
+## Appendix E: Flow Not Available Modal Specification
+
+**Trigger**: Decision engine reports current route is blocked AFTER Save/Next.
+
+### Modal Contents
+
+1. **Header**: `[Route Name] Not Available`
+2. **Why blocked**: Clear, user-friendly explanation
+3. **Legal basis**: Collapsible section with statute reference
+4. **Alternative routes**: List of available alternatives
+5. **Jurisdiction-specific guidance**: Tailored to England/Wales/Scotland
+6. **Actions**:
+   - "Continue with current answers" (dismiss)
+   - "Switch to [Alternative Route]" (route change)
+
+### Trigger Conditions
+
+- Never shown for unanswered questions
+- Only shown after Save/Next
+- Only for notice_only products
+- Only when route is definitively blocked (not just warned)

@@ -394,14 +394,22 @@ function getRelevantIssuesForStep(
 
 /**
  * Maps issue codes to the step IDs where they should be displayed
+ *
+ * JURISDICTION COVERAGE:
+ * - England: Section 21 + Section 8 rules
+ * - Wales: Section 173 + Fault-based rules (RHW forms)
+ * - Scotland: Notice to Leave + Pre-action requirements
  */
 const ISSUE_TO_STEP_MAP: Record<string, string[]> = {
+  // ==========================================================================
+  // ENGLAND RULES
+  // ==========================================================================
   // Deposit issues
   deposit_not_protected: ['deposit_details', 'deposit_protected_scheme', 'deposit_compliance'],
   prescribed_info_not_given: ['deposit_details', 'deposit_protected_scheme', 'deposit_compliance'],
   deposit_exceeds_cap: ['deposit_details', 'tenancy_details'],
 
-  // Gas/EPC/H2R issues
+  // Gas/EPC/H2R issues (England-specific for S21)
   gas_safety_not_provided: ['safety_compliance', 'gas_safety_certificate'],
   epc_not_provided: ['safety_compliance', 'epc_provided'],
   how_to_rent_not_provided: ['safety_compliance', 'how_to_rent_provided'],
@@ -410,16 +418,54 @@ const ISSUE_TO_STEP_MAP: Record<string, string[]> = {
   hmo_not_licensed: ['property_details', 'property_licensing'],
   licensing_issue: ['property_details', 'property_licensing'],
 
-  // Wales-specific
-  rent_smart_not_registered: ['landlord_details', 'rent_smart_wales_registered'],
-  contract_type_incompatible: ['tenancy_details', 'wales_contract_category'],
-
-  // Scotland-specific
-  pre_action_not_met: ['pre_action_contact', 'pre_action_requirements'],
-
-  // Ground/route issues
+  // Section 8 grounds
   grounds_required: ['section8_grounds_selection', 'eviction_grounds', 'grounds_selection'],
   ground_particulars_incomplete: ['ground_particulars'],
+  ground_8_threshold_not_met: ['arrears_details', 'rent_arrears'],
+
+  // ==========================================================================
+  // WALES RULES (Renting Homes (Wales) Act 2016)
+  // ==========================================================================
+  // Rent Smart Wales registration - BLOCKS Section 173
+  rent_smart_not_registered: ['landlord_details', 'rent_smart_wales_registered', 'landlord_registration'],
+  rsw_registration_required: ['landlord_details', 'rent_smart_wales_registered'],
+
+  // Contract type - determines available routes
+  contract_type_incompatible: ['tenancy_details', 'wales_contract_category', 'contract_type'],
+  supported_contract_s173_blocked: ['tenancy_details', 'wales_contract_category'],
+  secure_contract_s173_blocked: ['tenancy_details', 'wales_contract_category'],
+
+  // Wales deposit protection
+  wales_deposit_not_protected: ['deposit_details', 'deposit_protected_scheme'],
+
+  // Wales notice periods
+  wales_6_month_bar: ['tenancy_details', 'notice_service', 'contract_start_date'],
+  wales_notice_period_insufficient: ['notice_service', 'notice_expiry'],
+
+  // Wales fault-based sections (s157, s159, s161, s162)
+  wales_fault_section_required: ['eviction_grounds', 'wales_fault_section'],
+  wales_breach_notice_required: ['breach_notice', 'previous_notice'],
+
+  // ==========================================================================
+  // SCOTLAND RULES (Private Housing (Tenancies) (Scotland) Act 2016)
+  // ==========================================================================
+  // Ground selection
+  scotland_ground_required: ['eviction_grounds', 'grounds_selection', 'scotland_grounds'],
+  ntl_ground_required: ['eviction_grounds', 'grounds_selection'],
+
+  // Pre-action requirements (Ground 1 - rent arrears)
+  pre_action_not_met: ['pre_action_contact', 'pre_action_requirements', 'pre_action_protocol'],
+  pre_action_letter_not_sent: ['pre_action_contact', 'pre_action_letter'],
+  pre_action_signposting_not_done: ['pre_action_contact', 'pre_action_signposting'],
+
+  // Notice periods (28 or 84 days depending on ground)
+  scotland_notice_period_28: ['notice_service', 'notice_expiry'],
+  scotland_notice_period_84: ['notice_service', 'notice_expiry'],
+  scotland_notice_period_insufficient: ['notice_service', 'notice_expiry'],
+
+  // Ground-specific issues
+  scotland_ground_1_threshold: ['arrears_details', 'rent_arrears'],
+  scotland_ground_3_asb_evidence: ['antisocial_behaviour', 'asb_evidence'],
 };
 
 function isIssueRelevantToStep(
@@ -446,7 +492,14 @@ function isComplianceIssueRelevantToStep(
   allFacts: Record<string, any>
 ): boolean {
   // Map compliance codes to step IDs
+  // Comprehensive coverage for all jurisdictions:
+  // - England: S21-* and S8-* codes
+  // - Wales: S173-*, RHW-*, WALES-* codes
+  // - Scotland: NTL-*, SCOTLAND-* codes
   const codeToStepMap: Record<string, string[]> = {
+    // ==========================================================================
+    // ENGLAND - Section 21
+    // ==========================================================================
     'S21-DEPOSIT-NONCOMPLIANT': ['deposit_details', 'deposit_protected_scheme'],
     'S21-PRESCRIBED-INFO-REQUIRED': ['deposit_details', 'deposit_protected_scheme'],
     'S21-GAS-CERT': ['safety_compliance', 'gas_safety_certificate'],
@@ -454,13 +507,52 @@ function isComplianceIssueRelevantToStep(
     'S21-H2R': ['safety_compliance', 'how_to_rent_provided'],
     'S21-LICENSING': ['property_details', 'property_licensing'],
     'S21-FOUR-MONTH-BAR': ['tenancy_details', 'notice_service'],
+    'S21-RETALIATORY': ['recent_complaints', 'repair_requests'],
+    'S21-DEPOSIT-CAP': ['deposit_details', 'tenancy_details'],
+
+    // ==========================================================================
+    // ENGLAND - Section 8
+    // ==========================================================================
     'S8-GROUNDS-REQUIRED': ['section8_grounds_selection', 'grounds_selection'],
     'S8-NOTICE-PERIOD': ['notice_service', 'notice_expiry'],
-    'S173-PERIOD-BAR': ['notice_service', 'contract_start_date'],
+    'S8-GROUND8-THRESHOLD': ['arrears_details', 'rent_arrears'],
+    'S8-PARTICULARS-INCOMPLETE': ['ground_particulars'],
+
+    // ==========================================================================
+    // WALES - Section 173 (No-fault, Renting Homes Act)
+    // ==========================================================================
+    'S173-PERIOD-BAR': ['notice_service', 'contract_start_date', 'tenancy_details'],
     'S173-LICENSING': ['landlord_details', 'rent_smart_wales_registered'],
-    'NTL-GROUND-REQUIRED': ['eviction_grounds', 'grounds_selection'],
+    'S173-CONTRACT-TYPE': ['tenancy_details', 'wales_contract_category'],
+    'S173-DEPOSIT': ['deposit_details', 'deposit_protected_scheme'],
+    'S173-NOTICE-PERIOD': ['notice_service', 'notice_expiry'],
+
+    // ==========================================================================
+    // WALES - Fault-based (RHW forms)
+    // ==========================================================================
+    'RHW23-GROUND-REQUIRED': ['eviction_grounds', 'wales_fault_section'],
+    'WALES-SECTION-157': ['eviction_grounds', 'rent_arrears'],
+    'WALES-SECTION-159': ['eviction_grounds', 'rent_arrears'],
+    'WALES-SECTION-161': ['eviction_grounds', 'antisocial_behaviour'],
+    'WALES-SECTION-162': ['eviction_grounds', 'breach_of_contract'],
+    'WALES-BREACH-NOTICE': ['breach_notice', 'previous_notice'],
+
+    // ==========================================================================
+    // SCOTLAND - Notice to Leave (PRT Act 2016)
+    // ==========================================================================
+    'NTL-GROUND-REQUIRED': ['eviction_grounds', 'grounds_selection', 'scotland_grounds'],
     'NTL-PRE-ACTION': ['pre_action_contact', 'pre_action_requirements'],
     'NTL-NOTICE-PERIOD': ['notice_service', 'notice_expiry'],
+    'NTL-GROUND-1-THRESHOLD': ['arrears_details', 'rent_arrears'],
+    'NTL-28-DAY-PERIOD': ['notice_service', 'notice_expiry'],
+    'NTL-84-DAY-PERIOD': ['notice_service', 'notice_expiry'],
+
+    // ==========================================================================
+    // SCOTLAND - Pre-action Protocol
+    // ==========================================================================
+    'SCOTLAND-PRE-ACTION-LETTER': ['pre_action_contact', 'pre_action_letter'],
+    'SCOTLAND-PRE-ACTION-SIGNPOST': ['pre_action_contact', 'pre_action_signposting'],
+    'SCOTLAND-PRE-ACTION-INCOMPLETE': ['pre_action_contact', 'pre_action_requirements'],
   };
 
   const relevantSteps = codeToStepMap[code] || [];
@@ -473,23 +565,42 @@ function isComplianceIssueRelevantToStep(
 
 /**
  * Check if conditional dependencies are met for an issue to be displayed
+ *
+ * IMPORTANT: These conditions determine when an issue should NOT be shown.
+ * Returning false = issue is hidden (dependency not met)
+ * Returning true = issue is visible (all conditions met)
+ *
+ * JURISDICTION-SPECIFIC RULES:
+ * - England: Deposit, gas, EPC, H2R, licensing
+ * - Wales: RSW registration, contract type, 6-month bar
+ * - Scotland: Pre-action requirements for rent arrears grounds
  */
 function checkConditionalDependencies(
   issueCode: string,
   answers: Record<string, any>,
   allFacts: Record<string, any>
 ): boolean {
-  const normalizedCode = issueCode.toLowerCase().replace(/-/g, '_').replace(/^s21_|^s8_|^s173_|^ntl_/, '');
+  const normalizedCode = issueCode.toLowerCase().replace(/-/g, '_').replace(/^s21_|^s8_|^s173_|^ntl_|^rhw23_|^wales_|^scotland_/, '');
 
-  // Deposit-related issues only apply if deposit was taken
-  if (['deposit_not_protected', 'prescribed_info_not_given', 'deposit_exceeds_cap', 'deposit_noncompliant', 'prescribed_info_required'].includes(normalizedCode)) {
+  // ==========================================================================
+  // DEPOSIT RULES (England, Wales)
+  // Only apply if deposit was taken
+  // ==========================================================================
+  const depositRelatedCodes = [
+    'deposit_not_protected', 'prescribed_info_not_given', 'deposit_exceeds_cap',
+    'deposit_noncompliant', 'prescribed_info_required', 'deposit', 'deposit_cap'
+  ];
+  if (depositRelatedCodes.includes(normalizedCode)) {
     const depositTaken = allFacts.deposit_taken ?? answers.deposit_taken;
     if (depositTaken !== true) {
       return false;
     }
   }
 
-  // Gas safety only applies if there are gas appliances
+  // ==========================================================================
+  // GAS SAFETY RULES (England)
+  // Only apply if there are gas appliances
+  // ==========================================================================
   if (['gas_safety_not_provided', 'gas_cert'].includes(normalizedCode)) {
     const hasGas = allFacts.has_gas_appliances ?? answers.has_gas_appliances;
     if (hasGas === false) {
@@ -497,10 +608,90 @@ function checkConditionalDependencies(
     }
   }
 
-  // Pre-action only applies if ground 1 (rent arrears) is selected in Scotland
-  if (['pre_action', 'pre_action_not_met'].includes(normalizedCode)) {
+  // ==========================================================================
+  // SCOTLAND PRE-ACTION REQUIREMENTS
+  // Only apply if Ground 1 (rent arrears) is selected
+  // ==========================================================================
+  const preActionCodes = [
+    'pre_action', 'pre_action_not_met', 'pre_action_letter', 'pre_action_signpost',
+    'pre_action_letter_not_sent', 'pre_action_signposting_not_done', 'pre_action_incomplete'
+  ];
+  if (preActionCodes.includes(normalizedCode)) {
     const grounds = allFacts.scotland_ground_codes ?? allFacts.eviction_grounds ?? [];
-    if (!Array.isArray(grounds) || !grounds.includes('ground_1') && !grounds.includes('1')) {
+    // Ground 1 can be represented as 'ground_1', '1', 'ground1', or 'rent_arrears'
+    const hasRentArrearsGround = Array.isArray(grounds) && (
+      grounds.includes('ground_1') ||
+      grounds.includes('1') ||
+      grounds.includes('ground1') ||
+      grounds.includes('rent_arrears')
+    );
+    if (!hasRentArrearsGround) {
+      return false;
+    }
+  }
+
+  // ==========================================================================
+  // WALES SECTION 173 RULES
+  // Only apply if contract type is 'standard' occupation contract
+  // ==========================================================================
+  const s173SpecificCodes = ['period_bar', '6_month_bar', 'six_month_bar'];
+  if (s173SpecificCodes.includes(normalizedCode)) {
+    const contractType = allFacts.wales_contract_category ?? answers.wales_contract_category;
+    // Section 173 only available for standard occupation contracts
+    if (contractType === 'supported_standard' || contractType === 'secure') {
+      // These contract types can't use S173 at all, so don't show the period bar issue
+      return false;
+    }
+  }
+
+  // ==========================================================================
+  // WALES CONTRACT TYPE ISSUES
+  // Only show if contract type IS supported/secure (blocking S173)
+  // ==========================================================================
+  const contractBlockingCodes = ['supported_contract_s173_blocked', 'secure_contract_s173_blocked', 'contract_type_incompatible', 'contract_type'];
+  if (contractBlockingCodes.includes(normalizedCode)) {
+    const contractType = allFacts.wales_contract_category ?? answers.wales_contract_category;
+    // Only show these issues if contract type actually blocks S173
+    if (contractType !== 'supported_standard' && contractType !== 'secure') {
+      return false;
+    }
+  }
+
+  // ==========================================================================
+  // SCOTLAND GROUND-SPECIFIC ISSUES
+  // ==========================================================================
+  // Ground 1 threshold only applies if Ground 1 is selected
+  if (normalizedCode === 'ground_1_threshold' || normalizedCode === 'ground1_threshold') {
+    const grounds = allFacts.scotland_ground_codes ?? allFacts.eviction_grounds ?? [];
+    const hasGround1 = Array.isArray(grounds) && (
+      grounds.includes('ground_1') || grounds.includes('1')
+    );
+    if (!hasGround1) {
+      return false;
+    }
+  }
+
+  // Ground 3 ASB evidence only applies if Ground 3 is selected
+  if (normalizedCode === 'ground_3_asb_evidence' || normalizedCode === 'ground3_asb') {
+    const grounds = allFacts.scotland_ground_codes ?? allFacts.eviction_grounds ?? [];
+    const hasGround3 = Array.isArray(grounds) && (
+      grounds.includes('ground_3') || grounds.includes('3') || grounds.includes('antisocial_behaviour')
+    );
+    if (!hasGround3) {
+      return false;
+    }
+  }
+
+  // ==========================================================================
+  // ENGLAND GROUND 8 THRESHOLD
+  // Only applies if Ground 8 is selected
+  // ==========================================================================
+  if (normalizedCode === 'ground8_threshold' || normalizedCode === 'ground_8_threshold') {
+    const grounds = allFacts.section8_grounds ?? allFacts.eviction_grounds ?? [];
+    const hasGround8 = Array.isArray(grounds) && (
+      grounds.includes('ground_8') || grounds.includes('8')
+    );
+    if (!hasGround8) {
       return false;
     }
   }
@@ -509,17 +700,80 @@ function checkConditionalDependencies(
 }
 
 function getAffectedQuestionId(issueCode: string): string | undefined {
+  // Comprehensive mapping of issue codes to the question ID where they can be fixed
+  // Covers all jurisdictions: England, Wales, Scotland
   const codeToQuestion: Record<string, string> = {
+    // ==========================================================================
+    // ENGLAND - Section 21
+    // ==========================================================================
     deposit_not_protected: 'deposit_protected_scheme',
+    deposit_noncompliant: 'deposit_protected_scheme',
     prescribed_info_not_given: 'deposit_protected_scheme',
+    prescribed_info_required: 'deposit_protected_scheme',
     gas_safety_not_provided: 'gas_safety_certificate',
+    gas_cert: 'gas_safety_certificate',
     epc_not_provided: 'epc_provided',
+    epc: 'epc_provided',
     how_to_rent_not_provided: 'how_to_rent_provided',
+    h2r: 'how_to_rent_provided',
     hmo_not_licensed: 'property_licensing',
-    rent_smart_not_registered: 'rent_smart_wales_registered',
-    contract_type_incompatible: 'wales_contract_category',
+    licensing_issue: 'property_licensing',
+    licensing: 'property_licensing',
+    four_month_bar: 'notice_service',
+    deposit_exceeds_cap: 'deposit_details',
+    deposit_cap: 'deposit_details',
+
+    // ==========================================================================
+    // ENGLAND - Section 8
+    // ==========================================================================
     grounds_required: 'section8_grounds_selection',
+    ground_particulars_incomplete: 'ground_particulars',
+    ground_8_threshold_not_met: 'arrears_details',
+    ground8_threshold: 'arrears_details',
+
+    // ==========================================================================
+    // WALES - Section 173
+    // ==========================================================================
+    rent_smart_not_registered: 'rent_smart_wales_registered',
+    rsw_registration_required: 'rent_smart_wales_registered',
+    licensing: 'rent_smart_wales_registered',
+    contract_type_incompatible: 'wales_contract_category',
+    supported_contract_s173_blocked: 'wales_contract_category',
+    secure_contract_s173_blocked: 'wales_contract_category',
+    contract_type: 'wales_contract_category',
+    wales_deposit_not_protected: 'deposit_protected_scheme',
+    deposit: 'deposit_protected_scheme',
+    period_bar: 'notice_service',
+    six_month_bar: 'contract_start_date',
+    wales_6_month_bar: 'contract_start_date',
+    notice_period_insufficient: 'notice_expiry',
+
+    // ==========================================================================
+    // WALES - Fault-based
+    // ==========================================================================
+    wales_fault_section_required: 'wales_fault_section',
+    ground_required: 'wales_fault_section',
+    breach_notice_required: 'breach_notice',
+    section_157: 'rent_arrears',
+    section_159: 'rent_arrears',
+    section_161: 'antisocial_behaviour',
+    section_162: 'breach_of_contract',
+
+    // ==========================================================================
+    // SCOTLAND - Notice to Leave
+    // ==========================================================================
     pre_action_not_met: 'pre_action_contact',
+    pre_action: 'pre_action_contact',
+    pre_action_letter_not_sent: 'pre_action_letter',
+    pre_action_signposting_not_done: 'pre_action_signposting',
+    pre_action_incomplete: 'pre_action_requirements',
+    scotland_ground_required: 'eviction_grounds',
+    ntl_ground_required: 'eviction_grounds',
+    ground_1_threshold: 'rent_arrears',
+    ground_3_asb_evidence: 'asb_evidence',
+    notice_period_28: 'notice_expiry',
+    notice_period_84: 'notice_expiry',
+    scotland_notice_period_insufficient: 'notice_expiry',
   };
 
   return codeToQuestion[issueCode.toLowerCase().replace(/-/g, '_')];

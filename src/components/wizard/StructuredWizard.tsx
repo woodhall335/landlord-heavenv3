@@ -241,10 +241,19 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // ====================================================================================
   // This replaces the legacy wizardIssueFilter approach for notice-only products.
   // Guidance is non-blocking, field errors block navigation.
+  // KEY: Validation fires ONLY after Save/Next, not while typing.
   const [noticeOnlyGuidance, setNoticeOnlyGuidance] = useState<InlineGuidance[]>([]);
   const [noticeOnlyRouteSuggestion, setNoticeOnlyRouteSuggestion] = useState<{
     toRoute: string;
     reason: string;
+  } | null>(null);
+  // Flow Not Available modal state
+  const [showFlowNotAvailableModal, setShowFlowNotAvailableModal] = useState(false);
+  const [flowNotAvailableDetails, setFlowNotAvailableDetails] = useState<{
+    blockedRoute: string;
+    reason: string;
+    legalBasis?: string;
+    alternativeRoutes: string[];
   } | null>(null);
 
   const [calculatedDate, setCalculatedDate] = useState<{
@@ -788,57 +797,70 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // ====================================================================================
   // NOTICE-ONLY INLINE VALIDATION (NEW - rebuilt from first principles)
   // ====================================================================================
-  // Runs the new noticeOnlyInlineValidator for notice_only products
-  // Provides real-time guidance without blocking navigation
+  // KEY PRINCIPLE: Validation fires ONLY after Save/Next, not while typing.
+  // This useEffect runs when a NEW question is loaded (after save), showing guidance
+  // based on ALREADY SAVED facts. It does NOT run on currentAnswer changes.
+  //
+  // Why? Users should not see validation errors for incomplete data while typing.
+  // Validation is only meaningful after the user commits their answer.
+  const runNoticeOnlyValidation = useCallback(async (savedFacts: Record<string, any>) => {
+    if (product !== 'notice_only' || !currentQuestion || !jurisdiction) {
+      setNoticeOnlyGuidance([]);
+      setNoticeOnlyRouteSuggestion(null);
+      return;
+    }
+
+    // Get the current route from case facts
+    const currentRoute = savedFacts.selected_notice_route ||
+      savedFacts.route_recommendation?.recommended_route ||
+      (jurisdiction === 'scotland' ? 'notice_to_leave' : 'section_8');
+
+    try {
+      const result = await validateStepInline({
+        jurisdiction: jurisdiction as CanonicalJurisdiction,
+        route: currentRoute,
+        msq: currentQuestion,
+        stepId: currentQuestion.id,
+        answers: {}, // Empty - we validate based on saved facts only
+        allFacts: savedFacts,
+        product: 'notice_only',
+      });
+
+      // Update guidance state
+      setNoticeOnlyGuidance(result.guidance);
+      setNoticeOnlyRouteSuggestion(result.routeSuggestion || null);
+
+      // Check if current route is blocked - trigger Flow Not Available modal
+      if (result.routeSuggestion) {
+        setFlowNotAvailableDetails({
+          blockedRoute: currentRoute,
+          reason: result.routeSuggestion.reason,
+          alternativeRoutes: [result.routeSuggestion.toRoute],
+        });
+        // Don't auto-show modal - let user see inline guidance first
+        // Modal is triggered by explicit action or severe blocking
+      }
+    } catch (error) {
+      console.error('[StructuredWizard] Notice-only inline validation error:', error);
+      setNoticeOnlyGuidance([]);
+      setNoticeOnlyRouteSuggestion(null);
+    }
+  }, [product, currentQuestion, jurisdiction]);
+
+  // Run validation when question changes (after save) or on initial load with saved data
   useEffect(() => {
-    // Only run for notice-only products
     if (product !== 'notice_only') {
       setNoticeOnlyGuidance([]);
       setNoticeOnlyRouteSuggestion(null);
       return;
     }
 
-    if (!currentQuestion || !jurisdiction) {
-      return;
+    // Only run if we have saved case facts to validate against
+    // This ensures we don't show errors for unanswered questions
+    if (Object.keys(caseFacts).length > 0) {
+      void runNoticeOnlyValidation(caseFacts);
     }
-
-    // Get the current route from case facts
-    const currentRoute = caseFacts.selected_notice_route ||
-      caseFacts.route_recommendation?.recommended_route ||
-      (jurisdiction === 'scotland' ? 'notice_to_leave' : 'section_8');
-
-    // Prepare all facts including current answer
-    const allFacts = {
-      ...caseFacts,
-      ...currentAnswer,
-    };
-
-    // Run the inline validator asynchronously
-    const runValidation = async () => {
-      try {
-        const result = await validateStepInline({
-          jurisdiction: jurisdiction as CanonicalJurisdiction,
-          route: currentRoute,
-          msq: currentQuestion,
-          stepId: currentQuestion.id,
-          answers: currentAnswer || {},
-          allFacts,
-          product: 'notice_only',
-        });
-
-        // Update guidance state
-        setNoticeOnlyGuidance(result.guidance);
-        setNoticeOnlyRouteSuggestion(result.routeSuggestion || null);
-      } catch (error) {
-        console.error('[StructuredWizard] Notice-only inline validation error:', error);
-        // Don't block on validation errors
-        setNoticeOnlyGuidance([]);
-        setNoticeOnlyRouteSuggestion(null);
-      }
-    };
-
-    void runValidation();
-  }, [product, currentQuestion, currentAnswer, caseFacts, jurisdiction]);
+  }, [product, currentQuestion?.id, caseFacts, runNoticeOnlyValidation]);
 
   // EPC rating validation (England & Wales tenancies)
   useEffect(() => {
@@ -2975,21 +2997,28 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             {product === 'notice_only' ? (
               /* NOTICE-ONLY: New inline validation from noticeOnlyInlineValidator */
               <>
-                {/* Route suggestion CTA */}
+                {/* Route suggestion CTA - triggered ONLY after Save/Next when route is blocked */}
                 {noticeOnlyRouteSuggestion && (
-                  <div className="bg-blue-50 border-l-4 border-blue-500 rounded-r-lg p-4 mb-4">
+                  <div className="bg-amber-50 border-l-4 border-amber-500 rounded-r-lg p-4 mb-4">
                     <div className="flex items-start gap-3">
-                      <span className="text-lg">💡</span>
+                      <span className="text-lg">⚠️</span>
                       <div className="flex-1">
-                        <p className="text-sm font-semibold text-blue-900 mb-1">
-                          Consider switching routes
+                        <p className="text-sm font-semibold text-amber-900 mb-1">
+                          Current route may not be available
                         </p>
-                        <p className="text-sm text-blue-700 mb-2">
+                        <p className="text-sm text-amber-700 mb-2">
                           {noticeOnlyRouteSuggestion.reason}
                         </p>
-                        <p className="text-sm text-blue-800">
-                          <strong>{noticeOnlyRouteSuggestion.toRoute.replace(/_/g, ' ')}</strong> may be available.
+                        <p className="text-sm text-amber-800 mb-3">
+                          <strong>{noticeOnlyRouteSuggestion.toRoute.replace(/_/g, ' ').replace(/section/i, 'Section ')}</strong> may be a better option.
                         </p>
+                        <button
+                          type="button"
+                          onClick={() => setShowFlowNotAvailableModal(true)}
+                          className="text-xs font-medium text-amber-700 hover:text-amber-900 underline"
+                        >
+                          Learn more about why this route is blocked →
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -3718,6 +3747,105 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           )}
         </aside>
       </div>
+
+      {/* ============================================================================
+          FLOW NOT AVAILABLE MODAL
+          ============================================================================
+          Triggered when the decision engine reports the current route is blocked.
+          Jurisdiction-aware, provides:
+          - Clear explanation of WHY the route is blocked
+          - Legal basis for the blocking rule
+          - Alternative routes available
+          - Actions needed to unblock the current route
+      */}
+      {showFlowNotAvailableModal && flowNotAvailableDetails && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-lg w-full shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="bg-red-50 border-b border-red-100 px-6 py-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-100 rounded-full">
+                  <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-red-900">
+                    {flowNotAvailableDetails.blockedRoute.replace(/_/g, ' ').replace(/section/i, 'Section ')} Not Available
+                  </h2>
+                  <p className="text-sm text-red-700">
+                    Based on your answers, this notice route cannot be used
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-5 space-y-4">
+              {/* Why blocked */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">Why is this blocked?</h3>
+                <p className="text-sm text-gray-700">{flowNotAvailableDetails.reason}</p>
+              </div>
+
+              {/* Legal basis */}
+              {flowNotAvailableDetails.legalBasis && (
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                  <p className="text-xs font-medium text-gray-600 mb-1">Legal basis:</p>
+                  <p className="text-sm text-gray-800">{flowNotAvailableDetails.legalBasis}</p>
+                </div>
+              )}
+
+              {/* Alternative routes */}
+              {flowNotAvailableDetails.alternativeRoutes.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-2">Available alternatives:</h3>
+                  <ul className="space-y-2">
+                    {flowNotAvailableDetails.alternativeRoutes.map((route, i) => (
+                      <li key={`alt-${route}-${i}`} className="flex items-center gap-2 p-2 bg-green-50 rounded-lg border border-green-200">
+                        <span className="text-green-600">✓</span>
+                        <span className="text-sm font-medium text-green-900">
+                          {route.replace(/_/g, ' ').replace(/section/i, 'Section ')}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Jurisdiction-specific guidance */}
+              <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                <p className="text-xs font-medium text-blue-800">
+                  {jurisdiction === 'england' && 'England-specific: Check deposit protection and prescribed information requirements.'}
+                  {jurisdiction === 'wales' && 'Wales-specific: Verify Rent Smart Wales registration and occupation contract type.'}
+                  {jurisdiction === 'scotland' && 'Scotland-specific: Check pre-action requirements if claiming rent arrears.'}
+                </p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex gap-3 justify-end">
+              <Button
+                variant="secondary"
+                onClick={() => setShowFlowNotAvailableModal(false)}
+              >
+                Continue with current answers
+              </Button>
+              {flowNotAvailableDetails.alternativeRoutes.length > 0 && (
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    // In a full implementation, this would switch routes
+                    setShowFlowNotAvailableModal(false);
+                  }}
+                >
+                  Switch to {flowNotAvailableDetails.alternativeRoutes[0].replace(/_/g, ' ').replace(/section/i, 'Section ')}
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

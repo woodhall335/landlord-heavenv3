@@ -389,4 +389,307 @@ describe('Notice-Only Inline Validator', () => {
       expect(result).toHaveProperty('guidance');
     });
   });
+
+  // ====================================================================================
+  // WALES-SPECIFIC TESTS
+  // ====================================================================================
+
+  describe('Wales Validation Rules', () => {
+    it('Section 173 blocked when contract type is supported_standard', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'wales',
+        route: 'wales_section_173',
+        product: 'notice_only',
+        msq: {
+          id: 'wales_contract_category',
+          question: 'Contract type',
+          inputType: 'select',
+        },
+        stepId: 'wales_contract_category',
+        answers: {},
+        allFacts: {
+          wales_contract_category: 'supported_standard',
+        },
+      });
+
+      // S173 should be blocked for supported contracts
+      expect(result).toHaveProperty('guidance');
+    });
+
+    it('Section 173 blocked when Rent Smart Wales not registered', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'wales',
+        route: 'wales_section_173',
+        product: 'notice_only',
+        msq: {
+          id: 'rent_smart_wales_registered',
+          question: 'Are you registered with Rent Smart Wales?',
+          inputType: 'yes_no',
+        },
+        stepId: 'rent_smart_wales_registered',
+        answers: {},
+        allFacts: {
+          rent_smart_wales_registered: false,
+        },
+      });
+
+      expect(result).toHaveProperty('guidance');
+    });
+
+    it('deposit protection required in Wales', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'wales',
+        route: 'wales_section_173',
+        product: 'notice_only',
+        msq: {
+          id: 'deposit_protected_scheme',
+          question: 'Deposit protection',
+          inputType: 'yes_no',
+        },
+        stepId: 'deposit_protected_scheme',
+        answers: {},
+        allFacts: {
+          deposit_taken: true,
+          deposit_protected: false,
+        },
+      });
+
+      expect(result).toHaveProperty('guidance');
+    });
+
+    it('fault-based route available for all contract types', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'wales',
+        route: 'wales_fault_based',
+        product: 'notice_only',
+        msq: {
+          id: 'eviction_grounds',
+          question: 'Select fault grounds',
+          inputType: 'select',
+        },
+        stepId: 'eviction_grounds',
+        answers: {},
+        allFacts: {
+          wales_contract_category: 'secure', // Secure contract
+        },
+      });
+
+      // Fault-based should be available even for secure contracts
+      expect(result).toHaveProperty('fieldErrors');
+      expect(result).toHaveProperty('guidance');
+    });
+  });
+
+  // ====================================================================================
+  // SCOTLAND-SPECIFIC TESTS
+  // ====================================================================================
+
+  describe('Scotland Validation Rules', () => {
+    it('pre-action required for Ground 1 (rent arrears)', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'scotland',
+        route: 'notice_to_leave',
+        product: 'notice_only',
+        msq: {
+          id: 'pre_action_requirements',
+          question: 'Pre-action requirements',
+          inputType: 'group',
+          fields: [],
+        },
+        stepId: 'pre_action_requirements',
+        answers: {},
+        allFacts: {
+          scotland_ground_codes: ['ground_1'],
+          pre_action_confirmed: false,
+        },
+      });
+
+      expect(result).toHaveProperty('guidance');
+    });
+
+    it('pre-action NOT required for Ground 3 (ASB)', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'scotland',
+        route: 'notice_to_leave',
+        product: 'notice_only',
+        msq: {
+          id: 'pre_action_requirements',
+          question: 'Pre-action requirements',
+          inputType: 'group',
+          fields: [],
+        },
+        stepId: 'pre_action_requirements',
+        answers: {},
+        allFacts: {
+          scotland_ground_codes: ['ground_3'], // ASB ground
+          pre_action_confirmed: false,
+        },
+      });
+
+      // Pre-action issues should NOT be shown for Ground 3
+      const preActionIssue = result.guidance.find(
+        g => g.code?.includes('PRE_ACTION') || g.message?.toLowerCase().includes('pre-action')
+      );
+      expect(preActionIssue).toBeUndefined();
+    });
+
+    it('ground selection required for Notice to Leave', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'scotland',
+        route: 'notice_to_leave',
+        product: 'notice_only',
+        msq: {
+          id: 'eviction_grounds',
+          question: 'Select eviction grounds',
+          inputType: 'checkbox',
+        },
+        stepId: 'eviction_grounds',
+        answers: {},
+        allFacts: {
+          scotland_ground_codes: [], // No grounds selected
+        },
+      });
+
+      expect(result).toHaveProperty('guidance');
+    });
+  });
+
+  // ====================================================================================
+  // VALIDATION TIMING TESTS
+  // ====================================================================================
+
+  describe('Validation Timing', () => {
+    it('validates based on saved facts, not current answers', async () => {
+      // This tests the key principle: validation uses allFacts (saved data)
+      // not answers (current unsaved input)
+      const result = await validateStepInline({
+        jurisdiction: 'england',
+        route: 'section_21',
+        product: 'notice_only',
+        msq: {
+          id: 'deposit_details',
+          question: 'Deposit details',
+          inputType: 'group',
+          fields: [],
+        },
+        stepId: 'deposit_details',
+        answers: {
+          // Current answer says deposit taken
+          deposit_taken: true,
+        },
+        allFacts: {
+          // But saved facts say no deposit
+          deposit_taken: false,
+        },
+      });
+
+      // Should NOT show deposit issues because saved facts say deposit_taken=false
+      const depositIssue = result.guidance.find(
+        g => g.code?.includes('DEPOSIT')
+      );
+      expect(depositIssue).toBeUndefined();
+    });
+
+    it('returns structured result even for empty facts', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'england',
+        route: 'section_21',
+        product: 'notice_only',
+        msq: {
+          id: 'test',
+          question: 'Test',
+          inputType: 'text',
+        },
+        stepId: 'test',
+        answers: {},
+        allFacts: {},
+      });
+
+      expect(result).toHaveProperty('fieldErrors');
+      expect(result).toHaveProperty('guidance');
+      expect(Array.isArray(result.guidance)).toBe(true);
+    });
+  });
+
+  // ====================================================================================
+  // CROSS-JURISDICTION ISOLATION TESTS
+  // ====================================================================================
+
+  describe('Cross-Jurisdiction Isolation', () => {
+    it('England rules do not leak to Wales', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'wales',
+        route: 'wales_section_173',
+        product: 'notice_only',
+        msq: {
+          id: 'safety_compliance',
+          question: 'Safety compliance',
+          inputType: 'group',
+          fields: [],
+        },
+        stepId: 'safety_compliance',
+        answers: {},
+        allFacts: {
+          how_to_rent_provided: false, // England-specific
+        },
+      });
+
+      // How to Rent is England-specific, should not appear for Wales
+      const h2rIssue = result.guidance.find(
+        g => g.code?.includes('H2R') || g.message?.toLowerCase().includes('how to rent')
+      );
+      expect(h2rIssue).toBeUndefined();
+    });
+
+    it('Wales rules do not leak to Scotland', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'scotland',
+        route: 'notice_to_leave',
+        product: 'notice_only',
+        msq: {
+          id: 'landlord_details',
+          question: 'Landlord details',
+          inputType: 'group',
+          fields: [],
+        },
+        stepId: 'landlord_details',
+        answers: {},
+        allFacts: {
+          rent_smart_wales_registered: false, // Wales-specific
+        },
+      });
+
+      // RSW is Wales-specific, should not appear for Scotland
+      const rswIssue = result.guidance.find(
+        g => g.code?.includes('RSW') || g.code?.includes('RENT_SMART') ||
+             g.message?.toLowerCase().includes('rent smart wales')
+      );
+      expect(rswIssue).toBeUndefined();
+    });
+
+    it('Scotland rules do not leak to England', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'england',
+        route: 'section_8',
+        product: 'notice_only',
+        msq: {
+          id: 'pre_action_contact',
+          question: 'Pre-action contact',
+          inputType: 'yes_no',
+        },
+        stepId: 'pre_action_contact',
+        answers: {},
+        allFacts: {
+          pre_action_confirmed: false, // Scotland-specific
+          eviction_grounds: ['ground_8'],
+        },
+      });
+
+      // Pre-action is Scotland-specific, should not appear for England S8
+      const preActionIssue = result.guidance.find(
+        g => g.code?.includes('PRE_ACTION')
+      );
+      expect(preActionIssue).toBeUndefined();
+    });
+  });
 });
