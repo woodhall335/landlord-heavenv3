@@ -319,14 +319,20 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
           user_fix_hint: 'Protect the deposit in an approved scheme before continuing',
         });
       } else if (wizardFacts.deposit_protected === true) {
-        if (wizardFacts.prescribed_info_given === false) {
+        // Check canonical field first, then fallbacks for legacy/alternative field names
+        const prescribedInfoGiven =
+          wizardFacts.prescribed_info_given ??
+          wizardFacts.prescribed_info_provided ??
+          wizardFacts.prescribed_info_served ??
+          wizardFacts.tenancy?.prescribed_info_given;
+        if (prescribedInfoGiven === false) {
           pushStageIssue({
             code: 'S21-DEPOSIT-NONCOMPLIANT',
             affected_question_id: 'prescribed_info_given',
             legal_reason: 'Prescribed information must be served before a Section 21 notice',
             user_fix_hint: 'Serve the prescribed information and confirm before continuing',
           });
-        } else if (wizardFacts.prescribed_info_given === undefined || wizardFacts.prescribed_info_given === null) {
+        } else if (prescribedInfoGiven === undefined || prescribedInfoGiven === null) {
           pushStageIssue(
             {
               code: 'S21-PRESCRIBED-INFO-REQUIRED',

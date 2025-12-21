@@ -117,10 +117,15 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   }
 
   // Prescribed information (CRITICAL)
-  const prescribedInfoGiven = facts.tenancy?.deposit_protection_date ||
-    (input.facts as any).prescribed_info_given;
+  // Check canonical location first (facts.tenancy.prescribed_info_given), then legacy/root fallbacks
+  const prescribedInfoGiven =
+    facts.tenancy?.prescribed_info_given ??
+    (input.facts as any).prescribed_info_given ??
+    (input.facts as any).prescribed_info_provided ??
+    (input.facts as any).prescribed_info_served;
   if (facts.tenancy?.deposit_amount && facts.tenancy.deposit_amount > 0) {
-    if (!prescribedInfoGiven) {
+    // Only block if explicitly false (not given), not if undefined (not yet answered)
+    if (prescribedInfoGiven === false) {
       const issue: BlockingIssue = {
         route: 'section_21',
         issue: 'prescribed_info_not_given',
@@ -132,6 +137,11 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
         output.warnings.push(issue.description);
       } else {
         s21Blocks.push(issue);
+      }
+    } else if (prescribedInfoGiven === undefined || prescribedInfoGiven === null) {
+      // Undefined means not answered yet - warn but don't block in early stages
+      if (!isWizardStage) {
+        output.warnings.push('Prescribed information status not confirmed');
       }
     }
   }

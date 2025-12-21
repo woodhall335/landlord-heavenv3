@@ -577,6 +577,19 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   );
   base.tenancy.deposit_reference ??= getWizardValue(wizard, 'deposit_reference');
 
+  // Prescribed information (Section 21 requirement when deposit taken)
+  // Check multiple possible field names for backwards compatibility
+  const prescribedInfoValue = getFirstValue(wizard, [
+    'case_facts.tenancy.prescribed_info_given',
+    'prescribed_info_given',
+    'prescribed_info_provided',
+    'prescribed_info_served',
+    'tenancy.prescribed_info_given',
+  ]);
+  if (prescribedInfoValue !== null && prescribedInfoValue !== undefined) {
+    base.tenancy.prescribed_info_given = coerceBoolean(prescribedInfoValue);
+  }
+
   // =============================================================================
   // PARTIES - Landlord, agent, solicitor, tenants
   // =============================================================================

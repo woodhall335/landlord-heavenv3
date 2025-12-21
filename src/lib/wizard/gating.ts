@@ -298,7 +298,11 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
                        resolveFactValue(facts, 'tenancy.deposit_amount');
   const depositProtected = resolveFactValue(facts, 'deposit_protected') ??
                           resolveFactValue(facts, 'tenancy.deposit_protected');
-  const prescribedInfoGiven = resolveFactValue(facts, 'prescribed_info_given');
+  // Check canonical location first, then legacy/alternative field names
+  const prescribedInfoGiven = resolveFactValue(facts, 'tenancy.prescribed_info_given') ??
+                              resolveFactValue(facts, 'prescribed_info_given') ??
+                              resolveFactValue(facts, 'prescribed_info_provided') ??
+                              resolveFactValue(facts, 'prescribed_info_served');
 
   // If deposit taken, must have deposit_amount
   if (depositTaken === true) {
