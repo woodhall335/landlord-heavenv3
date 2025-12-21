@@ -12,6 +12,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { validateFlow, create422Response } from '@/lib/validation/validateFlow';
 import { deriveCanonicalJurisdiction, normalizeJurisdiction } from '@/lib/types/jurisdiction';
 import type { Product } from '@/lib/jurisdictions/capabilities/matrix';
+import type { CaseRow } from '@/lib/supabase/database-types';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -50,14 +51,16 @@ export async function POST(request: Request) {
       );
     }
 
-    const collectedFacts = (caseData.collected_facts as Record<string, any>) || {};
+    // Type the case data properly
+    const typedCaseData = caseData as CaseRow;
+    const collectedFacts = (typedCaseData.collected_facts as Record<string, any>) || {};
 
     // Derive jurisdiction
     let canonicalJurisdiction =
-      deriveCanonicalJurisdiction(caseData.jurisdiction, collectedFacts) ||
-      normalizeJurisdiction(caseData.jurisdiction);
+      deriveCanonicalJurisdiction(typedCaseData.jurisdiction, collectedFacts) ||
+      normalizeJurisdiction(typedCaseData.jurisdiction);
 
-    if (!canonicalJurisdiction && caseData.case_type === 'eviction') {
+    if (!canonicalJurisdiction && typedCaseData.case_type === 'eviction') {
       canonicalJurisdiction = 'england';
     }
 
@@ -80,9 +83,9 @@ export async function POST(request: Request) {
     let product: Product;
     if (metaProduct) {
       product = metaProduct as Product;
-    } else if (caseData.case_type === 'money_claim') {
+    } else if (typedCaseData.case_type === 'money_claim') {
       product = 'money_claim';
-    } else if (caseData.case_type === 'tenancy_agreement') {
+    } else if (typedCaseData.case_type === 'tenancy_agreement') {
       product = 'tenancy_agreement';
     } else {
       // Default to notice_only for eviction flows
@@ -94,7 +97,7 @@ export async function POST(request: Request) {
       collectedFacts.selected_notice_route ||
       collectedFacts.route_recommendation?.recommended_route ||
       collectedFacts.selected_route ||
-      (caseData.case_type === 'eviction' ? 'section_8' : product);
+      (typedCaseData.case_type === 'eviction' ? 'section_8' : product);
 
     // Run validation at requested stage (defaults to preview)
     console.log(`[WIZARD/VALIDATE] Running ${stage}-stage validation for case ${case_id}`);
