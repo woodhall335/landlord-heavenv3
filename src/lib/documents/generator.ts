@@ -7,9 +7,14 @@
 
 import Handlebars from 'handlebars';
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer';
 import { SITE_CONFIG } from '@/config/site';
+
+// ESM compatibility: Get __dirname equivalent
+const __filename_esm = typeof __filename !== 'undefined' ? __filename : fileURLToPath(import.meta.url);
+const __dirname_esm = typeof __dirname !== 'undefined' ? __dirname : dirname(__filename_esm);
 
 // ============================================================================
 // TYPES
@@ -196,6 +201,38 @@ registerHandlebarsHelpers();
 // ============================================================================
 
 /**
+ * Essential inline CSS fallback when print.css cannot be loaded.
+ * This ensures notice PDFs are still styled even if file loading fails.
+ * Matches the core rules from config/jurisdictions/_shared/print/print.css
+ */
+const FALLBACK_PRINT_CSS = `
+/* Fallback print styles - used if print.css file cannot be loaded */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+@page { size: A4; margin: 0.75in 0.75in 1in 0.75in; }
+html { font-size: 12pt; }
+body { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 12pt; line-height: 1.5; color: #000; background: #fff; max-width: 8.5in; margin: 0 auto; padding: 0.5in; word-wrap: break-word; }
+h1 { font-size: 14pt; font-weight: bold; line-height: 1.3; text-align: center; text-transform: uppercase; margin: 0 0 1em 0; page-break-after: avoid; }
+h2 { font-size: 12pt; font-weight: bold; line-height: 1.4; text-align: center; margin: 0 0 1em 0; page-break-after: avoid; }
+h3 { font-size: 12pt; font-weight: bold; line-height: 1.4; margin: 1.5em 0 0.5em 0; page-break-after: avoid; }
+p { margin: 0 0 0.75em 0; line-height: 1.5; }
+ul, ol { margin: 0.75em 0; padding-left: 1.5em; }
+li { margin-bottom: 0.5em; line-height: 1.5; }
+strong { font-weight: bold; }
+.link, a { color: #0066cc; text-decoration: underline; word-break: break-all; }
+.info-box { border: 2px solid #000; padding: 1em; margin: 1em 0 1.5em 0; background-color: #f9f9f9; page-break-inside: avoid; }
+.section { margin: 1.5em 0; page-break-inside: avoid; break-inside: avoid; }
+.field-label { font-weight: bold; margin-top: 0.75em; margin-bottom: 0.25em; display: block; }
+.field-value { margin-left: 0.25in; border-bottom: 1px dotted #666; min-height: 1.5em; padding: 0.25em 0; display: block; }
+.signature-block { margin-top: 2em; page-break-inside: avoid; break-inside: avoid; }
+.checkbox { display: inline-block; width: 1em; height: 1em; border: 1px solid #000; margin-right: 0.5em; vertical-align: middle; background-color: #fff; }
+.guidance-section { margin-top: 2em; padding-top: 1.5em; border-top: 2px solid #000; }
+.avoid-break { page-break-inside: avoid; break-inside: avoid; }
+table { width: 100%; border-collapse: collapse; margin: 1em 0; page-break-inside: avoid; }
+th, td { padding: 0.5em; border: 1px solid #ccc; text-align: left; vertical-align: top; }
+th { font-weight: bold; background-color: #f0f0f0; }
+`.trim();
+
+/**
  * Load and cache the centralized print.css stylesheet
  */
 let cachedPrintCss: string | null = null;
@@ -205,15 +242,30 @@ export function loadPrintCss(): string {
     return cachedPrintCss;
   }
 
-  try {
-    const printCssPath = join(process.cwd(), 'config', 'jurisdictions', '_shared', 'print', 'print.css');
-    cachedPrintCss = readFileSync(printCssPath, 'utf-8');
-    console.log('[PRINT SYSTEM] ✅ Loaded print.css');
-    return cachedPrintCss;
-  } catch (error: any) {
-    console.warn('[PRINT SYSTEM] ⚠️  Could not load print.css:', error.message);
-    return ''; // Graceful fallback - templates will use inline styles
+  // Try multiple possible paths for print.css
+  // This covers different runtime environments (dev, production, tests)
+  const possiblePaths = [
+    join(process.cwd(), 'config', 'jurisdictions', '_shared', 'print', 'print.css'),
+    join(__dirname_esm, '..', '..', '..', '..', 'config', 'jurisdictions', '_shared', 'print', 'print.css'),
+    join(process.cwd(), '..', 'config', 'jurisdictions', '_shared', 'print', 'print.css'),
+  ];
+
+  for (const printCssPath of possiblePaths) {
+    try {
+      cachedPrintCss = readFileSync(printCssPath, 'utf-8');
+      console.log('[PRINT SYSTEM] ✅ Loaded print.css from:', printCssPath);
+      console.log('[PRINT SYSTEM] CSS length:', cachedPrintCss.length, 'characters');
+      return cachedPrintCss;
+    } catch {
+      // Try next path
+    }
   }
+
+  // Use fallback CSS if file cannot be loaded from any path
+  console.warn('[PRINT SYSTEM] ⚠️  Could not load print.css from any path, using fallback CSS');
+  console.warn('[PRINT SYSTEM] Tried paths:', possiblePaths);
+  cachedPrintCss = FALLBACK_PRINT_CSS;
+  return cachedPrintCss;
 }
 
 /**
@@ -448,11 +500,23 @@ export function safeText(value: any): string {
   return String(value);
 }
 
+// Debug flag for PDF generation tracing
+const PDF_DEBUG = process.env.PDF_DEBUG === '1';
+
 /**
  * Compile a template with data
  */
 export function compileTemplate(templateContent: string, data: Record<string, any>): string {
   try {
+    // Load print CSS
+    const printCssContent = loadPrintCss();
+
+    if (PDF_DEBUG) {
+      console.log('[PDF_DEBUG] compileTemplate() called');
+      console.log('[PDF_DEBUG] print_css length:', printCssContent.length);
+      console.log('[PDF_DEBUG] print_css first 200 chars:', printCssContent.substring(0, 200));
+    }
+
     // Add generation metadata + site config + print system
     const enrichedData = {
       ...data,
@@ -465,7 +529,7 @@ export function compileTemplate(templateContent: string, data: Record<string, an
       site_url: SITE_CONFIG.url,
       support_email: SITE_CONFIG.support_email,
       // Print Design System CSS (for templates that use {{> print_head}} or {{{print_css}}})
-      print_css: loadPrintCss(),
+      print_css: printCssContent,
     };
 
     // Safe-convert all data values to prevent [object Object] leaks
@@ -479,11 +543,23 @@ export function compileTemplate(templateContent: string, data: Record<string, an
     const template = Handlebars.compile(templateContent);
     let html = template(safeData);
 
+    if (PDF_DEBUG) {
+      console.log('[PDF_DEBUG] Compiled HTML first 300 chars:', html.substring(0, 300));
+      console.log('[PDF_DEBUG] isFullHtmlDocument:', isFullHtmlDocument(html));
+    }
+
     // Skip markdown conversion for full HTML documents (those with <!DOCTYPE>, <html>, <head>)
     // These templates have their own structure and styles that would be corrupted by markdownToHtml
     if (!isFullHtmlDocument(html)) {
       // Convert markdown to HTML for PDF rendering
       html = markdownToHtml(html);
+      if (PDF_DEBUG) {
+        console.log('[PDF_DEBUG] Applied markdownToHtml (not a full HTML doc)');
+      }
+    } else {
+      if (PDF_DEBUG) {
+        console.log('[PDF_DEBUG] Skipped markdownToHtml (full HTML doc detected)');
+      }
     }
 
     return html;
@@ -616,6 +692,13 @@ export async function htmlToPdf(
 ): Promise<Buffer> {
   let browser;
 
+  if (PDF_DEBUG) {
+    console.log('[PDF_DEBUG] htmlToPdf() called');
+    console.log('[PDF_DEBUG] Input HTML length:', html.length);
+    console.log('[PDF_DEBUG] Input HTML first 300 chars:', html.substring(0, 300));
+    console.log('[PDF_DEBUG] isFullHtmlDocument in htmlToPdf:', isFullHtmlDocument(html));
+  }
+
   try {
     browser = await puppeteer.launch({
       headless: true,
@@ -628,29 +711,51 @@ export async function htmlToPdf(
     let finalHtml: string;
 
     if (isFullHtmlDocument(html)) {
+      if (PDF_DEBUG) {
+        console.log('[PDF_DEBUG] Full HTML document detected - passing through without wrapper');
+      }
       // Full HTML documents already have their own structure and styles
       // Pass them directly to Puppeteer without wrapping in another HTML shell
-      // Inject @page rules for consistent page size/margins if not already present
-      const pageRules = `
+
+      // Only inject @page rules if NOT already present in the HTML
+      // This preserves the template's intended margins (e.g., from print.css)
+      const hasPageRules = /@page\s*\{/i.test(html);
+
+      if (hasPageRules) {
+        // Template has its own @page rules - use HTML as-is
+        if (PDF_DEBUG) {
+          console.log('[PDF_DEBUG] @page rules already present - using HTML as-is');
+        }
+        finalHtml = html;
+      } else {
+        // No @page rules in template - inject default rules for consistency
+        if (PDF_DEBUG) {
+          console.log('[PDF_DEBUG] No @page rules found - injecting default rules');
+        }
+        const pageRules = `
     @page {
       size: ${options?.pageSize || 'A4'};
       margin: ${options?.margins?.top || '2cm'} ${options?.margins?.right || '2cm'} ${options?.margins?.bottom || '2cm'} ${options?.margins?.left || '2cm'};
     }`;
 
-      // Inject @page rules before </style> or </head> if they exist
-      if (html.includes('</style>')) {
-        finalHtml = html.replace('</style>', `${pageRules}\n  </style>`);
-      } else if (html.toLowerCase().includes('</head>')) {
-        // Inject a style block before </head>
-        finalHtml = html.replace(
-          /<\/head>/i,
-          `<style>${pageRules}\n  </style>\n</head>`
-        );
-      } else {
-        // Fallback: use as-is (rare case)
-        finalHtml = html;
+        // Inject @page rules before </style> or </head> if they exist
+        if (html.includes('</style>')) {
+          finalHtml = html.replace('</style>', `${pageRules}\n  </style>`);
+        } else if (html.toLowerCase().includes('</head>')) {
+          // Inject a style block before </head>
+          finalHtml = html.replace(
+            /<\/head>/i,
+            `<style>${pageRules}\n  </style>\n</head>`
+          );
+        } else {
+          // Fallback: use as-is (rare case)
+          finalHtml = html;
+        }
       }
     } else {
+      if (PDF_DEBUG) {
+        console.log('[PDF_DEBUG] NOT a full HTML document - wrapping in default HTML structure');
+      }
       // Wrap non-full HTML in proper HTML structure with styling
       finalHtml = `
 <!DOCTYPE html>
@@ -787,6 +892,28 @@ ${html}
 </body>
 </html>
       `;
+    }
+
+    // Debug: Write final HTML to file for inspection
+    if (PDF_DEBUG) {
+      console.log('[PDF_DEBUG] finalHtml length:', finalHtml.length);
+      console.log('[PDF_DEBUG] finalHtml first 500 chars:', finalHtml.substring(0, 500));
+      // Check if styles are present
+      const styleMatch = finalHtml.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
+      if (styleMatch) {
+        console.log('[PDF_DEBUG] Style block found, length:', styleMatch[1].length);
+        console.log('[PDF_DEBUG] Style block first 300 chars:', styleMatch[1].substring(0, 300));
+      } else {
+        console.log('[PDF_DEBUG] WARNING: No style block found in finalHtml!');
+      }
+      // Write to /tmp for inspection
+      try {
+        const fs = await import('fs/promises');
+        await fs.writeFile('/tmp/form6a.final.html', finalHtml, 'utf-8');
+        console.log('[PDF_DEBUG] Wrote finalHtml to /tmp/form6a.final.html');
+      } catch (writeErr) {
+        console.log('[PDF_DEBUG] Failed to write debug file:', writeErr);
+      }
     }
 
     await page.setContent(finalHtml, { waitUntil: 'networkidle0' });
