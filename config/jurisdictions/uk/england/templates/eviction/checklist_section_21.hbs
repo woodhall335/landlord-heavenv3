@@ -14,6 +14,19 @@
   <style>
     {{{print_css}}}
 
+    /* ===== @PAGE OVERRIDE - NARROW MARGINS ===== */
+    /* Override print.css defaults to match Form 6A narrow margins */
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+
+    /* Zero out body padding since @page handles margins */
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
     /* ===== HARMONIZED DOCUMENT STYLES ===== */
     
     /* Document Header */
