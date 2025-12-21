@@ -52,7 +52,7 @@ export async function POST(request: Request) {
     }
 
     // Type the case data properly
-    const typedCaseData = caseData as CaseRow;
+    const typedCaseData = caseData as unknown as CaseRow;
     const collectedFacts = (typedCaseData.collected_facts as Record<string, any>) || {};
 
     // Derive jurisdiction
