@@ -25,6 +25,20 @@
   <style>
     {{{print_css}}}
 
+    /* ===== FORM 6A @PAGE OVERRIDE - NARROW MARGINS ===== */
+    /* Override print.css defaults for Form 6A to match official government form */
+    @page {
+      size: A4;
+      margin: 10mm; /* Narrow margins as per official Form 6A */
+    }
+
+    /* Zero out body padding since @page handles margins */
+    body {
+      padding: 0;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+
     /* ===== ENHANCED FORM 6A STYLES ===== */
     
     /* Form Header */

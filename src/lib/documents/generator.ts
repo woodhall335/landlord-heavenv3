@@ -1000,11 +1000,20 @@ ${html}
     // For non-full HTML (wrapped content), use format option
     const isFullHtml = isFullHtmlDocument(html);
 
-    const pdf = await page.pdf({
+    // IMPORTANT: For full HTML templates, do NOT pass margin option at all.
+    // Let the template's @page CSS rules control margins entirely.
+    // Only pass margin for non-full-HTML where we inject our own @page rules.
+    const pdfOptions: Parameters<typeof page.pdf>[0] = {
       format: options?.pageSize || 'A4',
       printBackground: true,
       preferCSSPageSize: isFullHtml,
-    });
+    };
+
+    // For non-full-HTML, the injected @page rules handle margins via CSS,
+    // so we still don't need to pass Puppeteer margin options.
+    // The @page CSS rules are already in the finalHtml.
+
+    const pdf = await page.pdf(pdfOptions);
 
     return Buffer.from(pdf);
   } finally {
