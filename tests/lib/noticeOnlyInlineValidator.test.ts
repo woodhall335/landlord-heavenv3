@@ -2,9 +2,17 @@
  * Tests for Notice-Only Inline Validator
  *
  * @see docs/notice-only-rules-audit.md
+ *
+ * PRE-MERGE VERIFICATION TESTS:
+ * - Validation timing (ONLY after Save)
+ * - England S21 blocking rules (EPC, deposit, gas, prescribed info)
+ * - Deposit cap warning behavior
+ * - Jurisdiction isolation (no cross-jurisdiction leakage)
+ * - Section 8 Ask Heaven preservation
  */
 
 import { validateStepInline, validateFieldsOnly, type ValidateStepInlineParams } from '@/lib/validation/noticeOnlyInlineValidator';
+import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
 describe('Notice-Only Inline Validator', () => {
@@ -690,6 +698,395 @@ describe('Notice-Only Inline Validator', () => {
         g => g.code?.includes('PRE_ACTION')
       );
       expect(preActionIssue).toBeUndefined();
+    });
+  });
+
+  // ====================================================================================
+  // PREVIEW/GENERATE ENFORCEMENT TESTS (PRE-MERGE VERIFICATION)
+  // ====================================================================================
+
+  describe('Preview/Generate Enforcement (Legal Hard Stops)', () => {
+    describe('England Section 21 Blocking Rules', () => {
+      it('EPC not provided BLOCKS at preview stage', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            epc_provided: false,
+            deposit_taken: false,
+            has_gas_appliances: false,
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(false);
+        const epcIssue = result.hardFailures.find(f => f.code === 'S21-EPC');
+        expect(epcIssue).toBeDefined();
+        expect(epcIssue?.legal_reason).toContain('EPC');
+      });
+
+      it('EPC not provided is WARNING at wizard stage (not blocking)', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            epc_provided: false,
+            deposit_taken: false,
+            has_gas_appliances: false,
+          },
+          stage: 'wizard',
+        });
+
+        // At wizard stage, EPC should be a warning not blocking
+        const epcWarning = result.warnings.find(w => w.code === 'S21-EPC');
+        const epcHard = result.hardFailures.find(f => f.code === 'S21-EPC');
+        expect(epcWarning).toBeDefined();
+        expect(epcHard).toBeUndefined();
+      });
+
+      it('deposit_protected=false BLOCKS when deposit_taken=true at preview', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            deposit_taken: true,
+            deposit_protected: false,
+            epc_provided: true,
+            has_gas_appliances: false,
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(false);
+        const depositIssue = result.hardFailures.find(f => f.code === 'S21-DEPOSIT-NONCOMPLIANT');
+        expect(depositIssue).toBeDefined();
+        expect(depositIssue?.legal_reason).toContain('Deposit');
+      });
+
+      it('gas_certificate_provided=false BLOCKS when has_gas_appliances=true at preview', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            has_gas_appliances: true,
+            gas_certificate_provided: false,
+            deposit_taken: false,
+            epc_provided: true,
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(false);
+        const gasIssue = result.hardFailures.find(f => f.code === 'S21-GAS-CERT');
+        expect(gasIssue).toBeDefined();
+        expect(gasIssue?.legal_reason).toContain('Gas');
+      });
+
+      it('gas certificate NOT required when has_gas_appliances=false', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            has_gas_appliances: false,
+            gas_certificate_provided: false,
+            deposit_taken: false,
+            epc_provided: true,
+          },
+          stage: 'preview',
+        });
+
+        // No gas issues should be present
+        const gasIssue = result.hardFailures.find(f => f.code === 'S21-GAS-CERT');
+        expect(gasIssue).toBeUndefined();
+      });
+
+      it('prescribed_info_given=false BLOCKS when deposit_taken=true at preview', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            deposit_taken: true,
+            deposit_protected: true,
+            prescribed_info_given: false,
+            epc_provided: true,
+            has_gas_appliances: false,
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(false);
+        const prescribedIssue = result.hardFailures.find(f => f.code === 'S21-DEPOSIT-NONCOMPLIANT');
+        expect(prescribedIssue).toBeDefined();
+      });
+
+      it('how_to_rent_provided=false BLOCKS at preview (post-Oct 2015 tenancy)', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            tenancy_start_date: '2020-01-01',
+            how_to_rent_provided: false,
+            deposit_taken: false,
+            epc_provided: true,
+            has_gas_appliances: false,
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(false);
+        const h2rIssue = result.hardFailures.find(f => f.code === 'S21-H2R');
+        expect(h2rIssue).toBeDefined();
+      });
+
+      it('fully compliant Section 21 passes preview', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            deposit_taken: true,
+            deposit_protected: true,
+            prescribed_info_given: true,
+            has_gas_appliances: true,
+            gas_certificate_provided: true,
+            epc_provided: true,
+            how_to_rent_provided: true,
+            property_licensing_status: 'licensed',
+            tenancy_start_date: '2020-01-01',
+            notice_service_date: '2024-06-01',
+            notice_expiry_date: '2024-08-01',
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(true);
+        expect(result.hardFailures).toHaveLength(0);
+      });
+    });
+
+    describe('Wales Section 173 Blocking Rules', () => {
+      it('RSW not registered BLOCKS at preview', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'wales',
+          product: 'notice_only',
+          selected_route: 'wales_section_173',
+          wizardFacts: {
+            rent_smart_wales_registered: false,
+            contract_start_date: '2022-01-01',
+            notice_service_date: '2024-01-01',
+            notice_expiry_date: '2024-07-01',
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(false);
+        const rswIssue = result.hardFailures.find(f => f.code === 'S173-LICENSING');
+        expect(rswIssue).toBeDefined();
+      });
+
+      it('service in first 6 months BLOCKS', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'wales',
+          product: 'notice_only',
+          selected_route: 'wales_section_173',
+          wizardFacts: {
+            rent_smart_wales_registered: true,
+            contract_start_date: '2024-01-01',
+            notice_service_date: '2024-04-01', // Only 3 months after start
+            notice_expiry_date: '2024-10-01',
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(false);
+        const periodBarIssue = result.hardFailures.find(f => f.code === 'S173-PERIOD-BAR');
+        expect(periodBarIssue).toBeDefined();
+      });
+    });
+
+    describe('Scotland Notice to Leave Blocking Rules', () => {
+      it('no grounds selected BLOCKS', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'scotland',
+          product: 'notice_only',
+          selected_route: 'notice_to_leave',
+          wizardFacts: {
+            scotland_ground_codes: [],
+            notice_service_date: '2024-01-01',
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(false);
+        const groundsIssue = result.hardFailures.find(f => f.code === 'NTL-GROUND-REQUIRED');
+        expect(groundsIssue).toBeDefined();
+      });
+
+      it('pre-action not confirmed BLOCKS when Ground 1 selected', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'scotland',
+          product: 'notice_only',
+          selected_route: 'notice_to_leave',
+          wizardFacts: {
+            scotland_ground_codes: [1],
+            issues: {
+              rent_arrears: {
+                pre_action_confirmed: false,
+              },
+            },
+            notice_service_date: '2024-01-01',
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(false);
+        const preActionIssue = result.hardFailures.find(f => f.code === 'NTL-PRE-ACTION');
+        expect(preActionIssue).toBeDefined();
+      });
+
+      it('pre-action NOT required when Ground 3 (ASB) only', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'scotland',
+          product: 'notice_only',
+          selected_route: 'notice_to_leave',
+          wizardFacts: {
+            scotland_ground_codes: [3], // ASB ground
+            notice_service_date: '2024-01-01',
+            notice_expiry_date: '2024-02-01',
+          },
+          stage: 'preview',
+        });
+
+        // Should not have pre-action issue for Ground 3
+        const preActionIssue = result.hardFailures.find(f => f.code === 'NTL-PRE-ACTION');
+        expect(preActionIssue).toBeUndefined();
+      });
+    });
+  });
+
+  // ====================================================================================
+  // DEPOSIT CAP TESTS (TENANT FEES ACT 2019)
+  // ====================================================================================
+
+  describe('Deposit Cap Rules (Tenant Fees Act 2019)', () => {
+    it('deposit exceeding 5 weeks rent (annual rent <£50k) is WARNING not blocking', async () => {
+      // Annual rent < £50k: max deposit = 5 weeks rent
+      // Monthly rent £1000 = annual £12000 = weekly £230.77
+      // 5 weeks max = £1153.85
+      const result = await validateStepInline({
+        jurisdiction: 'england',
+        route: 'section_21',
+        product: 'notice_only',
+        msq: {
+          id: 'deposit_details',
+          question: 'Deposit details',
+          inputType: 'group',
+          fields: [],
+        },
+        stepId: 'deposit_details',
+        answers: {},
+        allFacts: {
+          deposit_taken: true,
+          deposit_amount: 2500, // Exceeds 5 weeks
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+        },
+      });
+
+      // Should be guidance (warning), not blocking
+      const depositCapGuidance = result.guidance.find(
+        g => g.code === 'DEPOSIT_EXCEEDS_CAP'
+      );
+      expect(depositCapGuidance).toBeDefined();
+      expect(depositCapGuidance?.severity).toBe('warn');
+    });
+
+    it('deposit under 5 weeks rent (annual rent <£50k) is compliant', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'england',
+        route: 'section_21',
+        product: 'notice_only',
+        msq: {
+          id: 'deposit_details',
+          question: 'Deposit details',
+          inputType: 'group',
+          fields: [],
+        },
+        stepId: 'deposit_details',
+        answers: {},
+        allFacts: {
+          deposit_taken: true,
+          deposit_amount: 1000, // Under 5 weeks (max ~£1154)
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+        },
+      });
+
+      // Should NOT have deposit cap warning
+      const depositCapGuidance = result.guidance.find(
+        g => g.code === 'DEPOSIT_EXCEEDS_CAP'
+      );
+      expect(depositCapGuidance).toBeUndefined();
+    });
+
+    // Note: The deposit cap is a WARNING at all stages, not a blocker
+    // This is intentional because landlords may have already refunded the excess
+  });
+
+  // ====================================================================================
+  // SECTION 8 ASK HEAVEN PRESERVATION SMOKE TEST
+  // ====================================================================================
+
+  describe('Section 8 Ask Heaven Preservation', () => {
+    it('Section 8 ground particulars step validation works correctly', async () => {
+      // This ensures the Ask Heaven enhancement is not blocked by our changes
+      const result = await validateStepInline({
+        jurisdiction: 'england',
+        route: 'section_8',
+        product: 'notice_only',
+        msq: {
+          id: 'ground_particulars',
+          question: 'Enter particulars for each ground',
+          inputType: 'textarea',
+        },
+        stepId: 'ground_particulars',
+        answers: {},
+        allFacts: {
+          section8_grounds: ['ground_8', 'ground_11'],
+          section8_grounds_selection: ['ground_8', 'ground_11'],
+        },
+      });
+
+      // Should return structured result without blocking
+      expect(result).toHaveProperty('fieldErrors');
+      expect(result).toHaveProperty('guidance');
+      // Should NOT have any blocking errors that would prevent Ask Heaven
+      expect(Object.keys(result.fieldErrors)).toHaveLength(0);
+    });
+
+    it('Section 8 grounds selection step accepts valid grounds', () => {
+      const result = evaluateNoticeCompliance({
+        jurisdiction: 'england',
+        product: 'notice_only',
+        selected_route: 'section_8',
+        wizardFacts: {
+          section8_grounds: ['Ground 8 - Serious rent arrears', 'Ground 11 - Persistent delay'],
+          notice_service_date: '2024-01-01',
+          notice_expiry_date: '2024-02-15',
+        },
+        stage: 'preview',
+      });
+
+      // Should not have grounds-required issue
+      const groundsIssue = result.hardFailures.find(f => f.code === 'S8-GROUNDS-REQUIRED');
+      expect(groundsIssue).toBeUndefined();
     });
   });
 });
