@@ -316,12 +316,13 @@
       min-width: 10em;
     }
 
-    /* Guidance Sections */
+    /* Guidance Sections - Keep together rules for Chromium PDF rendering */
     .guidance-box {
       margin: 2em 0;
+      break-inside: avoid;
       page-break-inside: avoid;
     }
-    
+
     .guidance-box h3 {
       font-size: 11pt;
       font-weight: 700;
@@ -330,40 +331,48 @@
       background: #1a1a1a;
       color: white;
     }
-    
+
     .guidance-box .content {
       border: 1px solid #1a1a1a;
       border-top: none;
       padding: 1em;
       background: #fff;
+      break-inside: avoid;
+      page-break-inside: avoid;
     }
-    
+
     .guidance-box p {
       font-size: 10pt;
       line-height: 1.5;
       margin: 0.5em 0;
     }
-    
+
     .guidance-box ul {
       margin: 0.75em 0;
       padding-left: 1.5em;
+      break-inside: avoid;
+      page-break-inside: avoid;
     }
-    
+
     .guidance-box li {
       font-size: 10pt;
       line-height: 1.6;
       margin: 0.4em 0;
+      break-inside: avoid;
+      page-break-inside: avoid;
     }
-    
+
     .guidance-box li strong {
       color: #1a1a1a;
     }
-    
+
     .guidance-box .important {
       background: #f8f8f8;
       padding: 0.6em 0.8em;
       border-left: 3px solid #1a1a1a;
       margin: 0.75em 0;
+      break-inside: avoid;
+      page-break-inside: avoid;
     }
 
     /* Utility */
@@ -377,6 +386,23 @@
     
     @media print {
       .guidance-box {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .guidance-box .content {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .guidance-box ul {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .guidance-box li {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .guidance-box .important {
+        break-inside: avoid;
         page-break-inside: avoid;
       }
     }
