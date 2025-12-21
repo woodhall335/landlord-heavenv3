@@ -567,8 +567,9 @@ async function generateEnglandOrWalesEvictionPack(
       );
     }
 
+    // Use the full HTML Form 6A template (notice_only version) for proper margin control
     const section21Doc = await generateDocument({
-      templatePath: 'uk/england/templates/eviction/section21_form6a.hbs',
+      templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
       data: evictionCase,
       isPreview: false,
       outputFormat: 'both',
@@ -999,8 +1000,9 @@ export async function generateNoticeOnlyPack(
         );
       }
 
+      // Use the full HTML Form 6A template (notice_only version) for proper margin control
       const section21Doc = await generateDocument({
-        templatePath: 'uk/england/templates/eviction/section21_form6a.hbs',
+        templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
         data: evictionCase,
         isPreview: false,
         outputFormat: 'both',
