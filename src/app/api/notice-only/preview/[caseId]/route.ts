@@ -384,6 +384,56 @@ export async function GET(
       // Ground descriptions for checklist (e.g., "Ground 8 – Serious rent arrears, Ground 11 – Persistent delay in paying rent")
       templateData.ground_descriptions = templateData.grounds.map((g: any) => `Ground ${g.code} – ${g.title}`).join(', ');
 
+      // ========================================================================
+      // SECTION 21 DATE CALCULATION (FIX: Use proper Section 21 rules, not Section 8)
+      // Section 21 requires: max(service_date + 2 calendar months, fixed_term_end_date)
+      // ========================================================================
+      if (selected_route === 'section_21' && templateData.service_date) {
+        try {
+          const { calculateSection21ExpiryDate } = await import('@/lib/documents/notice-date-calculator');
+
+          const section21Result = calculateSection21ExpiryDate({
+            service_date: templateData.service_date,
+            tenancy_start_date: templateData.tenancy_start_date || templateData.service_date,
+            fixed_term: templateData.fixed_term === true || templateData.is_fixed_term === true,
+            fixed_term_end_date: templateData.fixed_term_end_date || undefined,
+            rent_period: templateData.rent_frequency || 'monthly',
+          });
+
+          if (section21Result) {
+            // Store the Section 21 specific expiry date
+            templateData.section21_expiry_date = section21Result.earliest_valid_date;
+            templateData.section21_expiry_date_formatted = formatUKDate(section21Result.earliest_valid_date);
+            templateData.section21_notice_period_days = section21Result.notice_period_days;
+            templateData.section21_explanation = section21Result.explanation;
+
+            // Also update notice_expiry_date for Form 6A
+            templateData.notice_expiry_date = section21Result.earliest_valid_date;
+            templateData.notice_expiry_date_formatted = formatUKDate(section21Result.earliest_valid_date);
+
+            console.log('[PDF] Section 21 calculated expiry date:', section21Result.earliest_valid_date);
+            console.log('[PDF] Section 21 explanation:', section21Result.explanation);
+          }
+        } catch (error) {
+          console.error('[PDF] Section 21 date calculation error:', error);
+        }
+      }
+
+      // ========================================================================
+      // DISPLAY_POSSESSION_DATE: Single source of truth for templates
+      // - Section 21: Uses notice_expiry_date (respects 2-month + fixed-term rules)
+      // - Section 8: Uses earliest_possession_date (ground-based)
+      // ========================================================================
+      if (selected_route === 'section_21') {
+        // Section 21: Use the properly calculated Section 21 expiry date
+        templateData.display_possession_date = templateData.section21_expiry_date || templateData.notice_expiry_date || templateData.earliest_possession_date;
+        templateData.display_possession_date_formatted = templateData.section21_expiry_date_formatted || templateData.notice_expiry_date_formatted || templateData.earliest_possession_date_formatted;
+      } else {
+        // Section 8 (and others): Use ground-based earliest possession date
+        templateData.display_possession_date = templateData.earliest_possession_date;
+        templateData.display_possession_date_formatted = templateData.earliest_possession_date_formatted;
+      }
+
       console.log('[NOTICE-PREVIEW-API] Section 8 ground payload:',
         templateData.grounds.map((g: any) => ({
           code: g.code,

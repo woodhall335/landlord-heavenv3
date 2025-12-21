@@ -84,7 +84,7 @@
     <p><strong>Tenant:</strong> {{tenant_full_name}}{{#if tenant_2_name}}, {{tenant_2_name}}{{/if}}</p>
     <p><strong>Notice Type:</strong> Section 21</p>
     <p><strong>Service Date:</strong> {{service_date_formatted}}</p>
-    <p><strong>Expiry Date:</strong> {{earliest_possession_date_formatted}}</p>
+    <p><strong>Date After Which Possession Required:</strong> {{display_possession_date_formatted}}</p>
   </div>
 
   <div class="critical">
@@ -185,7 +185,7 @@
     <h2>What Happens After Service?</h2>
 
     <h3>Waiting Period</h3>
-    <p>After serving the notice, you must wait until the expiry date: <strong>{{earliest_possession_date_formatted}}</strong></p>
+    <p>After serving the notice, you must wait until the date in section 2 of the notice: <strong>{{display_possession_date_formatted}}</strong></p>
 
     <ul>
       <li>The tenant does NOT have to leave immediately</li>
@@ -205,7 +205,7 @@
     </ul>
 
     <h3>If They Don't Leave</h3>
-    <p>If the tenant is still in the property after <strong>{{earliest_possession_date_formatted}}</strong>:</p>
+    <p>If the tenant is still in the property after <strong>{{display_possession_date_formatted}}</strong>:</p>
     <ul>
       <li><strong>DO NOT</strong> change the locks (illegal eviction - you could face criminal charges)</li>
       <li><strong>DO NOT</strong> remove their belongings (illegal)</li>
