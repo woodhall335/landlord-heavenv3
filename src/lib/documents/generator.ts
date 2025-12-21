@@ -723,33 +723,68 @@ export async function htmlToPdf(
 
       if (hasPageRules) {
         // Template has its own @page rules - use HTML as-is
+        // The template (via print.css or embedded styles) controls margins
         if (PDF_DEBUG) {
           console.log('[PDF_DEBUG] @page rules already present - using HTML as-is');
         }
         finalHtml = html;
       } else {
-        // No @page rules in template - inject default rules for consistency
+        // No @page rules in template
+        // Only inject @page rules when explicitly requested via options.margins
+        // Otherwise, use minimal rules (margin: 0) to let template CSS control spacing
         if (PDF_DEBUG) {
-          console.log('[PDF_DEBUG] No @page rules found - injecting default rules');
+          console.log('[PDF_DEBUG] No @page rules found - checking if margins explicitly requested');
         }
-        const pageRules = `
+
+        if (options?.margins) {
+          // Explicit margins requested - inject them
+          if (PDF_DEBUG) {
+            console.log('[PDF_DEBUG] Explicit margins provided - injecting @page rules');
+          }
+          const pageRules = `
     @page {
       size: ${options?.pageSize || 'A4'};
-      margin: ${options?.margins?.top || '2cm'} ${options?.margins?.right || '2cm'} ${options?.margins?.bottom || '2cm'} ${options?.margins?.left || '2cm'};
+      margin: ${options.margins.top} ${options.margins.right} ${options.margins.bottom} ${options.margins.left};
     }`;
 
-        // Inject @page rules before </style> or </head> if they exist
-        if (html.includes('</style>')) {
-          finalHtml = html.replace('</style>', `${pageRules}\n  </style>`);
-        } else if (html.toLowerCase().includes('</head>')) {
-          // Inject a style block before </head>
-          finalHtml = html.replace(
-            /<\/head>/i,
-            `<style>${pageRules}\n  </style>\n</head>`
-          );
+          // Inject @page rules before </style> or </head> if they exist
+          if (html.includes('</style>')) {
+            finalHtml = html.replace('</style>', `${pageRules}\n  </style>`);
+          } else if (html.toLowerCase().includes('</head>')) {
+            // Inject a style block before </head>
+            finalHtml = html.replace(
+              /<\/head>/i,
+              `<style>${pageRules}\n  </style>\n</head>`
+            );
+          } else {
+            // Fallback: use as-is (rare case)
+            finalHtml = html;
+          }
         } else {
-          // Fallback: use as-is (rare case)
-          finalHtml = html;
+          // No explicit margins - inject minimal @page with 0 margins
+          // Let the template's CSS (body padding, etc.) control spacing
+          if (PDF_DEBUG) {
+            console.log('[PDF_DEBUG] No explicit margins - injecting @page with margin: 0');
+          }
+          const pageRules = `
+    @page {
+      size: ${options?.pageSize || 'A4'};
+      margin: 0;
+    }`;
+
+          // Inject @page rules before </style> or </head> if they exist
+          if (html.includes('</style>')) {
+            finalHtml = html.replace('</style>', `${pageRules}\n  </style>`);
+          } else if (html.toLowerCase().includes('</head>')) {
+            // Inject a style block before </head>
+            finalHtml = html.replace(
+              /<\/head>/i,
+              `<style>${pageRules}\n  </style>\n</head>`
+            );
+          } else {
+            // Fallback: use as-is (rare case)
+            finalHtml = html;
+          }
         }
       }
     } else {
@@ -961,10 +996,14 @@ ${html}
       }, options.watermark);
     }
 
+    // For full HTML templates, prefer CSS @page rules so template controls margins
+    // For non-full HTML (wrapped content), use format option
+    const isFullHtml = isFullHtmlDocument(html);
+
     const pdf = await page.pdf({
       format: options?.pageSize || 'A4',
       printBackground: true,
-      preferCSSPageSize: false,
+      preferCSSPageSize: isFullHtml,
     });
 
     return Buffer.from(pdf);
