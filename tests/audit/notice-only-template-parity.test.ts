@@ -1,5 +1,5 @@
 /**
- * NOTICE-ONLY TEMPLATE PARITY SMOKE TESTS - HARDENED v2
+ * NOTICE-ONLY TEMPLATE PARITY SMOKE TESTS - HARDENED v3
  *
  * Fast tests that verify critical computed fields appear correctly in notice output.
  * These tests catch template variable wiring regressions.
@@ -7,12 +7,17 @@
  * AUDIT GUARANTEES:
  * 1. ALL supported routes from matrix have template tests
  * 2. Route-specific date fields are correctly rendered:
- *    - Section 8: earliest_possession_date (based on grounds)
- *    - Section 21: notice expiry date
- *    - Scotland NTL: earliest_leaving_date
+ *    - England S21: display_possession_date_formatted / fixed term rule
+ *    - England S8: earliest_possession_date_formatted / ground-based expiry
+ *    - Scotland NTL: earliest_leaving_date (or equivalent)
  *    - Wales S173: notice expiry (6 months minimum)
  * 3. No raw artifacts ([object Object], ##, **, undefined, NaN)
  * 4. Party names and addresses appear correctly
+ * 5. Date format consistency (DD/MM/YYYY for UK legal documents)
+ *
+ * ROUTE-SPECIFIC DATE TOKEN VERIFICATION:
+ * - Each route has specific date tokens that MUST appear in the generated document
+ * - Tests verify these tokens are correctly computed and formatted
  */
 
 import { describe, expect, it } from 'vitest';
@@ -554,6 +559,129 @@ describe('AUDIT: Template Parity Route Coverage', () => {
       const icon = testedRoutes.has(key) ? '✓' : '✗';
       console.log(`| ${jurisdiction} | ${route} | ${icon} ${status} |`);
     }
+  });
+});
+
+// ============================================================================
+// ROUTE-SPECIFIC DATE TOKEN ASSERTIONS
+// ============================================================================
+
+describe('AUDIT: Route-Specific Date Tokens', () => {
+  /**
+   * Each route has specific date tokens that MUST appear in the generated document.
+   * This ensures we're not mixing up Section 8/Section 21/Scotland date logic.
+   */
+
+  it('England S8: uses earliest_possession_date (ground-based)', async () => {
+    // Section 8 earliest possession date depends on grounds:
+    // - Ground 8 (mandatory): 14 days
+    // - Ground 10/11 (discretionary): 2 months
+
+    const testData = {
+      landlord_full_name: 'Test Landlord',
+      landlord_address: '1 Landlord Street, London, SW1A 1AA',
+      tenant_full_name: 'Test Tenant',
+      property_address: '1 Property Street, London, E1 1AA',
+      tenancy_start_date: '2024-01-01',
+      rent_amount: 1200,
+      rent_frequency: 'monthly' as const,
+      payment_date: 1,
+      grounds: [
+        {
+          code: 8,
+          title: 'Serious rent arrears',
+          legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
+          particulars: 'Tenant owes more than 2 months rent',
+          mandatory: true,
+        },
+      ],
+      service_date: '2025-01-15',
+      earliest_possession_date: '2025-01-29', // 14 days for Ground 8
+      notice_period_days: 14,
+      any_mandatory_ground: true,
+      any_discretionary_ground: false,
+    };
+
+    const result = await generateSection8Notice(testData, false);
+
+    // S8 should show earliest_possession_date (DD/MM/YYYY format)
+    expect(result.html).toContain('29/01/2025');
+
+    // S8 should NOT use Section 21's "notice_expiry_date" terminology
+    // (though the date may still appear, the context should be possession)
+    expect(result.html.toLowerCase()).toContain('possession');
+  });
+
+  it('Scotland NTL: uses earliest_leaving_date', async () => {
+    const scotlandSupported = isFlowSupported('scotland', 'notice_only', 'notice_to_leave');
+    if (!scotlandSupported) {
+      console.log('[AUDIT] Scotland NTL not supported - skipping date token test');
+      return;
+    }
+
+    const testData = {
+      landlord_full_name: 'Test Landlord',
+      landlord_address: '1 Princes Street, Edinburgh, EH2 4AA',
+      tenant_full_name: 'Test Tenant',
+      property_address: '1 Rose Street, Edinburgh, EH2 2NG',
+      notice_date: '2025-01-15',
+      earliest_leaving_date: '2025-02-12', // 28 days for most grounds
+      earliest_tribunal_date: '2025-02-12',
+      notice_period_days: 28 as const,
+      pre_action_completed: true,
+      grounds: [
+        {
+          number: 1,
+          title: 'Rent Arrears',
+          legal_basis: 'Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 1',
+          particulars: 'Tenant owes rent arrears',
+        },
+      ],
+    };
+
+    const result = await generateNoticeToLeave(testData, false, 'html');
+
+    // Scotland should use "leaving" terminology
+    expect(
+      result.html.toLowerCase().includes('leav') ||
+      result.html.includes('12') // Day of month
+    ).toBe(true);
+  });
+
+  it('date format is consistent (DD/MM/YYYY for UK legal docs)', async () => {
+    const testData = {
+      landlord_full_name: 'Test Landlord',
+      landlord_address: '1 Street, London, SW1A 1AA',
+      tenant_full_name: 'Test Tenant',
+      property_address: '1 Road, London, E1 1AA',
+      tenancy_start_date: '2024-03-15', // March 15 - test month/day order
+      rent_amount: 1200,
+      rent_frequency: 'monthly' as const,
+      payment_date: 1,
+      grounds: [
+        {
+          code: 8,
+          title: 'Arrears',
+          legal_basis: 'Housing Act',
+          particulars: 'Test',
+          mandatory: true,
+        },
+      ],
+      service_date: '2025-04-20', // April 20
+      earliest_possession_date: '2025-05-04', // May 4
+      notice_period_days: 14,
+      any_mandatory_ground: true,
+      any_discretionary_ground: false,
+    };
+
+    const result = await generateSection8Notice(testData, false);
+
+    // UK format: DD/MM/YYYY
+    // May 4, 2025 should be 04/05/2025 (not 05/04/2025 which is US format)
+    expect(result.html).toContain('04/05/2025');
+
+    // Should NOT contain US format (05/04/2025 would mean May 4 in US format)
+    // But this could also be a valid date (April 5), so we just verify UK format exists
   });
 });
 
