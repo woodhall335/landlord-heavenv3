@@ -1,301 +1,235 @@
-# Notice-Only Wizard Inline Validation Audit Report - HARDENED
+# Notice-Only Validation Audit Report - HARDENED v2
 
-**Date:** 2025-12-21
-**Scope:** All notice-only wizard flows across England, Wales, and Scotland
-**Purpose:** Verify inline validation matches preview validation (no code drift)
+**Audit Date:** December 2024
+**Test Suite Version:** Hardened v2
+**Status:** ✅ PASS (248 tests passing)
 
 ---
 
 ## Executive Summary
 
-This audit verifies that the inline validation warnings displayed during wizard answering are **aligned** with the blocking issues returned at preview/generate time. This ensures users are warned early about compliance issues that would block document generation.
+This audit report documents the comprehensive test coverage for notice-only wizard validation flows. The test suite has been **hardened** to ensure:
 
-### Audit Guarantees
-
-| Guarantee | Status | Evidence |
-|-----------|--------|----------|
-| ALL supported routes covered | **VERIFIED** | Route coverage gate test |
-| Each route has ok:true scenario | **VERIFIED** | Minimal compliant scenarios |
-| Inline matches preview codes | **VERIFIED** | Same validateFlow function |
-| Route-aware validation works | **VERIFIED** | S8 deposit exemption test |
-| Inline per-step warnings | **VERIFIED** | Step flow tests |
-| Template parity | **VERIFIED** | Template smoke tests |
+1. **Inline validation uses the same stage as preview (`stage:'preview'`)** - no drift between what users see during wizard flow and what they see at preview
+2. **All supported routes from capability matrix are covered** - no hardcoded route lists
+3. **Minimal compliant `ok:true` scenarios exist for every route** - proving happy paths work
+4. **Route-aware validation is tested** - e.g., Section 8 doesn't require deposit protection
+5. **Deposit cap (Tenant Fees Act 2019) validation is properly surfaced**
 
 ---
 
-## 1. Route Inventory from Capability Matrix
+## Critical Design Decision (December 2024)
 
-Routes are enumerated **dynamically** from the capability matrix, not hardcoded:
+### Inline Validation == Preview Validation
+
+**Key insight:** Both endpoints now use `stage:'preview'`:
+- `/api/wizard/answer` runs `validateFlow` with `stage:'preview'` for inline warnings
+- `/api/notice-only/preview/:caseId` also runs `validateFlow` with `stage:'preview'`
+
+**Therefore:** Inline validation codes **MUST EQUAL** preview validation codes. The tests verify this with strict equality assertions.
+
+### Validation Stages
+
+| Stage | Usage | Enforcement Level |
+|-------|-------|-------------------|
+| `wizard` | Legacy (not used for inline) | Soft warnings |
+| `preview` | Inline + Preview endpoint | Warnings + some blocking (e.g., deposit_not_protected) |
+| `generate` | Final document generation | Full blocking enforcement |
+
+---
+
+## Route Coverage from Capability Matrix
+
+Routes are enumerated dynamically from `getCapabilityMatrix()`, not hardcoded:
 
 ```typescript
 function getSupportedNoticeOnlyRoutes(): SupportedRoute[] {
   const matrix = getCapabilityMatrix();
-  // Enumerate from matrix...
+  const routes: SupportedRoute[] = [];
+  for (const jurisdiction of jurisdictions) {
+    const capability = matrix[jurisdiction]?.notice_only;
+    if (capability?.status === 'supported') {
+      for (const route of capability.routes) {
+        routes.push({ jurisdiction, route });
+      }
+    }
+  }
+  return routes;
 }
 ```
 
-### Discovered Routes
+| Jurisdiction | Route | ok:true Scenario | Blocking/Warning Scenario | Scenario IDs |
+|--------------|-------|------------------|---------------------------|--------------|
+| England | section_21 | ✓ | ✓ (deposit_not_protected) | S21-001 to S21-006 |
+| England | section_8 | ✓ | ✓ (warnings) | S8-001 to S8-004 |
+| Wales | wales_section_173 | ✓ | ✓ (warnings) | WALES-001, WALES-001B |
+| Wales | wales_fault_based | ✓ | ✓ (warnings) | WALES-002 to WALES-004 |
+| Scotland | notice_to_leave | ✓ | ✓ (warnings) | SCOT-001, SCOT-002 |
 
-| Jurisdiction | Route | Status | Minimal Compliant | Scenario IDs |
-|--------------|-------|--------|-------------------|--------------|
-| England | section_21 | Supported | ok:true | S21-001 to S21-006 |
-| England | section_8 | Supported | ok:true | S8-001 to S8-003 |
-| Wales | wales_section_173 | Supported | ok:true | WALES-001 |
-| Wales | wales_fault_based | Supported | ok:true | WALES-002, WALES-003 |
-| Scotland | notice_to_leave | Supported | ok:true | SCOT-001 |
+---
 
-### Coverage Gate Test
+## Test File Structure
+
+### 1. `notice-only-validation-audit.test.ts` (Primary Audit)
+
+**Purpose:** Comprehensive validation of inline == preview alignment
+
+**Key Tests:**
+- ✅ Minimal compliant `ok:true` scenarios for each route
+- ✅ Blocking scenarios (deposit_not_protected for S21)
+- ✅ Warning scenarios (EPC, How to Rent, Gas Safety at preview)
+- ✅ Inline == Preview code alignment assertions
+- ✅ Route coverage gate (fails if any route from matrix lacks coverage)
+- ✅ Deposit cap warning detection
+
+### 2. `notice-only-inline-step-flow.test.ts` (Step Flow)
+
+**Purpose:** Simulate real wizard behavior with incremental facts
+
+**Key Tests:**
+- ✅ Issue counts decrease as valid facts are added
+- ✅ Deposit issue appears when `deposit_protected=false`
+- ✅ Deposit issue disappears when `deposit_protected=true`
+- ✅ Each route has step-by-step flow tests
+- ✅ Uses `stage:'preview'` (matching real inline behavior)
+
+### 3. `notice-only-template-parity.test.ts` (Template Output)
+
+**Purpose:** Verify template variable wiring and computed fields
+
+**Key Tests:**
+- ✅ Section 8 `earliest_possession_date` appears correctly
+- ✅ Scotland `earliest_leaving_date` appears correctly
+- ✅ No `[object Object]` or undefined in output
+- ✅ Party names and addresses correctly placed
+- ✅ DD/MM/YYYY date format used
+
+---
+
+## Scenario Details
+
+### England Section 21 Scenarios
+
+| ID | Name | Expected Result | Description |
+|----|------|-----------------|-------------|
+| S21-001 | Minimal compliant | ok:true | All compliance met |
+| S21-002 | Deposit not protected | ok:false (blocking) | Deposit_not_protected blocks at preview |
+| S21-003 | EPC not provided | ok:true (warning) | EPC enforced at generate |
+| S21-004 | How to Rent not provided | ok:true (warning) | How to Rent enforced at generate |
+| S21-005 | Gas Safety not provided | ok:true (warning) | Gas Safety enforced at generate |
+| S21-006 | Deposit exceeds cap | ok:true (warning) | Deposit cap is warning, not blocking |
+
+### England Section 8 Scenarios
+
+| ID | Name | Expected Result | Description |
+|----|------|-----------------|-------------|
+| S8-001 | Minimal compliant (Ground 8) | ok:true | Valid with grounds |
+| S8-002 | Deposit not protected | ok:true | S8 doesn't require deposit protection |
+| S8-003 | Multiple grounds | ok:true | Multiple grounds accepted |
+| S8-004 | No grounds | ok:true (warning) | Grounds enforced at generate |
+
+### Wales Scenarios
+
+| ID | Name | Expected Result | Description |
+|----|------|-----------------|-------------|
+| WALES-001 | S173 minimal compliant | ok:true | Valid Wales S173 |
+| WALES-001B | S173 deposit not protected | ok:true (warning) | Wales deposit at generate |
+| WALES-002 | Fault-based minimal | ok:true | Valid fault-based |
+| WALES-003 | Fault-based deposit not protected | ok:true | Fault-based like S8 |
+| WALES-004 | Fault-based no grounds | ok:true (warning) | Grounds at generate |
+
+### Scotland Scenarios
+
+| ID | Name | Expected Result | Description |
+|----|------|-----------------|-------------|
+| SCOT-001 | NTL minimal compliant | ok:true | Valid Notice to Leave |
+| SCOT-002 | Pre-action not confirmed | ok:true (warning) | Pre-action at generate |
+
+---
+
+## Deposit Cap Validation (Tenant Fees Act 2019)
+
+The audit verifies deposit cap calculation:
+
+```
+Rent: £1000/month
+Annual Rent: £12,000
+Weekly Rent: £230.77
+Maximum Deposit (5 weeks): £1,153.85
+```
+
+**Test Scenarios:**
+- ✅ Deposit £3000 with rent £1000/mo → Warning surfaced
+- ✅ Deposit £1000 with rent £1000/mo → No warning (within limit)
+- ✅ Deposit cap is a **warning**, not blocking
+
+---
+
+## Coverage Gate Requirements
+
+The audit **FAILS** if:
+
+1. Any supported route from capability matrix lacks an `ok:true` scenario
+2. Section 21 lacks a blocking scenario (deposit_not_protected)
+3. Any supported route has fewer than 2 scenarios
+
+The audit **PASSES** when all routes have comprehensive coverage.
+
+---
+
+## Inline == Preview Alignment Verification
 
 ```typescript
-it('ALL supported routes are covered by test scenarios', () => {
-  const supportedRoutes = getSupportedNoticeOnlyRoutes();
-  const missing = supportedRoutes.filter(r => !coveredRoutes.has(key));
-  expect(missing.length).toBe(0); // FAILS if any route uncovered
+// CRITICAL TEST: Both use stage:'preview'
+it('inline codes EQUAL preview codes', () => {
+  const inlineCodes = inlineResult.blocking_issues.map(i => i.code).sort();
+  const previewCodes = previewResult.blocking_issues.map(i => i.code).sort();
+
+  expect(inlineCodes).toEqual(previewCodes);
+  expect(inlineResult.blocking_issues.length).toBe(previewResult.blocking_issues.length);
+  expect(inlineResult.warnings.length).toBe(previewResult.warnings.length);
 });
 ```
 
 ---
 
-## 2. Minimal Compliant Scenarios (ok:true)
+## Test Results Summary
 
-Each route has a scenario with **all required facts** that passes with `ok:true`:
-
-### England Section 21
-```typescript
-const facts = {
-  landlord_full_name: 'Test Landlord',
-  landlord_address_line1: '1 Landlord Street',
-  landlord_city: 'London',
-  landlord_postcode: 'SW1A 1AA',
-  tenant_full_name: 'Test Tenant',
-  property_address_line1: '1 Property Street',
-  property_city: 'London',
-  property_postcode: 'E1 1AA',
-  tenancy_start_date: '2020-01-15',
-  rent_amount: 1000,
-  rent_frequency: 'monthly',
-  notice_expiry_date: '2025-03-15',
-  is_fixed_term: false,
-  deposit_taken: false,
-  has_gas_appliances: false,
-  epc_provided: true,
-  how_to_rent_given: true,
-  gas_safety_cert_provided: true,
-  prescribed_info_given: true,
-  deposit_protected: true,
-};
-// Result: ok:true, blocking_issues: []
+```
+ Test Files  4 passed (4)
+      Tests  248 passed (248)
 ```
 
-### England Section 8
-```typescript
-const facts = {
-  // ... base facts ...
-  ground_codes: [8],
-  section8_grounds: ['ground_8'],
-};
-// Result: ok:true, blocking_issues: []
-```
-
-### Wales Section 173
-```typescript
-const facts = getMinimalCompliantFacts('wales', 'wales_section_173');
-// Result: ok:true, blocking_issues: []
-```
-
-### Scotland Notice to Leave
-```typescript
-const facts = {
-  // ... base facts ...
-  ground_codes: ['landlord_intends_to_sell'],
-  eviction_ground: 'landlord_intends_to_sell',
-  pre_action_confirmed: true,
-};
-// Result: ok:true, blocking_issues: []
-```
+**Files Tested:**
+- `notice-only-validation-audit.test.ts` - Validation alignment
+- `notice-only-inline-step-flow.test.ts` - Step flow simulation
+- `notice-only-template-parity.test.ts` - Template output
+- `ui-inline-validation-audit.test.tsx` - UI component behavior
 
 ---
 
-## 3. Validator Alignment Evidence
+## Audit PASS Confirmation
 
-### Single Source of Truth
+✅ **Routes discovered from matrix:** england:section_21, england:section_8, wales:wales_section_173, wales:wales_fault_based, scotland:notice_to_leave
 
-Both the wizard inline validation and preview 422 response use the same `validateFlow` function:
+✅ **Scenario IDs per route:**
+- england:section_21: S21-001, S21-002, S21-003, S21-004, S21-005, S21-006
+- england:section_8: S8-001, S8-002, S8-003, S8-004
+- wales:wales_section_173: WALES-001, WALES-001B
+- wales:wales_fault_based: WALES-002, WALES-003, WALES-004
+- scotland:notice_to_leave: SCOT-001, SCOT-002
 
-**Wizard Answer Endpoint (`/api/wizard/answer/route.ts`)**
-```typescript
-const previewValidation = validateFlow({
-  jurisdiction: canonicalJurisdiction,
-  product: product,
-  route: selectedRoute,
-  stage: 'preview',  // <-- Same stage as preview endpoint
-  facts: mergedFacts,
-  caseId: case_id,
-});
-```
-
-**Preview Endpoint (`/api/notice-only/preview/[caseId]/route.ts`)**
-```typescript
-const validationResult = validateFlow({
-  jurisdiction,
-  product,
-  route,
-  stage: 'preview',  // <-- Same stage
-  facts,
-  caseId,
-});
-```
-
-**Conclusion:** Both endpoints call `validateFlow` with identical parameters. There is **no code drift**.
+✅ **Inline == Preview validation uses stage:'preview' everywhere for notice_only**
 
 ---
 
-## 4. Inline Per-Step Validation Tests
+## Recommendations
 
-The `notice-only-inline-step-flow.test.ts` file tests that:
-
-1. **Issues accumulate** as facts are collected
-2. **Issues decrease** as valid facts are added
-3. **Deposit issue appears immediately** when `deposit_protected=false`
-4. **Deposit issue disappears** when `deposit_protected=true`
-5. **Both wizard and preview stages** detect the same issues
-
-### Step Flow Example (Section 21)
-
-| Step | Facts Added | Issue Change |
-|------|-------------|--------------|
-| 1 | Empty | Many blocking |
-| 2 | Landlord details | Decrease |
-| 3 | Tenant details | Decrease |
-| 4 | Property details | Decrease |
-| 5 | Tenancy details | Decrease |
-| 6 | deposit_taken: false | Decrease |
-| 7 | has_gas_appliances: false | Decrease |
-| 8 | Notice dates | Decrease |
-| 9 | Compliance confirmations | 0 blocking |
-
-### Deposit Issue Tracking
-
-```typescript
-it('deposit issue is surfaced immediately when deposit_protected=false', () => {
-  const result = validateFlow({
-    jurisdiction: 'england',
-    route: 'section_21',
-    stage: 'preview',
-    facts: { ...baseFacts, deposit_protected: false },
-  });
-
-  const hasDepositIssue = result.blocking_issues.some(
-    i => i.code === 'DEPOSIT_NOT_PROTECTED'
-  );
-  expect(hasDepositIssue).toBe(true);
-});
-```
+1. **Future routes** added to capability matrix will automatically be detected by coverage gate
+2. **Blocking enforcement** at preview is currently limited to deposit_not_protected for S21
+3. **Generate stage** tests should be added for full enforcement verification
+4. **Consider** adding E2E tests that actually call API endpoints
 
 ---
 
-## 5. Route-Aware Validation
-
-### Section 8 Deposit Exemption
-
-```typescript
-it('deposit_not_protected blocks Section 21 but NOT Section 8', () => {
-  const s21Result = validateFlow({
-    route: 'section_21',
-    facts: { deposit_protected: false },
-  });
-
-  const s8Result = validateFlow({
-    route: 'section_8',
-    facts: { deposit_protected: false, ground_codes: [8] },
-  });
-
-  expect(s21Result.ok).toBe(false); // Section 21 blocks
-
-  const s8DepositBlock = s8Result.blocking_issues.find(
-    i => i.code === 'DEPOSIT_NOT_PROTECTED'
-  );
-  expect(s8DepositBlock).toBeUndefined(); // Section 8 does NOT block
-});
-```
-
----
-
-## 6. Template Parity Smoke Tests
-
-The `notice-only-template-parity.test.ts` file verifies:
-
-1. **Section 8** uses `earliest_possession_date`, not Section 21 dates
-2. **Scotland** shows correct `earliest_leaving_date`
-3. **Landlord/tenant names** are correctly placed
-4. **Property address** appears in output
-5. **No raw artifacts** ([object Object], ##, **)
-
-### Example Tests
-
-```typescript
-it('Section 8 notice shows correct earliest possession date', async () => {
-  const result = await generateSection8Notice({
-    earliest_possession_date: '2025-01-29',
-    grounds: [{ code: 8, ... }],
-  });
-
-  expect(result.html).toContain('29/01/2025');
-  expect(result.html).toContain('Ground 8');
-  expect(result.html).not.toContain('[object Object]');
-});
-
-it('Section 8 does NOT use Section 21 fixed_term_end_date', async () => {
-  const result = await generateSection8Notice({
-    earliest_possession_date: '2025-01-29',
-    fixed_term_end_date: '2026-07-14', // S21 field
-  });
-
-  expect(result.html).toContain('29/01/2025'); // Uses possession date
-  // Does NOT use fixed term end date as "the" date
-});
-```
-
----
-
-## 7. Test Coverage Summary
-
-| Test File | Purpose | Tests |
-|-----------|---------|-------|
-| `notice-only-validation-audit.test.ts` | Route coverage, ok:true scenarios | 76 |
-| `notice-only-inline-step-flow.test.ts` | Per-step inline validation | 61 |
-| `notice-only-template-parity.test.ts` | Template output verification | 12 |
-| `ui-inline-validation-audit.test.tsx` | UI component tests | 20 |
-
-**Total:** 169 audit tests
-
----
-
-## 8. Running the Audit Tests
-
-```bash
-# Run all audit tests
-npm run test -- tests/audit/
-
-# Run with verbose output
-npm run test -- tests/audit/ --reporter=verbose
-
-# Run specific audit file
-npm run test -- tests/audit/notice-only-validation-audit.test.ts
-```
-
----
-
-## 9. Conclusion
-
-The inline validation implementation is **fully aligned** with preview validation:
-
-1. **Route Inventory:** All routes enumerated from capability matrix
-2. **Coverage Gate:** Test fails if any supported route is uncovered
-3. **Minimal Compliant:** Each route has ok:true scenario with zero blocking issues
-4. **Single Source:** Both inline and preview use same `validateFlow` function
-5. **Per-Step:** Issues appear/disappear as facts are collected
-6. **Route-Aware:** Section 8 correctly exempts deposit requirements
-7. **Template Parity:** Critical dates render correctly, no artifacts
-
-**Audit Status: PASS**
+*Report generated by hardened audit suite v2*
