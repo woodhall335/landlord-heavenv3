@@ -170,7 +170,7 @@ function getMoneyClaimMissingEssentials(
 export async function POST(request: Request) {
   try {
     const user = await getServerUser().catch(() => null);
-    const { case_id, mode, include_answered, review_mode, current_question_id } = await request.json();
+    const { case_id, mode, include_answered, review_mode, current_question_id, target_question_id } = await request.json();
     const isReviewMode = mode === 'edit' || include_answered === true || review_mode === true;
 
     if (!case_id || typeof case_id !== 'string') {
@@ -259,6 +259,31 @@ export async function POST(request: Request) {
     const docIntel = applyDocumentIntelligence(facts);
     const hydratedFacts = normalizeAskOnceFacts(docIntel.facts, mqs);
     const progress = computeProgress(mqs, hydratedFacts);
+
+    // ====================================================================================
+    // TARGET QUESTION ID: Jump directly to a specific question (for validation issue links)
+    // ====================================================================================
+    // This allows users to click on validation issues and navigate directly to the question
+    // that can fix the issue, preserving case context (case_id, type, jurisdiction, product).
+    if (target_question_id && mqs) {
+      const targetQuestion = mqs.questions.find(q => q.id === target_question_id);
+
+      if (targetQuestion) {
+        await supabase
+          .from('cases')
+          .update({ wizard_progress: progress } as any)
+          .eq('id', case_id);
+
+        return NextResponse.json({
+          next_question: targetQuestion,
+          is_complete: false,
+          progress,
+          jumped_to: target_question_id,
+        });
+      }
+      // If target question not found, fall through to normal behavior
+      console.warn(`[WIZARD] Target question not found: ${target_question_id}`);
+    }
 
     if (isReviewMode && mqs) {
       const { nextQuestion: reviewQuestion, isComplete: reviewComplete } = getReviewNavigation(

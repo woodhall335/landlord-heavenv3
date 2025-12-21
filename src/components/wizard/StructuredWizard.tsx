@@ -9,7 +9,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Input, Card } from '@/components/ui';
-import type { ExtendedWizardQuestion, StepFlags } from '@/lib/wizard/types';
+import type { ExtendedWizardQuestion, StepFlags, WizardValidationIssue } from '@/lib/wizard/types';
 import { GuidanceTips } from '@/components/wizard/GuidanceTips';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
@@ -220,26 +220,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [groundsFetchError, setGroundsFetchError] = useState<string | null>(null);
 
   // ====================================================================================
-  // PREVIEW VALIDATION STATE (for inline blocking issues in edit mode)
+  // PREVIEW VALIDATION STATE (for inline blocking issues - ALL MODES)
   // ====================================================================================
-  const [previewBlockingIssues, setPreviewBlockingIssues] = useState<Array<{
-    code: string;
-    fields: string[];
-    affected_question_id?: string;
-    alternate_question_ids?: string[];
-    user_fix_hint?: string;
-    user_message?: string;
-  }>>([]);
-  const [previewWarnings, setPreviewWarnings] = useState<Array<{
-    code: string;
-    fields: string[];
-    affected_question_id?: string;
-    alternate_question_ids?: string[];
-    user_fix_hint?: string;
-    user_message?: string;
-  }>>([]);
+  // Canonical validation issues from /api/wizard/answer
+  // These are now returned in ALL modes (not just edit mode) to enable
+  // inline per-step warnings across all notice-only wizards.
+  const [previewBlockingIssues, setPreviewBlockingIssues] = useState<WizardValidationIssue[]>([]);
+  const [previewWarnings, setPreviewWarnings] = useState<WizardValidationIssue[]>([]);
+  const [wizardWarnings, setWizardWarnings] = useState<WizardValidationIssue[]>([]);
   const [hasBlockingIssues, setHasBlockingIssues] = useState(false);
   const [isReviewComplete, setIsReviewComplete] = useState(false);
+  const [issueCounts, setIssueCounts] = useState<{ blocking: number; warnings: number }>({ blocking: 0, warnings: 0 });
   // Service date validation warning
   const [pastServiceDateWarning, setPastServiceDateWarning] = useState<string | null>(null);
 
@@ -516,6 +507,54 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       setLoading(false);
     }
   }, [caseId, handleComplete, initializeQuestion, mode]);
+
+  // ====================================================================================
+  // JUMP-TO-QUESTION FUNCTIONALITY (for issue links)
+  // ====================================================================================
+  // Allows users to click on validation issues to navigate directly to the question
+  // that can fix the issue. Preserves case context (case_id, type, jurisdiction, product).
+  const jumpToQuestion = useCallback(async (questionId: string) => {
+    if (!caseId || !questionId) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Fetch the specific question by ID
+      const response = await fetch(apiUrl('/api/wizard/next-question'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          case_id: caseId,
+          mode: 'edit', // Always use edit mode for jumping to questions
+          include_answered: true,
+          review_mode: true,
+          target_question_id: questionId, // Request specific question
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to load question: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.next_question) {
+        initializeQuestion(data.next_question);
+        setProgress(data.progress || 0);
+        console.log('[VALIDATION-UI] Jumped to question:', questionId);
+      } else {
+        // If specific question not found, just log it
+        console.warn('[VALIDATION-UI] Question not found:', questionId);
+        setError(`Question "${questionId}" not found in current flow`);
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to navigate to question');
+      console.error('Jump to question error:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [caseId, initializeQuestion]);
 
   // ====================================================================================
   // PHASE 2: MQS LOADING FUNCTION
@@ -1205,18 +1244,23 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       }
 
       // ====================================================================================
-      // PREVIEW VALIDATION: Capture blocking issues for inline display (edit mode)
+      // CANONICAL VALIDATION: Capture blocking issues for inline display (ALL MODES)
       // ====================================================================================
-      if (mode === 'edit') {
-        // Always update with the latest validation state
-        setPreviewBlockingIssues(data.preview_blocking_issues || []);
-        setPreviewWarnings(data.preview_warnings || []);
-        setHasBlockingIssues(data.has_blocking_issues || false);
-        setIsReviewComplete(data.is_review_complete || false);
+      // Always update with the latest validation state - this enables inline per-step
+      // warnings across ALL notice-only wizards (Section 21, Section 8, Wales, Scotland, etc.)
+      // Key UX rule: Never block navigation - only warn early and persistently.
+      setPreviewBlockingIssues(data.preview_blocking_issues || []);
+      setPreviewWarnings(data.preview_warnings || []);
+      setWizardWarnings(data.wizard_warnings || []);
+      setHasBlockingIssues(data.has_blocking_issues || false);
+      setIssueCounts(data.issue_counts || { blocking: 0, warnings: 0 });
 
-        if (data.preview_blocking_issues?.length > 0) {
-          console.log('[VALIDATION-UI] Preview blocking issues:', data.preview_blocking_issues.length);
-        }
+      if (mode === 'edit') {
+        setIsReviewComplete(data.is_review_complete || false);
+      }
+
+      if (data.preview_blocking_issues?.length > 0) {
+        console.log('[VALIDATION-UI] Preview blocking issues:', data.preview_blocking_issues.length);
       }
 
       // Update progress
@@ -2831,33 +2875,84 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               </div>
             )}
 
-            {/* Preview blocking issues banner (edit mode) */}
-            {mode === 'edit' && previewBlockingIssues.length > 0 && (
-              <div className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4 mb-6">
-                <div className="flex items-start gap-3">
-                  <span className="text-lg">⚠️</span>
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold text-red-900 mb-1">
-                      {previewBlockingIssues.length} Blocking {previewBlockingIssues.length === 1 ? 'Issue' : 'Issues'}
-                    </p>
-                    <p className="text-sm text-red-800 mb-2">
-                      These must be fixed before you can regenerate the preview.
-                    </p>
-                    <ul className="text-sm text-red-700 space-y-1">
-                      {previewBlockingIssues.slice(0, 3).map((issue, i) => (
-                        <li key={`${issue.code}-${i}`} className="flex items-start gap-2">
-                          <span>•</span>
-                          <span>{issue.user_fix_hint || issue.user_message || `Missing: ${issue.fields.join(', ')}`}</span>
-                        </li>
-                      ))}
-                      {previewBlockingIssues.length > 3 && (
-                        <li className="italic text-red-600">+ {previewBlockingIssues.length - 3} more</li>
-                      )}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            )}
+            {/* ============================================================================
+                INLINE VALIDATION ISSUES - PER-STEP WARNINGS (ALL MODES)
+                ============================================================================
+                Display blocking issues and warnings that match the current question.
+                This surfaces compliance issues early across ALL notice-only wizards.
+                Key UX: Never block navigation - only warn early and persistently.
+            */}
+            {(() => {
+              // Filter issues that match the current question
+              const currentQuestionId = currentQuestion?.id;
+              const currentFields = currentQuestion?.maps_to || [currentQuestionId];
+
+              // Match issues to current question by affected_question_id or fields
+              const matchingBlockingIssues = previewBlockingIssues.filter(issue =>
+                issue.affected_question_id === currentQuestionId ||
+                issue.alternate_question_ids?.includes(currentQuestionId || '') ||
+                issue.fields?.some(field => currentFields?.includes(field))
+              );
+
+              const matchingWarnings = previewWarnings.filter(issue =>
+                issue.affected_question_id === currentQuestionId ||
+                issue.alternate_question_ids?.includes(currentQuestionId || '') ||
+                issue.fields?.some(field => currentFields?.includes(field))
+              );
+
+              return (
+                <>
+                  {/* Inline blocking issues for current step */}
+                  {matchingBlockingIssues.length > 0 && (
+                    <div className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4 mb-4">
+                      <div className="flex items-start gap-3">
+                        <span className="text-lg">🚫</span>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-red-900 mb-1">
+                            Blocking {matchingBlockingIssues.length === 1 ? 'Issue' : 'Issues'} – will prevent generating your documents
+                          </p>
+                          <ul className="text-sm text-red-700 space-y-1 mt-2">
+                            {matchingBlockingIssues.map((issue, i) => (
+                              <li key={`block-${issue.code}-${i}`} className="flex items-start gap-2">
+                                <span>•</span>
+                                <div>
+                                  <span>{issue.user_fix_hint || issue.user_message || `Missing: ${issue.fields?.join(', ')}`}</span>
+                                  {issue.legal_reason && (
+                                    <p className="text-xs text-red-600 mt-0.5">{issue.legal_reason}</p>
+                                  )}
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Inline warnings for current step */}
+                  {matchingWarnings.length > 0 && (
+                    <div className="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-4 mb-4">
+                      <div className="flex items-start gap-3">
+                        <span className="text-lg">⚠️</span>
+                        <div className="flex-1">
+                          <p className="text-sm font-semibold text-amber-900 mb-1">
+                            {matchingWarnings.length === 1 ? 'Warning' : 'Warnings'} – recommended for compliance
+                          </p>
+                          <ul className="text-sm text-amber-700 space-y-1 mt-2">
+                            {matchingWarnings.map((issue, i) => (
+                              <li key={`warn-${issue.code}-${i}`} className="flex items-start gap-2">
+                                <span>•</span>
+                                <span>{issue.user_fix_hint || issue.user_message || `Recommended: ${issue.fields?.join(', ')}`}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
 
             {/* Navigation */}
             <div className="flex gap-4">
@@ -2882,6 +2977,90 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
         {/* RIGHT: Side panels – case-specific widgets */}
         <aside className="space-y-4">
+          {/* ============================================================================
+              PERSISTENT ISSUES SUMMARY PANEL (ALL MODES)
+              ============================================================================
+              Displays a compact summary of all blocking issues and warnings.
+              Users can click issues to jump to the relevant question.
+              Visible whenever there are any issues detected.
+          */}
+          {(issueCounts.blocking > 0 || issueCounts.warnings > 0) && caseType === 'eviction' && (
+            <div className="hidden lg:block sticky top-4 z-10 mb-4">
+              <Card className={`p-4 ${issueCounts.blocking > 0 ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50'}`}>
+                <h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  {issueCounts.blocking > 0 ? '🚫' : '⚠️'}
+                  Compliance Issues
+                </h3>
+
+                {/* Blocking issues count */}
+                {issueCounts.blocking > 0 && (
+                  <div className="flex items-center justify-between p-2 bg-red-100 rounded mb-2">
+                    <span className="text-sm font-medium text-red-900">
+                      Blocking issues
+                    </span>
+                    <span className="text-sm font-bold text-red-600 bg-red-200 px-2 py-0.5 rounded-full">
+                      {issueCounts.blocking}
+                    </span>
+                  </div>
+                )}
+
+                {/* Warnings count */}
+                {issueCounts.warnings > 0 && (
+                  <div className="flex items-center justify-between p-2 bg-amber-100 rounded mb-2">
+                    <span className="text-sm font-medium text-amber-900">
+                      Warnings
+                    </span>
+                    <span className="text-sm font-bold text-amber-600 bg-amber-200 px-2 py-0.5 rounded-full">
+                      {issueCounts.warnings}
+                    </span>
+                  </div>
+                )}
+
+                {/* Issue list with jump links */}
+                {previewBlockingIssues.length > 0 && (
+                  <div className="mt-3 space-y-2">
+                    <p className="text-xs font-semibold text-red-900">Blocking issues:</p>
+                    {previewBlockingIssues.slice(0, 3).map((issue, i) => (
+                      <button
+                        key={`summary-block-${issue.code}-${i}`}
+                        type="button"
+                        className="w-full text-left text-xs p-2 bg-white rounded border border-red-200 hover:bg-red-50 transition-colors cursor-pointer"
+                        onClick={() => {
+                          // Jump to the question that can fix this issue
+                          if (issue.affected_question_id) {
+                            void jumpToQuestion(issue.affected_question_id);
+                          }
+                        }}
+                        disabled={!issue.affected_question_id || loading}
+                      >
+                        <span className="text-red-800">{issue.user_fix_hint || issue.user_message}</span>
+                        {issue.affected_question_id && (
+                          <span className="block text-xs text-red-600 mt-0.5">
+                            → Go to: {issue.affected_question_id.replace(/_/g, ' ')}
+                          </span>
+                        )}
+                      </button>
+                    ))}
+                    {previewBlockingIssues.length > 3 && (
+                      <p className="text-xs text-red-600 italic">
+                        + {previewBlockingIssues.length - 3} more blocking issues
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Info message */}
+                <div className="mt-3 p-2 bg-gray-100 rounded">
+                  <p className="text-xs text-gray-700">
+                    {issueCounts.blocking > 0
+                      ? 'Blocking issues will prevent generating your documents. You can continue through the wizard, but please resolve these before generating the preview.'
+                      : 'Warnings are recommended but not required. Review them before generating your documents.'}
+                  </p>
+                </div>
+              </Card>
+            </div>
+          )}
+
           {/* Smart Guidance panels for Notice Only (eviction) - sticky sidebar */}
           {caseType === 'eviction' && product === 'notice_only' && (
             <div className="hidden lg:block sticky top-32 space-y-4">
