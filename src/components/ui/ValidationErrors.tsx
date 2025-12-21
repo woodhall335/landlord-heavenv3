@@ -3,11 +3,18 @@
  *
  * Displays structured validation errors (blocking_issues and warnings) from 422 LEGAL_BLOCK responses.
  * Provides "Go to question" navigation using affected_question_id.
+ *
+ * UX Rules:
+ * - Title: "Fix before generating notice" (not "Required Information Missing")
+ * - Sections: "Will block preview" (blocking), "Warnings" (non-blocking)
+ * - User-friendly wording with friendly labels
+ * - "Why?" expandable section with legal reason
+ * - "Go to: [Question Label]" with friendly names
  */
 
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from './Button';
 
@@ -17,6 +24,9 @@ export interface ValidationIssue {
   affected_question_id?: string;
   alternate_question_ids?: string[];
   user_fix_hint?: string;
+  legal_reason?: string;
+  friendlyAction?: string;
+  friendlyQuestionLabel?: string;
 }
 
 export interface ValidationErrorsProps {
@@ -42,6 +52,19 @@ export function ValidationErrors({
   product,
 }: ValidationErrorsProps) {
   const router = useRouter();
+  const [expandedIssues, setExpandedIssues] = useState<Set<string>>(new Set());
+
+  const toggleExpanded = (issueKey: string) => {
+    setExpandedIssues(prev => {
+      const next = new Set(prev);
+      if (next.has(issueKey)) {
+        next.delete(issueKey);
+      } else {
+        next.add(issueKey);
+      }
+      return next;
+    });
+  };
 
   /**
    * Build a properly scoped URL that preserves case context.
@@ -77,72 +100,99 @@ export function ValidationErrors({
     router.push(buildWizardUrl());
   };
 
+  /**
+   * Get a user-friendly label for a question ID
+   */
+  const getQuestionLabel = (issue: ValidationIssue): string => {
+    if (issue.friendlyQuestionLabel) {
+      return issue.friendlyQuestionLabel;
+    }
+    if (issue.affected_question_id) {
+      // Convert snake_case to Title Case
+      return issue.affected_question_id
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+    return 'this question';
+  };
+
+  /**
+   * Get a user-friendly action message
+   */
+  const getActionMessage = (issue: ValidationIssue): string => {
+    if (issue.friendlyAction) {
+      return issue.friendlyAction;
+    }
+    if (issue.user_fix_hint) {
+      return issue.user_fix_hint;
+    }
+    if (issue.fields.length > 0) {
+      return `Complete: ${issue.fields.join(', ')}`;
+    }
+    return 'Complete the required information';
+  };
+
   return (
     <div className="space-y-6">
       {/* Blocking Issues */}
       {blocking_issues.length > 0 && (
         <div className="bg-red-50 border-l-4 border-red-600 p-6 rounded-r-lg">
           <div className="flex items-start gap-4">
-            <div className="text-3xl">⚠️</div>
+            <div className="text-3xl">📋</div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-red-900 mb-2">
-                Required Information Missing
+                Fix before generating notice
               </h3>
               <p className="text-sm text-red-800 mb-4">
-                We need some additional information before we can generate your documents.
-                Please complete the following:
+                These issues need to be resolved before we can generate your documents.
               </p>
 
               <div className="space-y-3">
-                {blocking_issues.map((issue, index) => (
-                  <div
-                    key={`${issue.code}-${index}`}
-                    className="bg-white border border-red-200 rounded-lg p-4"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900 mb-1">
-                          {issue.user_fix_hint || `Missing: ${issue.fields.join(', ')}`}
-                        </p>
+                {blocking_issues.map((issue, index) => {
+                  const issueKey = `${issue.code}-${index}`;
+                  const isExpanded = expandedIssues.has(issueKey);
 
-                        {issue.fields.length > 0 && (
-                          <p className="text-xs text-gray-600">
-                            Fields: {issue.fields.join(', ')}
+                  return (
+                    <div
+                      key={issueKey}
+                      className="bg-white border border-red-200 rounded-lg p-4"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-900 mb-1">
+                            {getActionMessage(issue)}
                           </p>
+
+                          {issue.legal_reason && (
+                            <div className="mt-2">
+                              <button
+                                onClick={() => toggleExpanded(issueKey)}
+                                className="text-xs text-red-600 hover:text-red-800 underline"
+                              >
+                                {isExpanded ? 'Hide reason' : 'Why?'}
+                              </button>
+                              {isExpanded && (
+                                <p className="text-xs text-red-700 mt-1 pl-2 border-l-2 border-red-200">
+                                  {issue.legal_reason}
+                                </p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+
+                        {issue.affected_question_id && (
+                          <Button
+                            onClick={() => handleGoToQuestion(issue.affected_question_id!)}
+                            variant="primary"
+                            size="small"
+                          >
+                            Go to: {getQuestionLabel(issue)} →
+                          </Button>
                         )}
                       </div>
-
-                      {issue.affected_question_id && (
-                        <Button
-                          onClick={() => handleGoToQuestion(issue.affected_question_id!)}
-                          variant="primary"
-                          size="small"
-                        >
-                          Go to question →
-                        </Button>
-                      )}
                     </div>
-
-                    {issue.alternate_question_ids && issue.alternate_question_ids.length > 0 && (
-                      <div className="mt-2 pt-2 border-t border-gray-200">
-                        <p className="text-xs text-gray-600 mb-1">
-                          Also available in:
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {issue.alternate_question_ids.map((altId) => (
-                            <button
-                              key={altId}
-                              onClick={() => handleGoToQuestion(altId)}
-                              className="text-xs text-blue-700 hover:text-blue-900 underline"
-                            >
-                              {altId}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="mt-6 flex gap-3">
@@ -151,11 +201,11 @@ export function ValidationErrors({
                   variant="primary"
                   size="medium"
                 >
-                  ✏️ Complete Wizard
+                  Fix all issues
                 </Button>
                 {onRetry && (
                   <Button onClick={onRetry} variant="secondary" size="medium">
-                    🔄 Try Again
+                    Try again
                   </Button>
                 )}
               </div>
@@ -168,14 +218,13 @@ export function ValidationErrors({
       {warnings.length > 0 && (
         <div className="bg-yellow-50 border-l-4 border-yellow-600 p-6 rounded-r-lg">
           <div className="flex items-start gap-4">
-            <div className="text-2xl">⚡</div>
+            <div className="text-2xl">💡</div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-yellow-900 mb-2">
-                Recommended Improvements
+                Recommendations
               </h3>
               <p className="text-sm text-yellow-800 mb-4">
-                Your documents can be generated, but we recommend addressing these items
-                for better legal compliance:
+                Your documents can be generated, but we recommend reviewing these items:
               </p>
 
               <div className="space-y-2">
@@ -186,7 +235,7 @@ export function ValidationErrors({
                   >
                     <div className="flex-1">
                       <p className="text-sm text-gray-900">
-                        {warning.user_fix_hint || `Warning: ${warning.fields.join(', ')}`}
+                        {getActionMessage(warning)}
                       </p>
                     </div>
 
