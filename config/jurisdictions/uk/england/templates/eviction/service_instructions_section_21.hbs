@@ -27,6 +27,12 @@
       padding: 0;
     }
 
+    /* Keep sections together on same page */
+    .keep-together {
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+    }
+
     /* ===== HARMONIZED DOCUMENT STYLES ===== */
     
     /* Document Header */
@@ -317,11 +323,6 @@
       .method-block,
       .checklist-box,
       .alert-box {
-        page-break-inside: avoid;
-      }
-
-      .keep-together {
-        break-inside: avoid;
         page-break-inside: avoid;
       }
     }
