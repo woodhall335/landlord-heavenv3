@@ -24,6 +24,12 @@ export interface ValidationErrorsProps {
   warnings?: ValidationIssue[];
   caseId: string;
   onRetry?: () => void;
+  /** Case type for proper routing */
+  caseType?: 'eviction' | 'money_claim' | 'tenancy_agreement';
+  /** Jurisdiction for proper routing */
+  jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland';
+  /** Product type for proper routing */
+  product?: string;
 }
 
 export function ValidationErrors({
@@ -31,17 +37,44 @@ export function ValidationErrors({
   warnings = [],
   caseId,
   onRetry,
+  caseType,
+  jurisdiction,
+  product,
 }: ValidationErrorsProps) {
   const router = useRouter();
 
+  /**
+   * Build a properly scoped URL that preserves case context.
+   * This ensures "Go to question" doesn't drop the case and start a new flow.
+   */
+  const buildWizardUrl = (questionId?: string) => {
+    const params = new URLSearchParams();
+
+    // Required params for wizard/flow
+    if (caseType) params.set('type', caseType);
+    if (jurisdiction) params.set('jurisdiction', jurisdiction);
+    if (product) params.set('product', product);
+
+    // Case context - essential for edit mode
+    params.set('case_id', caseId);
+    params.set('mode', 'edit');
+
+    // Jump to specific question if provided
+    if (questionId) {
+      params.set('jump_to', questionId);
+    }
+
+    return `/wizard/flow?${params.toString()}`;
+  };
+
   const handleGoToQuestion = (questionId: string) => {
-    // Navigate to wizard flow with the specific question
-    router.push(`/wizard/flow?case_id=${caseId}&jump_to=${questionId}`);
+    // Navigate to wizard flow with the specific question, preserving case context
+    router.push(buildWizardUrl(questionId));
   };
 
   const handleEditAnswers = () => {
-    // Navigate to wizard for editing
-    router.push(`/wizard/flow?case_id=${caseId}&mode=edit`);
+    // Navigate to wizard for editing, preserving case context
+    router.push(buildWizardUrl());
   };
 
   return (
