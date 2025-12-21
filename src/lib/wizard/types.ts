@@ -57,3 +57,51 @@ export interface StepFlags {
 }
 
 export type { WizardField as WizardFieldType };
+
+// ============================================================================
+// CANONICAL VALIDATION ISSUE TYPES
+// ============================================================================
+// These types define the unified validation output from /api/wizard/answer
+// for inline per-step validation warnings across all notice-only wizards.
+
+/**
+ * Canonical validation issue returned by wizard answer endpoint.
+ * Used for both blocking issues and warnings.
+ */
+export interface WizardValidationIssue {
+  /** Issue code (e.g., 'DEPOSIT_NOT_PROTECTED', 'EPC_NOT_PROVIDED') */
+  code: string;
+  /** Severity: 'blocking' will prevent preview generation, 'warning' is recommended */
+  severity: 'blocking' | 'warning';
+  /** Affected fact keys */
+  fields: string[];
+  /** Primary MQS question ID to navigate to for fixing */
+  affected_question_id?: string;
+  /** Alternate question IDs if the primary is not in the current flow */
+  alternate_question_ids?: string[];
+  /** User-friendly hint on how to fix this issue */
+  user_fix_hint?: string;
+  /** User-facing message */
+  user_message?: string;
+  /** Legal basis/reason for this requirement */
+  legal_reason?: string;
+}
+
+/**
+ * Canonical validation response shape from /api/wizard/answer
+ */
+export interface WizardValidationResponse {
+  /** Non-blocking guidance issues from wizard stage */
+  wizard_warnings: WizardValidationIssue[];
+  /** Blocking issues that will prevent document generation */
+  preview_blocking_issues: WizardValidationIssue[];
+  /** Warnings from preview stage (recommended for compliance) */
+  preview_warnings: WizardValidationIssue[];
+  /** Quick boolean check: are there any blocking issues? */
+  has_blocking_issues: boolean;
+  /** Summary counts for persistent panel display */
+  issue_counts: {
+    blocking: number;
+    warnings: number;
+  };
+}

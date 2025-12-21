@@ -866,15 +866,43 @@ export async function POST(request: Request) {
     }));
 
     // ============================================================================
-    // PREVIEW-STAGE VALIDATION FOR EDIT MODE
+    // PREVIEW-STAGE VALIDATION FOR ALL MODES (INLINE WARNINGS)
     // ============================================================================
-    // When in edit/review mode, also run preview-stage validation to surface
-    // blocking issues immediately (not just at regenerate preview time)
-    let previewBlockingIssues: typeof complianceWarnings = [];
-    let previewWarnings: typeof complianceWarnings = [];
+    // Always run preview-stage validation to surface blocking issues and warnings
+    // immediately after each answer - not just at preview regeneration time.
+    // This enables inline per-step warnings across ALL notice-only wizards.
+    //
+    // Key UX rule: Never block Next/Continue - only warn early and persistently.
+    // Preview generation remains the only hard block.
+    let previewBlockingIssues: Array<{
+      code: string;
+      user_message: string;
+      fields: string[];
+      affected_question_id?: string;
+      alternate_question_ids?: string[];
+      user_fix_hint?: string;
+      severity: 'blocking';
+      legal_reason?: string;
+    }> = [];
+    let previewWarnings: Array<{
+      code: string;
+      user_message: string;
+      fields: string[];
+      affected_question_id?: string;
+      alternate_question_ids?: string[];
+      user_fix_hint?: string;
+      severity: 'warning';
+      legal_reason?: string;
+    }> = [];
 
-    if (isReviewMode) {
-      console.log('[WIZARD] Running preview-stage validation for edit mode');
+    // Only run preview validation for notice-only products (eviction notices)
+    // This covers Section 21, Section 8, Wales/Scotland variants, etc.
+    const isNoticeOnlyFlow = product === 'notice_only' ||
+                              product === 'complete_pack' ||
+                              caseRow.case_type === 'eviction';
+
+    if (isNoticeOnlyFlow) {
+      console.log('[WIZARD] Running preview-stage validation for inline warnings');
       const previewValidation = validateFlow({
         jurisdiction: canonicalJurisdiction as any,
         product: product as any,
@@ -892,6 +920,7 @@ export async function POST(request: Request) {
         alternate_question_ids: issue.alternate_question_ids,
         user_fix_hint: issue.user_fix_hint,
         severity: 'blocking' as const,
+        legal_reason: issue.legal_basis,
       }));
 
       previewWarnings = previewValidation.warnings.map(issue => ({
@@ -902,6 +931,7 @@ export async function POST(request: Request) {
         alternate_question_ids: issue.alternate_question_ids,
         user_fix_hint: issue.user_fix_hint,
         severity: 'warning' as const,
+        legal_reason: issue.legal_basis,
       }));
 
       console.log(`[WIZARD] Preview validation: ${previewBlockingIssues.length} blocking, ${previewWarnings.length} warnings`);
@@ -1264,11 +1294,21 @@ export async function POST(request: Request) {
       calculated_date: responseData.calculated_date ?? null,
       compliance_warnings: complianceWarnings,
       // ============================================================================
-      // PREVIEW VALIDATION: Include blocking issues for immediate feedback in edit mode
+      // CANONICAL VALIDATION OUTPUT: Always returned for inline per-step warnings
       // ============================================================================
+      // wizard_warnings: Non-blocking guidance from wizard stage
+      wizard_warnings: complianceWarnings,
+      // preview_blocking_issues: Blocking issues that will prevent document generation
       preview_blocking_issues: previewBlockingIssues,
+      // preview_warnings: Warnings from preview stage (recommended for compliance)
       preview_warnings: previewWarnings,
+      // has_blocking_issues: Boolean flag for quick UI checks
       has_blocking_issues: previewBlockingIssues.length > 0,
+      // issue_counts: Summary counts for persistent panel display
+      issue_counts: {
+        blocking: previewBlockingIssues.length,
+        warnings: previewWarnings.length + complianceWarnings.length,
+      },
       next_question: nextQuestion ?? null,
       is_complete: isComplete,
       // In edit mode, flow is only truly complete if there are no blocking issues
