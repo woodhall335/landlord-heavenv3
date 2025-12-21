@@ -269,13 +269,49 @@ export async function GET(
     });
 
     if (compliance.hardFailures.length > 0) {
+      // Return structured validation data for the preview page to render a "Fix Issues" UI
+      // NOTE: We do NOT return block_next_question for notice_only flows - navigation is never blocked.
+      // The preview page should render a fixable compliance panel instead of throwing an error.
+      console.info('[NOTICE-PREVIEW-API] Compliance check found blocking issues:', {
+        case_id: caseId,
+        jurisdiction,
+        route: selected_route,
+        failure_count: compliance.hardFailures.length,
+        warning_count: compliance.warnings.length,
+      });
+
       return NextResponse.json(
         {
+          code: 'NOTICE_NONCOMPLIANT',
           error: 'NOTICE_NONCOMPLIANT',
-          failures: compliance.hardFailures,
-          warnings: compliance.warnings,
+          ok: false,
+          // Structured blocking issues with canonical format
+          blocking_issues: compliance.hardFailures.map(f => ({
+            code: f.code,
+            affected_question_id: f.affected_question_id,
+            legal_reason: f.legal_reason,
+            user_fix_hint: f.user_fix_hint,
+            severity: 'blocking' as const,
+          })),
+          // Warnings for informational purposes
+          warnings: compliance.warnings.map(w => ({
+            code: w.code,
+            affected_question_id: w.affected_question_id,
+            legal_reason: w.legal_reason,
+            user_fix_hint: w.user_fix_hint,
+            severity: 'warning' as const,
+          })),
+          // Computed dates for display even when noncompliant
           computed: compliance.computed ?? null,
-          block_next_question: true,
+          // Issue counts for quick UI checks
+          issue_counts: {
+            blocking: compliance.hardFailures.length,
+            warnings: compliance.warnings.length,
+          },
+          // Metadata for debugging/display
+          jurisdiction,
+          route: selected_route,
+          case_id: caseId,
         },
         { status: 422 },
       );

@@ -4,6 +4,7 @@ import {
   calculateSection8ExpiryDate,
 } from '@/lib/documents/notice-date-calculator';
 import { getNoticeComplianceSpec } from './notice-compliance-spec';
+import { normalizeFactKeys, getAffectedQuestionId, getFactValue } from '@/lib/wizard/normalizeFacts';
 
 type NoticeStage = 'wizard' | 'preview' | 'generate';
 
@@ -85,7 +86,11 @@ function pickDateValue(facts: Record<string, any>, keys: string[]): string | und
 }
 
 export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult {
-  const { jurisdiction, product, selected_route, wizardFacts, stage = 'wizard' } = input;
+  const { jurisdiction, product, selected_route, stage = 'wizard' } = input;
+
+  // Apply canonical fact normalization to ensure consistent field names
+  // This handles legacy keys like gas_safety_cert_provided -> gas_certificate_provided
+  const wizardFacts = normalizeFactKeys(input.wizardFacts);
 
   const hardFailures: ComplianceResult['hardFailures'] = [];
   const warnings: ComplianceResult['warnings'] = [];
