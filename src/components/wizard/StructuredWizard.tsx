@@ -2899,6 +2899,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 Display blocking issues and warnings that match the current question.
                 This surfaces compliance issues early across ALL notice-only wizards.
                 Key UX: Never block navigation - only warn early and persistently.
+
+                UX Rules:
+                - Show only AFTER user saves a step (issues are now filtered in API)
+                - Use friendly action phrases instead of raw fact keys
+                - Include "Why?" expandable with legal reason
             */}
             {(() => {
               // Filter issues that match the current question
@@ -2924,19 +2929,28 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   {matchingBlockingIssues.length > 0 && (
                     <div className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4 mb-4">
                       <div className="flex items-start gap-3">
-                        <span className="text-lg">🚫</span>
+                        <span className="text-lg">📋</span>
                         <div className="flex-1">
                           <p className="text-sm font-semibold text-red-900 mb-1">
-                            Blocking {matchingBlockingIssues.length === 1 ? 'Issue' : 'Issues'} – will prevent generating your documents
+                            Fix {matchingBlockingIssues.length === 1 ? 'this' : 'these'} before generating your notice
                           </p>
-                          <ul className="text-sm text-red-700 space-y-1 mt-2">
+                          <ul className="text-sm text-red-700 space-y-2 mt-2">
                             {matchingBlockingIssues.map((issue, i) => (
                               <li key={`block-${issue.code}-${i}`} className="flex items-start gap-2">
-                                <span>•</span>
-                                <div>
-                                  <span>{issue.user_fix_hint || issue.user_message || `Missing: ${issue.fields?.join(', ')}`}</span>
+                                <span className="text-red-500 mt-0.5">•</span>
+                                <div className="flex-1">
+                                  <span className="font-medium">
+                                    {(issue as any).friendlyAction || issue.user_fix_hint || issue.user_message}
+                                  </span>
                                   {issue.legal_reason && (
-                                    <p className="text-xs text-red-600 mt-0.5">{issue.legal_reason}</p>
+                                    <details className="mt-1">
+                                      <summary className="text-xs text-red-600 cursor-pointer hover:text-red-800">
+                                        Why?
+                                      </summary>
+                                      <p className="text-xs text-red-600 mt-1 pl-2 border-l-2 border-red-200">
+                                        {issue.legal_reason}
+                                      </p>
+                                    </details>
                                   )}
                                 </div>
                               </li>
@@ -2951,16 +2965,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                   {matchingWarnings.length > 0 && (
                     <div className="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-4 mb-4">
                       <div className="flex items-start gap-3">
-                        <span className="text-lg">⚠️</span>
+                        <span className="text-lg">💡</span>
                         <div className="flex-1">
                           <p className="text-sm font-semibold text-amber-900 mb-1">
-                            {matchingWarnings.length === 1 ? 'Warning' : 'Warnings'} – recommended for compliance
+                            {matchingWarnings.length === 1 ? 'Recommendation' : 'Recommendations'}
                           </p>
                           <ul className="text-sm text-amber-700 space-y-1 mt-2">
                             {matchingWarnings.map((issue, i) => (
                               <li key={`warn-${issue.code}-${i}`} className="flex items-start gap-2">
-                                <span>•</span>
-                                <span>{issue.user_fix_hint || issue.user_message || `Recommended: ${issue.fields?.join(', ')}`}</span>
+                                <span className="text-amber-500 mt-0.5">•</span>
+                                <span>
+                                  {(issue as any).friendlyAction || issue.user_fix_hint || issue.user_message}
+                                </span>
                               </li>
                             ))}
                           </ul>
@@ -3001,78 +3017,120 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               Displays a compact summary of all blocking issues and warnings.
               Users can click issues to jump to the relevant question.
               Visible whenever there are any issues detected.
+
+              UX Rules:
+              - Title: "Fix before generating notice" (not "Compliance Issues")
+              - Sections: "Will block preview" (blocking), "Warnings" (non-blocking)
+              - User-friendly wording with friendly labels
+              - "Why?" expandable section with legal reason
+              - "Go to: [Question Label]" with friendly names
           */}
           {(issueCounts.blocking > 0 || issueCounts.warnings > 0) && caseType === 'eviction' && (
             <div className="hidden lg:block sticky top-4 z-10 mb-4">
               <Card className={`p-4 ${issueCounts.blocking > 0 ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50'}`}>
                 <h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
-                  {issueCounts.blocking > 0 ? '🚫' : '⚠️'}
-                  Compliance Issues
+                  {issueCounts.blocking > 0 ? '📋' : '⚠️'}
+                  Fix before generating notice
                 </h3>
 
-                {/* Blocking issues count */}
+                {/* Will block preview section */}
                 {issueCounts.blocking > 0 && (
-                  <div className="flex items-center justify-between p-2 bg-red-100 rounded mb-2">
-                    <span className="text-sm font-medium text-red-900">
-                      Blocking issues
-                    </span>
-                    <span className="text-sm font-bold text-red-600 bg-red-200 px-2 py-0.5 rounded-full">
-                      {issueCounts.blocking}
-                    </span>
+                  <div className="mb-3">
+                    <div className="flex items-center justify-between p-2 bg-red-100 rounded mb-2">
+                      <span className="text-sm font-medium text-red-900">
+                        Will block preview
+                      </span>
+                      <span className="text-sm font-bold text-red-600 bg-red-200 px-2 py-0.5 rounded-full">
+                        {issueCounts.blocking}
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      {previewBlockingIssues.slice(0, 3).map((issue, i) => (
+                        <div
+                          key={`summary-block-${issue.code}-${i}`}
+                          className="text-xs p-2 bg-white rounded border border-red-200"
+                        >
+                          <p className="text-red-800 font-medium">
+                            {(issue as any).friendlyAction || issue.user_fix_hint || issue.user_message}
+                          </p>
+                          {issue.legal_reason && (
+                            <details className="mt-1">
+                              <summary className="text-xs text-red-600 cursor-pointer hover:text-red-800">
+                                Why?
+                              </summary>
+                              <p className="text-xs text-red-700 mt-1 pl-2 border-l-2 border-red-200">
+                                {issue.legal_reason}
+                              </p>
+                            </details>
+                          )}
+                          {issue.affected_question_id && (
+                            <button
+                              type="button"
+                              onClick={() => void jumpToQuestion(issue.affected_question_id!)}
+                              disabled={loading}
+                              className="mt-1 text-xs text-red-600 hover:text-red-800 hover:underline"
+                            >
+                              → Go to: {(issue as any).friendlyQuestionLabel || issue.affected_question_id.replace(/_/g, ' ')}
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      {previewBlockingIssues.length > 3 && (
+                        <p className="text-xs text-red-600 italic">
+                          + {previewBlockingIssues.length - 3} more
+                        </p>
+                      )}
+                    </div>
                   </div>
                 )}
 
-                {/* Warnings count */}
+                {/* Warnings section */}
                 {issueCounts.warnings > 0 && (
-                  <div className="flex items-center justify-between p-2 bg-amber-100 rounded mb-2">
-                    <span className="text-sm font-medium text-amber-900">
-                      Warnings
-                    </span>
-                    <span className="text-sm font-bold text-amber-600 bg-amber-200 px-2 py-0.5 rounded-full">
-                      {issueCounts.warnings}
-                    </span>
-                  </div>
-                )}
-
-                {/* Issue list with jump links */}
-                {previewBlockingIssues.length > 0 && (
-                  <div className="mt-3 space-y-2">
-                    <p className="text-xs font-semibold text-red-900">Blocking issues:</p>
-                    {previewBlockingIssues.slice(0, 3).map((issue, i) => (
-                      <button
-                        key={`summary-block-${issue.code}-${i}`}
-                        type="button"
-                        className="w-full text-left text-xs p-2 bg-white rounded border border-red-200 hover:bg-red-50 transition-colors cursor-pointer"
-                        onClick={() => {
-                          // Jump to the question that can fix this issue
-                          if (issue.affected_question_id) {
-                            void jumpToQuestion(issue.affected_question_id);
-                          }
-                        }}
-                        disabled={!issue.affected_question_id || loading}
-                      >
-                        <span className="text-red-800">{issue.user_fix_hint || issue.user_message}</span>
-                        {issue.affected_question_id && (
-                          <span className="block text-xs text-red-600 mt-0.5">
-                            → Go to: {issue.affected_question_id.replace(/_/g, ' ')}
-                          </span>
-                        )}
-                      </button>
-                    ))}
-                    {previewBlockingIssues.length > 3 && (
-                      <p className="text-xs text-red-600 italic">
-                        + {previewBlockingIssues.length - 3} more blocking issues
-                      </p>
-                    )}
+                  <div className="mb-3">
+                    <div className="flex items-center justify-between p-2 bg-amber-100 rounded mb-2">
+                      <span className="text-sm font-medium text-amber-900">
+                        Warnings
+                      </span>
+                      <span className="text-sm font-bold text-amber-600 bg-amber-200 px-2 py-0.5 rounded-full">
+                        {issueCounts.warnings}
+                      </span>
+                    </div>
+                    <div className="space-y-2">
+                      {previewWarnings.slice(0, 2).map((issue, i) => (
+                        <div
+                          key={`summary-warn-${issue.code}-${i}`}
+                          className="text-xs p-2 bg-white rounded border border-amber-200"
+                        >
+                          <p className="text-amber-800">
+                            {(issue as any).friendlyAction || issue.user_fix_hint || issue.user_message}
+                          </p>
+                          {issue.affected_question_id && (
+                            <button
+                              type="button"
+                              onClick={() => void jumpToQuestion(issue.affected_question_id!)}
+                              disabled={loading}
+                              className="mt-1 text-xs text-amber-600 hover:text-amber-800 hover:underline"
+                            >
+                              → Go to: {(issue as any).friendlyQuestionLabel || issue.affected_question_id.replace(/_/g, ' ')}
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      {previewWarnings.length > 2 && (
+                        <p className="text-xs text-amber-600 italic">
+                          + {previewWarnings.length - 2} more
+                        </p>
+                      )}
+                    </div>
                   </div>
                 )}
 
                 {/* Info message */}
-                <div className="mt-3 p-2 bg-gray-100 rounded">
+                <div className="p-2 bg-gray-100 rounded">
                   <p className="text-xs text-gray-700">
                     {issueCounts.blocking > 0
-                      ? 'Blocking issues will prevent generating your documents. You can continue through the wizard, but please resolve these before generating the preview.'
-                      : 'Warnings are recommended but not required. Review them before generating your documents.'}
+                      ? 'You can continue through the wizard. Fix these before generating your preview.'
+                      : 'These are recommended but not required.'}
                   </p>
                 </div>
               </Card>

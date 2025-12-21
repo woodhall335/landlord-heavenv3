@@ -24,6 +24,8 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import { getReviewNavigation } from '@/lib/wizard/review-navigation';
 import { deriveCanonicalJurisdiction, normalizeJurisdiction } from '@/lib/types/jurisdiction';
 import { validateFlow } from '@/lib/validation/validateFlow';
+import { filterWizardIssues, transformIssuesWithFriendlyLabels, getIssueCounts } from '@/lib/validation/wizardIssueFilter';
+import type { Jurisdiction, Product } from '@/lib/jurisdictions/capabilities/matrix';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -870,8 +872,11 @@ export async function POST(request: Request) {
     // immediately after each answer - not just at preview regeneration time.
     // This enables inline per-step warnings across ALL notice-only wizards.
     //
-    // Key UX rule: Never block Next/Continue - only warn early and persistently.
-    // Preview generation remains the only hard block.
+    // Key UX rules:
+    // 1. Never block Next/Continue - only warn early and persistently
+    // 2. Never show "missing future fields" as blockers during the wizard
+    // 3. Only show issues CAUSED BY the user's saved answers (e.g., deposit_protected=false)
+    // 4. Preview generation remains the only hard block
     let previewBlockingIssues: Array<{
       code: string;
       user_message: string;
@@ -881,6 +886,8 @@ export async function POST(request: Request) {
       user_fix_hint?: string;
       severity: 'blocking';
       legal_reason?: string;
+      friendlyAction?: string;
+      friendlyQuestionLabel?: string;
     }> = [];
     let previewWarnings: Array<{
       code: string;
@@ -891,6 +898,8 @@ export async function POST(request: Request) {
       user_fix_hint?: string;
       severity: 'warning';
       legal_reason?: string;
+      friendlyAction?: string;
+      friendlyQuestionLabel?: string;
     }> = [];
 
     // Only run preview validation for notice-only products (eviction notices)
@@ -910,29 +919,68 @@ export async function POST(request: Request) {
         caseId: case_id,
       });
 
-      previewBlockingIssues = previewValidation.blocking_issues.map(issue => ({
+      // ============================================================================
+      // WIZARD CONTEXT FILTERING: Filter out "missing future fields" issues
+      // ============================================================================
+      // Only show issues that are CAUSED BY the user's actual answers, not issues
+      // for questions the user hasn't reached yet. This prevents the confusing
+      // "tenant_full_name missing" blocker appearing before the user reaches that step.
+      const wizardFilterContext = {
+        jurisdiction: canonicalJurisdiction as Jurisdiction,
+        product: product as Product,
+        route: selectedRoute,
+        facts: mergedFacts,
+      };
+
+      // Filter blocking issues - only show issues caused by actual answers
+      const filteredBlockingIssues = filterWizardIssues(
+        previewValidation.blocking_issues,
+        wizardFilterContext
+      );
+
+      // Filter warning issues
+      const filteredWarnings = filterWizardIssues(
+        previewValidation.warnings,
+        wizardFilterContext
+      );
+
+      // Transform to API response format with friendly labels
+      previewBlockingIssues = filteredBlockingIssues.map(issue => ({
         code: issue.code,
-        user_message: issue.user_fix_hint || 'Missing information',
+        user_message: issue.friendlyAction || issue.user_fix_hint || 'Missing information',
         fields: issue.fields,
         affected_question_id: issue.affected_question_id,
         alternate_question_ids: issue.alternate_question_ids,
-        user_fix_hint: issue.user_fix_hint,
+        user_fix_hint: issue.friendlyAction || issue.user_fix_hint,
         severity: 'blocking' as const,
-        legal_reason: issue.legal_basis,
+        legal_reason: issue.legalReason || issue.legal_basis,
+        friendlyAction: issue.friendlyAction,
+        friendlyQuestionLabel: issue.friendlyQuestionLabel,
       }));
 
-      previewWarnings = previewValidation.warnings.map(issue => ({
+      previewWarnings = filteredWarnings.map(issue => ({
         code: issue.code,
-        user_message: issue.user_fix_hint || 'Information needs attention',
+        user_message: issue.friendlyAction || issue.user_fix_hint || 'Information needs attention',
         fields: issue.fields,
         affected_question_id: issue.affected_question_id,
         alternate_question_ids: issue.alternate_question_ids,
-        user_fix_hint: issue.user_fix_hint,
+        user_fix_hint: issue.friendlyAction || issue.user_fix_hint,
         severity: 'warning' as const,
-        legal_reason: issue.legal_basis,
+        legal_reason: issue.legalReason || issue.legal_basis,
+        friendlyAction: issue.friendlyAction,
+        friendlyQuestionLabel: issue.friendlyQuestionLabel,
       }));
 
-      console.log(`[WIZARD] Preview validation: ${previewBlockingIssues.length} blocking, ${previewWarnings.length} warnings`);
+      const rawCounts = {
+        blocking: previewValidation.blocking_issues.length,
+        warnings: previewValidation.warnings.length,
+      };
+      const filteredCounts = {
+        blocking: previewBlockingIssues.length,
+        warnings: previewWarnings.length,
+      };
+
+      console.log(`[WIZARD] Preview validation (filtered for wizard context): ${filteredCounts.blocking} blocking (was ${rawCounts.blocking}), ${filteredCounts.warnings} warnings (was ${rawCounts.warnings})`);
     }
 
     // ============================================================================
