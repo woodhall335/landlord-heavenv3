@@ -227,9 +227,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // inline per-step warnings across all notice-only wizards.
   const [previewBlockingIssues, setPreviewBlockingIssues] = useState<WizardValidationIssue[]>([]);
   const [previewWarnings, setPreviewWarnings] = useState<WizardValidationIssue[]>([]);
-  const [_wizardWarnings, setWizardWarnings] = useState<WizardValidationIssue[]>([]);
+  const [, setWizardWarnings] = useState<WizardValidationIssue[]>([]);
   const [hasBlockingIssues, setHasBlockingIssues] = useState(false);
-  const [_isReviewComplete, setIsReviewComplete] = useState(false);
+  const [, setIsReviewComplete] = useState(false);
   const [issueCounts, setIssueCounts] = useState<{ blocking: number; warnings: number }>({ blocking: 0, warnings: 0 });
   // Service date validation warning
   const [pastServiceDateWarning, setPastServiceDateWarning] = useState<string | null>(null);
