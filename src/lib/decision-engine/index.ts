@@ -114,6 +114,43 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
         s21Blocks.push(issue);
       }
     }
+
+    // Deposit cap check (Tenant Fees Act 2019 - applies to tenancies from 1 June 2019)
+    // Maximum: 5 weeks' rent (or 6 weeks if annual rent > £50,000)
+    const rentAmount = facts.tenancy?.rent_amount ?? (input.facts as any).rent_amount;
+    const rentFrequency = facts.tenancy?.rent_frequency ?? (input.facts as any).rent_frequency ?? 'monthly';
+    const depositAmount = facts.tenancy.deposit_amount;
+
+    if (rentAmount && depositAmount) {
+      // Calculate annual rent
+      let annualRent = rentAmount;
+      if (rentFrequency === 'weekly') {
+        annualRent = rentAmount * 52;
+      } else if (rentFrequency === 'fortnightly') {
+        annualRent = rentAmount * 26;
+      } else if (rentFrequency === 'monthly') {
+        annualRent = rentAmount * 12;
+      } else if (rentFrequency === 'quarterly') {
+        annualRent = rentAmount * 4;
+      }
+
+      // Calculate weekly rent and max deposit
+      const weeklyRent = annualRent / 52;
+      const maxWeeks = annualRent > 50000 ? 6 : 5;
+      const maxDeposit = weeklyRent * maxWeeks;
+
+      if (depositAmount > maxDeposit) {
+        const issue: BlockingIssue = {
+          route: 'all', // Affects all routes - illegal deposit is a tenancy issue
+          issue: 'deposit_exceeds_cap',
+          description: `Deposit £${depositAmount.toFixed(2)} exceeds legal maximum of £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent)`,
+          action_required: `Reduce deposit to max £${maxDeposit.toFixed(2)} or refund excess to tenant`,
+          severity: 'warning', // Warning not blocking - landlord may have already refunded
+          legal_basis: 'Tenant Fees Act 2019 s3 - deposit capped at 5 weeks rent (6 weeks if annual rent > £50,000)',
+        };
+        output.warnings.push(issue.description);
+      }
+    }
   }
 
   // Prescribed information (CRITICAL)

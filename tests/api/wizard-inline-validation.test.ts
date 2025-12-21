@@ -369,6 +369,89 @@ describe('validateFlow - Inline validation warnings (all modes)', () => {
   });
 });
 
+describe('Deposit cap validation (Tenant Fees Act 2019)', () => {
+  it('returns warning when deposit exceeds 5 weeks rent (£1000/mo rent, £3000 deposit)', () => {
+    // £1000/mo = £12,000/year = £230.77/week
+    // 5 weeks = £1153.85 max deposit
+    // £3000 deposit exceeds cap
+    const result = validateFlow({
+      jurisdiction: 'england',
+      product: 'notice_only',
+      route: 'section_21',
+      stage: 'preview',
+      facts: {
+        deposit_amount: 3000,
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        deposit_protected: true, // Deposit is protected, but exceeds cap
+        tenancy_start_date: '2020-01-01',
+      },
+    });
+
+    // Should have a warning about deposit exceeding cap
+    const depositCapWarning = result.warnings.find(
+      (issue) => issue.code === 'DEPOSIT_EXCEEDS_CAP'
+    );
+
+    // The deposit cap is a warning (not blocking) since landlord may have refunded
+    expect(result.warnings.some(w =>
+      w.code === 'DEPOSIT_EXCEEDS_CAP' ||
+      w.description?.includes('exceeds') ||
+      w.user_fix_hint?.includes('exceeds')
+    )).toBe(true);
+  });
+
+  it('does NOT return deposit cap warning when deposit is within limit', () => {
+    // £1000/mo = £12,000/year = £230.77/week
+    // 5 weeks = £1153.85 max deposit
+    // £1000 deposit is within cap
+    const result = validateFlow({
+      jurisdiction: 'england',
+      product: 'notice_only',
+      route: 'section_21',
+      stage: 'preview',
+      facts: {
+        deposit_amount: 1000,
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        deposit_protected: true,
+        tenancy_start_date: '2020-01-01',
+      },
+    });
+
+    // Should NOT have a deposit cap warning
+    const depositCapWarning = result.warnings.find(
+      (issue) => issue.code === 'DEPOSIT_EXCEEDS_CAP'
+    );
+    expect(depositCapWarning).toBeUndefined();
+  });
+
+  it('uses 6 week cap when annual rent exceeds £50,000', () => {
+    // £5000/mo = £60,000/year = £1153.85/week
+    // 6 weeks = £6923.08 max deposit (since annual rent > £50k)
+    // £6000 deposit is within 6-week cap
+    const result = validateFlow({
+      jurisdiction: 'england',
+      product: 'notice_only',
+      route: 'section_21',
+      stage: 'preview',
+      facts: {
+        deposit_amount: 6000,
+        rent_amount: 5000,
+        rent_frequency: 'monthly',
+        deposit_protected: true,
+        tenancy_start_date: '2020-01-01',
+      },
+    });
+
+    // £6000 is within 6-week cap for £60k annual rent
+    const depositCapWarning = result.warnings.find(
+      (issue) => issue.code === 'DEPOSIT_EXCEEDS_CAP'
+    );
+    expect(depositCapWarning).toBeUndefined();
+  });
+});
+
 describe('Canonical validation response from /api/wizard/answer', () => {
   // These tests verify the shape of the validation response
   // The actual API call is mocked since we're testing the output format

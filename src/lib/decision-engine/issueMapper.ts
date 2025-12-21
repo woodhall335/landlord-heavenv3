@@ -24,6 +24,9 @@ const ISSUE_CODE_TO_FACT_KEYS: Record<string, string[]> = {
   epc_not_provided: ['epc_provided'],
   hmo_not_licensed: ['hmo_license_valid'],
 
+  // Deposit cap (Tenant Fees Act 2019 - England & Wales)
+  deposit_exceeds_cap: ['deposit_amount', 'rent_amount'],
+
   // Wales Section 173
   contract_type_incompatible: ['wales_contract_category', 'contract_category'],
   rent_smart_not_registered: ['rent_smart_wales_registered'],
