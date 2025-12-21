@@ -219,6 +219,30 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [loadingGrounds, setLoadingGrounds] = useState(false);
   const [groundsFetchError, setGroundsFetchError] = useState<string | null>(null);
 
+  // ====================================================================================
+  // PREVIEW VALIDATION STATE (for inline blocking issues in edit mode)
+  // ====================================================================================
+  const [previewBlockingIssues, setPreviewBlockingIssues] = useState<Array<{
+    code: string;
+    fields: string[];
+    affected_question_id?: string;
+    alternate_question_ids?: string[];
+    user_fix_hint?: string;
+    user_message?: string;
+  }>>([]);
+  const [previewWarnings, setPreviewWarnings] = useState<Array<{
+    code: string;
+    fields: string[];
+    affected_question_id?: string;
+    alternate_question_ids?: string[];
+    user_fix_hint?: string;
+    user_message?: string;
+  }>>([]);
+  const [hasBlockingIssues, setHasBlockingIssues] = useState(false);
+  const [isReviewComplete, setIsReviewComplete] = useState(false);
+  // Service date validation warning
+  const [pastServiceDateWarning, setPastServiceDateWarning] = useState<string | null>(null);
+
   const [calculatedDate, setCalculatedDate] = useState<{
     date: string;
     notice_period_days: number;
@@ -290,6 +314,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setNoticeComplianceError(null); // Clear compliance error when question changes
     setActiveTextFieldPath(null); // Clear active field when question changes (Task A)
     setExpiryDateOverride(false); // Reset expiry date override when question changes (Task B)
+    setPastServiceDateWarning(null); // Clear past service date warning when question changes
 
     if (question.inputType === 'group' && question.fields) {
       const defaults: Record<string, any> = {};
@@ -881,6 +906,27 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           continue;
         }
 
+        // ====================================================================================
+        // SPECIAL VALIDATION: Past service date warning
+        // Warn user if the notice_service_date is in the past (implies already served)
+        // ====================================================================================
+        if (field.id === 'notice_service_date' && currentQuestion.id === 'notice_service' && fieldValue) {
+          const serviceDate = new Date(fieldValue);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          serviceDate.setHours(0, 0, 0, 0);
+
+          if (serviceDate < today) {
+            // Show warning but don't block - user may have already served
+            setPastServiceDateWarning(
+              `The service date (${fieldValue}) is in the past. This is valid if you've already served the notice. ` +
+              `If you haven't served it yet, please update the date to when you plan to serve.`
+            );
+          } else {
+            setPastServiceDateWarning(null);
+          }
+        }
+
         // Check for required fields - must handle boolean false as valid
         if (
           field.validation?.required &&
@@ -1156,6 +1202,21 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         setStepFlags(data.step_flags as StepFlags);
       } else {
         setStepFlags(null);
+      }
+
+      // ====================================================================================
+      // PREVIEW VALIDATION: Capture blocking issues for inline display (edit mode)
+      // ====================================================================================
+      if (mode === 'edit') {
+        // Always update with the latest validation state
+        setPreviewBlockingIssues(data.preview_blocking_issues || []);
+        setPreviewWarnings(data.preview_warnings || []);
+        setHasBlockingIssues(data.has_blocking_issues || false);
+        setIsReviewComplete(data.is_review_complete || false);
+
+        if (data.preview_blocking_issues?.length > 0) {
+          console.log('[VALIDATION-UI] Preview blocking issues:', data.preview_blocking_issues.length);
+        }
       }
 
       // Update progress
@@ -2060,26 +2121,113 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   }
 
   if (isComplete && mode === 'edit') {
+    // Determine if there are blocking issues that prevent regeneration
+    const canRegenerate = !hasBlockingIssues && previewBlockingIssues.length === 0;
+    const totalIssues = previewBlockingIssues.length;
+    const totalWarnings = previewWarnings.length;
+
     return (
       <div className="max-w-3xl mx-auto p-6">
         <Card className="p-8 space-y-4">
+          {/* Show blocking issues banner if any exist */}
+          {!canRegenerate && (
+            <div className="bg-red-50 border-l-4 border-red-600 p-4 rounded-r-lg mb-4">
+              <div className="flex items-start gap-3">
+                <div className="text-2xl">⚠️</div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-red-900 mb-1">
+                    {totalIssues} Blocking {totalIssues === 1 ? 'Issue' : 'Issues'} Must Be Fixed
+                  </h3>
+                  <p className="text-sm text-red-800 mb-3">
+                    You cannot regenerate the preview until these issues are resolved.
+                  </p>
+                  <div className="space-y-2">
+                    {previewBlockingIssues.map((issue, index) => (
+                      <div key={`${issue.code}-${index}`} className="bg-white border border-red-200 rounded p-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <p className="text-sm text-gray-900 flex-1">
+                            {issue.user_fix_hint || issue.user_message || `Missing: ${issue.fields.join(', ')}`}
+                          </p>
+                          {issue.affected_question_id && (
+                            <Button
+                              onClick={() => {
+                                // Navigate back to the question to fix
+                                const url = new URL(window.location.href);
+                                url.searchParams.set('jump_to', issue.affected_question_id || '');
+                                url.searchParams.set('mode', 'edit');
+                                window.location.href = url.toString();
+                              }}
+                              variant="primary"
+                              size="small"
+                            >
+                              Go to question →
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Show warnings if any exist */}
+          {totalWarnings > 0 && (
+            <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg mb-4">
+              <div className="flex items-start gap-3">
+                <div className="text-xl">⚡</div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-semibold text-yellow-900 mb-1">
+                    {totalWarnings} {totalWarnings === 1 ? 'Warning' : 'Warnings'}
+                  </h3>
+                  <div className="space-y-1">
+                    {previewWarnings.slice(0, 3).map((warning, index) => (
+                      <p key={`${warning.code}-${index}`} className="text-sm text-yellow-800">
+                        • {warning.user_fix_hint || warning.user_message || `Warning: ${warning.fields.join(', ')}`}
+                      </p>
+                    ))}
+                    {totalWarnings > 3 && (
+                      <p className="text-sm text-yellow-700 italic">
+                        + {totalWarnings - 3} more warning{totalWarnings - 3 > 1 ? 's' : ''}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-100 text-green-700 rounded-full flex items-center justify-center text-xl">
-              ✓
+            <div className={`w-10 h-10 ${canRegenerate ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'} rounded-full flex items-center justify-center text-xl`}>
+              {canRegenerate ? '✓' : '!'}
             </div>
             <div>
-              <p className="text-sm uppercase tracking-wide text-green-700 font-semibold mb-1">Review complete</p>
-              <h2 className="text-2xl font-bold text-gray-900">Your answers have been updated</h2>
+              <p className={`text-sm uppercase tracking-wide ${canRegenerate ? 'text-green-700' : 'text-amber-700'} font-semibold mb-1`}>
+                {canRegenerate ? 'Review complete' : 'Review complete - Issues found'}
+              </p>
+              <h2 className="text-2xl font-bold text-gray-900">
+                {canRegenerate ? 'Your answers have been updated' : 'Please fix the issues above'}
+              </h2>
             </div>
           </div>
 
           <p className="text-gray-700">
-            Step through the full flow is complete. Choose whether to regenerate your preview now or just save your changes.
+            {canRegenerate
+              ? 'All answers have been reviewed. Choose whether to regenerate your preview now or just save your changes.'
+              : 'You have reviewed all questions, but there are blocking issues that must be fixed before you can regenerate the preview.'
+            }
           </p>
 
           <div className="flex flex-wrap gap-3">
-            <Button onClick={() => void handleComplete({ redirect: true })} variant="primary" size="large">
-              Regenerate preview
+            <Button
+              onClick={() => void handleComplete({ redirect: true })}
+              variant="primary"
+              size="large"
+              disabled={!canRegenerate}
+              className={!canRegenerate ? 'opacity-50 cursor-not-allowed' : ''}
+            >
+              {canRegenerate ? 'Regenerate preview' : 'Fix issues to regenerate'}
             </Button>
             <Button onClick={() => void handleComplete({ redirect: false })} variant="secondary" size="large">
               Save and exit
@@ -2667,6 +2815,47 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             {astSuitabilityWarning && (
               <div className="bg-red-50 border border-red-300 rounded-lg p-4 mb-6">
                 <p className="text-sm text-red-900 font-medium">{astSuitabilityWarning}</p>
+              </div>
+            )}
+
+            {/* Past service date warning */}
+            {pastServiceDateWarning && currentQuestion?.id === 'notice_service' && (
+              <div className="bg-amber-50 border border-amber-300 rounded-lg p-4 mb-6">
+                <div className="flex items-start gap-3">
+                  <span className="text-lg">📅</span>
+                  <div>
+                    <p className="text-sm font-semibold text-amber-900 mb-1">Past Service Date</p>
+                    <p className="text-sm text-amber-800">{pastServiceDateWarning}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Preview blocking issues banner (edit mode) */}
+            {mode === 'edit' && previewBlockingIssues.length > 0 && (
+              <div className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4 mb-6">
+                <div className="flex items-start gap-3">
+                  <span className="text-lg">⚠️</span>
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold text-red-900 mb-1">
+                      {previewBlockingIssues.length} Blocking {previewBlockingIssues.length === 1 ? 'Issue' : 'Issues'}
+                    </p>
+                    <p className="text-sm text-red-800 mb-2">
+                      These must be fixed before you can regenerate the preview.
+                    </p>
+                    <ul className="text-sm text-red-700 space-y-1">
+                      {previewBlockingIssues.slice(0, 3).map((issue, i) => (
+                        <li key={`${issue.code}-${i}`} className="flex items-start gap-2">
+                          <span>•</span>
+                          <span>{issue.user_fix_hint || issue.user_message || `Missing: ${issue.fields.join(', ')}`}</span>
+                        </li>
+                      ))}
+                      {previewBlockingIssues.length > 3 && (
+                        <li className="italic text-red-600">+ {previewBlockingIssues.length - 3} more</li>
+                      )}
+                    </ul>
+                  </div>
+                </div>
               </div>
             )}
 

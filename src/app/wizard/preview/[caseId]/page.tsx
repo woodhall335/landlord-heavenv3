@@ -613,6 +613,9 @@ export default function WizardPreviewPage() {
               blocking_issues={validationErrors.blocking_issues}
               warnings={validationErrors.warnings}
               caseId={caseId}
+              caseType={caseData?.case_type as 'eviction' | 'money_claim' | 'tenancy_agreement'}
+              jurisdiction={caseData?.jurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland'}
+              product={(caseData?.collected_facts as any)?.__meta?.product || undefined}
               onRetry={handleRetry}
             />
           </div>

@@ -866,6 +866,48 @@ export async function POST(request: Request) {
     }));
 
     // ============================================================================
+    // PREVIEW-STAGE VALIDATION FOR EDIT MODE
+    // ============================================================================
+    // When in edit/review mode, also run preview-stage validation to surface
+    // blocking issues immediately (not just at regenerate preview time)
+    let previewBlockingIssues: typeof complianceWarnings = [];
+    let previewWarnings: typeof complianceWarnings = [];
+
+    if (isReviewMode) {
+      console.log('[WIZARD] Running preview-stage validation for edit mode');
+      const previewValidation = validateFlow({
+        jurisdiction: canonicalJurisdiction as any,
+        product: product as any,
+        route: selectedRoute,
+        stage: 'preview',
+        facts: mergedFacts,
+        caseId: case_id,
+      });
+
+      previewBlockingIssues = previewValidation.blocking_issues.map(issue => ({
+        code: issue.code,
+        user_message: issue.user_fix_hint || 'Missing information',
+        fields: issue.fields,
+        affected_question_id: issue.affected_question_id,
+        alternate_question_ids: issue.alternate_question_ids,
+        user_fix_hint: issue.user_fix_hint,
+        severity: 'blocking' as const,
+      }));
+
+      previewWarnings = previewValidation.warnings.map(issue => ({
+        code: issue.code,
+        user_message: issue.user_fix_hint || 'Information needs attention',
+        fields: issue.fields,
+        affected_question_id: issue.affected_question_id,
+        alternate_question_ids: issue.alternate_question_ids,
+        user_fix_hint: issue.user_fix_hint,
+        severity: 'warning' as const,
+      }));
+
+      console.log(`[WIZARD] Preview validation: ${previewBlockingIssues.length} blocking, ${previewWarnings.length} warnings`);
+    }
+
+    // ============================================================================
     // SMART GUIDANCE: Initialize response data container
     // ============================================================================
     const responseData: any = {};
@@ -1221,8 +1263,16 @@ export async function POST(request: Request) {
       ground_recommendations: responseData.ground_recommendations ?? null,
       calculated_date: responseData.calculated_date ?? null,
       compliance_warnings: complianceWarnings,
+      // ============================================================================
+      // PREVIEW VALIDATION: Include blocking issues for immediate feedback in edit mode
+      // ============================================================================
+      preview_blocking_issues: previewBlockingIssues,
+      preview_warnings: previewWarnings,
+      has_blocking_issues: previewBlockingIssues.length > 0,
       next_question: nextQuestion ?? null,
       is_complete: isComplete,
+      // In edit mode, flow is only truly complete if there are no blocking issues
+      is_review_complete: isReviewMode && isComplete && previewBlockingIssues.length === 0,
       progress: isComplete ? 100 : progress,
     });
   } catch (error: any) {
