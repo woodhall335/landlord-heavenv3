@@ -290,7 +290,7 @@ describe('IssuesSummaryPanel component', () => {
       />
     );
 
-    expect(screen.getByTestId('blocking-count-badge')).toHaveTextContent('3');
+    expect(screen.getByTestId('blocking-count-badge').textContent).toBe('3');
   });
 
   it('displays warning count', () => {
@@ -302,7 +302,7 @@ describe('IssuesSummaryPanel component', () => {
       />
     );
 
-    expect(screen.getByTestId('warnings-count-badge')).toHaveTextContent('5');
+    expect(screen.getByTestId('warnings-count-badge').textContent).toBe('5');
   });
 
   it('does not render when no issues exist', () => {
