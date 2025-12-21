@@ -673,14 +673,14 @@ async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: st
 
     try {
       pdfParseModule = await import('pdf-parse');
-    } catch (esmError) {
+    } catch (_esmError) {
       // Attempt 2: Fall back to CJS require (handles ESM/CJS mismatch)
       try {
         // Use createRequire for compatibility with ESM context
         const { createRequire } = await import('module');
         const require = createRequire(import.meta.url);
         pdfParseModule = require('pdf-parse');
-      } catch (cjsError) {
+      } catch (_cjsError) {
         // Both approaches failed - pdf-parse not available
         return null;
       }
@@ -732,7 +732,7 @@ async function tryLoadPdfParse(): Promise<((data: Buffer) => Promise<{ text?: st
       }
       // Self-check passed - return the working parse function
       return parseFunction;
-    } catch (selfCheckError) {
+    } catch (_selfCheckError) {
       // Self-check failed - pdf-parse is broken or incompatible
       // Better to return null than to fail on every PDF
       return null;
@@ -855,9 +855,6 @@ async function validatePDF(
     }
 
     if (parseSuccess) {
-      // Normalize PDF text once for all comparisons
-      const normalizedPdfText = normalizePdfText(pdfText);
-
       // Check expected phrases with normalized matching
       for (const phrase of route.expectedPhrases) {
         // Handle RegExp patterns directly

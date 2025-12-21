@@ -28,15 +28,12 @@
  * Routes are enumerated FROM THE MATRIX, not hardcoded.
  */
 
-import { describe, expect, it, beforeAll, afterAll } from 'vitest';
+import { describe, expect, it, beforeAll } from 'vitest';
 import { validateFlow } from '@/lib/validation/validateFlow';
 import {
   getCapabilityMatrix,
-  getSupportedRoutes,
   isFlowSupported,
   type Jurisdiction,
-  type Product,
-  type CapabilityMatrix,
 } from '@/lib/jurisdictions/capabilities/matrix';
 
 // ============================================================================
@@ -579,7 +576,7 @@ function runAuditScenario(scenario: AuditScenario) {
         expect(issue.code, 'Issue must have code').toBeDefined();
         expect(issue.fields, 'Issue must have fields array').toBeDefined();
         expect(
-          issue.user_fix_hint || issue.description || issue.user_message,
+          issue.user_fix_hint || issue.description,
           `Issue ${issue.code} must have user-facing message`
         ).toBeDefined();
       }

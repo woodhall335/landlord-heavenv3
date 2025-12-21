@@ -1,6 +1,5 @@
 import { RequirementsResult, ValidationContext } from './index';
 import { FlowCapability } from '../capabilities/matrix';
-import { getFlowMapping } from '../../mqs/mapping.generated';
 
 export function getNoticeOnlyRequirements(
   ctx: ValidationContext & { flow: FlowCapability }
