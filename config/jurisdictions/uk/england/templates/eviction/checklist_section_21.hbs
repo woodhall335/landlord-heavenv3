@@ -100,7 +100,7 @@
     <p><span class="field-label">Property Address:</span> {{property_address}}</p>
     <p><span class="field-label">Tenancy Start Date:</span> {{tenancy_start_date_formatted}}</p>
     <p><span class="field-label">Notice Service Date:</span> {{service_date_formatted}}</p>
-    <p><span class="field-label">Possession Date (two months from service):</span> {{earliest_possession_date_formatted}}</p>
+    <p><span class="field-label">Possession Date (date in section 2 of the notice):</span> {{display_possession_date_formatted}}</p>
   </div>
 
   <div class="section">
@@ -166,7 +166,7 @@
     <div class="checklist">
       <p><strong>Post-service actions:</strong></p>
       <ul>
-        <li><span class="checkbox"></span> Wait until possession date has passed: <strong>{{earliest_possession_date_formatted}}</strong></li>
+        <li><span class="checkbox"></span> Wait until the date in section 2 has passed: <strong>{{display_possession_date_formatted}}</strong></li>
         <li><span class="checkbox"></span> Do not change locks or remove tenant belongings (illegal eviction)</li>
         <li><span class="checkbox"></span> Do not harass tenant or cut off utilities</li>
         <li><span class="checkbox"></span> If tenant remains after possession date, apply to court using Form N5B (accelerated) or Form N5 (standard)</li>
