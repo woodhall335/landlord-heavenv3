@@ -266,6 +266,11 @@ const DEPENDENT_FACTS_TO_CLEAR: Record<string, Record<string, string[]>> = {
   deposit_protected_scheme: {
     false: ['prescribed_info_given', 'prescribed_info_provided'],
   },
+  // When deposit_protected=false (the canonical fact), also clear prescribed info
+  // This handles cases where the question maps to the canonical fact name
+  deposit_protected: {
+    false: ['prescribed_info_given', 'prescribed_info_provided'],
+  },
 };
 
 /**
