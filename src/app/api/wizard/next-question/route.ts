@@ -13,6 +13,7 @@ import {
   loadMQS,
   normalizeAskOnceFacts,
   questionIsApplicable,
+  isQuestionAnsweredForMQS,
   type MasterQuestionSet,
   type ProductType,
 } from '@/lib/wizard/mqs-loader';
@@ -48,7 +49,16 @@ type CaseRow = {
   wizard_completed_at: string | null;
 };
 
+/**
+ * Helper to get value at a dot-notation path from facts.
+ * Used for debug logging.
+ */
 function getValueAtPath(facts: Record<string, any>, path: string): unknown {
+  // First check if the full path is a flat key
+  if (Object.prototype.hasOwnProperty.call(facts, path)) {
+    return facts[path];
+  }
+  // Then try nested traversal
   return path
     .split('.')
     .filter(Boolean)
@@ -59,73 +69,14 @@ function getValueAtPath(facts: Record<string, any>, path: string): unknown {
     }, facts);
 }
 
-/**
- * Determines if a question is answered.
- *
- * For GROUP questions: Only required fields must be answered.
- * For other questions: All maps_to paths must be answered.
- *
- * This prevents optional fields from blocking wizard progression.
- */
+// NOTE: isQuestionAnswered logic is now consolidated in isQuestionAnsweredForMQS
+// which is imported from @/lib/wizard/mqs-loader to avoid duplication.
+// Local alias for backwards compatibility in this file:
 function isQuestionAnswered(
   question: ExtendedWizardQuestion,
   facts: Record<string, any>
 ): boolean {
-  // Helper to check if a value is considered "answered"
-  const isValueAnswered = (value: unknown): boolean => {
-    if (value === null || value === undefined) return false;
-    if (typeof value === 'string') return value.trim().length > 0;
-    return true;
-  };
-
-  // Helper to get value - try both nested path and flat key
-  const getValue = (path: string): unknown => {
-    // First try nested path
-    const nestedValue = getValueAtPath(facts, path);
-    if (nestedValue !== undefined) return nestedValue;
-
-    // Fallback: try flat key (for paths like "notice_service.notice_date" stored as flat keys)
-    const flatKey = path.includes('.') ? path.split('.').pop() : path;
-    if (flatKey && facts[flatKey] !== undefined) return facts[flatKey];
-
-    // Also try the full path as a flat key
-    if (facts[path] !== undefined) return facts[path];
-
-    return undefined;
-  };
-
-  if (question.maps_to && question.maps_to.length > 0) {
-    // For GROUP questions with fields, only check REQUIRED fields
-    if (question.inputType === 'group' && question.fields && question.fields.length > 0) {
-      // Get required field IDs
-      const requiredFieldIds = new Set(
-        question.fields
-          .filter((field) => field.validation?.required === true)
-          .map((field) => field.id)
-      );
-
-      // If no required fields, question is considered answered
-      if (requiredFieldIds.size === 0) {
-        return true;
-      }
-
-      // Only check maps_to paths that correspond to required fields
-      const requiredPaths = question.maps_to.filter((path) => {
-        const lastSegment = path.split('.').pop();
-        return lastSegment && requiredFieldIds.has(lastSegment);
-      });
-
-      // All required paths must be answered
-      return requiredPaths.every((path) => isValueAnswered(getValue(path)));
-    }
-
-    // For non-group questions, all maps_to paths must be answered
-    return question.maps_to.every((path) => isValueAnswered(getValue(path)));
-  }
-
-  // For questions without maps_to, check if answered directly by question ID
-  const fallbackValue = facts[question.id];
-  return isValueAnswered(fallbackValue);
+  return isQuestionAnsweredForMQS(question, facts);
 }
 
 function deriveProduct(

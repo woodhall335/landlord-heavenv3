@@ -32,6 +32,10 @@ export function setFactPath(
 /**
  * Applies mapped answers from MQS questions to WizardFacts (flat format).
  * Each maps_to path becomes a flat key in the WizardFacts object.
+ *
+ * IMPORTANT: This function NEVER writes whole objects into flat facts.
+ * If the expected key is not found in the value object, the path is skipped.
+ * This prevents object pollution which causes normalization flattening loops.
  */
 export function applyMappedAnswers(
   facts: WizardFacts,
@@ -44,20 +48,51 @@ export function applyMappedAnswers(
 
   return mapsTo.reduce((currentFacts, path) => {
     const key = path.split('.').pop();
-    let valueForPath = value as any;
+    let valueForPath: unknown;
+    let shouldWrite = true;
 
     if (value && typeof value === 'object' && !Array.isArray(value) && key) {
+      // Value is an object - extract the specific field by key
       if (Object.prototype.hasOwnProperty.call(value as object, key)) {
         valueForPath = (value as Record<string, unknown>)[key];
       } else {
+        // Try address key fallback (address_line1, address_line2, city, postcode, country)
         const addressKeys = ['address_line1', 'address_line2', 'city', 'postcode', 'country'];
         const matchedAddressKey = addressKeys.find((addressKey) => key.includes(addressKey));
         if (matchedAddressKey && Object.prototype.hasOwnProperty.call(value as object, matchedAddressKey)) {
           valueForPath = (value as Record<string, unknown>)[matchedAddressKey];
+        } else {
+          // TASK B FIX: Key not found and no address fallback - DO NOT write
+          // This prevents object pollution into flat facts
+          shouldWrite = false;
         }
+      }
+
+      // TASK B FIX: Defensive guard - never write non-array objects to flat facts
+      if (shouldWrite && valueForPath !== null && typeof valueForPath === 'object' && !Array.isArray(valueForPath)) {
+        console.warn(
+          `[applyMappedAnswers] Skipping object write to flat path "${path}" - would corrupt facts. ` +
+          `Value keys: ${Object.keys(valueForPath as object).join(', ')}`
+        );
+        shouldWrite = false;
+      }
+    } else {
+      // Value is a primitive, array, null, or undefined - use directly
+      valueForPath = value;
+
+      // TASK B FIX: Extra guard for non-array objects that somehow got here
+      if (valueForPath !== null && typeof valueForPath === 'object' && !Array.isArray(valueForPath)) {
+        console.warn(
+          `[applyMappedAnswers] Skipping object write to flat path "${path}" - would corrupt facts.`
+        );
+        shouldWrite = false;
       }
     }
 
-    return setFactPath(currentFacts, path, valueForPath);
+    if (shouldWrite) {
+      return setFactPath(currentFacts, path, valueForPath);
+    }
+
+    return currentFacts;
   }, facts);
 }

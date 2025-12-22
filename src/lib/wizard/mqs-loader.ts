@@ -304,4 +304,4 @@ export function getNextMQSQuestion(
   return null; // no more questions
 }
 
-export { questionIsApplicable, deriveRoutesFromFacts };
+export { questionIsApplicable, deriveRoutesFromFacts, isQuestionAnsweredForMQS };
