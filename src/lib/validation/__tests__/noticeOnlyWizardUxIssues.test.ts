@@ -182,7 +182,7 @@ describe('extractWizardUxIssues', () => {
   });
 
   describe('Deposit cap warning', () => {
-    it('should include computed max in deposit cap warning for Section 21', () => {
+    it('should include computed max in deposit cap warning (inline only, never blocking)', () => {
       mockRunDecisionEngine.mockReturnValue({
         recommended_routes: ['section_8'],
         allowed_routes: ['section_8'],
@@ -223,14 +223,15 @@ describe('extractWizardUxIssues', () => {
       expect(depositWarning?.computedValues).toBeDefined();
       expect(depositWarning?.computedValues?.maxDeposit).toBeCloseTo(1153.85, 1); // 5 weeks of £1000/month
 
-      // For Section 21, deposit cap should also be route-invalidating
+      // Per task requirements: deposit cap is NEVER route-invalidating in wizard
+      // Blocking happens only at preview/generate stage
       const routeInvalidating = result.routeInvalidatingIssues.find(
-        i => i.code === 'S21-DEPOSIT-CAP-EXCEEDED'
+        i => i.code === 'S21-DEPOSIT-CAP-EXCEEDED' || i.code.includes('DEPOSIT-CAP')
       );
-      expect(routeInvalidating).toBeDefined();
+      expect(routeInvalidating).toBeUndefined();
     });
 
-    it('should NOT block Section 8 for deposit cap', () => {
+    it('should show deposit cap as info for Section 8 (not warn)', () => {
       const input: WizardUxIssuesInput = {
         jurisdiction: 'england',
         route: 'section_8',
@@ -245,16 +246,38 @@ describe('extractWizardUxIssues', () => {
 
       const result = extractWizardUxIssues(input);
 
-      // Should have inline warning but NOT be route-invalidating
+      // Should have inline warning
       const depositWarning = result.inlineWarnings.find(w => w.code === 'DEPOSIT_EXCEEDS_CAP');
       expect(depositWarning).toBeDefined();
-      expect(depositWarning?.severity).toBe('info'); // Info, not warn
+      expect(depositWarning?.severity).toBe('info'); // Info, not warn for S8
 
       // Should NOT have route-invalidating issue for deposit cap
       const routeInvalidating = result.routeInvalidatingIssues.find(
         i => i.code.includes('DEPOSIT-CAP')
       );
       expect(routeInvalidating).toBeUndefined();
+    });
+
+    it('should NOT have deposit_reduced_to_legal_cap_confirmed as a step', () => {
+      // This tests that the question was removed from the MSQ
+      // The deposit cap should only be an inline warning, not a wizard step
+      const input: WizardUxIssuesInput = {
+        jurisdiction: 'england',
+        route: 'section_21',
+        savedFacts: {
+          deposit_taken: true,
+          deposit_amount: 2000,
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+        },
+        lastSavedQuestionIds: ['deposit_amount'],
+      };
+
+      const result = extractWizardUxIssues(input);
+
+      // The affected question should be deposit_amount, not deposit_reduced_to_legal_cap_confirmed
+      const depositWarning = result.inlineWarnings.find(w => w.code === 'DEPOSIT_EXCEEDS_CAP');
+      expect(depositWarning?.affectedQuestionId).toBe('deposit_amount');
     });
   });
 

@@ -71,7 +71,8 @@ const ENGLAND_ROUTE_INVALIDATING_CODES: Record<string, string[]> = {
     'S21-GAS-CERT',
     'S21-EPC',
     'S21-H2R',
-    'S21-DEPOSIT-CAP-EXCEEDED',
+    // NOTE: S21-DEPOSIT-CAP-EXCEEDED is NOT route-invalidating in wizard
+    // It is shown as inline warning only; blocking happens at preview/generate
     'S21-FOUR-MONTH-BAR',
     // Decision engine codes (lowercase with underscores)
     'deposit_not_protected',
@@ -101,7 +102,7 @@ const ISSUE_CODE_TO_QUESTION_ID: Record<string, string> = {
   'S21-GAS-CERT': 'gas_safety_certificate',
   'S21-EPC': 'epc_provided',
   'S21-H2R': 'how_to_rent_provided',
-  'S21-DEPOSIT-CAP-EXCEEDED': 'deposit_reduced_to_legal_cap_confirmed',
+  'S21-DEPOSIT-CAP-EXCEEDED': 'deposit_amount', // Points to deposit_amount (no separate confirmation step)
   'S21-FOUR-MONTH-BAR': 'tenancy_start_date',
   'deposit_not_protected': 'deposit_protected_scheme',
   'prescribed_info_not_given': 'prescribed_info_given',
@@ -113,7 +114,7 @@ const ISSUE_CODE_TO_QUESTION_ID: Record<string, string> = {
   // Section 8 issues
   'S8-GROUNDS-REQUIRED': 'section8_grounds_selection',
   'grounds_required': 'section8_grounds_selection',
-  // Deposit cap
+  // Deposit cap - inline warning only
   'DEPOSIT_EXCEEDS_CAP': 'deposit_amount',
   'deposit_exceeds_cap': 'deposit_amount',
 };
@@ -130,8 +131,7 @@ const QUESTION_ID_TO_CONTROLLING_IDS: Record<string, string[]> = {
   prescribed_info_given: ['deposit_taken', 'deposit_protected_scheme'],
   // Gas certificate depends on has_gas_appliances
   gas_safety_certificate: ['has_gas_appliances'],
-  // Deposit cap confirmation depends on deposit_taken and deposit_amount
-  deposit_reduced_to_legal_cap_confirmed: ['deposit_taken', 'deposit_amount'],
+  // Note: deposit_reduced_to_legal_cap_confirmed removed - deposit cap is inline warning only
 };
 
 // ============================================================================
@@ -343,8 +343,11 @@ export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssue
   }
 
   // -------------------------------------------------------------------------
-  // 5. Add deposit cap warning with computed values (always inline, never blocking)
+  // 5. Add deposit cap warning with computed values (INLINE ONLY, NEVER BLOCKING)
   // -------------------------------------------------------------------------
+  // Per task requirements: "Never make it a step; never block Next"
+  // Deposit cap is ONLY shown as inline warning on deposit_amount step.
+  // Blocking enforcement happens at preview/generate stage via evaluate-notice-compliance.
   if (lastSavedQuestionIds.includes('deposit_amount') ||
       lastSavedQuestionIds.includes('rent_terms') ||
       lastSavedQuestionIds.includes('deposit_taken')) {
@@ -353,34 +356,14 @@ export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssue
 
     if (depositCapInfo?.exceeds && normalizedFacts.deposit_taken === true) {
       const isSection21 = route === 'section_21';
-      const confirmationValue = normalizedFacts.deposit_reduced_to_legal_cap_confirmed;
-      const isConfirmed = confirmationValue === 'yes' || confirmationValue === true;
 
-      // For Section 21, if not confirmed, this is route-invalidating
-      // For Section 8, it's just an informational warning
-      if (isSection21 && !isConfirmed) {
-        // Check if we already have a deposit cap issue
-        const hasDepositCapIssue = result.routeInvalidatingIssues.some(
-          i => i.code.includes('DEPOSIT-CAP') || i.code.includes('deposit_cap')
-        );
-
-        if (!hasDepositCapIssue) {
-          result.routeInvalidatingIssues.push({
-            code: 'S21-DEPOSIT-CAP-EXCEEDED',
-            route,
-            description: `Deposit exceeds legal cap. Entered: £${depositCapInfo.actualDeposit.toFixed(2)}. Maximum allowed: £${depositCapInfo.maxDeposit.toFixed(2)} (${depositCapInfo.maxWeeks} weeks' rent).`,
-            legalBasis: 'Tenant Fees Act 2019 s3 - deposit capped at 5 weeks rent (6 weeks if annual rent > £50,000)',
-            affectedQuestionId: 'deposit_reduced_to_legal_cap_confirmed',
-            userFixHint: 'Confirm you have refunded/reduced the deposit to within the legal cap, or use Section 8 instead.',
-          });
-        }
-      }
-
-      // Always add inline warning with computed values for visibility
+      // Add inline warning with computed values for visibility
+      // Severity is 'warn' for Section 21 (will block at preview), 'info' for Section 8
       result.inlineWarnings.push({
         code: 'DEPOSIT_EXCEEDS_CAP',
-        message: `Deposit entered: £${depositCapInfo.actualDeposit.toFixed(2)}. Maximum allowed: £${depositCapInfo.maxDeposit.toFixed(2)} (${depositCapInfo.maxWeeks} weeks' rent at £${depositCapInfo.weeklyRent.toFixed(2)}/week).`,
-        severity: isSection21 && !isConfirmed ? 'warn' : 'info',
+        message: `Deposit entered: £${depositCapInfo.actualDeposit.toFixed(2)}. Maximum allowed: £${depositCapInfo.maxDeposit.toFixed(2)} (${depositCapInfo.maxWeeks} weeks' rent at £${depositCapInfo.weeklyRent.toFixed(2)}/week).` +
+          (isSection21 ? ' This may block Section 21 at preview stage if not resolved.' : ''),
+        severity: isSection21 ? 'warn' : 'info',
         legalBasis: 'Tenant Fees Act 2019 s3',
         affectedQuestionId: 'deposit_amount',
         computedValues: {

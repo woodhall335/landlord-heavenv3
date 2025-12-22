@@ -2403,10 +2403,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     currentQuestion?.validation?.required &&
     uploadFilesForCurrentQuestion.length === 0
   );
+  // pendingRouteBlock must be included to ensure Next is blocked when route-invalidating answer exists
   const disableNextButton =
     loading ||
     uploadingEvidence ||
     uploadRequiredMissing ||
+    pendingRouteBlock || // Hard-block Next when route is invalidated
     (!isUploadQuestion && !isInfoQuestion && (currentAnswer === null || currentAnswer === undefined));
 
   // ------------------------------
