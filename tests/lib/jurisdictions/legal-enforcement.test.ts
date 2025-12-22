@@ -196,7 +196,9 @@ describe('jurisdiction gating enforcement', () => {
       stage: 'preview',
     });
 
-    expect(mutatedValidation.blocking.map((b) => b.code)).toContain('DEPOSIT_NOT_PROTECTED');
+    // When deposit_protected becomes undefined, the validation should require clarification
+    // DEPOSIT_PROTECTION_STATUS_REQUIRED is for unknown status, DEPOSIT_NOT_PROTECTED is for explicit false
+    expect(mutatedValidation.blocking.map((b) => b.code)).toContain('DEPOSIT_PROTECTION_STATUS_REQUIRED');
   });
 
   it('does not fail closed when deposit facts are not answered yet', () => {

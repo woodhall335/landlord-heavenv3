@@ -319,14 +319,19 @@ export function validateDepositCompliance(params: {
       }
     }
 
-    const depositScheme = resolveFactValue(facts, 'deposit_protected_scheme');
+    // Check for deposit scheme name - look for 'deposit_scheme' (new MQS field)
+    // with fallback to legacy 'deposit_protected_scheme' for backward compatibility
+    const depositScheme =
+      resolveFactValue(facts, 'deposit_scheme') ??
+      resolveFactValue(facts, 'deposit_scheme_name') ??
+      resolveFactValue(facts, 'deposit_protected_scheme');
     if (depositProtected === true && isMissing(depositScheme)) {
       const issue: LegalValidationIssue = {
         code: 'DEPOSIT_FIELD_REQUIRED',
         user_message: 'Deposit protection scheme details are required for compliance checks',
-        fields: ['deposit_protected_scheme'],
-        affected_question_id: 'deposit_protected_scheme',
-        user_fix_hint: 'Select or enter the approved deposit protection scheme.',
+        fields: ['deposit_scheme', 'deposit_scheme_name'],
+        affected_question_id: 'deposit_scheme_name',
+        user_fix_hint: 'Select the approved deposit protection scheme (DPS, MyDeposits, or TDS).',
       };
 
       if (stage === 'wizard' || downgradeMissing || downgradeToWarning) {

@@ -272,6 +272,27 @@ questions:
     maps_to:
       - deposit_protected
 
+  # NEW: Collect actual deposit scheme name when deposit is protected
+  - id: deposit_scheme_name
+    section: Deposit & Compliance
+    question: "Which deposit protection scheme was used?"
+    inputType: select
+    dependsOn:
+      questionId: deposit_protected_scheme
+      value: true
+    validation:
+      required: true
+    helperText: "Select the government-approved scheme where the deposit is protected."
+    options:
+      - value: "DPS"
+        label: "Deposit Protection Service (DPS)"
+      - value: "MyDeposits"
+        label: "MyDeposits"
+      - value: "TDS"
+        label: "Tenancy Deposit Scheme (TDS)"
+    maps_to:
+      - deposit_scheme
+
   # UPDATED: prescribed_info_given now depends on BOTH deposit_taken AND deposit_protected_scheme
   # Prescribed information can only be given if the deposit was first protected in an approved scheme
   - id: prescribed_info_given

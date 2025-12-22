@@ -328,14 +328,19 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     }
 
     if (depositAmount > 0 && depositProtected === true) {
-      const depositScheme = resolveFactValue(facts, 'deposit_protected_scheme');
+      // Check for deposit scheme name - look for 'deposit_scheme' (new MQS field)
+      // with fallback to legacy 'deposit_protected_scheme' for backward compatibility
+      const depositScheme =
+        resolveFactValue(facts, 'deposit_scheme') ??
+        resolveFactValue(facts, 'deposit_scheme_name') ??
+        resolveFactValue(facts, 'deposit_protected_scheme');
       if (depositScheme === undefined || depositScheme === null || String(depositScheme).trim().length === 0) {
         blocking.push({
           code: 'DEPOSIT_FIELD_REQUIRED',
           message: 'Deposit protection scheme details are required when a deposit is protected',
-          fields: ['deposit_protected_scheme'],
-          user_fix_hint: 'Select the deposit protection scheme used to protect the deposit.',
-          affected_question_id: 'deposit_protected_scheme',
+          fields: ['deposit_scheme', 'deposit_scheme_name'],
+          user_fix_hint: 'Select the deposit protection scheme (DPS, MyDeposits, or TDS).',
+          affected_question_id: 'deposit_scheme_name',
         });
       }
 
