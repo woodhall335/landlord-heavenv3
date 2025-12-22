@@ -16,6 +16,7 @@ import { UploadField, type EvidenceFileSummary } from '@/components/wizard/field
 import { formatGroundTitle, getGroundTypeBadgeClasses, type GroundMetadata } from '@/lib/grounds/format-ground-title';
 import { apiUrl } from '@/lib/api';
 import { validateStepInline, type InlineValidationResult, type InlineGuidance } from '@/lib/validation/noticeOnlyInlineValidator';
+import { extractWizardUxIssues, getRouteLabel, type WizardUxIssuesResult, type RouteInvalidatingIssue, type InlineWarning } from '@/lib/validation/noticeOnlyWizardUxIssues';
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 // ====================================================================================
@@ -770,34 +771,46 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     }
   }, [currentQuestion, caseType, runCheckpoint]);
 
-  // Inline deposit validation
+  // Inline deposit validation (Tenant Fees Act 2019)
+  // Shows computed max amount; does NOT block Next (per task requirements)
   useEffect(() => {
-    if (currentQuestion?.id === 'deposit_details' && currentAnswer?.deposit_amount) {
-      const depositAmount = parseFloat(currentAnswer.deposit_amount);
-      const rentAmount = parseFloat(caseFacts.rent_amount || 0);
-      const rentPeriod = caseFacts.rent_period || 'month';
+    const isDepositQuestion = currentQuestion?.id === 'deposit_amount' ||
+      currentQuestion?.id === 'deposit_details' ||
+      (currentQuestion?.id === 'rent_terms' && currentAnswer);
 
-      if (rentAmount > 0 && depositAmount > 0) {
-        // Calculate 5 weeks rent
-        let weeklyRent = rentAmount;
-        if (rentPeriod === 'month') weeklyRent = (rentAmount * 12) / 52;
-        else if (rentPeriod === 'quarter') weeklyRent = (rentAmount * 4) / 52;
-        else if (rentPeriod === 'year') weeklyRent = rentAmount / 52;
+    if (!isDepositQuestion) {
+      setDepositWarning(null);
+      return;
+    }
 
-        const maxDeposit = weeklyRent * 5;
+    // Get deposit and rent amounts from current answer or case facts
+    const depositAmount = parseFloat(currentAnswer?.deposit_amount || caseFacts.deposit_amount || 0);
+    const rentAmount = parseFloat(currentAnswer?.rent_amount || caseFacts.rent_amount || 0);
+    const rentFrequency = currentAnswer?.rent_frequency || caseFacts.rent_frequency || 'monthly';
 
-        if (depositAmount > maxDeposit) {
-          setDepositWarning(
-            `⚠️ ILLEGAL DEPOSIT: £${depositAmount.toFixed(
-              2,
-            )} exceeds 5 weeks rent (£${maxDeposit.toFixed(
-              2,
-            )}). This VIOLATES the Tenant Fees Act 2019. Maximum permitted: £${maxDeposit.toFixed(2)}.`,
-          );
-        } else {
-          setDepositWarning(null);
-        }
-      }
+    if (rentAmount <= 0 || depositAmount <= 0) {
+      setDepositWarning(null);
+      return;
+    }
+
+    // Calculate annual rent based on frequency
+    let annualRent = rentAmount * 12; // default monthly
+    if (rentFrequency === 'weekly') annualRent = rentAmount * 52;
+    else if (rentFrequency === 'fortnightly') annualRent = rentAmount * 26;
+    else if (rentFrequency === 'quarterly') annualRent = rentAmount * 4;
+    else if (rentFrequency === 'yearly' || rentFrequency === 'annually') annualRent = rentAmount;
+
+    // Tenant Fees Act 2019: 5 weeks (or 6 weeks if annual rent > £50k)
+    const weeklyRent = annualRent / 52;
+    const maxWeeks = annualRent > 50000 ? 6 : 5;
+    const maxDeposit = weeklyRent * maxWeeks;
+
+    if (depositAmount > maxDeposit) {
+      setDepositWarning(
+        `Deposit entered: £${depositAmount.toFixed(2)}. Maximum allowed: £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent at £${weeklyRent.toFixed(2)}/week). ` +
+        `Per Tenant Fees Act 2019, deposits are capped at ${maxWeeks} weeks' rent. ` +
+        `This does not block Section 8, but may block Section 21 if not resolved.`,
+      );
     } else {
       setDepositWarning(null);
     }
@@ -1237,13 +1250,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       return;
     }
 
-    // Block progression if deposit warning exists
-    if (depositWarning) {
-      setError(
-        'Please reduce the deposit amount to comply with the Tenant Fees Act 2019 before continuing.',
-      );
-      return;
-    }
+    // NOTE: Deposit cap warning is informational only - do NOT block Next
+    // Per task requirements: "Never make it a step; never block Next"
+    // The deposit cap is enforced at preview/generate stage via compliance evaluator
 
     // Block progression if AST suitability warning exists
     if (astSuitabilityWarning) {
@@ -1418,64 +1427,53 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       // issue. If so, block Next and show the Flow Not Available modal with options to:
       // 1. Edit my answer (go back and change the answer)
       // 2. Switch to alternative route (e.g., Section 8 instead of Section 21)
-      if (product === 'notice_only' && data.preview_blocking_issues?.length > 0) {
-        const currentRoute = caseFacts.selected_notice_route ||
-          (jurisdiction === 'scotland' ? 'notice_to_leave' :
-           jurisdiction === 'wales' ? 'wales_section_173' : 'section_21');
+      //
+      // Uses extractWizardUxIssues helper which:
+      // - Uses existing decision engine and compliance evaluator outputs (no new logic)
+      // - Filters to only issues triggered by the step just saved
+      // - Returns route-invalidating issues and inline warnings separately
+      if (product === 'notice_only' && jurisdiction === 'england') {
+        const currentRoute = data.facts?.selected_notice_route ||
+          caseFacts.selected_notice_route ||
+          'section_21';
 
-        // Define route-invalidating issue codes per route
-        const routeInvalidatingCodes: Record<string, string[]> = {
-          section_21: [
-            'S21-DEPOSIT-NONCOMPLIANT',
-            'S21-PRESCRIBED-INFO-REQUIRED',
-            'S21-LICENSING',
-            'S21-GAS-CERT',
-            'S21-EPC',
-            'S21-H2R',
-            'S21-DEPOSIT-CAP-EXCEEDED',
-          ],
-          section_8: [
-            'S8-GROUNDS-REQUIRED',
-          ],
-          wales_section_173: [
-            'S173-LICENSING',
-            'S173-CONTRACT-TYPE',
-            'S173-DEPOSIT',
-          ],
-          wales_fault_based: [
-            'RHW23-GROUND-REQUIRED',
-          ],
-          notice_to_leave: [
-            'NTL-GROUND-REQUIRED',
-            'NTL-PRE-ACTION',
-          ],
-        };
+        // Extract wizard UX issues using the new helper
+        // lastSavedQuestionIds = the question(s) that were just saved
+        const lastSavedQuestionIds = currentQuestion?.inputType === 'group' && currentQuestion?.fields
+          ? [currentQuestion.id, ...currentQuestion.fields.map((f: any) => f.id)]
+          : [currentQuestion?.id].filter(Boolean) as string[];
 
-        // Alternative route suggestions per route
-        const alternativeRoutes: Record<string, string[]> = {
-          section_21: ['section_8'],
-          section_8: [],
-          wales_section_173: ['wales_fault_based'],
-          wales_fault_based: ['wales_section_173'],
-          notice_to_leave: [],
-        };
+        const wxIssues = extractWizardUxIssues({
+          jurisdiction: jurisdiction as CanonicalJurisdiction,
+          route: currentRoute,
+          savedFacts: data.facts || caseFacts,
+          lastSavedQuestionIds,
+        });
 
-        // Check if any blocking issue is route-invalidating for current route
-        const invalidatingCodes = routeInvalidatingCodes[currentRoute] || [];
-        const routeInvalidatingIssue = data.preview_blocking_issues.find(
-          (issue: WizardValidationIssue) => invalidatingCodes.includes(issue.code)
-        );
+        // Update inline warnings state for display
+        if (wxIssues.inlineWarnings.length > 0) {
+          // Convert to InlineGuidance format for existing UI
+          const newGuidance: InlineGuidance[] = wxIssues.inlineWarnings.map((w: InlineWarning) => ({
+            message: w.message,
+            severity: w.severity,
+            code: w.code,
+            legalBasis: w.legalBasis,
+            affectedQuestionId: w.affectedQuestionId,
+          }));
+          setNoticeOnlyGuidance(newGuidance);
+        }
 
-        if (routeInvalidatingIssue) {
-          // Found a route-invalidating issue - block and show modal
-          console.log('[NOTICE-ONLY] Route-invalidating issue detected:', routeInvalidatingIssue.code);
+        // Check for route-invalidating issues
+        if (wxIssues.routeInvalidatingIssues.length > 0) {
+          const firstIssue = wxIssues.routeInvalidatingIssues[0];
+          console.log('[NOTICE-ONLY] Route-invalidating issue detected:', firstIssue.code);
 
           // Set up the flow not available modal
           setFlowNotAvailableDetails({
             blockedRoute: currentRoute,
-            reason: routeInvalidatingIssue.user_fix_hint || routeInvalidatingIssue.legal_reason || 'This route is not available based on your answers.',
-            legalBasis: routeInvalidatingIssue.legal_reason,
-            alternativeRoutes: alternativeRoutes[currentRoute] || [],
+            reason: firstIssue.userFixHint || firstIssue.description || 'This route is not available based on your answers.',
+            legalBasis: firstIssue.legalBasis,
+            alternativeRoutes: wxIssues.alternativeRoutes,
           });
           setPendingRouteBlock(true);
           setShowFlowNotAvailableModal(true);
@@ -2405,10 +2403,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     currentQuestion?.validation?.required &&
     uploadFilesForCurrentQuestion.length === 0
   );
+  // pendingRouteBlock must be included to ensure Next is blocked when route-invalidating answer exists
   const disableNextButton =
     loading ||
     uploadingEvidence ||
     uploadRequiredMissing ||
+    pendingRouteBlock || // Hard-block Next when route is invalidated
     (!isUploadQuestion && !isInfoQuestion && (currentAnswer === null || currentAnswer === undefined));
 
   // ------------------------------

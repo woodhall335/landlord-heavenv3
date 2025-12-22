@@ -231,42 +231,13 @@ questions:
       - deposit_amount
 
   # ========================================
-  # DEPOSIT CAP CONFIRMATION (England Section 21 only)
-  # Tenant Fees Act 2019 - deposit capped at 5 weeks rent (6 weeks if annual rent > £50k)
-  # This question appears when deposit exceeds the legal cap.
-  # Enforcement logic in decision engine/compliance evaluator determines if blocking.
+  # DEPOSIT CAP - INLINE WARNING ONLY (NOT A WIZARD STEP)
   # ========================================
-  - id: deposit_reduced_to_legal_cap_confirmed
-    section: Deposit & Compliance
-    question: "The deposit you entered may exceed the legal cap. Have you reduced or refunded the deposit to comply with the legal limit?"
-    inputType: select
-    dependsOn:
-      allOf:
-        - questionId: deposit_taken
-          value: true
-        - questionId: selected_notice_route
-          value: section_21
-    validation:
-      required: false  # Conditionally required based on deposit amount vs cap - enforced in validator
-    options:
-      - value: "yes"
-        label: "Yes - I have reduced/refunded the deposit to within the legal cap"
-      - value: "no"
-        label: "No - the deposit has not been reduced/refunded"
-      - value: "not_sure"
-        label: "Not sure"
-    helperText: |
-      **Tenant Fees Act 2019 Deposit Cap:**
-
-      • Annual rent under £50,000: Maximum 5 weeks' rent
-      • Annual rent £50,000 or more: Maximum 6 weeks' rent
-
-      **For Section 21 to be valid**, the tenant must not be holding a deposit that exceeds the legal cap.
-
-      If you have already refunded the excess to the tenant, select "Yes".
-      If you're unsure or haven't refunded, select accordingly and consider using Section 8 instead (deposit cap does not affect Section 8 validity).
-    maps_to:
-      - deposit_reduced_to_legal_cap_confirmed
+  # Deposit cap (Tenant Fees Act 2019) is enforced as an inline warning
+  # on the deposit_amount step, not as a separate confirmation step.
+  # The warning is computed and displayed by StructuredWizard.tsx.
+  # evaluate-notice-compliance.ts computes cap values for messaging.
+  # ========================================
 
   - id: has_gas_appliances
     section: Deposit & Compliance
@@ -340,6 +311,8 @@ questions:
     section: Deposit & Compliance
     question: "Was an EPC provided before tenancy started?"
     inputType: yes_no
+    routes:
+      - section_21
     validation:
       required: true
     helperText: |
@@ -366,6 +339,8 @@ questions:
     section: Deposit & Compliance
     question: "How to Rent Guide"
     inputType: info
+    routes:
+      - section_21
     content: |
       **How to Rent guide requirement:**
 
@@ -381,6 +356,8 @@ questions:
     section: Deposit & Compliance
     question: "Was the 'How to Rent' guide provided?"
     inputType: yes_no
+    routes:
+      - section_21
     validation:
       required: false  # Not required in UI, enforced in API for Section 21
     helperText: |
@@ -393,6 +370,8 @@ questions:
     section: Deposit & Compliance
     question: "Property licensing status"
     inputType: select
+    routes:
+      - section_21
     validation:
       required: true
     options:
@@ -407,6 +386,8 @@ questions:
     section: Deposit & Compliance
     question: "Has tenant made repair complaints in last 6 months?"
     inputType: yes_no
+    routes:
+      - section_21
     validation:
       required: true
     helperText: "Retaliatory eviction rules may apply to Section 21 notices if tenant has made recent repair complaints."
