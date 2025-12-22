@@ -28,6 +28,17 @@ import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+// ==============================================================================
+// PHASE 1: DEBUG INSTRUMENTATION (behind NOTICE_ONLY_DEBUG=1 env flag)
+// ==============================================================================
+const NOTICE_ONLY_DEBUG = process.env.NOTICE_ONLY_DEBUG === '1';
+
+function debugLog(context: string, data: Record<string, any>) {
+  if (NOTICE_ONLY_DEBUG) {
+    console.log(`[NOTICE-ONLY-DEBUG] [/api/wizard/next-question] [${context}]`, JSON.stringify(data, null, 2));
+  }
+}
+
 type CaseRow = {
   id: string;
   jurisdiction: string;
@@ -48,24 +59,73 @@ function getValueAtPath(facts: Record<string, any>, path: string): unknown {
     }, facts);
 }
 
+/**
+ * Determines if a question is answered.
+ *
+ * For GROUP questions: Only required fields must be answered.
+ * For other questions: All maps_to paths must be answered.
+ *
+ * This prevents optional fields from blocking wizard progression.
+ */
 function isQuestionAnswered(
   question: ExtendedWizardQuestion,
   facts: Record<string, any>
 ): boolean {
+  // Helper to check if a value is considered "answered"
+  const isValueAnswered = (value: unknown): boolean => {
+    if (value === null || value === undefined) return false;
+    if (typeof value === 'string') return value.trim().length > 0;
+    return true;
+  };
+
+  // Helper to get value - try both nested path and flat key
+  const getValue = (path: string): unknown => {
+    // First try nested path
+    const nestedValue = getValueAtPath(facts, path);
+    if (nestedValue !== undefined) return nestedValue;
+
+    // Fallback: try flat key (for paths like "notice_service.notice_date" stored as flat keys)
+    const flatKey = path.includes('.') ? path.split('.').pop() : path;
+    if (flatKey && facts[flatKey] !== undefined) return facts[flatKey];
+
+    // Also try the full path as a flat key
+    if (facts[path] !== undefined) return facts[path];
+
+    return undefined;
+  };
+
   if (question.maps_to && question.maps_to.length > 0) {
-    return question.maps_to.every((path) => {
-      const value = getValueAtPath(facts, path);
-      if (value === null || value === undefined) return false;
-      if (typeof value === 'string') return value.trim().length > 0;
-      return true;
-    });
+    // For GROUP questions with fields, only check REQUIRED fields
+    if (question.inputType === 'group' && question.fields && question.fields.length > 0) {
+      // Get required field IDs
+      const requiredFieldIds = new Set(
+        question.fields
+          .filter((field) => field.validation?.required === true)
+          .map((field) => field.id)
+      );
+
+      // If no required fields, question is considered answered
+      if (requiredFieldIds.size === 0) {
+        return true;
+      }
+
+      // Only check maps_to paths that correspond to required fields
+      const requiredPaths = question.maps_to.filter((path) => {
+        const lastSegment = path.split('.').pop();
+        return lastSegment && requiredFieldIds.has(lastSegment);
+      });
+
+      // All required paths must be answered
+      return requiredPaths.every((path) => isValueAnswered(getValue(path)));
+    }
+
+    // For non-group questions, all maps_to paths must be answered
+    return question.maps_to.every((path) => isValueAnswered(getValue(path)));
   }
 
   // For questions without maps_to, check if answered directly by question ID
   const fallbackValue = facts[question.id];
-  if (fallbackValue === null || fallbackValue === undefined) return false;
-  if (typeof fallbackValue === 'string') return fallbackValue.trim().length > 0;
-  return true;
+  return isValueAnswered(fallbackValue);
 }
 
 function deriveProduct(
@@ -304,7 +364,47 @@ export async function POST(request: Request) {
       });
     }
 
+    // PHASE 1: Debug instrumentation - log current state before finding next question
+    debugLog('BeforeGetNext', {
+      case_id,
+      current_question_id: current_question_id || null,
+      product,
+      jurisdiction: canonicalJurisdiction,
+    });
+
     let nextQuestion = getNextMQSQuestion(mqs, hydratedFacts);
+
+    // PHASE 1: Debug instrumentation - analyze why we got this next question
+    if (NOTICE_ONLY_DEBUG && current_question_id) {
+      const currentQ = mqs.questions.find(q => q.id === current_question_id);
+      if (currentQ) {
+        const answeredResults: Record<string, { value: any; isAnswered: boolean }> = {};
+        if (currentQ.maps_to && currentQ.maps_to.length > 0) {
+          for (const path of currentQ.maps_to) {
+            const value = getValueAtPath(hydratedFacts, path);
+            answeredResults[path] = {
+              value,
+              isAnswered: value !== null && value !== undefined && (typeof value !== 'string' || value.trim().length > 0),
+            };
+          }
+        }
+        const isCurrentAnswered = isQuestionAnswered(currentQ, hydratedFacts);
+        debugLog('CurrentQuestionAnalysis', {
+          current_question_id,
+          is_answered: isCurrentAnswered,
+          maps_to_analysis: answeredResults,
+          inputType: currentQ.inputType,
+          fields_count: currentQ.fields?.length || 0,
+        });
+      }
+    }
+
+    debugLog('NextQuestionResult', {
+      case_id,
+      current_question_id: current_question_id || null,
+      next_question_id: nextQuestion?.id || null,
+      is_same_question: current_question_id === nextQuestion?.id,
+    });
 
     // Auto-mark info-type questions as "viewed" so they don't get returned again
     if (nextQuestion && nextQuestion.inputType === 'info') {

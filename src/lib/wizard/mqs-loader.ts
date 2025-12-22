@@ -237,6 +237,54 @@ export function normalizeAskOnceFacts(facts: WizardFacts, mqs: MasterQuestionSet
   return updatedFacts;
 }
 
+/**
+ * Determines if a question is answered.
+ *
+ * For GROUP questions: Only required fields must be answered.
+ * For other questions: All maps_to paths must be answered.
+ *
+ * This prevents optional fields from blocking wizard progression.
+ */
+function isQuestionAnsweredForMQS(
+  question: ExtendedWizardQuestion,
+  facts: Record<string, any>
+): boolean {
+  const maps = question.maps_to;
+
+  if (maps && maps.length > 0) {
+    // For GROUP questions with fields, only check REQUIRED fields
+    if (question.inputType === 'group' && question.fields && question.fields.length > 0) {
+      // Get required field IDs
+      const requiredFieldIds = new Set(
+        question.fields
+          .filter((field) => field.validation?.required === true)
+          .map((field) => field.id)
+      );
+
+      // If no required fields, question is considered answered
+      if (requiredFieldIds.size === 0) {
+        return true;
+      }
+
+      // Only check maps_to paths that correspond to required fields
+      const requiredPaths = maps.filter((path) => {
+        const lastSegment = path.split('.').pop();
+        return lastSegment && requiredFieldIds.has(lastSegment);
+      });
+
+      // All required paths must be answered
+      return requiredPaths.every((path) => isTruthyValue(getValueAtPath(facts, path)));
+    }
+
+    // For non-group questions, all maps_to paths must be answered
+    return maps.every((path) => isTruthyValue(getValueAtPath(facts, path)));
+  }
+
+  // For questions without maps_to, check if answered directly by question ID
+  const fallbackValue = facts[question.id];
+  return isTruthyValue(fallbackValue);
+}
+
 // Determine the next question from an MQS definition and current facts
 export function getNextMQSQuestion(
   mqs: MasterQuestionSet,
@@ -247,17 +295,8 @@ export function getNextMQSQuestion(
   for (const q of mqs.questions) {
     if (!questionIsApplicable(mqs, q, answered)) continue;
 
-    const maps = q.maps_to;
-    if (maps && maps.length > 0) {
-      const allMapped = maps.every((path) => isTruthyValue(getValueAtPath(answered as Record<string, any>, path)));
-      if (!allMapped) {
-        return q;
-      }
-      continue;
-    }
-
-    const fallbackValue = (answered as Record<string, any>)[q.id];
-    if (!isTruthyValue(fallbackValue)) {
+    // Use the group-aware isQuestionAnswered logic
+    if (!isQuestionAnsweredForMQS(q, answered as Record<string, any>)) {
       return q;
     }
   }

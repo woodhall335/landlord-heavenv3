@@ -523,6 +523,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
       const data = await response.json();
 
+      // PHASE 1: Debug instrumentation - log next-question response
+      debugLog('loadNextQuestion:response', {
+        is_complete: data.is_complete,
+        next_question_id: data.next_question?.id || null,
+        current_question_id: opts?.currentQuestionId || null,
+        progress: data.progress,
+      });
+
       if (data.is_complete) {
         setProgress(data.progress || 100);
         setIsComplete(true);
@@ -538,11 +546,28 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         }
         await handleComplete();
       } else if (data.next_question) {
+        // Debug: Check if next question is different from current
+        const isSameQuestion = opts?.currentQuestionId === data.next_question.id;
+        debugLog('loadNextQuestion:applying', {
+          current_question_id: opts?.currentQuestionId || null,
+          next_question_id: data.next_question.id,
+          is_same_question: isSameQuestion,
+        });
+
+        if (isSameQuestion) {
+          console.warn('[NOTICE-ONLY-DEBUG] Server returned same question - wizard may be stuck!');
+        }
+
         if (mode === 'edit') {
           setReviewStepIndex((prev) => (opts?.currentQuestionId ? prev + 1 : 0));
         }
         initializeQuestion(data.next_question);
         setProgress(data.progress || 0);
+
+        // Debug: Confirm state was updated
+        debugLog('loadNextQuestion:stateUpdated', {
+          new_question_id: data.next_question.id,
+        });
       } else {
         throw new Error('No question returned from API');
       }
