@@ -15,8 +15,8 @@ import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 import { formatGroundTitle, getGroundTypeBadgeClasses, type GroundMetadata } from '@/lib/grounds/format-ground-title';
 import { apiUrl } from '@/lib/api';
-import { validateStepInline, type InlineValidationResult, type InlineGuidance } from '@/lib/validation/noticeOnlyInlineValidator';
-import { extractWizardUxIssues, getRouteLabel, type WizardUxIssuesResult, type RouteInvalidatingIssue, type InlineWarning } from '@/lib/validation/noticeOnlyWizardUxIssues';
+import { validateStepInline, type InlineGuidance } from '@/lib/validation/noticeOnlyInlineValidator';
+import { extractWizardUxIssues, type InlineWarning } from '@/lib/validation/noticeOnlyWizardUxIssues';
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 // ====================================================================================
