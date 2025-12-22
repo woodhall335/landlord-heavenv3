@@ -20,6 +20,18 @@ import { evaluateNoticeCompliance, type ComplianceResult } from '../notices/eval
 import { normalizeFactKeys } from '../wizard/normalizeFacts';
 import type { CanonicalJurisdiction } from '../types/jurisdiction';
 
+// ====================================================================================
+// PHASE 1: DEBUG LOGGING HELPER (behind NOTICE_ONLY_DEBUG env flag)
+// ====================================================================================
+const NOTICE_ONLY_DEBUG = typeof process !== 'undefined' &&
+  process.env?.NEXT_PUBLIC_NOTICE_ONLY_DEBUG === '1';
+
+function debugLog(context: string, ...args: any[]) {
+  if (NOTICE_ONLY_DEBUG) {
+    console.log(`[NOTICE-ONLY-DEBUG] [${context}]`, ...args);
+  }
+}
+
 // ============================================================================
 // TYPES
 // ============================================================================
@@ -187,6 +199,40 @@ function calculateDepositCapInfo(facts: Record<string, any>): DepositCapInfo | n
 }
 
 // ============================================================================
+// PHASE 5: SECTION 8 GROUNDS NORMALIZATION
+// ============================================================================
+
+/**
+ * Normalizes section8_grounds to always be an array.
+ * Handles various input formats:
+ * - Already an array: ['ground_8', 'ground_11'] -> ['ground_8', 'ground_11']
+ * - Comma-joined string: 'ground_8,ground_11' -> ['ground_8', 'ground_11']
+ * - Single value: 'ground_8' -> ['ground_8']
+ * - Null/undefined: -> []
+ */
+function normalizeSection8Grounds(grounds: any): string[] {
+  if (!grounds) return [];
+
+  if (Array.isArray(grounds)) {
+    // Already an array - filter out empty values
+    return grounds.filter((g): g is string => typeof g === 'string' && g.length > 0);
+  }
+
+  if (typeof grounds === 'string') {
+    // Check if it's a comma-separated string
+    if (grounds.includes(',')) {
+      return grounds.split(',').map(g => g.trim()).filter(g => g.length > 0);
+    }
+    // Single value
+    return grounds.trim() ? [grounds.trim()] : [];
+  }
+
+  // Unexpected type - log and return empty
+  console.warn('[normalizeSection8Grounds] Unexpected grounds type:', typeof grounds, grounds);
+  return [];
+}
+
+// ============================================================================
 // MAIN FUNCTION
 // ============================================================================
 
@@ -204,6 +250,21 @@ export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssue
 
   // Normalize facts to ensure consistent field names
   const normalizedFacts = normalizeFactKeys(savedFacts);
+
+  // PHASE 5: Normalize section8_grounds to ensure it's always an array
+  if (normalizedFacts.section8_grounds !== undefined) {
+    normalizedFacts.section8_grounds = normalizeSection8Grounds(normalizedFacts.section8_grounds);
+  }
+
+  // PHASE 1: Debug logging
+  debugLog('extractWizardUxIssues input', {
+    jurisdiction,
+    route,
+    lastSavedQuestionIds,
+    section8_grounds: normalizedFacts.section8_grounds,
+    deposit_protected: normalizedFacts.deposit_protected,
+    deposit_taken: normalizedFacts.deposit_taken,
+  });
 
   const result: WizardUxIssuesResult = {
     routeInvalidatingIssues: [],
@@ -375,6 +436,21 @@ export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssue
       });
     }
   }
+
+  // PHASE 1: Debug logging for output
+  debugLog('extractWizardUxIssues output', {
+    routeInvalidatingIssuesCount: result.routeInvalidatingIssues.length,
+    routeInvalidatingIssues: result.routeInvalidatingIssues.map(i => ({
+      code: i.code,
+      affectedQuestionId: i.affectedQuestionId,
+    })),
+    inlineWarningsCount: result.inlineWarnings.length,
+    inlineWarnings: result.inlineWarnings.map(w => ({
+      code: w.code,
+      affectedQuestionId: w.affectedQuestionId,
+    })),
+    alternativeRoutes: result.alternativeRoutes,
+  });
 
   return result;
 }

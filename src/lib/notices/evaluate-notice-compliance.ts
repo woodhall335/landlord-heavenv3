@@ -85,12 +85,42 @@ function pickDateValue(facts: Record<string, any>, keys: string[]): string | und
   return undefined;
 }
 
+/**
+ * PHASE 5: Normalizes section8_grounds to always be an array.
+ * Handles various input formats:
+ * - Already an array: ['ground_8', 'ground_11'] -> ['ground_8', 'ground_11']
+ * - Comma-joined string: 'ground_8,ground_11' -> ['ground_8', 'ground_11']
+ * - Single value: 'ground_8' -> ['ground_8']
+ * - Null/undefined: -> []
+ */
+function normalizeSection8Grounds(grounds: any): string[] {
+  if (!grounds) return [];
+
+  if (Array.isArray(grounds)) {
+    return grounds.filter((g): g is string => typeof g === 'string' && g.length > 0);
+  }
+
+  if (typeof grounds === 'string') {
+    if (grounds.includes(',')) {
+      return grounds.split(',').map(g => g.trim()).filter(g => g.length > 0);
+    }
+    return grounds.trim() ? [grounds.trim()] : [];
+  }
+
+  return [];
+}
+
 export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult {
   const { jurisdiction, product, selected_route, stage = 'wizard' } = input;
 
   // Apply canonical fact normalization to ensure consistent field names
   // This handles legacy keys like gas_safety_cert_provided -> gas_certificate_provided
   const wizardFacts = normalizeFactKeys(input.wizardFacts);
+
+  // PHASE 5: Normalize section8_grounds to ensure it's always an array
+  if (wizardFacts.section8_grounds !== undefined) {
+    wizardFacts.section8_grounds = normalizeSection8Grounds(wizardFacts.section8_grounds);
+  }
 
   const hardFailures: ComplianceResult['hardFailures'] = [];
   const warnings: ComplianceResult['warnings'] = [];

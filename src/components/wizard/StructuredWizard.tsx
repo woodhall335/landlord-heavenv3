@@ -20,6 +20,19 @@ import { extractWizardUxIssues, type InlineWarning } from '@/lib/validation/noti
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 // ====================================================================================
+// PHASE 1: DEBUG LOGGING HELPER (behind NOTICE_ONLY_DEBUG env flag)
+// ====================================================================================
+const NOTICE_ONLY_DEBUG = typeof window !== 'undefined' &&
+  (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_NOTICE_ONLY_DEBUG === '1' ||
+   window.localStorage?.getItem('NOTICE_ONLY_DEBUG') === '1');
+
+function debugLog(context: string, ...args: any[]) {
+  if (NOTICE_ONLY_DEBUG) {
+    console.log(`[NOTICE-ONLY-DEBUG] [${context}]`, ...args);
+  }
+}
+
+// ====================================================================================
 // OPTION NORMALIZATION HELPER (FIX FOR [object Object] REACT ERRORS)
 // ====================================================================================
 type MQSOption = string | { value: string; label?: string; [k: string]: any };
@@ -1423,19 +1436,25 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       // ====================================================================================
       // NOTICE-ONLY: Route-Invalidating Block Check (After Save/Next)
       // ====================================================================================
+      // PHASE 2 FIX: Use server-updated facts (data.facts) for validation, not stale local state.
+      // PHASE 3 FIX: Reset pendingRouteBlock when no route-invalidating issues.
+      // PHASE 4 FIX: Only treat issues with valid affectedQuestionId as blocking.
+      //
       // For notice_only products, check if the saved answer triggers a route-invalidating
       // issue. If so, block Next and show the Flow Not Available modal with options to:
       // 1. Edit my answer (go back and change the answer)
       // 2. Switch to alternative route (e.g., Section 8 instead of Section 21)
-      //
-      // Uses extractWizardUxIssues helper which:
-      // - Uses existing decision engine and compliance evaluator outputs (no new logic)
-      // - Filters to only issues triggered by the step just saved
-      // - Returns route-invalidating issues and inline warnings separately
       if (product === 'notice_only' && jurisdiction === 'england') {
-        const currentRoute = data.facts?.selected_notice_route ||
+        // PHASE 2: Use server-returned facts (data.facts) as the source of truth
+        const serverUpdatedFacts = data.facts || caseFacts;
+        const currentRoute = serverUpdatedFacts.selected_notice_route ||
           caseFacts.selected_notice_route ||
           'section_21';
+
+        // Update local caseFacts with server state to keep them in sync
+        if (data.facts) {
+          setCaseFacts(data.facts);
+        }
 
         // Extract wizard UX issues using the new helper
         // lastSavedQuestionIds = the question(s) that were just saved
@@ -1443,11 +1462,36 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           ? [currentQuestion.id, ...currentQuestion.fields.map((f: any) => f.id)]
           : [currentQuestion?.id].filter(Boolean) as string[];
 
+        // PHASE 1: Debug logging
+        debugLog('Save/Next', {
+          product,
+          route: currentRoute,
+          questionId: currentQuestion?.id,
+          answerPayloadType: typeof currentAnswer,
+          answerPayloadShape: Array.isArray(currentAnswer) ? 'array' : typeof currentAnswer === 'object' ? 'object' : 'primitive',
+          lastSavedQuestionIds,
+          serverFactsReturned: !!data.facts,
+        });
+
         const wxIssues = extractWizardUxIssues({
           jurisdiction: jurisdiction as CanonicalJurisdiction,
           route: currentRoute,
-          savedFacts: data.facts || caseFacts,
+          savedFacts: serverUpdatedFacts,
           lastSavedQuestionIds,
+        });
+
+        // PHASE 1: Debug log the extracted issues
+        debugLog('wxIssues', {
+          routeInvalidatingIssues: wxIssues.routeInvalidatingIssues.map(i => ({
+            code: i.code,
+            affectedQuestionId: i.affectedQuestionId,
+            userFixHint: i.userFixHint?.substring(0, 50),
+          })),
+          inlineWarnings: wxIssues.inlineWarnings.map(w => ({
+            code: w.code,
+            affectedQuestionId: w.affectedQuestionId,
+            message: w.message?.substring(0, 50),
+          })),
         });
 
         // Update inline warnings state for display
@@ -1461,11 +1505,20 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             affectedQuestionId: w.affectedQuestionId,
           }));
           setNoticeOnlyGuidance(newGuidance);
+        } else {
+          // Clear inline warnings if none
+          setNoticeOnlyGuidance([]);
         }
 
+        // PHASE 4 FIX: Only treat issues with a valid affectedQuestionId as blocking
+        // Issues without affectedQuestionId are generic/guidance only and should not block
+        const blockingIssues = wxIssues.routeInvalidatingIssues.filter(
+          issue => issue.affectedQuestionId && issue.affectedQuestionId.length > 0
+        );
+
         // Check for route-invalidating issues
-        if (wxIssues.routeInvalidatingIssues.length > 0) {
-          const firstIssue = wxIssues.routeInvalidatingIssues[0];
+        if (blockingIssues.length > 0) {
+          const firstIssue = blockingIssues[0];
           console.log('[NOTICE-ONLY] Route-invalidating issue detected:', firstIssue.code);
 
           // Set up the flow not available modal
@@ -1479,6 +1532,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           setShowFlowNotAvailableModal(true);
           setLoading(false);
           return; // Block navigation - user must resolve via modal
+        }
+
+        // PHASE 3 FIX: Reset pendingRouteBlock when there are no route-invalidating issues
+        // This ensures the user is never stuck after fixing an issue
+        if (pendingRouteBlock) {
+          debugLog('pendingRouteBlock reset', 'No route-invalidating issues after save');
+          setPendingRouteBlock(false);
+          setShowFlowNotAvailableModal(false);
         }
       }
 
