@@ -1340,6 +1340,11 @@ export async function POST(request: Request) {
       case_id,
       question_id,
       answer_saved: true,
+      // ============================================================================
+      // PHASE 2 FIX: Return updated facts so frontend can validate using server state
+      // This ensures wxIssues are computed from saved facts, not stale local state
+      // ============================================================================
+      facts: newFacts,
       ask_heaven: enhanced
         ? {
             suggested_wording: enhanced.suggested_wording,
