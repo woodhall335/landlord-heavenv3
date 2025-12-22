@@ -47,6 +47,10 @@ export interface TenancyFacts {
   deposit_reference?: string | null;
   // For deposit prescribed information (England & Wales)
   prescribed_info_given?: boolean | null;
+  // Deposit cap confirmation (England Section 21 only - Tenant Fees Act 2019)
+  // Required when deposit_amount exceeds legal cap (5 weeks rent, or 6 weeks if annual rent > £50k)
+  // Confirms landlord has refunded/reduced deposit to within legal limit
+  deposit_reduced_to_legal_cap_confirmed?: boolean | null;
 }
 
 export interface PropertyAddress {
@@ -321,6 +325,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     deposit_protection_date: null,
     deposit_reference: null,
     prescribed_info_given: null,
+    deposit_reduced_to_legal_cap_confirmed: null,
   },
   property: {
     address_line1: null,

@@ -972,72 +972,275 @@ describe('Notice-Only Inline Validator', () => {
   });
 
   // ====================================================================================
-  // DEPOSIT CAP TESTS (TENANT FEES ACT 2019)
+  // DEPOSIT CAP ENFORCEMENT TESTS (TENANT FEES ACT 2019) - OPTION B IMPLEMENTATION
   // ====================================================================================
 
-  describe('Deposit Cap Rules (Tenant Fees Act 2019)', () => {
-    it('deposit exceeding 5 weeks rent (annual rent <£50k) is WARNING not blocking', async () => {
-      // Annual rent < £50k: max deposit = 5 weeks rent
-      // Monthly rent £1000 = annual £12000 = weekly £230.77
-      // 5 weeks max = £1153.85
-      const result = await validateStepInline({
-        jurisdiction: 'england',
-        route: 'section_21',
-        product: 'notice_only',
-        msq: {
-          id: 'deposit_details',
-          question: 'Deposit details',
-          inputType: 'group',
-          fields: [],
-        },
-        stepId: 'deposit_details',
-        answers: {},
-        allFacts: {
-          deposit_taken: true,
-          deposit_amount: 2500, // Exceeds 5 weeks
-          rent_amount: 1000,
-          rent_frequency: 'monthly',
-        },
+  describe('Deposit Cap Enforcement (Option B - Confirmation Required)', () => {
+    describe('England Section 21 - Deposit Cap Blocking', () => {
+      it('deposit exceeds cap + no confirmation → BLOCKS at preview/generate', () => {
+        // Monthly rent £1000 = annual £12000 = weekly £230.77
+        // 5 weeks max = £1153.85
+        // Deposit £2500 exceeds cap
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            deposit_taken: true,
+            deposit_amount: 2500,
+            rent_amount: 1000,
+            rent_frequency: 'monthly',
+            deposit_protected: true,
+            prescribed_info_given: true,
+            epc_provided: true,
+            has_gas_appliances: false,
+            // NO confirmation provided
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(false);
+        const capIssue = result.hardFailures.find(f => f.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capIssue).toBeDefined();
+        expect(capIssue?.legal_reason).toContain('Tenant Fees Act');
       });
 
-      // Should be guidance (warning), not blocking
-      const depositCapGuidance = result.guidance.find(
-        g => g.code === 'DEPOSIT_EXCEEDS_CAP'
-      );
-      expect(depositCapGuidance).toBeDefined();
-      expect(depositCapGuidance?.severity).toBe('warn');
-    });
+      it('deposit exceeds cap + confirmation="yes" → NOT blocked', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            deposit_taken: true,
+            deposit_amount: 2500,
+            rent_amount: 1000,
+            rent_frequency: 'monthly',
+            deposit_reduced_to_legal_cap_confirmed: 'yes', // Confirmed
+            deposit_protected: true,
+            prescribed_info_given: true,
+            epc_provided: true,
+            has_gas_appliances: false,
+          },
+          stage: 'preview',
+        });
 
-    it('deposit under 5 weeks rent (annual rent <£50k) is compliant', async () => {
-      const result = await validateStepInline({
-        jurisdiction: 'england',
-        route: 'section_21',
-        product: 'notice_only',
-        msq: {
-          id: 'deposit_details',
-          question: 'Deposit details',
-          inputType: 'group',
-          fields: [],
-        },
-        stepId: 'deposit_details',
-        answers: {},
-        allFacts: {
-          deposit_taken: true,
-          deposit_amount: 1000, // Under 5 weeks (max ~£1154)
-          rent_amount: 1000,
-          rent_frequency: 'monthly',
-        },
+        // Should NOT have the cap exceeded issue
+        const capIssue = result.hardFailures.find(f => f.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capIssue).toBeUndefined();
       });
 
-      // Should NOT have deposit cap warning
-      const depositCapGuidance = result.guidance.find(
-        g => g.code === 'DEPOSIT_EXCEEDS_CAP'
-      );
-      expect(depositCapGuidance).toBeUndefined();
+      it('deposit exceeds cap + confirmation=true (boolean) → NOT blocked', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            deposit_taken: true,
+            deposit_amount: 2500,
+            rent_amount: 1000,
+            rent_frequency: 'monthly',
+            deposit_reduced_to_legal_cap_confirmed: true, // Boolean true
+            deposit_protected: true,
+            prescribed_info_given: true,
+            epc_provided: true,
+            has_gas_appliances: false,
+          },
+          stage: 'preview',
+        });
+
+        const capIssue = result.hardFailures.find(f => f.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capIssue).toBeUndefined();
+      });
+
+      it('deposit exceeds cap + confirmation="no" → BLOCKS', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            deposit_taken: true,
+            deposit_amount: 2500,
+            rent_amount: 1000,
+            rent_frequency: 'monthly',
+            deposit_reduced_to_legal_cap_confirmed: 'no', // Explicit no
+            deposit_protected: true,
+            prescribed_info_given: true,
+            epc_provided: true,
+            has_gas_appliances: false,
+          },
+          stage: 'preview',
+        });
+
+        expect(result.ok).toBe(false);
+        const capIssue = result.hardFailures.find(f => f.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capIssue).toBeDefined();
+      });
+
+      it('deposit within cap → no confirmation needed, NOT blocked', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            deposit_taken: true,
+            deposit_amount: 1000, // Within 5 weeks cap (~£1154)
+            rent_amount: 1000,
+            rent_frequency: 'monthly',
+            deposit_protected: true,
+            prescribed_info_given: true,
+            epc_provided: true,
+            has_gas_appliances: false,
+          },
+          stage: 'preview',
+        });
+
+        const capIssue = result.hardFailures.find(f => f.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capIssue).toBeUndefined();
+      });
+
+      it('high rent (>£50k) uses 6 weeks cap correctly', () => {
+        // Annual rent > £50k: monthly £5000 = annual £60000 = weekly £1153.85
+        // 6 weeks max = £6923.08
+        // Deposit £6500 is under 6 weeks cap
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            deposit_taken: true,
+            deposit_amount: 6500, // Under 6 weeks cap for high rent
+            rent_amount: 5000,
+            rent_frequency: 'monthly',
+            deposit_protected: true,
+            prescribed_info_given: true,
+            epc_provided: true,
+            has_gas_appliances: false,
+          },
+          stage: 'preview',
+        });
+
+        // Should NOT block - deposit is within 6 weeks cap
+        const capIssue = result.hardFailures.find(f => f.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capIssue).toBeUndefined();
+      });
     });
 
-    // Note: The deposit cap is a WARNING at all stages, not a blocker
-    // This is intentional because landlords may have already refunded the excess
+    describe('England Section 8 - Deposit Cap Does NOT Block', () => {
+      it('deposit exceeds cap → does NOT block Section 8', () => {
+        const result = evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_8',
+          wizardFacts: {
+            deposit_taken: true,
+            deposit_amount: 5000, // Massively exceeds cap
+            rent_amount: 1000,
+            rent_frequency: 'monthly',
+            section8_grounds: ['Ground 8'],
+            notice_service_date: '2024-01-01',
+            notice_expiry_date: '2024-02-15',
+          },
+          stage: 'preview',
+        });
+
+        // Section 8 should NOT have deposit cap blocking
+        const capIssue = result.hardFailures.find(f => f.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+        expect(capIssue).toBeUndefined();
+      });
+    });
+
+    describe('Inline Validator - Deposit Cap Guidance', () => {
+      it('S21 deposit exceeds cap shows blocking guidance when not confirmed', async () => {
+        const result = await validateStepInline({
+          jurisdiction: 'england',
+          route: 'section_21',
+          product: 'notice_only',
+          msq: {
+            id: 'deposit_details',
+            question: 'Deposit details',
+            inputType: 'group',
+            fields: [],
+          },
+          stepId: 'deposit_details',
+          answers: {},
+          allFacts: {
+            deposit_taken: true,
+            deposit_amount: 2500,
+            rent_amount: 1000,
+            rent_frequency: 'monthly',
+            selected_notice_route: 'section_21',
+            // No confirmation
+          },
+        });
+
+        const capGuidance = result.guidance.find(
+          g => g.code === 'S21-DEPOSIT-CAP-EXCEEDED'
+        );
+        expect(capGuidance).toBeDefined();
+        expect(capGuidance?.severity).toBe('warn');
+        expect(capGuidance?.message).toContain('Section 8');
+      });
+
+      it('S8 deposit exceeds cap shows informational guidance (not blocking)', async () => {
+        const result = await validateStepInline({
+          jurisdiction: 'england',
+          route: 'section_8',
+          product: 'notice_only',
+          msq: {
+            id: 'deposit_details',
+            question: 'Deposit details',
+            inputType: 'group',
+            fields: [],
+          },
+          stepId: 'deposit_details',
+          answers: {},
+          allFacts: {
+            deposit_taken: true,
+            deposit_amount: 2500,
+            rent_amount: 1000,
+            rent_frequency: 'monthly',
+            selected_notice_route: 'section_8',
+          },
+        });
+
+        const capGuidance = result.guidance.find(
+          g => g.code === 'DEPOSIT_EXCEEDS_CAP'
+        );
+        expect(capGuidance).toBeDefined();
+        expect(capGuidance?.severity).toBe('info');
+        expect(capGuidance?.message).toContain('does not affect Section 8');
+      });
+
+      it('S21 deposit exceeds cap with confirmation shows no guidance', async () => {
+        const result = await validateStepInline({
+          jurisdiction: 'england',
+          route: 'section_21',
+          product: 'notice_only',
+          msq: {
+            id: 'deposit_details',
+            question: 'Deposit details',
+            inputType: 'group',
+            fields: [],
+          },
+          stepId: 'deposit_details',
+          answers: {},
+          allFacts: {
+            deposit_taken: true,
+            deposit_amount: 2500,
+            rent_amount: 1000,
+            rent_frequency: 'monthly',
+            selected_notice_route: 'section_21',
+            deposit_reduced_to_legal_cap_confirmed: 'yes',
+          },
+        });
+
+        // Should have no cap guidance since confirmed
+        const capGuidance = result.guidance.find(
+          g => g.code === 'S21-DEPOSIT-CAP-EXCEEDED' || g.code === 'DEPOSIT_EXCEEDS_CAP'
+        );
+        expect(capGuidance).toBeUndefined();
+      });
+    });
   });
 
   // ====================================================================================

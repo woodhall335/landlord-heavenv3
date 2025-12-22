@@ -312,6 +312,14 @@ export const DECISION_ISSUE_LABELS: Record<string, { action: string; legalReason
     action: "Check the deposit amount against the legal cap",
     legalReason: "Under the Tenant Fees Act 2019, deposits are capped at 5 weeks' rent (6 weeks for rent over £50k/year).",
   },
+  'S21-DEPOSIT-CAP-EXCEEDED': {
+    action: "Confirm you have refunded/reduced the deposit to within the legal cap, or use Section 8 instead",
+    legalReason: "Under the Tenant Fees Act 2019, deposits are capped at 5 weeks' rent (6 weeks for rent over £50k/year). For Section 21 to be valid, the deposit must be within this limit.",
+  },
+  SECTION21_DEPOSIT_CAP_EXCEEDED: {
+    action: "Confirm you have refunded/reduced the deposit to within the legal cap",
+    legalReason: "Under the Tenant Fees Act 2019, deposits are capped at 5 weeks' rent (6 weeks for rent over £50k/year). Section 21 is invalid if the tenant is holding a deposit above the cap.",
+  },
   RENT_SMART_NOT_REGISTERED: {
     action: "Confirm you are registered with Rent Smart Wales",
     legalReason: "Landlords in Wales must be registered with Rent Smart Wales to serve valid notices.",

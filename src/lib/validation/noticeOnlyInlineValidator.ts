@@ -296,8 +296,10 @@ function generateLegalGuidance(
     });
   }
 
-  // Deposit cap warning (non-blocking)
-  if (isDepositStep(stepId) && (jurisdiction === 'england' || jurisdiction === 'wales')) {
+  // Deposit cap guidance (route-aware)
+  // - Section 21: BLOCKING unless confirmed
+  // - Section 8: Non-blocking (deposit cap doesn't affect S8 validity)
+  if (isDepositStep(stepId) && jurisdiction === 'england') {
     const depositTaken = allFacts.deposit_taken ?? answers.deposit_taken;
     if (depositTaken === true) {
       const rentAmount = allFacts.rent_amount || allFacts.tenancy?.rent_amount;
@@ -307,12 +309,32 @@ function generateLegalGuidance(
       if (rentAmount && !isNaN(depositAmount)) {
         const cap = calculateDepositCap(rentAmount, rentFrequency, depositAmount);
         if (cap?.exceeds) {
-          guidance.push({
-            message: `Deposit exceeds legal cap of ${cap.maxWeeks} weeks' rent (max \u00A3${cap.maxDeposit.toFixed(2)}). Consider refunding the excess to the tenant.`,
-            severity: 'warn',
-            code: 'DEPOSIT_EXCEEDS_CAP',
-            legalBasis: 'Tenant Fees Act 2019 s3',
-          });
+          const isSection21 = route === 'section_21' || allFacts.selected_notice_route === 'section_21';
+          const confirmationValue = allFacts.deposit_reduced_to_legal_cap_confirmed;
+          const isConfirmed = confirmationValue === 'yes' || confirmationValue === true;
+
+          if (isSection21 && !isConfirmed) {
+            // Section 21: Blocking unless confirmed
+            guidance.push({
+              message: `Deposit exceeds legal cap of ${cap.maxWeeks} weeks' rent (max £${cap.maxDeposit.toFixed(2)}). ` +
+                `To generate a valid Section 21 notice, you must confirm the deposit has been reduced/refunded to within the cap. ` +
+                `Alternatively, consider using Section 8 (deposit cap does not affect Section 8 validity).`,
+              severity: 'warn',
+              code: 'S21-DEPOSIT-CAP-EXCEEDED',
+              legalBasis: 'Tenant Fees Act 2019 s3 - deposit capped at 5 weeks rent (6 weeks if annual rent > £50,000)',
+              affectedQuestionId: 'deposit_reduced_to_legal_cap_confirmed',
+            });
+          } else if (!isSection21) {
+            // Section 8: Non-blocking informational
+            guidance.push({
+              message: `Deposit exceeds legal cap of ${cap.maxWeeks} weeks' rent (max £${cap.maxDeposit.toFixed(2)}). ` +
+                `This does not affect Section 8 validity, but you may want to refund the excess.`,
+              severity: 'info',
+              code: 'DEPOSIT_EXCEEDS_CAP',
+              legalBasis: 'Tenant Fees Act 2019 s3',
+            });
+          }
+          // If isSection21 && isConfirmed, no guidance needed - issue is resolved
         }
       }
     }
@@ -423,6 +445,10 @@ const ISSUE_TO_STEP_MAP: Record<string, string[]> = {
   ground_particulars_incomplete: ['ground_particulars'],
   ground_8_threshold_not_met: ['arrears_details', 'rent_arrears'],
 
+  // Deposit cap exceeded (Section 21 only - blocking unless confirmed)
+  deposit_cap_exceeded: ['deposit_details', 'deposit_amount', 'deposit_reduced_to_legal_cap_confirmed'],
+  s21_deposit_cap_exceeded: ['deposit_details', 'deposit_amount', 'deposit_reduced_to_legal_cap_confirmed'],
+
   // ==========================================================================
   // WALES RULES (Renting Homes (Wales) Act 2016)
   // ==========================================================================
@@ -509,6 +535,7 @@ function isComplianceIssueRelevantToStep(
     'S21-FOUR-MONTH-BAR': ['tenancy_details', 'notice_service'],
     'S21-RETALIATORY': ['recent_complaints', 'repair_requests'],
     'S21-DEPOSIT-CAP': ['deposit_details', 'tenancy_details'],
+    'S21-DEPOSIT-CAP-EXCEEDED': ['deposit_details', 'deposit_amount', 'deposit_reduced_to_legal_cap_confirmed'],
 
     // ==========================================================================
     // ENGLAND - Section 8
@@ -722,6 +749,8 @@ function getAffectedQuestionId(issueCode: string): string | undefined {
     four_month_bar: 'notice_service',
     deposit_exceeds_cap: 'deposit_details',
     deposit_cap: 'deposit_details',
+    deposit_cap_exceeded: 'deposit_reduced_to_legal_cap_confirmed',
+    s21_deposit_cap_exceeded: 'deposit_reduced_to_legal_cap_confirmed',
 
     // ==========================================================================
     // ENGLAND - Section 8

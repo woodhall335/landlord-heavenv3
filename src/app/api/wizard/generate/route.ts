@@ -126,6 +126,41 @@ export async function POST(request: Request) {
         );
       }
 
+      // DEPOSIT CAP ENFORCEMENT (Tenant Fees Act 2019)
+      // 5 weeks rent max (or 6 weeks if annual rent > £50,000)
+      // Blocks Section 21 unless landlord confirms refund/reduction
+      if (caseFacts.deposit_taken === true && caseFacts.deposit_amount && caseFacts.rent_amount) {
+        const rentFrequency = caseFacts.rent_frequency ?? 'monthly';
+        let annualRent = caseFacts.rent_amount * 12;
+        if (rentFrequency === 'weekly') annualRent = caseFacts.rent_amount * 52;
+        else if (rentFrequency === 'fortnightly') annualRent = caseFacts.rent_amount * 26;
+        else if (rentFrequency === 'quarterly') annualRent = caseFacts.rent_amount * 4;
+        else if (rentFrequency === 'yearly') annualRent = caseFacts.rent_amount;
+
+        const weeklyRent = annualRent / 52;
+        const maxWeeks = annualRent > 50000 ? 6 : 5;
+        const maxDeposit = weeklyRent * maxWeeks;
+
+        if (caseFacts.deposit_amount > maxDeposit) {
+          const confirmationValue = caseFacts.deposit_reduced_to_legal_cap_confirmed;
+          const isConfirmed = confirmationValue === 'yes' || confirmationValue === true;
+
+          if (!isConfirmed) {
+            return NextResponse.json(
+              handleLegalError(
+                new LegalComplianceError(
+                  'SECTION21_DEPOSIT_CAP_EXCEEDED',
+                  `Section 21 invalid: deposit £${caseFacts.deposit_amount.toFixed(2)} exceeds legal cap of £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent). ` +
+                    `Tenant Fees Act 2019 requires the deposit to be within the cap. ` +
+                    `Confirm you have refunded/reduced the deposit, or use Section 8 instead.`
+                )
+              ),
+              { status: 403 }
+            );
+          }
+        }
+      }
+
       // Gas certificate (ONLY if gas appliances)
       if (caseFacts.has_gas_appliances === true && caseFacts.gas_certificate_provided === false) {
         return NextResponse.json(

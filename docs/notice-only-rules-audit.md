@@ -369,8 +369,9 @@ For any `(jurisdiction, route)` combination, we can definitively answer:
 | `how_to_rent_provided=false` | **BLOCKED** | Deregulation Act 2015 s33 | Provide How to Rent Guide |
 | `property_licensing_status='unlicensed'` (where licence required) | **BLOCKED** | Housing Act 2004 Part 2/3 | Obtain required licence |
 | `notice_service_date < tenancy_start_date + 4 months` | **BLOCKED** | Deregulation Act 2015 s36 | Wait until 4 months from tenancy start |
-| `deposit_amount > 5 weeks' rent` (annual rent ≤ £50k) | **WARNING** | Tenant Fees Act 2019 s3 | Consider refunding excess |
-| `deposit_amount > 6 weeks' rent` (annual rent > £50k) | **WARNING** | Tenant Fees Act 2019 s3 | Consider refunding excess |
+| `deposit_amount > 5 weeks' rent` (annual rent ≤ £50k) AND `deposit_reduced_to_legal_cap_confirmed !== 'yes'` | **BLOCKED** | Tenant Fees Act 2019 s3 | Confirm refund/reduction or use Section 8 |
+| `deposit_amount > 6 weeks' rent` (annual rent > £50k) AND `deposit_reduced_to_legal_cap_confirmed !== 'yes'` | **BLOCKED** | Tenant Fees Act 2019 s3 | Confirm refund/reduction or use Section 8 |
+| `deposit_amount > cap` AND `deposit_reduced_to_legal_cap_confirmed === 'yes'` | **ALLOWED** | Tenant Fees Act 2019 s3 | Compliance confirmed by user |
 | `recent_repair_complaints=true` | **WARNING** | Deregulation Act 2015 s33 | Section 21 may be retaliatory |
 
 #### Section 8 Route Availability (ALWAYS ALLOWED)
@@ -379,6 +380,7 @@ For any `(jurisdiction, route)` combination, we can definitively answer:
 |------------|--------------|-------|
 | Any deposit status | **ALLOWED** | Deposit protection does NOT block Section 8 |
 | Any compliance status | **ALLOWED** | Section 8 based on fault grounds, not compliance |
+| `deposit_amount > legal cap` | **ALLOWED** | Deposit cap does NOT block Section 8 |
 | `section8_grounds.length === 0` | **BLOCKED** | At least one ground required |
 | Ground 8 selected AND `arrears < 2 months' rent` | **BLOCKED** | Ground 8 threshold not met |
 
@@ -468,3 +470,89 @@ For any `(jurisdiction, route)` combination, we can definitively answer:
 - Only shown after Save/Next
 - Only for notice_only products
 - Only when route is definitively blocked (not just warned)
+
+---
+
+## Appendix F: Deposit Cap Confirmation Requirement (Option B)
+
+**Updated**: 2025-12-21
+**Purpose**: Document the deposit cap confirmation flow for "always legally compliant" guarantee.
+
+### Background
+
+Under the Tenant Fees Act 2019:
+- Deposits are capped at **5 weeks' rent** (annual rent ≤ £50,000)
+- Deposits are capped at **6 weeks' rent** (annual rent > £50,000)
+
+Previously, exceeding the deposit cap was treated as a warning-only condition with justification "landlord may have refunded". This was insufficient for an "always legally compliant" guarantee.
+
+### Option B Implementation
+
+When a deposit exceeds the legal cap, we now require **explicit confirmation** that the deposit has been reduced/refunded before allowing preview/generate.
+
+#### New Fact Key
+
+```typescript
+deposit_reduced_to_legal_cap_confirmed?: 'yes' | 'no' | 'not_sure' | boolean | null;
+```
+
+#### Enforcement Logic
+
+**For England Section 21:**
+- IF `deposit_amount > calculated_cap`
+  - AND `deposit_reduced_to_legal_cap_confirmed !== 'yes'` AND `!== true`
+  - THEN **BLOCK** at preview/generate
+
+**For England Section 8:**
+- Deposit cap does **NOT** block Section 8
+- Only informational guidance shown
+
+**For Wales/Scotland:**
+- No deposit cap rules in existing decision/compliance logic
+- Not implemented (do not invent new law)
+
+#### MSQ Question
+
+Location: `config/mqs/notice_only/england.yaml`
+
+```yaml
+- id: deposit_reduced_to_legal_cap_confirmed
+  section: Deposit & Compliance
+  question: "The deposit you entered may exceed the legal cap. Have you reduced or refunded the deposit to comply with the legal limit?"
+  inputType: select
+  dependsOn:
+    allOf:
+      - questionId: deposit_taken
+        value: true
+      - questionId: selected_notice_route
+        value: section_21
+  options:
+    - value: "yes"
+      label: "Yes - I have reduced/refunded the deposit to within the legal cap"
+    - value: "no"
+      label: "No - the deposit has not been reduced/refunded"
+    - value: "not_sure"
+      label: "Not sure"
+```
+
+#### Inline Guidance
+
+After Save/Next, users see:
+- **Section 21**: "Deposit exceeds legal cap... confirm you have refunded/reduced... or use Section 8"
+- **Section 8**: "Deposit exceeds legal cap... does not affect Section 8 validity"
+
+#### API Enforcement
+
+- **Preview API** (`/api/notice-only/preview/[caseId]`): Returns 422 if cap exceeded and not confirmed
+- **Generate API** (`/api/wizard/generate`): Returns 403 if cap exceeded and not confirmed
+
+### Test Coverage
+
+Tests verify:
+1. S21 + cap exceeded + no confirmation → BLOCKING
+2. S21 + cap exceeded + confirmation='yes' → NOT blocked
+3. S21 + cap exceeded + confirmation=true → NOT blocked
+4. S21 + cap exceeded + confirmation='no' → BLOCKING
+5. S8 + cap exceeded → does NOT block
+6. Validation timing: Only after Save/Next
+7. Cross-jurisdiction: England-only, not Wales/Scotland
