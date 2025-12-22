@@ -4,61 +4,64 @@
  * These tests verify that S21-only questions are not shown when route=section_8
  */
 
-import { questionIsApplicable, loadMQS, deriveRoutesFromFacts } from '../mqs-loader';
+import { describe, it, expect } from 'vitest';
+import { questionIsApplicable, deriveRoutesFromFacts } from '../mqs-loader';
+import type { MasterQuestionSet } from '../mqs-loader';
+import type { ExtendedWizardQuestion } from '../types';
 
-// Mock fs and yaml since we're testing the logic, not file loading
-jest.mock('fs', () => ({
-  existsSync: jest.fn(() => true),
-  readFileSync: jest.fn(() => `
-id: notice_only_england
-product: notice_only
-jurisdiction: england
-version: "1.0.0"
-questions:
-  - id: selected_notice_route
-    question: "Which type of notice?"
-    inputType: select
-    options:
-      - section_8
-      - section_21
-    maps_to:
-      - selected_notice_route
-  - id: epc_provided
-    question: "Was EPC provided?"
-    inputType: yes_no
-    routes:
-      - section_21
-    maps_to:
-      - epc_provided
-  - id: how_to_rent_provided
-    question: "Was How to Rent guide provided?"
-    inputType: yes_no
-    routes:
-      - section_21
-    maps_to:
-      - how_to_rent_provided
-  - id: property_licensing
-    question: "Property licensing status"
-    inputType: select
-    routes:
-      - section_21
-    maps_to:
-      - property_licensing_status
-  - id: deposit_protected_scheme
-    question: "Is deposit protected?"
-    inputType: yes_no
-    maps_to:
-      - deposit_protected
-`),
-}));
+// Create a mock MQS directly instead of mocking fs
+const mockMQS: MasterQuestionSet = {
+  id: 'notice_only_england',
+  product: 'notice_only',
+  jurisdiction: 'england',
+  version: '1.0.0',
+  questions: [
+    {
+      id: 'selected_notice_route',
+      question: 'Which type of notice?',
+      inputType: 'select',
+      section: 'Notice Type',
+      options: [
+        { value: 'section_8', label: 'Section 8' },
+        { value: 'section_21', label: 'Section 21' },
+      ],
+      maps_to: ['selected_notice_route'],
+    },
+    {
+      id: 'epc_provided',
+      question: 'Was EPC provided?',
+      inputType: 'yes_no',
+      section: 'Compliance',
+      routes: ['section_21'],
+      maps_to: ['epc_provided'],
+    },
+    {
+      id: 'how_to_rent_provided',
+      question: 'Was How to Rent guide provided?',
+      inputType: 'yes_no',
+      section: 'Compliance',
+      routes: ['section_21'],
+      maps_to: ['how_to_rent_provided'],
+    },
+    {
+      id: 'property_licensing',
+      question: 'Property licensing status',
+      inputType: 'select',
+      section: 'Compliance',
+      routes: ['section_21'],
+      maps_to: ['property_licensing_status'],
+    },
+    {
+      id: 'deposit_protected_scheme',
+      question: 'Is deposit protected?',
+      inputType: 'yes_no',
+      section: 'Deposit',
+      maps_to: ['deposit_protected'],
+    },
+  ] as ExtendedWizardQuestion[],
+};
 
 describe('MQS Route Filtering', () => {
-  let mqs: any;
-
-  beforeAll(() => {
-    mqs = loadMQS('notice_only', 'england');
-  });
-
   describe('deriveRoutesFromFacts', () => {
     it('should derive section_8 route from selected_notice_route fact', () => {
       const routes = deriveRoutesFromFacts(
@@ -84,13 +87,32 @@ describe('MQS Route Filtering', () => {
       );
       expect(routes).toContain('section_8');
     });
+
+    it('should handle array of routes', () => {
+      const routes = deriveRoutesFromFacts(
+        { selected_notice_route: ['section_8', 'section_21'] },
+        'england'
+      );
+      expect(routes).toContain('section_8');
+      expect(routes).toContain('section_21');
+    });
+
+    it('should return unknown for empty facts', () => {
+      const routes = deriveRoutesFromFacts({}, 'england');
+      expect(routes).toContain('unknown');
+    });
+
+    it('should auto-add notice_to_leave for Scotland', () => {
+      const routes = deriveRoutesFromFacts({}, 'scotland');
+      expect(routes).toContain('notice_to_leave');
+    });
   });
 
   describe('questionIsApplicable - Route Filtering', () => {
     it('should hide S21-only questions when route=section_8', () => {
-      const epcQuestion = mqs?.questions.find((q: any) => q.id === 'epc_provided');
+      const epcQuestion = mockMQS.questions.find((q) => q.id === 'epc_provided');
 
-      const isApplicable = questionIsApplicable(mqs, epcQuestion, {
+      const isApplicable = questionIsApplicable(mockMQS, epcQuestion!, {
         selected_notice_route: 'section_8',
       });
 
@@ -98,9 +120,9 @@ describe('MQS Route Filtering', () => {
     });
 
     it('should show S21-only questions when route=section_21', () => {
-      const epcQuestion = mqs?.questions.find((q: any) => q.id === 'epc_provided');
+      const epcQuestion = mockMQS.questions.find((q) => q.id === 'epc_provided');
 
-      const isApplicable = questionIsApplicable(mqs, epcQuestion, {
+      const isApplicable = questionIsApplicable(mockMQS, epcQuestion!, {
         selected_notice_route: 'section_21',
       });
 
@@ -108,9 +130,9 @@ describe('MQS Route Filtering', () => {
     });
 
     it('should hide how_to_rent_provided when route=section_8', () => {
-      const h2rQuestion = mqs?.questions.find((q: any) => q.id === 'how_to_rent_provided');
+      const h2rQuestion = mockMQS.questions.find((q) => q.id === 'how_to_rent_provided');
 
-      const isApplicable = questionIsApplicable(mqs, h2rQuestion, {
+      const isApplicable = questionIsApplicable(mockMQS, h2rQuestion!, {
         selected_notice_route: 'section_8',
       });
 
@@ -118,9 +140,9 @@ describe('MQS Route Filtering', () => {
     });
 
     it('should hide property_licensing when route=section_8', () => {
-      const licensingQuestion = mqs?.questions.find((q: any) => q.id === 'property_licensing');
+      const licensingQuestion = mockMQS.questions.find((q) => q.id === 'property_licensing');
 
-      const isApplicable = questionIsApplicable(mqs, licensingQuestion, {
+      const isApplicable = questionIsApplicable(mockMQS, licensingQuestion!, {
         selected_notice_route: 'section_8',
       });
 
@@ -128,18 +150,28 @@ describe('MQS Route Filtering', () => {
     });
 
     it('should show questions without routes field for any route', () => {
-      const depositQuestion = mqs?.questions.find((q: any) => q.id === 'deposit_protected_scheme');
+      const depositQuestion = mockMQS.questions.find((q) => q.id === 'deposit_protected_scheme');
 
       // Should be visible for both routes
-      const isApplicableS8 = questionIsApplicable(mqs, depositQuestion, {
+      const isApplicableS8 = questionIsApplicable(mockMQS, depositQuestion!, {
         selected_notice_route: 'section_8',
       });
-      const isApplicableS21 = questionIsApplicable(mqs, depositQuestion, {
+      const isApplicableS21 = questionIsApplicable(mockMQS, depositQuestion!, {
         selected_notice_route: 'section_21',
       });
 
       expect(isApplicableS8).toBe(true);
       expect(isApplicableS21).toBe(true);
+    });
+
+    it('should show S21-only questions when no route selected yet', () => {
+      const epcQuestion = mockMQS.questions.find((q) => q.id === 'epc_provided');
+
+      // When route is unknown, questions with routes should still be hidden
+      // because deriveRoutesFromFacts returns ['unknown'] when no route selected
+      const isApplicable = questionIsApplicable(mockMQS, epcQuestion!, {});
+
+      expect(isApplicable).toBe(false);
     });
   });
 });

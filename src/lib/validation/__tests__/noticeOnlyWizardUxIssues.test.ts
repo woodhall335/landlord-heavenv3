@@ -10,11 +10,12 @@
  * 6. Ask Heaven still works for Section 8 particulars (handled separately)
  */
 
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
 import { extractWizardUxIssues, getRouteLabel, type WizardUxIssuesInput } from '../noticeOnlyWizardUxIssues';
 
 // Mock the decision engine and compliance evaluator
-jest.mock('../../decision-engine', () => ({
-  runDecisionEngine: jest.fn(() => ({
+vi.mock('../../decision-engine', () => ({
+  runDecisionEngine: vi.fn(() => ({
     recommended_routes: ['section_8'],
     allowed_routes: ['section_8'],
     blocked_routes: ['section_21'],
@@ -28,8 +29,8 @@ jest.mock('../../decision-engine', () => ({
   })),
 }));
 
-jest.mock('../../notices/evaluate-notice-compliance', () => ({
-  evaluateNoticeCompliance: jest.fn(() => ({
+vi.mock('../../notices/evaluate-notice-compliance', () => ({
+  evaluateNoticeCompliance: vi.fn(() => ({
     ok: true,
     hardFailures: [],
     warnings: [],
@@ -39,12 +40,12 @@ jest.mock('../../notices/evaluate-notice-compliance', () => ({
 import { runDecisionEngine } from '../../decision-engine';
 import { evaluateNoticeCompliance } from '../../notices/evaluate-notice-compliance';
 
-const mockRunDecisionEngine = runDecisionEngine as jest.MockedFunction<typeof runDecisionEngine>;
-const mockEvaluateNoticeCompliance = evaluateNoticeCompliance as jest.MockedFunction<typeof evaluateNoticeCompliance>;
+const mockRunDecisionEngine = runDecisionEngine as Mock;
+const mockEvaluateNoticeCompliance = evaluateNoticeCompliance as Mock;
 
 describe('extractWizardUxIssues', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Section 21 route-invalidating issues', () => {
