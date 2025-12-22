@@ -125,5 +125,176 @@ describe('evaluateNoticeCompliance', () => {
 
     expect(result.hardFailures.find((f) => f.code === 'NTL-PRE-ACTION')).toBeFalsy();
   });
+
+  describe('deposit cap enforcement (Tenant Fees Act 2019)', () => {
+    it('does not crash when deposit_amount and rent_amount are strings', () => {
+      // This tests the type coercion fix - string inputs should be parsed correctly
+      expect(() =>
+        evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: {
+            deposit_taken: true,
+            deposit_amount: '2000',  // String, not number
+            rent_amount: '1000',     // String, not number
+            rent_frequency: 'monthly',
+            deposit_protected: true,
+            prescribed_info_given: true,
+            tenancy_start_date: '2023-01-01',
+            notice_service_date: '2024-06-01',
+          },
+          stage: 'wizard',
+        })
+      ).not.toThrow();
+    });
+
+    it('flags deposit cap exceeded when deposit exceeds legal maximum and not confirmed', () => {
+      // Monthly rent 1000 = annual 12000. Max deposit = 5 weeks = 12000/52*5 = 1153.85
+      // Deposit 2000 exceeds cap
+      const result = evaluateNoticeCompliance({
+        jurisdiction: 'england',
+        product: 'notice_only',
+        selected_route: 'section_21',
+        wizardFacts: {
+          deposit_taken: true,
+          deposit_amount: 2000,
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+          deposit_protected: true,
+          prescribed_info_given: true,
+          deposit_reduced_to_legal_cap_confirmed: 'no',
+          tenancy_start_date: '2023-01-01',
+          notice_service_date: '2024-06-01',
+        },
+        stage: 'wizard',
+      });
+
+      const capIssue = result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+      expect(capIssue).toBeTruthy();
+    });
+
+    it('includes entered deposit and maximum allowed in the deposit cap message', () => {
+      const result = evaluateNoticeCompliance({
+        jurisdiction: 'england',
+        product: 'notice_only',
+        selected_route: 'section_21',
+        wizardFacts: {
+          deposit_taken: true,
+          deposit_amount: 3000,
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+          deposit_protected: true,
+          prescribed_info_given: true,
+          deposit_reduced_to_legal_cap_confirmed: 'no',
+          tenancy_start_date: '2023-01-01',
+          notice_service_date: '2024-06-01',
+        },
+        stage: 'wizard',
+      });
+
+      const capIssue = result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+      expect(capIssue).toBeTruthy();
+      // Check the message includes "Entered deposit" and "Maximum allowed"
+      expect(capIssue?.legal_reason).toContain('Entered deposit');
+      expect(capIssue?.legal_reason).toContain('Maximum allowed');
+      expect(capIssue?.legal_reason).toContain('3000.00');  // Entered amount
+      expect(capIssue?.legal_reason).toContain('5 weeks');   // Cap explanation
+    });
+
+    it('does not flag deposit cap when deposit is within legal maximum', () => {
+      // Monthly rent 1000 = annual 12000. Max deposit = 5 weeks = ~1153.85
+      // Deposit 1000 is within cap
+      const result = evaluateNoticeCompliance({
+        jurisdiction: 'england',
+        product: 'notice_only',
+        selected_route: 'section_21',
+        wizardFacts: {
+          deposit_taken: true,
+          deposit_amount: 1000,
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+          deposit_protected: true,
+          prescribed_info_given: true,
+          tenancy_start_date: '2023-01-01',
+          notice_service_date: '2024-06-01',
+        },
+        stage: 'wizard',
+      });
+
+      expect(result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED')).toBeFalsy();
+    });
+
+    it('does not flag deposit cap when confirmed as reduced', () => {
+      const result = evaluateNoticeCompliance({
+        jurisdiction: 'england',
+        product: 'notice_only',
+        selected_route: 'section_21',
+        wizardFacts: {
+          deposit_taken: true,
+          deposit_amount: 2000,
+          rent_amount: 1000,
+          rent_frequency: 'monthly',
+          deposit_protected: true,
+          prescribed_info_given: true,
+          deposit_reduced_to_legal_cap_confirmed: 'yes',  // Confirmed
+          tenancy_start_date: '2023-01-01',
+          notice_service_date: '2024-06-01',
+        },
+        stage: 'wizard',
+      });
+
+      expect(result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED')).toBeFalsy();
+    });
+
+    it('uses 6 weeks cap when annual rent exceeds 50000', () => {
+      // Monthly rent 5000 = annual 60000 > 50000, so max is 6 weeks
+      // 6 weeks rent = 60000/52*6 = ~6923.08
+      // Deposit 6500 is within 6-week cap
+      const result = evaluateNoticeCompliance({
+        jurisdiction: 'england',
+        product: 'notice_only',
+        selected_route: 'section_21',
+        wizardFacts: {
+          deposit_taken: true,
+          deposit_amount: 6500,
+          rent_amount: 5000,
+          rent_frequency: 'monthly',
+          deposit_protected: true,
+          prescribed_info_given: true,
+          tenancy_start_date: '2023-01-01',
+          notice_service_date: '2024-06-01',
+        },
+        stage: 'wizard',
+      });
+
+      // Should not trigger cap exceeded (6500 < 6923.08)
+      expect(result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED')).toBeFalsy();
+    });
+
+    it('handles string inputs for deposit and rent amounts', () => {
+      const result = evaluateNoticeCompliance({
+        jurisdiction: 'england',
+        product: 'notice_only',
+        selected_route: 'section_21',
+        wizardFacts: {
+          deposit_taken: true,
+          deposit_amount: '2000',  // String
+          rent_amount: '1000',     // String
+          rent_frequency: 'monthly',
+          deposit_protected: true,
+          prescribed_info_given: true,
+          deposit_reduced_to_legal_cap_confirmed: 'no',
+          tenancy_start_date: '2023-01-01',
+          notice_service_date: '2024-06-01',
+        },
+        stage: 'wizard',
+      });
+
+      // Should correctly detect cap exceeded even with string inputs
+      const capIssue = result.warnings.find((w) => w.code === 'S21-DEPOSIT-CAP-EXCEEDED');
+      expect(capIssue).toBeTruthy();
+    });
+  });
 });
 

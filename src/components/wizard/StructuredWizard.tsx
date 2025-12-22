@@ -257,6 +257,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     legalBasis?: string;
     alternativeRoutes: string[];
   } | null>(null);
+  // Pending route block - when true, Next is blocked until user resolves via modal
+  const [pendingRouteBlock, setPendingRouteBlock] = useState(false);
 
   const [calculatedDate, setCalculatedDate] = useState<{
     date: string;
@@ -1409,6 +1411,79 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         console.log('[VALIDATION-UI] Preview blocking issues:', data.preview_blocking_issues.length);
       }
 
+      // ====================================================================================
+      // NOTICE-ONLY: Route-Invalidating Block Check (After Save/Next)
+      // ====================================================================================
+      // For notice_only products, check if the saved answer triggers a route-invalidating
+      // issue. If so, block Next and show the Flow Not Available modal with options to:
+      // 1. Edit my answer (go back and change the answer)
+      // 2. Switch to alternative route (e.g., Section 8 instead of Section 21)
+      if (product === 'notice_only' && data.preview_blocking_issues?.length > 0) {
+        const currentRoute = caseFacts.selected_notice_route ||
+          (jurisdiction === 'scotland' ? 'notice_to_leave' :
+           jurisdiction === 'wales' ? 'wales_section_173' : 'section_21');
+
+        // Define route-invalidating issue codes per route
+        const routeInvalidatingCodes: Record<string, string[]> = {
+          section_21: [
+            'S21-DEPOSIT-NONCOMPLIANT',
+            'S21-PRESCRIBED-INFO-REQUIRED',
+            'S21-LICENSING',
+            'S21-GAS-CERT',
+            'S21-EPC',
+            'S21-H2R',
+            'S21-DEPOSIT-CAP-EXCEEDED',
+          ],
+          section_8: [
+            'S8-GROUNDS-REQUIRED',
+          ],
+          wales_section_173: [
+            'S173-LICENSING',
+            'S173-CONTRACT-TYPE',
+            'S173-DEPOSIT',
+          ],
+          wales_fault_based: [
+            'RHW23-GROUND-REQUIRED',
+          ],
+          notice_to_leave: [
+            'NTL-GROUND-REQUIRED',
+            'NTL-PRE-ACTION',
+          ],
+        };
+
+        // Alternative route suggestions per route
+        const alternativeRoutes: Record<string, string[]> = {
+          section_21: ['section_8'],
+          section_8: [],
+          wales_section_173: ['wales_fault_based'],
+          wales_fault_based: ['wales_section_173'],
+          notice_to_leave: [],
+        };
+
+        // Check if any blocking issue is route-invalidating for current route
+        const invalidatingCodes = routeInvalidatingCodes[currentRoute] || [];
+        const routeInvalidatingIssue = data.preview_blocking_issues.find(
+          (issue: WizardValidationIssue) => invalidatingCodes.includes(issue.code)
+        );
+
+        if (routeInvalidatingIssue) {
+          // Found a route-invalidating issue - block and show modal
+          console.log('[NOTICE-ONLY] Route-invalidating issue detected:', routeInvalidatingIssue.code);
+
+          // Set up the flow not available modal
+          setFlowNotAvailableDetails({
+            blockedRoute: currentRoute,
+            reason: routeInvalidatingIssue.user_fix_hint || routeInvalidatingIssue.legal_reason || 'This route is not available based on your answers.',
+            legalBasis: routeInvalidatingIssue.legal_reason,
+            alternativeRoutes: alternativeRoutes[currentRoute] || [],
+          });
+          setPendingRouteBlock(true);
+          setShowFlowNotAvailableModal(true);
+          setLoading(false);
+          return; // Block navigation - user must resolve via modal
+        }
+      }
+
       // Update progress
       setProgress(data.progress || 0);
 
@@ -1463,6 +1538,60 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     // Decrease progress (approximate)
     setProgress((prev) => Math.max(0, prev - 5));
   };
+
+  // ====================================================================================
+  // ROUTE SWITCHING (Notice-Only) - Used when current route is blocked
+  // ====================================================================================
+  const switchNoticeRoute = useCallback(async (newRoute: string) => {
+    if (!caseId) return;
+
+    setLoading(true);
+    try {
+      // Persist the route change to backend
+      const response = await fetch(apiUrl('/api/wizard/answer'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          case_id: caseId,
+          question_id: 'selected_notice_route',
+          answer: newRoute,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to switch route');
+      }
+
+      // Update local state
+      setCaseFacts((prev) => ({
+        ...prev,
+        selected_notice_route: newRoute,
+      }));
+
+      // Clear the route block state
+      setPendingRouteBlock(false);
+      setShowFlowNotAvailableModal(false);
+      setFlowNotAvailableDetails(null);
+      setNoticeOnlyRouteSuggestion(null);
+
+      // Continue to next question
+      if (currentQuestion) {
+        await loadNextQuestion({ currentQuestionId: currentQuestion.id });
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to switch route');
+      console.error('Switch route error:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, [caseId, currentQuestion, loadNextQuestion]);
+
+  // Handle "Edit my answer" from route block modal - just close modal
+  const handleEditAnswer = useCallback(() => {
+    setPendingRouteBlock(false);
+    setShowFlowNotAvailableModal(false);
+    // Don't clear flowNotAvailableDetails - keep the warning visible inline
+  }, []);
 
   const renderInput = () => {
     if (!currentQuestion) return null;
@@ -3839,19 +3968,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex gap-3 justify-end">
               <Button
                 variant="secondary"
-                onClick={() => setShowFlowNotAvailableModal(false)}
+                onClick={handleEditAnswer}
+                disabled={loading}
               >
-                Continue with current answers
+                Edit my answer
               </Button>
               {flowNotAvailableDetails.alternativeRoutes.length > 0 && (
                 <Button
                   variant="primary"
-                  onClick={() => {
-                    // In a full implementation, this would switch routes
-                    setShowFlowNotAvailableModal(false);
-                  }}
+                  onClick={() => void switchNoticeRoute(flowNotAvailableDetails.alternativeRoutes[0])}
+                  disabled={loading}
                 >
-                  Switch to {flowNotAvailableDetails.alternativeRoutes[0].replace(/_/g, ' ').replace(/section/i, 'Section ')}
+                  {loading ? 'Switching...' : `Switch to ${flowNotAvailableDetails.alternativeRoutes[0].replace(/_/g, ' ').replace(/section/i, 'Section ')}`}
                 </Button>
               )}
             </div>

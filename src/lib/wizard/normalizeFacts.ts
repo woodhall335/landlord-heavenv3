@@ -216,3 +216,126 @@ export function getFactValue(facts?: Record<string, any>, ...keys: string[]): an
 
   return undefined;
 }
+
+/**
+ * Dependent Fact Clearing Configuration
+ *
+ * When a controlling fact changes to a value that makes dependent facts irrelevant,
+ * those dependent facts should be cleared to avoid stale/orphan data.
+ *
+ * Format: { controllingFact: { clearWhenValue: [dependentFacts] } }
+ */
+const DEPENDENT_FACTS_TO_CLEAR: Record<string, Record<string, string[]>> = {
+  // When deposit_taken=false, clear all deposit-related facts
+  deposit_taken: {
+    false: [
+      'deposit_amount',
+      'deposit_protected',
+      'deposit_protected_scheme',
+      'prescribed_info_given',
+      'prescribed_info_provided',
+      'deposit_reduced_to_legal_cap_confirmed',
+      'deposit_scheme',
+    ],
+  },
+  // When has_gas_appliances=false, clear gas certificate facts
+  has_gas_appliances: {
+    false: [
+      'gas_certificate_provided',
+      'gas_safety_cert_provided',
+      'gas_safety_certificate_provided',
+    ],
+  },
+  // When is_fixed_term=false, clear fixed term end date
+  is_fixed_term: {
+    false: ['fixed_term_end_date'],
+  },
+  // When has_rent_arrears=false, clear arrears details
+  has_rent_arrears: {
+    false: ['arrears_total', 'arrears_from_date', 'rent_arrears_amount'],
+  },
+  // Wales: When deposit_taken_wales=false, clear Wales deposit facts
+  deposit_taken_wales: {
+    false: ['deposit_protected', 'deposit_protected_wales', 'deposit_scheme', 'deposit_scheme_wales_s173'],
+  },
+  // Wales: When deposit_taken_fault=false, clear Wales fault deposit facts
+  deposit_taken_fault: {
+    false: ['deposit_protected', 'deposit_protected_fault', 'deposit_scheme', 'deposit_scheme_fault'],
+  },
+  // When deposit_protected_scheme=false, clear prescribed info (can't give prescribed info without protection)
+  deposit_protected_scheme: {
+    false: ['prescribed_info_given', 'prescribed_info_provided'],
+  },
+};
+
+/**
+ * Clear dependent facts when a controlling fact changes to a value that makes them irrelevant.
+ *
+ * This maintains data integrity in the caseFacts by removing orphaned data.
+ * For example, if deposit_taken=false, we don't want to keep deposit_amount in the facts.
+ *
+ * @param facts - The current facts object
+ * @param changedFactId - The fact that just changed
+ * @param newValue - The new value of the changed fact
+ * @returns A new facts object with dependent facts cleared (or the original if no changes)
+ */
+export function clearDependentFacts(
+  facts: Record<string, any>,
+  changedFactId: string,
+  newValue: any
+): Record<string, any> {
+  if (!facts) return {};
+
+  const clearConfig = DEPENDENT_FACTS_TO_CLEAR[changedFactId];
+  if (!clearConfig) {
+    // No dependent facts defined for this controlling fact
+    return facts;
+  }
+
+  // Normalize the new value to a string for comparison
+  const normalizedValue = String(newValue).toLowerCase();
+
+  // Check if this value triggers clearing
+  const factsToClear = clearConfig[normalizedValue];
+  if (!factsToClear || factsToClear.length === 0) {
+    return facts;
+  }
+
+  // Create a copy and remove the dependent facts
+  const clearedFacts = { ...facts };
+  let didClear = false;
+
+  for (const factKey of factsToClear) {
+    if (clearedFacts[factKey] !== undefined) {
+      delete clearedFacts[factKey];
+      didClear = true;
+    }
+  }
+
+  if (didClear) {
+    console.log(`[clearDependentFacts] Cleared orphan facts for ${changedFactId}=${newValue}:`, factsToClear);
+  }
+
+  return clearedFacts;
+}
+
+/**
+ * Batch clear dependent facts for multiple changes at once.
+ * Useful when processing a complete step save.
+ *
+ * @param facts - The current facts object
+ * @param changes - Map of changed fact IDs to their new values
+ * @returns A new facts object with dependent facts cleared
+ */
+export function batchClearDependentFacts(
+  facts: Record<string, any>,
+  changes: Record<string, any>
+): Record<string, any> {
+  let currentFacts = { ...facts };
+
+  for (const [factId, newValue] of Object.entries(changes)) {
+    currentFacts = clearDependentFacts(currentFacts, factId, newValue);
+  }
+
+  return currentFacts;
+}
