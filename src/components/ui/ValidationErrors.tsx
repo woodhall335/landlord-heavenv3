@@ -40,6 +40,12 @@ export interface ValidationErrorsProps {
   jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland';
   /** Product type for proper routing */
   product?: string;
+  /** Current selected route (for notice_only) */
+  currentRoute?: string;
+  /** Alternative routes available when current route is blocked */
+  alternativeRoutes?: string[];
+  /** Callback when user wants to switch routes */
+  onSwitchRoute?: (newRoute: string) => Promise<void>;
 }
 
 export function ValidationErrors({
@@ -50,9 +56,13 @@ export function ValidationErrors({
   caseType,
   jurisdiction,
   product,
+  currentRoute,
+  alternativeRoutes = [],
+  onSwitchRoute,
 }: ValidationErrorsProps) {
   const router = useRouter();
   const [expandedIssues, setExpandedIssues] = useState<Set<string>>(new Set());
+  const [switchingRoute, setSwitchingRoute] = useState(false);
 
   const toggleExpanded = (issueKey: string) => {
     setExpandedIssues(prev => {
@@ -132,6 +142,36 @@ export function ValidationErrors({
     return 'Complete the required information';
   };
 
+  /**
+   * Get user-friendly label for a route
+   */
+  const getRouteLabel = (route: string): string => {
+    const labels: Record<string, string> = {
+      section_21: 'Section 21 (No-Fault)',
+      section_8: 'Section 8 (Fault-Based)',
+      wales_section_173: 'Section 173 (No-Fault)',
+      wales_fault_based: 'Fault-Based Notice',
+      notice_to_leave: 'Notice to Leave',
+    };
+    return labels[route] || route.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  };
+
+  /**
+   * Handle route switching
+   */
+  const handleSwitchRoute = async (newRoute: string) => {
+    if (!onSwitchRoute) return;
+
+    setSwitchingRoute(true);
+    try {
+      await onSwitchRoute(newRoute);
+    } catch (err) {
+      console.error('Failed to switch route:', err);
+    } finally {
+      setSwitchingRoute(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Blocking Issues */}
@@ -209,6 +249,62 @@ export function ValidationErrors({
                   </Button>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Route Switching (when alternatives are available) */}
+      {blocking_issues.length > 0 && alternativeRoutes.length > 0 && onSwitchRoute && (
+        <div className="bg-blue-50 border-l-4 border-blue-600 p-6 rounded-r-lg">
+          <div className="flex items-start gap-4">
+            <div className="text-2xl">🔄</div>
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-blue-900 mb-2">
+                Alternative Route Available
+              </h3>
+              <p className="text-sm text-blue-800 mb-4">
+                {currentRoute && (
+                  <>
+                    Your current route ({getRouteLabel(currentRoute)}) is blocked.{' '}
+                  </>
+                )}
+                You can switch to an alternative notice type that may work for your situation:
+              </p>
+
+              <div className="space-y-2">
+                {alternativeRoutes.map((route) => (
+                  <div
+                    key={route}
+                    className="bg-white border border-blue-200 rounded-lg p-4 flex items-center justify-between gap-4"
+                  >
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-gray-900">
+                        {getRouteLabel(route)}
+                      </p>
+                      <p className="text-xs text-gray-600 mt-1">
+                        {route === 'section_8' && 'Requires grounds for possession (rent arrears, breach of tenancy, etc.)'}
+                        {route === 'section_21' && 'No grounds required, but strict compliance needed'}
+                        {route === 'wales_section_173' && 'No grounds required, 6-month notice period'}
+                        {route === 'wales_fault_based' && 'Requires grounds under Renting Homes (Wales) Act 2016'}
+                        {route === 'notice_to_leave' && 'For Private Residential Tenancies in Scotland'}
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => void handleSwitchRoute(route)}
+                      variant="primary"
+                      size="medium"
+                      disabled={switchingRoute}
+                    >
+                      {switchingRoute ? 'Switching...' : `Switch to ${getRouteLabel(route).split(' ')[0]}`}
+                    </Button>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-xs text-blue-700 mt-4">
+                After switching, we&apos;ll re-validate your case with the new route.
+              </p>
             </div>
           </div>
         </div>

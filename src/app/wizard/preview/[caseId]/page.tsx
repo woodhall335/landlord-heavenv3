@@ -747,8 +747,8 @@ export default function WizardPreviewPage() {
             Your Documents Are Ready! 🎉
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Review your preview below. Purchase to download the final documents
-            without watermarks.
+            Review your documents below. Purchase to download the final
+            court-ready documents.
           </p>
           <div className="mt-6">
             <Button
@@ -800,10 +800,9 @@ export default function WizardPreviewPage() {
 
               {previewUrl ? (
                 <div className="relative bg-white border-2 border-gray-200 rounded-lg overflow-hidden">
-                  <div className="absolute top-0 left-0 right-0 bg-yellow-50 border-b border-yellow-200 px-4 py-2 z-10">
-                    <p className="text-sm text-yellow-800 text-center font-medium">
-                      ⚠️ PREVIEW MODE - Watermarked document. Purchase to remove
-                      watermark.
+                  <div className="absolute top-0 left-0 right-0 bg-blue-50 border-b border-blue-200 px-4 py-2 z-10">
+                    <p className="text-sm text-blue-800 text-center font-medium">
+                      📄 PREVIEW - Review your documents before purchase
                     </p>
                   </div>
 

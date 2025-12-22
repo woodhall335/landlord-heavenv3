@@ -120,6 +120,8 @@ interface StructuredWizardProps {
   initialQuestion?: ExtendedWizardQuestion | null;
   onComplete: (caseId: string) => void;
   mode?: 'default' | 'edit';
+  /** Question ID to jump to on mount (from End Validator "Fix this" button) */
+  jumpToQuestionId?: string;
 }
 
 interface CaseAnalysisState {
@@ -138,6 +140,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   initialQuestion,
   onComplete,
   mode = 'default',
+  jumpToQuestionId,
 }) => {
   const [currentQuestion, setCurrentQuestion] = useState<ExtendedWizardQuestion | null>(
     initialQuestion ?? null,
@@ -598,6 +601,20 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       setLoading(false);
     }
   }, [caseId, initializeQuestion]);
+
+  // ====================================================================================
+  // JUMP-TO-QUESTION ON MOUNT (from End Validator "Fix this" button)
+  // ====================================================================================
+  // When the user clicks "Fix this" in the End Validator (preview page), they're
+  // redirected here with jumpToQuestionId. Jump to that question on mount.
+  useEffect(() => {
+    if (jumpToQuestionId && caseId) {
+      console.log('[JUMP-TO] Jumping to question from URL param:', jumpToQuestionId);
+      void jumpToQuestion(jumpToQuestionId);
+    }
+    // Only run on mount when we have a jumpToQuestionId
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jumpToQuestionId, caseId]);
 
   // ====================================================================================
   // PHASE 2: MQS LOADING FUNCTION
@@ -1510,34 +1527,25 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           setNoticeOnlyGuidance([]);
         }
 
-        // PHASE 4 FIX: Only treat issues with a valid affectedQuestionId as blocking
-        // Issues without affectedQuestionId are generic/guidance only and should not block
-        const blockingIssues = wxIssues.routeInvalidatingIssues.filter(
-          issue => issue.affectedQuestionId && issue.affectedQuestionId.length > 0
-        );
+        // ====================================================================================
+        // SIMPLIFIED UX: Per-step compliance blocking DISABLED for notice_only
+        // ====================================================================================
+        // All route-invalidating issues are collected and deferred to the End Validator UI
+        // shown at preview/generate time. Users can complete the wizard without interruption.
+        // Server-side validation remains the ultimate hard stop at /api/wizard/generate.
+        //
+        // The routeInvalidatingIssues are logged for debugging but NOT used to block navigation.
+        // Inline warnings (deposit cap, etc.) continue to be shown as non-blocking guidance.
+        //
+        // See: docs/notice-only-validation-ux-audit.md for design documentation.
+        debugLog('Simplified UX', {
+          routeInvalidatingIssuesCount: wxIssues.routeInvalidatingIssues.length,
+          inlineWarningsCount: wxIssues.inlineWarnings.length,
+          message: 'Per-step blocking disabled - issues deferred to End Validator',
+        });
 
-        // Check for route-invalidating issues
-        if (blockingIssues.length > 0) {
-          const firstIssue = blockingIssues[0];
-          console.log('[NOTICE-ONLY] Route-invalidating issue detected:', firstIssue.code);
-
-          // Set up the flow not available modal
-          setFlowNotAvailableDetails({
-            blockedRoute: currentRoute,
-            reason: firstIssue.userFixHint || firstIssue.description || 'This route is not available based on your answers.',
-            legalBasis: firstIssue.legalBasis,
-            alternativeRoutes: wxIssues.alternativeRoutes,
-          });
-          setPendingRouteBlock(true);
-          setShowFlowNotAvailableModal(true);
-          setLoading(false);
-          return; // Block navigation - user must resolve via modal
-        }
-
-        // PHASE 3 FIX: Reset pendingRouteBlock when there are no route-invalidating issues
-        // This ensures the user is never stuck after fixing an issue
+        // Always ensure pendingRouteBlock is false for notice_only (simplified UX)
         if (pendingRouteBlock) {
-          debugLog('pendingRouteBlock reset', 'No route-invalidating issues after save');
           setPendingRouteBlock(false);
           setShowFlowNotAvailableModal(false);
         }
@@ -2464,12 +2472,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     currentQuestion?.validation?.required &&
     uploadFilesForCurrentQuestion.length === 0
   );
-  // pendingRouteBlock must be included to ensure Next is blocked when route-invalidating answer exists
+  // For notice_only products: simplified UX means NO compliance blocking during wizard steps.
+  // Compliance validation happens at preview/generate time via the End Validator.
+  // For other products: pendingRouteBlock still applies to block navigation.
   const disableNextButton =
     loading ||
     uploadingEvidence ||
     uploadRequiredMissing ||
-    pendingRouteBlock || // Hard-block Next when route is invalidated
+    (product !== 'notice_only' && pendingRouteBlock) || // Only block for non-notice_only products
     (!isUploadQuestion && !isInfoQuestion && (currentAnswer === null || currentAnswer === undefined));
 
   // ------------------------------
@@ -3954,13 +3964,18 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           FLOW NOT AVAILABLE MODAL
           ============================================================================
           Triggered when the decision engine reports the current route is blocked.
+
+          NOTE: For notice_only products, this modal is DISABLED as part of the
+          simplified UX. All compliance validation happens at preview/generate time
+          via the End Validator. This modal is only shown for other products.
+
           Jurisdiction-aware, provides:
           - Clear explanation of WHY the route is blocked
           - Legal basis for the blocking rule
           - Alternative routes available
           - Actions needed to unblock the current route
       */}
-      {showFlowNotAvailableModal && flowNotAvailableDetails && (
+      {product !== 'notice_only' && showFlowNotAvailableModal && flowNotAvailableDetails && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl max-w-lg w-full shadow-2xl overflow-hidden">
             {/* Header */}

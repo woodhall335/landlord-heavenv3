@@ -953,48 +953,14 @@ ${html}
 
     await page.setContent(finalHtml, { waitUntil: 'networkidle0' });
 
-    // Add watermark if specified
-    if (options?.watermark) {
-      await page.evaluate((watermarkText) => {
-        // Create watermark style that appears on EVERY page
-        const style = document.createElement('style');
-        style.textContent = `
-          @media print {
-            body::before {
-              content: "${watermarkText}";
-              position: fixed;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%) rotate(-45deg);
-              font-size: 80px;
-              font-weight: bold;
-              color: rgba(255, 0, 0, 0.15);
-              pointer-events: none;
-              z-index: 9999;
-              white-space: nowrap;
-              text-transform: uppercase;
-              letter-spacing: 5px;
-            }
-          }
-          body::before {
-            content: "${watermarkText}";
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 80px;
-            font-weight: bold;
-            color: rgba(255, 0, 0, 0.15);
-            pointer-events: none;
-            z-index: 9999;
-            white-space: nowrap;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-          }
-        `;
-        document.head.appendChild(style);
-      }, options.watermark);
-    }
+    // ====================================================================================
+    // WATERMARK REMOVED - Simplified UX Change
+    // ====================================================================================
+    // Watermarks have been removed from all PDFs as part of the simplified notice-only
+    // validation UX. Preview and final PDFs are now generated without watermarks.
+    // Server-side validation at /api/wizard/generate remains the hard stop for compliance.
+    // See docs/pdf-watermark-audit.md for details on the removal.
+    // ====================================================================================
 
     // For full HTML templates, prefer CSS @page rules so template controls margins
     // For non-full HTML (wrapped content), use format option
@@ -1058,8 +1024,10 @@ export async function generateDocument(
   let pdf: Buffer | undefined;
   if (outputFormat === 'pdf' || outputFormat === 'both') {
     try {
-      const watermark = isPreview ? 'PREVIEW - NOT FOR COURT USE' : undefined;
-      pdf = await htmlToPdf(html, { watermark });
+      // WATERMARK REMOVED - Simplified UX Change
+      // All PDFs are now generated without watermarks (preview and final)
+      // See docs/pdf-watermark-audit.md for details
+      pdf = await htmlToPdf(html, {});
     } catch (error: any) {
       console.warn(`⚠️  PDF generation skipped: ${error.message}`);
       console.warn('   HTML output will still be generated.');
