@@ -951,7 +951,13 @@ ${html}
       }
     }
 
-    await page.setContent(finalHtml, { waitUntil: 'networkidle0' });
+    // Use networkidle2 instead of networkidle0 for more resilient waiting
+    // networkidle2 waits for ≤2 network connections vs 0, preventing timeout
+    // on complex templates like Form 6A with embedded resources
+    await page.setContent(finalHtml, {
+      waitUntil: 'networkidle2',
+      timeout: 45000  // Explicit 45s timeout (up from default 30s)
+    });
 
     // ====================================================================================
     // WATERMARK REMOVED - Simplified UX Change
