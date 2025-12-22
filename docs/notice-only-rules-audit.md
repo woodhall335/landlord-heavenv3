@@ -556,3 +556,102 @@ Tests verify:
 5. S8 + cap exceeded → does NOT block
 6. Validation timing: Only after Save/Next
 7. Cross-jurisdiction: England-only, not Wales/Scotland
+
+---
+
+## Appendix G: Non-Mandatory Prescribed Form Fields
+
+**Updated**: 2025-12-22
+**Purpose**: Document optional fields in prescribed forms that must render correctly if provided.
+
+### Overview
+
+Some fields on prescribed forms (e.g., Form 6A) are **not legally mandatory** but appear on the official form. These fields:
+- MUST NOT block validation if absent
+- MUST NOT trigger warnings if absent
+- MUST render correctly if provided
+- MUST be collected via MSQ and mapped through CaseFacts
+
+### Non-Mandatory Fields List
+
+| Field | Prescribed Form | Jurisdiction | Template Variable | Status |
+|-------|-----------------|--------------|-------------------|--------|
+| `landlord_phone` | Form 6A (Section 21) | England | `{{#if landlord_phone}}{{landlord_phone}}{{/if}}` | ✅ Matrix-mapped |
+| `landlord_phone` | Notice to Leave | Scotland | `{{#if landlord_phone}}{{landlord_phone}}{{/if}}` | ✅ Matrix-mapped |
+| `landlord_phone` | RHW Forms | Wales | Not in prescribed form | N/A |
+
+### Matrix Mapping
+
+For each non-mandatory field:
+
+1. **MSQ Collection**
+   - Field defined in `config/mqs/notice_only/{jurisdiction}.yaml`
+   - No `validation.required: true`
+   - Label indicates optional status: "Telephone (optional)"
+
+2. **CaseFacts Mapping**
+   - `mapNoticeOnlyFacts()` in `normalize.ts` maps to template data
+   - Example: `templateData.landlord_phone = extractString(getFirstValue(wizard, ['landlord_phone', 'landlord.phone']))`
+
+3. **Template Binding**
+   - Templates use conditional rendering: `{{#if landlord_phone}}{{landlord_phone}}{{/if}}`
+   - No fallback logic inside templates
+   - No hardcoded blanks
+
+4. **Validation**
+   - Field-level: Format-only (e.g., tel input type)
+   - Fires ONLY after Save
+   - Never blocks Next
+   - Never appears in Flow Not Available modal
+
+### Implementation Details
+
+#### England Form 6A
+
+The official Form 6A includes a "Telephone" field for landlord/agent:
+
+```yaml
+# config/mqs/notice_only/england.yaml
+- id: landlord_details
+  section: Landlord Details
+  fields:
+    # ... required fields ...
+    - id: landlord_phone
+      label: "Telephone (optional)"
+      inputType: tel
+      placeholder: "e.g. 020 1234 5678"
+      helperText: "Optional contact number for the notice form"
+```
+
+Template reference:
+```handlebars
+<label>Telephone</label>
+<p class="value">{{#if landlord_phone}}{{landlord_phone}}{{/if}}</p>
+```
+
+#### Scotland Notice to Leave
+
+Similarly mapped for Scotland MSQ:
+
+```yaml
+# config/mqs/notice_only/scotland.yaml
+- id: landlord_details
+  fields:
+    - id: landlord_phone
+      label: Phone number
+      inputType: tel
+      validation:
+        required: true  # Note: Scotland MSQ marks as required
+```
+
+### Test Coverage
+
+Tests in `tests/audit/notice-only-template-parity.test.ts`:
+- `landlord_phone renders correctly when provided`
+- `landlord_phone absence does not block or cause errors`
+- `Template variables do not reference undefined facts`
+
+### Key Principle
+
+> These fields are optional in law but must render correctly if provided.
+> Absence MUST NOT affect notice validity or block generation.
