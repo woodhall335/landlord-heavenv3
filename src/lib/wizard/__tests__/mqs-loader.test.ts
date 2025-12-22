@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { questionIsApplicable, deriveRoutesFromFacts } from '../mqs-loader';
+import { questionIsApplicable, deriveRoutesFromFacts, getNextMQSQuestion } from '../mqs-loader';
 import type { MasterQuestionSet } from '../mqs-loader';
 import type { ExtendedWizardQuestion } from '../types';
 
@@ -173,5 +173,127 @@ describe('MQS Route Filtering', () => {
 
       expect(isApplicable).toBe(false);
     });
+  });
+});
+
+// ==============================================================================
+// REGRESSION TESTS: Wizard Progression with Optional Fields
+// ==============================================================================
+// These tests ensure the wizard can progress when optional fields are left empty.
+// The bug was: optional fields like landlord_address_line2 left empty would cause
+// the wizard to appear "stuck" because the question was considered unanswered.
+
+describe('Wizard Progression - Optional Fields Regression', () => {
+  // Mock MQS with a group question containing optional fields
+  const groupQuestionMQS: MasterQuestionSet = {
+    id: 'test_mqs',
+    product: 'notice_only',
+    jurisdiction: 'england',
+    version: '1.0.0',
+    questions: [
+      {
+        id: 'landlord_details',
+        question: 'Landlord Details',
+        inputType: 'group',
+        section: 'Landlord',
+        maps_to: [
+          'landlord_full_name',
+          'landlord_address_line1',
+          'landlord_address_line2', // OPTIONAL - often left blank
+          'landlord_city',
+          'landlord_postcode',
+          'landlord_phone',
+        ],
+        fields: [
+          { id: 'landlord_full_name', inputType: 'text', label: 'Name', validation: { required: true } },
+          { id: 'landlord_address_line1', inputType: 'text', label: 'Address Line 1', validation: { required: true } },
+          { id: 'landlord_address_line2', inputType: 'text', label: 'Address Line 2 (optional)' },
+          { id: 'landlord_city', inputType: 'text', label: 'City', validation: { required: true } },
+          { id: 'landlord_postcode', inputType: 'text', label: 'Postcode', validation: { required: true } },
+          { id: 'landlord_phone', inputType: 'text', label: 'Phone', validation: { required: true } },
+        ],
+      },
+      {
+        id: 'tenant_details',
+        question: 'Tenant Details',
+        inputType: 'group',
+        section: 'Tenant',
+        maps_to: ['tenant_full_name'],
+        fields: [
+          { id: 'tenant_full_name', inputType: 'text', label: 'Name', validation: { required: true } },
+        ],
+      },
+    ] as ExtendedWizardQuestion[],
+  };
+
+  it('REGRESSION: should progress to next question when optional field is empty string', () => {
+    // Simulate user filling required fields but leaving address_line2 empty
+    const facts = {
+      landlord_full_name: 'John Smith',
+      landlord_address_line1: '123 Main St',
+      landlord_address_line2: '', // Optional field left empty
+      landlord_city: 'London',
+      landlord_postcode: 'SW1A 1AA',
+      landlord_phone: '020 1234 5678',
+    };
+
+    const nextQuestion = getNextMQSQuestion(groupQuestionMQS, facts);
+
+    // Should progress to tenant_details, NOT return landlord_details again
+    expect(nextQuestion).not.toBeNull();
+    expect(nextQuestion?.id).toBe('tenant_details');
+  });
+
+  it('REGRESSION: empty string should be treated as "answered" for optional fields', () => {
+    // All fields including optional are filled (optional with empty string)
+    const facts = {
+      landlord_full_name: 'John Smith',
+      landlord_address_line1: '123 Main St',
+      landlord_address_line2: '', // Empty string = user saw it and left it blank
+      landlord_city: 'London',
+      landlord_postcode: 'SW1A 1AA',
+      landlord_phone: '020 1234 5678',
+      tenant_full_name: 'Jane Doe',
+    };
+
+    const nextQuestion = getNextMQSQuestion(groupQuestionMQS, facts);
+
+    // All questions answered, should return null (complete)
+    expect(nextQuestion).toBeNull();
+  });
+
+  it('should NOT progress when required field is missing (undefined)', () => {
+    // landlord_full_name is missing (undefined)
+    const facts = {
+      // landlord_full_name: undefined (not set)
+      landlord_address_line1: '123 Main St',
+      landlord_address_line2: '',
+      landlord_city: 'London',
+      landlord_postcode: 'SW1A 1AA',
+      landlord_phone: '020 1234 5678',
+    };
+
+    const nextQuestion = getNextMQSQuestion(groupQuestionMQS, facts);
+
+    // Should return landlord_details because a required field is missing
+    expect(nextQuestion).not.toBeNull();
+    expect(nextQuestion?.id).toBe('landlord_details');
+  });
+
+  it('should NOT progress when required field is null', () => {
+    const facts = {
+      landlord_full_name: null, // Explicitly null
+      landlord_address_line1: '123 Main St',
+      landlord_address_line2: '',
+      landlord_city: 'London',
+      landlord_postcode: 'SW1A 1AA',
+      landlord_phone: '020 1234 5678',
+    };
+
+    const nextQuestion = getNextMQSQuestion(groupQuestionMQS, facts);
+
+    // Should return landlord_details because landlord_full_name is null
+    expect(nextQuestion).not.toBeNull();
+    expect(nextQuestion?.id).toBe('landlord_details');
   });
 });

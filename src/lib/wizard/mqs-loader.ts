@@ -49,7 +49,10 @@ function getValueAtPath(facts: Record<string, any>, path: string): unknown {
 
 function isTruthyValue(value: unknown): boolean {
   if (value === null || value === undefined) return false;
-  if (typeof value === 'string') return value.trim().length > 0;
+  // Empty string IS a deliberate answer (user saw the field and left it blank).
+  // This allows optional fields to be considered "answered" when submitted empty.
+  // Contrast with `undefined` which means "never set" and `null` which means "explicitly unset".
+  if (typeof value === 'string') return true;
   if (typeof value === 'boolean') return true; // false is a deliberate answer (mapped-module-audit)
   if (typeof value === 'number') return true;
   if (Array.isArray(value)) return value.length > 0;

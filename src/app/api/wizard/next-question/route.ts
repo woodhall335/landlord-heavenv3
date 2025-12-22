@@ -56,7 +56,9 @@ function isQuestionAnswered(
     return question.maps_to.every((path) => {
       const value = getValueAtPath(facts, path);
       if (value === null || value === undefined) return false;
-      if (typeof value === 'string') return value.trim().length > 0;
+      // Empty string IS a deliberate answer (user saw the field and left it blank).
+      // This allows optional fields to be considered "answered" when submitted empty.
+      if (typeof value === 'string') return true;
       return true;
     });
   }
@@ -64,7 +66,8 @@ function isQuestionAnswered(
   // For questions without maps_to, check if answered directly by question ID
   const fallbackValue = facts[question.id];
   if (fallbackValue === null || fallbackValue === undefined) return false;
-  if (typeof fallbackValue === 'string') return fallbackValue.trim().length > 0;
+  // Empty string IS a deliberate answer
+  if (typeof fallbackValue === 'string') return true;
   return true;
 }
 

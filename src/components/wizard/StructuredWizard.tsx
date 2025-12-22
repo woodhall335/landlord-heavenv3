@@ -354,13 +354,37 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     setPastServiceDateWarning(null); // Clear past service date warning when question changes
 
     if (question.inputType === 'group' && question.fields) {
+      // Initialize ALL fields with their default values or empty string
+      // This ensures optional fields are included in the answer object when submitted,
+      // which is necessary for `getNextMQSQuestion` to see the question as answered.
+      // Without this, optional fields that the user never edits would be missing,
+      // causing the wizard to appear "stuck" on the same question.
       const defaults: Record<string, any> = {};
       question.fields.forEach((field: any) => {
         if (field.defaultValue !== undefined) {
           defaults[field.id] = field.defaultValue;
+        } else {
+          // Initialize with appropriate empty value based on input type
+          switch (field.inputType) {
+            case 'yes_no':
+            case 'boolean':
+              // Leave undefined - user must explicitly choose
+              break;
+            case 'number':
+            case 'currency':
+              defaults[field.id] = '';
+              break;
+            case 'multiselect':
+            case 'checkbox_group':
+              defaults[field.id] = [];
+              break;
+            default:
+              // text, textarea, date, tel, email, select, etc.
+              defaults[field.id] = '';
+          }
         }
       });
-      setCurrentAnswer(Object.keys(defaults).length > 0 ? defaults : null);
+      setCurrentAnswer(defaults);
     } else if (question.inputType === 'upload' || question.inputType === 'file_upload') {
       setCurrentAnswer({ uploaded_document_ids: [], file_count: 0 });
     } else {
