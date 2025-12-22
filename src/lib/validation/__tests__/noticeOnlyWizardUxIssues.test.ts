@@ -713,3 +713,336 @@ describe('PHASE 2: Validation uses server-updated facts', () => {
     expect(result.routeInvalidatingIssues).toHaveLength(0);
   });
 });
+
+// ============================================================================
+// PHASE 7: REGRESSION TESTS for modal validation fix
+// These tests verify that modals ONLY appear when explicit disqualifying answers
+// are saved, NOT when facts are merely missing/unanswered.
+// ============================================================================
+
+describe('Modal validation fix: explicit disqualifying answers only', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Default mocks that simulate potential issues being returned
+    mockRunDecisionEngine.mockReturnValue({
+      recommended_routes: ['section_21', 'section_8'],
+      allowed_routes: ['section_21', 'section_8'],
+      blocked_routes: [],
+      recommended_grounds: [],
+      notice_period_suggestions: {},
+      pre_action_requirements: { required: false, met: null, details: [] },
+      blocking_issues: [],
+      warnings: [],
+      analysis_summary: '',
+      route_explanations: {},
+    });
+  });
+
+  describe('Deposit protection scenarios', () => {
+    it('should NOT produce routeInvalidatingIssues when saving deposit_taken=true (undefined deposit_protected)', () => {
+      // Simulate compliance evaluator detecting missing deposit protection
+      mockEvaluateNoticeCompliance.mockReturnValue({
+        ok: false,
+        hardFailures: [{
+          code: 'S21-DEPOSIT-NONCOMPLIANT',
+          affected_question_id: 'deposit_protected_scheme',
+          legal_reason: 'Confirm whether the deposit is protected',
+          user_fix_hint: 'Answer the deposit protection question to continue',
+        }],
+        warnings: [],
+      });
+
+      const input: WizardUxIssuesInput = {
+        jurisdiction: 'england',
+        route: 'section_21',
+        savedFacts: {
+          deposit_taken: true,
+          // deposit_protected is UNDEFINED - not answered yet
+        },
+        lastSavedQuestionIds: ['deposit_taken'],
+      };
+
+      const result = extractWizardUxIssues(input);
+
+      // Should NOT have route-invalidating issues (deposit_protected is undefined, not false)
+      expect(result.routeInvalidatingIssues).toHaveLength(0);
+
+      // Should have it as missing guidance instead
+      expect(result.missingRequiredForCurrentRoute.some(m =>
+        m.code === 'S21-DEPOSIT-NONCOMPLIANT' || m.questionId === 'deposit_protected_scheme'
+      )).toBe(true);
+    });
+
+    it('should PRODUCE routeInvalidatingIssues when saving deposit_protected=false', () => {
+      mockEvaluateNoticeCompliance.mockReturnValue({
+        ok: false,
+        hardFailures: [{
+          code: 'S21-DEPOSIT-NONCOMPLIANT',
+          affected_question_id: 'deposit_protected_scheme',
+          legal_reason: 'Deposit must be protected before a Section 21 notice',
+          user_fix_hint: 'Protect the deposit in an approved scheme before continuing',
+        }],
+        warnings: [],
+      });
+
+      const input: WizardUxIssuesInput = {
+        jurisdiction: 'england',
+        route: 'section_21',
+        savedFacts: {
+          deposit_taken: true,
+          deposit_protected: false, // EXPLICIT disqualifying answer
+        },
+        lastSavedQuestionIds: ['deposit_protected_scheme'],
+      };
+
+      const result = extractWizardUxIssues(input);
+
+      // Should have route-invalidating issue
+      expect(result.routeInvalidatingIssues).toHaveLength(1);
+      expect(result.routeInvalidatingIssues[0].code).toBe('S21-DEPOSIT-NONCOMPLIANT');
+      expect(result.routeInvalidatingIssues[0].affectedQuestionId).toBe('deposit_protected_scheme');
+    });
+
+    it('should NOT produce modal when deposit_protected is undefined even with deposit_taken=true already set', () => {
+      mockEvaluateNoticeCompliance.mockReturnValue({
+        ok: false,
+        hardFailures: [{
+          code: 'S21-DEPOSIT-NONCOMPLIANT',
+          affected_question_id: 'deposit_protected_scheme',
+          legal_reason: 'Deposit protection not confirmed',
+          user_fix_hint: 'Answer the deposit protection question to continue',
+        }],
+        warnings: [],
+      });
+
+      const input: WizardUxIssuesInput = {
+        jurisdiction: 'england',
+        route: 'section_21',
+        savedFacts: {
+          deposit_taken: true,
+          deposit_protected: undefined, // Not yet answered
+          // Saving an unrelated step
+          epc_provided: true,
+        },
+        lastSavedQuestionIds: ['epc_provided'],
+      };
+
+      const result = extractWizardUxIssues(input);
+
+      // Should NOT have route-invalidating issues
+      expect(result.routeInvalidatingIssues).toHaveLength(0);
+    });
+  });
+
+  describe('Gas safety scenarios', () => {
+    it('should NOT produce routeInvalidatingIssues when saving has_gas_appliances=true (undefined gas_certificate)', () => {
+      mockEvaluateNoticeCompliance.mockReturnValue({
+        ok: false,
+        hardFailures: [{
+          code: 'S21-GAS-CERT',
+          affected_question_id: 'gas_safety_certificate',
+          legal_reason: 'Confirm gas safety certificate status',
+          user_fix_hint: 'Answer whether a valid gas safety certificate was provided',
+        }],
+        warnings: [],
+      });
+
+      const input: WizardUxIssuesInput = {
+        jurisdiction: 'england',
+        route: 'section_21',
+        savedFacts: {
+          has_gas_appliances: true,
+          // gas_certificate_provided is UNDEFINED - not answered yet
+        },
+        lastSavedQuestionIds: ['has_gas_appliances'],
+      };
+
+      const result = extractWizardUxIssues(input);
+
+      // Should NOT have route-invalidating issues (gas_certificate_provided is undefined, not false)
+      expect(result.routeInvalidatingIssues).toHaveLength(0);
+
+      // Should have it as missing guidance instead
+      expect(result.missingRequiredForCurrentRoute.some(m =>
+        m.code === 'S21-GAS-CERT' || m.questionId === 'gas_safety_certificate'
+      )).toBe(true);
+    });
+
+    it('should PRODUCE routeInvalidatingIssues when saving gas_certificate_provided=false', () => {
+      mockEvaluateNoticeCompliance.mockReturnValue({
+        ok: false,
+        hardFailures: [{
+          code: 'S21-GAS-CERT',
+          affected_question_id: 'gas_safety_certificate',
+          legal_reason: 'Gas safety certificate must be provided before serving Section 21',
+          user_fix_hint: 'Confirm the latest gas safety record before continuing',
+        }],
+        warnings: [],
+      });
+
+      const input: WizardUxIssuesInput = {
+        jurisdiction: 'england',
+        route: 'section_21',
+        savedFacts: {
+          has_gas_appliances: true,
+          gas_certificate_provided: false, // EXPLICIT disqualifying answer
+        },
+        lastSavedQuestionIds: ['gas_safety_certificate'],
+      };
+
+      const result = extractWizardUxIssues(input);
+
+      // Should have route-invalidating issue
+      expect(result.routeInvalidatingIssues).toHaveLength(1);
+      expect(result.routeInvalidatingIssues[0].code).toBe('S21-GAS-CERT');
+      expect(result.routeInvalidatingIssues[0].affectedQuestionId).toBe('gas_safety_certificate');
+    });
+  });
+
+  describe('EPC and How to Rent scenarios', () => {
+    it('should PRODUCE routeInvalidatingIssues when saving epc_provided=false', () => {
+      mockEvaluateNoticeCompliance.mockReturnValue({
+        ok: false,
+        hardFailures: [{
+          code: 'S21-EPC',
+          affected_question_id: 'epc_provided',
+          legal_reason: 'An EPC must be provided before serving Section 21',
+          user_fix_hint: 'Confirm EPC has been provided to the tenant',
+        }],
+        warnings: [],
+      });
+
+      const input: WizardUxIssuesInput = {
+        jurisdiction: 'england',
+        route: 'section_21',
+        savedFacts: {
+          epc_provided: false, // EXPLICIT disqualifying answer
+        },
+        lastSavedQuestionIds: ['epc_provided'],
+      };
+
+      const result = extractWizardUxIssues(input);
+
+      expect(result.routeInvalidatingIssues).toHaveLength(1);
+      expect(result.routeInvalidatingIssues[0].code).toBe('S21-EPC');
+    });
+
+    it('should PRODUCE routeInvalidatingIssues when saving how_to_rent_provided=false', () => {
+      mockEvaluateNoticeCompliance.mockReturnValue({
+        ok: false,
+        hardFailures: [{
+          code: 'S21-H2R',
+          affected_question_id: 'how_to_rent_provided',
+          legal_reason: 'The latest How to Rent guide must be provided before serving Section 21',
+          user_fix_hint: 'Provide the How to Rent guide and confirm service before continuing',
+        }],
+        warnings: [],
+      });
+
+      const input: WizardUxIssuesInput = {
+        jurisdiction: 'england',
+        route: 'section_21',
+        savedFacts: {
+          how_to_rent_provided: false, // EXPLICIT disqualifying answer
+        },
+        lastSavedQuestionIds: ['how_to_rent_provided'],
+      };
+
+      const result = extractWizardUxIssues(input);
+
+      expect(result.routeInvalidatingIssues).toHaveLength(1);
+      expect(result.routeInvalidatingIssues[0].code).toBe('S21-H2R');
+    });
+  });
+
+  describe('Missing facts should be guidance only', () => {
+    it('should classify missing deposit_protected as missingRequiredForCurrentRoute, not routeInvalidating', () => {
+      mockEvaluateNoticeCompliance.mockReturnValue({
+        ok: false,
+        hardFailures: [{
+          code: 'S21-DEPOSIT-NONCOMPLIANT',
+          affected_question_id: 'deposit_protected_scheme',
+          legal_reason: 'Confirm deposit protection status',
+          user_fix_hint: 'Answer the deposit protection question to continue',
+        }],
+        warnings: [],
+      });
+
+      const input: WizardUxIssuesInput = {
+        jurisdiction: 'england',
+        route: 'section_21',
+        savedFacts: {
+          deposit_taken: true,
+          deposit_protected: undefined, // Missing - not answered
+        },
+        lastSavedQuestionIds: ['deposit_taken'],
+      };
+
+      const result = extractWizardUxIssues(input);
+
+      // No modal (routeInvalidating)
+      expect(result.routeInvalidatingIssues).toHaveLength(0);
+
+      // But guidance is present
+      expect(result.missingRequiredForCurrentRoute.length).toBeGreaterThan(0);
+    });
+
+    it('should NOT block when user saves unrelated step and deposit is missing', () => {
+      mockEvaluateNoticeCompliance.mockReturnValue({
+        ok: false,
+        hardFailures: [{
+          code: 'S21-DEPOSIT-NONCOMPLIANT',
+          affected_question_id: 'deposit_protected_scheme',
+          legal_reason: 'Deposit protection required',
+          user_fix_hint: 'Answer the deposit protection question to continue',
+        }],
+        warnings: [],
+      });
+
+      const input: WizardUxIssuesInput = {
+        jurisdiction: 'england',
+        route: 'section_21',
+        savedFacts: {
+          deposit_taken: true,
+          deposit_protected: undefined, // Missing
+          how_to_rent_provided: true, // Saving this unrelated step
+        },
+        lastSavedQuestionIds: ['how_to_rent_provided'],
+      };
+
+      const result = extractWizardUxIssues(input);
+
+      // Should NOT have route-invalidating issues for unrelated save
+      expect(result.routeInvalidatingIssues).toHaveLength(0);
+    });
+  });
+
+  describe('Licensing scenarios', () => {
+    it('should PRODUCE routeInvalidatingIssues when property_licensing_status=unlicensed', () => {
+      mockEvaluateNoticeCompliance.mockReturnValue({
+        ok: false,
+        hardFailures: [{
+          code: 'S21-LICENSING',
+          affected_question_id: 'property_licensing',
+          legal_reason: 'Section 21 cannot be used while the property remains unlicensed',
+          user_fix_hint: 'Record a valid licence or resolve the licensing position to proceed',
+        }],
+        warnings: [],
+      });
+
+      const input: WizardUxIssuesInput = {
+        jurisdiction: 'england',
+        route: 'section_21',
+        savedFacts: {
+          property_licensing_status: 'unlicensed', // EXPLICIT disqualifying answer
+        },
+        lastSavedQuestionIds: ['property_licensing'],
+      };
+
+      const result = extractWizardUxIssues(input);
+
+      expect(result.routeInvalidatingIssues).toHaveLength(1);
+      expect(result.routeInvalidatingIssues[0].code).toBe('S21-LICENSING');
+    });
+  });
+});
