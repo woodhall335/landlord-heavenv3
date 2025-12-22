@@ -13,6 +13,7 @@ import {
   loadMQS,
   normalizeAskOnceFacts,
   questionIsApplicable,
+  isQuestionAnsweredForMQS,
   type MasterQuestionSet,
   type ProductType,
 } from '@/lib/wizard/mqs-loader';
@@ -28,6 +29,17 @@ import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+// ==============================================================================
+// PHASE 1: DEBUG INSTRUMENTATION (behind NOTICE_ONLY_DEBUG=1 env flag)
+// ==============================================================================
+const NOTICE_ONLY_DEBUG = process.env.NOTICE_ONLY_DEBUG === '1';
+
+function debugLog(context: string, data: Record<string, any>) {
+  if (NOTICE_ONLY_DEBUG) {
+    console.log(`[NOTICE-ONLY-DEBUG] [/api/wizard/next-question] [${context}]`, JSON.stringify(data, null, 2));
+  }
+}
+
 type CaseRow = {
   id: string;
   jurisdiction: string;
@@ -37,7 +49,16 @@ type CaseRow = {
   wizard_completed_at: string | null;
 };
 
+/**
+ * Helper to get value at a dot-notation path from facts.
+ * Used for debug logging.
+ */
 function getValueAtPath(facts: Record<string, any>, path: string): unknown {
+  // First check if the full path is a flat key
+  if (Object.prototype.hasOwnProperty.call(facts, path)) {
+    return facts[path];
+  }
+  // Then try nested traversal
   return path
     .split('.')
     .filter(Boolean)
@@ -48,24 +69,14 @@ function getValueAtPath(facts: Record<string, any>, path: string): unknown {
     }, facts);
 }
 
+// NOTE: isQuestionAnswered logic is now consolidated in isQuestionAnsweredForMQS
+// which is imported from @/lib/wizard/mqs-loader to avoid duplication.
+// Local alias for backwards compatibility in this file:
 function isQuestionAnswered(
   question: ExtendedWizardQuestion,
   facts: Record<string, any>
 ): boolean {
-  if (question.maps_to && question.maps_to.length > 0) {
-    return question.maps_to.every((path) => {
-      const value = getValueAtPath(facts, path);
-      if (value === null || value === undefined) return false;
-      if (typeof value === 'string') return value.trim().length > 0;
-      return true;
-    });
-  }
-
-  // For questions without maps_to, check if answered directly by question ID
-  const fallbackValue = facts[question.id];
-  if (fallbackValue === null || fallbackValue === undefined) return false;
-  if (typeof fallbackValue === 'string') return fallbackValue.trim().length > 0;
-  return true;
+  return isQuestionAnsweredForMQS(question, facts);
 }
 
 function deriveProduct(
@@ -304,7 +315,47 @@ export async function POST(request: Request) {
       });
     }
 
+    // PHASE 1: Debug instrumentation - log current state before finding next question
+    debugLog('BeforeGetNext', {
+      case_id,
+      current_question_id: current_question_id || null,
+      product,
+      jurisdiction: canonicalJurisdiction,
+    });
+
     let nextQuestion = getNextMQSQuestion(mqs, hydratedFacts);
+
+    // PHASE 1: Debug instrumentation - analyze why we got this next question
+    if (NOTICE_ONLY_DEBUG && current_question_id) {
+      const currentQ = mqs.questions.find(q => q.id === current_question_id);
+      if (currentQ) {
+        const answeredResults: Record<string, { value: any; isAnswered: boolean }> = {};
+        if (currentQ.maps_to && currentQ.maps_to.length > 0) {
+          for (const path of currentQ.maps_to) {
+            const value = getValueAtPath(hydratedFacts, path);
+            answeredResults[path] = {
+              value,
+              isAnswered: value !== null && value !== undefined && (typeof value !== 'string' || value.trim().length > 0),
+            };
+          }
+        }
+        const isCurrentAnswered = isQuestionAnswered(currentQ, hydratedFacts);
+        debugLog('CurrentQuestionAnalysis', {
+          current_question_id,
+          is_answered: isCurrentAnswered,
+          maps_to_analysis: answeredResults,
+          inputType: currentQ.inputType,
+          fields_count: currentQ.fields?.length || 0,
+        });
+      }
+    }
+
+    debugLog('NextQuestionResult', {
+      case_id,
+      current_question_id: current_question_id || null,
+      next_question_id: nextQuestion?.id || null,
+      is_same_question: current_question_id === nextQuestion?.id,
+    });
 
     // Auto-mark info-type questions as "viewed" so they don't get returned again
     if (nextQuestion && nextQuestion.inputType === 'info') {

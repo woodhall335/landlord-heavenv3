@@ -840,4 +840,62 @@ describe('wizardFactsToCaseFacts', () => {
       expect(result.money_claim.solicitor_costs).toBeNull();
     });
   });
+
+  // =============================================================================
+  // KNOWN STRUCTURES - Verify notice and service_contact are recognized
+  // =============================================================================
+  // These tests verify that notice and service_contact are in the knownStructures
+  // list and won't trigger "unexpected object" warnings during normalization.
+
+  describe('Known Structures - notice and service_contact', () => {
+    test('should produce CaseFacts with notice as a proper nested structure', () => {
+      const wizard: WizardFacts = {
+        notice_type: 'section_8',
+        notice_date: '2024-03-01',
+        notice_expiry_date: '2024-05-01',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      // notice should be a proper nested object (not flattened/stringified)
+      expect(result.notice).toBeDefined();
+      expect(typeof result.notice).toBe('object');
+      expect(result.notice).not.toBeNull();
+      expect(result.notice.notice_type).toBe('section_8');
+      expect(result.notice.notice_date).toBe('2024-03-01');
+    });
+
+    test('should produce CaseFacts with service_contact as a proper nested structure', () => {
+      const wizard: WizardFacts = {
+        service_name: 'Legal Services Ltd',
+        service_email: 'service@legal.com',
+        service_phone: '020 5555 4444',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      // service_contact should be a proper nested object (not flattened/stringified)
+      expect(result.service_contact).toBeDefined();
+      expect(typeof result.service_contact).toBe('object');
+      expect(result.service_contact).not.toBeNull();
+      expect(result.service_contact.service_name).toBe('Legal Services Ltd');
+    });
+
+    test('should NOT flatten notice or service_contact to strings', () => {
+      const wizard: WizardFacts = {
+        notice_type: 'section_21',
+        service_name: 'Agent Ltd',
+      };
+
+      const result = wizardFactsToCaseFacts(wizard);
+
+      // Verify they are objects, not strings (which would happen if they were flattened)
+      expect(typeof result.notice).toBe('object');
+      expect(typeof result.service_contact).toBe('object');
+
+      // Make sure they're not JSON strings
+      expect(typeof (result as any).notice).not.toBe('string');
+      expect(typeof (result as any).service_contact).not.toBe('string');
+    });
+  });
 });

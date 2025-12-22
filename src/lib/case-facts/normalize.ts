@@ -1631,6 +1631,8 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
         'eviction',
         'meta',
         'case_health',
+        'notice',           // CaseFacts.notice (NoticeFacts)
+        'service_contact',  // CaseFacts.service_contact (ServiceContactFacts)
       ];
 
       if (knownStructures.includes(key)) {
