@@ -319,6 +319,11 @@ export async function GET(
 
     const documents: NoticeOnlyDocument[] = [];
 
+    // Track whether the core notice document was generated successfully
+    // If the notice fails, we MUST abort - partial previews are legally dangerous
+    let coreNoticeGenerated = false;
+    let coreNoticeError: Error | null = null;
+
     // ===========================================================================
     // ENGLAND NOTICE ONLY PACK
     // ===========================================================================
@@ -501,6 +506,7 @@ export async function GET(
       });
 
       // 1. Generate notice (Section 8 or Section 21)
+      // CRITICAL: If the core notice fails, we MUST abort the entire preview
       if (selected_route === 'section_8') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 8 notice');
         try {
@@ -516,9 +522,13 @@ export async function GET(
               category: 'notice',
               pdf: section8Doc.pdf,
             });
+            coreNoticeGenerated = true;
+          } else {
+            coreNoticeError = new Error('Section 8 notice PDF was not generated');
           }
-        } catch (err) {
+        } catch (err: any) {
           console.error('[NOTICE-PREVIEW-API] Section 8 generation failed:', err);
+          coreNoticeError = err;
         }
       } else if (selected_route === 'section_21') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 21 notice');
@@ -559,9 +569,13 @@ export async function GET(
               category: 'notice',
               pdf: section21Doc.pdf,
             });
+            coreNoticeGenerated = true;
+          } else {
+            coreNoticeError = new Error('Section 21 notice PDF was not generated');
           }
-        } catch (err) {
+        } catch (err: any) {
           console.error('[NOTICE-PREVIEW-API] Section 21 generation failed:', err);
+          coreNoticeError = err;
         }
       }
 
@@ -666,6 +680,7 @@ export async function GET(
       });
 
       // 1. Generate notice (Section 173 or fault-based)
+      // CRITICAL: If the core notice fails, we MUST abort the entire preview
       if (selected_route === 'wales_section_173') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 173 notice');
         try {
@@ -698,9 +713,13 @@ export async function GET(
               category: 'notice',
               pdf: section173Doc.pdf,
             });
+            coreNoticeGenerated = true;
+          } else {
+            coreNoticeError = new Error('Section 173 notice PDF was not generated');
           }
-        } catch (err) {
+        } catch (err: any) {
           console.error('[NOTICE-PREVIEW-API] Section 173 generation failed:', err);
+          coreNoticeError = err;
         }
       } else if (selected_route === 'wales_fault_based') {
         console.log('[NOTICE-PREVIEW-API] Generating Wales fault-based notice (RHW23)');
@@ -771,9 +790,13 @@ export async function GET(
               category: 'notice',
               pdf: faultDoc.pdf,
             });
+            coreNoticeGenerated = true;
+          } else {
+            coreNoticeError = new Error('Wales fault-based notice PDF was not generated');
           }
-        } catch (err) {
+        } catch (err: any) {
           console.error('[NOTICE-PREVIEW-API] Wales fault-based generation failed:', err);
+          coreNoticeError = err;
         }
       }
 
@@ -935,6 +958,7 @@ export async function GET(
       });
 
       // 1. Generate Notice to Leave
+      // CRITICAL: If the core notice fails, we MUST abort the entire preview
       console.log('[NOTICE-PREVIEW-API] Generating Notice to Leave');
       try {
         const noticeDoc = await generateDocument({
@@ -950,9 +974,13 @@ export async function GET(
             category: 'notice',
             pdf: noticeDoc.pdf,
           });
+          coreNoticeGenerated = true;
+        } else {
+          coreNoticeError = new Error('Notice to Leave PDF was not generated');
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error('[NOTICE-PREVIEW-API] Notice to Leave generation failed:', err);
+        coreNoticeError = err;
       }
 
       // 2. Generate route-specific service instructions (Scotland - Notice to Leave)
@@ -994,6 +1022,31 @@ export async function GET(
       } catch (err) {
         console.error('[NOTICE-PREVIEW-API] Notice to Leave checklist generation failed:', err);
       }
+    }
+
+    // ===========================================================================
+    // ABORT IF CORE NOTICE FAILED - Partial previews are legally dangerous
+    // ===========================================================================
+    if (!coreNoticeGenerated) {
+      const errorMessage = coreNoticeError?.message || 'Core notice document failed to generate';
+      console.error('[NOTICE-PREVIEW-API] ABORTING: Core notice generation failed:', errorMessage);
+      console.error('[NOTICE-PREVIEW-API] Refusing to return partial preview (ancillary docs only)');
+
+      return NextResponse.json(
+        {
+          error: true,
+          code: 'NOTICE_GENERATION_FAILED',
+          message: 'Failed to generate the notice document. Preview cannot be created.',
+          user_message: 'We were unable to generate your notice document. Please try again. If the problem persists, contact support.',
+          details: errorMessage,
+          jurisdiction,
+          route: selected_route,
+          case_id: caseId,
+          // Indicate this is a retryable error
+          retryable: true,
+        },
+        { status: 503 } // Service Unavailable - indicates temporary failure
+      );
     }
 
     // ===========================================================================
