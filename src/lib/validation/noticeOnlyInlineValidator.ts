@@ -765,7 +765,7 @@ function getAffectedQuestionId(issueCode: string): string | undefined {
     // ==========================================================================
     rent_smart_not_registered: 'rent_smart_wales_registered',
     rsw_registration_required: 'rent_smart_wales_registered',
-    licensing: 'rent_smart_wales_registered',
+    wales_licensing: 'rent_smart_wales_registered',
     contract_type_incompatible: 'wales_contract_category',
     supported_contract_s173_blocked: 'wales_contract_category',
     secure_contract_s173_blocked: 'wales_contract_category',

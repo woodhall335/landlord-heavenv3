@@ -186,6 +186,38 @@ describe('clearDependentFacts', () => {
     });
   });
 
+  describe('deposit_protected (canonical fact) clearing', () => {
+    it('clears prescribed_info when deposit_protected becomes false', () => {
+      // This tests the canonical fact path used when MQS maps_to is used
+      const facts = {
+        deposit_taken: true,
+        deposit_protected: true,
+        prescribed_info_given: true,
+        prescribed_info_provided: true,
+        deposit_amount: 1500,  // should remain
+      };
+
+      const result = clearDependentFacts(facts, 'deposit_protected', false);
+
+      expect(result.prescribed_info_given).toBeUndefined();
+      expect(result.prescribed_info_provided).toBeUndefined();
+      expect(result.deposit_amount).toBe(1500);
+      expect(result.deposit_taken).toBe(true);
+    });
+
+    it('does not clear prescribed_info when deposit_protected is true', () => {
+      const facts = {
+        deposit_taken: true,
+        deposit_protected: false,
+        prescribed_info_given: true,
+      };
+
+      const result = clearDependentFacts(facts, 'deposit_protected', true);
+
+      expect(result.prescribed_info_given).toBe(true);
+    });
+  });
+
   describe('batchClearDependentFacts', () => {
     it('clears multiple dependent facts from multiple changes', () => {
       const facts = {
