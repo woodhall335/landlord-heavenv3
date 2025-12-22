@@ -46,12 +46,20 @@ questions:
         validation:
           required: true
         width: half
+      # Telephone: Optional - NOT legally mandatory but renders if provided
+      - id: landlord_phone
+        label: "Telephone (optional)"
+        inputType: tel
+        placeholder: "e.g. 020 1234 5678"
+        width: half
+        helperText: "Optional contact number for the notice form"
     maps_to:
       - landlord_full_name
       - landlord_address_line1
       - landlord_address_line2
       - landlord_city
       - landlord_postcode
+      - landlord_phone
 
   # TASK B: Route selection EARLY (before route-dependent questions)
   - id: selected_notice_route

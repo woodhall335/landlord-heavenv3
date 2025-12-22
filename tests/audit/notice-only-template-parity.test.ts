@@ -722,3 +722,228 @@ describe('AUDIT: Date Format Consistency', () => {
     expect(result.html).toContain('03/04/2025');
   });
 });
+
+// ============================================================================
+// NON-MANDATORY PRESCRIBED FORM FIELDS (TELEPHONE)
+// Task: Verify optional fields render when provided, don't block when absent
+// ============================================================================
+
+describe('AUDIT: Non-Mandatory Prescribed Form Fields (Telephone)', () => {
+  describe('landlord_phone renders correctly when provided', () => {
+    it('Scotland NTL: landlord_phone appears in output when provided', async () => {
+      const scotlandSupported = isFlowSupported('scotland', 'notice_only', 'notice_to_leave');
+      if (!scotlandSupported) {
+        console.log('[AUDIT] Scotland NTL not supported - skipping telephone test');
+        return;
+      }
+
+      const testData = {
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '1 Princes Street, Edinburgh, EH2 4AA',
+        landlord_phone: '0131 555 1234', // TELEPHONE PROVIDED
+        tenant_full_name: 'Test Tenant',
+        property_address: '1 Rose Street, Edinburgh, EH2 2NG',
+        notice_date: '2025-01-15',
+        earliest_leaving_date: '2025-02-12',
+        earliest_tribunal_date: '2025-02-12',
+        notice_period_days: 28 as const,
+        pre_action_completed: true,
+        grounds: [
+          {
+            number: 1,
+            title: 'Rent Arrears',
+            legal_basis: 'Private Housing (Tenancies) (Scotland) Act 2016, Schedule 3, Ground 1',
+            particulars: 'Tenant owes rent arrears',
+          },
+        ],
+      };
+
+      const result = await generateNoticeToLeave(testData, false, 'html');
+
+      // Telephone should appear in output
+      expect(result.html).toContain('0131 555 1234');
+    });
+
+    it('Section 8: generator accepts landlord_phone without error', async () => {
+      const testData = {
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '1 Landlord Street, London, SW1A 1AA',
+        landlord_phone: '020 7946 0958', // TELEPHONE PROVIDED
+        tenant_full_name: 'Test Tenant',
+        property_address: '1 Property Street, London, E1 1AA',
+        tenancy_start_date: '2024-01-01',
+        rent_amount: 1200,
+        rent_frequency: 'monthly' as const,
+        payment_date: 1,
+        grounds: [
+          {
+            code: 8,
+            title: 'Serious rent arrears',
+            legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
+            particulars: 'Tenant owes more than 2 months rent',
+            mandatory: true,
+          },
+        ],
+        service_date: '2025-01-15',
+        earliest_possession_date: '2025-01-29',
+        notice_period_days: 14,
+        any_mandatory_ground: true,
+        any_discretionary_ground: false,
+      };
+
+      // Should not throw
+      const result = await generateSection8Notice(testData as any, false);
+
+      // Output should be valid HTML
+      expect(result.html).toContain('Test Landlord');
+      expect(result.html).not.toContain('[object Object]');
+    });
+  });
+
+  describe('landlord_phone absence does not block or cause errors', () => {
+    it('Scotland NTL: works without landlord_phone', async () => {
+      const scotlandSupported = isFlowSupported('scotland', 'notice_only', 'notice_to_leave');
+      if (!scotlandSupported) {
+        console.log('[AUDIT] Scotland NTL not supported - skipping absence test');
+        return;
+      }
+
+      const testData = {
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '1 Princes Street, Edinburgh, EH2 4AA',
+        // NO landlord_phone provided
+        tenant_full_name: 'Test Tenant',
+        property_address: '1 Rose Street, Edinburgh, EH2 2NG',
+        notice_date: '2025-01-15',
+        earliest_leaving_date: '2025-02-12',
+        earliest_tribunal_date: '2025-02-12',
+        notice_period_days: 28 as const,
+        pre_action_completed: true,
+        grounds: [
+          {
+            number: 1,
+            title: 'Rent Arrears',
+            legal_basis: 'Private Housing (Tenancies) (Scotland) Act 2016',
+            particulars: 'Arrears',
+          },
+        ],
+      };
+
+      // Should not throw
+      const result = await generateNoticeToLeave(testData, false, 'html');
+
+      // Valid output without artifacts
+      expect(result.html).toContain('Test Landlord');
+      expect(result.html).not.toContain('[object Object]');
+      expect(result.html).not.toContain('undefined');
+    });
+
+    it('Section 8: works without landlord_phone', async () => {
+      const testData = {
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '1 Landlord Street, London, SW1A 1AA',
+        // NO landlord_phone provided
+        tenant_full_name: 'Test Tenant',
+        property_address: '1 Property Street, London, E1 1AA',
+        tenancy_start_date: '2024-01-01',
+        rent_amount: 1200,
+        rent_frequency: 'monthly' as const,
+        payment_date: 1,
+        grounds: [
+          {
+            code: 8,
+            title: 'Serious rent arrears',
+            legal_basis: 'Housing Act 1988, Schedule 2, Ground 8',
+            particulars: 'Arrears',
+            mandatory: true,
+          },
+        ],
+        service_date: '2025-01-15',
+        earliest_possession_date: '2025-01-29',
+        notice_period_days: 14,
+        any_mandatory_ground: true,
+        any_discretionary_ground: false,
+      };
+
+      // Should not throw
+      const result = await generateSection8Notice(testData, false);
+
+      // Valid output without artifacts
+      expect(result.html).toContain('Test Landlord');
+      expect(result.html).not.toContain('[object Object]');
+      expect(result.html).not.toContain('undefined');
+    });
+  });
+
+  describe('Template variables do not reference undefined facts', () => {
+    it('Section 8: no undefined or null artifacts in output', async () => {
+      const testData = {
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '1 Street, London, SW1A 1AA',
+        tenant_full_name: 'Test Tenant',
+        property_address: '1 Road, London, E1 1AA',
+        tenancy_start_date: '2024-01-01',
+        rent_amount: 1200,
+        rent_frequency: 'monthly' as const,
+        payment_date: 1,
+        grounds: [
+          {
+            code: 8,
+            title: 'Arrears',
+            legal_basis: 'Housing Act',
+            particulars: 'Test',
+            mandatory: true,
+          },
+        ],
+        service_date: '2025-01-15',
+        earliest_possession_date: '2025-01-29',
+        notice_period_days: 14,
+        any_mandatory_ground: true,
+        any_discretionary_ground: false,
+      };
+
+      const result = await generateSection8Notice(testData, false);
+
+      // Check for common template variable errors
+      expect(result.html).not.toContain('undefined');
+      expect(result.html).not.toContain('null');
+      expect(result.html).not.toContain('[object Object]');
+      expect(result.html).not.toContain('{{'); // Unprocessed template variable
+      expect(result.html).not.toContain('}}');
+    });
+
+    it('Scotland NTL: no undefined or null artifacts in output', async () => {
+      const scotlandSupported = isFlowSupported('scotland', 'notice_only', 'notice_to_leave');
+      if (!scotlandSupported) {
+        return;
+      }
+
+      const testData = {
+        landlord_full_name: 'Test Landlord',
+        landlord_address: '1 Street, Edinburgh, EH1 1AA',
+        tenant_full_name: 'Test Tenant',
+        property_address: '1 Road, Edinburgh, EH2 2BB',
+        notice_date: '2025-01-15',
+        earliest_leaving_date: '2025-02-12',
+        earliest_tribunal_date: '2025-02-12',
+        notice_period_days: 28 as const,
+        pre_action_completed: true,
+        grounds: [
+          {
+            number: 1,
+            title: 'Rent arrears',
+            legal_basis: 'PRT Act 2016',
+            particulars: 'Arrears',
+          },
+        ],
+      };
+
+      const result = await generateNoticeToLeave(testData, false, 'html');
+
+      // Check for common template variable errors
+      expect(result.html).not.toContain('undefined');
+      expect(result.html).not.toContain('null');
+      expect(result.html).not.toContain('[object Object]');
+    });
+  });
+});

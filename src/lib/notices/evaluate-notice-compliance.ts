@@ -359,6 +359,49 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
           ['generate']
         );
       }
+
+      // -------------------------------------------------------------------------
+      // DEPOSIT CAP ENFORCEMENT (Tenant Fees Act 2019)
+      // 5 weeks rent max (or 6 weeks if annual rent > £50,000)
+      // This is BLOCKING for Section 21 unless landlord confirms refund/reduction
+      // -------------------------------------------------------------------------
+      const depositAmount = wizardFacts.deposit_amount ?? wizardFacts.tenancy?.deposit_amount;
+      const rentAmount = wizardFacts.rent_amount ?? wizardFacts.tenancy?.rent_amount;
+      const rentFrequency = wizardFacts.rent_frequency ?? wizardFacts.tenancy?.rent_frequency ?? 'monthly';
+
+      if (depositAmount && rentAmount && depositAmount > 0 && rentAmount > 0) {
+        // Calculate annual rent based on frequency
+        let annualRent = rentAmount * 12; // default monthly
+        if (rentFrequency === 'weekly') {
+          annualRent = rentAmount * 52;
+        } else if (rentFrequency === 'fortnightly') {
+          annualRent = rentAmount * 26;
+        } else if (rentFrequency === 'quarterly') {
+          annualRent = rentAmount * 4;
+        } else if (rentFrequency === 'yearly') {
+          annualRent = rentAmount;
+        }
+
+        // Calculate max deposit: 5 weeks (or 6 weeks if annual rent > £50k)
+        const weeklyRent = annualRent / 52;
+        const maxWeeks = annualRent > 50000 ? 6 : 5;
+        const maxDeposit = weeklyRent * maxWeeks;
+
+        if (depositAmount > maxDeposit) {
+          // Deposit exceeds cap - check for confirmation
+          const confirmationValue = wizardFacts.deposit_reduced_to_legal_cap_confirmed;
+          const isConfirmed = confirmationValue === 'yes' || confirmationValue === true;
+
+          if (!isConfirmed) {
+            pushStageIssue({
+              code: 'S21-DEPOSIT-CAP-EXCEEDED',
+              affected_question_id: 'deposit_reduced_to_legal_cap_confirmed',
+              legal_reason: `Deposit £${depositAmount.toFixed(2)} exceeds legal maximum of £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent). Tenant Fees Act 2019 requires refund/reduction before Section 21 is valid.`,
+              user_fix_hint: 'Confirm you have refunded/reduced the deposit to within the legal cap, or use Section 8 instead (deposit cap does not affect Section 8 validity).',
+            });
+          }
+        }
+      }
     }
 
     if (wizardFacts.property_licensing_status === 'unlicensed') {

@@ -15,6 +15,8 @@ import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 import { formatGroundTitle, getGroundTypeBadgeClasses, type GroundMetadata } from '@/lib/grounds/format-ground-title';
 import { apiUrl } from '@/lib/api';
+import { validateStepInline, type InlineValidationResult, type InlineGuidance } from '@/lib/validation/noticeOnlyInlineValidator';
+import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 
 // ====================================================================================
 // OPTION NORMALIZATION HELPER (FIX FOR [object Object] REACT ERRORS)
@@ -233,6 +235,26 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [issueCounts, setIssueCounts] = useState<{ blocking: number; warnings: number }>({ blocking: 0, warnings: 0 });
   // Service date validation warning
   const [pastServiceDateWarning, setPastServiceDateWarning] = useState<string | null>(null);
+
+  // ====================================================================================
+  // NOTICE-ONLY INLINE VALIDATION STATE (NEW - rebuilt from first principles)
+  // ====================================================================================
+  // This replaces the legacy wizardIssueFilter approach for notice-only products.
+  // Guidance is non-blocking, field errors block navigation.
+  // KEY: Validation fires ONLY after Save/Next, not while typing.
+  const [noticeOnlyGuidance, setNoticeOnlyGuidance] = useState<InlineGuidance[]>([]);
+  const [noticeOnlyRouteSuggestion, setNoticeOnlyRouteSuggestion] = useState<{
+    toRoute: string;
+    reason: string;
+  } | null>(null);
+  // Flow Not Available modal state
+  const [showFlowNotAvailableModal, setShowFlowNotAvailableModal] = useState(false);
+  const [flowNotAvailableDetails, setFlowNotAvailableDetails] = useState<{
+    blockedRoute: string;
+    reason: string;
+    legalBasis?: string;
+    alternativeRoutes: string[];
+  } | null>(null);
 
   const [calculatedDate, setCalculatedDate] = useState<{
     date: string;
@@ -771,6 +793,74 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       setDepositWarning(null);
     }
   }, [currentAnswer, currentQuestion, caseFacts]);
+
+  // ====================================================================================
+  // NOTICE-ONLY INLINE VALIDATION (NEW - rebuilt from first principles)
+  // ====================================================================================
+  // KEY PRINCIPLE: Validation fires ONLY after Save/Next, not while typing.
+  // This useEffect runs when a NEW question is loaded (after save), showing guidance
+  // based on ALREADY SAVED facts. It does NOT run on currentAnswer changes.
+  //
+  // Why? Users should not see validation errors for incomplete data while typing.
+  // Validation is only meaningful after the user commits their answer.
+  const runNoticeOnlyValidation = useCallback(async (savedFacts: Record<string, any>) => {
+    if (product !== 'notice_only' || !currentQuestion || !jurisdiction) {
+      setNoticeOnlyGuidance([]);
+      setNoticeOnlyRouteSuggestion(null);
+      return;
+    }
+
+    // Get the current route from case facts
+    const currentRoute = savedFacts.selected_notice_route ||
+      savedFacts.route_recommendation?.recommended_route ||
+      (jurisdiction === 'scotland' ? 'notice_to_leave' : 'section_8');
+
+    try {
+      const result = await validateStepInline({
+        jurisdiction: jurisdiction as CanonicalJurisdiction,
+        route: currentRoute,
+        msq: currentQuestion,
+        stepId: currentQuestion.id,
+        answers: {}, // Empty - we validate based on saved facts only
+        allFacts: savedFacts,
+        product: 'notice_only',
+      });
+
+      // Update guidance state
+      setNoticeOnlyGuidance(result.guidance);
+      setNoticeOnlyRouteSuggestion(result.routeSuggestion || null);
+
+      // Check if current route is blocked - trigger Flow Not Available modal
+      if (result.routeSuggestion) {
+        setFlowNotAvailableDetails({
+          blockedRoute: currentRoute,
+          reason: result.routeSuggestion.reason,
+          alternativeRoutes: [result.routeSuggestion.toRoute],
+        });
+        // Don't auto-show modal - let user see inline guidance first
+        // Modal is triggered by explicit action or severe blocking
+      }
+    } catch (error) {
+      console.error('[StructuredWizard] Notice-only inline validation error:', error);
+      setNoticeOnlyGuidance([]);
+      setNoticeOnlyRouteSuggestion(null);
+    }
+  }, [product, currentQuestion, jurisdiction]);
+
+  // Run validation when question changes (after save) or on initial load with saved data
+  useEffect(() => {
+    if (product !== 'notice_only') {
+      setNoticeOnlyGuidance([]);
+      setNoticeOnlyRouteSuggestion(null);
+      return;
+    }
+
+    // Only run if we have saved case facts to validate against
+    // This ensures we don't show errors for unanswered questions
+    if (Object.keys(caseFacts).length > 0) {
+      void runNoticeOnlyValidation(caseFacts);
+    }
+  }, [product, currentQuestion?.id, caseFacts, runNoticeOnlyValidation]);
 
   // EPC rating validation (England & Wales tenancies)
   useEffect(() => {
@@ -2897,99 +2987,186 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             )}
 
             {/* ============================================================================
-                INLINE VALIDATION ISSUES - PER-STEP WARNINGS (ALL MODES)
+                INLINE VALIDATION - PRODUCT-AWARE
                 ============================================================================
-                Display blocking issues and warnings that match the current question.
-                This surfaces compliance issues early across ALL notice-only wizards.
-                Key UX: Never block navigation - only warn early and persistently.
+                For notice_only: Use new inline validator (noticeOnlyGuidance)
+                For other products: Use legacy issue filtering (previewBlockingIssues, previewWarnings)
 
-                UX Rules:
-                - Show only AFTER user saves a step (issues are now filtered in API)
-                - Use friendly action phrases instead of raw fact keys
-                - Include "Why?" expandable with legal reason
+                Key UX: Never block navigation - only provide guidance.
             */}
-            {(() => {
-              // Filter issues that match the current question
-              const currentQuestionId = currentQuestion?.id;
-              const currentFields = currentQuestion?.maps_to || [currentQuestionId];
+            {product === 'notice_only' ? (
+              /* NOTICE-ONLY: New inline validation from noticeOnlyInlineValidator */
+              <>
+                {/* Route suggestion CTA - triggered ONLY after Save/Next when route is blocked */}
+                {noticeOnlyRouteSuggestion && (
+                  <div className="bg-amber-50 border-l-4 border-amber-500 rounded-r-lg p-4 mb-4">
+                    <div className="flex items-start gap-3">
+                      <span className="text-lg">⚠️</span>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-amber-900 mb-1">
+                          Current route may not be available
+                        </p>
+                        <p className="text-sm text-amber-700 mb-2">
+                          {noticeOnlyRouteSuggestion.reason}
+                        </p>
+                        <p className="text-sm text-amber-800 mb-3">
+                          <strong>{noticeOnlyRouteSuggestion.toRoute.replace(/_/g, ' ').replace(/section/i, 'Section ')}</strong> may be a better option.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setShowFlowNotAvailableModal(true)}
+                          className="text-xs font-medium text-amber-700 hover:text-amber-900 underline"
+                        >
+                          Learn more about why this route is blocked →
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
-              // Match issues to current question by affected_question_id or fields
-              const matchingBlockingIssues = previewBlockingIssues.filter(issue =>
-                issue.affected_question_id === currentQuestionId ||
-                issue.alternate_question_ids?.includes(currentQuestionId || '') ||
-                issue.fields?.some(field => currentFields?.includes(field))
-              );
+                {/* Inline guidance (non-blocking) */}
+                {noticeOnlyGuidance.length > 0 && (
+                  <div className={`${
+                    noticeOnlyGuidance.some(g => g.severity === 'warn')
+                      ? 'bg-amber-50 border-l-4 border-amber-400'
+                      : 'bg-blue-50 border-l-4 border-blue-400'
+                  } rounded-r-lg p-4 mb-4`}>
+                    <div className="flex items-start gap-3">
+                      <span className="text-lg">
+                        {noticeOnlyGuidance.some(g => g.severity === 'warn') ? '⚠️' : 'ℹ️'}
+                      </span>
+                      <div className="flex-1">
+                        <p className={`text-sm font-semibold mb-1 ${
+                          noticeOnlyGuidance.some(g => g.severity === 'warn')
+                            ? 'text-amber-900'
+                            : 'text-blue-900'
+                        }`}>
+                          Legal Guidance
+                        </p>
+                        <ul className={`text-sm space-y-2 mt-2 ${
+                          noticeOnlyGuidance.some(g => g.severity === 'warn')
+                            ? 'text-amber-700'
+                            : 'text-blue-700'
+                        }`}>
+                          {noticeOnlyGuidance.map((guidance, i) => (
+                            <li key={`guidance-${guidance.code || i}`} className="flex items-start gap-2">
+                              <span className={`mt-0.5 ${
+                                guidance.severity === 'warn' ? 'text-amber-500' : 'text-blue-500'
+                              }`}>•</span>
+                              <div className="flex-1">
+                                <span>{guidance.message}</span>
+                                {guidance.legalBasis && (
+                                  <details className="mt-1">
+                                    <summary className={`text-xs cursor-pointer ${
+                                      guidance.severity === 'warn'
+                                        ? 'text-amber-600 hover:text-amber-800'
+                                        : 'text-blue-600 hover:text-blue-800'
+                                    }`}>
+                                      Legal basis
+                                    </summary>
+                                    <p className={`text-xs mt-1 pl-2 border-l-2 ${
+                                      guidance.severity === 'warn'
+                                        ? 'text-amber-600 border-amber-200'
+                                        : 'text-blue-600 border-blue-200'
+                                    }`}>
+                                      {guidance.legalBasis}
+                                    </p>
+                                  </details>
+                                )}
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            ) : (
+              /* OTHER PRODUCTS: Legacy inline validation */
+              (() => {
+                // Filter issues that match the current question
+                const currentQuestionId = currentQuestion?.id;
+                const currentFields = currentQuestion?.maps_to || [currentQuestionId];
 
-              const matchingWarnings = previewWarnings.filter(issue =>
-                issue.affected_question_id === currentQuestionId ||
-                issue.alternate_question_ids?.includes(currentQuestionId || '') ||
-                issue.fields?.some(field => currentFields?.includes(field))
-              );
+                // Match issues to current question by affected_question_id or fields
+                const matchingBlockingIssues = previewBlockingIssues.filter(issue =>
+                  issue.affected_question_id === currentQuestionId ||
+                  issue.alternate_question_ids?.includes(currentQuestionId || '') ||
+                  issue.fields?.some(field => currentFields?.includes(field))
+                );
 
-              return (
-                <>
-                  {/* Inline blocking issues for current step */}
-                  {matchingBlockingIssues.length > 0 && (
-                    <div className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4 mb-4">
-                      <div className="flex items-start gap-3">
-                        <span className="text-lg">📋</span>
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-red-900 mb-1">
-                            Fix {matchingBlockingIssues.length === 1 ? 'this' : 'these'} before generating your notice
-                          </p>
-                          <ul className="text-sm text-red-700 space-y-2 mt-2">
-                            {matchingBlockingIssues.map((issue, i) => (
-                              <li key={`block-${issue.code}-${i}`} className="flex items-start gap-2">
-                                <span className="text-red-500 mt-0.5">•</span>
-                                <div className="flex-1">
-                                  <span className="font-medium">
+                const matchingWarnings = previewWarnings.filter(issue =>
+                  issue.affected_question_id === currentQuestionId ||
+                  issue.alternate_question_ids?.includes(currentQuestionId || '') ||
+                  issue.fields?.some(field => currentFields?.includes(field))
+                );
+
+                return (
+                  <>
+                    {/* Inline blocking issues for current step */}
+                    {matchingBlockingIssues.length > 0 && (
+                      <div className="bg-red-50 border-l-4 border-red-500 rounded-r-lg p-4 mb-4">
+                        <div className="flex items-start gap-3">
+                          <span className="text-lg">📋</span>
+                          <div className="flex-1">
+                            <p className="text-sm font-semibold text-red-900 mb-1">
+                              Fix {matchingBlockingIssues.length === 1 ? 'this' : 'these'} before generating your notice
+                            </p>
+                            <ul className="text-sm text-red-700 space-y-2 mt-2">
+                              {matchingBlockingIssues.map((issue, i) => (
+                                <li key={`block-${issue.code}-${i}`} className="flex items-start gap-2">
+                                  <span className="text-red-500 mt-0.5">•</span>
+                                  <div className="flex-1">
+                                    <span className="font-medium">
+                                      {(issue as any).friendlyAction || issue.user_fix_hint || issue.user_message}
+                                    </span>
+                                    {issue.legal_reason && (
+                                      <details className="mt-1">
+                                        <summary className="text-xs text-red-600 cursor-pointer hover:text-red-800">
+                                          Why?
+                                        </summary>
+                                        <p className="text-xs text-red-600 mt-1 pl-2 border-l-2 border-red-200">
+                                          {issue.legal_reason}
+                                        </p>
+                                      </details>
+                                    )}
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Inline warnings for current step */}
+                    {matchingWarnings.length > 0 && (
+                      <div className="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-4 mb-4">
+                        <div className="flex items-start gap-3">
+                          <span className="text-lg">💡</span>
+                          <div className="flex-1">
+                            <p className="text-sm font-semibold text-amber-900 mb-1">
+                              {matchingWarnings.length === 1 ? 'Recommendation' : 'Recommendations'}
+                            </p>
+                            <ul className="text-sm text-amber-700 space-y-1 mt-2">
+                              {matchingWarnings.map((issue, i) => (
+                                <li key={`warn-${issue.code}-${i}`} className="flex items-start gap-2">
+                                  <span className="text-amber-500 mt-0.5">•</span>
+                                  <span>
                                     {(issue as any).friendlyAction || issue.user_fix_hint || issue.user_message}
                                   </span>
-                                  {issue.legal_reason && (
-                                    <details className="mt-1">
-                                      <summary className="text-xs text-red-600 cursor-pointer hover:text-red-800">
-                                        Why?
-                                      </summary>
-                                      <p className="text-xs text-red-600 mt-1 pl-2 border-l-2 border-red-200">
-                                        {issue.legal_reason}
-                                      </p>
-                                    </details>
-                                  )}
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  )}
-
-                  {/* Inline warnings for current step */}
-                  {matchingWarnings.length > 0 && (
-                    <div className="bg-amber-50 border-l-4 border-amber-400 rounded-r-lg p-4 mb-4">
-                      <div className="flex items-start gap-3">
-                        <span className="text-lg">💡</span>
-                        <div className="flex-1">
-                          <p className="text-sm font-semibold text-amber-900 mb-1">
-                            {matchingWarnings.length === 1 ? 'Recommendation' : 'Recommendations'}
-                          </p>
-                          <ul className="text-sm text-amber-700 space-y-1 mt-2">
-                            {matchingWarnings.map((issue, i) => (
-                              <li key={`warn-${issue.code}-${i}`} className="flex items-start gap-2">
-                                <span className="text-amber-500 mt-0.5">•</span>
-                                <span>
-                                  {(issue as any).friendlyAction || issue.user_fix_hint || issue.user_message}
-                                </span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </>
-              );
-            })()}
+                    )}
+                  </>
+                );
+              })()
+            )}
 
             {/* Navigation */}
             <div className="flex gap-4">
@@ -3028,7 +3205,15 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               - "Why?" expandable section with legal reason
               - "Go to: [Question Label]" with friendly names
           */}
-          {(issueCounts.blocking > 0 || issueCounts.warnings > 0) && caseType === 'eviction' && (
+          {/*
+            RIGHT-SIDE VALIDATION PANEL - DISABLED FOR NOTICE-ONLY
+
+            Per the notice-only validation rebuild (docs/notice-only-rules-audit.md):
+            - Notice-only uses inline-only validation
+            - No right-side panel for notice_only products
+            - Other products (complete_pack) retain the right-side panel
+          */}
+          {(issueCounts.blocking > 0 || issueCounts.warnings > 0) && caseType === 'eviction' && product !== 'notice_only' && (
             <div className="hidden lg:block sticky top-4 z-10 mb-4">
               <Card className={`p-4 ${issueCounts.blocking > 0 ? 'border-red-300 bg-red-50' : 'border-amber-300 bg-amber-50'}`}>
                 <h3 className="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
@@ -3562,6 +3747,105 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           )}
         </aside>
       </div>
+
+      {/* ============================================================================
+          FLOW NOT AVAILABLE MODAL
+          ============================================================================
+          Triggered when the decision engine reports the current route is blocked.
+          Jurisdiction-aware, provides:
+          - Clear explanation of WHY the route is blocked
+          - Legal basis for the blocking rule
+          - Alternative routes available
+          - Actions needed to unblock the current route
+      */}
+      {showFlowNotAvailableModal && flowNotAvailableDetails && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-lg w-full shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div className="bg-red-50 border-b border-red-100 px-6 py-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-red-100 rounded-full">
+                  <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-lg font-bold text-red-900">
+                    {flowNotAvailableDetails.blockedRoute.replace(/_/g, ' ').replace(/section/i, 'Section ')} Not Available
+                  </h2>
+                  <p className="text-sm text-red-700">
+                    Based on your answers, this notice route cannot be used
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div className="px-6 py-5 space-y-4">
+              {/* Why blocked */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-900 mb-2">Why is this blocked?</h3>
+                <p className="text-sm text-gray-700">{flowNotAvailableDetails.reason}</p>
+              </div>
+
+              {/* Legal basis */}
+              {flowNotAvailableDetails.legalBasis && (
+                <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                  <p className="text-xs font-medium text-gray-600 mb-1">Legal basis:</p>
+                  <p className="text-sm text-gray-800">{flowNotAvailableDetails.legalBasis}</p>
+                </div>
+              )}
+
+              {/* Alternative routes */}
+              {flowNotAvailableDetails.alternativeRoutes.length > 0 && (
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-2">Available alternatives:</h3>
+                  <ul className="space-y-2">
+                    {flowNotAvailableDetails.alternativeRoutes.map((route, i) => (
+                      <li key={`alt-${route}-${i}`} className="flex items-center gap-2 p-2 bg-green-50 rounded-lg border border-green-200">
+                        <span className="text-green-600">✓</span>
+                        <span className="text-sm font-medium text-green-900">
+                          {route.replace(/_/g, ' ').replace(/section/i, 'Section ')}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Jurisdiction-specific guidance */}
+              <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
+                <p className="text-xs font-medium text-blue-800">
+                  {jurisdiction === 'england' && 'England-specific: Check deposit protection and prescribed information requirements.'}
+                  {jurisdiction === 'wales' && 'Wales-specific: Verify Rent Smart Wales registration and occupation contract type.'}
+                  {jurisdiction === 'scotland' && 'Scotland-specific: Check pre-action requirements if claiming rent arrears.'}
+                </p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-4 bg-gray-50 border-t border-gray-100 flex gap-3 justify-end">
+              <Button
+                variant="secondary"
+                onClick={() => setShowFlowNotAvailableModal(false)}
+              >
+                Continue with current answers
+              </Button>
+              {flowNotAvailableDetails.alternativeRoutes.length > 0 && (
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    // In a full implementation, this would switch routes
+                    setShowFlowNotAvailableModal(false);
+                  }}
+                >
+                  Switch to {flowNotAvailableDetails.alternativeRoutes[0].replace(/_/g, ' ').replace(/section/i, 'Section ')}
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
