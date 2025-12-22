@@ -17,6 +17,7 @@ import {
 } from '@/lib/wizard/mqs-loader';
 import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
+import { batchClearDependentFacts } from '@/lib/wizard/normalizeFacts';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 import { runDecisionEngine, type DecisionInput, type DecisionOutput } from '@/lib/decision-engine';
@@ -832,6 +833,32 @@ export async function POST(request: Request) {
       mergedFacts,
       normalizedAnswer,
     );
+
+    // ============================================================================
+    // CLEAR DEPENDENT FACTS: When a controlling fact changes to a value that
+    // makes dependent facts irrelevant, remove them to avoid stale/orphan data.
+    // This is critical for conditional visibility - e.g., when deposit_protected_scheme
+    // changes to false, prescribed_info_given should be cleared.
+    // ============================================================================
+    {
+      const factsToTrack: Record<string, any> = {};
+
+      // Track the question ID itself (for questions without maps_to)
+      factsToTrack[question_id] = normalizedAnswer;
+
+      // Track all mapped paths (for questions with maps_to)
+      if (question.maps_to && question.maps_to.length > 0) {
+        for (const mappedPath of question.maps_to) {
+          // For simple paths (no dots), use the mapped path directly
+          // For nested paths, use the first segment
+          const factKey = mappedPath.includes('.') ? mappedPath.split('.')[0] : mappedPath;
+          factsToTrack[factKey] = normalizedAnswer;
+        }
+      }
+
+      // Clear any dependent facts based on the changes
+      mergedFacts = batchClearDependentFacts(mergedFacts, factsToTrack);
+    }
 
     // ============================================================================
     // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE (WIZARD STAGE)
