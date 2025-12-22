@@ -1292,4 +1292,112 @@ describe('Notice-Only Inline Validator', () => {
       expect(groundsIssue).toBeUndefined();
     });
   });
+
+  // ====================================================================================
+  // REGRESSION TESTS: NULL-SAFETY FIXES (Initial Load Crash)
+  // ====================================================================================
+  // These tests ensure the wizard doesn't crash on initial load when facts are undefined
+  // GitHub issue: notice-only wizard crash on initial load caused by normalizeFactKeys
+  // reading undefined facts.
+
+  describe('Null-Safety Regression Tests', () => {
+    it('validateStepInline does not throw with undefined allFacts', async () => {
+      // This test ensures the fix for the initial load crash
+      await expect(
+        validateStepInline({
+          jurisdiction: 'england',
+          route: 'section_21',
+          product: 'notice_only',
+          msq: {
+            id: 'test',
+            question: 'Test',
+            inputType: 'text',
+          },
+          stepId: 'test',
+          answers: {},
+          allFacts: undefined as any, // Simulates undefined facts on initial load
+        })
+      ).resolves.not.toThrow();
+    });
+
+    it('validateStepInline returns valid structure with undefined allFacts', async () => {
+      const result = await validateStepInline({
+        jurisdiction: 'england',
+        route: 'section_21',
+        product: 'notice_only',
+        msq: {
+          id: 'test',
+          question: 'Test',
+          inputType: 'text',
+        },
+        stepId: 'test',
+        answers: {},
+        allFacts: undefined as any,
+      });
+
+      expect(result).toHaveProperty('fieldErrors');
+      expect(result).toHaveProperty('guidance');
+      expect(Array.isArray(result.guidance)).toBe(true);
+    });
+
+    it('validateStepInline does not throw with null allFacts', async () => {
+      await expect(
+        validateStepInline({
+          jurisdiction: 'england',
+          route: 'section_8',
+          product: 'notice_only',
+          msq: {
+            id: 'test',
+            question: 'Test',
+            inputType: 'text',
+          },
+          stepId: 'test',
+          answers: {},
+          allFacts: null as any, // Simulates null facts
+        })
+      ).resolves.not.toThrow();
+    });
+
+    it('evaluateNoticeCompliance does not throw with undefined wizardFacts', () => {
+      expect(() =>
+        evaluateNoticeCompliance({
+          jurisdiction: 'england',
+          product: 'notice_only',
+          selected_route: 'section_21',
+          wizardFacts: undefined as any,
+          stage: 'wizard',
+        })
+      ).not.toThrow();
+    });
+
+    it('evaluateNoticeCompliance returns valid result with undefined wizardFacts', () => {
+      const result = evaluateNoticeCompliance({
+        jurisdiction: 'england',
+        product: 'notice_only',
+        selected_route: 'section_21',
+        wizardFacts: undefined as any,
+        stage: 'wizard',
+      });
+
+      expect(result).toHaveProperty('ok');
+      expect(result).toHaveProperty('hardFailures');
+      expect(result).toHaveProperty('warnings');
+      expect(Array.isArray(result.hardFailures)).toBe(true);
+      expect(Array.isArray(result.warnings)).toBe(true);
+    });
+
+    it('evaluateNoticeCompliance handles empty object gracefully', () => {
+      const result = evaluateNoticeCompliance({
+        jurisdiction: 'england',
+        product: 'notice_only',
+        selected_route: 'section_21',
+        wizardFacts: {},
+        stage: 'wizard',
+      });
+
+      expect(result).toHaveProperty('ok');
+      expect(result).toHaveProperty('hardFailures');
+      expect(result).toHaveProperty('warnings');
+    });
+  });
 });

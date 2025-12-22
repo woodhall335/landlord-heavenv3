@@ -102,44 +102,48 @@ export const CANONICAL_TO_QUESTION_ID: Record<string, string> = {
 /**
  * Normalize fact keys in a wizard facts object to use canonical keys
  * This ensures validation and templates see consistent field names
+ *
+ * @param facts - Optional facts object. If undefined/null, returns empty object.
  */
-export function normalizeFactKeys(facts: Record<string, any>): Record<string, any> {
-  const normalized: Record<string, any> = { ...facts };
+export function normalizeFactKeys(facts?: Record<string, any>): Record<string, any> {
+  // Handle undefined/null facts - return empty object to prevent crashes on initial load
+  const safeFacts = facts ?? {};
+  const normalized: Record<string, any> = { ...safeFacts };
 
   for (const [legacyKey, canonicalKey] of Object.entries(CANONICAL_FACT_KEYS)) {
     // If the legacy key exists and the canonical key doesn't, copy the value
-    if (facts[legacyKey] !== undefined && facts[canonicalKey] === undefined) {
-      normalized[canonicalKey] = facts[legacyKey];
+    if (safeFacts[legacyKey] !== undefined && safeFacts[canonicalKey] === undefined) {
+      normalized[canonicalKey] = safeFacts[legacyKey];
     }
   }
 
   // Handle nested objects (like notice_service.notice_date -> notice_service_date)
-  if (facts.notice_service) {
-    if (facts.notice_service.notice_date && !normalized.notice_service_date) {
-      normalized.notice_service_date = facts.notice_service.notice_date;
+  if (safeFacts.notice_service) {
+    if (safeFacts.notice_service.notice_date && !normalized.notice_service_date) {
+      normalized.notice_service_date = safeFacts.notice_service.notice_date;
     }
-    if (facts.notice_service.notice_expiry_date && !normalized.notice_expiry_date) {
-      normalized.notice_expiry_date = facts.notice_service.notice_expiry_date;
+    if (safeFacts.notice_service.notice_expiry_date && !normalized.notice_expiry_date) {
+      normalized.notice_expiry_date = safeFacts.notice_service.notice_expiry_date;
     }
   }
 
   // Handle notice object variants
-  if (facts.notice) {
-    if (facts.notice.service_date && !normalized.notice_service_date) {
-      normalized.notice_service_date = facts.notice.service_date;
+  if (safeFacts.notice) {
+    if (safeFacts.notice.service_date && !normalized.notice_service_date) {
+      normalized.notice_service_date = safeFacts.notice.service_date;
     }
-    if (facts.notice.notice_date && !normalized.notice_service_date) {
-      normalized.notice_service_date = facts.notice.notice_date;
+    if (safeFacts.notice.notice_date && !normalized.notice_service_date) {
+      normalized.notice_service_date = safeFacts.notice.notice_date;
     }
-    if (facts.notice.expiry_date && !normalized.notice_expiry_date) {
-      normalized.notice_expiry_date = facts.notice.expiry_date;
+    if (safeFacts.notice.expiry_date && !normalized.notice_expiry_date) {
+      normalized.notice_expiry_date = safeFacts.notice.expiry_date;
     }
   }
 
   // Handle tenancy nested object
-  if (facts.tenancy) {
-    if (facts.tenancy.prescribed_info_given !== undefined && normalized.prescribed_info_given === undefined) {
-      normalized.prescribed_info_given = facts.tenancy.prescribed_info_given;
+  if (safeFacts.tenancy) {
+    if (safeFacts.tenancy.prescribed_info_given !== undefined && normalized.prescribed_info_given === undefined) {
+      normalized.prescribed_info_given = safeFacts.tenancy.prescribed_info_given;
     }
   }
 
@@ -192,9 +196,10 @@ export function isFalsy(value: unknown): boolean {
 
 /**
  * Get a fact value with normalization, checking multiple possible keys
+ * @param facts - Optional facts object. If undefined/null, returns undefined.
  */
-export function getFactValue(facts: Record<string, any>, ...keys: string[]): any {
-  const normalizedFacts = normalizeFactKeys(facts);
+export function getFactValue(facts?: Record<string, any>, ...keys: string[]): any {
+  const normalizedFacts = normalizeFactKeys(facts ?? {});
 
   for (const key of keys) {
     // Check direct key

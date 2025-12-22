@@ -184,6 +184,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   const [selectedLocation, setSelectedLocation] = useState<'england' | 'wales' | null>(null);
   const previousRouteRef = React.useRef<string | null>(null);
   const routeGuardTriggeredRef = React.useRef(false);
+  // Track if user has explicitly saved at least once (prevents validation on initial mount)
+  const hasUserSavedRef = React.useRef(false);
 
   // ====================================================================================
   // SMART GUIDANCE STATE (Phase 3)
@@ -648,7 +650,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         const response = await fetch(apiUrl(`/api/cases/${caseId}`));
         if (response.ok) {
           const data = await response.json();
-          setCaseFacts(data.case?.collected_facts || {});
+          const collectedFacts = data.case?.collected_facts || {};
+          setCaseFacts(collectedFacts);
+          // If we loaded existing facts, user has previously saved - enable validation
+          if (Object.keys(collectedFacts).length > 0) {
+            hasUserSavedRef.current = true;
+          }
         }
       } catch (err) {
         console.error('Failed to fetch case facts:', err);
@@ -855,9 +862,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       return;
     }
 
-    // Only run if we have saved case facts to validate against
-    // This ensures we don't show errors for unanswered questions
-    if (Object.keys(caseFacts).length > 0) {
+    // Only run if:
+    // 1. User has explicitly saved at least once (prevents validation on initial mount)
+    // 2. We have saved case facts to validate against
+    // This ensures we don't show errors for unanswered questions on initial load
+    if (hasUserSavedRef.current && Object.keys(caseFacts).length > 0) {
       void runNoticeOnlyValidation(caseFacts);
     }
   }, [product, currentQuestion?.id, caseFacts, runNoticeOnlyValidation]);
@@ -1329,6 +1338,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
       // Clear any previous compliance errors on successful save
       setNoticeComplianceError(null);
+
+      // Mark that user has saved at least once - enables notice-only validation
+      hasUserSavedRef.current = true;
 
       // Check for validation errors from AST generator
       if (data.error && data.error.includes('validation failed')) {

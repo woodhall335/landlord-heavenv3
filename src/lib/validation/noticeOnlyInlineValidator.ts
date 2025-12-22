@@ -16,7 +16,7 @@
  */
 
 import { runDecisionEngine, type DecisionOutput, type DecisionInput } from '../decision-engine';
-import { evaluateNoticeCompliance, type NoticeComplianceResult } from '../notices/evaluate-notice-compliance';
+import { evaluateNoticeCompliance, type ComplianceResult as NoticeComplianceResult } from '../notices/evaluate-notice-compliance';
 import type { ExtendedWizardQuestion, WizardField } from '../wizard/types';
 import type { CanonicalJurisdiction } from '../types/jurisdiction';
 
@@ -940,8 +940,9 @@ export async function validateStepInline(
   try {
     complianceResults = evaluateNoticeCompliance({
       jurisdiction,
-      route,
-      facts: allFacts,
+      product: 'notice_only',
+      selected_route: route,
+      wizardFacts: allFacts ?? {},
       stage: 'wizard',
     });
   } catch (error) {
