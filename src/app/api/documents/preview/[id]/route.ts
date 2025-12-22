@@ -2,7 +2,7 @@
  * Documents API - Preview
  *
  * GET /api/documents/preview/[id]
- * Generates a watermarked preview of a document
+ * Generates a preview of a document (watermarks removed as part of simplified UX)
  */
 
 import { createServerSupabaseClient, getServerUser, createAdminClient } from '@/lib/supabase/server';
@@ -79,10 +79,8 @@ export async function GET(
       // Prepare HTML for preview (limit to 2 pages, add headers/footers)
       const previewHtml = preparePreviewHtml((document as any).html_content, 2);
 
-      // Generate watermarked PDF
-      const previewPdf = await htmlToPdf(previewHtml, {
-        watermark: 'PREVIEW - NOT FOR COURT USE',
-      });
+      // Generate PDF (watermarks removed as part of simplified UX)
+      const previewPdf = await htmlToPdf(previewHtml, {});
 
       // Upload preview PDF to storage
       const adminClient = createAdminClient();

@@ -1,11 +1,14 @@
 /**
  * Notice Only Pack Preview Merger
  *
- * Merges all Notice Only documents into a single watermarked PDF for preview.
+ * Merges all Notice Only documents into a single PDF for preview.
  * Used to show users exactly what they're purchasing before payment.
+ *
+ * NOTE: Watermarks have been removed as part of the simplified UX change.
+ * See docs/pdf-watermark-audit.md for details.
  */
 
-import { PDFDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import type { CanonicalJurisdiction } from '../types/jurisdiction';
 
 // ============================================================================
@@ -22,6 +25,7 @@ export interface NoticeOnlyDocument {
 export interface NoticeOnlyPreviewOptions {
   jurisdiction: Extract<CanonicalJurisdiction, 'england' | 'wales' | 'scotland'>;
   notice_type?: 'section_8' | 'section_21' | 'notice_to_leave' | 'wales_section_173' | 'wales_fault_based';
+  /** @deprecated Watermarks have been removed from all PDFs */
   watermarkText?: string;
   includeTableOfContents?: boolean;
 }
@@ -83,49 +87,24 @@ export async function generateNoticeOnlyPreview(
     }
   }
 
-  // Add watermark to EVERY page
-  const watermarkText = options.watermarkText || 'PREVIEW - Complete Purchase to Download';
-  console.log('[NOTICE-PREVIEW] Adding watermarks to', mergedPdf.getPageCount(), 'pages');
+  // ====================================================================================
+  // WATERMARKS REMOVED - Simplified UX Change
+  // ====================================================================================
+  // All watermarks have been removed from preview PDFs as part of the simplified
+  // notice-only validation UX. Server-side validation at /api/wizard/generate
+  // remains the hard stop for compliance.
+  // See docs/pdf-watermark-audit.md for details on the removal.
+  // ====================================================================================
+  console.log('[NOTICE-PREVIEW] Watermarks disabled - generating clean preview');
 
   const pages = mergedPdf.getPages();
 
+  // Only add page numbers (keeping useful metadata, no watermarks)
   for (let i = 0; i < pages.length; i++) {
     const page = pages[i];
-    const { width, height } = page.getSize();
+    const { width } = page.getSize();
 
-    // Add diagonal watermark in center - reduced size and opacity to prevent overlap with content
-    // Position carefully to avoid text blocks
-    page.drawText(watermarkText, {
-      x: width / 2 - 180,
-      y: height / 2 - 50, // Shift down slightly to avoid header areas
-      size: 36, // Reduced from 48 to be less intrusive
-      font: font,
-      color: rgb(0.88, 0.88, 0.88), // Lighter gray
-      rotate: degrees(45),
-      opacity: 0.15, // Reduced from 0.3 for less interference
-    });
-
-    // Add header watermark band (non-overlapping)
-    page.drawText('PREVIEW - NOT FOR COURT USE', {
-      x: width / 2 - 120,
-      y: height - 15,
-      size: 11,
-      font: regularFont,
-      color: rgb(0.75, 0.75, 0.75),
-      opacity: 0.6,
-    });
-
-    // Add small footer watermark
-    page.drawText('PREVIEW ONLY', {
-      x: 20,
-      y: 20,
-      size: 10,
-      font: regularFont,
-      color: rgb(0.7, 0.7, 0.7),
-      opacity: 0.5,
-    });
-
-    // Add page numbers (except TOC)
+    // Add page numbers (except TOC) - keeping this for usability
     if (i > 0 || !options.includeTableOfContents) {
       const pageNum = options.includeTableOfContents ? i : i + 1;
       page.drawText(`Page ${pageNum} of ${pages.length}`, {
@@ -138,7 +117,7 @@ export async function generateNoticeOnlyPreview(
     }
   }
 
-  console.log('[NOTICE-PREVIEW] Watermarked', pages.length, 'pages');
+  console.log('[NOTICE-PREVIEW] Added page numbers to', pages.length, 'pages');
 
   // Save and return
   const pdfBytes = await mergedPdf.save();

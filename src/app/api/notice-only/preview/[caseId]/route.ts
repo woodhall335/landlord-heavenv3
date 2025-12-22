@@ -2,7 +2,7 @@
  * Notice Only Preview API
  *
  * GET /api/notice-only/preview/[caseId]
- * Generates a watermarked preview of the complete Notice Only pack
+ * Generates a preview of the complete Notice Only pack (watermarks removed as part of simplified UX)
  */
 
 import { NextResponse } from 'next/server';
@@ -1009,11 +1009,12 @@ export async function GET(
 
     console.log('[NOTICE-PREVIEW-API] Merging', documents.length, 'documents into preview');
 
+    // Generate preview PDF (watermarks removed as part of simplified UX)
     const previewPdf = await generateNoticeOnlyPreview(documents, {
       jurisdiction,
       notice_type: selected_route as any,
       includeTableOfContents: true,
-      watermarkText: 'PREVIEW - Complete Purchase (£29.99) to Download',
+      // watermarkText removed - see docs/pdf-watermark-audit.md
     });
 
     console.log('[NOTICE-PREVIEW-API] Preview generated successfully');

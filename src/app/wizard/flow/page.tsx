@@ -32,6 +32,7 @@ function WizardFlowContent() {
   const productVariant = searchParams.get('product_variant'); // e.g. money_claim_england_wales
   const editCaseId = searchParams.get('case_id'); // Case ID to edit
   const mode = searchParams.get('mode');
+  const jumpTo = searchParams.get('jump_to'); // Question ID to jump to (from End Validator "Fix this" button)
 
   const hasRequiredParams = Boolean(type && jurisdiction);
 
@@ -224,6 +225,7 @@ function WizardFlowContent() {
         initialQuestion={initialQuestion ?? undefined}
         onComplete={handleComplete}
         mode={mode === 'edit' ? 'edit' : 'default'}
+        jumpToQuestionId={jumpTo ?? undefined}
       />
     );
   }
