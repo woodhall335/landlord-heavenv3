@@ -365,11 +365,15 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
       // 5 weeks rent max (or 6 weeks if annual rent > £50,000)
       // This is BLOCKING for Section 21 unless landlord confirms refund/reduction
       // -------------------------------------------------------------------------
-      const depositAmount = wizardFacts.deposit_amount ?? wizardFacts.tenancy?.deposit_amount;
-      const rentAmount = wizardFacts.rent_amount ?? wizardFacts.tenancy?.rent_amount;
+      const rawDepositAmount = wizardFacts.deposit_amount ?? wizardFacts.tenancy?.deposit_amount;
+      const rawRentAmount = wizardFacts.rent_amount ?? wizardFacts.tenancy?.rent_amount;
       const rentFrequency = wizardFacts.rent_frequency ?? wizardFacts.tenancy?.rent_frequency ?? 'monthly';
 
-      if (depositAmount && rentAmount && depositAmount > 0 && rentAmount > 0) {
+      // Coerce string inputs to numbers (wizard may store as strings)
+      const depositAmount = typeof rawDepositAmount === 'string' ? parseFloat(rawDepositAmount) : rawDepositAmount;
+      const rentAmount = typeof rawRentAmount === 'string' ? parseFloat(rawRentAmount) : rawRentAmount;
+
+      if (depositAmount && rentAmount && !isNaN(depositAmount) && !isNaN(rentAmount) && depositAmount > 0 && rentAmount > 0) {
         // Calculate annual rent based on frequency
         let annualRent = rentAmount * 12; // default monthly
         if (rentFrequency === 'weekly') {
@@ -396,7 +400,7 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
             pushStageIssue({
               code: 'S21-DEPOSIT-CAP-EXCEEDED',
               affected_question_id: 'deposit_reduced_to_legal_cap_confirmed',
-              legal_reason: `Deposit £${depositAmount.toFixed(2)} exceeds legal maximum of £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent). Tenant Fees Act 2019 requires refund/reduction before Section 21 is valid.`,
+              legal_reason: `Deposit exceeds legal maximum. Entered deposit: £${depositAmount.toFixed(2)}. Maximum allowed: £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent based on Tenant Fees Act 2019).`,
               user_fix_hint: 'Confirm you have refunded/reduced the deposit to within the legal cap, or use Section 8 instead (deposit cap does not affect Section 8 validity).',
             });
           }
