@@ -8,9 +8,12 @@
  *
  * Key principles:
  * 1. Issues are filtered to only those affected by the step just saved
- * 2. Route-invalidating issues block Next and trigger modal
- * 3. Inline warnings are shown under the triggering question
- * 4. Preview/Generate remains the ultimate hard stop
+ * 2. Route-invalidating issues block Next and trigger modal ONLY when:
+ *    - The disqualifying fact is EXPLICITLY set to a route-invalidating value
+ *    - NOT when the fact is merely undefined/missing
+ * 3. Missing/unanswered facts produce "guidance only" messages (no modal)
+ * 4. Inline warnings are shown under the triggering question
+ * 5. Preview/Generate remains the ultimate hard stop
  *
  * @see docs/notice-only-wizard-ux.md for full design documentation
  */
@@ -54,9 +57,17 @@ export interface InlineWarning {
   computedValues?: Record<string, number | string>;
 }
 
+export interface MissingRequiredFact {
+  code: string;
+  questionId: string;
+  message: string;
+}
+
 export interface WizardUxIssuesResult {
-  /** Issues that make the CURRENT route unavailable (blocking at preview/generate) */
+  /** Issues that make the CURRENT route unavailable - ONLY when explicit disqualifying answer given */
   routeInvalidatingIssues: RouteInvalidatingIssue[];
+  /** Missing/unanswered facts that will be needed (guidance only, NO modal) */
+  missingRequiredForCurrentRoute: MissingRequiredFact[];
   /** Warnings applicable to the current step (non-blocking) */
   inlineWarnings: InlineWarning[];
   /** Alternative routes that are still available */
@@ -144,6 +155,247 @@ const QUESTION_ID_TO_CONTROLLING_IDS: Record<string, string[]> = {
   // Gas certificate depends on has_gas_appliances
   gas_safety_certificate: ['has_gas_appliances'],
   // Note: deposit_reduced_to_legal_cap_confirmed removed - deposit cap is inline warning only
+};
+
+// ============================================================================
+// EXPLICIT DISQUALIFYING CONDITIONS
+// Defines when an issue is actually route-invalidating (vs just missing/unanswered)
+// Modal should ONLY appear when these explicit conditions are met
+// ============================================================================
+
+interface ExplicitDisqualifyingCondition {
+  /** The fact key that must be checked */
+  factKey: string;
+  /** The explicit disqualifying value(s) - if fact === any of these, it's disqualifying */
+  disqualifyingValues: any[];
+  /** Optional: prerequisite fact that must be true for this to apply */
+  prerequisiteFact?: { key: string; value: any };
+  /** The question ID that the user needs to edit to fix this */
+  affectedQuestionId: string;
+}
+
+/**
+ * Maps issue codes to explicit disqualifying conditions.
+ * An issue should ONLY trigger modal if:
+ * 1. The prerequisite fact (if any) matches the expected value
+ * 2. The factKey is explicitly set to one of the disqualifyingValues
+ *
+ * If the fact is undefined/null, it means "not yet answered" -> NO modal
+ */
+const EXPLICIT_DISQUALIFYING_CONDITIONS: Record<string, ExplicitDisqualifyingCondition> = {
+  // Section 21 - Deposit Protection
+  'S21-DEPOSIT-NONCOMPLIANT': {
+    factKey: 'deposit_protected',
+    disqualifyingValues: [false],
+    prerequisiteFact: { key: 'deposit_taken', value: true },
+    affectedQuestionId: 'deposit_protected_scheme',
+  },
+  'deposit_not_protected': {
+    factKey: 'deposit_protected',
+    disqualifyingValues: [false],
+    prerequisiteFact: { key: 'deposit_taken', value: true },
+    affectedQuestionId: 'deposit_protected_scheme',
+  },
+
+  // Section 21 - Prescribed Info
+  'S21-PRESCRIBED-INFO-REQUIRED': {
+    factKey: 'prescribed_info_given',
+    disqualifyingValues: [false],
+    prerequisiteFact: { key: 'deposit_protected', value: true },
+    affectedQuestionId: 'prescribed_info_given',
+  },
+  'prescribed_info_not_given': {
+    factKey: 'prescribed_info_given',
+    disqualifyingValues: [false],
+    prerequisiteFact: { key: 'deposit_protected', value: true },
+    affectedQuestionId: 'prescribed_info_given',
+  },
+
+  // Section 21 - Gas Safety
+  'S21-GAS-CERT': {
+    factKey: 'gas_certificate_provided',
+    disqualifyingValues: [false],
+    prerequisiteFact: { key: 'has_gas_appliances', value: true },
+    affectedQuestionId: 'gas_safety_certificate',
+  },
+  'gas_safety_not_provided': {
+    factKey: 'gas_certificate_provided',
+    disqualifyingValues: [false],
+    prerequisiteFact: { key: 'has_gas_appliances', value: true },
+    affectedQuestionId: 'gas_safety_certificate',
+  },
+
+  // Section 21 - EPC
+  'S21-EPC': {
+    factKey: 'epc_provided',
+    disqualifyingValues: [false],
+    affectedQuestionId: 'epc_provided',
+  },
+  'epc_not_provided': {
+    factKey: 'epc_provided',
+    disqualifyingValues: [false],
+    affectedQuestionId: 'epc_provided',
+  },
+
+  // Section 21 - How to Rent
+  'S21-H2R': {
+    factKey: 'how_to_rent_provided',
+    disqualifyingValues: [false],
+    affectedQuestionId: 'how_to_rent_provided',
+  },
+  'how_to_rent_not_provided': {
+    factKey: 'how_to_rent_provided',
+    disqualifyingValues: [false],
+    affectedQuestionId: 'how_to_rent_provided',
+  },
+
+  // Section 21 - Licensing
+  'S21-LICENSING': {
+    factKey: 'property_licensing_status',
+    disqualifyingValues: ['unlicensed'],
+    affectedQuestionId: 'property_licensing',
+  },
+  'licensing_issue': {
+    factKey: 'property_licensing_status',
+    disqualifyingValues: ['unlicensed'],
+    affectedQuestionId: 'property_licensing',
+  },
+  'hmo_not_licensed': {
+    factKey: 'property_licensing_status',
+    disqualifyingValues: ['unlicensed'],
+    affectedQuestionId: 'property_licensing',
+  },
+
+  // Section 8 - Grounds Required (empty array is explicit disqualification)
+  'S8-GROUNDS-REQUIRED': {
+    factKey: 'section8_grounds',
+    disqualifyingValues: [[], null, undefined, ''],
+    affectedQuestionId: 'section8_grounds_selection',
+  },
+  'grounds_required': {
+    factKey: 'section8_grounds',
+    disqualifyingValues: [[], null, undefined, ''],
+    affectedQuestionId: 'section8_grounds_selection',
+  },
+};
+
+/**
+ * Check if an issue has an explicit disqualifying value set in facts.
+ * Returns:
+ * - 'explicit': The fact is explicitly set to a disqualifying value -> MODAL
+ * - 'missing': The fact is undefined/missing -> NO MODAL (guidance only)
+ * - 'passing': The fact is set but not disqualifying -> NO MODAL
+ * - 'not-applicable': No condition defined for this issue code
+ */
+function getIssueDisqualificationStatus(
+  issueCode: string,
+  facts: Record<string, any>
+): 'explicit' | 'missing' | 'passing' | 'not-applicable' {
+  const condition = EXPLICIT_DISQUALIFYING_CONDITIONS[issueCode];
+
+  if (!condition) {
+    return 'not-applicable';
+  }
+
+  // Check prerequisite if defined
+  if (condition.prerequisiteFact) {
+    const prereqValue = facts[condition.prerequisiteFact.key];
+    if (prereqValue !== condition.prerequisiteFact.value) {
+      // Prerequisite not met, so this issue doesn't apply
+      return 'passing';
+    }
+  }
+
+  // Get the fact value
+  const factValue = facts[condition.factKey];
+
+  // Check if fact is missing/undefined
+  if (factValue === undefined || factValue === null) {
+    // Special case: for Section 8 grounds, undefined/null means "not selected yet"
+    // which is treated as "explicit" because they need to select grounds
+    if (issueCode === 'S8-GROUNDS-REQUIRED' || issueCode === 'grounds_required') {
+      return 'explicit';
+    }
+    return 'missing';
+  }
+
+  // Check if the fact value matches any disqualifying value
+  for (const disqualifyingValue of condition.disqualifyingValues) {
+    // Handle array comparison (for section8_grounds)
+    if (Array.isArray(disqualifyingValue) && Array.isArray(factValue)) {
+      if (disqualifyingValue.length === 0 && factValue.length === 0) {
+        return 'explicit';
+      }
+    } else if (factValue === disqualifyingValue) {
+      return 'explicit';
+    }
+  }
+
+  return 'passing';
+}
+
+/**
+ * Check if saving the given question IDs could have explicitly set the disqualifying value.
+ * This is used to determine if the modal should be shown for the current save.
+ */
+function wasDisqualifyingAnswerJustSaved(
+  issueCode: string,
+  lastSavedQuestionIds: string[],
+  facts: Record<string, any>
+): boolean {
+  const condition = EXPLICIT_DISQUALIFYING_CONDITIONS[issueCode];
+
+  if (!condition) {
+    return false;
+  }
+
+  // Check if the affected question was directly saved
+  if (lastSavedQuestionIds.includes(condition.affectedQuestionId)) {
+    return true;
+  }
+
+  // For issues with prerequisites, also check if the prerequisite AND disqualifying fact
+  // were both just saved or the disqualifying fact was already set and prerequisite just saved
+  if (condition.prerequisiteFact) {
+    const prereqQuestionId = FACT_KEY_TO_QUESTION_ID[condition.prerequisiteFact.key];
+    const factQuestionId = FACT_KEY_TO_QUESTION_ID[condition.factKey];
+
+    // If prerequisite was just saved AND the disqualifying fact is already explicitly false
+    if (prereqQuestionId && lastSavedQuestionIds.includes(prereqQuestionId)) {
+      const factValue = facts[condition.factKey];
+      const isExplicitlyDisqualifying = condition.disqualifyingValues.some(dv => {
+        if (Array.isArray(dv) && Array.isArray(factValue)) {
+          return dv.length === 0 && factValue.length === 0;
+        }
+        return factValue === dv;
+      });
+      if (isExplicitlyDisqualifying) {
+        return true;
+      }
+    }
+
+    // If the disqualifying fact question was just saved
+    if (factQuestionId && lastSavedQuestionIds.includes(factQuestionId)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Maps fact keys to question IDs (reverse of some ISSUE_CODE_TO_QUESTION_ID mappings)
+ */
+const FACT_KEY_TO_QUESTION_ID: Record<string, string> = {
+  deposit_taken: 'deposit_taken',
+  deposit_protected: 'deposit_protected_scheme',
+  prescribed_info_given: 'prescribed_info_given',
+  has_gas_appliances: 'has_gas_appliances',
+  gas_certificate_provided: 'gas_safety_certificate',
+  epc_provided: 'epc_provided',
+  how_to_rent_provided: 'how_to_rent_provided',
+  property_licensing_status: 'property_licensing',
+  section8_grounds: 'section8_grounds_selection',
 };
 
 // ============================================================================
@@ -268,6 +520,7 @@ export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssue
 
   const result: WizardUxIssuesResult = {
     routeInvalidatingIssues: [],
+    missingRequiredForCurrentRoute: [],
     inlineWarnings: [],
     alternativeRoutes: ALTERNATIVE_ROUTES[route] || [],
   };
@@ -363,44 +616,81 @@ export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssue
   }
 
   // -------------------------------------------------------------------------
-  // 4. Filter issues to only those triggered by lastSavedQuestionIds
+  // 4. Filter and classify issues using explicit disqualifying conditions
+  // -------------------------------------------------------------------------
+  // KEY PRINCIPLE: Modal should ONLY appear when a disqualifying ANSWER is given,
+  // NOT when a fact is merely missing/unanswered.
   // -------------------------------------------------------------------------
   const routeInvalidatingCodes = ENGLAND_ROUTE_INVALIDATING_CODES[route] || [];
 
   for (const issue of allIssues) {
-    // Check if this issue was triggered by the last saved questions
-    const isTriggeredByLastSave = isIssueTriggeredByQuestions(
-      issue.affectedQuestionId,
-      lastSavedQuestionIds
-    );
+    // Check if this is a route-invalidating issue code
+    const isRouteInvalidatingCode = routeInvalidatingCodes.includes(issue.code) ||
+                                    routeInvalidatingCodes.includes(issue.code.toUpperCase());
 
-    if (!isTriggeredByLastSave) {
-      continue; // Skip issues not triggered by the current step
+    if (!isRouteInvalidatingCode) {
+      // Not a route-invalidating code - add as inline warning if triggered
+      const isTriggeredByLastSave = isIssueTriggeredByQuestions(
+        issue.affectedQuestionId,
+        lastSavedQuestionIds
+      );
+      if (isTriggeredByLastSave) {
+        result.inlineWarnings.push({
+          code: issue.code,
+          message: issue.userFixHint || issue.description,
+          severity: 'warn',
+          legalBasis: issue.legalBasis,
+          affectedQuestionId: issue.affectedQuestionId,
+        });
+      }
+      continue;
     }
 
-    // Check if this is a route-invalidating issue
-    const isRouteInvalidating = routeInvalidatingCodes.includes(issue.code) ||
-                                routeInvalidatingCodes.includes(issue.code.toUpperCase());
+    // This is a route-invalidating code - check if it's explicit vs missing
+    const disqualificationStatus = getIssueDisqualificationStatus(issue.code, normalizedFacts);
 
-    if (isRouteInvalidating) {
-      result.routeInvalidatingIssues.push({
-        code: issue.code,
-        route,
-        description: issue.description,
-        legalBasis: issue.legalBasis,
-        affectedQuestionId: issue.affectedQuestionId,
-        userFixHint: issue.userFixHint,
-      });
-    } else {
-      // Add as inline warning
-      result.inlineWarnings.push({
-        code: issue.code,
-        message: issue.userFixHint || issue.description,
-        severity: 'warn',
-        legalBasis: issue.legalBasis,
-        affectedQuestionId: issue.affectedQuestionId,
-      });
+    debugLog('Issue classification', {
+      code: issue.code,
+      affectedQuestionId: issue.affectedQuestionId,
+      disqualificationStatus,
+      lastSavedQuestionIds,
+    });
+
+    // Filter out "Answer X to continue" style messages - these are guidance, not blocking
+    const isGuidanceMessage = issue.userFixHint?.toLowerCase().includes('answer') &&
+                              issue.userFixHint?.toLowerCase().includes('to continue');
+
+    if (disqualificationStatus === 'explicit' && !isGuidanceMessage) {
+      // Check if the disqualifying answer was just saved (scoped to current save)
+      const justSaved = wasDisqualifyingAnswerJustSaved(issue.code, lastSavedQuestionIds, normalizedFacts);
+
+      if (justSaved) {
+        // Explicit disqualifying answer was just saved -> MODAL
+        result.routeInvalidatingIssues.push({
+          code: issue.code,
+          route,
+          description: issue.description,
+          legalBasis: issue.legalBasis,
+          affectedQuestionId: issue.affectedQuestionId,
+          userFixHint: issue.userFixHint,
+        });
+      }
+    } else if (disqualificationStatus === 'missing') {
+      // Fact is missing/unanswered - add as guidance ONLY (no modal)
+      // Only add if triggered by the current save (controlling question was saved)
+      const isTriggeredByLastSave = isIssueTriggeredByQuestions(
+        issue.affectedQuestionId,
+        lastSavedQuestionIds
+      );
+      if (isTriggeredByLastSave && issue.affectedQuestionId) {
+        result.missingRequiredForCurrentRoute.push({
+          code: issue.code,
+          questionId: issue.affectedQuestionId,
+          message: issue.userFixHint || issue.description,
+        });
+      }
     }
+    // 'passing' or 'not-applicable' status = no issue to report
   }
 
   // -------------------------------------------------------------------------
@@ -443,6 +733,11 @@ export function extractWizardUxIssues(input: WizardUxIssuesInput): WizardUxIssue
     routeInvalidatingIssues: result.routeInvalidatingIssues.map(i => ({
       code: i.code,
       affectedQuestionId: i.affectedQuestionId,
+    })),
+    missingRequiredCount: result.missingRequiredForCurrentRoute.length,
+    missingRequired: result.missingRequiredForCurrentRoute.map(m => ({
+      code: m.code,
+      questionId: m.questionId,
     })),
     inlineWarningsCount: result.inlineWarnings.length,
     inlineWarnings: result.inlineWarnings.map(w => ({
