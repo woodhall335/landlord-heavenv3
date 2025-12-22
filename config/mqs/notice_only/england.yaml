@@ -240,6 +240,8 @@ questions:
     section: Deposit & Compliance
     question: "The deposit you entered may exceed the legal cap. Have you reduced or refunded the deposit to comply with the legal limit?"
     inputType: select
+    routes:
+      - section_21
     dependsOn:
       allOf:
         - questionId: deposit_taken
@@ -340,6 +342,8 @@ questions:
     section: Deposit & Compliance
     question: "Was an EPC provided before tenancy started?"
     inputType: yes_no
+    routes:
+      - section_21
     validation:
       required: true
     helperText: |
@@ -366,6 +370,8 @@ questions:
     section: Deposit & Compliance
     question: "How to Rent Guide"
     inputType: info
+    routes:
+      - section_21
     content: |
       **How to Rent guide requirement:**
 
@@ -381,6 +387,8 @@ questions:
     section: Deposit & Compliance
     question: "Was the 'How to Rent' guide provided?"
     inputType: yes_no
+    routes:
+      - section_21
     validation:
       required: false  # Not required in UI, enforced in API for Section 21
     helperText: |
@@ -393,6 +401,8 @@ questions:
     section: Deposit & Compliance
     question: "Property licensing status"
     inputType: select
+    routes:
+      - section_21
     validation:
       required: true
     options:
@@ -407,6 +417,8 @@ questions:
     section: Deposit & Compliance
     question: "Has tenant made repair complaints in last 6 months?"
     inputType: yes_no
+    routes:
+      - section_21
     validation:
       required: true
     helperText: "Retaliatory eviction rules may apply to Section 21 notices if tenant has made recent repair complaints."
