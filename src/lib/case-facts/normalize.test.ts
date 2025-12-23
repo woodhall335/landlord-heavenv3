@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest';
-import { wizardFactsToCaseFacts } from './normalize';
+import { wizardFactsToCaseFacts, resolveNoticeServiceDate, resolveNoticeExpiryDate } from './normalize';
 import type { WizardFacts } from './schema';
 
 describe('wizardFactsToCaseFacts', () => {
@@ -897,5 +897,138 @@ describe('wizardFactsToCaseFacts', () => {
       expect(typeof (result as any).notice).not.toBe('string');
       expect(typeof (result as any).service_contact).not.toBe('string');
     });
+  });
+});
+
+// =============================================================================
+// NOTICE SERVICE DATE RESOLUTION TESTS
+// =============================================================================
+// These tests verify that the canonical service date resolver correctly
+// finds dates from various storage paths (field IDs vs maps_to paths).
+
+describe('resolveNoticeServiceDate', () => {
+  test('should return null for empty wizard facts', () => {
+    const wizard: WizardFacts = {};
+    expect(resolveNoticeServiceDate(wizard)).toBeNull();
+  });
+
+  test('should resolve date from notice_service.notice_date (maps_to path)', () => {
+    const wizard: WizardFacts = {
+      notice_service: {
+        notice_date: '2026-02-01',
+      },
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-02-01');
+  });
+
+  test('should resolve date from notice.notice_date (Scotland maps_to path)', () => {
+    const wizard: WizardFacts = {
+      notice: {
+        notice_date: '2026-03-15',
+      },
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-03-15');
+  });
+
+  test('should resolve date from notice_service_date (direct field ID)', () => {
+    const wizard: WizardFacts = {
+      notice_service_date: '2026-04-01',
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-04-01');
+  });
+
+  test('should resolve date from service_date (legacy field)', () => {
+    const wizard: WizardFacts = {
+      service_date: '2026-05-01',
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-05-01');
+  });
+
+  test('should resolve date from notice_date (Scotland field ID)', () => {
+    const wizard: WizardFacts = {
+      notice_date: '2026-06-01',
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-06-01');
+  });
+
+  test('should prefer maps_to path over field ID (notice_service.notice_date wins)', () => {
+    const wizard: WizardFacts = {
+      notice_service: {
+        notice_date: '2026-02-01', // maps_to path
+      },
+      notice_service_date: '2025-12-23', // field ID (should be ignored)
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-02-01');
+  });
+
+  test('should return ISO date format for valid dates', () => {
+    const wizard: WizardFacts = {
+      notice_service_date: '2026-01-15T10:30:00Z',
+    };
+    // Should return just the date part
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-01-15');
+  });
+
+  test('should ignore invalid date strings', () => {
+    const wizard: WizardFacts = {
+      notice_service_date: 'not-a-date',
+      service_date: '2026-07-01', // valid fallback
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-07-01');
+  });
+
+  test('should ignore empty strings', () => {
+    const wizard: WizardFacts = {
+      notice_service_date: '',
+      service_date: '2026-08-01',
+    };
+    expect(resolveNoticeServiceDate(wizard)).toBe('2026-08-01');
+  });
+});
+
+describe('resolveNoticeExpiryDate', () => {
+  test('should return null for empty wizard facts', () => {
+    const wizard: WizardFacts = {};
+    expect(resolveNoticeExpiryDate(wizard)).toBeNull();
+  });
+
+  test('should resolve date from notice_service.notice_expiry_date (maps_to path)', () => {
+    const wizard: WizardFacts = {
+      notice_service: {
+        notice_expiry_date: '2026-04-01',
+      },
+    };
+    expect(resolveNoticeExpiryDate(wizard)).toBe('2026-04-01');
+  });
+
+  test('should resolve date from notice_expiry_date (direct field ID)', () => {
+    const wizard: WizardFacts = {
+      notice_expiry_date: '2026-05-01',
+    };
+    expect(resolveNoticeExpiryDate(wizard)).toBe('2026-05-01');
+  });
+
+  test('should resolve date from expiry_date (legacy field)', () => {
+    const wizard: WizardFacts = {
+      expiry_date: '2026-06-01',
+    };
+    expect(resolveNoticeExpiryDate(wizard)).toBe('2026-06-01');
+  });
+
+  test('should resolve date from earliest_leaving_date (Scotland)', () => {
+    const wizard: WizardFacts = {
+      earliest_leaving_date: '2026-07-01',
+    };
+    expect(resolveNoticeExpiryDate(wizard)).toBe('2026-07-01');
+  });
+
+  test('should prefer maps_to path over field ID', () => {
+    const wizard: WizardFacts = {
+      notice_service: {
+        notice_expiry_date: '2026-04-01', // maps_to path
+      },
+      notice_expiry_date: '2025-12-23', // field ID (should be ignored)
+    };
+    expect(resolveNoticeExpiryDate(wizard)).toBe('2026-04-01');
   });
 });

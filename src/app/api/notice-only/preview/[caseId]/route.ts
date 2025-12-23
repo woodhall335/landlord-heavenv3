@@ -241,7 +241,8 @@ export async function GET(
 
     // Log legacy blocking issues for monitoring but do NOT block
     // This prevents legacy validator drift from blocking compliant cases
-    if (legacyBlockingIssues.length > 0) {
+    // Gated behind NOTICE_ONLY_DEBUG to reduce log noise when unified validation passes
+    if (legacyBlockingIssues.length > 0 && process.env.NOTICE_ONLY_DEBUG === '1') {
       console.warn('[NOTICE-PREVIEW-API] Legacy validation would have blocked (suppressed):', {
         case_id: caseId,
         issues: legacyBlockingIssues.map((b) => b.code),
@@ -249,8 +250,9 @@ export async function GET(
       });
     }
 
-    // Warnings from legacy validation can still be logged
-    if (legacyWarnings.length > 0) {
+    // Legacy warnings are now gated behind NOTICE_ONLY_DEBUG flag
+    // since unified validation passed, these are noise
+    if (legacyWarnings.length > 0 && process.env.NOTICE_ONLY_DEBUG === '1') {
       console.log('[NOTICE-PREVIEW-API] Legacy validation warnings:', {
         case_id: caseId,
         warnings: legacyWarnings.map((w) => w.code),
@@ -328,6 +330,12 @@ export async function GET(
       // Use mapNoticeOnlyFacts() to build template data with proper address concatenation,
       // ground normalization, deposit logic, and date handling
       const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+      // Debug: Log the resolved service date to verify it matches user input
+      if (process.env.NOTICE_ONLY_DEBUG === '1') {
+        console.log('[NOTICE-PREVIEW-API] Resolved service_date:', templateData.service_date);
+        console.log('[NOTICE-PREVIEW-API] Resolved notice_date:', templateData.notice_date);
+      }
 
       // JURISDICTION VALIDATION: Block Section 8/21 for Wales
       // Section 8 and Section 21 only exist in England (Housing Act 1988)
