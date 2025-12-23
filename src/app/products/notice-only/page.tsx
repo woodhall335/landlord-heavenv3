@@ -25,7 +25,6 @@ export default function NoticeOnlyPage() {
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">£29.99</span>
-              <span className="text-xl text-gray-600">one-time</span>
             </div>
             <Link
               href="/wizard?product=notice_only"
