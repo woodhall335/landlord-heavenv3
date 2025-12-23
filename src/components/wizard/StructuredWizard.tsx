@@ -2590,6 +2590,33 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             </div>
           )}
 
+          {/* Switch to Section 8 option (England only, when Section 21 is blocked) */}
+          {!canRegenerate && jurisdiction === 'england' &&
+           (caseFacts.selected_notice_route === 'section_21' || !caseFacts.selected_notice_route) && (
+            <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-lg mb-4">
+              <div className="flex items-start gap-3">
+                <div className="text-xl">🔄</div>
+                <div className="flex-1">
+                  <h3 className="text-sm font-semibold text-blue-900 mb-1">
+                    Alternative: Switch to Section 8
+                  </h3>
+                  <p className="text-sm text-blue-800 mb-3">
+                    Section 21 has strict compliance requirements. If you have grounds for possession
+                    (rent arrears, breach of tenancy, etc.), you can use Section 8 instead.
+                  </p>
+                  <Button
+                    onClick={() => void switchNoticeRoute('section_8')}
+                    variant="secondary"
+                    size="small"
+                    disabled={loading}
+                  >
+                    {loading ? 'Switching...' : 'Switch to Section 8 →'}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Show warnings if any exist */}
           {totalWarnings > 0 && (
             <div className="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg mb-4">
