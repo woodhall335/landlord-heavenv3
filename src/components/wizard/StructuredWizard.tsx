@@ -2139,7 +2139,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                           <strong>Amount owed:</strong> £{prePopulatedArrears.amount || '0'}
                         </p>
                         <p className="text-sm text-green-800">
-                          <strong>Period:</strong> {prePopulatedArrears.start_date || 'Not set'} to {prePopulatedArrears.end_date || 'Not set'}
+                          <strong>Period:</strong>{' '}
+                          {prePopulatedArrears.start_date
+                            ? new Date(prePopulatedArrears.start_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })
+                            : 'Not set'}{' '}
+                          to{' '}
+                          {prePopulatedArrears.end_date
+                            ? new Date(prePopulatedArrears.end_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })
+                            : 'Not set'}
                         </p>
                       </div>
                     )}
