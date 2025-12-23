@@ -754,6 +754,53 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   }, [caseFacts, currentAnswer, currentQuestion, deriveAnswerFromFacts]);
 
   // ====================================================================================
+  // FIX: Auto-initialize shared_arrears for ground_particulars when arrears grounds selected
+  // ====================================================================================
+  // Problem: Pre-populated arrears values are DISPLAYED but not in currentAnswer.
+  // When user fills factual summaries without touching arrears fields, validation fails
+  // because currentAnswer.shared_arrears is undefined.
+  // Solution: Auto-populate shared_arrears with pre-populated values including default end_date.
+  useEffect(() => {
+    if (!currentQuestion || currentQuestion.id !== 'ground_particulars') return;
+
+    // Get selected grounds
+    const selectedGrounds = caseFacts.section8_grounds || [];
+    const groundIds: string[] = Array.from(new Set<string>(selectedGrounds.map((g: string) => {
+      if (g.startsWith('ground_')) return g;
+      const match = g.match(/Ground (\d+[A-Za-z]?)/i);
+      return match ? `ground_${match[1].toLowerCase()}` : g;
+    })));
+
+    // Check if any arrears grounds are selected
+    const hasArrearsGrounds = groundIds.some((id: string) =>
+      id === 'ground_8' || id === 'ground_10' || id === 'ground_11'
+    );
+
+    if (!hasArrearsGrounds) return;
+
+    // If shared_arrears already exists in currentAnswer, don't overwrite
+    const structuredValue = typeof currentAnswer === 'object' && currentAnswer !== null ? currentAnswer : {};
+    if (structuredValue.shared_arrears?.amount || structuredValue.shared_arrears?.end_date) return;
+
+    // Auto-populate shared_arrears with pre-populated values
+    // Default end_date to today (ISO format) since it's described as "Usually today or notice service date"
+    const todayISO = new Date().toISOString().split('T')[0];
+    const prePopulatedArrears = {
+      amount: caseFacts.arrears_total || '',
+      start_date: caseFacts.arrears_from_date || '',
+      end_date: todayISO,
+    };
+
+    // Only initialize if we have at least the amount from previous step
+    if (prePopulatedArrears.amount) {
+      setCurrentAnswer({
+        ...structuredValue,
+        shared_arrears: prePopulatedArrears,
+      });
+    }
+  }, [currentQuestion, caseFacts, currentAnswer]);
+
+  // ====================================================================================
   // PHASE 2: ROUTE GUARD (CLAUDE CODE FIX #4 + #7 WITH LOOP PROTECTION)
   // ====================================================================================
   useEffect(() => {
@@ -2002,10 +2049,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
 
           // Pre-populate shared_arrears from previously collected arrears_details if not already set
           // This ensures we use the data from the earlier arrears question step
+          // Default end_date to today since the field says "Usually today or notice service date"
+          const todayISO = new Date().toISOString().split('T')[0];
           const prePopulatedArrears = {
             amount: structuredValue.shared_arrears?.amount || caseFacts.arrears_total || '',
             start_date: structuredValue.shared_arrears?.start_date || caseFacts.arrears_from_date || '',
-            end_date: structuredValue.shared_arrears?.end_date || '',
+            end_date: structuredValue.shared_arrears?.end_date || todayISO,
           };
 
           return (
