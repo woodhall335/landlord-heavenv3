@@ -568,20 +568,22 @@ export default function NoticeOnlyPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-20 bg-linear-to-br from-primary to-emerald-600">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Your Notice?</h2>
-            <p className="text-xl mb-8 text-white/90">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Get Your Notice?</h2>
+            <p className="text-xl mb-8 text-gray-600">
               Join thousands of UK landlords who've successfully served eviction notices with Landlord Heaven
             </p>
-            <Link
-              href="/wizard?product=notice_only"
-              className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
-            >
-              Start Your Notice - £29.99 →
-            </Link>
-            <p className="mt-4 text-sm text-white/80">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/wizard?product=notice_only"
+                className="hero-btn-primary"
+              >
+                Start Your Notice - £29.99 →
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-gray-600">
               Instant download • Legally compliant • No subscription
             </p>
           </div>
