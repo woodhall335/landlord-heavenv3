@@ -33,6 +33,7 @@ function WizardFlowContent() {
   const editCaseId = searchParams.get('case_id'); // Case ID to edit
   const mode = searchParams.get('mode');
   const jumpTo = searchParams.get('jump_to'); // Question ID to jump to (from End Validator "Fix this" button)
+  const fixMode = searchParams.get('fix_mode') === 'true'; // Single-question fix mode (returns to validation after save)
 
   const hasRequiredParams = Boolean(type && jurisdiction);
 
@@ -226,6 +227,7 @@ function WizardFlowContent() {
         onComplete={handleComplete}
         mode={mode === 'edit' ? 'edit' : 'default'}
         jumpToQuestionId={jumpTo ?? undefined}
+        fixMode={fixMode}
       />
     );
   }
