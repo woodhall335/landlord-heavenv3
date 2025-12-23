@@ -3198,7 +3198,8 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               </div>
             )}
 
-            {depositWarning && (
+            {/* Deposit cap warning: Hidden for notice_only products - shown only at preview */}
+            {depositWarning && product !== 'notice_only' && (
               <div className="bg-orange-50 border border-orange-300 rounded-lg p-4 mb-6">
                 <p className="text-sm text-orange-900 font-medium">{depositWarning}</p>
               </div>

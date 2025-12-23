@@ -9,6 +9,12 @@
 
 import type { CaseFacts } from '../case-facts/schema';
 import { normalizeJurisdiction, type CanonicalJurisdiction, type LegacyJurisdiction } from '../types/jurisdiction';
+import {
+  resolveGasCertificateFacts,
+  resolveHowToRentFacts,
+  resolveEPCFacts,
+  resolveLicensingFacts,
+} from '../wizard/complianceFactResolvers';
 
 // ============================================================================
 // TYPES
@@ -190,8 +196,12 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   }
 
   // Gas safety certificate (CRITICAL)
-  const gasCertProvided = (input.facts as any).gas_safety_cert_provided;
-  if (gasCertProvided === false) {
+  // Use resolver to handle key aliases: gas_certificate_provided, gas_safety_cert_provided, etc.
+  const gasCertFacts = resolveGasCertificateFacts(input.facts as Record<string, any>);
+  // Only check if gas appliances exist AND certificate not provided
+  // If has_gas_appliances is null/undefined, we fall back to checking certificate status alone
+  const shouldCheckGasCert = gasCertFacts.hasGasAppliances === true || gasCertFacts.hasGasAppliances === null;
+  if (shouldCheckGasCert && gasCertFacts.certificateProvided === false) {
     const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'gas_safety_not_provided',
@@ -207,9 +217,9 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   }
 
   // How to Rent guide (CRITICAL for England)
-  const howToRentGiven = (input.facts as any).how_to_rent_given ||
-    (input.facts as any).how_to_rent_guide_provided;
-  if (howToRentGiven === false) {
+  // Use resolver to handle key aliases: how_to_rent_provided, how_to_rent_given, h2r_provided, etc.
+  const howToRentFacts = resolveHowToRentFacts(input.facts as Record<string, any>);
+  if (howToRentFacts.provided === false) {
     const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'how_to_rent_not_provided',
@@ -225,8 +235,9 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   }
 
   // EPC provided (CRITICAL)
-  const epcProvided = (input.facts as any).epc_provided;
-  if (epcProvided === false) {
+  // Use resolver to handle key aliases: epc_provided, epc_certificate_provided, etc.
+  const epcFacts = resolveEPCFacts(input.facts as Record<string, any>);
+  if (epcFacts.provided === false) {
     const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'epc_not_provided',
@@ -242,14 +253,18 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   }
 
   // HMO licensing (CRITICAL)
-  const hmoLicenseRequired = (input.facts as any).hmo_license_required;
-  const hmoLicenseValid = (input.facts as any).hmo_license_valid;
-  if (hmoLicenseRequired === true && hmoLicenseValid !== true) {
+  // Use resolver to handle key aliases: property_licensing_status, hmo_license_required, etc.
+  const licensingFacts = resolveLicensingFacts(input.facts as Record<string, any>);
+  // Block if property is unlicensed OR if HMO is required but not valid
+  if (licensingFacts.status === 'unlicensed' ||
+      (licensingFacts.hmoRequired === true && licensingFacts.hmoValid !== true)) {
     const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'hmo_not_licensed',
-      description: 'HMO/selective licence required but not in place',
-      action_required: 'Obtain HMO/selective licence before serving Section 21',
+      description: licensingFacts.status === 'unlicensed'
+        ? 'Property requires licensing but is not licensed'
+        : 'HMO/selective licence required but not in place',
+      action_required: 'Obtain required licence before serving Section 21',
       severity: isWizardStage ? 'warning' : 'blocking',
     };
     if (isWizardStage) {
