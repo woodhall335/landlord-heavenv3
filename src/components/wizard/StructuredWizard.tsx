@@ -261,8 +261,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   // This replaces the legacy wizardIssueFilter approach for notice-only products.
   // Guidance is non-blocking, field errors block navigation.
   // KEY: Validation fires ONLY after Save/Next, not while typing.
-  const [noticeOnlyGuidance, setNoticeOnlyGuidance] = useState<InlineGuidance[]>([]);
-  const [noticeOnlyRouteSuggestion, setNoticeOnlyRouteSuggestion] = useState<{
+  // NOTE: State is kept for setter calls but UI rendering is disabled per UX cleanup.
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_noticeOnlyGuidance, setNoticeOnlyGuidance] = useState<InlineGuidance[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_noticeOnlyRouteSuggestion, setNoticeOnlyRouteSuggestion] = useState<{
     toRoute: string;
     reason: string;
   } | null>(null);
