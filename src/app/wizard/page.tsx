@@ -249,7 +249,7 @@ function WizardPageInner() {
         actions={
           <button
             onClick={handleStartNowClick}
-            className="group flex items-center gap-2 px-6 py-3 rounded-full border-2 border-black bg-transparent text-black font-semibold hover:border-purple-600 hover:text-purple-600 hover:shadow-lg transition-all duration-300 animate-subtle-pulse"
+            className="group flex items-center gap-2 px-6 py-3 rounded-full border-2 border-black bg-transparent text-black font-semibold hover:border-purple-600 hover:text-purple-600 hover:shadow-lg transition-all duration-300 animate-subtle-pulse cursor-pointer"
           >
             Start Now
             <svg
