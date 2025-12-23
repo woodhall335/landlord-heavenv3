@@ -464,6 +464,8 @@ questions:
   # SECTION 8 GROUNDS (must come BEFORE notice_service for proper flow)
   # ========================================
 
+  # Ground selection fetches all available grounds from API (config/jurisdictions/uk/england/grounds/)
+  # No static options needed - UI loads complete ground list with descriptions
   - id: section8_grounds_selection
     section: Section 8 Grounds
     question: "Select grounds for eviction"
@@ -473,16 +475,7 @@ questions:
       value: section_8
     validation:
       required: true
-    options:
-      - "Ground 1 - Landlord previously occupied"
-      - "Ground 8 - Serious rent arrears (2+ months)"
-      - "Ground 10 - Some rent arrears"
-      - "Ground 11 - Persistent late payment"
-      - "Ground 12 - Breach of tenancy"
-      - "Ground 13 - Property deterioration"
-      - "Ground 14 - Antisocial behaviour"
-      - "Ground 14A - Domestic violence"
-    helperText: "You can select multiple grounds"
+    helperText: "Select all grounds that apply to your case. Grounds are loaded from legal database."
     maps_to:
       - section8_grounds
 

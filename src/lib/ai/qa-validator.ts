@@ -1,7 +1,7 @@
 /**
  * QA Validator
  *
- * Uses GPT-4 Mini to validate generated legal documents
+ * Uses GPT-4o Mini to validate generated legal documents
  * Ensures documents meet quality standards (target: >85 score)
  */
 
@@ -79,7 +79,7 @@ Respond with JSON:
 }`;
 
 /**
- * Validate a legal document using GPT-4 Mini
+ * Validate a legal document using GPT-4o Mini
  */
 export async function validateDocument(
   request: QAValidationRequest
