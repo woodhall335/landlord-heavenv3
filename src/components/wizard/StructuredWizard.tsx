@@ -693,7 +693,13 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   }, [caseId, loadNextQuestion]);
 
   // Load first question after intro or when no initial question was provided
+  // IMPORTANT: Skip if we have a jumpToQuestionId - let the jump effect handle it
   useEffect(() => {
+    // Don't load first question if we're jumping to a specific question
+    if (jumpToQuestionId) {
+      return;
+    }
+
     if (initialQuestion && !currentQuestion) {
       if (mode === 'edit') {
         setReviewStepIndex(0);
@@ -705,7 +711,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (!showIntro && !currentQuestion) {
       void loadNextQuestion();
     }
-  }, [currentQuestion, initialQuestion, initializeQuestion, loadNextQuestion, mode, showIntro]);
+  }, [currentQuestion, initialQuestion, initializeQuestion, jumpToQuestionId, loadNextQuestion, mode, showIntro]);
 
   // Fetch case facts when question changes (for validation and side panels)
   useEffect(() => {
