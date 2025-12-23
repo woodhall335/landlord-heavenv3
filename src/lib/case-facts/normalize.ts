@@ -1610,6 +1610,17 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     base.compliance.how_to_rent_given = coerceBoolean(howToRent);
   }
 
+  // Recent repair complaints (retaliatory eviction protection)
+  const recentRepairComplaints = getFirstValue(wizard, [
+    'recent_repair_complaints',
+    'repair_complaints',
+    'outstanding_repairs',
+    'tenant_complained',
+  ]);
+  if (recentRepairComplaints !== null && recentRepairComplaints !== undefined) {
+    (base.compliance as any).recent_repair_complaints = coerceBoolean(recentRepairComplaints);
+  }
+
   // Keep "breaches" in sync with "other_breaches" for modules that expect either
   if (!base.issues.breaches) {
     base.issues.breaches = {

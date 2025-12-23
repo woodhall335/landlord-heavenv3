@@ -285,7 +285,9 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   // Deregulation Act 2015 s.33 - Section 21 invalid if served within 6 months of local authority notice
   // Also blocked if tenant has made repair complaints in last 6 months
   const recentRepairComplaints = (input.facts as any).recent_repair_complaints ??
-    (facts as any).eviction?.tenant_complained ?? false;
+    (facts as any).compliance?.recent_repair_complaints ??
+    (input.facts as any).repair_complaints ??
+    (input.facts as any).outstanding_repairs ?? false;
   if (recentRepairComplaints === true) {
     const issue: BlockingIssue = {
       route: 'section_21',
