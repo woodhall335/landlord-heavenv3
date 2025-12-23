@@ -1584,6 +1584,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // =============================================================================
   const gasSafety = getFirstValue(wizard, [
     'case_facts.compliance.gas_safety_cert_provided',
+    'gas_certificate_provided', // Canonical wizard key
     'gas_safety_cert_provided',
     'gas_safety_certificate_provided',
   ]);
@@ -1601,6 +1602,7 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
 
   const howToRent = getFirstValue(wizard, [
     'case_facts.compliance.how_to_rent_given',
+    'how_to_rent_provided', // Canonical wizard key
     'how_to_rent_given',
     'how_to_rent_guide_provided',
   ]);

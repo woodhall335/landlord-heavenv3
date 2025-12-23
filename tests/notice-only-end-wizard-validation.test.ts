@@ -186,6 +186,9 @@ describe('End-of-Wizard Validation Completeness', () => {
   });
 
   describe('Decision Engine Key Resolution', () => {
+    // Note: These tests use flat wizard facts with 'as any' because the decision engine
+    // resolver functions handle both flat keys and nested CaseFacts structures.
+
     it('detects gas certificate missing using canonical key gas_certificate_provided', () => {
       const result = runDecisionEngine({
         jurisdiction: 'england',
@@ -197,7 +200,7 @@ describe('End-of-Wizard Validation Completeness', () => {
           },
           // Use canonical key from wizard
           gas_certificate_provided: false,
-        },
+        } as any,
         stage: 'preview',
       });
 
@@ -217,7 +220,7 @@ describe('End-of-Wizard Validation Completeness', () => {
           },
           // Use canonical key from wizard
           how_to_rent_provided: false,
-        },
+        } as any,
         stage: 'preview',
       });
 
@@ -237,7 +240,7 @@ describe('End-of-Wizard Validation Completeness', () => {
           },
           // Use canonical key from wizard
           epc_provided: false,
-        },
+        } as any,
         stage: 'preview',
       });
 
@@ -256,7 +259,7 @@ describe('End-of-Wizard Validation Completeness', () => {
             deposit_amount: 0,
           },
           property_licensing_status: 'unlicensed',
-        },
+        } as any,
         stage: 'preview',
       });
 
@@ -281,7 +284,7 @@ describe('End-of-Wizard Validation Completeness', () => {
           how_to_rent_provided: false, // Canonical key
           epc_provided: false, // Canonical key
           property_licensing_status: 'unlicensed',
-        },
+        } as any,
         stage: 'preview',
       });
 
@@ -326,11 +329,11 @@ describe('End-of-Wizard Validation Completeness', () => {
           case_type: 'eviction',
           facts: {
             tenancy: {
-              deposit_amount: '2000', // String
-              rent_amount: '1000', // String
+              deposit_amount: '2000', // String (simulating wizard input)
+              rent_amount: '1000', // String (simulating wizard input)
               rent_frequency: 'monthly',
             },
-          },
+          } as any,
           stage: 'preview',
         })
       ).not.toThrow();

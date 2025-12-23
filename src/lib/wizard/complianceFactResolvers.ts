@@ -26,22 +26,29 @@ export interface ResolvedDeposit {
 /**
  * Resolve all deposit-related facts from wizard answers
  * Handles legacy keys: deposit_protected_scheme, deposit_is_protected, etc.
+ * Also handles nested CaseFacts structure: tenancy.deposit_protected, tenancy.deposit_amount
  */
 export function resolveDepositFacts(facts: Record<string, any>): ResolvedDeposit {
   const normalized = normalizeFactKeys(facts);
 
-  // deposit_taken - check multiple possible keys
-  const depositTaken = getFactValue(facts, 'deposit_taken', 'tenancy.deposit_taken');
+  // deposit_taken - check multiple possible keys including nested CaseFacts
+  const depositTaken = getFactValue(facts, 'deposit_taken', 'tenancy.deposit_taken')
+    ?? facts.tenancy?.deposit_taken;
   const taken = depositTaken === true || depositTaken === 'yes';
 
-  // deposit_amount - coerce to number
-  const rawAmount = getFactValue(facts, 'deposit_amount', 'tenancy.deposit_amount');
+  // deposit_amount - coerce to number, check nested CaseFacts paths
+  const rawAmount = getFactValue(facts, 'deposit_amount', 'tenancy.deposit_amount')
+    ?? facts.tenancy?.deposit_amount;
   const amount = rawAmount !== undefined && rawAmount !== null
     ? (typeof rawAmount === 'string' ? parseFloat(rawAmount) : Number(rawAmount))
     : null;
 
-  // deposit_protected - canonical key after normalization
-  const depositProtected = normalized.deposit_protected ?? facts.deposit_protected_scheme ?? facts.deposit_is_protected;
+  // deposit_protected - canonical key after normalization, check nested CaseFacts
+  const depositProtected = normalized.deposit_protected
+    ?? facts.deposit_protected
+    ?? facts.tenancy?.deposit_protected  // CaseFacts nested path
+    ?? facts.deposit_protected_scheme
+    ?? facts.deposit_is_protected;
   let protectedValue: boolean | null = null;
   if (depositProtected === true) protectedValue = true;
   else if (depositProtected === false) protectedValue = false;
@@ -49,13 +56,15 @@ export function resolveDepositFacts(facts: Record<string, any>): ResolvedDeposit
   else if (depositProtected === 'no') protectedValue = false;
 
   // deposit_scheme
-  const scheme = getFactValue(facts, 'deposit_scheme', 'deposit_scheme_name') ?? null;
+  const scheme = getFactValue(facts, 'deposit_scheme', 'deposit_scheme_name')
+    ?? facts.tenancy?.deposit_scheme ?? null;
 
-  // prescribed_info_given - check canonical and legacy keys
+  // prescribed_info_given - check canonical, legacy, and nested CaseFacts keys
   const prescribedInfo = normalized.prescribed_info_given
+    ?? facts.prescribed_info_given
+    ?? facts.tenancy?.prescribed_info_given  // CaseFacts nested path
     ?? facts.prescribed_info_provided
-    ?? facts.prescribed_info_served
-    ?? facts.tenancy?.prescribed_info_given;
+    ?? facts.prescribed_info_served;
   let prescribedInfoGiven: boolean | null = null;
   if (prescribedInfo === true || prescribedInfo === 'yes') prescribedInfoGiven = true;
   else if (prescribedInfo === false || prescribedInfo === 'no') prescribedInfoGiven = false;
@@ -85,6 +94,7 @@ export interface ResolvedGasCertificate {
 /**
  * Resolve gas safety certificate facts
  * Handles legacy keys: gas_safety_cert_provided, gas_safety_certificate_provided, etc.
+ * Also handles nested CaseFacts structure: compliance.gas_safety_cert_provided
  */
 export function resolveGasCertificateFacts(facts: Record<string, any>): ResolvedGasCertificate {
   const normalized = normalizeFactKeys(facts);
@@ -96,9 +106,11 @@ export function resolveGasCertificateFacts(facts: Record<string, any>): Resolved
   else if (hasGasRaw === false || hasGasRaw === 'no') hasGasAppliances = false;
 
   // gas_certificate_provided - canonical key
-  // Check both canonical (after normalization) and all legacy variants
+  // Check both canonical (after normalization), nested CaseFacts paths, and all legacy variants
   const gasCertRaw = normalized.gas_certificate_provided
     ?? facts.gas_certificate_provided
+    ?? facts.compliance?.gas_safety_cert_provided  // CaseFacts nested path
+    ?? facts.compliance?.gas_cert_provided         // CaseFacts alternate
     ?? facts.gas_safety_cert_provided
     ?? facts.gas_safety_certificate_provided
     ?? facts.gas_safety_record_provided
@@ -124,14 +136,17 @@ export interface ResolvedHowToRent {
 /**
  * Resolve How to Rent guide facts
  * Handles legacy keys: how_to_rent_given, h2r_provided, how_to_rent_guide_provided, etc.
+ * Also handles nested CaseFacts structure: compliance.how_to_rent_given
  */
 export function resolveHowToRentFacts(facts: Record<string, any>): ResolvedHowToRent {
   const normalized = normalizeFactKeys(facts);
 
   // how_to_rent_provided - canonical key
-  // Check both canonical (after normalization) and all legacy variants
+  // Check both canonical (after normalization), nested CaseFacts paths, and all legacy variants
   const h2rRaw = normalized.how_to_rent_provided
     ?? facts.how_to_rent_provided
+    ?? facts.compliance?.how_to_rent_given    // CaseFacts nested path
+    ?? facts.compliance?.how_to_rent_provided // CaseFacts alternate
     ?? facts.how_to_rent_given
     ?? facts.h2r_provided
     ?? facts.how_to_rent_served
@@ -154,13 +169,16 @@ export interface ResolvedEPC {
 /**
  * Resolve EPC facts
  * Handles legacy keys: epc_certificate_provided, energy_certificate_provided, etc.
+ * Also handles nested CaseFacts structure: compliance.epc_provided
  */
 export function resolveEPCFacts(facts: Record<string, any>): ResolvedEPC {
   const normalized = normalizeFactKeys(facts);
 
   // epc_provided - canonical key
+  // Check both canonical (after normalization), nested CaseFacts paths, and all legacy variants
   const epcRaw = normalized.epc_provided
     ?? facts.epc_provided
+    ?? facts.compliance?.epc_provided  // CaseFacts nested path
     ?? facts.epc_certificate_provided
     ?? facts.energy_certificate_provided;
 
