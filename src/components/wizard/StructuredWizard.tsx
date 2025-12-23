@@ -3112,8 +3112,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               </div>
             )}
 
-            {/* Notice Compliance Error Panel */}
-            {noticeComplianceError && (
+            {/* Notice Compliance Error Panel - DISABLED for notice_only per UX cleanup
+                Compliance issues only appear at Preview in the End Validator summary.
+                Wizard steps should only block on MSQ field validation (required/type/range).
+                See: docs/notice-only-rules-audit.md */}
+            {product !== 'notice_only' && noticeComplianceError && (
               <div className="bg-orange-50 border-2 border-orange-400 rounded-lg p-5 mb-6 shadow-md">
                 <div className="flex items-start gap-3 mb-4">
                   <div className="text-3xl shrink-0">⚠️</div>
@@ -3226,99 +3229,23 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             {/* ============================================================================
                 INLINE VALIDATION - PRODUCT-AWARE
                 ============================================================================
-                For notice_only: Use new inline validator (noticeOnlyGuidance)
+                For notice_only: Legal Guidance UI is DISABLED per UX cleanup.
+                  - All compliance issues only appear at Preview (End Validator summary)
+                  - Wizard steps only show MSQ field validation (required/type/range)
+                  - Route suggestion banners disabled during wizard
+                  - See: docs/notice-only-rules-audit.md
+
                 For other products: Use legacy issue filtering (previewBlockingIssues, previewWarnings)
 
                 Key UX: Never block navigation - only provide guidance.
             */}
             {product === 'notice_only' ? (
-              /* NOTICE-ONLY: New inline validation from noticeOnlyInlineValidator */
-              <>
-                {/* Route suggestion CTA - triggered ONLY after Save/Next when route is blocked */}
-                {noticeOnlyRouteSuggestion && (
-                  <div className="bg-amber-50 border-l-4 border-amber-500 rounded-r-lg p-4 mb-4">
-                    <div className="flex items-start gap-3">
-                      <span className="text-lg">⚠️</span>
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold text-amber-900 mb-1">
-                          Current route may not be available
-                        </p>
-                        <p className="text-sm text-amber-700 mb-2">
-                          {noticeOnlyRouteSuggestion.reason}
-                        </p>
-                        <p className="text-sm text-amber-800 mb-3">
-                          <strong>{noticeOnlyRouteSuggestion.toRoute.replace(/_/g, ' ').replace(/section/i, 'Section ')}</strong> may be a better option.
-                        </p>
-                        <button
-                          type="button"
-                          onClick={() => setShowFlowNotAvailableModal(true)}
-                          className="text-xs font-medium text-amber-700 hover:text-amber-900 underline"
-                        >
-                          Learn more about why this route is blocked →
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Inline guidance (non-blocking) */}
-                {noticeOnlyGuidance.length > 0 && (
-                  <div className={`${
-                    noticeOnlyGuidance.some(g => g.severity === 'warn')
-                      ? 'bg-amber-50 border-l-4 border-amber-400'
-                      : 'bg-blue-50 border-l-4 border-blue-400'
-                  } rounded-r-lg p-4 mb-4`}>
-                    <div className="flex items-start gap-3">
-                      <span className="text-lg">
-                        {noticeOnlyGuidance.some(g => g.severity === 'warn') ? '⚠️' : 'ℹ️'}
-                      </span>
-                      <div className="flex-1">
-                        <p className={`text-sm font-semibold mb-1 ${
-                          noticeOnlyGuidance.some(g => g.severity === 'warn')
-                            ? 'text-amber-900'
-                            : 'text-blue-900'
-                        }`}>
-                          Legal Guidance
-                        </p>
-                        <ul className={`text-sm space-y-2 mt-2 ${
-                          noticeOnlyGuidance.some(g => g.severity === 'warn')
-                            ? 'text-amber-700'
-                            : 'text-blue-700'
-                        }`}>
-                          {noticeOnlyGuidance.map((guidance, i) => (
-                            <li key={`guidance-${guidance.code || i}`} className="flex items-start gap-2">
-                              <span className={`mt-0.5 ${
-                                guidance.severity === 'warn' ? 'text-amber-500' : 'text-blue-500'
-                              }`}>•</span>
-                              <div className="flex-1">
-                                <span>{guidance.message}</span>
-                                {guidance.legalBasis && (
-                                  <details className="mt-1">
-                                    <summary className={`text-xs cursor-pointer ${
-                                      guidance.severity === 'warn'
-                                        ? 'text-amber-600 hover:text-amber-800'
-                                        : 'text-blue-600 hover:text-blue-800'
-                                    }`}>
-                                      Legal basis
-                                    </summary>
-                                    <p className={`text-xs mt-1 pl-2 border-l-2 ${
-                                      guidance.severity === 'warn'
-                                        ? 'text-amber-600 border-amber-200'
-                                        : 'text-blue-600 border-blue-200'
-                                    }`}>
-                                      {guidance.legalBasis}
-                                    </p>
-                                  </details>
-                                )}
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </>
+              /* NOTICE-ONLY: Legal Guidance UI disabled per UX cleanup.
+                 Compliance issues only appear at Preview in the End Validator summary.
+                 noticeOnlyGuidance, noticeOnlyRouteSuggestion, and
+                 noticeComplianceError are kept as state for potential
+                 future use but not rendered during wizard steps. */
+              null
             ) : (
               /* OTHER PRODUCTS: Legacy inline validation */
               (() => {

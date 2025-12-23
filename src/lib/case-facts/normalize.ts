@@ -128,6 +128,91 @@ function setNestedValue(target: Record<string, any>, path: string, value: any) {
   });
 }
 
+// =============================================================================
+// CANONICAL SERVICE DATE RESOLUTION
+// =============================================================================
+
+/**
+ * Resolves the canonical notice service date from wizard facts.
+ *
+ * This helper provides a single source of truth for notice service dates,
+ * addressing the mismatch between wizard field IDs and maps_to paths.
+ *
+ * PRECEDENCE ORDER:
+ * 1. User-entered date from wizard (maps_to paths)
+ * 2. Direct field ID keys (legacy)
+ * 3. Fallback to null (caller must decide whether to default to today)
+ *
+ * PATHS CHECKED (by jurisdiction):
+ * - England/Wales: notice_service.notice_date, notice_service_date, service_date
+ * - Scotland: notice.notice_date, notice_date
+ * - Legacy: service_date (flat key)
+ *
+ * @param wizard - The wizard facts object
+ * @returns The canonical service date string (YYYY-MM-DD) or null if not found
+ */
+export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
+  // Check all possible paths in precedence order
+  const candidates = [
+    // England/Wales maps_to path
+    'notice_service.notice_date',
+    // Scotland maps_to path
+    'notice.notice_date',
+    // Direct field IDs (wizard stores by field id)
+    'notice_service_date',
+    'service_date',
+    // Scotland field ID
+    'notice_date',
+  ];
+
+  for (const path of candidates) {
+    const value = getWizardValue(wizard, path);
+    if (value && typeof value === 'string' && value.trim()) {
+      // Validate it looks like a date (YYYY-MM-DD or parseable)
+      const parsed = new Date(value);
+      if (!Number.isNaN(parsed.getTime())) {
+        // Return in ISO format (YYYY-MM-DD)
+        return parsed.toISOString().split('T')[0];
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Resolves the canonical notice expiry date from wizard facts.
+ *
+ * Similar to resolveNoticeServiceDate but for expiry dates.
+ *
+ * @param wizard - The wizard facts object
+ * @returns The canonical expiry date string (YYYY-MM-DD) or null if not found
+ */
+export function resolveNoticeExpiryDate(wizard: WizardFacts): string | null {
+  const candidates = [
+    // England/Wales maps_to path
+    'notice_service.notice_expiry_date',
+    // Direct field IDs
+    'notice_expiry_date',
+    'expiry_date',
+    // Scotland
+    'earliest_leaving_date',
+    'earliest_tribunal_date',
+  ];
+
+  for (const path of candidates) {
+    const value = getWizardValue(wizard, path);
+    if (value && typeof value === 'string' && value.trim()) {
+      const parsed = new Date(value);
+      if (!Number.isNaN(parsed.getTime())) {
+        return parsed.toISOString().split('T')[0];
+      }
+    }
+  }
+
+  return null;
+}
+
 /**
  * Helper to extract tenant data from flat wizard facts
  * Looks for keys like "tenants.0.full_name", "tenants.0.email", etc.
@@ -2385,30 +2470,18 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   );
 
   // =============================================================================
-  // NOTICE DATES
+  // NOTICE DATES - Using canonical resolvers to ensure user-entered dates are used
   // =============================================================================
-  templateData.service_date = extractString(
-    getFirstValue(wizard, [
-      'notice_service_date',
-      'service_date',
-      'notice_date', // Scotland
-    ])
-  );
+  // Use resolveNoticeServiceDate to ensure we find dates stored in nested paths
+  // (e.g., notice_service.notice_date from maps_to config)
+  const canonicalServiceDate = resolveNoticeServiceDate(wizard);
+  templateData.service_date = canonicalServiceDate;
 
-  templateData.notice_date = extractString(
-    getFirstValue(wizard, [
-      'notice_date',
-      'notice_service_date',
-      'service_date',
-    ])
-  );
+  // notice_date should be the same as service_date for consistency
+  templateData.notice_date = canonicalServiceDate;
 
-  templateData.expiry_date = extractString(
-    getFirstValue(wizard, [
-      'notice_expiry_date',
-      'expiry_date',
-    ])
-  );
+  // Use resolveNoticeExpiryDate for expiry dates
+  templateData.expiry_date = resolveNoticeExpiryDate(wizard);
 
   // Scotland-specific
   templateData.earliest_leaving_date = extractString(
@@ -2421,14 +2494,22 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   templateData.notice_period_days = noticePeriodDays !== null ? Number(noticePeriodDays) || null : null;
 
   // =============================================================================
-  // NOTICE SERVICE
+  // NOTICE SERVICE - Check nested paths from maps_to
   // =============================================================================
   templateData.notice_service_method = extractString(
-    getFirstValue(wizard, ['notice_service_method', 'service_method'])
+    getFirstValue(wizard, [
+      'notice_service.service_method',  // England/Wales maps_to path
+      'notice_service_method',
+      'service_method',
+    ])
   );
 
   templateData.notice_served_by = extractString(
-    getFirstValue(wizard, ['notice_served_by', 'served_by'])
+    getFirstValue(wizard, [
+      'notice_service.served_by',  // England/Wales maps_to path
+      'notice_served_by',
+      'served_by',
+    ])
   );
 
   // =============================================================================
@@ -2618,11 +2699,15 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
 
   // =============================================================================
   // DATES: Ensure notice_date, service_date, earliest_possession_date are always set
+  // IMPORTANT: Only default to today if user has not entered a service date.
+  // The canonical resolvers above have already checked all possible paths.
   // =============================================================================
   if (!templateData.notice_date && !templateData.service_date) {
-    // Default to today if no date provided
-    templateData.notice_date = new Date().toISOString().split('T')[0];
-    templateData.service_date = templateData.notice_date;
+    // No user-entered date found - default to today as a fallback
+    // This ensures templates always have a date to work with
+    const todayISO = new Date().toISOString().split('T')[0];
+    templateData.notice_date = todayISO;
+    templateData.service_date = todayISO;
   }
 
   // Calculate earliest_possession_date if not provided
