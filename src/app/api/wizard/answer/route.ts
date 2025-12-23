@@ -860,6 +860,24 @@ export async function POST(request: Request) {
       mergedFacts = setFactPath(mergedFacts, question_id, normalizedAnswer);
     }
 
+    // ====================================================================================
+    // SPECIAL HANDLING: ground_particulars is a structured textarea that returns an object
+    // ====================================================================================
+    // The normal mapping code skips objects to prevent "object pollution", but
+    // ground_particulars specifically NEEDS to save its structured object (shared_arrears,
+    // ground_8, ground_10, etc.) to the facts. Without this, the answer is lost and the
+    // wizard returns the same question indefinitely.
+    if (question_id === 'ground_particulars' && normalizedAnswer && typeof normalizedAnswer === 'object') {
+      // Save the entire structured object directly to the mapped paths
+      for (const mappedPath of (question.maps_to || ['ground_particulars'])) {
+        mergedFacts = setFactPath(mergedFacts, mappedPath, normalizedAnswer);
+      }
+      console.log('[WIZARD] Saved ground_particulars structured object:', {
+        paths: question.maps_to || ['ground_particulars'],
+        keys: Object.keys(normalizedAnswer as object),
+      });
+    }
+
     // ALSO save answers under their field IDs for reliable lookup
     // This ensures values are accessible whether looked up by maps_to path or field ID
     // Critical for: deposit_protected_scheme, gas_safety_certificate, recent_repair_complaints_s21, etc.
