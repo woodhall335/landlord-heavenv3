@@ -29,6 +29,9 @@ const ISSUE_CODE_TO_FACT_KEYS: Record<string, string[]> = {
   // Deposit cap (Tenant Fees Act 2019 - England & Wales)
   deposit_exceeds_cap: ['deposit_reduced_to_legal_cap_confirmed', 'deposit_amount', 'rent_amount'],
 
+  // Retaliatory eviction (Deregulation Act 2015 - England)
+  retaliatory_eviction: ['recent_repair_complaints', 'repair_complaints', 'tenant_complained'],
+
   // Wales Section 173
   contract_type_incompatible: ['wales_contract_category', 'contract_category'],
   rent_smart_not_registered: ['rent_smart_wales_registered'],
@@ -55,6 +58,9 @@ const ISSUE_CODE_TO_QUESTION_ID: Record<string, string> = {
 
   // Deposit cap
   deposit_exceeds_cap: 'deposit_reduced_to_legal_cap_confirmed',
+
+  // Retaliatory eviction
+  retaliatory_eviction: 'recent_repair_complaints_s21',
 
   // Wales Section 173
   contract_type_incompatible: 'wales_contract_category',

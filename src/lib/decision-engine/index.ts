@@ -126,7 +126,7 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
     // Part D: Coerce values to numbers to avoid "toFixed is not a function" crashes
     const rawRentAmount = facts.tenancy?.rent_amount ?? (input.facts as any).rent_amount;
     const rentFrequency = facts.tenancy?.rent_frequency ?? (input.facts as any).rent_frequency ?? 'monthly';
-    const rawDepositAmount = facts.tenancy.deposit_amount;
+    const rawDepositAmount = facts.tenancy?.deposit_amount ?? (input.facts as any).deposit_amount;
 
     // Coerce to numbers (wizard may store as strings from form input)
     const rentAmount = typeof rawRentAmount === 'string' ? parseFloat(rawRentAmount) : Number(rawRentAmount);
@@ -151,16 +151,23 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
       const maxWeeks = annualRent > 50000 ? 6 : 5;
       const maxDeposit = weeklyRent * maxWeeks;
 
-      if (depositAmount > maxDeposit) {
+      // Check if landlord has confirmed they've reduced the deposit to legal cap
+      const depositCapConfirmed = (input.facts as any).deposit_reduced_to_legal_cap_confirmed === true;
+
+      if (depositAmount > maxDeposit && !depositCapConfirmed) {
         const issue: BlockingIssue = {
-          route: 'all', // Affects all routes - illegal deposit is a tenancy issue
+          route: 'section_21', // Section 21 specific - deposit issues can block S21 notices
           issue: 'deposit_exceeds_cap',
           description: `Deposit £${depositAmount.toFixed(2)} exceeds legal maximum of £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent)`,
-          action_required: `Reduce deposit to max £${maxDeposit.toFixed(2)} or refund excess to tenant`,
-          severity: 'warning', // Warning not blocking - landlord may have already refunded
+          action_required: `Refund excess deposit (£${(depositAmount - maxDeposit).toFixed(2)}) to tenant before proceeding`,
+          severity: isWizardStage ? 'warning' : 'blocking',
           legal_basis: 'Tenant Fees Act 2019 s3 - deposit capped at 5 weeks rent (6 weeks if annual rent > £50,000)',
         };
-        output.warnings.push(issue.description);
+        if (isWizardStage) {
+          output.warnings.push(issue.description);
+        } else {
+          s21Blocks.push(issue);
+        }
       }
     }
   }
@@ -266,6 +273,27 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
         : 'HMO/selective licence required but not in place',
       action_required: 'Obtain required licence before serving Section 21',
       severity: isWizardStage ? 'warning' : 'blocking',
+    };
+    if (isWizardStage) {
+      output.warnings.push(issue.description);
+    } else {
+      s21Blocks.push(issue);
+    }
+  }
+
+  // Retaliatory eviction check (CRITICAL for England)
+  // Deregulation Act 2015 s.33 - Section 21 invalid if served within 6 months of local authority notice
+  // Also blocked if tenant has made repair complaints in last 6 months
+  const recentRepairComplaints = (input.facts as any).recent_repair_complaints ??
+    (facts as any).eviction?.tenant_complained ?? false;
+  if (recentRepairComplaints === true) {
+    const issue: BlockingIssue = {
+      route: 'section_21',
+      issue: 'retaliatory_eviction',
+      description: 'Section 21 may be invalid due to recent repair complaints from tenant',
+      action_required: 'Cannot use Section 21 within 6 months of tenant repair complaint. Consider Section 8 instead.',
+      severity: isWizardStage ? 'warning' : 'blocking',
+      legal_basis: 'Deregulation Act 2015 s.33 - retaliatory eviction protection',
     };
     if (isWizardStage) {
       output.warnings.push(issue.description);
