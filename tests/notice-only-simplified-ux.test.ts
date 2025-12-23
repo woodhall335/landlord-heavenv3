@@ -43,7 +43,7 @@ describe('Notice-Only Wizard: No Per-Step Compliance Blocking', () => {
   });
 
   it('should STILL block for complete_pack product when pendingRouteBlock is true', () => {
-    const product = 'complete_pack';
+    const product = 'complete_pack' as string;
     const pendingRouteBlock = true;
     const loading = false;
     const uploadingEvidence = false;
@@ -136,7 +136,7 @@ describe('Notice-Only Wizard: Flow Not Available Modal Disabled', () => {
   });
 
   it('should STILL render Flow Not Available modal for complete_pack product', () => {
-    const product = 'complete_pack';
+    const product = 'complete_pack' as string;
     const showFlowNotAvailableModal = true;
     const flowNotAvailableDetails = {
       blockedRoute: 'section_21',
@@ -431,7 +431,7 @@ describe('Notice-Only Simplified UX Integration', () => {
     };
 
     const isMsqValid = mockMsqValidation.required
-      ? mockMsqValidation.value && mockMsqValidation.value.length > 0
+      ? Boolean(mockMsqValidation.value && mockMsqValidation.value.length > 0)
       : true;
 
     expect(isMsqValid).toBe(false); // MSQ validation still blocks empty required fields
