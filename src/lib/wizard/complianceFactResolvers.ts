@@ -333,9 +333,10 @@ export function resolveSection21ComplianceFacts(facts: Record<string, any>): Res
  */
 export const COMPLIANCE_ISSUE_TO_QUESTION_ID: Record<string, string> = {
   // Section 21 compliance evaluator codes
+  // NOTE: Question IDs must match those defined in config/mqs/notice_only/england.yaml
   'S21-DEPOSIT-NONCOMPLIANT': 'deposit_protected_scheme',
   'S21-PRESCRIBED-INFO-REQUIRED': 'prescribed_info_given',
-  'S21-DEPOSIT-CAP-EXCEEDED': 'deposit_reduced_to_legal_cap_confirmed',
+  'S21-DEPOSIT-CAP-EXCEEDED': 'deposit_amount', // User needs to fix the deposit amount
   'S21-LICENSING': 'property_licensing',
   'S21-GAS-CERT': 'gas_safety_certificate',
   'S21-EPC': 'epc_provided',

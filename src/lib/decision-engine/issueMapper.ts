@@ -46,6 +46,7 @@ const ISSUE_CODE_TO_FACT_KEYS: Record<string, string[]> = {
 /**
  * Direct mapping from issue codes to question IDs (fallback when MQS lookup fails)
  * This ensures deep-linking works even if MQS mapping is incomplete
+ * NOTE: Question IDs must match those defined in config/mqs/notice_only/england.yaml
  */
 const ISSUE_CODE_TO_QUESTION_ID: Record<string, string> = {
   // England/Wales Section 21
@@ -56,8 +57,8 @@ const ISSUE_CODE_TO_QUESTION_ID: Record<string, string> = {
   epc_not_provided: 'epc_provided',
   hmo_not_licensed: 'property_licensing',
 
-  // Deposit cap
-  deposit_exceeds_cap: 'deposit_reduced_to_legal_cap_confirmed',
+  // Deposit cap - link to deposit_amount question where user enters the amount
+  deposit_exceeds_cap: 'deposit_amount',
 
   // Retaliatory eviction
   retaliatory_eviction: 'recent_repair_complaints_s21',
