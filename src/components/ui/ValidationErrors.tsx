@@ -310,8 +310,10 @@ export function ValidationErrors({
         </div>
       )}
 
-      {/* Warnings */}
-      {warnings.length > 0 && (
+      {/* Warnings / Recommendations
+        Part C: Hide recommendations block for notice_only - we only show blocking issues
+        for that product to avoid overwhelming users with non-critical suggestions */}
+      {warnings.length > 0 && product !== 'notice_only' && (
         <div className="bg-yellow-50 border-l-4 border-yellow-600 p-6 rounded-r-lg">
           <div className="flex items-start gap-4">
             <div className="text-2xl">💡</div>

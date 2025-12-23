@@ -371,11 +371,14 @@ export default function WizardPreviewPage() {
             } else if (checkpointResponse.status === 422) {
               // Checkpoint returned 422 LEGAL_BLOCK - extract structured validation errors
               if (checkpointData.code === 'LEGAL_BLOCK' && checkpointData.blocking_issues) {
+                // Part A: Set validation state directly instead of throwing to avoid noisy console stack traces
                 setValidationErrors({
                   blocking_issues: checkpointData.blocking_issues || [],
                   warnings: checkpointData.warnings || [],
                 });
-                throw new Error('VALIDATION_ERROR'); // Special error to trigger validation UI
+                setError('VALIDATION_ERROR');
+                setLoading(false);
+                return; // Early return - let render path handle validation UI
               } else {
                 // Old-style 422 error format
                 const missingFields = checkpointData.missingFields || [];
@@ -437,11 +440,14 @@ export default function WizardPreviewPage() {
 
           // Check for 422 LEGAL_BLOCK with structured validation errors
           if (previewResponse.status === 422 && errorData.code === 'LEGAL_BLOCK' && errorData.blocking_issues) {
+            // Part A: Set validation state directly instead of throwing to avoid noisy console stack traces
             setValidationErrors({
               blocking_issues: errorData.blocking_issues || [],
               warnings: errorData.warnings || [],
             });
-            throw new Error('VALIDATION_ERROR'); // Special error to trigger validation UI
+            setError('VALIDATION_ERROR');
+            setLoading(false);
+            return; // Early return - let render path handle validation UI
           }
 
           // Handle 422 NOTICE_NONCOMPLIANT with structured compliance issues
@@ -475,12 +481,14 @@ export default function WizardPreviewPage() {
               severity: 'warning' as const,
             }));
 
+            // Part A: Set validation state directly instead of throwing to avoid noisy console stack traces
             setValidationErrors({
               blocking_issues: mappedBlockingIssues,
               warnings: mappedWarnings,
             });
-
-            throw new Error('VALIDATION_ERROR'); // Trigger validation UI (NOT "Something went wrong")
+            setError('VALIDATION_ERROR');
+            setLoading(false);
+            return; // Early return - let render path handle validation UI (NOT "Something went wrong")
           }
 
           // Old-style error handling for backward compatibility
@@ -632,6 +640,77 @@ export default function WizardPreviewPage() {
     window.location.reload();
   };
 
+  // Part B: Get current route for route switching functionality
+  const getCurrentRoute = (): string | undefined => {
+    if (caseData?.recommended_route) {
+      return caseData.recommended_route;
+    }
+    const facts = caseData?.collected_facts as any;
+    return facts?.selected_notice_route || facts?.route_recommendation?.recommended_route;
+  };
+
+  // Part B: Get alternative routes based on jurisdiction and current route
+  const getAlternativeRoutes = (): string[] => {
+    const currentRoute = getCurrentRoute();
+    const jurisdiction = caseData?.jurisdiction;
+
+    // Only offer section_8 as alternative when section_21 is blocked in England
+    if (jurisdiction === 'england' && currentRoute === 'section_21') {
+      return ['section_8'];
+    }
+
+    // Could add more alternatives for other jurisdictions here
+    // e.g., Wales: section_173 blocked -> offer wales_fault_based
+    if (jurisdiction === 'wales' && currentRoute === 'wales_section_173') {
+      return ['wales_fault_based'];
+    }
+
+    return [];
+  };
+
+  // Part B: Handle route switching - persists new route and reloads preview
+  const handleSwitchRoute = async (newRoute: string): Promise<void> => {
+    try {
+      // Persist the route switch by calling the wizard answer API
+      const response = await fetch('/api/wizard/answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          case_id: caseId,
+          question_id: 'selected_notice_route',
+          answer: newRoute,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to switch route');
+      }
+
+      // Also update recommended_route on the case if needed
+      try {
+        await fetch('/api/wizard/checkpoint', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            case_id: caseId,
+            force_route: newRoute,
+          }),
+        });
+      } catch (checkpointErr) {
+        console.warn('Checkpoint after route switch failed (non-blocking):', checkpointErr);
+      }
+
+      // Reload the page to regenerate preview with new route
+      showToast(`Switching to ${newRoute === 'section_8' ? 'Section 8' : newRoute}...`, 'success');
+      window.location.reload();
+    } catch (err: any) {
+      console.error('Route switch failed:', err);
+      showToast(err.message || 'Failed to switch route. Please try again.', 'error');
+      throw err; // Re-throw so the UI can handle loading state
+    }
+  };
+
   // Error state with structured validation errors
   if (error || !caseData) {
     // Show structured validation errors if available
@@ -654,8 +733,11 @@ export default function WizardPreviewPage() {
               caseId={caseId}
               caseType={caseData?.case_type as 'eviction' | 'money_claim' | 'tenancy_agreement'}
               jurisdiction={caseData?.jurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland'}
-              product={(caseData?.collected_facts as any)?.__meta?.product || undefined}
+              product={(caseData?.collected_facts as any)?.__meta?.product || (caseData?.collected_facts as any)?.meta?.product || undefined}
               onRetry={handleRetry}
+              currentRoute={getCurrentRoute()}
+              alternativeRoutes={getAlternativeRoutes()}
+              onSwitchRoute={handleSwitchRoute}
             />
           </div>
         </div>
