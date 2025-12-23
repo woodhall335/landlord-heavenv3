@@ -78,13 +78,13 @@ export default function ScotlandPRTPage() {
       {
         '@type': 'Offer',
         name: 'Standard PRT',
-        price: '39.99',
+        price: '9.99',
         priceCurrency: 'GBP',
       },
       {
         '@type': 'Offer',
         name: 'Premium PRT',
-        price: '59.00',
+        price: '14.99',
         priceCurrency: 'GBP',
       },
     ],
@@ -128,13 +128,13 @@ export default function ScotlandPRTPage() {
                 href="/wizard?jurisdiction=scotland&document_type=prt_agreement"
                 className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg"
               >
-                Create Standard PRT - £39.99
+                Create Standard PRT - £9.99
               </Link>
               <Link
                 href="/wizard?jurisdiction=scotland&document_type=prt_premium"
                 className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:hover:bg-primary-dark transition-colors text-lg"
               >
-                Create Premium PRT - £59.00
+                Create Premium PRT - £14.99
               </Link>
             </div>
           </div>
@@ -643,7 +643,7 @@ export default function ScotlandPRTPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                  <h4 className="text-xl font-bold mb-3">Standard PRT - £39.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Standard PRT - £9.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>✓ All legal essentials for Scottish PRTs</li>
                     <li>✓ Compliant with PH(T)(S) Act 2016</li>
@@ -665,7 +665,7 @@ export default function ScotlandPRTPage() {
                   <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
                     RECOMMENDED
                   </div>
-                  <h4 className="text-xl font-bold mb-3">Premium PRT - £59.00</h4>
+                  <h4 className="text-xl font-bold mb-3">Premium PRT - £14.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>✓ Everything in Standard PLUS:</li>
                     <li>✓ Comprehensive inventory section with white goods grid</li>
@@ -952,10 +952,10 @@ export default function ScotlandPRTPage() {
                   What is the difference between Standard and Premium PRT agreements?
                 </summary>
                 <p className="mt-3 text-gray-700">
-                  The <strong>Standard PRT (£39.99)</strong> covers all legal essentials for Scottish tenancies, including open-ended structure, 18 grounds for possession, Repairing Standard obligations, and landlord registration.
+                  The <strong>Standard PRT (£9.99)</strong> covers all legal essentials for Scottish tenancies, including open-ended structure, 18 grounds for possession, Repairing Standard obligations, and landlord registration.
                 </p>
                 <p className="mt-2 text-gray-700">
-                  The <strong>Premium PRT (£59.00)</strong> adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (Scotland blue theme), rights of change clauses, enhanced legal compliance information boxes, detailed Repairing Standard explanation, First-tier Tribunal guidance, and superior professional presentation.
+                  The <strong>Premium PRT (£14.99)</strong> adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (Scotland blue theme), rights of change clauses, enhanced legal compliance information boxes, detailed Repairing Standard explanation, First-tier Tribunal guidance, and superior professional presentation.
                 </p>
               </details>
 
@@ -1065,13 +1065,13 @@ export default function ScotlandPRTPage() {
                 href="/wizard?jurisdiction=scotland&document_type=prt_agreement"
                 className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg shadow-lg"
               >
-                Standard PRT - £39.99
+                Standard PRT - £9.99
               </Link>
               <Link
                 href="/wizard?jurisdiction=scotland&document_type=prt_premium"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
-                Premium PRT - £59.00 ⭐
+                Premium PRT - £14.99 ⭐
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">

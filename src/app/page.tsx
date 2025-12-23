@@ -304,7 +304,7 @@ export default function Home() {
             {
               title: "Tenancy Agreements",
               description: "Compliant ASTs with optional clauses for HMOs and students",
-              price: "£49.99",
+              price: "from £9.99",
               icon: "📋",
             },
           ].map((item) => (
