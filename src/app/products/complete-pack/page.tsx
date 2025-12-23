@@ -1067,28 +1067,28 @@ export default function CompleteEvictionPackPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 md:py-20 bg-linear-to-br from-primary to-emerald-600 text-white">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Your Eviction?</h2>
-            <p className="text-xl mb-8 text-white/90">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Start Your Eviction?</h2>
+            <p className="text-xl mb-8 text-gray-600">
               Get your Complete Eviction Pack now and take control of your property with confidence.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard?product=complete_pack"
-                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
+                className="hero-btn-primary"
               >
                 Get Complete Pack - £149.99 →
               </Link>
               <Link
                 href="/products/notice-only"
-                className="inline-block bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/10 transition-colors"
+                className="hero-btn-secondary"
               >
                 Or Just Get Notice - £29.99
               </Link>
             </div>
-            <p className="text-sm text-white/80">
+            <p className="mt-4 text-sm text-gray-600">
               Instant download • Court-ready documents • Lifetime storage • Priority support
             </p>
           </div>

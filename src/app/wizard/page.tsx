@@ -90,7 +90,7 @@ const documentOptions: DocumentOption[] = [
     title: 'Tenancy Agreement',
     description: 'Standard or Premium AST - create a compliant tenancy agreement',
     icon: '📝',
-    price: 'From £39.99',
+    price: 'From £9.99',
   },
   {
     type: 'money_claim',
