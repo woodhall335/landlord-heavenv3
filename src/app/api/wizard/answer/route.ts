@@ -860,6 +860,22 @@ export async function POST(request: Request) {
       mergedFacts = setFactPath(mergedFacts, question_id, normalizedAnswer);
     }
 
+    // ALSO save answers under their field IDs for reliable lookup
+    // This ensures values are accessible whether looked up by maps_to path or field ID
+    // Critical for: deposit_protected_scheme, gas_safety_certificate, recent_repair_complaints_s21, etc.
+    if (normalizedAnswer && typeof normalizedAnswer === 'object' && !Array.isArray(normalizedAnswer)) {
+      // Group question - save each field under its field ID
+      for (const [fieldId, fieldValue] of Object.entries(normalizedAnswer as Record<string, unknown>)) {
+        if (fieldValue !== undefined && fieldValue !== null && typeof fieldValue !== 'object') {
+          mergedFacts = setFactPath(mergedFacts, fieldId, fieldValue);
+        }
+      }
+    } else if (normalizedAnswer !== undefined && normalizedAnswer !== null) {
+      // Single question (yes_no, select, etc.) - save under question_id
+      // This ensures is_fixed_term, deposit_taken, has_gas_appliances etc. are always saved
+      mergedFacts = setFactPath(mergedFacts, question_id, normalizedAnswer);
+    }
+
     mergedFacts = updateDerivedFacts(
       question_id,
       caseRow.jurisdiction,

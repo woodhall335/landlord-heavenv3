@@ -107,10 +107,13 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   // Deposit protection (CRITICAL)
   if (facts.tenancy?.deposit_amount && facts.tenancy.deposit_amount > 0) {
     if (facts.tenancy.deposit_protected !== true) {
+      // Get the user's actual answer to show them what they selected
+      const depositProtectedAnswer = facts.tenancy.deposit_protected === false ? 'No' :
+        facts.tenancy.deposit_protected === undefined ? 'Not answered' : String(facts.tenancy.deposit_protected);
       const issue: BlockingIssue = {
         route: 'section_21',
         issue: 'deposit_not_protected',
-        description: 'Deposit not protected in approved scheme',
+        description: `Deposit not protected in approved scheme (you selected: "${depositProtectedAnswer}")`,
         action_required: 'Protect deposit in DPS, MyDeposits, or TDS before serving Section 21',
         severity: isWizardStage ? 'warning' : 'blocking',
       };
@@ -212,7 +215,7 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
     const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'gas_safety_not_provided',
-      description: 'Gas safety certificate not provided before tenancy start',
+      description: 'Gas safety certificate not provided before tenancy start (you selected: "No")',
       action_required: 'Cannot use Section 21 if gas cert not provided at start',
       severity: isWizardStage ? 'warning' : 'blocking',
     };
@@ -230,7 +233,7 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
     const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'how_to_rent_not_provided',
-      description: '"How to Rent" guide not provided at start of tenancy',
+      description: '"How to Rent" guide not provided at start of tenancy (you selected: "No")',
       action_required: 'Cannot use Section 21 without providing How to Rent guide',
       severity: isWizardStage ? 'warning' : 'blocking',
     };
@@ -248,7 +251,7 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
     const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'epc_not_provided',
-      description: 'Energy Performance Certificate not provided to tenant',
+      description: 'Energy Performance Certificate not provided to tenant (you selected: "No")',
       action_required: 'Provide EPC before Section 21 is valid',
       severity: isWizardStage ? 'warning' : 'blocking',
     };
@@ -269,7 +272,7 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
       route: 'section_21',
       issue: 'hmo_not_licensed',
       description: licensingFacts.status === 'unlicensed'
-        ? 'Property requires licensing but is not licensed'
+        ? `Property requires licensing but is not licensed (status: "${licensingFacts.status}")`
         : 'HMO/selective licence required but not in place',
       action_required: 'Obtain required licence before serving Section 21',
       severity: isWizardStage ? 'warning' : 'blocking',
@@ -292,7 +295,7 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
     const issue: BlockingIssue = {
       route: 'section_21',
       issue: 'retaliatory_eviction',
-      description: 'Section 21 may be invalid due to recent repair complaints from tenant',
+      description: 'Section 21 may be invalid due to recent repair complaints from tenant (you selected: "Yes")',
       action_required: 'Cannot use Section 21 within 6 months of tenant repair complaint. Consider Section 8 instead.',
       severity: isWizardStage ? 'warning' : 'blocking',
       legal_basis: 'Deregulation Act 2015 s.33 - retaliatory eviction protection',

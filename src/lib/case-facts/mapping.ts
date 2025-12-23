@@ -53,18 +53,35 @@ export function applyMappedAnswers(
 
     if (value && typeof value === 'object' && !Array.isArray(value) && key) {
       // Value is an object - extract the specific field by key
-      if (Object.prototype.hasOwnProperty.call(value as object, key)) {
-        valueForPath = (value as Record<string, unknown>)[key];
+      const valueObj = value as Record<string, unknown>;
+
+      if (Object.prototype.hasOwnProperty.call(valueObj, key)) {
+        valueForPath = valueObj[key];
       } else {
-        // Try address key fallback (address_line1, address_line2, city, postcode, country)
-        const addressKeys = ['address_line1', 'address_line2', 'city', 'postcode', 'country'];
-        const matchedAddressKey = addressKeys.find((addressKey) => key.includes(addressKey));
-        if (matchedAddressKey && Object.prototype.hasOwnProperty.call(value as object, matchedAddressKey)) {
-          valueForPath = (value as Record<string, unknown>)[matchedAddressKey];
+        // Try common field ID patterns where the field ID has a prefix
+        // e.g., maps_to: "notice_service.notice_date" → key: "notice_date"
+        //       but field ID is "notice_service_date"
+        const matchingFieldKey = Object.keys(valueObj).find(fieldKey => {
+          // Check if field key ends with the expected key
+          // e.g., "notice_service_date" ends with "date" (from "notice_date")
+          const keyParts = key.split('_');
+          const lastKeyPart = keyParts[keyParts.length - 1];
+          return fieldKey.endsWith(`_${lastKeyPart}`) || fieldKey.endsWith(`_${key}`);
+        });
+
+        if (matchingFieldKey) {
+          valueForPath = valueObj[matchingFieldKey];
         } else {
-          // TASK B FIX: Key not found and no address fallback - DO NOT write
-          // This prevents object pollution into flat facts
-          shouldWrite = false;
+          // Try address key fallback (address_line1, address_line2, city, postcode, country)
+          const addressKeys = ['address_line1', 'address_line2', 'city', 'postcode', 'country'];
+          const matchedAddressKey = addressKeys.find((addressKey) => key.includes(addressKey));
+          if (matchedAddressKey && Object.prototype.hasOwnProperty.call(valueObj, matchedAddressKey)) {
+            valueForPath = valueObj[matchedAddressKey];
+          } else {
+            // Key not found and no fallback - DO NOT write
+            // This prevents object pollution into flat facts
+            shouldWrite = false;
+          }
         }
       }
 
