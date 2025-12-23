@@ -2,9 +2,10 @@
  * AI Module - Central exports
  *
  * Provides access to all AI functionality:
- * - OpenAI (GPT-4) for fact-finding and chat
- * - Claude (Sonnet 4) for QA validation
+ * - OpenAI (GPT-4 Mini) for fact-finding, chat, and QA validation
  * - Token tracking for cost monitoring
+ *
+ * Note: Claude exports kept for backwards compatibility but no longer used
  */
 
 // OpenAI exports

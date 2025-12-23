@@ -119,10 +119,10 @@ export default function HelpPage() {
                       <strong>Money Claims (£179.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
                     </li>
                     <li>
-                      <strong>Standard AST (£49.99):</strong> Simple tenancy agreement for standard lettings.
+                      <strong>Standard AST (£9.99):</strong> Simple tenancy agreement for standard lettings.
                     </li>
                     <li>
-                      <strong>Premium AST (£99.99):</strong> Advanced tenancy with HMO clauses, guarantors, rent
+                      <strong>Premium AST (£14.99):</strong> Advanced tenancy with HMO clauses, guarantors, rent
                       increases.
                     </li>
                     <li>
