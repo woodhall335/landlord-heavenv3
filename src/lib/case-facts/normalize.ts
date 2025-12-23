@@ -1864,6 +1864,83 @@ export function normalizeCaseFacts(
 // =============================================================================
 
 /**
+ * Notice periods required for each Section 8 ground (in days)
+ *
+ * Legal basis: Housing Act 1988, Section 8(4) and Schedule 2
+ *
+ * 2 weeks (14 days): Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 14ZA, 15, 17
+ * 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16
+ * Immediate (0 days): Ground 14 (serious anti-social behaviour), Ground 14A
+ *
+ * NOTE: Ground 14 can be served with immediate effect in cases of serious
+ * anti-social behaviour, but defaults to 14 days for standard nuisance.
+ */
+const GROUND_NOTICE_PERIODS: Record<number | string, number> = {
+  1: 60,    // 2 months - landlord previously occupied
+  2: 60,    // 2 months - mortgage lender requires possession
+  3: 14,    // 2 weeks - holiday let
+  4: 14,    // 2 weeks - educational institution let
+  5: 60,    // 2 months - minister of religion
+  6: 60,    // 2 months - demolition/reconstruction
+  7: 60,    // 2 months - death of periodic tenant
+  '7A': 14, // 2 weeks - abandonment (fixed term)
+  '7B': 14, // 2 weeks - abandonment (periodic)
+  8: 14,    // 2 weeks - serious rent arrears (8 weeks/2 months)
+  9: 60,    // 2 months - suitable alternative accommodation
+  10: 60,   // 2 MONTHS - some rent arrears (NOT 2 weeks!)
+  11: 60,   // 2 MONTHS - persistent delay in paying rent (NOT 2 weeks!)
+  12: 14,   // 2 weeks - breach of tenancy obligation
+  13: 14,   // 2 weeks - deterioration of dwelling
+  14: 14,   // 2 weeks (default) - nuisance/annoyance (can be immediate for serious ASB)
+  '14ZA': 14, // 2 weeks - riot conviction
+  '14A': 0,   // Immediate - domestic violence
+  15: 14,   // 2 weeks - deterioration of furniture
+  16: 60,   // 2 months - former employee
+  17: 14,   // 2 weeks - false statement
+};
+
+/**
+ * Calculate the required notice period based on selected grounds
+ * Returns the MAXIMUM notice period required across all selected grounds
+ *
+ * @param selectedGrounds - Array of ground codes (e.g., ['8', '10', '11'])
+ * @returns Notice period in days (defaults to 14 if no grounds specified)
+ */
+function calculateRequiredNoticePeriod(selectedGrounds: (string | number)[]): number {
+  if (!selectedGrounds || selectedGrounds.length === 0) {
+    return 14; // Default for Section 8 when no specific grounds
+  }
+
+  let maxPeriod = 0;
+
+  for (const ground of selectedGrounds) {
+    // Normalize ground code
+    let groundKey: string | number = ground;
+    if (typeof ground === 'string') {
+      const match = ground.match(/ground[_\s-]*([0-9]+[ab]?)/i);
+      if (match) {
+        groundKey = match[1].toUpperCase();
+      } else {
+        const numMatch = ground.match(/^([0-9]+[ab]?)$/i);
+        if (numMatch) {
+          groundKey = numMatch[1].toUpperCase();
+        }
+      }
+    }
+
+    // Try numeric key first, then string key
+    const numericKey = typeof groundKey === 'string' ? parseInt(groundKey, 10) : groundKey;
+    const period = GROUND_NOTICE_PERIODS[numericKey] ?? GROUND_NOTICE_PERIODS[groundKey] ?? 14;
+
+    if (period > maxPeriod) {
+      maxPeriod = period;
+    }
+  }
+
+  return maxPeriod;
+}
+
+/**
  * Official Section 8 ground definitions
  */
 const SECTION8_GROUND_DEFINITIONS: Record<number | string, {
@@ -2724,11 +2801,36 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
   }
 
   // Calculate earliest_possession_date if not provided
+  // IMPORTANT: Notice period depends on selected grounds!
+  // Grounds 10 and 11 require 2 months (60 days), not 2 weeks (14 days)
   if (!templateData.earliest_possession_date && templateData.service_date) {
-    const noticePeriodDays = templateData.notice_period_days || 14;
+    // Get selected grounds to calculate required notice period
+    const selectedGrounds = getFirstValue(wizard, [
+      'case_facts.issues.section8_grounds.selected_grounds',
+      'section8_grounds',
+      'section8_grounds_selection',
+      'selected_grounds',
+    ]);
+
+    const groundsList = Array.isArray(selectedGrounds) ? selectedGrounds : (selectedGrounds ? [selectedGrounds] : []);
+
+    // Calculate notice period based on grounds (use max of all selected grounds)
+    const calculatedNoticePeriod = calculateRequiredNoticePeriod(groundsList);
+
+    // Use explicitly provided notice_period_days if available, otherwise use calculated
+    const noticePeriodDays = templateData.notice_period_days || calculatedNoticePeriod;
+
+    // Store the calculated notice period for templates and validation
+    templateData.notice_period_days = noticePeriodDays;
+    templateData.notice_period_weeks = Math.ceil(noticePeriodDays / 7);
+    templateData.notice_period_months = noticePeriodDays >= 60 ? 2 : 0;
+    templateData.notice_period_description = noticePeriodDays >= 60 ? '2 months' : '2 weeks';
+
     const serviceDate = new Date(templateData.service_date);
     const earliestDate = new Date(serviceDate.getTime() + noticePeriodDays * 24 * 60 * 60 * 1000);
     templateData.earliest_possession_date = earliestDate.toISOString().split('T')[0];
+
+    console.log(`[mapNoticeOnlyFacts] Notice period calculated: ${noticePeriodDays} days (${templateData.notice_period_description}) based on grounds: ${groundsList.join(', ')}`);
   }
 
   // =============================================================================
