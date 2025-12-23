@@ -102,12 +102,15 @@ a:hover {
   border-radius: 0.5rem;
   font-weight: 600;
   font-size: 1.125rem;
-  transition: background-color 0.25s ease;
+  transition: all 0.25s ease;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 2px solid #7C3AED;
 }
 
 .hero-btn-primary:hover {
-  background-color: #6D28D9;
+  background-color: transparent;
+  color: #7C3AED;
+  border-color: #7C3AED;
 }
 
 .hero-btn-secondary {
@@ -118,12 +121,14 @@ a:hover {
   border-radius: 0.5rem;
   font-weight: 600;
   font-size: 1.125rem;
-  transition: background-color 0.25s ease;
+  transition: all 0.25s ease;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 2px solid transparent;
 }
 
 .hero-btn-secondary:hover {
-  background-color: #f9fafb;
+  background-color: transparent;
+  border-color: #7C3AED;
 }
 
 /* Custom scrollbar styling - Purple brand color */
