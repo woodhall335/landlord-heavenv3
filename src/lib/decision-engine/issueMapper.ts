@@ -14,28 +14,57 @@ import type { Jurisdiction, Product } from '../jurisdictions/capabilities/matrix
 
 /**
  * Maps decision engine issue codes to the fact keys they validate
+ * NOTE: Uses CANONICAL keys that match MQS wizard questions, plus legacy fallbacks
  */
 const ISSUE_CODE_TO_FACT_KEYS: Record<string, string[]> = {
   // England/Wales Section 21
-  deposit_not_protected: ['deposit_protected'],
-  prescribed_info_not_given: ['prescribed_info_given'],
-  gas_safety_not_provided: ['gas_safety_cert_provided'],
-  how_to_rent_not_provided: ['how_to_rent_given', 'how_to_rent_guide_provided'],
-  epc_not_provided: ['epc_provided'],
-  hmo_not_licensed: ['hmo_license_valid'],
+  // Use canonical keys FIRST, then legacy fallbacks for MQS lookup
+  deposit_not_protected: ['deposit_protected', 'deposit_protected_scheme'],
+  prescribed_info_not_given: ['prescribed_info_given', 'prescribed_info_provided'],
+  gas_safety_not_provided: ['gas_certificate_provided', 'gas_safety_cert_provided', 'gas_safety_certificate'],
+  how_to_rent_not_provided: ['how_to_rent_provided', 'how_to_rent_given', 'how_to_rent_guide_provided'],
+  epc_not_provided: ['epc_provided', 'epc_certificate_provided'],
+  hmo_not_licensed: ['property_licensing_status', 'property_licensing', 'hmo_license_valid'],
 
   // Deposit cap (Tenant Fees Act 2019 - England & Wales)
-  deposit_exceeds_cap: ['deposit_amount', 'rent_amount'],
+  deposit_exceeds_cap: ['deposit_reduced_to_legal_cap_confirmed', 'deposit_amount', 'rent_amount'],
 
   // Wales Section 173
   contract_type_incompatible: ['wales_contract_category', 'contract_category'],
   rent_smart_not_registered: ['rent_smart_wales_registered'],
 
   // Scotland Notice to Leave
-  pre_action_not_met: ['pre_action_confirmed'],
+  pre_action_not_met: ['pre_action_contact', 'pre_action_confirmed'],
 
   // General/unknown
   ni_not_supported: [],
+};
+
+/**
+ * Direct mapping from issue codes to question IDs (fallback when MQS lookup fails)
+ * This ensures deep-linking works even if MQS mapping is incomplete
+ */
+const ISSUE_CODE_TO_QUESTION_ID: Record<string, string> = {
+  // England/Wales Section 21
+  deposit_not_protected: 'deposit_protected_scheme',
+  prescribed_info_not_given: 'prescribed_info_given',
+  gas_safety_not_provided: 'gas_safety_certificate',
+  how_to_rent_not_provided: 'how_to_rent_provided',
+  epc_not_provided: 'epc_provided',
+  hmo_not_licensed: 'property_licensing',
+
+  // Deposit cap
+  deposit_exceeds_cap: 'deposit_reduced_to_legal_cap_confirmed',
+
+  // Wales Section 173
+  contract_type_incompatible: 'wales_contract_category',
+  rent_smart_not_registered: 'rent_smart_wales_registered',
+
+  // Scotland Notice to Leave
+  pre_action_not_met: 'pre_action_contact',
+
+  // Northern Ireland
+  ni_not_supported: 'jurisdiction',
 };
 
 export interface DecisionIssueMapperContext {
@@ -71,6 +100,11 @@ export function mapDecisionIssueToValidationIssue(
       }
       alternateQuestionIds.push(...questionIds.slice(1));
     }
+  }
+
+  // Fallback to direct mapping if MQS lookup failed
+  if (!affectedQuestionId) {
+    affectedQuestionId = ISSUE_CODE_TO_QUESTION_ID[issue.issue];
   }
 
   // Convert to ValidationIssue format
