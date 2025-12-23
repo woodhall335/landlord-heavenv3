@@ -153,7 +153,9 @@ describe('Notice-Only Inline Validator', () => {
       expect(result).toHaveProperty('guidance');
     });
 
-    it('returns deposit cap warning for England when deposit exceeds 5 weeks rent', async () => {
+    it('returns NO deposit cap guidance by default (UX: guidance at preview only)', async () => {
+      // Per UX requirements: inline guidance is disabled by default
+      // Deposit cap validation happens at preview stage via decision engine
       const result = await validateStepInline({
         ...baseParams,
         msq: {
@@ -177,11 +179,9 @@ describe('Notice-Only Inline Validator', () => {
         },
       });
 
-      // With £1000 monthly rent, max deposit = (1000 * 12 / 52) * 5 = £1153.85
-      // £2500 exceeds this, so we should get a warning
-      const depositWarning = result.guidance.find(g => g.code === 'DEPOSIT_EXCEEDS_CAP');
-      expect(depositWarning).toBeDefined();
-      expect(depositWarning?.severity).toBe('warn');
+      // With £1000 monthly rent, deposit exceeds 5 weeks cap
+      // But guidance is disabled at wizard stage by default
+      expect(result.guidance).toHaveLength(0);
     });
 
     it('does not return deposit cap warning when deposit_taken is false', async () => {
@@ -1150,7 +1150,11 @@ describe('Notice-Only Inline Validator', () => {
     });
 
     describe('Inline Validator - Deposit Cap Guidance', () => {
-      it('S21 deposit exceeds cap shows blocking guidance when not confirmed', async () => {
+      // NOTE: By default, inline guidance is disabled (NOTICE_ONLY_INLINE_GUIDANCE !== '1')
+      // These tests verify that guidance is NOT shown during wizard steps per UX requirements
+      // Deposit cap validation happens at preview stage via the decision engine
+
+      it('S21 deposit exceeds cap returns no guidance (UX: validation at preview only)', async () => {
         const result = await validateStepInline({
           jurisdiction: 'england',
           route: 'section_21',
@@ -1169,19 +1173,16 @@ describe('Notice-Only Inline Validator', () => {
             rent_amount: 1000,
             rent_frequency: 'monthly',
             selected_notice_route: 'section_21',
-            // No confirmation
+            // No confirmation - but guidance is disabled at wizard stage
           },
         });
 
-        const capGuidance = result.guidance.find(
-          g => g.code === 'S21-DEPOSIT-CAP-EXCEEDED'
-        );
-        expect(capGuidance).toBeDefined();
-        expect(capGuidance?.severity).toBe('warn');
-        expect(capGuidance?.message).toContain('Section 8');
+        // Per UX requirements: inline guidance disabled by default
+        // Deposit cap validation happens at preview/generate stage
+        expect(result.guidance).toHaveLength(0);
       });
 
-      it('S8 deposit exceeds cap shows informational guidance (not blocking)', async () => {
+      it('S8 deposit exceeds cap returns no guidance (UX: validation at preview only)', async () => {
         const result = await validateStepInline({
           jurisdiction: 'england',
           route: 'section_8',
@@ -1203,12 +1204,8 @@ describe('Notice-Only Inline Validator', () => {
           },
         });
 
-        const capGuidance = result.guidance.find(
-          g => g.code === 'DEPOSIT_EXCEEDS_CAP'
-        );
-        expect(capGuidance).toBeDefined();
-        expect(capGuidance?.severity).toBe('info');
-        expect(capGuidance?.message).toContain('does not affect Section 8');
+        // Per UX requirements: inline guidance disabled by default
+        expect(result.guidance).toHaveLength(0);
       });
 
       it('S21 deposit exceeds cap with confirmation shows no guidance', async () => {
