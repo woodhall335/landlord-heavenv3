@@ -122,6 +122,8 @@ interface StructuredWizardProps {
   mode?: 'default' | 'edit';
   /** Question ID to jump to on mount (from End Validator "Fix this" button) */
   jumpToQuestionId?: string;
+  /** Single-question fix mode: after saving, returns to validation instead of continuing to next question */
+  fixMode?: boolean;
 }
 
 interface CaseAnalysisState {
@@ -141,6 +143,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   onComplete,
   mode = 'default',
   jumpToQuestionId,
+  fixMode = false,
 }) => {
   const [currentQuestion, setCurrentQuestion] = useState<ExtendedWizardQuestion | null>(
     initialQuestion ?? null,
@@ -1604,6 +1607,13 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           return;
         }
         await handleComplete();
+      } else if (fixMode) {
+        // FIX MODE: After saving the single question, return to validation page
+        // instead of continuing to the next question
+        setIsComplete(true);
+        setReviewStepIndex((prev) => prev + 1);
+        setLoading(false);
+        return;
       } else {
         // Load next question
         await loadNextQuestion({ currentQuestionId: currentQuestion.id });
@@ -2569,16 +2579,17 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                           {issue.affected_question_id && (
                             <Button
                               onClick={() => {
-                                // Navigate back to the question to fix
+                                // Navigate back to the question to fix (fix_mode returns to validation after save)
                                 const url = new URL(window.location.href);
                                 url.searchParams.set('jump_to', issue.affected_question_id || '');
                                 url.searchParams.set('mode', 'edit');
+                                url.searchParams.set('fix_mode', 'true');
                                 window.location.href = url.toString();
                               }}
                               variant="primary"
                               size="small"
                             >
-                              Go to question →
+                              Fix this →
                             </Button>
                           )}
                         </div>
@@ -2929,6 +2940,21 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               />
             </div>
           </div>
+
+          {/* Fix Mode Banner */}
+          {fixMode && (
+            <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
+              <div className="flex items-center gap-3">
+                <div className="text-xl">🔧</div>
+                <div>
+                  <h4 className="font-semibold text-blue-900 text-sm">Fixing Issue</h4>
+                  <p className="text-sm text-blue-700">
+                    Update your answer below, then click "Save & Return to Issues" to continue fixing other issues.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Checkpoint: Blocking Issues Banner */}
           {checkpoint?.blocking_issues && checkpoint.blocking_issues.length > 0 && (
@@ -3377,7 +3403,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                 className="flex-1"
                 disabled={disableNextButton}
               >
-                {loading ? 'Saving...' : 'Next →'}
+                {loading ? 'Saving...' : fixMode ? 'Save & Return to Issues ✓' : 'Next →'}
               </Button>
             </div>
           </Card>
