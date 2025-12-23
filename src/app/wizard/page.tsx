@@ -394,8 +394,8 @@ function WizardPageInner() {
                           src={jur.flag}
                           alt={jur.label}
                           width={48}
-                          height={48}
-                          className="w-12 h-12"
+                          height={32}
+                          className="w-12 h-8 border border-gray-200 rounded-sm"
                         />
                       </div>
                       <div className="flex-1">
