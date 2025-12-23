@@ -182,13 +182,16 @@ function WizardPageInner() {
   return (
     <div className="min-h-screen bg-gray-50">
       <TealHero
-        title="Eviction Route Checker"
-        subtitle="A calm, guided workspace with guardrails for every UK jurisdiction."
+        title="Serve the Right Possession Notice"
+        subtitle="Jurisdiction Specific & Validated Notices"
         eyebrow="Wizard"
         actions={
-          <Badge variant="success" size="large" className="bg-white/15 text-white">
-            Conversational + compliant
-          </Badge>
+          <button
+            onClick={() => setStep(2)}
+            className="px-4 py-2 rounded-full border-2 border-black bg-white/15 text-black font-medium hover:bg-white/30 transition-colors"
+          >
+            Start Now →
+          </button>
         }
       />
       <Container size="large" className="py-12">
