@@ -1,0 +1,103 @@
+{
+  "ground": "14A",
+  "type": "mandatory",
+  "category": "domestic_violence",
+  "name": "Domestic Violence",
+  "short_description": "Partner has left due to domestic violence and is unlikely to return",
+  "legal_basis": {
+    "act": "Housing Act 1988",
+    "section": "Schedule 2, Ground 14A",
+    "statute_year": "1996",
+    "amendments": "Added by Housing Act 1996"
+  },
+  "requirements": {
+    "relationship": {
+      "tenant_or_partner": "One partner of a married couple or civil partnership",
+      "cohabitees": "Or one of a cohabiting couple"
+    },
+    "departure": {
+      "left_property": "The partner has left the dwelling because of violence or threats of violence",
+      "perpetrator": "From the other partner"
+    },
+    "court_satisfied": {
+      "unlikely_to_return": "Court is satisfied that the partner who left is unlikely to return"
+    }
+  },
+  "notice_period": {
+    "section_8_notice": "2 weeks",
+    "court_proceedings": "Can be started after notice period"
+  },
+  "evidence_required": [
+    "Police reports of domestic violence incidents",
+    "Injunction or non-molestation order",
+    "Evidence partner has left the property",
+    "Statement from departed partner (if available)",
+    "Medical evidence of injuries",
+    "Refuge or support organization involvement",
+    "Criminal convictions for domestic violence"
+  ],
+  "success_factors": {
+    "high_probability": [
+      "Criminal conviction for domestic violence",
+      "Non-molestation order in place",
+      "Police involvement documented",
+      "Departed partner in refuge",
+      "Clear evidence partner unlikely to return"
+    ],
+    "medium_probability": [
+      "Police called but no conviction",
+      "Civil injunction obtained",
+      "Partner has left and moved elsewhere",
+      "Some documented evidence of violence"
+    ],
+    "low_probability": [
+      "No independent evidence of violence",
+      "Partner may return",
+      "Allegations disputed",
+      "Violence alleged but not documented"
+    ]
+  },
+  "red_flags": [
+    "No evidence of violence",
+    "Partner may return to property",
+    "Allegations made maliciously",
+    "Both parties still in property",
+    "Violence not directed at partner"
+  ],
+  "typical_timeline": {
+    "notice_period": "2 weeks",
+    "court_proceedings": "3-6 months",
+    "total": "3.5-6.5 months"
+  },
+  "costs": {
+    "court_fee": 355,
+    "bailiff_fee": 130,
+    "legal_costs": "800-2000"
+  },
+  "tenant_defenses": [
+    "No violence occurred",
+    "Partner likely to return",
+    "Violence allegations exaggerated",
+    "Partner left for other reasons",
+    "Discrimination or human rights issues"
+  ],
+  "related_grounds": ["14"],
+  "notes": "Ground 14A is MANDATORY if conditions are met. Created to allow landlords to evict a perpetrator of domestic violence when the victim-partner has fled. Often used by social landlords. Requires clear evidence that violence caused departure and partner is unlikely to return.",
+  "case_law": [
+    "Camden LBC v Mallett [2001] - Partner must have left due to violence",
+    "Sanctuary Housing Association v Campbell [2014] - Evidence of violence required"
+  ],
+  "court_considerations": [
+    "Was there violence or threats of violence?",
+    "Did the partner leave because of the violence?",
+    "Is the departed partner unlikely to return?",
+    "Is there credible evidence?",
+    "What impact would possession have?"
+  ],
+  "special_considerations": {
+    "perpetrator_remains": "The perpetrator/remaining tenant loses security of tenure",
+    "victim_protection": "Ground designed to protect victims by removing perpetrators",
+    "social_housing": "Often used by housing associations and councils",
+    "injunctions": "Non-molestation orders can support the case"
+  }
+}

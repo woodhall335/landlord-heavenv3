@@ -1237,18 +1237,35 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
       );
 
       // Validate shared arrears if any arrears ground is selected
+      // Check both currentAnswer.shared_arrears AND pre-populated caseFacts values
       if (hasArrearsGrounds) {
-        const sharedArrears = currentAnswer.shared_arrears;
-        if (!sharedArrears || !sharedArrears.amount || !sharedArrears.period) {
-          setError('Please provide the total amount owed and period of arrears in the shared arrears section');
+        const sharedArrears = currentAnswer.shared_arrears || {};
+        // Use pre-populated values if shared_arrears fields are empty
+        const amount = sharedArrears.amount || caseFacts.arrears_total;
+        const startDate = sharedArrears.start_date || caseFacts.arrears_from_date;
+        const endDate = sharedArrears.end_date;
+
+        if (!amount) {
+          setError('Please provide the total arrears amount');
           return false;
         }
-        if (Number(sharedArrears.amount) <= 0) {
+        if (Number(amount) <= 0) {
           setError('Arrears amount must be greater than zero');
           return false;
         }
-        if (sharedArrears.period.trim() === '') {
-          setError('Please specify the period of arrears');
+        if (!startDate) {
+          setError('Please provide the arrears start date');
+          return false;
+        }
+        if (!endDate) {
+          setError('Please provide the arrears end date (usually today or notice service date)');
+          return false;
+        }
+        // Validate dates for 2-month arrears threshold (Ground 8 requirement)
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        if (start > end) {
+          setError('Arrears start date must be before end date');
           return false;
         }
       }
@@ -1983,42 +2000,52 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             id === 'ground_8' || id === 'ground_10' || id === 'ground_11'
           );
 
+          // Pre-populate shared_arrears from previously collected arrears_details if not already set
+          // This ensures we use the data from the earlier arrears question step
+          const prePopulatedArrears = {
+            amount: structuredValue.shared_arrears?.amount || caseFacts.arrears_total || '',
+            start_date: structuredValue.shared_arrears?.start_date || caseFacts.arrears_from_date || '',
+            end_date: structuredValue.shared_arrears?.end_date || '',
+          };
+
           return (
             <div className="space-y-6">
-              {/* Shared arrears section for grounds 8, 10, 11 */}
+              {/* Shared arrears section for grounds 8, 10, 11 - pre-populated from arrears_details */}
               {hasArrearsGrounds && (
-                <div className="p-5 border-2 border-blue-300 rounded-lg bg-blue-50">
+                <div className="p-5 border-2 border-green-300 rounded-lg bg-green-50">
                   <div className="flex items-start gap-3 mb-4">
-                    <div className="text-2xl">💰</div>
+                    <div className="text-2xl">✓</div>
                     <div className="flex-1">
-                      <h3 className="font-semibold text-blue-900 mb-1">
-                        Shared Arrears Information
+                      <h3 className="font-semibold text-green-900 mb-1">
+                        Arrears Information (From Previous Step)
                       </h3>
-                      <p className="text-sm text-blue-800 mb-3">
-                        This section applies to all arrears-related grounds you've selected (8, 10, 11).
-                        Enter the overall arrears information once here.
+                      <p className="text-sm text-green-800 mb-3">
+                        This information was collected earlier. You can update it here if needed.
+                        For Ground 8, arrears must be at least 2 months&apos; rent at both notice and hearing dates.
                       </p>
                     </div>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-blue-900 mb-1">
+                      <label className="block text-sm font-medium text-green-900 mb-1">
                         Total amount owed (£) <span className="text-red-500">*</span>
                       </label>
                       <div className="relative">
                         <span className="absolute left-3 top-3 text-gray-500">£</span>
                         <input
                           type="number"
-                          value={structuredValue.shared_arrears?.amount || ''}
+                          value={prePopulatedArrears.amount}
                           onChange={(e) => setCurrentAnswer({
                             ...structuredValue,
                             shared_arrears: {
                               ...structuredValue.shared_arrears,
-                              amount: e.target.value
+                              amount: e.target.value,
+                              start_date: prePopulatedArrears.start_date,
+                              end_date: prePopulatedArrears.end_date,
                             }
                           })}
-                          className="w-full pl-8 p-2 border border-blue-300 rounded-lg"
+                          className="w-full pl-8 p-2 border border-green-300 rounded-lg bg-white"
                           placeholder="e.g., 3000"
                           disabled={loading}
                         />
@@ -2026,25 +2053,47 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-blue-900 mb-1">
-                        Period of arrears <span className="text-red-500">*</span>
+                      <label className="block text-sm font-medium text-green-900 mb-1">
+                        Arrears from date <span className="text-red-500">*</span>
                       </label>
                       <input
-                        type="text"
-                        value={structuredValue.shared_arrears?.period || ''}
+                        type="date"
+                        value={prePopulatedArrears.start_date}
                         onChange={(e) => setCurrentAnswer({
                           ...structuredValue,
                           shared_arrears: {
                             ...structuredValue.shared_arrears,
-                            period: e.target.value
+                            amount: prePopulatedArrears.amount,
+                            start_date: e.target.value,
+                            end_date: prePopulatedArrears.end_date,
                           }
                         })}
-                        className="w-full p-2 border border-blue-300 rounded-lg"
-                        placeholder="e.g., October 2025 – December 2025"
+                        className="w-full p-2 border border-green-300 rounded-lg bg-white"
                         disabled={loading}
                       />
-                      <p className="text-xs text-blue-700 mt-1">
-                        Example formats: "Oct-Dec 2025", "1 October 2025 to 31 December 2025"
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-green-900 mb-1">
+                        Arrears to date <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="date"
+                        value={prePopulatedArrears.end_date}
+                        onChange={(e) => setCurrentAnswer({
+                          ...structuredValue,
+                          shared_arrears: {
+                            ...structuredValue.shared_arrears,
+                            amount: prePopulatedArrears.amount,
+                            start_date: prePopulatedArrears.start_date,
+                            end_date: e.target.value,
+                          }
+                        })}
+                        className="w-full p-2 border border-green-300 rounded-lg bg-white"
+                        disabled={loading}
+                      />
+                      <p className="text-xs text-green-700 mt-1">
+                        Usually today or notice service date
                       </p>
                     </div>
                   </div>
@@ -2082,19 +2131,15 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       )}
                     </h3>
 
-                    {/* Show shared arrears summary for arrears grounds */}
-                    {isArrearsGround && structuredValue.shared_arrears && (
-                      <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                        <p className="text-sm font-medium text-blue-900 mb-1">Shared Arrears Information:</p>
-                        <p className="text-sm text-blue-800">
-                          <strong>Amount owed:</strong> £{structuredValue.shared_arrears.amount || '0'}
+                    {/* Show shared arrears summary for arrears grounds - using pre-populated values */}
+                    {isArrearsGround && (prePopulatedArrears.amount || structuredValue.shared_arrears?.amount) && (
+                      <div className="mb-3 p-3 bg-green-50 border border-green-200 rounded-lg">
+                        <p className="text-sm font-medium text-green-900 mb-1">Arrears Applied to This Ground:</p>
+                        <p className="text-sm text-green-800">
+                          <strong>Amount owed:</strong> £{prePopulatedArrears.amount || '0'}
                         </p>
-                        <p className="text-sm text-blue-800">
-                          <strong>Period:</strong> {structuredValue.shared_arrears.period || 'Not specified'}
-                        </p>
-                        <p className="text-xs text-blue-700 mt-1 italic">
-                          This information applies to all arrears-related grounds (8, 10, 11).
-                          You can edit it in the shared arrears section above.
+                        <p className="text-sm text-green-800">
+                          <strong>Period:</strong> {prePopulatedArrears.start_date || 'Not set'} to {prePopulatedArrears.end_date || 'Not set'}
                         </p>
                       </div>
                     )}
