@@ -117,11 +117,17 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
 
     // Deposit cap check (Tenant Fees Act 2019 - applies to tenancies from 1 June 2019)
     // Maximum: 5 weeks' rent (or 6 weeks if annual rent > £50,000)
-    const rentAmount = facts.tenancy?.rent_amount ?? (input.facts as any).rent_amount;
+    // Part D: Coerce values to numbers to avoid "toFixed is not a function" crashes
+    const rawRentAmount = facts.tenancy?.rent_amount ?? (input.facts as any).rent_amount;
     const rentFrequency = facts.tenancy?.rent_frequency ?? (input.facts as any).rent_frequency ?? 'monthly';
-    const depositAmount = facts.tenancy.deposit_amount;
+    const rawDepositAmount = facts.tenancy.deposit_amount;
 
-    if (rentAmount && depositAmount) {
+    // Coerce to numbers (wizard may store as strings from form input)
+    const rentAmount = typeof rawRentAmount === 'string' ? parseFloat(rawRentAmount) : Number(rawRentAmount);
+    const depositAmount = typeof rawDepositAmount === 'string' ? parseFloat(rawDepositAmount) : Number(rawDepositAmount);
+
+    // Only proceed if both are valid finite numbers
+    if (Number.isFinite(rentAmount) && Number.isFinite(depositAmount) && rentAmount > 0 && depositAmount > 0) {
       // Calculate annual rent
       let annualRent = rentAmount;
       if (rentFrequency === 'weekly') {
@@ -271,16 +277,19 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   const section8Grounds: GroundRecommendation[] = [];
 
   // Ground 8: Serious rent arrears
-  const totalArrears = facts.issues?.rent_arrears?.total_arrears ?? 0;
-  const rentAmount = facts.tenancy?.rent_amount ?? 0;
+  // Part D: Coerce values to numbers safely to avoid arithmetic on strings
+  const rawTotalArrears = facts.issues?.rent_arrears?.total_arrears;
+  const rawRentAmountForArrears = facts.tenancy?.rent_amount;
+  const totalArrears = typeof rawTotalArrears === 'string' ? parseFloat(rawTotalArrears) : Number(rawTotalArrears) || 0;
+  const rentAmountForArrears = typeof rawRentAmountForArrears === 'string' ? parseFloat(rawRentAmountForArrears) : Number(rawRentAmountForArrears) || 0;
   const rentFrequency = facts.tenancy?.rent_frequency;
 
-  if (totalArrears > 0 && rentAmount > 0) {
+  if (Number.isFinite(totalArrears) && Number.isFinite(rentAmountForArrears) && totalArrears > 0 && rentAmountForArrears > 0) {
     let arrearsMonths = 0;
     if (rentFrequency === 'monthly') {
-      arrearsMonths = totalArrears / rentAmount;
+      arrearsMonths = totalArrears / rentAmountForArrears;
     } else if (rentFrequency === 'weekly') {
-      arrearsMonths = (totalArrears / rentAmount) / 4.33;
+      arrearsMonths = (totalArrears / rentAmountForArrears) / 4.33;
     }
 
     if (arrearsMonths >= 2) {
@@ -501,11 +510,14 @@ function analyzeWales(input: DecisionInput): DecisionOutput {
   const faultGrounds: GroundRecommendation[] = [];
 
   // Section 157: Serious rent arrears (2+ months)
-  const totalArrears = facts.issues?.rent_arrears?.total_arrears ?? 0;
-  const rentAmount = facts.tenancy?.rent_amount ?? 0;
+  // Part D: Coerce values to numbers safely to avoid arithmetic on strings
+  const rawWalesTotalArrears = facts.issues?.rent_arrears?.total_arrears;
+  const rawWalesRentAmount = facts.tenancy?.rent_amount;
+  const walesTotalArrears = typeof rawWalesTotalArrears === 'string' ? parseFloat(rawWalesTotalArrears) : Number(rawWalesTotalArrears) || 0;
+  const walesRentAmount = typeof rawWalesRentAmount === 'string' ? parseFloat(rawWalesRentAmount) : Number(rawWalesRentAmount) || 0;
 
-  if (totalArrears > 0 && rentAmount > 0) {
-    const arrearsMonths = totalArrears / rentAmount;
+  if (Number.isFinite(walesTotalArrears) && Number.isFinite(walesRentAmount) && walesTotalArrears > 0 && walesRentAmount > 0) {
+    const arrearsMonths = walesTotalArrears / walesRentAmount;
 
     if (arrearsMonths >= 2) {
       faultGrounds.push({
@@ -601,12 +613,15 @@ function analyzeScotland(input: DecisionInput): DecisionOutput {
   const isWizardStage = stage === 'wizard';
 
   // Ground 1: Rent arrears (REQUIRES PRE-ACTION)
-  const totalArrears = facts.issues?.rent_arrears?.total_arrears ?? 0;
-  const rentAmount = facts.tenancy?.rent_amount ?? 0;
+  // Part D: Coerce values to numbers safely to avoid arithmetic on strings
+  const rawScotlandTotalArrears = facts.issues?.rent_arrears?.total_arrears;
+  const rawScotlandRentAmount = facts.tenancy?.rent_amount;
+  const scotlandTotalArrears = typeof rawScotlandTotalArrears === 'string' ? parseFloat(rawScotlandTotalArrears) : Number(rawScotlandTotalArrears) || 0;
+  const scotlandRentAmount = typeof rawScotlandRentAmount === 'string' ? parseFloat(rawScotlandRentAmount) : Number(rawScotlandRentAmount) || 0;
   const preActionConfirmed = facts.issues?.rent_arrears?.pre_action_confirmed;
 
-  if (totalArrears > 0 && rentAmount > 0) {
-    const arrearsMonths = totalArrears / (rentAmount || 1);
+  if (Number.isFinite(scotlandTotalArrears) && Number.isFinite(scotlandRentAmount) && scotlandTotalArrears > 0 && scotlandRentAmount > 0) {
+    const arrearsMonths = scotlandTotalArrears / scotlandRentAmount;
 
     if (arrearsMonths >= 3) {
       if (preActionConfirmed === true) {
