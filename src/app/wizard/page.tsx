@@ -7,11 +7,59 @@
 
 'use client';
 
-import React, { Suspense, useMemo, useState } from 'react';
+import React, { Suspense, useMemo, useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Badge, Button, Container, TealHero } from '@/components/ui';
 import { clsx } from 'clsx';
+
+// Product-specific hero content
+interface HeroContent {
+  title: string;
+  subtitle: string;
+  eyebrow: string;
+}
+
+function getHeroContent(product: string | null): HeroContent {
+  switch (product) {
+    case 'notice_only':
+      return {
+        title: 'Serve the Right Possession Notice',
+        subtitle: 'Jurisdiction Specific & Validated Notices',
+        eyebrow: 'Notice Only',
+      };
+    case 'complete_pack':
+      return {
+        title: 'Complete Eviction Pack',
+        subtitle: 'From Notice to Possession Order - Everything You Need',
+        eyebrow: 'Complete Pack',
+      };
+    case 'ast_standard':
+      return {
+        title: 'Standard Tenancy Agreement',
+        subtitle: 'Create a Compliant AST for Your Property',
+        eyebrow: 'Standard AST',
+      };
+    case 'ast_premium':
+      return {
+        title: 'Premium Tenancy Agreement',
+        subtitle: 'Comprehensive AST with Enhanced Clauses & Schedules',
+        eyebrow: 'Premium AST',
+      };
+    case 'money_claim':
+      return {
+        title: 'Money Claim Pack',
+        subtitle: 'Recover Rent Arrears & Damages Through the Courts',
+        eyebrow: 'Money Claim',
+      };
+    default:
+      return {
+        title: 'Legal Document Wizard',
+        subtitle: 'Guided Document Creation for UK Landlords',
+        eyebrow: 'Wizard',
+      };
+  }
+}
 
 interface DocumentOption {
   type: 'eviction' | 'money_claim' | 'tenancy_agreement';
@@ -132,6 +180,7 @@ function WizardPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const productParam = searchParams.get('product');
+  const locationSectionRef = useRef<HTMLDivElement>(null);
 
   const preselectedDocument = useMemo(() => {
     if (!productParam) return null;
@@ -146,8 +195,20 @@ function WizardPageInner() {
     useState<JurisdictionOption | null>(null);
   const [step, setStep] = useState<1 | 2>(preselectedDocument ? 2 : 1);
 
+  // Get product-specific hero content
+  const heroContent = getHeroContent(productParam);
+
   // All jurisdictions are shown, but some may be disabled
   const availableJurisdictions = allJurisdictions;
+
+  // Handle Start Now button - scroll to location section
+  const handleStartNowClick = () => {
+    setStep(2);
+    // Scroll to location section after a brief delay to allow step change
+    setTimeout(() => {
+      locationSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  };
 
   const handleDocumentSelect = (doc: DocumentOption) => {
     setSelectedDocument(doc);
@@ -182,13 +243,13 @@ function WizardPageInner() {
   return (
     <div className="min-h-screen bg-gray-50">
       <TealHero
-        title="Serve the Right Possession Notice"
-        subtitle="Jurisdiction Specific & Validated Notices"
-        eyebrow="Wizard"
+        title={heroContent.title}
+        subtitle={heroContent.subtitle}
+        eyebrow={heroContent.eyebrow}
         actions={
           <button
-            onClick={() => setStep(2)}
-            className="px-4 py-2 rounded-full border-2 border-black bg-white/15 text-black font-medium hover:bg-white/30 transition-colors"
+            onClick={handleStartNowClick}
+            className="px-4 py-2 rounded-full border-2 border-black bg-transparent text-black font-medium hover:border-purple-600 hover:text-purple-600 transition-colors"
           >
             Start Now →
           </button>
@@ -276,7 +337,7 @@ function WizardPageInner() {
 
         {/* Step 2: Jurisdiction Selection */}
         {step === 2 && selectedDocument && (
-          <div className="max-w-2xl mx-auto">
+          <div ref={locationSectionRef} className="max-w-2xl mx-auto">
             <button
               onClick={() => setStep(1)}
               className="mb-6 text-gray-600 hover:text-primary transition-colors flex items-center gap-2"
