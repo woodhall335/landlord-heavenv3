@@ -745,4 +745,35 @@ const GROUND_NOTICE_PERIODS: Record<number | string, number> = {
 
 ---
 
-*Audit completed. This document should be updated as fixes are implemented.*
+## Implementation Status
+
+### ✅ Completed (2024-12-23)
+
+1. **Ground-dependent notice periods** - FIXED
+   - Added `GROUND_NOTICE_PERIODS` lookup table to `normalize.ts`
+   - Added `calculateRequiredNoticePeriod()` function
+   - Grounds 10 & 11 now correctly require 60 days
+   - Maximum notice period used when multiple grounds selected
+
+2. **Notice date calculator update** - FIXED
+   - Added `SECTION8_GROUND_NOTICE_PERIODS` to `notice-date-calculator.ts`
+   - Updated `calculateSection8NoticePeriod()` with ground-dependent logic
+   - Proper handling of Ground 14 severity (immediate vs 14 days)
+
+3. **MQS notice_strategy labels** - FIXED
+   - Updated labels to reflect ground-dependent periods
+   - Added helperText explaining Grounds 10 & 11 require 2 months
+
+4. **Validation tests** - ADDED
+   - 7 new tests for ground-dependent notice period calculation
+   - All 19 tests pass
+
+### 🔲 Remaining Work
+
+- Add remaining grounds (3, 4, 5, 7, 7A, 7B, 9, 14ZA, 14A, 15, 16) to MQS UI
+- Smart validation UX with inline warnings
+- Real-time threshold calculations
+
+---
+
+*Audit completed. Fixes implemented on 2024-12-23.*
