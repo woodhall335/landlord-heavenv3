@@ -950,15 +950,22 @@ export async function validateStepInline(
   }
 
   // 4. Generate legal guidance (non-blocking)
-  const guidance = generateLegalGuidance(
-    jurisdiction,
-    route,
-    stepId,
-    answers,
-    allFacts,
-    decisionResults,
-    complianceResults
-  );
+  // Per UX requirements: inline guidance is disabled by default
+  // Guidance is shown at preview stage via ValidationErrors component
+  const inlineGuidanceEnabled = process.env.NOTICE_ONLY_INLINE_GUIDANCE === '1';
+
+  let guidance: InlineGuidance[] = [];
+  if (inlineGuidanceEnabled) {
+    guidance = generateLegalGuidance(
+      jurisdiction,
+      route,
+      stepId,
+      answers,
+      allFacts,
+      decisionResults,
+      complianceResults
+    );
+  }
 
   // 5. Generate route suggestion if applicable
   const routeSuggestion = generateRouteSuggestion(route, jurisdiction, decisionResults);

@@ -458,17 +458,18 @@ export function evaluateNoticeCompliance(input: EvaluateInput): ComplianceResult
     }
 
     if (wizardFacts.has_gas_appliances === true) {
-      if (wizardFacts.gas_certificate_provided === false && wizardFacts.gas_safety_cert_provided === false) {
+      // Check canonical field (normalizeFactKeys already handles legacy -> canonical conversion)
+      // Use OR logic: block if EITHER field explicitly says false
+      const gasCertProvided = wizardFacts.gas_certificate_provided ?? wizardFacts.gas_safety_cert_provided;
+
+      if (gasCertProvided === false) {
         pushStageIssue({
           code: 'S21-GAS-CERT',
           affected_question_id: 'gas_safety_certificate',
           legal_reason: 'Gas safety certificate must be provided before serving Section 21',
           user_fix_hint: 'Confirm the latest gas safety record before continuing',
         });
-      } else if (
-        wizardFacts.gas_certificate_provided === undefined &&
-        wizardFacts.gas_safety_cert_provided === undefined
-      ) {
+      } else if (gasCertProvided === undefined) {
         pushStageIssue(
           {
             code: 'S21-GAS-CERT',
