@@ -89,13 +89,50 @@ export type NoticePeriodResult = {
 // ============================================================================
 
 /**
+ * Ground-specific notice periods (in days) as per Housing Act 1988, Schedule 2
+ *
+ * Legal requirements:
+ * - 2 weeks (14 days): Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 14ZA, 15, 17
+ * - 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16
+ * - Immediate (0 days): Ground 14 (serious ASB), Ground 14A
+ *
+ * CRITICAL: Grounds 10 and 11 require 2 MONTHS, not 2 weeks!
+ */
+const SECTION8_GROUND_NOTICE_PERIODS: Record<number | string, number> = {
+  1: 60,    // 2 months - landlord previously occupied
+  2: 60,    // 2 months - mortgage lender requires possession
+  3: 14,    // 2 weeks - holiday let
+  4: 14,    // 2 weeks - educational institution let
+  5: 60,    // 2 months - minister of religion
+  6: 60,    // 2 months - demolition/reconstruction
+  7: 60,    // 2 months - death of periodic tenant
+  '7A': 14, // 2 weeks - abandonment (fixed term)
+  '7B': 14, // 2 weeks - abandonment (periodic)
+  8: 14,    // 2 weeks - serious rent arrears (8 weeks/2 months)
+  9: 60,    // 2 months - suitable alternative accommodation
+  10: 60,   // 2 MONTHS - some rent arrears (NOT 2 weeks!)
+  11: 60,   // 2 MONTHS - persistent delay in paying rent (NOT 2 weeks!)
+  12: 14,   // 2 weeks - breach of tenancy obligation
+  13: 14,   // 2 weeks - deterioration of dwelling
+  14: 14,   // 2 weeks (default) - nuisance/annoyance (can be immediate for serious ASB)
+  '14ZA': 14, // 2 weeks - riot conviction
+  '14A': 0,   // Immediate - domestic violence
+  15: 14,   // 2 weeks - deterioration of furniture
+  16: 60,   // 2 months - former employee
+  17: 14,   // 2 weeks - false statement
+};
+
+/**
  * Determine the notice period for Section 8 based on grounds
  *
- * NEW UNIFIED LOGIC (Production-Grade):
- * - Ground 14A: 14 days minimum, 60 recommended (discretionary)
- * - Ground 14 serious ASB: 0 days (immediate)
- * - Ground 14 moderate ASB: 14 days minimum, 60 recommended
- * - All other grounds: 14 days minimum (with optional 60 for discretionary)
+ * GROUND-DEPENDENT LOGIC (Production-Grade):
+ * - Uses MAXIMUM notice period across all selected grounds
+ * - Ground 14A: Immediate (0 days) for domestic violence
+ * - Ground 14 serious ASB: Immediate (0 days)
+ * - Ground 14 moderate ASB: 14 days minimum
+ * - Grounds 10, 11: 2 MONTHS (60 days) - NOT 2 weeks!
+ * - Grounds 1, 2, 5, 6, 7, 9, 16: 2 months (60 days)
+ * - All other grounds: 14 days minimum
  * - Wales: Generates warnings (wrong terminology)
  */
 export function calculateSection8NoticePeriod(
@@ -112,9 +149,6 @@ export function calculateSection8NoticePeriod(
     throw new Error('At least one ground is required');
   }
 
-  // Import ValidationError for consistency
-  const ValidationError = Error; // Placeholder - in real code would import from legal-errors.ts
-
   // WALES WARNING (SOFT BLOCK)
   const warnings: string[] = [];
   if (jurisdiction === 'wales') {
@@ -126,60 +160,91 @@ export function calculateSection8NoticePeriod(
   }
 
   const hasGround14A = grounds.some((g) => String(g.code) === '14A');
-  const hasGround14 = grounds.some((g) => g.code === 14);
+  const hasGround14 = grounds.some((g) => String(g.code) === '14' || g.code === 14);
   const discretionaryGrounds = grounds.filter((g) => !g.mandatory);
 
-  let minimum_legal_days: number;
+  // Calculate the MAXIMUM notice period required across all selected grounds
+  let maxNoticePeriod = 0;
+  const groundPeriods: Array<{ code: string | number; days: number }> = [];
+
+  for (const ground of grounds) {
+    const code = String(ground.code).toUpperCase();
+    let period: number;
+
+    // Special handling for Ground 14 with severity
+    if ((code === '14' || ground.code === 14) && severity === 'serious') {
+      period = 0; // Immediate for serious ASB
+    } else {
+      // Look up the standard notice period for this ground
+      const numericCode = parseInt(code, 10);
+      period = SECTION8_GROUND_NOTICE_PERIODS[code] ??
+               SECTION8_GROUND_NOTICE_PERIODS[numericCode] ??
+               14; // Default to 14 days for unknown grounds
+    }
+
+    groundPeriods.push({ code: ground.code, days: period });
+    if (period > maxNoticePeriod) {
+      maxNoticePeriod = period;
+    }
+  }
+
+  let minimum_legal_days = maxNoticePeriod;
   let recommended_days: number | undefined;
   let explanation_minimum: string;
   let explanation_recommended: string | undefined;
   let legal_basis: string;
 
-  // Ground 14A: 14 days, offers recommended 60
-  if (hasGround14A) {
-    minimum_legal_days = 14;
-    recommended_days = 60;
-    explanation_minimum = 'Ground 14A (domestic violence conviction) requires 14 days minimum notice.';
-    explanation_recommended =
-      'Recommended 60 days demonstrates reasonableness for discretionary grounds. ' +
-      'This is not legally required. Courts may still grant possession after the minimum period.';
-    legal_basis = 'Housing Act 1988, Schedule 2, Ground 14A';
-  }
-  // Ground 14: severity-based
-  else if (hasGround14) {
-    if (severity === 'serious') {
-      minimum_legal_days = 0;
+  // Build explanation based on what's driving the notice period
+  const twoMonthGrounds = groundPeriods.filter(g => g.days === 60);
+  const twoWeekGrounds = groundPeriods.filter(g => g.days === 14);
+  const immediateGrounds = groundPeriods.filter(g => g.days === 0);
+
+  if (immediateGrounds.length > 0 && maxNoticePeriod === 0) {
+    // Only immediate grounds selected
+    if (hasGround14A) {
+      explanation_minimum = 'Ground 14A (domestic violence) allows immediate court proceedings (0 days notice).';
+      legal_basis = 'Housing Act 1988, Schedule 2, Ground 14A';
+    } else if (hasGround14 && severity === 'serious') {
       explanation_minimum =
         'Ground 14 serious ASB allows immediate court proceedings (0 days notice). ' +
         'Serious ASB includes violence, threats, drug dealing, or criminal damage.';
-      recommended_days = undefined;
+      legal_basis = 'Housing Act 1988, Schedule 2, Ground 14';
     } else {
-      minimum_legal_days = 14;
-      recommended_days = 60;
-      explanation_minimum =
-        'Ground 14 moderate ASB requires 14 days minimum notice. ' +
-        'Moderate ASB includes noise complaints, minor nuisance, or tenant disputes.';
-      explanation_recommended =
-        'Recommended 60 days demonstrates reasonableness. ' +
-        'This is not legally required. Courts may still grant possession after the minimum period.';
+      explanation_minimum = 'Selected ground(s) allow immediate court proceedings.';
+      legal_basis = 'Housing Act 1988, Schedule 2';
     }
-    legal_basis = 'Housing Act 1988, Schedule 2, Ground 14';
-  }
-  // All other grounds
-  else {
-    minimum_legal_days = 14;
+  } else if (maxNoticePeriod === 60) {
+    // Two-month grounds drive the period
+    const twoMonthCodes = twoMonthGrounds.map(g => `Ground ${g.code}`).join(', ');
     explanation_minimum =
-      'All Section 8 grounds require 14 days minimum notice ' + '(Housing Act 1988 Amendment 2021).';
-    legal_basis = 'Housing Act 1988 (Amendment) (England) Regulations 2021';
+      `${twoMonthCodes} require${twoMonthGrounds.length === 1 ? 's' : ''} 2 months (60 days) minimum notice ` +
+      'under Schedule 2 of the Housing Act 1988.';
+    legal_basis = 'Housing Act 1988, Schedule 2';
 
-    // Discretionary grounds offer recommended 60
-    if (discretionaryGrounds.length > 0) {
+    if (twoMonthGrounds.some(g => String(g.code) === '10' || g.code === 10)) {
+      explanation_minimum += ' Ground 10 (some rent arrears) specifically requires 2 months notice.';
+    }
+    if (twoMonthGrounds.some(g => String(g.code) === '11' || g.code === 11)) {
+      explanation_minimum += ' Ground 11 (persistent delay in paying rent) specifically requires 2 months notice.';
+    }
+  } else if (maxNoticePeriod === 14) {
+    // All selected grounds are 2-week grounds
+    explanation_minimum =
+      'Selected ground(s) require 14 days minimum notice under Schedule 2 of the Housing Act 1988.';
+    legal_basis = 'Housing Act 1988, Schedule 2';
+
+    // For discretionary 14-day grounds, suggest 60 days as recommended
+    if (discretionaryGrounds.length > 0 && !hasGround14A && !(hasGround14 && severity === 'serious')) {
       recommended_days = 60;
       explanation_recommended =
         'While 14 days is legally sufficient for discretionary grounds, ' +
-        '60 days demonstrates reasonableness to the court and improves success probability. ' +
+        '60 days demonstrates reasonableness to the court and may improve success probability. ' +
         'This is not legally required. Courts may still grant possession after the minimum period.';
     }
+  } else {
+    // Fallback
+    explanation_minimum = `Selected ground(s) require ${maxNoticePeriod} days minimum notice.`;
+    legal_basis = 'Housing Act 1988, Schedule 2';
   }
 
   const used_days = strategy === 'recommended' && recommended_days ? recommended_days : minimum_legal_days;

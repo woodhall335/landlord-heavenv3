@@ -36,7 +36,7 @@ section_8_grounds:
 
     ground_1:
       title: "Landlord previously occupied as only or principal home"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
       court_type: "mandatory"
       description: "Property was landlord's home before letting"
       required_facts:
@@ -50,7 +50,7 @@ section_8_grounds:
 
     ground_2:
       title: "Mortgage lender requires possession"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
       court_type: "mandatory"
       description: "Property is mortgaged and lender requires possession for default"
       required_facts:
@@ -99,7 +99,7 @@ section_8_grounds:
 
     ground_5:
       title: "Property required for minister of religion"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
       court_type: "mandatory"
       description: "Property is held for occupation by minister of religion"
       required_facts:
@@ -115,7 +115,7 @@ section_8_grounds:
 
     ground_6:
       title: "Intention to demolish or reconstruct"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
       court_type: "mandatory"
       description: "Landlord intends to demolish, reconstruct or carry out substantial works"
       required_facts:
@@ -133,7 +133,7 @@ section_8_grounds:
 
     ground_7:
       title: "Death of periodic tenant (within 12 months)"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV
       court_type: "mandatory"
       description: "Tenant has died and proceedings begun within 12 months"
       required_facts:
@@ -153,7 +153,7 @@ section_8_grounds:
 
     ground_10:
       title: "Rent arrears (some arrears)"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV (post Oct-2021)
       court_type: "discretionary"
       description: "Some rent is unpaid at notice and hearing"
       required_facts:
@@ -172,7 +172,7 @@ section_8_grounds:
 
     ground_11:
       title: "Persistent delay in paying rent"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV (post Oct-2021)
       court_type: "discretionary"
       description: "Tenant persistently delays paying rent"
       required_facts:

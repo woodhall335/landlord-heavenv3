@@ -528,10 +528,10 @@ questions:
       required: true
     options:
       - value: "minimum"
-        label: "Minimum legal period (14 days)"
+        label: "Minimum legal period (ground-dependent: 14 days or 2 months)"
       - value: "recommended"
         label: "Recommended period (60 days for discretionary grounds)"
-    helperText: "Recommended period improves court success probability"
+    helperText: "Notice period depends on selected grounds. Grounds 10 & 11 require 2 months minimum. All other grounds require 2 weeks minimum."
     maps_to:
       - notice_strategy
 

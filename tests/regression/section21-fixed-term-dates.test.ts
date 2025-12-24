@@ -103,11 +103,11 @@ describe('Section 21 Fixed-Term Date Calculation Regression', () => {
   });
 
   describe('Section 8 ground-based dates remain unchanged', () => {
-    it('should calculate 14 days from service for standard grounds', () => {
-      // Ground 10: 14 days notice
+    it('should calculate 14 days from service for 2-week grounds', () => {
+      // Ground 8 (2 months+ rent arrears): 14 days notice
       const result = calculateSection8ExpiryDate({
         service_date: '2025-12-21',
-        grounds: [{ code: 10, mandatory: false }],
+        grounds: [{ code: 8, mandatory: true }],
         tenancy_start_date: '2023-07-14',
         fixed_term: false,
       });
@@ -115,6 +115,20 @@ describe('Section 21 Fixed-Term Date Calculation Regression', () => {
       // Should be 14 days from service (4 January 2026)
       expect(result.earliest_valid_date).toBe('2026-01-04');
       expect(result.notice_period_days).toBe(14);
+    });
+
+    it('should calculate 60 days from service for Ground 10', () => {
+      // Ground 10 (some rent arrears): 60 days notice (2 months MINIMUM per Housing Act 1988)
+      const result = calculateSection8ExpiryDate({
+        service_date: '2025-12-21',
+        grounds: [{ code: 10, mandatory: false }],
+        tenancy_start_date: '2023-07-14',
+        fixed_term: false,
+      });
+
+      // Should be 60 days from service (19 February 2026)
+      expect(result.earliest_valid_date).toBe('2026-02-19');
+      expect(result.notice_period_days).toBe(60);
     });
 
     it('should not extend Section 8 to fixed-term end date', () => {
@@ -248,17 +262,19 @@ describe('Section 8 ground-based logic preserved', () => {
     expect(result.earliest_valid_date).toBe('2026-01-04');
   });
 
-  it('should handle multiple grounds with shortest notice period', () => {
-    // Ground 8 (mandatory) + Ground 10 (discretionary) = 14 days
+  it('should use maximum notice period when combining grounds', () => {
+    // Ground 8 (mandatory, 14 days) + Ground 10 (discretionary, 60 days)
+    // System uses MAXIMUM to satisfy all grounds = 60 days
     const result = calculateSection8ExpiryDate({
       service_date: '2025-12-21',
       grounds: [
-        { code: 8, mandatory: true },
-        { code: 10, mandatory: false },
+        { code: 8, mandatory: true },   // 14 days
+        { code: 10, mandatory: false }, // 60 days
       ],
     });
 
-    expect(result.notice_period_days).toBe(14);
+    // Should use maximum (60 days) to satisfy Ground 10's legal requirement
+    expect(result.notice_period_days).toBe(60);
   });
 
   it('should handle Ground 14 serious ASB (0 days)', () => {

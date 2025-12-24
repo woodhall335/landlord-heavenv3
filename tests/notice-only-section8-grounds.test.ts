@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
+import { calculateSection8NoticePeriod } from '@/lib/documents/notice-date-calculator';
 
 describe('Section 8 Notice Only - Grounds Rendering', () => {
   it('maps grounds with statutory_text for Form 3 Section 3', () => {
@@ -366,5 +367,268 @@ describe('Section 8 Notice Only - Preview Route Integration', () => {
     expect(description).not.toContain('ground_8');
     expect(description).not.toContain('Ground ,');
     expect(templateData.grounds[0].evidence).toContain('Ledger');
+  });
+});
+
+describe('Section 8 Notice Only - Ground-Dependent Notice Periods', () => {
+  it('calculates 14-day notice period for Ground 8 only', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['Ground 8 - Serious rent arrears'],
+      landlord_full_name: 'John Doe',
+      tenant_full_name: 'Jane Smith',
+      property_address: '123 Test Street',
+      total_arrears: 3000,
+      rent_amount: 1000,
+      rent_frequency: 'monthly',
+      notice_service_date: '2024-01-01',
+    };
+
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    expect(templateData.notice_period_days).toBe(14);
+    expect(templateData.notice_period_description).toBe('2 weeks');
+    // Service: Jan 1, +14 days = Jan 15
+    expect(templateData.earliest_possession_date).toBe('2024-01-15');
+  });
+
+  it('calculates 60-day notice period for Ground 10 (some rent arrears)', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['Ground 10 - Some rent arrears'],
+      landlord_full_name: 'John Doe',
+      tenant_full_name: 'Jane Smith',
+      property_address: '123 Test Street',
+      total_arrears: 500,
+      rent_amount: 1000,
+      rent_frequency: 'monthly',
+      notice_service_date: '2024-01-01',
+    };
+
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    expect(templateData.notice_period_days).toBe(60);
+    expect(templateData.notice_period_description).toBe('2 months');
+    // Service: Jan 1, +60 days = Mar 1
+    expect(templateData.earliest_possession_date).toBe('2024-03-01');
+  });
+
+  it('calculates 60-day notice period for Ground 11 (persistent delay)', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['Ground 11 - Persistent delay in paying rent'],
+      landlord_full_name: 'John Doe',
+      tenant_full_name: 'Jane Smith',
+      property_address: '123 Test Street',
+      notice_service_date: '2024-01-01',
+    };
+
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    expect(templateData.notice_period_days).toBe(60);
+    expect(templateData.notice_period_description).toBe('2 months');
+  });
+
+  it('uses maximum notice period when mixing 14-day and 60-day grounds', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: [
+        'Ground 8 - Serious rent arrears',  // 14 days
+        'Ground 10 - Some rent arrears',    // 60 days
+      ],
+      landlord_full_name: 'John Doe',
+      tenant_full_name: 'Jane Smith',
+      property_address: '123 Test Street',
+      total_arrears: 3000,
+      rent_amount: 1000,
+      rent_frequency: 'monthly',
+      notice_service_date: '2024-01-01',
+    };
+
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    // Should use max of 14 and 60 = 60 days
+    expect(templateData.notice_period_days).toBe(60);
+    expect(templateData.notice_period_description).toBe('2 months');
+    expect(templateData.earliest_possession_date).toBe('2024-03-01');
+  });
+
+  it('calculates 14-day period for Ground 12 (breach of tenancy)', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['Ground 12 - Breach of tenancy obligation'],
+      landlord_full_name: 'John Doe',
+      tenant_full_name: 'Jane Smith',
+      property_address: '123 Test Street',
+      notice_service_date: '2024-01-01',
+    };
+
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    expect(templateData.notice_period_days).toBe(14);
+    expect(templateData.notice_period_description).toBe('2 weeks');
+  });
+
+  it('handles internal ground_8/ground_11 format correctly', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['ground_8', 'ground_11'],
+      landlord_full_name: 'John Doe',
+      tenant_full_name: 'Jane Smith',
+      property_address: '123 Test Street',
+      total_arrears: 3000,
+      rent_amount: 1000,
+      rent_frequency: 'monthly',
+      notice_service_date: '2024-01-01',
+    };
+
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    // Ground 11 requires 60 days
+    expect(templateData.notice_period_days).toBe(60);
+    expect(templateData.notice_period_description).toBe('2 months');
+  });
+
+  it('correctly sets notice period metadata fields', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['Ground 10 - Some rent arrears'],
+      landlord_full_name: 'John Doe',
+      tenant_full_name: 'Jane Smith',
+      property_address: '123 Test Street',
+      notice_service_date: '2024-01-01',
+    };
+
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    expect(templateData.notice_period_days).toBe(60);
+    expect(templateData.notice_period_weeks).toBe(9); // ceil(60/7)
+    expect(templateData.notice_period_months).toBe(2);
+    expect(templateData.notice_period_description).toBe('2 months');
+  });
+});
+
+/**
+ * REGRESSION TEST: Verify both notice period implementations are aligned
+ *
+ * There are TWO implementations of Section 8 notice period calculation:
+ * 1. normalize.ts - GROUND_NOTICE_PERIODS + calculateRequiredNoticePeriod()
+ * 2. notice-date-calculator.ts - SECTION8_GROUND_NOTICE_PERIODS + calculateSection8NoticePeriod()
+ *
+ * This test ensures they produce consistent results to prevent future divergence.
+ */
+describe('Section 8 Notice Period - Implementation Alignment', () => {
+
+  const groundTestCases = [
+    { grounds: [8], expected: 14, description: 'Ground 8 (serious arrears) = 14 days' },
+    { grounds: [10], expected: 60, description: 'Ground 10 (some arrears) = 60 days' },
+    { grounds: [11], expected: 60, description: 'Ground 11 (persistent delay) = 60 days' },
+    { grounds: [12], expected: 14, description: 'Ground 12 (breach) = 14 days' },
+    { grounds: [8, 10], expected: 60, description: 'Mixed: max(14, 60) = 60 days' },
+    { grounds: [8, 11], expected: 60, description: 'Mixed: max(14, 60) = 60 days' },
+    { grounds: [8, 12], expected: 14, description: 'Both 14-day grounds = 14 days' },
+    { grounds: [1], expected: 60, description: 'Ground 1 (prior occupation) = 60 days' },
+    { grounds: [2], expected: 60, description: 'Ground 2 (mortgagee) = 60 days' },
+    { grounds: [17], expected: 14, description: 'Ground 17 (false statement) = 14 days' },
+  ];
+
+  it.each(groundTestCases)('$description', ({ grounds, expected }) => {
+    // Test notice-date-calculator.ts implementation
+    const groundsForCalc = grounds.map(code => ({ code, mandatory: code <= 8 }));
+    const result = calculateSection8NoticePeriod({
+      grounds: groundsForCalc,
+      severity: 'moderate',
+      strategy: 'minimum',
+      jurisdiction: 'england',
+    });
+
+    expect(result.minimum_legal_days).toBe(expected);
+  });
+
+  it('mapNoticeOnlyFacts matches calculateSection8NoticePeriod for Ground 10', () => {
+    // Test via mapNoticeOnlyFacts (normalize.ts implementation)
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['Ground 10 - Some rent arrears'],
+      landlord_full_name: 'Test',
+      tenant_full_name: 'Tenant',
+      property_address: '123 Test St',
+      notice_service_date: '2024-01-01',
+    };
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    // Test via calculateSection8NoticePeriod (notice-date-calculator.ts implementation)
+    const calcResult = calculateSection8NoticePeriod({
+      grounds: [{ code: 10, mandatory: false }],
+      severity: 'moderate',
+      strategy: 'minimum',
+      jurisdiction: 'england',
+    });
+
+    // CRITICAL: Both implementations must agree
+    expect(templateData.notice_period_days).toBe(calcResult.minimum_legal_days);
+    expect(templateData.notice_period_days).toBe(60);
+  });
+
+  it('mapNoticeOnlyFacts matches calculateSection8NoticePeriod for Ground 11', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['Ground 11 - Persistent delay'],
+      landlord_full_name: 'Test',
+      tenant_full_name: 'Tenant',
+      property_address: '123 Test St',
+      notice_service_date: '2024-01-01',
+    };
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    const calcResult = calculateSection8NoticePeriod({
+      grounds: [{ code: 11, mandatory: false }],
+      severity: 'moderate',
+      strategy: 'minimum',
+      jurisdiction: 'england',
+    });
+
+    // CRITICAL: Both implementations must agree
+    expect(templateData.notice_period_days).toBe(calcResult.minimum_legal_days);
+    expect(templateData.notice_period_days).toBe(60);
+  });
+
+  it('mapNoticeOnlyFacts matches calculateSection8NoticePeriod for mixed grounds 8+10', () => {
+    const wizardFacts = {
+      jurisdiction: 'england',
+      selected_notice_route: 'section_8',
+      section8_grounds_selection: ['Ground 8 - Serious arrears', 'Ground 10 - Some arrears'],
+      landlord_full_name: 'Test',
+      tenant_full_name: 'Tenant',
+      property_address: '123 Test St',
+      total_arrears: 3000,
+      rent_amount: 1000,
+      rent_frequency: 'monthly',
+      notice_service_date: '2024-01-01',
+    };
+    const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+    const calcResult = calculateSection8NoticePeriod({
+      grounds: [
+        { code: 8, mandatory: true },
+        { code: 10, mandatory: false },
+      ],
+      severity: 'moderate',
+      strategy: 'minimum',
+      jurisdiction: 'england',
+    });
+
+    // CRITICAL: Both implementations must agree - use max of 14 and 60 = 60
+    expect(templateData.notice_period_days).toBe(calcResult.minimum_legal_days);
+    expect(templateData.notice_period_days).toBe(60);
   });
 });
