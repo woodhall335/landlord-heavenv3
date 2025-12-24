@@ -154,7 +154,7 @@ function setNestedValue(target: Record<string, any>, path: string, value: any) {
 export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
   // Check all possible paths in precedence order
   const candidates = [
-    // Complete pack MQS maps_to path
+    // Complete pack MQS maps_to path (England)
     'notice_served_date',
     // England/Wales maps_to path
     'notice_service.notice_date',
