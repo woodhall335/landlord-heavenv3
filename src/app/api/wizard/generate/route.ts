@@ -4,11 +4,18 @@
  *
  * Enforces legal compliance before generating documents.
  * Cannot be bypassed - API-layer enforcement.
+ *
+ * PRE-GENERATION VALIDATION:
+ * - Rule-based consistency check always runs for complete_pack
+ * - Optional LLM check via ENABLE_LLM_CONSISTENCY_CHECK env flag
+ * - BLOCKER issues return 400 and prevent generation
+ * - WARNING issues are logged but allow generation
  */
 
 import { NextResponse } from 'next/server';
 import { handleLegalError, LegalComplianceError, ValidationError } from '@/lib/errors/legal-errors';
 import { getCaseFacts } from './getCaseFacts';
+import { runPreGenerationCheck } from '@/lib/validation/pre-generation-check';
 
 // Helper function to parse dates consistently (CLAUDE CODE FIX #2)
 function parseUTCDate(dateStr: string): Date {
@@ -35,6 +42,39 @@ export async function POST(request: Request) {
     }
 
     const caseFacts = await getCaseFacts(caseId);
+
+    // ========================================
+    // PRE-GENERATION CONSISTENCY CHECK (complete_pack only)
+    // ========================================
+
+    // Determine product from documentType or caseFacts
+    const product = caseFacts.__meta?.product || caseFacts.product ||
+      (documentType.includes('eviction') || documentType.includes('section') ? 'complete_pack' : 'notice_only');
+
+    if (product === 'complete_pack' || product === 'eviction_pack') {
+      const preGenResult = await runPreGenerationCheck(caseFacts, product);
+
+      // Log warnings but don't block
+      if (preGenResult.warnings.length > 0) {
+        console.log(`[API Generate] Pre-generation warnings:`, preGenResult.warnings.map(w => w.code));
+      }
+
+      // Block on blocker issues
+      if (!preGenResult.passed) {
+        console.log(`[API Generate] Pre-generation blockers:`, preGenResult.blockers.map(b => b.code));
+        return NextResponse.json(
+          {
+            error: 'PRE_GENERATION_VALIDATION_FAILED',
+            code: 'CONSISTENCY_CHECK_FAILED',
+            message: 'Document generation blocked due to data inconsistencies',
+            blocking_issues: preGenResult.blockers,
+            warnings: preGenResult.warnings,
+            llm_check_ran: preGenResult.llm_check_ran,
+          },
+          { status: 400 }
+        );
+      }
+    }
 
     // ========================================
     // WALES SECTION 173 ENFORCEMENT

@@ -352,10 +352,14 @@ export async function POST(request: Request) {
             );
           }
 
-          const templateJurisdiction = canonicalJurisdiction === 'wales' ? 'wales' : 'england';
+          // Section 21 is England-only (Wales uses Section 173)
+          // Use canonical notice_only template path for England
+          const templatePath = canonicalJurisdiction === 'wales'
+            ? 'uk/wales/templates/eviction/section21_form6a.hbs' // Legacy path for any Wales edge cases
+            : 'uk/england/templates/notice_only/form_6a_section21/notice.hbs'; // Canonical England path
 
           generatedDoc = await generateDocument({
-            templatePath: `uk/${templateJurisdiction}/templates/eviction/section21_form6a.hbs`,
+            templatePath,
             data: safeCaseData as any,
             isPreview: is_preview,
             outputFormat: 'both',

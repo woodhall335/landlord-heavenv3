@@ -2,7 +2,7 @@
 
 ## Supported Flows
 - england / notice_only (section_21, section_8)
-- england / eviction_pack (Section 8 (fault-based), Section 21 (no-fault))
+- england / eviction_pack (section_8, section_21)
 - england / money_claim (money_claim)
 - england / tenancy_agreement (tenancy_agreement)
 - wales / notice_only (wales_section_173, wales_fault_based)
