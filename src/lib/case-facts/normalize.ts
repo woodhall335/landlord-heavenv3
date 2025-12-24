@@ -2391,13 +2391,15 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
         'landlord.city',
       ])
     );
-    const landlordPostcode = extractString(
+    const landlordPostcodeRaw = extractString(
       getFirstValue(wizard, [
         'landlord_address_postcode',
         'landlord_postcode',
         'landlord.postcode',
       ])
     );
+    // Normalize postcode to uppercase for display consistency
+    const landlordPostcode = landlordPostcodeRaw?.toUpperCase() || null;
 
     // Concatenate landlord address
     const landlordAddressParts = [
@@ -2474,13 +2476,15 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
       'property.city',
     ])
   );
-  const propertyPostcode = extractString(
+  const propertyPostcodeRaw = extractString(
     getFirstValue(wizard, [
       'property_address_postcode',
       'property_postcode',
       'property.postcode',
     ])
   );
+  // Normalize postcode to uppercase for display consistency
+  const propertyPostcode = propertyPostcodeRaw?.toUpperCase() || null;
 
   // Concatenate property address
   const propertyAddressParts = [
