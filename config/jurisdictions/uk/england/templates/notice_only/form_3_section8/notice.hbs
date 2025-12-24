@@ -312,12 +312,15 @@
       margin-top: 0.5em;
     }
 
-    /* Signature Block */
+    /* Signature Block - CRITICAL: Must stay together on same page */
     .signature-section {
       margin: 2em 0;
       padding: 1.25em;
       border: 1px solid #ccc;
       background: #fafafa;
+      /* Prevent section 7 from being split across pages */
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
     
     .signature-section h4 {
@@ -327,6 +330,9 @@
       display: flex;
       align-items: center;
       gap: 0.5em;
+      /* Keep header with following content */
+      page-break-after: avoid;
+      break-after: avoid-page;
     }
     
     .signature-section h4 .num {
@@ -513,6 +519,19 @@
       .guidance-box,
       .ground-block {
         page-break-inside: avoid;
+      }
+
+      /* Section 7 signature block must stay atomic */
+      .signature-section {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Keep section headers with their content */
+      .signature-section h4,
+      .numbered-section .section-label {
+        page-break-after: avoid;
+        break-after: avoid-page;
       }
     }
   </style>

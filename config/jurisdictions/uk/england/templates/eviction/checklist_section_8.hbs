@@ -31,14 +31,23 @@
       color: #2563eb;
       margin-top: 30px;
       margin-bottom: 15px;
+      /* Keep heading with following content */
+      page-break-after: avoid;
+      break-after: avoid-page;
     }
     h3 {
       color: #1a1a1a;
       margin-top: 20px;
       margin-bottom: 10px;
+      /* Keep heading with following content */
+      page-break-after: avoid;
+      break-after: avoid-page;
     }
     .section {
       margin: 25px 0;
+      /* Prevent section from being split across pages */
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
     .info-box {
       background: #f3f4f6;
@@ -58,6 +67,9 @@
       padding: 20px;
       border-radius: 5px;
       margin: 20px 0;
+      /* Prevent checklist from being split across pages */
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
     .checkbox {
       display: inline-block;
@@ -146,10 +158,10 @@
         <li><span class="checkbox"></span> Ground(s) for possession clearly stated with particulars</li>
         <li><span class="checkbox"></span> Notice period is sufficient for the grounds claimed:
           <ul style="margin-left: 30px; margin-top: 8px;">
-            <li>Grounds 1, 2, 5-7, 9, 16: Two weeks notice minimum</li>
-            <li>Ground 8 (serious rent arrears): Two weeks notice minimum</li>
-            <li>Ground 14 (ASB), Ground 14A (serious ASB): Immediate notice possible if not periodic</li>
-            <li>Other grounds: Two months notice minimum</li>
+            <li><strong>60 days (2 months) minimum:</strong> Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16</li>
+            <li><strong>14 days (2 weeks) minimum:</strong> Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 14ZA, 15, 17</li>
+            <li><strong>Immediate (0 days):</strong> Ground 14A (domestic violence), Ground 14 (serious ASB only)</li>
+            <li><strong>Multi-ground notices:</strong> Use the MAXIMUM notice period across all selected grounds</li>
           </ul>
         </li>
         {{#if is_fixed_term}}
