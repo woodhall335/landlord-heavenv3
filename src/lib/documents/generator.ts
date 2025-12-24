@@ -365,7 +365,7 @@ export function loadTemplate(templatePath: string): string {
     throw new Error(
       `[TEMPLATE GUARD] Template path must be relative to config/jurisdictions/\n` +
       `Received absolute path: ${templatePath}\n` +
-      `Use relative paths like "uk/england/templates/eviction/section8_notice.hbs"`
+      `Use relative paths like "uk/england/templates/notice_only/form_3_section8/notice.hbs"`
     );
   }
 
