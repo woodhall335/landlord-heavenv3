@@ -99,35 +99,31 @@ export async function generateNoticeOnlyPreview(
 
   const pages = mergedPdf.getPages();
 
-  // Calculate page numbering
-  // When TOC is included, it occupies exactly 1 page at the start and doesn't get numbered
-  const tocPageCount = options.includeTableOfContents ? 1 : 0;
-  const totalContentPages = pages.length - tocPageCount;
+  // Calculate total page count for numbering
+  // When TOC is included, exclude it from the content page count
+  const totalContentPages = options.includeTableOfContents ? pages.length - 1 : pages.length;
 
-  // Add page numbers to content pages only (not TOC)
-  // Page numbers are 1-indexed and only count content pages
+  // Only add page numbers (keeping useful metadata, no watermarks)
   for (let i = 0; i < pages.length; i++) {
     const page = pages[i];
     const { width } = page.getSize();
 
-    // Skip TOC pages (they don't get page numbers)
-    if (i < tocPageCount) {
-      continue;
+    // Add page numbers (except TOC) - keeping this for usability
+    if (i > 0 || !options.includeTableOfContents) {
+      // When TOC is included: i starts at 1 for content, so pageNum = i
+      // When no TOC: i starts at 0, so pageNum = i + 1
+      const pageNum = options.includeTableOfContents ? i : i + 1;
+      page.drawText(`Page ${pageNum} of ${totalContentPages}`, {
+        x: width - 100,
+        y: 20,
+        size: 10,
+        font: regularFont,
+        color: rgb(0.5, 0.5, 0.5),
+      });
     }
-
-    // Calculate 1-indexed content page number
-    const contentPageNumber = i - tocPageCount + 1;
-
-    page.drawText(`Page ${contentPageNumber} of ${totalContentPages}`, {
-      x: width - 100,
-      y: 20,
-      size: 10,
-      font: regularFont,
-      color: rgb(0.5, 0.5, 0.5),
-    });
   }
 
-  console.log('[NOTICE-PREVIEW] Added page numbers to', totalContentPages, 'content pages (TOC pages:', tocPageCount, ', total pages:', pages.length, ')');
+  console.log('[NOTICE-PREVIEW] Added page numbers to', totalContentPages, 'content pages (total pages:', pages.length, ')');
 
   // Save and return
   const pdfBytes = await mergedPdf.save();

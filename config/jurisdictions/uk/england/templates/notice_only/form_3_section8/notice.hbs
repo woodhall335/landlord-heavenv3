@@ -313,20 +313,16 @@
     }
 
     /* Signature Block - CRITICAL: Must stay together on same page */
-    /* Section 7 is an atomic block: header + signature grid + capacity + date */
     .signature-section {
       margin: 2em 0;
       padding: 1.25em;
       border: 1px solid #ccc;
       background: #fafafa;
-      /* Prevent section 7 from being split across pages - use all methods */
-      page-break-inside: avoid !important;
-      break-inside: avoid !important;
-      /* If section doesn't fit, start on new page */
-      page-break-before: auto;
-      break-before: auto;
+      /* Prevent section 7 from being split across pages */
+      page-break-inside: avoid;
+      break-inside: avoid;
     }
-
+    
     .signature-section h4 {
       font-size: 10pt;
       font-weight: 600;
@@ -335,8 +331,8 @@
       align-items: center;
       gap: 0.5em;
       /* Keep header with following content */
-      page-break-after: avoid !important;
-      break-after: avoid-page !important;
+      page-break-after: avoid;
+      break-after: avoid-page;
     }
     
     .signature-section h4 .num {
@@ -525,28 +521,17 @@
         page-break-inside: avoid;
       }
 
-      /* Section 7 signature block must stay atomic - reinforced for print */
+      /* Section 7 signature block must stay atomic */
       .signature-section {
-        page-break-inside: avoid !important;
-        break-inside: avoid !important;
-        /* Force to new page if not enough space (browser decides) */
-        orphans: 10;
-        widows: 10;
+        page-break-inside: avoid;
+        break-inside: avoid;
       }
 
       /* Keep section headers with their content */
       .signature-section h4,
       .numbered-section .section-label {
-        page-break-after: avoid !important;
-        break-after: avoid-page !important;
-      }
-
-      /* Ensure signature grid doesn't split */
-      .signature-grid,
-      .signatory-block,
-      .capacity-section {
-        page-break-inside: avoid;
-        break-inside: avoid;
+        page-break-after: avoid;
+        break-after: avoid-page;
       }
     }
   </style>

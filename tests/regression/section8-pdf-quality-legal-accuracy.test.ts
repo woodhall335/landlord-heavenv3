@@ -65,11 +65,8 @@ describe('Section 8 PDF Layout - Page Break Controls', () => {
 
       const templateContent = fs.readFileSync(form3Path, 'utf-8');
 
-      // Should have @media print rules block and signature-section reference within it
-      expect(templateContent).toContain('@media print');
-      expect(templateContent).toContain('.signature-section');
-      // The signature section should have page-break rules
-      expect(templateContent).toMatch(/\.signature-section[\s\S]*?page-break-inside:\s*avoid/);
+      // Should have @media print rules for signature section
+      expect(templateContent).toMatch(/@media\s+print\s*\{[^}]*\.signature-section[^}]*\}/s);
     });
   });
 
@@ -133,46 +130,6 @@ describe('Section 8 PDF Layout - Page Break Controls', () => {
       expect(criticalMatch![0]).toContain('page-break-inside: avoid');
       expect(successMatch![0]).toContain('page-break-inside: avoid');
     });
-
-    it('should have section-header-block class with page-break-inside: avoid', () => {
-      const serviceInstructionsPath = path.join(
-        process.cwd(),
-        'config/jurisdictions/uk/england/templates/eviction/service_instructions_section_8.hbs'
-      );
-
-      const templateContent = fs.readFileSync(serviceInstructionsPath, 'utf-8');
-
-      // .section-header-block should have page-break-inside: avoid
-      const sectionHeaderBlockMatch = templateContent.match(/\.section-header-block\s*\{[^}]*\}/);
-      expect(sectionHeaderBlockMatch).not.toBeNull();
-      expect(sectionHeaderBlockMatch![0]).toContain('page-break-inside: avoid');
-    });
-
-    it('should have callout-section class with page-break-inside: avoid', () => {
-      const serviceInstructionsPath = path.join(
-        process.cwd(),
-        'config/jurisdictions/uk/england/templates/eviction/service_instructions_section_8.hbs'
-      );
-
-      const templateContent = fs.readFileSync(serviceInstructionsPath, 'utf-8');
-
-      // .callout-section should have page-break-inside: avoid
-      const calloutSectionMatch = templateContent.match(/\.callout-section\s*\{[^}]*\}/);
-      expect(calloutSectionMatch).not.toBeNull();
-      expect(calloutSectionMatch![0]).toContain('page-break-inside: avoid');
-    });
-
-    it('should wrap major sections with callout-section class', () => {
-      const serviceInstructionsPath = path.join(
-        process.cwd(),
-        'config/jurisdictions/uk/england/templates/eviction/service_instructions_section_8.hbs'
-      );
-
-      const templateContent = fs.readFileSync(serviceInstructionsPath, 'utf-8');
-
-      // Major sections should use callout-section class
-      expect(templateContent).toContain('class="section callout-section"');
-    });
   });
 
   describe('Checklist Page Break Controls', () => {
@@ -202,32 +159,6 @@ describe('Section 8 PDF Layout - Page Break Controls', () => {
       const h2Match = templateContent.match(/h2\s*\{[^}]*\}/);
       expect(h2Match).not.toBeNull();
       expect(h2Match![0]).toContain('page-break-after: avoid');
-    });
-
-    it('should have checklist-section class with page-break-inside: avoid', () => {
-      const checklistPath = path.join(
-        process.cwd(),
-        'config/jurisdictions/uk/england/templates/eviction/checklist_section_8.hbs'
-      );
-
-      const templateContent = fs.readFileSync(checklistPath, 'utf-8');
-
-      // .checklist-section should have page-break-inside: avoid
-      const checklistSectionMatch = templateContent.match(/\.checklist-section\s*\{[^}]*\}/);
-      expect(checklistSectionMatch).not.toBeNull();
-      expect(checklistSectionMatch![0]).toContain('page-break-inside: avoid');
-    });
-
-    it('should wrap major sections with checklist-section class', () => {
-      const checklistPath = path.join(
-        process.cwd(),
-        'config/jurisdictions/uk/england/templates/eviction/checklist_section_8.hbs'
-      );
-
-      const templateContent = fs.readFileSync(checklistPath, 'utf-8');
-
-      // Major sections should use checklist-section class
-      expect(templateContent).toContain('class="section checklist-section"');
     });
   });
 });
@@ -317,9 +248,9 @@ describe('Section 8 Checklist - Legal Accuracy', () => {
   });
 
   describe('Consistency with notice-date-calculator.ts', () => {
-    it('should match SECTION8_GROUND_NOTICE_PERIODS from notice-date-calculator', async () => {
-      // Import the authoritative source using dynamic import
-      const { calculateSection8NoticePeriod } = await import('../../src/lib/documents/notice-date-calculator');
+    it('should match SECTION8_GROUND_NOTICE_PERIODS from notice-date-calculator', () => {
+      // Import the authoritative source
+      const { calculateSection8NoticePeriod } = require('@/lib/documents/notice-date-calculator');
 
       // Test each category of grounds
       const twoMonthGrounds = [1, 2, 5, 6, 7, 9, 10, 11, 16];

@@ -32,36 +32,22 @@
       margin-top: 30px;
       margin-bottom: 15px;
       /* Keep heading with following content */
-      page-break-after: avoid !important;
-      break-after: avoid-page !important;
+      page-break-after: avoid;
+      break-after: avoid-page;
     }
     h3 {
       color: #1a1a1a;
       margin-top: 20px;
       margin-bottom: 10px;
       /* Keep heading with following content */
-      page-break-after: avoid !important;
-      break-after: avoid-page !important;
+      page-break-after: avoid;
+      break-after: avoid-page;
     }
     .section {
       margin: 30px 0;
       /* Prevent section from being split across pages */
       page-break-inside: avoid;
       break-inside: avoid;
-    }
-
-    /* Section header block - keeps header + first paragraph/list together */
-    .section-header-block {
-      page-break-inside: avoid !important;
-      break-inside: avoid !important;
-    }
-
-    /* Callout sections with icons - must stay atomic */
-    .callout-section {
-      page-break-inside: avoid !important;
-      break-inside: avoid !important;
-      orphans: 5;
-      widows: 5;
     }
     .warning {
       background: #fef3c7;
@@ -140,11 +126,9 @@
     ⚠️ <strong>CRITICAL:</strong> You must serve this notice correctly or it will be invalid. Incorrect service is the most common reason for court rejection.
   </div>
 
-  <div class="section callout-section">
-    <div class="section-header-block">
-      <h2>How to Serve This Notice</h2>
-      <p>Under the Housing Act 1988, you have several options for serving the notice. Choose the method that gives you the best evidence of service.</p>
-    </div>
+  <div class="section">
+    <h2>How to Serve This Notice</h2>
+    <p>Under the Housing Act 1988, you have several options for serving the notice. Choose the method that gives you the best evidence of service.</p>
 
     <h3>✅ RECOMMENDED METHOD: Hand Delivery</h3>
     <ul>
@@ -193,11 +177,9 @@
     </ul>
   </div>
 
-  <div class="section callout-section">
-    <div class="section-header-block">
-      <h2>Evidence You Must Keep</h2>
-      <p>If you go to court, you must <strong>prove you served the notice correctly</strong>. The court will ask for evidence. Keep the following:</p>
-    </div>
+  <div class="section">
+    <h2>Evidence You Must Keep</h2>
+    <p>If you go to court, you must <strong>prove you served the notice correctly</strong>. The court will ask for evidence. Keep the following:</p>
 
     <div class="checklist">
       <h3>Service Evidence Checklist:</h3>
@@ -228,10 +210,8 @@ Date: ______________________________
     </div>
   </div>
 
-  <div class="section callout-section">
-    <div class="section-header-block">
-      <h2>What Happens After Service?</h2>
-    </div>
+  <div class="section">
+    <h2>What Happens After Service?</h2>
 
     <h3>Waiting Period</h3>
     <p>After serving the notice, you must wait until the expiry date: <strong>{{earliest_possession_date_formatted}}</strong></p>
@@ -267,10 +247,8 @@ Date: ______________________________
     </div>
   </div>
 
-  <div class="section callout-section">
-    <div class="section-header-block">
-      <h2>Common Mistakes to Avoid</h2>
-    </div>
+  <div class="section">
+    <h2>Common Mistakes to Avoid</h2>
     <ul>
       <li>❌ Serving the notice too early (before arrears reach required level for your ground)</li>
       <li>❌ Getting the expiry date wrong (too short or not aligned with rent period)</li>
@@ -281,13 +259,11 @@ Date: ______________________________
     </ul>
   </div>
 
-  <div class="section callout-section">
-    <div class="section-header-block">
-      <h2>Legal Basis</h2>
-      <p><strong>Service Requirements:</strong> Housing Act 1988, Section 8</p>
-      <p><strong>Proof of Service:</strong> Civil Procedure Rules, Part 6</p>
-      <p><strong>Illegal Eviction:</strong> Protection from Eviction Act 1977</p>
-    </div>
+  <div class="section">
+    <h2>Legal Basis</h2>
+    <p><strong>Service Requirements:</strong> Housing Act 1988, Section 8</p>
+    <p><strong>Proof of Service:</strong> Civil Procedure Rules, Part 6</p>
+    <p><strong>Illegal Eviction:</strong> Protection from Eviction Act 1977</p>
   </div>
 
   <footer>
