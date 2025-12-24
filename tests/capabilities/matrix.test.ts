@@ -8,6 +8,7 @@ import {
   getCapabilityMatrix,
   getSupportedRoutes,
   isFlowSupported,
+  normalizeProductSlug,
 } from "../../src/lib/jurisdictions/capabilities/matrix";
 import { writeCapabilityAlignmentReport } from "../../src/lib/jurisdictions/capabilities/alignmentReport";
 
@@ -100,5 +101,55 @@ describe("capability matrix", () => {
     const outputPath = path.join(process.cwd(), "ALIGNMENT_REPORT.uk_packs.md");
     writeCapabilityAlignmentReport(matrix, report, outputPath);
     expect(fs.existsSync(outputPath)).toBe(true);
+  });
+});
+
+describe("product alias normalization (complete_pack => eviction_pack)", () => {
+  it("normalizes complete_pack to eviction_pack", () => {
+    expect(normalizeProductSlug("complete_pack")).toBe("eviction_pack");
+  });
+
+  it("preserves valid product types unchanged", () => {
+    expect(normalizeProductSlug("notice_only")).toBe("notice_only");
+    expect(normalizeProductSlug("eviction_pack")).toBe("eviction_pack");
+    expect(normalizeProductSlug("money_claim")).toBe("money_claim");
+    expect(normalizeProductSlug("tenancy_agreement")).toBe("tenancy_agreement");
+  });
+
+  it("isFlowSupported accepts complete_pack as alias for eviction_pack", () => {
+    // England should support both eviction_pack and complete_pack
+    expect(isFlowSupported("england", "eviction_pack")).toBe(true);
+    expect(isFlowSupported("england", "complete_pack")).toBe(true);
+
+    // Wales should support both eviction_pack and complete_pack
+    expect(isFlowSupported("wales", "eviction_pack")).toBe(true);
+    expect(isFlowSupported("wales", "complete_pack")).toBe(true);
+
+    // Scotland should support both eviction_pack and complete_pack
+    expect(isFlowSupported("scotland", "eviction_pack")).toBe(true);
+    expect(isFlowSupported("scotland", "complete_pack")).toBe(true);
+
+    // Northern Ireland should NOT support eviction_pack or complete_pack
+    expect(isFlowSupported("northern-ireland", "eviction_pack")).toBe(false);
+    expect(isFlowSupported("northern-ireland", "complete_pack")).toBe(false);
+  });
+
+  it("getSupportedRoutes accepts complete_pack as alias", () => {
+    const routesViaEvictionPack = getSupportedRoutes("england", "eviction_pack");
+    const routesViaCompletePack = getSupportedRoutes("england", "complete_pack");
+
+    expect(routesViaCompletePack).toEqual(routesViaEvictionPack);
+    expect(routesViaCompletePack).toContain("section_8");
+    expect(routesViaCompletePack).toContain("section_21");
+  });
+
+  it("assertFlowSupported does not throw FLOW_NOT_DEFINED for complete_pack", () => {
+    // Should not throw for valid flows
+    expect(() => assertFlowSupported("england", "complete_pack")).not.toThrow();
+    expect(() => assertFlowSupported("england", "complete_pack", "section_8")).not.toThrow();
+    expect(() => assertFlowSupported("england", "complete_pack", "section_21")).not.toThrow();
+
+    // Should still throw for Northern Ireland
+    expect(() => assertFlowSupported("northern-ireland", "complete_pack")).toThrow(FlowCapabilityError);
   });
 });
