@@ -2,20 +2,21 @@
 #
 # ENGLAND-ONLY Eviction Pack (Section 8 + Section 21)
 # Split from england-wales.yaml as part of canonical jurisdiction implementation
-# Version 2.0.0 - England jurisdiction
+# Version 2.1.0 - England jurisdiction
+# 2.1.0: Added court-ready fields (notice dates, arrears amounts, deposit details)
 
 __meta:
-  version: "2.0.0"
+  version: "2.1.0"
   effective_from: "2025-12-16"
-  last_updated: "2025-12-16"
-  legal_review_date: "2025-12-16"
+  last_updated: "2025-12-24"
+  legal_review_date: "2025-12-24"
   jurisdiction: "england"
   product: "complete_pack"
 
 id: complete_pack_england_v2
 product: complete_pack
 jurisdiction: england
-version: "2.0.0"
+version: "2.1.0"
 
 questions:
   # 1. Eviction route selection (England: Section 8 or Section 21)
@@ -31,6 +32,61 @@ questions:
       required: true
     maps_to:
       - selected_notice_route
+
+  # ============================================================
+  # NOTICE SERVICE DETAILS (COMMON FOR BOTH ROUTES)
+  # ============================================================
+
+  - id: notice_service_details
+    section: Notice Service
+    question: "When was the notice served?"
+    inputType: group
+    helperText: "The date you served the eviction notice on the tenant(s)."
+    fields:
+      - id: notice_served_date
+        label: "Date notice was served"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: notice_expiry_date
+        label: "Notice expiry date (if known)"
+        inputType: date
+        helperText: "Leave blank to auto-calculate based on notice type"
+        width: half
+    maps_to:
+      - notice_served_date
+      - notice_expiry_date
+
+  # ============================================================
+  # RENT DETAILS (COMMON FOR BOTH ROUTES)
+  # ============================================================
+
+  - id: rent_details
+    section: Rent
+    question: "Rent details"
+    inputType: group
+    helperText: "Current rent amount and payment frequency"
+    fields:
+      - id: rent_amount
+        label: "Monthly rent amount (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+      - id: rent_frequency
+        label: "Payment frequency"
+        inputType: select
+        options:
+          - "weekly"
+          - "fortnightly"
+          - "monthly"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - rent_amount
+      - rent_frequency
 
   # ============================================================
   # SECTION 8 QUESTIONS
@@ -80,6 +136,32 @@ questions:
       required: true
     maps_to:
       - section8_details
+
+  - id: rent_arrears_amount
+    section: Arrears Details
+    question: "Total rent arrears amount"
+    inputType: group
+    routes:
+      - section_8
+    dependsOn:
+      questionId: eviction_route
+      value: "Section 8 (fault-based)"
+    helperText: "Enter the total arrears for Forms N5 and N119. Required for arrears grounds (8, 10, 11)."
+    fields:
+      - id: total_arrears
+        label: "Total arrears outstanding (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+      - id: arrears_at_notice_date
+        label: "Arrears at date of notice (£)"
+        inputType: number
+        helperText: "Amount outstanding when notice was served"
+        width: half
+    maps_to:
+      - total_arrears
+      - arrears_at_notice_date
 
   # ============================================================
   # SECTION 21 QUESTIONS (ENGLAND ONLY)
@@ -132,6 +214,50 @@ questions:
       - section21.how_to_rent_served
       - section21.epc_gas_cert_served
       - section21.no_retaliatory_notice
+
+  - id: deposit_details
+    section: Deposit Information
+    question: "Deposit protection details"
+    inputType: group
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "Section 21 (no-fault)"
+    helperText: "Required for Form N5B accelerated possession claim."
+    fields:
+      - id: deposit_amount
+        label: "Deposit amount (£)"
+        inputType: number
+        validation:
+          required: true
+        width: half
+      - id: deposit_protection_date
+        label: "Date deposit was protected"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: deposit_scheme_name
+        label: "Deposit protection scheme"
+        inputType: select
+        options:
+          - "DPS"
+          - "MyDeposits"
+          - "TDS"
+        validation:
+          required: true
+        width: half
+      - id: deposit_reference
+        label: "Deposit reference number"
+        inputType: text
+        helperText: "Optional - reference from protection scheme"
+        width: half
+    maps_to:
+      - deposit_amount
+      - deposit_protection_date
+      - deposit_scheme_name
+      - deposit_reference
 
   # ============================================================
   # COMMON EVICTION PACK QUESTIONS

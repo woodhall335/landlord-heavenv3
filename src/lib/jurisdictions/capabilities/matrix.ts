@@ -47,6 +47,23 @@ const productSlugMap: Record<string, Product> = {
   tenancy_agreement: "tenancy_agreement",
 };
 
+/**
+ * Normalize a product slug to its internal Product type.
+ * Handles the complete_pack => eviction_pack alias.
+ *
+ * @param productSlug - The external product slug (e.g., "complete_pack")
+ * @returns The internal Product type (e.g., "eviction_pack")
+ */
+export function normalizeProductSlug(productSlug: string): Product {
+  // Check if it's already a valid Product type
+  const validProducts: Product[] = ["notice_only", "eviction_pack", "money_claim", "tenancy_agreement"];
+  if (validProducts.includes(productSlug as Product)) {
+    return productSlug as Product;
+  }
+  // Apply slug mapping
+  return productSlugMap[productSlug] || (productSlug as Product);
+}
+
 function isDeprecated(file: string) {
   return file.toLowerCase().includes("deprecated");
 }
@@ -356,15 +373,17 @@ export function getCapabilityBuildReport(): CapabilityBuildReport {
   return capabilityReport;
 }
 
-export function isFlowSupported(jurisdiction: Jurisdiction, product: Product, route?: string): boolean {
-  const capability = capabilityMatrix[jurisdiction]?.[product];
+export function isFlowSupported(jurisdiction: Jurisdiction, product: Product | string, route?: string): boolean {
+  const normalizedProduct = normalizeProductSlug(product);
+  const capability = capabilityMatrix[jurisdiction]?.[normalizedProduct];
   if (!capability || capability.status !== "supported") return false;
   if (!route) return true;
   return capability.routes.includes(route);
 }
 
-export function getSupportedRoutes(jurisdiction: Jurisdiction, product: Product): string[] {
-  const capability = capabilityMatrix[jurisdiction]?.[product];
+export function getSupportedRoutes(jurisdiction: Jurisdiction, product: Product | string): string[] {
+  const normalizedProduct = normalizeProductSlug(product);
+  const capability = capabilityMatrix[jurisdiction]?.[normalizedProduct];
   if (!capability || capability.status !== "supported") return [];
   return capability.routes ?? [];
 }
@@ -399,16 +418,17 @@ export class FlowCapabilityError extends Error {
   }
 }
 
-export function assertFlowSupported(jurisdiction: Jurisdiction, product: Product, route?: string): FlowCapability {
-  const capability = capabilityMatrix[jurisdiction]?.[product];
+export function assertFlowSupported(jurisdiction: Jurisdiction, product: Product | string, route?: string): FlowCapability {
+  const normalizedProduct = normalizeProductSlug(product);
+  const capability = capabilityMatrix[jurisdiction]?.[normalizedProduct];
   if (!capability) {
-    throw new FlowCapabilityError("FLOW_NOT_DEFINED", `Flow ${jurisdiction}/${product} is not defined in matrix`);
+    throw new FlowCapabilityError("FLOW_NOT_DEFINED", `Flow ${jurisdiction}/${normalizedProduct} is not defined in matrix`);
   }
 
   if (capability.status === "misconfigured") {
     throw new FlowCapabilityError(
       "FLOW_MISCONFIGURED",
-      `Flow ${jurisdiction}/${product} is misconfigured and unavailable`,
+      `Flow ${jurisdiction}/${normalizedProduct} is misconfigured and unavailable`,
       capability.routes,
     );
   }
@@ -416,7 +436,7 @@ export function assertFlowSupported(jurisdiction: Jurisdiction, product: Product
   if (capability.status === "unsupported") {
     throw new FlowCapabilityError(
       "FLOW_NOT_SUPPORTED",
-      `Flow ${jurisdiction}/${product} is not supported`,
+      `Flow ${jurisdiction}/${normalizedProduct} is not supported`,
       capability.routes,
     );
   }
@@ -424,7 +444,7 @@ export function assertFlowSupported(jurisdiction: Jurisdiction, product: Product
   if (route && !capability.routes.includes(route)) {
     throw new FlowCapabilityError(
       "ROUTE_NOT_SUPPORTED",
-      `Route ${route} is not available for ${jurisdiction}/${product}`,
+      `Route ${route} is not available for ${jurisdiction}/${normalizedProduct}`,
       capability.routes,
     );
   }

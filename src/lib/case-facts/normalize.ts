@@ -154,6 +154,8 @@ function setNestedValue(target: Record<string, any>, path: string, value: any) {
 export function resolveNoticeServiceDate(wizard: WizardFacts): string | null {
   // Check all possible paths in precedence order
   const candidates = [
+    // Complete pack MQS maps_to path (England)
+    'notice_served_date',
     // England/Wales maps_to path
     'notice_service.notice_date',
     // Scotland maps_to path
@@ -1061,10 +1063,12 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'notice_reason',
   ]);
   base.notice.notice_date ??= getFirstValue(wizard, [
+    'notice_served_date',
     'case_facts.notice.notice_date',
     'notice_date',
   ]);
   base.notice.service_date ??= getFirstValue(wizard, [
+    'notice_served_date',
     'case_facts.notice.service_date',
     'notice_service_date',
     'service_date',
@@ -1088,6 +1092,9 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   // Defensive fallback: ensure simple keys populate notice block even if normalization above misses them
   if (!base.notice.notice_type && typeof (wizard as any).notice_type === 'string') {
     base.notice.notice_type = (wizard as any).notice_type as any;
+  }
+  if (!base.notice.notice_date && typeof (wizard as any).notice_served_date === 'string') {
+    base.notice.notice_date = (wizard as any).notice_served_date as any;
   }
   if (!base.notice.notice_date && typeof (wizard as any).notice_date === 'string') {
     base.notice.notice_date = (wizard as any).notice_date as any;
