@@ -32,22 +32,36 @@
       margin-top: 30px;
       margin-bottom: 15px;
       /* Keep heading with following content */
-      page-break-after: avoid;
-      break-after: avoid-page;
+      page-break-after: avoid !important;
+      break-after: avoid-page !important;
     }
     h3 {
       color: #1a1a1a;
       margin-top: 20px;
       margin-bottom: 10px;
       /* Keep heading with following content */
-      page-break-after: avoid;
-      break-after: avoid-page;
+      page-break-after: avoid !important;
+      break-after: avoid-page !important;
     }
     .section {
       margin: 25px 0;
       /* Prevent section from being split across pages */
       page-break-inside: avoid;
       break-inside: avoid;
+    }
+
+    /* Section header block - keeps header + first content together */
+    .section-header-block {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* Checklist sections must stay atomic */
+    .checklist-section {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      orphans: 5;
+      widows: 5;
     }
     .info-box {
       background: #f3f4f6;
@@ -122,8 +136,10 @@
     {{/if}}
   </div>
 
-  <div class="section">
-    <h2>Service Evidence Checklist</h2>
+  <div class="section checklist-section">
+    <div class="section-header-block">
+      <h2>Service Evidence Checklist</h2>
+    </div>
     <div class="checklist">
       <p><strong>Confirm you have collected and retained the following evidence of service:</strong></p>
       <ul>
@@ -148,8 +164,10 @@
     </div>
   </div>
 
-  <div class="section">
-    <h2>Validity Requirements (Housing Act 1988, Section 8)</h2>
+  <div class="section checklist-section">
+    <div class="section-header-block">
+      <h2>Validity Requirements (Housing Act 1988, Section 8)</h2>
+    </div>
     <div class="checklist">
       <p><strong>Verify your notice meets these validity requirements:</strong></p>
       <ul>
@@ -179,8 +197,10 @@
     </div>
   </div>
 
-  <div class="section">
-    <h2>After Service</h2>
+  <div class="section checklist-section">
+    <div class="section-header-block">
+      <h2>After Service</h2>
+    </div>
     <div class="checklist">
       <p><strong>Post-service actions:</strong></p>
       <ul>
