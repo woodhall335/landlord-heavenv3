@@ -99,25 +99,35 @@ export async function generateNoticeOnlyPreview(
 
   const pages = mergedPdf.getPages();
 
-  // Only add page numbers (keeping useful metadata, no watermarks)
+  // Calculate page numbering
+  // When TOC is included, it occupies exactly 1 page at the start and doesn't get numbered
+  const tocPageCount = options.includeTableOfContents ? 1 : 0;
+  const totalContentPages = pages.length - tocPageCount;
+
+  // Add page numbers to content pages only (not TOC)
+  // Page numbers are 1-indexed and only count content pages
   for (let i = 0; i < pages.length; i++) {
     const page = pages[i];
     const { width } = page.getSize();
 
-    // Add page numbers (except TOC) - keeping this for usability
-    if (i > 0 || !options.includeTableOfContents) {
-      const pageNum = options.includeTableOfContents ? i : i + 1;
-      page.drawText(`Page ${pageNum} of ${pages.length}`, {
-        x: width - 100,
-        y: 20,
-        size: 10,
-        font: regularFont,
-        color: rgb(0.5, 0.5, 0.5),
-      });
+    // Skip TOC pages (they don't get page numbers)
+    if (i < tocPageCount) {
+      continue;
     }
+
+    // Calculate 1-indexed content page number
+    const contentPageNumber = i - tocPageCount + 1;
+
+    page.drawText(`Page ${contentPageNumber} of ${totalContentPages}`, {
+      x: width - 100,
+      y: 20,
+      size: 10,
+      font: regularFont,
+      color: rgb(0.5, 0.5, 0.5),
+    });
   }
 
-  console.log('[NOTICE-PREVIEW] Added page numbers to', pages.length, 'pages');
+  console.log('[NOTICE-PREVIEW] Added page numbers to', totalContentPages, 'content pages (TOC pages:', tocPageCount, ', total pages:', pages.length, ')');
 
   // Save and return
   const pdfBytes = await mergedPdf.save();
