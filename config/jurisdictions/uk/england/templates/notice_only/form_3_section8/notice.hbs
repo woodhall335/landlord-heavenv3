@@ -312,6 +312,13 @@
       margin-top: 0.5em;
     }
 
+    /* ===== KEEP-TOGETHER UTILITY CLASS ===== */
+    /* Use for any block that must not split across pages */
+    .keep-together {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
     /* Signature Block - CRITICAL: Must stay together on same page */
     /* Section 7 is an atomic block: header + signature grid + capacity + date */
     .signature-section {

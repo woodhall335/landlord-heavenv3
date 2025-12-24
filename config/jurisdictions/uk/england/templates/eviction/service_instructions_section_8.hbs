@@ -14,6 +14,33 @@
   <style>
     {{{print_css}}}
 
+    /* ===== @PAGE OVERRIDE - MATCH FORM 3 MARGINS ===== */
+    @page {
+      size: A4;
+      margin: 10mm; /* Narrow margins to match Form 3 */
+    }
+
+    /* Zero out body padding since @page handles margins */
+    body {
+      padding: 0;
+      margin: 0 auto;
+    }
+
+    /* ===== KEEP-TOGETHER UTILITIES ===== */
+    /* Prevent numbered circle headings from splitting */
+    .keep-together {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* Section headers with numbered badges must stay with content */
+    .section-header,
+    .numbered-badge,
+    .step-header {
+      page-break-after: avoid !important;
+      break-after: avoid-page !important;
+    }
+
     /* ===== HARMONIZED DOCUMENT STYLES ===== */
     
     /* Document Header */
@@ -358,21 +385,84 @@
   </dl>
 </div>
 
-  <div class="section callout-section">
-    <div class="section-header-block">
-      <h2>How to Serve This Notice</h2>
-      <p>Under the Housing Act 1988, you have several options for serving the notice. Choose the method that gives you the best evidence of service.</p>
-    </div>
-
 <!-- How to Serve -->
-<div class="section-header">
+<div class="section-header keep-together">
   <span class="num">1</span>
   <h2>How to Serve This Notice</h2>
 </div>
 
 <p style="font-size: 10pt; line-height: 1.5;">Under the Housing Act 1988, you have several options for serving the notice. Choose the method that gives you the best evidence of service.</p>
 
-<!-- Recommended Method -->
+{{!-- Service Method Blocks - Conditional based on chosen service_method --}}
+
+{{#if (eq service_method "post")}}
+<!-- YOUR CHOSEN METHOD: Post -->
+<div class="method-block">
+  <div class="method-block-header recommended">✅ YOUR CHOSEN METHOD: First Class Post</div>
+  <div class="method-block-content">
+    <ul>
+      <li><strong>Send via Royal Mail First Class</strong> post</li>
+      <li><strong>Keep proof of postage receipt</strong> (Royal Mail will provide this when you post)</li>
+      <li><strong>Deemed served:</strong> Notice is deemed served 2 days after posting (excluding Sundays and bank holidays)</li>
+      <li><strong>Safety margin:</strong> The expiry date already accounts for postal service time</li>
+      <li><strong>Post to:</strong> {{property_address}}</li>
+    </ul>
+  </div>
+</div>
+
+<div class="alert-box info">
+  <h4>ℹ️ Postal Service</h4>
+  <p>First class post is legally acceptable. Keep your proof of postage receipt as evidence. The notice is deemed served 2 working days after posting.</p>
+</div>
+
+<!-- Alternative: Hand Delivery -->
+<div class="method-block">
+  <div class="method-block-header">Alternative: Hand Delivery</div>
+  <div class="method-block-content">
+    <ul>
+      <li><strong>Hand-deliver through the letterbox</strong> at the property</li>
+      <li><strong>Witness:</strong> Take a witness with you who can confirm delivery</li>
+      <li><strong>Evidence:</strong> Take a photo of the letterbox with the notice visible</li>
+      <li><strong>Witness Statement:</strong> Get your witness to sign a statement confirming what they saw</li>
+    </ul>
+  </div>
+</div>
+
+{{else if (eq service_method "recorded_delivery")}}
+<!-- YOUR CHOSEN METHOD: Recorded Delivery -->
+<div class="method-block">
+  <div class="method-block-header recommended">✅ YOUR CHOSEN METHOD: Recorded Delivery</div>
+  <div class="method-block-content">
+    <ul>
+      <li><strong>Send via Royal Mail Recorded Delivery</strong></li>
+      <li><strong>Tracking:</strong> You'll receive a tracking number</li>
+      <li><strong>Proof of delivery:</strong> Royal Mail provides proof when it's delivered</li>
+      <li><strong>Signature required:</strong> Someone must sign for it</li>
+      <li><strong>Send to:</strong> {{property_address}}</li>
+    </ul>
+  </div>
+</div>
+
+<div class="alert-box warning">
+  <h4>⚠️ Important</h4>
+  <p>If the tenant refuses to sign or doesn't answer the door, the notice may not be deemed served. Have a backup plan ready (e.g., hand delivery).</p>
+</div>
+
+<!-- Alternative: Hand Delivery -->
+<div class="method-block">
+  <div class="method-block-header">Alternative: Hand Delivery</div>
+  <div class="method-block-content">
+    <ul>
+      <li><strong>Hand-deliver through the letterbox</strong> at the property</li>
+      <li><strong>Witness:</strong> Take a witness with you who can confirm delivery</li>
+      <li><strong>Evidence:</strong> Take a photo of the letterbox with the notice visible</li>
+      <li><strong>Witness Statement:</strong> Get your witness to sign a statement confirming what they saw</li>
+    </ul>
+  </div>
+</div>
+
+{{else}}
+<!-- Default: Hand Delivery Recommended -->
 <div class="method-block">
   <div class="method-block-header recommended">✅ RECOMMENDED: Hand Delivery</div>
   <div class="method-block-content">
@@ -427,6 +517,7 @@
   <h4>⚠️ Risk</h4>
   <p>If the tenant refuses to sign or doesn't answer the door, the notice may not be deemed served. Use this method only if you're confident the tenant will accept it.</p>
 </div>
+{{/if}}
 
 <!-- Not Recommended -->
 <div class="method-block">
@@ -528,7 +619,7 @@ Date: ______________________________
       <li>❌ Not keeping evidence of service</li>
       <li>❌ Serving by email when the tenancy doesn't allow it</li>
       <li>❌ Changing locks before getting a court order (illegal eviction)</li>
-      <li>❌ Missing compliance requirements (gas cert, EPC, How to Rent, etc.)</li>
+      <li>❌ Failing to specify adequate particulars for each ground claimed</li>
     </ul>
   </div>
 </div>
@@ -541,51 +632,6 @@ Date: ______________________________
       <p><strong>Illegal Eviction:</strong> Protection from Eviction Act 1977</p>
     </div>
   </div>
-</div>
-
-<h3 style="font-size: 11pt; margin-top: 1.25em;">If They Don't Leave</h3>
-<p style="font-size: 10pt; line-height: 1.5;">If the tenant is still in the property after <strong>{{earliest_possession_date_formatted}}</strong>:</p>
-
-<div class="alert-box critical">
-  <h4>⚠️ Do NOT</h4>
-  <ul>
-    <li>Change the locks (illegal eviction - you could face criminal charges)</li>
-    <li>Remove their belongings (illegal)</li>
-    <li>Harass them or cut off utilities (illegal)</li>
-  </ul>
-  <p style="margin-top: 0.75em;"><strong>DO</strong> apply to court for a possession order.</p>
-</div>
-
-<div class="alert-box info">
-  <h4>Court Application</h4>
-  <p>You'll need to use Form N5 (standard possession claim). If you purchased the Complete Pack, these forms are included. Otherwise, you'll need to upgrade or obtain them separately.</p>
-</div>
-
-<!-- Common Mistakes -->
-<div class="section-header">
-  <span class="num">4</span>
-  <h2>Common Mistakes to Avoid</h2>
-</div>
-
-<ul class="mistakes-list">
-  <li>Serving the notice too early (before arrears reach required level for your ground)</li>
-  <li>Getting the expiry date wrong (too short or not aligned with rent period)</li>
-  <li>Not keeping evidence of service</li>
-  <li>Serving by email when the tenancy doesn't allow it</li>
-  <li>Changing locks before getting a court order (illegal eviction)</li>
-  <li>Missing compliance requirements (gas cert, EPC, How to Rent, etc.)</li>
-</ul>
-
-<!-- Legal Basis -->
-<div class="section-header">
-  <span class="num">5</span>
-  <h2>Legal Basis</h2>
-</div>
-
-<div class="legal-basis">
-  <p><strong>Service Requirements:</strong> Housing Act 1988, Section 8</p>
-  <p><strong>Proof of Service:</strong> Civil Procedure Rules, Part 6</p>
-  <p><strong>Illegal Eviction:</strong> Protection from Eviction Act 1977</p>
 </div>
 
 <!-- Footer -->

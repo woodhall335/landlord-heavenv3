@@ -2597,6 +2597,8 @@ export function mapNoticeOnlyFacts(wizard: WizardFacts): Record<string, any> {
       'service_method',
     ])
   );
+  // Also expose as service_method for template convenience
+  templateData.service_method = templateData.notice_service_method;
 
   templateData.notice_served_by = extractString(
     getFirstValue(wizard, [
