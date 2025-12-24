@@ -152,10 +152,10 @@ const testCases = [
   },
 ];
 
-// Template path mapping
+// Template path mapping - uses canonical notice_only templates for England
 const templatePaths: Record<string, string> = {
-  section_21: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
-  section_8: 'uk/england-wales/templates/eviction/section8_notice.hbs',
+  section_21: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
+  section_8: 'uk/england/templates/notice_only/form_3_section8/notice.hbs',
   notice_to_leave: 'uk/scotland/templates/eviction/notice_to_leave.hbs',
   wales_section_173: 'uk/wales/templates/eviction/section173_landlords_notice.hbs',
   wales_fault_based: 'uk/wales/templates/eviction/fault_based_notice.hbs',

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
-import councilsData from '@/config/jurisdictions/uk/england-wales/councils.json';
+import councilsData from '@/config/jurisdictions/uk/england/councils.json';
 
 // Function to lookup council by postcode
 function getCouncilByPostcode(postcode: string): { name: string; website: string } | null {
