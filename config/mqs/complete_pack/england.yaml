@@ -25,8 +25,10 @@ questions:
     question: "Which eviction route are you using?"
     inputType: select
     options:
-      - "Section 8 (fault-based)"
-      - "Section 21 (no-fault)"
+      - value: "section_8"
+        label: "Section 8 (fault-based)"
+      - value: "section_21"
+        label: "Section 21 (no-fault)"
     helperText: "Section 8 requires grounds. Section 21 (England only) does not require a reason."
     validation:
       required: true
@@ -100,7 +102,7 @@ questions:
       - section_8
     dependsOn:
       questionId: eviction_route
-      value: "Section 8 (fault-based)"
+      value: "section_8"
     options:
       - "Ground 1 - Landlord occupation"
       - "Ground 2 - Mortgage lender requiring possession"
@@ -129,7 +131,7 @@ questions:
       - section_8
     dependsOn:
       questionId: eviction_route
-      value: "Section 8 (fault-based)"
+      value: "section_8"
     helperText: "Describe the facts supporting each ground. Be specific with dates and evidence."
     placeholder: "E.g., Ground 8: Rent arrears currently stand at £3,200, representing 10 weeks of unpaid rent. Last payment received 15/10/2025."
     validation:
@@ -145,7 +147,7 @@ questions:
       - section_8
     dependsOn:
       questionId: eviction_route
-      value: "Section 8 (fault-based)"
+      value: "section_8"
     helperText: "Enter the total arrears for Forms N5 and N119. Required for arrears grounds (8, 10, 11)."
     fields:
       - id: total_arrears
@@ -175,7 +177,7 @@ questions:
       - section_21
     dependsOn:
       questionId: eviction_route
-      value: "Section 21 (no-fault)"
+      value: "section_21"
     helperText: "All must be YES to use Section 21."
     fields:
       - id: deposit_protected
@@ -223,7 +225,7 @@ questions:
       - section_21
     dependsOn:
       questionId: eviction_route
-      value: "Section 21 (no-fault)"
+      value: "section_21"
     helperText: "Required for Form N5B accelerated possession claim."
     fields:
       - id: deposit_amount
