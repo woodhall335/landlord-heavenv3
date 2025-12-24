@@ -15,6 +15,7 @@
 import { generateDocument } from './generator';
 import { assertNoticeOnlyValid } from './noticeOnly';
 import { generateSection8Notice, Section8NoticeData } from './section8-generator';
+import { generateSection21Notice, Section21NoticeData } from './section21-generator';
 import { fillN5Form, fillN119Form, CaseData, fillN5BForm } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
 import { buildServiceContact } from '@/lib/documents/service-contact';
@@ -567,13 +568,32 @@ async function generateEnglandOrWalesEvictionPack(
       );
     }
 
-    // Use the full HTML Form 6A template (notice_only version) for proper margin control
-    const section21Doc = await generateDocument({
-      templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
-      data: evictionCase,
-      isPreview: false,
-      outputFormat: 'both',
-    });
+    // Build Section21NoticeData from evictionCase to use the canonical notice generator
+    const section21Data: Section21NoticeData = {
+      landlord_full_name: evictionCase.landlord_full_name,
+      landlord_2_name: evictionCase.landlord_2_name,
+      landlord_address: evictionCase.landlord_address,
+      landlord_email: evictionCase.landlord_email,
+      landlord_phone: evictionCase.landlord_phone,
+      tenant_full_name: evictionCase.tenant_full_name,
+      tenant_2_name: evictionCase.tenant_2_name,
+      property_address: evictionCase.property_address,
+      tenancy_start_date: evictionCase.tenancy_start_date,
+      fixed_term: evictionCase.fixed_term,
+      fixed_term_end_date: evictionCase.fixed_term_end_date,
+      rent_amount: evictionCase.rent_amount,
+      rent_frequency: evictionCase.rent_frequency,
+      expiry_date: '', // Will be auto-calculated by generateSection21Notice
+      deposit_protected: evictionCase.deposit_protected,
+      deposit_amount: evictionCase.deposit_amount,
+      deposit_scheme: evictionCase.deposit_scheme_name,
+      deposit_reference: evictionCase.deposit_reference,
+      gas_certificate_provided: evictionCase.gas_safety_certificate,
+      epc_rating: evictionCase.epc_rating,
+    };
+
+    // Use canonical Section 21 notice generator (single source of truth)
+    const section21Doc = await generateSection21Notice(section21Data, false);
 
     documents.push({
       title: 'Section 21 Notice - Form 6A',
@@ -1000,13 +1020,32 @@ export async function generateNoticeOnlyPack(
         );
       }
 
-      // Use the full HTML Form 6A template (notice_only version) for proper margin control
-      const section21Doc = await generateDocument({
-        templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
-        data: evictionCase,
-        isPreview: false,
-        outputFormat: 'both',
-      });
+      // Build Section21NoticeData from evictionCase to use the canonical notice generator
+      const section21Data: Section21NoticeData = {
+        landlord_full_name: evictionCase.landlord_full_name,
+        landlord_2_name: evictionCase.landlord_2_name,
+        landlord_address: evictionCase.landlord_address,
+        landlord_email: evictionCase.landlord_email,
+        landlord_phone: evictionCase.landlord_phone,
+        tenant_full_name: evictionCase.tenant_full_name,
+        tenant_2_name: evictionCase.tenant_2_name,
+        property_address: evictionCase.property_address,
+        tenancy_start_date: evictionCase.tenancy_start_date,
+        fixed_term: evictionCase.fixed_term,
+        fixed_term_end_date: evictionCase.fixed_term_end_date,
+        rent_amount: evictionCase.rent_amount,
+        rent_frequency: evictionCase.rent_frequency,
+        expiry_date: '', // Will be auto-calculated by generateSection21Notice
+        deposit_protected: evictionCase.deposit_protected,
+        deposit_amount: evictionCase.deposit_amount,
+        deposit_scheme: evictionCase.deposit_scheme_name,
+        deposit_reference: evictionCase.deposit_reference,
+        gas_certificate_provided: evictionCase.gas_safety_certificate,
+        epc_rating: evictionCase.epc_rating,
+      };
+
+      // Use canonical Section 21 notice generator (single source of truth)
+      const section21Doc = await generateSection21Notice(section21Data, false);
       documents.push({
         title: 'Section 21 Notice - Form 6A',
         description: 'No-fault eviction notice (England only)',

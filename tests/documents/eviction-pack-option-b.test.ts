@@ -14,6 +14,7 @@ vi.mock('@/lib/documents/generator', async () => {
 });
 
 function buildEnglandWalesFacts() {
+  // Use only Ground 8 (mandatory, 14 days notice) to avoid the 60-day requirement of Ground 10
   return {
     __meta: { case_id: 'EVICT-TEST-01', jurisdiction: 'england' },
     landlord_name: 'Alex Landlord',
@@ -35,7 +36,7 @@ function buildEnglandWalesFacts() {
     notice_type: 'Section 8',
     notice_date: '2024-06-01',
     eviction_route: 'Section 8',
-    section8_grounds: ['Ground 8', 'Ground 10'],
+    section8_grounds: ['Ground 8'], // Ground 8 only (mandatory, 14 days notice)
     arrears_breakdown: 'Total arrears £2400',
     total_arrears: 2400,
     deposit_amount: 1200,

@@ -23,7 +23,7 @@ export interface TemplateResolutionResult {
 const noticeTemplates: Record<Jurisdiction, Record<string, string[]>> = {
   england: {
     section_21: ["uk/england/templates/notice_only/form_6a_section21/notice.hbs"],
-    section_8: ["uk/england/templates/eviction/section8_notice.hbs"],
+    section_8: ["uk/england/templates/notice_only/form_3_section8/notice.hbs"],
   },
   wales: {
     wales_section_173: [
@@ -39,7 +39,10 @@ const noticeTemplates: Record<Jurisdiction, Record<string, string[]>> = {
 };
 
 const evictionPackTemplates: Record<Jurisdiction, string[]> = {
-  england: ["uk/england/templates/eviction/section21_form6a.hbs", "uk/england/templates/eviction/section8_notice.hbs"],
+  england: [
+    "uk/england/templates/notice_only/form_6a_section21/notice.hbs",
+    "uk/england/templates/notice_only/form_3_section8/notice.hbs",
+  ],
   wales: ["uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"],
   scotland: ["uk/scotland/templates/eviction/notice_to_leave.hbs"],
   "northern-ireland": [],
