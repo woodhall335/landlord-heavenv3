@@ -42,6 +42,24 @@ export type WizardFactsFlat = Record<string, any>;
 // =============================================================================
 
 /**
+ * Normalize route values to canonical slugs.
+ * Handles both legacy display labels and new slug values.
+ *
+ * Examples:
+ * - "Section 8 (fault-based)" -> "section_8"
+ * - "Section 21 (no-fault)" -> "section_21"
+ * - "section_8" -> "section_8"
+ * - "section_21" -> "section_21"
+ */
+export function normalizeRoute(route: string | undefined): string | undefined {
+  if (!route) return route;
+  const lower = route.toLowerCase();
+  if (lower.includes('section 8') || lower.includes('section_8')) return 'section_8';
+  if (lower.includes('section 21') || lower.includes('section_21')) return 'section_21';
+  return route;
+}
+
+/**
  * Run rule-based consistency checks on wizard facts.
  * These always run before generation.
  */
@@ -53,7 +71,9 @@ export function runRuleBasedChecks(facts: WizardFactsFlat, product: string): Con
     return issues;
   }
 
-  const route = facts.selected_notice_route || facts.eviction_route;
+  // Normalize route to canonical slug (handles legacy "Section 8 (fault-based)" etc.)
+  const rawRoute = facts.selected_notice_route || facts.eviction_route;
+  const route = normalizeRoute(rawRoute);
 
   // ========================================
   // Common Checks (both routes)

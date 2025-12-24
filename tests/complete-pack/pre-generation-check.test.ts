@@ -9,8 +9,36 @@ import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 import {
   runRuleBasedChecks,
   runPreGenerationCheck,
+  normalizeRoute,
   type WizardFactsFlat,
 } from '../../src/lib/validation/pre-generation-check';
+
+describe('normalizeRoute', () => {
+  it('normalizes legacy "Section 8 (fault-based)" to "section_8"', () => {
+    expect(normalizeRoute('Section 8 (fault-based)')).toBe('section_8');
+  });
+
+  it('normalizes legacy "Section 21 (no-fault)" to "section_21"', () => {
+    expect(normalizeRoute('Section 21 (no-fault)')).toBe('section_21');
+  });
+
+  it('preserves new slug "section_8"', () => {
+    expect(normalizeRoute('section_8')).toBe('section_8');
+  });
+
+  it('preserves new slug "section_21"', () => {
+    expect(normalizeRoute('section_21')).toBe('section_21');
+  });
+
+  it('handles undefined', () => {
+    expect(normalizeRoute(undefined)).toBeUndefined();
+  });
+
+  it('returns other values unchanged', () => {
+    expect(normalizeRoute('wales_section_173')).toBe('wales_section_173');
+    expect(normalizeRoute('notice_to_leave')).toBe('notice_to_leave');
+  });
+});
 
 describe('Pre-Generation Consistency Check', () => {
   describe('runRuleBasedChecks', () => {
@@ -418,6 +446,123 @@ describe('Pre-Generation Consistency Check', () => {
 
         expect(warning).toBeDefined();
         expect(warning?.severity).toBe('warning');
+      });
+    });
+
+    describe('Legacy Route Value Backwards Compatibility', () => {
+      it('triggers S8 checks for legacy "Section 8 (fault-based)" value', () => {
+        const facts: WizardFactsFlat = {
+          landlord_full_name: 'Jane Landlord',
+          tenant_full_name: 'John Tenant',
+          property_address_line1: '123 Test St',
+          tenancy_start_date: '2024-01-01',
+          notice_served_date: '2024-06-01',
+          // LEGACY VALUE
+          selected_notice_route: 'Section 8 (fault-based)',
+          // Missing grounds and particulars - should trigger S8_NO_GROUNDS blocker
+        };
+
+        const issues = runRuleBasedChecks(facts, 'complete_pack');
+        const s8NoGrounds = issues.find(i => i.code === 'S8_NO_GROUNDS');
+        const s8NoParticulars = issues.find(i => i.code === 'S8_NO_PARTICULARS');
+
+        expect(s8NoGrounds).toBeDefined();
+        expect(s8NoGrounds?.severity).toBe('blocker');
+        expect(s8NoParticulars).toBeDefined();
+        expect(s8NoParticulars?.severity).toBe('blocker');
+      });
+
+      it('triggers S8 arrears check for legacy value with arrears ground', () => {
+        const facts: WizardFactsFlat = {
+          landlord_full_name: 'Jane Landlord',
+          tenant_full_name: 'John Tenant',
+          property_address_line1: '123 Test St',
+          tenancy_start_date: '2024-01-01',
+          notice_served_date: '2024-06-01',
+          // LEGACY VALUE
+          selected_notice_route: 'Section 8 (fault-based)',
+          section8_grounds: ['Ground 8'],
+          section8_details: 'Some details',
+          has_rent_arrears: false, // Should trigger arrears ground check
+        };
+
+        const issues = runRuleBasedChecks(facts, 'complete_pack');
+        const arrearsBlocker = issues.find(i => i.code === 'S8_ARREARS_GROUND_NO_DATA');
+
+        expect(arrearsBlocker).toBeDefined();
+        expect(arrearsBlocker?.severity).toBe('blocker');
+      });
+
+      it('triggers S21 checks for legacy "Section 21 (no-fault)" value', () => {
+        const facts: WizardFactsFlat = {
+          landlord_full_name: 'Jane Landlord',
+          tenant_full_name: 'John Tenant',
+          property_address_line1: '123 Test St',
+          tenancy_start_date: '2024-01-01',
+          notice_served_date: '2024-06-01',
+          // LEGACY VALUE
+          selected_notice_route: 'Section 21 (no-fault)',
+          deposit_taken: true,
+          deposit_amount: 1500,
+          deposit_protected: false, // Should trigger S21 deposit blocker
+        };
+
+        const issues = runRuleBasedChecks(facts, 'complete_pack');
+        const depositBlocker = issues.find(i => i.code === 'S21_DEPOSIT_NOT_PROTECTED');
+
+        expect(depositBlocker).toBeDefined();
+        expect(depositBlocker?.severity).toBe('blocker');
+      });
+
+      it('triggers S21 prescribed info check for legacy value', () => {
+        const facts: WizardFactsFlat = {
+          landlord_full_name: 'Jane Landlord',
+          tenant_full_name: 'John Tenant',
+          property_address_line1: '123 Test St',
+          tenancy_start_date: '2024-01-01',
+          notice_served_date: '2024-06-01',
+          // LEGACY VALUE
+          selected_notice_route: 'Section 21 (no-fault)',
+          deposit_taken: true,
+          deposit_amount: 1500,
+          deposit_protected: true,
+          prescribed_info_served: false, // Should trigger prescribed info blocker
+        };
+
+        const issues = runRuleBasedChecks(facts, 'complete_pack');
+        const prescribedInfoBlocker = issues.find(i => i.code === 'S21_PRESCRIBED_INFO_MISSING');
+
+        expect(prescribedInfoBlocker).toBeDefined();
+        expect(prescribedInfoBlocker?.severity).toBe('blocker');
+      });
+
+      it('new slug values work identically to legacy values', () => {
+        // Test S8 with new slug
+        const s8NewSlug: WizardFactsFlat = {
+          landlord_full_name: 'Jane Landlord',
+          tenant_full_name: 'John Tenant',
+          property_address_line1: '123 Test St',
+          tenancy_start_date: '2024-01-01',
+          notice_served_date: '2024-06-01',
+          selected_notice_route: 'section_8', // NEW SLUG
+        };
+        const s8Issues = runRuleBasedChecks(s8NewSlug, 'complete_pack');
+        expect(s8Issues.some(i => i.code === 'S8_NO_GROUNDS')).toBe(true);
+
+        // Test S21 with new slug
+        const s21NewSlug: WizardFactsFlat = {
+          landlord_full_name: 'Jane Landlord',
+          tenant_full_name: 'John Tenant',
+          property_address_line1: '123 Test St',
+          tenancy_start_date: '2024-01-01',
+          notice_served_date: '2024-06-01',
+          selected_notice_route: 'section_21', // NEW SLUG
+          deposit_taken: true,
+          deposit_amount: 1500,
+          deposit_protected: false,
+        };
+        const s21Issues = runRuleBasedChecks(s21NewSlug, 'complete_pack');
+        expect(s21Issues.some(i => i.code === 'S21_DEPOSIT_NOT_PROTECTED')).toBe(true);
       });
     });
 
