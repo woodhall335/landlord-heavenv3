@@ -375,7 +375,7 @@ export class FlowCapabilityError extends Error {
     code: string;
     error: string;
     user_message: string;
-    blocking_issues: Array<{ code: string; fields?: string[]; affected_question_id?: string; user_fix_hint?: string }>;
+    blocking_issues: Array<{ code: string; fields: string[]; affected_question_id?: string; user_fix_hint?: string }>;
     warnings: any[];
   };
 
@@ -389,7 +389,7 @@ export class FlowCapabilityError extends Error {
       blocking_issues: [
         {
           code,
-          fields,
+          fields: fields ?? [], // Ensure fields is always an array
           affected_question_id: undefined,
           user_fix_hint: userMessage,
         },
