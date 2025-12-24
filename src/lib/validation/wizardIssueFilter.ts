@@ -108,9 +108,12 @@ function isProblematicAnswer(
     'PRE_ACTION_NOT_MET',
   ];
 
+  // Defensive: ensure fields is an array (can be undefined from FlowCapabilityError)
+  const fields = Array.isArray(issue.fields) ? issue.fields : [];
+
   if (decisionIssueCodes.includes(issue.code)) {
     // Check if any of the related facts have been touched
-    for (const field of issue.fields) {
+    for (const field of fields) {
       if (touchedFacts.has(field)) {
         // The user has answered this - it's a problematic answer
         return true;
@@ -123,7 +126,7 @@ function isProblematicAnswer(
   // For REQUIRED_FACT_MISSING, check if the fact has been explicitly set to empty/null
   // vs never touched at all
   if (issue.code === 'REQUIRED_FACT_MISSING') {
-    for (const field of issue.fields) {
+    for (const field of fields) {
       const value = facts[field];
       // If value is undefined, it was never answered - this is a future step
       if (value === undefined) {
@@ -158,8 +161,11 @@ function isAnsweredQuestion(
     }
   }
 
+  // Defensive: ensure fields is an array (can be undefined from FlowCapabilityError)
+  const fields = Array.isArray(issue.fields) ? issue.fields : [];
+
   // Fall back to checking if any of the issue's fields are in touched facts
-  for (const field of issue.fields) {
+  for (const field of fields) {
     if (touchedFacts.has(field)) {
       return true;
     }
@@ -227,9 +233,11 @@ export function filterWizardIssues(
     }
 
     // Transform the issue with friendly labels
-    const friendlyAction = transformUserFixHint(issue.user_fix_hint, issue.fields);
+    // Defensive: ensure fields is an array (can be undefined from FlowCapabilityError)
+    const issueFields = Array.isArray(issue.fields) ? issue.fields : [];
+    const friendlyAction = transformUserFixHint(issue.user_fix_hint, issueFields);
     const friendlyQuestionLabel = issue.affected_question_id
-      ? getQuestionLabel(issue.fields[0] || issue.affected_question_id)
+      ? getQuestionLabel(issueFields[0] || issue.affected_question_id)
       : undefined;
 
     // Get legal reason for decision engine issues
@@ -279,9 +287,11 @@ export function transformIssuesWithFriendlyLabels(
   issues: ValidationIssue[]
 ): FilteredValidationIssue[] {
   return issues.map(issue => {
-    const friendlyAction = transformUserFixHint(issue.user_fix_hint, issue.fields);
+    // Defensive: ensure fields is an array (can be undefined from FlowCapabilityError)
+    const issueFields = Array.isArray(issue.fields) ? issue.fields : [];
+    const friendlyAction = transformUserFixHint(issue.user_fix_hint, issueFields);
     const friendlyQuestionLabel = issue.affected_question_id
-      ? getQuestionLabel(issue.fields[0] || issue.affected_question_id)
+      ? getQuestionLabel(issueFields[0] || issue.affected_question_id)
       : undefined;
 
     // Get legal reason for decision engine issues

@@ -328,4 +328,76 @@ describe('Wizard Issue Filter', () => {
       expect(previewTransformed.length).toBe(2);
     });
   });
+
+  // ============================================================================
+  // REGRESSION TEST: Issue with undefined/missing fields (crash from FlowCapabilityError)
+  // https://github.com/woodhall335/landlord-heavenv3/issues/X
+  // ============================================================================
+  describe('Defensive handling of malformed issues', () => {
+    test('REGRESSION: does not crash when issue.fields is undefined (FlowCapabilityError case)', () => {
+      const context: WizardIssueFilterContext = {
+        jurisdiction: 'england',
+        product: 'notice_only',
+        route: 'section_21',
+        facts: {
+          landlord_full_name: 'Test',
+        },
+      };
+
+      // Simulate a FlowCapabilityError-style issue where fields is undefined
+      const issuesWithUndefinedFields = [
+        {
+          code: 'FLOW_NOT_DEFINED',
+          severity: 'blocking' as const,
+          fields: undefined as any, // This was causing the crash: "issue.fields is not iterable"
+          user_fix_hint: 'Flow england/complete_pack is not defined in matrix',
+        },
+      ];
+
+      // Should NOT throw TypeError: issue.fields is not iterable
+      expect(() => filterWizardIssues(issuesWithUndefinedFields, context)).not.toThrow();
+
+      const filtered = filterWizardIssues(issuesWithUndefinedFields, context);
+      // The issue should still be processed, just treated as having no fields to check
+      expect(filtered).toBeDefined();
+    });
+
+    test('REGRESSION: does not crash when issue.fields is null', () => {
+      const context: WizardIssueFilterContext = {
+        jurisdiction: 'england',
+        product: 'notice_only',
+        route: 'section_21',
+        facts: {},
+      };
+
+      const issuesWithNullFields = [
+        {
+          code: 'FLOW_MISCONFIGURED',
+          severity: 'blocking' as const,
+          fields: null as any,
+          user_fix_hint: 'Flow is misconfigured',
+        },
+      ];
+
+      expect(() => filterWizardIssues(issuesWithNullFields, context)).not.toThrow();
+    });
+
+    test('REGRESSION: transformIssuesWithFriendlyLabels handles undefined fields', () => {
+      const issues = [
+        {
+          code: 'FLOW_NOT_SUPPORTED',
+          severity: 'blocking' as const,
+          fields: undefined as any,
+          user_fix_hint: 'This flow is not supported',
+        },
+      ];
+
+      // Should NOT throw
+      expect(() => transformIssuesWithFriendlyLabels(issues)).not.toThrow();
+
+      const transformed = transformIssuesWithFriendlyLabels(issues);
+      expect(transformed.length).toBe(1);
+      expect(transformed[0].friendlyAction).toBeDefined();
+    });
+  });
 });
