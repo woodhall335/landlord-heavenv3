@@ -127,10 +127,11 @@ describe('Section 8 Ground-Based Calculations', () => {
     expect(result.explanation).toContain('14 days');
   });
 
-  test('Discretionary ground only = 14 days (NEW POLICY: all grounds 14 days minimum)', () => {
+  test('Ground 12 discretionary = 14 days minimum, 60 recommended', () => {
+    // Ground 12 (breach of tenancy) has 14-day minimum with 60-day recommendation
     const result = calculateSection8ExpiryDate({
       service_date: '2025-01-15',
-      grounds: [{ code: 10, mandatory: false }],
+      grounds: [{ code: 12, mandatory: false }],
       strategy: 'minimum', // Use minimum
     });
 
@@ -140,29 +141,32 @@ describe('Section 8 Ground-Based Calculations', () => {
     expect(result.recommended_days).toBe(60); // Has recommendation
   });
 
-  test('Discretionary ground with recommended strategy = 60 days', () => {
+  test('Ground 10 discretionary = 60 days minimum (no recommended)', () => {
+    // Ground 10 (some rent arrears) requires 60 days minimum per Housing Act 1988
     const result = calculateSection8ExpiryDate({
       service_date: '2025-01-15',
       grounds: [{ code: 10, mandatory: false }],
-      strategy: 'recommended', // Use recommended
+      strategy: 'minimum',
     });
 
     expect(result.earliest_valid_date).toBe('2025-03-16');
     expect(result.notice_period_days).toBe(60);
-    expect(result.used_days).toBe(60);
+    expect(result.minimum_legal_days).toBe(60);
+    expect(result.recommended_days).toBeUndefined(); // 60 IS the minimum
   });
 
-  test('Mixed grounds use minimum period (14 days) by default', () => {
+  test('Mixed grounds use MAXIMUM period to satisfy all grounds', () => {
+    // Ground 8 (14 days) + Ground 10 (60 days) = 60 days (max to satisfy both)
     const result = calculateSection8ExpiryDate({
       service_date: '2025-01-15',
       grounds: [
         { code: 8, mandatory: true }, // 14 days
-        { code: 10, mandatory: false }, // 14 minimum, 60 recommended
+        { code: 10, mandatory: false }, // 60 days (Ground 10/11 require 2 months)
       ],
       strategy: 'minimum',
     });
 
-    expect(result.notice_period_days).toBe(14);
+    expect(result.notice_period_days).toBe(60); // Uses maximum to satisfy Ground 10
   });
 });
 
@@ -361,9 +365,10 @@ describe('DST-Safe UTC Date Calculations', () => {
 // ============================================================================
 
 describe('Section 8 Unified Notice Periods', () => {
-  test('Ground 14A: 14 days minimum, 60 recommended with disclaimer', () => {
+  test('Ground 12 (discretionary): 14 days minimum, 60 recommended with disclaimer', () => {
+    // Ground 12 (breach of tenancy) has 14-day minimum with 60-day recommendation
     const result = calculateSection8NoticePeriod({
-      grounds: [{ code: '14A', mandatory: false }],
+      grounds: [{ code: 12, mandatory: false }],
       strategy: 'minimum',
     });
 
@@ -374,14 +379,16 @@ describe('Section 8 Unified Notice Periods', () => {
     expect(result.explanation_recommended).toContain('Courts may still grant possession');
   });
 
-  test('Ground 14A: Uses recommended when strategy=recommended', () => {
+  test('Ground 14A: Immediate (0 days) regardless of strategy', () => {
+    // Ground 14A (domestic violence) is always immediate (0 days)
     const result = calculateSection8NoticePeriod({
       grounds: [{ code: '14A', mandatory: false }],
-      strategy: 'recommended',
+      strategy: 'recommended', // Strategy doesn't matter for immediate grounds
     });
 
-    expect(result.used_days).toBe(60);
-    expect(result.recommended_days).toBe(60);
+    expect(result.minimum_legal_days).toBe(0);
+    expect(result.used_days).toBe(0);
+    expect(result.recommended_days).toBeUndefined(); // No recommendation for immediate grounds
   });
 
   test('Ground 14 serious ASB: 0 days (immediate)', () => {
@@ -398,6 +405,7 @@ describe('Section 8 Unified Notice Periods', () => {
   });
 
   test('Ground 14 moderate ASB: 14 days minimum, 60 recommended', () => {
+    // Ground 14 with moderate severity (not serious) uses standard 14-day period
     const result = calculateSection8NoticePeriod({
       grounds: [{ code: 14, mandatory: false }],
       severity: 'moderate',
@@ -406,7 +414,7 @@ describe('Section 8 Unified Notice Periods', () => {
     expect(result.minimum_legal_days).toBe(14);
     expect(result.recommended_days).toBe(60);
     expect(result.used_days).toBe(14);
-    expect(result.explanation_minimum).toContain('noise complaints');
+    expect(result.explanation_minimum).toContain('14 days'); // Standard discretionary period
   });
 
   test('All other mandatory grounds: 14 days, no recommended', () => {
@@ -419,15 +427,28 @@ describe('Section 8 Unified Notice Periods', () => {
     expect(result.used_days).toBe(14);
   });
 
-  test('Discretionary grounds: 14 days minimum, 60 recommended', () => {
+  test('Discretionary grounds (14-day): 14 days minimum, 60 recommended', () => {
+    // Ground 12 (breach of tenancy) has 14-day minimum
     const result = calculateSection8NoticePeriod({
-      grounds: [{ code: 10, mandatory: false }],
+      grounds: [{ code: 12, mandatory: false }],
     });
 
     expect(result.minimum_legal_days).toBe(14);
     expect(result.recommended_days).toBe(60);
     expect(result.used_days).toBe(14);
     expect(result.explanation_recommended).toContain('not legally required');
+  });
+
+  test('Discretionary grounds (60-day): Ground 10 = 60 days minimum, no recommended', () => {
+    // Ground 10 (some rent arrears) requires 60 days minimum
+    const result = calculateSection8NoticePeriod({
+      grounds: [{ code: 10, mandatory: false }],
+    });
+
+    expect(result.minimum_legal_days).toBe(60);
+    expect(result.recommended_days).toBeUndefined(); // 60 IS the minimum
+    expect(result.used_days).toBe(60);
+    expect(result.explanation_minimum).toContain('Ground 10');
   });
 
   test('Wales Section 8: Generates warning', () => {

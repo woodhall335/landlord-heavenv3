@@ -153,7 +153,7 @@ section_8_grounds:
 
     ground_10:
       title: "Rent arrears (some arrears)"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV (post Oct-2021)
       court_type: "discretionary"
       description: "Some rent is unpaid at notice and hearing"
       required_facts:
@@ -172,7 +172,7 @@ section_8_grounds:
 
     ground_11:
       title: "Persistent delay in paying rent"
-      notice_period_days: 14
+      notice_period_days: 60  # 2 months - Housing Act 1988, Schedule 2, Part IV (post Oct-2021)
       court_type: "discretionary"
       description: "Tenant persistently delays paying rent"
       required_facts:
