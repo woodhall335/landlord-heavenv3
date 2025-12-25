@@ -205,10 +205,24 @@ describe("England Complete Pack Data Flow", () => {
       expect(caseData.tenancy_start_date).toBe("2023-01-01");
     });
 
-    it("sets default court_name to County Court", () => {
-      const { caseData } = wizardFactsToEnglandWalesEviction("test-case-14", commonWizardFacts);
+    it("passes court_name from wizard facts when provided", () => {
+      const factsWithCourt = {
+        ...commonWizardFacts,
+        court_name: "Manchester County Court",
+        court_address: "1 Bridge Street West, Manchester, M60 9DJ",
+      };
+      const { caseData } = wizardFactsToEnglandWalesEviction("test-case-14", factsWithCourt);
 
-      expect(caseData.court_name).toBe("County Court");
+      expect(caseData.court_name).toBe("Manchester County Court");
+      expect(caseData.court_address).toBe("1 Bridge Street West, Manchester, M60 9DJ");
+    });
+
+    it("leaves court_name undefined when not provided (no fallback)", () => {
+      const { caseData } = wizardFactsToEnglandWalesEviction("test-case-14b", commonWizardFacts);
+
+      // Court name should be undefined - no hardcoded defaults
+      // The gating system will block generation if court details are required but missing
+      expect(caseData.court_name).toBeUndefined();
     });
 
     it("sets signatory_name to landlord name", () => {

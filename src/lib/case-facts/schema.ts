@@ -161,6 +161,8 @@ export interface CourtFacts {
   total_claim_amount: number | null;
   claimant_reference?: string | null;
   court_name?: string | null;
+  court_address?: string | null;
+  court_postcode?: string | null;
   particulars_of_claim?: string | null;
   n5_required: boolean | null;
   n119_required: boolean | null;
@@ -455,6 +457,8 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     total_claim_amount: null,
     claimant_reference: null,
     court_name: null,
+    court_address: null,
+    court_postcode: null,
     particulars_of_claim: null,
     n5_required: null,
     n119_required: null,

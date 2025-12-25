@@ -480,6 +480,32 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
     }
   }
 
+  // ============================================================================
+  // GATE 5: Court Details for Complete Pack Generation (England/Wales only)
+  // ============================================================================
+  // Court details are REQUIRED for complete pack generation (N5, N5B, N119)
+  // Court details are NOT required for notice-only generation
+
+  const isCompletePack = resolveFactValue(facts, 'product_tier') === 'complete_pack' ||
+                         resolveFactValue(facts, 'pack_type') === 'complete';
+  const isEnglandWales = canonicalJurisdiction === 'england' || canonicalJurisdiction === 'wales';
+
+  // Only enforce court details at generation stage for complete packs
+  if (stage === 'generation' && isCompletePack && isEnglandWales) {
+    const courtName = resolveFactValue(facts, 'court_name') ||
+                      resolveFactValue(facts, 'case_facts.court.court_name');
+
+    if (!courtName || (typeof courtName === 'string' && courtName.trim().length === 0)) {
+      blocking.push({
+        code: 'COURT_DETAILS_REQUIRED',
+        message: 'Court name is required for generating court forms (N5, N5B, N119)',
+        fields: ['court_name'],
+        user_fix_hint: 'Use the HMCTS Court Finder to find your local County Court and enter the court name and address.',
+        user_message: 'Please provide court details before generating court forms.',
+      });
+    }
+  }
+
   return { blocking, warnings };
 }
 
