@@ -190,6 +190,8 @@ describe('End-of-Wizard Validation Completeness', () => {
     // resolver functions handle both flat keys and nested CaseFacts structures.
 
     it('detects gas certificate missing using canonical key gas_certificate_provided', () => {
+      // Use stage 'generate' to test blocking behavior
+      // At preview stage, gas safety is a warning (not blocker)
       const result = runDecisionEngine({
         jurisdiction: 'england',
         product: 'notice_only',
@@ -201,7 +203,7 @@ describe('End-of-Wizard Validation Completeness', () => {
           // Use canonical key from wizard
           gas_certificate_provided: false,
         } as any,
-        stage: 'preview',
+        stage: 'generate',
       });
 
       // Should detect gas safety issue
@@ -210,6 +212,8 @@ describe('End-of-Wizard Validation Completeness', () => {
     });
 
     it('detects How to Rent missing using canonical key how_to_rent_provided', () => {
+      // Use stage 'generate' to test blocking behavior
+      // At preview stage, H2R is a warning (not blocker)
       const result = runDecisionEngine({
         jurisdiction: 'england',
         product: 'notice_only',
@@ -221,7 +225,7 @@ describe('End-of-Wizard Validation Completeness', () => {
           // Use canonical key from wizard
           how_to_rent_provided: false,
         } as any,
-        stage: 'preview',
+        stage: 'generate',
       });
 
       // Should detect H2R issue
@@ -230,6 +234,8 @@ describe('End-of-Wizard Validation Completeness', () => {
     });
 
     it('detects EPC missing using canonical key epc_provided', () => {
+      // Use stage 'generate' to test blocking behavior
+      // At preview stage, EPC is a warning (not blocker)
       const result = runDecisionEngine({
         jurisdiction: 'england',
         product: 'notice_only',
@@ -241,7 +247,7 @@ describe('End-of-Wizard Validation Completeness', () => {
           // Use canonical key from wizard
           epc_provided: false,
         } as any,
-        stage: 'preview',
+        stage: 'generate',
       });
 
       // Should detect EPC issue
@@ -269,6 +275,8 @@ describe('End-of-Wizard Validation Completeness', () => {
     });
 
     it('detects multiple issues when multiple compliance failures exist', () => {
+      // Use stage 'generate' to test full blocking behavior
+      // At preview stage, gas/EPC/H2R are warnings (not blockers)
       const result = runDecisionEngine({
         jurisdiction: 'england',
         product: 'notice_only',
@@ -285,7 +293,7 @@ describe('End-of-Wizard Validation Completeness', () => {
           epc_provided: false, // Canonical key
           property_licensing_status: 'unlicensed',
         } as any,
-        stage: 'preview',
+        stage: 'generate',
       });
 
       // Should have multiple blocking issues

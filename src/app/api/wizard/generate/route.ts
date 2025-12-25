@@ -48,8 +48,14 @@ export async function POST(request: Request) {
     // ========================================
 
     // Determine product from documentType or caseFacts
+    // Note: section21_notice and wales_section_173 are notice-only types, not complete_pack
+    const isNoticeOnlyDocType = documentType === 'section21_notice' ||
+      documentType === 'wales_section_173' ||
+      documentType === 'section8_notice' ||
+      documentType.startsWith('notice_');
     const product = caseFacts.__meta?.product || caseFacts.product ||
-      (documentType.includes('eviction') || documentType.includes('section') ? 'complete_pack' : 'notice_only');
+      (isNoticeOnlyDocType ? 'notice_only' :
+        (documentType.includes('eviction') || documentType.includes('pack') ? 'complete_pack' : 'notice_only'));
 
     if (product === 'complete_pack' || product === 'eviction_pack') {
       const preGenResult = await runPreGenerationCheck(caseFacts, product);

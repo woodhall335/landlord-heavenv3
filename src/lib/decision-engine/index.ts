@@ -103,6 +103,9 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
   // Check Section 21 eligibility and blocking issues
   const s21Blocks: BlockingIssue[] = [];
   const isWizardStage = stage === 'wizard';
+  // Preview stage should also treat compliance doc/proof checks as warnings, not blockers
+  // Only 'generate' stage should fully block for missing docs
+  const isPreviewOrWizardStage = stage === 'wizard' || stage === 'preview';
 
   // Deposit protection (CRITICAL)
   if (facts.tenancy?.deposit_amount && facts.tenancy.deposit_amount > 0) {
@@ -158,19 +161,17 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
       const depositCapConfirmed = (input.facts as any).deposit_reduced_to_legal_cap_confirmed === true;
 
       if (depositAmount > maxDeposit && !depositCapConfirmed) {
+        // Deposit cap is ALWAYS a warning, never blocking (user may have already refunded)
+        // This is a product decision to maintain warnings-only behavior for deposit cap
         const issue: BlockingIssue = {
           route: 'section_21', // Section 21 specific - deposit issues can block S21 notices
           issue: 'deposit_exceeds_cap',
           description: `Deposit £${depositAmount.toFixed(2)} exceeds legal maximum of £${maxDeposit.toFixed(2)} (${maxWeeks} weeks' rent)`,
           action_required: `Refund excess deposit (£${(depositAmount - maxDeposit).toFixed(2)}) to tenant before proceeding`,
-          severity: isWizardStage ? 'warning' : 'blocking',
+          severity: 'warning', // Always warning - deposit cap never blocks
           legal_basis: 'Tenant Fees Act 2019 s3 - deposit capped at 5 weeks rent (6 weeks if annual rent > £50,000)',
         };
-        if (isWizardStage) {
-          output.warnings.push(issue.description);
-        } else {
-          s21Blocks.push(issue);
-        }
+        output.warnings.push(issue.description);
       }
     }
   }
@@ -217,9 +218,9 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
       issue: 'gas_safety_not_provided',
       description: 'Gas safety certificate not provided before tenancy start (you selected: "No")',
       action_required: 'Cannot use Section 21 if gas cert not provided at start',
-      severity: isWizardStage ? 'warning' : 'blocking',
+      severity: isPreviewOrWizardStage ? 'warning' : 'blocking',
     };
-    if (isWizardStage) {
+    if (isPreviewOrWizardStage) {
       output.warnings.push(issue.description);
     } else {
       s21Blocks.push(issue);
@@ -235,9 +236,9 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
       issue: 'how_to_rent_not_provided',
       description: '"How to Rent" guide not provided at start of tenancy (you selected: "No")',
       action_required: 'Cannot use Section 21 without providing How to Rent guide',
-      severity: isWizardStage ? 'warning' : 'blocking',
+      severity: isPreviewOrWizardStage ? 'warning' : 'blocking',
     };
-    if (isWizardStage) {
+    if (isPreviewOrWizardStage) {
       output.warnings.push(issue.description);
     } else {
       s21Blocks.push(issue);
@@ -253,9 +254,9 @@ function analyzeEnglandWales(input: DecisionInput): DecisionOutput {
       issue: 'epc_not_provided',
       description: 'Energy Performance Certificate not provided to tenant (you selected: "No")',
       action_required: 'Provide EPC before Section 21 is valid',
-      severity: isWizardStage ? 'warning' : 'blocking',
+      severity: isPreviewOrWizardStage ? 'warning' : 'blocking',
     };
-    if (isWizardStage) {
+    if (isPreviewOrWizardStage) {
       output.warnings.push(issue.description);
     } else {
       s21Blocks.push(issue);

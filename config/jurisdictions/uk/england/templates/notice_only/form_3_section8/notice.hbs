@@ -708,9 +708,9 @@
   <p class="section-label">The court proceedings will not begin earlier than:</p>
   <p class="section-value" style="font-size: 12pt; font-weight: 700;">
     {{#if earliest_possession_date}}
-      {{format_date earliest_possession_date 'long'}}
+      {{format_date earliest_possession_date}}
     {{else if notice_expiry_date}}
-      {{format_date notice_expiry_date 'long'}}
+      {{format_date notice_expiry_date}}
     {{else}}
       <em style="color: #888; font-weight: normal;">(insert a calendar date in accordance with the notice period required for the ground(s) being relied on as set out in section 8 Housing Act 1988 (as amended))</em>
     {{/if}}
@@ -789,9 +789,9 @@
       <label>Date:</label>
       <span class="value">
         {{#if service_date}}
-          {{format_date service_date 'long'}}
+          {{format_date service_date}}
         {{else if notice_service_date}}
-          {{format_date notice_service_date 'long'}}
+          {{format_date notice_service_date}}
         {{/if}}
       </span>
     </div>

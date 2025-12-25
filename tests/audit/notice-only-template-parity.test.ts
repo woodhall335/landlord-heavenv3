@@ -118,7 +118,7 @@ describe('AUDIT: Section 8 Template Output Parity', () => {
         },
       ],
       service_date: '2025-01-15',
-      earliest_possession_date: '2025-03-15', // Ground 10 = 2 months
+      earliest_possession_date: '2025-03-16', // Ground 10 = 60 days (2 months)
       notice_period_days: 60,
       any_mandatory_ground: false,
       any_discretionary_ground: true,
@@ -127,7 +127,7 @@ describe('AUDIT: Section 8 Template Output Parity', () => {
     const result = await generateSection8Notice(testData, false);
 
     // Should contain the longer possession date for discretionary ground (DD/MM/YYYY)
-    expect(result.html).toContain('15/03/2025');
+    expect(result.html).toContain('16/03/2025');
 
     // Should contain Ground 10 reference
     expect(result.html).toContain('Ground 10');
@@ -167,8 +167,9 @@ describe('AUDIT: Section 8 Template Output Parity', () => {
         },
       ],
       service_date: '2025-01-15',
-      earliest_possession_date: '2025-01-29',
-      notice_period_days: 14,
+      // When combining grounds, use MAXIMUM period (Ground 10/11 require 60 days)
+      earliest_possession_date: '2025-03-16',
+      notice_period_days: 60,
       any_mandatory_ground: true,
       any_discretionary_ground: true,
     };

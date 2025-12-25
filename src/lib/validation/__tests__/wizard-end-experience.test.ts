@@ -151,11 +151,14 @@ describe('Part D: Comprehensive Validation Output', () => {
   });
 
   it('should identify all Section 21 blockers when multiple exist', () => {
+    // Use stage 'generate' to test full blocking behavior
+    // At preview stage, EPC/HowToRent/Gas are warnings (not blockers)
+    // At generate stage, all compliance issues become blockers
     const input: DecisionInput = {
       jurisdiction: 'england',
       product: 'notice_only',
       case_type: 'eviction',
-      stage: 'preview',
+      stage: 'generate', // Use generate stage for full blocking behavior
       facts: {
         tenancy: {
           deposit_amount: 1000,
