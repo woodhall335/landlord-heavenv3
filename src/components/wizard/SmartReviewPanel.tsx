@@ -282,7 +282,7 @@ export function SmartReviewPanel({
               {/* Disclaimer */}
               <div className="mt-4 pt-4 border-t border-gray-100">
                 <p className="text-xs text-gray-500 italic">
-                  These are automated checks to help spot possible inconsistencies between your uploaded documents and the information you provided. They do not guarantee accuracy or legal outcomes.
+                  These are automated checks to help spot possible inconsistencies between your uploaded documents and the information you provided. They may miss details and may not be accurate. They are informational only and do not predict outcomes.
                 </p>
               </div>
             </>

@@ -293,7 +293,7 @@ describe('SmartReviewPanel', () => {
         screen.getByText(/These are automated checks to help spot possible inconsistencies/)
       ).toBeInTheDocument();
       expect(
-        screen.getByText(/They do not guarantee accuracy or legal outcomes/)
+        screen.getByText(/They may miss details and may not be accurate/)
       ).toBeInTheDocument();
     });
   });
@@ -428,6 +428,7 @@ describe('SmartReviewPanel Edge Cases', () => {
 
     await user.click(screen.getByText('Possible rent amount mismatch'));
 
-    expect(screen.getByText('Not provided')).toBeInTheDocument();
+    // Both wizardValue and extractedValue are null, so "Not provided" appears twice
+    expect(screen.getAllByText('Not provided')).toHaveLength(2);
   });
 });
