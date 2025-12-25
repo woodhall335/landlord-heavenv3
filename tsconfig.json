@@ -26,6 +26,7 @@
   "include": [
     "next-env.d.ts",
     "global.d.ts",
+    "vitest.d.ts",
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
