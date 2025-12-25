@@ -21,6 +21,7 @@ export interface WizardFactsMeta {
 
 export interface WizardFacts {
   __meta?: WizardFactsMeta;
+  __smart_review?: PersistedSmartReview;
   [key: string]: any; // Flat MQS keys like property_address_line1, tenants.0.full_name, etc.
 }
 
@@ -251,6 +252,68 @@ export interface MetaFacts {
   product_tier?: string | null;
   jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
   case_id?: string | null;
+}
+
+// =============================================================================
+// Smart Review Persistence Types
+// =============================================================================
+
+/**
+ * Persisted Smart Review warning (stripped to essential fields for storage).
+ * Full warning type is in evidence/warnings.ts.
+ */
+export interface PersistedSmartReviewWarning {
+  code: string;
+  severity: 'info' | 'warning' | 'blocker';
+  title: string;
+  message: string;
+  fields: string[];
+  relatedUploads: string[];
+  suggestedUserAction: string;
+  confidence?: number;
+  comparison?: {
+    wizardValue: any;
+    extractedValue: any;
+    source?: string;
+  };
+}
+
+/**
+ * Persisted Smart Review run metadata.
+ * Stored in case_facts.facts.__smart_review to survive refresh.
+ */
+export interface PersistedSmartReview {
+  /** When this run occurred (ISO timestamp) */
+  ranAt: string;
+  /** All warnings from the most recent run */
+  warnings: PersistedSmartReviewWarning[];
+  /** Summary counts from the run */
+  summary: {
+    documentsProcessed: number;
+    documentsCached: number;
+    documentsSkipped: number;
+    documentsTimedOut: number;
+    pagesProcessed: number;
+    warningsTotal: number;
+    warningsBlocker: number;
+    warningsWarning: number;
+    warningsInfo: number;
+  };
+  /** Limits that were applied */
+  limitsApplied?: {
+    maxFilesPerRun: number;
+    maxPagesPerPdf: number;
+    maxTotalPages: number;
+    filesExceededLimit?: boolean;
+    pagesExceededLimit?: boolean;
+  };
+  /** If Smart Review was skipped */
+  skipped?: {
+    reason: string;
+    code: string;
+  };
+  /** Total cost in USD (for internal tracking) */
+  costUsd?: number;
 }
 
 // -----------------------------------------------------------------------------
