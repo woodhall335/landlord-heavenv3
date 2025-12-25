@@ -43,6 +43,8 @@ export interface ExtendedWizardQuestion {
   fields?: WizardField[];
   evidence_types?: string[];
   maps_to?: string[];
+  /** Mark legacy questions that are deprecated */
+  deprecated?: boolean;
 }
 
 export interface StepFlags {

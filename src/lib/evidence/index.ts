@@ -37,6 +37,8 @@ export {
   isImageMimeType,
   isPdfMimeType,
   supportsExtraction,
+  isEvidenceCategory,
+  parseEvidenceCategory,
 } from './schema';
 
 // Warning types

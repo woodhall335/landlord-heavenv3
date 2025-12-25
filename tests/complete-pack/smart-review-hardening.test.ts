@@ -562,7 +562,7 @@ describe('Smart Review Multi-Category Support', () => {
       EvidenceCategory.HOW_TO_RENT_PROOF,
       EvidenceCategory.EPC,
       EvidenceCategory.GAS_SAFETY_CERTIFICATE,
-      EvidenceCategory.LICENSING_CERTIFICATE,
+      EvidenceCategory.LICENSING,
       EvidenceCategory.NOTICE_SERVED_PROOF,
       EvidenceCategory.CORRESPONDENCE,
       EvidenceCategory.OTHER,

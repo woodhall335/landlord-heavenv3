@@ -466,3 +466,25 @@ export const SUPPORTED_EXTRACTION_MIME_TYPES = [
 export function supportsExtraction(mimeType: string): boolean {
   return SUPPORTED_EXTRACTION_MIME_TYPES.includes(mimeType.toLowerCase());
 }
+
+/**
+ * Set of valid EvidenceCategory values for type narrowing.
+ */
+const VALID_EVIDENCE_CATEGORIES = new Set<string>(Object.values(EvidenceCategory));
+
+/**
+ * Type guard to check if a string is a valid EvidenceCategory.
+ */
+export function isEvidenceCategory(value: unknown): value is EvidenceCategory {
+  return typeof value === 'string' && VALID_EVIDENCE_CATEGORIES.has(value);
+}
+
+/**
+ * Parse a string to an EvidenceCategory, returning null if invalid.
+ */
+export function parseEvidenceCategory(value: unknown): EvidenceCategory | null {
+  if (isEvidenceCategory(value)) {
+    return value;
+  }
+  return null;
+}

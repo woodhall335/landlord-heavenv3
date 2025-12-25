@@ -5,7 +5,7 @@
  * Ensures documents meet quality standards (target: >85 score)
  */
 
-import { chatCompletion, ChatMessage } from './openai-client';
+import { chatCompletion, ChatMessage, parseAIModel } from './openai-client';
 
 export interface QAValidationRequest {
   document_html: string;
@@ -124,7 +124,7 @@ Provide a detailed assessment with specific issues and suggestions for improveme
 
   try {
     const response = await chatCompletion(messages, {
-      model: process.env.AI_MODEL_QA || 'gpt-4o-mini',
+      model: parseAIModel(process.env.AI_MODEL_QA, 'gpt-4o-mini'),
       temperature: 0.3, // Lower temperature for consistent evaluation
       max_tokens: 4096,
     });

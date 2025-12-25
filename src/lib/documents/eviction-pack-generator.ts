@@ -146,6 +146,25 @@ export interface EvictionCase {
   [key: string]: any;
 }
 
+/**
+ * England deposit protection schemes for Section 21 notices.
+ */
+type EnglandDepositScheme = 'DPS' | 'MyDeposits' | 'TDS';
+
+/**
+ * Narrow deposit scheme to England-only schemes for Section 21 notices.
+ * Returns undefined if the scheme is not valid for England.
+ */
+function toEnglandDepositScheme(
+  scheme: 'DPS' | 'MyDeposits' | 'TDS' | 'SafeDeposits Scotland' | undefined
+): EnglandDepositScheme | undefined {
+  if (scheme === 'DPS' || scheme === 'MyDeposits' || scheme === 'TDS') {
+    return scheme;
+  }
+  // SafeDeposits Scotland is not valid for England Section 21 notices
+  return undefined;
+}
+
 function extractGroundCodes(section8Grounds: any[]): number[] {
   if (!Array.isArray(section8Grounds)) return [];
 
@@ -586,7 +605,7 @@ async function generateEnglandOrWalesEvictionPack(
       expiry_date: '', // Will be auto-calculated by generateSection21Notice
       deposit_protected: evictionCase.deposit_protected,
       deposit_amount: evictionCase.deposit_amount,
-      deposit_scheme: evictionCase.deposit_scheme_name,
+      deposit_scheme: toEnglandDepositScheme(evictionCase.deposit_scheme_name),
       deposit_reference: evictionCase.deposit_reference,
       gas_certificate_provided: evictionCase.gas_safety_certificate,
       epc_rating: evictionCase.epc_rating,
@@ -1038,7 +1057,7 @@ export async function generateNoticeOnlyPack(
         expiry_date: '', // Will be auto-calculated by generateSection21Notice
         deposit_protected: evictionCase.deposit_protected,
         deposit_amount: evictionCase.deposit_amount,
-        deposit_scheme: evictionCase.deposit_scheme_name,
+        deposit_scheme: toEnglandDepositScheme(evictionCase.deposit_scheme_name),
         deposit_reference: evictionCase.deposit_reference,
         gas_certificate_provided: evictionCase.gas_safety_certificate,
         epc_rating: evictionCase.epc_rating,
