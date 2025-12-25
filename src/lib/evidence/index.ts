@@ -66,6 +66,13 @@ export {
   isSmartReviewEnabled,
   isVisionOCREnabled,
   clearExtractionCache,
+  // v1 Hardening: Limit configuration
+  getMaxFilesPerRun,
+  getMaxPagesPerPdf,
+  getMaxTotalPagesPerRun,
+  getDocumentTimeoutMs,
+  getMaxImageDimension,
   type SmartReviewInput,
   type SmartReviewPipelineResult,
+  type SmartReviewRunMetadata,
 } from './smart-review';

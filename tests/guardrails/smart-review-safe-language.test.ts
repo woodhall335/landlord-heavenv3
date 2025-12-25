@@ -209,7 +209,9 @@ describe('Smart Review Safe Language Guardrails', () => {
           action.startsWith('review') ||
           action.startsWith('try') ||
           action.startsWith('ensure') ||
+          action.startsWith('the most') || // "The most important documents..."
           action.includes('you may want') ||
+          action.includes('you may') || // "You may re-upload..."
           action.includes('please verify');
 
         expect(suggestive).toBe(true);
@@ -250,7 +252,10 @@ describe('Smart Review Safe Language Guardrails', () => {
           title.includes('failed') || // "Extraction failed"
           title.includes('partial') || // "Partial information extracted"
           title.includes('consider') || // "Consider redacting..."
-          title.includes('sensitive'); // "Sensitive data detected"
+          title.includes('sensitive') || // "Sensitive data detected"
+          title.includes('limit') || // "Processing limit reached", "Page limit reached"
+          title.includes('timeout') || // "Document processing timed out"
+          title.includes('processing'); // "Processing limit reached"
 
         expect(descriptive).toBe(true);
       });

@@ -16,8 +16,15 @@ export {
   populateCache,
   isSmartReviewEnabled,
   isVisionOCREnabled,
+  // v1 Hardening: Limit configuration
+  getMaxFilesPerRun,
+  getMaxPagesPerPdf,
+  getMaxTotalPagesPerRun,
+  getDocumentTimeoutMs,
+  getMaxImageDimension,
   type SmartReviewInput,
   type SmartReviewPipelineResult,
+  type SmartReviewRunMetadata,
 } from './orchestrator';
 
 // Classification

@@ -94,6 +94,11 @@ export enum WarningCode {
   // Privacy/sensitivity warnings
   PRIVACY_REDACTION_SUGGESTED = 'PRIVACY_REDACTION_SUGGESTED',
   PRIVACY_SENSITIVE_DATA_DETECTED = 'PRIVACY_SENSITIVE_DATA_DETECTED',
+
+  // Processing limit warnings (v1 hardening)
+  SMART_REVIEW_LIMIT_REACHED = 'SMART_REVIEW_LIMIT_REACHED',
+  SMART_REVIEW_TIMEOUT = 'SMART_REVIEW_TIMEOUT',
+  SMART_REVIEW_PAGE_LIMIT_REACHED = 'SMART_REVIEW_PAGE_LIMIT_REACHED',
 }
 
 // =============================================================================
@@ -387,6 +392,29 @@ const WARNING_TEMPLATES: Record<WarningCode, WarningTemplate> = {
     title: 'Sensitive data detected',
     messageTemplate: 'We detected potentially sensitive information in this document (e.g., bank account numbers).',
     suggestedUserActionTemplate: 'Ensure you are comfortable including this information in your case bundle.',
+    defaultFields: [],
+  },
+
+  // Processing limit warnings (v1 hardening)
+  [WarningCode.SMART_REVIEW_LIMIT_REACHED]: {
+    severity: 'info',
+    title: 'Processing limit reached',
+    messageTemplate: 'Some documents were not processed due to processing limits. {wizardValue} of {extractedValue} documents were reviewed.',
+    suggestedUserActionTemplate: 'The most important documents have been reviewed. You may re-upload key documents to prioritize them.',
+    defaultFields: [],
+  },
+  [WarningCode.SMART_REVIEW_TIMEOUT]: {
+    severity: 'info',
+    title: 'Document processing timed out',
+    messageTemplate: 'Processing of this document took too long and was skipped.',
+    suggestedUserActionTemplate: 'Try uploading a smaller or clearer version of this document.',
+    defaultFields: [],
+  },
+  [WarningCode.SMART_REVIEW_PAGE_LIMIT_REACHED]: {
+    severity: 'info',
+    title: 'Page limit reached',
+    messageTemplate: 'Only the first few pages of this document were reviewed.',
+    suggestedUserActionTemplate: 'Ensure important information is on the first pages of multi-page documents.',
     defaultFields: [],
   },
 };

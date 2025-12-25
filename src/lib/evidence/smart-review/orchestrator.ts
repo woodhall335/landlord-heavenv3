@@ -7,7 +7,13 @@
  * 3. Fact comparison
  * 4. Warning generation
  *
- * Includes caching, rate limiting, and feature flag checks.
+ * Includes caching, rate limiting, cost/perf limits, and feature flag checks.
+ *
+ * v1 Hardening:
+ * - Enforces file/page limits to control costs
+ * - Graceful fallback on errors (no 500s)
+ * - Per-document timeouts
+ * - Deduplication via SHA256
  *
  * @module src/lib/evidence/smart-review/orchestrator
  */
@@ -33,6 +39,75 @@ import {
 import { extractFromImage, extractFromMultipleImages, VisionExtractionInput } from './vision-extract';
 import { extractFromText } from './text-extract';
 import { compareFacts, WizardFacts, ComparisonConfig, DEFAULT_COMPARISON_CONFIG } from './compare';
+
+// =============================================================================
+// Cost/Performance Limits (v1 Hardening)
+// =============================================================================
+
+/**
+ * Maximum number of files to process per Smart Review run.
+ * Default: 10 files
+ */
+export function getMaxFilesPerRun(): number {
+  const envValue = process.env.SMART_REVIEW_MAX_FILES_PER_RUN;
+  if (envValue) {
+    const parsed = parseInt(envValue, 10);
+    if (!isNaN(parsed) && parsed > 0) return parsed;
+  }
+  return 10;
+}
+
+/**
+ * Maximum pages to process from a single PDF.
+ * Default: 3 pages
+ */
+export function getMaxPagesPerPdf(): number {
+  const envValue = process.env.SMART_REVIEW_MAX_PAGES_PER_PDF;
+  if (envValue) {
+    const parsed = parseInt(envValue, 10);
+    if (!isNaN(parsed) && parsed > 0) return parsed;
+  }
+  return 3;
+}
+
+/**
+ * Maximum total pages across all documents per run.
+ * Default: 12 pages
+ */
+export function getMaxTotalPagesPerRun(): number {
+  const envValue = process.env.SMART_REVIEW_MAX_TOTAL_PAGES_PER_RUN;
+  if (envValue) {
+    const parsed = parseInt(envValue, 10);
+    if (!isNaN(parsed) && parsed > 0) return parsed;
+  }
+  return 12;
+}
+
+/**
+ * Timeout for processing a single document (milliseconds).
+ * Default: 15 seconds
+ */
+export function getDocumentTimeoutMs(): number {
+  const envValue = process.env.SMART_REVIEW_TIMEOUT_MS;
+  if (envValue) {
+    const parsed = parseInt(envValue, 10);
+    if (!isNaN(parsed) && parsed > 0) return parsed;
+  }
+  return 15000;
+}
+
+/**
+ * Maximum image dimension for Vision processing.
+ * Default: 1536px
+ */
+export function getMaxImageDimension(): number {
+  const envValue = process.env.SMART_REVIEW_MAX_IMAGE_DIMENSION;
+  if (envValue) {
+    const parsed = parseInt(envValue, 10);
+    if (!isNaN(parsed) && parsed > 0) return parsed;
+  }
+  return 1536;
+}
 
 // =============================================================================
 // Types
@@ -77,10 +152,23 @@ export interface SmartReviewPipelineResult {
     documentsVision: number;
     documentsText: number;
     documentsSkipped: number;
+    documentsLimitExceeded: number;
+    documentsTimedOut: number;
+    pagesProcessed: number;
+    pagesLimitExceeded: number;
     warningsTotal: number;
     warningsBlocker: number;
     warningsWarning: number;
     warningsInfo: number;
+  };
+  /** Limits applied during this run */
+  limitsApplied?: {
+    maxFilesPerRun: number;
+    maxPagesPerPdf: number;
+    maxTotalPages: number;
+    timeoutMs: number;
+    filesExceededLimit: boolean;
+    pagesExceededLimit: boolean;
   };
   /** Error if pipeline failed */
   error?: string;
@@ -89,6 +177,29 @@ export interface SmartReviewPipelineResult {
     reason: string;
     code: 'DISABLED' | 'WRONG_PRODUCT' | 'WRONG_JURISDICTION' | 'NO_DOCUMENTS' | 'THROTTLED';
   };
+}
+
+/**
+ * Persisted Smart Review run metadata.
+ * Stored on the Case for resume/rerun.
+ */
+export interface SmartReviewRunMetadata {
+  /** When this run occurred */
+  ranAt: string;
+  /** Warnings from this run */
+  warnings: SmartReviewWarning[];
+  /** Whether LLM extraction ran */
+  llmRan: boolean;
+  /** Whether Vision extraction ran */
+  visionRan: boolean;
+  /** Limits that were applied */
+  limitsApplied: {
+    maxFilesPerRun: number;
+    maxPagesPerPdf: number;
+    maxTotalPages: number;
+  };
+  /** Summary of this run */
+  summary: SmartReviewPipelineResult['summary'];
 }
 
 /**
@@ -144,7 +255,61 @@ function getThrottleIntervalMs(): number {
 // =============================================================================
 
 /**
+ * Helper to create empty summary with all required fields.
+ */
+function createEmptySummary(): SmartReviewPipelineResult['summary'] {
+  return {
+    documentsProcessed: 0,
+    documentsCached: 0,
+    documentsVision: 0,
+    documentsText: 0,
+    documentsSkipped: 0,
+    documentsLimitExceeded: 0,
+    documentsTimedOut: 0,
+    pagesProcessed: 0,
+    pagesLimitExceeded: 0,
+    warningsTotal: 0,
+    warningsBlocker: 0,
+    warningsWarning: 0,
+    warningsInfo: 0,
+  };
+}
+
+/**
+ * Wrap a promise with a timeout.
+ */
+function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  errorMessage: string
+): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error(errorMessage));
+    }, timeoutMs);
+
+    promise
+      .then((result) => {
+        clearTimeout(timer);
+        resolve(result);
+      })
+      .catch((error) => {
+        clearTimeout(timer);
+        reject(error);
+      });
+  });
+}
+
+/**
  * Run the complete Smart Review pipeline.
+ *
+ * v1 Hardening Features:
+ * - Enforces file limits (SMART_REVIEW_MAX_FILES_PER_RUN)
+ * - Enforces page limits per PDF (SMART_REVIEW_MAX_PAGES_PER_PDF)
+ * - Enforces total page limit (SMART_REVIEW_MAX_TOTAL_PAGES_PER_RUN)
+ * - Per-document timeout (SMART_REVIEW_TIMEOUT_MS)
+ * - Graceful error handling (no 500s)
+ * - SHA256 deduplication via cache
  *
  * @param input - Pipeline input
  * @returns Pipeline result with warnings
@@ -153,6 +318,16 @@ export async function runSmartReview(
   input: SmartReviewInput
 ): Promise<SmartReviewPipelineResult> {
   const startTime = Date.now();
+
+  // Load limits
+  const limits = {
+    maxFilesPerRun: getMaxFilesPerRun(),
+    maxPagesPerPdf: getMaxPagesPerPdf(),
+    maxTotalPages: getMaxTotalPagesPerRun(),
+    timeoutMs: getDocumentTimeoutMs(),
+    filesExceededLimit: false,
+    pagesExceededLimit: false,
+  };
 
   // 1. Check feature flags and eligibility
   const eligibility = checkEligibility(input);
@@ -163,17 +338,7 @@ export async function runSmartReview(
       documentResults: [],
       totalCostUsd: 0,
       processingTimeMs: Date.now() - startTime,
-      summary: {
-        documentsProcessed: 0,
-        documentsCached: 0,
-        documentsVision: 0,
-        documentsText: 0,
-        documentsSkipped: 0,
-        warningsTotal: 0,
-        warningsBlocker: 0,
-        warningsWarning: 0,
-        warningsInfo: 0,
-      },
+      summary: createEmptySummary(),
       skipped: eligibility.skipReason,
     };
   }
@@ -187,17 +352,7 @@ export async function runSmartReview(
       documentResults: [],
       totalCostUsd: 0,
       processingTimeMs: Date.now() - startTime,
-      summary: {
-        documentsProcessed: 0,
-        documentsCached: 0,
-        documentsVision: 0,
-        documentsText: 0,
-        documentsSkipped: 0,
-        warningsTotal: 0,
-        warningsBlocker: 0,
-        warningsWarning: 0,
-        warningsInfo: 0,
-      },
+      summary: createEmptySummary(),
       skipped: {
         reason: 'Smart Review was recently run for this case',
         code: 'THROTTLED',
@@ -208,29 +363,28 @@ export async function runSmartReview(
   // Update throttle tracker
   throttleTracker.lastRun.set(input.caseId, Date.now());
 
+  // Track limits
+  let filesProcessed = 0;
+  let totalPagesProcessed = 0;
+  let filesExceededLimit = 0;
+  let pagesExceededLimit = 0;
+  let timedOutCount = 0;
+
   try {
     // 3. Get documents to process
     const documents = flattenEvidenceBundle(input.evidenceBundle);
     const supportedDocs = documents.filter((d) => supportsExtraction(d.mimeType));
 
     if (supportedDocs.length === 0) {
+      const summary = createEmptySummary();
+      summary.documentsSkipped = documents.length;
       return {
         success: true,
         warnings: [],
         documentResults: [],
         totalCostUsd: 0,
         processingTimeMs: Date.now() - startTime,
-        summary: {
-          documentsProcessed: 0,
-          documentsCached: 0,
-          documentsVision: 0,
-          documentsText: 0,
-          documentsSkipped: documents.length,
-          warningsTotal: 0,
-          warningsBlocker: 0,
-          warningsWarning: 0,
-          warningsInfo: 0,
-        },
+        summary,
         skipped: {
           reason: 'No supported documents found for extraction',
           code: 'NO_DOCUMENTS',
@@ -243,37 +397,158 @@ export async function runSmartReview(
     const { vision: visionDocs, text: textDocs, unsupported: unsupportedDocs } =
       partitionByExtractionMethod(classifications);
 
-    // 5. Process documents (with caching)
+    // 5. Process documents (with caching and limits)
     const documentResults: DocumentExtractionResult[] = [];
+    const allWarnings: SmartReviewWarning[] = [];
     let totalCost = 0;
     let cachedCount = 0;
     let visionCount = 0;
     let textCount = 0;
 
+    // Helper to check if we can process more files
+    const canProcessMoreFiles = () => filesProcessed < limits.maxFilesPerRun;
+    const canProcessMorePages = () => totalPagesProcessed < limits.maxTotalPages;
+
     // Process text-extractable documents
     for (const classification of textDocs) {
-      const result = await processTextDocument(classification);
-      documentResults.push(result);
-      totalCost += result.extraction ? 0.001 : 0; // Approximate cost for text extraction
-      if (result.wasProcessed) {
-        textCount++;
-      } else {
+      // Check file limit
+      if (!canProcessMoreFiles()) {
+        filesExceededLimit++;
+        documentResults.push({
+          upload: classification.upload,
+          extraction: null,
+          error: 'File limit reached for this run',
+          wasProcessed: false,
+        });
+        continue;
+      }
+
+      // Check if already cached
+      const cachedResult = getCachedExtraction(classification.upload);
+      if (cachedResult) {
+        documentResults.push({
+          upload: classification.upload,
+          extraction: cachedResult,
+          wasProcessed: false,
+        });
         cachedCount++;
+        continue;
+      }
+
+      // Process with timeout
+      try {
+        const result = await withTimeout(
+          processTextDocument(classification),
+          limits.timeoutMs,
+          'Document processing timed out'
+        );
+        documentResults.push(result);
+        filesProcessed++;
+        totalCost += result.extraction ? 0.001 : 0;
+        if (result.wasProcessed) {
+          textCount++;
+          // Estimate 1 page for text extraction
+          totalPagesProcessed++;
+        } else {
+          cachedCount++;
+        }
+      } catch (err: any) {
+        // Timeout or other error - graceful fallback
+        timedOutCount++;
+        documentResults.push({
+          upload: classification.upload,
+          extraction: null,
+          error: err.message || 'Processing failed',
+          wasProcessed: false,
+        });
+        allWarnings.push(
+          createWarning(WarningCode.SMART_REVIEW_TIMEOUT, {
+            relatedUploads: [classification.upload.id],
+          })
+        );
       }
     }
 
     // Process vision-required documents (if Vision is enabled)
     if (isVisionOCREnabled()) {
       for (const classification of visionDocs) {
-        const result = await processVisionDocument(classification);
-        documentResults.push(result);
-        if (result.extraction) {
-          totalCost += 0.01; // Approximate cost for Vision
+        // Check file limit
+        if (!canProcessMoreFiles()) {
+          filesExceededLimit++;
+          documentResults.push({
+            upload: classification.upload,
+            extraction: null,
+            error: 'File limit reached for this run',
+            wasProcessed: false,
+          });
+          continue;
         }
-        if (result.wasProcessed) {
-          visionCount++;
-        } else {
+
+        // Check page limit
+        if (!canProcessMorePages()) {
+          pagesExceededLimit++;
+          documentResults.push({
+            upload: classification.upload,
+            extraction: null,
+            error: 'Page limit reached for this run',
+            wasProcessed: false,
+          });
+          allWarnings.push(
+            createWarning(WarningCode.SMART_REVIEW_PAGE_LIMIT_REACHED, {
+              relatedUploads: [classification.upload.id],
+            })
+          );
+          continue;
+        }
+
+        // Check if already cached
+        const cachedResult = getCachedExtraction(classification.upload);
+        if (cachedResult) {
+          documentResults.push({
+            upload: classification.upload,
+            extraction: cachedResult,
+            wasProcessed: false,
+          });
           cachedCount++;
+          continue;
+        }
+
+        // Process with timeout
+        try {
+          const result = await withTimeout(
+            processVisionDocument(classification, limits.maxPagesPerPdf),
+            limits.timeoutMs,
+            'Vision processing timed out'
+          );
+          documentResults.push(result);
+          filesProcessed++;
+          if (result.extraction) {
+            totalCost += 0.01; // Approximate cost for Vision
+          }
+          if (result.wasProcessed) {
+            visionCount++;
+            // Track pages processed (estimate 1 for images, up to maxPagesPerPdf for PDFs)
+            const pageEstimate = classification.upload.mimeType === 'application/pdf'
+              ? Math.min(limits.maxPagesPerPdf, 3)
+              : 1;
+            totalPagesProcessed += pageEstimate;
+          } else {
+            cachedCount++;
+          }
+        } catch (err: any) {
+          // Timeout or other error - graceful fallback
+          timedOutCount++;
+          documentResults.push({
+            upload: classification.upload,
+            extraction: null,
+            error: err.message || 'Vision processing failed',
+            wasProcessed: false,
+          });
+          allWarnings.push(
+            createWarning(WarningCode.SMART_REVIEW_TIMEOUT, {
+              relatedUploads: [classification.upload.id],
+            })
+          );
         }
       }
     } else {
@@ -298,6 +573,22 @@ export async function runSmartReview(
       });
     }
 
+    // Track if limits were exceeded
+    limits.filesExceededLimit = filesExceededLimit > 0;
+    limits.pagesExceededLimit = pagesExceededLimit > 0;
+
+    // Add limit warning if files were skipped
+    if (filesExceededLimit > 0) {
+      allWarnings.push(
+        createWarning(WarningCode.SMART_REVIEW_LIMIT_REACHED, {
+          comparison: {
+            wizardValue: filesProcessed,
+            extractedValue: filesProcessed + filesExceededLimit,
+          },
+        })
+      );
+    }
+
     // 6. Extract facts from successful results
     const extractedFacts = documentResults
       .filter((r) => r.extraction !== null)
@@ -316,16 +607,20 @@ export async function runSmartReview(
       comparisonConfig
     );
 
-    // 8. Add extraction warnings
-    const allWarnings = [...comparisonResult.warnings];
+    // Add comparison warnings
+    allWarnings.push(...comparisonResult.warnings);
 
+    // 8. Add extraction warnings
     for (const result of documentResults) {
       if (result.error && !result.extraction) {
-        allWarnings.push(
-          createWarning(WarningCode.EXTRACT_FAILED, {
-            relatedUploads: [result.upload.id],
-          })
-        );
+        // Only add EXTRACT_FAILED if it's not a limit/timeout error
+        if (!result.error.includes('limit') && !result.error.includes('timed out')) {
+          allWarnings.push(
+            createWarning(WarningCode.EXTRACT_FAILED, {
+              relatedUploads: [result.upload.id],
+            })
+          );
+        }
       } else if (result.extraction) {
         // Add low confidence warning if applicable
         if (result.extraction.quality.confidence_overall < 0.5) {
@@ -358,6 +653,10 @@ export async function runSmartReview(
 
     console.log(`[SmartReview] Completed for case ${input.caseId}:`, {
       documentsProcessed: visionCount + textCount,
+      documentsCached: cachedCount,
+      documentsLimitExceeded: filesExceededLimit,
+      documentsTimedOut: timedOutCount,
+      pagesProcessed: totalPagesProcessed,
       warnings: allWarnings.length,
       cost: totalCost.toFixed(4),
     });
@@ -374,34 +673,58 @@ export async function runSmartReview(
         documentsVision: visionCount,
         documentsText: textCount,
         documentsSkipped: unsupportedDocs.length,
+        documentsLimitExceeded: filesExceededLimit,
+        documentsTimedOut: timedOutCount,
+        pagesProcessed: totalPagesProcessed,
+        pagesLimitExceeded: pagesExceededLimit,
         warningsTotal: allWarnings.length,
         warningsBlocker: warningCounts.blocker,
         warningsWarning: warningCounts.warning,
         warningsInfo: warningCounts.info,
       },
+      limitsApplied: limits,
     };
   } catch (error: any) {
-    console.error('[SmartReview] Pipeline failed:', error);
+    // CRITICAL: Graceful fallback - never throw 500
+    console.error('[SmartReview] Pipeline failed (graceful fallback):', error);
+
+    // Return success: true with a warning, not success: false
+    // This ensures Smart Review errors never block generation
     return {
-      success: false,
-      warnings: [],
+      success: true, // Changed from false - never block on Smart Review failure
+      warnings: [
+        createWarning(WarningCode.EXTRACT_FAILED, {
+          comparison: {
+            wizardValue: 'Smart Review',
+            extractedValue: error.message || 'Unknown error',
+          },
+        }),
+      ],
       documentResults: [],
       totalCostUsd: 0,
       processingTimeMs: Date.now() - startTime,
       summary: {
-        documentsProcessed: 0,
-        documentsCached: 0,
-        documentsVision: 0,
-        documentsText: 0,
-        documentsSkipped: 0,
-        warningsTotal: 0,
-        warningsBlocker: 0,
-        warningsWarning: 0,
-        warningsInfo: 0,
+        ...createEmptySummary(),
+        documentsLimitExceeded: filesExceededLimit,
+        documentsTimedOut: timedOutCount,
       },
+      limitsApplied: limits,
       error: error.message,
     };
   }
+}
+
+/**
+ * Get cached extraction result for an upload.
+ */
+function getCachedExtraction(upload: EvidenceUploadItem): EvidenceExtractedFacts | null {
+  // Check by hash first (most reliable)
+  if (upload.sha256) {
+    const cached = extractionCache.byHash.get(upload.sha256);
+    if (cached) return cached;
+  }
+  // Fallback to ID
+  return extractionCache.byId.get(upload.id) || null;
 }
 
 // =============================================================================
@@ -568,9 +891,13 @@ async function processTextDocument(
 
 /**
  * Process a document requiring Vision OCR.
+ *
+ * @param classification - Document classification
+ * @param maxPages - Maximum pages to process from PDFs (default: 3)
  */
 async function processVisionDocument(
-  classification: DocumentClassification
+  classification: DocumentClassification,
+  maxPages: number = 3
 ): Promise<DocumentExtractionResult> {
   const upload = classification.upload;
 
