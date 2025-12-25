@@ -1938,6 +1938,11 @@
       "type": "string",
       "required": false,
       "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "pre_action_confirmed": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether pre-action requirements have been completed"
     }
   }
 }

@@ -82,6 +82,11 @@
       margin: 0;
     }
 
+    /* Global heading page-break controls - must come before nested rules */
+    h2 {
+      page-break-after: avoid;
+    }
+
     /* Details Grid */
     .details-section {
       margin: 1.5em 0;
@@ -240,6 +245,17 @@
       margin: 0.3em 0;
     }
 
+    /* Page break controls for sections */
+    .checklist {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    .checklist-section {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
     @media print {
       .checklist-box,
       .alert-box {
@@ -321,7 +337,7 @@
 </div>
 
 <!-- Validity Requirements -->
-<div class="details-section">
+<div class="details-section"><div class="section checklist-section">
   <h2><span class="num">3</span> Validity Requirements</h2>
   
   <div class="checklist-box">
@@ -334,10 +350,10 @@
         <li><span class="checkbox"></span> Ground(s) for possession clearly stated with particulars</li>
         <li><span class="checkbox"></span> Notice period is sufficient for the grounds claimed:
           <ul>
-            <li><strong>2 months (60 days):</strong> Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16</li>
-            <li><strong>2 weeks (14 days):</strong> Grounds 3, 4, 8, 12, 13, 14, 15, 17</li>
+            <li><strong>60 days (2 months) minimum:</strong> Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16</li>
+            <li><strong>14 days (2 weeks) minimum:</strong> Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 14ZA, 15, 17</li>
             <li><strong>Immediate (0 days):</strong> Ground 14A (domestic violence), Ground 14 (serious ASB only)</li>
-            <li><strong>Mixed grounds:</strong> Use the LONGEST period required among all grounds claimed</li>
+            <li><strong>Mixed grounds:</strong> Use the MAXIMUM notice period required among all grounds claimed</li>
           </ul>
         </li>
         {{#if is_fixed_term}}
@@ -354,7 +370,7 @@
       </ul>
     </div>
   </div>
-</div>
+</div></div>
 
 <!-- After Service -->
 <div class="details-section">

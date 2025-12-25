@@ -40,7 +40,8 @@ describe('ValidationErrors component - Go to question routing', () => {
       />
     );
 
-    const goToQuestionButton = screen.getByText('Go to question →');
+    // Component renders "Go to: Deposit And Compliance →" (question_id converted to Title Case)
+    const goToQuestionButton = screen.getByText(/Go to: .+ →/);
     fireEvent.click(goToQuestionButton);
 
     expect(mockPush).toHaveBeenCalledTimes(1);
@@ -67,7 +68,8 @@ describe('ValidationErrors component - Go to question routing', () => {
       />
     );
 
-    const goToQuestionButton = screen.getByText('Go to question →');
+    // Component renders "Go to: Deposit And Compliance →" (question_id converted to Title Case)
+    const goToQuestionButton = screen.getByText(/Go to: .+ →/);
     fireEvent.click(goToQuestionButton);
 
     expect(mockPush).toHaveBeenCalledTimes(1);
@@ -98,7 +100,8 @@ describe('ValidationErrors component - Go to question routing', () => {
       />
     );
 
-    const goToQuestionButton = screen.getByText('Go to question →');
+    // Component renders "Go to: Tenant Details →" (question_id converted to Title Case)
+    const goToQuestionButton = screen.getByText(/Go to: .+ →/);
     fireEvent.click(goToQuestionButton);
 
     const url = mockPush.mock.calls[0][0];
@@ -128,7 +131,8 @@ describe('ValidationErrors component - Go to question routing', () => {
     );
 
     // Should have two "Go to question" buttons (one for each issue)
-    const buttons = screen.getAllByText('Go to question →');
+    // Component renders "Go to: Deposit And Compliance →" format
+    const buttons = screen.getAllByText(/Go to: .+ →/);
     expect(buttons).toHaveLength(2);
 
     // Both issues should be displayed
@@ -155,8 +159,9 @@ describe('ValidationErrors component - Go to question routing', () => {
       />
     );
 
-    const completeWizardButton = screen.getByText('✏️ Complete Wizard');
-    fireEvent.click(completeWizardButton);
+    // Component shows "Fix all issues" button (not "Complete Wizard")
+    const fixAllIssuesButton = screen.getByText('Fix all issues');
+    fireEvent.click(fixAllIssuesButton);
 
     const url = mockPush.mock.calls[0][0];
     expect(url).toContain('case_id=test-case-complete');

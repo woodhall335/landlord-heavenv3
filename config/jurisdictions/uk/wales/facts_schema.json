@@ -1419,6 +1419,16 @@
       "type": "string",
       "required": false,
       "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "arrears_total": {
+      "type": "number",
+      "required": false,
+      "description": "Total rent arrears outstanding"
+    },
+    "ground_particulars": {
+      "type": "string",
+      "required": false,
+      "description": "Particulars supporting the grounds for possession"
     }
   }
 }

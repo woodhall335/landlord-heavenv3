@@ -94,6 +94,19 @@
       color: #1a1a1a;
     }
 
+    /* Standalone callout page-break controls - must come before .alert-box variants */
+    .warning {
+      page-break-inside: avoid;
+    }
+
+    .critical {
+      page-break-inside: avoid;
+    }
+
+    .success {
+      page-break-inside: avoid;
+    }
+
     /* Alert Boxes */
     .alert-box {
       padding: 1em;
@@ -140,6 +153,15 @@
     .alert-box ul {
       margin: 0.5em 0;
       padding-left: 1.25em;
+    }
+
+    /* Global heading page-break controls - must come before nested rules */
+    h2 {
+      page-break-after: avoid;
+    }
+
+    h3 {
+      page-break-after: avoid;
     }
 
     /* Section Headers */
