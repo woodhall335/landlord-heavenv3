@@ -55,11 +55,11 @@ describe('Section 8 Bundle PDF Consistency', () => {
       const content = fs.readFileSync(templatePath, 'utf-8');
 
       // Should contain correct notice period guidance
-      // 2 months (60 days): Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16
-      expect(content).toMatch(/2 months.*60 days.*Grounds? 1.*2.*5.*6.*7.*9.*10.*11.*16/is);
+      // 60 days (2 months) minimum: Grounds 1, 2, 5, 6, 7, 9, 10, 11, 16
+      expect(content).toMatch(/60 days.*2 months.*Grounds 1.*2.*5.*6.*7.*9.*10.*11.*16/is);
 
-      // 2 weeks (14 days): Grounds 3, 4, 8, 12, 13, 14, 15, 17
-      expect(content).toMatch(/2 weeks.*14 days.*Grounds? 3.*4.*8.*12.*13.*14.*15.*17/is);
+      // 14 days (2 weeks) minimum: Grounds 3, 4, 7A, 7B, 8, 12, 13, 14, 14ZA, 15, 17
+      expect(content).toMatch(/14 days.*2 weeks.*Grounds 3.*4.*7A.*7B.*8.*12.*13.*14.*14ZA.*15.*17/is);
     });
 
     test('Does NOT contain incorrect "Grounds 1,2,5-7,9,16: Two weeks" guidance', () => {

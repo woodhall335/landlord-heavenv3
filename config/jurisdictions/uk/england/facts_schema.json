@@ -3084,6 +3084,76 @@
       "type": "string",
       "required": false,
       "description": "Auto-generated placeholder to align MQS and validators"
+    },
+    "notice_served_date": {
+      "type": "date",
+      "required": false,
+      "description": "Date the notice was served on the tenant"
+    },
+    "notice_expiry_date": {
+      "type": "date",
+      "required": false,
+      "description": "Date the notice expires"
+    },
+    "total_arrears": {
+      "type": "number",
+      "required": false,
+      "description": "Total rent arrears outstanding"
+    },
+    "deposit_reference": {
+      "type": "string",
+      "required": false,
+      "description": "Reference number from deposit protection scheme"
+    },
+    "evidence.tenancy_agreement_uploads": {
+      "type": "array",
+      "required": false,
+      "description": "Uploaded tenancy agreement documents"
+    },
+    "evidence.bank_statements_uploads": {
+      "type": "array",
+      "required": false,
+      "description": "Uploaded bank statements for rent payment evidence"
+    },
+    "evidence.deposit_protection_uploads": {
+      "type": "array",
+      "required": false,
+      "description": "Uploaded deposit protection certificates"
+    },
+    "evidence.prescribed_info_uploads": {
+      "type": "array",
+      "required": false,
+      "description": "Uploaded prescribed information documents"
+    },
+    "evidence.how_to_rent_uploads": {
+      "type": "array",
+      "required": false,
+      "description": "Uploaded How to Rent guide acknowledgements"
+    },
+    "evidence.epc_uploads": {
+      "type": "array",
+      "required": false,
+      "description": "Uploaded EPC certificates"
+    },
+    "evidence.gas_safety_uploads": {
+      "type": "array",
+      "required": false,
+      "description": "Uploaded gas safety certificates"
+    },
+    "evidence.notice_service_uploads": {
+      "type": "array",
+      "required": false,
+      "description": "Uploaded proof of notice service"
+    },
+    "evidence.correspondence_uploads": {
+      "type": "array",
+      "required": false,
+      "description": "Uploaded correspondence with tenant"
+    },
+    "evidence.other_uploads": {
+      "type": "array",
+      "required": false,
+      "description": "Other uploaded evidence documents"
     }
   }
 }
