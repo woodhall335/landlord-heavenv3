@@ -18,6 +18,7 @@ import {
 } from '@/lib/wizard/mqs-loader';
 import { applyMappedAnswers, setFactPath } from '@/lib/case-facts/mapping';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
+import type { PersistedSmartReview, PersistedSmartReviewWarning } from '@/lib/case-facts/schema';
 import { batchClearDependentFacts } from '@/lib/wizard/normalizeFacts';
 import { enhanceAnswer } from '@/lib/ai/ask-heaven';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
@@ -1488,6 +1489,51 @@ export async function POST(request: Request) {
       } catch (smartReviewErr) {
         console.error('[SMART-REVIEW] Failed:', smartReviewErr);
         // Non-fatal - continue without Smart Review
+      }
+
+      // ============================================================================
+      // 6.6. SMART REVIEW PERSISTENCE: Save results to case_facts for reload
+      // ============================================================================
+      // Persist Smart Review results so they survive page refresh.
+      // This is a separate update to avoid complicating the main facts flow.
+      try {
+        const persistedSmartReview: PersistedSmartReview = {
+          ranAt: new Date().toISOString(),
+          warnings: smartReviewWarnings.map((w): PersistedSmartReviewWarning => ({
+            code: w.code,
+            severity: w.severity,
+            title: w.title,
+            message: w.message,
+            fields: w.fields,
+            relatedUploads: w.relatedUploads,
+            suggestedUserAction: w.suggestedUserAction,
+            confidence: w.confidence,
+            comparison: w.comparison,
+          })),
+          summary: responseData.smart_review?.summary ?? {
+            documentsProcessed: 0,
+            documentsCached: 0,
+            documentsSkipped: 0,
+            documentsTimedOut: 0,
+            pagesProcessed: 0,
+            warningsTotal: smartReviewWarnings.length,
+            warningsBlocker: smartReviewWarnings.filter(w => w.severity === 'blocker').length,
+            warningsWarning: smartReviewWarnings.filter(w => w.severity === 'warning').length,
+            warningsInfo: smartReviewWarnings.filter(w => w.severity === 'info').length,
+          },
+          limitsApplied: responseData.smart_review?.limitsApplied,
+          costUsd: responseData.smart_review?.cost_usd,
+        };
+
+        await updateWizardFacts(supabase, case_id, (current) => ({
+          ...current,
+          __smart_review: persistedSmartReview,
+        }));
+
+        console.log(`[SMART-REVIEW] Persisted ${smartReviewWarnings.length} warnings to case_facts`);
+      } catch (persistErr) {
+        console.error('[SMART-REVIEW] Failed to persist results:', persistErr);
+        // Non-fatal - warnings will still be returned in this response
       }
     }
 

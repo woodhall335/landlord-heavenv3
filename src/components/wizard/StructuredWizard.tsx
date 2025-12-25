@@ -12,6 +12,7 @@ import { Button, Input, Card } from '@/components/ui';
 import type { ExtendedWizardQuestion, StepFlags, WizardValidationIssue } from '@/lib/wizard/types';
 import { GuidanceTips } from '@/components/wizard/GuidanceTips';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 import { formatGroundTitle, getGroundTypeBadgeClasses, type GroundMetadata } from '@/lib/grounds/format-ground-title';
 import { apiUrl } from '@/lib/api';
@@ -235,6 +236,37 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     required_evidence: string[];
     legal_basis: string;
   }> | null>(null);
+
+  // ====================================================================================
+  // SMART REVIEW STATE (for persisted warnings from evidence analysis)
+  // ====================================================================================
+  // Smart Review warnings from AI-extracted document analysis
+  // These warnings survive page refresh via __smart_review in case_facts
+  const [smartReviewWarnings, setSmartReviewWarnings] = useState<Array<{
+    code: string;
+    severity: 'info' | 'warning' | 'blocker';
+    title: string;
+    message: string;
+    fields: string[];
+    relatedUploads: string[];
+    suggestedUserAction: string;
+    confidence?: number;
+    comparison?: {
+      wizardValue: any;
+      extractedValue: any;
+      source?: string;
+    };
+  }>>([]);
+
+  // Smart Review run summary
+  const [smartReviewSummary, setSmartReviewSummary] = useState<{
+    documentsProcessed: number;
+    warningsTotal: number;
+    warningsBlocker: number;
+    warningsWarning: number;
+    warningsInfo: number;
+    ranAt: string | null;
+  } | null>(null);
 
   // ====================================================================================
   // GROUNDS SELECTOR STATE
@@ -726,6 +758,27 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           if (Object.keys(collectedFacts).length > 0) {
             hasUserSavedRef.current = true;
           }
+
+          // ============================================================================
+          // SMART REVIEW: Hydrate persisted warnings from case_facts.__smart_review
+          // ============================================================================
+          // Only for complete_pack/eviction_pack + England - Smart Review doesn't run for other products
+          if (
+            (product === 'complete_pack') &&
+            jurisdiction === 'england' &&
+            collectedFacts.__smart_review
+          ) {
+            const sr = collectedFacts.__smart_review;
+            setSmartReviewWarnings(sr.warnings || []);
+            setSmartReviewSummary({
+              documentsProcessed: sr.summary?.documentsProcessed ?? 0,
+              warningsTotal: sr.summary?.warningsTotal ?? 0,
+              warningsBlocker: sr.summary?.warningsBlocker ?? 0,
+              warningsWarning: sr.summary?.warningsWarning ?? 0,
+              warningsInfo: sr.summary?.warningsInfo ?? 0,
+              ranAt: sr.ranAt ?? null,
+            });
+          }
         }
       } catch (err) {
         console.error('Failed to fetch case facts:', err);
@@ -735,7 +788,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
     if (currentQuestion && caseId) {
       void fetchCaseFacts();
     }
-  }, [currentQuestion, caseId]);
+  }, [currentQuestion, caseId, product, jurisdiction]);
 
   useEffect(() => {
     if (!currentQuestion) return;
@@ -1529,6 +1582,26 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
         setStepFlags(data.step_flags as StepFlags);
       } else {
         setStepFlags(null);
+      }
+
+      // ====================================================================================
+      // SMART REVIEW: Update warnings from backend response (complete_pack only)
+      // ====================================================================================
+      // Smart Review runs after evidence uploads for complete_pack/eviction_pack + England
+      if (data.smart_review && product === 'complete_pack' && jurisdiction === 'england') {
+        const sr = data.smart_review;
+        setSmartReviewWarnings(sr.warnings || []);
+        if (sr.summary) {
+          setSmartReviewSummary({
+            documentsProcessed: sr.summary.documentsProcessed ?? 0,
+            warningsTotal: sr.summary.warningsTotal ?? 0,
+            warningsBlocker: sr.summary.warningsBlocker ?? 0,
+            warningsWarning: sr.summary.warningsWarning ?? 0,
+            warningsInfo: sr.summary.warningsInfo ?? 0,
+            ranAt: new Date().toISOString(),
+          });
+        }
+        console.log('[SMART-REVIEW-UI] Warnings received:', sr.warnings?.length ?? 0);
       }
 
       // ====================================================================================
@@ -3213,6 +3286,15 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               jurisdiction={guidanceJurisdiction}
               caseType={caseType}
             />
+
+            {/* Smart Review Panel - Evidence document analysis warnings (complete_pack + England only) */}
+            {product === 'complete_pack' && jurisdiction === 'england' && (
+              <SmartReviewPanel
+                warnings={smartReviewWarnings}
+                summary={smartReviewSummary}
+                defaultCollapsed={!currentQuestion?.id?.startsWith('evidence_')}
+              />
+            )}
 
             {/* Ask Heaven Suggestion (backend-driven) */}
             {askHeavenSuggestion && (

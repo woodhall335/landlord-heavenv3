@@ -296,12 +296,32 @@ export async function POST(request: Request) {
     const nextQuestion = getNextMQSQuestion(mqs, hydratedFacts);
     const isComplete = !nextQuestion;
 
+    // ------------------------------------------------
+    // 6. Include persisted Smart Review data for complete_pack/eviction_pack (England only)
+    // ------------------------------------------------
+    // Smart Review results survive refresh via __smart_review in case_facts
+    let smart_review = null;
+    if (
+      (normalizedProduct === 'complete_pack' || normalizedProduct === 'eviction_pack') &&
+      effectiveJurisdiction === 'england' &&
+      facts.__smart_review
+    ) {
+      smart_review = {
+        warnings: facts.__smart_review.warnings || [],
+        summary: facts.__smart_review.summary || null,
+        ranAt: facts.__smart_review.ranAt || null,
+        limitsApplied: facts.__smart_review.limitsApplied || null,
+      };
+    }
+
     return NextResponse.json({
       case_id: caseRecord.id,
       product,
       jurisdiction: effectiveJurisdiction,
       next_question: nextQuestion || null,
       is_complete: isComplete,
+      // Include persisted Smart Review data if available
+      smart_review,
     });
   } catch (error: any) {
     console.error('Start wizard error:', error);
