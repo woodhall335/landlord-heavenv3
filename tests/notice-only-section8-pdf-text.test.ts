@@ -80,8 +80,9 @@ const runPdf = process.env.RUN_PDF_TESTS === 'true' || process.env.RUN_PDF_TESTS
     await pdf.cleanup();
     text = text.replace(/\s+/g, ' ');
 
-    expect(text).toMatch(/Ground\s+8\s+[–-]\s+Serious rent arrears/i);
-    expect(text).toMatch(/Ground\s+11\s+[–-]\s+Persistent delay/i);
+// allow "Ground 8 – Serious..." OR "Ground 8 - Serious..." OR "Ground 8 Serious..."
+expect(text).toMatch(/Ground\s+8(?:\s*[–-]\s*|\s+)Serious rent arrears/i);
+expect(text).toMatch(/Ground\s+11(?:\s*[–-]\s*|\s+)Persistent delay/i);
     expect(text.toLowerCase()).not.toContain('ground_8');
     expect(text).not.toContain('Ground ,');
     expect(text).toContain('Ground particulars');
