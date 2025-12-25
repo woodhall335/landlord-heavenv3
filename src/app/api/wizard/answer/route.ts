@@ -33,7 +33,9 @@ import {
   runSmartReview,
   isSmartReviewEnabled,
   mapLegacyUploadsToBundle,
+  isEvidenceCategory,
   type SmartReviewWarning,
+  type EvidenceCategory,
 } from '@/lib/evidence';
 
 export const dynamic = 'force-dynamic';
@@ -1409,8 +1411,9 @@ export async function POST(request: Request) {
     // Returns warnings for mismatches but NEVER blocks generation in v1.
     let smartReviewWarnings: SmartReviewWarning[] = [];
 
+    // Note: eviction_pack is a legacy alias that might appear in persisted data
     if (
-      (product === 'complete_pack' || product === 'eviction_pack') &&
+      (product === 'complete_pack' || (product as string) === 'eviction_pack') &&
       canonicalJurisdiction === 'england' &&
       isSmartReviewEnabled() &&
       question_id.startsWith('evidence_') // Only run after evidence uploads
@@ -1426,26 +1429,26 @@ export async function POST(request: Request) {
         );
 
         // Add categorized uploads to bundle
-        const categoryUploads = [
-          { key: 'evidence.tenancy_agreement_uploads', category: 'tenancy_agreement' },
-          { key: 'evidence.bank_statements_uploads', category: 'bank_statements' },
-          { key: 'evidence.deposit_protection_uploads', category: 'deposit_protection_certificate' },
-          { key: 'evidence.prescribed_info_uploads', category: 'prescribed_information_proof' },
-          { key: 'evidence.how_to_rent_uploads', category: 'how_to_rent_proof' },
-          { key: 'evidence.epc_uploads', category: 'epc' },
-          { key: 'evidence.gas_safety_uploads', category: 'gas_safety_certificate' },
-          { key: 'evidence.notice_service_uploads', category: 'notice_served_proof' },
-          { key: 'evidence.correspondence_uploads', category: 'correspondence' },
-          { key: 'evidence.other_uploads', category: 'other' },
+        const categoryUploads: Array<{ key: string; category: EvidenceCategory }> = [
+          { key: 'evidence.tenancy_agreement_uploads', category: 'tenancy_agreement' as EvidenceCategory },
+          { key: 'evidence.bank_statements_uploads', category: 'bank_statements' as EvidenceCategory },
+          { key: 'evidence.deposit_protection_uploads', category: 'deposit_protection_certificate' as EvidenceCategory },
+          { key: 'evidence.prescribed_info_uploads', category: 'prescribed_information_proof' as EvidenceCategory },
+          { key: 'evidence.how_to_rent_uploads', category: 'how_to_rent_proof' as EvidenceCategory },
+          { key: 'evidence.epc_uploads', category: 'epc' as EvidenceCategory },
+          { key: 'evidence.gas_safety_uploads', category: 'gas_safety_certificate' as EvidenceCategory },
+          { key: 'evidence.notice_service_uploads', category: 'notice_served_proof' as EvidenceCategory },
+          { key: 'evidence.correspondence_uploads', category: 'correspondence' as EvidenceCategory },
+          { key: 'evidence.other_uploads', category: 'other' as EvidenceCategory },
         ];
 
         for (const { key, category } of categoryUploads) {
           const uploads = newFacts[key];
           if (Array.isArray(uploads) && uploads.length > 0) {
-            if (!evidenceBundle.byCategory[category as any]) {
-              evidenceBundle.byCategory[category as any] = [];
+            if (!evidenceBundle.byCategory[category]) {
+              evidenceBundle.byCategory[category] = [];
             }
-            evidenceBundle.byCategory[category as any]!.push(
+            evidenceBundle.byCategory[category]!.push(
               ...uploads.map((u: any) => ({
                 id: u.id || crypto.randomUUID(),
                 filename: u.filename || u.name || 'unknown',
@@ -1453,7 +1456,7 @@ export async function POST(request: Request) {
                 sizeBytes: u.sizeBytes || u.size || 0,
                 uploadedAt: u.uploadedAt || new Date().toISOString(),
                 storageKey: u.storageKey || u.path || '',
-                category: category as any,
+                category: category,
                 sha256: u.sha256,
               }))
             );

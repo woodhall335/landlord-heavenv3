@@ -724,6 +724,7 @@ describe('MQS Evidence Fields', () => {
       (q: any) => q.id === 'evidence_uploads'
     );
 
-    expect(legacyField.deprecated).toBe(true);
+    expect(legacyField).toBeDefined();
+    expect(legacyField!.deprecated).toBe(true);
   });
 });

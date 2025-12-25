@@ -301,8 +301,9 @@ export async function POST(request: Request) {
     // ------------------------------------------------
     // Smart Review results survive refresh via __smart_review in case_facts
     let smart_review = null;
+    // Note: eviction_pack is a legacy alias that might appear in persisted data
     if (
-      (normalizedProduct === 'complete_pack' || normalizedProduct === 'eviction_pack') &&
+      (normalizedProduct === 'complete_pack' || (normalizedProduct as string) === 'eviction_pack') &&
       effectiveJurisdiction === 'england' &&
       facts.__smart_review
     ) {
