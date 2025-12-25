@@ -261,6 +261,12 @@ export interface CaseData {
   how_to_rent_provided?: boolean;
   subsequent_tenancy?: boolean;
 
+  // Evidence uploads - used for N5B attachment checkboxes
+  // Only tick attachment boxes if user has actually uploaded/indicated they have the document
+  tenancy_agreement_uploaded?: boolean;
+  notice_copy_available?: boolean;
+  service_proof_available?: boolean;
+
   // Solicitor
   solicitor_firm?: string;
   solicitor_address?: string;
@@ -835,18 +841,41 @@ export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
     setCheckbox(form, N5B_CHECKBOXES.SOT_BELIEVES, true, ctx);
   }
 
-  // === ATTACHMENTS (only check if we have the data indicating they're provided) ===
-  setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_TENANCY, true, ctx); // Always required
-  setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_NOTICE, true, ctx);  // Always required
-  setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_SERVICE_PROOF, true, ctx); // Always required
+  // === ATTACHMENTS ===
+  // Only tick attachment boxes if the user has confirmed/uploaded the document.
+  // This prevents false claims on court forms - if user hasn't confirmed they have
+  // the document, the box is left unchecked for them to complete manually.
 
+  // Tenancy agreement (marked A) - required attachment
+  // Only tick if user has uploaded/confirmed they have a copy
+  if (data.tenancy_agreement_uploaded === true) {
+    setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_TENANCY, true, ctx);
+  }
+
+  // Notice copy (marked B) - required attachment
+  // Only tick if user has confirmed notice copy is available
+  if (data.notice_copy_available === true) {
+    setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_NOTICE, true, ctx);
+  }
+
+  // Proof of service (marked B1) - required attachment
+  // Only tick if user has confirmed proof of service is available
+  if (data.service_proof_available === true) {
+    setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_SERVICE_PROOF, true, ctx);
+  }
+
+  // Deposit certificate (marked E) - only if deposit was paid
   if (depositPaid) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_DEPOSIT_CERT, true, ctx);
   }
-  if (data.epc_provided) {
+
+  // EPC (marked F) - only if user confirmed EPC was provided
+  if (data.epc_provided === true) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_EPC, true, ctx);
   }
-  if (data.gas_safety_provided) {
+
+  // Gas safety records (marked G) - only if user confirmed gas cert was provided
+  if (data.gas_safety_provided === true) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_GAS, true, ctx);
   }
 

@@ -197,6 +197,13 @@ function buildCaseData(
     section_21_notice_date: wizardFacts.section_21_notice_date || facts.notice.notice_date || undefined,
     notice_served_date:
       wizardFacts.notice_served_date || wizardFacts.notice_date || facts.notice.notice_date || undefined,
+    // ✅ FIX: Map notice_service_method for N5B form field 10a ("How was the notice served")
+    notice_service_method:
+      wizardFacts.notice_service_method ||
+      wizardFacts.service_method ||
+      wizardFacts['notice_service.service_method'] ||
+      facts.notice.service_method ||
+      undefined,
     particulars_of_claim: facts.court.particulars_of_claim || undefined,
     total_arrears:
       wizardFacts.total_arrears ||
@@ -234,6 +241,13 @@ function buildCaseData(
     signatory_name: evictionCase.landlord_full_name,
     signature_date: new Date().toISOString().split('T')[0],
     notice_expiry_date: wizardFacts.notice_expiry_date || facts.notice.expiry_date || undefined,
+    // ✅ FIX: Map evidence upload flags for N5B attachment checkboxes
+    // Only tick attachment boxes on N5B if user has actually uploaded/confirmed the document
+    tenancy_agreement_uploaded: facts.evidence.tenancy_agreement_uploaded || undefined,
+    notice_copy_available: wizardFacts.notice_copy_available || wizardFacts.notice_uploaded || undefined,
+    service_proof_available: wizardFacts.service_proof_available || wizardFacts.proof_of_service_uploaded || undefined,
+    epc_provided: facts.compliance.epc_provided || wizardFacts.epc_provided || undefined,
+    gas_safety_provided: facts.compliance.gas_safety_cert_provided || wizardFacts.gas_certificate_provided || undefined,
   } as CaseData;
 }
 

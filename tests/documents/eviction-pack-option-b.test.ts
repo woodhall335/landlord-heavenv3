@@ -39,11 +39,19 @@ function buildEnglandWalesFacts() {
     section8_grounds: ['Ground 8'], // Ground 8 only (mandatory, 14 days notice)
     arrears_breakdown: 'Total arrears £2400',
     total_arrears: 2400,
+    arrears_total: 2400, // Required by gating validation
+    arrears_amount: 2400, // Required by complete pack validation
     deposit_amount: 1200,
     deposit_protected: true,
     deposit_protection_date: '2024-01-15',
     deposit_scheme_name: 'TDS',
     rent_arrears_amount: 2400,
+    // Ground particulars required for Section 8
+    ground_particulars: {
+      ground_8: {
+        summary: 'Tenant has rent arrears of £2400 over 2 months',
+      },
+    },
     case_facts: {
       eviction: {
         notice_served_date: '2024-06-01',
