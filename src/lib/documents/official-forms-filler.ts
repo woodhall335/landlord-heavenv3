@@ -197,19 +197,25 @@ function splitDate(dateString: string | undefined): { day: string; month: string
 export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   console.log('📄 Filling N5 form (Claim for possession)...');
 
+  // Validate required court details
+  if (!data.court_name) {
+    throw new Error('N5 form requires court_name to be specified. Please provide court details before generating court forms.');
+  }
+
   const pdfDoc = await loadOfficialForm('n5-eng.pdf');
   const form = pdfDoc.getForm();
 
-  // Court details
-  fillTextField(form, 'In the court', data.court_name || 'County Court');
+  // Court details - field name is "In the court" in the N5 PDF
+  fillTextField(form, 'In the court', data.court_name);
   fillTextField(form, 'Fee account no', data.claimant_reference);
 
   // Claimant and defendant details (combined fields)
+  // NOTE: The N5 PDF uses curly apostrophes (') not straight apostrophes (')
   const claimantDetails = `${data.landlord_full_name}\n${data.landlord_address}`;
   const defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
 
-  fillTextField(form, "claimant's details", claimantDetails);
-  fillTextField(form, "defendant's details", defendantDetails);
+  fillTextField(form, "claimant’s details", claimantDetails);
+  fillTextField(form, "defendant’s details", defendantDetails);
 
   // Property address
   fillTextField(form, 'possession of', data.property_address);
@@ -367,13 +373,24 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
 export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
   console.log('📄 Filling N5B form (Accelerated possession - Section 21)...');
 
+  // Validate required court details
+  if (!data.court_name) {
+    throw new Error('N5B form requires court_name to be specified. Please provide court details before generating court forms.');
+  }
+
   const pdfDoc = await loadOfficialForm('n5b-eng.pdf');
   const form = pdfDoc.getForm();
+
+  // Build court name and address string for the single combined field
+  // The N5B has a single field "Name and address of the court" that expects both
+  const courtNameAndAddress = data.court_address
+    ? `${data.court_name}\n${data.court_address}`
+    : data.court_name;
 
   // === HEADER SECTION ===
   fillTextField(form, 'Enter the full names of the Claimants', data.landlord_full_name + (data.landlord_2_name ? ', ' + data.landlord_2_name : ''));
   fillTextField(form, 'Enter the full names of the Defendants', data.tenant_full_name + (data.tenant_2_name ? ', ' + data.tenant_2_name : ''));
-  fillTextField(form, 'Name and address of the court', data.court_name);
+  fillTextField(form, 'Name and address of the court', courtNameAndAddress);
   fillTextField(form, 'The Claimant is claiming possession of', data.property_address);
 
   // Fees
@@ -582,11 +599,16 @@ export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
 export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   console.log('📄 Filling N119 form (Particulars of claim)...');
 
+  // Validate required court details
+  if (!data.court_name) {
+    throw new Error('N119 form requires court_name to be specified. Please provide court details before generating court forms.');
+  }
+
   const pdfDoc = await loadOfficialForm('n119-eng.pdf');
   const form = pdfDoc.getForm();
 
-  // Header
-  fillTextField(form, 'name of court', data.court_name || 'County Court');
+  // Header - field name is "name of court" in the N119 PDF
+  fillTextField(form, 'name of court', data.court_name);
   fillTextField(form, 'name of claimant', data.landlord_full_name);
   fillTextField(form, 'name of defendant', data.tenant_full_name);
 
