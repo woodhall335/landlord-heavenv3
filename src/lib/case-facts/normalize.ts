@@ -1143,6 +1143,14 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'preferred_court',
     'sheriffdom',
   ]);
+  base.court.court_address ??= getFirstValue(wizard, [
+    'case_facts.court.court_address',
+    'court_address',
+  ]);
+  base.court.court_postcode ??= getFirstValue(wizard, [
+    'case_facts.court.court_postcode',
+    'court_postcode',
+  ]);
   base.court.particulars_of_claim ??= getFirstValue(wizard, [
     'case_facts.court.particulars_of_claim',
     'particulars_of_claim',

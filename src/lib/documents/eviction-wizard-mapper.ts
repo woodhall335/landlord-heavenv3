@@ -155,6 +155,7 @@ function buildEvictionCaseFromFacts(
     deposit_protected: facts.tenancy.deposit_protected || undefined,
     deposit_protection_date: facts.tenancy.deposit_protection_date || undefined,
     court_name: facts.court.court_name || undefined,
+    court_address: facts.court.court_address || undefined,
   };
 
   return { evictionCase, caseType };
@@ -228,7 +229,8 @@ function buildCaseData(
     service_postcode: evictionCase.service_postcode,
     service_phone: evictionCase.service_phone,
     service_email: evictionCase.service_email,
-    court_name: evictionCase.court_name || wizardFacts.court_name || 'County Court',
+    court_name: evictionCase.court_name || wizardFacts.court_name,
+    court_address: evictionCase.court_address || wizardFacts.court_address,
     signatory_name: evictionCase.landlord_full_name,
     signature_date: new Date().toISOString().split('T')[0],
     notice_expiry_date: wizardFacts.notice_expiry_date || facts.notice.expiry_date || undefined,
