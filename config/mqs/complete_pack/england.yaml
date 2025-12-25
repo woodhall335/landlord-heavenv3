@@ -363,6 +363,151 @@ questions:
       - landlord_address_town
       - landlord_address_postcode
 
+  # ============================================================
+  # EVIDENCE UPLOADS - CATEGORIZED (Smart Review v1)
+  # ============================================================
+  # These categorized upload fields enable Smart Review AI extraction
+  # and fact comparison. The legacy evidence_uploads field is retained
+  # for backward compatibility - old uploads map to evidence.other_uploads.
+
+  - id: evidence_section_header
+    section: Evidence
+    question: "Supporting Documents"
+    inputType: info
+    helperText: "Upload documents to support your case. Smart Review will verify details against your answers."
+
+  - id: evidence_tenancy_agreement
+    section: Evidence
+    question: "Tenancy Agreement"
+    inputType: upload
+    helperText: "Upload the signed tenancy agreement or AST. Used to verify tenant/landlord names, property address, rent amount, and tenancy start date."
+    validation:
+      required: false
+    maps_to:
+      - evidence.tenancy_agreement_uploads
+
+  - id: evidence_bank_statements
+    section: Evidence
+    question: "Bank Statements / Rent Records"
+    inputType: upload
+    helperText: "Upload bank statements or rent payment records showing rent payments received."
+    validation:
+      required: false
+    routes:
+      - section_8
+    dependsOn:
+      questionId: eviction_route
+      value: "section_8"
+    maps_to:
+      - evidence.bank_statements_uploads
+
+  - id: evidence_deposit_protection
+    section: Evidence
+    question: "Deposit Protection Certificate"
+    inputType: upload
+    helperText: "Upload the deposit protection certificate from DPS, MyDeposits, or TDS."
+    validation:
+      required: false
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    maps_to:
+      - evidence.deposit_protection_uploads
+
+  - id: evidence_prescribed_info
+    section: Evidence
+    question: "Prescribed Information Proof"
+    inputType: upload
+    helperText: "Upload proof that prescribed deposit information was served to the tenant within 30 days."
+    validation:
+      required: false
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    maps_to:
+      - evidence.prescribed_info_uploads
+
+  - id: evidence_how_to_rent
+    section: Evidence
+    question: "How to Rent Guide Proof"
+    inputType: upload
+    helperText: "Upload proof the How to Rent guide was provided (email confirmation, signed acknowledgment)."
+    validation:
+      required: false
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    maps_to:
+      - evidence.how_to_rent_uploads
+
+  - id: evidence_epc
+    section: Evidence
+    question: "Energy Performance Certificate (EPC)"
+    inputType: upload
+    helperText: "Upload the current Energy Performance Certificate for the property."
+    validation:
+      required: false
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    maps_to:
+      - evidence.epc_uploads
+
+  - id: evidence_gas_safety
+    section: Evidence
+    question: "Gas Safety Certificate"
+    inputType: upload
+    helperText: "Upload the current Gas Safety Certificate (CP12) for the property."
+    validation:
+      required: false
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    maps_to:
+      - evidence.gas_safety_uploads
+
+  - id: evidence_notice_service
+    section: Evidence
+    question: "Notice Service Proof"
+    inputType: upload
+    helperText: "Upload proof of notice service (photo of notice, proof of postage, email confirmation)."
+    validation:
+      required: false
+    maps_to:
+      - evidence.notice_service_uploads
+
+  - id: evidence_correspondence
+    section: Evidence
+    question: "Tenant Correspondence"
+    inputType: upload
+    helperText: "Upload relevant correspondence with the tenant(s)."
+    validation:
+      required: false
+    maps_to:
+      - evidence.correspondence_uploads
+
+  - id: evidence_other
+    section: Evidence
+    question: "Other Supporting Documents"
+    inputType: upload
+    helperText: "Upload any other supporting documents not covered above."
+    validation:
+      required: false
+    maps_to:
+      - evidence.other_uploads
+
+  # Legacy field - retained for backward compatibility
+  # Existing evidence_uploads values map to evidence.other_uploads
   - id: evidence_uploads
     section: Evidence
     question: "Upload supporting documents"
@@ -370,5 +515,8 @@ questions:
     helperText: "Tenancy agreement, notice served, deposit certificate, rent statements, etc."
     validation:
       required: false
+    deprecated: true
+    deprecated_message: "Use categorized upload fields above for Smart Review support"
     maps_to:
       - evidence.pack_documents_uploaded
+      - evidence.other_uploads

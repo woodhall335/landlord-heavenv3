@@ -28,6 +28,12 @@ import { deriveCanonicalJurisdiction, normalizeJurisdiction } from '@/lib/types/
 import { validateFlow } from '@/lib/validation/validateFlow';
 import { filterWizardIssues } from '@/lib/validation/wizardIssueFilter';
 import type { Jurisdiction, Product } from '@/lib/jurisdictions/capabilities/matrix';
+import {
+  runSmartReview,
+  isSmartReviewEnabled,
+  mapLegacyUploadsToBundle,
+  type SmartReviewWarning,
+} from '@/lib/evidence';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -1392,6 +1398,99 @@ export async function POST(request: Request) {
       }
     }
 
+    // ============================================================================
+    // 6.5. SMART REVIEW: AI-assisted evidence extraction and fact comparison
+    // ============================================================================
+    // Runs for complete_pack/eviction_pack when:
+    // - Smart Review is enabled (ENABLE_SMART_REVIEW=true)
+    // - User has uploaded at least 1 document in an evidence category
+    // - Throttle limit not exceeded (max once per 30s per case)
+    // Returns warnings for mismatches but NEVER blocks generation in v1.
+    let smartReviewWarnings: SmartReviewWarning[] = [];
+
+    if (
+      (product === 'complete_pack' || product === 'eviction_pack') &&
+      canonicalJurisdiction === 'england' &&
+      isSmartReviewEnabled() &&
+      question_id.startsWith('evidence_') // Only run after evidence uploads
+    ) {
+      try {
+        console.log('[SMART-REVIEW] Running Smart Review after evidence upload');
+
+        // Build evidence bundle from wizard facts
+        const evidenceBundle = mapLegacyUploadsToBundle(
+          newFacts['evidence.pack_documents_uploaded'] ||
+          newFacts['evidence.other_uploads'] ||
+          []
+        );
+
+        // Add categorized uploads to bundle
+        const categoryUploads = [
+          { key: 'evidence.tenancy_agreement_uploads', category: 'tenancy_agreement' },
+          { key: 'evidence.bank_statements_uploads', category: 'bank_statements' },
+          { key: 'evidence.deposit_protection_uploads', category: 'deposit_protection_certificate' },
+          { key: 'evidence.prescribed_info_uploads', category: 'prescribed_information_proof' },
+          { key: 'evidence.how_to_rent_uploads', category: 'how_to_rent_proof' },
+          { key: 'evidence.epc_uploads', category: 'epc' },
+          { key: 'evidence.gas_safety_uploads', category: 'gas_safety_certificate' },
+          { key: 'evidence.notice_service_uploads', category: 'notice_served_proof' },
+          { key: 'evidence.correspondence_uploads', category: 'correspondence' },
+          { key: 'evidence.other_uploads', category: 'other' },
+        ];
+
+        for (const { key, category } of categoryUploads) {
+          const uploads = newFacts[key];
+          if (Array.isArray(uploads) && uploads.length > 0) {
+            if (!evidenceBundle.byCategory[category as any]) {
+              evidenceBundle.byCategory[category as any] = [];
+            }
+            evidenceBundle.byCategory[category as any]!.push(
+              ...uploads.map((u: any) => ({
+                id: u.id || crypto.randomUUID(),
+                filename: u.filename || u.name || 'unknown',
+                mimeType: u.mimeType || u.type || 'application/octet-stream',
+                sizeBytes: u.sizeBytes || u.size || 0,
+                uploadedAt: u.uploadedAt || new Date().toISOString(),
+                storageKey: u.storageKey || u.path || '',
+                category: category as any,
+                sha256: u.sha256,
+              }))
+            );
+          }
+        }
+
+        // Run Smart Review pipeline
+        const smartReviewResult = await runSmartReview({
+          caseId: case_id,
+          evidenceBundle,
+          wizardFacts: newFacts,
+          product,
+          jurisdiction: canonicalJurisdiction,
+        });
+
+        if (smartReviewResult.success && smartReviewResult.warnings.length > 0) {
+          smartReviewWarnings = smartReviewResult.warnings;
+          console.log(`[SMART-REVIEW] Found ${smartReviewWarnings.length} warnings:`, {
+            blockers: smartReviewResult.summary.warningsBlocker,
+            warnings: smartReviewResult.summary.warningsWarning,
+            info: smartReviewResult.summary.warningsInfo,
+          });
+
+          // Store Smart Review warnings in response data for UI
+          responseData.smart_review = {
+            warnings: smartReviewWarnings,
+            summary: smartReviewResult.summary,
+            cost_usd: smartReviewResult.totalCostUsd,
+          };
+        } else if (smartReviewResult.skipped) {
+          console.log(`[SMART-REVIEW] Skipped: ${smartReviewResult.skipped.reason}`);
+        }
+      } catch (smartReviewErr) {
+        console.error('[SMART-REVIEW] Failed:', smartReviewErr);
+        // Non-fatal - continue without Smart Review
+      }
+    }
+
     // ---------------------------------------
     // 7. Determine next question + progress
     // ---------------------------------------
@@ -1455,6 +1554,11 @@ export async function POST(request: Request) {
       ground_recommendations: responseData.ground_recommendations ?? null,
       calculated_date: responseData.calculated_date ?? null,
       compliance_warnings: complianceWarnings,
+      // ============================================================================
+      // SMART REVIEW: AI-extracted warnings from evidence documents
+      // ============================================================================
+      smart_review: responseData.smart_review ?? null,
+      smart_review_warnings: smartReviewWarnings,
       // ============================================================================
       // CANONICAL VALIDATION OUTPUT: Always returned for inline per-step warnings
       // ============================================================================
