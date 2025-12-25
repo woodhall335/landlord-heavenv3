@@ -11,6 +11,12 @@ import type { ProductType } from './mqs-loader';
 import { resolveFactValue, validateJurisdictionCompliance, type ValidationStage } from '@/lib/jurisdictions/validators';
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import {
+  validateGround8Eligibility,
+  hasAuthoritativeArrearsData,
+  getAuthoritativeArrears,
+} from '@/lib/arrears-engine';
+import type { ArrearsItem } from '@/lib/case-facts/schema';
 
 // ============================================================================
 // TYPES
@@ -52,34 +58,6 @@ export interface WizardGateInput {
 // ============================================================================
 // HELPERS
 // ============================================================================
-
-/**
- * Calculate arrears in months from arrears amount and rent
- */
-function calculateArrearsInMonths(
-  arrearsAmount: number,
-  rentAmount: number,
-  rentFrequency: string
-): number {
-  if (rentAmount <= 0) return 0;
-
-  switch (rentFrequency?.toLowerCase()) {
-    case 'weekly':
-      // 4.33 weeks per month (365.25 days / 12 months / 7 days)
-      return (arrearsAmount / rentAmount) / 4.33;
-    case 'fortnightly':
-      return (arrearsAmount / rentAmount) / 2.165;
-    case 'monthly':
-      return arrearsAmount / rentAmount;
-    case 'quarterly':
-      return (arrearsAmount / rentAmount) * 3;
-    case 'yearly':
-      return (arrearsAmount / rentAmount) * 12;
-    default:
-      // Assume monthly if unknown
-      return arrearsAmount / rentAmount;
-  }
-}
 
 /**
  * Extract ground codes from section8_grounds array
@@ -228,16 +206,20 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
   }
 
   if (groundCodes.indexOf(8) !== -1) {
-    // User has selected Ground 8 - check threshold
+    // User has selected Ground 8 - check threshold using canonical arrears engine
     const rentAmount = resolveFactValue(facts, 'rent_amount') ||
                       resolveFactValue(facts, 'tenancy.rent_amount') || 0;
     const rentFrequency = resolveFactValue(facts, 'rent_frequency') ||
                          resolveFactValue(facts, 'tenancy.rent_frequency') || 'monthly';
 
-    // Check multiple possible arrears fields
-    const arrearsAmount = resolveFactValue(facts, 'arrears_amount') ||
-                         resolveFactValue(facts, 'arrears_total') ||
-                         resolveFactValue(facts, 'issues.rent_arrears.total_arrears') || 0;
+    // Get arrears_items from canonical locations
+    const arrearsItems: ArrearsItem[] = resolveFactValue(facts, 'issues.rent_arrears.arrears_items') ||
+                                         resolveFactValue(facts, 'arrears_items') || [];
+
+    // Legacy flat total for backwards compatibility
+    const legacyArrearsTotal = resolveFactValue(facts, 'arrears_amount') ||
+                               resolveFactValue(facts, 'arrears_total') ||
+                               resolveFactValue(facts, 'issues.rent_arrears.total_arrears') || 0;
 
     // Validate we have the data to evaluate threshold
     if (rentAmount <= 0) {
@@ -258,32 +240,51 @@ function evaluateEvictionGating(input: WizardGateInput): WizardGateResult {
       });
     }
 
-    if (arrearsAmount <= 0) {
+    // Check if we have authoritative arrears data (schedule) or only legacy flat total
+    const hasScheduleData = hasAuthoritativeArrearsData(arrearsItems, legacyArrearsTotal);
+
+    if (!hasScheduleData && legacyArrearsTotal <= 0) {
       blocking.push({
         code: 'GROUND_8_MISSING_ARREARS',
-        message: 'Ground 8 requires arrears amount to be specified',
-        fields: ['arrears_amount', 'arrears_total'],
-        user_fix_hint: 'Please provide the total arrears amount owed',
+        message: 'Ground 8 requires arrears data. Please complete the arrears schedule.',
+        fields: ['arrears_items', 'arrears_amount', 'arrears_total'],
+        user_fix_hint: 'Complete the arrears schedule to specify rent due and paid for each period',
       });
     }
 
-    // If we have all data, check the threshold
-    if (rentAmount > 0 && rentFrequency && arrearsAmount > 0) {
-      const arrearsInMonths = calculateArrearsInMonths(arrearsAmount, rentAmount, rentFrequency);
+    // If we have data, validate Ground 8 using canonical engine
+    if (rentAmount > 0 && rentFrequency && (arrearsItems.length > 0 || legacyArrearsTotal > 0)) {
+      const ground8Result = validateGround8Eligibility({
+        arrears_items: arrearsItems,
+        rent_amount: rentAmount,
+        rent_frequency: rentFrequency,
+        jurisdiction: canonicalJurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland',
+        legacy_total_arrears: legacyArrearsTotal,
+      });
 
-      if (arrearsInMonths < 2) {
+      if (!ground8Result.is_eligible) {
         blocking.push({
           code: 'GROUND_8_THRESHOLD_NOT_MET',
-          message: `Ground 8 requires at least 2 months' rent in arrears. Current arrears: ${arrearsInMonths.toFixed(2)} months.`,
-          fields: ['arrears_amount', 'section8_grounds'],
+          message: ground8Result.explanation,
+          fields: ['arrears_items', 'section8_grounds'],
           legal_basis: 'Housing Act 1988, Schedule 2, Ground 8: "at least two months\' rent is unpaid" at both notice date and hearing date',
           user_fix_hint: 'Remove Ground 8 from your selection, or use discretionary grounds (Ground 10, 11) instead. Ground 8 can only be used when arrears are 2+ months.',
         });
-      } else if (arrearsInMonths < 3) {
+      } else if (ground8Result.arrears_in_months < 3) {
         warnings.push({
           code: 'GROUND_8_BORDERLINE',
-          message: `Ground 8 arrears (${arrearsInMonths.toFixed(2)} months) are close to the threshold. Ensure arrears still meet 2+ months at both notice service AND hearing date.`,
-          fields: ['arrears_amount'],
+          message: `Ground 8 arrears (${ground8Result.arrears_in_months.toFixed(2)} months) are close to the threshold. Ensure arrears still meet 2+ months at both notice service AND hearing date.`,
+          fields: ['arrears_items'],
+        });
+      }
+
+      // Warn if using legacy data (no schedule)
+      if (!ground8Result.is_authoritative && ground8Result.legacy_warning) {
+        warnings.push({
+          code: 'GROUND_8_LEGACY_DATA_WARNING',
+          message: ground8Result.legacy_warning,
+          fields: ['arrears_items'],
+          user_fix_hint: 'Complete the arrears schedule for stronger court evidence.',
         });
       }
     }

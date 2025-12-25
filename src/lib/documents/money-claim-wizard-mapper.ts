@@ -1,19 +1,17 @@
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import type { MoneyClaimCase } from './money-claim-pack-generator';
 import type { ScotlandMoneyClaimCase } from './scotland-money-claim-pack-generator';
+import { mapArrearsItemsToEntries, getArrearsScheduleFromFacts } from './arrears-schedule-mapper';
 
 function buildAddress(...parts: Array<string | null>): string {
   return parts.filter(Boolean).join(', ');
 }
 
+/**
+ * @deprecated Use mapArrearsItemsToEntries from arrears-schedule-mapper instead
+ */
 function formatArrearsItems(items: CaseFacts['issues']['rent_arrears']['arrears_items']) {
-  return (items || []).map((item) => ({
-    period: `${item.period_start} to ${item.period_end}`,
-    due_date: item.period_end,
-    amount_due: item.rent_due,
-    amount_paid: item.rent_paid,
-    arrears: (item.rent_due || 0) - (item.rent_paid || 0),
-  }));
+  return mapArrearsItemsToEntries(items || []);
 }
 
 function normaliseFrequency(freq: CaseFacts['tenancy']['rent_frequency']): MoneyClaimCase['rent_frequency'] {

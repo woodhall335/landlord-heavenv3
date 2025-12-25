@@ -4,6 +4,8 @@ import type { GroundClaim, EvictionCase } from './eviction-pack-generator';
 import type { CaseData } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
 import { GROUND_DEFINITIONS } from './section8-generator';
+import { generateArrearsParticulars } from './arrears-schedule-mapper';
+import { getAuthoritativeArrears } from '@/lib/arrears-engine';
 
 function buildAddress(...parts: Array<string | null | undefined>): string {
   return parts.filter(Boolean).join('\n');
@@ -39,7 +41,7 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
   return selections.map((selection) => {
     const { code, codeNum, title } = parseGround(selection);
 
-    // ✅ FIX: Look up ground definition to get legal_basis and mandatory status
+    // Look up ground definition to get legal_basis and mandatory status
     const groundDef = GROUND_DEFINITIONS[codeNum];
     const legal_basis = groundDef?.legal_basis || 'Housing Act 1988, Schedule 2';
     const mandatory = groundDef?.mandatory || false;
@@ -47,12 +49,22 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
     let particulars = '';
 
     if (['Ground 8', 'Ground 10', 'Ground 11'].includes(code)) {
-      particulars =
-        (facts.issues.section8_grounds.arrears_breakdown as string) ||
-        (facts.issues.rent_arrears.total_arrears
-          ? `Rent arrears outstanding: £${facts.issues.rent_arrears.total_arrears}`
-          : '') ||
-        '';
+      // Use canonical arrears mapper for arrears grounds particulars
+      // This ensures particulars are generated from authoritative arrears_items
+      if (facts.issues.section8_grounds.arrears_breakdown) {
+        // If user has manually entered arrears breakdown, use that
+        particulars = facts.issues.section8_grounds.arrears_breakdown as string;
+      } else {
+        // Otherwise, generate from canonical arrears data
+        const arrearsParticulars = generateArrearsParticulars({
+          arrears_items: facts.issues.rent_arrears.arrears_items,
+          total_arrears: facts.issues.rent_arrears.total_arrears,
+          rent_amount: facts.tenancy.rent_amount || 0,
+          rent_frequency: facts.tenancy.rent_frequency,
+          include_full_schedule: false, // Summary for notice, full schedule as separate PDF
+        });
+        particulars = arrearsParticulars.particulars;
+      }
     } else if (code === 'Ground 12') {
       particulars = facts.issues.section8_grounds.breach_details || '';
     } else if (code === 'Ground 13' || code === 'Ground 15') {
@@ -66,9 +78,9 @@ function mapSection8Grounds(facts: CaseFacts): GroundClaim[] {
     return {
       code,
       title: groundDef?.title || title,  // Use canonical title from definitions
-      legal_basis,  // ✅ FIX: Add legal_basis
+      legal_basis,
       particulars,
-      mandatory,  // ✅ FIX: Use correct mandatory status from definitions
+      mandatory,
     };
   });
 }

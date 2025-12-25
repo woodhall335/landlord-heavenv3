@@ -1,5 +1,10 @@
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
 import { evaluateWizardGate, type WizardGateResult } from '@/lib/wizard/gating';
+import {
+  validateGround8Eligibility,
+  hasAuthoritativeArrearsData,
+} from '@/lib/arrears-engine';
+import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 
 export interface NoticeValidationFailure {
   code: string;
@@ -174,61 +179,58 @@ export function validateCompletePackBeforeGeneration(params: {
   // ============================================================================
   // Ground 8 threshold enforcement for complete pack
   // Must be a hard blocker (not just warning) for court submission
+  // Uses canonical arrears engine for validation
   // ============================================================================
   if (selectedGroundCodes.includes(8)) {
-    // Check if Ground 8 threshold is met
+    // Check if Ground 8 threshold is met using canonical arrears engine
     const rentAmount = parseFloat(facts.rent_amount) || 0;
-    const rentFrequency = facts.rent_frequency || 'monthly';
-    const arrearsAmount = parseFloat(facts.arrears_amount) ||
-                          parseFloat(facts.arrears_total) ||
-                          parseFloat(facts.total_arrears) ||
-                          parseFloat(facts.rent_arrears_amount) || 0;
+    const rentFrequency = (facts.rent_frequency || 'monthly') as TenancyFacts['rent_frequency'];
 
-    if (rentAmount > 0 && arrearsAmount > 0) {
-      const arrearsInMonths = calculateArrearsInMonths(arrearsAmount, rentAmount, rentFrequency);
+    // Get arrears_items from canonical locations
+    const arrearsItems: ArrearsItem[] = facts.arrears_items ||
+                                         facts['issues.rent_arrears.arrears_items'] || [];
 
-      if (arrearsInMonths < 2) {
+    // Legacy flat total for backwards compatibility
+    const legacyArrearsTotal = parseFloat(facts.arrears_amount) ||
+                               parseFloat(facts.arrears_total) ||
+                               parseFloat(facts.total_arrears) ||
+                               parseFloat(facts.rent_arrears_amount) || 0;
+
+    if (rentAmount > 0 && (arrearsItems.length > 0 || legacyArrearsTotal > 0)) {
+      const ground8Result = validateGround8Eligibility({
+        arrears_items: arrearsItems,
+        rent_amount: rentAmount,
+        rent_frequency: rentFrequency,
+        jurisdiction: jurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland',
+        legacy_total_arrears: legacyArrearsTotal,
+      });
+
+      if (!ground8Result.is_eligible) {
         // Ensure Ground 8 threshold failure is a BLOCKER for complete pack
         const existingBlocker = blocking.find(b => b.code === 'GROUND_8_THRESHOLD_NOT_MET');
         if (!existingBlocker) {
           blocking.push({
             code: 'GROUND_8_THRESHOLD_NOT_MET',
-            user_message: `Ground 8 requires at least 2 months' rent in arrears. Current arrears: ${arrearsInMonths.toFixed(2)} months.`,
-            fields: ['arrears_amount', 'section8_grounds'],
+            user_message: ground8Result.explanation,
+            fields: ['arrears_items', 'section8_grounds'],
             user_fix_hint: 'Remove Ground 8 from your selection, or use discretionary grounds (Ground 10, 11) instead.',
           });
         }
+      }
+
+      // Warn if using legacy data without schedule
+      if (!ground8Result.is_authoritative && ground8Result.legacy_warning) {
+        warnings.push({
+          code: 'GROUND_8_LEGACY_DATA_WARNING',
+          user_message: ground8Result.legacy_warning,
+          fields: ['arrears_items'],
+          user_fix_hint: 'Complete the arrears schedule for stronger court evidence.',
+        });
       }
     }
   }
 
   return { blocking, warnings };
-}
-
-/**
- * Calculate arrears in months for Ground 8 threshold check
- */
-function calculateArrearsInMonths(
-  arrearsAmount: number,
-  rentAmount: number,
-  rentFrequency: string
-): number {
-  if (rentAmount <= 0) return 0;
-
-  switch (rentFrequency?.toLowerCase()) {
-    case 'weekly':
-      return (arrearsAmount / rentAmount) / 4.33;
-    case 'fortnightly':
-      return (arrearsAmount / rentAmount) / 2.165;
-    case 'monthly':
-      return arrearsAmount / rentAmount;
-    case 'quarterly':
-      return (arrearsAmount / rentAmount) * 3;
-    case 'yearly':
-      return (arrearsAmount / rentAmount) * 12;
-    default:
-      return arrearsAmount / rentAmount;
-  }
 }
 
 /**

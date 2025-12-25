@@ -30,6 +30,13 @@ import { computeRiskAssessment } from '@/lib/case-intel/risk-assessment';
 import fs from 'fs/promises';
 import path from 'path';
 import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
+import {
+  getArrearsScheduleData,
+  shouldIncludeSchedulePdf,
+  getLegacyArrearsWarning,
+} from './arrears-schedule-mapper';
+import { hasArrearsGroundsSelected } from '@/lib/arrears-engine';
+import type { ArrearsItem, TenancyFacts } from '@/lib/case-facts/schema';
 
 // ============================================================================
 // TYPES
@@ -852,6 +859,61 @@ export async function generateCompleteEvictionPack(
   }
 
   documents.push(...regionDocs);
+
+  // 1.1 Generate Schedule of Arrears if arrears grounds selected
+  if (hasArrearsGroundsSelected(selectedGroundCodes)) {
+    try {
+      // Get arrears data from wizard facts using canonical engine
+      const arrearsItems: ArrearsItem[] = wizardFacts?.arrears_items ||
+                                           wizardFacts?.issues?.rent_arrears?.arrears_items || [];
+      const totalArrears = wizardFacts?.total_arrears ||
+                            wizardFacts?.arrears_total ||
+                            wizardFacts?.issues?.rent_arrears?.total_arrears || 0;
+      const rentAmount = wizardFacts?.rent_amount ||
+                          wizardFacts?.tenancy?.rent_amount || 0;
+      const rentFrequency = (wizardFacts?.rent_frequency ||
+                              wizardFacts?.tenancy?.rent_frequency || 'monthly') as TenancyFacts['rent_frequency'];
+
+      const arrearsData = getArrearsScheduleData({
+        arrears_items: arrearsItems,
+        total_arrears: totalArrears,
+        rent_amount: rentAmount,
+        rent_frequency: rentFrequency,
+        include_schedule: true,
+      });
+
+      if (arrearsData.include_schedule_pdf) {
+        const jurisdictionKey = jurisdiction === 'wales' ? 'wales' : 'england';
+        const scheduleDoc = await generateDocument({
+          templatePath: `uk/${jurisdictionKey}/templates/money_claims/schedule_of_arrears.hbs`,
+          data: {
+            claimant_reference: wizardFacts?.claimant_reference || evictionCase.case_id,
+            arrears_schedule: arrearsData.arrears_schedule,
+            arrears_total: arrearsData.arrears_total,
+          },
+          isPreview: false,
+          outputFormat: 'both',
+        });
+
+        documents.push({
+          title: 'Schedule of Arrears',
+          description: 'Detailed period-by-period breakdown of rent arrears',
+          category: 'evidence_tool',
+          html: scheduleDoc.html,
+          pdf: scheduleDoc.pdf,
+          file_name: 'schedule_of_arrears.pdf',
+        });
+
+        console.log('✅ Generated schedule of arrears');
+      } else if (!arrearsData.is_authoritative && arrearsData.legacy_warning) {
+        // Log warning for legacy data
+        console.warn(`⚠️  Schedule of arrears not generated: ${arrearsData.legacy_warning}`);
+      }
+    } catch (error) {
+      console.error('⚠️  Failed to generate schedule of arrears:', error);
+      // Don't fail the entire pack if schedule generation fails
+    }
+  }
 
   // 2. Generate expert guidance documents
   const roadmap = await generateEvictionRoadmap(evictionCase, groundsData);
