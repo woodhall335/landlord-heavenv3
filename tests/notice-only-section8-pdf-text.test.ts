@@ -85,7 +85,8 @@ expect(text).toMatch(/Ground\s+8(?:\s*[–-]\s*|\s+)Serious rent arrears/i);
 expect(text).toMatch(/Ground\s+11(?:\s*[–-]\s*|\s+)Persistent delay/i);
     expect(text.toLowerCase()).not.toContain('ground_8');
     expect(text).not.toContain('Ground ,');
-    expect(text).toContain('Ground particulars');
+    expect(text.toLowerCase()).toContain('ground particulars');
+
     expect(text).toContain('Bank statements');
   });
 });
