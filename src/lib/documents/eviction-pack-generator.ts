@@ -13,7 +13,7 @@
  */
 
 import { generateDocument } from './generator';
-import { assertNoticeOnlyValid } from './noticeOnly';
+import { assertNoticeOnlyValid, assertCompletePackValid } from './noticeOnly';
 import { generateSection8Notice, Section8NoticeData } from './section8-generator';
 import { generateSection21Notice, Section21NoticeData } from './section21-generator';
 import { fillN5Form, fillN119Form, CaseData, fillN5BForm } from './official-forms-filler';
@@ -796,6 +796,40 @@ export async function generateCompleteEvictionPack(
 
   // Load jurisdiction-specific grounds
   const groundsData = await loadEvictionGrounds(jurisdiction as Jurisdiction);
+
+  // ============================================================================
+  // PRE-FLIGHT VALIDATION
+  // Ensure all required fields are present before generating court forms.
+  // This mirrors the notice-only validation and adds complete pack specific checks.
+  // ============================================================================
+
+  const selectedGroundCodes = extractGroundCodes(
+    wizardFacts?.section8_grounds || wizardFacts?.grounds || []
+  );
+
+  // Determine case type for validation
+  const evictionRoute = wizardFacts?.eviction_route || wizardFacts?.notice_type || wizardFacts?.selected_notice_route;
+  const isNoFault = evictionRoute?.toLowerCase?.().includes('section 21') ||
+                     evictionRoute?.toLowerCase?.().includes('section_21') ||
+                     evictionRoute === 'no_fault';
+  const caseType = isNoFault ? 'no_fault' : 'rent_arrears';
+
+  // Only validate for England/Wales - Scotland has different requirements
+  if (jurisdiction === 'england' || jurisdiction === 'wales') {
+    try {
+      assertCompletePackValid({
+        jurisdiction: jurisdiction as 'england' | 'wales',
+        facts: wizardFacts || {},
+        selectedGroundCodes,
+        caseType,
+      });
+    } catch (err) {
+      const reason = (err as Error).message;
+      throw new Error(reason.startsWith('EVICTION_PACK_VALIDATION_FAILED')
+        ? reason
+        : `EVICTION_PACK_VALIDATION_FAILED: ${reason}`);
+    }
+  }
 
   // Initialize documents array
   const documents: EvictionPackDocument[] = [];

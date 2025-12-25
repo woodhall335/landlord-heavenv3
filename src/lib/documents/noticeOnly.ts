@@ -15,6 +15,11 @@ export interface NoticeValidationOutcome {
   warnings: NoticeValidationFailure[];
 }
 
+/**
+ * Product type for validation context
+ */
+export type EvictionPackProduct = 'notice_only' | 'complete_pack';
+
 export function validateNoticeOnlyBeforeRender(params: {
   jurisdiction: JurisdictionKey;
   facts: Record<string, any>;
@@ -68,5 +73,177 @@ export function assertNoticeOnlyValid(params: {
     const message = outcome.blocking.map((b) => `${b.code}: ${b.user_message}`).join('; ');
     const error = new Error(`NOTICE_ONLY_VALIDATION_FAILED: ${message}`);
     throw error;
+  }
+}
+
+// ============================================================================
+// COMPLETE PACK VALIDATION
+// ============================================================================
+
+/**
+ * Additional validation requirements for complete eviction packs (court forms).
+ *
+ * For Section 21 (no-fault) cases in England, the N5B form requires:
+ * - notice_service_method (how the notice was served)
+ * - section_21_notice_date (when the notice was served)
+ * - tenancy_start_date (when the tenancy began)
+ * - court_name (the court where the claim will be filed)
+ *
+ * For Section 8 cases with Ground 8, the arrears threshold MUST be met
+ * as a hard blocker (not just a warning).
+ *
+ * NOTE: This validation is targeted specifically for complete pack court form requirements.
+ * It does NOT call the full wizard gating validation (which includes eligibility rules
+ * that may use natural language expressions that cannot be evaluated). Complete pack
+ * generation validates the minimum required fields for court form filling.
+ */
+export function validateCompletePackBeforeGeneration(params: {
+  jurisdiction: JurisdictionKey;
+  facts: Record<string, any>;
+  selectedGroundCodes: number[];
+  caseType: 'no_fault' | 'rent_arrears' | 'antisocial' | 'breach' | 'landlord_needs' | 'other';
+}): NoticeValidationOutcome {
+  const { jurisdiction, facts, selectedGroundCodes, caseType } = params;
+
+  // NOTE: We do NOT call validateNoticeOnlyBeforeRender here because it includes
+  // eligibility rules from decision_rules.yaml that use natural language expressions
+  // (e.g., "arrears >= 2 months rent equivalent") which cannot be evaluated as JavaScript.
+  // Complete pack validation focuses specifically on the fields required for court form filling.
+  const blocking: NoticeValidationFailure[] = [];
+  const warnings: NoticeValidationFailure[] = [];
+
+  // ============================================================================
+  // S21 (no-fault) complete pack validation
+  // N5B court form requires specific fields
+  // ============================================================================
+  if (caseType === 'no_fault' && (jurisdiction === 'england' || jurisdiction === 'wales')) {
+    // Check notice_service_method - required for N5B field 10a
+    const noticeServiceMethod = facts.notice_service_method ||
+                                 facts.service_method ||
+                                 facts.notice_service?.service_method ||
+                                 facts['notice_service.service_method'];
+
+    if (!noticeServiceMethod || (typeof noticeServiceMethod === 'string' && noticeServiceMethod.trim() === '')) {
+      blocking.push({
+        code: 'COMPLETE_PACK_MISSING_NOTICE_SERVICE_METHOD',
+        user_message: 'Notice service method is required for N5B court form (field 10a: "How was the notice served")',
+        fields: ['notice_service_method'],
+        user_fix_hint: 'Specify how the Section 21 notice was served (e.g., "First class post", "Hand-delivered", "By hand").',
+      });
+    }
+
+    // Check section_21_notice_date - required for N5B
+    const section21NoticeDate = facts.section_21_notice_date ||
+                                 facts.notice_date ||
+                                 facts.notice_served_date;
+
+    if (!section21NoticeDate) {
+      blocking.push({
+        code: 'COMPLETE_PACK_MISSING_SECTION_21_NOTICE_DATE',
+        user_message: 'Section 21 notice date is required for N5B court form',
+        fields: ['section_21_notice_date', 'notice_date'],
+        user_fix_hint: 'Specify the date when the Section 21 notice was served.',
+      });
+    }
+
+    // Check tenancy_start_date - required for N5B
+    const tenancyStartDate = facts.tenancy_start_date;
+
+    if (!tenancyStartDate) {
+      blocking.push({
+        code: 'COMPLETE_PACK_MISSING_TENANCY_START_DATE',
+        user_message: 'Tenancy start date is required for N5B court form',
+        fields: ['tenancy_start_date'],
+        user_fix_hint: 'Specify when the tenancy began.',
+      });
+    }
+
+    // Check court_name - required for all court forms
+    const courtName = facts.court_name;
+
+    if (!courtName || (typeof courtName === 'string' && courtName.trim() === '')) {
+      blocking.push({
+        code: 'COMPLETE_PACK_MISSING_COURT_NAME',
+        user_message: 'Court name is required for court forms (N5, N5B, N119)',
+        fields: ['court_name'],
+        user_fix_hint: 'Use the HMCTS Court Finder to find your local County Court.',
+      });
+    }
+  }
+
+  // ============================================================================
+  // Ground 8 threshold enforcement for complete pack
+  // Must be a hard blocker (not just warning) for court submission
+  // ============================================================================
+  if (selectedGroundCodes.includes(8)) {
+    // Check if Ground 8 threshold is met
+    const rentAmount = parseFloat(facts.rent_amount) || 0;
+    const rentFrequency = facts.rent_frequency || 'monthly';
+    const arrearsAmount = parseFloat(facts.arrears_amount) ||
+                          parseFloat(facts.arrears_total) ||
+                          parseFloat(facts.total_arrears) ||
+                          parseFloat(facts.rent_arrears_amount) || 0;
+
+    if (rentAmount > 0 && arrearsAmount > 0) {
+      const arrearsInMonths = calculateArrearsInMonths(arrearsAmount, rentAmount, rentFrequency);
+
+      if (arrearsInMonths < 2) {
+        // Ensure Ground 8 threshold failure is a BLOCKER for complete pack
+        const existingBlocker = blocking.find(b => b.code === 'GROUND_8_THRESHOLD_NOT_MET');
+        if (!existingBlocker) {
+          blocking.push({
+            code: 'GROUND_8_THRESHOLD_NOT_MET',
+            user_message: `Ground 8 requires at least 2 months' rent in arrears. Current arrears: ${arrearsInMonths.toFixed(2)} months.`,
+            fields: ['arrears_amount', 'section8_grounds'],
+            user_fix_hint: 'Remove Ground 8 from your selection, or use discretionary grounds (Ground 10, 11) instead.',
+          });
+        }
+      }
+    }
+  }
+
+  return { blocking, warnings };
+}
+
+/**
+ * Calculate arrears in months for Ground 8 threshold check
+ */
+function calculateArrearsInMonths(
+  arrearsAmount: number,
+  rentAmount: number,
+  rentFrequency: string
+): number {
+  if (rentAmount <= 0) return 0;
+
+  switch (rentFrequency?.toLowerCase()) {
+    case 'weekly':
+      return (arrearsAmount / rentAmount) / 4.33;
+    case 'fortnightly':
+      return (arrearsAmount / rentAmount) / 2.165;
+    case 'monthly':
+      return arrearsAmount / rentAmount;
+    case 'quarterly':
+      return (arrearsAmount / rentAmount) * 3;
+    case 'yearly':
+      return (arrearsAmount / rentAmount) * 12;
+    default:
+      return arrearsAmount / rentAmount;
+  }
+}
+
+/**
+ * Assert that complete pack requirements are met before generation.
+ * Throws EVICTION_PACK_VALIDATION_FAILED if blocking issues exist.
+ */
+export function assertCompletePackValid(params: {
+  jurisdiction: JurisdictionKey;
+  facts: Record<string, any>;
+  selectedGroundCodes: number[];
+  caseType: 'no_fault' | 'rent_arrears' | 'antisocial' | 'breach' | 'landlord_needs' | 'other';
+}): void {
+  const outcome = validateCompletePackBeforeGeneration(params);
+  if (outcome.blocking.length > 0) {
+    const message = outcome.blocking.map((b) => `${b.code}: ${b.user_message}`).join('; ');
+    throw new Error(`EVICTION_PACK_VALIDATION_FAILED: ${message}`);
   }
 }
