@@ -842,7 +842,7 @@ async function processTextDocument(
   try {
     // Placeholder: In real implementation, fetch text from PDF
     // const pdfText = await fetchPdfText(upload.storageKey);
-    const pdfText = ''; // Placeholder - needs actual implementation
+    const pdfText: string | null = ''; // Placeholder - needs actual implementation
 
     if (!pdfText || pdfText.trim().length < 50) {
       // No text found - may need Vision

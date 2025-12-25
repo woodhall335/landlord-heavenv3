@@ -1,9 +1,11 @@
 // Vitest global setup
-// Additional matchers are not added because we avoid external dependencies in this environment.
 
 import { vi } from 'vitest';
 import { config as loadEnv } from 'dotenv';
 import path from 'path';
+
+// Import jest-dom matchers for Vitest
+import '@testing-library/jest-dom/vitest';
 
 // Load environment variables from .env.local file for tests
 loadEnv({ path: path.resolve(__dirname, '.env.local') });

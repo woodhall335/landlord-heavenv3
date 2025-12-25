@@ -11,7 +11,7 @@
  * - WARNING issues are logged but allow generation to proceed
  */
 
-import { jsonCompletion, hasCustomJsonAIClient, ChatMessage } from '@/lib/ai/openai-client';
+import { jsonCompletion, hasCustomJsonAIClient, ChatMessage, parseAIModel } from '@/lib/ai/openai-client';
 
 // =============================================================================
 // Types
@@ -495,7 +495,7 @@ Identify any logical inconsistencies, contradictions, or critical missing data t
       issues: ConsistencyIssue[];
       summary: string;
     }>(messages, LLM_CONSISTENCY_SCHEMA, {
-      model: process.env.AI_MODEL_CONSISTENCY || 'gpt-4o-mini',
+      model: parseAIModel(process.env.AI_MODEL_CONSISTENCY, 'gpt-4o-mini'),
       temperature: 0.3,
       max_tokens: 2048,
     });
