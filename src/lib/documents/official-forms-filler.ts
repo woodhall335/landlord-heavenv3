@@ -14,29 +14,196 @@
  * - N119: Particulars of claim for possession
  * - N1: Claim form (for money claims)
  * - Form 6A: Section 21 notice (prescribed form)
+ *
+ * FIELD INVENTORY (as of 2024):
+ * - N5: 13 text fields, 0 checkboxes
+ * - N5B: 128 text fields, 118 checkboxes
+ * - N119: 17 text fields, 0 checkboxes
  */
 
-import { PDFDocument, PDFForm } from 'pdf-lib';
+import { PDFDocument, PDFForm, PDFTextField, PDFCheckBox } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 
 const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms');
 
-/**
- * Guard to ensure the referenced official PDF exists before attempting to load it.
- */
-export async function assertOfficialFormExists(formName: string): Promise<string> {
-  const formPath = path.join(OFFICIAL_FORMS_ROOT, formName);
+// =============================================================================
+// FIELD NAME CONSTANTS - Authoritative field names from PDF inventory
+// =============================================================================
 
-  try {
-    await fs.access(formPath);
-    return formPath;
-  } catch (error) {
-    throw new Error(
-      `Official form "${formName}" is missing. Add the PDF under public/official-forms (jurisdiction subfolder allowed) or update the manifest. Error: ${error}`
-    );
-  }
-}
+/**
+ * N5 form field names (13 fields total)
+ * Source: public/official-forms/n5-eng.pdf
+ */
+const N5_FIELDS = {
+  // Note: Uses curly apostrophe (') not straight (')
+  COURT: 'In the court',
+  CLAIMANT_DETAILS: "claimant’s details", // curly apostrophe U+2019
+  DEFENDANT_DETAILS: "defendant’s details", // curly apostrophe U+2019
+  POSSESSION_OF: 'possession of',
+  FEE_ACCOUNT: 'Fee account no',
+  SIGNATORY_NAME: 'Full name of the person signing the Statement of Truth',
+  SOLICITOR_FIRM: "Name of claimant's legal representative's firm",
+  ADDRESS_BUILDING: "building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  ADDRESS_LINE2: "Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  ADDRESS_TOWN: "Town or city - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  ADDRESS_COUNTY: "County (optional) - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  ADDRESS_POSTCODE: "Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  STATEMENT_SIGNED_BY_REP: "Statement of Truth is signed by the Claimant's legal representative (as defined by CPR 2.3(1))",
+} as const;
+
+/**
+ * N5B form field names (subset - key fields only)
+ * Source: public/official-forms/n5b-eng.pdf
+ */
+const N5B_FIELDS = {
+  // Header
+  CLAIMANTS_NAMES: 'Enter the full names of the Claimants',
+  DEFENDANTS_NAMES: 'Enter the full names of the Defendants',
+  COURT_NAME_ADDRESS: 'Name and address of the court',
+  CLAIMING_POSSESSION_OF: 'The Claimant is claiming possession of',
+  // Fees
+  COURT_FEE: 'Court fee',
+  LEGAL_COSTS: 'Legal representatives costs',
+  TOTAL_AMOUNT: 'Total amount',
+  // First Claimant
+  FIRST_CLAIMANT_FIRST_NAMES: "First Claimant's first names",
+  FIRST_CLAIMANT_LAST_NAME: "First Claimant's last name",
+  FIRST_CLAIMANT_ADDRESS_STREET: "First Claimant's address: building and street",
+  FIRST_CLAIMANT_ADDRESS_LINE2: "First Claimant's address: second line of address",
+  FIRST_CLAIMANT_ADDRESS_TOWN: "First Claimant's address: town or city",
+  FIRST_CLAIMANT_ADDRESS_POSTCODE: "First Claimant's address: postcode",
+  // Second Claimant
+  SECOND_CLAIMANT_FIRST_NAMES: "Second Claimant's first names",
+  SECOND_CLAIMANT_LAST_NAME: "Second Claimant's last name",
+  // First Defendant
+  FIRST_DEFENDANT_FIRST_NAMES: "First Defendant's first name(s)",
+  FIRST_DEFENDANT_LAST_NAME: "First Defendant's last name",
+  FIRST_DEFENDANT_ADDRESS_STREET: "First Defendant's address: building and street",
+  FIRST_DEFENDANT_ADDRESS_LINE2: "First Defendant's address: second line of address",
+  FIRST_DEFENDANT_ADDRESS_TOWN: "First Defendant's address: town or city",
+  FIRST_DEFENDANT_ADDRESS_POSTCODE: "First Defendant's address: postcode",
+  // Second Defendant
+  SECOND_DEFENDANT_FIRST_NAMES: "Second Defendant's first names",
+  SECOND_DEFENDANT_LAST_NAME: "Second Defendant's last name",
+  SECOND_DEFENDANT_ADDRESS_STREET: "Second Defendant's address: building and street",
+  SECOND_DEFENDANT_ADDRESS_LINE2: "Second Defendant's address: second line of address",
+  SECOND_DEFENDANT_ADDRESS_TOWN: "Second Defendant's address: town or city",
+  SECOND_DEFENDANT_ADDRESS_POSTCODE: "Second Defendant's address: postcode",
+  // Possession address
+  POSSESSION_STREET: 'Claimant seeks an order that the Defendant gives possession of: building and street',
+  POSSESSION_LINE2: 'Claimant seeks an order that the Defendant gives possession of: second line of address',
+  POSSESSION_TOWN: 'Claimant seeks an order that the Defendant gives possession of: town or city',
+  POSSESSION_POSTCODE: 'Claimant seeks an order that the Defendant gives possession of: postcode',
+  // Tenancy dates
+  TENANCY_LET_DATE_DAY: '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Day',
+  TENANCY_LET_DATE_MONTH: '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Month',
+  TENANCY_LET_DATE_YEAR: '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Year',
+  TENANCY_AGREEMENT_DATE_DAY: '7. The tenancy agreement is dated. Day',
+  TENANCY_AGREEMENT_DATE_MONTH: '7. The tenancy agreement is dated. Month',
+  TENANCY_AGREEMENT_DATE_YEAR: '7. The tenancy agreement is dated. Year',
+  // Notice service
+  NOTICE_SERVICE_METHOD: '10a How was the notice served',
+  NOTICE_SERVED_DATE_DAY: '10b. On what date was the notice served? Day',
+  NOTICE_SERVED_DATE_MONTH: '10b. On what date was the notice served? Month',
+  NOTICE_SERVED_DATE_YEAR: '10b. On what date was the notice served? Year',
+  NOTICE_SERVED_BY: '10c Who served the notice',
+  NOTICE_SERVED_ON: '10d Who was the notice served on',
+  NOTICE_EXPIRY_DATE_DAY: '10e. After what date did the notice require the Defendant to leave the property? Day',
+  NOTICE_EXPIRY_DATE_MONTH: '10e. After what date did the notice require the Defendant to leave the property? Month',
+  NOTICE_EXPIRY_DATE_YEAR: '10e. After what date did the notice require the Defendant to leave the property? Year',
+  // Deposit
+  DEPOSIT_INFO_DATE_DAY: '14b. On what date was the prescribed information given? Day',
+  DEPOSIT_INFO_DATE_MONTH: '14b. On what date was the prescribed information given? Month',
+  DEPOSIT_INFO_DATE_YEAR: '14b. On what date was the prescribed information given? Year',
+  // Statement of Truth
+  STATEMENT_SIGNATURE: 'Statement of Truth signature',
+  STATEMENT_SIGNATORY_NAME: 'Full name of the person signing the Statement of Truth',
+  STATEMENT_DATE_DAY: 'Date the Statement of Truth is signed - Day',
+  STATEMENT_DATE_MONTH: 'Date the Statement of Truth is signed - Month',
+  STATEMENT_DATE_YEAR: 'Date the Statement of Truth is signed - Year',
+  SOLICITOR_FIRM: 'Name of Claimants legal representatives firm',
+  // Service address
+  SERVICE_ADDRESS_STREET: "Claimant's or claimant's legal representative's address to which documents should be sent, if different from that on pages 2 and 3. Building and street",
+  SERVICE_ADDRESS_LINE2: "Claimant's or claimant's legal representative's address to which documents should be sent, if different from that on pages 2 and 3. Second line of address",
+  SERVICE_ADDRESS_TOWN: "Claimant's or claimant's legal representative's address to which documents should be sent, if different from that on pages 2 and 3. Town or city",
+  SERVICE_ADDRESS_POSTCODE: "Claimant's or claimant's legal representative's address to which documents should be sent, if different from that on pages 2 and 3. Postcode",
+  // Contact
+  PHONE: 'If applicable, phone number',
+  EMAIL: 'If applicable, email',
+  DX: 'If applicable, DX number',
+  REFERENCE: 'If applicable, reference number',
+} as const;
+
+/**
+ * N5B checkbox field names (key fields only)
+ */
+const N5B_CHECKBOXES = {
+  // Q3 - Costs
+  COSTS_YES: '3. Are you (the Claimant) asking for an order that the Defendant pay the costs of the claim? - Yes',
+  COSTS_NO: '3. Are you (the Claimant) asking for an order that the Defendant pay the costs of the claim? - No',
+  // Q5 - Dwelling house
+  DWELLING_YES: '5. Is the property a dwelling house or part of a dwelling house? Yes',
+  DWELLING_NO: '5. Is the property a dwelling house or part of a dwelling house? No',
+  // Q8 - Subsequent tenancy
+  SUBSEQUENT_TENANCY_YES: '8. Has any subsequent written tenancy agreement been entered into? Yes',
+  SUBSEQUENT_TENANCY_NO: '8. Has any subsequent written tenancy agreement been entered into? No',
+  // Q12 - Deposit
+  DEPOSIT_PAID_YES: '12. Was a deposit paid in connection with the current tenancy or any prior tenancy of the property to which the Defendant was a party? Yes',
+  DEPOSIT_PAID_NO: '12. Was a deposit paid in connection with the current tenancy or any prior tenancy of the property to which the Defendant was a party? No',
+  // Q13 - Deposit returned
+  DEPOSIT_RETURNED_YES: '13. Has the deposit been returned to the Defendant (or the person – if not the Defendant – who paid the deposit)? Yes',
+  DEPOSIT_RETURNED_NO: '13. Has the deposit been returned to the Defendant (or the person – if not the Defendant – who paid the deposit)? No',
+  // Q14a - Prescribed info
+  PRESCRIBED_INFO_YES: '14a. Has the Claimant given to the Defendant, and to anyone who paid the deposit on behalf of the Defendant, the prescribed information? Yes',
+  PRESCRIBED_INFO_NO: '14a. Has the Claimant given to the Defendant, and to anyone who paid the deposit on behalf of the Defendant, the prescribed information? No',
+  // Q21 - Orders
+  ORDER_POSSESSION: '21. The Claimant asks the court to order that the Defendant delivers up possession of the property',
+  ORDER_COSTS: '21. The Claimant asks the court to order that the Defendant pays the costs of this claim',
+  // Statement of Truth
+  SOT_CLAIMANT: 'Statement of Truth is signed by: Claimant',
+  SOT_LEGAL_REP: "Statement of Truth is signed by: Claimant's legal representative (as defined by CPR 2.3(1))",
+  SOT_BELIEVES: 'I believe that the facts stated in this claim form and any attached sheets are true',
+  SOT_AUTHORISED: "The Claimant(s) believe(s) that the facts stated in this claim form and any attached sheets are true. I am authorised by the Claimant(s) to sign this statement",
+  // England location
+  ENGLAND_YES: 'Is the property you are claiming possession of located wholly or partly in England? Yes',
+  ENGLAND_NO: 'Is the property you are claiming possession of located wholly or partly in England? No',
+  // Attachments
+  ATTACHMENT_TENANCY: 'Copy of the first written tenancy agreement marked A',
+  ATTACHMENT_NOTICE: 'Copy of the notice saying that possession was required marked B',
+  ATTACHMENT_SERVICE_PROOF: 'Proof of service of the notice requiring possession marked B1',
+  ATTACHMENT_DEPOSIT_CERT: 'Copy of the Tenancy Deposit Certificate marked E',
+  ATTACHMENT_EPC: 'Copy of the Energy Performance Certificate marked F',
+  ATTACHMENT_GAS: 'Copy of the Gas Safety Records marked G G1 G2 etc',
+} as const;
+
+/**
+ * N119 form field names (17 fields total, ALL are text fields)
+ * Source: public/official-forms/n119-eng.pdf
+ */
+const N119_FIELDS = {
+  COURT: 'name of court',
+  CLAIMANT: 'name of claimant',
+  DEFENDANT: 'name of defendant',
+  POSSESSION_OF: 'The claimant has a right to possession of:',
+  OCCUPANTS: "To the best of the claimant's knowledge the following persons are in possession of the property:",
+  TENANCY_TYPE: '3(a) Type of tenancy',
+  TENANCY_DATE: '3(a) Date of tenancy',
+  RENT: '3(b) The current rent is',
+  REASON: '4. (a) The reason the claimant is asking for possession is:',
+  NOTICE_DATE_DAY_MONTH: '6. Day and month notice served',
+  NOTICE_DATE_YEAR: '6. Year notice served',
+  CLAIMANT_TYPE_OTHER: '13. The claimant is - other',  // Text field, NOT checkbox!
+  CLAIMANT_TYPE_DETAILS: '13. Details if the claimant is some other entity',
+  SOT_BELIEVES: 'I believe that the facts stated in these particulars of claim are true',  // Text field!
+  SOT_AUTHORISED: 'The Claimant believes that the facts stated in these particulars of claim are true. I am authorised by the claimant to sign this statement',  // Text field!
+  SOT_SIGNED_BY_REP: "Statement of Truth signed by Claimant's legal representative (as defined by CPR 2.3(1))",  // Text field!
+  SOLICITOR_FIRM: "Name of claimant's legal representative's firm",
+} as const;
+
+// =============================================================================
+// TYPE DEFINITIONS
+// =============================================================================
 
 export interface CaseData {
   // Landlord details
@@ -56,6 +223,7 @@ export interface CaseData {
 
   // Tenancy details
   tenancy_start_date: string;
+  tenancy_type?: string;  // e.g. "Assured Shorthold Tenancy"
   fixed_term?: boolean;
   fixed_term_end_date?: string;
   rent_amount: number;
@@ -68,6 +236,8 @@ export interface CaseData {
   section_8_notice_date?: string;
   section_21_notice_date?: string;
   notice_served_date?: string;
+  notice_service_method?: string;  // REQUIRED for N5B: e.g. "First class post", "By hand"
+  notice_expiry_date?: string;
   particulars_of_claim?: string;
 
   // Amounts
@@ -82,6 +252,14 @@ export interface CaseData {
   deposit_scheme?: 'DPS' | 'MyDeposits' | 'TDS';
   deposit_protection_date?: string;
   deposit_reference?: string;
+  deposit_prescribed_info_given?: boolean;
+  deposit_returned?: boolean;
+
+  // Compliance
+  epc_provided?: boolean;
+  gas_safety_provided?: boolean;
+  how_to_rent_provided?: boolean;
+  subsequent_tenancy?: boolean;
 
   // Solicitor
   solicitor_firm?: string;
@@ -112,6 +290,160 @@ export interface CaseData {
   [key: string]: any;
 }
 
+// =============================================================================
+// STRICT FIELD HELPERS
+// =============================================================================
+
+/**
+ * List all field names in a PDF form
+ */
+export function listFormFieldNames(form: PDFForm): string[] {
+  return form.getFields().map(f => f.getName());
+}
+
+/**
+ * Get a text field strictly - throws if not found
+ */
+function getTextFieldStrict(form: PDFForm, fieldName: string, context: string): PDFTextField {
+  try {
+    return form.getTextField(fieldName);
+  } catch {
+    const available = listFormFieldNames(form).slice(0, 20).join(', ');
+    throw new Error(
+      `[${context}] Text field "${fieldName}" not found in PDF. ` +
+      `Available fields (first 20): ${available}...`
+    );
+  }
+}
+
+/**
+ * Get a checkbox strictly - throws if not found
+ */
+function getCheckBoxStrict(form: PDFForm, fieldName: string, context: string): PDFCheckBox {
+  try {
+    return form.getCheckBox(fieldName);
+  } catch {
+    const available = listFormFieldNames(form).slice(0, 20).join(', ');
+    throw new Error(
+      `[${context}] Checkbox "${fieldName}" not found in PDF. ` +
+      `Available fields (first 20): ${available}...`
+    );
+  }
+}
+
+/**
+ * Set a required text field - throws if value missing or field not found
+ */
+function setTextRequired(form: PDFForm, fieldName: string, value: string | undefined, context: string): void {
+  if (!value || value.trim() === '') {
+    throw new Error(
+      `[${context}] Required field "${fieldName}" has no value. ` +
+      `Please provide this data before generating court forms.`
+    );
+  }
+  const field = getTextFieldStrict(form, fieldName, context);
+  field.setText(value);
+}
+
+/**
+ * Set an optional text field - silently skips if value missing, throws if field missing
+ */
+function setTextOptional(form: PDFForm, fieldName: string, value: string | undefined, context: string): void {
+  if (!value || value.trim() === '') return;
+
+  try {
+    const field = form.getTextField(fieldName);
+    field.setText(value);
+  } catch {
+    // Field doesn't exist - this is acceptable for optional fields, but log it
+    console.debug(`[${context}] Optional field "${fieldName}" not found, skipping`);
+  }
+}
+
+/**
+ * Try multiple field name variants for a text field (handles apostrophe differences)
+ */
+function setTextWithVariants(
+  form: PDFForm,
+  fieldNames: string[],
+  value: string | undefined,
+  required: boolean,
+  context: string
+): void {
+  if (!value || value.trim() === '') {
+    if (required) {
+      throw new Error(
+        `[${context}] Required field (variants: ${fieldNames.join(' / ')}) has no value.`
+      );
+    }
+    return;
+  }
+
+  for (const fieldName of fieldNames) {
+    try {
+      const field = form.getTextField(fieldName);
+      field.setText(value);
+      return; // Success
+    } catch {
+      continue; // Try next variant
+    }
+  }
+
+  // None of the variants worked
+  if (required) {
+    throw new Error(
+      `[${context}] Could not find any of these text fields: ${fieldNames.join(' / ')}. ` +
+      `First 10 available: ${listFormFieldNames(form).slice(0, 10).join(', ')}...`
+    );
+  }
+}
+
+/**
+ * Set a checkbox - silently skips if field missing (checkboxes are often optional)
+ */
+function setCheckbox(form: PDFForm, fieldName: string, checked: boolean, context: string): void {
+  if (!checked) return;
+
+  try {
+    const field = form.getCheckBox(fieldName);
+    field.check();
+  } catch {
+    console.debug(`[${context}] Checkbox "${fieldName}" not found, skipping`);
+  }
+}
+
+/**
+ * Set a required checkbox - throws if field not found
+ */
+function setCheckboxRequired(form: PDFForm, fieldName: string, checked: boolean, context: string): void {
+  const field = getCheckBoxStrict(form, fieldName, context);
+  if (checked) {
+    field.check();
+  } else {
+    field.uncheck();
+  }
+}
+
+// =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
+
+/**
+ * Guard to ensure the referenced official PDF exists before attempting to load it.
+ */
+export async function assertOfficialFormExists(formName: string): Promise<string> {
+  const formPath = path.join(OFFICIAL_FORMS_ROOT, formName);
+
+  try {
+    await fs.access(formPath);
+    return formPath;
+  } catch (error) {
+    throw new Error(
+      `Official form "${formName}" is missing. Add the PDF under public/official-forms (jurisdiction subfolder allowed) or update the manifest. Error: ${error}`
+    );
+  }
+}
+
 /**
  * Load an official PDF form
  */
@@ -127,34 +459,6 @@ async function loadOfficialForm(formName: string): Promise<PDFDocument> {
     throw new Error(
       `Failed to load official form "${formName}". Make sure the PDF exists in /public/official-forms/. Error: ${error}`
     );
-  }
-}
-
-/**
- * Fill a PDF form field safely (handles missing fields)
- */
-function fillTextField(form: PDFForm, fieldName: string, value: string | undefined): void {
-  if (!value) return;
-
-  try {
-    const field = form.getTextField(fieldName);
-    field.setText(value);
-  } catch (error) {
-    console.warn(`Field "${fieldName}" not found in form, skipping: ${error}`);
-  }
-}
-
-/**
- * Check a PDF checkbox safely (handles missing fields)
- */
-function checkBox(form: PDFForm, fieldName: string, checked: boolean = true): void {
-  if (!checked) return;
-
-  try {
-    const field = form.getCheckBox(fieldName);
-    field.check();
-  } catch (error) {
-    console.warn(`Checkbox "${fieldName}" not found in form, skipping: ${error}`);
   }
 }
 
@@ -187,180 +491,108 @@ function splitDate(dateString: string | undefined): { day: string; month: string
 }
 
 /**
+ * Split address into lines
+ */
+function splitAddress(address: string): string[] {
+  return address.split('\n').filter(line => line.trim());
+}
+
+// =============================================================================
+// N5 FORM FILLER
+// =============================================================================
+
+/**
  * Fill Form N5 - Claim for possession of property
  *
  * This is the standard possession claim form used for both Section 8 and Section 21.
  *
  * Official PDF: /public/official-forms/n5-eng.pdf
  * Source: https://assets.publishing.service.gov.uk/media/601bc1858fa8f53fc3d799d9/n5-eng.pdf
+ *
+ * FIELD INVENTORY: 13 text fields, 0 checkboxes
  */
 export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
+  const ctx = 'N5';
   console.log('📄 Filling N5 form (Claim for possession)...');
 
-  // Validate required court details
+  // === VALIDATION ===
   if (!data.court_name) {
-    throw new Error('N5 form requires court_name to be specified. Please provide court details before generating court forms.');
+    throw new Error(`[${ctx}] court_name is required. Please provide court details before generating court forms.`);
+  }
+  if (!data.landlord_full_name) {
+    throw new Error(`[${ctx}] landlord_full_name is required.`);
+  }
+  if (!data.tenant_full_name) {
+    throw new Error(`[${ctx}] tenant_full_name is required.`);
+  }
+  if (!data.property_address) {
+    throw new Error(`[${ctx}] property_address is required.`);
   }
 
   const pdfDoc = await loadOfficialForm('n5-eng.pdf');
   const form = pdfDoc.getForm();
 
-  // Court details - field name is "In the court" in the N5 PDF
-  fillTextField(form, 'In the court', data.court_name);
-  fillTextField(form, 'Fee account no', data.claimant_reference);
+  // === REQUIRED FIELDS ===
 
-  // Claimant and defendant details (combined fields)
-  // NOTE: The N5 PDF uses curly apostrophes (') not straight apostrophes (')
+  // Court name
+  setTextRequired(form, N5_FIELDS.COURT, data.court_name, ctx);
+
+  // Claimant and defendant details - try both apostrophe variants (curly ' and straight ')
   const claimantDetails = `${data.landlord_full_name}\n${data.landlord_address}`;
   const defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
 
-  fillTextField(form, "claimant’s details", claimantDetails);
-  fillTextField(form, "defendant’s details", defendantDetails);
-
-  // Property address
-  fillTextField(form, 'possession of', data.property_address);
-
-  // Fees (if known)
-  if (data.court_fee) {
-    fillTextField(form, 'courtfee', `£${data.court_fee.toFixed(2)}`);
-  }
-  if (data.solicitor_costs) {
-    fillTextField(form, 'solfee', `£${data.solicitor_costs.toFixed(2)}`);
-  }
-  const total = (data.court_fee || 0) + (data.solicitor_costs || 0);
-  if (total > 0) {
-    fillTextField(form, 'total', `£${total.toFixed(2)}`);
-  }
-
-  // Claim grounds - checkboxes
-  if (data.total_arrears && data.total_arrears > 0) {
-    checkBox(form, 'rent arrears - yes', true);
-    fillTextField(form, 'rent arrears amount', `£${data.total_arrears.toFixed(2)}`);
-  }
-
-  if (data.claim_type === 'section_8') {
-    const grounds = data.ground_numbers || (data.ground_codes || []).join(', ');
-
-    // Check specific ground checkboxes based on ground numbers
-    if (grounds.includes('12') || grounds.includes('13') || grounds.includes('14') || grounds.includes('15')) {
-      checkBox(form, 'other breach of tenancy - yes', true);
-    }
-
-    if (grounds.includes('14')) {
-      checkBox(form, 'anti-social behaviour - yes', true);
-    }
-
-    if (grounds.includes('15')) {
-      checkBox(form, 'unlawful use - yes', true);
-    }
-
-    if (grounds.includes('7')) {
-      checkBox(form, 'trespass - yes', true);
-    }
-  }
-
-  if (data.ground_numbers || (data.ground_codes && data.ground_codes.length > 0)) {
-    fillTextField(
-      form,
-      'Ground(s) on which possession is claimed',
-      data.ground_numbers || (data.ground_codes || []).join(', ')
-    );
-  }
-
-  const noticeDate = data.section_8_notice_date || data.section_21_notice_date || data.notice_served_date;
-  if (noticeDate) {
-    const parts = splitDate(noticeDate);
-    if (parts) {
-      fillTextField(form, 'Date section 8 notice served - DD', parts.day);
-      fillTextField(form, 'Date section 8 notice served - MM', parts.month);
-      fillTextField(form, 'Date section 8 notice served - YYYY', parts.year);
-    }
-  }
-
-  // HRA consideration
-  checkBox(form, 'HRA - yes', true); // Human Rights Act always considered
-
-  // Statement of Truth
-  // First split the date if provided as YYYY-MM-DD
-  if (data.signature_date) {
-    const dateParts = data.signature_date.split('-');
-    if (dateParts.length === 3) {
-      fillTextField(form, 'Date the Statement of Truth is signed - DD', dateParts[2]);
-      fillTextField(form, 'Date the Statement of Truth is signed - MM', dateParts[1]);
-      fillTextField(form, 'Date the Statement of Truth is signed - YYYY', dateParts[0]);
-    }
-  }
-
-  fillTextField(form, 'Full name of the person signing the Statement of Truth', data.signatory_name);
-
-  if (data.solicitor_firm) {
-    fillTextField(form, 'Name of claimant’s legal representative’s firm', data.solicitor_firm);
-    checkBox(form, "The Claimant believes that the facts stated in this claim form are true. I am authorised by the claimant to sign this statement", true);
-    checkBox(form, 'Statement of Truth is signed by the Claimant’s legal representative (as defined by CPR 2.3(1))', true);
-  } else {
-    checkBox(form, 'I believe that the facts stated in this clam form are true', true);
-    checkBox(form, 'Statement of Truth is signed by the Claimant', true);
-  }
-
-  fillTextField(form, 'Statement of Truth signature box', data.signatory_name);
-
-  // Address for service
-  const serviceAddressParts = [
-    data.service_address_line1 || data.landlord_address,
-    data.service_address_line2,
-    data.service_address_town,
-    data.service_address_county,
-  ].filter((part): part is string => Boolean(part));
-
-  if (serviceAddressParts.length === 0) {
-    serviceAddressParts.push(data.landlord_address);
-  }
-
-  fillTextField(
+  setTextWithVariants(
     form,
-    'building and street - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
-    serviceAddressParts[0]
-  );
-  if (serviceAddressParts.length > 1) {
-    fillTextField(
-      form,
-      'Second line of address - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
-      serviceAddressParts[1]
-    );
-  }
-
-  fillTextField(
-    form,
-    'Town or city - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
-    data.service_address_town
+    [N5_FIELDS.CLAIMANT_DETAILS, "claimant's details"], // curly then straight
+    claimantDetails,
+    true,
+    ctx
   );
 
-  fillTextField(
+  setTextWithVariants(
     form,
-    'County (optional) - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
-    data.service_address_county
+    [N5_FIELDS.DEFENDANT_DETAILS, "defendant's details"], // curly then straight
+    defendantDetails,
+    true,
+    ctx
   );
 
-  if (data.service_postcode || data.landlord_postcode) {
-    fillTextField(
-      form,
-      'Postcode - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
-      data.service_postcode || data.landlord_postcode
-    );
+  // Property address (possession of)
+  setTextRequired(form, N5_FIELDS.POSSESSION_OF, data.property_address, ctx);
+
+  // Signatory name
+  setTextRequired(form, N5_FIELDS.SIGNATORY_NAME, data.signatory_name, ctx);
+
+  // === OPTIONAL FIELDS ===
+
+  setTextOptional(form, N5_FIELDS.FEE_ACCOUNT, data.claimant_reference, ctx);
+  setTextOptional(form, N5_FIELDS.SOLICITOR_FIRM, data.solicitor_firm, ctx);
+
+  // Service address
+  const serviceAddressLines = splitAddress(
+    data.service_address_line1 || data.landlord_address
+  );
+
+  setTextOptional(form, N5_FIELDS.ADDRESS_BUILDING, serviceAddressLines[0], ctx);
+  if (serviceAddressLines.length > 1) {
+    setTextOptional(form, N5_FIELDS.ADDRESS_LINE2, serviceAddressLines[1], ctx);
   }
+  setTextOptional(form, N5_FIELDS.ADDRESS_TOWN, data.service_address_town, ctx);
+  setTextOptional(form, N5_FIELDS.ADDRESS_COUNTY, data.service_address_county, ctx);
+  setTextOptional(form, N5_FIELDS.ADDRESS_POSTCODE, data.service_postcode || data.landlord_postcode, ctx);
 
-  const servicePhone = data.service_phone || data.solicitor_phone || data.landlord_phone;
-  const serviceEmail = data.service_email || data.solicitor_email || data.landlord_email;
-
-  fillTextField(form, 'If applicable, phone number', servicePhone);
-  fillTextField(form, 'If applicable, email address', serviceEmail);
-  fillTextField(form, 'If applicable, your reference', data.claimant_reference);
+  // Note: N5 has NO checkboxes for grounds/arrears/HRA/statement of truth type
+  // Those fields don't exist in this PDF
 
   const pdfBytes = await pdfDoc.save();
-  console.log('✅ N5 form filled successfully');
+  console.log(`✅ N5 form filled successfully (${listFormFieldNames(form).length} fields available, key fields set)`);
 
   return pdfBytes;
 }
+
+// =============================================================================
+// N5B FORM FILLER
+// =============================================================================
 
 /**
  * Fill Form N5B - Claim for possession (accelerated procedure)
@@ -369,349 +601,390 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
  *
  * Official PDF: /public/official-forms/n5b-eng.pdf
  * Source: https://assets.publishing.service.gov.uk/media/5fb39bf98fa8f55de86fb3a3/n5b-eng.pdf
+ *
+ * FIELD INVENTORY: 128 text fields, 118 checkboxes
+ *
+ * IMPORTANT: This form requires specific compliance data to be collected.
+ * We only fill fields where we have actual data - no hardcoding of answers.
  */
 export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
+  const ctx = 'N5B';
   console.log('📄 Filling N5B form (Accelerated possession - Section 21)...');
 
-  // Validate required court details
+  // === VALIDATION ===
   if (!data.court_name) {
-    throw new Error('N5B form requires court_name to be specified. Please provide court details before generating court forms.');
+    throw new Error(`[${ctx}] court_name is required. Please provide court details before generating court forms.`);
+  }
+  if (!data.landlord_full_name) {
+    throw new Error(`[${ctx}] landlord_full_name is required.`);
+  }
+  if (!data.tenant_full_name) {
+    throw new Error(`[${ctx}] tenant_full_name is required.`);
+  }
+  if (!data.property_address) {
+    throw new Error(`[${ctx}] property_address is required.`);
+  }
+  if (!data.notice_service_method) {
+    throw new Error(
+      `[${ctx}] notice_service_method is required for N5B (field 10a: "How was the notice served"). ` +
+      `Valid values: "First class post", "By hand", "Email", etc. Please collect this in the wizard.`
+    );
+  }
+  if (!data.section_21_notice_date) {
+    throw new Error(`[${ctx}] section_21_notice_date is required.`);
+  }
+  if (!data.tenancy_start_date) {
+    throw new Error(`[${ctx}] tenancy_start_date is required.`);
   }
 
   const pdfDoc = await loadOfficialForm('n5b-eng.pdf');
   const form = pdfDoc.getForm();
 
-  // Build court name and address string for the single combined field
-  // The N5B has a single field "Name and address of the court" that expects both
+  // === HEADER SECTION ===
   const courtNameAndAddress = data.court_address
     ? `${data.court_name}\n${data.court_address}`
     : data.court_name;
 
-  // === HEADER SECTION ===
-  fillTextField(form, 'Enter the full names of the Claimants', data.landlord_full_name + (data.landlord_2_name ? ', ' + data.landlord_2_name : ''));
-  fillTextField(form, 'Enter the full names of the Defendants', data.tenant_full_name + (data.tenant_2_name ? ', ' + data.tenant_2_name : ''));
-  fillTextField(form, 'Name and address of the court', courtNameAndAddress);
-  fillTextField(form, 'The Claimant is claiming possession of', data.property_address);
+  setTextRequired(form, N5B_FIELDS.CLAIMANTS_NAMES,
+    data.landlord_full_name + (data.landlord_2_name ? ', ' + data.landlord_2_name : ''), ctx);
+  setTextRequired(form, N5B_FIELDS.DEFENDANTS_NAMES,
+    data.tenant_full_name + (data.tenant_2_name ? ', ' + data.tenant_2_name : ''), ctx);
+  setTextRequired(form, N5B_FIELDS.COURT_NAME_ADDRESS, courtNameAndAddress, ctx);
+  setTextRequired(form, N5B_FIELDS.CLAIMING_POSSESSION_OF, data.property_address, ctx);
 
-  // Fees
+  // === FEES (optional) ===
   if (data.court_fee) {
-    fillTextField(form, 'Court fee', `${data.court_fee.toFixed(2)}`);
+    setTextOptional(form, N5B_FIELDS.COURT_FEE, data.court_fee.toFixed(2), ctx);
   }
   if (data.solicitor_costs) {
-    fillTextField(form, 'Legal representatives costs', `${data.solicitor_costs.toFixed(2)}`);
+    setTextOptional(form, N5B_FIELDS.LEGAL_COSTS, data.solicitor_costs.toFixed(2), ctx);
   }
   const totalAmount = (data.court_fee || 0) + (data.solicitor_costs || 0);
   if (totalAmount > 0) {
-    fillTextField(form, 'Total amount', `${totalAmount.toFixed(2)}`);
+    setTextOptional(form, N5B_FIELDS.TOTAL_AMOUNT, totalAmount.toFixed(2), ctx);
   }
+
+  // === Q3: COSTS ===
+  setCheckbox(form, N5B_CHECKBOXES.COSTS_YES, !!data.solicitor_costs, ctx);
+  setCheckbox(form, N5B_CHECKBOXES.COSTS_NO, !data.solicitor_costs, ctx);
 
   // === FIRST CLAIMANT DETAILS ===
   const landlordName = splitName(data.landlord_full_name);
-  fillTextField(form, "First Claimant's first names", landlordName.firstName);
-  fillTextField(form, "First Claimant's last name", landlordName.lastName);
+  setTextOptional(form, N5B_FIELDS.FIRST_CLAIMANT_FIRST_NAMES, landlordName.firstName, ctx);
+  setTextOptional(form, N5B_FIELDS.FIRST_CLAIMANT_LAST_NAME, landlordName.lastName, ctx);
 
-  // Split address into lines
-  const landlordAddressLines = data.landlord_address.split('\n');
-  fillTextField(form, "First Claimant's address: building and street", landlordAddressLines[0]);
+  const landlordAddressLines = splitAddress(data.landlord_address);
+  setTextOptional(form, N5B_FIELDS.FIRST_CLAIMANT_ADDRESS_STREET, landlordAddressLines[0], ctx);
   if (landlordAddressLines.length > 1) {
-    fillTextField(form, "First Claimant's address: second line of address", landlordAddressLines[1]);
+    setTextOptional(form, N5B_FIELDS.FIRST_CLAIMANT_ADDRESS_LINE2, landlordAddressLines[1], ctx);
   }
   if (landlordAddressLines.length > 2) {
-    fillTextField(form, "First Claimant's address: town or city", landlordAddressLines[2]);
+    setTextOptional(form, N5B_FIELDS.FIRST_CLAIMANT_ADDRESS_TOWN, landlordAddressLines[2], ctx);
   }
-  fillTextField(form, "First Claimant's address: postcode", data.landlord_postcode);
+  setTextOptional(form, N5B_FIELDS.FIRST_CLAIMANT_ADDRESS_POSTCODE, data.landlord_postcode, ctx);
 
   // === SECOND CLAIMANT (if exists) ===
   if (data.landlord_2_name) {
     const landlord2Name = splitName(data.landlord_2_name);
-    fillTextField(form, "Second Claimant's first names", landlord2Name.firstName);
-    fillTextField(form, "Second Claimant's last name", landlord2Name.lastName);
+    setTextOptional(form, N5B_FIELDS.SECOND_CLAIMANT_FIRST_NAMES, landlord2Name.firstName, ctx);
+    setTextOptional(form, N5B_FIELDS.SECOND_CLAIMANT_LAST_NAME, landlord2Name.lastName, ctx);
   }
 
   // === FIRST DEFENDANT DETAILS ===
   const tenantName = splitName(data.tenant_full_name);
-  fillTextField(form, "First Defendant's first name(s)", tenantName.firstName);
-  fillTextField(form, "First Defendant's last name", tenantName.lastName);
+  setTextOptional(form, N5B_FIELDS.FIRST_DEFENDANT_FIRST_NAMES, tenantName.firstName, ctx);
+  setTextOptional(form, N5B_FIELDS.FIRST_DEFENDANT_LAST_NAME, tenantName.lastName, ctx);
 
-  // Property address (defendant's address)
-  const propertyAddressLines = data.property_address.split('\n');
-  fillTextField(form, "First Defendant's address: building and street", propertyAddressLines[0]);
+  const propertyAddressLines = splitAddress(data.property_address);
+  setTextOptional(form, N5B_FIELDS.FIRST_DEFENDANT_ADDRESS_STREET, propertyAddressLines[0], ctx);
   if (propertyAddressLines.length > 1) {
-    fillTextField(form, "First Defendant's address: second line of address", propertyAddressLines[1]);
+    setTextOptional(form, N5B_FIELDS.FIRST_DEFENDANT_ADDRESS_LINE2, propertyAddressLines[1], ctx);
   }
   if (propertyAddressLines.length > 2) {
-    fillTextField(form, "First Defendant's address: town or city", propertyAddressLines[2]);
+    setTextOptional(form, N5B_FIELDS.FIRST_DEFENDANT_ADDRESS_TOWN, propertyAddressLines[2], ctx);
   }
-  fillTextField(form, "First Defendant's address: postcode", data.property_postcode);
+  setTextOptional(form, N5B_FIELDS.FIRST_DEFENDANT_ADDRESS_POSTCODE, data.property_postcode, ctx);
 
   // === SECOND DEFENDANT (if exists) ===
   if (data.tenant_2_name) {
     const tenant2Name = splitName(data.tenant_2_name);
-    fillTextField(form, "Second Defendant's first names", tenant2Name.firstName);
-    fillTextField(form, "Second Defendant's last name", tenant2Name.lastName);
-
-    // Same property address for second tenant
-    fillTextField(form, "Second Defendant's address: building and street", propertyAddressLines[0]);
+    setTextOptional(form, N5B_FIELDS.SECOND_DEFENDANT_FIRST_NAMES, tenant2Name.firstName, ctx);
+    setTextOptional(form, N5B_FIELDS.SECOND_DEFENDANT_LAST_NAME, tenant2Name.lastName, ctx);
+    setTextOptional(form, N5B_FIELDS.SECOND_DEFENDANT_ADDRESS_STREET, propertyAddressLines[0], ctx);
     if (propertyAddressLines.length > 1) {
-      fillTextField(form, "Second Defendant's address: second line of address", propertyAddressLines[1]);
+      setTextOptional(form, N5B_FIELDS.SECOND_DEFENDANT_ADDRESS_LINE2, propertyAddressLines[1], ctx);
     }
     if (propertyAddressLines.length > 2) {
-      fillTextField(form, "Second Defendant's address: town or city", propertyAddressLines[2]);
+      setTextOptional(form, N5B_FIELDS.SECOND_DEFENDANT_ADDRESS_TOWN, propertyAddressLines[2], ctx);
     }
-    fillTextField(form, "Second Defendant's address: postcode", data.property_postcode);
+    setTextOptional(form, N5B_FIELDS.SECOND_DEFENDANT_ADDRESS_POSTCODE, data.property_postcode, ctx);
   }
 
-  // === CLAIM DETAILS ===
-  // Costs
-  checkBox(form, '3. Are you (the Claimant) asking for an order that the Defendant pay the costs of the claim? - Yes', !!data.solicitor_costs);
-  checkBox(form, '3. Are you (the Claimant) asking for an order that the Defendant pay the costs of the claim? - No', !data.solicitor_costs);
-
-  // Property details
-  fillTextField(form, 'Claimant seeks an order that the Defendant gives possession of: building and street', propertyAddressLines[0]);
+  // === POSSESSION ADDRESS ===
+  setTextOptional(form, N5B_FIELDS.POSSESSION_STREET, propertyAddressLines[0], ctx);
   if (propertyAddressLines.length > 1) {
-    fillTextField(form, 'Claimant seeks an order that the Defendant gives possession of: second line of address', propertyAddressLines[1]);
+    setTextOptional(form, N5B_FIELDS.POSSESSION_LINE2, propertyAddressLines[1], ctx);
   }
   if (propertyAddressLines.length > 2) {
-    fillTextField(form, 'Claimant seeks an order that the Defendant gives possession of: town or city', propertyAddressLines[2]);
+    setTextOptional(form, N5B_FIELDS.POSSESSION_TOWN, propertyAddressLines[2], ctx);
   }
-  fillTextField(form, 'Claimant seeks an order that the Defendant gives possession of: postcode', data.property_postcode);
+  setTextOptional(form, N5B_FIELDS.POSSESSION_POSTCODE, data.property_postcode, ctx);
 
-  // Is it a dwelling house?
-  checkBox(form, '5. Is the property a dwelling house or part of a dwelling house? Yes', true);
+  // === Q5: DWELLING HOUSE (always yes for residential) ===
+  setCheckbox(form, N5B_CHECKBOXES.DWELLING_YES, true, ctx);
 
-  // === TENANCY DATES ===
+  // === Q6-7: TENANCY DATES ===
   const tenancyDate = splitDate(data.tenancy_start_date);
   if (tenancyDate) {
-    fillTextField(form, '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Day', tenancyDate.day);
-    fillTextField(form, '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Month', tenancyDate.month);
-    fillTextField(form, '6. On what date was the property let to the Defendant by way of a written tenancy agreement? Year', tenancyDate.year);
-
-    // Same date for agreement (typically)
-    fillTextField(form, '7. The tenancy agreement is dated. Day', tenancyDate.day);
-    fillTextField(form, '7. The tenancy agreement is dated. Month', tenancyDate.month);
-    fillTextField(form, '7. The tenancy agreement is dated. Year', tenancyDate.year);
+    setTextOptional(form, N5B_FIELDS.TENANCY_LET_DATE_DAY, tenancyDate.day, ctx);
+    setTextOptional(form, N5B_FIELDS.TENANCY_LET_DATE_MONTH, tenancyDate.month, ctx);
+    setTextOptional(form, N5B_FIELDS.TENANCY_LET_DATE_YEAR, tenancyDate.year, ctx);
+    // Assume agreement dated same as let date (common case)
+    setTextOptional(form, N5B_FIELDS.TENANCY_AGREEMENT_DATE_DAY, tenancyDate.day, ctx);
+    setTextOptional(form, N5B_FIELDS.TENANCY_AGREEMENT_DATE_MONTH, tenancyDate.month, ctx);
+    setTextOptional(form, N5B_FIELDS.TENANCY_AGREEMENT_DATE_YEAR, tenancyDate.year, ctx);
   }
 
-  // Subsequent tenancies
-  checkBox(form, '8. Has any subsequent written tenancy agreement been entered into? No', true);
+  // === Q8: SUBSEQUENT TENANCY ===
+  if (data.subsequent_tenancy !== undefined) {
+    setCheckbox(form, N5B_CHECKBOXES.SUBSEQUENT_TENANCY_YES, data.subsequent_tenancy, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.SUBSEQUENT_TENANCY_NO, !data.subsequent_tenancy, ctx);
+  }
 
-  // === AST VERIFICATION (Critical for Section 21) ===
-  checkBox(form, '9a Was the first tenancy and any agreement for it made on or after 28 February 1997? Yes', true); // Most ASTs
-  checkBox(form, '9b Was a notice served on the Defendant stating that any tenancy would not be, or would cease to be, an assured shorthold tenancy? No', true);
-  checkBox(form, '9c Is there any provision in any tenancy agreement which states that it is not an assured shorthold tenancy? No', true);
-  checkBox(form, '9d Is the \'agricultural worker condition\' defined in Schedule 3 to the Housing Act 1988 fulfilled with respect to the property? No', true);
-  checkBox(form, '9e Did any tenancy arise by way of succession under s.39 of the Housing Act 1988? No', true);
-  checkBox(form, '9f Was any tenancy previously a secure tenancy under s.79 of the Housing Act 1985? No', true);
-  checkBox(form, '9g Did any tenancy arise under Schedule 10 to the Local Government and Housing Act 1989 (at the end of a long residential tenancy)? No', true);
-
-  // === SECTION 21 NOTICE SERVICE ===
-  fillTextField(form, '10a How was the notice served', 'By hand / First class post');
+  // === Q10: NOTICE SERVICE (REQUIRED) ===
+  setTextRequired(form, N5B_FIELDS.NOTICE_SERVICE_METHOD, data.notice_service_method, ctx);
 
   const noticeDate = splitDate(data.section_21_notice_date);
   if (noticeDate) {
-    fillTextField(form, '10b. On what date was the notice served? Day', noticeDate.day);
-    fillTextField(form, '10b. On what date was the notice served? Month', noticeDate.month);
-    fillTextField(form, '10b. On what date was the notice served? Year', noticeDate.year);
+    setTextOptional(form, N5B_FIELDS.NOTICE_SERVED_DATE_DAY, noticeDate.day, ctx);
+    setTextOptional(form, N5B_FIELDS.NOTICE_SERVED_DATE_MONTH, noticeDate.month, ctx);
+    setTextOptional(form, N5B_FIELDS.NOTICE_SERVED_DATE_YEAR, noticeDate.year, ctx);
   }
 
-  fillTextField(form, '10c Who served the notice', data.landlord_full_name);
-  fillTextField(form, '10d Who was the notice served on', data.tenant_full_name);
+  setTextOptional(form, N5B_FIELDS.NOTICE_SERVED_BY, data.landlord_full_name, ctx);
+  setTextOptional(form, N5B_FIELDS.NOTICE_SERVED_ON, data.tenant_full_name, ctx);
 
-  // Expiry date (notice + 2 months)
-  if (data['notice_expiry_date']) {
-    const expiryDate = splitDate(data['notice_expiry_date']);
+  if (data.notice_expiry_date) {
+    const expiryDate = splitDate(data.notice_expiry_date);
     if (expiryDate) {
-      fillTextField(form, '10e. After what date did the notice require the Defendant to leave the property? Day', expiryDate.day);
-      fillTextField(form, '10e. After what date did the notice require the Defendant to leave the property? Month', expiryDate.month);
-      fillTextField(form, '10e. After what date did the notice require the Defendant to leave the property? Year', expiryDate.year);
+      setTextOptional(form, N5B_FIELDS.NOTICE_EXPIRY_DATE_DAY, expiryDate.day, ctx);
+      setTextOptional(form, N5B_FIELDS.NOTICE_EXPIRY_DATE_MONTH, expiryDate.month, ctx);
+      setTextOptional(form, N5B_FIELDS.NOTICE_EXPIRY_DATE_YEAR, expiryDate.year, ctx);
     }
   }
 
-  // === HMO/LICENSING ===
-  const hmoRequired = data['hmo_license_required'] || false;
-  const hmoValid = data['hmo_license_valid'] || false;
-
-  checkBox(form, '11a. Is the property required to be licensed under Part 2 (Houses in Multiple Occupation) or Part 3 (Selective Licensing) of the Housing Act 2004? Yes', hmoRequired);
-  checkBox(form, '11a. Is the property required to be licensed under Part 2 (Houses in Multiple Occupation) or Part 3 (Selective Licensing) of the Housing Act 2004? No', !hmoRequired);
-
-  if (hmoRequired) {
-    checkBox(form, 'If yes, is there a valid licence? Yes', hmoValid);
-    checkBox(form, 'If yes, is there a valid licence? No', !hmoValid);
-  }
-
-  checkBox(form, '11b. Is a decision outstanding as to licensing, or as to a temporary exemption notice? No', true);
-
-  // === DEPOSIT PROTECTION ===
-  const depositPaid = !!data.deposit_amount;
-  checkBox(form, '12. Was a deposit paid in connection with the current tenancy or any prior tenancy of the property to which the Defendant was a party? Yes', depositPaid);
-  checkBox(form, '12. Was a deposit paid in connection with the current tenancy or any prior tenancy of the property to which the Defendant was a party? No', !depositPaid);
-
+  // === Q12-14: DEPOSIT (only if we have data) ===
+  const depositPaid = data.deposit_amount !== undefined && data.deposit_amount > 0;
   if (depositPaid) {
-    // Deposit not returned (still protected)
-    checkBox(form, '13. Has the deposit been returned to the Defendant (or the person – if not the Defendant – who paid the deposit)? No', true);
+    setCheckbox(form, N5B_CHECKBOXES.DEPOSIT_PAID_YES, true, ctx);
 
-    // Prescribed information given
-    checkBox(form, '14a. Has the Claimant given to the Defendant, and to anyone who paid the deposit on behalf of the Defendant, the prescribed information? Yes', true);
-
-    const depositInfoDate = splitDate(data.deposit_protection_date);
-    if (depositInfoDate) {
-      fillTextField(form, '14b. On what date was the prescribed information given? Day', depositInfoDate.day);
-      fillTextField(form, '14b. On what date was the prescribed information given? Month', depositInfoDate.month);
-      fillTextField(form, '14b. On what date was the prescribed information given? Year', depositInfoDate.year);
+    // Q13: Deposit returned
+    if (data.deposit_returned !== undefined) {
+      setCheckbox(form, N5B_CHECKBOXES.DEPOSIT_RETURNED_YES, data.deposit_returned, ctx);
+      setCheckbox(form, N5B_CHECKBOXES.DEPOSIT_RETURNED_NO, !data.deposit_returned, ctx);
     }
+
+    // Q14a: Prescribed info given
+    if (data.deposit_prescribed_info_given !== undefined) {
+      setCheckbox(form, N5B_CHECKBOXES.PRESCRIBED_INFO_YES, data.deposit_prescribed_info_given, ctx);
+      setCheckbox(form, N5B_CHECKBOXES.PRESCRIBED_INFO_NO, !data.deposit_prescribed_info_given, ctx);
+    }
+
+    // Q14b: Date prescribed info given
+    if (data.deposit_protection_date) {
+      const depositInfoDate = splitDate(data.deposit_protection_date);
+      if (depositInfoDate) {
+        setTextOptional(form, N5B_FIELDS.DEPOSIT_INFO_DATE_DAY, depositInfoDate.day, ctx);
+        setTextOptional(form, N5B_FIELDS.DEPOSIT_INFO_DATE_MONTH, depositInfoDate.month, ctx);
+        setTextOptional(form, N5B_FIELDS.DEPOSIT_INFO_DATE_YEAR, depositInfoDate.year, ctx);
+      }
+    }
+  } else if (data.deposit_amount === 0 || data.deposit_amount === undefined) {
+    // Explicitly no deposit
+    setCheckbox(form, N5B_CHECKBOXES.DEPOSIT_PAID_NO, true, ctx);
   }
 
-  // === HOUSING ACT 2004 NOTICES (Retaliatory Eviction) ===
-  checkBox(form, '15. Has the Claimant been served with a relevant notice in relation to the condition of the property or relevant common parts under s.11, s.12 or s.40(7) of the Housing Act 2004? No', true);
+  // === Q21: ORDERS REQUESTED ===
+  setCheckbox(form, N5B_CHECKBOXES.ORDER_POSSESSION, true, ctx);
+  if (data.solicitor_costs) {
+    setCheckbox(form, N5B_CHECKBOXES.ORDER_COSTS, true, ctx);
+  }
 
-  // === EPC AND GAS SAFETY ===
-  checkBox(form, 'Copy of the Energy Performance Certificate marked F', true);
-  checkBox(form, 'Copy of the Gas Safety Records marked G G1 G2 etc', true);
-  checkBox(form, 'Copy of the Tenancy Deposit Certificate marked E', depositPaid);
-
-  // === ATTACHMENTS ===
-  checkBox(form, 'Copy of the first written tenancy agreement marked A', true);
-  checkBox(form, 'Copy of the notice saying that possession was required marked B', true);
-  checkBox(form, 'Proof of service of the notice requiring possession marked B1', true);
-
-  // === ENGLAND/WALES ===
-  checkBox(form, 'Is the property you are claiming possession of located wholly or partly in England? Yes', true);
+  // === ENGLAND LOCATION ===
+  setCheckbox(form, N5B_CHECKBOXES.ENGLAND_YES, true, ctx);
 
   // === STATEMENT OF TRUTH ===
-  fillTextField(form, 'Statement of Truth signature', data.signatory_name);
+  setTextOptional(form, N5B_FIELDS.STATEMENT_SIGNATURE, data.signatory_name, ctx);
+  setTextOptional(form, N5B_FIELDS.STATEMENT_SIGNATORY_NAME, data.signatory_name, ctx);
 
-  if (data.solicitor_firm) {
-    fillTextField(form, 'Name of Claimants legal representatives firm', data.solicitor_firm);
+  if (data.signature_date) {
+    const sigDate = splitDate(data.signature_date);
+    if (sigDate) {
+      setTextOptional(form, N5B_FIELDS.STATEMENT_DATE_DAY, sigDate.day, ctx);
+      setTextOptional(form, N5B_FIELDS.STATEMENT_DATE_MONTH, sigDate.month, ctx);
+      setTextOptional(form, N5B_FIELDS.STATEMENT_DATE_YEAR, sigDate.year, ctx);
+    }
   }
 
+  if (data.solicitor_firm) {
+    setTextOptional(form, N5B_FIELDS.SOLICITOR_FIRM, data.solicitor_firm, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.SOT_LEGAL_REP, true, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.SOT_AUTHORISED, true, ctx);
+  } else {
+    setCheckbox(form, N5B_CHECKBOXES.SOT_CLAIMANT, true, ctx);
+    setCheckbox(form, N5B_CHECKBOXES.SOT_BELIEVES, true, ctx);
+  }
+
+  // === ATTACHMENTS (only check if we have the data indicating they're provided) ===
+  setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_TENANCY, true, ctx); // Always required
+  setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_NOTICE, true, ctx);  // Always required
+  setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_SERVICE_PROOF, true, ctx); // Always required
+
+  if (depositPaid) {
+    setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_DEPOSIT_CERT, true, ctx);
+  }
+  if (data.epc_provided) {
+    setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_EPC, true, ctx);
+  }
+  if (data.gas_safety_provided) {
+    setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_GAS, true, ctx);
+  }
+
+  // === SERVICE ADDRESS ===
+  const serviceAddressLines = splitAddress(data.service_address_line1 || data.landlord_address);
+  setTextOptional(form, N5B_FIELDS.SERVICE_ADDRESS_STREET, serviceAddressLines[0], ctx);
+  if (serviceAddressLines.length > 1) {
+    setTextOptional(form, N5B_FIELDS.SERVICE_ADDRESS_LINE2, serviceAddressLines[1], ctx);
+  }
+  if (serviceAddressLines.length > 2) {
+    setTextOptional(form, N5B_FIELDS.SERVICE_ADDRESS_TOWN, serviceAddressLines[2], ctx);
+  }
+  setTextOptional(form, N5B_FIELDS.SERVICE_ADDRESS_POSTCODE, data.service_postcode || data.landlord_postcode, ctx);
+
+  // Contact details
+  setTextOptional(form, N5B_FIELDS.PHONE, data.service_phone || data.landlord_phone, ctx);
+  setTextOptional(form, N5B_FIELDS.EMAIL, data.service_email || data.landlord_email, ctx);
+  setTextOptional(form, N5B_FIELDS.DX, data.dx_number, ctx);
+  setTextOptional(form, N5B_FIELDS.REFERENCE, data.claimant_reference, ctx);
+
   const pdfBytes = await pdfDoc.save();
-  console.log('✅ N5B form filled successfully (246 fields mapped)');
+  console.log(`✅ N5B form filled successfully (${listFormFieldNames(form).length} fields in form, key fields set)`);
 
   return pdfBytes;
 }
+
+// =============================================================================
+// N119 FORM FILLER
+// =============================================================================
 
 /**
  * Fill Form N119 - Particulars of claim for possession
  *
  * Official PDF: /public/official-forms/n119-eng.pdf
  * Source: https://assets.publishing.service.gov.uk/media/601bc1f8e90e071292663ea8/n119-eng.pdf
+ *
+ * FIELD INVENTORY: 17 text fields, 0 checkboxes
+ * Note: All fields are TEXT fields - no checkboxes in this form!
  */
 export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
+  const ctx = 'N119';
   console.log('📄 Filling N119 form (Particulars of claim)...');
 
-  // Validate required court details
+  // === VALIDATION ===
   if (!data.court_name) {
-    throw new Error('N119 form requires court_name to be specified. Please provide court details before generating court forms.');
+    throw new Error(`[${ctx}] court_name is required. Please provide court details before generating court forms.`);
+  }
+  if (!data.landlord_full_name) {
+    throw new Error(`[${ctx}] landlord_full_name is required.`);
+  }
+  if (!data.tenant_full_name) {
+    throw new Error(`[${ctx}] tenant_full_name is required.`);
+  }
+  if (!data.property_address) {
+    throw new Error(`[${ctx}] property_address is required.`);
+  }
+  if (!data.tenancy_start_date) {
+    throw new Error(`[${ctx}] tenancy_start_date is required.`);
   }
 
   const pdfDoc = await loadOfficialForm('n119-eng.pdf');
   const form = pdfDoc.getForm();
 
-  // Header - field name is "name of court" in the N119 PDF
-  fillTextField(form, 'name of court', data.court_name);
-  fillTextField(form, 'name of claimant', data.landlord_full_name);
-  fillTextField(form, 'name of defendant', data.tenant_full_name);
+  // === REQUIRED FIELDS ===
+  setTextRequired(form, N119_FIELDS.COURT, data.court_name, ctx);
+  setTextRequired(form, N119_FIELDS.CLAIMANT, data.landlord_full_name, ctx);
+  setTextRequired(form, N119_FIELDS.DEFENDANT, data.tenant_full_name, ctx);
+  setTextRequired(form, N119_FIELDS.POSSESSION_OF, data.property_address, ctx);
 
-  // Property details
-  fillTextField(form, 'The claimant has a right to possession of:', data.property_address);
-  fillTextField(form, 'To the best of the claimant’s knowledge the following persons are in possession of the property:', data.tenant_full_name);
+  // Occupants - default to tenant name
+  setTextOptional(form, N119_FIELDS.OCCUPANTS, data.tenant_full_name, ctx);
 
-  // Tenancy details
-  fillTextField(form, '3(a) Type of tenancy', 'Assured Shorthold Tenancy');
-  fillTextField(form, '3(a) Date of tenancy', data.tenancy_start_date);
+  // === TENANCY DETAILS ===
+  // Type of tenancy - use collected value or a safe generic
+  const tenancyType = data.tenancy_type || 'Assured Shorthold Tenancy';
+  setTextOptional(form, N119_FIELDS.TENANCY_TYPE, tenancyType, ctx);
+  setTextOptional(form, N119_FIELDS.TENANCY_DATE, data.tenancy_start_date, ctx);
 
   // Rent
-  fillTextField(form, '3(b) The current rent is', `£${data.rent_amount}`);
-
-  // Rent frequency checkboxes
-  if (data.rent_frequency === 'weekly') {
-    fillTextField(form, '3(b) The current rent is payable each week', '£' + data.rent_amount);
-  } else if (data.rent_frequency === 'fortnightly') {
-    fillTextField(form, '3(b) The current rent is payable each fortnight', '£' + data.rent_amount);
-  } else if (data.rent_frequency === 'monthly') {
-    fillTextField(form, '3(b) The current rent is payable each month', '£' + data.rent_amount);
-  } else {
-    fillTextField(form, '3(b) The current rent is payable each - specify the period', data.rent_frequency);
+  if (data.rent_amount !== undefined) {
+    const rentFrequencyText = data.rent_frequency === 'weekly' ? 'per week' :
+                               data.rent_frequency === 'fortnightly' ? 'per fortnight' :
+                               data.rent_frequency === 'monthly' ? 'per month' :
+                               data.rent_frequency === 'quarterly' ? 'per quarter' :
+                               data.rent_frequency === 'yearly' ? 'per year' : '';
+    setTextOptional(form, N119_FIELDS.RENT, `£${data.rent_amount} ${rentFrequencyText}`, ctx);
   }
 
-  // Arrears
-  if (data.total_arrears) {
-    fillTextField(
-      form,
-      '3(c) Any unpaid rent or charge for use and occupation should be calculated at £',
-      data.total_arrears.toString()
-    );
-    fillTextField(form, '3(d) Total amount outstanding', data.total_arrears.toString());
-  }
-
-  // Grounds for possession
-  fillTextField(
-    form,
-    '4. (a) The reason the claimant is asking for possession is:',
-    data.particulars_of_claim || (data.ground_numbers ? `Grounds: ${data.ground_numbers}` : undefined)
+  // === REASON FOR POSSESSION ===
+  setTextOptional(form, N119_FIELDS.REASON,
+    data.particulars_of_claim || (data.ground_numbers ? `Grounds: ${data.ground_numbers}` : undefined),
+    ctx
   );
 
-  // Notice details
-  if (data.section_8_notice_date) {
-    const dateParts = data.section_8_notice_date.split('-');
+  // === NOTICE DATES ===
+  const noticeDate = data.section_8_notice_date || data.section_21_notice_date;
+  if (noticeDate) {
+    const dateParts = noticeDate.split('-');
     if (dateParts.length === 3) {
-      fillTextField(form, '6. Day and month notice served', `${dateParts[2]}/${dateParts[1]}`);
-      fillTextField(form, '6. Year notice served', dateParts[0]);
-    }
-  } else if (data.section_21_notice_date) {
-    const dateParts = data.section_21_notice_date.split('-');
-    if (dateParts.length === 3) {
-      fillTextField(form, '6. Day and month notice served', `${dateParts[2]}/${dateParts[1]}`);
-      fillTextField(form, '6. Year notice served', dateParts[0]);
+      setTextOptional(form, N119_FIELDS.NOTICE_DATE_DAY_MONTH, `${dateParts[2]}/${dateParts[1]}`, ctx);
+      setTextOptional(form, N119_FIELDS.NOTICE_DATE_YEAR, dateParts[0], ctx);
     }
   }
 
-  // Claimant type (private landlord)
-  checkBox(form, '13. The claimant is - other', true);
-  fillTextField(form, '13. Details if the claimant is some other entity', 'Private landlord');
+  // === CLAIMANT TYPE (Section 13) ===
+  // Note: These are TEXT fields, not checkboxes!
+  // We mark "other" and provide details
+  setTextOptional(form, N119_FIELDS.CLAIMANT_TYPE_OTHER, 'X', ctx);  // Mark this option
+  setTextOptional(form, N119_FIELDS.CLAIMANT_TYPE_DETAILS, 'Private landlord', ctx);
 
-  // No demotion order
-  checkBox(form, '11. In the alternative to possession, is the claimant asking the court to make a demotion order or an order suspending the right to buy? No', true);
-
-  // Statement of Truth
-  if (data.signature_date) {
-    const dateParts = data.signature_date.split('-');
-    if (dateParts.length === 3) {
-      fillTextField(form, 'Date Statement of Truth is signed - DD', dateParts[2]);
-      fillTextField(form, 'Date Statement of Truth is signed - MM', dateParts[1]);
-      fillTextField(form, 'Date Statement of Truth is signed - YYYY', dateParts[0]);
-    }
-  }
-
-  fillTextField(form, 'Full name of person signing the Statement of Truth', data.signatory_name);
-
+  // === STATEMENT OF TRUTH ===
+  // Note: These are also TEXT fields, not checkboxes!
   if (data.solicitor_firm) {
-    fillTextField(form, 'Name of claimant’s legal representative’s firm', data.solicitor_firm);
-    checkBox(form, 'The Claimant believes that the facts stated in these particulars of claim are true. I am authorised by the claimant to sign this statement', true);
-    checkBox(form, 'Statement of Truth signed by Claimant’s legal representative (as defined by CPR 2.3(1))', true);
+    setTextOptional(form, N119_FIELDS.SOT_AUTHORISED, data.signatory_name, ctx);
+    setTextOptional(form, N119_FIELDS.SOT_SIGNED_BY_REP, data.signatory_name, ctx);
+    setTextOptional(form, N119_FIELDS.SOLICITOR_FIRM, data.solicitor_firm, ctx);
   } else {
-    checkBox(form, 'I believe that the facts stated in these particulars of claim are true', true);
-    checkBox(form, 'Statement of Truth signed by Claimant', true);
+    setTextOptional(form, N119_FIELDS.SOT_BELIEVES, data.signatory_name, ctx);
   }
-
-  fillTextField(form, 'Statement of Truth signature box', data.signatory_name);
 
   const pdfBytes = await pdfDoc.save();
-  console.log('✅ N119 form filled successfully');
+  console.log(`✅ N119 form filled successfully (${listFormFieldNames(form).length} fields in form, key fields set)`);
 
   return pdfBytes;
 }
+
+// =============================================================================
+// N1 FORM FILLER (Money Claims)
+// =============================================================================
 
 /**
  * Fill Form N1 - Claim form (for money claims)
  *
  * Official PDF: /public/official-forms/N1_1224.pdf
  * Source: https://assets.publishing.service.gov.uk/media/674d7ea12e91c6fb83fb5162/N1_1224.pdf
- *
- * NOTE: This form uses generic field names. Field mapping was determined by
- * visual inspection of test PDF. See scripts/test-n1-fields.ts
  */
 export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
+  const ctx = 'N1';
   console.log('📄 Filling N1 form (Money claim)...');
 
   const pdfDoc = await loadOfficialForm('N1_1224.pdf');
@@ -720,199 +993,165 @@ export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
   // === PAGE 1 - Main Claim Form ===
 
   // Court and fees header
-  fillTextField(form, 'Text35', data.court_name); // "In the [court name]"
-  fillTextField(form, 'Text36', data.claimant_reference); // Fee Account no.
+  setTextOptional(form, 'Text35', data.court_name, ctx);
+  setTextOptional(form, 'Text36', data.claimant_reference, ctx);
 
   // Claimant details (large text box)
   const claimantDetails = `${data.landlord_full_name}\n${data.landlord_address}`;
-  fillTextField(form, 'Text21', claimantDetails);
+  setTextOptional(form, 'Text21', claimantDetails, ctx);
 
   // Defendant details (large text box)
   const defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
-  fillTextField(form, 'Text22', defendantDetails);
+  setTextOptional(form, 'Text22', defendantDetails, ctx);
 
   // Brief details of claim
   const briefDetails = data.particulars_of_claim
-    ? data.particulars_of_claim.substring(0, 200) + '...'
+    ? data.particulars_of_claim.substring(0, 200) + (data.particulars_of_claim.length > 200 ? '...' : '')
     : 'Claim for unpaid rent and possession of property';
-  fillTextField(form, 'Text23', briefDetails);
+  setTextOptional(form, 'Text23', briefDetails, ctx);
 
   // Value
   if (data.total_claim_amount) {
-    fillTextField(form, 'Text24', `£${data.total_claim_amount.toFixed(2)}`);
+    setTextOptional(form, 'Text24', `£${data.total_claim_amount.toFixed(2)}`, ctx);
   }
 
-  // Defendant's address for service (left box, bottom)
-  fillTextField(form, 'Text Field 48', data.property_address);
+  // Defendant's address for service
+  setTextOptional(form, 'Text Field 48', data.property_address, ctx);
 
-  // Financial details (bottom right)
+  // Financial details
   if (data.total_claim_amount) {
-    fillTextField(form, 'Text25', data.total_claim_amount.toFixed(2)); // Amount claimed (no £ symbol)
+    setTextOptional(form, 'Text25', data.total_claim_amount.toFixed(2), ctx);
   }
   if (data.court_fee) {
-    fillTextField(form, 'Text26', data.court_fee.toFixed(2)); // Court fee
+    setTextOptional(form, 'Text26', data.court_fee.toFixed(2), ctx);
   }
   if (data.solicitor_costs) {
-    fillTextField(form, 'Text27', data.solicitor_costs.toFixed(2)); // Legal rep costs
+    setTextOptional(form, 'Text27', data.solicitor_costs.toFixed(2), ctx);
   }
 
-  // Total amount
   const totalAmount = (data.total_claim_amount || 0) + (data.court_fee || 0) + (data.solicitor_costs || 0);
   if (totalAmount > 0) {
-    fillTextField(form, 'Text28', totalAmount.toFixed(2));
+    setTextOptional(form, 'Text28', totalAmount.toFixed(2), ctx);
   }
 
-  // === PAGE 2 - Hearing Centre and Questions ===
+  // === PAGE 2 ===
+  setCheckbox(form, 'Check Box40', true, ctx); // Vulnerability: No
+  setCheckbox(form, 'Check Box42', true, ctx); // Human Rights Act: No
 
-  // Preferred County Court Hearing Centre
-  // Note: There's a field name conflict - Text Field 28 appears twice!
-  // We'll skip this for now as it's the same name as Total amount
-  if (data.court_name) {
-    // Try to fill hearing centre (may conflict with total amount field)
-    try {
-      fillTextField(form, 'Text Field 28', data.court_name);
-    } catch (error) {
-      console.warn(`Could not fill hearing centre due to field name conflict: ${error}`);
-    }
-  }
-
-  // Vulnerability - No (most common case)
-  checkBox(form, 'Check Box40', true); // Vulnerability: No
-
-  // Human Rights Act - No (most common case)
-  checkBox(form, 'Check Box42', true); // Human Rights Act: No
-
-  // === PAGE 3 - Particulars of Claim ===
-
-  // Particulars attached checkbox
-  checkBox(form, 'Check Box43', !!data.particulars_of_claim);
-
-  // Particulars text (large text area)
+  // === PAGE 3 ===
   if (data.particulars_of_claim) {
-    fillTextField(form, 'Text30', data.particulars_of_claim);
+    setCheckbox(form, 'Check Box43', true, ctx);
+    setTextOptional(form, 'Text30', data.particulars_of_claim, ctx);
   }
 
   // === PAGE 4 - Statement of Truth ===
-
-  // Statement of Truth checkboxes
   if (data.solicitor_firm) {
-    checkBox(form, 'Check Box46', true); // "The claimant believes... I am authorised"
-    checkBox(form, 'Check Box49', true); // "Claimant's legal representative"
+    setCheckbox(form, 'Check Box46', true, ctx);
+    setCheckbox(form, 'Check Box49', true, ctx);
   } else {
-    checkBox(form, 'Check Box45', true); // "I believe that the facts stated..."
-    checkBox(form, 'Check Box47', true); // "Claimant"
+    setCheckbox(form, 'Check Box45', true, ctx);
+    setCheckbox(form, 'Check Box47', true, ctx);
   }
 
-  // Signature box
-  fillTextField(form, 'Text Field 47', data.signatory_name);
+  setTextOptional(form, 'Text Field 47', data.signatory_name, ctx);
+  setTextOptional(form, 'Text Field 46', data.signatory_name, ctx);
 
-  // Date fields
   if (data.signature_date) {
     const dateparts = splitDate(data.signature_date);
     if (dateparts) {
-      fillTextField(form, 'Text31', dateparts.day); // Day
-      fillTextField(form, 'Text32', dateparts.month); // Month
-      fillTextField(form, 'Text33', dateparts.year); // Year
+      setTextOptional(form, 'Text31', dateparts.day, ctx);
+      setTextOptional(form, 'Text32', dateparts.month, ctx);
+      setTextOptional(form, 'Text33', dateparts.year, ctx);
     }
   }
 
-  // Full name
-  fillTextField(form, 'Text Field 46', data.signatory_name);
-
-  // Legal representative's firm
   if (data.solicitor_firm) {
-    fillTextField(form, 'Text Field 45', data.solicitor_firm);
-  }
-
-  // Position or office held
-  if (data.solicitor_firm && data['solicitor_position']) {
-    fillTextField(form, 'Text Field 44', data['solicitor_position']);
+    setTextOptional(form, 'Text Field 45', data.solicitor_firm, ctx);
   }
 
   // === PAGE 5 - Address for Service ===
-
-  const serviceAddressLines = [
-    data.service_address_line1 || data.landlord_address,
-    data.service_address_line2,
-    data.service_address_town,
-    data.service_address_county,
-  ].filter((part): part is string => Boolean(part));
-
-  fillTextField(form, 'Text Field 10', serviceAddressLines[0]); // Building and street
+  const serviceAddressLines = splitAddress(data.service_address_line1 || data.landlord_address);
+  setTextOptional(form, 'Text Field 10', serviceAddressLines[0], ctx);
   if (serviceAddressLines.length > 1) {
-    fillTextField(form, 'Text Field 9', serviceAddressLines[1]); // Second line
+    setTextOptional(form, 'Text Field 9', serviceAddressLines[1], ctx);
   }
   if (serviceAddressLines.length > 2) {
-    fillTextField(form, 'Text Field 8', serviceAddressLines[2]); // Town or city
+    setTextOptional(form, 'Text Field 8', serviceAddressLines[2], ctx);
   }
   if (serviceAddressLines.length > 3) {
-    fillTextField(form, 'Text Field 7', serviceAddressLines[3]); // County
+    setTextOptional(form, 'Text Field 7', serviceAddressLines[3], ctx);
   }
 
-  // Postcode (max 7 characters)
   const postcode = (data.service_postcode || data.landlord_postcode || '').substring(0, 7);
-  fillTextField(form, 'Text34', postcode);
+  setTextOptional(form, 'Text34', postcode, ctx);
 
-  // Contact details
   const servicePhone = data.service_phone || data.solicitor_phone || data.landlord_phone;
   const serviceEmail = data.service_email || data.solicitor_email || data.landlord_email;
 
-  fillTextField(form, 'Text Field 6', servicePhone); // Phone number
-  fillTextField(form, 'Text Field 4', data['dx_number']); // DX number (if applicable)
-  fillTextField(form, 'Text Field 3', data.claimant_reference); // Your Ref.
-  fillTextField(form, 'Text Field 2', serviceEmail); // Email
+  setTextOptional(form, 'Text Field 6', servicePhone, ctx);
+  setTextOptional(form, 'Text Field 4', data.dx_number, ctx);
+  setTextOptional(form, 'Text Field 3', data.claimant_reference, ctx);
+  setTextOptional(form, 'Text Field 2', serviceEmail, ctx);
 
   const pdfBytes = await pdfDoc.save();
-  console.log('✅ N1 form filled successfully (43 fields mapped)');
+  console.log(`✅ N1 form filled successfully`);
 
   return pdfBytes;
 }
+
+// =============================================================================
+// FORM 6A (Section 21 Notice)
+// =============================================================================
 
 /**
  * Fill Form 6A - Section 21 notice (prescribed form)
  *
  * Official PDF: /public/official-forms/form_6a.pdf
- * Source: https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/468937/form_6a.pdf
  */
 export async function fillForm6A(data: CaseData): Promise<Uint8Array> {
+  const ctx = 'Form6A';
   console.log('📄 Filling Form 6A (Section 21 notice)...');
 
   const pdfDoc = await loadOfficialForm('form_6a.pdf');
   const form = pdfDoc.getForm();
 
   // Property address
-  fillTextField(form, 'Premises address', data.property_address);
+  setTextOptional(form, 'Premises address', data.property_address, ctx);
 
-  // Leaving date - formatted as DD/MM/YYYY
-  fillTextField(form, 'leaving date DD/MM/YYYYY', data.section_21_notice_date);
+  // Leaving date
+  setTextOptional(form, 'leaving date DD/MM/YYYYY', data.section_21_notice_date, ctx);
 
   // Landlord/agent names
-  fillTextField(form, 'Name 1', data.landlord_full_name);
-  fillTextField(form, 'Name 2', data.landlord_2_name);
+  setTextOptional(form, 'Name 1', data.landlord_full_name, ctx);
+  setTextOptional(form, 'Name 2', data.landlord_2_name, ctx);
 
   // Landlord/agent address
-  fillTextField(form, 'Address 1', data.landlord_address);
-  fillTextField(form, 'Signatory address 1', data.landlord_address);
-  fillTextField(form, 'Signatory address 2', data.landlord_address); // Second signatory
+  setTextOptional(form, 'Address 1', data.landlord_address, ctx);
+  setTextOptional(form, 'Signatory address 1', data.landlord_address, ctx);
+  setTextOptional(form, 'Signatory address 2', data.landlord_address, ctx);
 
   // Contact details
-  fillTextField(form, 'Signatory telephone1', data.landlord_phone);
-  fillTextField(form, 'Signatory telephone2', data.landlord_phone);
-  fillTextField(form, 'Signatory Telephone 1', data.landlord_phone);
-  fillTextField(form, 'Signatory Telephone 2', data.landlord_phone);
+  setTextOptional(form, 'Signatory telephone1', data.landlord_phone, ctx);
+  setTextOptional(form, 'Signatory telephone2', data.landlord_phone, ctx);
+  setTextOptional(form, 'Signatory Telephone 1', data.landlord_phone, ctx);
+  setTextOptional(form, 'Signatory Telephone 2', data.landlord_phone, ctx);
 
   // Signatory names
-  fillTextField(form, 'Signatory Name 1', data.landlord_full_name);
-  fillTextField(form, 'Signatory name 2 ', data.landlord_2_name);
+  setTextOptional(form, 'Signatory Name 1', data.landlord_full_name, ctx);
+  setTextOptional(form, 'Signatory name 2 ', data.landlord_2_name, ctx);
 
   // Date signed
-  fillTextField(form, 'Date 2 ', data.signature_date);
+  setTextOptional(form, 'Date 2 ', data.signature_date, ctx);
 
   const pdfBytes = await pdfDoc.save();
   console.log('✅ Form 6A filled successfully');
 
   return pdfBytes;
 }
+
+// =============================================================================
+// MAIN ENTRY POINT
+// =============================================================================
 
 /**
  * Main entry point - fill any official form

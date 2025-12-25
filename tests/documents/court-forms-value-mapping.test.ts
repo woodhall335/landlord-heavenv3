@@ -38,7 +38,7 @@ async function getTextFieldValue(
 }
 
 /**
- * Create test case data with court details
+ * Create test case data with all required fields for N5/N5B/N119
  */
 function createTestCaseData(overrides: Partial<CaseData> = {}): CaseData {
   return {
@@ -60,8 +60,9 @@ function createTestCaseData(overrides: Partial<CaseData> = {}): CaseData {
     ground_numbers: '8, 10, 11',
     ground_codes: ['8', '10', '11'],
     section_8_notice_date: '2024-06-01',
-    section_21_notice_date: undefined,
+    section_21_notice_date: '2024-06-01',  // Required for N5B
     notice_served_date: '2024-06-01',
+    notice_service_method: 'First class post',  // Required for N5B
     particulars_of_claim: 'The tenant owes rent arrears.',
     total_arrears: 3600,
     arrears_at_notice_date: 3600,
@@ -139,9 +140,7 @@ describe('Court Forms Value Mapping', () => {
         court_name: undefined,
       });
 
-      await expect(fillN5Form(data)).rejects.toThrow(
-        'N5 form requires court_name to be specified'
-      );
+      await expect(fillN5Form(data)).rejects.toThrow('court_name is required');
     });
 
     test('throws error when court_name is empty string', async () => {
@@ -149,9 +148,31 @@ describe('Court Forms Value Mapping', () => {
         court_name: '',
       });
 
-      await expect(fillN5Form(data)).rejects.toThrow(
-        'N5 form requires court_name to be specified'
-      );
+      await expect(fillN5Form(data)).rejects.toThrow('court_name is required');
+    });
+
+    test('throws error when landlord_full_name is missing', async () => {
+      const data = createTestCaseData({
+        landlord_full_name: '',
+      });
+
+      await expect(fillN5Form(data)).rejects.toThrow('landlord_full_name is required');
+    });
+
+    test('throws error when tenant_full_name is missing', async () => {
+      const data = createTestCaseData({
+        tenant_full_name: '',
+      });
+
+      await expect(fillN5Form(data)).rejects.toThrow('tenant_full_name is required');
+    });
+
+    test('throws error when property_address is missing', async () => {
+      const data = createTestCaseData({
+        property_address: '',
+      });
+
+      await expect(fillN5Form(data)).rejects.toThrow('property_address is required');
     });
   });
 
@@ -161,7 +182,6 @@ describe('Court Forms Value Mapping', () => {
         court_name: 'Central London County Court',
         court_address: 'Thomas More Building, Royal Courts of Justice, Strand, London WC2A 2LL',
         claim_type: 'section_21',
-        section_21_notice_date: '2024-06-01',
       });
 
       const pdfBytes = await fillN5BForm(data);
@@ -222,6 +242,18 @@ describe('Court Forms Value Mapping', () => {
       expect(possessionAddress).toBe('42 Maple Drive\nBristol\nBS1 1AA');
     });
 
+    test('populates notice service method correctly', async () => {
+      const data = createTestCaseData({
+        notice_service_method: 'By hand',
+        claim_type: 'section_21',
+      });
+
+      const pdfBytes = await fillN5BForm(data);
+      const serviceMethod = await getTextFieldValue(pdfBytes, '10a How was the notice served');
+
+      expect(serviceMethod).toBe('By hand');
+    });
+
     test('handles court name only (no address)', async () => {
       const data = createTestCaseData({
         court_name: 'Liverpool Civil and Family Court',
@@ -241,9 +273,36 @@ describe('Court Forms Value Mapping', () => {
         claim_type: 'section_21',
       });
 
+      await expect(fillN5BForm(data)).rejects.toThrow('court_name is required');
+    });
+
+    test('throws error when notice_service_method is missing', async () => {
+      const data = createTestCaseData({
+        notice_service_method: undefined,
+        claim_type: 'section_21',
+      });
+
       await expect(fillN5BForm(data)).rejects.toThrow(
-        'N5B form requires court_name to be specified'
+        'notice_service_method is required for N5B'
       );
+    });
+
+    test('throws error when section_21_notice_date is missing', async () => {
+      const data = createTestCaseData({
+        section_21_notice_date: undefined,
+        claim_type: 'section_21',
+      });
+
+      await expect(fillN5BForm(data)).rejects.toThrow('section_21_notice_date is required');
+    });
+
+    test('throws error when tenancy_start_date is missing', async () => {
+      const data = createTestCaseData({
+        tenancy_start_date: '',
+        claim_type: 'section_21',
+      });
+
+      await expect(fillN5BForm(data)).rejects.toThrow('tenancy_start_date is required');
     });
   });
 
@@ -295,14 +354,42 @@ describe('Court Forms Value Mapping', () => {
       expect(possessionAddress).toBe('77 Garden Way\nSheffield\nS1 1AA');
     });
 
+    test('populates tenancy type correctly', async () => {
+      const data = createTestCaseData({
+        tenancy_type: 'Periodic Tenancy',
+      });
+
+      const pdfBytes = await fillN119Form(data);
+      const tenancyType = await getTextFieldValue(pdfBytes, '3(a) Type of tenancy');
+
+      expect(tenancyType).toBe('Periodic Tenancy');
+    });
+
+    test('uses default tenancy type when not specified', async () => {
+      const data = createTestCaseData({
+        tenancy_type: undefined,
+      });
+
+      const pdfBytes = await fillN119Form(data);
+      const tenancyType = await getTextFieldValue(pdfBytes, '3(a) Type of tenancy');
+
+      expect(tenancyType).toBe('Assured Shorthold Tenancy');
+    });
+
     test('throws error when court_name is missing', async () => {
       const data = createTestCaseData({
         court_name: undefined,
       });
 
-      await expect(fillN119Form(data)).rejects.toThrow(
-        'N119 form requires court_name to be specified'
-      );
+      await expect(fillN119Form(data)).rejects.toThrow('court_name is required');
+    });
+
+    test('throws error when tenancy_start_date is missing', async () => {
+      const data = createTestCaseData({
+        tenancy_start_date: '',
+      });
+
+      await expect(fillN119Form(data)).rejects.toThrow('tenancy_start_date is required');
     });
   });
 
@@ -333,6 +420,51 @@ describe('Court Forms Value Mapping', () => {
       // Check N119
       const n119CourtName = await getTextFieldValue(n119Bytes, 'name of court');
       expect(n119CourtName).toBe(courtName);
+    });
+  });
+
+  describe('Strict Field Validation', () => {
+    test('N5 validates all required fields before filling', async () => {
+      // Missing multiple required fields
+      const data = {
+        landlord_full_name: '',
+        landlord_address: '',
+        tenant_full_name: '',
+        property_address: '',
+        signatory_name: '',
+        signature_date: '',
+        rent_amount: 0,
+        rent_frequency: 'monthly' as const,
+        tenancy_start_date: '',
+        court_name: '',
+      };
+
+      await expect(fillN5Form(data as CaseData)).rejects.toThrow('is required');
+    });
+
+    test('N5B validates notice service method specifically', async () => {
+      const data = createTestCaseData({
+        notice_service_method: '', // Empty string should fail
+      });
+
+      await expect(fillN5BForm(data)).rejects.toThrow('notice_service_method is required');
+    });
+
+    test('N119 validates required fields', async () => {
+      const data = {
+        landlord_full_name: '',
+        landlord_address: '',
+        tenant_full_name: '',
+        property_address: '',
+        signatory_name: '',
+        signature_date: '',
+        rent_amount: 0,
+        rent_frequency: 'monthly' as const,
+        tenancy_start_date: '',
+        court_name: '',
+      };
+
+      await expect(fillN119Form(data as CaseData)).rejects.toThrow('is required');
     });
   });
 });
