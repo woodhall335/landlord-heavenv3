@@ -98,8 +98,14 @@ const SECTIONS: WizardSection[] = [
     id: 'notice',
     label: 'Notice',
     description: 'Notice service details',
-    isComplete: (facts) =>
-      Boolean(facts.notice_served_date) && Boolean(facts.notice_service_method),
+    isComplete: (facts) => {
+      // Must answer the gating question first
+      if (facts.notice_already_served === undefined) return false;
+
+      // If already served: require served date and service method
+      // If generating: subflow populates notice_served_date and notice_service_method on completion
+      return Boolean(facts.notice_served_date) && Boolean(facts.notice_service_method);
+    },
   },
   {
     id: 'section21_compliance',
