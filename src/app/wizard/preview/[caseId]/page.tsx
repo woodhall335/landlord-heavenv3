@@ -78,10 +78,11 @@ export default function WizardPreviewPage() {
   const [fullPackDocsLoading, setFullPackDocsLoading] = useState(false);
 
   // Map case type to primary preview document type
-  const getDocumentType = (caseType: string, caseData?: CaseData): string | null => {
-    // Eviction: preview the main notice that matches the recommended route
+  const getDocumentType = (caseType: string, caseData?: CaseData, product?: string): string | null => {
+    // Eviction: preview the main document based on product and route
     if (caseType === 'eviction') {
       const route = caseData?.recommended_route;
+      const jurisdiction = caseData?.jurisdiction;
 
       // IMPORTANT: Smart recommend wins - no default fallback
       // If no route is recommended, we return null and show an error
@@ -90,7 +91,18 @@ export default function WizardPreviewPage() {
         return null;
       }
 
-      // Map the recommended route to the correct document type
+      // For COMPLETE_PACK: Show court form (N5) as the primary preview document
+      // This is what the user is paying for - the court claim form, not just the notice
+      if (product === 'complete_pack' && jurisdiction !== 'scotland') {
+        // For Section 21 accelerated route, show N5B (accelerated possession)
+        if (route === 'accelerated_possession' || route === 'accelerated_section21') {
+          return 'n5b_claim';
+        }
+        // For standard Section 8 or Section 21, show N5 (standard possession claim)
+        return 'n5_claim';
+      }
+
+      // For NOTICE_ONLY or Scotland: Show the notice
       if (route === 'section_21' || route === 'accelerated_possession' || route === 'accelerated_section21') {
         return 'section21_notice';
       }
@@ -335,13 +347,15 @@ export default function WizardPreviewPage() {
         const factsMeta = (fetchedCase.collected_facts as any)?.meta || {};
         const originalMeta = (fetchedCase.collected_facts as any)?.__meta || {};
         const inferredProduct =
-          factsMeta.product || originalMeta.product || originalMeta.original_product;
+          factsMeta.product || originalMeta.product || originalMeta.original_product || 'complete_pack';
         if (inferredProduct === 'notice_only') {
           setSelectedProduct('notice_only');
         }
 
-        // Determine document type based on smart recommendation
-        let documentType = getDocumentType(fetchedCase.case_type, fetchedCase);
+        // Determine document type based on smart recommendation and product
+        // For complete_pack: Show court forms (N5/N119)
+        // For notice_only: Show notice (Section 8/21)
+        let documentType = getDocumentType(fetchedCase.case_type, fetchedCase, inferredProduct);
 
         // SMART RECOMMEND WINS: If no recommendation for eviction cases, try calling checkpoint once to compute it
         if (!documentType && fetchedCase.case_type === 'eviction') {
@@ -365,7 +379,7 @@ export default function WizardPreviewPage() {
                   const refetchResult = await refetchResponse.json();
                   const refetchedCase: CaseData = refetchResult.case;
                   setCaseData(refetchedCase);
-                  documentType = getDocumentType(refetchedCase.case_type, refetchedCase);
+                  documentType = getDocumentType(refetchedCase.case_type, refetchedCase, inferredProduct);
                 }
               }
             } else if (checkpointResponse.status === 422) {
