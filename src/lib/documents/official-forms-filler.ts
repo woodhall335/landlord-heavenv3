@@ -267,6 +267,13 @@ export interface CaseData {
   notice_copy_available?: boolean;
   service_proof_available?: boolean;
 
+  // P0-2: Upload-based attachment flags for N5B checkboxes E, F, G
+  // CRITICAL: These must be based on ACTUAL file uploads, NOT compliance flags.
+  // Ticking these boxes falsely is a false statement on a court form.
+  deposit_certificate_uploaded?: boolean;  // Checkbox E - deposit protection cert uploaded
+  epc_uploaded?: boolean;                   // Checkbox F - EPC uploaded
+  gas_safety_uploaded?: boolean;            // Checkbox G - gas safety cert uploaded
+
   // Solicitor
   solicitor_firm?: string;
   solicitor_address?: string;
@@ -864,18 +871,38 @@ export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_SERVICE_PROOF, true, ctx);
   }
 
-  // Deposit certificate (marked E) - only if deposit was paid
-  if (depositPaid) {
+  // =========================================================================
+  // P0-2 FIX: N5B ATTACHMENT CHECKBOXES E, F, G - TRUTHFULNESS
+  // =========================================================================
+  // CRITICAL: These checkboxes declare that documents are ATTACHED to the claim.
+  // Ticking these boxes without the actual document uploaded is a FALSE STATEMENT.
+  //
+  // OLD BEHAVIOR (WRONG):
+  //   - E: Ticked if depositPaid (regardless of certificate upload)
+  //   - F: Ticked if epc_provided compliance flag (regardless of upload)
+  //   - G: Ticked if gas_safety_provided compliance flag (regardless of upload)
+  //
+  // NEW BEHAVIOR (CORRECT):
+  //   - E: Only tick if deposit_certificate_uploaded === true
+  //   - F: Only tick if epc_uploaded === true
+  //   - G: Only tick if gas_safety_uploaded === true
+  //
+  // The upload-based flags are derived from facts.evidence.files[] in
+  // eviction-wizard-mapper.ts using the canonical EvidenceCategory enum.
+  // =========================================================================
+
+  // Deposit certificate (marked E) - only if certificate was ACTUALLY UPLOADED
+  if (data.deposit_certificate_uploaded === true) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_DEPOSIT_CERT, true, ctx);
   }
 
-  // EPC (marked F) - only if user confirmed EPC was provided
-  if (data.epc_provided === true) {
+  // EPC (marked F) - only if EPC was ACTUALLY UPLOADED
+  if (data.epc_uploaded === true) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_EPC, true, ctx);
   }
 
-  // Gas safety records (marked G) - only if user confirmed gas cert was provided
-  if (data.gas_safety_provided === true) {
+  // Gas safety records (marked G) - only if gas cert was ACTUALLY UPLOADED
+  if (data.gas_safety_uploaded === true) {
     setCheckbox(form, N5B_CHECKBOXES.ATTACHMENT_GAS, true, ctx);
   }
 
