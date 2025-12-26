@@ -840,8 +840,43 @@ export async function POST(request: Request) {
             : 'section_8';
       }
     } else if (decisionEngineOutput) {
-      // For complete_pack: Use decision engine recommendation
-      finalRecommendedRoute = decisionEngineOutput.recommended_routes[0] || route;
+      // For complete_pack: Respect user's explicit route selection if valid
+      const userSelectedRoute = (wizardFacts as any).selected_notice_route || null;
+      const allowedRoutes = decisionEngineOutput.allowed_routes || [];
+      const blockedRoutes = decisionEngineOutput.blocked_routes || [];
+
+      if (userSelectedRoute) {
+        // User explicitly selected a route - use it if allowed
+        if (blockedRoutes.includes(userSelectedRoute)) {
+          // User's selected route is blocked - auto-route to alternative
+          const fallbackRoute =
+            userSelectedRoute === 'section_21'
+              ? 'section_8'
+              : userSelectedRoute === 'section_8'
+              ? (allowedRoutes.includes('section_21') ? 'section_21' : 'section_8')
+              : decisionEngineOutput.recommended_routes[0] || route;
+
+          finalRecommendedRoute = fallbackRoute;
+
+          const blockingIssues = decisionEngineOutput.blocking_issues
+            .filter(b => b.route === userSelectedRoute && b.severity === 'blocking')
+            .map(b => b.description);
+
+          route_override = {
+            from: userSelectedRoute,
+            to: fallbackRoute,
+            reason: decisionEngineOutput.route_explanations?.[userSelectedRoute as keyof typeof decisionEngineOutput.route_explanations] ||
+              `${userSelectedRoute.replace('_', ' ')} is not available due to compliance issues.`,
+            blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
+          };
+        } else {
+          // User's selected route is allowed - use it
+          finalRecommendedRoute = userSelectedRoute;
+        }
+      } else {
+        // No explicit user selection - use decision engine recommendation
+        finalRecommendedRoute = decisionEngineOutput.recommended_routes[0] || route;
+      }
     } else {
       // Fallback if no decision engine output
       finalRecommendedRoute = route;
