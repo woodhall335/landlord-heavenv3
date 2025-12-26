@@ -67,14 +67,20 @@ const SECTIONS: WizardSection[] = [
     label: 'Parties',
     description: 'Landlord and tenant details',
     isComplete: (facts) =>
-      Boolean(facts.landlord_full_name) && Boolean(facts.tenant_full_name),
+      Boolean(facts.landlord_full_name) &&
+      Boolean(facts.landlord_address_line1) &&
+      Boolean(facts.landlord_address_town) &&
+      Boolean(facts.landlord_address_postcode) &&
+      Boolean(facts.tenant_full_name),
   },
   {
     id: 'property',
     label: 'Property',
     description: 'Property address',
     isComplete: (facts) =>
-      Boolean(facts.property_address_line1) && Boolean(facts.property_address_postcode),
+      Boolean(facts.property_address_line1) &&
+      Boolean(facts.property_address_town) &&
+      Boolean(facts.property_address_postcode),
   },
   {
     id: 'tenancy',
