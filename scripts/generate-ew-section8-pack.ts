@@ -27,6 +27,27 @@ function buildEnglandFacts() {
     section8_grounds: ['Ground 8', 'Ground 10'],
     arrears_breakdown: 'Total arrears £2400',
     total_arrears: 2400,
+    // =========================================================================
+    // AUTHORITATIVE ARREARS SCHEDULE (Required for Ground 8)
+    // Ground 8 validation requires period-by-period breakdown, not just totals.
+    // The arrears engine enforces this for court form generation.
+    // =========================================================================
+    arrears_items: [
+      {
+        period_start: '2024-04-01',
+        period_end: '2024-04-30',
+        rent_due: 1200,
+        rent_paid: 0,
+        amount_owed: 1200,
+      },
+      {
+        period_start: '2024-05-01',
+        period_end: '2024-05-31',
+        rent_due: 1200,
+        rent_paid: 0,
+        amount_owed: 1200,
+      },
+    ],
     deposit_amount: 1200,
     deposit_protected: true,
     deposit_protection_date: '2024-01-15',

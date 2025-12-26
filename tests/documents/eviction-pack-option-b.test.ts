@@ -15,6 +15,7 @@ vi.mock('@/lib/documents/generator', async () => {
 
 function buildEnglandWalesFacts() {
   // Use only Ground 8 (mandatory, 14 days notice) to avoid the 60-day requirement of Ground 10
+  // Ground 8 requires authoritative arrears_items schedule for court validation
   return {
     __meta: { case_id: 'EVICT-TEST-01', jurisdiction: 'england' },
     landlord_name: 'Alex Landlord',
@@ -41,6 +42,27 @@ function buildEnglandWalesFacts() {
     total_arrears: 2400,
     arrears_total: 2400, // Required by gating validation
     arrears_amount: 2400, // Required by complete pack validation
+    // =========================================================================
+    // AUTHORITATIVE ARREARS SCHEDULE (Required for Ground 8)
+    // Ground 8 validation requires period-by-period breakdown, not just totals.
+    // The arrears engine enforces this for court form generation.
+    // =========================================================================
+    arrears_items: [
+      {
+        period_start: '2024-04-01',
+        period_end: '2024-04-30',
+        rent_due: 1200,
+        rent_paid: 0,
+        amount_owed: 1200,
+      },
+      {
+        period_start: '2024-05-01',
+        period_end: '2024-05-31',
+        rent_due: 1200,
+        rent_paid: 0,
+        amount_owed: 1200,
+      },
+    ],
     deposit_amount: 1200,
     deposit_protected: true,
     deposit_protection_date: '2024-01-15',

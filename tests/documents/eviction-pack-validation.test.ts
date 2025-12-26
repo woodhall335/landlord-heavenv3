@@ -160,20 +160,46 @@ describe('Complete eviction pack validation', () => {
       );
     });
 
-    it('passes validation if Ground 8 arrears >= 2 months', () => {
+    it('passes validation if Ground 8 arrears >= 2 months with authoritative schedule', () => {
+      // Ground 8 validation requires authoritative arrears_items schedule, not just flat totals.
+      // The arrears engine treats flat totals as non-authoritative for court proceedings.
       const outcome = validateCompletePackBeforeGeneration({
         jurisdiction: 'england',
         facts: {
           rent_amount: 1200,
           rent_frequency: 'monthly',
-          arrears_amount: 2500, // More than 2 months
+          arrears_amount: 2500, // Legacy flat total (backup, but not authoritative)
           section8_grounds: ['Ground 8'],
+          // AUTHORITATIVE: arrears_items schedule provides period-by-period breakdown
+          arrears_items: [
+            {
+              period_start: '2024-04-01',
+              period_end: '2024-04-30',
+              rent_due: 1200,
+              rent_paid: 0,
+              amount_owed: 1200,
+            },
+            {
+              period_start: '2024-05-01',
+              period_end: '2024-05-31',
+              rent_due: 1200,
+              rent_paid: 0,
+              amount_owed: 1200,
+            },
+            {
+              period_start: '2024-06-01',
+              period_end: '2024-06-30',
+              rent_due: 1200,
+              rent_paid: 1100,
+              amount_owed: 100,
+            },
+          ],
         },
         selectedGroundCodes: [8],
         caseType: 'rent_arrears',
       });
 
-      // Should not have the threshold blocker
+      // Should not have the threshold blocker (2500/1200 = 2.08 months)
       const ground8Blocker = outcome.blocking.find(b => b.code === 'GROUND_8_THRESHOLD_NOT_MET');
       expect(ground8Blocker).toBeUndefined();
     });
