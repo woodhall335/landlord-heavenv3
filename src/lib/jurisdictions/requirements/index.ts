@@ -1,4 +1,4 @@
-import { CapabilityMatrix, FlowCapability, getCapabilityMatrix } from '../capabilities/matrix';
+import { CapabilityMatrix, FlowCapability, getCapabilityMatrix, normalizeProductSlug } from '../capabilities/matrix';
 import { getNoticeOnlyRequirements } from './noticeOnly';
 import { getEvictionPackRequirements } from './evictionPack';
 import { getMoneyClaimRequirements } from './moneyClaim';
@@ -34,8 +34,10 @@ const productHandlers: Record<string, RequirementsGetter> = {
 
 export function getRequirements(context: ValidationContext): RequirementsResult {
   const matrix = context.matrix ?? getCapabilityMatrix();
+  // Normalize product slug (e.g., complete_pack -> eviction_pack)
+  const normalizedProduct = normalizeProductSlug(context.product);
   const flow = matrix?.[context.jurisdiction as keyof CapabilityMatrix]?.[
-    context.product as keyof CapabilityMatrix[keyof CapabilityMatrix]
+    normalizedProduct as keyof CapabilityMatrix[keyof CapabilityMatrix]
   ] as FlowCapability | undefined;
 
   // Fail-closed: unsupported flows
@@ -83,14 +85,14 @@ export function getRequirements(context: ValidationContext): RequirementsResult 
   }
 
   // Handler not found - should not happen but fail-closed
-  const handler = productHandlers[context.product];
+  const handler = productHandlers[normalizedProduct];
   if (!handler) {
     return {
       requiredNow: new Set(),
       warnNow: new Set(),
       derived: new Set(),
       status: 'misconfigured',
-      statusReason: `No requirement handler found for product ${context.product}`,
+      statusReason: `No requirement handler found for product ${normalizedProduct}`,
     };
   }
 
