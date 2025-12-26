@@ -64,7 +64,12 @@ function normaliseFrequency(
 
 function deriveCaseType(evictionRoute: any): EvictionCase['case_type'] {
   const route = Array.isArray(evictionRoute) ? evictionRoute : [evictionRoute].filter(Boolean);
-  const hasSection21 = route.some((r) => typeof r === 'string' && r.toLowerCase().includes('section 21'));
+  // Check for Section 21 in various formats: 'section_21', 'section 21', 'Section 21'
+  const hasSection21 = route.some((r) => {
+    if (typeof r !== 'string') return false;
+    const normalized = r.toLowerCase().replace(/_/g, ' ');
+    return normalized.includes('section 21') || normalized === 'section21';
+  });
   if (hasSection21) return 'no_fault';
   return 'rent_arrears';
 }
@@ -292,8 +297,8 @@ function buildCaseData(
     service_email: evictionCase.service_email,
     court_name: evictionCase.court_name || wizardFacts.court_name,
     court_address: evictionCase.court_address || wizardFacts.court_address,
-    signatory_name: evictionCase.landlord_full_name,
-    signature_date: new Date().toISOString().split('T')[0],
+    signatory_name: wizardFacts.signatory_name || evictionCase.landlord_full_name,
+    signature_date: wizardFacts.signature_date || new Date().toISOString().split('T')[0],
     notice_expiry_date: wizardFacts.notice_expiry_date || facts.notice.expiry_date || undefined,
 
     // =========================================================================
