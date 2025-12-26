@@ -10,8 +10,8 @@
  * 3. Property - Full address and postcode
  * 4. Tenancy - Start date, rent amount, frequency, due day
  * 5. Section 21 Compliance - S21 only (deposit, prescribed info, gas, EPC, HtR)
- * 6. Section 8 Arrears - S8 only using ArrearsScheduleStep
- * 7. Notice Details - Grounds, particulars, service details
+ * 6. Notice Details - Grounds and service details (S8 grounds selected here BEFORE arrears)
+ * 7. Section 8 Arrears - S8 only using ArrearsScheduleStep (needs grounds to be selected first)
  * 8. Review - Generate and download notice
  *
  * Design: Matches EvictionSectionFlow UI exactly (gray-50 background, purple-600
@@ -128,6 +128,20 @@ const SECTIONS: WizardSection[] = [
     },
   },
   {
+    id: 'notice',
+    label: 'Notice Details',
+    description: 'Grounds and service details',
+    isComplete: (facts) => {
+      // For Section 21: just need to confirm service method
+      if (facts.eviction_route === 'section_21') {
+        return Boolean(facts.notice_service_method);
+      }
+      // For Section 8: need grounds selected
+      const selectedGrounds = (facts.section8_grounds as string[]) || [];
+      return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
+    },
+  },
+  {
     id: 'section8_arrears',
     label: 'Arrears',
     description: 'Rent arrears breakdown for Section 8',
@@ -174,20 +188,6 @@ const SECTIONS: WizardSection[] = [
         }
       }
       return blockers;
-    },
-  },
-  {
-    id: 'notice',
-    label: 'Notice Details',
-    description: 'Grounds and service details',
-    isComplete: (facts) => {
-      // For Section 21: just need to confirm service method
-      if (facts.eviction_route === 'section_21') {
-        return Boolean(facts.notice_service_method);
-      }
-      // For Section 8: need grounds selected
-      const selectedGrounds = (facts.section8_grounds as string[]) || [];
-      return selectedGrounds.length > 0 && Boolean(facts.notice_service_method);
     },
   },
   {
