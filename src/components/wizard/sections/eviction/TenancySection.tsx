@@ -18,7 +18,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 
 interface TenancySectionProps {
@@ -48,6 +48,22 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
   const tenancyType = facts.tenancy_type || '';
   const rentFrequency = facts.rent_frequency || 'monthly';
   const isFixedTerm = tenancyType === 'ast_fixed';
+
+  // Initialize default values for rent_frequency and rent_due_day
+  // This ensures displayed defaults are saved to facts for isComplete checks
+  useEffect(() => {
+    const updates: Record<string, any> = {};
+    if (!facts.rent_frequency) {
+      updates.rent_frequency = 'monthly';
+    }
+    if (!facts.rent_due_day) {
+      updates.rent_due_day = 1;
+    }
+    if (Object.keys(updates).length > 0) {
+      onUpdate(updates);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount - intentionally empty deps
 
   // Helper text for rent due day based on frequency
   const getRentDueDayHelper = () => {
