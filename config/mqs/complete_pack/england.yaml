@@ -6,13 +6,19 @@
 # 2.1.0: Added court-ready fields (notice dates, arrears amounts, deposit details)
 
 __meta:
-  version: "2.3.0"
+  version: "2.4.0"
   effective_from: "2025-12-16"
   last_updated: "2025-12-26"
   legal_review_date: "2025-12-26"
   jurisdiction: "england"
   product: "complete_pack"
   changelog:
+    - version: "2.4.0"
+      date: "2025-12-26"
+      changes:
+        - "Added rent_due_day (critical for Section 8 notice period description)"
+        - "Added signatory_name, signatory_capacity, signature_date (required for court form Statement of Truth)"
+        - "Added joint landlords question (all landlords must be named on court forms)"
     - version: "2.3.0"
       date: "2025-12-26"
       changes:
@@ -29,10 +35,10 @@ __meta:
         - "Added court_name question (required for court forms N5, N5B, N119)"
         - "Added arrears_schedule question for Ground 8 (canonical arrears_items)"
 
-id: complete_pack_england_v3
+id: complete_pack_england_v4
 product: complete_pack
 jurisdiction: england
-version: "2.3.0"
+version: "2.4.0"
 
 questions:
   # 1. Eviction route selection (England: Section 8 or Section 21)
@@ -147,9 +153,24 @@ questions:
         validation:
           required: true
         width: half
+      # ===================================================================
+      # RENT DUE DAY (Phase 3.3 - Critical for Section 8 notices)
+      # Section 8 notice requires the specific day rent is due to properly
+      # describe the rental period and calculate arrears.
+      # ===================================================================
+      - id: rent_due_day
+        label: "Day rent is due"
+        inputType: number
+        helperText: "Day of the month rent is due (1-31). For weekly, enter day of week (1=Mon, 7=Sun)."
+        validation:
+          required: true
+          min: 1
+          max: 31
+        width: half
     maps_to:
       - rent_amount
       - rent_frequency
+      - rent_due_day
 
   # ============================================================
   # SECTION 8 QUESTIONS
@@ -629,6 +650,38 @@ questions:
       - landlord_address_postcode
 
   # ============================================================
+  # JOINT LANDLORDS (Critical for valid court forms)
+  # Phase 3.3: All landlords named on tenancy must be named on court forms.
+  # ============================================================
+  - id: has_joint_landlords
+    section: Landlord
+    question: "Are there multiple landlords on the tenancy agreement?"
+    inputType: yes_no
+    helperText: "If there are joint landlords (e.g., husband and wife), all must be named on court forms as claimants."
+    validation:
+      required: true
+    maps_to:
+      - has_joint_landlords
+
+  - id: additional_landlord
+    section: Landlord
+    question: "Second landlord details"
+    inputType: group
+    helperText: "Enter details for the second landlord named on the tenancy agreement."
+    dependsOn:
+      questionId: has_joint_landlords
+      value: true
+    fields:
+      - id: landlord2_name
+        label: "Second landlord full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - landlord2_name
+
+  # ============================================================
   # COURT DETAILS (Required for N5, N5B, N119 court forms)
   # ============================================================
   - id: court_name
@@ -641,6 +694,48 @@ questions:
       required: true
     maps_to:
       - court_name
+
+  # ============================================================
+  # SIGNATORY DETAILS (Required for court form Statement of Truth)
+  # Phase 3.3: N5, N5B, N119 all require a signature and date.
+  # ============================================================
+  - id: signatory_details
+    section: Court
+    question: "Who will sign the court forms?"
+    inputType: group
+    helperText: "Court forms include a Statement of Truth that must be signed. False statements can result in contempt of court."
+    fields:
+      - id: signatory_name
+        label: "Full name of person signing"
+        inputType: text
+        helperText: "Usually the landlord, or their solicitor if represented."
+        validation:
+          required: true
+        width: full
+      - id: signatory_capacity
+        label: "Capacity"
+        inputType: select
+        options:
+          - value: "claimant"
+            label: "Claimant (Landlord)"
+          - value: "solicitor"
+            label: "Claimant's Solicitor"
+          - value: "agent"
+            label: "Claimant's Agent"
+        validation:
+          required: true
+        width: half
+      - id: signature_date
+        label: "Date of signature"
+        inputType: date
+        helperText: "Usually today's date when submitting the claim."
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - signatory_name
+      - signatory_capacity
+      - signature_date
 
   # ============================================================
   # EVIDENCE UPLOADS - CATEGORIZED (Smart Review v1)
