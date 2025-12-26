@@ -1174,6 +1174,7 @@ export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
  *
  * @throws Error Always throws - use generateSection21Notice() instead
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function fillForm6A(_data: CaseData): Promise<Uint8Array> {
   // P0-B: Block Form 6A generation via official PDF filler
   // Section 21 notices must come from HBS template for matrix compliance
