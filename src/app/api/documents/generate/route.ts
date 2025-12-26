@@ -25,6 +25,8 @@ import { mapWizardToASTData } from '@/lib/documents/ast-wizard-mapper';
 import { generatePrivateTenancyAgreement } from '@/lib/documents/northern-ireland/private-tenancy-generator';
 import { mapWizardToPrivateTenancyData } from '@/lib/documents/northern-ireland/private-tenancy-wizard-mapper';
 
+import { fillOfficialForm, type CaseData } from '@/lib/documents/official-forms-filler';
+
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
@@ -477,18 +479,22 @@ export async function POST(request: Request) {
 
         /**
          * Court Forms (England - Complete Eviction Pack)
+         *
+         * IMPORTANT: These use the OFFICIAL HMCTS PDF forms from /public/official-forms/
+         * filled via pdf-lib. Courts ONLY accept their official forms - we cannot
+         * generate custom PDFs that look like court forms.
          */
         case 'n5_claim': {
           const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
-          const safeCaseData = ensurePropertyAddress(caseData as any);
+          const safeCaseData = ensurePropertyAddress(caseData as any) as CaseData;
 
-          // Generate N5 claim form using HBS template
-          generatedDoc = await generateDocument({
-            templatePath: 'uk/england/templates/eviction/n5_claim.hbs',
-            data: safeCaseData as any,
-            isPreview: is_preview,
-            outputFormat: 'both',
-          });
+          // Fill official N5 PDF form using pdf-lib
+          const pdfBytes = await fillOfficialForm('n5', safeCaseData);
+
+          generatedDoc = {
+            pdf: Buffer.from(pdfBytes),
+            html: null, // Official PDFs have no HTML representation
+          };
 
           documentTitle = 'Form N5 - Claim for Possession of Property';
           break;
@@ -496,15 +502,15 @@ export async function POST(request: Request) {
 
         case 'n119_particulars': {
           const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
-          const safeCaseData = ensurePropertyAddress(caseData as any);
+          const safeCaseData = ensurePropertyAddress(caseData as any) as CaseData;
 
-          // Generate N119 particulars using HBS template
-          generatedDoc = await generateDocument({
-            templatePath: 'uk/england/templates/eviction/n119_particulars.hbs',
-            data: safeCaseData as any,
-            isPreview: is_preview,
-            outputFormat: 'both',
-          });
+          // Fill official N119 PDF form using pdf-lib
+          const pdfBytes = await fillOfficialForm('n119', safeCaseData);
+
+          generatedDoc = {
+            pdf: Buffer.from(pdfBytes),
+            html: null, // Official PDFs have no HTML representation
+          };
 
           documentTitle = 'Form N119 - Particulars of Claim for Possession';
           break;
@@ -512,15 +518,15 @@ export async function POST(request: Request) {
 
         case 'n5b_claim': {
           const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
-          const safeCaseData = ensurePropertyAddress(caseData as any);
+          const safeCaseData = ensurePropertyAddress(caseData as any) as CaseData;
 
-          // Generate N5B accelerated possession claim using HBS template
-          generatedDoc = await generateDocument({
-            templatePath: 'uk/england/templates/eviction/n5b_claim.hbs',
-            data: safeCaseData as any,
-            isPreview: is_preview,
-            outputFormat: 'both',
-          });
+          // Fill official N5B PDF form using pdf-lib
+          const pdfBytes = await fillOfficialForm('n5b', safeCaseData);
+
+          generatedDoc = {
+            pdf: Buffer.from(pdfBytes),
+            html: null, // Official PDFs have no HTML representation
+          };
 
           documentTitle = 'Form N5B - Claim for Possession (Accelerated Procedure)';
           break;
