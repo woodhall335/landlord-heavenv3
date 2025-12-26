@@ -430,7 +430,7 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
           {/* Progress bar */}
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-blue-600 transition-all duration-300"
+              className="h-full bg-[#7C3AED] transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -448,7 +448,7 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
                   onClick={() => setCurrentSectionIndex(index)}
                   className={`
                     px-3 py-1.5 text-sm font-medium rounded-md whitespace-nowrap transition-colors
-                    ${isCurrent ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                    ${isCurrent ? 'bg-[#7C3AED] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
                     ${hasBlocker && !isCurrent ? 'ring-2 ring-red-300' : ''}
                   `}
                 >
@@ -564,7 +564,7 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
                   px-6 py-2 text-sm font-medium rounded-md transition-colors
                   ${currentSectionIndex === visibleSections.length - 1
                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'}
+                    : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'}
                 `}
               >
                 Next →

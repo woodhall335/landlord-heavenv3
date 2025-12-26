@@ -48,7 +48,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
             <input
               id="landlord_full_name"
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.landlord_full_name || ''}
               onChange={(e) => onUpdate({ landlord_full_name: e.target.value })}
               placeholder="e.g., John Smith"
@@ -63,7 +63,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
             <input
               id="landlord_address_line1"
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.landlord_address_line1 || ''}
               onChange={(e) => onUpdate({ landlord_address_line1: e.target.value })}
               placeholder="Street address"
@@ -78,7 +78,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
             <input
               id="landlord_address_town"
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.landlord_address_town || ''}
               onChange={(e) => onUpdate({ landlord_address_town: e.target.value })}
             />
@@ -92,7 +92,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
             <input
               id="landlord_address_postcode"
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.landlord_address_postcode || ''}
               onChange={(e) => onUpdate({ landlord_address_postcode: e.target.value })}
               placeholder="e.g., SW1A 1AA"
@@ -106,7 +106,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
             <input
               id="landlord_email"
               type="email"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.landlord_email || ''}
               onChange={(e) => onUpdate({ landlord_email: e.target.value })}
             />
@@ -119,7 +119,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
             <input
               id="landlord_phone"
               type="tel"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.landlord_phone || ''}
               onChange={(e) => onUpdate({ landlord_phone: e.target.value })}
             />
@@ -133,7 +133,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
               type="checkbox"
               checked={hasJointLandlords}
               onChange={(e) => onUpdate({ has_joint_landlords: e.target.checked })}
-              className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-gray-300 text-[#7C3AED] focus:ring-[#7C3AED]"
             />
             <span className="text-sm text-gray-700">
               There are joint landlords on the tenancy agreement
@@ -146,7 +146,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
 
         {/* Second landlord details */}
         {hasJointLandlords && (
-          <div className="pt-4 pl-4 border-l-2 border-blue-200 space-y-4">
+          <div className="pt-4 pl-4 border-l-2 border-purple-200 space-y-4">
             <h4 className="text-sm font-medium text-gray-900">Second Landlord</h4>
             <div className="space-y-2">
               <label htmlFor="landlord2_name" className="block text-sm font-medium text-gray-700">
@@ -156,7 +156,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
               <input
                 id="landlord2_name"
                 type="text"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                 value={facts.landlord2_name || ''}
                 onChange={(e) => onUpdate({ landlord2_name: e.target.value })}
                 placeholder="e.g., Jane Smith"
@@ -181,7 +181,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
             <input
               id="tenant_full_name"
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.tenant_full_name || ''}
               onChange={(e) => onUpdate({ tenant_full_name: e.target.value })}
               placeholder="e.g., Alice Johnson"
@@ -195,7 +195,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
             <input
               id="tenant_email"
               type="email"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.tenant_email || ''}
               onChange={(e) => onUpdate({ tenant_email: e.target.value })}
             />
@@ -208,7 +208,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
             <input
               id="tenant_phone"
               type="tel"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.tenant_phone || ''}
               onChange={(e) => onUpdate({ tenant_phone: e.target.value })}
             />
@@ -222,7 +222,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
               type="checkbox"
               checked={hasJointTenants}
               onChange={(e) => onUpdate({ has_joint_tenants: e.target.checked })}
-              className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-gray-300 text-[#7C3AED] focus:ring-[#7C3AED]"
             />
             <span className="text-sm text-gray-700">
               There are joint tenants on the tenancy agreement
@@ -235,7 +235,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
 
         {/* Additional tenant details */}
         {hasJointTenants && (
-          <div className="pt-4 pl-4 border-l-2 border-blue-200 space-y-4">
+          <div className="pt-4 pl-4 border-l-2 border-purple-200 space-y-4">
             <h4 className="text-sm font-medium text-gray-900">Additional Tenants</h4>
 
             <div className="space-y-2">
@@ -246,7 +246,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
               <input
                 id="tenant2_name"
                 type="text"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                 value={facts.tenant2_name || ''}
                 onChange={(e) => onUpdate({ tenant2_name: e.target.value })}
               />
@@ -259,7 +259,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
               <input
                 id="tenant3_name"
                 type="text"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                 value={facts.tenant3_name || ''}
                 onChange={(e) => onUpdate({ tenant3_name: e.target.value })}
               />
@@ -272,7 +272,7 @@ export const PartiesSection: React.FC<PartiesSectionProps> = ({
               <input
                 id="tenant4_name"
                 type="text"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                 value={facts.tenant4_name || ''}
                 onChange={(e) => onUpdate({ tenant4_name: e.target.value })}
               />

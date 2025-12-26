@@ -74,11 +74,11 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
           Court Details
         </h3>
 
-        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h4 className="text-sm font-medium text-blue-900 mb-2">
+        <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+          <h4 className="text-sm font-medium text-purple-900 mb-2">
             Find Your Local County Court
           </h4>
-          <p className="text-sm text-blue-800 mb-3">
+          <p className="text-sm text-purple-800 mb-3">
             Use the official HMCTS Court Finder to find the County Court that will
             handle your possession claim. Search using the property postcode.
           </p>
@@ -86,7 +86,7 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
             href={HMCTS_COURT_FINDER_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#7C3AED] text-white text-sm font-medium rounded-md hover:bg-[#6D28D9] transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -103,7 +103,7 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
           <input
             id="court_name"
             type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={facts.court_name || ''}
             onChange={(e) => onUpdate({ court_name: e.target.value })}
             placeholder="e.g., Manchester County Court"
@@ -120,7 +120,7 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
           <textarea
             id="court_address"
             rows={3}
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={facts.court_address || ''}
             onChange={(e) => onUpdate({ court_address: e.target.value })}
             placeholder="e.g., 1 Bridge Street West, Manchester, M60 9DJ"
@@ -157,7 +157,7 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
             <input
               id="signatory_name"
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.signatory_name || facts.landlord_full_name || ''}
               onChange={(e) => onUpdate({ signatory_name: e.target.value })}
               placeholder="Full legal name"
@@ -171,7 +171,7 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
             </label>
             <select
               id="signatory_capacity"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.signatory_capacity || ''}
               onChange={(e) => onUpdate({ signatory_capacity: e.target.value })}
             >
@@ -195,7 +195,7 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
             <input
               id="signature_date"
               type="date"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={signatureDate}
               onChange={(e) => onUpdate({ signature_date: e.target.value })}
             />

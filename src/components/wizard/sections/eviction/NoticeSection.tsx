@@ -35,6 +35,8 @@ interface NoticeSectionProps {
   facts: WizardFacts;
   jurisdiction: 'england' | 'wales';
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
+  /** Mode: 'complete_pack' shows gating question, 'notice_only' skips it */
+  mode?: 'complete_pack' | 'notice_only';
 }
 
 const SERVICE_METHODS = [
@@ -197,13 +199,13 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
   const currentStepNum = currentStep === 'service' ? 2 : 1;
 
   return (
-    <div className="space-y-6 border-l-4 border-blue-400 pl-4 bg-blue-50/30 py-4 rounded-r-lg">
+    <div className="space-y-6 border-l-4 border-[#7C3AED] pl-4 bg-purple-50/30 py-4 rounded-r-lg">
       <div className="flex items-center justify-between">
         <div>
-          <h4 className="text-sm font-semibold text-blue-800">
+          <h4 className="text-sm font-semibold text-purple-800">
             Generate Notice - Step {currentStepNum} of {totalSteps}
           </h4>
-          <p className="text-xs text-blue-600 mt-1">
+          <p className="text-xs text-[#7C3AED] mt-1">
             Complete these questions to generate your {isSection8 ? 'Section 8' : 'Section 21'} notice
           </p>
         </div>
@@ -456,7 +458,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
                 className={`
                   flex items-start p-3 border rounded-lg cursor-pointer transition-all
                   ${selectedGrounds.includes(ground.value)
-                    ? 'border-blue-500 bg-blue-50'
+                    ? 'border-[#7C3AED] bg-purple-50'
                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
                 `}
               >
@@ -488,14 +490,14 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
           </div>
 
           {selectedGrounds.length > 0 && (
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-800">
+            <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+              <p className="text-sm text-purple-800">
                 <strong>Selected:</strong> {selectedGrounds.join(', ')}
               </p>
-              <p className="text-xs text-blue-700 mt-1">
+              <p className="text-xs text-purple-700 mt-1">
                 Minimum notice period: {minNoticePeriod} days
               </p>
-              <p className="text-xs text-blue-600 mt-2">
+              <p className="text-xs text-[#7C3AED] mt-2">
                 You&apos;ll provide the particulars for these grounds after completing the arrears schedule.
               </p>
             </div>
@@ -520,7 +522,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
             <input
               id="notice_service_date"
               type="date"
-              className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.notice_service_date || today}
               onChange={(e) => onUpdate({ notice_service_date: e.target.value })}
             />
@@ -534,7 +536,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
             </label>
             <select
               id="notice_service_method_inline"
-              className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.notice_service_method || ''}
               onChange={(e) => onUpdate({ notice_service_method: e.target.value })}
             >
@@ -556,7 +558,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
               <input
                 id="notice_expiry_date_inline"
                 type="date"
-                className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                 value={facts.notice_expiry_date || ''}
                 onChange={(e) => onUpdate({ notice_expiry_date: e.target.value })}
               />
@@ -564,7 +566,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
                 <button
                   type="button"
                   onClick={() => onUpdate({ notice_expiry_date: suggestedExpiryDate })}
-                  className="text-sm text-blue-600 hover:text-blue-700 underline"
+                  className="text-sm text-[#7C3AED] hover:text-purple-700 underline"
                 >
                   Use suggested: {suggestedExpiryDate}
                 </button>
@@ -592,7 +594,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
       )}
 
       {/* Navigation buttons */}
-      <div className="flex items-center justify-between pt-4 border-t border-blue-200">
+      <div className="flex items-center justify-between pt-4 border-t border-purple-200">
         {currentStep === 'service' ? (
           <button
             type="button"
@@ -612,7 +614,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
           className={`
             px-4 py-2 text-sm font-medium rounded-md transition-colors
             ${isStepComplete()
-              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              ? 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'
               : 'bg-gray-300 text-gray-500 cursor-not-allowed'}
           `}
         >
@@ -626,6 +628,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
 export const NoticeSection: React.FC<NoticeSectionProps> = ({
   facts,
   onUpdate,
+  mode = 'complete_pack',
 }) => {
   const isSection8 = facts.eviction_route === 'section_8';
   const selectedGrounds = (facts.section8_grounds as string[]) || [];
@@ -633,9 +636,14 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
   // Track whether the inline subflow is complete
   const [subflowComplete, setSubflowComplete] = useState(false);
 
+  // For notice_only mode, skip the gating question - user is here to generate a notice
+  // For complete_pack mode, show gating question to check if they already have a notice
+  const isNoticeOnlyMode = mode === 'notice_only';
+
   // Derive the notice status from facts
   // notice_already_served: true = already served, false = need to generate
-  const noticeAlreadyServed = facts.notice_already_served;
+  // In notice_only mode, we always treat it as "need to generate"
+  const noticeAlreadyServed = isNoticeOnlyMode ? false : facts.notice_already_served;
 
   // Calculate minimum notice period based on selected grounds
   const minNoticePeriod = useMemo(() => {
@@ -690,64 +698,79 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
     <div className="space-y-6">
       {/* ================================================================== */}
       {/* GATING QUESTION: Have you already served a notice? */}
+      {/* Only shown in complete_pack mode - notice_only skips this */}
       {/* ================================================================== */}
-      <div className="space-y-3 p-4 bg-gray-50 border border-gray-200 rounded-lg">
-        <label className="block text-sm font-medium text-gray-900">
-          Have you already served a valid notice on the tenant?
-          <span className="text-red-500 ml-1">*</span>
-        </label>
-        <p className="text-xs text-gray-500">
-          This determines whether we need to generate a notice for you or use your existing notice.
-        </p>
-
-        <div className="flex flex-col gap-2 mt-2">
-          <label className={`
-            flex items-start p-3 border rounded-lg cursor-pointer transition-all
-            ${noticeAlreadyServed === true
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-200 hover:border-gray-300'}
-          `}>
-            <input
-              type="radio"
-              name="notice_already_served"
-              checked={noticeAlreadyServed === true}
-              onChange={() => onUpdate({ notice_already_served: true })}
-              className="mt-0.5 mr-3"
-            />
-            <div>
-              <span className="text-sm font-medium text-gray-900">
-                Yes, I have already served a notice
-              </span>
-              <p className="text-xs text-gray-500 mt-0.5">
-                I will provide details of the notice I have already served on the tenant.
-              </p>
-            </div>
+      {!isNoticeOnlyMode && (
+        <div className="space-y-3 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+          <label className="block text-sm font-medium text-gray-900">
+            Have you already served a valid notice on the tenant?
+            <span className="text-red-500 ml-1">*</span>
           </label>
+          <p className="text-xs text-gray-500">
+            This determines whether we need to generate a notice for you or use your existing notice.
+          </p>
 
-          <label className={`
-            flex items-start p-3 border rounded-lg cursor-pointer transition-all
-            ${noticeAlreadyServed === false
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-200 hover:border-gray-300'}
-          `}>
-            <input
-              type="radio"
-              name="notice_already_served"
-              checked={noticeAlreadyServed === false}
-              onChange={() => onUpdate({ notice_already_served: false })}
-              className="mt-0.5 mr-3"
-            />
-            <div>
-              <span className="text-sm font-medium text-gray-900">
-                No, I need to generate a notice
-              </span>
-              <p className="text-xs text-gray-500 mt-0.5">
-                We'll help you create the correct notice ({isSection8 ? 'Form 3 - Section 8' : 'Form 6A - Section 21'}) as part of your eviction pack.
-              </p>
-            </div>
-          </label>
+          <div className="flex flex-col gap-2 mt-2">
+            <label className={`
+              flex items-start p-3 border rounded-lg cursor-pointer transition-all
+              ${facts.notice_already_served === true
+                ? 'border-purple-500 bg-purple-50'
+                : 'border-gray-200 hover:border-gray-300'}
+            `}>
+              <input
+                type="radio"
+                name="notice_already_served"
+                checked={facts.notice_already_served === true}
+                onChange={() => onUpdate({ notice_already_served: true })}
+                className="mt-0.5 mr-3"
+              />
+              <div>
+                <span className="text-sm font-medium text-gray-900">
+                  Yes, I have already served a notice
+                </span>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  I will provide details of the notice I have already served on the tenant.
+                </p>
+              </div>
+            </label>
+
+            <label className={`
+              flex items-start p-3 border rounded-lg cursor-pointer transition-all
+              ${facts.notice_already_served === false
+                ? 'border-purple-500 bg-purple-50'
+                : 'border-gray-200 hover:border-gray-300'}
+            `}>
+              <input
+                type="radio"
+                name="notice_already_served"
+                checked={facts.notice_already_served === false}
+                onChange={() => onUpdate({ notice_already_served: false })}
+                className="mt-0.5 mr-3"
+              />
+              <div>
+                <span className="text-sm font-medium text-gray-900">
+                  No, I need to generate a notice
+                </span>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  We'll help you create the correct notice ({isSection8 ? 'Form 3 - Section 8' : 'Form 6A - Section 21'}) as part of your eviction pack.
+                </p>
+              </div>
+            </label>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Notice-only mode header */}
+      {isNoticeOnlyMode && (
+        <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+          <h4 className="text-sm font-medium text-purple-900">
+            Generate Your {isSection8 ? 'Section 8' : 'Section 21'} Notice
+          </h4>
+          <p className="text-sm text-purple-700 mt-1">
+            Complete the details below to generate your court-ready eviction notice.
+          </p>
+        </div>
+      )}
 
       {/* ================================================================== */}
       {/* PATH A: Already served - show existing notice details */}
@@ -763,7 +786,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
             <input
               id="notice_served_date"
               type="date"
-              className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.notice_served_date || ''}
               onChange={(e) => onUpdate({ notice_served_date: e.target.value })}
             />
@@ -780,7 +803,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
             </label>
             <select
               id="notice_service_method"
-              className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.notice_service_method || ''}
               onChange={(e) => onUpdate({ notice_service_method: e.target.value })}
             >
@@ -805,7 +828,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
               <input
                 id="notice_expiry_date"
                 type="date"
-                className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                 value={facts.notice_expiry_date || ''}
                 onChange={(e) => onUpdate({ notice_expiry_date: e.target.value })}
               />
@@ -813,7 +836,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => onUpdate({ notice_expiry_date: suggestedExpiryDate })}
-                  className="text-sm text-blue-600 hover:text-blue-700 underline"
+                  className="text-sm text-[#7C3AED] hover:text-purple-700 underline"
                 >
                   Use suggested: {suggestedExpiryDate}
                 </button>
@@ -845,7 +868,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
                     className={`
                       flex items-start p-3 border rounded-lg cursor-pointer transition-all
                       ${selectedGrounds.includes(ground.value)
-                        ? 'border-blue-500 bg-blue-50'
+                        ? 'border-[#7C3AED] bg-purple-50'
                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
                     `}
                   >
@@ -877,11 +900,11 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
               </div>
 
               {selectedGrounds.length > 0 && (
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-800">
+                <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                  <p className="text-sm text-purple-800">
                     <strong>Selected grounds:</strong> {selectedGrounds.join(', ')}
                   </p>
-                  <p className="text-xs text-blue-700 mt-1">
+                  <p className="text-xs text-purple-700 mt-1">
                     Minimum notice period: {minNoticePeriod} days
                   </p>
                 </div>
@@ -901,11 +924,11 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
 
           {/* Section 21 info */}
           {!isSection8 && (
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h4 className="text-sm font-medium text-blue-900 mb-1">
+            <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+              <h4 className="text-sm font-medium text-purple-900 mb-1">
                 Section 21 Notice Period
               </h4>
-              <p className="text-sm text-blue-800">
+              <p className="text-sm text-purple-800">
                 Section 21 notices require a minimum of 2 months (60 days) notice.
                 The notice cannot expire before the end of any fixed term.
               </p>
@@ -975,7 +998,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
           <button
             type="button"
             onClick={() => setSubflowComplete(false)}
-            className="text-sm text-blue-600 hover:text-blue-700 underline"
+            className="text-sm text-[#7C3AED] hover:text-purple-700 underline"
           >
             Edit notice details
           </button>

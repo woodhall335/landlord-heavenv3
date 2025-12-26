@@ -92,7 +92,7 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
         <input
           id="tenancy_start_date"
           type="date"
-          className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+          className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
           value={facts.tenancy_start_date || ''}
           onChange={(e) => onUpdate({ tenancy_start_date: e.target.value })}
         />
@@ -110,7 +110,7 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
         </label>
         <select
           id="tenancy_type"
-          className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+          className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
           value={tenancyType}
           onChange={(e) => onUpdate({ tenancy_type: e.target.value })}
         >
@@ -128,7 +128,7 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
 
       {/* Fixed term end date (conditional) */}
       {isFixedTerm && (
-        <div className="space-y-2 pl-4 border-l-2 border-blue-200">
+        <div className="space-y-2 pl-4 border-l-2 border-purple-200">
           <label htmlFor="fixed_term_end_date" className="block text-sm font-medium text-gray-700">
             Fixed term end date
             <span className="text-red-500 ml-1">*</span>
@@ -136,7 +136,7 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
           <input
             id="fixed_term_end_date"
             type="date"
-            className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full max-w-xs rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={facts.fixed_term_end_date || ''}
             onChange={(e) => onUpdate({ fixed_term_end_date: e.target.value })}
           />
@@ -164,7 +164,7 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
                 type="number"
                 min="0"
                 step="0.01"
-                className="w-full rounded-md border border-gray-300 pl-7 pr-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-md border border-gray-300 pl-7 pr-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                 value={facts.rent_amount || ''}
                 onChange={(e) => onUpdate({ rent_amount: parseFloat(e.target.value) || 0 })}
                 placeholder="0.00"
@@ -180,7 +180,7 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
             </label>
             <select
               id="rent_frequency"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={rentFrequency}
               onChange={(e) => onUpdate({ rent_frequency: e.target.value })}
             >
@@ -203,7 +203,7 @@ export const TenancySection: React.FC<TenancySectionProps> = ({
               type="number"
               min="1"
               max={rentFrequency === 'weekly' || rentFrequency === 'fortnightly' ? 7 : 31}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.rent_due_day || ''}
               onChange={(e) => onUpdate({ rent_due_day: parseInt(e.target.value) || 1 })}
               placeholder={rentFrequency === 'weekly' || rentFrequency === 'fortnightly' ? '1-7' : '1-31'}

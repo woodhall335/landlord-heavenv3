@@ -40,15 +40,15 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-        <h3 className="text-sm font-medium text-blue-900 mb-2">
+      <div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
+        <h3 className="text-sm font-medium text-purple-900 mb-2">
           Court Details Required for Complete Pack
         </h3>
-        <p className="text-sm text-blue-800 mb-3">
+        <p className="text-sm text-purple-800 mb-3">
           To generate court forms (N5, N5B, or N119), you need to provide the name
           and address of the County Court that will handle your possession claim.
         </p>
-        <p className="text-sm text-blue-800">
+        <p className="text-sm text-purple-800">
           Use the official HMCTS Court Finder to search by postcode and find your
           local court:
         </p>
@@ -56,7 +56,7 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
           href={HMCTS_COURT_FINDER_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-[#7C3AED] text-white text-sm font-medium rounded-md hover:bg-[#6D28D9] transition-colors"
         >
           <svg
             className="w-4 h-4"
@@ -87,7 +87,7 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
           <input
             id="court_name"
             type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={courtName}
             onChange={(e) => onUpdate({ court_name: e.target.value })}
             placeholder="e.g., Manchester County Court"
@@ -107,7 +107,7 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
           </label>
           <textarea
             id="court_address"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[100px] focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[100px] focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={courtAddress}
             onChange={(e) => onUpdate({ court_address: e.target.value })}
             placeholder="e.g., 1 Bridge Street West, Manchester, M60 9DJ"

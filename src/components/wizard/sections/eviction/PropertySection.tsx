@@ -30,8 +30,8 @@ export const PropertySection: React.FC<PropertySectionProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p className="text-sm text-blue-800">
+      <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+        <p className="text-sm text-purple-800">
           Enter the address of the rental property exactly as it appears on the tenancy agreement.
           This address will appear on all notices and court forms.
         </p>
@@ -46,7 +46,7 @@ export const PropertySection: React.FC<PropertySectionProps> = ({
           <input
             id="property_address_line1"
             type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={facts.property_address_line1 || ''}
             onChange={(e) => onUpdate({ property_address_line1: e.target.value })}
             placeholder="e.g., 123 High Street, Flat 4A"
@@ -60,7 +60,7 @@ export const PropertySection: React.FC<PropertySectionProps> = ({
           <input
             id="property_address_line2"
             type="text"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={facts.property_address_line2 || ''}
             onChange={(e) => onUpdate({ property_address_line2: e.target.value })}
             placeholder="e.g., Building name, district"
@@ -76,7 +76,7 @@ export const PropertySection: React.FC<PropertySectionProps> = ({
             <input
               id="property_address_town"
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.property_address_town || ''}
               onChange={(e) => onUpdate({ property_address_town: e.target.value })}
               placeholder="e.g., Manchester"
@@ -91,7 +91,7 @@ export const PropertySection: React.FC<PropertySectionProps> = ({
             <input
               id="property_address_postcode"
               type="text"
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
               value={facts.property_address_postcode || ''}
               onChange={(e) => onUpdate({ property_address_postcode: e.target.value.toUpperCase() })}
               placeholder="e.g., M1 1AA"
