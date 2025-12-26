@@ -340,10 +340,12 @@ export default function WizardPreviewPage() {
         const fetchedCase: CaseData = caseResult.case;
 
         // Ensure recommended_route is set from wizard facts if not already set
+        // Check eviction_route (user's explicit selection from Case Basics) as primary fallback
         if (!fetchedCase.recommended_route && fetchedCase.collected_facts) {
           const wizardFacts = fetchedCase.collected_facts as any;
           fetchedCase.recommended_route =
             wizardFacts.selected_notice_route ||
+            wizardFacts.eviction_route ||
             wizardFacts.route_recommendation?.recommended_route ||
             wizardFacts.recommended_route;
         }
@@ -666,7 +668,7 @@ export default function WizardPreviewPage() {
       return caseData.recommended_route;
     }
     const facts = caseData?.collected_facts as any;
-    return facts?.selected_notice_route || facts?.route_recommendation?.recommended_route;
+    return facts?.selected_notice_route || facts?.eviction_route || facts?.route_recommendation?.recommended_route;
   };
 
   // Part B: Get alternative routes based on jurisdiction and current route
@@ -1226,7 +1228,7 @@ export default function WizardPreviewPage() {
                                       showToast(err.message || `Failed to generate ${doc.title}`, 'error');
                                     }
                                   }}
-                                  className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors text-left group"
+                                  className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors text-left group cursor-pointer"
                                 >
                                   <div className="flex items-center gap-3">
                                     <span className="text-lg">{doc.icon}</span>

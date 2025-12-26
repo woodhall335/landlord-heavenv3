@@ -169,8 +169,9 @@ export async function POST(request: NextRequest) {
     // ============================================================================
     // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE (CHECKPOINT STAGE)
     // ============================================================================
-    // Determine route from wizard facts
+    // Determine route from wizard facts - check eviction_route (user's explicit selection) first
     const selectedRoute = (wizardFacts as any).selected_notice_route ||
+                          (wizardFacts as any).eviction_route ||
                           (wizardFacts as any).route_recommendation?.recommended_route ||
                           (wizardFacts as any).selected_route ||
                           (effectiveCaseType === 'eviction' ? 'section_8' : effectiveProduct);
@@ -219,16 +220,21 @@ export async function POST(request: NextRequest) {
 
     // ROUTE SELECTION LOGIC:
     // For notice_only product, route is automatically selected by the wizard (stored as selected_notice_route).
-    // For complete_pack, use decision engine recommendation.
+    // For complete_pack, respect user's explicit eviction_route selection, falling back to decision engine.
     const selectedNoticeRoute = (wizardFacts as any).selected_notice_route || null;
+    const userExplicitRoute = (wizardFacts as any).eviction_route || null;
 
     let finalRecommendedRoute: string | null = null;
 
     if (effectiveProduct === 'notice_only' && selectedNoticeRoute) {
       // For notice_only: Use the automatically selected route from wizard
       finalRecommendedRoute = selectedNoticeRoute;
+    } else if (userExplicitRoute) {
+      // For complete_pack: Respect user's explicit eviction_route selection from Case Basics
+      // This ensures that if the user selected Section 8, we don't override it with Section 21
+      finalRecommendedRoute = userExplicitRoute;
     } else {
-      // For complete_pack or when no route selected yet: Use decision engine recommendation
+      // Fallback to decision engine recommendation when no route selected yet
       finalRecommendedRoute =
         decision.recommended_routes.length > 0 ? decision.recommended_routes[0] : null;
     }
