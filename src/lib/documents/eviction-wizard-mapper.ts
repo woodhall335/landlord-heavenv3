@@ -7,6 +7,7 @@ import { GROUND_DEFINITIONS } from './section8-generator';
 import { generateArrearsParticulars } from './arrears-schedule-mapper';
 import { getAuthoritativeArrears } from '@/lib/arrears-engine';
 import { EvidenceCategory } from '@/lib/evidence/schema';
+import { calculatePossessionFees } from '@/lib/court-fees/hmcts-fees';
 
 function buildAddress(...parts: Array<string | null | undefined>): string {
   return parts.filter(Boolean).join('\n');
@@ -289,7 +290,33 @@ function buildCaseData(
       facts.issues.rent_arrears.total_arrears ||
       undefined,
 
-    court_fee: facts.court.claim_amount_costs || undefined,
+    // =========================================================================
+    // COURT FEE AUTO-CALCULATION
+    // =========================================================================
+    // If no manual fee is provided, auto-calculate based on claim type and arrears.
+    // Uses HMCTS fee structure from hmcts-fees.ts.
+    // - Standard/Accelerated possession: £355
+    // - Plus money claim fee if claiming arrears (banded by amount)
+    // =========================================================================
+    court_fee: (() => {
+      // Use manually entered fee if provided
+      if (facts.court.claim_amount_costs) {
+        return facts.court.claim_amount_costs;
+      }
+
+      // Auto-calculate based on claim type and arrears
+      const totalArrears =
+        wizardFacts.total_arrears ||
+        wizardFacts.rent_arrears_amount ||
+        facts.issues.rent_arrears.total_arrears ||
+        0;
+
+      // Map claim type to fee calculator type
+      const feeClaimType = claimType === 'section_21' ? 'accelerated_section21' : 'section_8';
+      const calculatedFees = calculatePossessionFees(feeClaimType, totalArrears);
+
+      return calculatedFees.totalFee;
+    })(),
     solicitor_costs: facts.court.claim_amount_other || undefined,
     deposit_amount: facts.tenancy.deposit_amount || undefined,
     deposit_scheme: (facts.tenancy.deposit_scheme_name as any) || undefined,
