@@ -32,24 +32,96 @@ const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms')
 // =============================================================================
 
 /**
- * N5 form field names (13 fields total)
- * Source: public/official-forms/n5-eng.pdf
+ * N5 form field names (34 text fields, 20 checkboxes)
+ * Source: public/official-forms/n5-eng.pdf (official HMCTS form, 123KB)
+ * Field inventory updated: December 2025
  */
 const N5_FIELDS = {
-  // Note: Uses curly apostrophe (') not straight (')
+  // Header fields
   COURT: 'In the court',
-  CLAIMANT_DETAILS: "claimant’s details", // curly apostrophe U+2019
-  DEFENDANT_DETAILS: "defendant’s details", // curly apostrophe U+2019
-  POSSESSION_OF: 'possession of',
+  CLAIM_NO: 'claimno',
+  CLAIM_NO_2: 'claim no',
   FEE_ACCOUNT: 'Fee account no',
+
+  // Party details
+  CLAIMANT_DETAILS: "claimant's details",
+  DEFENDANT_DETAILS: "defendant's details",
+  POSSESSION_OF: 'possession of',
+  ADDRESS_FOR_SERVICE: 'address for service',
+
+  // Hearing details
+  HEARD_ON: 'heardon',
+  YEAR: 'year',
+  TIME: 'time',
+  LOCATION: 'location',
+  ISSUE_DATE: 'issuedate',
+
+  // Fees
+  COURT_FEE: 'courtfee',
+  SOLICITOR_FEE: 'solfee',
+  TOTAL: 'total',
+
+  // Other reason details
+  OTHER_REASON_DETAILS: 'some other reason - details',
+
+  // Statement of Truth
+  STATEMENT_SIGNATURE: 'Statement of Truth signature box',
+  STATEMENT_DATE_DD: 'Date the Statement of Truth is signed - DD',
+  STATEMENT_DATE_MM: 'Date the Statement of Truth is signed - MM',
+  STATEMENT_DATE_YYYY: 'Date the Statement of Truth is signed - YYYY',
   SIGNATORY_NAME: 'Full name of the person signing the Statement of Truth',
   SOLICITOR_FIRM: "Name of claimant's legal representative's firm",
+  POSITION_HELD: 'If signing on behalf of firm or company give position or office held',
+
+  // Service address
+  ADDRESS_POSTCODE: "Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
+  ADDRESS_TOWN: "Town or city - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
   ADDRESS_BUILDING: "building and street - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
   ADDRESS_LINE2: "Second line of address - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
-  ADDRESS_TOWN: "Town or city - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
   ADDRESS_COUNTY: "County (optional) - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
-  ADDRESS_POSTCODE: "Postcode - Claimant's or claimant's legal representative's address to which documents or payments should be sent",
-  STATEMENT_SIGNED_BY_REP: "Statement of Truth is signed by the Claimant's legal representative (as defined by CPR 2.3(1))",
+
+  // Contact details
+  FAX: 'If applicable, fax number',
+  PHONE: 'If applicable, phone number',
+  REFERENCE: 'If applicable, your reference',
+  DX: 'If applicable, DX number',
+  EMAIL: 'If applicable, email address',
+} as const;
+
+/**
+ * N5 form checkbox field names (20 checkboxes)
+ * Source: public/official-forms/n5-eng.pdf
+ */
+const N5_CHECKBOXES = {
+  // Grounds for possession
+  RENT_ARREARS: 'rent arrears - yes',
+  OTHER_BREACH_TENANCY: 'other breach of tenancy - yes',
+  FORFEITURE: 'forfeiture of the lease - yes',
+  MORTGAGE_ARREARS: 'mortgage arrears - yes',
+  OTHER_BREACH_MORTGAGE: 'other breach of the mortgage - yes',
+  TRESPASS: 'trespass - yes',
+  OTHER: 'other - yes',
+  ANTI_SOCIAL_BEHAVIOUR: 'anti-social behaviour - yes',
+  UNLAWFUL_USE: 'unlawful use - yes',
+
+  // Demotion of tenancy
+  DEMOTION_YES: 'demotion of tenancy - yes',
+  DEMOTION_NO: 'demotion of tenancy - no',
+
+  // Right to buy suspension
+  RIGHT_TO_BUY_YES: 'order suspending the right to buy - yes',
+  RIGHT_TO_BUY_NO: 'order suspending the right to buy - no',
+
+  // Human Rights Act
+  HRA_YES: 'HRA - yes',
+  HRA_NO: 'HRA - no',
+
+  // Statement of Truth
+  SOT_BELIEVES: 'I believe that the facts stated in this clam form are true',
+  SOT_AUTHORISED: 'The Claimant believes that the facts stated in this claim form are true. I am authorised by the claimant to sign this statement',
+  SOT_CLAIMANT: 'Statement of Truth is signed by the Claimant',
+  SOT_LITIGATION_FRIEND: 'Statement of Truth is signed by the Litigation friend (where claimant is a child or a patient)',
+  SOT_LEGAL_REP: "Statement of Truth is signed by the Claimant's legal representative (as defined by CPR 2.3(1))",
 } as const;
 
 /**
@@ -178,27 +250,104 @@ const N5B_CHECKBOXES = {
 } as const;
 
 /**
- * N119 form field names (17 fields total, ALL are text fields)
- * Source: public/official-forms/n119-eng.pdf
+ * N119 form field names (38 text fields, 16 checkboxes)
+ * Source: public/official-forms/n119-eng.pdf (official HMCTS form, 84.5KB)
+ * Field inventory updated: December 2025
  */
 const N119_FIELDS = {
+  // Header
   COURT: 'name of court',
+  CLAIM_NO: 'claim no',
   CLAIMANT: 'name of claimant',
   DEFENDANT: 'name of defendant',
+
+  // Property details
   POSSESSION_OF: 'The claimant has a right to possession of:',
   OCCUPANTS: "To the best of the claimant's knowledge the following persons are in possession of the property:",
+
+  // Tenancy details (Section 3)
   TENANCY_TYPE: '3(a) Type of tenancy',
   TENANCY_DATE: '3(a) Date of tenancy',
   RENT: '3(b) The current rent is',
-  REASON: '4. (a) The reason the claimant is asking for possession is:',
+  RENT_WEEKLY: '3(b) The current rent is payable each week',
+  RENT_FORTNIGHTLY: '3(b) The current rent is payable each fortnight',
+  RENT_MONTHLY: '3(b) The current rent is payable each month',
+  RENT_OTHER_PERIOD: '3(b) The current rent is payable each - specify the period',
+  DAILY_RATE: '3(c) Any unpaid rent or charge for use and occupation should be calculated at £',
+
+  // Reasons for possession (Section 4)
+  REASON_A: '4. (a) The reason the claimant is asking for possession is:',
+  REASON_B: '4. (b) The reason the claimant is asking for possession is:',
+  REASON_C: '4. (c) The reason the claimant is asking for possession is:',
+
+  // Steps taken (Section 5)
+  STEPS_TAKEN: '5. The following steps have already been taken to recover any arrears:',
+
+  // Notice details (Section 6)
+  NOTICE_OTHER_TYPE: '6. Other type of notice',
   NOTICE_DATE_DAY_MONTH: '6. Day and month notice served',
   NOTICE_DATE_YEAR: '6. Year notice served',
-  CLAIMANT_TYPE_OTHER: '13. The claimant is - other',  // Text field, NOT checkbox!
+
+  // Defendant circumstances (Section 7)
+  DEFENDANT_CIRCUMSTANCES: "7. The following information is known about the defendant's circumstances:",
+
+  // Financial info (Section 8)
+  FINANCIAL_INFO: '8. The claimant is asking the court to take the following financial or other information into account when making its decision whether or not to grant an order for possession:',
+
+  // Forfeiture relief (Section 9)
+  FORFEITURE_NAME: '9. (b) Entitled to relief against forfeiture - name',
+  FORFEITURE_ADDRESS: '9. (b) Entitled to relief against forfeiture - address',
+
+  // Claimant type (Section 13)
   CLAIMANT_TYPE_DETAILS: '13. Details if the claimant is some other entity',
-  SOT_BELIEVES: 'I believe that the facts stated in these particulars of claim are true',  // Text field!
-  SOT_AUTHORISED: 'The Claimant believes that the facts stated in these particulars of claim are true. I am authorised by the claimant to sign this statement',  // Text field!
-  SOT_SIGNED_BY_REP: "Statement of Truth signed by Claimant's legal representative (as defined by CPR 2.3(1))",  // Text field!
+
+  // Demotion (Section 15)
+  DEMOTION_DETAILS: '15. The claimant is claiming demotion of tenancy',
+  RIGHT_TO_BUY_DETAILS_1: '15. The claimant is claiming an order suspending the right to buy 1',
+  RIGHT_TO_BUY_DETAILS_2: '15. The claimant is claiming an order suspending the right to buy 2',
+  DEMOTED_TENANCY_TERMS: 'if the claimant served on the tenant a statement of express terms of the tenancy which are to apply to the demoted tenancy, please give details',
+  CONDUCT_DETAILS: 'details of the conduct alleged and any other matters relied upon',
+
+  // Statement of Truth
+  STATEMENT_SIGNATURE: 'Statement of Truth signature box',
+  STATEMENT_DATE_MM: 'Date Statement of Truth is signed - MM',
+  STATEMENT_DATE_DD: 'Date Statement of Truth is signed - DD',
+  STATEMENT_DATE_YYYY: 'Date Statement of Truth is signed - YYYY',
+  SIGNATORY_NAME: 'Full name of person signing the Statement of Truth',
   SOLICITOR_FIRM: "Name of claimant's legal representative's firm",
+  POSITION_HELD: 'If signing on behalf of firm or company give position or office held',
+} as const;
+
+/**
+ * N119 form checkbox field names (16 checkboxes)
+ * Source: public/official-forms/n119-eng.pdf
+ */
+const N119_CHECKBOXES = {
+  // Demotion/suspension order (Section 11)
+  DEMOTION_ORDER_YES: '11. In the alternative to possession, is the claimant asking the court to make a demotion order or an order suspending the right to buy? Yes',
+  DEMOTION_ORDER_NO: '11. In the alternative to possession, is the claimant asking the court to make a demotion order or an order suspending the right to buy? No',
+
+  // Demotion claim basis (Section 12)
+  HOUSING_ACT_1985_82A: '12. The (demotion) (suspension) claim is made under: section 82A(2) of the Housing Act 1985',
+  HOUSING_ACT_1988_6A: '12. The (demotion) (suspension) claim is made under: section 6A(2) of the Housing Act 1988',
+  HOUSING_ACT_1985_121A: '12. The (demotion) (suspension) claim is made under: section 121A of the Housing Act 1985',
+
+  // Claimant type (Section 13)
+  CLAIMANT_LOCAL_AUTHORITY: '13. The claimant is a: local authority',
+  CLAIMANT_HOUSING_ACTION_TRUST: '13. The claimant is a: housing action trust',
+  CLAIMANT_REGISTERED_SOCIAL: '13. The claimant is a: registered social landlord or a private registered provider of social housing',
+  CLAIMANT_OTHER: '13. The claimant is - other',
+
+  // Demoted tenancy terms (Section 14)
+  DEMOTED_TERMS_YES: '14. Has the claimant served on the tenant a statement of express terms of the tenancy which are to apply to the demoted tenancy? Yes',
+  DEMOTED_TERMS_NO: '14. Has the claimant served on the tenant a statement of express terms of the tenancy which are to apply to the demoted tenancy? No',
+
+  // Statement of Truth
+  SOT_BELIEVES: 'I believe that the facts stated in these particulars of claim are true',
+  SOT_AUTHORISED: 'The Claimant believes that the facts stated in these particulars of claim are true. I am authorised by the claimant to sign this statement',
+  SOT_CLAIMANT: 'Statement of Truth signed by Claimant',
+  SOT_LITIGATION_FRIEND: 'Statement of Truth signed by Litigation friend (where claimant is a child or a patient)',
+  SOT_LEGAL_REP: "Statement of Truth signed by Claimant's legal representative (as defined by CPR 2.3(1))",
 } as const;
 
 // =============================================================================
@@ -520,9 +669,10 @@ function splitAddress(address: string): string[] {
  * This is the standard possession claim form used for both Section 8 and Section 21.
  *
  * Official PDF: /public/official-forms/n5-eng.pdf
- * Source: https://assets.publishing.service.gov.uk/media/601bc1858fa8f53fc3d799d9/n5-eng.pdf
+ * Source: https://www.gov.uk/government/publications/form-n5-claim-form-for-possession-of-property
  *
- * FIELD INVENTORY: 13 text fields, 0 checkboxes
+ * FIELD INVENTORY: 34 text fields, 20 checkboxes
+ * Field inventory updated: December 2025
  */
 export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   const ctx = 'N5';
@@ -545,18 +695,17 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   const pdfDoc = await loadOfficialForm('n5-eng.pdf');
   const form = pdfDoc.getForm();
 
-  // === REQUIRED FIELDS ===
-
-  // Court name
+  // === HEADER FIELDS ===
   setTextRequired(form, N5_FIELDS.COURT, data.court_name, ctx);
+  setTextOptional(form, N5_FIELDS.FEE_ACCOUNT, data.claimant_reference, ctx);
 
-  // Claimant and defendant details - try both apostrophe variants (curly ' and straight ')
+  // === PARTY DETAILS ===
   const claimantDetails = `${data.landlord_full_name}\n${data.landlord_address}`;
   const defendantDetails = `${data.tenant_full_name}\n${data.property_address}`;
 
   setTextWithVariants(
     form,
-    [N5_FIELDS.CLAIMANT_DETAILS, "claimant's details"], // curly then straight
+    [N5_FIELDS.CLAIMANT_DETAILS, "claimant's details"],
     claimantDetails,
     true,
     ctx
@@ -564,7 +713,7 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
 
   setTextWithVariants(
     form,
-    [N5_FIELDS.DEFENDANT_DETAILS, "defendant's details"], // curly then straight
+    [N5_FIELDS.DEFENDANT_DETAILS, "defendant's details"],
     defendantDetails,
     true,
     ctx
@@ -573,15 +722,85 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   // Property address (possession of)
   setTextRequired(form, N5_FIELDS.POSSESSION_OF, data.property_address, ctx);
 
-  // Signatory name
+  // Defendant's address for service (same as property address by default)
+  setTextOptional(form, N5_FIELDS.ADDRESS_FOR_SERVICE, data.property_address, ctx);
+
+  // === FEES ===
+  if (data.court_fee) {
+    setTextOptional(form, N5_FIELDS.COURT_FEE, data.court_fee.toFixed(2), ctx);
+  }
+  if (data.solicitor_costs) {
+    setTextOptional(form, N5_FIELDS.SOLICITOR_FEE, data.solicitor_costs.toFixed(2), ctx);
+  }
+  const totalFees = (data.court_fee || 0) + (data.solicitor_costs || 0);
+  if (totalFees > 0) {
+    setTextOptional(form, N5_FIELDS.TOTAL, totalFees.toFixed(2), ctx);
+  }
+
+  // === GROUNDS FOR POSSESSION CHECKBOXES ===
+  // Tick the appropriate ground based on case data
+  const groundCodes = data.ground_codes || [];
+  const claimType = data.claim_type;
+
+  // Rent arrears - Ground 8, 10, 11
+  const hasArrearsGround = groundCodes.some(g => ['8', '10', '11'].includes(g));
+  if (hasArrearsGround || data.total_arrears) {
+    setCheckbox(form, N5_CHECKBOXES.RENT_ARREARS, true, ctx);
+  }
+
+  // Anti-social behaviour - Ground 14
+  if (groundCodes.includes('14')) {
+    setCheckbox(form, N5_CHECKBOXES.ANTI_SOCIAL_BEHAVIOUR, true, ctx);
+  }
+
+  // Other breach of tenancy - Ground 12, 13, 15, etc.
+  const hasBreachGround = groundCodes.some(g => ['12', '13', '15'].includes(g));
+  if (hasBreachGround) {
+    setCheckbox(form, N5_CHECKBOXES.OTHER_BREACH_TENANCY, true, ctx);
+  }
+
+  // Section 21 (no-fault) - use "other" category with details
+  if (claimType === 'section_21') {
+    setCheckbox(form, N5_CHECKBOXES.OTHER, true, ctx);
+    setTextOptional(form, N5_FIELDS.OTHER_REASON_DETAILS, 'Section 21 - No fault possession (Housing Act 1988)', ctx);
+  }
+
+  // === DEMOTION OF TENANCY ===
+  // Default to "No" for private landlords
+  setCheckbox(form, N5_CHECKBOXES.DEMOTION_NO, true, ctx);
+
+  // === RIGHT TO BUY SUSPENSION ===
+  // Default to "No" for private landlords
+  setCheckbox(form, N5_CHECKBOXES.RIGHT_TO_BUY_NO, true, ctx);
+
+  // === HUMAN RIGHTS ACT ===
+  // Default to "No" unless specifically indicated
+  setCheckbox(form, N5_CHECKBOXES.HRA_NO, true, ctx);
+
+  // === STATEMENT OF TRUTH ===
+  setTextOptional(form, N5_FIELDS.STATEMENT_SIGNATURE, data.signatory_name, ctx);
   setTextRequired(form, N5_FIELDS.SIGNATORY_NAME, data.signatory_name, ctx);
 
-  // === OPTIONAL FIELDS ===
+  if (data.signature_date) {
+    const sigDate = splitDate(data.signature_date);
+    if (sigDate) {
+      setTextOptional(form, N5_FIELDS.STATEMENT_DATE_DD, sigDate.day, ctx);
+      setTextOptional(form, N5_FIELDS.STATEMENT_DATE_MM, sigDate.month, ctx);
+      setTextOptional(form, N5_FIELDS.STATEMENT_DATE_YYYY, sigDate.year, ctx);
+    }
+  }
 
-  setTextOptional(form, N5_FIELDS.FEE_ACCOUNT, data.claimant_reference, ctx);
-  setTextOptional(form, N5_FIELDS.SOLICITOR_FIRM, data.solicitor_firm, ctx);
+  // Statement of Truth checkbox
+  if (data.solicitor_firm) {
+    setTextOptional(form, N5_FIELDS.SOLICITOR_FIRM, data.solicitor_firm, ctx);
+    setCheckbox(form, N5_CHECKBOXES.SOT_LEGAL_REP, true, ctx);
+    setCheckbox(form, N5_CHECKBOXES.SOT_AUTHORISED, true, ctx);
+  } else {
+    setCheckbox(form, N5_CHECKBOXES.SOT_CLAIMANT, true, ctx);
+    setCheckbox(form, N5_CHECKBOXES.SOT_BELIEVES, true, ctx);
+  }
 
-  // Service address
+  // === SERVICE ADDRESS ===
   const serviceAddressLines = splitAddress(
     data.service_address_line1 || data.landlord_address
   );
@@ -594,8 +813,11 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   setTextOptional(form, N5_FIELDS.ADDRESS_COUNTY, data.service_address_county, ctx);
   setTextOptional(form, N5_FIELDS.ADDRESS_POSTCODE, data.service_postcode || data.landlord_postcode, ctx);
 
-  // Note: N5 has NO checkboxes for grounds/arrears/HRA/statement of truth type
-  // Those fields don't exist in this PDF
+  // === CONTACT DETAILS ===
+  setTextOptional(form, N5_FIELDS.PHONE, data.service_phone || data.landlord_phone, ctx);
+  setTextOptional(form, N5_FIELDS.EMAIL, data.service_email || data.landlord_email, ctx);
+  setTextOptional(form, N5_FIELDS.DX, data.dx_number, ctx);
+  setTextOptional(form, N5_FIELDS.REFERENCE, data.claimant_reference, ctx);
 
   const pdfBytes = await pdfDoc.save();
   console.log(`✅ N5 form filled successfully (${listFormFieldNames(form).length} fields available, key fields set)`);
@@ -937,10 +1159,10 @@ export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
  * Fill Form N119 - Particulars of claim for possession
  *
  * Official PDF: /public/official-forms/n119-eng.pdf
- * Source: https://assets.publishing.service.gov.uk/media/601bc1f8e90e071292663ea8/n119-eng.pdf
+ * Source: https://www.gov.uk/government/publications/form-n119-particulars-of-claim-for-possession-arrears-of-rent
  *
- * FIELD INVENTORY: 17 text fields, 0 checkboxes
- * Note: All fields are TEXT fields - no checkboxes in this form!
+ * FIELD INVENTORY: 38 text fields, 16 checkboxes
+ * Field inventory updated: December 2025
  */
 export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   const ctx = 'N119';
@@ -966,7 +1188,7 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   const pdfDoc = await loadOfficialForm('n119-eng.pdf');
   const form = pdfDoc.getForm();
 
-  // === REQUIRED FIELDS ===
+  // === HEADER FIELDS ===
   setTextRequired(form, N119_FIELDS.COURT, data.court_name, ctx);
   setTextRequired(form, N119_FIELDS.CLAIMANT, data.landlord_full_name, ctx);
   setTextRequired(form, N119_FIELDS.DEFENDANT, data.tenant_full_name, ctx);
@@ -975,29 +1197,44 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   // Occupants - default to tenant name
   setTextOptional(form, N119_FIELDS.OCCUPANTS, data.tenant_full_name, ctx);
 
-  // === TENANCY DETAILS ===
-  // Type of tenancy - use collected value or a safe generic
+  // === TENANCY DETAILS (Section 3) ===
   const tenancyType = data.tenancy_type || 'Assured Shorthold Tenancy';
   setTextOptional(form, N119_FIELDS.TENANCY_TYPE, tenancyType, ctx);
   setTextOptional(form, N119_FIELDS.TENANCY_DATE, data.tenancy_start_date, ctx);
 
-  // Rent
+  // Rent amount
   if (data.rent_amount !== undefined) {
-    const rentFrequencyText = data.rent_frequency === 'weekly' ? 'per week' :
-                               data.rent_frequency === 'fortnightly' ? 'per fortnight' :
-                               data.rent_frequency === 'monthly' ? 'per month' :
-                               data.rent_frequency === 'quarterly' ? 'per quarter' :
-                               data.rent_frequency === 'yearly' ? 'per year' : '';
-    setTextOptional(form, N119_FIELDS.RENT, `£${data.rent_amount} ${rentFrequencyText}`, ctx);
+    setTextOptional(form, N119_FIELDS.RENT, `£${data.rent_amount}`, ctx);
+
+    // Tick appropriate rent frequency
+    if (data.rent_frequency === 'weekly') {
+      setTextOptional(form, N119_FIELDS.RENT_WEEKLY, 'X', ctx);
+    } else if (data.rent_frequency === 'fortnightly') {
+      setTextOptional(form, N119_FIELDS.RENT_FORTNIGHTLY, 'X', ctx);
+    } else if (data.rent_frequency === 'monthly') {
+      setTextOptional(form, N119_FIELDS.RENT_MONTHLY, 'X', ctx);
+    } else if (data.rent_frequency) {
+      setTextOptional(form, N119_FIELDS.RENT_OTHER_PERIOD, data.rent_frequency, ctx);
+    }
+
+    // Daily rate for arrears calculation
+    const dailyRate = data.rent_frequency === 'weekly' ? data.rent_amount / 7 :
+                      data.rent_frequency === 'monthly' ? data.rent_amount / 30 :
+                      data.rent_amount / 30;
+    setTextOptional(form, N119_FIELDS.DAILY_RATE, dailyRate.toFixed(2), ctx);
   }
 
-  // === REASON FOR POSSESSION ===
-  setTextOptional(form, N119_FIELDS.REASON,
-    data.particulars_of_claim || (data.ground_numbers ? `Grounds: ${data.ground_numbers}` : undefined),
-    ctx
-  );
+  // === REASON FOR POSSESSION (Section 4) ===
+  const reason = data.particulars_of_claim || (data.ground_numbers ? `Grounds: ${data.ground_numbers}` : undefined);
+  setTextOptional(form, N119_FIELDS.REASON_A, reason, ctx);
 
-  // === NOTICE DATES ===
+  // === STEPS TAKEN (Section 5) ===
+  if (data.total_arrears) {
+    setTextOptional(form, N119_FIELDS.STEPS_TAKEN,
+      'Demands for payment have been made. A notice seeking possession was served.', ctx);
+  }
+
+  // === NOTICE DATES (Section 6) ===
   const noticeDate = data.section_8_notice_date || data.section_21_notice_date;
   if (noticeDate) {
     const dateParts = noticeDate.split('-');
@@ -1007,20 +1244,36 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
     }
   }
 
+  // === DEMOTION ORDER (Section 11) ===
+  // Default to "No" for private landlords
+  setCheckbox(form, N119_CHECKBOXES.DEMOTION_ORDER_NO, true, ctx);
+
   // === CLAIMANT TYPE (Section 13) ===
-  // Note: These are TEXT fields, not checkboxes!
-  // We mark "other" and provide details
-  setTextOptional(form, N119_FIELDS.CLAIMANT_TYPE_OTHER, 'X', ctx);  // Mark this option
+  // Private landlord = "other"
+  setCheckbox(form, N119_CHECKBOXES.CLAIMANT_OTHER, true, ctx);
   setTextOptional(form, N119_FIELDS.CLAIMANT_TYPE_DETAILS, 'Private landlord', ctx);
 
   // === STATEMENT OF TRUTH ===
-  // Note: These are also TEXT fields, not checkboxes!
+  setTextOptional(form, N119_FIELDS.STATEMENT_SIGNATURE, data.signatory_name, ctx);
+  setTextOptional(form, N119_FIELDS.SIGNATORY_NAME, data.signatory_name, ctx);
+
+  if (data.signature_date) {
+    const sigDate = splitDate(data.signature_date);
+    if (sigDate) {
+      setTextOptional(form, N119_FIELDS.STATEMENT_DATE_DD, sigDate.day, ctx);
+      setTextOptional(form, N119_FIELDS.STATEMENT_DATE_MM, sigDate.month, ctx);
+      setTextOptional(form, N119_FIELDS.STATEMENT_DATE_YYYY, sigDate.year, ctx);
+    }
+  }
+
+  // Statement of Truth checkboxes
   if (data.solicitor_firm) {
-    setTextOptional(form, N119_FIELDS.SOT_AUTHORISED, data.signatory_name, ctx);
-    setTextOptional(form, N119_FIELDS.SOT_SIGNED_BY_REP, data.signatory_name, ctx);
     setTextOptional(form, N119_FIELDS.SOLICITOR_FIRM, data.solicitor_firm, ctx);
+    setCheckbox(form, N119_CHECKBOXES.SOT_LEGAL_REP, true, ctx);
+    setCheckbox(form, N119_CHECKBOXES.SOT_AUTHORISED, true, ctx);
   } else {
-    setTextOptional(form, N119_FIELDS.SOT_BELIEVES, data.signatory_name, ctx);
+    setCheckbox(form, N119_CHECKBOXES.SOT_CLAIMANT, true, ctx);
+    setCheckbox(form, N119_CHECKBOXES.SOT_BELIEVES, true, ctx);
   }
 
   const pdfBytes = await pdfDoc.save();

@@ -6,13 +6,19 @@
 # 2.1.0: Added court-ready fields (notice dates, arrears amounts, deposit details)
 
 __meta:
-  version: "2.4.0"
+  version: "2.5.0"
   effective_from: "2025-12-16"
   last_updated: "2025-12-26"
   legal_review_date: "2025-12-26"
   jurisdiction: "england"
   product: "complete_pack"
   changelog:
+    - version: "2.5.0"
+      date: "2025-12-26"
+      changes:
+        - "Added solicitor_details question (solicitor_firm, solicitor_reference, dx_number)"
+        - "Shows conditionally when signatory_capacity is 'solicitor'"
+        - "Required for N5/N5B/N119 Statement of Truth - Legal Representative section"
     - version: "2.4.0"
       date: "2025-12-26"
       changes:
@@ -736,6 +742,40 @@ questions:
       - signatory_name
       - signatory_capacity
       - signature_date
+
+  # ============================================================
+  # SOLICITOR DETAILS (Required when signatory is solicitor)
+  # N5, N5B, N119 have fields for solicitor firm name
+  # ============================================================
+  - id: solicitor_details
+    section: Court
+    question: "Solicitor firm details"
+    inputType: group
+    helperText: "Required when court forms are signed by a solicitor."
+    dependsOn:
+      questionId: signatory_capacity
+      value: "solicitor"
+    fields:
+      - id: solicitor_firm
+        label: "Solicitor firm name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: solicitor_reference
+        label: "Your reference"
+        inputType: text
+        helperText: "Optional - your case reference number"
+        width: half
+      - id: solicitor_dx
+        label: "DX number"
+        inputType: text
+        helperText: "Optional - Document Exchange number"
+        width: half
+    maps_to:
+      - solicitor_firm
+      - claimant_reference
+      - dx_number
 
   # ============================================================
   # EVIDENCE UPLOADS - CATEGORIZED (Smart Review v1)

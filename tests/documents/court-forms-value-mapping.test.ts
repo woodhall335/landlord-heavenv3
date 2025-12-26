@@ -101,8 +101,8 @@ describe('Court Forms Value Mapping', () => {
       });
 
       const pdfBytes = await fillN5Form(data);
-      // N5 PDF uses curly apostrophe (') in field name
-      const claimantDetails = await getTextFieldValue(pdfBytes, "claimant’s details");
+      // N5 PDF uses straight apostrophe (') in field name
+      const claimantDetails = await getTextFieldValue(pdfBytes, "claimant's details");
 
       expect(claimantDetails).toBeDefined();
       expect(claimantDetails).toContain('John Smith');
@@ -117,7 +117,7 @@ describe('Court Forms Value Mapping', () => {
 
       const pdfBytes = await fillN5Form(data);
       // N5 PDF uses curly apostrophe (') in field name
-      const defendantDetails = await getTextFieldValue(pdfBytes, "defendant’s details");
+      const defendantDetails = await getTextFieldValue(pdfBytes, "defendant's details");
 
       expect(defendantDetails).toBeDefined();
       expect(defendantDetails).toContain('Jane Doe');
