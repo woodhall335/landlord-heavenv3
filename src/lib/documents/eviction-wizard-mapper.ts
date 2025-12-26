@@ -64,7 +64,24 @@ function normaliseFrequency(
 
 function deriveCaseType(evictionRoute: any): EvictionCase['case_type'] {
   const route = Array.isArray(evictionRoute) ? evictionRoute : [evictionRoute].filter(Boolean);
-  const hasSection21 = route.some((r) => typeof r === 'string' && r.toLowerCase().includes('section 21'));
+  // ==========================================================================
+  // CASE TYPE DERIVATION
+  // ==========================================================================
+  // The wizard emits eviction_route as either 'section_21' or 'section_8'.
+  // We check for Section 21 variants (with underscores, spaces, or concatenated)
+  // and classify those as 'no_fault' evictions. All other routes (including
+  // Section 8 with any grounds - arrears, ASB, breach) are classified as
+  // 'rent_arrears' which is the general eviction case type.
+  //
+  // Note: Section 8 can be used for non-arrears grounds (e.g., Ground 14 ASB),
+  // but for court form purposes, the 'rent_arrears' case_type covers all
+  // fault-based evictions. The actual grounds are specified separately.
+  // ==========================================================================
+  const hasSection21 = route.some((r) => {
+    if (typeof r !== 'string') return false;
+    const normalized = r.toLowerCase().replace(/_/g, ' ');
+    return normalized.includes('section 21') || normalized === 'section21';
+  });
   if (hasSection21) return 'no_fault';
   return 'rent_arrears';
 }
@@ -292,8 +309,8 @@ function buildCaseData(
     service_email: evictionCase.service_email,
     court_name: evictionCase.court_name || wizardFacts.court_name,
     court_address: evictionCase.court_address || wizardFacts.court_address,
-    signatory_name: evictionCase.landlord_full_name,
-    signature_date: new Date().toISOString().split('T')[0],
+    signatory_name: wizardFacts.signatory_name || evictionCase.landlord_full_name,
+    signature_date: wizardFacts.signature_date || new Date().toISOString().split('T')[0],
     notice_expiry_date: wizardFacts.notice_expiry_date || facts.notice.expiry_date || undefined,
 
     // =========================================================================

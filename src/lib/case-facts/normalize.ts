@@ -691,9 +691,10 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   base.parties.landlord.co_claimant ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.co_claimant',
     'landlord_co_claimant',
+    'landlord2_full_name',
+    'landlord2_name',
     'claimant_secondary_name',
     'pursuer_secondary_name',
-    'claimant_secondary_name',
   ]);
   base.parties.landlord.email ??= getFirstValue(wizard, [
     'case_facts.parties.landlord.email',
