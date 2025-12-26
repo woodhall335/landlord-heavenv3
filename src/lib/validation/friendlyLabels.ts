@@ -36,12 +36,12 @@ export const FACT_KEY_LABELS: Record<string, FriendlyLabel> = {
     questionLabel: "Your address",
     category: 'landlord',
   },
-  landlord_city: {
+  landlord_address_town: {
     action: "Add your town or city",
     questionLabel: "Your address",
     category: 'landlord',
   },
-  landlord_postcode: {
+  landlord_address_postcode: {
     action: "Add your postcode",
     questionLabel: "Your address",
     category: 'landlord',
@@ -53,12 +53,12 @@ export const FACT_KEY_LABELS: Record<string, FriendlyLabel> = {
     questionLabel: "Property address",
     category: 'property',
   },
-  property_city: {
+  property_address_town: {
     action: "Add the property town or city",
     questionLabel: "Property address",
     category: 'property',
   },
-  property_postcode: {
+  property_address_postcode: {
     action: "Add the property postcode",
     questionLabel: "Property address",
     category: 'property',
