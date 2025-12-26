@@ -2376,8 +2376,12 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             // Fall back to the main question text when label is missing.
             label={(currentQuestion as any).label ?? currentQuestion.question}
             description={currentQuestion.helperText}
-            // Use label as the evidence category tag if present
-            evidenceCategory={(currentQuestion as any).label}
+            // P0-D: Use evidenceCategory from MQS question for canonical category mapping.
+            // This enables N5B checkbox truthfulness: uploads with canonical categories
+            // (deposit_protection_certificate, epc, gas_safety_certificate) are tracked
+            // in facts.evidence.files[] and used to tick attachment checkboxes.
+            // Falls back to label for legacy compatibility.
+            evidenceCategory={(currentQuestion as any).evidenceCategory ?? (currentQuestion as any).label}
             required={!!currentQuestion.validation?.required}
             disabled={loading}
             value={uploadFilesForCurrentQuestion}
