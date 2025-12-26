@@ -64,7 +64,19 @@ function normaliseFrequency(
 
 function deriveCaseType(evictionRoute: any): EvictionCase['case_type'] {
   const route = Array.isArray(evictionRoute) ? evictionRoute : [evictionRoute].filter(Boolean);
-  // Check for Section 21 in various formats: 'section_21', 'section 21', 'Section 21'
+  // ==========================================================================
+  // CASE TYPE DERIVATION
+  // ==========================================================================
+  // The wizard emits eviction_route as either 'section_21' or 'section_8'.
+  // We check for Section 21 variants (with underscores, spaces, or concatenated)
+  // and classify those as 'no_fault' evictions. All other routes (including
+  // Section 8 with any grounds - arrears, ASB, breach) are classified as
+  // 'rent_arrears' which is the general eviction case type.
+  //
+  // Note: Section 8 can be used for non-arrears grounds (e.g., Ground 14 ASB),
+  // but for court form purposes, the 'rent_arrears' case_type covers all
+  // fault-based evictions. The actual grounds are specified separately.
+  // ==========================================================================
   const hasSection21 = route.some((r) => {
     if (typeof r !== 'string') return false;
     const normalized = r.toLowerCase().replace(/_/g, ' ');

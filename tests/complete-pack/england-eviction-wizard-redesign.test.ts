@@ -426,4 +426,164 @@ describe('England Eviction Wizard Redesign', () => {
       expect(caseData.signature_date).toBe('2024-06-01');
     });
   });
+
+  // ===========================================================================
+  // "TRUTH OVER UI" TESTS - Prove wizard truly controls court form output
+  // ===========================================================================
+  // These tests verify that user inputs from the wizard are what appear
+  // in court forms, not default/fallback values.
+  // ===========================================================================
+
+  describe('Truth Over UI - Wizard Controls Output', () => {
+    it('uses signatory name different from landlord name when provided (N5/N5B/N119)', () => {
+      // This test proves that when a solicitor or agent signs (signatory ≠ landlord),
+      // the signatory name appears in court forms, not the landlord name.
+      const factsWithSolicitorSigning: WizardFacts = {
+        __meta: { jurisdiction: 'england', product: 'complete_pack', original_product: null },
+        eviction_route: 'section_21',
+        // Landlord details
+        landlord_full_name: 'John Smith',
+        landlord_address_line1: '1 Test St',
+        landlord_address_town: 'London',
+        landlord_address_postcode: 'SW1A 1AA',
+        // Tenant details
+        tenant_full_name: 'Test Tenant',
+        property_address_line1: '2 Test Rd',
+        property_address_town: 'London',
+        property_address_postcode: 'SW1A 2BB',
+        tenancy_start_date: '2023-01-01',
+        rent_amount: 1200,
+        rent_frequency: 'monthly',
+        rent_due_day: 1,
+        notice_served_date: '2024-06-01',
+        notice_service_method: 'first_class_post',
+        court_name: 'Test Court',
+        // SIGNATORY IS DIFFERENT FROM LANDLORD - Solicitor is signing
+        signatory_name: 'Sarah Solicitor',
+        signatory_capacity: 'solicitor',
+        signature_date: '2024-06-15', // Different from notice date
+      };
+
+      const { caseData } = wizardFactsToEnglandWalesEviction('test', factsWithSolicitorSigning);
+
+      // CRITICAL: The signatory name should be the solicitor, NOT the landlord
+      expect(caseData.signatory_name).toBe('Sarah Solicitor');
+      expect(caseData.signatory_name).not.toBe('John Smith');
+
+      // CRITICAL: The signature date should be the provided date, NOT today
+      expect(caseData.signature_date).toBe('2024-06-15');
+
+      // Verify landlord details are still correct
+      expect(caseData.landlord_full_name).toBe('John Smith');
+    });
+
+    it('uses signatory name for agent signing on behalf of landlord', () => {
+      const factsWithAgentSigning: WizardFacts = {
+        __meta: { jurisdiction: 'england', product: 'complete_pack', original_product: null },
+        eviction_route: 'section_8',
+        landlord_full_name: 'Property Management Ltd',
+        landlord_address_line1: '100 Office Park',
+        landlord_address_town: 'Manchester',
+        landlord_address_postcode: 'M1 1AA',
+        tenant_full_name: 'Test Tenant',
+        property_address_line1: '5 Rental St',
+        property_address_town: 'Manchester',
+        property_address_postcode: 'M2 2BB',
+        tenancy_start_date: '2022-01-01',
+        rent_amount: 950,
+        rent_frequency: 'monthly',
+        rent_due_day: 1,
+        notice_served_date: '2024-10-01',
+        notice_service_method: 'hand_delivered',
+        section8_grounds: ['Ground 8 - 8+ weeks rent arrears'],
+        total_arrears: 2850,
+        court_name: 'Manchester County Court',
+        // AGENT is signing, not the company director
+        signatory_name: 'Agent Angela',
+        signatory_capacity: 'agent',
+        signature_date: '2024-10-05',
+      };
+
+      const { caseData } = wizardFactsToEnglandWalesEviction('test', factsWithAgentSigning);
+
+      // Agent name should be in the signatory field
+      expect(caseData.signatory_name).toBe('Agent Angela');
+      expect(caseData.signature_date).toBe('2024-10-05');
+    });
+
+    it('falls back to landlord name only when no signatory provided', () => {
+      const factsWithoutSignatory: WizardFacts = {
+        __meta: { jurisdiction: 'england', product: 'complete_pack', original_product: null },
+        eviction_route: 'section_21',
+        landlord_full_name: 'Fallback Landlord',
+        landlord_address_line1: '1 Test St',
+        landlord_address_town: 'London',
+        landlord_address_postcode: 'SW1A 1AA',
+        tenant_full_name: 'Test Tenant',
+        property_address_line1: '2 Test Rd',
+        property_address_town: 'London',
+        property_address_postcode: 'SW1A 2BB',
+        tenancy_start_date: '2023-01-01',
+        rent_amount: 1200,
+        rent_frequency: 'monthly',
+        rent_due_day: 1,
+        notice_served_date: '2024-06-01',
+        notice_service_method: 'first_class_post',
+        court_name: 'Test Court',
+        // NO signatory_name provided - should fall back to landlord
+        signatory_capacity: 'claimant',
+      };
+
+      const { caseData } = wizardFactsToEnglandWalesEviction('test', factsWithoutSignatory);
+
+      // Should fall back to landlord name
+      expect(caseData.signatory_name).toBe('Fallback Landlord');
+    });
+
+    it('maps arrears schedule to canonical path for N119 particulars', () => {
+      // This test proves arrears data entered via UI appears in court documents
+      const factsWithArrears: WizardFacts = {
+        __meta: { jurisdiction: 'england', product: 'complete_pack', original_product: null },
+        eviction_route: 'section_8',
+        landlord_full_name: 'Test Landlord',
+        landlord_address_line1: '1 Test St',
+        landlord_address_town: 'London',
+        landlord_address_postcode: 'SW1A 1AA',
+        tenant_full_name: 'Test Tenant',
+        property_address_line1: '2 Test Rd',
+        property_address_town: 'London',
+        property_address_postcode: 'SW1A 2BB',
+        tenancy_start_date: '2023-01-01',
+        rent_amount: 1000,
+        rent_frequency: 'monthly',
+        rent_due_day: 1,
+        notice_served_date: '2024-09-01',
+        notice_service_method: 'first_class_post',
+        section8_grounds: ['Ground 8 - 8+ weeks rent arrears'],
+        court_name: 'Test Court',
+        signatory_name: 'Test Landlord',
+        signatory_capacity: 'claimant',
+        // Arrears entered via wizard
+        total_arrears: 3500,
+        arrears_at_notice_date: 3000,
+        arrears_items: [
+          { period_start: '2024-06-01', period_end: '2024-06-30', rent_due: 1000, rent_paid: 0 },
+          { period_start: '2024-07-01', period_end: '2024-07-31', rent_due: 1000, rent_paid: 500 },
+          { period_start: '2024-08-01', period_end: '2024-08-31', rent_due: 1000, rent_paid: 0 },
+          { period_start: '2024-09-01', period_end: '2024-09-30', rent_due: 1000, rent_paid: 0 },
+        ],
+      };
+
+      const { caseData, evictionCase } = wizardFactsToEnglandWalesEviction('test', factsWithArrears);
+
+      // Verify the arrears amounts flow through correctly
+      expect(caseData.total_arrears).toBe(3500);
+      expect(caseData.arrears_at_notice_date).toBe(3000);
+      expect(evictionCase.current_arrears).toBe(3500);
+
+      // Verify Ground 8 is included
+      expect(evictionCase.grounds.length).toBeGreaterThan(0);
+      expect(evictionCase.grounds[0].code).toBe('Ground 8');
+    });
+  });
 });

@@ -2498,9 +2498,9 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       disabled={loading}
                     >
                       <option value="">-- Select --</option>
-                      {field.options?.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
+                      {normalizeOptions(field.options as MQSOption[]).map((opt) => (
+                        <option key={opt.key} value={opt.value}>
+                          {opt.label}
                         </option>
                       ))}
                     </select>
