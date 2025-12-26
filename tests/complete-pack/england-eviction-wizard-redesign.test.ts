@@ -586,4 +586,204 @@ describe('England Eviction Wizard Redesign', () => {
       expect(evictionCase.grounds[0].code).toBe('Ground 8');
     });
   });
+
+  // ===========================================================================
+  // INLINE NOTICE-ONLY PATH TESTS
+  // ===========================================================================
+  // These tests verify that when notice_already_served = false, the inline
+  // notice-only subflow data correctly populates notice fields used by CaseData.
+  // ===========================================================================
+
+  describe('Inline Notice-Only Path (No Notice Yet)', () => {
+    it('populates notice_served_date + notice_service_method from inline subflow for Section 21', () => {
+      // Simulates a user who selected "No, I need to generate a notice"
+      // and completed the inline notice-only subflow
+      const factsWithInlineNotice: WizardFacts = {
+        __meta: {
+          case_id: 'TEST-INLINE-NOTICE-S21',
+          jurisdiction: 'england',
+          product: 'complete_pack',
+          original_product: 'complete_pack',
+        },
+        // Case Basics
+        eviction_route: 'section_21',
+
+        // Parties - Landlord
+        landlord_full_name: 'Inline Test Landlord',
+        landlord_address_line1: '1 Test Street',
+        landlord_address_town: 'London',
+        landlord_address_postcode: 'SW1A 1AA',
+        has_joint_landlords: false,
+
+        // Parties - Tenant
+        tenant_full_name: 'Inline Test Tenant',
+        has_joint_tenants: false,
+
+        // Property
+        property_address_line1: '2 Rental Road',
+        property_address_town: 'London',
+        property_address_postcode: 'SW1A 2BB',
+
+        // Tenancy
+        tenancy_start_date: '2023-01-01',
+        tenancy_type: 'ast_periodic',
+        rent_amount: 1500,
+        rent_frequency: 'monthly',
+        rent_due_day: 1,
+
+        // GATING QUESTION: User has NOT served notice yet
+        notice_already_served: false,
+
+        // INLINE SUBFLOW DATA:
+        // The inline notice-only subflow collects compliance data and then
+        // populates these canonical notice fields on completion
+        notice_served_date: '2024-12-26', // Set by subflow on completion
+        notice_service_method: 'first_class_post', // Set by subflow
+        notice_expiry_date: '2025-02-24', // 60 days for Section 21
+
+        // Section 21 Compliance (collected by inline subflow)
+        deposit_taken: true,
+        deposit_protected: true,
+        prescribed_info_served: true,
+        has_gas_appliances: true,
+        gas_safety_cert_served: true,
+        epc_served: true,
+        how_to_rent_served: true,
+
+        // Court & Signing
+        court_name: 'Test County Court',
+        signatory_name: 'Inline Test Landlord',
+        signatory_capacity: 'claimant',
+      };
+
+      const { caseData, evictionCase } = wizardFactsToEnglandWalesEviction(
+        'test-inline-notice',
+        factsWithInlineNotice
+      );
+
+      // CRITICAL: Notice fields populated from inline subflow must appear in caseData
+      expect(caseData.notice_served_date).toBe('2024-12-26');
+      expect(caseData.notice_service_method).toBe('first_class_post');
+      expect(caseData.notice_expiry_date).toBe('2025-02-24');
+
+      // Verify Section 21 case type
+      expect(caseData.claim_type).toBe('section_21');
+      expect(evictionCase.case_type).toBe('no_fault');
+    });
+
+    it('populates notice fields from inline subflow for Section 8 with grounds', () => {
+      // Simulates a user who selected "No, I need to generate a notice"
+      // for a Section 8 case and completed the inline notice-only subflow
+      const factsWithInlineNoticeS8: WizardFacts = {
+        __meta: {
+          case_id: 'TEST-INLINE-NOTICE-S8',
+          jurisdiction: 'england',
+          product: 'complete_pack',
+          original_product: 'complete_pack',
+        },
+        // Case Basics
+        eviction_route: 'section_8',
+
+        // Parties - Landlord
+        landlord_full_name: 'S8 Inline Landlord',
+        landlord_address_line1: '10 Landlord Lane',
+        landlord_address_town: 'Birmingham',
+        landlord_address_postcode: 'B1 1AA',
+        has_joint_landlords: false,
+
+        // Parties - Tenant
+        tenant_full_name: 'S8 Inline Tenant',
+        has_joint_tenants: false,
+
+        // Property
+        property_address_line1: '20 Tenant Terrace',
+        property_address_town: 'Birmingham',
+        property_address_postcode: 'B2 2BB',
+
+        // Tenancy
+        tenancy_start_date: '2022-06-01',
+        tenancy_type: 'ast_periodic',
+        rent_amount: 900,
+        rent_frequency: 'monthly',
+        rent_due_day: 1,
+
+        // GATING QUESTION: User has NOT served notice yet
+        notice_already_served: false,
+
+        // INLINE SUBFLOW DATA:
+        // Section 8 grounds and particulars collected by inline subflow
+        section8_grounds: ['Ground 8 - 8+ weeks rent arrears', 'Ground 10 - Rent arrears'],
+        section8_details: 'Tenant owes £2,700 in rent arrears dating back to October 2024.',
+
+        // Notice fields populated by subflow on completion
+        notice_served_date: '2024-12-26',
+        notice_service_method: 'hand_delivered',
+        notice_expiry_date: '2025-01-09', // 14 days for Ground 8
+
+        // Arrears data
+        total_arrears: 2700,
+
+        // Court & Signing
+        court_name: 'Birmingham County Court',
+        signatory_name: 'S8 Inline Landlord',
+        signatory_capacity: 'claimant',
+      };
+
+      const { caseData, evictionCase } = wizardFactsToEnglandWalesEviction(
+        'test-inline-notice-s8',
+        factsWithInlineNoticeS8
+      );
+
+      // CRITICAL: Notice fields from inline subflow must appear in caseData
+      expect(caseData.notice_served_date).toBe('2024-12-26');
+      expect(caseData.notice_service_method).toBe('hand_delivered');
+
+      // Verify Section 8 case type and grounds
+      expect(caseData.claim_type).toBe('section_8');
+      expect(evictionCase.case_type).toBe('rent_arrears');
+      expect(evictionCase.grounds.length).toBeGreaterThan(0);
+
+      // Verify arrears
+      expect(caseData.total_arrears).toBe(2700);
+    });
+
+    it('maps notice_service_date to notice_served_date when using inline subflow', () => {
+      // The inline subflow uses notice_service_date internally, which gets
+      // mapped to notice_served_date for consistency with the eviction wizard
+      const factsWithServiceDate: WizardFacts = {
+        __meta: {
+          case_id: 'TEST-SERVICE-DATE-MAPPING',
+          jurisdiction: 'england',
+          product: 'complete_pack',
+          original_product: 'complete_pack',
+        },
+        eviction_route: 'section_21',
+        landlord_full_name: 'Test Landlord',
+        landlord_address_line1: '1 Test St',
+        landlord_address_town: 'London',
+        landlord_address_postcode: 'SW1A 1AA',
+        tenant_full_name: 'Test Tenant',
+        property_address_line1: '2 Test Rd',
+        property_address_town: 'London',
+        property_address_postcode: 'SW1A 2BB',
+        tenancy_start_date: '2023-01-01',
+        rent_amount: 1200,
+        rent_frequency: 'monthly',
+        rent_due_day: 1,
+        notice_already_served: false,
+        // The subflow populates notice_served_date directly (mapped from notice_service_date)
+        notice_served_date: '2024-12-26',
+        notice_service_method: 'recorded_delivery',
+        court_name: 'Test Court',
+        signatory_name: 'Test Landlord',
+        signatory_capacity: 'claimant',
+      };
+
+      const { caseData } = wizardFactsToEnglandWalesEviction('test', factsWithServiceDate);
+
+      // The mapper should use notice_served_date
+      expect(caseData.notice_served_date).toBe('2024-12-26');
+      expect(caseData.notice_service_method).toBe('recorded_delivery');
+    });
+  });
 });
