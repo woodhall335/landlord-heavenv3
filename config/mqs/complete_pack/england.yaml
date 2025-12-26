@@ -6,17 +6,24 @@
 # 2.1.0: Added court-ready fields (notice dates, arrears amounts, deposit details)
 
 __meta:
-  version: "2.1.0"
+  version: "2.2.0"
   effective_from: "2025-12-16"
-  last_updated: "2025-12-24"
-  legal_review_date: "2025-12-24"
+  last_updated: "2025-12-26"
+  legal_review_date: "2025-12-26"
   jurisdiction: "england"
   product: "complete_pack"
+  changelog:
+    - version: "2.2.0"
+      date: "2025-12-26"
+      changes:
+        - "Added notice_service_method question (required for N5B field 10a)"
+        - "Added court_name question (required for court forms N5, N5B, N119)"
+        - "Added arrears_schedule question for Ground 8 (canonical arrears_items)"
 
 id: complete_pack_england_v2
 product: complete_pack
 jurisdiction: england
-version: "2.1.0"
+version: "2.2.0"
 
 questions:
   # 1. Eviction route selection (England: Section 8 or Section 21)
@@ -59,6 +66,32 @@ questions:
     maps_to:
       - notice_served_date
       - notice_expiry_date
+
+  # ============================================================
+  # NOTICE SERVICE METHOD (Required for N5B field 10a)
+  # ============================================================
+  - id: notice_service_method
+    section: Notice Service
+    question: "How was the notice served on the tenant?"
+    inputType: select
+    helperText: "Required for court forms. Select how the notice was delivered to the tenant."
+    options:
+      - value: "first_class_post"
+        label: "First class post"
+      - value: "recorded_delivery"
+        label: "Recorded delivery / signed for"
+      - value: "hand_delivered"
+        label: "Hand delivered to tenant"
+      - value: "left_at_property"
+        label: "Left at the property"
+      - value: "email"
+        label: "Email (if permitted by tenancy)"
+      - value: "other"
+        label: "Other method"
+    validation:
+      required: true
+    maps_to:
+      - notice_service_method
 
   # ============================================================
   # RENT DETAILS (COMMON FOR BOTH ROUTES)
@@ -164,6 +197,51 @@ questions:
     maps_to:
       - total_arrears
       - arrears_at_notice_date
+
+  # ============================================================
+  # ARREARS SCHEDULE (Required for Ground 8 court proceedings)
+  # ============================================================
+  # Ground 8 requires authoritative period-by-period arrears data.
+  # The court needs to see a detailed schedule of rent due vs paid.
+  # This is enforced as a BLOCKER in complete pack validation.
+  - id: arrears_schedule
+    section: Arrears Details
+    question: "Arrears schedule"
+    inputType: arrears_schedule
+    routes:
+      - section_8
+    dependsOn:
+      questionId: section8_grounds
+      contains: "Ground 8"
+    helperText: "Required for Ground 8. Enter the rent due and amount paid for each period. Courts require a detailed breakdown to verify the 2-month arrears threshold is met."
+    validation:
+      required: true
+      min_items: 1
+    config:
+      # UI should use tenancy_start_date and rent_frequency to generate periods
+      period_source: "tenancy_start_date"
+      frequency_source: "rent_frequency"
+      amount_source: "rent_amount"
+      # Show columns for period, rent due, rent paid, amount owed
+      columns:
+        - id: period_start
+          label: "Period start"
+          type: date
+        - id: period_end
+          label: "Period end"
+          type: date
+        - id: rent_due
+          label: "Rent due (£)"
+          type: number
+        - id: rent_paid
+          label: "Rent paid (£)"
+          type: number
+        - id: amount_owed
+          label: "Amount owed (£)"
+          type: calculated
+          formula: "rent_due - rent_paid"
+    maps_to:
+      - arrears_items
 
   # ============================================================
   # SECTION 21 QUESTIONS (ENGLAND ONLY)
@@ -362,6 +440,20 @@ questions:
       - landlord_address_line1
       - landlord_address_town
       - landlord_address_postcode
+
+  # ============================================================
+  # COURT DETAILS (Required for N5, N5B, N119 court forms)
+  # ============================================================
+  - id: court_name
+    section: Court
+    question: "Which county court will handle your claim?"
+    inputType: text
+    helperText: "Required for court forms. Use HMCTS Court Finder (https://www.gov.uk/find-court-tribunal) to find your local County Court based on the property address."
+    placeholder: "e.g., Central London County Court"
+    validation:
+      required: true
+    maps_to:
+      - court_name
 
   # ============================================================
   # EVIDENCE UPLOADS - CATEGORIZED (Smart Review v1)
