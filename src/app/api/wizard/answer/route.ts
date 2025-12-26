@@ -1154,8 +1154,23 @@ export async function POST(request: Request) {
           recommended_routes_all: decision.recommended_routes,
         };
 
-        // Auto-select route (user can override later if they choose)
-        let selected_notice_route = route_recommendation.recommended_route;
+        // Check if user explicitly selected a route via eviction_route question
+        const userExplicitRoute = mergedFacts.eviction_route || mergedFacts.selected_notice_route;
+        let selected_notice_route: string;
+
+        if (userExplicitRoute && !route_recommendation.blocked_routes.includes(userExplicitRoute)) {
+          // User's explicit selection is valid (not blocked) - keep it
+          selected_notice_route = userExplicitRoute;
+          console.log(`[SMART-GUIDANCE] Keeping user's explicit route selection: ${userExplicitRoute}`);
+        } else if (userExplicitRoute && route_recommendation.blocked_routes.includes(userExplicitRoute)) {
+          // User's selection is blocked - use decision engine's recommendation
+          selected_notice_route = route_recommendation.recommended_route;
+          console.log(`[SMART-GUIDANCE] User selected ${userExplicitRoute} but it's blocked - auto-routing to: ${selected_notice_route}`);
+        } else {
+          // No explicit user selection - use decision engine recommendation
+          selected_notice_route = route_recommendation.recommended_route;
+          console.log(`[SMART-GUIDANCE] No explicit user selection - using recommendation: ${selected_notice_route}`);
+        }
 
         // Persist route selection in wizard facts
         mergedFacts = setFactPath(mergedFacts, 'selected_notice_route', selected_notice_route);
@@ -1164,7 +1179,8 @@ export async function POST(request: Request) {
         // Return recommendation to frontend for display
         responseData.route_recommendation = route_recommendation;
 
-        console.log(`[SMART-GUIDANCE] Route recommended: ${selected_notice_route}`, {
+        console.log(`[SMART-GUIDANCE] Final route: ${selected_notice_route}`, {
+          userExplicitRoute,
           blocked: route_recommendation.blocked_routes,
           warnings: route_recommendation.warnings.length,
         });

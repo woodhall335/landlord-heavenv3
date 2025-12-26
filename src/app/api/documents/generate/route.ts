@@ -49,6 +49,10 @@ const generateDocumentSchema = z.object({
     'prt_premium', // Scotland Premium
     'private_tenancy', // Northern Ireland
     'private_tenancy_premium', // Northern Ireland Premium
+    // Court forms for complete_pack
+    'n5_claim', // England court possession claim
+    'n119_particulars', // England particulars of claim
+    'n5b_claim', // England accelerated possession (Section 21)
   ]),
   is_preview: z.boolean().optional().default(true),
 });
@@ -468,6 +472,57 @@ export async function POST(request: Request) {
           const privateTenancyPremiumData = mapWizardToPrivateTenancyData(wizardFacts as any);
           generatedDoc = await generatePremiumPrivateTenancy(privateTenancyPremiumData);
           documentTitle = 'Premium Private Tenancy Agreement - Northern Ireland';
+          break;
+        }
+
+        /**
+         * Court Forms (England - Complete Eviction Pack)
+         */
+        case 'n5_claim': {
+          const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
+          const safeCaseData = ensurePropertyAddress(caseData as any);
+
+          // Generate N5 claim form using HBS template
+          generatedDoc = await generateDocument({
+            templatePath: 'uk/england/templates/eviction/n5_claim.hbs',
+            data: safeCaseData as any,
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Form N5 - Claim for Possession of Property';
+          break;
+        }
+
+        case 'n119_particulars': {
+          const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
+          const safeCaseData = ensurePropertyAddress(caseData as any);
+
+          // Generate N119 particulars using HBS template
+          generatedDoc = await generateDocument({
+            templatePath: 'uk/england/templates/eviction/n119_particulars.hbs',
+            data: safeCaseData as any,
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Form N119 - Particulars of Claim for Possession';
+          break;
+        }
+
+        case 'n5b_claim': {
+          const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
+          const safeCaseData = ensurePropertyAddress(caseData as any);
+
+          // Generate N5B accelerated possession claim using HBS template
+          generatedDoc = await generateDocument({
+            templatePath: 'uk/england/templates/eviction/n5b_claim.hbs',
+            data: safeCaseData as any,
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Form N5B - Claim for Possession (Accelerated Procedure)';
           break;
         }
 

@@ -840,8 +840,43 @@ export async function POST(request: Request) {
             : 'section_8';
       }
     } else if (decisionEngineOutput) {
-      // For complete_pack: Use decision engine recommendation
-      finalRecommendedRoute = decisionEngineOutput.recommended_routes[0] || route;
+      // For complete_pack: Respect user's explicit route selection if valid
+      const userSelectedRoute = (wizardFacts as any).selected_notice_route || null;
+      const allowedRoutes = decisionEngineOutput.allowed_routes || [];
+      const blockedRoutes = decisionEngineOutput.blocked_routes || [];
+
+      if (userSelectedRoute) {
+        // User explicitly selected a route - use it if allowed
+        if (blockedRoutes.includes(userSelectedRoute)) {
+          // User's selected route is blocked - auto-route to alternative
+          const fallbackRoute =
+            userSelectedRoute === 'section_21'
+              ? 'section_8'
+              : userSelectedRoute === 'section_8'
+              ? (allowedRoutes.includes('section_21') ? 'section_21' : 'section_8')
+              : decisionEngineOutput.recommended_routes[0] || route;
+
+          finalRecommendedRoute = fallbackRoute;
+
+          const blockingIssues = decisionEngineOutput.blocking_issues
+            .filter(b => b.route === userSelectedRoute && b.severity === 'blocking')
+            .map(b => b.description);
+
+          route_override = {
+            from: userSelectedRoute,
+            to: fallbackRoute,
+            reason: decisionEngineOutput.route_explanations?.[userSelectedRoute as keyof typeof decisionEngineOutput.route_explanations] ||
+              `${userSelectedRoute.replace('_', ' ')} is not available due to compliance issues.`,
+            blocking_issues: blockingIssues.length > 0 ? blockingIssues : undefined,
+          };
+        } else {
+          // User's selected route is allowed - use it
+          finalRecommendedRoute = userSelectedRoute;
+        }
+      } else {
+        // No explicit user selection - use decision engine recommendation
+        finalRecommendedRoute = decisionEngineOutput.recommended_routes[0] || route;
+      }
     } else {
       // Fallback if no decision engine output
       finalRecommendedRoute = route;
@@ -901,17 +936,46 @@ export async function POST(request: Request) {
           },
         );
       } else {
+        // England: Show route-specific notices based on recommended route
+        const isSection21Route = finalRecommendedRoute === 'section_21' ||
+                                  finalRecommendedRoute === 'accelerated_possession' ||
+                                  finalRecommendedRoute === 'accelerated_section21';
+        const isSection8Route = finalRecommendedRoute === 'section_8' ||
+                                 finalRecommendedRoute === 'section8_notice';
+
+        if (isSection21Route) {
+          previewDocuments.push(
+            {
+              id: 's21_notice',
+              document_type: 'notice',
+              document_title: 'Section 21 notice (Form 6A)',
+            },
+          );
+        } else if (isSection8Route) {
+          previewDocuments.push(
+            {
+              id: 's8_notice',
+              document_type: 'notice',
+              document_title: 'Section 8 notice (Form 3)',
+            },
+          );
+        } else {
+          // Fallback: show both if route is unclear
+          previewDocuments.push(
+            {
+              id: 's8_notice',
+              document_type: 'notice',
+              document_title: 'Section 8 notice (Form 3)',
+            },
+            {
+              id: 's21_notice',
+              document_type: 'notice',
+              document_title: 'Section 21 notice (Form 6A)',
+            },
+          );
+        }
+
         previewDocuments.push(
-          {
-            id: 's8_notice',
-            document_type: 'notice',
-            document_title: 'Section 8 notice (Form 3)',
-          },
-          {
-            id: 's21_notice',
-            document_type: 'notice',
-            document_title: 'Section 21 notice (Form 6A)',
-          },
           {
             id: 'service_proofs',
             document_type: 'guidance',
@@ -1009,6 +1073,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       case_id,
+      jurisdiction: canonicalJurisdiction, // Include jurisdiction for UI display
+      case_type: caseData.case_type, // Include case_type for UI context
       product,
       recommended_route: finalRecommendedRoute,
       recommended_route_label,

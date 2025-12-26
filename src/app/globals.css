@@ -80,6 +80,17 @@ a:hover {
   color: #6D28D9;
 }
 
+/* Ensure buttons styled as links respect their text color classes */
+a.text-white,
+a[class*="text-white"] {
+  color: #ffffff !important;
+}
+
+a.text-white:hover,
+a[class*="text-white"]:hover {
+  color: #ffffff !important;
+}
+
 /* Ensure all text has sufficient contrast */
 .text-gray-500 {
   color: #6b7280 !important;
