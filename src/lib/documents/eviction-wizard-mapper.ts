@@ -6,9 +6,51 @@ import type { ScotlandCaseData } from './scotland-forms-filler';
 import { GROUND_DEFINITIONS } from './section8-generator';
 import { generateArrearsParticulars } from './arrears-schedule-mapper';
 import { getAuthoritativeArrears } from '@/lib/arrears-engine';
+import { EvidenceCategory } from '@/lib/evidence/schema';
 
 function buildAddress(...parts: Array<string | null | undefined>): string {
   return parts.filter(Boolean).join('\n');
+}
+
+// =============================================================================
+// P0-2: N5B ATTACHMENT CHECKBOX TRUTHFULNESS HELPER
+// =============================================================================
+// This helper checks if an evidence file with a specific category has been
+// uploaded. It examines the facts.evidence.files[] array (canonical source)
+// for files matching the given category.
+//
+// Used to determine whether N5B attachment checkboxes (E, F, G) should be
+// ticked based on ACTUAL uploads, not compliance flags.
+// =============================================================================
+
+interface EvidenceFileEntry {
+  id: string;
+  category?: string;
+  [key: string]: any;
+}
+
+/**
+ * Check if an evidence file exists for a given category in the evidence files list.
+ * This is the source of truth for N5B attachment checkboxes.
+ *
+ * @param evidenceFiles - The evidence.files array from wizard facts
+ * @param category - The evidence category to check (from EvidenceCategory enum)
+ * @returns true if at least one file with the matching category exists
+ */
+function hasUploadForCategory(
+  evidenceFiles: EvidenceFileEntry[] | undefined,
+  category: EvidenceCategory | string
+): boolean {
+  if (!Array.isArray(evidenceFiles) || evidenceFiles.length === 0) {
+    return false;
+  }
+
+  // Check for exact category match
+  return evidenceFiles.some((file) => {
+    const fileCategory = file.category?.toLowerCase();
+    const targetCategory = category.toLowerCase();
+    return fileCategory === targetCategory;
+  });
 }
 
 function normaliseFrequency(
@@ -253,11 +295,46 @@ function buildCaseData(
     signatory_name: evictionCase.landlord_full_name,
     signature_date: new Date().toISOString().split('T')[0],
     notice_expiry_date: wizardFacts.notice_expiry_date || facts.notice.expiry_date || undefined,
-    // ✅ FIX: Map evidence upload flags for N5B attachment checkboxes
-    // Only tick attachment boxes on N5B if user has actually uploaded/confirmed the document
+
+    // =========================================================================
+    // N5B ATTACHMENT CHECKBOXES - A, B, B1 (document availability)
+    // =========================================================================
+    // These control whether attachments A/B/B1 are marked as included
     tenancy_agreement_uploaded: facts.evidence.tenancy_agreement_uploaded || undefined,
     notice_copy_available: wizardFacts.notice_copy_available || wizardFacts.notice_uploaded || undefined,
     service_proof_available: wizardFacts.service_proof_available || wizardFacts.proof_of_service_uploaded || undefined,
+
+    // =========================================================================
+    // N5B ATTACHMENT CHECKBOXES - E, F, G (UPLOAD-BASED TRUTHFULNESS)
+    // =========================================================================
+    // P0-2 FIX: These MUST be based on ACTUAL file uploads, NOT compliance flags.
+    // The N5B form checkboxes for E, F, G declare that documents are ATTACHED.
+    // Ticking these without the actual document is a false statement.
+    //
+    // Source of truth: facts.evidence.files[] (from wizard uploads)
+    // Category mapping uses EvidenceCategory enum from schema.ts:
+    //   - deposit_protection_certificate -> Checkbox E
+    //   - epc -> Checkbox F
+    //   - gas_safety_certificate -> Checkbox G
+    // =========================================================================
+    deposit_certificate_uploaded: hasUploadForCategory(
+      (wizardFacts as any)?.evidence?.files,
+      EvidenceCategory.DEPOSIT_PROTECTION_CERTIFICATE
+    ),
+    epc_uploaded: hasUploadForCategory(
+      (wizardFacts as any)?.evidence?.files,
+      EvidenceCategory.EPC
+    ),
+    gas_safety_uploaded: hasUploadForCategory(
+      (wizardFacts as any)?.evidence?.files,
+      EvidenceCategory.GAS_SAFETY_CERTIFICATE
+    ),
+
+    // =========================================================================
+    // COMPLIANCE FLAGS (kept for other N5B questions, NOT for attachment boxes)
+    // =========================================================================
+    // These are used for N5B questions about whether documents were PROVIDED to tenant
+    // (e.g., "Was EPC provided to tenant?") - NOT for attachment checkboxes
     epc_provided: facts.compliance.epc_provided || wizardFacts.epc_provided || undefined,
     gas_safety_provided: facts.compliance.gas_safety_cert_provided || wizardFacts.gas_certificate_provided || undefined,
   } as CaseData;
