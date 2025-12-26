@@ -84,7 +84,13 @@ export async function POST(request: NextRequest) {
     // Use case data from DB, falling back to provided values
     const jurisdiction = caseRow.jurisdiction || providedJurisdiction;
     const case_type = caseRow.case_type || providedCaseType;
-    const product = providedProduct || ((caseData as any).product) || (case_type === 'money_claim' ? 'money_claim' : case_type === 'tenancy_agreement' ? 'tenancy_agreement' : 'complete_pack');
+
+    // Read product from collected_facts.__meta where wizard stores it
+    const collectedFacts = (caseData as any).collected_facts || {};
+    const metaProduct = collectedFacts.__meta?.product || collectedFacts.__meta?.original_product;
+
+    // Priority: provided > meta from facts > case column > default based on case_type
+    const product = providedProduct || metaProduct || ((caseData as any).product) || (case_type === 'money_claim' ? 'money_claim' : case_type === 'tenancy_agreement' ? 'tenancy_agreement' : 'complete_pack');
 
     // Validate required fields
     if (!jurisdiction) {
