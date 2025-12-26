@@ -13,6 +13,12 @@ import { Button, Card, Loading, ValidationErrors, type ValidationIssue } from '@
 import { useToast } from '@/components/ui/Toast';
 import { SignupModal } from '@/components/modals/SignupModal';
 import { PRICING, formatPrice } from '@/config/pricing';
+import {
+  getEvictionPackContents,
+  getRouteName,
+  type PackCategory,
+  type PackDocument,
+} from '@/lib/documents/eviction-pack-contents';
 
 interface CaseData {
   id: string;
@@ -957,27 +963,11 @@ export default function WizardPreviewPage() {
                         </>
                       )}
 
-                      {/* COMPLETE_PACK product - full eviction bundle */}
-                      {effectiveProduct !== 'notice_only' && isScotlandEviction && (
-                        <>
-                          <li>✅ Notice to Leave with auto-calculated dates</li>
-                          <li>✅ Form E (First-tier Tribunal application)</li>
-                          <li>✅ Rent arrears schedule & payment history log</li>
-                          <li>✅ Evidence checklist & proof of service templates</li>
-                          <li>✅ Step-by-step tribunal roadmap & lodging guide</li>
-                          <li>✅ Lifetime access to all documents in your dashboard</li>
-                        </>
-                      )}
-
-                      {effectiveProduct !== 'notice_only' && !isScotlandEviction && (
-                        <>
-                          <li>✅ {caseData.recommended_route === 'section_21' ? 'Section 21 notice (Form 6A)' : caseData.recommended_route === 'section_8' ? 'Section 8 notice (Form 3)' : 'Required notice'} (auto-selected)</li>
-                          <li>✅ Court possession claim forms (N5, N119, and N5B where eligible)</li>
-                          <li>✅ Rent arrears schedule & payment history log</li>
-                          <li>✅ Evidence checklist & proof of service templates</li>
-                          <li>✅ Step-by-step court roadmap & filing guide</li>
-                          <li>✅ Lifetime access to all documents in your dashboard</li>
-                        </>
+                      {/* COMPLETE_PACK product - simplified, full list on right side */}
+                      {effectiveProduct !== 'notice_only' && (
+                        <li className="text-blue-800">
+                          👉 See full document list on the right →
+                        </li>
                       )}
                     </ul>
                   </>
@@ -1118,89 +1108,292 @@ export default function WizardPreviewPage() {
             </Card>
           </div>
 
-          {/* Pricing Section */}
-          <div>
-            <div className="space-y-6">
-              {pricingOptions.map((option, index) => (
-                <Card
-                  key={option.productType}
-                  className={
-                    index === pricingOptions.length - 1
-                      ? 'border-2 border-primary shadow-lg'
-                      : ''
-                  }
+          {/* What's Included Section - For Eviction Packs */}
+          {isEviction && effectiveProduct !== 'notice_only' ? (
+            <div>
+              <Card className="border-2 border-primary shadow-lg">
+                <div className="bg-primary text-white text-center py-2 text-sm font-semibold -mt-6 -mx-6 mb-6 rounded-t-lg">
+                  COMPLETE EVICTION PACK
+                </div>
+
+                {/* Header with price */}
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900">
+                      {isScotlandEviction ? 'Complete Eviction Pack (Scotland)' : 'Complete Eviction Pack'}
+                    </h3>
+                    <p className="text-gray-600 mt-1">
+                      Everything you need from notice to {isScotlandEviction ? 'tribunal' : 'court'} eviction
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-bold text-primary">
+                      {formatPrice(PRICING.COMPLETE_EVICTION_PACK)}
+                    </div>
+                    <div className="text-sm text-gray-500">one-time payment</div>
+                  </div>
+                </div>
+
+                {/* Route indicator */}
+                {caseData.recommended_route && (
+                  <div className="mb-6 p-3 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">📋</span>
+                      <div>
+                        <span className="text-sm font-semibold text-purple-900">
+                          Route: {getRouteName(caseData.recommended_route, caseData.jurisdiction)}
+                        </span>
+                        <span className="text-sm text-purple-700 ml-2">
+                          (auto-selected based on your answers)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Documents included by category */}
+                <div className="mb-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                    What&apos;s Included
+                  </h4>
+
+                  {(() => {
+                    const hasArrears = !!(caseData.collected_facts as any)?.total_arrears ||
+                      !!(caseData.collected_facts as any)?.rent_arrears_amount;
+                    const packContents = getEvictionPackContents({
+                      jurisdiction: caseData.jurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland',
+                      route: caseData.recommended_route || 'section_8',
+                      packType: 'complete_pack',
+                      hasArrears,
+                      isAccelerated: ['accelerated_possession', 'accelerated_section21'].includes(caseData.recommended_route || ''),
+                    });
+
+                    return (
+                      <div className="space-y-4">
+                        {packContents.map((category) => (
+                          <div key={category.id} className="border border-gray-200 rounded-lg overflow-hidden">
+                            <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
+                              <div className="flex items-center gap-2">
+                                <span>{category.icon}</span>
+                                <span className="font-semibold text-gray-900">{category.title}</span>
+                                <span className="text-xs text-gray-500 ml-auto">
+                                  {category.documents.length} document{category.documents.length !== 1 ? 's' : ''}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="divide-y divide-gray-100">
+                              {category.documents.map((doc) => (
+                                <button
+                                  key={doc.id}
+                                  onClick={async () => {
+                                    if (!doc.documentType) {
+                                      showToast(`${doc.title} - Coming soon`, 'info');
+                                      return;
+                                    }
+
+                                    showToast(`Generating ${doc.title}...`, 'info');
+
+                                    try {
+                                      const response = await fetch('/api/documents/generate', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                          case_id: caseId,
+                                          document_type: doc.documentType,
+                                          is_preview: true,
+                                        }),
+                                      });
+
+                                      if (!response.ok) {
+                                        const errorData = await response.json().catch(() => ({}));
+                                        throw new Error(errorData.error || 'Failed to generate document');
+                                      }
+
+                                      const result = await response.json();
+
+                                      // Get the preview URL
+                                      if (result.document?.id) {
+                                        const previewResponse = await fetch(`/api/documents/preview/${result.document.id}`);
+                                        if (previewResponse.ok) {
+                                          const previewResult = await previewResponse.json();
+                                          // Open in new tab
+                                          window.open(previewResult.preview_url, '_blank');
+                                          showToast(`${doc.title} opened in new tab`, 'success');
+                                        }
+                                      }
+                                    } catch (err: any) {
+                                      console.error('Document generation error:', err);
+                                      showToast(err.message || `Failed to generate ${doc.title}`, 'error');
+                                    }
+                                  }}
+                                  className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors text-left group"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <span className="text-lg">{doc.icon}</span>
+                                    <div>
+                                      <div className="font-medium text-gray-900 group-hover:text-primary transition-colors">
+                                        {doc.title}
+                                        {doc.isPremium && (
+                                          <span className="ml-2 text-xs bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 px-2 py-0.5 rounded-full">
+                                            AI-Generated
+                                          </span>
+                                        )}
+                                      </div>
+                                      <div className="text-sm text-gray-500">{doc.description}</div>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-green-500">
+                                    <span className="text-lg">🔓</span>
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                {/* Unlock button */}
+                <Button
+                  onClick={() => handleCheckout('complete_pack')}
+                  variant="primary"
+                  size="large"
+                  className="w-full"
+                  disabled={checkoutLoading}
                 >
-                  {index === pricingOptions.length - 1 && (
-                    <div className="bg-primary text-white text-center py-1 text-sm font-semibold -mt-6 -mx-6 mb-4 rounded-t-lg">
-                      RECOMMENDED
-                    </div>
+                  {checkoutLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loading variant="spinner" size="small" />
+                      Processing...
+                    </span>
+                  ) : (
+                    <>
+                      🔓 Unlock Pack - {formatPrice(PRICING.COMPLETE_EVICTION_PACK)}
+                    </>
                   )}
+                </Button>
 
-                  <div className="mb-4">
-                    <h3 className="text-2xl font-bold text-gray-900">{option.name}</h3>
-                    <p className="text-gray-600 mt-1">{option.description}</p>
-                  </div>
+                <p className="text-center text-xs text-gray-500 mt-3">
+                  Secure payment via Stripe • Instant download • Lifetime access
+                </p>
 
-                  <div className="mb-6">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-4xl font-bold text-primary">
-                        {option.price}
-                      </span>
-                      <span className="text-gray-600">one-time payment</span>
-                    </div>
-                  </div>
-
-                  <ul className="space-y-3 mb-6">
-                    {option.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-green-600 text-lg">✓</span>
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
-                    ))}
+                {/* What happens after unlock */}
+                <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <h5 className="font-semibold text-green-900 mb-2">After you unlock:</h5>
+                  <ul className="text-sm text-green-800 space-y-1">
+                    <li>✓ All documents instantly available in your dashboard</li>
+                    <li>✓ Edit your wizard answers anytime to regenerate</li>
+                    <li>✓ Download PDFs for court filing</li>
+                    <li>✓ Lifetime access - no subscription required</li>
                   </ul>
-
-                  <Button
-                    onClick={() => handleCheckout(option.productType)}
-                    variant="primary"
-                    size="large"
-                    className="w-full"
-                    disabled={checkoutLoading}
-                  >
-                    {checkoutLoading ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <Loading variant="spinner" size="small" />
-                        Processing...
-                      </span>
-                    ) : (
-                      `Buy ${option.name}`
-                    )}
-                  </Button>
-
-                  <p className="text-center text-xs text-gray-500 mt-3">
-                    Secure payment via Stripe • Instant download
-                  </p>
-                </Card>
-              ))}
-            </div>
-
-            {/* Trust indicators */}
-            <div className="mt-6 p-4 bg-gray-100 rounded-lg">
-              <div className="flex items-center justify-center gap-8 text-sm text-gray-600">
-                <div className="flex items-center gap-2">
-                  <span>🔒</span>
-                  <span>Secure checkout</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span>⚡</span>
-                  <span>Instant access</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span>✅</span>
-                  <span>Court-approved</span>
+              </Card>
+
+              {/* Trust indicators */}
+              <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+                <div className="flex items-center justify-center gap-8 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <span>🔒</span>
+                    <span>Secure checkout</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>⚡</span>
+                    <span>Instant access</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>✅</span>
+                    <span>Court-approved</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            /* Standard Pricing Section - For Notice Only, Money Claim, Tenancy */
+            <div>
+              <div className="space-y-6">
+                {pricingOptions.map((option, index) => (
+                  <Card
+                    key={option.productType}
+                    className={
+                      index === pricingOptions.length - 1
+                        ? 'border-2 border-primary shadow-lg'
+                        : ''
+                    }
+                  >
+                    {index === pricingOptions.length - 1 && (
+                      <div className="bg-primary text-white text-center py-1 text-sm font-semibold -mt-6 -mx-6 mb-4 rounded-t-lg">
+                        RECOMMENDED
+                      </div>
+                    )}
+
+                    <div className="mb-4">
+                      <h3 className="text-2xl font-bold text-gray-900">{option.name}</h3>
+                      <p className="text-gray-600 mt-1">{option.description}</p>
+                    </div>
+
+                    <div className="mb-6">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-4xl font-bold text-primary">
+                          {option.price}
+                        </span>
+                        <span className="text-gray-600">one-time payment</span>
+                      </div>
+                    </div>
+
+                    <ul className="space-y-3 mb-6">
+                      {option.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-green-600 text-lg">✓</span>
+                          <span className="text-gray-700">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Button
+                      onClick={() => handleCheckout(option.productType)}
+                      variant="primary"
+                      size="large"
+                      className="w-full"
+                      disabled={checkoutLoading}
+                    >
+                      {checkoutLoading ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <Loading variant="spinner" size="small" />
+                          Processing...
+                        </span>
+                      ) : (
+                        `Buy ${option.name}`
+                      )}
+                    </Button>
+
+                    <p className="text-center text-xs text-gray-500 mt-3">
+                      Secure payment via Stripe • Instant download
+                    </p>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Trust indicators */}
+              <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+                <div className="flex items-center justify-center gap-8 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <span>🔒</span>
+                    <span>Secure checkout</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>⚡</span>
+                    <span>Instant access</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>✅</span>
+                    <span>Court-approved</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* FAQ Section */}
