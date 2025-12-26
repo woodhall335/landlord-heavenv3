@@ -191,11 +191,11 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
 
   return (
     <div className="space-y-6">
-      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <h4 className="text-sm font-medium text-blue-900 mb-2">
+      <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+        <h4 className="text-sm font-medium text-purple-900 mb-2">
           Supporting Evidence
         </h4>
-        <p className="text-sm text-blue-800">
+        <p className="text-sm text-purple-800">
           Upload documents to support your case. For Section 21 (N5B form), checkboxes E, F, and G
           declare that specific documents are <strong>attached</strong> to your claim.
           Only upload documents you actually have.
@@ -237,7 +237,7 @@ export const EvidenceSection: React.FC<EvidenceSectionProps> = ({
                   px-4 py-2 text-sm font-medium rounded-md cursor-pointer transition-colors
                   ${isUploading
                     ? 'bg-gray-100 text-gray-400 cursor-wait'
-                    : 'bg-blue-600 text-white hover:bg-blue-700'}
+                    : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'}
                 `}>
                   {isUploading ? 'Uploading...' : 'Upload'}
                   <input

@@ -58,7 +58,7 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
             className={`
               flex items-start p-4 border rounded-lg cursor-pointer transition-all
               ${evictionRoute === 'section_21'
-                ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
+                ? 'border-[#7C3AED] bg-purple-50 ring-2 ring-purple-200'
                 : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
             `}
           >
@@ -79,10 +79,10 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
                 Deposit must be protected, EPC, Gas Safety, and How to Rent guide must be provided.
               </p>
               <div className="mt-2 flex flex-wrap gap-2">
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
                   Form 6A
                 </span>
-                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
                   Accelerated Possession (N5B)
                 </span>
               </div>
@@ -94,7 +94,7 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
             className={`
               flex items-start p-4 border rounded-lg cursor-pointer transition-all
               ${evictionRoute === 'section_8'
-                ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-200'
+                ? 'border-[#7C3AED] bg-purple-50 ring-2 ring-purple-200'
                 : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}
             `}
           >
@@ -135,11 +135,11 @@ export const CaseBasicsSection: React.FC<CaseBasicsSectionProps> = ({
 
       {/* Route-specific info boxes */}
       {evictionRoute === 'section_21' && (
-        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <h4 className="text-sm font-medium text-blue-900 mb-2">
+        <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+          <h4 className="text-sm font-medium text-purple-900 mb-2">
             Section 21 Requirements
           </h4>
-          <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+          <ul className="text-sm text-purple-800 space-y-1 list-disc list-inside">
             <li>Deposit protected within 30 days of receipt</li>
             <li>Prescribed information served within 30 days</li>
             <li>Valid Gas Safety Certificate provided annually</li>

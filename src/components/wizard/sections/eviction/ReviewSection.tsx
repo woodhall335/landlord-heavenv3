@@ -192,7 +192,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
                 <button
                   type="button"
                   onClick={() => onJumpToSection(item.sectionId)}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+                  className="text-sm text-[#7C3AED] hover:text-[#6D28D9] font-medium"
                 >
                   Complete →
                 </button>
@@ -301,14 +301,14 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           {documentsToGenerate.map((doc) => (
             <div
               key={doc.name}
-              className="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg"
+              className="flex items-center gap-3 p-3 bg-purple-50 border border-purple-200 rounded-lg"
             >
-              <svg className="w-5 h-5 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <svg className="w-5 h-5 text-[#7C3AED] flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
               </svg>
               <div>
-                <p className="text-sm font-medium text-blue-900">{doc.name}</p>
-                <p className="text-xs text-blue-700">{doc.description}</p>
+                <p className="text-sm font-medium text-purple-900">{doc.name}</p>
+                <p className="text-xs text-purple-700">{doc.description}</p>
               </div>
             </div>
           ))}

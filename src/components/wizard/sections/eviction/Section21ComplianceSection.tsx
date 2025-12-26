@@ -135,7 +135,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
         />
 
         {depositTaken && (
-          <div className="pl-4 border-l-2 border-blue-200 space-y-4">
+          <div className="pl-4 border-l-2 border-purple-200 space-y-4">
             {/* Deposit amount */}
             <div className="space-y-2">
               <label htmlFor="deposit_amount" className="block text-sm font-medium text-gray-700">
@@ -149,7 +149,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
                   type="number"
                   min="0"
                   step="0.01"
-                  className="w-full rounded-md border border-gray-300 pl-7 pr-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-md border border-gray-300 pl-7 pr-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                   value={facts.deposit_amount || ''}
                   onChange={(e) => onUpdate({ deposit_amount: parseFloat(e.target.value) || 0 })}
                 />
@@ -175,7 +175,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
                   </label>
                   <select
                     id="deposit_scheme_name"
-                    className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                     value={facts.deposit_scheme_name || ''}
                     onChange={(e) => onUpdate({ deposit_scheme_name: e.target.value })}
                   >
@@ -197,7 +197,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
                     <input
                       id="deposit_protection_date"
                       type="date"
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                       value={facts.deposit_protection_date || ''}
                       onChange={(e) => onUpdate({ deposit_protection_date: e.target.value })}
                     />
@@ -210,7 +210,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
                     <input
                       id="deposit_reference"
                       type="text"
-                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
                       value={facts.deposit_reference || ''}
                       onChange={(e) => onUpdate({ deposit_reference: e.target.value })}
                       placeholder="Optional - scheme reference"
@@ -249,7 +249,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
         />
 
         {hasGasAppliances && (
-          <div className="pl-4 border-l-2 border-blue-200">
+          <div className="pl-4 border-l-2 border-purple-200">
             <YesNoToggle
               id="gas_safety_cert_served"
               value={facts.gas_safety_cert_served}
@@ -310,7 +310,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
           </label>
           <select
             id="licensing_required"
-            className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+            className="w-full max-w-md rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={facts.licensing_required || ''}
             onChange={(e) => onUpdate({ licensing_required: e.target.value })}
           >
@@ -327,7 +327,7 @@ export const Section21ComplianceSection: React.FC<Section21ComplianceSectionProp
         </div>
 
         {licensingRequired && (
-          <div className="pl-4 border-l-2 border-blue-200">
+          <div className="pl-4 border-l-2 border-purple-200">
             <YesNoToggle
               id="has_valid_licence"
               value={facts.has_valid_licence}

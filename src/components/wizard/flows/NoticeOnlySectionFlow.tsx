@@ -14,8 +14,8 @@
  * 7. Notice Details - Grounds, particulars, service details
  * 8. Review - Generate and download notice
  *
- * Design: Matches EvictionSectionFlow UI exactly (gray-50 background, blue-600
- * primary, section tabs, progress bar, white card content area)
+ * Design: Matches EvictionSectionFlow UI exactly (gray-50 background, purple-600
+ * primary #7C3AED, section tabs, progress bar, white card content area)
  */
 
 'use client';
@@ -381,7 +381,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
       case 'section8_arrears':
         return <Section8ArrearsSection {...sectionProps} />;
       case 'notice':
-        return <NoticeSection {...sectionProps} />;
+        return <NoticeSection {...sectionProps} mode="notice_only" />;
       case 'review':
         return renderReviewSection();
       default:
@@ -505,7 +505,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+          <div className="w-12 h-12 border-4 border-[#7C3AED] border-t-transparent rounded-full animate-spin" />
           <p className="text-gray-600">Loading wizard...</p>
         </div>
       </div>
@@ -529,7 +529,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
           {/* Progress bar */}
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-blue-600 transition-all duration-300"
+              className="h-full bg-[#7C3AED] transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -547,7 +547,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                   onClick={() => setCurrentSectionIndex(index)}
                   className={`
                     px-3 py-1.5 text-sm font-medium rounded-md whitespace-nowrap transition-colors
-                    ${isCurrent ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
+                    ${isCurrent ? 'bg-[#7C3AED] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}
                     ${hasBlocker && !isCurrent ? 'ring-2 ring-red-300' : ''}
                   `}
                 >
@@ -666,7 +666,7 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                   ${
                     currentSectionIndex === visibleSections.length - 1
                       ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                      : 'bg-blue-600 text-white hover:bg-blue-700'
+                      : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'
                   }
                 `}
               >

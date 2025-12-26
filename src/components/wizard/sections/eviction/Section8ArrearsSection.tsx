@@ -173,19 +173,19 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
   return (
     <div className="space-y-6">
       {/* Ground info */}
-      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <h4 className="text-sm font-medium text-blue-900 mb-2">
+      <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+        <h4 className="text-sm font-medium text-purple-900 mb-2">
           {hasGround8 ? 'Ground 8 Arrears Schedule (Required)' : 'Arrears Schedule'}
         </h4>
         {hasGround8 && (
-          <p className="text-sm text-blue-800">
+          <p className="text-sm text-purple-800">
             Ground 8 is a <strong>mandatory ground</strong> requiring at least 2 months&apos; rent
             arrears at both the date of service and the date of the hearing.
             The court requires a detailed period-by-period breakdown.
           </p>
         )}
         {!hasGround8 && (hasGround10 || hasGround11) && (
-          <p className="text-sm text-blue-800">
+          <p className="text-sm text-purple-800">
             Grounds 10 and 11 are <strong>discretionary grounds</strong>. A detailed arrears
             schedule strengthens your case but the court will decide if possession is reasonable.
           </p>
@@ -397,14 +397,14 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
 
       {/* Quick start from arrears data */}
       {arrearsSummary && arrearsSummary.total_arrears > 0 && !particularsText && (
-        <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-sm text-blue-800 mb-2">
+        <div className="p-3 bg-purple-50 border border-purple-200 rounded-lg">
+          <p className="text-sm text-purple-800 mb-2">
             <strong>Quick start:</strong> Generate a summary based on your arrears schedule.
           </p>
           <button
             type="button"
             onClick={handleUseSuggestion}
-            className="px-3 py-1.5 text-sm font-medium text-blue-700 bg-white border border-blue-300 rounded-md hover:bg-blue-50"
+            className="px-3 py-1.5 text-sm font-medium text-purple-700 bg-white border border-purple-300 rounded-md hover:bg-purple-50"
           >
             Use arrears summary as starting point
           </button>
@@ -420,7 +420,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
         <textarea
           id="section8_details"
           rows={6}
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
           value={particularsText}
           onChange={(e) => onUpdate({ section8_details: e.target.value })}
           placeholder="Describe the rent arrears: total amount owed, how many months behind, when arrears began, any partial payments made..."
