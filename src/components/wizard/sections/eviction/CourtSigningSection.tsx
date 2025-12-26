@@ -18,7 +18,7 @@
 
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 
 interface CourtSigningSectionProps {
@@ -44,6 +44,27 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
   // Default signature date to today if not set
   const today = new Date().toISOString().split('T')[0];
   const signatureDate = facts.signature_date || today;
+
+  // Initialize default values for signatory_name and signature_date
+  // This ensures displayed defaults are saved to facts for isComplete checks
+  useEffect(() => {
+    const updates: Record<string, any> = {};
+
+    // If signatory_name not set but we have landlord name, use that as default
+    if (!facts.signatory_name && facts.landlord_full_name) {
+      updates.signatory_name = facts.landlord_full_name;
+    }
+
+    // If signature_date not set, default to today
+    if (!facts.signature_date) {
+      updates.signature_date = today;
+    }
+
+    if (Object.keys(updates).length > 0) {
+      onUpdate(updates);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Only run once on mount - intentionally empty deps
 
   return (
     <div className="space-y-8">
