@@ -6,13 +6,22 @@
 # 2.1.0: Added court-ready fields (notice dates, arrears amounts, deposit details)
 
 __meta:
-  version: "2.2.0"
+  version: "2.3.0"
   effective_from: "2025-12-16"
   last_updated: "2025-12-26"
   legal_review_date: "2025-12-26"
   jurisdiction: "england"
   product: "complete_pack"
   changelog:
+    - version: "2.3.0"
+      date: "2025-12-26"
+      changes:
+        - "Section 8: Added date validation for notice_expiry_date based on grounds"
+        - "Section 8: Expiry date now validated against earliest legal date per ground"
+        - "Added joint tenants question (critical for valid notices)"
+        - "Added tenancy_type and fixed_term_end_date (affects notice timing)"
+        - "Added has_gas_appliances (conditional gas cert requirement)"
+        - "Added licensing questions for Section 21 validity"
     - version: "2.2.0"
       date: "2025-12-26"
       changes:
@@ -20,10 +29,10 @@ __meta:
         - "Added court_name question (required for court forms N5, N5B, N119)"
         - "Added arrears_schedule question for Ground 8 (canonical arrears_items)"
 
-id: complete_pack_england_v2
+id: complete_pack_england_v3
 product: complete_pack
 jurisdiction: england
-version: "2.2.0"
+version: "2.3.0"
 
 questions:
   # 1. Eviction route selection (England: Section 8 or Section 21)
@@ -61,8 +70,27 @@ questions:
       - id: notice_expiry_date
         label: "Notice expiry date (if known)"
         inputType: date
-        helperText: "Leave blank to auto-calculate based on notice type"
+        # ===================================================================
+        # SECTION 8 DATE VALIDATION (Phase 3.3)
+        # The expiry date must meet the minimum notice period based on grounds:
+        #   - Ground 8 (serious arrears): 14 days minimum
+        #   - Grounds 10, 11 (some arrears, persistent delay): 60 days minimum
+        #   - Ground 14 (nuisance): 14 days (or immediate for serious ASB)
+        # When multiple grounds, the MAXIMUM period applies.
+        # If left blank, the system auto-calculates the earliest valid date.
+        # ===================================================================
+        helperText: "Leave blank to auto-calculate based on notice type and grounds. For Section 8, the minimum notice period varies by ground (14-60 days)."
         width: half
+        validation:
+          # Custom validation rule for Section 8 expiry date
+          # UI should call validateSection8ExpiryDate() if eviction_route is section_8
+          custom:
+            type: section8_expiry_date
+            error_message: "Expiry date is too early for the selected grounds. See suggested date below."
+            dependencies:
+              - notice_served_date
+              - section8_grounds
+              - tenancy_start_date
     maps_to:
       - notice_served_date
       - notice_expiry_date
@@ -276,8 +304,8 @@ questions:
         validation:
           required: true
         width: half
-      - id: epc_gas_cert_served
-        label: "EPC & Gas Safety cert served?"
+      - id: epc_served
+        label: "EPC served to tenant?"
         inputType: yes_no
         validation:
           required: true
@@ -292,8 +320,88 @@ questions:
       - section21.deposit_protected
       - section21.prescribed_info_served
       - section21.how_to_rent_served
-      - section21.epc_gas_cert_served
+      - section21.epc_served
       - section21.no_retaliatory_notice
+
+  # ============================================================
+  # GAS APPLIANCES (Phase 3.3: Conditional gas cert requirement)
+  # Only require gas safety cert if property has gas appliances.
+  # ============================================================
+  - id: has_gas_appliances
+    section: Section 21 Compliance
+    question: "Does the property have gas appliances?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "If the property has a gas boiler, gas hob, or gas fire, you need a valid gas safety certificate."
+    validation:
+      required: true
+    maps_to:
+      - has_gas_appliances
+
+  - id: gas_safety_cert_served
+    section: Section 21 Compliance
+    question: "Was the Gas Safety Certificate served to the tenant?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: has_gas_appliances
+      value: true
+    helperText: "A copy of the current Gas Safety Certificate (CP12) must be provided to tenants within 28 days of the check."
+    validation:
+      required: true
+    maps_to:
+      - section21.gas_safety_cert_served
+
+  # ============================================================
+  # LICENSING (Phase 3.3: S21 can be blocked if unlicensed)
+  # HMO licensing and selective licensing can block Section 21.
+  # ============================================================
+  - id: licensing_required
+    section: Section 21 Compliance
+    question: "Is the property required to be licensed?"
+    inputType: select
+    routes:
+      - section_21
+    dependsOn:
+      questionId: eviction_route
+      value: "section_21"
+    helperText: "Properties may require licensing if they are HMOs (5+ occupants from 2+ households) or in a selective licensing area. Check with your local council."
+    options:
+      - value: "not_required"
+        label: "No licensing required"
+      - value: "hmo_mandatory"
+        label: "Mandatory HMO licence required"
+      - value: "hmo_additional"
+        label: "Additional HMO licence required"
+      - value: "selective"
+        label: "Selective licence required"
+    validation:
+      required: true
+    maps_to:
+      - licensing_required
+
+  - id: has_valid_licence
+    section: Section 21 Compliance
+    question: "Do you have a valid licence for this property?"
+    inputType: yes_no
+    routes:
+      - section_21
+    dependsOn:
+      questionId: licensing_required
+      valueNotEqual: "not_required"
+    helperText: "CRITICAL: Section 21 notices are INVALID if the property should be licensed but isn't. You cannot use Section 21 until the property is properly licensed."
+    validation:
+      required: true
+      # Blocking validation - must be YES to proceed
+      assertValue: true
+      assertMessage: "Section 21 cannot be used if the property requires a licence but does not have one. Apply for a licence or use Section 8 instead."
+    maps_to:
+      - has_valid_licence
 
   - id: deposit_details
     section: Deposit Information
@@ -382,6 +490,42 @@ questions:
     maps_to:
       - tenancy_start_date
 
+  # ============================================================
+  # TENANCY TYPE (Affects notice timing and validity)
+  # Phase 3.3: Minimum necessary question for court-ready packs
+  # ============================================================
+  - id: tenancy_type
+    section: Tenancy
+    question: "What type of tenancy is this?"
+    inputType: select
+    helperText: "The tenancy type affects which notices can be used and notice periods."
+    options:
+      - value: "ast_fixed"
+        label: "Assured Shorthold Tenancy (Fixed term)"
+      - value: "ast_periodic"
+        label: "Assured Shorthold Tenancy (Periodic/Rolling)"
+      - value: "assured"
+        label: "Assured Tenancy (pre-1997)"
+      - value: "regulated"
+        label: "Regulated Tenancy (pre-1989)"
+    validation:
+      required: true
+    maps_to:
+      - tenancy_type
+
+  - id: fixed_term_end_date
+    section: Tenancy
+    question: "Fixed term end date"
+    inputType: date
+    helperText: "Required if tenancy is fixed term. Section 21 notices cannot expire before the fixed term ends."
+    dependsOn:
+      questionId: tenancy_type
+      value: "ast_fixed"
+    validation:
+      required: true
+    maps_to:
+      - fixed_term_end_date
+
   - id: tenant_details
     section: Tenant
     question: "Lead tenant details"
@@ -405,6 +549,49 @@ questions:
       - tenant_full_name
       - tenant_email
       - tenant_phone
+
+  # ============================================================
+  # JOINT TENANTS (Critical for valid notices)
+  # Phase 3.3: Minimum necessary question for court-ready packs
+  # A notice is INVALID if it omits joint tenants named on the tenancy.
+  # ============================================================
+  - id: has_joint_tenants
+    section: Tenant
+    question: "Are there joint tenants on the tenancy agreement?"
+    inputType: yes_no
+    helperText: "CRITICAL: All tenants named on the tenancy agreement MUST be named on the notice. Omitting a joint tenant makes the notice invalid."
+    validation:
+      required: true
+    maps_to:
+      - has_joint_tenants
+
+  - id: additional_tenants
+    section: Tenant
+    question: "Additional tenant details"
+    inputType: group
+    helperText: "Enter details for all additional tenants named on the tenancy agreement."
+    dependsOn:
+      questionId: has_joint_tenants
+      value: true
+    fields:
+      - id: tenant2_name
+        label: "Second tenant full name"
+        inputType: text
+        validation:
+          required: true
+        width: full
+      - id: tenant3_name
+        label: "Third tenant full name (if applicable)"
+        inputType: text
+        width: full
+      - id: tenant4_name
+        label: "Fourth tenant full name (if applicable)"
+        inputType: text
+        width: full
+    maps_to:
+      - tenant2_name
+      - tenant3_name
+      - tenant4_name
 
   - id: landlord_details
     section: Landlord
@@ -568,9 +755,10 @@ questions:
       required: false
     routes:
       - section_21
+    # Phase 3.3: Only show if property has gas appliances
     dependsOn:
-      questionId: eviction_route
-      value: "section_21"
+      questionId: has_gas_appliances
+      value: true
     maps_to:
       - evidence.gas_safety_uploads
 

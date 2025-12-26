@@ -3,6 +3,10 @@ import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 import { generateCompleteEvictionPack } from '@/lib/documents/eviction-pack-generator';
 import { assertCompletePackValid, validateCompletePackBeforeGeneration } from '@/lib/documents/noticeOnly';
 import { __setTestJsonAIClient } from '@/lib/ai/openai-client';
+import {
+  calculateSection8ExpiryDate,
+  validateSection8ExpiryDate,
+} from '@/lib/documents/notice-date-calculator';
 
 // Mock the document generator to avoid template loading issues
 vi.mock('@/lib/documents/generator', async () => {
@@ -286,5 +290,204 @@ describe('Complete eviction pack validation', () => {
       expect(pack.jurisdiction).toBe('scotland');
       expect(pack.documents.length).toBeGreaterThan(0);
     }, 30000);
+  });
+
+  // ============================================================================
+  // SECTION 8 DATE VALIDATION (Phase 3.3)
+  // ============================================================================
+  describe('Section 8 expiry date validation', () => {
+    describe('calculateSection8ExpiryDate', () => {
+      it('calculates 14-day notice period for Ground 8 only', () => {
+        const today = new Date().toISOString().split('T')[0];
+        const result = calculateSection8ExpiryDate({
+          service_date: today,
+          grounds: [{ code: 8, mandatory: true }],
+        });
+
+        expect(result.notice_period_days).toBe(14);
+        expect(result.minimum_legal_days).toBe(14);
+        expect(result.explanation).toContain('14 days');
+      });
+
+      it('calculates 60-day notice period for Ground 10', () => {
+        const today = new Date().toISOString().split('T')[0];
+        const result = calculateSection8ExpiryDate({
+          service_date: today,
+          grounds: [{ code: 10, mandatory: false }],
+        });
+
+        expect(result.notice_period_days).toBe(60);
+        expect(result.minimum_legal_days).toBe(60);
+        expect(result.explanation).toContain('60 days');
+      });
+
+      it('calculates 60-day notice period for Ground 11', () => {
+        const today = new Date().toISOString().split('T')[0];
+        const result = calculateSection8ExpiryDate({
+          service_date: today,
+          grounds: [{ code: 11, mandatory: false }],
+        });
+
+        expect(result.notice_period_days).toBe(60);
+        expect(result.minimum_legal_days).toBe(60);
+        expect(result.explanation).toContain('60 days');
+      });
+
+      it('uses MAXIMUM period when multiple grounds selected (Ground 8 + Ground 10 = 60 days)', () => {
+        const today = new Date().toISOString().split('T')[0];
+        const result = calculateSection8ExpiryDate({
+          service_date: today,
+          grounds: [
+            { code: 8, mandatory: true },   // 14 days
+            { code: 10, mandatory: false }, // 60 days
+          ],
+        });
+
+        // Should use maximum: 60 days
+        expect(result.notice_period_days).toBe(60);
+        expect(result.minimum_legal_days).toBe(60);
+        expect(result.explanation).toContain('60 days');
+        expect(result.explanation).toContain('Ground 10');
+      });
+
+      it('returns correct earliest_valid_date', () => {
+        const serviceDate = '2025-01-15';
+        const result = calculateSection8ExpiryDate({
+          service_date: serviceDate,
+          grounds: [{ code: 8, mandatory: true }],
+        });
+
+        // 14 days from 2025-01-15 = 2025-01-29
+        expect(result.earliest_valid_date).toBe('2025-01-29');
+      });
+    });
+
+    describe('validateSection8ExpiryDate', () => {
+      it('returns valid=true for dates on or after earliest valid date', () => {
+        const serviceDate = '2025-01-15';
+        const validExpiry = '2025-01-30'; // 15 days after service (> 14 days minimum for Ground 8)
+
+        const result = validateSection8ExpiryDate(validExpiry, {
+          service_date: serviceDate,
+          grounds: [{ code: 8, mandatory: true }],
+        });
+
+        expect(result.valid).toBe(true);
+        expect(result.errors).toHaveLength(0);
+      });
+
+      it('returns valid=false with suggestedDate for dates too early', () => {
+        const serviceDate = '2025-01-15';
+        const invalidExpiry = '2025-01-20'; // Only 5 days (< 14 days minimum for Ground 8)
+
+        const result = validateSection8ExpiryDate(invalidExpiry, {
+          service_date: serviceDate,
+          grounds: [{ code: 8, mandatory: true }],
+        });
+
+        expect(result.valid).toBe(false);
+        expect(result.errors.length).toBeGreaterThan(0);
+        expect(result.errors[0]).toContain('too early');
+        expect(result.suggested_date).toBe('2025-01-29'); // Correct earliest date
+      });
+
+      it('returns valid=false when Ground 10 requires 60 days but given only 14', () => {
+        const serviceDate = '2025-01-15';
+        const invalidExpiry = '2025-01-29'; // 14 days (valid for Ground 8, NOT for Ground 10)
+
+        const result = validateSection8ExpiryDate(invalidExpiry, {
+          service_date: serviceDate,
+          grounds: [
+            { code: 8, mandatory: true },   // 14 days
+            { code: 10, mandatory: false }, // 60 days - this drives the requirement!
+          ],
+        });
+
+        expect(result.valid).toBe(false);
+        expect(result.errors[0]).toContain('too early');
+        // 60 days from 2025-01-15 = 2025-03-16
+        expect(result.suggested_date).toBe('2025-03-16');
+      });
+
+      it('includes suggestedDate in validation response', () => {
+        const serviceDate = '2025-01-15';
+        const invalidExpiry = '2025-01-20';
+
+        const result = validateSection8ExpiryDate(invalidExpiry, {
+          service_date: serviceDate,
+          grounds: [{ code: 8, mandatory: true }],
+        });
+
+        expect(result.suggested_date).toBeDefined();
+        expect(typeof result.suggested_date).toBe('string');
+        // Suggested date should be a valid ISO date
+        expect(result.suggested_date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      });
+    });
+
+    describe('Section 8 complete pack with dynamic dates', () => {
+      it('generates complete pack successfully when no expiry date provided (auto-calculates)', async () => {
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+
+        // Calculate arrears period dates dynamically
+        const twoMonthsAgo = new Date(today);
+        twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2);
+        const oneMonthAgo = new Date(today);
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+        const section8Facts = {
+          __meta: { case_id: 'TEST-S8-DYNAMIC', jurisdiction: 'england' },
+          landlord_name: 'Test Landlord',
+          landlord_address_line1: '1 Test Street',
+          landlord_city: 'London',
+          landlord_postcode: 'SW1A 1AA',
+          tenant1_name: 'Test Tenant',
+          property_address_line1: '2 Test Road',
+          property_city: 'London',
+          property_postcode: 'SW1A 2BB',
+          tenancy_start_date: '2024-01-01',
+          rent_amount: 1200,
+          rent_frequency: 'monthly',
+          rent_due_day: 1,
+          eviction_route: 'Section 8',
+          notice_type: 'Section 8',
+          section8_grounds: ['Ground 8', 'Ground 10'],
+          // Use today's date as service date
+          notice_date: todayStr,
+          notice_served_date: todayStr,
+          // Do NOT provide notice_expiry_date - let it auto-calculate
+          notice_service_method: 'first_class_post',
+          court_name: 'Central London County Court',
+          arrears_breakdown: 'Total arrears £2400',
+          total_arrears: 2400,
+          arrears_items: [
+            {
+              period_start: twoMonthsAgo.toISOString().split('T')[0],
+              period_end: new Date(twoMonthsAgo.getFullYear(), twoMonthsAgo.getMonth() + 1, 0).toISOString().split('T')[0],
+              rent_due: 1200,
+              rent_paid: 0,
+              amount_owed: 1200,
+            },
+            {
+              period_start: oneMonthAgo.toISOString().split('T')[0],
+              period_end: new Date(oneMonthAgo.getFullYear(), oneMonthAgo.getMonth() + 1, 0).toISOString().split('T')[0],
+              rent_due: 1200,
+              rent_paid: 0,
+              amount_owed: 1200,
+            },
+          ],
+        };
+
+        // Should successfully generate pack with auto-calculated expiry date
+        const pack = await generateCompleteEvictionPack(section8Facts);
+        expect(pack.jurisdiction).toBe('england');
+        expect(pack.documents.length).toBeGreaterThan(0);
+
+        // Should include Section 8 notice
+        const s8Notice = pack.documents.find(d => d.title.includes('Section 8'));
+        expect(s8Notice).toBeDefined();
+      }, 30000);
+    });
   });
 });
