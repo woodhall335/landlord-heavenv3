@@ -155,7 +155,7 @@ const SECTIONS: WizardSection[] = [
     description: 'Rent arrears breakdown for Section 8',
     routes: ['section_8'],
     isComplete: (facts) => {
-      // For Section 8 with arrears grounds, arrears schedule must be complete
+      // For Section 8 with arrears grounds, arrears schedule + particulars must be complete
       const selectedGrounds = (facts.section8_grounds as string[]) || [];
       const hasArrearsGround = selectedGrounds.some((g) =>
         ['Ground 8', 'Ground 10', 'Ground 11'].some((ag) => g.includes(ag))
@@ -165,7 +165,12 @@ const SECTIONS: WizardSection[] = [
 
       // Must have arrears items
       const arrearsItems = facts.issues?.rent_arrears?.arrears_items || facts.arrears_items || [];
-      return Array.isArray(arrearsItems) && arrearsItems.length > 0;
+      const hasArrearsItems = Array.isArray(arrearsItems) && arrearsItems.length > 0;
+
+      // Must have particulars (now collected in this section after arrears)
+      const hasParticulars = Boolean(facts.section8_details);
+
+      return hasArrearsItems && hasParticulars;
     },
     hasBlockers: (facts) => {
       const blockers: string[] = [];

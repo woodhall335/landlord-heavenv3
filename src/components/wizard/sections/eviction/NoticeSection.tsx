@@ -155,8 +155,9 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
         if (facts.how_to_rent_served === undefined) return false;
         return true;
       case 'grounds':
-        // For S8: at least one ground must be selected with particulars
-        return selectedGrounds.length > 0 && Boolean(facts.section8_details);
+        // For S8: at least one ground must be selected
+        // Particulars are now collected in the Arrears section (after arrears data is known)
+        return selectedGrounds.length > 0;
       case 'service':
         // Service details must be complete
         return Boolean(facts.notice_service_date) && Boolean(facts.notice_service_method);
@@ -487,31 +488,17 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
           </div>
 
           {selectedGrounds.length > 0 && (
-            <>
-              <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm text-blue-800">
-                  <strong>Selected:</strong> {selectedGrounds.join(', ')}
-                </p>
-                <p className="text-xs text-blue-700 mt-1">
-                  Minimum notice period: {minNoticePeriod} days
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="section8_details" className="block text-sm font-medium text-gray-700">
-                  Particulars for selected grounds
-                  <span className="text-red-500 ml-1">*</span>
-                </label>
-                <textarea
-                  id="section8_details"
-                  rows={4}
-                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                  value={facts.section8_details || ''}
-                  onChange={(e) => onUpdate({ section8_details: e.target.value })}
-                  placeholder="Provide specific details for each ground: dates, amounts, incidents..."
-                />
-              </div>
-            </>
+            <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800">
+                <strong>Selected:</strong> {selectedGrounds.join(', ')}
+              </p>
+              <p className="text-xs text-blue-700 mt-1">
+                Minimum notice period: {minNoticePeriod} days
+              </p>
+              <p className="text-xs text-blue-600 mt-2">
+                You&apos;ll provide the particulars for these grounds after completing the arrears schedule.
+              </p>
+            </div>
           )}
         </div>
       )}
@@ -902,24 +889,12 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
             </div>
           )}
 
-          {/* Section 8 particulars */}
+          {/* Section 8 particulars note - moved to Arrears section */}
           {isSection8 && selectedGrounds.length > 0 && (
-            <div className="space-y-2">
-              <label htmlFor="section8_details" className="block text-sm font-medium text-gray-700">
-                Particulars for selected grounds
-                <span className="text-red-500 ml-1">*</span>
-              </label>
-              <textarea
-                id="section8_details"
-                rows={6}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-                value={facts.section8_details || ''}
-                onChange={(e) => onUpdate({ section8_details: e.target.value })}
-                placeholder="For each ground, provide specific details: dates, amounts (if arrears), incidents, evidence available..."
-              />
-              <p className="text-xs text-gray-500">
-                Be specific and factual. Include dates, amounts, and reference any evidence.
-                This will appear in the particulars of claim.
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+              <p className="text-sm text-amber-800">
+                <strong>Next step:</strong> After completing the arrears schedule, you&apos;ll write the
+                particulars for these grounds with help from Ask Heaven, our AI writing assistant.
               </p>
             </div>
           )}
