@@ -405,6 +405,8 @@ questions:
     section: Evidence
     question: "Deposit Protection Certificate"
     inputType: upload
+    # P0-D: Canonical evidence category for N5B checkbox truthfulness
+    evidenceCategory: deposit_protection_certificate
     helperText: "Upload the deposit protection certificate from DPS, MyDeposits, or TDS."
     validation:
       required: false
@@ -450,6 +452,8 @@ questions:
     section: Evidence
     question: "Energy Performance Certificate (EPC)"
     inputType: upload
+    # P0-D: Canonical evidence category for N5B checkbox truthfulness
+    evidenceCategory: epc
     helperText: "Upload the current Energy Performance Certificate for the property."
     validation:
       required: false
@@ -465,6 +469,8 @@ questions:
     section: Evidence
     question: "Gas Safety Certificate"
     inputType: upload
+    # P0-D: Canonical evidence category for N5B checkbox truthfulness
+    evidenceCategory: gas_safety_certificate
     helperText: "Upload the current Gas Safety Certificate (CP12) for the property."
     validation:
       required: false

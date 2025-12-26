@@ -1156,53 +1156,33 @@ export async function fillN1Form(data: CaseData): Promise<Uint8Array> {
 }
 
 // =============================================================================
-// FORM 6A (Section 21 Notice)
+// FORM 6A (Section 21 Notice) - DEPRECATED
 // =============================================================================
 
 /**
  * Fill Form 6A - Section 21 notice (prescribed form)
  *
- * Official PDF: /public/official-forms/form_6a.pdf
+ * @deprecated DO NOT USE. Form 6A (Section 21 notice) must be generated via the
+ * HBS template at config/jurisdictions/uk/england/templates/notice_only/form_6a_section21/notice.hbs
+ * using generateSection21Notice() from section21-generator.ts.
+ *
+ * Matrix compliance requires that prescribed notices come from the HBS pipeline,
+ * not from official-forms-filler.ts. Only court forms (N5, N5B, N119, N1) should
+ * be filled via this module.
+ *
+ * This function will throw an error if called in production to prevent misuse.
+ *
+ * @throws Error Always throws - use generateSection21Notice() instead
  */
-export async function fillForm6A(data: CaseData): Promise<Uint8Array> {
-  const ctx = 'Form6A';
-  console.log('📄 Filling Form 6A (Section 21 notice)...');
+export async function fillForm6A(_data: CaseData): Promise<Uint8Array> {
+  // P0-B: Block Form 6A generation via official PDF filler
+  // Section 21 notices must come from HBS template for matrix compliance
+  throw new Error(
+    '[DEPRECATED] fillForm6A is disabled. ' +
+    'Section 21 (Form 6A) notices must be generated via HBS template using generateSection21Notice() from section21-generator.ts. ' +
+    'See: config/jurisdictions/uk/england/templates/notice_only/form_6a_section21/notice.hbs'
+  );
 
-  const pdfDoc = await loadOfficialForm('form_6a.pdf');
-  const form = pdfDoc.getForm();
-
-  // Property address
-  setTextOptional(form, 'Premises address', data.property_address, ctx);
-
-  // Leaving date
-  setTextOptional(form, 'leaving date DD/MM/YYYYY', data.section_21_notice_date, ctx);
-
-  // Landlord/agent names
-  setTextOptional(form, 'Name 1', data.landlord_full_name, ctx);
-  setTextOptional(form, 'Name 2', data.landlord_2_name, ctx);
-
-  // Landlord/agent address
-  setTextOptional(form, 'Address 1', data.landlord_address, ctx);
-  setTextOptional(form, 'Signatory address 1', data.landlord_address, ctx);
-  setTextOptional(form, 'Signatory address 2', data.landlord_address, ctx);
-
-  // Contact details
-  setTextOptional(form, 'Signatory telephone1', data.landlord_phone, ctx);
-  setTextOptional(form, 'Signatory telephone2', data.landlord_phone, ctx);
-  setTextOptional(form, 'Signatory Telephone 1', data.landlord_phone, ctx);
-  setTextOptional(form, 'Signatory Telephone 2', data.landlord_phone, ctx);
-
-  // Signatory names
-  setTextOptional(form, 'Signatory Name 1', data.landlord_full_name, ctx);
-  setTextOptional(form, 'Signatory name 2 ', data.landlord_2_name, ctx);
-
-  // Date signed
-  setTextOptional(form, 'Date 2 ', data.signature_date, ctx);
-
-  const pdfBytes = await pdfDoc.save();
-  console.log('✅ Form 6A filled successfully');
-
-  return pdfBytes;
 }
 
 // =============================================================================
@@ -1210,9 +1190,28 @@ export async function fillForm6A(data: CaseData): Promise<Uint8Array> {
 // =============================================================================
 
 /**
- * Main entry point - fill any official form
+ * Main entry point - fill any official court form
+ *
+ * Supported forms:
+ * - n5: Claim for possession of property
+ * - n5b: Claim for possession (accelerated procedure - Section 21)
+ * - n119: Particulars of claim for possession
+ * - n1: Claim form (for money claims)
+ *
+ * @deprecated form6a - Use generateSection21Notice() from section21-generator.ts instead.
+ *             Form 6A is a prescribed notice, not a court form, and must be generated
+ *             via HBS template for matrix compliance.
  */
 export async function fillOfficialForm(formType: 'n5' | 'n5b' | 'n119' | 'n1' | 'form6a', data: CaseData): Promise<Uint8Array> {
+  // P0-B: Block form6a at entry point as well
+  if (formType === 'form6a') {
+    throw new Error(
+      '[DEPRECATED] Form 6A cannot be generated via fillOfficialForm. ' +
+      'Section 21 (Form 6A) notices must be generated via HBS template using generateSection21Notice() from section21-generator.ts. ' +
+      'This function only supports court forms (N5, N5B, N119, N1).'
+    );
+  }
+
   console.log(`\n🏛️  Filling official court form: ${formType.toUpperCase()}`);
   console.log('=' .repeat(60));
 
@@ -1225,8 +1224,6 @@ export async function fillOfficialForm(formType: 'n5' | 'n5b' | 'n119' | 'n1' | 
       return await fillN119Form(data);
     case 'n1':
       return await fillN1Form(data);
-    case 'form6a':
-      return await fillForm6A(data);
     default:
       throw new Error(`Unknown form type: ${formType}`);
   }

@@ -8,6 +8,7 @@ import { randomUUID } from 'node:crypto';
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { chatCompletion } from '@/lib/ai/openai-client';
+import { isEvidenceCategory, EvidenceCategory } from '@/lib/evidence/schema';
 
 export const runtime = 'nodejs';
 
@@ -162,6 +163,28 @@ export async function POST(request: Request) {
     }
 
     // =========================================================================
+    // P0-C: CATEGORY VALIDATION (prevent schema pollution)
+    // =========================================================================
+    // If a category is provided, it MUST be a canonical EvidenceCategory.
+    // This prevents arbitrary categories from creating dynamic flags.
+    const categoryString = typeof category === 'string' && category.length > 0 ? category : undefined;
+
+    if (categoryString && !isEvidenceCategory(categoryString)) {
+      const validCategories = Object.values(EvidenceCategory).join(', ');
+      return NextResponse.json(
+        {
+          error: `Invalid evidence category: "${categoryString}". ` +
+                 `Must be one of: ${validCategories}`,
+          valid_categories: Object.values(EvidenceCategory),
+        },
+        { status: 400 }
+      );
+    }
+
+    // Use the validated canonical category (undefined if not provided)
+    const validatedCategory = categoryString as EvidenceCategory | undefined;
+
+    // =========================================================================
     // FILE VALIDATION (P1 hardening - included in P0 rollout)
     // =========================================================================
     const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
@@ -262,7 +285,7 @@ export async function POST(request: Request) {
       id: randomUUID(),
       document_id: documentRow.id,
       question_id: questionId,
-      category: typeof category === 'string' && category.length > 0 ? (category as string) : undefined,
+      category: validatedCategory, // P0-C: Use validated canonical category
       file_name: file.name || safeFilename,
       storage_bucket: 'documents',
       storage_path: objectKey,
@@ -292,7 +315,7 @@ export async function POST(request: Request) {
 
       const flagsToSet = mapQuestionToEvidenceFlags(
         questionId,
-        typeof category === 'string' && category.length > 0 ? (category as string) : undefined,
+        validatedCategory, // P0-C: Use validated canonical category
       );
       for (const flag of flagsToSet) {
         (evidenceFlags as any)[flag] = true;
@@ -318,7 +341,7 @@ export async function POST(request: Request) {
         {
           fileName: file.name || safeFilename,
           mimeType: (file as any).type || 'application/octet-stream',
-          category: typeof category === 'string' && category.length > 0 ? (category as string) : undefined,
+          category: validatedCategory, // P0-C: Use validated canonical category
         },
         (factsSnapshot as any) || {},
       );
