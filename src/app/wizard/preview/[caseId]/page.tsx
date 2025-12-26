@@ -1186,8 +1186,8 @@ export default function WizardPreviewPage() {
                                 <button
                                   key={doc.id}
                                   onClick={() => {
-                                    // For now, show toast that document is locked
-                                    showToast('Unlock the pack to access this document', 'info');
+                                    // TODO: Link to document preview/generation
+                                    showToast(`Opening ${doc.title}...`, 'info');
                                   }}
                                   className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors text-left group"
                                 >
@@ -1205,8 +1205,8 @@ export default function WizardPreviewPage() {
                                       <div className="text-sm text-gray-500">{doc.description}</div>
                                     </div>
                                   </div>
-                                  <div className="flex items-center gap-2 text-gray-400">
-                                    <span className="text-lg">🔒</span>
+                                  <div className="flex items-center gap-2 text-green-500">
+                                    <span className="text-lg">🔓</span>
                                   </div>
                                 </button>
                               ))}
