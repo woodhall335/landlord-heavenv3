@@ -1185,9 +1185,46 @@ export default function WizardPreviewPage() {
                               {category.documents.map((doc) => (
                                 <button
                                   key={doc.id}
-                                  onClick={() => {
-                                    // TODO: Link to document preview/generation
-                                    showToast(`Opening ${doc.title}...`, 'info');
+                                  onClick={async () => {
+                                    if (!doc.documentType) {
+                                      showToast(`${doc.title} - Coming soon`, 'info');
+                                      return;
+                                    }
+
+                                    showToast(`Generating ${doc.title}...`, 'info');
+
+                                    try {
+                                      const response = await fetch('/api/documents/generate', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                          case_id: caseId,
+                                          document_type: doc.documentType,
+                                          is_preview: true,
+                                        }),
+                                      });
+
+                                      if (!response.ok) {
+                                        const errorData = await response.json().catch(() => ({}));
+                                        throw new Error(errorData.error || 'Failed to generate document');
+                                      }
+
+                                      const result = await response.json();
+
+                                      // Get the preview URL
+                                      if (result.document?.id) {
+                                        const previewResponse = await fetch(`/api/documents/preview/${result.document.id}`);
+                                        if (previewResponse.ok) {
+                                          const previewResult = await previewResponse.json();
+                                          // Open in new tab
+                                          window.open(previewResult.preview_url, '_blank');
+                                          showToast(`${doc.title} opened in new tab`, 'success');
+                                        }
+                                      }
+                                    } catch (err: any) {
+                                      console.error('Document generation error:', err);
+                                      showToast(err.message || `Failed to generate ${doc.title}`, 'error');
+                                    }
                                   }}
                                   className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors text-left group"
                                 >
