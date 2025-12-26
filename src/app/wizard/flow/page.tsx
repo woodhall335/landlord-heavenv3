@@ -12,11 +12,13 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { StructuredWizard } from '@/components/wizard/StructuredWizard';
 import { MoneyClaimSectionFlow } from '@/components/wizard/flows/MoneyClaimSectionFlow';
 import { EvictionSectionFlow } from '@/components/wizard/flows/EvictionSectionFlow';
+import { NoticeOnlySectionFlow } from '@/components/wizard/flows/NoticeOnlySectionFlow';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
-// Feature flag: Use new section-based eviction flow for complete packs
-// Set to true to enable the redesigned wizard, false to use legacy StructuredWizard
+// Feature flags: Use new section-based flows
+// Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
 const USE_EVICTION_SECTION_FLOW = true;
+const USE_NOTICE_ONLY_SECTION_FLOW = true;
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
@@ -217,7 +219,6 @@ function WizardFlowContent() {
 
   // 🟩 NEW: For eviction complete_pack in England/Wales, use the redesigned section-based flow
   // This provides a logical, court-ready, jurisdiction-aware wizard experience.
-  // Notice-only evictions still use StructuredWizard (MQS-based).
   if (
     type === 'eviction' &&
     askHeavenProduct === 'complete_pack' &&
@@ -232,7 +233,23 @@ function WizardFlowContent() {
     );
   }
 
-  // Use existing StructuredWizard for tenancy agreements and eviction notice-only flows
+  // 🟨 NEW: For eviction notice_only in England/Wales, use the redesigned section-based flow
+  // This matches the EvictionSectionFlow design for UI consistency.
+  if (
+    type === 'eviction' &&
+    askHeavenProduct === 'notice_only' &&
+    USE_NOTICE_ONLY_SECTION_FLOW &&
+    (jurisdiction === 'england' || jurisdiction === 'wales')
+  ) {
+    return (
+      <NoticeOnlySectionFlow
+        caseId={caseId}
+        jurisdiction={jurisdiction as 'england' | 'wales'}
+      />
+    );
+  }
+
+  // Use existing StructuredWizard for tenancy agreements and Scotland eviction flows
   if (type === 'tenancy_agreement' || type === 'eviction') {
     return (
       <StructuredWizard
