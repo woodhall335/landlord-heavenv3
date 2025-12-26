@@ -546,8 +546,10 @@ async function generateEnglandOrWalesEvictionPack(
 
   // 1. Section 8 Notice (if fault-based grounds)
   if (evictionCase.grounds.length > 0) {
-    const noticePeriodDays = 14; // baseline; templates can explain nuances
-    const earliestPossessionDate = calculateLeavingDate(noticePeriodDays);
+    // NOTE: Do NOT hardcode notice period - it varies by ground (14 days for Ground 8,
+    // 60 days for Grounds 10/11). Let section8-generator auto-calculate based on grounds.
+    // service_date defaults to today if not provided.
+    const serviceDate = caseData.notice_served_date || caseData.section_8_notice_date;
 
     const section8Data: Section8NoticeData = {
       landlord_full_name: evictionCase.landlord_full_name,
@@ -566,8 +568,12 @@ async function generateEnglandOrWalesEvictionPack(
         supporting_evidence: g.evidence,
         mandatory: g.mandatory || false,
       })),
-      notice_period_days: noticePeriodDays,
-      earliest_possession_date: earliestPossessionDate,
+      // Pass service date if user provided it; section8-generator will calculate
+      // earliest_possession_date and notice_period_days based on grounds
+      service_date: serviceDate || undefined,
+      // Let section8-generator auto-calculate these based on grounds:
+      notice_period_days: 0, // Will be computed by generator
+      earliest_possession_date: '', // Will be computed by generator
       any_mandatory_ground: evictionCase.grounds.some((g) => g.mandatory),
       any_discretionary_ground: evictionCase.grounds.some((g) => !g.mandatory),
     };
