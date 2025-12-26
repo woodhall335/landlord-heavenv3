@@ -123,6 +123,14 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
     return date.toISOString().split('T')[0];
   }, [facts.notice_service_date, minNoticePeriod, today]);
 
+  // Initialize notice_service_date with today when entering service step
+  // This ensures the displayed default value is also saved to facts
+  useEffect(() => {
+    if (currentStep === 'service' && !facts.notice_service_date) {
+      onUpdate({ notice_service_date: today });
+    }
+  }, [currentStep, facts.notice_service_date, today, onUpdate]);
+
   // Handle ground toggle
   const handleGroundToggle = (ground: string) => {
     const newGrounds = selectedGrounds.includes(ground)
