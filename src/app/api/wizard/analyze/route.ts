@@ -901,17 +901,46 @@ export async function POST(request: Request) {
           },
         );
       } else {
+        // England: Show route-specific notices based on recommended route
+        const isSection21Route = finalRecommendedRoute === 'section_21' ||
+                                  finalRecommendedRoute === 'accelerated_possession' ||
+                                  finalRecommendedRoute === 'accelerated_section21';
+        const isSection8Route = finalRecommendedRoute === 'section_8' ||
+                                 finalRecommendedRoute === 'section8_notice';
+
+        if (isSection21Route) {
+          previewDocuments.push(
+            {
+              id: 's21_notice',
+              document_type: 'notice',
+              document_title: 'Section 21 notice (Form 6A)',
+            },
+          );
+        } else if (isSection8Route) {
+          previewDocuments.push(
+            {
+              id: 's8_notice',
+              document_type: 'notice',
+              document_title: 'Section 8 notice (Form 3)',
+            },
+          );
+        } else {
+          // Fallback: show both if route is unclear
+          previewDocuments.push(
+            {
+              id: 's8_notice',
+              document_type: 'notice',
+              document_title: 'Section 8 notice (Form 3)',
+            },
+            {
+              id: 's21_notice',
+              document_type: 'notice',
+              document_title: 'Section 21 notice (Form 6A)',
+            },
+          );
+        }
+
         previewDocuments.push(
-          {
-            id: 's8_notice',
-            document_type: 'notice',
-            document_title: 'Section 8 notice (Form 3)',
-          },
-          {
-            id: 's21_notice',
-            document_type: 'notice',
-            document_title: 'Section 21 notice (Form 6A)',
-          },
           {
             id: 'service_proofs',
             document_type: 'guidance',
@@ -1009,6 +1038,8 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       case_id,
+      jurisdiction: canonicalJurisdiction, // Include jurisdiction for UI display
+      case_type: caseData.case_type, // Include case_type for UI context
       product,
       recommended_route: finalRecommendedRoute,
       recommended_route_label,
