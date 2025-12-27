@@ -68,12 +68,12 @@ export function Footer() {
 
           {/* Column 2: Products */}
           <div>
-            <h5 className="text-base font-bold mb-6 text-white">Products</h5>
+            <h5 className="text-base font-bold mb-6 text-gray-300">Products</h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
                   href="/products/notice-only"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   Notice Only
                 </Link>
@@ -81,7 +81,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/products/complete-pack"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   Complete Eviction Pack
                 </Link>
@@ -89,7 +89,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/products/money-claim"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   Money Claim Pack
                 </Link>
@@ -97,7 +97,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/products/ast"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   Tenancy Agreements
                 </Link>
@@ -105,7 +105,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/hmo-pro"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   HMO Pro Membership
                 </Link>
@@ -115,12 +115,12 @@ export function Footer() {
 
           {/* Column 3: Legal */}
           <div>
-            <h5 className="text-base font-bold mb-6 text-white">Legal</h5>
+            <h5 className="text-base font-bold mb-6 text-gray-300">Legal</h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
                   href="/terms"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   Terms & Conditions
                 </Link>
@@ -128,7 +128,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/privacy"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   Privacy Policy
                 </Link>
@@ -136,7 +136,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/refunds"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   Refund Policy
                 </Link>
@@ -144,7 +144,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/cookies"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   Cookie Policy
                 </Link>
@@ -154,12 +154,12 @@ export function Footer() {
 
           {/* Column 4: Account */}
           <div>
-            <h5 className="text-base font-bold mb-6 text-white">Account</h5>
+            <h5 className="text-base font-bold mb-6 text-gray-300">Account</h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
                   href="/auth/login"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   Login
                 </Link>
@@ -167,7 +167,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/auth/signup"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   Register
                 </Link>
@@ -175,7 +175,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/contact"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   Contact Us
                 </Link>
@@ -183,7 +183,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/about"
-                  className="text-sm text-primary-400 hover:text-primary-300 transition-colors inline-block"
+                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
                 >
                   About Us
                 </Link>
