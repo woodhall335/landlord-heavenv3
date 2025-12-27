@@ -66,17 +66,17 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
 }
 
-/* Footer text styling - gray-300 (#d1d5db) */
+/* Footer text styling */
 footer h1, footer h2, footer h3, footer h4, footer h5, footer h6 {
-  color: #d1d5db;
+  color: #4A5568 !important;
 }
 
 footer a {
-  color: #d1d5db;
+  color: #4A5568 !important;
 }
 
 footer a:hover {
-  color: #ffffff;
+  color: #718096 !important;
 }
 
 p {
