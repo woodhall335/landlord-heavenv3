@@ -62,9 +62,12 @@ function normaliseEvidence(facts: CaseFacts): EvidenceSnapshot {
   };
 }
 
-function computeRoute(facts: CaseFacts, jurisdiction: string, caseType: string): string {
+function computeRoute(facts: CaseFacts, jurisdiction: string, caseType: string, wizardFacts?: any): string {
   if (caseType === 'money_claim') return 'money_claim';
   if (jurisdiction === 'scotland') return 'notice_to_leave';
+  // Check user's explicit eviction_route selection from Case Basics first
+  if (wizardFacts?.eviction_route) return wizardFacts.eviction_route;
+  if (wizardFacts?.selected_notice_route) return wizardFacts.selected_notice_route;
   if (facts.notice.notice_type) return facts.notice.notice_type;
   return 'standard_possession';
 }
@@ -676,7 +679,7 @@ export async function POST(request: Request) {
       files: evidence.files,
     };
 
-    const route = computeRoute(facts, canonicalJurisdiction, caseData.case_type);
+    const route = computeRoute(facts, canonicalJurisdiction, caseData.case_type, wizardFacts);
     const product =
       (facts.meta?.product as string | undefined) ||
       (facts.meta?.original_product as string | undefined) ||
@@ -841,7 +844,10 @@ export async function POST(request: Request) {
       }
     } else if (decisionEngineOutput) {
       // For complete_pack: Respect user's explicit route selection if valid
-      const userSelectedRoute = (wizardFacts as any).selected_notice_route || null;
+      // Check both selected_notice_route and eviction_route (user's Case Basics selection)
+      const userSelectedRoute = (wizardFacts as any).selected_notice_route ||
+                                 (wizardFacts as any).eviction_route ||
+                                 null;
       const allowedRoutes = decisionEngineOutput.allowed_routes || [];
       const blockedRoutes = decisionEngineOutput.blocked_routes || [];
 
@@ -1011,29 +1017,31 @@ export async function POST(request: Request) {
 
     let is_court_ready: boolean | null = null;
     let readiness_summary: string | null = null;
-    let recommended_route_label: string = route;
+    // Use finalRecommendedRoute for the label since that's what's actually recommended
+    const effectiveRoute = finalRecommendedRoute || route;
+    let recommended_route_label: string = effectiveRoute;
 
     // Human-friendly route labels for the UI
     if (caseData.case_type === 'eviction') {
       if (canonicalJurisdiction === 'england') {
-        if (route === 'section_21') {
+        if (effectiveRoute === 'section_21') {
           recommended_route_label =
             'Section 21 possession (accelerated or standard, depending on compliance)';
-        } else if (route === 'section_8') {
+        } else if (effectiveRoute === 'section_8') {
           recommended_route_label = 'Section 8 standard possession (N5 + N119)';
-        } else if (route === 'notice_only') {
+        } else if (effectiveRoute === 'notice_only') {
           recommended_route_label = 'Notice-only route (serve notice now, claim later)';
-        } else if (route === 'standard_possession') {
+        } else if (effectiveRoute === 'standard_possession') {
           recommended_route_label = 'Standard possession (N5 + N119)';
         }
       } else if (canonicalJurisdiction === 'wales') {
-        if (route === 'wales_section_173') {
+        if (effectiveRoute === 'wales_section_173') {
           recommended_route_label = 'Section 173 notice (no fault)';
-        } else if (route === 'wales_fault_based') {
+        } else if (effectiveRoute === 'wales_fault_based') {
           recommended_route_label = 'Section 157/159 breach notice (RHW23)';
         }
       } else if (canonicalJurisdiction === 'scotland') {
-        if (route === 'notice_to_leave') {
+        if (effectiveRoute === 'notice_to_leave') {
           recommended_route_label = 'Notice to Leave + Form E (First-tier Tribunal)';
         }
       }
