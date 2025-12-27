@@ -30,6 +30,7 @@ import { fillOfficialForm, type CaseData } from '@/lib/documents/official-forms-
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
 import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
@@ -55,6 +56,8 @@ const generateDocumentSchema = z.object({
     'n5_claim', // England court possession claim
     'n119_particulars', // England particulars of claim
     'n5b_claim', // England accelerated possession (Section 21)
+    // Evidence tools
+    'arrears_schedule', // Rent arrears schedule
   ]),
   is_preview: z.boolean().optional().default(true),
 });
@@ -529,6 +532,57 @@ export async function POST(request: Request) {
           };
 
           documentTitle = 'Form N5B - Claim for Possession (Accelerated Procedure)';
+          break;
+        }
+
+        case 'arrears_schedule': {
+          // Get arrears data from wizard facts
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const arrearsItems = caseFacts.issues?.rent_arrears?.arrears_items || [];
+          const totalArrears = wizardFacts.total_arrears ||
+                               wizardFacts.rent_arrears_amount ||
+                               caseFacts.issues?.rent_arrears?.total_arrears || 0;
+          const rentAmount = wizardFacts.rent_amount ||
+                              caseFacts.tenancy?.rent_amount || 0;
+          const rentFrequency = wizardFacts.rent_frequency ||
+                                 caseFacts.tenancy?.rent_frequency || 'monthly';
+
+          const arrearsData = getArrearsScheduleData({
+            arrears_items: arrearsItems,
+            total_arrears: totalArrears,
+            rent_amount: rentAmount,
+            rent_frequency: rentFrequency as any,
+            include_schedule: true,
+          });
+
+          if (!arrearsData.include_schedule_pdf) {
+            return NextResponse.json(
+              {
+                error: 'No arrears schedule data available',
+                code: 'NO_ARREARS_DATA',
+                user_message: 'There is no detailed arrears schedule to generate. Please enter arrears data in the wizard first.',
+              },
+              { status: 422 }
+            );
+          }
+
+          // Determine jurisdiction key for template path
+          const jurisdictionKey = canonicalJurisdiction === 'wales' ? 'wales' : 'england';
+
+          generatedDoc = await generateDocument({
+            templatePath: `uk/${jurisdictionKey}/templates/money_claims/schedule_of_arrears.hbs`,
+            data: {
+              claimant_reference: wizardFacts.claimant_reference || case_id,
+              arrears_schedule: arrearsData.arrears_schedule,
+              arrears_total: arrearsData.arrears_total,
+              rent_amount: rentAmount,
+              rent_frequency: rentFrequency,
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Schedule of Arrears';
           break;
         }
 

@@ -263,7 +263,7 @@ const ARREARS_SCHEDULE: PackDocument = {
   description: 'Detailed breakdown of rent owed with payment history',
   category: 'evidence_tool',
   icon: '📊',
-  // documentType: undefined - not yet implemented
+  documentType: 'arrears_schedule',
   conditions: {
     requiresArrears: true,
   },

@@ -1268,13 +1268,18 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   setTextRequired(form, N119_FIELDS.DEFENDANT, data.tenant_full_name, ctx);
   setTextRequired(form, N119_FIELDS.POSSESSION_OF, data.property_address, ctx);
 
-  // Occupants - list all known tenants/occupants
-  const occupants = [data.tenant_full_name];
+  // Occupants - list all known tenants/occupants (Section 2)
+  const occupants: string[] = [];
+  if (data.tenant_full_name) {
+    occupants.push(data.tenant_full_name);
+  }
   if (data.tenant_2_name) {
     occupants.push(data.tenant_2_name);
   }
-  const occupantsText = occupants.join(', ') + ' (the defendant' + (occupants.length > 1 ? 's' : '') + ')';
-  setTextOptional(form, N119_FIELDS.OCCUPANTS, occupantsText, ctx);
+  if (occupants.length > 0) {
+    const occupantsText = occupants.join(', ') + ' (the defendant' + (occupants.length > 1 ? 's' : '') + ')';
+    setTextOptional(form, N119_FIELDS.OCCUPANTS, occupantsText, ctx);
+  }
 
   // === TENANCY DETAILS (Section 3) ===
   const tenancyType = data.tenancy_type || 'Assured Shorthold Tenancy';
