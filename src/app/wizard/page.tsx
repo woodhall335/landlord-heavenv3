@@ -10,7 +10,7 @@
 import React, { Suspense, useMemo, useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
-import { Badge, Button, Container, TealHero } from '@/components/ui';
+import { Button, Container, TealHero } from '@/components/ui';
 import { clsx } from 'clsx';
 import { RiArrowDownLine, RiArrowLeftLine, RiCheckLine } from 'react-icons/ri';
 
@@ -68,7 +68,6 @@ interface DocumentOption {
   description: string;
   icon: string;
   price: string;
-  popular?: boolean;
 }
 
 interface JurisdictionOption {
@@ -91,7 +90,6 @@ const documentOptions: DocumentOption[] = [
     description: 'Full bundle from notice to possession order with court forms and guidance',
     icon: '⚖️',
     price: '£149.99',
-    popular: true,
   },
   {
     type: 'money_claim',
@@ -326,15 +324,9 @@ function WizardPageInner() {
                       : 'border-gray-300 bg-white hover:border-primary'
                   )}
                 >
-                  {doc.popular && (
-                    <div className="absolute -top-3 right-4">
-                      <Badge variant="primary" size="small">
-                        Most Popular
-                      </Badge>
-                    </div>
-                  )}
-
-                  <div className="text-4xl mb-4">{doc.icon}</div>
+                  <div className="h-12 flex items-center mb-4">
+                    <span className="text-4xl">{doc.icon}</span>
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal mb-2">{doc.title}</h3>
                   <p className="text-sm text-gray-600 mb-4 min-h-12">{doc.description}</p>
                   <div className="text-primary font-semibold">{doc.price}</div>
