@@ -95,12 +95,12 @@ a:hover {
 
 /* Ensure buttons styled as links respect their text color classes */
 a.text-white,
-a[class*="text-white"] {
+a[class*="text-white"]:not([class*="hover:"]) {
   color: #ffffff !important;
 }
 
 a.text-white:hover,
-a[class*="text-white"]:hover {
+a[class*="text-white"]:not([class*="hover:"]):hover {
   color: #ffffff !important;
 }
 
