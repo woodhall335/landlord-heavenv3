@@ -12,7 +12,7 @@ export function Footer() {
           <div>
             <div className="mb-6">
               <Image
-                src="/footerlogo.png"
+                src="/footerlogo2.png"
                 alt="Landlord Heaven"
                 width={200}
                 height={40}
