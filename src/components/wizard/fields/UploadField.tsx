@@ -4,6 +4,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { FileUpload } from '@/components/wizard/FileUpload';
+import { RiFileTextLine, RiCloseCircleLine } from 'react-icons/ri';
 
 export interface EvidenceFileSummary {
   id: string;
@@ -197,13 +198,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
                 key={file.id}
                 className="flex items-center gap-3 rounded-md border border-gray-200 bg-gray-50 px-3 py-2"
               >
-                <svg className="h-5 w-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2-1a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1V8h-3a1 1 0 01-1-1V4H6z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <RiFileTextLine className="h-5 w-5 text-[#7C3AED]" />
 
                 <div className="flex-1 min-w-0">
                   <p className="truncate text-sm font-medium text-charcoal">
@@ -227,13 +222,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
 
       {error && (
         <div className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-900">
-          <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fillRule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-              clipRule="evenodd"
-            />
-          </svg>
+          <RiCloseCircleLine className="h-5 w-5 text-[#7C3AED]" />
           <span>{error}</span>
         </div>
       )}

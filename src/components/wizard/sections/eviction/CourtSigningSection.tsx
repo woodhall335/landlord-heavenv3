@@ -20,6 +20,7 @@
 
 import React, { useEffect } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
+import { RiExternalLinkLine } from 'react-icons/ri';
 
 interface CourtSigningSectionProps {
   facts: WizardFacts;
@@ -88,9 +89,7 @@ export const CourtSigningSection: React.FC<CourtSigningSectionProps> = ({
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-4 py-2 bg-[#7C3AED] text-white text-sm font-medium rounded-md hover:bg-[#6D28D9] transition-colors"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
+            <RiExternalLinkLine className="w-4 h-4 text-white" />
             Find your court (opens in new tab)
           </a>
         </div>

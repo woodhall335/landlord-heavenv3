@@ -11,6 +11,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import { RiAlertLine, RiErrorWarningLine, RiInformationLine, RiCheckboxCircleLine, RiArrowDownSLine } from 'react-icons/ri';
 
 // =============================================================================
 // Types
@@ -59,12 +60,7 @@ const SEVERITY_CONFIG = {
     borderColor: 'border-amber-300',
     textColor: 'text-amber-900',
     iconColor: 'text-amber-600',
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-      </svg>
-    ),
+    icon: <RiAlertLine className="w-5 h-5 text-[#7C3AED]" />,
   },
   warning: {
     label: 'Possible Issue',
@@ -72,12 +68,7 @@ const SEVERITY_CONFIG = {
     borderColor: 'border-yellow-200',
     textColor: 'text-yellow-900',
     iconColor: 'text-yellow-600',
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
+    icon: <RiErrorWarningLine className="w-5 h-5 text-[#7C3AED]" />,
   },
   info: {
     label: 'Note',
@@ -85,12 +76,7 @@ const SEVERITY_CONFIG = {
     borderColor: 'border-blue-200',
     textColor: 'text-blue-900',
     iconColor: 'text-blue-600',
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
+    icon: <RiInformationLine className="w-5 h-5 text-[#7C3AED]" />,
   },
 };
 
@@ -174,15 +160,9 @@ export function SmartReviewPanel({
         <div className="flex items-center gap-3">
           {/* Icon */}
           {hasWarnings ? (
-            <svg className="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
           ) : (
-            <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
           )}
 
           {/* Title */}
@@ -205,14 +185,7 @@ export function SmartReviewPanel({
         </div>
 
         {/* Chevron */}
-        <svg
-          className={`w-5 h-5 text-gray-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
+        <RiArrowDownSLine className={`w-5 h-5 text-[#7C3AED] transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
       </button>
 
       {/* Expandable content */}
@@ -221,10 +194,7 @@ export function SmartReviewPanel({
           {/* No warnings - all clear */}
           {!hasWarnings && summary && (
             <div className="text-center py-4">
-              <svg className="w-12 h-12 mx-auto text-green-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+              <RiCheckboxCircleLine className="w-12 h-12 mx-auto text-[#7C3AED] mb-2" />
               <p className="text-green-800 font-medium">No issues found</p>
               <p className="text-sm text-gray-500 mt-1">
                 Your documents appear to match the information you provided.
@@ -366,14 +336,7 @@ function WarningCard({ warning }: WarningCardProps) {
               {warning.message}
             </p>
           </div>
-          <svg
-            className={`w-5 h-5 text-gray-400 transition-transform flex-shrink-0 ${expanded ? 'rotate-180' : ''}`}
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
+          <RiArrowDownSLine className={`w-5 h-5 text-[#7C3AED] transition-transform flex-shrink-0 ${expanded ? 'rotate-180' : ''}`} />
         </div>
       </div>
 

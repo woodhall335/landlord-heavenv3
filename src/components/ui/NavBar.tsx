@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Button } from "./Button";
 import { clsx } from "clsx";
+import { RiArrowDownSLine, RiMenuLine } from 'react-icons/ri';
 
 interface NavItem {
   href: string;
@@ -63,9 +64,7 @@ export function NavBar({ user }: NavBarProps) {
               className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors relative py-2 flex items-center gap-1"
             >
               Free Tools
-              <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
+              <RiArrowDownSLine className="h-4 w-4 text-[#7C3AED]" />
             </button>
 
             {showFreeTools && (
@@ -129,9 +128,7 @@ export function NavBar({ user }: NavBarProps) {
           aria-expanded={open}
         >
           <span>Menu</span>
-          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-            <path d="M4 7h16M4 12h16M4 17h16" />
-          </svg>
+          <RiMenuLine className="h-5 w-5 text-[#7C3AED]" />
         </button>
       </div>
 

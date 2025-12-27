@@ -19,6 +19,7 @@ import { apiUrl } from '@/lib/api';
 import { validateStepInline, type InlineGuidance } from '@/lib/validation/noticeOnlyInlineValidator';
 import { extractWizardUxIssues, type InlineWarning } from '@/lib/validation/noticeOnlyWizardUxIssues';
 import type { CanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { RiCheckboxCircleLine, RiAlertLine } from 'react-icons/ri';
 
 // ====================================================================================
 // PHASE 1: DEBUG LOGGING HELPER (behind NOTICE_ONLY_DEBUG env flag)
@@ -2565,9 +2566,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       {calculatedDate && !expiryDateOverride && (
                         <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                           <div className="flex items-center gap-2 mb-1">
-                            <svg className="h-4 w-4 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                            <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                             <span className="text-sm font-semibold text-blue-900">
                               Auto-calculated: {new Date(calculatedDate.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </span>
@@ -4184,9 +4183,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             <div className="bg-red-50 border-b border-red-100 px-6 py-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-red-100 rounded-full">
-                  <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
+                  <RiAlertLine className="w-6 h-6 text-[#7C3AED]" />
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-red-900">
