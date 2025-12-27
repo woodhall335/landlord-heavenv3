@@ -24,6 +24,7 @@
 import { PDFDocument, PDFForm, PDFTextField, PDFCheckBox } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
+import { generateArrearsBreakdownForCourt } from './arrears-schedule-mapper';
 
 const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms');
 
@@ -1152,6 +1153,79 @@ export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
 }
 
 // =============================================================================
+// N119 PARTICULARS GENERATOR
+// =============================================================================
+
+/**
+ * Generate detailed particulars of claim based on case data
+ * This creates proper legal particulars for the N119 form Section 4
+ */
+function generateParticularsOfClaim(data: CaseData): string {
+  const parts: string[] = [];
+
+  // Parse ground numbers
+  const grounds = data.ground_numbers?.split(',').map(g => g.trim()) || [];
+  const hasGround8 = grounds.includes('8') || data.ground_codes?.includes('ground_8');
+  const hasGround10 = grounds.includes('10') || data.ground_codes?.includes('ground_10');
+  const hasGround11 = grounds.includes('11') || data.ground_codes?.includes('ground_11');
+  const hasArrearsGrounds = hasGround8 || hasGround10 || hasGround11;
+
+  // Section 8 rent arrears grounds
+  if (hasArrearsGrounds || data.total_arrears) {
+    // Ground 8 - Mandatory ground (2+ months arrears)
+    if (hasGround8) {
+      parts.push('The claimant relies on Ground 8 of Schedule 2 to the Housing Act 1988 (mandatory ground).');
+      parts.push('Both at the date of service of the notice seeking possession and at the date of the hearing:');
+      if (data.rent_frequency === 'weekly') {
+        parts.push('- at least 8 weeks\' rent was unpaid.');
+      } else {
+        parts.push('- at least 2 months\' rent was unpaid.');
+      }
+    }
+
+    // Ground 10 - Discretionary ground (some arrears)
+    if (hasGround10) {
+      parts.push('The claimant also relies on Ground 10 of Schedule 2 to the Housing Act 1988.');
+      parts.push('Some rent lawfully due from the tenant is unpaid on the date on which proceedings are begun.');
+    }
+
+    // Ground 11 - Discretionary ground (persistent delay)
+    if (hasGround11) {
+      parts.push('The claimant also relies on Ground 11 of Schedule 2 to the Housing Act 1988.');
+      parts.push('The tenant has persistently delayed paying rent which has become lawfully due.');
+    }
+
+    // Use the arrears breakdown generator for detailed arrears information
+    // This leverages the canonical arrears schedule if available
+    if (data.total_arrears || data.arrears_items) {
+      const arrearsBreakdown = generateArrearsBreakdownForCourt({
+        arrears_items: data.arrears_items,
+        total_arrears: data.total_arrears,
+        rent_amount: data.rent_amount || 0,
+        rent_frequency: data.rent_frequency,
+      });
+      parts.push(arrearsBreakdown);
+    }
+
+    // Note arrears at notice date if different from current
+    if (data.arrears_at_notice_date && data.total_arrears &&
+        data.arrears_at_notice_date !== data.total_arrears) {
+      parts.push(`At the date of the notice, arrears stood at £${data.arrears_at_notice_date.toFixed(2)}.`);
+    }
+  } else if (data.ground_numbers) {
+    // Other grounds - provide generic statement
+    parts.push(`The claimant relies on Ground(s) ${data.ground_numbers} of Schedule 2 to the Housing Act 1988.`);
+  }
+
+  // If no particulars could be generated, return a basic statement
+  if (parts.length === 0) {
+    return 'The defendant has not paid the rent lawfully due under the tenancy agreement.';
+  }
+
+  return parts.join(' ');
+}
+
+// =============================================================================
 // N119 FORM FILLER
 // =============================================================================
 
@@ -1194,8 +1268,13 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   setTextRequired(form, N119_FIELDS.DEFENDANT, data.tenant_full_name, ctx);
   setTextRequired(form, N119_FIELDS.POSSESSION_OF, data.property_address, ctx);
 
-  // Occupants - default to tenant name
-  setTextOptional(form, N119_FIELDS.OCCUPANTS, data.tenant_full_name, ctx);
+  // Occupants - list all known tenants/occupants
+  const occupants = [data.tenant_full_name];
+  if (data.tenant_2_name) {
+    occupants.push(data.tenant_2_name);
+  }
+  const occupantsText = occupants.join(', ') + ' (the defendant' + (occupants.length > 1 ? 's' : '') + ')';
+  setTextOptional(form, N119_FIELDS.OCCUPANTS, occupantsText, ctx);
 
   // === TENANCY DETAILS (Section 3) ===
   const tenancyType = data.tenancy_type || 'Assured Shorthold Tenancy';
@@ -1225,7 +1304,8 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   }
 
   // === REASON FOR POSSESSION (Section 4) ===
-  const reason = data.particulars_of_claim || (data.ground_numbers ? `Grounds: ${data.ground_numbers}` : undefined);
+  // Generate detailed particulars if not provided
+  const reason = data.particulars_of_claim || generateParticularsOfClaim(data);
   setTextOptional(form, N119_FIELDS.REASON_A, reason, ctx);
 
   // === STEPS TAKEN (Section 5) ===
