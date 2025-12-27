@@ -68,7 +68,7 @@ export function Footer() {
 
           {/* Column 2: Products */}
           <div>
-            <h5 className="text-base font-bold mb-6 text-gray-300">Products</h5>
+            <h5 className="text-base font-bold mb-6 text-gray-300"><u>Products</u></h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
@@ -115,7 +115,7 @@ export function Footer() {
 
           {/* Column 3: Legal */}
           <div>
-            <h5 className="text-base font-bold mb-6 text-gray-300">Legal</h5>
+            <h5 className="text-base font-bold mb-6 text-gray-300"><u>Legal</u></h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
@@ -154,7 +154,7 @@ export function Footer() {
 
           {/* Column 4: Account */}
           <div>
-            <h5 className="text-base font-bold mb-6 text-gray-300">Account</h5>
+            <h5 className="text-base font-bold mb-6 text-gray-300"><u>Account</u></h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
@@ -195,7 +195,7 @@ export function Footer() {
         {/* Bottom Row */}
         <div className="mt-16 pt-10 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-sm text-gray-400 text-center md:text-left">
+            <p className="text-sm text-gray-600 text-center md:text-left">
               © {currentYear} Landlord Heaven. All rights reserved.
             </p>
 
