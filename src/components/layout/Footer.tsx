@@ -31,7 +31,7 @@ export function Footer() {
                   height={20}
                   className="w-7 h-5"
                 />
-                <span>England</span>
+                <span style={{ color: '#4A5568' }}>England</span>
               </div>
               <div className="flex items-center gap-2">
                 <Image
@@ -41,7 +41,7 @@ export function Footer() {
                   height={20}
                   className="w-7 h-5"
                 />
-                <span>Wales</span>
+                <span style={{ color: '#4A5568' }}>Wales</span>
               </div>
               <div className="flex items-center gap-2">
                 <Image
@@ -51,7 +51,7 @@ export function Footer() {
                   height={20}
                   className="w-7 h-5"
                 />
-                <span>Scotland</span>
+                <span style={{ color: '#4A5568' }}>Scotland</span>
               </div>
               <div className="flex items-center gap-2">
                 <Image
@@ -61,7 +61,7 @@ export function Footer() {
                   height={20}
                   className="w-7 h-5"
                 />
-                <span>Northern Ireland</span>
+                <span style={{ color: '#4A5568' }}>Northern Ireland</span>
               </div>
             </div>
           </div>
