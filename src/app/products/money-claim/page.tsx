@@ -24,7 +24,6 @@ export default function MoneyClaimPage() {
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">£179.99</span>
-              <span className="text-xl text-gray-600">one-time</span>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link

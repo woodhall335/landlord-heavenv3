@@ -14,8 +14,8 @@ export const PRICING = {
   MONEY_CLAIM_PACK: 179.99,
 
   // Tenancy Products (One-Time)
-  STANDARD_AST: 39.99,
-  PREMIUM_AST: 59.00,
+  STANDARD_AST: 9.99,
+  PREMIUM_AST: 14.99,
 
   // HMO Pro Membership (TIERED SUBSCRIPTION)
   HMO_PRO: {

@@ -29,7 +29,7 @@ export function Footer() {
                   alt="England"
                   width={20}
                   height={20}
-                  className="w-5 h-5"
+                  className="w-7 h-5"
                 />
                 <span>England</span>
               </div>
@@ -39,7 +39,7 @@ export function Footer() {
                   alt="Wales"
                   width={20}
                   height={20}
-                  className="w-5 h-5"
+                  className="w-7 h-5"
                 />
                 <span>Wales</span>
               </div>
@@ -49,7 +49,7 @@ export function Footer() {
                   alt="Scotland"
                   width={20}
                   height={20}
-                  className="w-5 h-5"
+                  className="w-7 h-5"
                 />
                 <span>Scotland</span>
               </div>
@@ -59,7 +59,7 @@ export function Footer() {
                   alt="Northern Ireland"
                   width={20}
                   height={20}
-                  className="w-5 h-5"
+                  className="w-7 h-5"
                 />
                 <span>Northern Ireland</span>
               </div>

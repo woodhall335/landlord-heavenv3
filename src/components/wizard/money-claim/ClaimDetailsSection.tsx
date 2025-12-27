@@ -35,7 +35,7 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
       ? String(moneyClaim.interest_rate)
       : '';
 
-  const isEnglandWales = jurisdiction === 'england-wales';
+  const isEnglandWales = (jurisdiction === 'england' || jurisdiction === 'wales');
 
   return (
     <div className="space-y-6">

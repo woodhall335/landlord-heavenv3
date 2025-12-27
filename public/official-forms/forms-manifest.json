@@ -1,0 +1,48 @@
+{
+  "jurisdictions": {
+    "england": {
+      "forms": {
+        "n5-eng.pdf": {
+          "name": "N5 - Claim for Possession",
+          "fillable": true
+        },
+        "n5b-eng.pdf": {
+          "name": "N5B - Accelerated Possession",
+          "fillable": true
+        },
+        "n119-eng.pdf": {
+          "name": "N119 - Particulars of Claim",
+          "fillable": true
+        },
+        "N1_1224.pdf": {
+          "name": "N1 - Claim Form",
+          "fillable": true
+        },
+        "form_6a.pdf": {
+          "name": "Form 6A - Section 21 Notice",
+          "fillable": true
+        }
+      }
+    },
+    "scotland": {
+      "forms": {
+        "notice_to_leave.pdf": {
+          "name": "AT6 - Notice to Leave",
+          "fillable": false
+        },
+        "form_e_eviction.pdf": {
+          "name": "Form E - Eviction Order Application",
+          "fillable": true
+        },
+        "simple_procedure_claim_form.pdf": {
+          "name": "Form 3A - Simple Procedure Claim",
+          "fillable": false
+        },
+        "simple_procedure_response_form.pdf": {
+          "name": "Form 4A - Simple Procedure Response",
+          "fillable": false
+        }
+      }
+    }
+  }
+}

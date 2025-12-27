@@ -6,6 +6,10 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     setupFiles: ['./vitest.setup.ts'],
+    // Use jsdom for component tests
+    environmentMatchGlobs: [
+      ['tests/components/**', 'jsdom'],
+    ],
   },
   resolve: {
     alias: {

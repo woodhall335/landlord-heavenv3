@@ -9,7 +9,14 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:pdf": "RUN_PDF_TESTS=true vitest run",
-    "law-monitor": "ts-node --esm scripts/law-monitor-run.ts"
+    "test:notice-compliance": "vitest run notice-compliance",
+    "law-monitor": "ts-node --esm scripts/law-monitor-run.ts",
+    "audit:notice-only": "npx tsx scripts/audit-notice-only-pdfs.ts",
+    "audit:notice-only:layout": "npx tsx scripts/audit-notice-only-layout.ts",
+    "audit:notice-only:visual": "npx tsx scripts/render-notice-only-snapshots.ts && npx tsx scripts/audit-notice-only-layout.ts",
+    "audit:notice-only:all": "npx tsx scripts/audit-notice-only-pdfs.ts && npx tsx scripts/render-notice-only-snapshots.ts && npx tsx scripts/audit-notice-only-layout.ts",
+    "prove:notice-only:e2e": "npx tsx scripts/prove-notice-only-e2e.ts",
+    "prove:notice-only:editable": "npx tsx scripts/prove-notice-only-editable-html.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",
@@ -41,7 +48,9 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -56,6 +65,6 @@
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.9"
   }
 }

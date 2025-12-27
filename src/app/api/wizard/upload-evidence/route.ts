@@ -8,6 +8,7 @@ import { randomUUID } from 'node:crypto';
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { chatCompletion } from '@/lib/ai/openai-client';
+import { isEvidenceCategory, EvidenceCategory } from '@/lib/evidence/schema';
 
 export const runtime = 'nodejs';
 
@@ -161,6 +162,58 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'file is required' }, { status: 400 });
     }
 
+    // =========================================================================
+    // P0-C: CATEGORY VALIDATION (prevent schema pollution)
+    // =========================================================================
+    // If a category is provided, it MUST be a canonical EvidenceCategory.
+    // This prevents arbitrary categories from creating dynamic flags.
+    const categoryString = typeof category === 'string' && category.length > 0 ? category : undefined;
+
+    if (categoryString && !isEvidenceCategory(categoryString)) {
+      const validCategories = Object.values(EvidenceCategory).join(', ');
+      return NextResponse.json(
+        {
+          error: `Invalid evidence category: "${categoryString}". ` +
+                 `Must be one of: ${validCategories}`,
+          valid_categories: Object.values(EvidenceCategory),
+        },
+        { status: 400 }
+      );
+    }
+
+    // Use the validated canonical category (undefined if not provided)
+    const validatedCategory = categoryString as EvidenceCategory | undefined;
+
+    // =========================================================================
+    // FILE VALIDATION (P1 hardening - included in P0 rollout)
+    // =========================================================================
+    const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
+    const ALLOWED_MIME_TYPES = [
+      'application/pdf',
+      'image/jpeg',
+      'image/png',
+      'image/webp',
+      'image/gif',
+    ];
+
+    const fileSize = (file as any).size;
+    if (typeof fileSize === 'number' && fileSize > MAX_FILE_SIZE_BYTES) {
+      return NextResponse.json(
+        { error: `File too large. Maximum size is 10MB, received ${(fileSize / 1024 / 1024).toFixed(2)}MB` },
+        { status: 400 }
+      );
+    }
+
+    const mimeType = ((file as any).type || '').toLowerCase();
+    if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
+      return NextResponse.json(
+        {
+          error: `File type not allowed. Accepted types: PDF, JPEG, PNG, WebP, GIF. Received: ${mimeType || 'unknown'}`,
+        },
+        { status: 400 }
+      );
+    }
+
     const { data: caseRow, error: caseError } = await supabase
       .from('cases')
       .select('id, user_id, jurisdiction')
@@ -205,10 +258,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Could not upload file' }, { status: 500 });
     }
 
-    const { data: publicUrlData } = supabase.storage
-      .from('documents')
-      .getPublicUrl(objectKey);
-    const publicUrl = publicUrlData?.publicUrl || null;
+    // SECURITY: Do NOT use getPublicUrl() for evidence files.
+    // Store only the storage path (objectKey) - never expose public URLs.
+    // Downloads will be served via signed URLs through /api/evidence/download endpoint.
 
     const { data: documentRow, error: documentError } = await supabase
       .from('documents')
@@ -218,7 +270,7 @@ export async function POST(request: Request) {
         document_type: 'evidence',
         document_title: file.name || safeFilename,
         jurisdiction: caseRow.jurisdiction,
-        pdf_url: publicUrl || objectKey,
+        pdf_url: objectKey, // Store storage path only, NOT public URL
         is_preview: false,
       })
       .select('id, document_title, document_type, pdf_url, created_at')
@@ -233,7 +285,7 @@ export async function POST(request: Request) {
       id: randomUUID(),
       document_id: documentRow.id,
       question_id: questionId,
-      category: typeof category === 'string' && category.length > 0 ? (category as string) : undefined,
+      category: validatedCategory, // P0-C: Use validated canonical category
       file_name: file.name || safeFilename,
       storage_bucket: 'documents',
       storage_path: objectKey,
@@ -263,7 +315,7 @@ export async function POST(request: Request) {
 
       const flagsToSet = mapQuestionToEvidenceFlags(
         questionId,
-        typeof category === 'string' && category.length > 0 ? (category as string) : undefined,
+        validatedCategory, // P0-C: Use validated canonical category
       );
       for (const flag of flagsToSet) {
         (evidenceFlags as any)[flag] = true;
@@ -289,7 +341,7 @@ export async function POST(request: Request) {
         {
           fileName: file.name || safeFilename,
           mimeType: (file as any).type || 'application/octet-stream',
-          category: typeof category === 'string' && category.length > 0 ? (category as string) : undefined,
+          category: validatedCategory, // P0-C: Use validated canonical category
         },
         (factsSnapshot as any) || {},
       );

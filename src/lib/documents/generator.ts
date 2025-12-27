@@ -7,9 +7,14 @@
 
 import Handlebars from 'handlebars';
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer';
 import { SITE_CONFIG } from '@/config/site';
+
+// ESM compatibility: Get __dirname equivalent
+const __filename_esm = typeof __filename !== 'undefined' ? __filename : fileURLToPath(import.meta.url);
+const __dirname_esm = typeof __dirname !== 'undefined' ? __dirname : dirname(__filename_esm);
 
 // ============================================================================
 // TYPES
@@ -192,6 +197,116 @@ function registerHandlebarsHelpers() {
 registerHandlebarsHelpers();
 
 // ============================================================================
+// PRINT DESIGN SYSTEM
+// ============================================================================
+
+/**
+ * Essential inline CSS fallback when print.css cannot be loaded.
+ * This ensures notice PDFs are still styled even if file loading fails.
+ * Matches the core rules from config/jurisdictions/_shared/print/print.css
+ */
+const FALLBACK_PRINT_CSS = `
+/* Fallback print styles - used if print.css file cannot be loaded */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+@page { size: A4; margin: 0.75in 0.75in 1in 0.75in; }
+html { font-size: 12pt; }
+body { font-family: Arial, "Helvetica Neue", Helvetica, sans-serif; font-size: 12pt; line-height: 1.5; color: #000; background: #fff; max-width: 8.5in; margin: 0 auto; padding: 0.5in; word-wrap: break-word; }
+h1 { font-size: 14pt; font-weight: bold; line-height: 1.3; text-align: center; text-transform: uppercase; margin: 0 0 1em 0; page-break-after: avoid; }
+h2 { font-size: 12pt; font-weight: bold; line-height: 1.4; text-align: center; margin: 0 0 1em 0; page-break-after: avoid; }
+h3 { font-size: 12pt; font-weight: bold; line-height: 1.4; margin: 1.5em 0 0.5em 0; page-break-after: avoid; }
+p { margin: 0 0 0.75em 0; line-height: 1.5; }
+ul, ol { margin: 0.75em 0; padding-left: 1.5em; }
+li { margin-bottom: 0.5em; line-height: 1.5; }
+strong { font-weight: bold; }
+.link, a { color: #0066cc; text-decoration: underline; word-break: break-all; }
+.info-box { border: 2px solid #000; padding: 1em; margin: 1em 0 1.5em 0; background-color: #f9f9f9; page-break-inside: avoid; }
+.section { margin: 1.5em 0; page-break-inside: avoid; break-inside: avoid; }
+.field-label { font-weight: bold; margin-top: 0.75em; margin-bottom: 0.25em; display: block; }
+.field-value { margin-left: 0.25in; border-bottom: 1px dotted #666; min-height: 1.5em; padding: 0.25em 0; display: block; }
+.signature-block { margin-top: 2em; page-break-inside: avoid; break-inside: avoid; }
+.checkbox { display: inline-block; width: 1em; height: 1em; border: 1px solid #000; margin-right: 0.5em; vertical-align: middle; background-color: #fff; }
+.guidance-section { margin-top: 2em; padding-top: 1.5em; border-top: 2px solid #000; }
+.avoid-break { page-break-inside: avoid; break-inside: avoid; }
+table { width: 100%; border-collapse: collapse; margin: 1em 0; page-break-inside: avoid; }
+th, td { padding: 0.5em; border: 1px solid #ccc; text-align: left; vertical-align: top; }
+th { font-weight: bold; background-color: #f0f0f0; }
+`.trim();
+
+/**
+ * Load and cache the centralized print.css stylesheet
+ */
+let cachedPrintCss: string | null = null;
+
+export function loadPrintCss(): string {
+  if (cachedPrintCss) {
+    return cachedPrintCss;
+  }
+
+  // Try multiple possible paths for print.css
+  // This covers different runtime environments (dev, production, tests)
+  const possiblePaths = [
+    join(process.cwd(), 'config', 'jurisdictions', '_shared', 'print', 'print.css'),
+    join(__dirname_esm, '..', '..', '..', '..', 'config', 'jurisdictions', '_shared', 'print', 'print.css'),
+    join(process.cwd(), '..', 'config', 'jurisdictions', '_shared', 'print', 'print.css'),
+  ];
+
+  for (const printCssPath of possiblePaths) {
+    try {
+      cachedPrintCss = readFileSync(printCssPath, 'utf-8');
+      console.log('[PRINT SYSTEM] ✅ Loaded print.css from:', printCssPath);
+      console.log('[PRINT SYSTEM] CSS length:', cachedPrintCss.length, 'characters');
+      return cachedPrintCss;
+    } catch {
+      // Try next path
+    }
+  }
+
+  // Use fallback CSS if file cannot be loaded from any path
+  console.warn('[PRINT SYSTEM] ⚠️  Could not load print.css from any path, using fallback CSS');
+  console.warn('[PRINT SYSTEM] Tried paths:', possiblePaths);
+  cachedPrintCss = FALLBACK_PRINT_CSS;
+  return cachedPrintCss;
+}
+
+/**
+ * Register print component partials (from components.hbs)
+ * These partials provide reusable layout components for notices
+ */
+let partialsRegistered = false;
+
+export function registerPrintPartials(): void {
+  if (partialsRegistered) {
+    return; // Only register once
+  }
+
+  try {
+    const componentsPath = join(process.cwd(), 'config', 'jurisdictions', '_shared', 'print', 'components.hbs');
+    const componentsContent = readFileSync(componentsPath, 'utf-8');
+
+    // Parse and register all inline partials defined in components.hbs
+    // Handlebars {{#*inline "name"}} syntax defines partials that can be registered
+    const partialPattern = /\{\{#\*inline "([^"]+)"\}\}([\s\S]*?)\{\{\/inline\}\}/g;
+    let match;
+    let count = 0;
+
+    while ((match = partialPattern.exec(componentsContent)) !== null) {
+      const [, partialName, partialContent] = match;
+      Handlebars.registerPartial(partialName, partialContent);
+      count++;
+    }
+
+    partialsRegistered = true;
+    console.log(`[PRINT SYSTEM] ✅ Registered ${count} print component partials`);
+  } catch (error: any) {
+    console.warn('[PRINT SYSTEM] ⚠️  Could not load components.hbs:', error.message);
+    // Graceful fallback - templates will work without partials if they don't use them
+  }
+}
+
+// Initialize print system on module load
+registerPrintPartials();
+
+// ============================================================================
 // TEMPLATE LOADER
 // ============================================================================
 
@@ -214,12 +329,43 @@ export function loadTemplate(templatePath: string): string {
     );
   }
 
+  // ============================================================================
+  // WALES TEMPLATE GUARD: Block deleted bilingual/legacy templates
+  // ============================================================================
+  if (templatePath.includes('rhw20_section173_bilingual')) {
+    throw new Error(
+      `[TEMPLATE GUARD] Attempted to load deleted Wales bilingual template: ${templatePath}\n` +
+      `BLOCKED: Wales bilingual templates have been removed.\n` +
+      `Use English-only prescribed forms:\n` +
+      `  - For Section 173: Use generateWalesSection173Notice() (auto-selects RHW16 or RHW17)\n` +
+      `  - For fault-based: Use 'uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs'`
+    );
+  }
+
+  if (templatePath.includes('uk/wales/templates/notice_only/fault_based/notice.hbs') ||
+      templatePath.includes('/wales/templates/notice_only/fault_based/')) {
+    throw new Error(
+      `[TEMPLATE GUARD] Attempted to load deleted Wales legacy fault-based template: ${templatePath}\n` +
+      `BLOCKED: Legacy Wales fault-based templates have been removed.\n` +
+      `Use the prescribed form RHW23:\n` +
+      `  'uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs'`
+    );
+  }
+
+  if (templatePath.toLowerCase().includes('bilingual') && templatePath.includes('/wales/')) {
+    throw new Error(
+      `[TEMPLATE GUARD] Attempted to load bilingual Wales template: ${templatePath}\n` +
+      `BLOCKED: Bilingual templates are not available.\n` +
+      `Wales templates are English-only prescribed forms (RHW16, RHW17, RHW23).`
+    );
+  }
+
   // Prevent absolute paths
   if (templatePath.startsWith('/')) {
     throw new Error(
       `[TEMPLATE GUARD] Template path must be relative to config/jurisdictions/\n` +
       `Received absolute path: ${templatePath}\n` +
-      `Use relative paths like "uk/england/templates/eviction/section8_notice.hbs"`
+      `Use relative paths like "uk/england/templates/notice_only/form_3_section8/notice.hbs"`
     );
   }
 
@@ -290,6 +436,32 @@ function markdownToHtml(markdown: string): string {
 }
 
 /**
+ * Detect if HTML content is a full HTML document (with <!DOCTYPE>, <html>, <head>, etc.)
+ * These templates should NOT be processed with markdownToHtml or wrapped in another HTML shell.
+ *
+ * Detection is case-insensitive and based on trimmed content.
+ * Returns true if:
+ *   - starts with <!DOCTYPE or <html
+ *   - OR contains <html and <head> near the top of the document
+ */
+export function isFullHtmlDocument(html: string): boolean {
+  const trimmed = html.trim().toLowerCase();
+
+  // Check if starts with <!doctype or <html
+  if (trimmed.startsWith('<!doctype') || trimmed.startsWith('<html')) {
+    return true;
+  }
+
+  // Check for <html and <head> near the top (within first 500 chars after trimming)
+  const topPortion = trimmed.substring(0, 500);
+  if (topPortion.includes('<html') && topPortion.includes('<head')) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * Safe text helper - converts objects to strings, prevents [object Object]
  */
 export function safeText(value: any): string {
@@ -328,12 +500,24 @@ export function safeText(value: any): string {
   return String(value);
 }
 
+// Debug flag for PDF generation tracing
+const PDF_DEBUG = process.env.PDF_DEBUG === '1';
+
 /**
  * Compile a template with data
  */
 export function compileTemplate(templateContent: string, data: Record<string, any>): string {
   try {
-    // Add generation metadata + site config
+    // Load print CSS
+    const printCssContent = loadPrintCss();
+
+    if (PDF_DEBUG) {
+      console.log('[PDF_DEBUG] compileTemplate() called');
+      console.log('[PDF_DEBUG] print_css length:', printCssContent.length);
+      console.log('[PDF_DEBUG] print_css first 200 chars:', printCssContent.substring(0, 200));
+    }
+
+    // Add generation metadata + site config + print system
     const enrichedData = {
       ...data,
       generation_date: new Date().toISOString().split('T')[0],
@@ -344,6 +528,8 @@ export function compileTemplate(templateContent: string, data: Record<string, an
       site_name: SITE_CONFIG.name,
       site_url: SITE_CONFIG.url,
       support_email: SITE_CONFIG.support_email,
+      // Print Design System CSS (for templates that use {{> print_head}} or {{{print_css}}})
+      print_css: printCssContent,
     };
 
     // Safe-convert all data values to prevent [object Object] leaks
@@ -357,8 +543,24 @@ export function compileTemplate(templateContent: string, data: Record<string, an
     const template = Handlebars.compile(templateContent);
     let html = template(safeData);
 
-    // Convert markdown to HTML for PDF rendering
-    html = markdownToHtml(html);
+    if (PDF_DEBUG) {
+      console.log('[PDF_DEBUG] Compiled HTML first 300 chars:', html.substring(0, 300));
+      console.log('[PDF_DEBUG] isFullHtmlDocument:', isFullHtmlDocument(html));
+    }
+
+    // Skip markdown conversion for full HTML documents (those with <!DOCTYPE>, <html>, <head>)
+    // These templates have their own structure and styles that would be corrupted by markdownToHtml
+    if (!isFullHtmlDocument(html)) {
+      // Convert markdown to HTML for PDF rendering
+      html = markdownToHtml(html);
+      if (PDF_DEBUG) {
+        console.log('[PDF_DEBUG] Applied markdownToHtml (not a full HTML doc)');
+      }
+    } else {
+      if (PDF_DEBUG) {
+        console.log('[PDF_DEBUG] Skipped markdownToHtml (full HTML doc detected)');
+      }
+    }
 
     return html;
   } catch (error: any) {
@@ -490,6 +692,13 @@ export async function htmlToPdf(
 ): Promise<Buffer> {
   let browser;
 
+  if (PDF_DEBUG) {
+    console.log('[PDF_DEBUG] htmlToPdf() called');
+    console.log('[PDF_DEBUG] Input HTML length:', html.length);
+    console.log('[PDF_DEBUG] Input HTML first 300 chars:', html.substring(0, 300));
+    console.log('[PDF_DEBUG] isFullHtmlDocument in htmlToPdf:', isFullHtmlDocument(html));
+  }
+
   try {
     browser = await puppeteer.launch({
       headless: true,
@@ -498,8 +707,92 @@ export async function htmlToPdf(
 
     const page = await browser.newPage();
 
-    // Wrap in proper HTML structure with styling
-    const styledHtml = `
+    // Determine what HTML to use for PDF generation
+    let finalHtml: string;
+
+    if (isFullHtmlDocument(html)) {
+      if (PDF_DEBUG) {
+        console.log('[PDF_DEBUG] Full HTML document detected - passing through without wrapper');
+      }
+      // Full HTML documents already have their own structure and styles
+      // Pass them directly to Puppeteer without wrapping in another HTML shell
+
+      // Only inject @page rules if NOT already present in the HTML
+      // This preserves the template's intended margins (e.g., from print.css)
+      const hasPageRules = /@page\s*\{/i.test(html);
+
+      if (hasPageRules) {
+        // Template has its own @page rules - use HTML as-is
+        // The template (via print.css or embedded styles) controls margins
+        if (PDF_DEBUG) {
+          console.log('[PDF_DEBUG] @page rules already present - using HTML as-is');
+        }
+        finalHtml = html;
+      } else {
+        // No @page rules in template
+        // Only inject @page rules when explicitly requested via options.margins
+        // Otherwise, use minimal rules (margin: 0) to let template CSS control spacing
+        if (PDF_DEBUG) {
+          console.log('[PDF_DEBUG] No @page rules found - checking if margins explicitly requested');
+        }
+
+        if (options?.margins) {
+          // Explicit margins requested - inject them
+          if (PDF_DEBUG) {
+            console.log('[PDF_DEBUG] Explicit margins provided - injecting @page rules');
+          }
+          const pageRules = `
+    @page {
+      size: ${options?.pageSize || 'A4'};
+      margin: ${options.margins.top} ${options.margins.right} ${options.margins.bottom} ${options.margins.left};
+    }`;
+
+          // Inject @page rules before </style> or </head> if they exist
+          if (html.includes('</style>')) {
+            finalHtml = html.replace('</style>', `${pageRules}\n  </style>`);
+          } else if (html.toLowerCase().includes('</head>')) {
+            // Inject a style block before </head>
+            finalHtml = html.replace(
+              /<\/head>/i,
+              `<style>${pageRules}\n  </style>\n</head>`
+            );
+          } else {
+            // Fallback: use as-is (rare case)
+            finalHtml = html;
+          }
+        } else {
+          // No explicit margins - inject minimal @page with 0 margins
+          // Let the template's CSS (body padding, etc.) control spacing
+          if (PDF_DEBUG) {
+            console.log('[PDF_DEBUG] No explicit margins - injecting @page with margin: 0');
+          }
+          const pageRules = `
+    @page {
+      size: ${options?.pageSize || 'A4'};
+      margin: 0;
+    }`;
+
+          // Inject @page rules before </style> or </head> if they exist
+          if (html.includes('</style>')) {
+            finalHtml = html.replace('</style>', `${pageRules}\n  </style>`);
+          } else if (html.toLowerCase().includes('</head>')) {
+            // Inject a style block before </head>
+            finalHtml = html.replace(
+              /<\/head>/i,
+              `<style>${pageRules}\n  </style>\n</head>`
+            );
+          } else {
+            // Fallback: use as-is (rare case)
+            finalHtml = html;
+          }
+        }
+      }
+    } else {
+      if (PDF_DEBUG) {
+        console.log('[PDF_DEBUG] NOT a full HTML document - wrapping in default HTML structure');
+      }
+      // Wrap non-full HTML in proper HTML structure with styling
+      finalHtml = `
 <!DOCTYPE html>
 <html>
 <head>
@@ -633,58 +926,66 @@ export async function htmlToPdf(
 ${html}
 </body>
 </html>
-    `;
-
-    await page.setContent(styledHtml, { waitUntil: 'networkidle0' });
-
-    // Add watermark if specified
-    if (options?.watermark) {
-      await page.evaluate((watermarkText) => {
-        // Create watermark style that appears on EVERY page
-        const style = document.createElement('style');
-        style.textContent = `
-          @media print {
-            body::before {
-              content: "${watermarkText}";
-              position: fixed;
-              top: 50%;
-              left: 50%;
-              transform: translate(-50%, -50%) rotate(-45deg);
-              font-size: 80px;
-              font-weight: bold;
-              color: rgba(255, 0, 0, 0.15);
-              pointer-events: none;
-              z-index: 9999;
-              white-space: nowrap;
-              text-transform: uppercase;
-              letter-spacing: 5px;
-            }
-          }
-          body::before {
-            content: "${watermarkText}";
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            font-size: 80px;
-            font-weight: bold;
-            color: rgba(255, 0, 0, 0.15);
-            pointer-events: none;
-            z-index: 9999;
-            white-space: nowrap;
-            text-transform: uppercase;
-            letter-spacing: 5px;
-          }
-        `;
-        document.head.appendChild(style);
-      }, options.watermark);
+      `;
     }
 
-    const pdf = await page.pdf({
+    // Debug: Write final HTML to file for inspection
+    if (PDF_DEBUG) {
+      console.log('[PDF_DEBUG] finalHtml length:', finalHtml.length);
+      console.log('[PDF_DEBUG] finalHtml first 500 chars:', finalHtml.substring(0, 500));
+      // Check if styles are present
+      const styleMatch = finalHtml.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
+      if (styleMatch) {
+        console.log('[PDF_DEBUG] Style block found, length:', styleMatch[1].length);
+        console.log('[PDF_DEBUG] Style block first 300 chars:', styleMatch[1].substring(0, 300));
+      } else {
+        console.log('[PDF_DEBUG] WARNING: No style block found in finalHtml!');
+      }
+      // Write to /tmp for inspection
+      try {
+        const fs = await import('fs/promises');
+        await fs.writeFile('/tmp/form6a.final.html', finalHtml, 'utf-8');
+        console.log('[PDF_DEBUG] Wrote finalHtml to /tmp/form6a.final.html');
+      } catch (writeErr) {
+        console.log('[PDF_DEBUG] Failed to write debug file:', writeErr);
+      }
+    }
+
+    // Use networkidle2 instead of networkidle0 for more resilient waiting
+    // networkidle2 waits for ≤2 network connections vs 0, preventing timeout
+    // on complex templates like Form 6A with embedded resources
+    await page.setContent(finalHtml, {
+      waitUntil: 'networkidle2',
+      timeout: 45000  // Explicit 45s timeout (up from default 30s)
+    });
+
+    // ====================================================================================
+    // WATERMARK REMOVED - Simplified UX Change
+    // ====================================================================================
+    // Watermarks have been removed from all PDFs as part of the simplified notice-only
+    // validation UX. Preview and final PDFs are now generated without watermarks.
+    // Server-side validation at /api/wizard/generate remains the hard stop for compliance.
+    // See docs/pdf-watermark-audit.md for details on the removal.
+    // ====================================================================================
+
+    // For full HTML templates, prefer CSS @page rules so template controls margins
+    // For non-full HTML (wrapped content), use format option
+    const isFullHtml = isFullHtmlDocument(html);
+
+    // IMPORTANT: For full HTML templates, do NOT pass margin option at all.
+    // Let the template's @page CSS rules control margins entirely.
+    // Only pass margin for non-full-HTML where we inject our own @page rules.
+    const pdfOptions: Parameters<typeof page.pdf>[0] = {
       format: options?.pageSize || 'A4',
       printBackground: true,
-      preferCSSPageSize: false,
-    });
+      preferCSSPageSize: isFullHtml,
+    };
+
+    // For non-full-HTML, the injected @page rules handle margins via CSS,
+    // so we still don't need to pass Puppeteer margin options.
+    // The @page CSS rules are already in the finalHtml.
+
+    const pdf = await page.pdf(pdfOptions);
 
     return Buffer.from(pdf);
   } finally {
@@ -729,8 +1030,10 @@ export async function generateDocument(
   let pdf: Buffer | undefined;
   if (outputFormat === 'pdf' || outputFormat === 'both') {
     try {
-      const watermark = isPreview ? 'PREVIEW - NOT FOR COURT USE' : undefined;
-      pdf = await htmlToPdf(html, { watermark });
+      // WATERMARK REMOVED - Simplified UX Change
+      // All PDFs are now generated without watermarks (preview and final)
+      // See docs/pdf-watermark-audit.md for details
+      pdf = await htmlToPdf(html, {});
     } catch (error: any) {
       console.warn(`⚠️  PDF generation skipped: ${error.message}`);
       console.warn('   HTML output will still be generated.');

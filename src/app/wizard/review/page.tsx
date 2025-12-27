@@ -456,14 +456,32 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
             </>
           ) : (
             <>
-              <li className="flex items-center gap-2 text-sm">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
-                Section 8 Notice (if applicable)
-              </li>
-              <li className="flex items-center gap-2 text-sm">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
-                Section 21 Notice (if available)
-              </li>
+              {/* Route-specific notice display for England/Wales */}
+              {analysis.recommended_route === 'section_21' ||
+               analysis.recommended_route === 'accelerated_possession' ||
+               analysis.recommended_route === 'accelerated_section21' ? (
+                <li className="flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  Section 21 notice (Form 6A)
+                </li>
+              ) : analysis.recommended_route === 'section_8' ||
+                   analysis.recommended_route === 'section8_notice' ? (
+                <li className="flex items-center gap-2 text-sm">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  Section 8 notice (Form 3)
+                </li>
+              ) : (
+                <>
+                  <li className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    Section 8 notice (Form 3)
+                  </li>
+                  <li className="flex items-center gap-2 text-sm">
+                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    Section 21 notice (Form 6A)
+                  </li>
+                </>
+              )}
               {!product.includes('notice_only') && (
                 <li className="flex items-center gap-2 text-sm">
                   <CheckCircle2 className="h-4 w-4 text-green-600" />

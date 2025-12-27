@@ -72,7 +72,7 @@ function getGuidanceForQuestion(
 
       case 'ground_particulars':
       case 'evidence_details':
-        if (jurisdiction === 'england-wales') {
+        if (jurisdiction === 'england' || jurisdiction === 'wales') {
           return {
             title: '💡 Example particulars for England & Wales',
             examples: [
@@ -97,7 +97,7 @@ function getGuidanceForQuestion(
         return null;
 
       case 'deposit_protection_scheme':
-        if (jurisdiction === 'england-wales') {
+        if (jurisdiction === 'england' || jurisdiction === 'wales') {
           return {
             title: '💡 England & Wales deposit schemes',
             examples: [

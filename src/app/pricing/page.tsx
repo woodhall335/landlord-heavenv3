@@ -5,7 +5,7 @@ import { generateMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - Compare All Products",
-  description: "Compare Landlord Heaven pricing. Notices £29.99, Money Claims £179.99, Tenancy Agreements £39.99-£59.00, HMO Pro £19.99-£34.99/month.",
+  description: "Compare Landlord Heaven pricing. Notices £29.99, Money Claims £179.99, Tenancy Agreements £9.99-£14.99, HMO Pro £19.99-£34.99/month.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",
@@ -56,12 +56,12 @@ export default function PricingPage() {
                 </th>
                 <th className="text-center p-6 w-1/6">
                   <div className="font-semibold text-charcoal mb-2">Standard AST</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£39.99</div>
+                  <div className="text-3xl font-bold text-primary mb-1">£9.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6 w-1/6">
                   <div className="font-semibold text-charcoal mb-2">Premium AST</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£59.00</div>
+                  <div className="text-3xl font-bold text-primary mb-1">£14.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
                 <th className="text-center p-6 w-1/6">
@@ -337,7 +337,7 @@ export default function PricingPage() {
           {/* Standard AST */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Standard AST</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£39.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£9.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ AST/PRT/NI Agreement</li>
               <li>✅ Core Clauses</li>
@@ -355,7 +355,7 @@ export default function PricingPage() {
           {/* Premium AST */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Premium AST</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£59.00 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£14.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Everything in Standard</li>
               <li>✅ HMO Clauses</li>

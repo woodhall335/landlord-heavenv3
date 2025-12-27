@@ -2,7 +2,7 @@
  * Notice Only Preview API
  *
  * GET /api/notice-only/preview/[caseId]
- * Generates a watermarked preview of the complete Notice Only pack
+ * Generates a preview of the complete Notice Only pack (watermarks removed as part of simplified UX)
  */
 
 import { NextResponse } from 'next/server';
@@ -12,6 +12,14 @@ import type { CaseFacts } from '@/lib/case-facts/schema';
 import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/documents/notice-only-preview-merger';
 import { generateDocument } from '@/lib/documents/generator';
 import { validateNoticeOnlyJurisdiction, formatValidationErrors } from '@/lib/jurisdictions/validator';
+import { evaluateNoticeCompliance } from '@/lib/notices/evaluate-notice-compliance';
+import { validateNoticeOnlyBeforeRender } from '@/lib/documents/noticeOnly';
+import type { JurisdictionKey } from '@/lib/jurisdictions/rulesLoader';
+import {
+  type CanonicalJurisdiction,
+  deriveCanonicalJurisdiction,
+} from '@/lib/types/jurisdiction';
+import { validateForPreview } from '@/lib/validation/previewValidation';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -38,8 +46,21 @@ export async function GET(
   { params }: { params: Promise<{ caseId: string }> }
 ) {
   let caseId = '';
-  let jurisdiction: string | undefined;
+  let jurisdiction: CanonicalJurisdiction | undefined;
+  let validationJurisdiction: JurisdictionKey | undefined;
   let selected_route: string | undefined;
+
+  const extractGroundCodes = (section8Grounds: any[]): number[] => {
+    if (!Array.isArray(section8Grounds)) return [];
+    return section8Grounds
+      .map((g) => {
+        if (typeof g === 'number') return g;
+        if (typeof g !== 'string') return null;
+        const match = g.match(/Ground\s+(\d+)/i) || g.match(/ground[_\s](\d+)/i);
+        return match ? parseInt(match[1], 10) : null;
+      })
+      .filter((code): code is number => code !== null && !Number.isNaN(code));
+  };
 
   try {
     const resolvedParams = await params;
@@ -76,7 +97,42 @@ export async function GET(
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
 
     // Determine jurisdiction and notice type (assign to outer scope for error handling)
-    jurisdiction = caseRow.jurisdiction as 'england' | 'wales' | 'scotland' | 'england-wales';
+    const derivedJurisdiction = deriveCanonicalJurisdiction(
+      caseRow.jurisdiction,
+      wizardFacts,
+    );
+    jurisdiction = derivedJurisdiction ?? undefined;
+
+    if (!jurisdiction) {
+      return NextResponse.json(
+        {
+          code: 'INVALID_JURISDICTION',
+          error: 'Invalid or missing jurisdiction',
+          user_message: 'A supported jurisdiction is required to generate a preview.',
+          details: 'A supported jurisdiction is required to generate a preview.',
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
+    if (jurisdiction === 'northern-ireland') {
+      return NextResponse.json(
+        {
+          code: 'NI_NOTICE_PREVIEW_UNSUPPORTED',
+          error: 'NI_NOTICE_PREVIEW_UNSUPPORTED',
+          user_message:
+            'Eviction notices are not supported in Northern Ireland. Tenancy agreements remain available.',
+          details: 'Eviction notices are not supported in Northern Ireland. Tenancy agreements remain available.',
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
+    validationJurisdiction = jurisdiction as JurisdictionKey;
 
     // Determine selected route with jurisdiction-aware fallback (assign to outer scope for error handling)
     selected_route =
@@ -104,13 +160,17 @@ export async function GET(
       if (jurisdiction !== 'wales') {
         console.warn(`[NOTICE-PREVIEW-API] Jurisdiction mismatch: selected_route is ${selected_route} but jurisdiction is ${jurisdiction}. Overriding to 'wales'.`);
         jurisdiction = 'wales';
+        validationJurisdiction = 'wales';
       }
     } else if (selected_route === 'notice_to_leave') {
       if (jurisdiction !== 'scotland') {
         console.warn(`[NOTICE-PREVIEW-API] Jurisdiction mismatch: selected_route is ${selected_route} but jurisdiction is ${jurisdiction}. Overriding to 'scotland'.`);
         jurisdiction = 'scotland';
+        validationJurisdiction = 'scotland';
       }
     }
+
+    validationJurisdiction = validationJurisdiction || (jurisdiction as JurisdictionKey | undefined);
 
     // ============================================================================
     // VALIDATE JURISDICTION CONFIGURATION
@@ -137,17 +197,145 @@ export async function GET(
       console.warn('[NOTICE-PREVIEW-API] Jurisdiction warnings:\n', formatValidationErrors(validationResult));
     }
 
+    const groundCodes = extractGroundCodes(wizardFacts.section8_grounds || []);
+
+    // ============================================================================
+    // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
+    // ============================================================================
+    console.log('[NOTICE-PREVIEW-API] Running unified validation via validateForPreview');
+    const validationError = validateForPreview({
+      jurisdiction,
+      product: 'notice_only',
+      route: selected_route,
+      facts: wizardFacts,
+      caseId,
+    });
+
+    if (validationError) {
+      console.warn('[NOTICE-PREVIEW-API] Unified validation blocked preview:', {
+        case_id: caseId,
+      });
+      return validationError; // Already a NextResponse with standardized 422 payload
+    }
+
+    // ========================================================================
+    // LEGACY CONFIG-DRIVEN VALIDATION
+    //
+    // IMPORTANT: Since unified validation (validateForPreview) already ran and
+    // passed, legacy validation must NOT block. This prevents drift where legacy
+    // validators require fields the MQS doesn't collect.
+    //
+    // Legacy validation is kept for logging purposes only - any blocking issues
+    // are logged as warnings but do NOT block the preview.
+    // ========================================================================
+    const validationOutcome = validateNoticeOnlyBeforeRender({
+      jurisdiction: validationJurisdiction as JurisdictionKey,
+      facts: wizardFacts,
+      selectedGroundCodes: groundCodes,
+      selectedRoute: selected_route,
+      stage: 'preview',
+    });
+
+    const legacyBlockingIssues = validationOutcome.blocking ?? [];
+    const legacyWarnings = validationOutcome.warnings ?? [];
+
+    // Log legacy blocking issues for monitoring but do NOT block
+    // This prevents legacy validator drift from blocking compliant cases
+    // Gated behind NOTICE_ONLY_DEBUG to reduce log noise when unified validation passes
+    if (legacyBlockingIssues.length > 0 && process.env.NOTICE_ONLY_DEBUG === '1') {
+      console.warn('[NOTICE-PREVIEW-API] Legacy validation would have blocked (suppressed):', {
+        case_id: caseId,
+        issues: legacyBlockingIssues.map((b) => b.code),
+        note: 'Unified validation passed - legacy blocking suppressed to prevent drift',
+      });
+    }
+
+    // Legacy warnings are now gated behind NOTICE_ONLY_DEBUG flag
+    // since unified validation passed, these are noise
+    if (legacyWarnings.length > 0 && process.env.NOTICE_ONLY_DEBUG === '1') {
+      console.log('[NOTICE-PREVIEW-API] Legacy validation warnings:', {
+        case_id: caseId,
+        warnings: legacyWarnings.map((w) => w.code),
+      });
+    }
+
+    // ========================================================================
+    // FINAL COMPLIANCE CHECK BEFORE GENERATION
+    // ========================================================================
+    const compliance = evaluateNoticeCompliance({
+      jurisdiction,
+      product: 'notice_only',
+      selected_route,
+      wizardFacts,
+      stage: 'preview',
+    });
+
+    if (compliance.hardFailures.length > 0) {
+      // Return structured validation data for the preview page to render a "Fix Issues" UI
+      // NOTE: We do NOT return block_next_question for notice_only flows - navigation is never blocked.
+      // The preview page should render a fixable compliance panel instead of throwing an error.
+      console.info('[NOTICE-PREVIEW-API] Compliance check found blocking issues:', {
+        case_id: caseId,
+        jurisdiction,
+        route: selected_route,
+        failure_count: compliance.hardFailures.length,
+        warning_count: compliance.warnings.length,
+      });
+
+      return NextResponse.json(
+        {
+          code: 'NOTICE_NONCOMPLIANT',
+          error: 'NOTICE_NONCOMPLIANT',
+          ok: false,
+          // Structured blocking issues with canonical format
+          blocking_issues: compliance.hardFailures.map(f => ({
+            code: f.code,
+            affected_question_id: f.affected_question_id,
+            legal_reason: f.legal_reason,
+            user_fix_hint: f.user_fix_hint,
+            severity: 'blocking' as const,
+          })),
+          // Warnings for informational purposes
+          warnings: compliance.warnings.map(w => ({
+            code: w.code,
+            affected_question_id: w.affected_question_id,
+            legal_reason: w.legal_reason,
+            user_fix_hint: w.user_fix_hint,
+            severity: 'warning' as const,
+          })),
+          // Computed dates for display even when noncompliant
+          computed: compliance.computed ?? null,
+          // Issue counts for quick UI checks
+          issue_counts: {
+            blocking: compliance.hardFailures.length,
+            warnings: compliance.warnings.length,
+          },
+          // Metadata for debugging/display
+          jurisdiction,
+          route: selected_route,
+          case_id: caseId,
+        },
+        { status: 422 },
+      );
+    }
+
     const documents: NoticeOnlyDocument[] = [];
 
     // ===========================================================================
-    // ENGLAND & WALES NOTICE ONLY PACK
+    // ENGLAND NOTICE ONLY PACK
     // ===========================================================================
-    if (jurisdiction === 'england-wales') {
-      console.log('[NOTICE-PREVIEW-API] Generating England & Wales pack');
+    if (jurisdiction === 'england') {
+      console.log('[NOTICE-PREVIEW-API] Generating England pack');
 
       // Use mapNoticeOnlyFacts() to build template data with proper address concatenation,
       // ground normalization, deposit logic, and date handling
       const templateData = mapNoticeOnlyFacts(wizardFacts);
+
+      // Debug: Log the resolved service date to verify it matches user input
+      if (process.env.NOTICE_ONLY_DEBUG === '1') {
+        console.log('[NOTICE-PREVIEW-API] Resolved service_date:', templateData.service_date);
+        console.log('[NOTICE-PREVIEW-API] Resolved notice_date:', templateData.notice_date);
+      }
 
       // JURISDICTION VALIDATION: Block Section 8/21 for Wales
       // Section 8 and Section 21 only exist in England (Housing Act 1988)
@@ -236,6 +424,69 @@ export async function GET(
       templateData.grounds_count = templateData.grounds.length;
       templateData.has_mandatory_ground = templateData.grounds.some((g: any) => g.mandatory === true);
       templateData.ground_numbers = templateData.grounds.map((g: any) => g.code).join(', ');
+      // Ground descriptions for checklist (e.g., "Ground 8 – Serious rent arrears, Ground 11 – Persistent delay in paying rent")
+      templateData.ground_descriptions = templateData.grounds.map((g: any) => `Ground ${g.code} – ${g.title}`).join(', ');
+
+      // ========================================================================
+      // SECTION 21 DATE CALCULATION (FIX: Use proper Section 21 rules, not Section 8)
+      // Section 21 requires: max(service_date + 2 calendar months, fixed_term_end_date)
+      // ========================================================================
+      if (selected_route === 'section_21' && templateData.service_date) {
+        try {
+          const { calculateSection21ExpiryDate } = await import('@/lib/documents/notice-date-calculator');
+
+          const section21Result = calculateSection21ExpiryDate({
+            service_date: templateData.service_date,
+            tenancy_start_date: templateData.tenancy_start_date || templateData.service_date,
+            fixed_term: templateData.fixed_term === true || templateData.is_fixed_term === true,
+            fixed_term_end_date: templateData.fixed_term_end_date || undefined,
+            rent_period: templateData.rent_frequency || 'monthly',
+          });
+
+          if (section21Result) {
+            // Store the Section 21 specific expiry date
+            templateData.section21_expiry_date = section21Result.earliest_valid_date;
+            templateData.section21_expiry_date_formatted = formatUKDate(section21Result.earliest_valid_date);
+            templateData.section21_notice_period_days = section21Result.notice_period_days;
+            templateData.section21_explanation = section21Result.explanation;
+
+            // Also update notice_expiry_date for Form 6A
+            templateData.notice_expiry_date = section21Result.earliest_valid_date;
+            templateData.notice_expiry_date_formatted = formatUKDate(section21Result.earliest_valid_date);
+
+            console.log('[PDF] Section 21 calculated expiry date:', section21Result.earliest_valid_date);
+            console.log('[PDF] Section 21 explanation:', section21Result.explanation);
+          }
+        } catch (error) {
+          console.error('[PDF] Section 21 date calculation error:', error);
+        }
+      }
+
+      // ========================================================================
+      // DISPLAY_POSSESSION_DATE: Single source of truth for templates
+      // - Section 21: Uses notice_expiry_date (respects 2-month + fixed-term rules)
+      // - Section 8: Uses earliest_possession_date (ground-based)
+      // ========================================================================
+      if (selected_route === 'section_21') {
+        // Section 21: Use the properly calculated Section 21 expiry date
+        templateData.display_possession_date = templateData.section21_expiry_date || templateData.notice_expiry_date || templateData.earliest_possession_date;
+        templateData.display_possession_date_formatted = templateData.section21_expiry_date_formatted || templateData.notice_expiry_date_formatted || templateData.earliest_possession_date_formatted;
+      } else {
+        // Section 8 (and others): Use ground-based earliest possession date
+        templateData.display_possession_date = templateData.earliest_possession_date;
+        templateData.display_possession_date_formatted = templateData.earliest_possession_date_formatted;
+      }
+
+      console.log('[NOTICE-PREVIEW-API] Section 8 ground payload:',
+        templateData.grounds.map((g: any) => ({
+          code: g.code,
+          title: g.title,
+          type: g.type || g.type_label,
+          statutory_text: g.statutory_text?.slice(0, 120) || '',
+          particulars: g.particulars,
+          evidence: g.evidence,
+        }))
+      );
 
       // Pass through full facts for templates that need them
       templateData.caseFacts = caseFacts;
@@ -262,7 +513,7 @@ export async function GET(
         console.log('[NOTICE-PREVIEW-API] Generating Section 8 notice');
         try {
           const section8Doc = await generateDocument({
-            templatePath: 'uk/england-wales/templates/eviction/section8_notice.hbs',
+            templatePath: 'uk/england/templates/notice_only/form_3_section8/notice.hbs',
             data: templateData,
             outputFormat: 'pdf',
             isPreview: true,
@@ -305,7 +556,7 @@ export async function GET(
           };
 
           const section21Doc = await generateDocument({
-            templatePath: 'uk/england-wales/templates/eviction/section21_form6a.hbs',
+            templatePath: 'uk/england/templates/notice_only/form_6a_section21/notice.hbs',
             data: section21Data,
             outputFormat: 'pdf',
             isPreview: true,
@@ -426,29 +677,29 @@ export async function GET(
       if (selected_route === 'wales_section_173') {
         console.log('[NOTICE-PREVIEW-API] Generating Section 173 notice');
         try {
-          // Calculate expiry date (6 months from service for Section 173)
-          let expiryDate = templateData.earliest_possession_date;
-          if (!expiryDate && (templateData.service_date || templateData.notice_date)) {
-            const serviceDate = new Date(templateData.service_date || templateData.notice_date);
-            const expiry = new Date(serviceDate);
-            expiry.setMonth(expiry.getMonth() + 6);
-            expiryDate = expiry.toISOString().split('T')[0];
-          }
+          // Use the wales-section173-generator which automatically selects RHW16 or RHW17
+          const { generateWalesSection173Notice } = await import('@/lib/documents/wales-section173-generator');
 
+          // Prepare data for generator (it handles date calculations and template selection)
           const section173Data = {
-            ...templateData,
-            is_wales_section_173: true,
-            expiry_date: formatUKDate(expiryDate || ''),
-            // Calculate prohibited period (first 6 months)
-            prohibited_period_violation: false, // TODO: Calculate based on dates
+            landlord_full_name: templateData.landlord_full_name,
+            landlord_address: templateData.landlord_address,
+            contract_holder_full_name: templateData.contract_holder_full_name || templateData.tenant_full_name,
+            property_address: templateData.property_address,
+            contract_start_date: contractStartDate || templateData.tenancy_start_date,
+            rent_amount: templateData.rent_amount || 0,
+            rent_frequency: (templateData.rent_frequency || 'monthly') as 'weekly' | 'fortnightly' | 'monthly' | 'quarterly',
+            service_date: templateData.service_date || templateData.notice_date,
+            notice_service_date: templateData.notice_date || templateData.service_date,
+            expiry_date: templateData.earliest_possession_date,
+            notice_expiry_date: templateData.earliest_possession_date,
+            wales_contract_category: wizardFacts.wales_contract_category || 'standard',
+            rent_smart_wales_registered: wizardFacts.rent_smart_wales_registered,
+            deposit_taken: wizardFacts.deposit_taken || templateData.deposit_taken,
+            deposit_protected: wizardFacts.deposit_protected || templateData.deposit_protected,
           };
 
-          const section173Doc = await generateDocument({
-            templatePath: 'uk/wales/templates/eviction/section173_landlords_notice.hbs',
-            data: section173Data,
-            outputFormat: 'pdf',
-            isPreview: true,
-          });
+          const section173Doc = await generateWalesSection173Notice(section173Data, true);
           if (section173Doc.pdf) {
             documents.push({
               title: 'Section 173 Landlord\'s Notice (Wales)',
@@ -460,31 +711,63 @@ export async function GET(
           console.error('[NOTICE-PREVIEW-API] Section 173 generation failed:', err);
         }
       } else if (selected_route === 'wales_fault_based') {
-        console.log('[NOTICE-PREVIEW-API] Generating Wales fault-based notice');
+        console.log('[NOTICE-PREVIEW-API] Generating Wales fault-based notice (RHW23)');
         try {
-          // Determine if the breach is rent arrears
-          const breachType = wizardFacts.wales_breach_type || 'breach_of_contract';
-          const isRentArrears = breachType === 'rent_arrears' || breachType.toLowerCase().includes('arrears');
+          // Map fault-based section to breach particulars
+          const faultBasedSection = wizardFacts.wales_fault_based_section || '';
 
-          // Convert breach type enum to human-friendly display
-          const breachTypeDisplay = breachType === 'rent_arrears' ? 'Rent Arrears' :
-                                   breachType === 'anti_social_behaviour' ? 'Anti-Social Behaviour' :
-                                   breachType === 'property_damage' ? 'Property Damage' :
-                                   breachType === 'unauthorised_occupants' ? 'Unauthorised Occupants' :
-                                   breachType === 'breach_of_contract' ? 'Breach of Contract' :
-                                   breachType;
+          // Detect breach type from multiple possible fields
+          const breachType = wizardFacts.wales_breach_type || wizardFacts.breach_or_ground || '';
+          const isRentArrears =
+            breachType === 'rent_arrears' ||
+            breachType === 'arrears' ||
+            faultBasedSection.includes('Section 157') ||
+            faultBasedSection.includes('Section 159');
+
+          let breachParticulars = '';
+
+          // Build breach particulars based on section type or breach type
+          if (faultBasedSection.includes('Section 157')) {
+            // Serious rent arrears (2+ months) - Section 157
+            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
+            breachParticulars = `Breach of contract (section 157)\n\nSerious rent arrears (2+ months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
+          } else if (faultBasedSection.includes('Section 159')) {
+            // Rent arrears (less than 2 months) - Section 159
+            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
+            breachParticulars = `Breach of contract (section 159)\n\nRent arrears (less than 2 months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
+          } else if (faultBasedSection.includes('Section 161')) {
+            // Anti-social behaviour - Section 161
+            breachParticulars = `Breach of contract (section 161)\n\nAnti-social behaviour\n\n${wizardFacts.asb_description || wizardFacts.breach_description || wizardFacts.breach_details || ''}`;
+          } else if (faultBasedSection.includes('Section 162')) {
+            // Other breach - Section 162
+            breachParticulars = `Breach of contract (section 162)\n\n${wizardFacts.breach_description || wizardFacts.breach_details || ''}`;
+          } else if (isRentArrears) {
+            // Fallback: Detected rent arrears without specific section
+            // Default to Section 157 (serious arrears)
+            const arrearsAmount = wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount || 0;
+            breachParticulars = `Breach of contract (section 157)\n\nSerious rent arrears (2+ months)\n\nTotal arrears: £${arrearsAmount.toLocaleString('en-GB')}`;
+            console.log(`[NOTICE-PREVIEW-API] Wales fault-based: Detected rent arrears (${arrearsAmount}), defaulting to Section 157`);
+          } else {
+            // Final fallback: Use breach_description or breach_details as-is
+            breachParticulars = wizardFacts.breach_description || wizardFacts.breach_details || wizardFacts.asb_description || '';
+          }
+
+          // Log the computed breach particulars for debugging
+          console.log('[NOTICE-PREVIEW-API] Wales fault-based breach particulars:', {
+            faultBasedSection,
+            breachType,
+            arrearsAmount: wizardFacts.rent_arrears_amount || wizardFacts.arrears_amount,
+            breach_particulars_length: breachParticulars.length,
+            breach_particulars_preview: breachParticulars.substring(0, 100),
+          });
 
           const faultBasedData = {
             ...templateData,
-            is_wales_fault_based: true,
-            wales_breach_type: breachTypeDisplay,
-            wales_breach_type_rent_arrears: isRentArrears,
-            rent_arrears_amount: wizardFacts.rent_arrears_amount,
-            breach_details: wizardFacts.breach_details || templateData.ground_particulars,
+            breach_particulars: breachParticulars,
           };
 
           const faultDoc = await generateDocument({
-            templatePath: 'uk/wales/templates/eviction/fault_based_notice.hbs',
+            templatePath: 'uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs',
             data: faultBasedData,
             outputFormat: 'pdf',
             isPreview: true,
@@ -492,7 +775,7 @@ export async function GET(
 
           if (faultDoc.pdf) {
             documents.push({
-              title: 'Fault-Based Breach Notice (Wales)',
+              title: 'Notice Before Making a Possession Claim (RHW23)',
               category: 'notice',
               pdf: faultDoc.pdf,
             });
@@ -663,7 +946,7 @@ export async function GET(
       console.log('[NOTICE-PREVIEW-API] Generating Notice to Leave');
       try {
         const noticeDoc = await generateDocument({
-          templatePath: 'uk/scotland/templates/eviction/notice_to_leave.hbs',
+          templatePath: 'uk/scotland/templates/notice_only/notice_to_leave_prt_2017/notice.hbs',
           data: templateData,
           outputFormat: 'pdf',
           isPreview: true,
@@ -734,11 +1017,12 @@ export async function GET(
 
     console.log('[NOTICE-PREVIEW-API] Merging', documents.length, 'documents into preview');
 
+    // Generate preview PDF (watermarks removed as part of simplified UX)
     const previewPdf = await generateNoticeOnlyPreview(documents, {
       jurisdiction,
       notice_type: selected_route as any,
       includeTableOfContents: true,
-      watermarkText: 'PREVIEW - Complete Purchase (£29.99) to Download',
+      // watermarkText removed - see docs/pdf-watermark-audit.md
     });
 
     console.log('[NOTICE-PREVIEW-API] Preview generated successfully');

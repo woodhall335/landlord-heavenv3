@@ -6,15 +6,16 @@
  * They verify rule selection logic without file system access.
  */
 
+import { vi } from 'vitest';
 import { getWalesSection173Rule, getWalesFaultBasedRule } from '../wales-notice-periods';
 
 // Mock the config loading to avoid file system in tests
-jest.mock('../wales-notice-periods', () => {
-  const actualModule = jest.requireActual('../wales-notice-periods');
+vi.mock('../wales-notice-periods', async () => {
+  const actualModule = await vi.importActual('../wales-notice-periods');
 
   return {
     ...actualModule,
-    loadWalesNoticePeriods: jest.fn().mockResolvedValue({
+    loadWalesNoticePeriods: vi.fn().mockResolvedValue({
       section_173_no_fault: {
         rules: [
           {
@@ -192,8 +193,8 @@ describe('Wales Config Structure', () => {
     const rule2017 = await getWalesSection173Rule('2017-01-01');
     const rule2023 = await getWalesSection173Rule('2023-01-01');
 
-    expect(new Date(rule2017.effective_from)).toBeLessThan(
-      new Date(rule2023.effective_from)
+    expect(new Date(rule2017.effective_from).getTime()).toBeLessThan(
+      new Date(rule2023.effective_from).getTime()
     );
   });
 });

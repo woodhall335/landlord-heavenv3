@@ -3,11 +3,11 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Assured Shorthold Tenancy Agreement (AST) | England & Wales | Landlord Heaven',
-  description: 'Create a legally compliant Assured Shorthold Tenancy Agreement for England & Wales. Covers Housing Act 1988, Tenant Fees Act 2019, and all legal requirements. Standard (£39.99) and Premium (£59.00) options available.',
+  description: 'Create a legally compliant Assured Shorthold Tenancy Agreement for England & Wales. Covers Housing Act 1988, Tenant Fees Act 2019, and all legal requirements. Standard (£9.99) and Premium (£14.99) options available.',
   keywords: 'AST, Assured Shorthold Tenancy, tenancy agreement England Wales, AST agreement, residential tenancy UK, landlord forms, rental agreement, housing act 1988, tenant fees act 2019',
   openGraph: {
     title: 'Assured Shorthold Tenancy Agreement (AST) | England & Wales',
-    description: 'Create a legally compliant AST for England & Wales. Standard (£39.99) and Premium (£59.00) options.',
+    description: 'Create a legally compliant AST for England & Wales. Standard (£9.99) and Premium (£14.99) options.',
     type: 'website',
     url: 'https://landlordheaven.co.uk/tenancy-agreements/england-wales',
   },
@@ -39,7 +39,7 @@ export default function EnglandWalesASTPage() {
         name: 'What is the difference between Standard and Premium AST agreements?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'The Standard AST (£39.99) covers all legal essentials for a compliant tenancy. The Premium AST (£59.00) adds comprehensive inventory sections, exhaustive terms and conditions (13 detailed clauses), professional gradient styling, rights of change clauses, and enhanced legal compliance information boxes.',
+          text: 'The Standard AST (£9.99) covers all legal essentials for a compliant tenancy. The Premium AST (£14.99) adds comprehensive inventory sections, exhaustive terms and conditions (13 detailed clauses), professional gradient styling, rights of change clauses, and enhanced legal compliance information boxes.',
         },
       },
       {
@@ -94,13 +94,13 @@ export default function EnglandWalesASTPage() {
       {
         '@type': 'Offer',
         name: 'Standard AST',
-        price: '39.99',
+        price: '9.99',
         priceCurrency: 'GBP',
       },
       {
         '@type': 'Offer',
         name: 'Premium AST',
-        price: '59.00',
+        price: '14.99',
         priceCurrency: 'GBP',
       },
     ],
@@ -144,13 +144,13 @@ export default function EnglandWalesASTPage() {
                 href="/wizard?jurisdiction=england-wales&document_type=ast_standard"
                 className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg"
               >
-                Create Standard AST - £39.99
+                Create Standard AST - £9.99
               </Link>
               <Link
                 href="/wizard?jurisdiction=england-wales&document_type=ast_premium"
                 className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:hover:bg-primary-dark transition-colors text-lg"
               >
-                Create Premium AST - £59.00
+                Create Premium AST - £14.99
               </Link>
             </div>
           </div>
@@ -634,7 +634,7 @@ export default function EnglandWalesASTPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                  <h4 className="text-xl font-bold mb-3">Standard AST - £39.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Standard AST - £9.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>✓ All legal essentials included</li>
                     <li>✓ Compliant with Housing Act 1988 & Tenant Fees Act 2019</li>
@@ -655,7 +655,7 @@ export default function EnglandWalesASTPage() {
                   <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
                     RECOMMENDED
                   </div>
-                  <h4 className="text-xl font-bold mb-3">Premium AST - £59.00</h4>
+                  <h4 className="text-xl font-bold mb-3">Premium AST - £14.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>✓ Everything in Standard PLUS:</li>
                     <li>✓ Comprehensive inventory section with white goods grid</li>
@@ -954,10 +954,10 @@ export default function EnglandWalesASTPage() {
                   What is the difference between Standard and Premium AST agreements?
                 </summary>
                 <p className="mt-3 text-gray-700">
-                  The <strong>Standard AST (£39.99)</strong> covers all legal essentials for a compliant tenancy, including deposit protection, tenancy terms, landlord/tenant obligations, and standard conditions.
+                  The <strong>Standard AST (£9.99)</strong> covers all legal essentials for a compliant tenancy, including deposit protection, tenancy terms, landlord/tenant obligations, and standard conditions.
                 </p>
                 <p className="mt-2 text-gray-700">
-                  The <strong>Premium AST (£59.00)</strong> adds: comprehensive inventory sections with white goods grid, exhaustive terms and conditions (13 detailed clauses covering every scenario), professional gradient styling, rights of change clauses for flexibility, enhanced legal compliance information boxes, detailed repair obligations under Landlord & Tenant Act 1985, and superior professional presentation that impresses tenants and agents.
+                  The <strong>Premium AST (£14.99)</strong> adds: comprehensive inventory sections with white goods grid, exhaustive terms and conditions (13 detailed clauses covering every scenario), professional gradient styling, rights of change clauses for flexibility, enhanced legal compliance information boxes, detailed repair obligations under Landlord & Tenant Act 1985, and superior professional presentation that impresses tenants and agents.
                 </p>
               </details>
 
@@ -1077,13 +1077,13 @@ export default function EnglandWalesASTPage() {
                 href="/wizard?jurisdiction=england-wales&document_type=ast_standard"
                 className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-lg shadow-lg"
               >
-                Standard AST - £39.99
+                Standard AST - £9.99
               </Link>
               <Link
                 href="/wizard?jurisdiction=england-wales&document_type=ast_premium"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
-                Premium AST - £59.00 ⭐
+                Premium AST - £14.99 ⭐
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">

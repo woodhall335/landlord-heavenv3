@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
-import councilsData from '@/config/jurisdictions/uk/england-wales/councils.json';
+import councilsData from '@/config/jurisdictions/uk/england/councils.json';
 
 // Function to lookup council by postcode
 function getCouncilByPostcode(postcode: string): { name: string; website: string } | null {
@@ -689,7 +689,7 @@ export default function HMOLicenseChecker() {
                 for all tenants. Individual agreements give you more flexibility (tenants can move out
                 independently) but require more administration. Joint agreements make all tenants
                 jointly and severally liable for the rent, providing more security. Our paid HMO
-                tenancy agreement product (£39.99) includes both options with HMO-specific terms.
+                tenancy agreement product (from £9.99) includes both options with HMO-specific terms.
               </p>
             </div>
           </div>

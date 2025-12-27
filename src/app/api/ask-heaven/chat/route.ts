@@ -8,7 +8,7 @@ import { ASK_HEAVEN_BASE_SYSTEM_PROMPT } from '@/lib/ai/ask-heaven';
 const chatSchema = z.object({
   case_id: z.string().optional(),
   case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']).optional(),
-  jurisdiction: z.enum(['england-wales', 'scotland', 'northern-ireland']).optional(),
+  jurisdiction: z.enum(['england', 'wales', 'scotland', 'northern-ireland']).optional(),
   product: z
     .enum(['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'])
     .optional(),

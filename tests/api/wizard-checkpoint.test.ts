@@ -26,18 +26,32 @@ vi.mock('@/lib/supabase/server', () => ({
   getServerUser: vi.fn(async () => null),
 }));
 
+// Minimal compliant facts that work across jurisdictions
+// Manually specified to avoid import issues in mock context
+// Note: Checkpoint stage requires fewer facts than generate stage
+const compliantWizardFacts = {
+  __meta: { product: 'notice_only' },
+  landlord_full_name: 'Test Landlord',
+  landlord_address_line1: '123 Test Street',
+  landlord_city: 'London',
+  landlord_postcode: 'SW1A 1AA',
+  tenant_full_name: 'Test Tenant',
+  property_address_line1: '456 Property St',
+  property_city: 'London',
+  property_postcode: 'SW1A 2BB',
+  tenancy_start_date: '2023-01-01',
+  rent_amount: 1000,
+  rent_frequency: 'monthly',
+  deposit_taken: false,
+  has_gas_appliances: false,
+  how_to_rent_given: true,
+  epc_provided: true,
+  gas_safety_cert_provided: false,
+  rent_smart_wales_registered: true, // Wales-specific compliance
+};
+
 vi.mock('@/lib/case-facts/store', () => ({
-  getOrCreateWizardFacts: vi.fn(async () => ({
-    __meta: { product: 'notice_only' },
-    landlord_full_name: 'Test Landlord',
-    tenant_full_name: 'Test Tenant',
-    property_address_line1: '123 Test Street',
-    tenancy_start_date: '2024-01-01',
-    rent_amount: 1000,
-    deposit_protected: true,
-    deposit_amount: 1000,
-    total_arrears: 2000,
-  })),
+  getOrCreateWizardFacts: vi.fn(async () => compliantWizardFacts),
 }));
 
 vi.mock('@/lib/case-facts/normalize', () => ({
@@ -141,9 +155,10 @@ describe('Wizard API Checkpoint', () => {
     vi.clearAllMocks();
     supabaseClientMock.single.mockResolvedValue({
       data: {
-        id: 'case-123',
+        id: '123e4567-e89b-12d3-a456-426614174000',
         jurisdiction: 'england',
         case_type: 'eviction',
+        product: 'notice_only', // Match wizard facts product
         user_id: null,
         wizard_progress: 50,
       },
@@ -156,7 +171,7 @@ describe('Wizard API Checkpoint', () => {
     const request = new Request('http://localhost/api/wizard/checkpoint', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ case_id: 'case-123' }),
+      body: JSON.stringify({ case_id: '123e4567-e89b-12d3-a456-426614174000' }),
     }) as NextRequest;
 
     const response = await checkpointWizard(request);
@@ -165,7 +180,7 @@ describe('Wizard API Checkpoint', () => {
     expect(response.status).toBe(200);
     expect(body.ok).toBe(true);
     expect(body.status).toBe('ok');
-    expect(body.case_id).toBe('case-123');
+    expect(body.case_id).toBe('123e4567-e89b-12d3-a456-426614174000');
     expect(body.recommended_route).toBe('section_8');
     expect(body.recommended_routes).toEqual(['section_8']);
   });
@@ -174,7 +189,7 @@ describe('Wizard API Checkpoint', () => {
     const request = new Request('http://localhost/api/wizard/checkpoint', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ case_id: 'case-123' }),
+      body: JSON.stringify({ case_id: '123e4567-e89b-12d3-a456-426614174000' }),
     }) as NextRequest;
 
     await checkpointWizard(request);
@@ -182,7 +197,7 @@ describe('Wizard API Checkpoint', () => {
     expect(supabaseClientMock.update).toHaveBeenCalledWith({
       recommended_route: 'section_8',
     });
-    expect(supabaseClientMock.eq).toHaveBeenCalledWith('id', 'case-123');
+    expect(supabaseClientMock.eq).toHaveBeenCalledWith('id', '123e4567-e89b-12d3-a456-426614174000');
   });
 
   it('returns structured error for missing case_id', async () => {
@@ -195,7 +210,7 @@ describe('Wizard API Checkpoint', () => {
     const response = await checkpointWizard(request);
     const body = await response.json();
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     expect(body.ok).toBe(false);
     expect(body.error).toBe('Invalid request');
     expect(body.missingFields).toContain('case_id');
@@ -210,7 +225,7 @@ describe('Wizard API Checkpoint', () => {
     const request = new Request('http://localhost/api/wizard/checkpoint', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ case_id: 'invalid-id' }),
+      body: JSON.stringify({ case_id: '999e4567-e89b-12d3-a456-426614174999' }),
     }) as NextRequest;
 
     const response = await checkpointWizard(request);
@@ -224,7 +239,7 @@ describe('Wizard API Checkpoint', () => {
   it('returns early for money_claim case_type', async () => {
     supabaseClientMock.single.mockResolvedValue({
       data: {
-        id: 'case-123',
+        id: '123e4567-e89b-12d3-a456-426614174000',
         jurisdiction: 'england',
         case_type: 'money_claim',
         user_id: null,
@@ -236,7 +251,7 @@ describe('Wizard API Checkpoint', () => {
     const request = new Request('http://localhost/api/wizard/checkpoint', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ case_id: 'case-123' }),
+      body: JSON.stringify({ case_id: '123e4567-e89b-12d3-a456-426614174000' }),
     }) as NextRequest;
 
     const response = await checkpointWizard(request);
@@ -250,7 +265,7 @@ describe('Wizard API Checkpoint', () => {
   it('blocks NI eviction cases with structured error', async () => {
     supabaseClientMock.single.mockResolvedValue({
       data: {
-        id: 'case-123',
+        id: '123e4567-e89b-12d3-a456-426614174000',
         jurisdiction: 'northern-ireland',
         case_type: 'eviction',
         user_id: null,
@@ -262,14 +277,132 @@ describe('Wizard API Checkpoint', () => {
     const request = new Request('http://localhost/api/wizard/checkpoint', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ case_id: 'case-123' }),
+      body: JSON.stringify({ case_id: '123e4567-e89b-12d3-a456-426614174000' }),
     }) as NextRequest;
 
     const response = await checkpointWizard(request);
     const body = await response.json();
 
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     expect(body.ok).toBe(false);
     expect(body.error).toBe('NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED');
+  });
+
+  it('accepts canonical jurisdiction "england" and normalizes for decision engine', async () => {
+    supabaseClientMock.single.mockResolvedValue({
+      data: {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        jurisdiction: 'england',
+        case_type: 'eviction',
+        product: 'notice_only',
+        user_id: null,
+        wizard_progress: 50,
+      },
+      error: null,
+    });
+
+    const request = new Request('http://localhost/api/wizard/checkpoint', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ case_id: '123e4567-e89b-12d3-a456-426614174000' }),
+    }) as NextRequest;
+
+    const response = await checkpointWizard(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.ok).toBe(true);
+    expect(body.status).toBe('ok');
+  });
+
+  it('accepts canonical jurisdiction "wales" and normalizes for decision engine', async () => {
+    supabaseClientMock.single.mockResolvedValue({
+      data: {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        jurisdiction: 'wales',
+        case_type: 'eviction',
+        product: 'notice_only',
+        user_id: null,
+        wizard_progress: 50,
+      },
+      error: null,
+    });
+
+    // Override wizard facts for Wales with Wales-specific route
+    const { getOrCreateWizardFacts } = await import('@/lib/case-facts/store');
+    vi.mocked(getOrCreateWizardFacts).mockResolvedValueOnce({
+      ...compliantWizardFacts,
+      selected_notice_route: 'wales_section_173', // Wales uses section 173, not section 8
+    } as any);
+
+    const request = new Request('http://localhost/api/wizard/checkpoint', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ case_id: '123e4567-e89b-12d3-a456-426614174000' }),
+    }) as NextRequest;
+
+    const response = await checkpointWizard(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.ok).toBe(true);
+    expect(body.status).toBe('ok');
+  });
+
+  it('still accepts legacy jurisdiction "england-wales" for backwards compatibility', async () => {
+    supabaseClientMock.single.mockResolvedValue({
+      data: {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        jurisdiction: 'england-wales',
+        case_type: 'eviction',
+        product: 'notice_only',
+        user_id: null,
+        wizard_progress: 50,
+        collected_facts: {
+          property_location: 'england', // Required for migration from legacy england-wales
+        },
+      },
+      error: null,
+    });
+
+    const request = new Request('http://localhost/api/wizard/checkpoint', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ case_id: '123e4567-e89b-12d3-a456-426614174000' }),
+    }) as NextRequest;
+
+    const response = await checkpointWizard(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.ok).toBe(true);
+    expect(body.status).toBe('ok');
+  });
+
+  it('rejects invalid jurisdiction values', async () => {
+    supabaseClientMock.single.mockResolvedValue({
+      data: {
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        jurisdiction: 'invalid',
+        case_type: 'eviction',
+        user_id: null,
+        wizard_progress: 50,
+      },
+      error: null,
+    });
+
+    const request = new Request('http://localhost/api/wizard/checkpoint', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ case_id: '123e4567-e89b-12d3-a456-426614174000' }),
+    }) as NextRequest;
+
+    const response = await checkpointWizard(request);
+    const body = await response.json();
+
+    expect(response.status).toBe(422);
+    expect(body.ok).toBe(false);
+    expect(body.error).toBe('Invalid jurisdiction');
+    expect(body.reason).toBeDefined();
   });
 });

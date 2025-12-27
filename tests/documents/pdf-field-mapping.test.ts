@@ -80,19 +80,19 @@ describe('PDF field mappings align with official forms', () => {
   it('matches critical N5 fields', async () => {
     const fields = await loadFieldNames('n5-eng.pdf');
     const expected = [
-      'In the court',
-      'Fee account no',
-      "claimant's details",
-      "defendant's details",
-      'possession of',
-      'Full name of the person signing the Statement of Truth',
-      'Name of claimant’s legal representative’s firm',
-      'Statement of Truth is signed by the Claimant’s legal representative (as defined by CPR 2.3(1))',
-      'building and street - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
-      'Second line of address - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
-      'Town or city - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
-      'County (optional) - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent',
-      'Postcode - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent'
+      "In the court",
+      "Fee account no",
+      "claimant’s details",
+      "defendant’s details",
+      "possession of",
+      "Full name of the person signing the Statement of Truth",
+      "Name of claimant’s legal representative’s firm",
+      "Statement of Truth is signed by the Claimant’s legal representative (as defined by CPR 2.3(1))",
+      "building and street - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent",
+      "Second line of address - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent",
+      "Town or city - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent",
+      "County (optional) - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent",
+      "Postcode - Claimant’s or claimant’s legal representative’s address to which documents or payments should be sent"
     ];
 
     expected.forEach((name) => expect(fields.has(name)).toBe(true));

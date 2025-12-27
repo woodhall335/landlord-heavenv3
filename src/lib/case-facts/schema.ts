@@ -21,6 +21,7 @@ export interface WizardFactsMeta {
 
 export interface WizardFacts {
   __meta?: WizardFactsMeta;
+  __smart_review?: PersistedSmartReview;
   [key: string]: any; // Flat MQS keys like property_address_line1, tenants.0.full_name, etc.
 }
 
@@ -47,6 +48,10 @@ export interface TenancyFacts {
   deposit_reference?: string | null;
   // For deposit prescribed information (England & Wales)
   prescribed_info_given?: boolean | null;
+  // Deposit cap confirmation (England Section 21 only - Tenant Fees Act 2019)
+  // Required when deposit_amount exceeds legal cap (5 weeks rent, or 6 weeks if annual rent > £50k)
+  // Confirms landlord has refunded/reduced deposit to within legal limit
+  deposit_reduced_to_legal_cap_confirmed?: boolean | null;
 }
 
 export interface PropertyAddress {
@@ -156,6 +161,8 @@ export interface CourtFacts {
   total_claim_amount: number | null;
   claimant_reference?: string | null;
   court_name?: string | null;
+  court_address?: string | null;
+  court_postcode?: string | null;
   particulars_of_claim?: string | null;
   n5_required: boolean | null;
   n119_required: boolean | null;
@@ -249,6 +256,68 @@ export interface MetaFacts {
   case_id?: string | null;
 }
 
+// =============================================================================
+// Smart Review Persistence Types
+// =============================================================================
+
+/**
+ * Persisted Smart Review warning (stripped to essential fields for storage).
+ * Full warning type is in evidence/warnings.ts.
+ */
+export interface PersistedSmartReviewWarning {
+  code: string;
+  severity: 'info' | 'warning' | 'blocker';
+  title: string;
+  message: string;
+  fields: string[];
+  relatedUploads: string[];
+  suggestedUserAction: string;
+  confidence?: number;
+  comparison?: {
+    wizardValue: any;
+    extractedValue: any;
+    source?: string;
+  };
+}
+
+/**
+ * Persisted Smart Review run metadata.
+ * Stored in case_facts.facts.__smart_review to survive refresh.
+ */
+export interface PersistedSmartReview {
+  /** When this run occurred (ISO timestamp) */
+  ranAt: string;
+  /** All warnings from the most recent run */
+  warnings: PersistedSmartReviewWarning[];
+  /** Summary counts from the run */
+  summary: {
+    documentsProcessed: number;
+    documentsCached: number;
+    documentsSkipped: number;
+    documentsTimedOut: number;
+    pagesProcessed: number;
+    warningsTotal: number;
+    warningsBlocker: number;
+    warningsWarning: number;
+    warningsInfo: number;
+  };
+  /** Limits that were applied */
+  limitsApplied?: {
+    maxFilesPerRun: number;
+    maxPagesPerPdf: number;
+    maxTotalPages: number;
+    filesExceededLimit?: boolean;
+    pagesExceededLimit?: boolean;
+  };
+  /** If Smart Review was skipped */
+  skipped?: {
+    reason: string;
+    code: string;
+  };
+  /** Total cost in USD (for internal tracking) */
+  costUsd?: number;
+}
+
 // -----------------------------------------------------------------------------
 // Case health / risk scoring
 // -----------------------------------------------------------------------------
@@ -321,6 +390,7 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     deposit_protection_date: null,
     deposit_reference: null,
     prescribed_info_given: null,
+    deposit_reduced_to_legal_cap_confirmed: null,
   },
   property: {
     address_line1: null,
@@ -387,6 +457,8 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     total_claim_amount: null,
     claimant_reference: null,
     court_name: null,
+    court_address: null,
+    court_postcode: null,
     particulars_of_claim: null,
     n5_required: null,
     n119_required: null,

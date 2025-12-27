@@ -62,13 +62,13 @@ export default function NorthernIrelandTenancyPage() {
       {
         '@type': 'Offer',
         name: 'Standard Private Tenancy',
-        price: '39.99',
+        price: '9.99',
         priceCurrency: 'GBP',
       },
       {
         '@type': 'Offer',
         name: 'Premium Private Tenancy',
-        price: '59.00',
+        price: '14.99',
         priceCurrency: 'GBP',
       },
     ],
@@ -117,13 +117,13 @@ export default function NorthernIrelandTenancyPage() {
                 href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy"
                 className="bg-red-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-red-700 transition-colors text-lg"
               >
-                Create Standard - £39.99
+                Create Standard - £9.99
               </Link>
               <Link
                 href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy_premium"
                 className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:hover:bg-primary-dark transition-colors text-lg"
               >
-                Create Premium - £59.00
+                Create Premium - £14.99
               </Link>
             </div>
           </div>
@@ -664,7 +664,7 @@ export default function NorthernIrelandTenancyPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-6">
-                  <h4 className="text-xl font-bold mb-3">Standard - £39.99</h4>
+                  <h4 className="text-xl font-bold mb-3">Standard - £9.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>✓ All legal essentials for NI tenancies</li>
                     <li>✓ 2025 legal updates (EICR, rent restrictions)</li>
@@ -685,7 +685,7 @@ export default function NorthernIrelandTenancyPage() {
                   <div className="inline-block bg-yellow-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold mb-2">
                     RECOMMENDED
                   </div>
-                  <h4 className="text-xl font-bold mb-3">Premium - £59.00</h4>
+                  <h4 className="text-xl font-bold mb-3">Premium - £14.99</h4>
                   <ul className="space-y-2 text-sm">
                     <li>✓ Everything in Standard PLUS:</li>
                     <li>✓ Comprehensive inventory section with white goods grid</li>
@@ -931,10 +931,10 @@ export default function NorthernIrelandTenancyPage() {
                   What is the difference between Standard and Premium agreements?
                 </summary>
                 <p className="mt-3 text-gray-700">
-                  The <strong>Standard (£39.99)</strong> covers all legal essentials for NI tenancies, including 2025 updates, deposit protection, and length-based notice periods.
+                  The <strong>Standard (£9.99)</strong> covers all legal essentials for NI tenancies, including 2025 updates, deposit protection, and length-based notice periods.
                 </p>
                 <p className="mt-2 text-gray-700">
-                  The <strong>Premium (£59.00)</strong> adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (NI red theme), enhanced 2025 legal compliance boxes, rights of change clauses, detailed repair obligations, and superior professional presentation.
+                  The <strong>Premium (£14.99)</strong> adds: comprehensive inventory section with white goods grid, exhaustive terms and conditions (13 detailed clauses), professional gradient styling (NI red theme), enhanced 2025 legal compliance boxes, rights of change clauses, detailed repair obligations, and superior professional presentation.
                 </p>
               </details>
 
@@ -1024,13 +1024,13 @@ export default function NorthernIrelandTenancyPage() {
                 href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy"
                 className="bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-red-50 transition-colors text-lg shadow-lg"
               >
-                Standard - £39.99
+                Standard - £9.99
               </Link>
               <Link
                 href="/wizard?jurisdiction=northern-ireland&document_type=private_tenancy_premium"
                 className="bg-yellow-400 text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-300 transition-colors text-lg shadow-lg"
               >
-                Premium - £59.00 ⭐
+                Premium - £14.99 ⭐
               </Link>
             </div>
             <p className="mt-6 text-sm opacity-75">

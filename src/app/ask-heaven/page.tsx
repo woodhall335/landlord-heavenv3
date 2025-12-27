@@ -2,8 +2,8 @@
 'use client';
 
 import React, { useCallback, useState } from 'react';
+import type { Jurisdiction } from '@/lib/jurisdiction/types';
 
-type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland';
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
 
@@ -16,7 +16,7 @@ interface ChatMessage {
   createdAt: string;
 }
 
-const defaultJurisdiction: Jurisdiction = 'england-wales';
+const defaultJurisdiction: Jurisdiction = 'england';
 const defaultCaseType: CaseType = 'eviction';
 const defaultProduct: Product = 'notice_only';
 
@@ -107,7 +107,8 @@ export default function AskHeavenPage(): React.ReactElement {
             value={jurisdiction}
             onChange={(e) => setJurisdiction(e.target.value as Jurisdiction)}
           >
-            <option value="england-wales">England &amp; Wales</option>
+            <option value="england">England</option>
+            <option value="wales">Wales</option>
             <option value="scotland">Scotland</option>
             <option value="northern-ireland">Northern Ireland</option>
           </select>

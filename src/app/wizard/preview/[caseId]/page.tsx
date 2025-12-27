@@ -9,10 +9,16 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Button, Card, Loading } from '@/components/ui';
+import { Button, Card, Loading, ValidationErrors, type ValidationIssue } from '@/components/ui';
 import { useToast } from '@/components/ui/Toast';
 import { SignupModal } from '@/components/modals/SignupModal';
 import { PRICING, formatPrice } from '@/config/pricing';
+import {
+  getEvictionPackContents,
+  getRouteName,
+  type PackCategory,
+  type PackDocument,
+} from '@/lib/documents/eviction-pack-contents';
 
 interface CaseData {
   id: string;
@@ -65,6 +71,7 @@ export default function WizardPreviewPage() {
   const [loading, setLoading] = useState(true);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{ blocking_issues: ValidationIssue[]; warnings: ValidationIssue[] } | null>(null);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
@@ -77,10 +84,11 @@ export default function WizardPreviewPage() {
   const [fullPackDocsLoading, setFullPackDocsLoading] = useState(false);
 
   // Map case type to primary preview document type
-  const getDocumentType = (caseType: string, caseData?: CaseData): string | null => {
-    // Eviction: preview the main notice that matches the recommended route
+  const getDocumentType = (caseType: string, caseData?: CaseData, product?: string): string | null => {
+    // Eviction: preview the main document based on product and route
     if (caseType === 'eviction') {
       const route = caseData?.recommended_route;
+      const jurisdiction = caseData?.jurisdiction;
 
       // IMPORTANT: Smart recommend wins - no default fallback
       // If no route is recommended, we return null and show an error
@@ -89,7 +97,18 @@ export default function WizardPreviewPage() {
         return null;
       }
 
-      // Map the recommended route to the correct document type
+      // For COMPLETE_PACK: Show court form (N5) as the primary preview document
+      // This is what the user is paying for - the court claim form, not just the notice
+      if (product === 'complete_pack' && jurisdiction !== 'scotland') {
+        // For Section 21 accelerated route, show N5B (accelerated possession)
+        if (route === 'accelerated_possession' || route === 'accelerated_section21') {
+          return 'n5b_claim';
+        }
+        // For standard Section 8 or Section 21, show N5 (standard possession claim)
+        return 'n5_claim';
+      }
+
+      // For NOTICE_ONLY or Scotland: Show the notice
       if (route === 'section_21' || route === 'accelerated_possession' || route === 'accelerated_section21') {
         return 'section21_notice';
       }
@@ -319,18 +338,32 @@ export default function WizardPreviewPage() {
 
         const caseResult = await caseResponse.json();
         const fetchedCase: CaseData = caseResult.case;
+
+        // Ensure recommended_route is set from wizard facts if not already set
+        // Check eviction_route (user's explicit selection from Case Basics) as primary fallback
+        if (!fetchedCase.recommended_route && fetchedCase.collected_facts) {
+          const wizardFacts = fetchedCase.collected_facts as any;
+          fetchedCase.recommended_route =
+            wizardFacts.selected_notice_route ||
+            wizardFacts.eviction_route ||
+            wizardFacts.route_recommendation?.recommended_route ||
+            wizardFacts.recommended_route;
+        }
+
         setCaseData(fetchedCase);
 
         const factsMeta = (fetchedCase.collected_facts as any)?.meta || {};
         const originalMeta = (fetchedCase.collected_facts as any)?.__meta || {};
         const inferredProduct =
-          factsMeta.product || originalMeta.product || originalMeta.original_product;
+          factsMeta.product || originalMeta.product || originalMeta.original_product || 'complete_pack';
         if (inferredProduct === 'notice_only') {
           setSelectedProduct('notice_only');
         }
 
-        // Determine document type based on smart recommendation
-        let documentType = getDocumentType(fetchedCase.case_type, fetchedCase);
+        // Determine document type based on smart recommendation and product
+        // For complete_pack: Show court forms (N5/N119)
+        // For notice_only: Show notice (Section 8/21)
+        let documentType = getDocumentType(fetchedCase.case_type, fetchedCase, inferredProduct);
 
         // SMART RECOMMEND WINS: If no recommendation for eviction cases, try calling checkpoint once to compute it
         if (!documentType && fetchedCase.case_type === 'eviction') {
@@ -343,10 +376,10 @@ export default function WizardPreviewPage() {
               body: JSON.stringify({ case_id: caseId }),
             });
 
-            if (checkpointResponse.ok) {
-              const checkpointData = await checkpointResponse.json();
-              console.log('Checkpoint response:', checkpointData);
+            const checkpointData = await checkpointResponse.json();
+            console.log('Checkpoint response:', checkpointData);
 
+            if (checkpointResponse.ok && checkpointData.ok) {
               // If checkpoint returned a recommendation, refetch the case
               if (checkpointData.recommended_route) {
                 const refetchResponse = await fetch(`/api/cases/${caseId}`);
@@ -354,19 +387,48 @@ export default function WizardPreviewPage() {
                   const refetchResult = await refetchResponse.json();
                   const refetchedCase: CaseData = refetchResult.case;
                   setCaseData(refetchedCase);
-                  documentType = getDocumentType(refetchedCase.case_type, refetchedCase);
+                  documentType = getDocumentType(refetchedCase.case_type, refetchedCase, inferredProduct);
                 }
-              } else if (!checkpointData.ok && checkpointData.missingFields) {
-                // Checkpoint returned structured missing fields - show helpful error
-                throw new Error(
-                  `Cannot generate preview: Missing required information - ${checkpointData.missingFields.join(', ')}. ` +
-                  `${checkpointData.reason || 'Please complete the wizard and try again.'}`
-                );
               }
+            } else if (checkpointResponse.status === 422) {
+              // Checkpoint returned 422 LEGAL_BLOCK - extract structured validation errors
+              if (checkpointData.code === 'LEGAL_BLOCK' && checkpointData.blocking_issues) {
+                // Part A: Set validation state directly instead of throwing to avoid noisy console stack traces
+                setValidationErrors({
+                  blocking_issues: checkpointData.blocking_issues || [],
+                  warnings: checkpointData.warnings || [],
+                });
+                setError('VALIDATION_ERROR');
+                setLoading(false);
+                return; // Early return - let render path handle validation UI
+              } else {
+                // Old-style 422 error format
+                const missingFields = checkpointData.missingFields || [];
+                const reason = checkpointData.reason || 'Please complete the wizard and try again.';
+
+                if (missingFields.length > 0) {
+                  throw new Error(
+                    `Cannot generate preview: Missing required information - ${missingFields.join(', ')}. ${reason}`
+                  );
+                } else {
+                  throw new Error(
+                    `Cannot generate preview: ${checkpointData.error || 'The wizard is incomplete'}. ${reason}`
+                  );
+                }
+              }
+            } else if (!checkpointData.ok) {
+              // Non-422 error
+              throw new Error(
+                `Cannot generate preview: ${checkpointData.error || 'The wizard is incomplete'}.`
+              );
             }
           } catch (checkpointError) {
             console.error('Checkpoint failed:', checkpointError);
-            // Continue to show generic error below if checkpoint itself failed
+            // Re-throw to show error to user
+            if (checkpointError instanceof Error) {
+              throw checkpointError;
+            }
+            throw new Error('Failed to validate wizard completion. Please try again.');
           }
         }
 
@@ -397,9 +459,64 @@ export default function WizardPreviewPage() {
 
         if (!previewResponse.ok) {
           const errorData = await previewResponse.json().catch(() => ({}));
-          const errorMessage = (errorData as any).error || 'Failed to generate preview document';
-          const missingFields = (errorData as any).missing || [];
-          const documentTypeFromError = (errorData as any).documentType || documentType;
+
+          // Check for 422 LEGAL_BLOCK with structured validation errors
+          if (previewResponse.status === 422 && errorData.code === 'LEGAL_BLOCK' && errorData.blocking_issues) {
+            // Part A: Set validation state directly instead of throwing to avoid noisy console stack traces
+            setValidationErrors({
+              blocking_issues: errorData.blocking_issues || [],
+              warnings: errorData.warnings || [],
+            });
+            setError('VALIDATION_ERROR');
+            setLoading(false);
+            return; // Early return - let render path handle validation UI
+          }
+
+          // Handle 422 NOTICE_NONCOMPLIANT with structured compliance issues
+          // This is the expected path for notice-only flows with compliance failures
+          // DO NOT treat this as a generic error - render a fixable "Issues" panel
+          if (previewResponse.status === 422 && (errorData.error === 'NOTICE_NONCOMPLIANT' || errorData.code === 'NOTICE_NONCOMPLIANT')) {
+            console.info('[PREVIEW-UX] Notice compliance issues detected - rendering fix panel:', {
+              blocking_count: errorData.blocking_issues?.length || 0,
+              warning_count: errorData.warnings?.length || 0,
+              computed: errorData.computed,
+            });
+
+            // Map the compliance issues to the ValidationIssue format expected by ValidationErrors component
+            const mappedBlockingIssues = (errorData.blocking_issues || []).map((issue: any) => ({
+              code: issue.code,
+              affected_question_id: issue.affected_question_id,
+              fields: issue.affected_question_id ? [issue.affected_question_id] : [],
+              user_message: issue.user_fix_hint || issue.legal_reason,
+              user_fix_hint: issue.user_fix_hint,
+              legal_reason: issue.legal_reason,
+              severity: 'blocking' as const,
+            }));
+
+            const mappedWarnings = (errorData.warnings || []).map((warning: any) => ({
+              code: warning.code,
+              affected_question_id: warning.affected_question_id,
+              fields: warning.affected_question_id ? [warning.affected_question_id] : [],
+              user_message: warning.user_fix_hint || warning.legal_reason,
+              user_fix_hint: warning.user_fix_hint,
+              legal_reason: warning.legal_reason,
+              severity: 'warning' as const,
+            }));
+
+            // Part A: Set validation state directly instead of throwing to avoid noisy console stack traces
+            setValidationErrors({
+              blocking_issues: mappedBlockingIssues,
+              warnings: mappedWarnings,
+            });
+            setError('VALIDATION_ERROR');
+            setLoading(false);
+            return; // Early return - let render path handle validation UI (NOT "Something went wrong")
+          }
+
+          // Old-style error handling for backward compatibility
+          const errorMessage = errorData.error || 'Failed to generate preview document';
+          const missingFields = errorData.missing || [];
+          const documentTypeFromError = errorData.documentType || documentType;
 
           console.error('Preview generation error:', errorMessage, {
             documentType: documentTypeFromError,
@@ -537,8 +654,119 @@ export default function WizardPreviewPage() {
     );
   }
 
-  // Error state
+  // Retry function for validation errors
+  const handleRetry = () => {
+    setLoading(true);
+    setError(null);
+    setValidationErrors(null);
+    window.location.reload();
+  };
+
+  // Part B: Get current route for route switching functionality
+  const getCurrentRoute = (): string | undefined => {
+    if (caseData?.recommended_route) {
+      return caseData.recommended_route;
+    }
+    const facts = caseData?.collected_facts as any;
+    return facts?.selected_notice_route || facts?.eviction_route || facts?.route_recommendation?.recommended_route;
+  };
+
+  // Part B: Get alternative routes based on jurisdiction and current route
+  const getAlternativeRoutes = (): string[] => {
+    const currentRoute = getCurrentRoute();
+    const jurisdiction = caseData?.jurisdiction;
+
+    // Only offer section_8 as alternative when section_21 is blocked in England
+    if (jurisdiction === 'england' && currentRoute === 'section_21') {
+      return ['section_8'];
+    }
+
+    // Could add more alternatives for other jurisdictions here
+    // e.g., Wales: section_173 blocked -> offer wales_fault_based
+    if (jurisdiction === 'wales' && currentRoute === 'wales_section_173') {
+      return ['wales_fault_based'];
+    }
+
+    return [];
+  };
+
+  // Part B: Handle route switching - persists new route and reloads preview
+  const handleSwitchRoute = async (newRoute: string): Promise<void> => {
+    try {
+      // Persist the route switch by calling the wizard answer API
+      const response = await fetch('/api/wizard/answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          case_id: caseId,
+          question_id: 'selected_notice_route',
+          answer: newRoute,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to switch route');
+      }
+
+      // Also update recommended_route on the case if needed
+      try {
+        await fetch('/api/wizard/checkpoint', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            case_id: caseId,
+            force_route: newRoute,
+          }),
+        });
+      } catch (checkpointErr) {
+        console.warn('Checkpoint after route switch failed (non-blocking):', checkpointErr);
+      }
+
+      // Reload the page to regenerate preview with new route
+      showToast(`Switching to ${newRoute === 'section_8' ? 'Section 8' : newRoute}...`, 'success');
+      window.location.reload();
+    } catch (err: any) {
+      console.error('Route switch failed:', err);
+      showToast(err.message || 'Failed to switch route. Please try again.', 'error');
+      throw err; // Re-throw so the UI can handle loading state
+    }
+  };
+
+  // Error state with structured validation errors
   if (error || !caseData) {
+    // Show structured validation errors if available
+    if (error === 'VALIDATION_ERROR' && validationErrors) {
+      return (
+        <div className="min-h-screen bg-gray-50 py-12">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                Unable to Generate Preview
+              </h1>
+              <p className="text-gray-600">
+                We need some additional information to complete your documents.
+              </p>
+            </div>
+
+            <ValidationErrors
+              blocking_issues={validationErrors.blocking_issues}
+              warnings={validationErrors.warnings}
+              caseId={caseId}
+              caseType={caseData?.case_type as 'eviction' | 'money_claim' | 'tenancy_agreement'}
+              jurisdiction={caseData?.jurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland'}
+              product={(caseData?.collected_facts as any)?.__meta?.product || (caseData?.collected_facts as any)?.meta?.product || undefined}
+              onRetry={handleRetry}
+              currentRoute={getCurrentRoute()}
+              alternativeRoutes={getAlternativeRoutes()}
+              onSwitchRoute={handleSwitchRoute}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    // Generic error display for non-validation errors
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card className="max-w-md">
@@ -623,14 +851,14 @@ export default function WizardPreviewPage() {
             Your Documents Are Ready! 🎉
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Review your preview below. Purchase to download the final documents
-            without watermarks.
+            Review your documents below. Purchase to download the final
+            court-ready documents.
           </p>
           <div className="mt-6">
             <Button
               onClick={() =>
                 router.push(
-                  `/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}${
+                  `/wizard/flow?type=${caseData.case_type}&jurisdiction=${caseData.jurisdiction}&case_id=${caseId}&mode=edit${
                     effectiveProduct ? `&product=${effectiveProduct}` : ''
                   }`
                 )
@@ -648,7 +876,11 @@ export default function WizardPreviewPage() {
           <div>
             <Card>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                {isEviction ? '📦 Eviction Pack Preview' : '📄 Document Preview'}
+                {isEviction && effectiveProduct === 'notice_only'
+                  ? '📦 Notice Only Pack Preview'
+                  : isEviction
+                  ? '📦 Eviction Pack Preview'
+                  : '📄 Document Preview'}
               </h3>
 
               {/* Notice Only - Show special message about merged preview */}
@@ -672,10 +904,9 @@ export default function WizardPreviewPage() {
 
               {previewUrl ? (
                 <div className="relative bg-white border-2 border-gray-200 rounded-lg overflow-hidden">
-                  <div className="absolute top-0 left-0 right-0 bg-yellow-50 border-b border-yellow-200 px-4 py-2 z-10">
-                    <p className="text-sm text-yellow-800 text-center font-medium">
-                      ⚠️ PREVIEW MODE - Watermarked document. Purchase to remove
-                      watermark.
+                  <div className="absolute top-0 left-0 right-0 bg-blue-50 border-b border-blue-200 px-4 py-2 z-10">
+                    <p className="text-sm text-blue-800 text-center font-medium">
+                      📄 PREVIEW - Review your documents before purchase
                     </p>
                   </div>
 
@@ -734,27 +965,11 @@ export default function WizardPreviewPage() {
                         </>
                       )}
 
-                      {/* COMPLETE_PACK product - full eviction bundle */}
-                      {effectiveProduct !== 'notice_only' && isScotlandEviction && (
-                        <>
-                          <li>✅ Notice to Leave with auto-calculated dates</li>
-                          <li>✅ Form E (First-tier Tribunal application)</li>
-                          <li>✅ Rent arrears schedule & payment history log</li>
-                          <li>✅ Evidence checklist & proof of service templates</li>
-                          <li>✅ Step-by-step tribunal roadmap & lodging guide</li>
-                          <li>✅ Lifetime access to all documents in your dashboard</li>
-                        </>
-                      )}
-
-                      {effectiveProduct !== 'notice_only' && !isScotlandEviction && (
-                        <>
-                          <li>✅ {caseData.recommended_route === 'section_21' ? 'Section 21 notice (Form 6A)' : caseData.recommended_route === 'section_8' ? 'Section 8 notice (Form 3)' : 'Required notice'} (auto-selected)</li>
-                          <li>✅ Court possession claim forms (N5, N119, and N5B where eligible)</li>
-                          <li>✅ Rent arrears schedule & payment history log</li>
-                          <li>✅ Evidence checklist & proof of service templates</li>
-                          <li>✅ Step-by-step court roadmap & filing guide</li>
-                          <li>✅ Lifetime access to all documents in your dashboard</li>
-                        </>
+                      {/* COMPLETE_PACK product - simplified, full list on right side */}
+                      {effectiveProduct !== 'notice_only' && (
+                        <li className="text-blue-800">
+                          👉 See full document list on the right →
+                        </li>
                       )}
                     </ul>
                   </>
@@ -895,89 +1110,292 @@ export default function WizardPreviewPage() {
             </Card>
           </div>
 
-          {/* Pricing Section */}
-          <div>
-            <div className="space-y-6">
-              {pricingOptions.map((option, index) => (
-                <Card
-                  key={option.productType}
-                  className={
-                    index === pricingOptions.length - 1
-                      ? 'border-2 border-primary shadow-lg'
-                      : ''
-                  }
+          {/* What's Included Section - For Eviction Packs */}
+          {isEviction && effectiveProduct !== 'notice_only' ? (
+            <div>
+              <Card className="border-2 border-primary shadow-lg">
+                <div className="bg-primary text-white text-center py-2 text-sm font-semibold -mt-6 -mx-6 mb-6 rounded-t-lg">
+                  COMPLETE EVICTION PACK
+                </div>
+
+                {/* Header with price */}
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h3 className="text-2xl font-bold text-gray-900">
+                      {isScotlandEviction ? 'Complete Eviction Pack (Scotland)' : 'Complete Eviction Pack'}
+                    </h3>
+                    <p className="text-gray-600 mt-1">
+                      Everything you need from notice to {isScotlandEviction ? 'tribunal' : 'court'} eviction
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-3xl font-bold text-primary">
+                      {formatPrice(PRICING.COMPLETE_EVICTION_PACK)}
+                    </div>
+                    <div className="text-sm text-gray-500">one-time payment</div>
+                  </div>
+                </div>
+
+                {/* Route indicator */}
+                {caseData.recommended_route && (
+                  <div className="mb-6 p-3 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">📋</span>
+                      <div>
+                        <span className="text-sm font-semibold text-purple-900">
+                          Route: {getRouteName(caseData.recommended_route, caseData.jurisdiction)}
+                        </span>
+                        <span className="text-sm text-purple-700 ml-2">
+                          (auto-selected based on your answers)
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Documents included by category */}
+                <div className="mb-6">
+                  <h4 className="text-lg font-semibold text-gray-900 mb-4">
+                    What&apos;s Included
+                  </h4>
+
+                  {(() => {
+                    const hasArrears = !!(caseData.collected_facts as any)?.total_arrears ||
+                      !!(caseData.collected_facts as any)?.rent_arrears_amount;
+                    const packContents = getEvictionPackContents({
+                      jurisdiction: caseData.jurisdiction as 'england' | 'wales' | 'scotland' | 'northern-ireland',
+                      route: caseData.recommended_route || 'section_8',
+                      packType: 'complete_pack',
+                      hasArrears,
+                      isAccelerated: ['accelerated_possession', 'accelerated_section21'].includes(caseData.recommended_route || ''),
+                    });
+
+                    return (
+                      <div className="space-y-4">
+                        {packContents.map((category) => (
+                          <div key={category.id} className="border border-gray-200 rounded-lg overflow-hidden">
+                            <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
+                              <div className="flex items-center gap-2">
+                                <span>{category.icon}</span>
+                                <span className="font-semibold text-gray-900">{category.title}</span>
+                                <span className="text-xs text-gray-500 ml-auto">
+                                  {category.documents.length} document{category.documents.length !== 1 ? 's' : ''}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="divide-y divide-gray-100">
+                              {category.documents.map((doc) => (
+                                <button
+                                  key={doc.id}
+                                  onClick={async () => {
+                                    if (!doc.documentType) {
+                                      showToast(`${doc.title} - Coming soon`, 'info');
+                                      return;
+                                    }
+
+                                    showToast(`Generating ${doc.title}...`, 'info');
+
+                                    try {
+                                      const response = await fetch('/api/documents/generate', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                          case_id: caseId,
+                                          document_type: doc.documentType,
+                                          is_preview: true,
+                                        }),
+                                      });
+
+                                      if (!response.ok) {
+                                        const errorData = await response.json().catch(() => ({}));
+                                        throw new Error(errorData.error || 'Failed to generate document');
+                                      }
+
+                                      const result = await response.json();
+
+                                      // Get the preview URL
+                                      if (result.document?.id) {
+                                        const previewResponse = await fetch(`/api/documents/preview/${result.document.id}`);
+                                        if (previewResponse.ok) {
+                                          const previewResult = await previewResponse.json();
+                                          // Open in new tab
+                                          window.open(previewResult.preview_url, '_blank');
+                                          showToast(`${doc.title} opened in new tab`, 'success');
+                                        }
+                                      }
+                                    } catch (err: any) {
+                                      console.error('Document generation error:', err);
+                                      showToast(err.message || `Failed to generate ${doc.title}`, 'error');
+                                    }
+                                  }}
+                                  className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors text-left group cursor-pointer"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <span className="text-lg">{doc.icon}</span>
+                                    <div>
+                                      <div className="font-medium text-gray-900 group-hover:text-primary transition-colors">
+                                        {doc.title}
+                                        {doc.isPremium && (
+                                          <span className="ml-2 text-xs bg-gradient-to-r from-purple-100 to-blue-100 text-purple-700 px-2 py-0.5 rounded-full">
+                                            AI-Generated
+                                          </span>
+                                        )}
+                                      </div>
+                                      <div className="text-sm text-gray-500">{doc.description}</div>
+                                    </div>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-green-500">
+                                    <span className="text-lg">🔓</span>
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })()}
+                </div>
+
+                {/* Unlock button */}
+                <Button
+                  onClick={() => handleCheckout('complete_pack')}
+                  variant="primary"
+                  size="large"
+                  className="w-full"
+                  disabled={checkoutLoading}
                 >
-                  {index === pricingOptions.length - 1 && (
-                    <div className="bg-primary text-white text-center py-1 text-sm font-semibold -mt-6 -mx-6 mb-4 rounded-t-lg">
-                      RECOMMENDED
-                    </div>
+                  {checkoutLoading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loading variant="spinner" size="small" />
+                      Processing...
+                    </span>
+                  ) : (
+                    <>
+                      🔓 Unlock Pack - {formatPrice(PRICING.COMPLETE_EVICTION_PACK)}
+                    </>
                   )}
+                </Button>
 
-                  <div className="mb-4">
-                    <h3 className="text-2xl font-bold text-gray-900">{option.name}</h3>
-                    <p className="text-gray-600 mt-1">{option.description}</p>
-                  </div>
+                <p className="text-center text-xs text-gray-500 mt-3">
+                  Secure payment via Stripe • Instant download • Lifetime access
+                </p>
 
-                  <div className="mb-6">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-4xl font-bold text-primary">
-                        {option.price}
-                      </span>
-                      <span className="text-gray-600">one-time payment</span>
-                    </div>
-                  </div>
-
-                  <ul className="space-y-3 mb-6">
-                    {option.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-green-600 text-lg">✓</span>
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
-                    ))}
+                {/* What happens after unlock */}
+                <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                  <h5 className="font-semibold text-green-900 mb-2">After you unlock:</h5>
+                  <ul className="text-sm text-green-800 space-y-1">
+                    <li>✓ All documents instantly available in your dashboard</li>
+                    <li>✓ Edit your wizard answers anytime to regenerate</li>
+                    <li>✓ Download PDFs for court filing</li>
+                    <li>✓ Lifetime access - no subscription required</li>
                   </ul>
-
-                  <Button
-                    onClick={() => handleCheckout(option.productType)}
-                    variant="primary"
-                    size="large"
-                    className="w-full"
-                    disabled={checkoutLoading}
-                  >
-                    {checkoutLoading ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <Loading variant="spinner" size="small" />
-                        Processing...
-                      </span>
-                    ) : (
-                      `Buy ${option.name}`
-                    )}
-                  </Button>
-
-                  <p className="text-center text-xs text-gray-500 mt-3">
-                    Secure payment via Stripe • Instant download
-                  </p>
-                </Card>
-              ))}
-            </div>
-
-            {/* Trust indicators */}
-            <div className="mt-6 p-4 bg-gray-100 rounded-lg">
-              <div className="flex items-center justify-center gap-8 text-sm text-gray-600">
-                <div className="flex items-center gap-2">
-                  <span>🔒</span>
-                  <span>Secure checkout</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span>⚡</span>
-                  <span>Instant access</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span>✅</span>
-                  <span>Court-approved</span>
+              </Card>
+
+              {/* Trust indicators */}
+              <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+                <div className="flex items-center justify-center gap-8 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <span>🔒</span>
+                    <span>Secure checkout</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>⚡</span>
+                    <span>Instant access</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>✅</span>
+                    <span>Court-approved</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          ) : (
+            /* Standard Pricing Section - For Notice Only, Money Claim, Tenancy */
+            <div>
+              <div className="space-y-6">
+                {pricingOptions.map((option, index) => (
+                  <Card
+                    key={option.productType}
+                    className={
+                      index === pricingOptions.length - 1
+                        ? 'border-2 border-primary shadow-lg'
+                        : ''
+                    }
+                  >
+                    {index === pricingOptions.length - 1 && (
+                      <div className="bg-primary text-white text-center py-1 text-sm font-semibold -mt-6 -mx-6 mb-4 rounded-t-lg">
+                        RECOMMENDED
+                      </div>
+                    )}
+
+                    <div className="mb-4">
+                      <h3 className="text-2xl font-bold text-gray-900">{option.name}</h3>
+                      <p className="text-gray-600 mt-1">{option.description}</p>
+                    </div>
+
+                    <div className="mb-6">
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-4xl font-bold text-primary">
+                          {option.price}
+                        </span>
+                        <span className="text-gray-600">one-time payment</span>
+                      </div>
+                    </div>
+
+                    <ul className="space-y-3 mb-6">
+                      {option.features.map((feature, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-green-600 text-lg">✓</span>
+                          <span className="text-gray-700">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <Button
+                      onClick={() => handleCheckout(option.productType)}
+                      variant="primary"
+                      size="large"
+                      className="w-full"
+                      disabled={checkoutLoading}
+                    >
+                      {checkoutLoading ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <Loading variant="spinner" size="small" />
+                          Processing...
+                        </span>
+                      ) : (
+                        `Buy ${option.name}`
+                      )}
+                    </Button>
+
+                    <p className="text-center text-xs text-gray-500 mt-3">
+                      Secure payment via Stripe • Instant download
+                    </p>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Trust indicators */}
+              <div className="mt-6 p-4 bg-gray-100 rounded-lg">
+                <div className="flex items-center justify-center gap-8 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <span>🔒</span>
+                    <span>Secure checkout</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>⚡</span>
+                    <span>Instant access</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>✅</span>
+                    <span>Court-approved</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* FAQ Section */}

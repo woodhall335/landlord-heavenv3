@@ -447,11 +447,11 @@ export async function generateStandardAST(
 
   // List of all templates to merge (in order)
   const templatePaths = [
-    'uk/england-wales/templates/standard_ast_formatted.hbs',
+    'uk/england/templates/standard_ast_formatted.hbs',
     'shared/templates/terms_and_conditions.hbs',
     'shared/templates/certificate_of_curation.hbs',
-    'uk/england-wales/templates/ast_legal_validity_summary.hbs',
-    'uk/england-wales/templates/government_model_clauses.hbs',
+    'uk/england/templates/ast_legal_validity_summary.hbs',
+    'uk/england/templates/government_model_clauses.hbs',
     'shared/templates/deposit_protection_certificate.hbs',
     'shared/templates/inventory_template.hbs',
   ];
@@ -514,19 +514,19 @@ export async function generatePremiumAST(
 
   // Premium includes all standard docs PLUS exclusive premium documents
   const templatePaths = [
-    'uk/england-wales/templates/premium_ast_formatted.hbs',
+    'uk/england/templates/premium_ast_formatted.hbs',
     'shared/templates/terms_and_conditions.hbs',
     'shared/templates/certificate_of_curation.hbs',
-    'uk/england-wales/templates/ast_legal_validity_summary.hbs',
-    'uk/england-wales/templates/government_model_clauses.hbs',
+    'uk/england/templates/ast_legal_validity_summary.hbs',
+    'uk/england/templates/government_model_clauses.hbs',
     'shared/templates/deposit_protection_certificate.hbs',
     'shared/templates/inventory_template.hbs',
     // Premium-exclusive documents (Option 2 enhancement)
-    'uk/england-wales/templates/premium/key_schedule.hbs',
-    'uk/england-wales/templates/premium/tenant_welcome_pack.hbs',
-    'uk/england-wales/templates/premium/property_maintenance_guide.hbs',
-    'uk/england-wales/templates/premium/move_in_condition_report.hbs',
-    'uk/england-wales/templates/premium/checkout_procedure.hbs',
+    'uk/england/templates/premium/key_schedule.hbs',
+    'uk/england/templates/premium/tenant_welcome_pack.hbs',
+    'uk/england/templates/premium/property_maintenance_guide.hbs',
+    'uk/england/templates/premium/move_in_condition_report.hbs',
+    'uk/england/templates/premium/checkout_procedure.hbs',
   ];
 
   // Compile and merge all templates

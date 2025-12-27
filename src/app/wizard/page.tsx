@@ -7,11 +7,59 @@
 
 'use client';
 
-import React, { Suspense, useMemo, useState } from 'react';
+import React, { Suspense, useMemo, useState, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Badge, Button, Container, TealHero } from '@/components/ui';
 import { clsx } from 'clsx';
+
+// Product-specific hero content
+interface HeroContent {
+  title: string;
+  subtitle: string;
+  eyebrow: string;
+}
+
+function getHeroContent(product: string | null): HeroContent {
+  switch (product) {
+    case 'notice_only':
+      return {
+        title: 'Serve the Right Possession Notice',
+        subtitle: 'Jurisdiction Specific & Validated Notices',
+        eyebrow: 'Notice Only',
+      };
+    case 'complete_pack':
+      return {
+        title: 'Complete Eviction Pack',
+        subtitle: 'From Notice to Possession Order - Everything You Need',
+        eyebrow: 'Complete Pack',
+      };
+    case 'ast_standard':
+      return {
+        title: 'Standard Tenancy Agreement',
+        subtitle: 'Create a Compliant AST for Your Property',
+        eyebrow: 'Standard AST',
+      };
+    case 'ast_premium':
+      return {
+        title: 'Premium Tenancy Agreement',
+        subtitle: 'Comprehensive AST with Enhanced Clauses & Schedules',
+        eyebrow: 'Premium AST',
+      };
+    case 'money_claim':
+      return {
+        title: 'Money Claim Pack',
+        subtitle: 'Recover Rent Arrears & Damages Through the Courts',
+        eyebrow: 'Money Claim',
+      };
+    default:
+      return {
+        title: 'Legal Document Wizard',
+        subtitle: 'Guided Document Creation for UK Landlords',
+        eyebrow: 'Wizard',
+      };
+  }
+}
 
 interface DocumentOption {
   type: 'eviction' | 'money_claim' | 'tenancy_agreement';
@@ -42,7 +90,7 @@ const documentOptions: DocumentOption[] = [
     title: 'Tenancy Agreement',
     description: 'Standard or Premium AST - create a compliant tenancy agreement',
     icon: '📝',
-    price: 'From £39.99',
+    price: 'From £9.99',
   },
   {
     type: 'money_claim',
@@ -61,21 +109,37 @@ const allJurisdictions: JurisdictionOption[] = [
   { value: 'northern-ireland', label: 'Northern Ireland', flag: '/gb-nir.svg' },
 ];
 
-// Get available jurisdictions based on document type
-function getAvailableJurisdictions(
+// Check if a jurisdiction is enabled for a document type
+function isJurisdictionEnabled(
+  jurisdiction: string,
   documentType: DocumentOption['type'] | null
-): JurisdictionOption[] {
+): boolean {
   if (!documentType) {
-    return allJurisdictions;
+    return true;
   }
 
   // Northern Ireland is only supported for tenancy agreements
-  if (documentType === 'tenancy_agreement') {
-    return allJurisdictions;
+  if (jurisdiction === 'northern-ireland') {
+    return documentType === 'tenancy_agreement';
   }
 
-  // Eviction and money claim: England, Wales, Scotland only
-  return allJurisdictions.filter((j) => j.value !== 'northern-ireland');
+  return true;
+}
+
+// Get disabled reason for a jurisdiction
+function getDisabledReason(
+  jurisdiction: string,
+  documentType: DocumentOption['type'] | null
+): string | null {
+  if (!documentType) {
+    return null;
+  }
+
+  if (jurisdiction === 'northern-ireland' && documentType !== 'tenancy_agreement') {
+    return 'Eviction and money claim flows are unavailable here. Tenancy agreements only.';
+  }
+
+  return null;
 }
 
 // Map product parameter to document type
@@ -116,6 +180,7 @@ function WizardPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const productParam = searchParams.get('product');
+  const locationSectionRef = useRef<HTMLDivElement>(null);
 
   const preselectedDocument = useMemo(() => {
     if (!productParam) return null;
@@ -130,15 +195,19 @@ function WizardPageInner() {
     useState<JurisdictionOption | null>(null);
   const [step, setStep] = useState<1 | 2>(preselectedDocument ? 2 : 1);
 
-  // Get available jurisdictions for current document type
-  const availableJurisdictions = useMemo(
-    () => getAvailableJurisdictions(selectedDocument?.type ?? null),
-    [selectedDocument]
-  );
+  // Get product-specific hero content
+  const heroContent = getHeroContent(productParam);
 
-  // All jurisdictions shown should be supported (filtered by getAvailableJurisdictions)
-  const isJurisdictionSupported = (jur: JurisdictionOption) => {
-    return availableJurisdictions.some((j) => j.value === jur.value);
+  // All jurisdictions are shown, but some may be disabled
+  const availableJurisdictions = allJurisdictions;
+
+  // Handle Start Now button - scroll to location section
+  const handleStartNowClick = () => {
+    setStep(2);
+    // Scroll to location section after a brief delay to allow step change
+    setTimeout(() => {
+      locationSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   };
 
   const handleDocumentSelect = (doc: DocumentOption) => {
@@ -174,13 +243,24 @@ function WizardPageInner() {
   return (
     <div className="min-h-screen bg-gray-50">
       <TealHero
-        title="Eviction Route Checker"
-        subtitle="A calm, guided workspace with guardrails for every UK jurisdiction."
-        eyebrow="Wizard"
+        title={heroContent.title}
+        subtitle={heroContent.subtitle}
+        eyebrow={heroContent.eyebrow}
         actions={
-          <Badge variant="success" size="large" className="bg-white/15 text-white">
-            Conversational + compliant
-          </Badge>
+          <button
+            onClick={handleStartNowClick}
+            className="group flex items-center gap-2 px-6 py-3 rounded-full border-2 border-black bg-transparent text-black font-semibold hover:border-purple-600 hover:text-purple-600 hover:shadow-lg transition-all duration-300 animate-subtle-pulse cursor-pointer"
+          >
+            Start Now
+            <svg
+              className="w-5 h-5 animate-bounce-slow group-hover:translate-y-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </button>
         }
       />
       <Container size="large" className="py-12">
@@ -265,7 +345,7 @@ function WizardPageInner() {
 
         {/* Step 2: Jurisdiction Selection */}
         {step === 2 && selectedDocument && (
-          <div className="max-w-2xl mx-auto">
+          <div ref={locationSectionRef} className="max-w-2xl mx-auto">
             <button
               onClick={() => setStep(1)}
               className="mb-6 text-gray-600 hover:text-primary transition-colors flex items-center gap-2"
@@ -289,37 +369,56 @@ function WizardPageInner() {
             </p>
 
             <div className="space-y-4">
-              {availableJurisdictions.map((jur) => (
-                <button
-                  key={jur.value}
-                  onClick={() => handleJurisdictionSelect(jur)}
-                  className={clsx(
-                    'w-full p-6 rounded-xl border-2 transition-all duration-200 text-left',
-                    'flex items-center gap-4',
-                    selectedJurisdiction?.value === jur.value
-                      ? 'border-primary bg-primary-subtle shadow-md'
-                      : 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
-                  )}
-                >
-                  <div>
-                    <Image src={jur.flag} alt={jur.label} width={48} height={48} className="w-12 h-12" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-charcoal">{jur.label}</h3>
-                  </div>
-                  {selectedJurisdiction?.value === jur.value && (
-                    <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                      <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
+              {availableJurisdictions.map((jur) => {
+                const enabled = isJurisdictionEnabled(jur.value, selectedDocument?.type ?? null);
+                const disabledReason = getDisabledReason(jur.value, selectedDocument?.type ?? null);
+
+                return (
+                  <div key={jur.value}>
+                    <button
+                      onClick={() => enabled && handleJurisdictionSelect(jur)}
+                      disabled={!enabled}
+                      className={clsx(
+                        'w-full p-6 rounded-xl border-2 transition-all duration-200 text-left',
+                        'flex items-center gap-4',
+                        !enabled && 'opacity-50 cursor-not-allowed',
+                        enabled && selectedJurisdiction?.value === jur.value
+                          ? 'border-primary bg-primary-subtle shadow-md'
+                          : enabled
+                            ? 'border-gray-300 bg-white hover:border-primary hover:shadow-sm'
+                            : 'border-gray-300 bg-gray-50'
+                      )}
+                    >
+                      <div>
+                        <Image
+                          src={jur.flag}
+                          alt={jur.label}
+                          width={48}
+                          height={32}
+                          className="w-12 h-8 border border-gray-200 rounded-sm"
                         />
-                      </svg>
-                    </div>
-                  )}
-                </button>
-              ))}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-charcoal">{jur.label}</h3>
+                      </div>
+                      {enabled && selectedJurisdiction?.value === jur.value && (
+                        <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+                          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                              fillRule="evenodd"
+                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      )}
+                    </button>
+                    {!enabled && disabledReason && (
+                      <p className="text-sm text-gray-600 mt-2 ml-4">{disabledReason}</p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Start Button */}

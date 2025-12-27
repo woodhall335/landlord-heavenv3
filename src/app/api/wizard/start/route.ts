@@ -145,8 +145,9 @@ export async function POST(request: Request) {
     if (effectiveJurisdiction === 'northern-ireland' && resolvedCaseType !== 'tenancy_agreement') {
       return NextResponse.json(
         {
+          code: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
           error: 'NI_EVICTION_MONEY_CLAIM_NOT_SUPPORTED',
-          message:
+          user_message:
             'Northern Ireland eviction and money claim workflows are not yet supported. ' +
             'We currently only support tenancy agreements for Northern Ireland. ' +
             'Full NI support is planned for V2 (Q2 2026).',
@@ -156,8 +157,10 @@ export async function POST(request: Request) {
             wales: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
             scotland: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'],
           },
+          blocking_issues: [],
+          warnings: [],
         },
-        { status: 400 },
+        { status: 422 },
       );
     }
 
@@ -168,18 +171,21 @@ export async function POST(request: Request) {
 
     // ------------------------------------------------
     // 1. Resume existing case if case_id supplied
+    //    RLS policies handle access control
     // ------------------------------------------------
     if (case_id) {
-      let query = supabase.from('cases').select('*').eq('id', case_id);
-      if (user) {
-        query = query.eq('user_id', user.id);
-      } else {
-        query = query.is('user_id', null);
-      }
+      const { data, error } = await supabase
+        .from('cases')
+        .select('*')
+        .eq('id', case_id)
+        .single();
 
-      const { data, error } = await query.single();
       if (error || !data) {
-        return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+        const { handleCaseFetchError } = await import('@/lib/api/error-handling');
+        const errorResponse = handleCaseFetchError(error, data, 'wizard/start', case_id);
+        if (errorResponse) {
+          return errorResponse;
+        }
       }
 
       // Type assertion: we know data exists after the null check
@@ -290,12 +296,33 @@ export async function POST(request: Request) {
     const nextQuestion = getNextMQSQuestion(mqs, hydratedFacts);
     const isComplete = !nextQuestion;
 
+    // ------------------------------------------------
+    // 6. Include persisted Smart Review data for complete_pack/eviction_pack (England only)
+    // ------------------------------------------------
+    // Smart Review results survive refresh via __smart_review in case_facts
+    let smart_review = null;
+    // Note: eviction_pack is a legacy alias that might appear in persisted data
+    if (
+      (normalizedProduct === 'complete_pack' || (normalizedProduct as string) === 'eviction_pack') &&
+      effectiveJurisdiction === 'england' &&
+      facts.__smart_review
+    ) {
+      smart_review = {
+        warnings: facts.__smart_review.warnings || [],
+        summary: facts.__smart_review.summary || null,
+        ranAt: facts.__smart_review.ranAt || null,
+        limitsApplied: facts.__smart_review.limitsApplied || null,
+      };
+    }
+
     return NextResponse.json({
       case_id: caseRecord.id,
       product,
       jurisdiction: effectiveJurisdiction,
       next_question: nextQuestion || null,
       is_complete: isComplete,
+      // Include persisted Smart Review data if available
+      smart_review,
     });
   } catch (error: any) {
     console.error('Start wizard error:', error);
