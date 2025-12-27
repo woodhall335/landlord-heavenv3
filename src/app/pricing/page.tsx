@@ -5,7 +5,7 @@ import { generateMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - Compare All Products",
-  description: "Compare Landlord Heaven pricing. Notices £29.99, Money Claims £179.99, Tenancy Agreements £9.99-£14.99, HMO Pro £19.99-£34.99/month.",
+  description: "Compare Landlord Heaven pricing. Notices £29.99, Complete Eviction Pack £149.99, Money Claims £179.99, Tenancy Agreements £9.99-£14.99, HMO Pro £19.99-£34.99/month.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",
@@ -13,7 +13,8 @@ export const metadata: Metadata = generateMetadata({
     "tenancy agreement price",
     "landlord legal documents",
     "section 21 notice price",
-    "HMO compliance cost"
+    "HMO compliance cost",
+    "complete eviction pack"
   ]
 });
 
@@ -43,42 +44,48 @@ export default function PricingPage() {
           <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-gray-100">
-                <th className="text-left p-6 font-semibold text-charcoal w-1/4">Feature</th>
-                <th className="text-center p-6 w-1/6">
+                <th className="text-left p-6 font-semibold text-charcoal">Feature</th>
+                <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Notices</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£29.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£29.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
-                <th className="text-center p-6 w-1/6">
+                <th className="text-center p-6">
+                  <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£149.99</div>
+                  <div className="text-sm text-gray-600">One-time</div>
+                </th>
+                <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Money Claims</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£179.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£179.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
-                <th className="text-center p-6 w-1/6">
+                <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Standard AST</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£9.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£9.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
-                <th className="text-center p-6 w-1/6">
+                <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Premium AST</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£14.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£14.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
-                <th className="text-center p-6 w-1/6">
+                <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">HMO Pro</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£19.99-£34.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£19.99-£34.99</div>
                   <div className="text-sm text-gray-600">/month</div>
                 </th>
               </tr>
             </thead>
             <tbody className="text-sm">
               <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
+                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={7}>
                   Eviction Documents
                 </td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Section 8/21 Notice</td>
+                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -88,6 +95,7 @@ export default function PricingPage() {
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Court Possession Claim (N5/N5B)</td>
                 <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -97,12 +105,14 @@ export default function PricingPage() {
                 <td className="p-4 text-gray-700">Witness Statement</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
               </tr>
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Money Claim for Arrears</td>
+                <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
@@ -112,6 +122,7 @@ export default function PricingPage() {
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Rent Arrears Schedule</td>
                 <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -119,12 +130,13 @@ export default function PricingPage() {
               </tr>
 
               <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
+                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={7}>
                   Tenancy Agreements
                 </td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Assured Shorthold Tenancy (AST)</td>
+                <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
@@ -133,6 +145,7 @@ export default function PricingPage() {
               </tr>
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Scotland PRT / NI Agreement</td>
+                <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
@@ -144,6 +157,7 @@ export default function PricingPage() {
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
               </tr>
@@ -152,17 +166,19 @@ export default function PricingPage() {
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
               </tr>
 
               <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
+                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={7}>
                   HMO Compliance
                 </td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">License Expiry Tracking</td>
+                <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -175,10 +191,12 @@ export default function PricingPage() {
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Gas/EICR Certificate Tracking</td>
+                <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -191,16 +209,18 @@ export default function PricingPage() {
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
               </tr>
 
               <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
+                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={7}>
                   Support & Features
                 </td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Smart Document Generation</td>
+                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
@@ -214,9 +234,11 @@ export default function PricingPage() {
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Instant Download</td>
+                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
@@ -230,9 +252,11 @@ export default function PricingPage() {
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Document Storage</td>
+                <td className="text-center p-4">12 months</td>
                 <td className="text-center p-4">12 months</td>
                 <td className="text-center p-4">12 months</td>
                 <td className="text-center p-4">Lifetime</td>
@@ -243,6 +267,7 @@ export default function PricingPage() {
               <tr className="border-t bg-gray-100">
                 <td className="p-6 font-semibold text-charcoal">Best For:</td>
                 <td className="text-center p-6 text-xs text-gray-700">Simple eviction notices</td>
+                <td className="text-center p-6 text-xs text-gray-700">Full eviction process</td>
                 <td className="text-center p-6 text-xs text-gray-700">Rent arrears claims</td>
                 <td className="text-center p-6 text-xs text-gray-700">Standard lettings</td>
                 <td className="text-center p-6 text-xs text-gray-700">HMOs & complex</td>
@@ -254,7 +279,15 @@ export default function PricingPage() {
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=notice_only"
-                    className="inline-block bg-gray-200 text-charcoal px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                  >
+                    Get Started
+                  </Link>
+                </td>
+                <td className="text-center p-6">
+                  <Link
+                    href="/wizard?product=complete_pack"
+                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
                   >
                     Get Started
                   </Link>
@@ -262,7 +295,7 @@ export default function PricingPage() {
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=money_claim"
-                    className="inline-block bg-gray-200 text-charcoal px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
                   >
                     Get Started
                   </Link>
@@ -270,7 +303,7 @@ export default function PricingPage() {
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=ast_standard"
-                    className="inline-block bg-gray-200 text-charcoal px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
                   >
                     Get Started
                   </Link>
@@ -278,7 +311,7 @@ export default function PricingPage() {
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=ast_premium"
-                    className="inline-block bg-gray-200 text-charcoal px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
                   >
                     Get Started
                   </Link>
@@ -286,7 +319,7 @@ export default function PricingPage() {
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=hmo_pro"
-                    className="inline-block bg-gray-200 text-charcoal px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
                   >
                     Free Trial
                   </Link>
@@ -310,6 +343,24 @@ export default function PricingPage() {
             </ul>
             <Link
               href="/wizard?product=notice_only"
+              className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+            >
+              Get Started
+            </Link>
+          </div>
+
+          {/* Complete Eviction Pack */}
+          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
+            <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
+            <div className="text-3xl font-bold text-primary mb-4">£149.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <ul className="space-y-2 mb-6 text-sm">
+              <li>✅ Section 8/21 Notice</li>
+              <li>✅ Court Possession Claim</li>
+              <li>✅ Witness Statement</li>
+              <li>✅ Full Eviction Bundle</li>
+            </ul>
+            <Link
+              href="/wizard?product=complete_pack"
               className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
             >
               Get Started
