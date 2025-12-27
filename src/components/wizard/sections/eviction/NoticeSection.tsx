@@ -30,6 +30,7 @@
 
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import type { WizardFacts } from '@/lib/case-facts/schema';
+import { RiCheckboxCircleLine } from 'react-icons/ri';
 
 interface NoticeSectionProps {
   facts: WizardFacts;
@@ -580,9 +581,7 @@ const InlineNoticeSubflow: React.FC<InlineNoticeSubflowProps> = ({
           {/* Notice generation info */}
           <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
             <h5 className="text-sm font-medium text-green-800 flex items-center gap-2">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
+              <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
               Notice Will Be Generated
             </h5>
             <p className="text-sm text-green-700 mt-1">
@@ -956,9 +955,7 @@ export const NoticeSection: React.FC<NoticeSectionProps> = ({
         <div className="space-y-4">
           <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
             <h4 className="text-sm font-medium text-green-800 flex items-center gap-2">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
+              <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
               Notice Setup Complete
             </h4>
             <p className="text-sm text-green-700 mt-1">
