@@ -63,7 +63,7 @@ function getHeroContent(product: string | null): HeroContent {
 }
 
 interface DocumentOption {
-  type: 'eviction' | 'money_claim' | 'tenancy_agreement';
+  type: 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
   title: string;
   description: string;
   icon: string;
@@ -79,26 +79,33 @@ interface JurisdictionOption {
 
 const documentOptions: DocumentOption[] = [
   {
-    type: 'eviction',
-    title: 'Eviction Pack',
-    description: 'Complete eviction bundle from notice to possession order',
-    icon: '🏠',
+    type: 'notice_only',
+    title: 'Eviction Notices',
+    description: 'Section 8, Section 21, and devolved equivalents with service instructions',
+    icon: '📄',
     price: 'From £29.99',
+  },
+  {
+    type: 'complete_pack',
+    title: 'Complete Eviction Pack',
+    description: 'Full bundle from notice to possession order with court forms and guidance',
+    icon: '⚖️',
+    price: '£149.99',
     popular: true,
   },
   {
-    type: 'tenancy_agreement',
-    title: 'Tenancy Agreement',
-    description: 'Standard or Premium AST - create a compliant tenancy agreement',
-    icon: '📝',
-    price: 'From £9.99',
-  },
-  {
     type: 'money_claim',
-    title: 'Money Claim',
-    description: 'Recover rent arrears or damages - complete claim pack with all forms',
+    title: 'Money Claims',
+    description: 'Rent arrears claims with evidence checklists and POC templates',
     icon: '💰',
     price: '£179.99',
+  },
+  {
+    type: 'tenancy_agreement',
+    title: 'Tenancy Agreements',
+    description: 'Compliant ASTs with optional clauses for HMOs and students',
+    icon: '📝',
+    price: 'From £9.99',
   },
 ];
 
@@ -146,11 +153,12 @@ function getDisabledReason(
 // Map product parameter to document type
 function mapProductToDocumentType(
   product: string
-): 'eviction' | 'money_claim' | 'tenancy_agreement' | null {
+): DocumentOption['type'] | null {
   switch (product) {
     case 'complete_pack':
+      return 'complete_pack';
     case 'notice_only':
-      return 'eviction';
+      return 'notice_only';
     case 'money_claim':
       return 'money_claim';
     case 'ast_standard':
@@ -161,15 +169,19 @@ function mapProductToDocumentType(
   }
 }
 
-function normalizeProductForWizard(
-  product: string | null,
-  documentType: DocumentOption['type']
-): string | null {
-  if (documentType === 'money_claim') {
-    return product ?? 'money_claim';
+// Map document type to the wizard flow type
+function getWizardFlowType(documentType: DocumentOption['type']): string {
+  switch (documentType) {
+    case 'notice_only':
+    case 'complete_pack':
+      return 'eviction';
+    case 'money_claim':
+      return 'money_claim';
+    case 'tenancy_agreement':
+      return 'tenancy_agreement';
+    default:
+      return 'eviction';
   }
-
-  return product;
 }
 
 /**
@@ -181,6 +193,7 @@ function WizardPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const productParam = searchParams.get('product');
+  const documentSectionRef = useRef<HTMLDivElement>(null);
   const locationSectionRef = useRef<HTMLDivElement>(null);
 
   const preselectedDocument = useMemo(() => {
@@ -202,12 +215,11 @@ function WizardPageInner() {
   // All jurisdictions are shown, but some may be disabled
   const availableJurisdictions = allJurisdictions;
 
-  // Handle Start Now button - scroll to location section
+  // Handle Start Now button - scroll to document selection section
   const handleStartNowClick = () => {
-    setStep(2);
-    // Scroll to location section after a brief delay to allow step change
+    // Scroll to document selection section
     setTimeout(() => {
-      locationSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      documentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
   };
 
@@ -222,18 +234,13 @@ function WizardPageInner() {
 
   const handleStart = () => {
     if (selectedDocument && selectedJurisdiction) {
-      // Get product parameter to pass through
-      const productParam = searchParams.get('product');
-      const normalizedProduct = normalizeProductForWizard(productParam, selectedDocument.type);
+      const flowType = getWizardFlowType(selectedDocument.type);
 
       const urlParams = new URLSearchParams({
-        type: selectedDocument.type,
+        type: flowType,
         jurisdiction: selectedJurisdiction.value,
+        product: selectedDocument.type,
       });
-
-      if (normalizedProduct) {
-        urlParams.set('product', normalizedProduct);
-      }
 
       const url = `/wizard/flow?${urlParams.toString()}`;
 
@@ -301,12 +308,12 @@ function WizardPageInner() {
 
         {/* Step 1: Document Type Selection */}
         {step === 1 && (
-          <div className="max-w-4xl mx-auto">
+          <div ref={documentSectionRef} className="max-w-5xl mx-auto">
             <h2 className="text-2xl font-bold text-charcoal text-center mb-8">
               What do you need help with?
             </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {documentOptions.map((doc) => (
                 <button
                   key={doc.type}
