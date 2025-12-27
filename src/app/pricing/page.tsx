@@ -518,10 +518,12 @@ export default function PricingPage() {
             </details>
           </div>
         </div>
+      </Container>
 
-        {/* CTA */}
-        <section className="mt-16 py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 rounded-2xl">
-          <div className="max-w-3xl mx-auto text-center px-8">
+      {/* CTA */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Still Have Questions?</h2>
             <p className="text-xl mb-8 text-gray-600">
               Not sure which product is right for you? Our support team is here to help.
@@ -542,8 +544,8 @@ export default function PricingPage() {
             </div>
             <p className="mt-4 text-sm text-gray-600">Quick response • Expert guidance • No obligation</p>
           </div>
-        </section>
-      </Container>
+        </Container>
+      </section>
     </div>
   );
 }
