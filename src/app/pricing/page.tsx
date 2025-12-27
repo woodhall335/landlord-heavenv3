@@ -520,26 +520,29 @@ export default function PricingPage() {
         </div>
 
         {/* CTA */}
-        <div className="mt-16 bg-linear-to-br from-primary to-emerald-600 text-white rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Still Have Questions?</h2>
-          <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-            Not sure which product is right for you? Our support team is here to help.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
-            >
-              Contact Us
-            </Link>
-            <Link
-              href="/help"
-              className="inline-block bg-white/10 backdrop-blur-sm border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/20 transition-colors"
-            >
-              Browse FAQ
-            </Link>
+        <section className="mt-16 py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 rounded-2xl">
+          <div className="max-w-3xl mx-auto text-center px-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Still Have Questions?</h2>
+            <p className="text-xl mb-8 text-gray-600">
+              Not sure which product is right for you? Our support team is here to help.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/contact"
+                className="hero-btn-primary"
+              >
+                Contact Us →
+              </Link>
+              <Link
+                href="/help"
+                className="hero-btn-secondary"
+              >
+                Browse FAQ →
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-gray-600">Quick response • Expert guidance • No obligation</p>
           </div>
-        </div>
+        </section>
       </Container>
     </div>
   );
