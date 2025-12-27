@@ -34,6 +34,7 @@ import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper'
 import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
 import { generateComplianceAudit, extractComplianceAuditContext } from '@/lib/ai/compliance-audit-generator';
 import { generateRiskAssessment, extractRiskAssessmentContext } from '@/lib/ai/risk-assessment-generator';
+import { generateProofOfServicePDF } from '@/lib/documents/proof-of-service-generator';
 import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
@@ -72,9 +73,11 @@ const generateDocumentSchema = z.object({
     'expert_guidance', // Expert eviction guidance
     'eviction_timeline', // Timeline expectations
     'case_summary', // Case summary document
+    'court_filing_guide', // Court filing instructions (England & Wales)
+    'tribunal_lodging_guide', // Tribunal lodging guide (Scotland)
     // Evidence tools
     'evidence_checklist', // Evidence collection checklist
-    'proof_of_service', // Proof of service template
+    'proof_of_service', // Proof of service template (editable PDF)
   ]),
   is_preview: z.boolean().optional().default(true),
 });
@@ -840,8 +843,38 @@ export async function POST(request: Request) {
         }
 
         case 'proof_of_service': {
+          // Generate editable PDF form with fillable fields
+          const proofPdfBytes = await generateProofOfServicePDF({
+            landlord_name: wizardFacts.landlord_full_name,
+            tenant_name: wizardFacts.tenant_full_name,
+            property_address: wizardFacts.property_address,
+            document_served: wizardFacts.eviction_route === 'section_21'
+              ? 'Section 21 Notice (Form 6A)'
+              : wizardFacts.eviction_route === 'section_8'
+              ? 'Section 8 Notice (Form 3)'
+              : 'Notice seeking possession',
+          });
+
+          generatedDoc = {
+            pdf: Buffer.from(proofPdfBytes),
+            html: null, // Editable PDFs have no HTML representation
+          };
+
+          documentTitle = 'Proof of Service (Editable Form)';
+          break;
+        }
+
+        case 'court_filing_guide': {
+          // England & Wales only
+          if (canonicalJurisdiction === 'scotland') {
+            return NextResponse.json(
+              { error: 'Court Filing Guide is for England & Wales. Use Tribunal Lodging Guide for Scotland.' },
+              { status: 400 }
+            );
+          }
+
           generatedDoc = await generateDocument({
-            templatePath: 'shared/templates/proof_of_service.hbs',
+            templatePath: 'uk/england/templates/eviction/court_filing_guide.hbs',
             data: {
               ...wizardFacts,
               jurisdiction: canonicalJurisdiction,
@@ -851,7 +884,31 @@ export async function POST(request: Request) {
             outputFormat: 'both',
           });
 
-          documentTitle = 'Proof of Service Template';
+          documentTitle = 'Court Filing Guide';
+          break;
+        }
+
+        case 'tribunal_lodging_guide': {
+          // Scotland only
+          if (canonicalJurisdiction !== 'scotland') {
+            return NextResponse.json(
+              { error: 'Tribunal Lodging Guide is for Scotland. Use Court Filing Guide for England & Wales.' },
+              { status: 400 }
+            );
+          }
+
+          generatedDoc = await generateDocument({
+            templatePath: 'uk/scotland/templates/eviction/tribunal_lodging_guide.hbs',
+            data: {
+              ...wizardFacts,
+              jurisdiction: canonicalJurisdiction,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Tribunal Lodging Guide';
           break;
         }
 

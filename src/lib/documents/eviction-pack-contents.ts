@@ -217,7 +217,7 @@ const COURT_FILING_GUIDE: PackDocument = {
   description: 'How to file your claim at County Court or online (PCOL)',
   category: 'guidance',
   icon: '📋',
-  // Court filing guide template not yet created
+  documentType: 'court_filing_guide',
   conditions: {
     jurisdictions: ['england', 'wales'],
   },
@@ -229,7 +229,7 @@ const TRIBUNAL_LODGING_GUIDE: PackDocument = {
   description: 'How to lodge your application with the First-tier Tribunal',
   category: 'guidance',
   icon: '📋',
-  // Tribunal guide template not yet created
+  documentType: 'tribunal_lodging_guide',
   conditions: {
     jurisdictions: ['scotland'],
   },
