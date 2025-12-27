@@ -283,6 +283,9 @@ function buildCaseData(
       facts.issues.rent_arrears.total_arrears ||
       undefined,
 
+    // Arrears items for N119 particulars generation
+    arrears_items: facts.issues.rent_arrears.arrears_items || undefined,
+
     // ✅ FIXED: removed invalid amount_owing access
     arrears_at_notice_date:
       wizardFacts.rent_arrears_amount ||
