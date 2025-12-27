@@ -24,43 +24,55 @@ export function Footer() {
             </p>
             <div className="flex flex-col gap-2 text-sm text-gray-400">
               <div className="flex items-center gap-2">
-                <Image
-                  src="/gb-eng.svg"
-                  alt="England"
-                  width={20}
-                  height={20}
-                  className="w-7 h-5"
-                />
+                <div className="relative w-7 h-5">
+                  <Image
+                    src="/gb-eng.svg"
+                    alt="England"
+                    width={20}
+                    height={20}
+                    className="w-7 h-5"
+                  />
+                  <div className="absolute inset-0 bg-[#4A5568] opacity-60 pointer-events-none" />
+                </div>
                 <span style={{ color: '#4A5568' }}>England</span>
               </div>
               <div className="flex items-center gap-2">
-                <Image
-                  src="/gb-wls.svg"
-                  alt="Wales"
-                  width={20}
-                  height={20}
-                  className="w-7 h-5"
-                />
+                <div className="relative w-7 h-5">
+                  <Image
+                    src="/gb-wls.svg"
+                    alt="Wales"
+                    width={20}
+                    height={20}
+                    className="w-7 h-5"
+                  />
+                  <div className="absolute inset-0 bg-[#4A5568] opacity-60 pointer-events-none" />
+                </div>
                 <span style={{ color: '#4A5568' }}>Wales</span>
               </div>
               <div className="flex items-center gap-2">
-                <Image
-                  src="/gb-sct.svg"
-                  alt="Scotland"
-                  width={20}
-                  height={20}
-                  className="w-7 h-5"
-                />
+                <div className="relative w-7 h-5">
+                  <Image
+                    src="/gb-sct.svg"
+                    alt="Scotland"
+                    width={20}
+                    height={20}
+                    className="w-7 h-5"
+                  />
+                  <div className="absolute inset-0 bg-[#4A5568] opacity-60 pointer-events-none" />
+                </div>
                 <span style={{ color: '#4A5568' }}>Scotland</span>
               </div>
               <div className="flex items-center gap-2">
-                <Image
-                  src="/gb-nir.svg"
-                  alt="Northern Ireland"
-                  width={20}
-                  height={20}
-                  className="w-7 h-5"
-                />
+                <div className="relative w-7 h-5">
+                  <Image
+                    src="/gb-nir.svg"
+                    alt="Northern Ireland"
+                    width={20}
+                    height={20}
+                    className="w-7 h-5"
+                  />
+                  <div className="absolute inset-0 bg-[#4A5568] opacity-60 pointer-events-none" />
+                </div>
                 <span style={{ color: '#4A5568' }}>Northern Ireland</span>
               </div>
             </div>
