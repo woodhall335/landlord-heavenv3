@@ -23,16 +23,16 @@ export default function PricingPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
-        <Container size="large">
-          <div className="text-center">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
               <span className="text-sm font-semibold text-primary">Transparent Pricing</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              No hidden fees. No surprises. Choose the product that fits your needs. All prices are one-time payments
-              except HMO Pro.
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
+              No hidden fees. No surprises. Choose the product that fits your needs.
             </p>
+            <p className="text-sm text-gray-600">All prices are one-time payments except HMO Pro</p>
           </div>
         </Container>
       </section>
