@@ -147,7 +147,7 @@ const WITNESS_STATEMENT: PackDocument = {
   description: 'Professional witness statement drafted by Ask Heaven AI (saves £200-500)',
   category: 'ai_generated',
   icon: '☁️',
-  // documentType: undefined - not yet implemented
+  documentType: 'witness_statement',
   isPremium: true,
 };
 
@@ -157,7 +157,7 @@ const COMPLIANCE_AUDIT: PackDocument = {
   description: '8 critical legal compliance checks by Ask Heaven AI',
   category: 'ai_generated',
   icon: '☁️',
-  // documentType: undefined - not yet implemented
+  documentType: 'compliance_audit',
   isPremium: true,
 };
 
@@ -167,7 +167,7 @@ const RISK_ASSESSMENT: PackDocument = {
   description: 'Case strength analysis and risk factors by Ask Heaven AI',
   category: 'ai_generated',
   icon: '☁️',
-  // documentType: undefined - not yet implemented
+  documentType: 'risk_assessment',
   isPremium: true,
 };
 
@@ -181,7 +181,7 @@ const EVICTION_ROADMAP: PackDocument = {
   description: 'Complete guide from notice to possession order',
   category: 'guidance',
   icon: '🗺️',
-  // documentType: undefined - not yet implemented
+  documentType: 'eviction_roadmap',
 };
 
 const EXPERT_GUIDANCE: PackDocument = {
@@ -190,7 +190,7 @@ const EXPERT_GUIDANCE: PackDocument = {
   description: 'Professional tips and common pitfalls to avoid',
   category: 'guidance',
   icon: '💡',
-  // documentType: undefined - not yet implemented
+  documentType: 'expert_guidance',
 };
 
 const TIMELINE_EXPECTATIONS: PackDocument = {
@@ -199,7 +199,7 @@ const TIMELINE_EXPECTATIONS: PackDocument = {
   description: 'Realistic timelines and what to expect at each stage',
   category: 'guidance',
   icon: '📅',
-  // documentType: undefined - not yet implemented
+  documentType: 'eviction_timeline',
 };
 
 const CASE_SUMMARY: PackDocument = {
@@ -208,7 +208,7 @@ const CASE_SUMMARY: PackDocument = {
   description: 'Overview of your case facts and key details',
   category: 'guidance',
   icon: '📄',
-  // documentType: undefined - not yet implemented
+  documentType: 'case_summary',
 };
 
 const COURT_FILING_GUIDE: PackDocument = {
@@ -217,7 +217,7 @@ const COURT_FILING_GUIDE: PackDocument = {
   description: 'How to file your claim at County Court or online (PCOL)',
   category: 'guidance',
   icon: '📋',
-  // documentType: undefined - not yet implemented
+  // Court filing guide template not yet created
   conditions: {
     jurisdictions: ['england', 'wales'],
   },
@@ -229,7 +229,7 @@ const TRIBUNAL_LODGING_GUIDE: PackDocument = {
   description: 'How to lodge your application with the First-tier Tribunal',
   category: 'guidance',
   icon: '📋',
-  // documentType: undefined - not yet implemented
+  // Tribunal guide template not yet created
   conditions: {
     jurisdictions: ['scotland'],
   },
@@ -241,7 +241,7 @@ const SERVICE_INSTRUCTIONS: PackDocument = {
   description: 'Legal requirements for serving notice correctly',
   category: 'guidance',
   icon: '📬',
-  // documentType: undefined - not yet implemented
+  documentType: 'service_instructions',
 };
 
 const SERVICE_VALIDITY_CHECKLIST: PackDocument = {
@@ -250,7 +250,7 @@ const SERVICE_VALIDITY_CHECKLIST: PackDocument = {
   description: 'Route-specific compliance verification checklist',
   category: 'guidance',
   icon: '☑️',
-  // documentType: undefined - not yet implemented
+  documentType: 'service_checklist',
 };
 
 // =============================================================================
@@ -275,7 +275,7 @@ const EVIDENCE_CHECKLIST: PackDocument = {
   description: 'What documents and evidence you need for court',
   category: 'evidence_tool',
   icon: '✅',
-  // documentType: undefined - not yet implemented
+  documentType: 'evidence_checklist',
 };
 
 const PROOF_OF_SERVICE: PackDocument = {
@@ -284,7 +284,7 @@ const PROOF_OF_SERVICE: PackDocument = {
   description: 'Certificate of service / proof of posting template',
   category: 'evidence_tool',
   icon: '📝',
-  // documentType: undefined - not yet implemented
+  documentType: 'proof_of_service',
 };
 
 // =============================================================================
