@@ -12,6 +12,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import { Badge, Button, Container, TealHero } from '@/components/ui';
 import { clsx } from 'clsx';
+import { RiArrowDownLine, RiArrowLeftLine, RiCheckLine } from 'react-icons/ri';
 
 // Product-specific hero content
 interface HeroContent {
@@ -252,14 +253,7 @@ function WizardPageInner() {
             className="group flex items-center gap-2 px-6 py-3 rounded-full border-2 border-black bg-transparent text-black font-semibold hover:border-purple-600 hover:text-purple-600 hover:shadow-lg transition-all duration-300 animate-subtle-pulse cursor-pointer"
           >
             Start Now
-            <svg
-              className="w-5 h-5 animate-bounce-slow group-hover:translate-y-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-            </svg>
+            <RiArrowDownLine className="w-5 h-5 animate-bounce-slow group-hover:translate-y-1 transition-transform text-[#7C3AED]" />
           </button>
         }
       />
@@ -350,14 +344,7 @@ function WizardPageInner() {
               onClick={() => setStep(1)}
               className="mb-6 text-gray-600 hover:text-primary transition-colors flex items-center gap-2"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
+              <RiArrowLeftLine className="w-5 h-5 text-[#7C3AED]" />
               Back to document selection
             </button>
 
@@ -403,13 +390,7 @@ function WizardPageInner() {
                       </div>
                       {enabled && selectedJurisdiction?.value === jur.value && (
                         <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-                          <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
+                          <RiCheckLine className="w-4 h-4 text-white" />
                         </div>
                       )}
                     </button>

@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { CaseStrengthWidget } from '../components/CaseStrengthWidget';
-import { AlertCircle, CheckCircle2, FileText, X, ShieldCheck, Info } from 'lucide-react';
+import { RiErrorWarningLine, RiCheckboxCircleLine, RiFileTextLine, RiCloseLine, RiShieldCheckLine, RiInformationLine } from 'react-icons/ri';
 
 function ReviewPageInner() {
   const searchParams = useSearchParams();
@@ -144,7 +144,7 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
     if (isCourtReady === true) {
       return (
         <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-          <ShieldCheck className="h-3 w-3" />
+          <RiShieldCheckLine className="h-3 w-3 text-[#7C3AED]" />
           Court-ready
         </span>
       );
@@ -152,7 +152,7 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
     if (isCourtReady === false) {
       return (
         <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-          <AlertCircle className="h-3 w-3" />
+          <RiErrorWarningLine className="h-3 w-3 text-[#7C3AED]" />
           Not court-ready yet
         </span>
       );
@@ -199,7 +199,7 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
       {readinessSummary && (
         <Card className="p-4 border-blue-200 bg-blue-50">
           <div className="flex items-start gap-3">
-            <Info className="h-5 w-5 text-blue-600 mt-0.5" />
+            <RiInformationLine className="h-5 w-5 text-[#7C3AED] mt-0.5" />
             <div>
               <h2 className="text-sm font-semibold text-blue-900 mb-1">
                 What this means in practice
@@ -219,7 +219,7 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
       {hasBlockingIssues && (
         <Card className="p-6 border-red-300 bg-red-50">
           <div className="flex items-start gap-3">
-            <X className="h-6 w-6 text-red-600 mt-1" />
+            <RiCloseLine className="h-6 w-6 text-[#7C3AED] mt-1" />
             <div className="flex-1">
               <h2 className="text-lg font-semibold text-red-900 mb-2">
                 Critical Issues Affecting Court Readiness
@@ -264,7 +264,7 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
                   key={route}
                   className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium"
                 >
-                  <CheckCircle2 className="inline h-4 w-4 mr-1" />
+                  <RiCheckboxCircleLine className="inline h-4 w-4 mr-1 text-[#7C3AED]" />
                   {route.toUpperCase()}
                 </span>
               ))}
@@ -350,9 +350,9 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
         <div className="grid md:grid-cols-2 gap-4">
           <div className="flex items-start gap-3">
             {evidence.tenancy_agreement_uploaded ? (
-              <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+              <RiCheckboxCircleLine className="h-5 w-5 text-[#7C3AED] mt-0.5" />
             ) : (
-              <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
+              <RiErrorWarningLine className="h-5 w-5 text-[#7C3AED] mt-0.5" />
             )}
             <div>
               <p className="text-sm font-medium text-gray-900">Tenancy agreement</p>
@@ -366,9 +366,9 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
 
           <div className="flex items-start gap-3">
             {evidence.rent_schedule_uploaded ? (
-              <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+              <RiCheckboxCircleLine className="h-5 w-5 text-[#7C3AED] mt-0.5" />
             ) : (
-              <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
+              <RiErrorWarningLine className="h-5 w-5 text-[#7C3AED] mt-0.5" />
             )}
             <div>
               <p className="text-sm font-medium text-gray-900">Rent / arrears schedule</p>
@@ -382,9 +382,9 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
 
           <div className="flex items-start gap-3">
             {evidence.bank_statements_uploaded ? (
-              <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+              <RiCheckboxCircleLine className="h-5 w-5 text-[#7C3AED] mt-0.5" />
             ) : (
-              <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
+              <RiErrorWarningLine className="h-5 w-5 text-[#7C3AED] mt-0.5" />
             )}
             <div>
               <p className="text-sm font-medium text-gray-900">Bank statements</p>
@@ -398,9 +398,9 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
 
           <div className="flex items-start gap-3">
             {evidence.other_evidence_uploaded ? (
-              <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5" />
+              <RiCheckboxCircleLine className="h-5 w-5 text-[#7C3AED] mt-0.5" />
             ) : (
-              <AlertCircle className="h-5 w-5 text-amber-500 mt-0.5" />
+              <RiErrorWarningLine className="h-5 w-5 text-[#7C3AED] mt-0.5" />
             )}
             <div>
               <p className="text-sm font-medium text-gray-900">Other supporting evidence</p>
@@ -417,7 +417,7 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
       {/* Documents to be generated */}
       <Card className="p-6">
         <h2 className="text-lg font-semibold mb-4">
-          <FileText className="inline h-5 w-5 mr-2" />
+          <RiFileTextLine className="inline h-5 w-5 mr-2 text-[#7C3AED]" />
           Documents that will be generated
         </h2>
         <p className="text-sm text-gray-600 mb-3">
@@ -428,7 +428,7 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
           {previewDocuments.length > 0 ? (
             previewDocuments.map((doc) => (
               <li key={doc.id} className="flex items-center gap-2 text-sm">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                 <span className="font-medium">
   {doc.title ?? doc.document_title ?? 'Untitled document'}
 </span>
@@ -444,12 +444,12 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
           ) : jurisdiction === 'scotland' ? (
             <>
               <li className="flex items-center gap-2 text-sm">
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                 Notice to Leave
               </li>
               {!product.includes('notice_only') && (
                 <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                   Form E (Tribunal application)
                 </li>
               )}
@@ -461,30 +461,30 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
                analysis.recommended_route === 'accelerated_possession' ||
                analysis.recommended_route === 'accelerated_section21' ? (
                 <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                   Section 21 notice (Form 6A)
                 </li>
               ) : analysis.recommended_route === 'section_8' ||
                    analysis.recommended_route === 'section8_notice' ? (
                 <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                   Section 8 notice (Form 3)
                 </li>
               ) : (
                 <>
                   <li className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                     Section 8 notice (Form 3)
                   </li>
                   <li className="flex items-center gap-2 text-sm">
-                    <CheckCircle2 className="h-4 w-4 text-green-600" />
+                    <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                     Section 21 notice (Form 6A)
                   </li>
                 </>
               )}
               {!product.includes('notice_only') && (
                 <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                   Form N5 / N119 (court forms)
                 </li>
               )}
@@ -497,7 +497,7 @@ const previewDocuments: PreviewDocument[] = Array.isArray(analysis.preview_docum
       {analysis.decision_engine?.warnings?.length > 0 && (
         <Card className="p-6 border-yellow-300 bg-yellow-50">
           <div className="flex items-start gap-3">
-            <AlertCircle className="h-6 w-6 text-yellow-600 mt-1" />
+            <RiErrorWarningLine className="h-6 w-6 text-[#7C3AED] mt-1" />
             <div>
               <h2 className="text-lg font-semibold text-yellow-900 mb-2">Important warnings</h2>
               <ul className="space-y-1">

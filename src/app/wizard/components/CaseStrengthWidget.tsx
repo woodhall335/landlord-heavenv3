@@ -2,7 +2,7 @@
 
 import { Card } from '@/components/ui/Card';
 import { Progress } from '@/components/ui/progress';
-import { Shield, FileText, CheckCircle2, FileCheck } from 'lucide-react';
+import { RiShieldLine, RiFileTextLine, RiCheckboxCircleLine, RiFileCheckLine } from 'react-icons/ri';
 
 interface CaseStrengthWidgetProps {
   scoreReport: {
@@ -53,7 +53,7 @@ export function CaseStrengthWidget({ scoreReport }: CaseStrengthWidgetProps) {
         <div>
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
-              <Shield className="h-4 w-4 text-blue-600" />
+              <RiShieldLine className="h-4 w-4 text-[#7C3AED]" />
               <span className="text-sm font-medium">Legal Eligibility</span>
             </div>
             <span className={`text-sm font-semibold ${getScoreColor(scoreReport.components.legal_eligibility.score)}`}>
@@ -75,7 +75,7 @@ export function CaseStrengthWidget({ scoreReport }: CaseStrengthWidgetProps) {
         <div>
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
-              <FileText className="h-4 w-4 text-green-600" />
+              <RiFileTextLine className="h-4 w-4 text-[#7C3AED]" />
               <span className="text-sm font-medium">Evidence</span>
             </div>
             <span className={`text-sm font-semibold ${getScoreColor(scoreReport.components.evidence.score)}`}>
@@ -89,7 +89,7 @@ export function CaseStrengthWidget({ scoreReport }: CaseStrengthWidgetProps) {
         <div>
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-purple-600" />
+              <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
               <span className="text-sm font-medium">Consistency</span>
             </div>
             <span className={`text-sm font-semibold ${getScoreColor(scoreReport.components.consistency.score)}`}>
@@ -103,7 +103,7 @@ export function CaseStrengthWidget({ scoreReport }: CaseStrengthWidgetProps) {
         <div>
           <div className="flex items-center justify-between mb-1">
             <div className="flex items-center gap-2">
-              <FileCheck className="h-4 w-4 text-orange-600" />
+              <RiFileCheckLine className="h-4 w-4 text-[#7C3AED]" />
               <span className="text-sm font-medium">Procedure</span>
             </div>
             <span className={`text-sm font-semibold ${getScoreColor(scoreReport.components.procedure.score)}`}>

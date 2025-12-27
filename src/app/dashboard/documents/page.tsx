@@ -12,6 +12,7 @@ import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { RiFileTextLine, RiDownloadLine, RiDeleteBinLine } from 'react-icons/ri';
 
 interface Document {
   id: string;
@@ -264,19 +265,7 @@ export default function DocumentsPage() {
         {filteredDocuments.length === 0 ? (
           <Card padding="large">
             <div className="text-center py-12">
-              <svg
-                className="w-16 h-16 text-gray-400 mx-auto mb-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"
-                />
-              </svg>
+              <RiFileTextLine className="w-16 h-16 text-[#7C3AED] mx-auto mb-4" />
               <h2 className="text-xl font-semibold text-charcoal mb-2">No documents found</h2>
               <p className="text-gray-600 mb-6">
                 {filterType !== 'all' || showPreviewOnly
@@ -296,17 +285,7 @@ export default function DocumentsPage() {
                   {/* Document Info */}
                   <div className="flex items-start gap-4 flex-1 min-w-0">
                     <div className="w-12 h-12 bg-primary-subtle rounded-lg flex items-center justify-center shrink-0">
-                      <svg
-                        className="w-6 h-6 text-primary"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiFileTextLine className="w-6 h-6 text-[#7C3AED]" />
                     </div>
 
                     <div className="flex-1 min-w-0">
@@ -344,17 +323,7 @@ export default function DocumentsPage() {
                         size="small"
                         onClick={() => handleDownload(doc)}
                       >
-                        <svg
-                          className="w-4 h-4 mr-1"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
+                        <RiDownloadLine className="w-4 h-4 mr-1 text-[#7C3AED]" />
                         Download
                       </Button>
                     )}
@@ -363,13 +332,7 @@ export default function DocumentsPage() {
                       className="p-2 text-gray-400 hover:text-error transition-colors"
                       title="Delete document"
                     >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiDeleteBinLine className="w-5 h-5 text-[#7C3AED]" />
                     </button>
                   </div>
                 </div>

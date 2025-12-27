@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { Container } from "@/components/ui";
+import { RiFileTextLine, RiScales3Line, RiMoneyDollarCircleLine, RiClipboardLine, RiCheckLine } from 'react-icons/ri';
 
 export default function Home() {
   const [askQuestion, setAskQuestion] = useState("");
@@ -117,28 +118,28 @@ export default function Home() {
               title="Eviction Notices"
               desc="Section 8, Section 21, and devolved equivalents with service instructions."
               price="From £29.99"
-              iconPath="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              icon={<RiFileTextLine className="w-7 h-7 text-[#7C3AED] group-hover:text-white transition-colors" />}
             />
             <ProductCard
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               desc="Full bundle from notice to possession order with court forms and guidance."
               price="£149.99"
-              iconPath="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
+              icon={<RiScales3Line className="w-7 h-7 text-[#7C3AED] group-hover:text-white transition-colors" />}
             />
             <ProductCard
               href="/products/money-claim"
               title="Money Claims"
               desc="Rent arrears claims with evidence checklists and POC templates."
               price="£179.99"
-              iconPath="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              icon={<RiMoneyDollarCircleLine className="w-7 h-7 text-[#7C3AED] group-hover:text-white transition-colors" />}
             />
             <ProductCard
               href="/products/ast"
               title="Tenancy Agreements"
               desc="Compliant ASTs with optional clauses for HMOs and students."
               price="From £9.99"
-              iconPath="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+              icon={<RiClipboardLine className="w-7 h-7 text-[#7C3AED] group-hover:text-white transition-colors" />}
             />
           </div>
         </Container>
@@ -423,26 +424,19 @@ function ProductCard({
   title,
   desc,
   price,
-  iconPath,
+  icon,
 }: {
   href: string;
   title: string;
   desc: string;
   price: string;
-  iconPath: string;
+  icon: React.ReactNode;
 }) {
   return (
     <Link href={href} className="group">
       <div className="bg-white rounded-2xl border-2 border-gray-100 p-8 h-full transition-all duration-300 hover:border-primary hover:shadow-xl hover:-translate-y-1">
         <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
-          <svg
-            className="w-7 h-7 text-primary group-hover:text-white transition-colors"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={iconPath} />
-          </svg>
+          {icon}
         </div>
 
         <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
@@ -476,10 +470,8 @@ function Step({ n, title, desc }: { n: string; title: string; desc: string }) {
 function Tick({ title, desc }: { title: string; desc: string }) {
   return (
     <div className="flex items-start gap-4">
-      <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-        <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-        </svg>
+      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+        <RiCheckLine className="w-5 h-5 text-[#7C3AED]" />
       </div>
       <div>
         <h3 className="font-bold text-gray-900 mb-1">{title}</h3>

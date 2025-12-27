@@ -13,6 +13,7 @@ import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { RiFileTextLine, RiCalendarLine } from 'react-icons/ri';
 
 interface Case {
   id: string;
@@ -220,19 +221,7 @@ export default function CasesListPage() {
         {filteredCases.length === 0 ? (
           <Card padding="large">
             <div className="text-center py-12">
-              <svg
-                className="w-16 h-16 text-gray-400 mx-auto mb-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                />
-              </svg>
+              <RiFileTextLine className="w-16 h-16 text-[#7C3AED] mx-auto mb-4" />
               <h2 className="text-xl font-semibold text-charcoal mb-2">
                 No cases found
               </h2>
@@ -288,13 +277,7 @@ export default function CasesListPage() {
                 {/* Dates */}
                 <div className="flex items-center gap-4 text-xs text-gray-500">
                   <div className="flex items-center gap-1">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCalendarLine className="w-4 h-4 text-[#7C3AED]" />
                     Created {formatDate(caseItem.created_at)}
                   </div>
                   <span>•</span>

@@ -26,7 +26,7 @@ import React, { useMemo, useState, useCallback } from 'react';
 import type { WizardFacts, ArrearsItem } from '@/lib/case-facts/schema';
 import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
 import { validateGround8Eligibility, computeArrears } from '@/lib/arrears-engine';
-import { Sparkles, Loader2, CheckCircle2 } from 'lucide-react';
+import { RiSparklingLine, RiLoader4Line, RiCheckboxCircleLine } from 'react-icons/ri';
 
 interface Section8ArrearsSectionProps {
   facts: WizardFacts;
@@ -442,12 +442,12 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
           >
             {isEnhancing ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                <RiLoader4Line className="w-4 h-4 mr-2 animate-spin text-[#7C3AED]" />
                 Enhancing...
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 mr-2" />
+                <RiSparklingLine className="w-4 h-4 mr-2 text-[#7C3AED]" />
                 Enhance with Ask Heaven
               </>
             )}
@@ -469,7 +469,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
       {enhancedText && (
         <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-lg space-y-3">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-indigo-600" />
+            <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
             <span className="text-sm font-semibold text-indigo-900">
               Ask Heaven Suggestion
             </span>
