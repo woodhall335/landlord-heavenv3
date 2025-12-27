@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Button, Card } from '@/components/ui';
-import { Sparkles, MessageCircle, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { RiSparklingLine, RiChat1Line, RiLoader4Line, RiErrorWarningLine, RiCheckboxCircleLine } from 'react-icons/ri';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
@@ -251,7 +251,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
       {/* Header */}
       <div className="flex items-start gap-3 mb-4">
         <div className="mt-0.5">
-          <Sparkles className="h-5 w-5 text-primary" />
+          <RiSparklingLine className="h-5 w-5 text-[#7C3AED]" />
         </div>
         <div>
           <h3 className="text-sm font-semibold text-gray-900">Ask Heaven</h3>
@@ -266,7 +266,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
       {/* Writing helper */}
       <div className="mt-3 border-t border-gray-100 pt-3">
         <div className="flex items-center gap-2 mb-1">
-          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          <RiSparklingLine className="h-3.5 w-3.5 text-[#7C3AED]" />
           <span className="text-xs font-semibold text-gray-800">Writing helper</span>
         </div>
         <p className="text-xs text-gray-500 mb-2">
@@ -284,12 +284,12 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
         >
           {writingLoading ? (
             <>
-              <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+              <RiLoader4Line className="mr-2 h-3.5 w-3.5 animate-spin text-[#7C3AED]" />
               Improving your wording…
             </>
           ) : (
             <>
-              <Sparkles className="mr-2 h-3.5 w-3.5" />
+              <RiSparklingLine className="mr-2 h-3.5 w-3.5 text-[#7C3AED]" />
               Improve my wording
             </>
           )}
@@ -301,7 +301,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
 
         {writingError && (
           <div className="mt-2 flex items-start gap-2 rounded-md bg-red-50 px-2.5 py-2">
-            <AlertCircle className="h-3.5 w-3.5 text-red-500 mt-0.5" />
+            <RiErrorWarningLine className="h-3.5 w-3.5 text-[#7C3AED] mt-0.5" />
             <p className="text-[11px] text-red-700">{writingError}</p>
           </div>
         )}
@@ -309,7 +309,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
         {writingResult && (
           <div className="mt-3 rounded-md border border-blue-100 bg-blue-50/60 p-2.5">
             <div className="flex items-center gap-1.5 mb-1">
-              <CheckCircle2 className="h-3.5 w-3.5 text-blue-600" />
+              <RiCheckboxCircleLine className="h-3.5 w-3.5 text-[#7C3AED]" />
               <span className="text-[11px] font-semibold text-blue-900">
                 Suggested wording (you stay in control)
               </span>
@@ -395,7 +395,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
       {/* Q&A helper */}
       <div className="mt-4 border-t border-gray-100 pt-3">
         <div className="flex items-center gap-2 mb-1">
-          <MessageCircle className="h-3.5 w-3.5 text-primary" />
+          <RiChat1Line className="h-3.5 w-3.5 text-[#7C3AED]" />
           <span className="text-xs font-semibold text-gray-800">Ask questions</span>
         </div>
         <p className="text-xs text-gray-500 mb-2">
@@ -421,12 +421,12 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
           >
             {qaLoading ? (
               <>
-                <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                <RiLoader4Line className="mr-2 h-3.5 w-3.5 animate-spin text-[#7C3AED]" />
                 Asking Ask Heaven…
               </>
             ) : (
               <>
-                <MessageCircle className="mr-2 h-3.5 w-3.5" />
+                <RiChat1Line className="mr-2 h-3.5 w-3.5 text-[#7C3AED]" />
                 Ask a question
               </>
             )}
@@ -435,7 +435,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
 
         {qaError && (
           <div className="mt-2 flex items-start gap-2 rounded-md bg-red-50 px-2.5 py-2">
-            <AlertCircle className="h-3.5 w-3.5 text-red-500 mt-0.5" />
+            <RiErrorWarningLine className="h-3.5 w-3.5 text-[#7C3AED] mt-0.5" />
             <p className="text-[11px] text-red-700">{qaError}</p>
           </div>
         )}
@@ -475,12 +475,12 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
           >
             {writingLoading ? (
               <>
-                <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+                <RiLoader4Line className="mr-2 h-3.5 w-3.5 animate-spin text-[#7C3AED]" />
                 Improving…
               </>
             ) : (
               <>
-                <Sparkles className="mr-2 h-3.5 w-3.5" />
+                <RiSparklingLine className="mr-2 h-3.5 w-3.5 text-[#7C3AED]" />
                 Improve with Ask Heaven
               </>
             )}
@@ -488,7 +488,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
 
           {writingError && (
             <div className="flex items-start justify-end gap-2 text-xs text-red-600">
-              <AlertCircle className="h-3.5 w-3.5" />
+              <RiErrorWarningLine className="h-3.5 w-3.5 text-[#7C3AED]" />
               <span>{writingError}</span>
             </div>
           )}
@@ -496,7 +496,7 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
           {writingResult && (
             <div className="rounded-md border border-blue-100 bg-blue-50/60 p-3 text-left">
               <div className="flex items-center gap-2 mb-1">
-                <CheckCircle2 className="h-4 w-4 text-blue-600" />
+                <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
                 <span className="text-xs font-semibold text-blue-900">
                   Suggested wording
                 </span>

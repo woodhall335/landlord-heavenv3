@@ -14,6 +14,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { TealHero } from '@/components/ui';
+import { RiFileTextLine, RiBookOpenLine, RiCustomerService2Line } from 'react-icons/ri';
 
 interface Case {
   id: string;
@@ -205,9 +206,7 @@ export default function DashboardPage() {
                       className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary transition-colors"
                     >
                       <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <svg className="w-8 h-8 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
-                        </svg>
+                        <RiFileTextLine className="w-8 h-8 text-[#7C3AED] shrink-0" />
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-charcoal truncate">{doc.document_title}</div>
                           <div className="text-xs text-gray-500">{formatDate(doc.created_at)}</div>
@@ -252,15 +251,11 @@ export default function DashboardPage() {
               <h3 className="font-semibold text-charcoal mb-4">Need Help?</h3>
               <div className="space-y-3 text-sm">
                 <Link href="/docs" className="flex items-center gap-2 text-gray-700 hover:text-primary">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                  </svg>
+                  <RiBookOpenLine className="w-5 h-5 text-[#7C3AED]" />
                   Documentation
                 </Link>
                 <Link href="/support" className="flex items-center gap-2 text-gray-700 hover:text-primary">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
+                  <RiCustomerService2Line className="w-5 h-5 text-[#7C3AED]" />
                   Contact Support
                 </Link>
               </div>
