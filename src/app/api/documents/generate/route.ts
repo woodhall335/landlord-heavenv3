@@ -30,6 +30,11 @@ import { fillOfficialForm, type CaseData } from '@/lib/documents/official-forms-
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToEnglandWalesEviction } from '@/lib/documents/eviction-wizard-mapper';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
+import { getArrearsScheduleData } from '@/lib/documents/arrears-schedule-mapper';
+import { generateWitnessStatement, extractWitnessStatementContext } from '@/lib/ai/witness-statement-generator';
+import { generateComplianceAudit, extractComplianceAuditContext } from '@/lib/ai/compliance-audit-generator';
+import { generateRiskAssessment, extractRiskAssessmentContext } from '@/lib/ai/risk-assessment-generator';
+import { generateProofOfServicePDF } from '@/lib/documents/proof-of-service-generator';
 import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
@@ -55,6 +60,24 @@ const generateDocumentSchema = z.object({
     'n5_claim', // England court possession claim
     'n119_particulars', // England particulars of claim
     'n5b_claim', // England accelerated possession (Section 21)
+    // Evidence tools
+    'arrears_schedule', // Rent arrears schedule
+    // AI-generated documents (Ask Heaven)
+    'witness_statement', // AI-drafted witness statement
+    'compliance_audit', // AI compliance audit report
+    'risk_assessment', // AI case risk assessment
+    // Guidance documents
+    'eviction_roadmap', // Step-by-step eviction roadmap
+    'service_instructions', // Notice service instructions
+    'service_checklist', // Service validity checklist
+    'expert_guidance', // Expert eviction guidance
+    'eviction_timeline', // Timeline expectations
+    'case_summary', // Case summary document
+    'court_filing_guide', // Court filing instructions (England & Wales)
+    'tribunal_lodging_guide', // Tribunal lodging guide (Scotland)
+    // Evidence tools
+    'evidence_checklist', // Evidence collection checklist
+    'proof_of_service', // Proof of service template (editable PDF)
   ]),
   is_preview: z.boolean().optional().default(true),
 });
@@ -529,6 +552,363 @@ export async function POST(request: Request) {
           };
 
           documentTitle = 'Form N5B - Claim for Possession (Accelerated Procedure)';
+          break;
+        }
+
+        case 'arrears_schedule': {
+          // Get arrears data from wizard facts
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const arrearsItems = caseFacts.issues?.rent_arrears?.arrears_items || [];
+          const totalArrears = wizardFacts.total_arrears ||
+                               wizardFacts.rent_arrears_amount ||
+                               caseFacts.issues?.rent_arrears?.total_arrears || 0;
+          const rentAmount = wizardFacts.rent_amount ||
+                              caseFacts.tenancy?.rent_amount || 0;
+          const rentFrequency = wizardFacts.rent_frequency ||
+                                 caseFacts.tenancy?.rent_frequency || 'monthly';
+
+          const arrearsData = getArrearsScheduleData({
+            arrears_items: arrearsItems,
+            total_arrears: totalArrears,
+            rent_amount: rentAmount,
+            rent_frequency: rentFrequency as any,
+            include_schedule: true,
+          });
+
+          if (!arrearsData.include_schedule_pdf) {
+            return NextResponse.json(
+              {
+                error: 'No arrears schedule data available',
+                code: 'NO_ARREARS_DATA',
+                user_message: 'There is no detailed arrears schedule to generate. Please enter arrears data in the wizard first.',
+              },
+              { status: 422 }
+            );
+          }
+
+          // Determine jurisdiction key for template path
+          const jurisdictionKey = canonicalJurisdiction === 'wales' ? 'wales' : 'england';
+
+          generatedDoc = await generateDocument({
+            templatePath: `uk/${jurisdictionKey}/templates/money_claims/schedule_of_arrears.hbs`,
+            data: {
+              claimant_reference: wizardFacts.claimant_reference || case_id,
+              arrears_schedule: arrearsData.arrears_schedule,
+              arrears_total: arrearsData.arrears_total,
+              rent_amount: rentAmount,
+              rent_frequency: rentFrequency,
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Schedule of Arrears';
+          break;
+        }
+
+        // =================================================================
+        // AI-GENERATED DOCUMENTS (Ask Heaven)
+        // =================================================================
+
+        case 'witness_statement': {
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const witnessContext = extractWitnessStatementContext(caseFacts);
+          const witnessContent = await generateWitnessStatement(caseFacts, witnessContext);
+
+          const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
+
+          generatedDoc = await generateDocument({
+            templatePath: `uk/${jurisdictionKey}/templates/eviction/witness-statement.hbs`,
+            data: {
+              landlord_name: witnessContext.landlord_name,
+              landlord_address: wizardFacts.landlord_address || '',
+              tenant_name: witnessContext.tenant_name,
+              property_address: witnessContext.property_address,
+              court_name: wizardFacts.court_name || 'County Court',
+              witness_statement: witnessContent,
+              generated_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'AI-Drafted Witness Statement';
+          break;
+        }
+
+        case 'compliance_audit': {
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const complianceContext = extractComplianceAuditContext(caseFacts);
+          const complianceContent = await generateComplianceAudit(caseFacts, complianceContext);
+
+          const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
+
+          generatedDoc = await generateDocument({
+            templatePath: `uk/${jurisdictionKey}/templates/eviction/compliance-audit.hbs`,
+            data: {
+              landlord_name: wizardFacts.landlord_full_name || 'Landlord',
+              property_address: wizardFacts.property_address || '',
+              compliance_audit: complianceContent,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Compliance Audit Report';
+          break;
+        }
+
+        case 'risk_assessment': {
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const riskContext = extractRiskAssessmentContext(caseFacts);
+          const riskContent = await generateRiskAssessment(caseFacts, riskContext);
+
+          const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
+
+          generatedDoc = await generateDocument({
+            templatePath: `uk/${jurisdictionKey}/templates/eviction/risk-report.hbs`,
+            data: {
+              landlord_name: riskContext.landlord_name,
+              tenant_name: riskContext.tenant_name,
+              property_address: riskContext.property_address,
+              case_type: wizardFacts.eviction_route || 'eviction',
+              risk_assessment: riskContent,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Case Risk Assessment Report';
+          break;
+        }
+
+        // =================================================================
+        // GUIDANCE DOCUMENTS
+        // =================================================================
+
+        case 'eviction_roadmap': {
+          const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
+          const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+
+          generatedDoc = await generateDocument({
+            templatePath: `uk/${jurisdictionKey}/templates/eviction/eviction_roadmap.hbs`,
+            data: {
+              ...wizardFacts,
+              jurisdiction: canonicalJurisdiction,
+              route,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Step-by-Step Eviction Roadmap';
+          break;
+        }
+
+        case 'service_instructions': {
+          const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
+          const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+
+          // Select route-specific template if available
+          let templatePath = `uk/${jurisdictionKey}/templates/eviction/service_instructions.hbs`;
+          if (route === 'section_21' && canonicalJurisdiction === 'england') {
+            templatePath = `uk/england/templates/eviction/service_instructions_section_21.hbs`;
+          } else if (route === 'section_8' && canonicalJurisdiction === 'england') {
+            templatePath = `uk/england/templates/eviction/service_instructions_section_8.hbs`;
+          }
+
+          generatedDoc = await generateDocument({
+            templatePath,
+            data: {
+              ...wizardFacts,
+              jurisdiction: canonicalJurisdiction,
+              route,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Service Instructions';
+          break;
+        }
+
+        case 'service_checklist': {
+          const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
+          const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+
+          // Select route-specific checklist
+          let templatePath = `uk/${jurisdictionKey}/templates/eviction/compliance_checklist.hbs`;
+          if (route === 'section_21' && canonicalJurisdiction === 'england') {
+            templatePath = `uk/england/templates/eviction/checklist_section_21.hbs`;
+          } else if (route === 'section_8' && canonicalJurisdiction === 'england') {
+            templatePath = `uk/england/templates/eviction/checklist_section_8.hbs`;
+          }
+
+          generatedDoc = await generateDocument({
+            templatePath,
+            data: {
+              ...wizardFacts,
+              jurisdiction: canonicalJurisdiction,
+              route,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Service & Validity Checklist';
+          break;
+        }
+
+        case 'expert_guidance': {
+          const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
+
+          generatedDoc = await generateDocument({
+            templatePath: `uk/${jurisdictionKey}/templates/eviction/expert_guidance.hbs`,
+            data: {
+              ...wizardFacts,
+              jurisdiction: canonicalJurisdiction,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Expert Eviction Guidance';
+          break;
+        }
+
+        case 'eviction_timeline': {
+          generatedDoc = await generateDocument({
+            templatePath: 'shared/templates/eviction_timeline.hbs',
+            data: {
+              ...wizardFacts,
+              jurisdiction: canonicalJurisdiction,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Eviction Timeline & Expectations';
+          break;
+        }
+
+        case 'case_summary': {
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
+
+          generatedDoc = await generateDocument({
+            templatePath: 'shared/templates/case_summary.hbs',
+            data: {
+              ...caseData,
+              ...wizardFacts,
+              caseFacts,
+              jurisdiction: canonicalJurisdiction,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Eviction Case Summary';
+          break;
+        }
+
+        // =================================================================
+        // EVIDENCE TOOLS
+        // =================================================================
+
+        case 'evidence_checklist': {
+          const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+
+          generatedDoc = await generateDocument({
+            templatePath: 'shared/templates/evidence_collection_checklist.hbs',
+            data: {
+              ...wizardFacts,
+              jurisdiction: canonicalJurisdiction,
+              route,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Evidence Collection Checklist';
+          break;
+        }
+
+        case 'proof_of_service': {
+          // Generate editable PDF form with fillable fields
+          const proofPdfBytes = await generateProofOfServicePDF({
+            landlord_name: wizardFacts.landlord_full_name,
+            tenant_name: wizardFacts.tenant_full_name,
+            property_address: wizardFacts.property_address,
+            document_served: wizardFacts.eviction_route === 'section_21'
+              ? 'Section 21 Notice (Form 6A)'
+              : wizardFacts.eviction_route === 'section_8'
+              ? 'Section 8 Notice (Form 3)'
+              : 'Notice seeking possession',
+          });
+
+          generatedDoc = {
+            pdf: Buffer.from(proofPdfBytes),
+            html: null, // Editable PDFs have no HTML representation
+          };
+
+          documentTitle = 'Proof of Service (Editable Form)';
+          break;
+        }
+
+        case 'court_filing_guide': {
+          // England & Wales only
+          if (canonicalJurisdiction === 'scotland') {
+            return NextResponse.json(
+              { error: 'Court Filing Guide is for England & Wales. Use Tribunal Lodging Guide for Scotland.' },
+              { status: 400 }
+            );
+          }
+
+          generatedDoc = await generateDocument({
+            templatePath: 'uk/england/templates/eviction/court_filing_guide.hbs',
+            data: {
+              ...wizardFacts,
+              jurisdiction: canonicalJurisdiction,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Court Filing Guide';
+          break;
+        }
+
+        case 'tribunal_lodging_guide': {
+          // Scotland only
+          if (canonicalJurisdiction !== 'scotland') {
+            return NextResponse.json(
+              { error: 'Tribunal Lodging Guide is for Scotland. Use Court Filing Guide for England & Wales.' },
+              { status: 400 }
+            );
+          }
+
+          generatedDoc = await generateDocument({
+            templatePath: 'uk/scotland/templates/eviction/tribunal_lodging_guide.hbs',
+            data: {
+              ...wizardFacts,
+              jurisdiction: canonicalJurisdiction,
+              current_date: new Date().toLocaleDateString('en-GB'),
+            },
+            isPreview: is_preview,
+            outputFormat: 'both',
+          });
+
+          documentTitle = 'Tribunal Lodging Guide';
           break;
         }
 
