@@ -66,9 +66,17 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
 }
 
-/* Allow Tailwind color classes to override in footer */
+/* Footer text styling - gray-300 (#d1d5db) */
 footer h1, footer h2, footer h3, footer h4, footer h5, footer h6 {
-  color: inherit;
+  color: #d1d5db;
+}
+
+footer a {
+  color: #d1d5db;
+}
+
+footer a:hover {
+  color: #ffffff;
 }
 
 p {
