@@ -13,6 +13,7 @@ import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line } from 'react-icons/ri';
 
 interface CaseDetails {
   id: string;
@@ -388,19 +389,7 @@ export default function CaseDetailPage() {
       <div className="min-h-screen flex items-center justify-center">
         <Card padding="large">
           <div className="text-center py-8">
-            <svg
-              className="w-16 h-16 text-red-400 mx-auto mb-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
+            <RiErrorWarningLine className="w-16 h-16 text-[#7C3AED] mx-auto mb-4" />
             <h2 className="text-xl font-semibold text-charcoal mb-2">{error}</h2>
             <Link href="/dashboard/cases">
               <Button variant="primary">Back to Cases</Button>
@@ -457,9 +446,7 @@ export default function CaseDetailPage() {
             {!isEditMode ? (
               <>
                 <Button variant="primary" onClick={() => setIsEditMode(true)}>
-                  <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                  </svg>
+                  <RiEditLine className="w-4 h-4 mr-2 text-white" />
                   Edit Case Details
                 </Button>
                 {caseDetails.wizard_progress < 100 && (
@@ -724,17 +711,7 @@ export default function CaseDetailPage() {
                       className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
                     >
                       <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <svg
-                          className="w-8 h-8 text-primary shrink-0"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
+                        <RiFileTextLine className="w-8 h-8 text-[#7C3AED] shrink-0" />
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-charcoal truncate">
                             {doc.document_title}
@@ -757,10 +734,7 @@ export default function CaseDetailPage() {
                             rel="noopener noreferrer"
                             className="text-primary hover:text-primary-dark"
                           >
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" />
-                              <path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" />
-                            </svg>
+                            <RiExternalLinkLine className="w-5 h-5 text-[#7C3AED]" />
                           </a>
                         )}
                       </div>
@@ -814,28 +788,14 @@ export default function CaseDetailPage() {
                   href="/docs"
                   className="flex items-center gap-2 text-gray-700 hover:text-primary"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                    />
-                  </svg>
+                  <RiBookOpenLine className="w-5 h-5 text-[#7C3AED]" />
                   Documentation
                 </Link>
                 <Link
                   href="/support"
                   className="flex items-center gap-2 text-gray-700 hover:text-primary"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"
-                    />
-                  </svg>
+                  <RiCustomerService2Line className="w-5 h-5 text-[#7C3AED]" />
                   Contact Support
                 </Link>
               </div>

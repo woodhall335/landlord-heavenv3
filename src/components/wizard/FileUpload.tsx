@@ -7,6 +7,7 @@
 
 import React, { useRef, useState } from 'react';
 import { clsx } from 'clsx';
+import { RiUploadCloudLine, RiCloseCircleLine, RiAttachmentLine, RiCloseLine } from 'react-icons/ri';
 
 export interface FileUploadProps {
   value?: File[];
@@ -136,9 +137,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
         <div className="flex flex-col items-center gap-3">
           <div className="w-12 h-12 rounded-full bg-primary-subtle flex items-center justify-center">
-            <svg className="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-            </svg>
+            <RiUploadCloudLine className="w-6 h-6 text-[#7C3AED]" />
           </div>
 
           <div>
@@ -158,9 +157,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
 
       {error && (
         <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-          <svg className="w-5 h-5 text-red-600 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-          </svg>
+          <RiCloseCircleLine className="w-5 h-5 text-[#7C3AED] shrink-0 mt-0.5" />
           <p className="text-sm text-red-900">{error}</p>
         </div>
       )}
@@ -178,9 +175,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
               className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
             >
               <div className="flex items-center gap-3 flex-1 min-w-0">
-                <svg className="w-5 h-5 text-gray-600 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clipRule="evenodd" />
-                </svg>
+                <RiAttachmentLine className="w-5 h-5 text-[#7C3AED] shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-charcoal truncate">{file.name}</p>
                   <p className="text-xs text-gray-500">{formatFileSize(file.size)}</p>
@@ -194,9 +189,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({
                 }}
                 className="ml-2 p-1 text-gray-400 hover:text-error transition-colors"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
+                <RiCloseLine className="w-5 h-5 text-[#7C3AED]" />
               </button>
             </div>
           ))}
