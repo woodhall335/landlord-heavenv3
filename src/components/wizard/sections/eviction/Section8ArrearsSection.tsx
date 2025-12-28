@@ -22,11 +22,11 @@
 
 'use client';
 
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import type { WizardFacts, ArrearsItem } from '@/lib/case-facts/schema';
 import { ArrearsScheduleStep } from '../../ArrearsScheduleStep';
 import { validateGround8Eligibility, computeArrears } from '@/lib/arrears-engine';
-import { RiSparklingLine, RiLoader4Line, RiCheckboxCircleLine } from 'react-icons/ri';
+import { AskHeavenInlineEnhancer } from '../../AskHeavenInlineEnhancer';
 
 interface Section8ArrearsSectionProps {
   facts: WizardFacts;
@@ -275,7 +275,7 @@ export const Section8ArrearsSection: React.FC<Section8ArrearsSectionProps> = ({
 // PARTICULARS WITH ASK HEAVEN
 // ============================================================================
 // Allows users to write particulars after seeing the arrears data,
-// with AI assistance from Ask Heaven.
+// with AI assistance from Ask Heaven using the shared inline enhancer.
 // ============================================================================
 
 interface ParticularsProps {
@@ -291,18 +291,11 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
   arrearsSummary,
   onUpdate,
 }) => {
-  const [isEnhancing, setIsEnhancing] = useState(false);
-  const [enhancedText, setEnhancedText] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
   const particularsText = facts.section8_details || '';
 
   // Generate a suggested starting point based on arrears data
   const generateSuggestion = useCallback(() => {
     if (!arrearsSummary || arrearsSummary.total_arrears === 0) return '';
-
-    const rentAmount = facts.rent_amount || 0;
-    const rentFrequency = facts.rent_frequency || 'monthly';
 
     let suggestion = `The tenant owes £${arrearsSummary.total_arrears.toFixed(2)} in rent arrears, `;
     suggestion += `representing ${arrearsSummary.arrears_in_months.toFixed(1)} months of unpaid rent. `;
@@ -316,65 +309,7 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
     }
 
     return suggestion;
-  }, [arrearsSummary, facts.rent_amount, facts.rent_frequency]);
-
-  // Call Ask Heaven to enhance the particulars
-  const handleEnhance = useCallback(async () => {
-    if (!particularsText.trim()) return;
-
-    setIsEnhancing(true);
-    setError(null);
-
-    try {
-      const response = await fetch('/api/ask-heaven/enhance-answer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question_id: 'section8_details',
-          question_text: 'Particulars for Section 8 grounds (rent arrears)',
-          answer: particularsText,
-          context: {
-            selected_grounds: selectedGrounds,
-            total_arrears: arrearsSummary?.total_arrears,
-            arrears_in_months: arrearsSummary?.arrears_in_months,
-            rent_amount: facts.rent_amount,
-            rent_frequency: facts.rent_frequency,
-            jurisdiction: 'england',
-          },
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to enhance particulars');
-      }
-
-      // Handle different response formats
-      const suggested =
-        data.suggested_wording ||
-        data.enhanced_answer?.suggested ||
-        data.ask_heaven?.suggested_wording;
-
-      if (suggested) {
-        setEnhancedText(suggested);
-      } else {
-        throw new Error('No suggestion returned from Ask Heaven');
-      }
-    } catch (err: any) {
-      console.error('Ask Heaven enhance error:', err);
-      setError(err.message || 'Failed to enhance. Please try again.');
-    } finally {
-      setIsEnhancing(false);
-    }
-  }, [particularsText, selectedGrounds, arrearsSummary, facts]);
-
-  const handleApplyEnhanced = () => {
-    if (enhancedText) {
-      onUpdate({ section8_details: enhancedText });
-      setEnhancedText(null);
-    }
-  };
+  }, [arrearsSummary]);
 
   const handleUseSuggestion = () => {
     const suggestion = generateSuggestion();
@@ -382,6 +317,16 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
       onUpdate({ section8_details: suggestion });
     }
   };
+
+  // Build context for Ask Heaven enhancement
+  const enhanceContext = useMemo(() => ({
+    selected_grounds: selectedGrounds,
+    total_arrears: arrearsSummary?.total_arrears,
+    arrears_in_months: arrearsSummary?.arrears_in_months,
+    rent_amount: facts.rent_amount,
+    rent_frequency: facts.rent_frequency,
+    jurisdiction: 'england',
+  }), [selectedGrounds, arrearsSummary, facts.rent_amount, facts.rent_frequency]);
 
   return (
     <div className="pt-6 border-t border-gray-200 space-y-4">
@@ -431,70 +376,15 @@ const ParticularsWithAskHeaven: React.FC<ParticularsProps> = ({
         </p>
       </div>
 
-      {/* Ask Heaven enhance button */}
-      {particularsText.trim().length > 20 && (
-        <div className="flex items-center gap-3">
-          <button
-            type="button"
-            onClick={handleEnhance}
-            disabled={isEnhancing}
-            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-md hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-          >
-            {isEnhancing ? (
-              <>
-                <RiLoader4Line className="w-4 h-4 mr-2 animate-spin text-[#7C3AED]" />
-                Enhancing...
-              </>
-            ) : (
-              <>
-                <RiSparklingLine className="w-4 h-4 mr-2 text-[#7C3AED]" />
-                Enhance with Ask Heaven
-              </>
-            )}
-          </button>
-          <span className="text-xs text-gray-500">
-            AI will improve clarity and court-readiness
-          </span>
-        </div>
-      )}
-
-      {/* Error display */}
-      {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-700">{error}</p>
-        </div>
-      )}
-
-      {/* Enhanced text suggestion */}
-      {enhancedText && (
-        <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-lg space-y-3">
-          <div className="flex items-center gap-2">
-            <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
-            <span className="text-sm font-semibold text-indigo-900">
-              Ask Heaven Suggestion
-            </span>
-          </div>
-          <p className="text-sm text-indigo-900 whitespace-pre-wrap">
-            {enhancedText}
-          </p>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={handleApplyEnhanced}
-              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
-            >
-              Use this wording
-            </button>
-            <button
-              type="button"
-              onClick={() => setEnhancedText(null)}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-            >
-              Dismiss
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Ask Heaven Inline Enhancer */}
+      <AskHeavenInlineEnhancer
+        questionId="section8_details"
+        questionText="Particulars for Section 8 grounds (rent arrears)"
+        answer={particularsText}
+        onApply={(newText) => onUpdate({ section8_details: newText })}
+        context={enhanceContext}
+        apiMode="generic"
+      />
     </div>
   );
 };

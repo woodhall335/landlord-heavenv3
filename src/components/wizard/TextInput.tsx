@@ -1,12 +1,27 @@
 /**
  * Text Input
  *
- * Simple text input with validation and optional multi-field support
+ * Simple text input with validation and optional multi-field support.
+ * Optionally supports Ask Heaven inline enhancement for multiline (textarea) inputs.
  */
 
 import React from 'react';
 import { clsx } from 'clsx';
 import { RiErrorWarningLine } from 'react-icons/ri';
+import { AskHeavenInlineEnhancer, type AskHeavenInlineEnhancerProps } from './AskHeavenInlineEnhancer';
+
+export interface AskHeavenConfig {
+  /** Case ID for MQS mode */
+  caseId?: string;
+  /** Question/field ID */
+  questionId: string;
+  /** Human-readable question text */
+  questionText?: string;
+  /** API mode: 'mqs' | 'generic' | 'auto' */
+  apiMode?: AskHeavenInlineEnhancerProps['apiMode'];
+  /** Additional context for AI enhancement */
+  context?: Record<string, any>;
+}
 
 export interface TextInputProps {
   value?: string;
@@ -20,6 +35,8 @@ export interface TextInputProps {
   disabled?: boolean;
   multiline?: boolean;
   rows?: number;
+  /** Optional Ask Heaven configuration for AI enhancement (only for multiline inputs) */
+  askHeavenConfig?: AskHeavenConfig;
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
@@ -34,6 +51,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   disabled = false,
   multiline = false,
   rows = 3,
+  askHeavenConfig,
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     let newValue = e.target.value;
@@ -86,6 +104,19 @@ export const TextInput: React.FC<TextInputProps> = ({
           maxLength={maxLength}
           disabled={disabled}
           className={baseClasses}
+        />
+      )}
+
+      {/* Ask Heaven Inline Enhancer for multiline inputs */}
+      {multiline && askHeavenConfig && (
+        <AskHeavenInlineEnhancer
+          caseId={askHeavenConfig.caseId}
+          questionId={askHeavenConfig.questionId}
+          questionText={askHeavenConfig.questionText}
+          answer={value}
+          onApply={onChange}
+          apiMode={askHeavenConfig.apiMode || 'auto'}
+          context={askHeavenConfig.context}
         />
       )}
 
