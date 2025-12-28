@@ -155,6 +155,28 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
   border-color: #7C3AED;
 }
 
+/* Header Login Button - Matches hero button hover behavior */
+.header-login-btn {
+  display: inline-block;
+  background-color: #7C3AED;
+  color: #ffffff;
+  padding: 0.75rem 1.75rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border: 2px solid #7C3AED;
+  cursor: pointer;
+}
+
+.header-login-btn:hover {
+  background-color: transparent;
+  color: #7C3AED;
+  border-color: #7C3AED;
+  cursor: pointer;
+}
+
 /* Custom scrollbar styling - Purple brand color */
 ::-webkit-scrollbar {
   width: 14px;
