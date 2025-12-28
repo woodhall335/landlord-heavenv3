@@ -18,10 +18,10 @@ The platform is **READY FOR LAUNCH**. All critical P1 fixes have been applied:
 | Scotland form reference (AT6) | ✅ FIXED - Updated to "Notice to Leave" |
 | Wales English-only warning | ✅ FIXED - Warning added to Help page |
 | Wales MQS AST terminology | ✅ FIXED - Updated to "Occupation Contract" |
-| Wales template registry | ⚠️ PARTIAL - Uses England templates (backlog item) |
+| Wales template registry | ✅ FIXED - New Wales Occupation Contract templates created |
 
-**Remaining backlog:**
-1. Wales tenancy templates still use England AST templates (P2 - counsel review pending)
+**All P1 issues resolved. Remaining backlog:**
+1. Wales RHW forms are English-only (bilingual versions available from gov.wales)
 2. Northern Ireland eviction/money claim correctly blocked - No action required
 
 ---
@@ -41,7 +41,7 @@ The platform is **READY FOR LAUNCH**. All critical P1 fixes have been applied:
 | **Wales** | notice_only | wales_fault_based | `config/mqs/notice_only/wales.yaml` | rhw17_notice_termination, rhw23_notice | ✅ Stage-aware | ⚠️ English-only | **CONDITIONAL** |
 | **Wales** | eviction_pack | Section 173, Breach | `config/mqs/complete_pack/wales.yaml` | rhw16, rhw17, rhw23 | ✅ Stage-aware | ⚠️ English-only | **CONDITIONAL** |
 | **Wales** | money_claim | money_claim | `config/mqs/money_claim/wales.yaml` | money_claim_* | ✅ Stage-aware | ✅ | **PASS** |
-| **Wales** | tenancy_agreement | tenancy_agreement | `config/mqs/tenancy_agreement/wales.yaml` | ❌ Uses England AST | ✅ | ⚠️ Wrong template type | **P1: REVIEW** |
+| **Wales** | tenancy_agreement | tenancy_agreement | `config/mqs/tenancy_agreement/wales.yaml` | standard_occupation_contract, premium_occupation_contract | ✅ | ✅ | **PASS** |
 | **Scotland** | notice_only | notice_to_leave | `config/mqs/notice_only/scotland.yaml` | notice_to_leave_prt_2017 | ✅ Stage-aware | ✅ | **PASS** |
 | **Scotland** | eviction_pack | notice_to_leave | `config/mqs/complete_pack/scotland.yaml` | notice_to_leave_official | ✅ Stage-aware | ✅ | **PASS** |
 | **Scotland** | money_claim | money_claim | `config/mqs/money_claim/scotland.yaml` | simple_procedure_* | ✅ Stage-aware | ✅ | **PASS** |
@@ -157,7 +157,7 @@ The platform is **READY FOR LAUNCH**. All critical P1 fixes have been applied:
 | **P1** | Help page contains incorrect Scotland form reference | Claims "AT6 for Scotland" | ✅ **FIXED** - Now says "Notice to Leave for Scotland" | 91505c4 |
 | **P1** | "Legally valid" claim is overbroad | Help page claimed "legally valid" | ✅ **FIXED** - Changed to "based on official government forms" | 91505c4 |
 | **P1** | Wales tenancy MQS uses AST terminology | MQS said "Standard/Premium AST" | ✅ **FIXED** - Updated to "Occupation Contract" per RH(W)A 2016 | 91505c4 |
-| **P1** | Wales tenancy templates use England AST | templateRegistry.ts maps Wales to England | ⚠️ **PARTIAL** - MQS fixed; template registry still needs Wales templates | - |
+| **P1** | Wales tenancy templates use England AST | templateRegistry.ts maps Wales to England | ✅ **FIXED** - Created Wales-specific Occupation Contract templates | TBD |
 
 ### P2 - MEDIUM PRIORITY (Backlog)
 
@@ -220,8 +220,8 @@ The following items require legal counsel confirmation as they could not be full
 4. **Rent Smart Wales hard-block**: Confirm if the platform should hard-block notice generation for landlords who haven't confirmed Rent Smart Wales registration/licensing.
    - Context: Currently warns but allows generation.
 
-5. **Wales tenancy agreements**: Confirm if AST-style templates are acceptable for Wales or if separate "Occupation Contract" templates are required under Renting Homes (Wales) Act 2016.
-   - Context: templateRegistry.ts lines 56-59 map Wales tenancy agreements to England AST templates. The Renting Homes (Wales) Act 2016 replaced ASTs with "Standard Occupation Contracts" which have different statutory terms.
+5. ~~**Wales tenancy agreements**: Confirm if AST-style templates are acceptable for Wales or if separate "Occupation Contract" templates are required under Renting Homes (Wales) Act 2016.~~
+   - **RESOLVED**: Created Wales-specific Occupation Contract templates (`standard_occupation_contract.hbs`, `premium_occupation_contract.hbs`) with RH(W)A 2016 terminology, Rent Smart Wales registration, and Wales-specific notice periods.
 
 ---
 
@@ -270,7 +270,7 @@ The following items require legal counsel confirmation as they could not be full
 | **Wales** | Notice Only (Fault-based) | **RHW23** (pre-possession) | `rhw23_*/notice.hbs` | ⚠️ English-only |
 | **Wales** | Eviction Pack | RHW16/17 + RHW23 + court forms | `rhw16, rhw17, rhw23 + eviction/*.hbs` | ⚠️ English-only |
 | **Wales** | Money Claim | N1 (shared with England) | Uses England `money_claims/*.hbs` | ✅ Uses England templates |
-| **Wales** | Tenancy Agreement | **Occupation Contract** (RH(W)A 2016) | ❌ Uses England AST templates | ❌ **P1: Wrong template type** |
+| **Wales** | Tenancy Agreement | **Occupation Contract** (RH(W)A 2016) | `standard_occupation_contract.hbs`, `premium_occupation_contract.hbs` | ✅ HBS templates exist |
 | **Scotland** | Notice Only | **Notice to Leave** (PH(T)(S) Act 2016) | `notice_to_leave_official.hbs` | ✅ HBS template exists |
 | **Scotland** | Eviction Pack | Notice to Leave + Tribunal application | `eviction/notice_to_leave.hbs` + `tribunal_application.hbs` | ✅ HBS templates exist |
 | **Scotland** | Money Claim | **Simple Procedure** (Sheriff Court) | `money_claims/simple_procedure_*.hbs` (9 templates) | ✅ HBS templates exist |
@@ -285,7 +285,7 @@ The following items require legal counsel confirmation as they could not be full
 | Jurisdiction | Template Type | Template File | Jurisdiction-Specific? | Legal Framework |
 |--------------|---------------|---------------|------------------------|-----------------|
 | **England** | Assured Shorthold Tenancy (AST) | `uk/england/templates/standard_ast_formatted.hbs` | ✅ Yes | Housing Act 1988 |
-| **Wales** | ❌ Uses England AST | `uk/england/templates/standard_ast_formatted.hbs` | ❌ **NO - Uses wrong template** | Should be Occupation Contract (RH(W)A 2016) |
+| **Wales** | Standard Occupation Contract | `uk/wales/templates/standard_occupation_contract.hbs` | ✅ Yes | Renting Homes (Wales) Act 2016 |
 | **Scotland** | Private Residential Tenancy (PRT) | `uk/scotland/templates/prt_agreement.hbs` | ✅ Yes | PH(T)(S) Act 2016 |
 | **N. Ireland** | Private Tenancy Agreement | `uk/northern-ireland/templates/private_tenancy_agreement.hbs` | ✅ Yes | Private Tenancies Act 2022 |
 
