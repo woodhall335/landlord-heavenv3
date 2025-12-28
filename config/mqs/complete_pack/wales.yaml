@@ -19,13 +19,15 @@ version: "2.0.0"
 
 questions:
   # 1. Eviction route selection (Wales: Section 173 or fault-based)
-  - id: eviction_route
+  - id: selected_notice_route
     section: Eviction Type
     question: "Which eviction route are you using?"
     inputType: select
     options:
-      - "Section 173 (no-fault notice)"
-      - "Breach of contract (fault-based)"
+      - value: wales_section_173
+        label: "Section 173 (no-fault notice)"
+      - value: wales_fault_based
+        label: "Breach of contract (fault-based)"
     helperText: "Wales uses Section 173 notices under the Renting Homes (Wales) Act 2016. Section 21 does NOT apply in Wales."
     validation:
       required: true
@@ -43,8 +45,8 @@ questions:
     routes:
       - wales_section_173
     dependsOn:
-      questionId: eviction_route
-      value: "Section 173 (no-fault notice)"
+      questionId: selected_notice_route
+      value: wales_section_173
     helperText: "All must be YES to use Section 173 no-fault possession."
     fields:
       - id: deposit_protected
@@ -95,8 +97,8 @@ questions:
     routes:
       - wales_fault_based
     dependsOn:
-      questionId: eviction_route
-      value: "Breach of contract (fault-based)"
+      questionId: selected_notice_route
+      value: wales_fault_based
     options:
       - "Rent arrears (2 months or more)"
       - "Persistent rent arrears"
@@ -117,8 +119,8 @@ questions:
     routes:
       - wales_fault_based
     dependsOn:
-      questionId: eviction_route
-      value: "Breach of contract (fault-based)"
+      questionId: selected_notice_route
+      value: wales_fault_based
     helperText: "Describe the facts supporting each breach. Be specific with dates and evidence."
     placeholder: "E.g., Rent arrears: £2,400 owed, representing 8 weeks unpaid rent. Last payment 01/11/2025."
     validation:

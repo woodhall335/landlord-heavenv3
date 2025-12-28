@@ -98,7 +98,7 @@ export const defaultMetadata: Metadata = {
     default: "Landlord Heaven - Legal Documents for UK Landlords",
     template: "%s | Landlord Heaven"
   },
-  description: "Court-ready eviction notices, tenancy agreements & legal documents for UK landlords. 100% UK coverage - England & Wales, Scotland, Northern Ireland.",
+  description: "Court-ready eviction notices, tenancy agreements & legal documents for UK landlords. UK-wide coverage - England & Wales, Scotland, Northern Ireland.",
   keywords: [
     "section 8 notice",
     "section 21 notice",
@@ -122,7 +122,7 @@ export const defaultMetadata: Metadata = {
     url: SITE_URL,
     siteName: SITE_NAME,
     title: "Landlord Heaven - Legal Documents for UK Landlords",
-    description: "Court-ready eviction notices, tenancy agreements & legal documents for UK landlords. 100% UK coverage.",
+    description: "Court-ready eviction notices, tenancy agreements & legal documents for UK landlords. UK-wide coverage.",
     images: [
       {
         url: DEFAULT_OG_IMAGE,

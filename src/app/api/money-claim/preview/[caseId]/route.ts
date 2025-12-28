@@ -1,8 +1,11 @@
+import { NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
+import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { validateForPreview } from '@/lib/validation/previewValidation';
 
 type CaseRow = any;
 
@@ -50,6 +53,65 @@ export async function GET(
       caseRow.facts ||
       caseRow.case_facts ||
       {};
+
+    // ============================================================================
+    // JURISDICTION VALIDATION & NI BLOCKING
+    // ============================================================================
+    const jurisdiction = deriveCanonicalJurisdiction(
+      caseRow.jurisdiction,
+      wizardFacts,
+    ) as CanonicalJurisdiction | undefined;
+
+    if (!jurisdiction) {
+      return NextResponse.json(
+        {
+          code: 'INVALID_JURISDICTION',
+          error: 'Invalid or missing jurisdiction',
+          user_message: 'A supported jurisdiction is required to generate a money claim preview.',
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
+    // NI money claims are not supported
+    if (jurisdiction === 'northern-ireland') {
+      return NextResponse.json(
+        {
+          code: 'NI_MONEY_CLAIM_UNSUPPORTED',
+          error: 'NI_MONEY_CLAIM_UNSUPPORTED',
+          user_message:
+            'Money claims are not supported in Northern Ireland. Tenancy agreements remain available.',
+          blocking_issues: [{
+            code: 'NI_MONEY_CLAIM_UNSUPPORTED',
+            fields: ['jurisdiction'],
+            user_fix_hint: 'Money claims are not available in Northern Ireland. Only tenancy agreements are currently supported.',
+          }],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
+    // ============================================================================
+    // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
+    // ============================================================================
+    console.log('[MONEY-CLAIM-PREVIEW] Running unified validation via validateForPreview');
+    const validationError = validateForPreview({
+      jurisdiction,
+      product: 'money_claim',
+      route: 'money_claim',
+      facts: wizardFacts,
+      caseId,
+    });
+
+    if (validationError) {
+      console.warn('[MONEY-CLAIM-PREVIEW] Unified validation blocked preview:', {
+        case_id: caseId,
+      });
+      return validationError; // Already a NextResponse with standardized 422 payload
+    }
 
     const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
     const moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);

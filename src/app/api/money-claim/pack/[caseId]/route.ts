@@ -7,6 +7,8 @@ import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { mapCaseFactsToMoneyClaimCase } from '@/lib/documents/money-claim-wizard-mapper';
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
+import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
+import { validateForGenerate } from '@/lib/validation/previewValidation';
 import JSZip from 'jszip';
 
 // If you have a proper Case row type somewhere, you can replace this `any`
@@ -74,6 +76,65 @@ export async function GET(
         { error: 'No case data found. Please complete the wizard first.' },
         { status: 400 }
       );
+    }
+
+    // ============================================================================
+    // JURISDICTION VALIDATION & NI BLOCKING
+    // ============================================================================
+    const jurisdiction = deriveCanonicalJurisdiction(
+      caseRow.jurisdiction,
+      wizardFacts,
+    ) as CanonicalJurisdiction | undefined;
+
+    if (!jurisdiction) {
+      return NextResponse.json(
+        {
+          code: 'INVALID_JURISDICTION',
+          error: 'Invalid or missing jurisdiction',
+          user_message: 'A supported jurisdiction is required to generate a money claim pack.',
+          blocking_issues: [],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
+    // NI money claims are not supported
+    if (jurisdiction === 'northern-ireland') {
+      return NextResponse.json(
+        {
+          code: 'NI_MONEY_CLAIM_UNSUPPORTED',
+          error: 'NI_MONEY_CLAIM_UNSUPPORTED',
+          user_message:
+            'Money claims are not supported in Northern Ireland. Tenancy agreements remain available.',
+          blocking_issues: [{
+            code: 'NI_MONEY_CLAIM_UNSUPPORTED',
+            fields: ['jurisdiction'],
+            user_fix_hint: 'Money claims are not available in Northern Ireland. Only tenancy agreements are currently supported.',
+          }],
+          warnings: [],
+        },
+        { status: 422 },
+      );
+    }
+
+    // ============================================================================
+    // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
+    // ============================================================================
+    console.log('[MONEY-CLAIM-PACK] Running unified validation via validateForGenerate');
+    const validationError = validateForGenerate({
+      jurisdiction,
+      product: 'money_claim',
+      route: 'money_claim',
+      facts: wizardFacts,
+      caseId,
+    });
+
+    if (validationError) {
+      console.warn('[MONEY-CLAIM-PACK] Unified validation blocked pack generation:', {
+        case_id: caseId,
+      });
+      return validationError; // Already a NextResponse with standardized 422 payload
     }
 
     caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;

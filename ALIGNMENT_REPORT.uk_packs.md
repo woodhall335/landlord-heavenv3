@@ -6,7 +6,7 @@
 - england / money_claim (money_claim)
 - england / tenancy_agreement (tenancy_agreement)
 - wales / notice_only (wales_section_173, wales_fault_based)
-- wales / eviction_pack (Section 173 (no-fault notice), Breach of contract (fault-based))
+- wales / eviction_pack (wales_section_173, wales_fault_based)
 - wales / money_claim (money_claim)
 - wales / tenancy_agreement (tenancy_agreement)
 - scotland / notice_only (notice_to_leave)

@@ -3154,6 +3154,101 @@
       "type": "array",
       "required": false,
       "description": "Other uploaded evidence documents"
+    },
+    "notice_service_method": {
+      "type": "string",
+      "required": false,
+      "description": "Method of serving the notice (e.g., 'personal', 'first_class_post', 'recorded')"
+    },
+    "arrears_items": {
+      "type": "array",
+      "required": false,
+      "description": "Detailed breakdown of rent arrears items"
+    },
+    "section21.epc_served": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether EPC was served to tenant for Section 21 compliance"
+    },
+    "section21.gas_safety_cert_served": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether gas safety certificate was served for Section 21 compliance"
+    },
+    "licensing_required": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether property licensing is required (HMO, selective, additional)"
+    },
+    "has_valid_licence": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether the property has a valid licence if licensing is required"
+    },
+    "has_joint_tenants": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether there are joint tenants on the tenancy"
+    },
+    "tenant2_name": {
+      "type": "string",
+      "required": false,
+      "description": "Name of second joint tenant"
+    },
+    "tenant3_name": {
+      "type": "string",
+      "required": false,
+      "description": "Name of third joint tenant"
+    },
+    "tenant4_name": {
+      "type": "string",
+      "required": false,
+      "description": "Name of fourth joint tenant"
+    },
+    "has_joint_landlords": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether there are joint landlords"
+    },
+    "landlord2_name": {
+      "type": "string",
+      "required": false,
+      "description": "Name of second joint landlord"
+    },
+    "court_name": {
+      "type": "string",
+      "required": false,
+      "description": "Name of the county court for possession claims"
+    },
+    "signatory_name": {
+      "type": "string",
+      "required": false,
+      "description": "Name of person signing the notice or claim"
+    },
+    "signatory_capacity": {
+      "type": "string",
+      "required": false,
+      "description": "Capacity of signatory (e.g., 'landlord', 'agent', 'solicitor')"
+    },
+    "signature_date": {
+      "type": "date",
+      "required": false,
+      "description": "Date of signature on notice or claim"
+    },
+    "solicitor_firm": {
+      "type": "string",
+      "required": false,
+      "description": "Name of solicitor firm if represented"
+    },
+    "claimant_reference": {
+      "type": "string",
+      "required": false,
+      "description": "Claimant's reference number for the case"
+    },
+    "dx_number": {
+      "type": "string",
+      "required": false,
+      "description": "DX number for document exchange"
     }
   }
 }
