@@ -32,7 +32,7 @@ The platform is **READY FOR LAUNCH** with the following critical conditions:
 | **Wales** | notice_only | wales_fault_based | `config/mqs/notice_only/wales.yaml` | rhw17_notice_termination, rhw23_notice | ✅ Stage-aware | ⚠️ English-only | **CONDITIONAL** |
 | **Wales** | eviction_pack | Section 173, Breach | `config/mqs/complete_pack/wales.yaml` | rhw16, rhw17, rhw23 | ✅ Stage-aware | ⚠️ English-only | **CONDITIONAL** |
 | **Wales** | money_claim | money_claim | `config/mqs/money_claim/wales.yaml` | money_claim_* | ✅ Stage-aware | ✅ | **PASS** |
-| **Wales** | tenancy_agreement | tenancy_agreement | `config/mqs/tenancy_agreement/wales.yaml` | standard_ast, premium_ast | ✅ | ✅ | **PASS** |
+| **Wales** | tenancy_agreement | tenancy_agreement | `config/mqs/tenancy_agreement/wales.yaml` | ❌ Uses England AST | ✅ | ⚠️ Wrong template type | **P1: REVIEW** |
 | **Scotland** | notice_only | notice_to_leave | `config/mqs/notice_only/scotland.yaml` | notice_to_leave_prt_2017 | ✅ Stage-aware | ✅ | **PASS** |
 | **Scotland** | eviction_pack | notice_to_leave | `config/mqs/complete_pack/scotland.yaml` | notice_to_leave_official | ✅ Stage-aware | ✅ | **PASS** |
 | **Scotland** | money_claim | money_claim | `config/mqs/money_claim/scotland.yaml` | simple_procedure_* | ✅ Stage-aware | ✅ | **PASS** |
@@ -147,6 +147,7 @@ The platform is **READY FOR LAUNCH** with the following critical conditions:
 | **P1** | Wales templates are English-only | Template comment: "This is ENGLISH-ONLY. Bilingual output requires Welsh-language official source." | Add prominent user-facing warning that RHW16/17/23 forms are English-only; recommend users obtain bilingual versions from gov.wales for formal service | `config/jurisdictions/uk/wales/templates/notice_only/rhw16_*/notice.hbs:13-18` |
 | **P1** | Help page contains incorrect Scotland form reference | Claims "AT6 for Scotland" but Scotland uses "Notice to Leave" under PH(T)(S) Act 2016 | Update Help page to say "Notice to Leave for Scotland" | `src/app/help/page.tsx:182-183` |
 | **P1** | "Legally valid" claim is overbroad for Wales | Help page claims all documents are "legally valid" but Wales forms may not meet bilingual requirement | Soften to "based on official forms" or add jurisdiction-specific caveats | `src/app/help/page.tsx:178-184` |
+| **P1** | Wales tenancy agreement uses England AST templates | templateRegistry.ts lines 56-59 map Wales to England templates. Wales requires "Occupation Contracts" per Renting Homes (Wales) Act 2016, not Assured Shorthold Tenancies | Create Wales-specific occupation contract templates or add clear warning that Wales contracts differ | `src/lib/jurisdictions/capabilities/templateRegistry.ts:56-59` |
 
 ### P2 - MEDIUM PRIORITY (Backlog)
 
@@ -209,6 +210,9 @@ The following items require legal counsel confirmation as they could not be full
 4. **Rent Smart Wales hard-block**: Confirm if the platform should hard-block notice generation for landlords who haven't confirmed Rent Smart Wales registration/licensing.
    - Context: Currently warns but allows generation.
 
+5. **Wales tenancy agreements**: Confirm if AST-style templates are acceptable for Wales or if separate "Occupation Contract" templates are required under Renting Homes (Wales) Act 2016.
+   - Context: templateRegistry.ts lines 56-59 map Wales tenancy agreements to England AST templates. The Renting Homes (Wales) Act 2016 replaced ASTs with "Standard Occupation Contracts" which have different statutory terms.
+
 ---
 
 ## 7. FINAL VERDICT
@@ -240,7 +244,55 @@ The following items require legal counsel confirmation as they could not be full
 
 ---
 
-## 8. APPENDIX: FILE REFERENCES
+## 8. OFFICIAL FORMS & TEMPLATES MATRIX
+
+### Complete Forms Required Per Jurisdiction/Product
+
+| Jurisdiction | Product | Official Form Required | Template File | Status |
+|--------------|---------|------------------------|---------------|--------|
+| **England** | Notice Only (Section 21) | **Form 6A** (Housing Act 1988) | `form_6a_section21/notice.hbs` | ✅ HBS template exists |
+| **England** | Notice Only (Section 8) | **Form 3** (Housing Act 1988) | `form_3_section8/notice.hbs` | ✅ HBS template exists |
+| **England** | Eviction Pack (Section 21) | Form 6A + N5 + N5B | `form_6a + eviction/n5_claim.hbs, n5b_claim.hbs` | ✅ HBS templates exist |
+| **England** | Eviction Pack (Section 8) | Form 3 + N5 | `form_3 + eviction/n5_claim.hbs` | ✅ HBS templates exist |
+| **England** | Money Claim | N1 (MCOL) + Particulars of Claim | `money_claims/*.hbs` (12 templates) | ✅ HBS templates exist |
+| **England** | Tenancy Agreement | AST (no prescribed form) | `standard_ast_formatted.hbs`, `premium_ast_formatted.hbs` | ✅ HBS templates exist |
+| **Wales** | Notice Only (Section 173) | **RHW16** (6-month) or **RHW17** (2-month) | `rhw16_*/notice.hbs`, `rhw17_*/notice.hbs` | ⚠️ English-only |
+| **Wales** | Notice Only (Fault-based) | **RHW23** (pre-possession) | `rhw23_*/notice.hbs` | ⚠️ English-only |
+| **Wales** | Eviction Pack | RHW16/17 + RHW23 + court forms | `rhw16, rhw17, rhw23 + eviction/*.hbs` | ⚠️ English-only |
+| **Wales** | Money Claim | N1 (shared with England) | Uses England `money_claims/*.hbs` | ✅ Uses England templates |
+| **Wales** | Tenancy Agreement | **Occupation Contract** (RH(W)A 2016) | ❌ Uses England AST templates | ❌ **P1: Wrong template type** |
+| **Scotland** | Notice Only | **Notice to Leave** (PH(T)(S) Act 2016) | `notice_to_leave_official.hbs` | ✅ HBS template exists |
+| **Scotland** | Eviction Pack | Notice to Leave + Tribunal application | `eviction/notice_to_leave.hbs` + `tribunal_application.hbs` | ✅ HBS templates exist |
+| **Scotland** | Money Claim | **Simple Procedure** (Sheriff Court) | `money_claims/simple_procedure_*.hbs` (9 templates) | ✅ HBS templates exist |
+| **Scotland** | Tenancy Agreement | **PRT** (PH(T)(S) Act 2016) | `prt_agreement.hbs`, `prt_agreement_premium.hbs` | ✅ HBS templates exist |
+| **N. Ireland** | Tenancy Agreement | Private Tenancy (PTA 2022) | `private_tenancy_agreement.hbs`, `private_tenancy_premium.hbs` | ✅ HBS templates exist |
+| **N. Ireland** | Notice Only | N/A | N/A | ✅ Correctly blocked (422) |
+| **N. Ireland** | Eviction Pack | N/A | N/A | ✅ Correctly blocked (422) |
+| **N. Ireland** | Money Claim | N/A | N/A | ✅ Correctly blocked (422) |
+
+### Tenancy Agreement Jurisdiction Specificity
+
+| Jurisdiction | Template Type | Template File | Jurisdiction-Specific? | Legal Framework |
+|--------------|---------------|---------------|------------------------|-----------------|
+| **England** | Assured Shorthold Tenancy (AST) | `uk/england/templates/standard_ast_formatted.hbs` | ✅ Yes | Housing Act 1988 |
+| **Wales** | ❌ Uses England AST | `uk/england/templates/standard_ast_formatted.hbs` | ❌ **NO - Uses wrong template** | Should be Occupation Contract (RH(W)A 2016) |
+| **Scotland** | Private Residential Tenancy (PRT) | `uk/scotland/templates/prt_agreement.hbs` | ✅ Yes | PH(T)(S) Act 2016 |
+| **N. Ireland** | Private Tenancy Agreement | `uk/northern-ireland/templates/private_tenancy_agreement.hbs` | ✅ Yes | Private Tenancies Act 2022 |
+
+### Official Form Sources in Repository
+
+| Jurisdiction | Form | Source File | Purpose |
+|--------------|------|-------------|---------|
+| England | Form 6A | `_official_form_sources/form6a_section21.odt` | Section 21 notice |
+| England | Form 3 | `_official_form_sources/form3_section8.odt` | Section 8 notice |
+| Wales | RHW16 | `_official_form_sources/rhw16_notice_termination_6_months.docx` | 6-month Section 173 notice |
+| Wales | RHW17 | `_official_form_sources/rhw17_notice_termination_2_months.docx` | 2-month Section 173 notice |
+| Wales | RHW23 | `_official_form_sources/rhw23_notice_before_possession_claim.docx` | Fault-based pre-possession notice |
+| Scotland | Notice to Leave | `_official_form_sources/notice_to_leave_parts_1_3.pdf` | PRT eviction notice |
+
+---
+
+## 9. APPENDIX: FILE REFERENCES
 
 ### Key Files Audited
 
