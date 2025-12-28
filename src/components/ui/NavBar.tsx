@@ -4,7 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Button } from "./Button";
 import { clsx } from "clsx";
 import { RiArrowDownSLine, RiMenuLine } from 'react-icons/ri';
 
@@ -61,10 +60,10 @@ export function NavBar({ user }: NavBarProps) {
             onMouseLeave={() => setShowFreeTools(false)}
           >
             <button
-              className="text-sm font-semibold text-gray-700 hover:text-primary transition-colors relative py-2 flex items-center gap-1"
+              className="text-sm font-semibold text-gray-700 hover:text-[#692ED4] transition-colors relative py-2 flex items-center gap-1"
             >
               Free Tools
-              <RiArrowDownSLine className="h-4 w-4 text-[#7C3AED]" />
+              <RiArrowDownSLine className="h-4 w-4 text-[#692ED4]" />
             </button>
 
             {showFreeTools && (
@@ -76,7 +75,7 @@ export function NavBar({ user }: NavBarProps) {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary transition-colors"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-[#692ED4] transition-colors"
                     >
                       {item.label}
                     </Link>
@@ -93,8 +92,8 @@ export function NavBar({ user }: NavBarProps) {
               className={clsx(
                 "text-sm font-semibold transition-colors relative py-2",
                 pathname === item.href
-                  ? "text-primary after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary"
-                  : "text-gray-700 hover:text-primary"
+                  ? "text-[#692ED4] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#692ED4]"
+                  : "text-gray-700 hover:text-[#692ED4]"
               )}
             >
               {item.label}
@@ -114,10 +113,8 @@ export function NavBar({ user }: NavBarProps) {
               </Link>
             </div>
           ) : (
-            <Link href="/auth/login">
-              <Button variant="primary" size="medium" className="px-7 shadow-md hover:shadow-lg">
-                Login
-              </Button>
+            <Link href="/auth/login" className="header-login-btn">
+              Login
             </Link>
           )}
         </div>
@@ -128,7 +125,7 @@ export function NavBar({ user }: NavBarProps) {
           aria-expanded={open}
         >
           <span>Menu</span>
-          <RiMenuLine className="h-5 w-5 text-[#7C3AED]" />
+          <RiMenuLine className="h-5 w-5 text-[#692ED4]" />
         </button>
       </div>
 
@@ -142,7 +139,7 @@ export function NavBar({ user }: NavBarProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="block py-2 text-sm font-semibold text-charcoal hover:text-primary"
+                  className="block py-2 text-sm font-semibold text-charcoal hover:text-[#692ED4]"
                   onClick={() => setOpen(false)}
                 >
                   {item.label}
