@@ -43,10 +43,11 @@ export function NavBar({ user }: NavBarProps) {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      // Trigger sticky header after scrolling 80px
-      setIsScrolled(scrollY > 80);
+      // Trigger sticky header and menu after 200px scroll
+      const isPastThreshold = scrollY >= 200;
+      setIsScrolled(isPastThreshold);
       // Menu visible at top (0-10px) or after 200px scroll
-      setShowMenu(scrollY <= 10 || scrollY >= 200);
+      setShowMenu(scrollY <= 10 || isPastThreshold);
     };
 
     // Check initial scroll position
