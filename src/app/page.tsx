@@ -77,9 +77,7 @@ export default function Home() {
                 View Pricing
               </Link>
             </div>
-
-            <p className="mt-4 text-sm text-gray-600">
-            </p>
+            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England &amp; Wales or Scotland</p>
           </div>
         </Container>
       </section>
