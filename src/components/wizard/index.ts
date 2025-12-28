@@ -19,7 +19,7 @@ export { YesNoToggle } from './YesNoToggle';
 export type { YesNoToggleProps, YesNoValue } from './YesNoToggle';
 
 export { TextInput } from './TextInput';
-export type { TextInputProps } from './TextInput';
+export type { TextInputProps, AskHeavenConfig } from './TextInput';
 
 export { MultipleSelection } from './MultipleSelection';
 export type { MultipleSelectionProps, MultipleSelectionOption } from './MultipleSelection';
@@ -29,3 +29,6 @@ export type { FileUploadProps } from './FileUpload';
 
 export { ScaleSlider } from './ScaleSlider';
 export type { ScaleSliderProps, ScaleLevel } from './ScaleSlider';
+
+export { AskHeavenInlineEnhancer } from './AskHeavenInlineEnhancer';
+export type { AskHeavenInlineEnhancerProps, ApiMode } from './AskHeavenInlineEnhancer';

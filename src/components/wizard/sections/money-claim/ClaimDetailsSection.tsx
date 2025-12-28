@@ -2,9 +2,9 @@
 
 'use client';
 
-import React, { useState, useCallback } from 'react';
-import { RiSparklingLine, RiLoader4Line, RiCheckboxCircleLine } from 'react-icons/ri';
+import React, { useMemo } from 'react';
 import { CourtFinderLink } from '@/components/wizard/shared/CourtFinderLink';
+import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 
 type Jurisdiction = 'england' | 'wales' | 'scotland';
 
@@ -20,11 +20,6 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
   onUpdate,
 }) => {
   const moneyClaim = facts.money_claim || {};
-
-  // Ask Heaven enhancement state
-  const [enhancingField, setEnhancingField] = useState<string | null>(null);
-  const [enhancedText, setEnhancedText] = useState<{ field: string; text: string } | null>(null);
-  const [enhanceError, setEnhanceError] = useState<string | null>(null);
 
   const updateMoneyClaim = (field: string, value: any) => {
     onUpdate({
@@ -86,60 +81,12 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
     ? moneyClaim.other_amounts_types
     : [];
 
-
-  // Enhance with Ask Heaven
-  const handleEnhance = useCallback(async (fieldName: string, currentText: string, questionText: string) => {
-    if (!currentText.trim() || currentText.trim().length < 20) return;
-
-    setEnhancingField(fieldName);
-    setEnhanceError(null);
-
-    try {
-      const response = await fetch('/api/ask-heaven/enhance-answer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question_id: fieldName,
-          question_text: questionText,
-          answer: currentText,
-          context: {
-            jurisdiction,
-            product: 'money_claim',
-            primary_issue: primaryIssue,
-          },
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to enhance text');
-      }
-
-      const suggested =
-        data.suggested_wording ||
-        data.enhanced_answer?.suggested ||
-        data.ask_heaven?.suggested_wording;
-
-      if (suggested) {
-        setEnhancedText({ field: fieldName, text: suggested });
-      } else {
-        throw new Error('No suggestion returned from Ask Heaven');
-      }
-    } catch (err: any) {
-      console.error('Ask Heaven enhance error:', err);
-      setEnhanceError(err.message || 'Failed to enhance. Please try again.');
-    } finally {
-      setEnhancingField(null);
-    }
-  }, [jurisdiction, primaryIssue]);
-
-  const handleApplyEnhanced = () => {
-    if (enhancedText) {
-      updateMoneyClaim(enhancedText.field, enhancedText.text);
-      setEnhancedText(null);
-    }
-  };
+  // Build context for Ask Heaven enhancement
+  const enhanceContext = useMemo(() => ({
+    jurisdiction,
+    product: 'money_claim',
+    primary_issue: primaryIssue,
+  }), [jurisdiction, primaryIssue]);
 
   return (
     <div className="space-y-6">
@@ -194,63 +141,15 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
           placeholder="For example: The defendant is my former tenant at [property address]. They have failed to pay rent since [month/year] and left the property owing £[amount] in rent and causing damage to the carpets and doors…"
         />
 
-        {/* Enhance with Ask Heaven button */}
-        {basisOfClaim.trim().length > 20 && (
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => handleEnhance('basis_of_claim', basisOfClaim, 'Basis of claim for money claim')}
-              disabled={enhancingField === 'basis_of_claim'}
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-md hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-            >
-              {enhancingField === 'basis_of_claim' ? (
-                <>
-                  <RiLoader4Line className="w-4 h-4 mr-2 animate-spin" />
-                  Enhancing...
-                </>
-              ) : (
-                <>
-                  <RiSparklingLine className="w-4 h-4 mr-2" />
-                  Enhance with Ask Heaven
-                </>
-              )}
-            </button>
-            <span className="text-xs text-gray-500">
-              AI will improve clarity and court-readiness
-            </span>
-          </div>
-        )}
-
-        {/* Enhanced text suggestion for basis_of_claim */}
-        {enhancedText?.field === 'basis_of_claim' && (
-          <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-lg space-y-3">
-            <div className="flex items-center gap-2">
-              <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
-              <span className="text-sm font-semibold text-indigo-900">
-                Ask Heaven Suggestion
-              </span>
-            </div>
-            <p className="text-sm text-indigo-900 whitespace-pre-wrap">
-              {enhancedText.text}
-            </p>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={handleApplyEnhanced}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
-              >
-                Use this wording
-              </button>
-              <button
-                type="button"
-                onClick={() => setEnhancedText(null)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
-              >
-                Dismiss
-              </button>
-            </div>
-          </div>
-        )}
+        {/* Ask Heaven Inline Enhancer */}
+        <AskHeavenInlineEnhancer
+          questionId="basis_of_claim"
+          questionText="Basis of claim for money claim"
+          answer={basisOfClaim}
+          onApply={(newText) => updateMoneyClaim('basis_of_claim', newText)}
+          context={enhanceContext}
+          apiMode="generic"
+        />
 
         <p className="text-xs text-gray-500">
           You can keep this in plain English. Later we&apos;ll help you turn this into
@@ -335,13 +234,6 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
             <strong>Damages</strong> section with specific amounts and descriptions.
             The court needs a structured schedule showing each item you are claiming.
           </p>
-        </div>
-      )}
-
-      {/* Error display */}
-      {enhanceError && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
-          <p className="text-sm text-red-700">{enhanceError}</p>
         </div>
       )}
     </div>

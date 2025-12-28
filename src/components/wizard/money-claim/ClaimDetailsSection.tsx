@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 
 type Jurisdiction = 'england' | 'wales' | 'scotland';
 
@@ -51,11 +52,22 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
           Briefly describe what this claim is about
         </label>
         <textarea
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[140px]"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[140px] focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
           value={basisOfClaim}
           onChange={(e) => updateMoneyClaim('basis_of_claim', e.target.value)}
           placeholder="For example: This claim is for rent arrears and related charges under an assured shorthold tenancy of 10 High Street, Manchester..."
         />
+
+        {/* Ask Heaven Inline Enhancer */}
+        <AskHeavenInlineEnhancer
+          questionId="basis_of_claim"
+          questionText="Basis of claim for money claim"
+          answer={basisOfClaim}
+          onApply={(newText) => updateMoneyClaim('basis_of_claim', newText)}
+          context={{ jurisdiction, product: 'money_claim' }}
+          apiMode="generic"
+        />
+
         <p className="text-xs text-gray-500">
           Focus on the big picture: what the tenancy is, how the arrears arose,
           and what you are asking the court to do. Ask Heaven will turn this into
@@ -156,13 +168,24 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
           Anything else you&apos;re claiming (damages, costs, other sums)
         </label>
         <textarea
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[120px]"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[120px] focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
           value={otherAmountsSummary}
           onChange={(e) =>
             updateMoneyClaim('other_amounts_summary', e.target.value)
           }
           placeholder="For example: £450 to replace damaged flooring, £120 cleaning, £80 unpaid water bill..."
         />
+
+        {/* Ask Heaven Inline Enhancer */}
+        <AskHeavenInlineEnhancer
+          questionId="other_amounts_summary"
+          questionText="Additional amounts claimed (damages, costs, other sums)"
+          answer={otherAmountsSummary}
+          onApply={(newText) => updateMoneyClaim('other_amounts_summary', newText)}
+          context={{ jurisdiction, product: 'money_claim' }}
+          apiMode="generic"
+        />
+
         <p className="text-xs text-gray-500">
           You&apos;ll break down the exact figures in the arrears and damages
           sections. This text gives Ask Heaven context for the Particulars of
