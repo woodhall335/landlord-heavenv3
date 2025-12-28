@@ -5,7 +5,6 @@ import type { CaseData } from './official-forms-filler';
 import type { ScotlandCaseData } from './scotland-forms-filler';
 import { GROUND_DEFINITIONS } from './section8-generator';
 import { generateArrearsParticulars } from './arrears-schedule-mapper';
-import { getAuthoritativeArrears } from '@/lib/arrears-engine';
 import { EvidenceCategory } from '@/lib/evidence/schema';
 import { calculatePossessionFees } from '@/lib/court-fees/hmcts-fees';
 

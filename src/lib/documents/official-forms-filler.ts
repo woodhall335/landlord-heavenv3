@@ -575,18 +575,6 @@ function setCheckbox(form: PDFForm, fieldName: string, checked: boolean, context
   }
 }
 
-/**
- * Set a required checkbox - throws if field not found
- */
-function setCheckboxRequired(form: PDFForm, fieldName: string, checked: boolean, context: string): void {
-  const field = getCheckBoxStrict(form, fieldName, context);
-  if (checked) {
-    field.check();
-  } else {
-    field.uncheck();
-  }
-}
-
 // =============================================================================
 // UTILITY FUNCTIONS
 // =============================================================================
