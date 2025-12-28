@@ -516,7 +516,7 @@ async function generateScotlandMoneyClaimPack(
   });
 
   // 6. Official Simple Procedure claim form
-  await assertOfficialFormExists('scotland/simple_procedure_claim_form.pdf');
+  await assertOfficialFormExists('scotland/form-3a.pdf');
   const simpleProcedurePdf = await fillSimpleProcedureClaim(
     buildSimpleProcedurePayload(claim, totals)
   );

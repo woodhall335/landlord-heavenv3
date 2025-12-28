@@ -194,7 +194,7 @@ async function main() {
   );
 
   await createTestPDFWithFields(
-    'simple_procedure_claim_form.pdf',
+    'form-3a.pdf',
     'Simple Procedure Claim Form (Test Fixture)',
     [],
     'scotland'
@@ -223,7 +223,7 @@ async function main() {
         forms: {
           'notice_to_leave.pdf': { name: 'AT6 - Notice to Leave', fillable: false },
           'form_e_eviction.pdf': { name: 'Form E - Eviction Order Application', fillable: true },
-          'simple_procedure_claim_form.pdf': { name: 'Form 3A - Simple Procedure Claim', fillable: false },
+          'form-3a.pdf': { name: 'Form 3A - Simple Procedure Claim', fillable: false },
           'simple_procedure_response_form.pdf': { name: 'Form 4A - Simple Procedure Response', fillable: false },
         },
       },

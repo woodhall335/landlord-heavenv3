@@ -305,7 +305,7 @@ The pack generator includes **4 mandatory PAP-DEBT documents** required before i
 
 ### 2.1 Official Form: Form 3A (Simple Procedure Claim Form)
 
-**File Location:** `public/official-forms/scotland/simple_procedure_claim_form.pdf`
+**File Location:** `public/official-forms/scotland/form-3a.pdf`
 **Form Filler:** `src/lib/documents/scotland-forms-filler.ts:fillSimpleProcedureClaim()`
 **Version:** 2024.03 or later
 **Source:** https://www.scotcourts.gov.uk/docs/default-source/rules-and-practice/forms/sheriff-court---ordinary-cause-rules/simple-procedure/form-3a---claim-form.pdf
@@ -774,7 +774,7 @@ landlord-heavenv3/
 │   └── official-forms/
 │       ├── N1_1224.pdf                     ← Official E&W N1 form
 │       └── scotland/
-│           └── simple_procedure_claim_form.pdf  ← Official Form 3A
+│           └── form-3a.pdf  ← Official Form 3A
 ├── src/
 │   └── lib/
 │       └── documents/
@@ -911,7 +911,7 @@ landlord-heavenv3/
 - **Source:** https://www.scotcourts.gov.uk/taking-action/simple-procedure
 - **Update Process:**
   1. Download new PDF from Scottish Courts
-  2. Replace `public/official-forms/scotland/simple_procedure_claim_form.pdf`
+  2. Replace `public/official-forms/scotland/form-3a.pdf`
   3. Update file reference in `scotland-forms-filler.ts:loadOfficialForm()`
   4. Re-map any changed field names
   5. Test with `tests/documents/scotland-money-claim-pack.test.ts`
