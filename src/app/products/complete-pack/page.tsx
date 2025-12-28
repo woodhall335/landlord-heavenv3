@@ -174,12 +174,12 @@ export default function CompleteEvictionPackPage() {
             </div>
 
             {/* Value Callout */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 text-center">
-              <h3 className="text-2xl font-bold mb-3">💰 Total Ask Heaven Value: £650-1,400</h3>
-              <p className="text-lg mb-4">
+            <div className="bg-[#F6EFFF] rounded-xl p-8 text-center">
+              <h3 className="text-2xl font-bold mb-3 text-charcoal">💰 Total Ask Heaven Value: £650-1,400</h3>
+              <p className="text-lg mb-4 text-gray-700">
                 These three AI-drafted documents alone would cost £650-1,400 if written by a solicitor
               </p>
-              <p className="text-white/90 text-base">
+              <p className="text-gray-600 text-base">
                 With the Complete Pack at £149.99, you also get all court forms, notices, checklists, and guides - making this an incredible value
               </p>
             </div>
@@ -417,7 +417,7 @@ export default function CompleteEvictionPackPage() {
             <div className="mt-12 text-center">
               <Link
                 href="/wizard?product=complete_pack"
-                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
+                className="hero-btn-primary"
               >
                 Start Your Complete Pack →
               </Link>
@@ -713,7 +713,7 @@ export default function CompleteEvictionPackPage() {
               <p className="text-gray-600 mb-6">Need the full solution to take your case to court?</p>
               <Link
                 href="/wizard?product=complete_pack"
-                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
+                className="hero-btn-primary"
               >
                 Get Complete Eviction Pack - £149.99 →
               </Link>
