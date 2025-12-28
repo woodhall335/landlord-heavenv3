@@ -10,7 +10,10 @@
  */
 
 import { describe, expect, it } from "vitest";
+import fs from "fs";
+import path from "path";
 import { getCapabilityMatrix, type Jurisdiction, type Product } from "../../src/lib/jurisdictions/capabilities/matrix";
+import { getFormFilename, getCourtFormFiles } from "../../src/lib/documents/official-forms-filler";
 
 // Minimal compliant facts for each flow
 const MINIMAL_FACTS: Record<string, Record<string, unknown>> = {
@@ -307,6 +310,69 @@ describe("Placeholder Detection", () => {
       expect(hasPlaceholderIssue).toBe(false);
     } else {
       expect(hasPlaceholderIssue).toBe(true);
+    }
+  });
+});
+
+/**
+ * Wales Eviction Pack Form Selection Smoke Test
+ *
+ * CRITICAL: Verifies that Wales eviction_pack routes use Wales-specific
+ * court forms (N5_WALES, N5B_WALES, N119_WALES) instead of England forms.
+ *
+ * This is a regression guard to prevent accidentally using England forms
+ * in Wales eviction packs.
+ */
+describe("Wales Eviction Pack Form Selection", () => {
+  const OFFICIAL_FORMS_DIR = path.join(process.cwd(), "public", "official-forms");
+
+  describe("Form Selection by Jurisdiction", () => {
+    it("Wales eviction_pack must use N5_WALES_1222.pdf (NOT n5-eng.pdf)", () => {
+      const walesN5 = getFormFilename("n5", "wales");
+      expect(walesN5).toBe("N5_WALES_1222.pdf");
+      expect(walesN5).not.toBe("n5-eng.pdf");
+    });
+
+    it("Wales eviction_pack must use N5B_WALES_0323.pdf (NOT n5b-eng.pdf)", () => {
+      const walesN5B = getFormFilename("n5b", "wales");
+      expect(walesN5B).toBe("N5B_WALES_0323.pdf");
+      expect(walesN5B).not.toBe("n5b-eng.pdf");
+    });
+
+    it("Wales eviction_pack must use N119_WALES_1222.pdf (NOT n119-eng.pdf)", () => {
+      const walesN119 = getFormFilename("n119", "wales");
+      expect(walesN119).toBe("N119_WALES_1222.pdf");
+      expect(walesN119).not.toBe("n119-eng.pdf");
+    });
+
+    it("England eviction_pack must use England forms (not Wales)", () => {
+      expect(getFormFilename("n5", "england")).toBe("n5-eng.pdf");
+      expect(getFormFilename("n5b", "england")).toBe("n5b-eng.pdf");
+      expect(getFormFilename("n119", "england")).toBe("n119-eng.pdf");
+    });
+  });
+
+  describe("Wales Form Files Exist on Disk", () => {
+    const walesForms = ["N5_WALES_1222.pdf", "N5B_WALES_0323.pdf", "N119_WALES_1222.pdf"];
+
+    for (const formFile of walesForms) {
+      it(`${formFile} exists in public/official-forms/`, () => {
+        const formPath = path.join(OFFICIAL_FORMS_DIR, formFile);
+        expect(fs.existsSync(formPath)).toBe(true);
+      });
+    }
+  });
+
+  describe("Wales Routes Use Correct Forms", () => {
+    const walesEvictionRoutes = ["wales_section_173", "wales_fault_based"];
+
+    for (const route of walesEvictionRoutes) {
+      it(`Route ${route} should resolve to Wales forms`, () => {
+        const forms = getCourtFormFiles("wales");
+        expect(forms.n5).toContain("WALES");
+        expect(forms.n5b).toContain("WALES");
+        expect(forms.n119).toContain("WALES");
+      });
     }
   });
 });

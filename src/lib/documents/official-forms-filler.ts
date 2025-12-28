@@ -29,6 +29,57 @@ import { generateArrearsBreakdownForCourt } from './arrears-schedule-mapper';
 const OFFICIAL_FORMS_ROOT = path.join(process.cwd(), 'public', 'official-forms');
 
 // =============================================================================
+// JURISDICTION-BASED FORM SELECTION
+// =============================================================================
+
+/**
+ * Court form filenames by jurisdiction.
+ *
+ * England uses the standard -eng.pdf forms.
+ * Wales uses bilingual Wales-specific versions (required for Welsh courts).
+ *
+ * CRITICAL: Wales eviction_pack routes (wales_section_173, wales_fault_based)
+ * MUST use Wales-specific forms. Using England forms in Wales is non-compliant.
+ */
+type CourtFormJurisdiction = 'england' | 'wales';
+
+const COURT_FORM_FILES: Record<CourtFormJurisdiction, { n5: string; n5b: string; n119: string }> = {
+  england: {
+    n5: 'n5-eng.pdf',
+    n5b: 'n5b-eng.pdf',
+    n119: 'n119-eng.pdf',
+  },
+  wales: {
+    n5: 'N5_WALES_1222.pdf',
+    n5b: 'N5B_WALES_0323.pdf',
+    n119: 'N119_WALES_1222.pdf',
+  },
+};
+
+/**
+ * Get the correct form filename for a jurisdiction.
+ *
+ * @param formType - The type of form (n5, n5b, n119)
+ * @param jurisdiction - The jurisdiction (england, wales). Defaults to england for safety.
+ * @returns The filename of the correct form to use
+ */
+export function getFormFilename(formType: 'n5' | 'n5b' | 'n119', jurisdiction?: string): string {
+  // Normalize jurisdiction - only england and wales use these court forms
+  const normalizedJurisdiction: CourtFormJurisdiction =
+    jurisdiction === 'wales' ? 'wales' : 'england';
+
+  return COURT_FORM_FILES[normalizedJurisdiction][formType];
+}
+
+/**
+ * Get all court form filenames for a jurisdiction.
+ * Exported for testing/validation purposes.
+ */
+export function getCourtFormFiles(jurisdiction: 'england' | 'wales'): { n5: string; n5b: string; n119: string } {
+  return COURT_FORM_FILES[jurisdiction];
+}
+
+// =============================================================================
 // FIELD NAME CONSTANTS - Authoritative field names from PDF inventory
 // =============================================================================
 
@@ -356,6 +407,10 @@ const N119_CHECKBOXES = {
 // =============================================================================
 
 export interface CaseData {
+  // Jurisdiction - CRITICAL for selecting correct court forms
+  // Wales uses N5_WALES, N5B_WALES, N119_WALES instead of England versions
+  jurisdiction?: 'england' | 'wales' | 'scotland' | 'northern-ireland';
+
   // Landlord details
   landlord_full_name: string;
   landlord_2_name?: string;
@@ -650,7 +705,8 @@ function splitAddress(address: string): string[] {
  */
 export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
   const ctx = 'N5';
-  console.log('📄 Filling N5 form (Claim for possession)...');
+  const formFile = getFormFilename('n5', data.jurisdiction);
+  console.log(`📄 Filling N5 form (Claim for possession) - using ${formFile}...`);
 
   // === VALIDATION ===
   if (!data.court_name) {
@@ -666,7 +722,7 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
     throw new Error(`[${ctx}] property_address is required.`);
   }
 
-  const pdfDoc = await loadOfficialForm('n5-eng.pdf');
+  const pdfDoc = await loadOfficialForm(formFile);
   const form = pdfDoc.getForm();
 
   // === HEADER FIELDS ===
@@ -818,7 +874,8 @@ export async function fillN5Form(data: CaseData): Promise<Uint8Array> {
  */
 export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
   const ctx = 'N5B';
-  console.log('📄 Filling N5B form (Accelerated possession - Section 21)...');
+  const formFile = getFormFilename('n5b', data.jurisdiction);
+  console.log(`📄 Filling N5B form (Accelerated possession - Section 21) - using ${formFile}...`);
 
   // === VALIDATION ===
   if (!data.court_name) {
@@ -846,7 +903,7 @@ export async function fillN5BForm(data: CaseData): Promise<Uint8Array> {
     throw new Error(`[${ctx}] tenancy_start_date is required.`);
   }
 
-  const pdfDoc = await loadOfficialForm('n5b-eng.pdf');
+  const pdfDoc = await loadOfficialForm(formFile);
   const form = pdfDoc.getForm();
 
   // === HEADER SECTION ===
@@ -1213,7 +1270,8 @@ function generateParticularsOfClaim(data: CaseData): string {
  */
 export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
   const ctx = 'N119';
-  console.log('📄 Filling N119 form (Particulars of claim)...');
+  const formFile = getFormFilename('n119', data.jurisdiction);
+  console.log(`📄 Filling N119 form (Particulars of claim) - using ${formFile}...`);
 
   // === VALIDATION ===
   if (!data.court_name) {
@@ -1232,7 +1290,7 @@ export async function fillN119Form(data: CaseData): Promise<Uint8Array> {
     throw new Error(`[${ctx}] tenancy_start_date is required.`);
   }
 
-  const pdfDoc = await loadOfficialForm('n119-eng.pdf');
+  const pdfDoc = await loadOfficialForm(formFile);
   const form = pdfDoc.getForm();
 
   // === HEADER FIELDS ===
