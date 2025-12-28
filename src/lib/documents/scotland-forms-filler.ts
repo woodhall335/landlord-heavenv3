@@ -435,6 +435,49 @@ export async function fillFormE(data: ScotlandCaseData): Promise<Uint8Array> {
  *
  * Official form: /public/official-forms/scotland/form-3a.pdf
  * Source: https://www.scotcourts.gov.uk/taking-action/simple-procedure
+ *
+ * OFFICIAL FORM FIELD MAPPING (74 fields total):
+ * ==============================================
+ * RadioGroups:
+ *   - A1: Claimant type (individual/company)
+ *   - A5: Contact preference
+ *   - B1: Representation type
+ *   - B4: Contact through representative
+ *   - B5: Representative contact preference
+ *   - C1: Respondent type (individual/company)
+ *   - C2: Respondent known details
+ *   - C6: Second respondent type
+ *   - C10: Second respondent known details
+ *   - D3: Consumer credit agreement
+ *   - D5: Claim type selection
+ *   - D6: Time order request
+ *
+ * Section A - Claimant Details:
+ *   - A2 Name, A2 Middle name, A2 Surname, A2 Trading name (individual)
+ *   - A3 Company Name, A3 Company type, A3 Company registration, A3 Trading name
+ *   - A4 Address, A4 City, A4 Postcode, A4 Email address
+ *
+ * Section B - Representative:
+ *   - B2 Representative Name, B2 Representative Surname, B2 Representative Organisation
+ *   - B3 Representative Address, B3 Representative City, B3 Representative Postcode, B3 Representative Email
+ *
+ * Section C - Respondent:
+ *   - C3 Respondent Name/Middle name/Surname/Trading name
+ *   - C4 Respondent Company Name/type/registration/Trading name
+ *   - C5 Respondent Address/City/Postcode/Email
+ *   - C7/C8 Second respondent fields
+ *
+ * Section D - Claim Details:
+ *   - D1 Background, D2 Address/City/Postcode/Details
+ *   - D4 Details of consumer credit agreement
+ *   - D5 Sum of money, D5 Deliver items, D5 Do something for me
+ *   - D7 Why should your claim be successful
+ *   - D8 Steps to settle your dispute
+ *
+ * Section E - Evidence:
+ *   - E1 Witnesses, E2 Documents, E3 Evidence
+ *
+ * Checkboxes: D5a (money), D5b (items), D5c (action)
  */
 export async function fillSimpleProcedureClaim(data: ScotlandMoneyClaimData): Promise<Uint8Array> {
   console.log('📄 Filling Simple Procedure Claim Form (Form 3A)...');
@@ -442,109 +485,158 @@ export async function fillSimpleProcedureClaim(data: ScotlandMoneyClaimData): Pr
   const pdfDoc = await loadOfficialForm('form-3a.pdf');
   const form = pdfDoc.getForm();
 
-  // Court details
-  fillTextField(form, '3A_SheriffCourt', data.sheriffdom || data.court_name || 'Edinburgh Sheriff Court');
-
-  // Section 1: Claimant (Pursuer) Details
-  fillTextField(form, '3A_Claimant', data.landlord_full_name);
-
-  // Claimant address fields (Section A1 - likely 5 fields for address lines)
-  const claimantAddressParts = [
-    data.landlord_address,
-    '',  // address line 2
-    '',  // address line 3
-    '',  // city/town
-    data.landlord_postcode
-  ];
-  fillTextField(form, '3A_A1_1', claimantAddressParts[0] || '');
-  fillTextField(form, '3A_A1_2', claimantAddressParts[1] || '');
-  fillTextField(form, '3A_A1_3', claimantAddressParts[2] || '');
-  fillTextField(form, '3A_A1_4', claimantAddressParts[3] || '');
-  fillTextField(form, '3A_A1_5', data.landlord_phone || data.landlord_email || '');
-
-  // Section 2: Respondent (Defender) Details
-  fillTextField(form, '3A_Respondent', data.tenant_full_name);
-
-  // Respondent address fields (Section B2 - likely 4 fields)
-  const respondentAddressParts = [
-    data.property_address,
-    '',  // address line 2
-    '',  // city/town
-    data.property_postcode
-  ];
-  fillTextField(form, '3A_B2_1', respondentAddressParts[0] || '');
-  fillTextField(form, '3A_B2_2', respondentAddressParts[1] || '');
-  fillTextField(form, '3A_B2_3', respondentAddressParts[2] || '');
-  fillTextField(form, '3A_B2_4', respondentAddressParts[3] || '');
-
-  // Section B3: What the claim is about (3 fields for detailed description)
-  const claimSummary = data.particulars_of_claim ||
-    `Claim for unpaid rent arrears of ${formatCurrency(data.arrears_total || 0)}` +
-    (data.damages_total ? ` and property damage costs of ${formatCurrency(data.damages_total)}` : '') +
-    ` relating to tenancy at ${data.property_address}.`;
-
-  fillTextField(form, '3A_B3_1', claimSummary.substring(0, 500));
-
-  // Section B3_2: What has happened
-  const background = data.basis_of_claim === 'rent_arrears'
-    ? `The respondent occupied the property under a tenancy commencing ${data.tenancy_start_date || 'on or about'} with rent of ${formatCurrency(data.rent_amount || 0)} per ${data.rent_frequency || 'month'}. The respondent failed to pay rent as agreed, resulting in arrears.`
-    : data.basis_of_claim === 'damages'
-    ? `The respondent caused damage to the property beyond normal wear and tear. The claimant seeks recovery of repair costs.`
-    : `The respondent occupied the property under a tenancy and has failed to pay rent as agreed, and has also caused damage to the property.`;
-
-  fillTextField(form, '3A_B3_2', background.substring(0, 1000));
-
-  // Section B3_3: What have you done to try to resolve
-  const attempts = data.attempts_to_resolve ||
-    'The claimant sent written demands for payment but the respondent failed to make payment or engage to resolve the debt.';
-
-  fillTextField(form, '3A_B3_3', attempts.substring(0, 500));
-
-  // Section B4: Financial details (amounts claimed)
-  fillTextField(form, '3A_B4_1', formatCurrency(data.total_claim_amount));
-
-  // Breakdown in B4 fields
-  if (data.arrears_total) {
-    fillTextField(form, '3A_B4_2', `Arrears: ${formatCurrency(data.arrears_total)}`);
+  // =========================================================================
+  // Section A - About You (Claimant/Pursuer)
+  // =========================================================================
+  // A1: Individual or Company - select via RadioGroup
+  try {
+    const a1Radio = form.getRadioGroup('A1');
+    const options = a1Radio.getOptions();
+    // Assume landlords are individuals by default
+    if (options.length >= 1) {
+      a1Radio.select(options[0]); // Individual
+    }
+  } catch (e) {
+    console.warn('Could not set A1 radio group');
   }
+
+  // A2: Individual claimant details
+  const landlordNameParts = data.landlord_full_name?.split(' ') || [];
+  const landlordFirstName = landlordNameParts[0] || '';
+  const landlordMiddleName = landlordNameParts.length > 2 ? landlordNameParts.slice(1, -1).join(' ') : '';
+  const landlordSurname = landlordNameParts.length > 1 ? landlordNameParts[landlordNameParts.length - 1] : '';
+
+  fillTextField(form, 'A2 Name', landlordFirstName);
+  fillTextField(form, 'A2 Middle name', landlordMiddleName);
+  fillTextField(form, 'A2 Surname', landlordSurname);
+  fillTextField(form, 'A2 Trading name', '');
+
+  // A4: Contact details
+  fillTextField(form, 'A4 Address', data.landlord_address || '');
+  fillTextField(form, 'A4 City', ''); // Could parse from address
+  fillTextField(form, 'A4 Postcode', data.landlord_postcode || '');
+  fillTextField(form, 'A4 Email address', data.landlord_email || '');
+
+  // A5: Contact preference
+  try {
+    const a5Radio = form.getRadioGroup('A5');
+    const options = a5Radio.getOptions();
+    if (options.length >= 1) {
+      a5Radio.select(options[0]); // Default to first option
+    }
+  } catch (e) {
+    console.warn('Could not set A5 radio group');
+  }
+
+  // =========================================================================
+  // Section B - Representative (skip if self-representing)
+  // =========================================================================
+  // B1: Representation type - typically self-representing
+  try {
+    const b1Radio = form.getRadioGroup('B1');
+    const options = b1Radio.getOptions();
+    if (options.length >= 1) {
+      b1Radio.select(options[0]); // Self-representing
+    }
+  } catch (e) {
+    console.warn('Could not set B1 radio group');
+  }
+
+  // =========================================================================
+  // Section C - About the Respondent (Defender)
+  // =========================================================================
+  // C1: Respondent type
+  try {
+    const c1Radio = form.getRadioGroup('C1');
+    const options = c1Radio.getOptions();
+    if (options.length >= 1) {
+      c1Radio.select(options[0]); // Individual
+    }
+  } catch (e) {
+    console.warn('Could not set C1 radio group');
+  }
+
+  // C3: Respondent individual details
+  const tenantNameParts = data.tenant_full_name?.split(' ') || [];
+  const tenantFirstName = tenantNameParts[0] || '';
+  const tenantMiddleName = tenantNameParts.length > 2 ? tenantNameParts.slice(1, -1).join(' ') : '';
+  const tenantSurname = tenantNameParts.length > 1 ? tenantNameParts[tenantNameParts.length - 1] : '';
+
+  fillTextField(form, 'C3 Respondent Name', tenantFirstName);
+  fillTextField(form, 'C3 Respondent Middle name', tenantMiddleName);
+  fillTextField(form, 'C3 Respondent Surname', tenantSurname);
+  fillTextField(form, 'C3 Respondent Trading name', '');
+
+  // C5: Respondent address
+  fillTextField(form, 'C5 Respondent Address', data.property_address || '');
+  fillTextField(form, 'C5 Respondent City', '');
+  fillTextField(form, 'C5 Respondent Postcode', data.property_postcode || '');
+  fillTextField(form, 'C5 Respondent Email', '');
+
+  // Second tenant if applicable
+  if (data.tenant_2_name) {
+    const tenant2Parts = data.tenant_2_name.split(' ');
+    fillTextField(form, 'C7 Respondent 2 Name', tenant2Parts[0] || '');
+    fillTextField(form, 'C7 Respondent 2 Surname', tenant2Parts[tenant2Parts.length - 1] || '');
+  }
+
+  // =========================================================================
+  // Section D - About Your Claim
+  // =========================================================================
+  // D1: Background to your claim
+  const background = data.particulars_of_claim ||
+    `This claim relates to a tenancy at ${data.property_address}. ` +
+    `The tenancy commenced on ${data.tenancy_start_date || '[date]'} with rent of ${formatCurrency(data.rent_amount || 0)} per ${data.rent_frequency || 'month'}. ` +
+    (data.basis_of_claim === 'rent_arrears'
+      ? `The respondent failed to pay rent as agreed, resulting in arrears of ${formatCurrency(data.arrears_total || 0)}.`
+      : data.basis_of_claim === 'damages'
+      ? `The respondent caused damage to the property beyond normal wear and tear.`
+      : `The respondent failed to pay rent and caused damage to the property.`);
+
+  fillTextField(form, 'D1 Background', background);
+
+  // D2: Address where dispute arose
+  fillTextField(form, 'D2 Address', data.property_address || '');
+  fillTextField(form, 'D2 City', '');
+  fillTextField(form, 'D2 Postcode', data.property_postcode || '');
+  fillTextField(form, 'D2 Details', `Tenancy property - ${data.property_address}`);
+
+  // D5: What you want - check money checkbox and fill amount
+  checkBox(form, 'D5a', true); // Payment of money
+  fillTextField(form, 'D5 Sum of money', formatCurrency(data.total_claim_amount));
+
+  // D7: Why your claim should be successful
+  const whySuccessful = `The claimant is the landlord of the property at ${data.property_address}. ` +
+    `The respondent entered into a tenancy agreement and agreed to pay rent of ${formatCurrency(data.rent_amount || 0)} per ${data.rent_frequency || 'month'}. ` +
+    (data.arrears_total ? `The respondent has failed to pay rent totalling ${formatCurrency(data.arrears_total)}. ` : '') +
+    (data.damages_total ? `The respondent has caused damage costing ${formatCurrency(data.damages_total)} to repair. ` : '') +
+    `The claimant is entitled to recover these sums.`;
+
+  fillTextField(form, 'D7 Why should your claim be successful', whySuccessful);
+
+  // D8: Steps to settle
+  const steps = data.attempts_to_resolve ||
+    'The claimant sent written demands for payment. ' +
+    'The respondent failed to make payment or engage to resolve the debt. ' +
+    'The claimant has complied with pre-action protocol requirements.';
+
+  fillTextField(form, 'D8 Steps to settle your dispute', steps);
+
+  // =========================================================================
+  // Section E - Evidence
+  // =========================================================================
+  const documents = [
+    'Tenancy agreement',
+    'Rent statement/schedule of arrears',
+    'Demand letters sent to respondent',
+  ];
   if (data.damages_total) {
-    fillTextField(form, '3A_B4_3', `Damages: ${formatCurrency(data.damages_total)}`);
+    documents.push('Photographs of damage');
+    documents.push('Repair quotes/invoices');
   }
 
-  // Interest details
-  if (data.interest_to_date && data.interest_to_date > 0) {
-    fillTextField(form, '3A_B4_4', `Interest: ${formatCurrency(data.interest_to_date)} at ${data.interest_rate || 8}% per annum from ${data.interest_start_date || 'date of claim'}`);
-  }
-
-  // Court fee and total
-  if (data.court_fee) {
-    fillTextField(form, '3A_B4_5', `Court fee: ${formatCurrency(data.court_fee)}`);
-  }
-
-  // Section B5: Total amount (RadioGroup field - skip for now, value shown in B4 fields)
-  // Note: B5 is a RadioGroup, not a text field. Total is captured in B4 breakdown.
-
-  // Section E: Attachments checklist (using CheckBox fields)
-  // CheckBox1-6 likely represent different attachment types
-  checkBox(form, 'CheckBox1', true);  // Particulars of claim
-  checkBox(form, 'CheckBox2', !!data.arrears_total);  // Schedule of arrears
-  checkBox(form, 'CheckBox3', true);  // Evidence list
-  checkBox(form, 'CheckBox4', true);  // Tenancy agreement
-  // CheckBox5 and CheckBox6 available for other attachments
-
-  // Section D/F: Statement of truth and signature
-  // Note: D1 and F1 are RadioGroups. Signature name might be in a different field.
-  // Text1 field might be for signatory name
-  fillTextField(form, 'Text1', data.signatory_name || data.landlord_full_name);
-
-  // Date fields: Text2/3/4 appear to have constraints, use alternative Text fields if available
-  // Using Text22/23/24 for date components as they're standard text fields
-  const sigDate = splitDate(data.signature_date || new Date().toISOString().split('T')[0]);
-  if (sigDate) {
-    fillTextField(form, 'Text22', sigDate.day);
-    fillTextField(form, 'Text23', sigDate.month);
-    fillTextField(form, 'Text24', sigDate.year);
-  }
+  fillTextField(form, 'E2 Documents', documents.join('\n'));
+  fillTextField(form, 'E3 Evidence', data.evidence_summary || 'Documentary evidence as listed above.');
 
   const pdfBytes = await pdfDoc.save();
   console.log('✅ Simple Procedure Claim Form filled successfully');

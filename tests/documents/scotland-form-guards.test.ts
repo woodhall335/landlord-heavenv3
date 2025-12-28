@@ -14,7 +14,25 @@ describe('Scotland official form guards', () => {
 
   it('ships official PDFs for Simple Procedure (money claims)', async () => {
     await expect(fs.access(path.join(base, 'simple_procedure_response_form.pdf'))).resolves.toBeUndefined();
-    // Note: form-3a.pdf (Simple Procedure Claim Form) should be added when available
+    await expect(fs.access(path.join(base, 'form-3a.pdf'))).resolves.toBeUndefined();
+  });
+
+  it('Form 3A (Simple Procedure Claim) is a valid fillable PDF', async () => {
+    const form3aBytes = await fs.readFile(path.join(base, 'form-3a.pdf'));
+    expect(form3aBytes.length).toBeGreaterThan(200000); // Official form is ~264KB
+
+    const pdfDoc = await PDFDocument.load(form3aBytes);
+    const form = pdfDoc.getForm();
+    const fields = form.getFields();
+
+    // Official Form 3A has 74 fields
+    expect(fields.length).toBe(74);
+
+    // Check for key fields
+    const fieldNames = fields.map(f => f.getName());
+    expect(fieldNames).toContain('A2 Name'); // Claimant name
+    expect(fieldNames).toContain('C3 Respondent Name'); // Respondent name
+    expect(fieldNames).toContain('D1 Background'); // Claim background
   });
 
   it('Form E is a valid fillable PDF with expected fields', async () => {
