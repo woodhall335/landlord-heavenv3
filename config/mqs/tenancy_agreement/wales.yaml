@@ -2,49 +2,50 @@
 #
 # WALES-ONLY Occupation Contract (Renting Homes Wales Act 2016)
 # Split from england-wales.yaml as part of canonical jurisdiction implementation
-# Version 2.0.2 - Wales jurisdiction
+# Version 2.1.0 - Wales jurisdiction (terminology fix)
 
 __meta:
-  version: "2.0.2"
+  version: "2.1.0"
   effective_from: "2025-12-16"
-  last_updated: "2025-12-16"
-  legal_review_date: "2025-12-16"
+  last_updated: "2025-12-28"
+  legal_review_date: "2025-12-28"
   jurisdiction: "wales"
   product: "tenancy_agreement"
 
-# Audit Notes (2025-12-16)
-# - Split from england-wales.yaml to support canonical jurisdictions
-# - Uses Wales-specific terminology (occupation contract, contract holder)
-# - Includes Rent Smart Wales registration requirements
-# - REMOVED Right to Rent (England-only)
+# Audit Notes (2025-12-28)
+# - CRITICAL FIX: Updated terminology from "AST" to "Occupation Contract" per Renting Homes (Wales) Act 2016
+# - Removed Right to Rent fields (England-only requirement)
+# - Removed How to Rent guide fields (England-only requirement)
+# - Wales uses "Standard/Premium Occupation Contract" not AST
+# - Contract holders (tenants) have different statutory rights under RH(W)A 2016
 # - Section 21 does NOT apply in Wales (uses Section 173 instead)
 
 id: tenancy_agreement_wales_v2
 product: tenancy_agreement
 jurisdiction: wales
-version: "2.0.2"
+version: "2.1.0"
 
 questions:
   # 0. Product selection
-  - id: ast_tier
+  - id: occupation_contract_tier
     section: Product
-    question: "Which tenancy agreement do you need?"
+    question: "Which occupation contract do you need?"
     inputType: select
     options:
-      - "Standard AST"
-      - "Premium AST"
-    helperText: "Standard covers simple lets. Premium adds guarantor, HMO, rent review and tighter controls."
+      - "Standard Occupation Contract"
+      - "Premium Occupation Contract"
+    helperText: "Under the Renting Homes (Wales) Act 2016, tenancies in Wales are called 'occupation contracts'. Standard covers simple lets. Premium adds guarantor, HMO, rent review and tighter controls."
     validation:
       required: true
     maps_to:
       - product_tier
 
-  # 1. AST Suitability Check
-  - id: ast_suitability
-    section: "Tenancy Type Check"
-    question: "AST suitability check"
+  # 1. Occupation Contract Suitability Check
+  - id: occupation_contract_suitability
+    section: "Contract Type Check"
+    question: "Occupation contract suitability check"
     inputType: group
-    helperText: "Basic checks to ensure this is a valid AST. For validation/warnings only."
+    helperText: "Basic checks to ensure this is a valid standard occupation contract under the Renting Homes (Wales) Act 2016. For validation/warnings only."
     fields:
       - id: tenant_is_individual
         label: "Is the tenant an individual (not a company)?"
@@ -61,22 +62,22 @@ questions:
       - id: landlord_lives_at_property
         label: "Does the landlord live at the property?"
         inputType: yes_no
-        helperText: "If yes, this may not be an AST"
+        helperText: "If yes, this may not be a standard occupation contract"
         validation:
           required: true
         width: half
       - id: holiday_or_licence
         label: "Is this a holiday let or licence arrangement?"
         inputType: yes_no
-        helperText: "If yes, an AST may not be appropriate"
+        helperText: "If yes, an occupation contract may not be appropriate"
         validation:
           required: true
         width: half
     maps_to:
-      - tenancy.ast_suitability.tenant_is_individual
-      - tenancy.ast_suitability.main_home
-      - tenancy.ast_suitability.landlord_lives_at_property
-      - tenancy.ast_suitability.holiday_or_licence
+      - tenancy.occupation_contract_suitability.tenant_is_individual
+      - tenancy.occupation_contract_suitability.main_home
+      - tenancy.occupation_contract_suitability.landlord_lives_at_property
+      - tenancy.occupation_contract_suitability.holiday_or_licence
 
   # 2. Property details
   - id: property_address
@@ -200,7 +201,7 @@ questions:
     section: Landlord Details
     question: "Landlord contact details"
     inputType: group
-    helperText: "Used on the AST, certificates and notices."
+    helperText: "Used on the occupation contract, certificates and notices."
     fields:
       - id: landlord_full_name
         label: "Full name"
@@ -264,7 +265,7 @@ questions:
     section: Landlord Details
     question: "Are you using a letting agent?"
     inputType: yes_no
-    helperText: "If yes, their details can appear on the AST for rent collection and management."
+    helperText: "If yes, their details can appear on the occupation contract for rent collection and management."
     validation:
       required: true
     maps_to:
@@ -523,12 +524,12 @@ questions:
       - tenants.4.email
       - tenants.4.phone
 
-  # 4. Tenancy type & dates
+  # 4. Contract type & dates
   - id: tenancy_type_and_dates
-    section: Tenancy
-    question: "Tenancy start and term"
+    section: Contract
+    question: "Contract start and term"
     inputType: group
-    helperText: "We tailor the AST for fixed term vs periodic."
+    helperText: "We tailor the occupation contract for fixed term vs periodic."
     fields:
       - id: tenancy_start_date
         label: "Start date"
@@ -833,10 +834,7 @@ questions:
         validation:
           required: true
         width: half
-      - id: right_to_rent_check_date
-        label: "Date right-to-rent checks completed (England only)"
-        inputType: date
-        width: half
+      # Note: Right to Rent checks do not apply in Wales
       - id: gas_safety_certificate
         label: "Current gas safety certificate provided?"
         inputType: yes_no
@@ -861,22 +859,13 @@ questions:
         validation:
           required: true
         width: half
-      - id: how_to_rent_guide_provided
-        label: "Latest 'How to Rent' guide given? (England only - required for valid S21)"
-        inputType: yes_no
-        defaultValue: false
-        helperText: "You MUST provide the latest government 'How to Rent' guide before or at the start of the tenancy. Failure to do so will invalidate any Section 21 notice, meaning you cannot use the accelerated possession procedure."
-        validation:
-          required: true
-        width: half
+      # Note: 'How to Rent' guide is England-only. Wales has separate requirements under the Renting Homes (Wales) Act 2016
     maps_to:
       - gas_safety_certificate
       - electrical_safety_certificate
       - epc_rating
       - smoke_alarms_fitted
       - carbon_monoxide_alarms
-      - how_to_rent_guide_provided
-      - right_to_rent_check_date
 
   # 9. Maintenance & repairs
   - id: maintenance_repairs
@@ -1040,7 +1029,7 @@ questions:
     section: Rent Reviews
     question: "Rent increase provisions"
     inputType: group
-    helperText: "Premium AST can include index-linked or Section 13 reviews."
+    helperText: "Premium occupation contract can include index-linked reviews. Note: Section 13 reviews (England) do not apply in Wales."
     fields:
       - id: rent_increase_clause
         label: "Include a rent increase clause?"
@@ -1128,8 +1117,8 @@ questions:
     question: "Is a guarantor required?"
     inputType: yes_no
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     validation:
       required: true
     maps_to:
@@ -1192,8 +1181,8 @@ questions:
     question: "Include joint & several liability wording?"
     inputType: yes_no
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     helperText: "Recommended when there is more than one tenant."
     maps_to:
       - joint_and_several_liability
@@ -1203,9 +1192,9 @@ questions:
     question: "HMO / shared facilities"
     inputType: group
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
-    helperText: "Premium AST adds HMO-ready clauses."
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
+    helperText: "Premium occupation contract adds HMO-ready clauses."
     fields:
       - id: is_hmo
         label: "Is the property an HMO or room-by-room let?"
@@ -1262,13 +1251,13 @@ questions:
     question: "Tenant insurance requirements"
     inputType: select
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     options:
       - "Required"
       - "Strongly recommended"
       - "Not required"
-    helperText: "Premium AST can mandate contents insurance."
+    helperText: "Premium occupation contract can mandate contents insurance."
     maps_to:
       - tenant_insurance_required
 
@@ -1277,8 +1266,8 @@ questions:
     question: "Detailed inventory / schedule"
     inputType: textarea
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     helperText: "Describe any detailed inventory or schedule you will attach."
     maps_to:
       - inventory_schedule_notes
@@ -1292,8 +1281,8 @@ questions:
     question: "Late payment interest and charges"
     inputType: group
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     helperText: "Set terms for late rent payments (must comply with statutory limits)."
     fields:
       - id: late_payment_interest_applicable
@@ -1340,8 +1329,8 @@ questions:
     question: "Keys and access cards schedule"
     inputType: group
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     helperText: "Record all keys and access cards provided to tenant."
     fields:
       - id: number_of_front_door_keys
@@ -1397,8 +1386,8 @@ questions:
     question: "Contractor and tradesperson access"
     inputType: group
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     helperText: "Define terms for contractors accessing property for repairs."
     fields:
       - id: contractor_access_notice_period
@@ -1441,8 +1430,8 @@ questions:
     question: "Emergency procedures and contacts"
     inputType: group
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     helperText: "Essential emergency contact information and procedures."
     fields:
       - id: emergency_landlord_phone
@@ -1508,8 +1497,8 @@ questions:
     question: "Property maintenance schedule"
     inputType: group
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     helperText: "Define regular maintenance responsibilities and schedule."
     fields:
       - id: boiler_service_frequency
@@ -1579,8 +1568,8 @@ questions:
     question: "Garden and outdoor maintenance"
     inputType: group
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     helperText: "Define garden maintenance responsibilities (if applicable)."
     fields:
       - id: lawn_mowing_frequency
@@ -1636,8 +1625,8 @@ questions:
     question: "Move-in procedures and checklist"
     inputType: group
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     helperText: "Define pre-tenancy and move-in requirements."
     fields:
       - id: pre_tenancy_meeting_required
@@ -1697,8 +1686,8 @@ questions:
     question: "Move-out and checkout procedures"
     inputType: group
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     helperText: "Define end-of-tenancy requirements and procedures."
     fields:
       - id: checkout_inspection_required
@@ -1776,8 +1765,8 @@ questions:
     question: "Cleaning standards and expectations"
     inputType: group
     dependsOn:
-      questionId: ast_tier
-      value: "Premium AST"
+      questionId: occupation_contract_tier
+      value: "Premium Occupation Contract"
     helperText: "Define expected cleaning standards during and at end of tenancy."
     fields:
       - id: regular_cleaning_expectations
