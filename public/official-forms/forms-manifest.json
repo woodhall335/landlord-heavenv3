@@ -24,6 +24,22 @@
         }
       }
     },
+    "wales": {
+      "forms": {
+        "N5_WALES_1222.pdf": {
+          "name": "N5 - Claim for Possession (Wales)",
+          "fillable": true
+        },
+        "N5B_WALES_0323.pdf": {
+          "name": "N5B - Accelerated Possession (Wales)",
+          "fillable": true
+        },
+        "N119_WALES_1222.pdf": {
+          "name": "N119 - Particulars of Claim (Wales)",
+          "fillable": true
+        }
+      }
+    },
     "scotland": {
       "forms": {
         "notice_to_leave.pdf": {

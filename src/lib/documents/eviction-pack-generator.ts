@@ -637,8 +637,10 @@ async function generateEnglandOrWalesEvictionPack(
     });
 
     // Accelerated possession claim (N5B)
+    // CRITICAL: Pass jurisdiction to select correct Wales/England form
     const n5bPdf = await fillN5BForm({
       ...caseData,
+      jurisdiction, // Ensures Wales uses N5B_WALES_0323.pdf, England uses n5b-eng.pdf
       landlord_full_name: caseData.landlord_full_name || evictionCase.landlord_full_name,
       landlord_address: caseData.landlord_address || evictionCase.landlord_address,
       landlord_postcode: caseData.landlord_postcode || evictionCase.landlord_address_postcode,
@@ -669,10 +671,12 @@ async function generateEnglandOrWalesEvictionPack(
   }
 
   // 3. N5 Claim Form
+  // CRITICAL: Pass jurisdiction to select correct Wales/England forms
   const service = buildServiceContact({ ...evictionCase, ...caseData });
 
   const enrichedCaseData: CaseData = {
     ...caseData,
+    jurisdiction, // Ensures Wales uses N5_WALES/N119_WALES forms, England uses n5-eng/n119-eng
     landlord_full_name: caseData.landlord_full_name || evictionCase.landlord_full_name,
     landlord_address: caseData.landlord_address || evictionCase.landlord_address,
     landlord_postcode: caseData.landlord_postcode || evictionCase.landlord_address_postcode,
