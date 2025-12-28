@@ -38,11 +38,15 @@ export function NavBar({ user }: NavBarProps) {
   const [open, setOpen] = useState(false);
   const [showFreeTools, setShowFreeTools] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showMenu, setShowMenu] = useState(true);
 
   useEffect(() => {
     const handleScroll = () => {
+      const scrollY = window.scrollY;
       // Trigger sticky header after scrolling 80px
-      setIsScrolled(window.scrollY > 80);
+      setIsScrolled(scrollY > 80);
+      // Menu visible at top (0-10px) or after 200px scroll
+      setShowMenu(scrollY <= 10 || scrollY >= 200);
     };
 
     // Check initial scroll position
@@ -75,7 +79,7 @@ export function NavBar({ user }: NavBarProps) {
 
         <nav className={clsx(
           "items-center gap-9 lg:flex transition-all duration-300",
-          isScrolled
+          showMenu
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-2 pointer-events-none",
           "hidden"
@@ -130,7 +134,7 @@ export function NavBar({ user }: NavBarProps) {
 
         <div className={clsx(
           "items-center gap-4 lg:flex transition-all duration-300",
-          isScrolled
+          showMenu
             ? "opacity-100 translate-y-0"
             : "opacity-0 -translate-y-2 pointer-events-none",
           "hidden"
