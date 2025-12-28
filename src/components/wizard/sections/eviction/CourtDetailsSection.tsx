@@ -1,14 +1,18 @@
 'use client';
 
 import React from 'react';
+import { CourtFinderLink } from '@/components/wizard/shared/CourtFinderLink';
 
 /**
  * Court Details Section for Complete Pack Flows
  *
- * This section collects court name and address for England complete-pack generation.
- * It is shared between Section 8 (N5 + N119) and Section 21 accelerated (N5B) flows.
+ * This section collects court name and address for eviction pack generation.
+ * Supports England, Wales, and Scotland with jurisdiction-specific court finders.
  *
- * The user manually searches the HMCTS Court Finder and copy/pastes the court details.
+ * - England/Wales: Uses HMCTS Court Finder for housing claims
+ * - Scotland: Uses Scotcourts locator for Sheriff Court
+ *
+ * The user manually searches the Court Finder and copy/pastes the court details.
  * There is NO automatic lookup or API integration.
  */
 
@@ -20,9 +24,6 @@ interface SectionProps {
   onUpdate: (updates: Record<string, any>) => void | Promise<void>;
 }
 
-const HMCTS_COURT_FINDER_URL =
-  'https://www.find-court-tribunal.service.gov.uk/services/money/housing/nearest/search-by-postcode';
-
 export const CourtDetailsSection: React.FC<SectionProps> = ({
   facts,
   jurisdiction,
@@ -31,49 +32,18 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
   const courtName = facts.court_name || '';
   const courtAddress = facts.court_address || '';
 
-  const isEnglandWales = jurisdiction === 'england' || jurisdiction === 'wales';
+  const isSupported = jurisdiction === 'england' || jurisdiction === 'wales' || jurisdiction === 'scotland';
+  const isScotland = jurisdiction === 'scotland';
 
-  // Only show for England/Wales complete packs
-  if (!isEnglandWales) {
+  // Only show for supported jurisdictions
+  if (!isSupported || !jurisdiction) {
     return null;
   }
 
   return (
     <div className="space-y-6">
-      <div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
-        <h3 className="text-sm font-medium text-purple-900 mb-2">
-          Court Details Required for Complete Pack
-        </h3>
-        <p className="text-sm text-purple-800 mb-3">
-          To generate court forms (N5, N5B, or N119), you need to provide the name
-          and address of the County Court that will handle your possession claim.
-        </p>
-        <p className="text-sm text-purple-800">
-          Use the official HMCTS Court Finder to search by postcode and find your
-          local court:
-        </p>
-        <a
-          href={HMCTS_COURT_FINDER_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-[#7C3AED] text-white text-sm font-medium rounded-md hover:bg-[#6D28D9] transition-colors"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-            />
-          </svg>
-          Find your court (opens in new tab)
-        </a>
-      </div>
+      {/* Jurisdiction-specific Court Finder Link */}
+      <CourtFinderLink jurisdiction={jurisdiction} context="eviction_pack" />
 
       <div className="space-y-4">
         <div className="space-y-2">
@@ -81,7 +51,7 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
             htmlFor="court_name"
             className="block text-sm font-medium text-gray-700"
           >
-            Court name
+            {isScotland ? 'Sheriff Court name' : 'Court name'}
             <span className="text-red-500 ml-1">*</span>
           </label>
           <input
@@ -90,10 +60,10 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={courtName}
             onChange={(e) => onUpdate({ court_name: e.target.value })}
-            placeholder="e.g., Manchester County Court"
+            placeholder={isScotland ? 'e.g., Edinburgh Sheriff Court' : 'e.g., Manchester County Court'}
           />
           <p className="text-xs text-gray-500">
-            Copy the court name exactly as shown in the Court Finder results.
+            Copy the court name exactly as shown in the {isScotland ? 'Scotcourts locator' : 'Court Finder'} results.
           </p>
         </div>
 
@@ -110,10 +80,10 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
             className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[100px] focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
             value={courtAddress}
             onChange={(e) => onUpdate({ court_address: e.target.value })}
-            placeholder="e.g., 1 Bridge Street West, Manchester, M60 9DJ"
+            placeholder={isScotland ? 'e.g., 27 Chambers Street, Edinburgh, EH1 1LB' : 'e.g., 1 Bridge Street West, Manchester, M60 9DJ'}
           />
           <p className="text-xs text-gray-500">
-            Copy the full court address from the Court Finder, including the
+            Copy the full court address from the {isScotland ? 'Scotcourts locator' : 'Court Finder'}, including the
             postcode.
           </p>
         </div>
@@ -123,7 +93,7 @@ export const CourtDetailsSection: React.FC<SectionProps> = ({
         <p className="text-xs text-amber-800">
           <strong>Important:</strong> Ensure the court details are correct. Court
           forms with incorrect court information may be rejected or cause delays
-          in your possession claim.
+          in your {isScotland ? 'eviction proceedings' : 'possession claim'}.
         </p>
       </div>
     </div>
