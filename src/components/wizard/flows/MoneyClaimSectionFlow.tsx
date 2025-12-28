@@ -30,7 +30,7 @@ import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
 import { ClaimantSection } from '@/components/wizard/money-claim/ClaimantSection';
 import { DefendantSection } from '@/components/wizard/money-claim/DefendantSection';
 import { TenancySection } from '@/components/wizard/money-claim/TenancySection';
-import { ClaimDetailsSection } from '@/components/wizard/money-claim/ClaimDetailsSection';
+import { ClaimDetailsSection } from '@/components/wizard/sections/money-claim/ClaimDetailsSection';
 import { ArrearsSection } from '@/components/wizard/money-claim/ArrearsSection';
 import { DamagesSection } from '@/components/wizard/money-claim/DamagesSection';
 import { PreActionSection } from '@/components/wizard/money-claim/PreActionSection';
