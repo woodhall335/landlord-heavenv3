@@ -13,12 +13,14 @@ import { StructuredWizard } from '@/components/wizard/StructuredWizard';
 import { MoneyClaimSectionFlow } from '@/components/wizard/flows/MoneyClaimSectionFlow';
 import { EvictionSectionFlow } from '@/components/wizard/flows/EvictionSectionFlow';
 import { NoticeOnlySectionFlow } from '@/components/wizard/flows/NoticeOnlySectionFlow';
+import { TenancySectionFlow } from '@/components/wizard/flows/TenancySectionFlow';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
 
 // Feature flags: Use new section-based flows
 // Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
 const USE_EVICTION_SECTION_FLOW = true;
 const USE_NOTICE_ONLY_SECTION_FLOW = true;
+const USE_TENANCY_SECTION_FLOW = true;
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
@@ -249,7 +251,27 @@ function WizardFlowContent() {
     );
   }
 
-  // Use existing StructuredWizard for tenancy agreements and Scotland eviction flows
+  // 🟪 NEW: For tenancy_agreement in England/Wales, use the redesigned section-based flow
+  // This provides a consistent tab-based UI matching MoneyClaimSectionFlow design.
+  if (
+    type === 'tenancy_agreement' &&
+    USE_TENANCY_SECTION_FLOW &&
+    (jurisdiction === 'england' || jurisdiction === 'wales')
+  ) {
+    return (
+      <TenancySectionFlow
+        caseId={caseId}
+        jurisdiction={jurisdiction as 'england' | 'wales'}
+        product={
+          normalizedProduct === 'ast_standard' || normalizedProduct === 'ast_premium'
+            ? normalizedProduct
+            : 'tenancy_agreement'
+        }
+      />
+    );
+  }
+
+  // Use existing StructuredWizard for Scotland/NI tenancy agreements and Scotland eviction flows
   if (type === 'tenancy_agreement' || type === 'eviction') {
     return (
       <StructuredWizard
