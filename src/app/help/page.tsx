@@ -139,7 +139,7 @@ export default function HelpPage() {
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
                   <p className="mb-3">
-                    <strong>100% UK Coverage:</strong>
+                    <strong>UK-Wide Coverage:</strong>
                   </p>
                   <ul className="space-y-2">
                     <li className="flex items-start gap-2">
@@ -153,7 +153,7 @@ export default function HelpPage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <Image src="/gb-nir.svg" alt="Northern Ireland" width={16} height={16} className="w-4 h-4 mt-0.5" />
-                      <span><strong>Northern Ireland:</strong> Notice to Quit, NI tenancy agreements, County Court forms</span>
+                      <span><strong>Northern Ireland:</strong> Tenancy agreements only (eviction notices planned for 2026)</span>
                     </li>
                   </ul>
                   <p className="mt-3">
