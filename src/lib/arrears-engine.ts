@@ -535,6 +535,7 @@ export function createLegacyArrearsResult(
  */
 export function hasAuthoritativeArrearsData(
   arrears_items: ArrearsItem[] | undefined,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _total_arrears: number | null | undefined
 ): boolean {
   // Authoritative if we have schedule data

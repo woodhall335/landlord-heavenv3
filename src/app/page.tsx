@@ -54,7 +54,7 @@ export default function Home() {
   return (
     <div className="bg-white">
       {/* HERO — match Complete Eviction Pack hero style */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
+      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -117,35 +117,35 @@ export default function Home() {
               title="Eviction Notices"
               desc="Section 8, Section 21, and devolved equivalents with service instructions."
               price="From £29.99"
-              icon={<RiFileTextLine className="w-7 h-7 text-[#7C3AED] group-hover:text-white transition-colors" />}
+              icon={<RiFileTextLine className="w-7 h-7 text-primary group-hover:text-white transition-colors" />}
             />
             <ProductCard
               href="/products/complete-pack"
               title="Complete Eviction Pack"
               desc="Full bundle from notice to possession order with court forms and guidance."
               price="£149.99"
-              icon={<RiScales3Line className="w-7 h-7 text-[#7C3AED] group-hover:text-white transition-colors" />}
+              icon={<RiScales3Line className="w-7 h-7 text-primary group-hover:text-white transition-colors" />}
             />
             <ProductCard
               href="/products/money-claim"
               title="Money Claims"
               desc="Rent arrears claims with evidence checklists and POC templates."
               price="£179.99"
-              icon={<RiMoneyDollarCircleLine className="w-7 h-7 text-[#7C3AED] group-hover:text-white transition-colors" />}
+              icon={<RiMoneyDollarCircleLine className="w-7 h-7 text-primary group-hover:text-white transition-colors" />}
             />
             <ProductCard
               href="/products/ast"
               title="Tenancy Agreements"
               desc="Compliant ASTs with optional clauses for HMOs and students."
               price="From £9.99"
-              icon={<RiClipboardLine className="w-7 h-7 text-[#7C3AED] group-hover:text-white transition-colors" />}
+              icon={<RiClipboardLine className="w-7 h-7 text-primary group-hover:text-white transition-colors" />}
             />
           </div>
         </Container>
       </section>
 
       {/* ASK HEAVEN — LIGHT (no dark purple) */}
-      <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 to-white">
+      <section className="py-20 md:py-24 bg-linear-to-br from-purple-50 to-white">
         <Container>
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -378,7 +378,7 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+      <section className="py-20 md:py-24 bg-linear-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -468,8 +468,8 @@ function Step({ n, title, desc }: { n: string; title: string; desc: string }) {
 function Tick({ title, desc }: { title: string; desc: string }) {
   return (
     <div className="flex items-start gap-4">
-      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-        <RiCheckLine className="w-5 h-5 text-[#7C3AED]" />
+      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center shrink-0">
+        <RiCheckLine className="w-5 h-5 text-primary" />
       </div>
       <div>
         <h3 className="font-bold text-gray-900 mb-1">{title}</h3>
