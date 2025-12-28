@@ -175,9 +175,9 @@ export default function CompleteEvictionPackPage() {
 
             {/* Value Callout */}
             <div className="bg-[#F6EFFF] rounded-xl p-8 text-center">
-              <h3 className="text-2xl font-bold mb-3 text-charcoal">💰 Total Ask Heaven Value: £650-1,400</h3>
+              <h3 className="text-2xl font-bold mb-3 text-charcoal">💰 Total Ask Heaven Value: £650-£1400</h3>
               <p className="text-lg mb-4 text-gray-700">
-                These three AI-drafted documents alone would cost £650-1,400 if written by a solicitor
+                These three Ask Heaven drafted documents alone would cost £650-£1400 if written by a solicitor
               </p>
               <p className="text-gray-600 text-base">
                 With the Complete Pack at £149.99, you also get all court forms, notices, checklists, and guides - making this an incredible value
