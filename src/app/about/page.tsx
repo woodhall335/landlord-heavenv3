@@ -108,9 +108,9 @@ export default function AboutPage() {
 
               <div className="bg-white rounded-lg border border-gray-200 p-8">
                 <div className="text-4xl mb-4">✅</div>
-                <h3 className="text-2xl font-semibold text-charcoal mb-4">100% UK Coverage</h3>
+                <h3 className="text-2xl font-semibold text-charcoal mb-4">UK-Wide Coverage</h3>
                 <p className="text-gray-700 mb-4">
-                  We're the ONLY service covering England & Wales, Scotland, AND Northern Ireland. Different
+                  We support England & Wales, Scotland, AND Northern Ireland. Different
                   jurisdictions have different laws - we handle all of them.
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2">
@@ -125,7 +125,7 @@ export default function AboutPage() {
                   </li>
                   <li className="flex items-center gap-2">
                     <Image src="/gb-nir.svg" alt="Northern Ireland" width={16} height={16} className="w-4 h-4" />
-                    Northern Ireland: Notice to Quit, NI forms
+                    Northern Ireland: Tenancy agreements (eviction notices coming 2026)
                   </li>
                 </ul>
               </div>

@@ -212,7 +212,7 @@ export function Footer() {
             </p>
 
             <div className="flex items-center gap-6 text-sm text-gray-400">
-              <span className="font-medium">100% UK Coverage</span>
+              <span className="font-medium">UK-Wide Coverage</span>
               <span className="text-gray-600">•</span>
               <span className="font-medium">Court-Ready Documents</span>
               <span className="text-gray-600">•</span>

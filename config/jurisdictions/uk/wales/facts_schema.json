@@ -1429,6 +1429,26 @@
       "type": "string",
       "required": false,
       "description": "Particulars supporting the grounds for possession"
+    },
+    "tenancy.occupation_contract_suitability.tenant_is_individual": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether the contract holder is an individual (not a company)"
+    },
+    "tenancy.occupation_contract_suitability.main_home": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether the dwelling is the contract holder's only or main home"
+    },
+    "tenancy.occupation_contract_suitability.landlord_lives_at_property": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether the landlord also lives at the property"
+    },
+    "tenancy.occupation_contract_suitability.holiday_or_licence": {
+      "type": "boolean",
+      "required": false,
+      "description": "Whether the arrangement is a holiday let or licence agreement"
     }
   }
 }

@@ -548,8 +548,8 @@ export default function CompleteEvictionPackPage() {
                 <div className="text-3xl mb-3">⚖️</div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Court-Ready Official Forms</h3>
                 <p className="text-gray-700">
-                  We use genuine HMCTS official forms (N5, N5B, N119, Form 6A) filled with your case details. Judges and
-                  courts accept these without question.
+                  We use genuine HMCTS official forms (N5, N5B, N119, Form 6A) auto-filled with your case details. These
+                  are the same forms used by solicitors nationwide.
                 </p>
               </div>
 
@@ -566,10 +566,10 @@ export default function CompleteEvictionPackPage() {
                 <div className="mb-3">
                   <Image src="/lgb.svg" alt="UK Coverage" width={48} height={48} className="w-12 h-12" />
                 </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">All UK Jurisdictions</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">UK-Wide Coverage</h3>
                 <p className="text-gray-700">
-                  England & Wales, Scotland, and Northern Ireland fully supported with jurisdiction-specific forms, laws, and
-                  timelines.
+                  England & Wales and Scotland fully supported with jurisdiction-specific forms, laws, and
+                  timelines. Northern Ireland coming soon.
                 </p>
               </div>
 
