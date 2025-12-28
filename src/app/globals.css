@@ -172,8 +172,8 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
 
 .header-login-btn:hover {
   background-color: transparent;
-  color: #7C3AED;
-  border-color: #7C3AED;
+  color: #692ED4;
+  border-color: #692ED4;
   cursor: pointer;
 }
 
