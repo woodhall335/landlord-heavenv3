@@ -2566,7 +2566,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       {calculatedDate && !expiryDateOverride && (
                         <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                           <div className="flex items-center gap-2 mb-1">
-                            <RiCheckboxCircleLine className="h-4 w-4 text-[#7C3AED]" />
+                            <RiCheckboxCircleLine className="h-4 w-4 text-primary" />
                             <span className="text-sm font-semibold text-blue-900">
                               Auto-calculated: {new Date(calculatedDate.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
                             </span>
@@ -4183,7 +4183,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             <div className="bg-red-50 border-b border-red-100 px-6 py-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-red-100 rounded-full">
-                  <RiAlertLine className="w-6 h-6 text-[#7C3AED]" />
+                  <RiAlertLine className="w-6 h-6 text-primary" />
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-red-900">
