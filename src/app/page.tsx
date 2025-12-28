@@ -79,7 +79,6 @@ export default function Home() {
             </div>
 
             <p className="mt-4 text-sm text-gray-600">
-              Court-ready documents • Expert guidance • Instant download
             </p>
           </div>
         </Container>
@@ -399,7 +398,6 @@ export default function Home() {
             </div>
 
             <p className="text-sm text-gray-600">
-              No credit card required • Instant download • Full UK coverage
             </p>
           </div>
         </Container>
