@@ -41,8 +41,8 @@ export function NavBar({ user }: NavBarProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Trigger at 10% of viewport height or 100px, whichever is smaller
-      const scrollThreshold = Math.min(window.innerHeight * 0.1, 100);
+      // Trigger at 10% of viewport height or 200px, whichever is smaller
+      const scrollThreshold = Math.min(window.innerHeight * 0.1, 200);
       setIsScrolled(window.scrollY > scrollThreshold);
     };
 
