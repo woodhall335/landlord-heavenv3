@@ -179,9 +179,12 @@ export default function HelpPage() {
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
                   <p>
-                    <strong>Yes.</strong> Our documents use official government forms (Form 6A for Section 21, AT6 for
-                    Scotland, etc.) and are accepted by all UK courts and tribunals. Thousands of landlords have
+                    <strong>Yes.</strong> Our documents are based on official government forms (Form 6A for Section 21 in England,
+                    Notice to Leave for Scotland, RHW forms for Wales) and are accepted by UK courts and tribunals. Thousands of landlords have
                     successfully used them.
+                  </p>
+                  <p className="mt-2 text-sm text-gray-600">
+                    <strong>Note for Wales:</strong> Our Welsh notice forms (RHW16/17/23) are currently English-only. For bilingual versions, obtain official forms from gov.wales.
                   </p>
                   <p className="mt-3 bg-warning/10 border-l-4 border-warning p-3 rounded-r">
                     <strong>Important:</strong> We are NOT a law firm and don't provide legal advice. For complex cases
