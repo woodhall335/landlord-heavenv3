@@ -177,6 +177,12 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
   cursor: pointer;
 }
 
+/* Header Navigation Link Hover - Accent purple */
+header nav a:hover,
+header nav button:hover {
+  color: #692ED4 !important;
+}
+
 /* Custom scrollbar styling - Purple brand color */
 ::-webkit-scrollbar {
   width: 14px;
