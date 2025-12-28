@@ -21,7 +21,7 @@
  * - N119: 17 text fields, 0 checkboxes
  */
 
-import { PDFDocument, PDFForm, PDFTextField, PDFCheckBox } from 'pdf-lib';
+import { PDFDocument, PDFForm, PDFTextField } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 import { generateArrearsBreakdownForCourt } from './arrears-schedule-mapper';
