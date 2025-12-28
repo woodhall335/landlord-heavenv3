@@ -722,7 +722,7 @@ export default function CompleteEvictionPackPage() {
             </h2>
 
             <div className="space-y-6">
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   Do I get all the court forms I need?
                 </summary>
@@ -734,7 +734,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   Are these genuine official court forms?
                 </summary>
@@ -746,7 +746,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   How long does the eviction process take?
                 </summary>
@@ -760,7 +760,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   What if my tenant contests the eviction?
                 </summary>
@@ -772,7 +772,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   Can I use this if I've already served a notice?
                 </summary>
@@ -783,7 +783,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   What grounds for eviction do you support?
                 </summary>
@@ -799,7 +799,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   Is this cheaper than using a solicitor?
                 </summary>
@@ -810,7 +810,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   What if I make a mistake on the forms?
                 </summary>
@@ -821,7 +821,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   Do you provide legal advice?
                 </summary>
