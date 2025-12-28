@@ -397,7 +397,8 @@ export default function Home() {
               </Link>
             </div>
 
-            <p className="text-sm text-gray-600">
+            <p className="mt-4 text-sm text-gray-600">
+              Court-ready documents • Expert guidance • Lifetime storage
             </p>
           </div>
         </Container>
