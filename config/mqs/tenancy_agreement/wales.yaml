@@ -2,10 +2,10 @@
 #
 # WALES-ONLY Occupation Contract (Renting Homes Wales Act 2016)
 # Split from england-wales.yaml as part of canonical jurisdiction implementation
-# Version 2.1.0 - Wales jurisdiction (terminology fix)
+# Version 2.2.0 - Wales jurisdiction (legal audit fixes)
 
 __meta:
-  version: "2.1.0"
+  version: "2.2.0"
   effective_from: "2025-12-16"
   last_updated: "2025-12-28"
   legal_review_date: "2025-12-28"
@@ -19,6 +19,9 @@ __meta:
 # - Wales uses "Standard/Premium Occupation Contract" not AST
 # - Contract holders (tenants) have different statutory rights under RH(W)A 2016
 # - Section 21 does NOT apply in Wales (uses Section 173 instead)
+# - FIXED: Removed Section 13 from rent increase options (England-only procedure)
+# - FIXED: Updated prescribed information helper text to reference Section 173 instead of Section 21
+# - FIXED: Updated rent increase notice requirement to 2 months per Renting Homes (Wales) Act 2016
 
 id: tenancy_agreement_wales_v2
 product: tenancy_agreement
@@ -728,7 +731,7 @@ questions:
     section: Deposit
     question: "Prescribed information compliance"
     inputType: yes_no
-    helperText: "STATUTORY REQUIREMENT: You MUST serve prescribed information to the tenant and any relevant person within 30 days of receiving the deposit. This is a legal obligation under the Housing Act 2004. Failure to comply can result in: (1) Being ordered to pay the tenant 1-3x the deposit amount in compensation, (2) Inability to serve a valid Section 21 notice until compliance is achieved and the tenant has held the deposit for the required period. Non-compliance exposes you to significant financial and legal risk."
+    helperText: "STATUTORY REQUIREMENT: You MUST serve prescribed information to the contract holder (tenant) within 30 days of receiving the deposit. This is a legal obligation under the Housing Act 2004 as it applies in Wales. Failure to comply can result in: (1) Being ordered to pay the contract holder 1-3x the deposit amount in compensation, (2) Potential difficulties in seeking possession under Section 173 of the Renting Homes (Wales) Act 2016. Non-compliance exposes you to significant financial and legal risk."
     validation:
       required: true
     maps_to:
@@ -1029,7 +1032,7 @@ questions:
     section: Rent Reviews
     question: "Rent increase provisions"
     inputType: group
-    helperText: "Premium occupation contract can include index-linked reviews. Note: Section 13 reviews (England) do not apply in Wales."
+    helperText: "Premium occupation contract can include index-linked reviews. Under the Renting Homes (Wales) Act 2016, landlords must give at least 2 months' written notice of any rent increase."
     fields:
       - id: rent_increase_clause
         label: "Include a rent increase clause?"
@@ -1043,7 +1046,7 @@ questions:
         options:
           - "RPI"
           - "CPI"
-          - "Section 13"
+          - "Market review"
           - "Fixed review"
         dependsOn:
           questionId: rent_increase_clause
@@ -1055,7 +1058,7 @@ questions:
         options:
           - "Annually"
           - "Every 2 years"
-          - "On anniversary with 1 month notice"
+          - "On anniversary with 2 months notice"
         dependsOn:
           questionId: rent_increase_clause
           value: true
