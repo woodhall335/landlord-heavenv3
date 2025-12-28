@@ -615,9 +615,9 @@ export async function generateNoticeToLeave(
     is_preview: isPreview,
   };
 
-  // Generate from template
+  // Generate from template - use official HTML template (matches prescribed form)
   return generateDocument({
-    templatePath: 'uk/scotland/templates/eviction/notice_to_leave.hbs',
+    templatePath: 'uk/scotland/templates/eviction/notice_to_leave_official.hbs',
     data: enrichedData,
     isPreview,
     outputFormat,

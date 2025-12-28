@@ -33,7 +33,7 @@ const noticeTemplates: Record<Jurisdiction, Record<string, string[]>> = {
     wales_fault_based: ["uk/wales/templates/notice_only/rhw23_notice_before_possession_claim/notice.hbs"],
   },
   scotland: {
-    notice_to_leave: ["uk/scotland/templates/eviction/notice_to_leave.hbs"],
+    notice_to_leave: ["uk/scotland/templates/eviction/notice_to_leave_official.hbs"],
   },
   "northern-ireland": {},
 };
@@ -44,7 +44,7 @@ const evictionPackTemplates: Record<Jurisdiction, string[]> = {
     "uk/england/templates/notice_only/form_3_section8/notice.hbs",
   ],
   wales: ["uk/wales/templates/notice_only/rhw16_notice_termination_6_months/notice.hbs"],
-  scotland: ["uk/scotland/templates/eviction/notice_to_leave.hbs"],
+  scotland: ["uk/scotland/templates/eviction/notice_to_leave_official.hbs"],
   "northern-ireland": [],
 };
 
