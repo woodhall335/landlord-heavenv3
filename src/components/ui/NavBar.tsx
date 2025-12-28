@@ -73,7 +73,13 @@ export function NavBar({ user }: NavBarProps) {
           />
         </Link>
 
-        <nav className="hidden items-center gap-9 lg:flex">
+        <nav className={clsx(
+          "items-center gap-9 lg:flex transition-all duration-300",
+          isScrolled
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-2 pointer-events-none",
+          "hidden"
+        )}>
           {/* Free Tools Dropdown */}
           <div
             className="relative"
@@ -122,7 +128,13 @@ export function NavBar({ user }: NavBarProps) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-4 lg:flex">
+        <div className={clsx(
+          "items-center gap-4 lg:flex transition-all duration-300",
+          isScrolled
+            ? "opacity-100 translate-y-0"
+            : "opacity-0 -translate-y-2 pointer-events-none",
+          "hidden"
+        )}>
           {user ? (
             <div className="flex items-center gap-3 rounded-full bg-gray-100 px-4 py-2 text-sm text-charcoal">
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white font-bold">
