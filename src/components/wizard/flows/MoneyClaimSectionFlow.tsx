@@ -123,7 +123,7 @@ export const MoneyClaimSectionFlow: React.FC<MoneyClaimSectionFlowProps> = ({
   const currentSection = SECTIONS[currentIndex];
 
   return (
-    <div className="flex flex-col gap-6 lg:flex-row">
+    <div className="flex flex-col gap-6 lg:flex-row pt-24 px-4">
       {/* Main wizard column */}
       <div className="w-full lg:w-2/3">
         <SectionContainer

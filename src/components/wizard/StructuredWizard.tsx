@@ -3106,7 +3106,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   })();
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto p-6 pt-24">
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.5fr)_minmax(0,1.5fr)] gap-6 items-start">
         {/* LEFT: Wizard content */}
         <div>
