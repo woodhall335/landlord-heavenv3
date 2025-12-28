@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { clsx } from "clsx";
 import { RiArrowDownSLine, RiMenuLine } from 'react-icons/ri';
 
@@ -37,9 +37,31 @@ export function NavBar({ user }: NavBarProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [showFreeTools, setShowFreeTools] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Trigger at 10% of viewport height or 100px, whichever is smaller
+      const scrollThreshold = Math.min(window.innerHeight * 0.1, 100);
+      setIsScrolled(window.scrollY > scrollThreshold);
+    };
+
+    // Check initial scroll position
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+    <header
+      className={clsx(
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+        isScrolled
+          ? "bg-white border-b border-gray-200 shadow-sm"
+          : "bg-transparent border-b border-transparent"
+      )}
+    >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
         <Link href="/" className="flex items-center hover:opacity-80 transition-opacity">
           <Image
