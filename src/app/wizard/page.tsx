@@ -213,11 +213,17 @@ function WizardPageInner() {
   // All jurisdictions are shown, but some may be disabled
   const availableJurisdictions = allJurisdictions;
 
-  // Handle Start Now button - scroll to document selection section
+  // Handle Start Now button - scroll to the appropriate section based on current step
   const handleStartNowClick = () => {
-    // Scroll to document selection section
+    // Scroll to the current step's section
     setTimeout(() => {
-      documentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (step === 2) {
+        // When product is pre-selected, scroll to jurisdiction selection
+        locationSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        // Default: scroll to document selection
+        documentSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }, 100);
   };
 

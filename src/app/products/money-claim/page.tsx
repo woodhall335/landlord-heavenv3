@@ -28,16 +28,10 @@ export default function MoneyClaimPage() {
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
+                href="/wizard?product=money_claim"
                 className="hero-btn-primary"
               >
-                England &amp; Wales Claim →
-              </Link>
-              <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                className="hero-btn-secondary"
-              >
-                Scotland Simple Procedure →
+                Start Money Claim →
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England &amp; Wales or Scotland</p>
@@ -371,18 +365,12 @@ export default function MoneyClaimPage() {
               </div>
             </div>
 
-            <div className="mt-8 text-center flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="mt-8 text-center">
               <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
+                href="/wizard?product=money_claim"
                 className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
               >
-                England &amp; Wales Claim - £179.99 →
-              </Link>
-              <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors border border-primary-200"
-              >
-                Scotland Claim - £179.99 →
+                Start Money Claim - £179.99 →
               </Link>
             </div>
           </div>
@@ -591,16 +579,10 @@ export default function MoneyClaimPage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=england-wales&product=money_claim&product_variant=money_claim_england_wales"
+                href="/wizard?product=money_claim"
                 className="hero-btn-primary"
               >
-                England &amp; Wales Claim - £179.99 →
-              </Link>
-              <Link
-                href="/wizard/flow?type=money_claim&jurisdiction=scotland&product=money_claim&product_variant=money_claim_scotland"
-                className="hero-btn-secondary"
-              >
-                Scotland Claim - £179.99 →
+                Start Money Claim - £179.99 →
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
