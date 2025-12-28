@@ -26,7 +26,7 @@ export default function CompleteEvictionPackPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
+      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -53,7 +53,7 @@ export default function CompleteEvictionPackPage() {
       </section>
 
       {/* Ask Heaven Features Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+      <section className="py-16 md:py-20 bg-linear-to-br from-blue-50 to-indigo-50">
         <Container>
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -196,19 +196,19 @@ export default function CompleteEvictionPackPage() {
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Section 8 or Section 21 (E&W)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Notice to Leave (Scotland)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Notice to Quit (Northern Ireland)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Service instructions included</span>
                   </li>
                 </ul>
@@ -222,25 +222,25 @@ export default function CompleteEvictionPackPage() {
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">
                       <strong>N5</strong> - Claim for Possession
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">
                       <strong>N5B</strong> - Accelerated Possession
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">
                       <strong>N119</strong> - Particulars of Claim
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Scotland Tribunal forms</span>
                   </li>
                 </ul>
@@ -254,19 +254,19 @@ export default function CompleteEvictionPackPage() {
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Step-by-step eviction guide</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Timeline expectations</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Evidence checklist</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Bailiff/sheriff guidance</span>
                   </li>
                 </ul>
@@ -280,19 +280,19 @@ export default function CompleteEvictionPackPage() {
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Rent arrears (Ground 8/10)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Anti-social behaviour (Ground 14)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Breach of tenancy (Ground 12)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">All 17 grounds supported</span>
                   </li>
                 </ul>
@@ -306,19 +306,19 @@ export default function CompleteEvictionPackPage() {
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Evidence collection checklist</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Document organization tips</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">What to collect & when</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Proof of service templates</span>
                   </li>
                 </ul>
@@ -332,19 +332,19 @@ export default function CompleteEvictionPackPage() {
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Lifetime cloud storage</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Priority email support</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Unlimited regenerations</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Guided case analysis</span>
                   </li>
                 </ul>
@@ -499,7 +499,7 @@ export default function CompleteEvictionPackPage() {
 
             <div className="mt-8 bg-primary-50 border border-primary-200 rounded-lg p-6">
               <div className="flex items-start gap-3">
-                <RiAlertLine className="w-6 h-6 text-[#7C3AED] shrink-0" />
+                <RiAlertLine className="w-6 h-6 text-primary shrink-0" />
                 <div>
                   <h4 className="font-semibold text-charcoal mb-2">Total Timeline Estimate</h4>
                   <p className="text-gray-700">
@@ -616,10 +616,10 @@ export default function CompleteEvictionPackPage() {
                       Eviction Notice (Section 8/21, etc.)
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mx-auto" />
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mx-auto" />
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
@@ -628,7 +628,7 @@ export default function CompleteEvictionPackPage() {
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mx-auto" />
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
@@ -648,7 +648,7 @@ export default function CompleteEvictionPackPage() {
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mx-auto" />
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
@@ -657,7 +657,7 @@ export default function CompleteEvictionPackPage() {
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mx-auto" />
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
@@ -666,7 +666,7 @@ export default function CompleteEvictionPackPage() {
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mx-auto" />
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
@@ -684,7 +684,7 @@ export default function CompleteEvictionPackPage() {
                       <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mx-auto" />
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
@@ -837,7 +837,7 @@ export default function CompleteEvictionPackPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+      <section className="py-16 md:py-20 bg-linear-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Start Your Eviction?</h2>

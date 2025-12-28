@@ -480,21 +480,6 @@ function getTextFieldStrict(form: PDFForm, fieldName: string, context: string): 
 }
 
 /**
- * Get a checkbox strictly - throws if not found
- */
-function getCheckBoxStrict(form: PDFForm, fieldName: string, context: string): PDFCheckBox {
-  try {
-    return form.getCheckBox(fieldName);
-  } catch {
-    const available = listFormFieldNames(form).slice(0, 20).join(', ');
-    throw new Error(
-      `[${context}] Checkbox "${fieldName}" not found in PDF. ` +
-      `Available fields (first 20): ${available}...`
-    );
-  }
-}
-
-/**
  * Set a required text field - throws if value missing or field not found
  */
 function setTextRequired(form: PDFForm, fieldName: string, value: string | undefined, context: string): void {
