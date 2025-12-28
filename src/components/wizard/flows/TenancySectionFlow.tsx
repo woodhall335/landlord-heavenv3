@@ -33,6 +33,7 @@ import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 
 import { getCaseFacts, saveCaseFacts } from '@/lib/wizard/facts-client';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 
 // Section components - we'll create these inline for now
 import { Button, Input } from '@/components/ui';
@@ -432,7 +433,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       case 'compliance':
         return <ComplianceSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'terms':
-        return <TermsSection facts={facts} onUpdate={handleUpdate} />;
+        return <TermsSection facts={facts} onUpdate={handleUpdate} caseId={caseId} jurisdiction={jurisdiction} />;
       case 'premium':
         return <PremiumSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'review':
@@ -1378,8 +1379,8 @@ const ComplianceSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdicti
   );
 };
 
-// Terms Section
-const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
+// Terms Section - with Ask Heaven inline enhancement for narrative text fields
+const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate, caseId, jurisdiction = 'england' }) => {
   return (
     <div className="space-y-6">
       {/* Property Rules */}
@@ -1456,12 +1457,22 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Repairs and Maintenance</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 space-y-2">
             <TextareaField
               label="What the landlord handles"
               value={facts.landlord_maintenance_responsibilities}
               onChange={(v) => onUpdate({ landlord_maintenance_responsibilities: v })}
               placeholder="Structural issues, boilers, white goods, etc."
+            />
+            <AskHeavenInlineEnhancer
+              caseId={caseId}
+              questionId="landlord_maintenance_responsibilities"
+              questionText="What maintenance responsibilities the landlord handles"
+              answer={facts.landlord_maintenance_responsibilities || ''}
+              onApply={(newText) => onUpdate({ landlord_maintenance_responsibilities: newText })}
+              context={{ jurisdiction, product: 'tenancy_agreement' }}
+              apiMode="generic"
+              helperText="AI will help clarify landlord maintenance responsibilities"
             />
           </div>
           <SelectField
@@ -1536,12 +1547,24 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
       {/* Additional Terms */}
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Additional Terms</h3>
-        <TextareaField
-          label="Any additional bespoke terms?"
-          value={facts.additional_terms}
-          onChange={(v) => onUpdate({ additional_terms: v })}
-          helperText="Optional bespoke clauses to insert into the agreement."
-        />
+        <div className="space-y-2">
+          <TextareaField
+            label="Any additional bespoke terms?"
+            value={facts.additional_terms}
+            onChange={(v) => onUpdate({ additional_terms: v })}
+            helperText="Optional bespoke clauses to insert into the agreement."
+          />
+          <AskHeavenInlineEnhancer
+            caseId={caseId}
+            questionId="additional_terms"
+            questionText="Additional bespoke terms for the tenancy agreement"
+            answer={facts.additional_terms || ''}
+            onApply={(newText) => onUpdate({ additional_terms: newText })}
+            context={{ jurisdiction, product: 'tenancy_agreement' }}
+            apiMode="generic"
+            helperText="AI will help make your terms clearer and more professional"
+          />
+        </div>
       </div>
     </div>
   );
