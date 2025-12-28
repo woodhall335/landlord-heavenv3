@@ -4,18 +4,24 @@
  * Redesigned wizard for Tenancy Agreement packs following a logical,
  * section-based flow with tab navigation (matching MoneyClaimSectionFlow design).
  *
+ * Jurisdiction-aware terminology:
+ * - England: Assured Shorthold Tenancy (AST) - Housing Act 1988
+ * - Wales: Occupation Contract - Renting Homes (Wales) Act 2016
+ * - Scotland: Private Residential Tenancy (PRT) - Private Housing (Tenancies) Act 2016
+ * - Northern Ireland: Private Tenancy - Private Tenancies (NI) Order 2006
+ *
  * Flow Structure:
- * 1. Product - Standard/Premium AST selection
+ * 1. Product - Standard/Premium tier selection (jurisdiction-specific naming)
  * 2. Property - Address and property details
  * 3. Landlord - Landlord contact and service address
- * 4. Tenants - Tenant details
+ * 4. Tenants - Tenant details (contract holder in Wales)
  * 5. Tenancy - Start date, term, type
  * 6. Rent - Rent amount, payment details
  * 7. Deposit - Deposit and protection details
  * 8. Bills - Utilities and bills responsibility
  * 9. Compliance - Safety certificates and legal requirements
  * 10. Terms - Property rules, access, maintenance
- * 11. Premium - Premium AST features (if applicable)
+ * 11. Premium - Premium features (if applicable)
  * 12. Review - Final review and generate
  */
 
@@ -38,6 +44,95 @@ interface TenancySectionFlowProps {
   jurisdiction: Jurisdiction;
   product?: 'tenancy_agreement' | 'ast_standard' | 'ast_premium';
 }
+
+/**
+ * Jurisdiction-specific terminology for tenancy agreements
+ *
+ * - England: Assured Shorthold Tenancy (AST) - Housing Act 1988
+ * - Wales: Occupation Contract - Renting Homes (Wales) Act 2016
+ * - Scotland: Private Residential Tenancy (PRT) - Private Housing (Tenancies) Act 2016
+ * - Northern Ireland: Private Tenancy - Private Tenancies (NI) Order 2006
+ */
+/**
+ * Check if a product tier is a premium tier (jurisdiction-agnostic check)
+ * This handles all jurisdiction-specific premium tier names
+ */
+const isPremiumTier = (productTier: string | undefined): boolean => {
+  if (!productTier) return false;
+  const premiumTiers = [
+    'Premium AST',
+    'Premium Occupation Contract',
+    'Premium PRT',
+    'Premium NI Private Tenancy',
+  ];
+  return premiumTiers.includes(productTier);
+};
+
+const getJurisdictionTerminology = (jurisdiction: Jurisdiction) => {
+  switch (jurisdiction) {
+    case 'wales':
+      return {
+        agreementType: 'Occupation Contract',
+        standardTier: 'Standard Occupation Contract',
+        premiumTier: 'Premium Occupation Contract',
+        suitabilityTitle: 'Occupation Contract Suitability Check',
+        suitabilityDescription: 'Basic checks to ensure this is a valid occupation contract under the Renting Homes (Wales) Act 2016.',
+        standardDescription: 'Simple, straightforward occupation contract for most lets.',
+        premiumDescription: 'Advanced features: guarantor clauses, HMO support, rent reviews, detailed schedules.',
+        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than a standard occupation contract.',
+        holidayWarning: 'Holiday lets and licence arrangements are not standard occupation contracts. Different rules apply.',
+        landlordHelperText: 'If yes, this may not be a standard occupation contract',
+        holidayHelperText: 'If yes, an occupation contract may not be appropriate',
+        tenantLabel: 'contract holder', // Wales terminology
+      };
+    case 'scotland':
+      return {
+        agreementType: 'Private Residential Tenancy',
+        standardTier: 'Standard PRT',
+        premiumTier: 'Premium PRT',
+        suitabilityTitle: 'PRT Suitability Check',
+        suitabilityDescription: 'Basic checks to ensure this is a valid Private Residential Tenancy under the Private Housing (Tenancies) (Scotland) Act 2016.',
+        standardDescription: 'Simple, straightforward PRT for most lets.',
+        premiumDescription: 'Advanced features: guarantor clauses, HMO support, detailed maintenance schedules.',
+        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than a PRT.',
+        holidayWarning: 'Holiday lets and licence arrangements are not PRTs. Different rules apply.',
+        landlordHelperText: 'If yes, this may not be a PRT',
+        holidayHelperText: 'If yes, a PRT may not be appropriate',
+        tenantLabel: 'tenant',
+      };
+    case 'northern-ireland':
+      return {
+        agreementType: 'Private Tenancy',
+        standardTier: 'Standard NI Private Tenancy',
+        premiumTier: 'Premium NI Private Tenancy',
+        suitabilityTitle: 'NI Private Tenancy Suitability Check',
+        suitabilityDescription: 'Basic checks to ensure this is a valid private tenancy under the Private Tenancies (Northern Ireland) Order 2006.',
+        standardDescription: 'Simple, straightforward private tenancy for most lets.',
+        premiumDescription: 'Advanced features: guarantor clauses, HMO support, detailed maintenance schedules.',
+        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than a private tenancy.',
+        holidayWarning: 'Holiday lets and licence arrangements are not private tenancies. Different rules apply.',
+        landlordHelperText: 'If yes, this may not be a private tenancy',
+        holidayHelperText: 'If yes, a private tenancy may not be appropriate',
+        tenantLabel: 'tenant',
+      };
+    case 'england':
+    default:
+      return {
+        agreementType: 'Assured Shorthold Tenancy',
+        standardTier: 'Standard AST',
+        premiumTier: 'Premium AST',
+        suitabilityTitle: 'AST Suitability Check',
+        suitabilityDescription: 'Basic checks to ensure this is a valid AST.',
+        standardDescription: 'Simple, straightforward tenancy agreement for most lets.',
+        premiumDescription: 'Advanced features: guarantor clauses, HMO support, rent reviews, detailed schedules.',
+        landlordWarning: 'If the landlord lives at the property, this may be a lodger arrangement rather than an AST.',
+        holidayWarning: 'Holiday lets and licence arrangements are not ASTs. Different rules apply.',
+        landlordHelperText: 'If yes, this may not be an AST',
+        holidayHelperText: 'If yes, an AST may not be appropriate',
+        tenantLabel: 'tenant',
+      };
+  }
+};
 
 // Section definition type
 interface WizardSection {
@@ -154,11 +249,11 @@ const SECTIONS: WizardSection[] = [
   {
     id: 'premium',
     label: 'Premium',
-    description: 'Premium AST features',
+    description: 'Premium features',
     premiumOnly: true,
     isComplete: (facts) => {
-      // Only applicable for premium AST
-      if (facts.product_tier !== 'Premium AST') return true;
+      // Only applicable for premium tier (jurisdiction-agnostic check)
+      if (!isPremiumTier(facts.product_tier)) return true;
       // Check some premium fields
       return facts.guarantor_required !== undefined;
     },
@@ -215,10 +310,10 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
     void loadFacts();
   }, [caseId, jurisdiction, product]);
 
-  // Filter sections based on premium status
+  // Filter sections based on premium status (jurisdiction-agnostic check)
   const visibleSections = useMemo(() => {
     return SECTIONS.filter((section) => {
-      if (section.premiumOnly && facts.product_tier !== 'Premium AST') {
+      if (section.premiumOnly && !isPremiumTier(facts.product_tier)) {
         return false;
       }
       return true;
@@ -339,7 +434,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       case 'terms':
         return <TermsSection facts={facts} onUpdate={handleUpdate} />;
       case 'premium':
-        return <PremiumSection facts={facts} onUpdate={handleUpdate} />;
+        return <PremiumSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'review':
         return <ReviewSection facts={facts} caseId={caseId} jurisdiction={jurisdiction} />;
       default:
@@ -545,62 +640,64 @@ interface SectionProps {
   caseId?: string;
 }
 
-// Product Section
-const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
+// Product Section - jurisdiction-aware terminology
+const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction = 'england' }) => {
+  const terms = getJurisdictionTerminology(jurisdiction);
+
   return (
     <div className="space-y-6">
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Which tenancy agreement do you need? <span className="text-red-500">*</span>
+          Which {jurisdiction === 'wales' ? 'occupation contract' : 'tenancy agreement'} do you need? <span className="text-red-500">*</span>
         </label>
         <p className="text-sm text-gray-500 mb-4">
           Standard covers simple lets. Premium adds guarantor, HMO, rent review and tighter controls.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <button
-            onClick={() => onUpdate({ product_tier: 'Standard AST' })}
+            onClick={() => onUpdate({ product_tier: terms.standardTier })}
             className={`p-4 rounded-lg border-2 text-left transition-colors ${
-              facts.product_tier === 'Standard AST'
+              facts.product_tier === terms.standardTier
                 ? 'border-[#7C3AED] bg-purple-50'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
           >
-            <h3 className="font-semibold text-gray-900">Standard AST</h3>
+            <h3 className="font-semibold text-gray-900">{terms.standardTier}</h3>
             <p className="text-sm text-gray-600 mt-1">
-              Simple, straightforward tenancy agreement for most lets.
+              {terms.standardDescription}
             </p>
           </button>
           <button
-            onClick={() => onUpdate({ product_tier: 'Premium AST' })}
+            onClick={() => onUpdate({ product_tier: terms.premiumTier })}
             className={`p-4 rounded-lg border-2 text-left transition-colors ${
-              facts.product_tier === 'Premium AST'
+              facts.product_tier === terms.premiumTier
                 ? 'border-[#7C3AED] bg-purple-50'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
           >
-            <h3 className="font-semibold text-gray-900">Premium AST</h3>
+            <h3 className="font-semibold text-gray-900">{terms.premiumTier}</h3>
             <p className="text-sm text-gray-600 mt-1">
-              Advanced features: guarantor clauses, HMO support, rent reviews, detailed schedules.
+              {terms.premiumDescription}
             </p>
           </button>
         </div>
       </div>
 
-      {/* AST Suitability Check */}
+      {/* Suitability Check - jurisdiction-aware */}
       <div className="border-t border-gray-200 pt-6">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">AST Suitability Check</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">{terms.suitabilityTitle}</h3>
         <p className="text-sm text-gray-500 mb-4">
-          Basic checks to ensure this is a valid AST.
+          {terms.suitabilityDescription}
         </p>
         <div className="space-y-4">
           <YesNoField
-            label="Is the tenant an individual (not a company)?"
+            label={`Is the ${terms.tenantLabel} an individual (not a company)?`}
             value={facts.tenant_is_individual}
             onChange={(v) => onUpdate({ tenant_is_individual: v })}
             required
           />
           <YesNoField
-            label="Will this be the tenant's main home?"
+            label={`Will this be the ${terms.tenantLabel}'s main home?`}
             value={facts.main_home}
             onChange={(v) => onUpdate({ main_home: v })}
             required
@@ -609,30 +706,30 @@ const ProductSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
             label="Does the landlord live at the property?"
             value={facts.landlord_lives_at_property}
             onChange={(v) => onUpdate({ landlord_lives_at_property: v })}
-            helperText="If yes, this may not be an AST"
+            helperText={terms.landlordHelperText}
             required
           />
           <YesNoField
             label="Is this a holiday let or licence arrangement?"
             value={facts.holiday_or_licence}
             onChange={(v) => onUpdate({ holiday_or_licence: v })}
-            helperText="If yes, an AST may not be appropriate"
+            helperText={terms.holidayHelperText}
             required
           />
         </div>
 
-        {/* Warnings */}
+        {/* Warnings - jurisdiction-aware */}
         {facts.landlord_lives_at_property === true && (
           <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
             <p className="text-sm text-amber-800">
-              <strong>Warning:</strong> If the landlord lives at the property, this may be a lodger arrangement rather than an AST.
+              <strong>Warning:</strong> {terms.landlordWarning}
             </p>
           </div>
         )}
         {facts.holiday_or_licence === true && (
           <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
             <p className="text-sm text-amber-800">
-              <strong>Warning:</strong> Holiday lets and licence arrangements are not ASTs. Different rules apply.
+              <strong>Warning:</strong> {terms.holidayWarning}
             </p>
           </div>
         )}
@@ -1450,8 +1547,9 @@ const TermsSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
   );
 };
 
-// Premium Section
-const PremiumSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
+// Premium Section - jurisdiction-aware
+const PremiumSection: React.FC<SectionProps> = ({ facts, onUpdate, jurisdiction = 'england' }) => {
+  const terms = getJurisdictionTerminology(jurisdiction);
   return (
     <div className="space-y-6">
       {/* Guarantor */}
@@ -1526,7 +1624,7 @@ const PremiumSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
       <div className="border-t border-gray-200 pt-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">HMO / Shared Facilities</h3>
         <p className="text-sm text-gray-500 mb-4">
-          Premium AST adds HMO-ready clauses.
+          {terms.premiumTier} adds HMO-ready clauses.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <YesNoField
@@ -1599,9 +1697,9 @@ const PremiumSection: React.FC<SectionProps> = ({ facts, onUpdate }) => {
 
 // Review Section
 const ReviewSection: React.FC<SectionProps> = ({ facts }) => {
-  // Calculate completion status
+  // Calculate completion status (jurisdiction-agnostic check)
   const completedSections = SECTIONS.filter((s) => {
-    if (s.premiumOnly && facts.product_tier !== 'Premium AST') return true;
+    if (s.premiumOnly && !isPremiumTier(facts.product_tier)) return true;
     return s.isComplete(facts);
   });
   const allComplete = completedSections.length === SECTIONS.length;
