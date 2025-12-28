@@ -101,7 +101,7 @@ export default function ScotlandPRTPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-20">
         {/* Breadcrumb Navigation */}
         <div className="container mx-auto px-4 py-4">
           <nav className="text-sm text-gray-600">
