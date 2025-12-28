@@ -50,7 +50,7 @@ public/official-forms/**/*.pdf
 !public/official-forms/README.md
 !public/official-forms/scotland/notice_to_leave.pdf
 !public/official-forms/scotland/form_e_eviction.pdf
-!public/official-forms/scotland/simple_procedure_claim_form.pdf
+!public/official-forms/scotland/form-3a.pdf
 !public/official-forms/scotland/simple_procedure_response_form.pdf
 
 # Sample/test documents (not to be committed)

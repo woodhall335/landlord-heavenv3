@@ -499,7 +499,7 @@ Canonical: Scotland money-claim sections in MASTER_BLUEPRINT.md, BUNDLE_BUILDER_
   - [x] Parties, sheriff court selection, claim value, arrears summary, narrative
   - [x] Based on MQS fields and CaseFacts
   - **Implementation:** `src/lib/documents/scotland-forms-filler.ts:fillSimpleProcedureClaim()`
-  - **Official Form:** `public/official-forms/scotland/simple_procedure_claim_form.pdf` (Form 3A v2024.03)
+  - **Official Form:** `public/official-forms/scotland/form-3a.pdf` (Form 3A v2024.03)
   - **Key Features:**
     - Pursuer (claimant) / Defender (respondent) details
     - Sheriffdom selection (e.g., Edinburgh Sheriff Court)
