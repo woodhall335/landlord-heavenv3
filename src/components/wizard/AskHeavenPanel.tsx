@@ -234,14 +234,6 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
     }
   };
 
-  // If there is literally no current question yet (very early edge case),
-  // we still show the panel so the user can ask generic questions.
-  const writingDisabledReason = !hasAnswerText
-    ? 'Type your answer first, then Ask Heaven can help tidy it up.'
-    : !currentQuestionId
-    ? 'Once this question has fully loaded, Ask Heaven can improve your wording.'
-    : null;
-
   const renderPanelContent = () => (
     <Card
       padding="none"
@@ -263,17 +255,8 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
         </div>
       </div>
 
-      {/* Writing helper */}
+      {/* Q&A section - streamlined without "Writing helper" header/description */}
       <div className="mt-3 border-t border-gray-100 pt-3">
-        <div className="flex items-center gap-2 mb-1">
-          <RiSparklingLine className="h-3.5 w-3.5 text-[#7C3AED]" />
-          <span className="text-xs font-semibold text-gray-800">Writing helper</span>
-        </div>
-        <p className="text-xs text-gray-500 mb-2">
-          Ask Heaven can rewrite your answer in clear, court-friendly language and highlight gaps
-          or helpful evidence to mention.
-        </p>
-
         <Button
           type="button"
           variant="outline"
@@ -295,9 +278,6 @@ export const AskHeavenPanel: React.FC<AskHeavenPanelProps> = ({
           )}
         </Button>
 
-        {writingDisabledReason && (
-          <p className="mt-2 text-[11px] text-gray-500">{writingDisabledReason}</p>
-        )}
 
         {writingError && (
           <div className="mt-2 flex items-start gap-2 rounded-md bg-red-50 px-2.5 py-2">

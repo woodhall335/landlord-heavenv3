@@ -29,6 +29,8 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { RiCheckLine, RiErrorWarningLine } from 'react-icons/ri';
 
+import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+
 // Section components
 import { CaseBasicsSection } from '../sections/eviction/CaseBasicsSection';
 import { PartiesSection } from '../sections/eviction/PartiesSection';
@@ -475,107 +477,123 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="max-w-3xl mx-auto px-4 py-8">
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-            {error}
-          </div>
-        )}
-
-        {/* Current section */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">
-              {currentSection?.label}
-            </h2>
-            <p className="text-sm text-gray-500 mt-1">
-              {currentSection?.description}
-            </p>
-          </div>
-
-          {/* Blockers */}
-          {currentBlockers.length > 0 && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-              <h3 className="text-sm font-medium text-red-800 mb-2">
-                Cannot Proceed - Blockers:
-              </h3>
-              <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
-                {currentBlockers.map((blocker, i) => (
-                  <li key={i}>{blocker}</li>
-                ))}
-              </ul>
+      {/* Main content with sidebar */}
+      <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6">
+        {/* Main wizard column */}
+        <main className="flex-1 lg:max-w-3xl">
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+              {error}
             </div>
           )}
 
-          {/* Warnings */}
-          {currentWarnings.length > 0 && (
-            <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
-              <h3 className="text-sm font-medium text-amber-800 mb-2">
-                Warnings:
-              </h3>
-              <ul className="list-disc list-inside text-sm text-amber-700 space-y-1">
-                {currentWarnings.map((warning, i) => (
-                  <li key={i}>{warning}</li>
-                ))}
-              </ul>
+          {/* Current section */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-900">
+                {currentSection?.label}
+              </h2>
+              <p className="text-sm text-gray-500 mt-1">
+                {currentSection?.description}
+              </p>
             </div>
-          )}
 
-          {/* Section content */}
-          {renderSection()}
-        </div>
-
-        {/* Navigation */}
-        <div className="flex items-center justify-between mt-6">
-          <button
-            onClick={handleBack}
-            disabled={currentSectionIndex === 0}
-            className={`
-              px-4 py-2 text-sm font-medium rounded-md transition-colors
-              ${currentSectionIndex === 0
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
-            `}
-          >
-            ← Back
-          </button>
-
-          <div className="flex items-center gap-2">
-            {saving && (
-              <span className="text-sm text-gray-500">Saving...</span>
+            {/* Blockers */}
+            {currentBlockers.length > 0 && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <h3 className="text-sm font-medium text-red-800 mb-2">
+                  Cannot Proceed - Blockers:
+                </h3>
+                <ul className="list-disc list-inside text-sm text-red-700 space-y-1">
+                  {currentBlockers.map((blocker, i) => (
+                    <li key={i}>{blocker}</li>
+                  ))}
+                </ul>
+              </div>
             )}
 
-            {currentSection?.id === 'review' ? (
-              <button
-                onClick={handleComplete}
-                disabled={currentBlockers.length > 0}
-                className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors
-                  ${currentBlockers.length > 0
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-green-600 text-white hover:bg-green-700'}
-                `}
-              >
-                Generate Documents
-              </button>
-            ) : (
-              <button
-                onClick={handleNext}
-                disabled={currentSectionIndex === visibleSections.length - 1}
-                className={`
-                  px-6 py-2 text-sm font-medium rounded-md transition-colors
-                  ${currentSectionIndex === visibleSections.length - 1
-                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'}
-                `}
-              >
-                Next →
-              </button>
+            {/* Warnings */}
+            {currentWarnings.length > 0 && (
+              <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                <h3 className="text-sm font-medium text-amber-800 mb-2">
+                  Warnings:
+                </h3>
+                <ul className="list-disc list-inside text-sm text-amber-700 space-y-1">
+                  {currentWarnings.map((warning, i) => (
+                    <li key={i}>{warning}</li>
+                  ))}
+                </ul>
+              </div>
             )}
+
+            {/* Section content */}
+            {renderSection()}
           </div>
-        </div>
-      </main>
+
+          {/* Navigation */}
+          <div className="flex items-center justify-between mt-6">
+            <button
+              onClick={handleBack}
+              disabled={currentSectionIndex === 0}
+              className={`
+                px-4 py-2 text-sm font-medium rounded-md transition-colors
+                ${currentSectionIndex === 0
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
+              `}
+            >
+              ← Back
+            </button>
+
+            <div className="flex items-center gap-2">
+              {saving && (
+                <span className="text-sm text-gray-500">Saving...</span>
+              )}
+
+              {currentSection?.id === 'review' ? (
+                <button
+                  onClick={handleComplete}
+                  disabled={currentBlockers.length > 0}
+                  className={`
+                    px-6 py-2 text-sm font-medium rounded-md transition-colors
+                    ${currentBlockers.length > 0
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-green-600 text-white hover:bg-green-700'}
+                  `}
+                >
+                  Generate Documents
+                </button>
+              ) : (
+                <button
+                  onClick={handleNext}
+                  disabled={currentSectionIndex === visibleSections.length - 1}
+                  className={`
+                    px-6 py-2 text-sm font-medium rounded-md transition-colors
+                    ${currentSectionIndex === visibleSections.length - 1
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-[#7C3AED] text-white hover:bg-[#6D28D9]'}
+                  `}
+                >
+                  Next →
+                </button>
+              )}
+            </div>
+          </div>
+        </main>
+
+        {/* Ask Heaven sidebar */}
+        <aside className="lg:w-80 shrink-0">
+          <div className="sticky top-44">
+            <AskHeavenPanel
+              caseId={caseId}
+              caseType="eviction"
+              jurisdiction={jurisdiction}
+              product="complete_pack"
+              currentQuestionId={undefined}
+            />
+          </div>
+        </aside>
+      </div>
     </div>
   );
 };

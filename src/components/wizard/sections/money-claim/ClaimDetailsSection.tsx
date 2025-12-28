@@ -2,7 +2,8 @@
 
 'use client';
 
-import React from 'react';
+import React, { useState, useCallback } from 'react';
+import { RiSparklingLine, RiLoader4Line, RiCheckboxCircleLine } from 'react-icons/ri';
 
 type Jurisdiction = 'england' | 'wales' | 'scotland';
 
@@ -18,6 +19,11 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
   onUpdate,
 }) => {
   const moneyClaim = facts.money_claim || {};
+
+  // Ask Heaven enhancement state
+  const [enhancingField, setEnhancingField] = useState<string | null>(null);
+  const [enhancedText, setEnhancedText] = useState<{ field: string; text: string } | null>(null);
+  const [enhanceError, setEnhanceError] = useState<string | null>(null);
 
   const updateMoneyClaim = (field: string, value: any) => {
     onUpdate({
@@ -47,6 +53,60 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
       set.add(value);
     }
     updateMoneyClaim('other_amounts_types', Array.from(set));
+  };
+
+  // Enhance with Ask Heaven
+  const handleEnhance = useCallback(async (fieldName: string, currentText: string, questionText: string) => {
+    if (!currentText.trim() || currentText.trim().length < 20) return;
+
+    setEnhancingField(fieldName);
+    setEnhanceError(null);
+
+    try {
+      const response = await fetch('/api/ask-heaven/enhance-answer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question_id: fieldName,
+          question_text: questionText,
+          answer: currentText,
+          context: {
+            jurisdiction,
+            product: 'money_claim',
+            primary_issue: primaryIssue,
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to enhance text');
+      }
+
+      const suggested =
+        data.suggested_wording ||
+        data.enhanced_answer?.suggested ||
+        data.ask_heaven?.suggested_wording;
+
+      if (suggested) {
+        setEnhancedText({ field: fieldName, text: suggested });
+      } else {
+        throw new Error('No suggestion returned from Ask Heaven');
+      }
+    } catch (err: any) {
+      console.error('Ask Heaven enhance error:', err);
+      setEnhanceError(err.message || 'Failed to enhance. Please try again.');
+    } finally {
+      setEnhancingField(null);
+    }
+  }, [jurisdiction, primaryIssue]);
+
+  const handleApplyEnhanced = () => {
+    if (enhancedText) {
+      updateMoneyClaim(enhancedText.field, enhancedText.text);
+      setEnhancedText(null);
+    }
   };
 
   return (
@@ -93,11 +153,70 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
           </span>
         </div>
         <textarea
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[120px]"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[120px] focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
           value={basisOfClaim}
           onChange={(e) => updateMoneyClaim('basis_of_claim', e.target.value)}
           placeholder="For example: The defendant is my former tenant at [property address]. They have failed to pay rent since [month/year] and left the property owing £[amount] in rent and causing damage to the carpets and doors…"
         />
+
+        {/* Enhance with Ask Heaven button */}
+        {basisOfClaim.trim().length > 20 && (
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => handleEnhance('basis_of_claim', basisOfClaim, 'Basis of claim for money claim')}
+              disabled={enhancingField === 'basis_of_claim'}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-md hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              {enhancingField === 'basis_of_claim' ? (
+                <>
+                  <RiLoader4Line className="w-4 h-4 mr-2 animate-spin" />
+                  Enhancing...
+                </>
+              ) : (
+                <>
+                  <RiSparklingLine className="w-4 h-4 mr-2" />
+                  Enhance with Ask Heaven
+                </>
+              )}
+            </button>
+            <span className="text-xs text-gray-500">
+              AI will improve clarity and court-readiness
+            </span>
+          </div>
+        )}
+
+        {/* Enhanced text suggestion for basis_of_claim */}
+        {enhancedText?.field === 'basis_of_claim' && (
+          <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-lg space-y-3">
+            <div className="flex items-center gap-2">
+              <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
+              <span className="text-sm font-semibold text-indigo-900">
+                Ask Heaven Suggestion
+              </span>
+            </div>
+            <p className="text-sm text-indigo-900 whitespace-pre-wrap">
+              {enhancedText.text}
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={handleApplyEnhanced}
+                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+              >
+                Use this wording
+              </button>
+              <button
+                type="button"
+                onClick={() => setEnhancedText(null)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        )}
+
         <p className="text-xs text-gray-500">
           You can keep this in plain English. Later we&apos;ll help you turn this into
           a court-ready legal summary.
@@ -184,16 +303,81 @@ export const ClaimDetailsSection: React.FC<SectionProps> = ({
           </span>
         </div>
         <textarea
-          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[120px]"
+          className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm min-h-[120px] focus:border-[#7C3AED] focus:ring-1 focus:ring-[#7C3AED]"
           value={otherAmountsSummary}
           onChange={(e) => updateMoneyClaim('other_amounts_summary', e.target.value)}
           placeholder="For example: £450 to replace damaged bedroom carpet, £120 for deep cleaning, £80 unpaid water bill, £60 locksmith fee…"
         />
+
+        {/* Enhance with Ask Heaven button */}
+        {otherAmountsSummary.trim().length > 20 && (
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => handleEnhance('other_amounts_summary', otherAmountsSummary, 'Other amounts summary for money claim')}
+              disabled={enhancingField === 'other_amounts_summary'}
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-500 to-purple-600 rounded-md hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            >
+              {enhancingField === 'other_amounts_summary' ? (
+                <>
+                  <RiLoader4Line className="w-4 h-4 mr-2 animate-spin" />
+                  Enhancing...
+                </>
+              ) : (
+                <>
+                  <RiSparklingLine className="w-4 h-4 mr-2" />
+                  Enhance with Ask Heaven
+                </>
+              )}
+            </button>
+            <span className="text-xs text-gray-500">
+              AI will improve clarity and court-readiness
+            </span>
+          </div>
+        )}
+
+        {/* Enhanced text suggestion for other_amounts_summary */}
+        {enhancedText?.field === 'other_amounts_summary' && (
+          <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-lg space-y-3">
+            <div className="flex items-center gap-2">
+              <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED]" />
+              <span className="text-sm font-semibold text-indigo-900">
+                Ask Heaven Suggestion
+              </span>
+            </div>
+            <p className="text-sm text-indigo-900 whitespace-pre-wrap">
+              {enhancedText.text}
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={handleApplyEnhanced}
+                className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+              >
+                Use this wording
+              </button>
+              <button
+                type="button"
+                onClick={() => setEnhancedText(null)}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50"
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        )}
+
         <p className="text-xs text-gray-500">
-          If you&apos;re not sure how to word this, you&apos;ll be able to ask Ask Heaven
-          for help later.
+          Ask Heaven can help enhance your text with court-ready wording.
         </p>
       </div>
+
+      {/* Error display */}
+      {enhanceError && (
+        <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-sm text-red-700">{enhanceError}</p>
+        </div>
+      )}
     </div>
   );
 };

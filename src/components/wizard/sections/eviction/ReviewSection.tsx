@@ -44,6 +44,7 @@ interface ReviewSectionProps {
 export const ReviewSection: React.FC<ReviewSectionProps> = ({
   facts,
   jurisdiction,
+  caseId,
   sections,
   onComplete,
   onJumpToSection,
@@ -174,6 +175,16 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
             ? 'England Section 21 Complete Pack'
             : 'England Section 8 Complete Pack'
           }
+        </p>
+      </div>
+
+      {/* Case Info */}
+      <div className="space-y-2 rounded-md border border-gray-200 bg-gray-50 p-3 text-sm">
+        <p>
+          <span className="font-semibold">Case ID:</span> {caseId}
+        </p>
+        <p>
+          <span className="font-semibold">Jurisdiction:</span> {jurisdiction}
         </p>
       </div>
 
