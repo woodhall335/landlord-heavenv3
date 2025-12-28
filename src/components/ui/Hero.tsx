@@ -70,7 +70,7 @@ export function Hero({
         />
       )}
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-16 md:pt-32 md:pb-20 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-16 md:pt-32 md:pb-36 lg:px-8">
         <div className="mx-auto max-w-2xl text-center lg:max-w-4xl">
           {/* Badge */}
           {badge && (
