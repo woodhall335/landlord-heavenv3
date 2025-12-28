@@ -426,15 +426,15 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                   >
                     <div className="flex items-center gap-3">
                       {complete && !hasBlocker ? (
-                        <RiCheckLine className="w-5 h-5 text-[#7C3AED]" />
+                        <RiCheckLine className="w-5 h-5 text-green-500" />
                       ) : hasBlocker ? (
-                        <RiErrorWarningLine className="w-5 h-5 text-[#7C3AED]" />
+                        <RiErrorWarningLine className="w-5 h-5 text-red-500" />
                       ) : (
                         <div className="w-5 h-5 rounded-full border-2 border-gray-300" />
                       )}
                       <span className="font-medium text-gray-900">{section.label}</span>
                     </div>
-                    <RiArrowRightSLine className="w-4 h-4 text-[#7C3AED]" />
+                    <RiArrowRightSLine className="w-4 h-4 text-gray-400" />
                   </button>
                 );
               })}
@@ -548,10 +548,10 @@ export const NoticeOnlySectionFlow: React.FC<NoticeOnlySectionFlowProps> = ({
                 >
                   <span className="flex items-center gap-1.5">
                     {isComplete && !hasBlocker && (
-                      <RiCheckLine className="w-4 h-4 text-[#7C3AED]" />
+                      <RiCheckLine className="w-4 h-4 text-green-500" />
                     )}
                     {hasBlocker && (
-                      <RiErrorWarningLine className="w-4 h-4 text-[#7C3AED]" />
+                      <RiErrorWarningLine className="w-4 h-4 text-red-500" />
                     )}
                     {section.label}
                   </span>

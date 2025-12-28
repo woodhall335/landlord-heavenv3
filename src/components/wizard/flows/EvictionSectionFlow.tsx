@@ -216,7 +216,8 @@ const SECTIONS: WizardSection[] = [
     id: 'evidence',
     label: 'Evidence',
     description: 'Supporting documents',
-    isComplete: () => true, // Evidence is optional but recommended
+    // Optional section - only complete when user has uploaded evidence or confirmed none needed
+    isComplete: (facts) => Boolean(facts.evidence_reviewed || facts.uploaded_documents?.length > 0),
   },
   {
     id: 'court_signing',
@@ -463,10 +464,10 @@ export const EvictionSectionFlow: React.FC<EvictionSectionFlowProps> = ({
                 >
                   <span className="flex items-center gap-1.5">
                     {isComplete && !hasBlocker && (
-                      <RiCheckLine className="w-4 h-4 text-[#7C3AED]" />
+                      <RiCheckLine className="w-4 h-4 text-green-500" />
                     )}
                     {hasBlocker && (
-                      <RiErrorWarningLine className="w-4 h-4 text-[#7C3AED]" />
+                      <RiErrorWarningLine className="w-4 h-4 text-red-500" />
                     )}
                     {section.label}
                   </span>

@@ -101,7 +101,10 @@ const SECTIONS: WizardSection[] = [
     label: 'Arrears',
     description: 'Rent arrears schedule',
     isComplete: (facts) => {
-      if (facts.claiming_rent_arrears !== true) return true;
+      // Only complete if user explicitly said they're NOT claiming rent arrears,
+      // OR if they ARE claiming and have provided arrears items
+      if (facts.claiming_rent_arrears === false) return true;
+      if (facts.claiming_rent_arrears !== true) return false; // undefined = not yet answered
       const arrearsItems = facts.arrears_items || facts.issues?.rent_arrears?.arrears_items || [];
       return Array.isArray(arrearsItems) && arrearsItems.length > 0;
     },
@@ -121,7 +124,10 @@ const SECTIONS: WizardSection[] = [
     label: 'Damages',
     description: 'Property damage and other costs',
     isComplete: (facts) => {
-      if (facts.claiming_damages !== true && facts.claiming_other !== true) return true;
+      // Only complete if user explicitly said they're NOT claiming damages/other,
+      // OR if they ARE claiming and have provided damage items
+      if (facts.claiming_damages === false && facts.claiming_other === false) return true;
+      if (facts.claiming_damages !== true && facts.claiming_other !== true) return false; // not yet answered
       return Boolean(facts.damage_items?.length > 0 || facts.other_charges?.length > 0);
     },
   },
@@ -137,19 +143,22 @@ const SECTIONS: WizardSection[] = [
     id: 'timeline',
     label: 'Timeline',
     description: 'Pre-action protocol timeline',
-    isComplete: () => true, // Timeline is informational
+    // Optional section - only complete when user has visited and reviewed
+    isComplete: (facts) => Boolean(facts.timeline_reviewed),
   },
   {
     id: 'evidence',
     label: 'Evidence',
     description: 'Supporting documents',
-    isComplete: () => true, // Evidence is optional but recommended
+    // Optional section - only complete when user has uploaded evidence or confirmed none needed
+    isComplete: (facts) => Boolean(facts.evidence_reviewed || facts.uploaded_documents?.length > 0),
   },
   {
     id: 'enforcement',
     label: 'Enforcement',
     description: 'Preferred enforcement methods',
-    isComplete: () => true, // Enforcement preferences are optional
+    // Optional section - only complete when user has made enforcement preferences
+    isComplete: (facts) => Boolean(facts.enforcement_reviewed || facts.enforcement_preference),
   },
   {
     id: 'review',

@@ -3106,23 +3106,40 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
   })();
 
   return (
-    <div className="max-w-6xl mx-auto p-6 pt-24">
-      <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2.5fr)_minmax(0,1.5fr)] gap-6 items-start">
-        {/* LEFT: Wizard content */}
-        <div>
-          {/* Progress Bar */}
-          <div className="mb-8">
-            <div className="flex justify-between text-sm text-gray-600 mb-2">
-              <span>{currentQuestion.section || 'Question'}</span>
-              <span>{Math.round(progress)}% Complete</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className="bg-primary h-2 rounded-full transition-all duration-300"
-                style={{ width: `${progress}%` }}
-              />
+    <div className="min-h-screen bg-gray-50 pt-20">
+      {/* Header with progress - sticky like section-based flows */}
+      <header className="bg-white border-b border-gray-200 sticky top-20 z-10">
+        <div className="max-w-5xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-2">
+            <h1 className="text-lg font-semibold text-gray-900">
+              {productLabel} Pack
+            </h1>
+            <span className="text-sm text-gray-500">
+              {Math.round(progress)}% Complete
+            </span>
+          </div>
+
+          {/* Progress bar */}
+          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-[#7C3AED] transition-all duration-300"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+
+          {/* Current section indicator */}
+          <div className="flex gap-1 mt-4 overflow-x-auto pb-2">
+            <div className="px-3 py-1.5 text-sm font-medium rounded-md whitespace-nowrap bg-[#7C3AED] text-white">
+              {currentQuestion.section || 'Question'}
             </div>
           </div>
+        </div>
+      </header>
+
+      {/* Main content with sidebar */}
+      <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col lg:flex-row gap-6">
+        {/* Main wizard column */}
+        <main className="flex-1 lg:max-w-3xl">
 
           {/* Fix Mode Banner */}
           {fixMode && (
@@ -3600,10 +3617,11 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
             </div>
           </Card>
 
-        </div>
+        </main>
 
-        {/* RIGHT: Side panels – case-specific widgets */}
-        <aside className="space-y-4">
+        {/* Ask Heaven sidebar - matching section-based flows */}
+        <aside className="lg:w-80 shrink-0 space-y-4">
+          <div className="sticky top-44">
           {/* ============================================================================
               PERSISTENT ISSUES SUMMARY PANEL (ALL MODES)
               ============================================================================
@@ -4158,6 +4176,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               </div>
             </Card>
           )}
+          </div>
         </aside>
       </div>
 
