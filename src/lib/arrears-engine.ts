@@ -87,16 +87,6 @@ export interface Ground8ValidationResult {
 /** Ground 8 requires at least 2 months' rent in arrears */
 const GROUND_8_THRESHOLD_MONTHS = 2;
 
-/** Days in each frequency period */
-const FREQUENCY_DAYS: Record<NonNullable<TenancyFacts['rent_frequency']>, number> = {
-  weekly: 7,
-  fortnightly: 14,
-  monthly: 30, // Approximate - actual calculation uses date math
-  quarterly: 91, // Approximate
-  yearly: 365,
-  other: 30, // Default to monthly
-};
-
 /** Periods per month for each frequency */
 const PERIODS_PER_MONTH: Record<NonNullable<TenancyFacts['rent_frequency']>, number> = {
   weekly: 4.33,
@@ -545,7 +535,7 @@ export function createLegacyArrearsResult(
  */
 export function hasAuthoritativeArrearsData(
   arrears_items: ArrearsItem[] | undefined,
-  total_arrears: number | null | undefined
+  _total_arrears: number | null | undefined
 ): boolean {
   // Authoritative if we have schedule data
   if (arrears_items && arrears_items.length > 0) {

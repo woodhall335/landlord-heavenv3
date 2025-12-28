@@ -172,9 +172,6 @@ export async function GET(request: Request) {
 // POST handler for consistency (accepts body instead of query params)
 export async function POST(request: Request) {
   try {
-    const supabase = createAdminClient();
-    const user = await getServerUser();
-
     let body: { caseId?: string; evidenceId?: string };
     try {
       body = await request.json();

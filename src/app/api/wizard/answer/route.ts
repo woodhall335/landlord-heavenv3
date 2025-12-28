@@ -33,7 +33,6 @@ import {
   runSmartReview,
   isSmartReviewEnabled,
   mapLegacyUploadsToBundle,
-  isEvidenceCategory,
   type SmartReviewWarning,
   type EvidenceCategory,
 } from '@/lib/evidence';
