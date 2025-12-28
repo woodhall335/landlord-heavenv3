@@ -46,7 +46,7 @@ export function HeroSection({
         </div>
       )}
 
-      <div className="relative mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-28 lg:py-36">
+      <div className="relative mx-auto max-w-7xl px-6 pt-28 pb-16 md:px-10 md:pt-36 md:pb-20 lg:pt-40 lg:pb-24">
         <div className={clsx("grid gap-12", mediaSlot ? "lg:grid-cols-2 lg:items-center" : "")}>
           <div className={clsx("flex flex-col gap-6", !mediaSlot && alignment)}>
             {breadcrumb && (
