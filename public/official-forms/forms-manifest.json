@@ -34,7 +34,7 @@
           "name": "Form E - Eviction Order Application",
           "fillable": true
         },
-        "simple_procedure_claim_form.pdf": {
+        "form-3a.pdf": {
           "name": "Form 3A - Simple Procedure Claim",
           "fillable": false
         },
