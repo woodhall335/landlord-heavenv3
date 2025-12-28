@@ -16,10 +16,23 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ caseId: string }> }
 ) {
+  // Step 1: Check authentication
+  let user;
   try {
-    const user = await requireServerAuth();
-    const { caseId } = await params;
+    user = await requireServerAuth();
+  } catch (authError) {
+    console.error('Money claim pack auth error:', authError);
+    return NextResponse.json(
+      { error: 'Please sign in to generate your money claim pack' },
+      { status: 401 }
+    );
+  }
 
+  const { caseId } = await params;
+
+  // Step 2: Fetch case data
+  let caseRow: CaseRow;
+  try {
     const supabase = await createServerSupabaseClient();
     const { data, error } = await supabase
       .from('cases')
@@ -30,11 +43,25 @@ export async function GET(
 
     if (error || !data) {
       console.error('Money claim case not found:', error);
-      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Case not found. Please ensure you have saved your case.' },
+        { status: 404 }
+      );
     }
 
-    const caseRow = data as CaseRow;
+    caseRow = data;
+  } catch (dbError) {
+    console.error('Money claim database error:', dbError);
+    return NextResponse.json(
+      { error: 'Unable to load case data. Please try again.' },
+      { status: 500 }
+    );
+  }
 
+  // Step 3: Transform wizard facts to case facts
+  let caseFacts: CaseFacts;
+  let moneyClaimCase;
+  try {
     const wizardFacts =
       caseRow.wizard_facts ||
       caseRow.collected_facts ||
@@ -42,12 +69,38 @@ export async function GET(
       caseRow.case_facts ||
       {};
 
-    const caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
-    const moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
+    if (!wizardFacts || Object.keys(wizardFacts).length === 0) {
+      return NextResponse.json(
+        { error: 'No case data found. Please complete the wizard first.' },
+        { status: 400 }
+      );
+    }
 
+    caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
+    moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
+  } catch (mapError) {
+    console.error('Money claim data mapping error:', mapError);
+    return NextResponse.json(
+      { error: 'Unable to process case data. Please check all required fields are filled.' },
+      { status: 400 }
+    );
+  }
+
+  // Step 4: Generate the pack
+  let pack;
+  try {
     // Pass caseFacts to enable AI drafting of LBA, PoC, and Evidence Index
-    const pack = await generateMoneyClaimPack(moneyClaimCase, caseFacts);
+    pack = await generateMoneyClaimPack(moneyClaimCase, caseFacts);
+  } catch (genError) {
+    console.error('Money claim pack generation error:', genError);
+    return NextResponse.json(
+      { error: 'Failed to generate documents. Please try again or contact support.' },
+      { status: 500 }
+    );
+  }
 
+  // Step 5: Create ZIP file
+  try {
     const zip = new JSZip();
     const root = zip.folder('Money-Claim-Premium')!;
 
@@ -103,7 +156,7 @@ export async function GET(
       }
     }
 
-    // ✅ Generate as ArrayBuffer instead of Uint8Array – TS is happy and Response accepts it
+    // Generate as ArrayBuffer – TS is happy and Response accepts it
     const zipBuffer = await zip.generateAsync({ type: 'arraybuffer' });
 
     return new Response(zipBuffer, {
@@ -113,10 +166,10 @@ export async function GET(
         'Content-Disposition': `attachment; filename="money-claim-${caseId}.zip"`,
       },
     });
-  } catch (err) {
-    console.error('Money claim pack generation error:', err);
+  } catch (zipError) {
+    console.error('Money claim ZIP creation error:', zipError);
     return NextResponse.json(
-      { error: 'Failed to generate money claim pack' },
+      { error: 'Failed to create download package. Please try again.' },
       { status: 500 }
     );
   }
