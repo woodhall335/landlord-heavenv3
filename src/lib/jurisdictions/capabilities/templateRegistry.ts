@@ -54,8 +54,8 @@ const tenancyAgreementTemplates: Record<Jurisdiction, string[]> = {
     "uk/england/templates/premium_ast_formatted.hbs",
   ],
   wales: [
-    "uk/england/templates/standard_ast_formatted.hbs",
-    "uk/england/templates/premium_ast_formatted.hbs",
+    "uk/wales/templates/standard_occupation_contract.hbs",
+    "uk/wales/templates/premium_occupation_contract.hbs",
   ],
   scotland: ["uk/scotland/templates/prt_agreement.hbs", "uk/scotland/templates/prt_agreement_premium.hbs"],
   "northern-ireland": [
