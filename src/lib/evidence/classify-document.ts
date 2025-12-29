@@ -2,6 +2,8 @@ export interface DocumentClassificationInput {
   fileName: string;
   mimeType?: string | null;
   extractedText?: string | null;
+  /** Category hint from validator context (e.g., 'notice_s21' when uploading to Section 21 validator) */
+  categoryHint?: string | null;
 }
 
 export interface DocumentClassificationResult {
@@ -156,13 +158,36 @@ export function classifyDocument(input: DocumentClassificationInput): DocumentCl
   });
 
   if (bestMatch.docType === 'other') {
+    // No keyword match found - check if we have a category hint from the validator context
+    if (input.categoryHint) {
+      // Validate the hint is a known document type
+      const knownDocTypes = RULES.map((r) => r.docType);
+      const isKnownType = knownDocTypes.includes(input.categoryHint) ||
+        ['notice_s21', 'notice_s8', 'tenancy_agreement', 'wales_notice', 'scotland_notice_to_leave'].includes(input.categoryHint);
+
+      if (isKnownType) {
+        reasons.push(`Using validator context hint: ${input.categoryHint}`);
+        reasons.push('Document content could not be extracted or analyzed');
+        return {
+          docType: input.categoryHint,
+          confidence: 0.65, // Moderate confidence - we trust the user's upload context
+          reasons,
+        };
+      }
+    }
     reasons.push('No strong keyword match found.');
   } else {
     reasons.push(...bestMatch.reasons);
   }
 
   // Improved confidence: base 0.25, +0.18 per match, max 0.85 for keyword-only
-  const confidence = bestMatch.score === 0 ? 0.2 : Math.min(0.85, 0.25 + 0.18 * bestMatch.score);
+  let confidence = bestMatch.score === 0 ? 0.2 : Math.min(0.85, 0.25 + 0.18 * bestMatch.score);
+
+  // Boost confidence if category hint matches the detected type
+  if (input.categoryHint && input.categoryHint === bestMatch.docType && confidence < 0.85) {
+    confidence = Math.min(0.85, confidence + 0.15);
+    reasons.push('Confidence boosted by matching validator context');
+  }
 
   return {
     docType: bestMatch.docType,

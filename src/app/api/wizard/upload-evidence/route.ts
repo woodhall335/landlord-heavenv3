@@ -331,6 +331,7 @@ export async function POST(request: Request) {
         fileName: file.name || safeFilename,
         mimeType: (file as any).type || null,
         extractedText: null,
+        categoryHint: validatedCategory || null, // Use evidence category as hint for classification
       });
     let extractionMeta: {
       merged_facts_count: number;
@@ -369,6 +370,7 @@ export async function POST(request: Request) {
         fileName: file.name || safeFilename,
         mimeType: (file as any).type || null,
         extractedText: analysis.raw_text || null,
+        categoryHint: validatedCategory || null, // Use evidence category as hint for classification
       });
 
       await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
