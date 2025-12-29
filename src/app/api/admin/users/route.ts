@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     // Fetch recent users with subscription info from users table
     const { data: users, error } = await supabase
       .from('users')
-      .select('id, email, full_name, hmo_pro_active, hmo_pro_tier, created_at')
+      .select('id, email, full_name, email_verified, hmo_pro_active, hmo_pro_tier, created_at, last_sign_in_at')
       .order('created_at', { ascending: false })
       .limit(limit);
 
@@ -47,7 +47,9 @@ export async function GET(request: NextRequest) {
       id: u.id,
       email: u.email,
       full_name: u.full_name,
+      email_verified: u.email_verified,
       created_at: u.created_at,
+      last_sign_in_at: u.last_sign_in_at,
       subscription_tier: u.hmo_pro_tier || null,
       subscription_status: u.hmo_pro_active ? 'active' : null,
     }));

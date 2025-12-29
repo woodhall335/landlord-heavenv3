@@ -10,9 +10,11 @@ interface User {
   id: string;
   email: string;
   full_name: string | null;
+  email_verified: boolean;
   hmo_pro_active: boolean;
   hmo_pro_tier: string | null;
   created_at: string;
+  last_sign_in_at: string | null;
 }
 
 interface UserWithStats extends User {
@@ -249,6 +251,9 @@ export default function AdminUsersPage() {
                     <td className="p-4">
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-gray-700">{user.email}</span>
+                        {user.email_verified && (
+                          <span className="text-xs text-success">✓</span>
+                        )}
                       </div>
                     </td>
                     <td className="p-4">

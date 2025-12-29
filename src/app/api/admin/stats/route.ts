@@ -31,9 +31,10 @@ export async function GET() {
     // Fetch users stats
     const { data: allUsers } = await supabase
       .from('users')
-      .select('id, created_at');
+      .select('id, email_verified, created_at');
 
     const totalUsers = allUsers?.length || 0;
+    const verifiedUsers = allUsers?.filter((u: any) => u.email_verified).length || 0;
     const newUsersThisMonth = allUsers?.filter(
       (u: any) => new Date(u.created_at) >= new Date(startOfThisMonth)
     ).length || 0;
@@ -113,7 +114,7 @@ export async function GET() {
         stats: {
           users: {
             total: totalUsers,
-            verified: 0, // Field not tracked - placeholder for backwards compatibility
+            verified: verifiedUsers,
             subscribers: totalSubscribers,
             new_this_month: newUsersThisMonth,
           },
