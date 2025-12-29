@@ -6,9 +6,11 @@
  */
 
 import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { sendWelcomeEmail } from '@/lib/email/resend';
+import { logger } from '@/lib/logger';
+import { rateLimiters } from '@/lib/rate-limit';
 
 // Validation schema
 const signupSchema = z.object({
@@ -18,8 +20,21 @@ const signupSchema = z.object({
   phone: z.string().optional(),
 });
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting (5 requests per minute for auth)
+    const rateLimitResult = await rateLimiters.auth(request);
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many signup attempts. Please try again later.' },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil((rateLimitResult.reset - Date.now()) / 1000)),
+          },
+        }
+      );
+    }
     const body = await request.json();
 
     // Validate input
@@ -52,7 +67,7 @@ export async function POST(request: Request) {
     });
 
     if (authError) {
-      console.error('Signup auth error:', authError);
+      logger.error('Signup auth error', { error: authError.message });
       return NextResponse.json(
         { error: authError.message },
         { status: 400 }
@@ -75,7 +90,7 @@ export async function POST(request: Request) {
     });
 
     if (profileError) {
-      console.error('Profile creation error:', profileError);
+      logger.warn('Profile creation error', { error: profileError.message });
       // Don't fail - auth user created successfully
     }
 
@@ -85,9 +100,9 @@ export async function POST(request: Request) {
         to: authData.user.email!,
         name: full_name || authData.user.email!.split('@')[0],
       });
-      console.log(`[Email] Welcome email sent to ${authData.user.email}`);
+      logger.info('Welcome email sent', { email: authData.user.email });
     } catch (emailError: any) {
-      console.error('[Email] Failed to send welcome email:', emailError);
+      logger.error('Failed to send welcome email', { error: emailError?.message });
       // Don't fail signup if email fails
     }
 
@@ -103,8 +118,8 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     );
-  } catch (error) {
-    console.error('Signup error:', error);
+  } catch (error: any) {
+    logger.error('Signup error', { error: error?.message });
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

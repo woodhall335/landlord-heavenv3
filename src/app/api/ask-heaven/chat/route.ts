@@ -1,9 +1,11 @@
 // src/app/api/ask-heaven/chat/route.ts
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { jsonCompletion } from '@/lib/ai';
 import type { ChatMessage, ChatCompletionOptions } from '@/lib/ai';
 import { ASK_HEAVEN_BASE_SYSTEM_PROMPT } from '@/lib/ai/ask-heaven';
+import { rateLimiters } from '@/lib/rate-limit';
+import { logger } from '@/lib/logger';
 
 const chatSchema = z.object({
   case_id: z.string().optional(),
@@ -25,8 +27,22 @@ const chatSchema = z.object({
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export async function POST(req: Request): Promise<Response> {
+export async function POST(req: NextRequest): Promise<Response> {
   try {
+    // Apply rate limiting for AI endpoints
+    const rateLimitResult = await rateLimiters.wizard(req);
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded. Please try again later.' },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil((rateLimitResult.reset - Date.now()) / 1000)),
+          },
+        }
+      );
+    }
+
     const json = await req.json();
     const parsed = chatSchema.parse(json);
 
@@ -98,6 +114,7 @@ ${case_id ? '- You are chatting about a specific internal case. NEVER show the c
       );
     }
 
+    logger.error('Ask Heaven chat error', { error: (err as Error)?.message });
     return NextResponse.json(
       { error: 'Ask Heaven chat is currently unavailable.' },
       { status: 500 },

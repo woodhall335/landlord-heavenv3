@@ -14,6 +14,7 @@ import {
   mapCaseFactsToMoneyClaimCase,
   mapCaseFactsToScotlandMoneyClaimCase,
 } from '@/lib/documents/money-claim-wizard-mapper';
+import { logger } from '@/lib/logger';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
     const signature = request.headers.get('stripe-signature');
 
     if (!signature) {
-      console.error('Missing stripe-signature header');
+      logger.error('Missing stripe-signature header');
       return NextResponse.json(
         { error: 'Missing signature' },
         { status: 400 }
@@ -39,14 +40,14 @@ export async function POST(request: Request) {
     try {
       event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
     } catch (err: any) {
-      console.error('Webhook signature verification failed:', err.message);
+      logger.error('Webhook signature verification failed', { error: err.message });
       return NextResponse.json(
         { error: `Webhook Error: ${err.message}` },
         { status: 400 }
       );
     }
 
-    console.log(`[Stripe Webhook] Received event: ${event.type}`);
+    logger.info('Stripe webhook received', { eventType: event.type });
 
     // Use admin client to bypass RLS
     const supabase = createAdminClient();
@@ -67,7 +68,7 @@ export async function POST(request: Request) {
           const productType = session.metadata?.product_type;
 
           if (!userId || !orderId) {
-            console.error('Missing metadata in checkout session');
+            logger.error('Missing metadata in checkout session');
             break;
           }
 
@@ -617,7 +618,7 @@ export async function POST(request: Request) {
       { status: 200 }
     );
   } catch (error: any) {
-    console.error('[Stripe Webhook] Error:', error);
+    logger.error('Stripe webhook error', { error: error?.message });
     return NextResponse.json(
       { error: 'Webhook handler failed', message: error.message },
       { status: 500 }
