@@ -420,6 +420,7 @@ async function extractViaVision(params: {
   ];
 
   try {
+    // Note: Removed response_format to avoid Zod 4 compatibility issues with OpenAI SDK
     const response = await client.chat.completions.create({
       model: 'gpt-4o-mini',
       temperature: 0,
@@ -427,15 +428,16 @@ async function extractViaVision(params: {
       messages: [
         {
           role: 'system',
-          content: 'Return only JSON with keys detected_type, extracted_fields, confidence, warnings. Do not guess.',
+          content:
+            'You are a document analyzer. Return ONLY valid JSON with keys: detected_type, extracted_fields, confidence, warnings. ' +
+            'Do not include markdown, code blocks, or explanations. Output pure JSON only.',
         },
         {
           role: 'user',
           content: messageContent,
         },
       ],
-      response_format: { type: 'json_object' },
-    });
+    } as any);
 
     const raw = response.choices[0]?.message?.content ?? '{}';
     const parsed = parseAnalysisPayload(raw, 'vision');
@@ -459,6 +461,9 @@ async function extractViaText(params: {
   client: ReturnType<typeof getOpenAIClient>;
 }): Promise<EvidenceAnalysisResult> {
   const { client } = params;
+
+  // Note: Using response_format can cause issues with some Zod versions
+  // Instead, we rely on strong prompting for JSON output
   const response = await client.chat.completions.create({
     model: 'gpt-4o-mini',
     temperature: 0,
@@ -466,15 +471,17 @@ async function extractViaText(params: {
     messages: [
       {
         role: 'system',
-        content: 'Return only JSON with keys detected_type, extracted_fields, confidence, warnings. Do not guess.',
+        content:
+          'You are a document analyzer. Return ONLY valid JSON with keys: detected_type, extracted_fields, confidence, warnings. ' +
+          'Do not include markdown, code blocks, or explanations. Output pure JSON only.',
       },
       {
         role: 'user',
         content: `${params.prompt}\n\nExtract from text:\n${params.text}`,
       },
     ],
-    response_format: { type: 'json_object' },
-  });
+    // Removed response_format to avoid Zod 4 compatibility issues with OpenAI SDK
+  } as any);
 
   const raw = response.choices[0]?.message?.content ?? '{}';
   const parsed = parseAnalysisPayload(raw, 'pdf_text');
@@ -484,9 +491,23 @@ async function extractViaText(params: {
 
 function parseAnalysisPayload(raw: string, source: EvidenceAnalysisResult['source']): EvidenceAnalysisResult {
   let parsedJson: any = {};
+
+  // Clean up potential markdown code blocks
+  let cleanedRaw = raw.trim();
+  if (cleanedRaw.startsWith('```json')) {
+    cleanedRaw = cleanedRaw.slice(7);
+  } else if (cleanedRaw.startsWith('```')) {
+    cleanedRaw = cleanedRaw.slice(3);
+  }
+  if (cleanedRaw.endsWith('```')) {
+    cleanedRaw = cleanedRaw.slice(0, -3);
+  }
+  cleanedRaw = cleanedRaw.trim();
+
   try {
-    parsedJson = JSON.parse(raw);
+    parsedJson = JSON.parse(cleanedRaw);
   } catch (error: any) {
+    console.error('[parseAnalysisPayload] Failed to parse JSON:', cleanedRaw.slice(0, 200));
     return {
       detected_type: 'unknown',
       extracted_fields: {},
