@@ -20,8 +20,7 @@ interface Document {
   document_title: string;
   document_type: string;
   is_preview: boolean;
-  file_path: string | null;
-  metadata: any;
+  pdf_url: string | null;  // Correct field name from schema
   created_at: string;
 }
 
@@ -110,14 +109,14 @@ export default function DocumentsPage() {
   };
 
   const handleDownload = async (doc: Document) => {
-    if (!doc.file_path) {
+    if (!doc.pdf_url) {
       alert('Document file not available');
       return;
     }
 
     try {
       // Open in new tab for now - in production this would trigger a download
-      window.open(doc.file_path, '_blank');
+      window.open(doc.pdf_url, '_blank');
     } catch (error) {
       console.error('Failed to download document:', error);
       alert('Failed to download document');
@@ -317,7 +316,7 @@ export default function DocumentsPage() {
                         </Button>
                       </Link>
                     )}
-                    {doc.file_path && (
+                    {doc.pdf_url && (
                       <Button
                         variant="secondary"
                         size="small"
@@ -337,30 +336,6 @@ export default function DocumentsPage() {
                   </div>
                 </div>
 
-                {/* Additional Metadata (if available) */}
-                {doc.metadata && Object.keys(doc.metadata).length > 0 && (
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <details className="text-sm">
-                      <summary className="cursor-pointer text-gray-600 hover:text-charcoal font-medium">
-                        View Details
-                      </summary>
-                      <div className="mt-3 space-y-2">
-                        {Object.entries(doc.metadata).map(([key, value]) => (
-                          <div key={key} className="flex gap-2">
-                            <span className="text-gray-600 capitalize min-w-[120px]">
-                              {key.replace(/_/g, ' ')}:
-                            </span>
-                            <span className="text-charcoal">
-                              {typeof value === 'object'
-                                ? JSON.stringify(value)
-                                : String(value)}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                    </details>
-                  </div>
-                )}
               </Card>
             ))}
           </div>

@@ -9,8 +9,8 @@ interface Order {
   id: string;
   user_id: string;
   product_type: string;
-  amount: number;
-  status: string;
+  total_amount: number;
+  payment_status: string;
   stripe_payment_intent_id: string | null;
   created_at: string;
   user_email?: string;
@@ -66,16 +66,16 @@ export default function AdminOrdersPage() {
         query = query.eq("product_type", filterProduct);
       }
 
-      // Status filter
+      // Status filter - use payment_status from schema
       if (filterStatus !== "all") {
-        query = query.eq("status", filterStatus);
+        query = query.eq("payment_status", filterStatus);
       }
 
       // Sort
       if (sortBy === "date") {
         query = query.order("created_at", { ascending: false });
       } else if (sortBy === "amount") {
-        query = query.order("amount", { ascending: false });
+        query = query.order("total_amount", { ascending: false });
       }
 
       const { data, error, count } = await query;
@@ -125,9 +125,9 @@ export default function AdminOrdersPage() {
     loadOrders();
   }, [loading, loadOrders]);
 
-  async function handleIssueRefund(orderId: string, amount: number) {
+  async function handleIssueRefund(orderId: string, totalAmount: number) {
     const confirmed = confirm(
-      `Are you sure you want to issue a full refund of £${(amount / 100).toFixed(2)}? This action cannot be undone.`
+      `Are you sure you want to issue a full refund of £${(totalAmount / 100).toFixed(2)}? This action cannot be undone.`
     );
 
     if (!confirmed) return;
@@ -179,8 +179,8 @@ export default function AdminOrdersPage() {
           new Date(order.created_at).toLocaleDateString(),
           order.user_email || "",
           getProductName(order.product_type),
-          (order.amount / 100).toFixed(2),
-          order.status,
+          (order.total_amount / 100).toFixed(2),
+          order.payment_status,
         ]),
       ];
 
@@ -290,8 +290,8 @@ export default function AdminOrdersPage() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               >
                 <option value="all">All Statuses</option>
-                <option value="succeeded">Succeeded</option>
-                <option value="processing">Processing</option>
+                <option value="paid">Paid</option>
+                <option value="pending">Pending</option>
                 <option value="failed">Failed</option>
                 <option value="refunded">Refunded</option>
               </select>
@@ -351,29 +351,29 @@ export default function AdminOrdersPage() {
                       <span className="text-sm text-gray-700">{getProductName(order.product_type)}</span>
                     </td>
                     <td className="p-4">
-                      <span className="text-sm font-semibold text-charcoal">£{(order.amount / 100).toFixed(2)}</span>
+                      <span className="text-sm font-semibold text-charcoal">£{(order.total_amount / 100).toFixed(2)}</span>
                     </td>
                     <td className="p-4">
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-xs ${
-                          order.status === "succeeded"
+                          order.payment_status === "paid"
                             ? "bg-success/10 text-success"
-                            : order.status === "processing"
+                            : order.payment_status === "pending"
                             ? "bg-warning/10 text-warning"
-                            : order.status === "refunded"
+                            : order.payment_status === "refunded"
                             ? "bg-gray-100 text-gray-600"
                             : "bg-error/10 text-error"
                         }`}
                       >
-                        {order.status}
+                        {order.payment_status}
                       </span>
                     </td>
                     <td className="p-4">
                       <div className="flex gap-2">
-                        {order.status === "succeeded" && (
+                        {order.payment_status === "paid" && (
                           <>
                             <button
-                              onClick={() => handleIssueRefund(order.id, order.amount)}
+                              onClick={() => handleIssueRefund(order.id, order.total_amount)}
                               className="text-error hover:underline text-sm"
                             >
                               Refund
@@ -427,15 +427,15 @@ export default function AdminOrdersPage() {
             <p className="text-3xl font-bold text-charcoal">{orders.length}</p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <p className="text-sm text-gray-600 mb-1">Successful</p>
+            <p className="text-sm text-gray-600 mb-1">Paid</p>
             <p className="text-3xl font-bold text-success">
-              {orders.filter((o) => o.status === "succeeded").length}
+              {orders.filter((o) => o.payment_status === "paid").length}
             </p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
             <p className="text-sm text-gray-600 mb-1">Refunded</p>
             <p className="text-3xl font-bold text-warning">
-              {orders.filter((o) => o.status === "refunded").length}
+              {orders.filter((o) => o.payment_status === "refunded").length}
             </p>
           </div>
           <div className="bg-white rounded-lg border border-gray-200 p-6">
@@ -444,8 +444,8 @@ export default function AdminOrdersPage() {
               £
               {(
                 orders
-                  .filter((o) => o.status === "succeeded")
-                  .reduce((sum, o) => sum + o.amount, 0) / 100
+                  .filter((o) => o.payment_status === "paid")
+                  .reduce((sum, o) => sum + o.total_amount, 0) / 100
               ).toFixed(2)}
             </p>
           </div>

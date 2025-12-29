@@ -39,11 +39,11 @@ export async function GET() {
       (u: any) => new Date(u.created_at) >= new Date(startOfThisMonth)
     ).length || 0;
 
-    // Fetch active subscribers
+    // Fetch active subscribers (from users table hmo_pro_active field)
     const { data: subscribers } = await supabase
-      .from('hmo_subscriptions')
-      .select('user_id')
-      .eq('status', 'active');
+      .from('users')
+      .select('id')
+      .eq('hmo_pro_active', true);
 
     const totalSubscribers = subscribers?.length || 0;
 
@@ -70,23 +70,23 @@ export async function GET() {
     const previewDocuments = allDocuments?.filter((d: any) => d.is_preview).length || 0;
     const finalDocuments = totalDocuments - previewDocuments;
 
-    // Fetch revenue stats
+    // Fetch revenue stats - use correct field names from schema
     const { data: allOrders } = await supabase
       .from('orders')
-      .select('amount, status, created_at')
-      .eq('status', 'succeeded');
+      .select('total_amount, payment_status, created_at')
+      .eq('payment_status', 'paid');
 
-    const totalRevenue = allOrders?.reduce((sum: number, o: any) => sum + o.amount, 0) || 0;
+    const totalRevenue = allOrders?.reduce((sum: number, o: any) => sum + o.total_amount, 0) || 0;
     const revenueThisMonth = allOrders
       ?.filter((o: any) => new Date(o.created_at) >= new Date(startOfThisMonth))
-      .reduce((sum: number, o: any) => sum + o.amount, 0) || 0;
+      .reduce((sum: number, o: any) => sum + o.total_amount, 0) || 0;
     const revenueLastMonth = allOrders
       ?.filter(
         (o: any) =>
           new Date(o.created_at) >= new Date(startOfLastMonth) &&
           new Date(o.created_at) <= new Date(endOfLastMonth)
       )
-      .reduce((sum: number, o: any) => sum + o.amount, 0) || 0;
+      .reduce((sum: number, o: any) => sum + o.total_amount, 0) || 0;
 
     // Calculate MRR from subscriptions (assuming £9.99/month for HMO Pro)
     const subscriptionsMRR = totalSubscribers * 999; // £9.99 in pence
