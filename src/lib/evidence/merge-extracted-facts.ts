@@ -9,7 +9,15 @@
  */
 
 import type { CaseFacts, WizardFacts } from '@/lib/case-facts/schema';
-import type { EvidenceAnalysisResult } from './analyze-evidence';
+import type { EvidenceAnalysisResult, ExtractionQualityMeta } from './analyze-evidence';
+
+// Debug logging helper - controlled by DEBUG_EVIDENCE env var
+const DEBUG = process.env.DEBUG_EVIDENCE === 'true';
+function debugLog(label: string, data: any): void {
+  if (DEBUG) {
+    console.log(`[DEBUG_EVIDENCE][merge][${label}]`, typeof data === 'object' ? JSON.stringify(data, null, 2) : data);
+  }
+}
 
 export interface ExtractionProvenance {
   evidence_id: string;
@@ -45,6 +53,8 @@ export interface MergeExtractedFactsOutput {
   lowConfidenceKeys: string[];
   /** All extracted fields before mapping (for debugging) */
   rawExtracted: Record<string, any>;
+  /** Extraction quality metadata for truthful validator messages */
+  extractionQuality?: ExtractionQualityMeta;
 }
 
 /**
@@ -196,6 +206,15 @@ export function mergeExtractedFacts(input: MergeExtractedFactsInput): MergeExtra
   const baseConfidence = analysisResult.confidence ?? 0.5;
   const source = analysisResult.source ?? 'unknown';
 
+  debugLog('merge_start', {
+    caseId,
+    evidenceId,
+    extractedFieldsCount: Object.keys(extractedFields).length,
+    baseConfidence,
+    source,
+    extractionQuality: analysisResult.extraction_quality,
+  });
+
   const mergedFactsPatch: Record<string, any> = {};
   const provenance: Record<string, ExtractionProvenance> = {};
   const confidenceMap: Record<string, number> = {};
@@ -254,12 +273,20 @@ export function mergeExtractedFacts(input: MergeExtractedFactsInput): MergeExtra
     }
   }
 
+  debugLog('merge_complete', {
+    mergedFactsCount: Object.keys(mergedFactsPatch).length,
+    lowConfidenceCount: lowConfidenceKeys.length,
+    mergedKeys: Object.keys(mergedFactsPatch),
+    lowConfidenceKeys,
+  });
+
   return {
     mergedFactsPatch,
     provenance,
     confidenceMap,
     lowConfidenceKeys,
     rawExtracted: extractedFields,
+    extractionQuality: analysisResult.extraction_quality,
   };
 }
 
@@ -304,6 +331,8 @@ export function applyMergedFacts(
         ...mergeOutput.lowConfidenceKeys,
       ]),
     ],
+    // Track extraction quality for truthful validator messages
+    quality: mergeOutput.extractionQuality || existingExtraction.quality,
   };
 
   return updated;

@@ -371,6 +371,7 @@ export async function POST(request: Request) {
         mimeType: (file as any).type || null,
         extractedText: analysis.raw_text || null,
         categoryHint: validatedCategory || null, // Use evidence category as hint for classification
+        extractionQuality: analysis.extraction_quality || undefined, // Pass extraction quality for better classification
       });
 
       console.log('[upload-evidence] Classification result:', {

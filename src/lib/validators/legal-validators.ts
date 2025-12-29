@@ -67,10 +67,20 @@ export interface ValidatorDefinition {
   evaluate: (input: ValidatorInput) => ValidatorResult;
 }
 
+export interface ExtractionQuality {
+  text_extraction_method?: 'pdf_lib' | 'vision' | 'regex_only' | 'failed';
+  text_length?: number;
+  regex_fields_found?: number;
+  llm_extraction_ran?: boolean;
+  llm_extraction_skipped_reason?: string;
+}
+
 export interface ValidatorInput {
   jurisdiction?: string;
   extracted: Record<string, any>;
   answers: Record<string, any>;
+  /** Extraction quality metadata for truthful error messages */
+  extractionQuality?: ExtractionQuality;
 }
 
 const YES_VALUES = new Set(['yes', 'true', 'y']);
@@ -144,6 +154,48 @@ function addIssue(
   issues.push({ code, message, severity });
 }
 
+/**
+ * Generate truthful message suffix based on extraction quality.
+ * Helps distinguish between:
+ * - "Not found in document" (extraction worked but field absent)
+ * - "Could not be extracted" (extraction failed)
+ * - "Not provided yet" (user needs to answer)
+ */
+function getExtractionContext(quality?: ExtractionQuality): string {
+  if (!quality) return '';
+
+  if (quality.text_extraction_method === 'failed') {
+    return ' (document could not be read)';
+  }
+
+  if (!quality.llm_extraction_ran) {
+    if (quality.llm_extraction_skipped_reason === 'OPENAI_API_KEY missing') {
+      return ' (AI extraction unavailable)';
+    }
+    return ' (extraction incomplete)';
+  }
+
+  if (quality.text_extraction_method === 'regex_only') {
+    return ' (limited text extraction)';
+  }
+
+  return '';
+}
+
+/**
+ * Add an issue with truthful context about extraction quality.
+ */
+function addTruthfulIssue(
+  issues: ValidationIssue[],
+  code: string,
+  baseMessage: string,
+  severity: ValidationIssue['severity'],
+  quality?: ExtractionQuality
+) {
+  const context = getExtractionContext(quality);
+  issues.push({ code, message: baseMessage + context, severity });
+}
+
 function buildUpsell(status: ValidatorStatus, mapping: Record<ValidatorStatus, UpsellRecommendation>): UpsellRecommendation | undefined {
   return mapping[status];
 }
@@ -183,13 +235,14 @@ export function validateSection21Notice(input: ValidatorInput): ValidatorResult 
     addIssue(blockers, 'S21-WRONG-FORM', 'Notice must be a Section 21 Form 6A notice.', 'blocking');
   }
 
+  const quality = input.extractionQuality;
   const serviceDate = parseDate(input.extracted.date_served);
   const expiryDate = parseDate(input.extracted.expiry_date);
   if (!serviceDate) {
-    addIssue(warnings, 'S21-SERVICE-DATE-MISSING', 'Service date is missing from the notice.', 'warning');
+    addTruthfulIssue(warnings, 'S21-SERVICE-DATE-MISSING', 'Service date not found in notice', 'warning', quality);
   }
   if (!expiryDate) {
-    addIssue(warnings, 'S21-EXPIRY-DATE-MISSING', 'Expiry date is missing from the notice.', 'warning');
+    addTruthfulIssue(warnings, 'S21-EXPIRY-DATE-MISSING', 'Expiry date not found in notice', 'warning', quality);
   }
 
   if (serviceDate && expiryDate) {
@@ -201,24 +254,24 @@ export function validateSection21Notice(input: ValidatorInput): ValidatorResult 
 
   const propertyAddress = input.extracted.property_address;
   if (isMissing(propertyAddress)) {
-    addIssue(warnings, 'S21-PROPERTY-ADDRESS-MISSING', 'Property address is missing from the notice.', 'warning');
+    addTruthfulIssue(warnings, 'S21-PROPERTY-ADDRESS-MISSING', 'Property address not found in notice', 'warning', quality);
   }
 
   const tenantNames = input.extracted.tenant_names || input.extracted.tenant_name;
   if (isMissing(tenantNames)) {
-    addIssue(warnings, 'S21-TENANT-NAME-MISSING', 'Tenant name(s) are missing from the notice.', 'warning');
+    addTruthfulIssue(warnings, 'S21-TENANT-NAME-MISSING', 'Tenant name(s) not found in notice', 'warning', quality);
   }
 
   const landlordName = input.extracted.landlord_name;
   if (isMissing(landlordName)) {
-    addIssue(warnings, 'S21-LANDLORD-NAME-MISSING', 'Landlord name is missing from the notice.', 'warning');
+    addTruthfulIssue(warnings, 'S21-LANDLORD-NAME-MISSING', 'Landlord name not found in notice', 'warning', quality);
   }
 
   const signaturePresent = normalizeBoolean(input.extracted.signature_present);
   if (signaturePresent === 'no') {
     addIssue(blockers, 'S21-SIGNATURE-MISSING', 'Notice must be signed to be valid.', 'blocking');
   } else if (signaturePresent === 'unknown') {
-    addIssue(warnings, 'S21-SIGNATURE-UNKNOWN', 'Signature could not be confirmed from the notice.', 'warning');
+    addTruthfulIssue(warnings, 'S21-SIGNATURE-UNKNOWN', 'Signature could not be confirmed', 'warning', quality);
   }
 
   const requiredChecks: Array<[string, string, string]> = [
