@@ -347,26 +347,27 @@ export function validateSection8Notice(input: ValidatorInput): ValidatorResult {
 
   const blockers: ValidationIssue[] = [];
   const warnings: ValidationIssue[] = [];
+  const quality = input.extractionQuality;
 
   const groundCodes = extractGroundCodes(input.extracted.grounds_cited);
   if (groundCodes.length === 0) {
-    addIssue(blockers, 'S8-GROUNDS-MISSING', 'At least one Section 8 ground must be cited.', 'blocking');
+    addTruthfulIssue(blockers, 'S8-GROUNDS-MISSING', 'At least one Section 8 ground must be cited', 'blocking', quality);
   }
 
   if (isMissing(input.extracted.date_served)) {
-    addIssue(warnings, 'S8-SERVICE-DATE-MISSING', 'Service date is missing from the notice.', 'warning');
+    addTruthfulIssue(warnings, 'S8-SERVICE-DATE-MISSING', 'Service date not found in notice', 'warning', quality);
   }
 
   if (isMissing(input.extracted.notice_period)) {
-    addIssue(warnings, 'S8-NOTICE-PERIOD-MISSING', 'Notice period is missing from the notice.', 'warning');
+    addTruthfulIssue(warnings, 'S8-NOTICE-PERIOD-MISSING', 'Notice period not found in notice', 'warning', quality);
   }
 
   if (isMissing(input.extracted.rent_arrears_stated)) {
-    addIssue(warnings, 'S8-ARREARS-MISSING', 'Rent arrears amount is missing from the notice.', 'warning');
+    addTruthfulIssue(warnings, 'S8-ARREARS-MISSING', 'Rent arrears amount not found in notice', 'warning', quality);
   }
 
   if (isMissing(input.extracted.tenant_details)) {
-    addIssue(warnings, 'S8-TENANT-DETAILS-MISSING', 'Tenant details are missing from the notice.', 'warning');
+    addTruthfulIssue(warnings, 'S8-TENANT-DETAILS-MISSING', 'Tenant details not found in notice', 'warning', quality);
   }
 
   const requiredKeys = ['rent_frequency', 'current_arrears', 'payment_history', 'joint_tenants'];
@@ -467,12 +468,13 @@ export function validateWalesNotice(input: ValidatorInput): ValidatorResult {
 
   const blockers: ValidationIssue[] = [];
   const warnings: ValidationIssue[] = [];
+  const quality = input.extractionQuality;
 
   const bilingual = normalizeBoolean(input.extracted.bilingual_text_present);
   if (bilingual === 'no') {
     addIssue(blockers, 'WLS-BILINGUAL', 'Bilingual notice text is required in Wales.', 'blocking');
   } else if (bilingual === 'unknown') {
-    addIssue(warnings, 'WLS-BILINGUAL-UNKNOWN', 'Confirm bilingual text is present.', 'warning');
+    addTruthfulIssue(warnings, 'WLS-BILINGUAL-UNKNOWN', 'Bilingual text presence could not be confirmed', 'warning', quality);
   }
 
   const requiredChecks: Array<[string, string, string]> = [
@@ -551,21 +553,22 @@ export function validateScotlandNoticeToLeave(input: ValidatorInput): ValidatorR
 
   const blockers: ValidationIssue[] = [];
   const warnings: ValidationIssue[] = [];
+  const quality = input.extractionQuality;
 
   if (isMissing(input.extracted.ground_cited)) {
-    addIssue(blockers, 'NTL-GROUND-MISSING', 'A Notice to Leave must cite a valid ground.', 'blocking');
+    addTruthfulIssue(blockers, 'NTL-GROUND-MISSING', 'Notice to Leave ground not found', 'blocking', quality);
   }
 
   if (isMissing(input.extracted.notice_period)) {
-    addIssue(warnings, 'NTL-PERIOD-MISSING', 'Notice period is missing.', 'warning');
+    addTruthfulIssue(warnings, 'NTL-PERIOD-MISSING', 'Notice period not found in notice', 'warning', quality);
   }
 
   if (isMissing(input.extracted.property_address)) {
-    addIssue(warnings, 'NTL-ADDRESS-MISSING', 'Property address is missing.', 'warning');
+    addTruthfulIssue(warnings, 'NTL-ADDRESS-MISSING', 'Property address not found in notice', 'warning', quality);
   }
 
   if (isMissing(input.extracted.tenant_name)) {
-    addIssue(warnings, 'NTL-TENANT-MISSING', 'Tenant name is missing.', 'warning');
+    addTruthfulIssue(warnings, 'NTL-TENANT-MISSING', 'Tenant name not found in notice', 'warning', quality);
   }
 
   const evidence = normalizeBoolean(input.answers.ground_evidence);
