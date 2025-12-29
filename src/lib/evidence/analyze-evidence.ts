@@ -328,8 +328,30 @@ async function loadBuffer(input: EvidenceAnalysisInput): Promise<Buffer> {
 }
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // Use pdfjs-dist directly for reliable text extraction
-  return extractPdfTextWithPdfJs(buffer);
+  // Try pdfjs-dist first, fall back to pdf-parse if it fails
+  try {
+    return await extractPdfTextWithPdfJs(buffer);
+  } catch (pdfjsError: any) {
+    console.warn('[extractPdfText] pdfjs-dist failed, trying pdf-parse:', pdfjsError.message);
+
+    // Fallback to pdf-parse with proper configuration
+    try {
+      // Set up environment for pdf-parse
+      const pdfParseModule = await import('pdf-parse');
+      const pdfParse = pdfParseModule.default || pdfParseModule;
+
+      // pdf-parse expects a Buffer
+      const result = await pdfParse(buffer, {
+        // Disable test mode which causes issues
+        max: 10, // Max pages
+      });
+
+      return result.text || '';
+    } catch (parseError: any) {
+      console.error('[extractPdfText] pdf-parse also failed:', parseError.message);
+      throw new Error(`PDF text extraction failed: ${pdfjsError.message} | ${parseError.message}`);
+    }
+  }
 }
 
 async function renderPdfPagesToImages(buffer: Buffer, maxPages: number): Promise<string[]> {
