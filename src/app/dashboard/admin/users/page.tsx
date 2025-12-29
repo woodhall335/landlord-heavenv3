@@ -10,9 +10,9 @@ interface User {
   id: string;
   email: string;
   full_name: string | null;
-  email_verified: boolean;
+  hmo_pro_active: boolean;
+  hmo_pro_tier: string | null;
   created_at: string;
-  last_sign_in_at: string | null;
 }
 
 interface UserWithStats extends User {
@@ -79,30 +79,22 @@ export default function AdminUsersPage() {
 
       if (error) throw error;
 
-      // Load subscription info and revenue for each user
+      // Load order stats for each user (subscription info is already in users table)
       const usersWithStats: UserWithStats[] = await Promise.all(
         (data || []).map(async (user: any) => {
-          // Get subscription
-          const { data: subData } = await supabase
-            .from("hmo_subscriptions")
-            .select("tier")
-            .eq("user_id", user.id)
-            .eq("status", "active")
-            .single();
-
-          // Get order stats
+          // Get order stats - use payment_status field from schema
           const { data: ordersData } = await supabase
             .from("orders")
-            .select("amount")
+            .select("total_amount")
             .eq("user_id", user.id)
-            .eq("status", "succeeded");
+            .eq("payment_status", "paid");
 
           const orderCount = ordersData?.length || 0;
-          const totalRevenue = (ordersData as { amount: number }[] | null)?.reduce((sum, order) => sum + order.amount, 0) || 0;
+          const totalRevenue = (ordersData as { total_amount: number }[] | null)?.reduce((sum, order) => sum + order.total_amount, 0) || 0;
 
           return {
             ...user,
-            subscription_tier: (subData as { tier: string } | null)?.tier,
+            subscription_tier: user.hmo_pro_tier,
             order_count: orderCount,
             total_revenue: totalRevenue,
           };
@@ -257,9 +249,6 @@ export default function AdminUsersPage() {
                     <td className="p-4">
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-gray-700">{user.email}</span>
-                        {user.email_verified && (
-                          <span className="text-xs text-success">✓</span>
-                        )}
                       </div>
                     </td>
                     <td className="p-4">
