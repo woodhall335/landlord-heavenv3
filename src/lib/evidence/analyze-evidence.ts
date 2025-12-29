@@ -3,10 +3,31 @@ import { getOpenAIClient } from '@/lib/ai/openai-client';
 import { isPdfMimeType, isImageMimeType } from '@/lib/evidence/schema';
 import puppeteer from 'puppeteer';
 
-// pdf-parse is a CommonJS module, use dynamic import
-async function getPdfParser(): Promise<(buffer: Buffer) => Promise<{ text: string }>> {
-  const pdfParse = await import('pdf-parse').then((m) => m.default || m);
-  return pdfParse;
+// Use pdfjs-dist directly for more reliable PDF text extraction
+async function extractPdfTextWithPdfJs(buffer: Buffer): Promise<string> {
+  // Dynamic import to avoid SSR issues
+  const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
+
+  // Create a typed array from the buffer
+  const data = new Uint8Array(buffer);
+
+  // Load the PDF document
+  const loadingTask = pdfjsLib.getDocument({ data });
+  const pdf = await loadingTask.promise;
+
+  const textParts: string[] = [];
+
+  // Extract text from each page
+  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+    const page = await pdf.getPage(pageNum);
+    const textContent = await page.getTextContent();
+    const pageText = textContent.items
+      .map((item: any) => item.str)
+      .join(' ');
+    textParts.push(pageText);
+  }
+
+  return textParts.join('\n');
 }
 
 export interface EvidenceAnalysisInput {
@@ -272,9 +293,8 @@ async function loadBuffer(input: EvidenceAnalysisInput): Promise<Buffer> {
 }
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  const pdfParse = await getPdfParser();
-  const data = await pdfParse(buffer);
-  return data.text || '';
+  // Use pdfjs-dist directly for reliable text extraction
+  return extractPdfTextWithPdfJs(buffer);
 }
 
 async function renderPdfPagesToImages(buffer: Buffer, maxPages: number): Promise<string[]> {
@@ -284,43 +304,57 @@ async function renderPdfPagesToImages(buffer: Buffer, maxPages: number): Promise
   try {
     const page = await browser.newPage();
     const base64Pdf = buffer.toString('base64');
+    // Use cdnjs which is more reliable, and use legacy build for better compatibility
     const html = `<!doctype html>
 <html>
 <head>
   <meta charset="utf-8" />
   <style>body{margin:0;padding:0}</style>
-  <script src="https://unpkg.com/pdfjs-dist@4.7.76/build/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
   <canvas id="page"></canvas>
   <script>
-    const pdfjsLib = window['pdfjs-dist/build/pdf'];
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@4.7.76/build/pdf.worker.min.js';
-    async function renderPages() {
-      const pdfData = atob('${base64Pdf}');
-      const loadingTask = pdfjsLib.getDocument({ data: pdfData });
-      const pdf = await loadingTask.promise;
-      const max = Math.min(pdf.numPages, ${maxPages});
-      const results = [];
-      for (let i = 1; i <= max; i++) {
-        const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 1.4 });
-        const canvas = document.getElementById('page');
-        const context = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        await page.render({ canvasContext: context, viewport }).promise;
-        results.push(canvas.toDataURL('image/png'));
-      }
-      return results;
+    // PDF.js 3.x uses pdfjsLib global
+    const pdfjsLib = window.pdfjsLib;
+    if (!pdfjsLib) {
+      window.renderError = 'PDF.js library failed to load';
+      window.renderPages = async () => [];
+    } else {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      window.renderPages = async function renderPages() {
+        try {
+          const pdfData = atob('${base64Pdf}');
+          const loadingTask = pdfjsLib.getDocument({ data: pdfData });
+          const pdf = await loadingTask.promise;
+          const max = Math.min(pdf.numPages, ${maxPages});
+          const results = [];
+          for (let i = 1; i <= max; i++) {
+            const pdfPage = await pdf.getPage(i);
+            const viewport = pdfPage.getViewport({ scale: 1.4 });
+            const canvas = document.getElementById('page');
+            const context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            await pdfPage.render({ canvasContext: context, viewport }).promise;
+            results.push(canvas.toDataURL('image/png'));
+          }
+          return results;
+        } catch (err) {
+          window.renderError = err.message;
+          return [];
+        }
+      };
     }
-    window.renderPages = renderPages;
   </script>
 </body>
 </html>`;
     await page.setContent(html, { waitUntil: 'networkidle0' });
     const dataUrls = await page.evaluate(async () => {
       // @ts-ignore
+      if (window.renderError) {
+        throw new Error(window.renderError);
+      }
       return await window.renderPages();
     });
     return Array.isArray(dataUrls) ? dataUrls : [];
