@@ -20,8 +20,8 @@ const PRODUCT_PRICES = {
   complete_pack: { amount: 14999, name: 'Complete Eviction Pack', description: 'All eviction documents + N5 claim form', jurisdiction: 'england' },
   money_claim: { amount: 17999, name: 'Money Claim Pack (England & Wales)', description: 'Complete money claim documents for England & Wales', jurisdiction: 'england' },
   sc_money_claim: { amount: 17999, name: 'Simple Procedure Pack (Scotland)', description: 'Complete Simple Procedure money claim documents for Scotland', jurisdiction: 'scotland' },
-  ast_standard: { amount: 3999, name: 'Standard AST Agreement', description: 'Basic assured shorthold tenancy agreement', jurisdiction: 'england' },
-  ast_premium: { amount: 5900, name: 'Premium AST Agreement', description: 'Comprehensive AST with all clauses', jurisdiction: 'england' },
+  ast_standard: { amount: 999, name: 'Standard AST Agreement', description: 'Basic assured shorthold tenancy agreement', jurisdiction: 'england' },
+  ast_premium: { amount: 1499, name: 'Premium AST Agreement', description: 'Comprehensive AST with all clauses', jurisdiction: 'england' },
 } as const;
 
 // Validation schema
