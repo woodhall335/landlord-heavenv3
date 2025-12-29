@@ -477,12 +477,16 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
       jurisdiction: input.jurisdiction,
     });
 
+    // Track any extracted text even if we fall back to vision (for classification)
+    let extractedPdfText: string | undefined;
+
     if (isPdfMimeType(input.mimeType)) {
       try {
         const text = await withTimeout(extractPdfText(buffer), 5000, 'PDF text extraction');
         const normalizedText = text?.trim() ?? '';
         if (normalizedText.length > 0) {
           const trimmed = text.slice(0, MAX_TEXT_CHARS);
+          extractedPdfText = trimmed; // Save for fallback
           try {
             const result = await withTimeout(
               extractViaText({ text: trimmed, prompt, client }),
@@ -531,7 +535,9 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
       return {
         ...visionResult,
         warnings: [...(visionResult.warnings ?? []), ...warnings],
-        raw_text: visionResult.raw_text,
+        // Use extracted PDF text if available (even if we fell back to vision for analysis)
+        // This ensures classification can still use the text
+        raw_text: extractedPdfText || visionResult.raw_text,
       };
     }
 

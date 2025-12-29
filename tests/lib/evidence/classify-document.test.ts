@@ -90,4 +90,63 @@ describe('classifyDocument', () => {
       expect(result.strongMarkersFound).toBeUndefined();
     });
   });
+
+  describe('filename normalization', () => {
+    it('classifies Section_21 filename with underscores', () => {
+      const result = classifyDocument({
+        fileName: 'Section_21_Notice.pdf',
+        mimeType: 'application/pdf',
+        extractedText: null,
+      });
+
+      expect(result.docType).toBe('notice_s21');
+      expect(result.confidence).toBeGreaterThanOrEqual(0.4);
+    });
+
+    it('classifies Section-21 filename with hyphens', () => {
+      const result = classifyDocument({
+        fileName: 'Section-21-Notice.pdf',
+        mimeType: 'application/pdf',
+        extractedText: null,
+      });
+
+      expect(result.docType).toBe('notice_s21');
+      expect(result.confidence).toBeGreaterThanOrEqual(0.4);
+    });
+
+    it('classifies Form_6A_Section_21 filename with high confidence', () => {
+      const result = classifyDocument({
+        fileName: 'Form_6A_Section_21_Notice.pdf',
+        mimeType: 'application/pdf',
+        extractedText: null,
+      });
+
+      expect(result.docType).toBe('notice_s21');
+      expect(result.confidence).toBeGreaterThanOrEqual(0.88);
+      expect(result.strongMarkersFound).toContain('form 6a');
+      expect(result.strongMarkersFound).toContain('section 21');
+    });
+
+    it('classifies Section_8 filename correctly', () => {
+      const result = classifyDocument({
+        fileName: 'Section_8_Form_3_Notice.pdf',
+        mimeType: 'application/pdf',
+        extractedText: null,
+      });
+
+      expect(result.docType).toBe('notice_s8');
+      expect(result.confidence).toBeGreaterThanOrEqual(0.88);
+    });
+
+    it('classifies RHW16 Wales notice filename', () => {
+      const result = classifyDocument({
+        fileName: 'RHW16_Occupation_Contract_Notice.pdf',
+        mimeType: 'application/pdf',
+        extractedText: null,
+      });
+
+      expect(result.docType).toBe('wales_notice');
+      expect(result.confidence).toBeGreaterThanOrEqual(0.85);
+    });
+  });
 });

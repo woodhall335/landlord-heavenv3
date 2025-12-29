@@ -68,7 +68,12 @@ const RULES: Array<{ docType: string; keywords: string[] }> = [
 ];
 
 function normalizeText(value: string | null | undefined): string {
-  return (value || '').toLowerCase();
+  // Lowercase and normalize common separators (underscores, hyphens, dots) to spaces
+  // This helps match filenames like "Section_21_Notice.pdf" against keywords like "section 21"
+  return (value || '')
+    .toLowerCase()
+    .replace(/[_\-.]+/g, ' ')
+    .replace(/\s+/g, ' ');
 }
 
 /**
@@ -88,7 +93,11 @@ function findStrongMarkerMatch(text: string): {
   } | null = null;
 
   for (const rule of STRONG_MARKER_RULES) {
-    const allMarkersPresent = rule.markers.every((marker) => text.includes(marker));
+    // Normalize markers the same way we normalize text (handle hyphens, etc.)
+    const allMarkersPresent = rule.markers.every((marker) => {
+      const normalizedMarker = normalizeText(marker);
+      return text.includes(normalizedMarker);
+    });
     if (allMarkersPresent) {
       if (!bestMatch || rule.confidence > bestMatch.confidence) {
         bestMatch = {
@@ -130,7 +139,11 @@ export function classifyDocument(input: DocumentClassificationInput): DocumentCl
   };
 
   RULES.forEach((rule) => {
-    const matched = rule.keywords.filter((keyword) => text.includes(keyword));
+    // Normalize keywords the same way we normalize text (handle hyphens, etc.)
+    const matched = rule.keywords.filter((keyword) => {
+      const normalizedKeyword = normalizeText(keyword);
+      return text.includes(normalizedKeyword);
+    });
     if (matched.length === 0) return;
     const score = matched.length;
     if (score > bestMatch.score) {
