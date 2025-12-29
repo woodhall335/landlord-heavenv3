@@ -6,8 +6,10 @@
  */
 
 import { createServerSupabaseClient } from '@/lib/supabase/server';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
+import { rateLimiters } from '@/lib/rate-limit';
 
 // Validation schema
 const loginSchema = z.object({
@@ -15,8 +17,22 @@ const loginSchema = z.object({
   password: z.string().min(1, 'Password is required'),
 });
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting (5 requests per minute for auth)
+    const rateLimitResult = await rateLimiters.auth(request);
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Too many login attempts. Please try again later.' },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil((rateLimitResult.reset - Date.now()) / 1000)),
+          },
+        }
+      );
+    }
+
     const body = await request.json();
 
     // Validate input
@@ -42,7 +58,7 @@ export async function POST(request: Request) {
     });
 
     if (authError) {
-      console.error('Login error:', authError);
+      logger.warn('Login failed', { error: authError.message });
       return NextResponse.json(
         { error: 'Invalid email or password' },
         { status: 401 }
@@ -65,7 +81,7 @@ export async function POST(request: Request) {
       .eq('id', authData.user.id);
 
     if (updateError) {
-      console.error('Failed to update last login:', updateError);
+      logger.warn('Failed to update last login', { error: updateError.message });
       // Don't fail - login successful
     }
 
@@ -77,7 +93,7 @@ export async function POST(request: Request) {
       .single();
 
     if (profileError) {
-      console.error('Failed to fetch profile:', profileError);
+      logger.warn('Failed to fetch profile', { error: profileError.message });
     }
 
     return NextResponse.json(
@@ -94,8 +110,8 @@ export async function POST(request: Request) {
       },
       { status: 200 }
     );
-  } catch (error) {
-    console.error('Login error:', error);
+  } catch (error: any) {
+    logger.error('Login error', { error: error?.message });
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
