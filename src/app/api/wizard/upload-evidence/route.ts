@@ -13,6 +13,11 @@ import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
 import { runLegalValidator } from '@/lib/validators/run-legal-validator';
 import { mapEvidenceToFacts } from '@/lib/evidence/map-evidence-to-facts';
 import { classifyDocument } from '@/lib/evidence/classify-document';
+import {
+  mergeExtractedFacts,
+  applyMergedFacts,
+  generateConfirmationQuestions,
+} from '@/lib/evidence/merge-extracted-facts';
 
 export const runtime = 'nodejs';
 
@@ -327,6 +332,12 @@ export async function POST(request: Request) {
         mimeType: (file as any).type || null,
         extractedText: null,
       });
+    let extractionMeta: {
+      merged_facts_count: number;
+      low_confidence_keys: string[];
+      provenance_count: number;
+    } | null = null;
+    let confirmationQuestions: Array<{ factKey: string; question: string; type: string; helpText?: string }> = [];
 
     try {
       const signed = await supabase.storage
@@ -397,15 +408,48 @@ export async function POST(request: Request) {
         } as typeof current;
       });
 
+      // =========================================================================
+      // NEW: SMART EXTRACTION MERGE
+      // Merge AI-extracted fields into canonical facts BEFORE document intel
+      // =========================================================================
+      const mergeOutput = mergeExtractedFacts({
+        caseId,
+        evidenceId: evidenceEntry.id,
+        jurisdiction: caseRow.jurisdiction,
+        docType: docClassification?.docType ?? analysis.detected_type,
+        validatorKey,
+        analysisResult: analysis,
+      });
+
+      // Apply merged facts to case
+      await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
+        const current = (currentRaw as any) || {};
+        return applyMergedFacts(current, mergeOutput) as typeof current;
+      });
+
+      // Generate confirmation questions for low-confidence extractions
+      confirmationQuestions = generateConfirmationQuestions(
+        mergeOutput.lowConfidenceKeys,
+        validatorKey
+      );
+
+      // Track extraction metadata for response
+      extractionMeta = {
+        merged_facts_count: Object.keys(mergeOutput.mergedFactsPatch).length,
+        low_confidence_keys: mergeOutput.lowConfidenceKeys,
+        provenance_count: Object.keys(mergeOutput.provenance).length,
+      };
+
       const factsSnapshot = await getOrCreateWizardFacts(supabase as any, caseId);
       const evidenceFiles = ((factsSnapshot as any)?.evidence?.files || []) as any[];
-      const analysisMap = ((factsSnapshot as any)?.evidence?.analysis || {}) as Record<string, any>;
+      const analysisMapForFlags = ((factsSnapshot as any)?.evidence?.analysis || {}) as Record<string, any>;
       const mappedFacts = mapEvidenceToFacts({
         facts: (factsSnapshot as any) || {},
         evidenceFiles,
-        analysisMap,
+        analysisMap: analysisMapForFlags,
       });
 
+      // Apply document intelligence on top of merged facts
       const intelligence = applyDocumentIntelligence(mappedFacts as any);
       intelligenceSnapshot = pickFactsSnapshot(intelligence.facts as any);
       documentIntel = {
@@ -433,7 +477,14 @@ export async function POST(request: Request) {
       validationResult = validatorOutcome.result;
       validationKey = validatorOutcome.validator_key;
       validationRecommendations = validatorOutcome.recommendations ?? [];
-      validationNextQuestions = validatorOutcome.missing_questions ?? [];
+      // Merge validator questions with low-confidence confirmation questions
+      const validatorQuestions = validatorOutcome.missing_questions ?? [];
+      // Filter out confirmation questions for facts that validator already has questions for
+      const validatorFactKeys = new Set(validatorQuestions.map((q: any) => q.factKey || q.id));
+      const filteredConfirmationQuestions = confirmationQuestions.filter(
+        q => !validatorFactKeys.has(q.factKey)
+      );
+      validationNextQuestions = [...validatorQuestions, ...filteredConfirmationQuestions];
 
       if (validationResult) {
         validationSummary = {
@@ -530,6 +581,8 @@ export async function POST(request: Request) {
       next_questions: validationNextQuestions,
       document_intel: documentIntel,
       fact_snapshot: intelligenceSnapshot,
+      // New: extraction metadata for transparency
+      extraction: extractionMeta,
     });
   } catch (error) {
     console.error('Unexpected error in upload-evidence route', error);

@@ -7,6 +7,7 @@ import type { QuestionDefinition } from '@/lib/validators/question-schema';
 import { getWizardCta } from '@/lib/checkout/cta-mapper';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
+import { EmailCaptureModal } from '@/components/leads/EmailCaptureModal';
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
@@ -60,7 +61,6 @@ export default function AskHeavenPage(): React.ReactElement {
   const [questionErrors, setQuestionErrors] = useState<Record<string, string>>({});
   const [answersSubmitting, setAnswersSubmitting] = useState(false);
   const [emailOpen, setEmailOpen] = useState(false);
-  const [emailInput, setEmailInput] = useState('');
   const [emailStatus, setEmailStatus] = useState<string | null>(null);
 
   const searchParams = useSearchParams();
@@ -470,13 +470,13 @@ export default function AskHeavenPage(): React.ReactElement {
 
           <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-xs text-gray-600">
             <div className="flex items-center justify-between">
-              <p className="font-semibold text-gray-700">Email me my report/checklist</p>
+              <p className="font-semibold text-gray-700">Get your report by email</p>
               <button
                 type="button"
                 className="rounded border border-gray-300 px-2 py-1 text-xs text-gray-700"
                 onClick={() => setEmailOpen(true)}
               >
-                Email me this report
+                Email my report
               </button>
             </div>
             {emailStatus && <p className="mt-2 text-xs text-gray-500">{emailStatus}</p>}
@@ -484,81 +484,23 @@ export default function AskHeavenPage(): React.ReactElement {
         </section>
       )}
 
-      {emailOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-sm rounded-lg bg-white p-4 text-sm shadow-lg">
-            <div className="flex items-center justify-between">
-              <p className="font-semibold">Email me this report</p>
-              <button
-                type="button"
-                className="text-xs text-gray-500"
-                onClick={() => setEmailOpen(false)}
-              >
-                Close
-              </button>
-            </div>
-            <input
-              type="email"
-              className="mt-3 w-full rounded border border-gray-200 px-2 py-2 text-sm"
-              placeholder="you@example.com"
-              value={emailInput}
-              onChange={(event) => setEmailInput(event.target.value)}
-            />
-            <div className="mt-3 flex justify-end gap-2">
-              <button
-                type="button"
-                className="rounded border border-gray-300 px-3 py-2 text-xs"
-                onClick={() => setEmailOpen(false)}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="rounded bg-purple-600 px-3 py-2 text-xs text-white"
-                onClick={async () => {
-                  if (!caseId) return;
-                  try {
-                    setEmailStatus(null);
-                    const email = emailInput.trim();
-                    if (!email) {
-                      setEmailStatus('Please enter a valid email.');
-                      return;
-                    }
-                    await fetch('/api/leads/capture', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        email,
-                        source: 'ask_heaven',
-                        jurisdiction: normalizeJurisdiction(caseContext?.jurisdiction) ?? caseContext?.jurisdiction,
-                        caseId,
-                        tags: ['report'],
-                      }),
-                    });
-                    await fetch('/api/leads/email-report', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        email,
-                        source: 'ask_heaven',
-                        jurisdiction: normalizeJurisdiction(caseContext?.jurisdiction) ?? caseContext?.jurisdiction,
-                        caseId,
-                      }),
-                    });
-                    setEmailStatus('Report queued. Check your inbox soon.');
-                    setEmailOpen(false);
-                  } catch (err) {
-                    console.error('Failed to capture email', err);
-                    setEmailStatus('Unable to send email right now.');
-                  }
-                }}
-              >
-                Send report
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Email Report Modal - Single unified component */}
+      <EmailCaptureModal
+        open={emailOpen}
+        onClose={() => setEmailOpen(false)}
+        source="ask_heaven"
+        jurisdiction={normalizeJurisdiction(caseContext?.jurisdiction) ?? caseContext?.jurisdiction ?? jurisdiction}
+        caseId={caseId ?? undefined}
+        tags={['ask_heaven', 'report']}
+        title="Email my report"
+        description="We'll send you a copy of your analysis report and helpful resources."
+        primaryLabel="Send report"
+        includeEmailReport={true}
+        reportCaseId={caseId ?? undefined}
+        onSuccess={() => {
+          setEmailStatus('Report queued — check your inbox soon.');
+        }}
+      />
 
       <section className="flex flex-1 flex-col gap-3 rounded-xl border bg-card p-3">
         <div className="flex-1 space-y-3 overflow-y-auto rounded-md border bg-muted/40 p-3 text-sm">
