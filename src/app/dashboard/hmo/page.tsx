@@ -561,11 +561,11 @@ export default function HMOProDashboardPage() {
             <Card padding="medium">
               <h3 className="font-semibold text-charcoal mb-4">Need Help?</h3>
               <div className="space-y-3 text-sm">
-                <Link href="/docs/hmo" className="flex items-center gap-2 text-gray-700 hover:text-primary">
+                <Link href="/help" className="flex items-center gap-2 text-gray-700 hover:text-primary">
                   <RiBookOpenLine className="w-5 h-5 text-[#7C3AED]" />
-                  HMO Pro Guide
+                  Help Center
                 </Link>
-                <Link href="/support" className="flex items-center gap-2 text-gray-700 hover:text-primary">
+                <Link href="/contact" className="flex items-center gap-2 text-gray-700 hover:text-primary">
                   <RiCustomerService2Line className="w-5 h-5 text-[#7C3AED]" />
                   Contact Support
                 </Link>
