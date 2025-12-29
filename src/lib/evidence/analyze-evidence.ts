@@ -5,29 +5,55 @@ import puppeteer from 'puppeteer';
 
 // Use pdfjs-dist directly for more reliable PDF text extraction
 async function extractPdfTextWithPdfJs(buffer: Buffer): Promise<string> {
-  // Dynamic import to avoid SSR issues
-  const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
+  try {
+    // Dynamic import with multiple fallback paths
+    let pdfjsLib: any;
+    try {
+      pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
+    } catch {
+      try {
+        pdfjsLib = await import('pdfjs-dist/build/pdf.mjs');
+      } catch {
+        pdfjsLib = await import('pdfjs-dist');
+      }
+    }
 
-  // Create a typed array from the buffer
-  const data = new Uint8Array(buffer);
+    // Handle different export styles
+    const getDocument = pdfjsLib.getDocument || pdfjsLib.default?.getDocument;
+    if (!getDocument) {
+      throw new Error('pdfjs-dist getDocument not found');
+    }
 
-  // Load the PDF document
-  const loadingTask = pdfjsLib.getDocument({ data });
-  const pdf = await loadingTask.promise;
+    // Create a typed array from the buffer
+    const data = new Uint8Array(buffer);
 
-  const textParts: string[] = [];
+    // Load the PDF document with worker disabled for server-side
+    const loadingTask = getDocument({
+      data,
+      useWorkerFetch: false,
+      isEvalSupported: false,
+      useSystemFonts: true,
+    });
+    const pdf = await loadingTask.promise;
 
-  // Extract text from each page
-  for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-    const page = await pdf.getPage(pageNum);
-    const textContent = await page.getTextContent();
-    const pageText = textContent.items
-      .map((item: any) => item.str)
-      .join(' ');
-    textParts.push(pageText);
+    const textParts: string[] = [];
+
+    // Extract text from each page (limit to first 10 pages for performance)
+    const maxPages = Math.min(pdf.numPages, 10);
+    for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
+      const page = await pdf.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items
+        .map((item: any) => item.str || '')
+        .join(' ');
+      textParts.push(pageText);
+    }
+
+    return textParts.join('\n');
+  } catch (error: any) {
+    console.error('[extractPdfTextWithPdfJs] Failed:', error.message);
+    throw error;
   }
-
-  return textParts.join('\n');
 }
 
 export interface EvidenceAnalysisInput {
@@ -396,27 +422,38 @@ async function extractViaVision(params: {
     ...imageUrls.map((url) => ({ type: 'image_url', image_url: { url } })),
   ];
 
-  const response = await client.chat.completions.create({
-    model: 'gpt-4o-mini',
-    temperature: 0,
-    max_tokens: 1200,
-    messages: [
-      {
-        role: 'system',
-        content: 'Return only JSON with keys detected_type, extracted_fields, confidence, warnings. Do not guess.',
-      },
-      {
-        role: 'user',
-        content: messageContent,
-      },
-    ],
-    response_format: { type: 'json_object' },
-  });
+  try {
+    const response = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      temperature: 0,
+      max_tokens: 1200,
+      messages: [
+        {
+          role: 'system',
+          content: 'Return only JSON with keys detected_type, extracted_fields, confidence, warnings. Do not guess.',
+        },
+        {
+          role: 'user',
+          content: messageContent,
+        },
+      ],
+      response_format: { type: 'json_object' },
+    });
 
-  const raw = response.choices[0]?.message?.content ?? '{}';
-  const parsed = parseAnalysisPayload(raw, 'vision');
+    const raw = response.choices[0]?.message?.content ?? '{}';
+    const parsed = parseAnalysisPayload(raw, 'vision');
 
-  return parsed;
+    return parsed;
+  } catch (error: any) {
+    console.error('[extractViaVision] OpenAI API error:', error.message);
+    return {
+      detected_type: 'unknown',
+      extracted_fields: {},
+      confidence: 0.1,
+      warnings: [`Vision analysis API error: ${error.message}`],
+      source: 'vision',
+    };
+  }
 }
 
 async function extractViaText(params: {
