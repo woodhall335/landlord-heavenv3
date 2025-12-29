@@ -50,6 +50,19 @@ const JURISDICTION_OPTIONS: { value: Jurisdiction; label: string }[] = [
   { value: 'northern_ireland', label: 'Northern Ireland' },
 ];
 
+/**
+ * Map validator keys to valid evidence categories.
+ * The validator key (e.g., 'section_21') may differ from the evidence category (e.g., 'notice_s21').
+ */
+const VALIDATOR_TO_EVIDENCE_CATEGORY: Record<string, string> = {
+  section_21: 'notice_s21',
+  section_8: 'notice_s8',
+  wales_notice: 'correspondence',
+  scotland_notice_to_leave: 'correspondence',
+  tenancy_agreement: 'tenancy_agreement',
+  money_claim: 'rent_schedule',
+};
+
 export function ValidatorPage({
   validatorKey,
   title,
@@ -246,7 +259,7 @@ export function ValidatorPage({
                     jurisdiction={effectiveJurisdiction}
                     label="Document Upload"
                     description="Drag and drop or click to upload your document"
-                    evidenceCategory={validatorKey}
+                    evidenceCategory={VALIDATOR_TO_EVIDENCE_CATEGORY[validatorKey] || validatorKey}
                   />
 
                   {/* Email Report Section - Single unified CTA */}
