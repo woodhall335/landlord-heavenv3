@@ -7,8 +7,8 @@
 
 import {
   createServerSupabaseClient,
-  requireServerAuth,
   createAdminClient,
+  tryGetServerUser,
 } from '@/lib/supabase/server';
 
 import { generateDocument } from '@/lib/documents/generator';
@@ -39,6 +39,7 @@ import { runDecisionEngine } from '@/lib/decision-engine';
 import type { DecisionInput } from '@/lib/decision-engine';
 import { deriveCanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { validateForGenerate } from '@/lib/validation/previewValidation';
+import { assertPaidEntitlement } from '@/lib/payments/entitlement';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -81,6 +82,47 @@ const generateDocumentSchema = z.object({
   ]),
   is_preview: z.boolean().optional().default(true),
 });
+
+function resolveProductForDocument(documentType: string, caseFacts: Record<string, any>) {
+  const productFromFacts = caseFacts.__meta?.product || caseFacts.product;
+
+  if (documentType === 'ast_standard' || documentType === 'ast_premium') {
+    return documentType;
+  }
+
+  if (productFromFacts === 'complete_pack' || productFromFacts === 'notice_only') {
+    return productFromFacts;
+  }
+
+  const completePackDocs = new Set([
+    'n5_claim',
+    'n119_particulars',
+    'n5b_claim',
+    'court_filing_guide',
+  ]);
+
+  const noticeOnlyDocs = new Set([
+    'section8_notice',
+    'section21_notice',
+    'service_instructions',
+    'service_checklist',
+    'eviction_roadmap',
+    'expert_guidance',
+    'eviction_timeline',
+    'case_summary',
+    'proof_of_service',
+  ]);
+
+  if (completePackDocs.has(documentType)) {
+    return 'complete_pack';
+  }
+
+  if (noticeOnlyDocs.has(documentType)) {
+    return 'notice_only';
+  }
+
+  return productFromFacts || 'notice_only';
+}
 
 function buildAddress(...parts: Array<string | null | undefined>) {
   const cleaned = parts.map((p) => (typeof p === 'string' ? p.trim() : p)).filter(Boolean) as string[];
@@ -161,20 +203,21 @@ export async function POST(request: Request) {
     }
 
     const { case_id, document_type, is_preview } = validationResult.data;
+    const user = await tryGetServerUser();
 
-    // For final docs, require auth
-    if (!is_preview) {
-      await requireServerAuth();
-    }
-
-    const supabase = await createServerSupabaseClient();
+    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
 
     // Fetch case metadata (RLS handles auth / anon)
-    const { data, error: caseError } = await supabase
+    let caseQuery = supabase
       .from('cases')
       .select('id, jurisdiction, user_id, collected_facts')
-      .eq('id', case_id)
-      .single();
+      .eq('id', case_id);
+
+    if (user) {
+      caseQuery = caseQuery.eq('user_id', user.id);
+    }
+
+    const { data, error: caseError } = await caseQuery.single();
 
     if (caseError || !data) {
       if (process.env.NODE_ENV !== 'test') {
@@ -198,6 +241,12 @@ export async function POST(request: Request) {
     const wizardFacts = (wizardFactsFromStore && Object.keys(wizardFactsFromStore).length > 0)
       ? wizardFactsFromStore
       : (caseRow.collected_facts ?? {});
+    const entitlementFacts = wizardFactsToCaseFacts(wizardFacts);
+
+    if (!is_preview) {
+      const productType = resolveProductForDocument(document_type, entitlementFacts as any);
+      await assertPaidEntitlement({ caseId: case_id, product: productType });
+    }
 
     const canonicalJurisdiction =
       deriveCanonicalJurisdiction(caseRow.jurisdiction, wizardFacts) ||
@@ -989,6 +1038,10 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error: any) {
+    if (error instanceof Response) {
+      return error;
+    }
+
     if (error?.message === 'Unauthorized - Please log in') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

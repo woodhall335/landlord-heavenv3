@@ -7,8 +7,12 @@ import { NextResponse } from 'next/server';
 import { randomUUID } from 'node:crypto';
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { updateWizardFacts, getOrCreateWizardFacts } from '@/lib/case-facts/store';
-import { chatCompletion } from '@/lib/ai/openai-client';
 import { isEvidenceCategory, EvidenceCategory } from '@/lib/evidence/schema';
+import { analyzeEvidence } from '@/lib/evidence/analyze-evidence';
+import { applyDocumentIntelligence } from '@/lib/wizard/document-intel';
+import { runLegalValidator } from '@/lib/validators/run-legal-validator';
+import { mapEvidenceToFacts } from '@/lib/evidence/map-evidence-to-facts';
+import { classifyDocument } from '@/lib/evidence/classify-document';
 
 export const runtime = 'nodejs';
 
@@ -17,53 +21,25 @@ function sanitizeFilename(name: string) {
   return trimmed.replace(/[^a-zA-Z0-9_.-]+/g, '_');
 }
 
-async function analyseDocument(
-  fileBuffer: Buffer,
-  metadata: { fileName: string; mimeType: string; category?: string },
-  facts: Record<string, any>,
-): Promise<Record<string, any> | null> {
-  if (!process.env.OPENAI_API_KEY) return null;
+const MAX_ANALYSIS_FACTS_KEYS = [
+  'tenant_full_name',
+  'landlord_full_name',
+  'rent_amount',
+  'rent_frequency',
+  'tenancy_start_date',
+  'deposit_amount',
+  'deposit_scheme',
+  'property_address_line1',
+  'notice_date',
+  'notice_expiry_date',
+];
 
-  const snippet = (() => {
-    if (metadata.mimeType?.startsWith('text/')) {
-      const text = fileBuffer.toString('utf8');
-      return text.slice(0, 2000);
-    }
-    return `Binary file preview unavailable. Name: ${metadata.fileName}.`;
-  })();
-
-  try {
-    const aiResponse = await chatCompletion(
-      [
-        {
-          role: 'system',
-          content:
-            'You are a legal evidence triage assistant. Return JSON only with keys detected_type, extracted_fields, confidence (0-1) and warnings (array). Do not invent facts; if unsure, keep fields empty.',
-        },
-        {
-          role: 'user',
-          content: `Jurisdiction: ${facts?.property?.country || 'unknown'}. Category: ${
-            metadata.category || 'unspecified'
-          }. File name: ${metadata.fileName}. Mime: ${metadata.mimeType}. Known parties: landlord ${
-            facts?.landlord?.name || ''
-          }, tenant ${facts?.tenant?.name || ''}. Property: ${
-            facts?.property?.address_line1 || facts?.property?.property_address_line1 || ''
-          }. Known arrears: ${facts?.issues?.rent_arrears?.total_arrears ?? 'unknown'}. Snippet: ${snippet}`,
-        },
-      ],
-      { model: 'gpt-4o-mini', max_tokens: 300, temperature: 0 },
-    );
-
-    const parsed = JSON.parse(aiResponse.content || '{}');
-    if (!parsed.detected_type) {
-      parsed.detected_type = metadata.category || metadata.mimeType || 'unknown';
-    }
-    parsed.confidence = typeof parsed.confidence === 'number' ? parsed.confidence : 0.35;
-    return parsed;
-  } catch (err) {
-    console.warn('Evidence analysis failed, continuing without AI flags', err);
-    return null;
-  }
+function pickFactsSnapshot(facts: Record<string, any>) {
+  const snapshot: Record<string, any> = {};
+  MAX_ANALYSIS_FACTS_KEYS.forEach((key) => {
+    if (facts[key] !== undefined) snapshot[key] = facts[key];
+  });
+  return snapshot;
 }
 
 function mapQuestionToEvidenceFlags(questionId: string, explicitCategory?: string) {
@@ -291,6 +267,9 @@ export async function POST(request: Request) {
       storage_path: objectKey,
       mime_type: (file as any).type || null,
       size_bytes: typeof (file as any).size === 'number' ? (file as any).size : null,
+      doc_type: null,
+      doc_type_confidence: null,
+      doc_type_reasons: null,
       uploaded_at: new Date().toISOString(),
     };
 
@@ -332,58 +311,218 @@ export async function POST(request: Request) {
     });
 
     // ------------------------------------------------------------------
-    // Optional AI analysis (non-blocking)
+    // AI analysis + document intelligence + legal validation (non-blocking)
     // ------------------------------------------------------------------
-    try {
-      const factsSnapshot = await getOrCreateWizardFacts(supabase as any, caseId);
-      const analysis = await analyseDocument(
-        fileBuffer,
-        {
-          fileName: file.name || safeFilename,
-          mimeType: (file as any).type || 'application/octet-stream',
-          category: validatedCategory, // P0-C: Use validated canonical category
-        },
-        (factsSnapshot as any) || {},
-      );
+    let analysisResult: any = null;
+    let validationResult: any = null;
+    let validationKey: any = null;
+    let validationRecommendations: Array<{ code: string; message: string }> = [];
+    let validationNextQuestions: Array<{ id: string; question: string }> = [];
+    let validationSummary: any = null;
+    let intelligenceSnapshot: any = null;
+    let documentIntel: any = null;
+    let docClassification: { docType: string; confidence: number; reasons: string[] } | null =
+      classifyDocument({
+        fileName: file.name || safeFilename,
+        mimeType: (file as any).type || null,
+        extractedText: null,
+      });
 
-      if (analysis) {
+    try {
+      const signed = await supabase.storage
+        .from('documents')
+        .createSignedUrl(objectKey, 60);
+
+      const analysis = await analyzeEvidence({
+        storageBucket: 'documents',
+        storagePath: objectKey,
+        mimeType: (file as any).type || 'application/octet-stream',
+        filename: file.name || safeFilename,
+        caseId,
+        questionId,
+        category: validatedCategory,
+        signedUrl: signed.data?.signedUrl ?? null,
+        fileBuffer,
+      });
+
+      analysisResult = analysis;
+
+      docClassification = classifyDocument({
+        fileName: file.name || safeFilename,
+        mimeType: (file as any).type || null,
+        extractedText: analysis.raw_text || null,
+      });
+
+      await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
+        const current = (currentRaw as any) || {};
+        const existingEvidence = (current as any).evidence || {};
+        const files = Array.isArray(existingEvidence.files) ? [...existingEvidence.files] : [];
+        const updatedFiles = files.map((entry: any) =>
+          entry.id === evidenceEntry.id
+            ? {
+                ...entry,
+                doc_type: docClassification?.docType ?? entry.doc_type,
+                doc_type_confidence: docClassification?.confidence ?? entry.doc_type_confidence,
+                doc_type_reasons: docClassification?.reasons ?? entry.doc_type_reasons,
+              }
+            : entry
+        );
+        return {
+          ...current,
+          evidence: {
+            ...existingEvidence,
+            files: updatedFiles,
+          },
+        } as typeof current;
+      });
+
+      await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
+        const current = (currentRaw as any) || {};
+        const existingEvidence = (current as any).evidence || {};
+        const analysisMap = { ...(existingEvidence.analysis || {}) };
+        analysisMap[evidenceEntry.id] = analysis;
+        return {
+          ...current,
+          evidence: {
+            ...existingEvidence,
+            analysis: analysisMap,
+          },
+        } as typeof current;
+      });
+
+      const factsSnapshot = await getOrCreateWizardFacts(supabase as any, caseId);
+      const evidenceFiles = ((factsSnapshot as any)?.evidence?.files || []) as any[];
+      const analysisMap = ((factsSnapshot as any)?.evidence?.analysis || {}) as Record<string, any>;
+      const mappedFacts = mapEvidenceToFacts({
+        facts: (factsSnapshot as any) || {},
+        evidenceFiles,
+        analysisMap,
+      });
+
+      const intelligence = applyDocumentIntelligence(mappedFacts as any);
+      intelligenceSnapshot = pickFactsSnapshot(intelligence.facts as any);
+      documentIntel = {
+        derived_routes: intelligence.derivedRoutes,
+        inconsistencies: intelligence.inconsistencies,
+        compliance_hints: intelligence.complianceHints,
+        recommended_uploads: intelligence.recommendedUploads,
+      };
+
+      await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
+        const current = (currentRaw as any) || {};
+        return {
+          ...current,
+          ...(intelligence.facts as any),
+        } as typeof current;
+      });
+
+      const validatorOutcome = runLegalValidator({
+        product: (factsSnapshot as any)?.__meta?.product || (factsSnapshot as any)?.product,
+        jurisdiction: caseRow.jurisdiction,
+        facts: intelligence.facts as any,
+        analysis,
+      });
+
+      validationResult = validatorOutcome.result;
+      validationKey = validatorOutcome.validator_key;
+      validationRecommendations = validatorOutcome.recommendations ?? [];
+      validationNextQuestions = validatorOutcome.missing_questions ?? [];
+
+      if (validationResult) {
+        validationSummary = {
+          validator_key: validationKey,
+          status: validationResult.status,
+          blockers: validationResult.blockers,
+          warnings: validationResult.warnings,
+          upsell: validationResult.upsell ?? null,
+        };
+
         await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
           const current = (currentRaw as any) || {};
-          const existingEvidence = (current as any).evidence || {};
-          const analysisMap = { ...(existingEvidence.analysis || {}) };
-          analysisMap[evidenceEntry.id] = analysis;
           return {
             ...current,
-            evidence: {
-              ...existingEvidence,
-              analysis: analysisMap,
-            },
+            validation_summary: validationSummary,
+            recommendations: validationRecommendations,
+            next_questions: validationNextQuestions,
+            validation_version: 'upload_v1',
           } as typeof current;
         });
       }
     } catch (analysisErr) {
       console.warn('Evidence analysis skipped due to error', analysisErr);
+      analysisResult = analysisResult || {
+        detected_type: validatedCategory || 'unknown',
+        extracted_fields: {},
+        confidence: 0,
+        warnings: ['Analysis failed; upload saved without extraction.'],
+      };
+    }
+
+    if (docClassification) {
+      await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
+        const current = (currentRaw as any) || {};
+        const existingEvidence = (current as any).evidence || {};
+        const files = Array.isArray(existingEvidence.files) ? [...existingEvidence.files] : [];
+        const updatedFiles = files.map((entry: any) =>
+          entry.id === evidenceEntry.id
+            ? {
+                ...entry,
+                doc_type: entry.doc_type ?? docClassification.docType,
+                doc_type_confidence: entry.doc_type_confidence ?? docClassification.confidence,
+                doc_type_reasons: entry.doc_type_reasons ?? docClassification.reasons,
+              }
+            : entry
+        );
+        return {
+          ...current,
+          evidence: {
+            ...existingEvidence,
+            files: updatedFiles,
+          },
+        } as typeof current;
+      });
     }
 
     const evidenceFacts: any = (updatedFacts as any).evidence || {};
+
+    const latestFacts = await getOrCreateWizardFacts(supabase as any, caseId);
+    const latestEvidenceFacts: any = (latestFacts as any).evidence || evidenceFacts;
 
     return NextResponse.json({
       success: true,
       document: documentRow,
       evidence: {
-        files: evidenceFacts.files || [],
+        files: latestEvidenceFacts.files || evidenceFacts.files || [],
         flags: {
-          tenancy_agreement_uploaded: !!evidenceFacts.tenancy_agreement_uploaded,
-          rent_schedule_uploaded: !!evidenceFacts.rent_schedule_uploaded,
-          correspondence_uploaded: !!evidenceFacts.correspondence_uploaded,
-          damage_photos_uploaded: !!evidenceFacts.damage_photos_uploaded,
-          authority_letters_uploaded: !!evidenceFacts.authority_letters_uploaded,
-          bank_statements_uploaded: !!evidenceFacts.bank_statements_uploaded,
-          safety_certificates_uploaded: !!evidenceFacts.safety_certificates_uploaded,
-          asb_evidence_uploaded: !!evidenceFacts.asb_evidence_uploaded,
-          other_evidence_uploaded: !!evidenceFacts.other_evidence_uploaded,
+          tenancy_agreement_uploaded: !!latestEvidenceFacts.tenancy_agreement_uploaded,
+          rent_schedule_uploaded: !!latestEvidenceFacts.rent_schedule_uploaded,
+          correspondence_uploaded: !!latestEvidenceFacts.correspondence_uploaded,
+          damage_photos_uploaded: !!latestEvidenceFacts.damage_photos_uploaded,
+          authority_letters_uploaded: !!latestEvidenceFacts.authority_letters_uploaded,
+          bank_statements_uploaded: !!latestEvidenceFacts.bank_statements_uploaded,
+          safety_certificates_uploaded: !!latestEvidenceFacts.safety_certificates_uploaded,
+          asb_evidence_uploaded: !!latestEvidenceFacts.asb_evidence_uploaded,
+          other_evidence_uploaded: !!latestEvidenceFacts.other_evidence_uploaded,
         },
+        analysis: analysisResult,
+        classification: docClassification,
       },
+      validation: validationResult
+        ? {
+            validator_key: validationKey,
+            status: validationResult.status,
+            blockers: validationResult.blockers,
+            warnings: validationResult.warnings,
+            upsell: validationResult.upsell ?? null,
+            recommendations: validationRecommendations,
+            next_questions: validationNextQuestions,
+          }
+        : null,
+      validation_summary: validationSummary,
+      recommendations: validationRecommendations,
+      next_questions: validationNextQuestions,
+      document_intel: documentIntel,
+      fact_snapshot: intelligenceSnapshot,
     });
   } catch (error) {
     console.error('Unexpected error in upload-evidence route', error);

@@ -36,16 +36,37 @@ export async function GET(request: Request) {
 
     // Parse query parameters
     const url = new URL(request.url);
-    const caseId = url.searchParams.get('caseId');
+    let caseId = url.searchParams.get('caseId');
     const evidenceId = url.searchParams.get('evidenceId');
+    let documentFallback: { id: string; case_id: string; pdf_url: string | null } | null = null;
 
     // Validate required parameters
-    if (!caseId) {
-      return NextResponse.json({ error: 'caseId is required' }, { status: 400 });
-    }
-
     if (!evidenceId) {
       return NextResponse.json({ error: 'evidenceId is required' }, { status: 400 });
+    }
+
+    if (!caseId) {
+      const { data: docRow, error: docError } = await supabase
+        .from('documents')
+        .select('id, case_id, pdf_url')
+        .eq('id', evidenceId)
+        .eq('document_type', 'evidence')
+        .maybeSingle();
+
+      if (docError) {
+        console.error('[evidence/download] Failed to load document for evidenceId:', docError);
+        return NextResponse.json({ error: 'Could not load evidence' }, { status: 500 });
+      }
+
+      if (docRow) {
+        documentFallback = docRow;
+        caseId = docRow.case_id;
+      } else {
+        return NextResponse.json(
+          { error: 'caseId is required when evidenceId is not a document record' },
+          { status: 400 }
+        );
+      }
     }
 
     // Load case to verify ownership
@@ -78,10 +99,7 @@ export async function GET(request: Request) {
 
     if (caseRow.user_id) {
       // Case is owned - require the owner
-      if (!user) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-      }
-      if (caseRow.user_id !== user.id) {
+      if (!user || caseRow.user_id !== user.id) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
     }
@@ -100,6 +118,31 @@ export async function GET(request: Request) {
     const evidenceFile = evidenceFiles.find((f: EvidenceFile) => f.id === evidenceId);
 
     if (!evidenceFile) {
+      if (documentFallback) {
+        const storagePath = documentFallback.pdf_url;
+        if (!storagePath || storagePath.startsWith('http')) {
+          console.warn('[evidence/download] Document has public URL instead of storage path:', evidenceId);
+          return NextResponse.json(
+            { error: 'Evidence file unavailable. Please re-upload.' },
+            { status: 410 }
+          );
+        }
+
+        const { data: signedUrlData, error: signedUrlError } = await supabase.storage
+          .from('documents')
+          .createSignedUrl(storagePath, SIGNED_URL_EXPIRY_SECONDS);
+
+        if (signedUrlError || !signedUrlData?.signedUrl) {
+          console.error('[evidence/download] Failed to create signed URL:', signedUrlError);
+          return NextResponse.json({ error: 'Could not generate download URL' }, { status: 500 });
+        }
+
+        return NextResponse.json({
+          signedUrl: signedUrlData.signedUrl,
+          expiresIn: SIGNED_URL_EXPIRY_SECONDS,
+        });
+      }
+
       // Fallback: check documents table for evidence documents
       const { data: docRow, error: docError } = await supabase
         .from('documents')
@@ -181,17 +224,15 @@ export async function POST(request: Request) {
 
     const { caseId, evidenceId } = body;
 
-    if (!caseId) {
-      return NextResponse.json({ error: 'caseId is required' }, { status: 400 });
-    }
-
     if (!evidenceId) {
       return NextResponse.json({ error: 'evidenceId is required' }, { status: 400 });
     }
 
     // Construct URL with query params and delegate to GET handler
     const url = new URL(request.url);
-    url.searchParams.set('caseId', caseId);
+    if (caseId) {
+      url.searchParams.set('caseId', caseId);
+    }
     url.searchParams.set('evidenceId', evidenceId);
 
     const getRequest = new Request(url.toString(), {

@@ -1,0 +1,3 @@
+ALTER TABLE public.webhook_logs
+  ADD COLUMN IF NOT EXISTS received_at TIMESTAMPTZ DEFAULT NOW(),
+  ADD COLUMN IF NOT EXISTS processing_result TEXT;

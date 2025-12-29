@@ -52,6 +52,7 @@ supabaseClientMock.is.mockReturnValue(supabaseClientMock);
 vi.mock('@/lib/supabase/server', () => ({
   createServerSupabaseClient: vi.fn(async () => supabaseClientMock),
   requireServerAuth: vi.fn(async () => ({ id: 'user-1' })),
+  tryGetServerUser: vi.fn(async () => ({ id: 'user-1' })),
   createAdminClient: vi.fn(() => ({
     storage: {
       from: () => ({

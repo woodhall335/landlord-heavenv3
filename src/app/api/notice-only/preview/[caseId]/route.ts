@@ -6,7 +6,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAdminClient, createServerSupabaseClient, tryGetServerUser } from '@/lib/supabase/server';
 import { wizardFactsToCaseFacts, mapNoticeOnlyFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 import { generateNoticeOnlyPreview, type NoticeOnlyDocument } from '@/lib/documents/notice-only-preview-merger';
@@ -20,6 +20,7 @@ import {
   deriveCanonicalJurisdiction,
 } from '@/lib/types/jurisdiction';
 import { validateForPreview } from '@/lib/validation/previewValidation';
+import { assertPaidEntitlement } from '@/lib/payments/entitlement';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -67,20 +68,15 @@ export async function GET(
     caseId = resolvedParams.caseId;
     console.log('[NOTICE-PREVIEW-API] Generating preview for case:', caseId);
 
-    const supabase = await createServerSupabaseClient();
+    await assertPaidEntitlement({ caseId, product: 'notice_only' });
 
-    // Try to get the current user (but allow anonymous access)
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = await tryGetServerUser();
+    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
 
-    // Build query to allow viewing own cases or anonymous cases
     let query = supabase.from('cases').select('*').eq('id', caseId);
 
     if (user) {
-      query = query.or(`user_id.eq.${user.id},user_id.is.null`);
-    } else {
-      query = query.is('user_id', null);
+      query = query.eq('user_id', user.id);
     }
 
     const { data, error: fetchError } = await query.single();
@@ -1037,6 +1033,10 @@ export async function GET(
       },
     });
   } catch (err: any) {
+    if (err instanceof Response) {
+      return err;
+    }
+
     console.error('[NOTICE-PREVIEW-API] Error:', err);
 
     // Build structured JSON error response
