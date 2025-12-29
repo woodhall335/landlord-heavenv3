@@ -455,7 +455,17 @@ function parseAnalysisPayload(raw: string, source: EvidenceAnalysisResult['sourc
 export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<EvidenceAnalysisResult> {
   const warnings: string[] = [];
 
+  console.log('[analyzeEvidence] Starting analysis for:', {
+    filename: input.filename,
+    mimeType: input.mimeType,
+    category: input.category,
+    validatorKey: input.validatorKey,
+    hasSignedUrl: !!input.signedUrl,
+    hasFileBuffer: !!input.fileBuffer,
+  });
+
   if (!process.env.OPENAI_API_KEY) {
+    console.warn('[analyzeEvidence] OpenAI API key missing');
     return {
       detected_type: input.category || 'unknown',
       extracted_fields: {},
@@ -466,6 +476,7 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
 
   try {
     const buffer = await loadBuffer(input);
+    console.log('[analyzeEvidence] Buffer loaded, size:', buffer.length);
     const client = input.openAIClient ?? getOpenAIClient();
     const prompt = buildPrompt({
       filename: input.filename,
@@ -481,18 +492,26 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
     let extractedPdfText: string | undefined;
 
     if (isPdfMimeType(input.mimeType)) {
+      console.log('[analyzeEvidence] Processing PDF...');
       try {
         const text = await withTimeout(extractPdfText(buffer), 5000, 'PDF text extraction');
         const normalizedText = text?.trim() ?? '';
+        console.log('[analyzeEvidence] PDF text extracted, length:', normalizedText.length);
         if (normalizedText.length > 0) {
           const trimmed = text.slice(0, MAX_TEXT_CHARS);
           extractedPdfText = trimmed; // Save for fallback
+          console.log('[analyzeEvidence] Calling OpenAI text analysis...');
           try {
             const result = await withTimeout(
               extractViaText({ text: trimmed, prompt, client }),
               15000,
               'Text analysis'
             );
+            console.log('[analyzeEvidence] Text analysis complete:', {
+              detected_type: result.detected_type,
+              confidence: result.confidence,
+              fieldsCount: Object.keys(result.extracted_fields || {}).length,
+            });
             if (normalizedText.length < MIN_TEXT_LENGTH) {
               result.warnings = [
                 ...(result.warnings ?? []),
@@ -504,6 +523,7 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
               raw_text: trimmed,
             };
           } catch (error: any) {
+            console.error('[analyzeEvidence] Text analysis failed:', error.message);
             return {
               detected_type: input.category || 'unknown',
               extracted_fields: {},
@@ -514,31 +534,45 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
             };
           }
         }
+        console.log('[analyzeEvidence] Insufficient text, falling back to vision');
         warnings.push('PDF text extraction returned insufficient text; falling back to vision.');
       } catch (error: any) {
+        console.error('[analyzeEvidence] PDF text extraction failed:', error.message);
         warnings.push(`PDF text extraction failed: ${error.message}`);
       }
     }
 
     if (isImageMimeType(input.mimeType) || isPdfMimeType(input.mimeType)) {
-      const visionResult = await withTimeout(
-        extractViaVision({
-          buffer,
-          mimeType: input.mimeType,
-          prompt,
-          client,
-        }),
-        20000,
-        'Vision analysis'
-      );
+      console.log('[analyzeEvidence] Starting vision analysis...');
+      try {
+        const visionResult = await withTimeout(
+          extractViaVision({
+            buffer,
+            mimeType: input.mimeType,
+            prompt,
+            client,
+          }),
+          20000,
+          'Vision analysis'
+        );
 
-      return {
-        ...visionResult,
-        warnings: [...(visionResult.warnings ?? []), ...warnings],
-        // Use extracted PDF text if available (even if we fell back to vision for analysis)
-        // This ensures classification can still use the text
-        raw_text: extractedPdfText || visionResult.raw_text,
-      };
+        console.log('[analyzeEvidence] Vision analysis complete:', {
+          detected_type: visionResult.detected_type,
+          confidence: visionResult.confidence,
+          fieldsCount: Object.keys(visionResult.extracted_fields || {}).length,
+        });
+
+        return {
+          ...visionResult,
+          warnings: [...(visionResult.warnings ?? []), ...warnings],
+          // Use extracted PDF text if available (even if we fell back to vision for analysis)
+          // This ensures classification can still use the text
+          raw_text: extractedPdfText || visionResult.raw_text,
+        };
+      } catch (visionError: any) {
+        console.error('[analyzeEvidence] Vision analysis failed:', visionError.message);
+        warnings.push(`Vision analysis failed: ${visionError.message}`);
+      }
     }
 
     return {

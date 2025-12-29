@@ -373,6 +373,14 @@ export async function POST(request: Request) {
         categoryHint: validatedCategory || null, // Use evidence category as hint for classification
       });
 
+      console.log('[upload-evidence] Classification result:', {
+        docType: docClassification.docType,
+        confidence: docClassification.confidence,
+        reasons: docClassification.reasons,
+        rawTextLength: analysis.raw_text?.length ?? 0,
+        categoryHint: validatedCategory,
+      });
+
       await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
         const current = (currentRaw as any) || {};
         const existingEvidence = (current as any).evidence || {};
