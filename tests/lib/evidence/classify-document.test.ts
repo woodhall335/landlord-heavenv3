@@ -91,6 +91,57 @@ describe('classifyDocument', () => {
     });
   });
 
+  describe('categoryHint fallback', () => {
+    it('uses categoryHint when no keywords match', () => {
+      const result = classifyDocument({
+        fileName: '3a871a41-1474-4051-9739-a309f494aca0.pdf', // UUID filename
+        mimeType: 'application/pdf',
+        extractedText: null, // No text extracted
+        categoryHint: 'notice_s21',
+      });
+
+      expect(result.docType).toBe('notice_s21');
+      expect(result.confidence).toBe(0.65);
+      expect(result.reasons).toContain('Using validator context hint: notice_s21');
+    });
+
+    it('boosts confidence when categoryHint matches detected type', () => {
+      const result = classifyDocument({
+        fileName: 'document.pdf',
+        mimeType: 'application/pdf',
+        extractedText: 'This is a section 21 notice.',
+        categoryHint: 'notice_s21',
+      });
+
+      expect(result.docType).toBe('notice_s21');
+      expect(result.confidence).toBeGreaterThanOrEqual(0.55); // Base + boost
+      expect(result.reasons).toContain('Confidence boosted by matching validator context');
+    });
+
+    it('ignores invalid categoryHint', () => {
+      const result = classifyDocument({
+        fileName: 'random-file.pdf',
+        mimeType: 'application/pdf',
+        extractedText: null,
+        categoryHint: 'invalid_category_type',
+      });
+
+      expect(result.docType).toBe('other');
+      expect(result.confidence).toBe(0.2);
+    });
+
+    it('does not use categoryHint when strong markers are found', () => {
+      const result = classifyDocument({
+        fileName: 'notice.pdf',
+        extractedText: 'This is a Form 6A notice under Section 21 of the Housing Act 1988.',
+        categoryHint: 'notice_s8', // Wrong hint - should be ignored
+      });
+
+      expect(result.docType).toBe('notice_s21'); // Strong markers win
+      expect(result.confidence).toBeGreaterThanOrEqual(0.88);
+    });
+  });
+
   describe('filename normalization', () => {
     it('classifies Section_21 filename with underscores', () => {
       const result = classifyDocument({

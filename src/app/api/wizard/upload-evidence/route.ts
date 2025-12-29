@@ -331,6 +331,7 @@ export async function POST(request: Request) {
         fileName: file.name || safeFilename,
         mimeType: (file as any).type || null,
         extractedText: null,
+        categoryHint: validatedCategory || null, // Use evidence category as hint for classification
       });
     let extractionMeta: {
       merged_facts_count: number;
@@ -369,6 +370,15 @@ export async function POST(request: Request) {
         fileName: file.name || safeFilename,
         mimeType: (file as any).type || null,
         extractedText: analysis.raw_text || null,
+        categoryHint: validatedCategory || null, // Use evidence category as hint for classification
+      });
+
+      console.log('[upload-evidence] Classification result:', {
+        docType: docClassification.docType,
+        confidence: docClassification.confidence,
+        reasons: docClassification.reasons,
+        rawTextLength: analysis.raw_text?.length ?? 0,
+        categoryHint: validatedCategory,
       });
 
       await updateWizardFacts(supabase as any, caseId, (currentRaw) => {
