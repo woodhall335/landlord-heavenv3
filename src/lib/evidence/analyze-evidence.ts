@@ -3,25 +3,34 @@ import { getOpenAIClient } from '@/lib/ai/openai-client';
 import { isPdfMimeType, isImageMimeType } from '@/lib/evidence/schema';
 import puppeteer from 'puppeteer';
 
+// Polyfill for pdfjs-dist in Node.js environment
+if (typeof globalThis !== 'undefined' && typeof globalThis.document === 'undefined') {
+  // @ts-ignore - Create minimal DOM-like environment for pdfjs-dist
+  globalThis.document = {
+    createElement: () => ({ getContext: () => null }),
+    documentElement: { style: {} },
+  };
+}
+
 // Use pdfjs-dist directly for more reliable PDF text extraction
 async function extractPdfTextWithPdfJs(buffer: Buffer): Promise<string> {
   try {
-    // Dynamic import with multiple fallback paths
-    let pdfjsLib: any;
-    try {
-      pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs');
-    } catch {
-      try {
-        pdfjsLib = await import('pdfjs-dist/build/pdf.mjs');
-      } catch {
-        pdfjsLib = await import('pdfjs-dist');
-      }
-    }
+    // Set up environment for pdfjs-dist
+    const isNode = typeof window === 'undefined';
+
+    // Dynamic import
+    const pdfjsModule = await import('pdfjs-dist');
+    const pdfjsLib = pdfjsModule.default || pdfjsModule;
 
     // Handle different export styles
-    const getDocument = pdfjsLib.getDocument || pdfjsLib.default?.getDocument;
+    const getDocument = pdfjsLib.getDocument;
     if (!getDocument) {
       throw new Error('pdfjs-dist getDocument not found');
+    }
+
+    // Disable worker for Node.js environment
+    if (isNode && pdfjsLib.GlobalWorkerOptions) {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '';
     }
 
     // Create a typed array from the buffer
@@ -30,9 +39,9 @@ async function extractPdfTextWithPdfJs(buffer: Buffer): Promise<string> {
     // Load the PDF document with worker disabled for server-side
     const loadingTask = getDocument({
       data,
-      useWorkerFetch: false,
-      isEvalSupported: false,
+      disableFontFace: true,
       useSystemFonts: true,
+      standardFontDataUrl: undefined,
     });
     const pdf = await loadingTask.promise;
 
@@ -51,7 +60,7 @@ async function extractPdfTextWithPdfJs(buffer: Buffer): Promise<string> {
 
     return textParts.join('\n');
   } catch (error: any) {
-    console.error('[extractPdfTextWithPdfJs] Failed:', error.message);
+    console.error('[extractPdfTextWithPdfJs] Failed:', error.message, error.stack);
     throw error;
   }
 }
@@ -319,8 +328,30 @@ async function loadBuffer(input: EvidenceAnalysisInput): Promise<Buffer> {
 }
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // Use pdfjs-dist directly for reliable text extraction
-  return extractPdfTextWithPdfJs(buffer);
+  // Try pdfjs-dist first, fall back to pdf-parse if it fails
+  try {
+    return await extractPdfTextWithPdfJs(buffer);
+  } catch (pdfjsError: any) {
+    console.warn('[extractPdfText] pdfjs-dist failed, trying pdf-parse:', pdfjsError.message);
+
+    // Fallback to pdf-parse with proper configuration
+    try {
+      // Set up environment for pdf-parse
+      const pdfParseModule = await import('pdf-parse');
+      const pdfParse = pdfParseModule.default || pdfParseModule;
+
+      // pdf-parse expects a Buffer
+      const result = await pdfParse(buffer, {
+        // Disable test mode which causes issues
+        max: 10, // Max pages
+      });
+
+      return result.text || '';
+    } catch (parseError: any) {
+      console.error('[extractPdfText] pdf-parse also failed:', parseError.message);
+      throw new Error(`PDF text extraction failed: ${pdfjsError.message} | ${parseError.message}`);
+    }
+  }
 }
 
 async function renderPdfPagesToImages(buffer: Buffer, maxPages: number): Promise<string[]> {
