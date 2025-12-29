@@ -10,29 +10,44 @@ export function getNoticeOnlyRequirements(
   const warnNow = new Set<string>();
   const derived = new Set<string>();
 
-  // === ALWAYS REQUIRED (all routes, all stages) ===
-  const alwaysRequired = [
+  // === CORE REQUIRED FACTS (all routes, all stages >= preview) ===
+  // NOTE: Address town/postcode are only strictly required at generate stage for PDF output.
+  // At preview stage, we only require address line 1 to identify the property/landlord.
+  // This allows users to see previews earlier in the flow.
+  const coreRequired = [
     'landlord_full_name',
     'landlord_address_line1',
-    'landlord_address_town',
-    'landlord_address_postcode',
     'tenant_full_name',
     'property_address_line1',
-    'property_address_town',
-    'property_address_postcode',
     'tenancy_start_date',
     'rent_amount',
     'rent_frequency',
   ];
 
-  if (stage === 'generate' || stage === 'preview') {
-    alwaysRequired.forEach(key => requiredNow.add(key));
+  // Address subfields only required at generate (for PDF output)
+  const addressSubfieldsForGenerate = [
+    'landlord_address_town',
+    'landlord_address_postcode',
+    'property_address_town',
+    'property_address_postcode',
+  ];
+
+  if (stage === 'generate') {
+    // At generate, require everything including address subfields
+    coreRequired.forEach(key => requiredNow.add(key));
+    addressSubfieldsForGenerate.forEach(key => requiredNow.add(key));
+  } else if (stage === 'preview') {
+    // At preview, require core facts but only warn about address subfields
+    coreRequired.forEach(key => requiredNow.add(key));
+    addressSubfieldsForGenerate.forEach(key => warnNow.add(key));
   } else if (stage === 'checkpoint') {
-    // At checkpoint, require core facts
-    alwaysRequired.forEach(key => requiredNow.add(key));
+    // At checkpoint, require core facts, warn about address subfields
+    coreRequired.forEach(key => requiredNow.add(key));
+    addressSubfieldsForGenerate.forEach(key => warnNow.add(key));
   } else {
     // wizard: warn about upcoming requirements
-    alwaysRequired.forEach(key => warnNow.add(key));
+    coreRequired.forEach(key => warnNow.add(key));
+    addressSubfieldsForGenerate.forEach(key => warnNow.add(key));
   }
 
   // === ROUTE-SPECIFIC REQUIREMENTS ===

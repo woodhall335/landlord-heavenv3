@@ -9,6 +9,45 @@ import { getRequirements, ValidationContext, RequirementsResult, ValidationStage
 import { getFlowMapping } from '../mqs/mapping.generated';
 import type { Jurisdiction, Product } from './capabilities/matrix';
 
+/**
+ * Field name aliases - maps common/alternate field names to canonical names.
+ * This allows tests and older wizard flows to use variant field names
+ * while the requirements engine uses canonical names.
+ */
+const FIELD_ALIASES: Record<string, string[]> = {
+  // Address field aliases: canonical -> [alternates]
+  landlord_address_line1: ['landlord_address'],
+  landlord_address_town: ['landlord_city', 'landlord_town'],
+  landlord_address_postcode: ['landlord_postcode'],
+  property_address_line1: ['property_address'],
+  property_address_town: ['property_city', 'property_town'],
+  property_address_postcode: ['property_postcode'],
+};
+
+/**
+ * Check if a fact is provided under its canonical name OR any of its aliases.
+ */
+function isFactProvided(facts: Record<string, unknown>, canonicalKey: string): boolean {
+  // Check canonical key first
+  const canonicalValue = facts[canonicalKey];
+  if (canonicalValue !== undefined && canonicalValue !== null && canonicalValue !== '') {
+    return true;
+  }
+
+  // Check aliases
+  const aliases = FIELD_ALIASES[canonicalKey];
+  if (aliases) {
+    for (const alias of aliases) {
+      const aliasValue = facts[alias];
+      if (aliasValue !== undefined && aliasValue !== null && aliasValue !== '') {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 export interface ValidationIssue {
   code: string;
   severity: 'blocking' | 'warning';
@@ -71,12 +110,10 @@ export function validateRequirements(ctx: ValidationContext): ValidationOutput {
   const warnings: ValidationIssue[] = [];
   const missing_required_facts: string[] = [];
 
-  // Check required facts
+  // Check required facts (using alias-aware lookup)
   for (const factKey of requirements.requiredNow) {
-    const factValue = ctx.facts[factKey];
-
-    // Skip if fact is provided
-    if (factValue !== undefined && factValue !== null && factValue !== '') {
+    // Skip if fact is provided (checking canonical name and aliases)
+    if (isFactProvided(ctx.facts, factKey)) {
       continue;
     }
 
@@ -106,12 +143,10 @@ export function validateRequirements(ctx: ValidationContext): ValidationOutput {
     });
   }
 
-  // Check warned facts
+  // Check warned facts (using alias-aware lookup)
   for (const factKey of requirements.warnNow) {
-    const factValue = ctx.facts[factKey];
-
-    // Skip if fact is provided
-    if (factValue !== undefined && factValue !== null && factValue !== '') {
+    // Skip if fact is provided (checking canonical name and aliases)
+    if (isFactProvided(ctx.facts, factKey)) {
       continue;
     }
 

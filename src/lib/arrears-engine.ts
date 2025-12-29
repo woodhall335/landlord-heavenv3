@@ -354,6 +354,8 @@ export function validateGround8Eligibility(params: {
 
   if (!hasScheduleData) {
     // No schedule data - cannot authoritatively validate Ground 8
+    // However, we CAN use legacy_total_arrears for wizard gating purposes
+    // while flagging that court proceedings need proper schedule
     if (legacy_total_arrears && legacy_total_arrears > 0) {
       const legacyMonths = calculateArrearsInMonths(
         legacy_total_arrears,
@@ -361,16 +363,22 @@ export function validateGround8Eligibility(params: {
         rent_frequency
       );
 
+      // Check eligibility based on legacy data (for wizard gating)
+      // but flag as non-authoritative for court purposes
+      const meetsThreshold = legacyMonths >= threshold_months;
+
       return {
-        is_eligible: false, // Cannot be eligible without schedule
+        is_eligible: meetsThreshold, // Allow wizard to proceed if threshold is met
         arrears_in_months: legacyMonths,
         threshold_months,
-        explanation: `Ground 8 cannot be validated: No detailed arrears schedule provided. ` +
-          `Legacy total (£${legacy_total_arrears.toFixed(2)}) suggests ${legacyMonths.toFixed(2)} months, ` +
-          `but this is not sufficient for court proceedings. Please complete the arrears schedule.`,
+        explanation: meetsThreshold
+          ? `Ground 8 threshold appears MET based on legacy data: ${legacyMonths.toFixed(2)} months ` +
+            `(threshold: ${threshold_months} months). Note: A detailed arrears schedule is required for court.`
+          : `Ground 8 threshold NOT MET: ${legacyMonths.toFixed(2)} months of arrears ` +
+            `(threshold: ${threshold_months} months). Additional ${(threshold_months - legacyMonths).toFixed(2)} months required.`,
         is_authoritative: false,
-        legacy_warning: 'Ground 8 eligibility cannot be confirmed without a detailed arrears schedule. ' +
-          'Courts require period-by-period breakdown of rent due and paid.',
+        legacy_warning: 'Ground 8 eligibility calculated from total arrears only. ' +
+          'Courts require a detailed period-by-period arrears schedule. Please complete the schedule before proceedings.',
       };
     }
 
