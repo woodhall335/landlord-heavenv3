@@ -303,6 +303,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
   const product = resolveProduct(input.facts, input.product);
   const jurisdiction = resolveJurisdiction(input.facts, input.jurisdiction);
   const extracted = input.analysis?.extracted_fields || {};
+  const extractionQuality = input.analysis?.extraction_quality || undefined;
   const requirementKey = resolveRequirementKey({
     product,
     jurisdiction,
@@ -320,6 +321,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
       jurisdiction: jurisdiction ?? undefined,
       extracted,
       answers,
+      extractionQuality,
     });
     const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
     if (result && !result.upsell) {
@@ -340,6 +342,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
       jurisdiction: jurisdiction ?? undefined,
       extracted,
       answers,
+      extractionQuality,
     });
     const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
     if (result && !result.upsell) {
@@ -362,6 +365,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
         jurisdiction: 'wales',
         extracted,
         answers,
+        extractionQuality,
       });
       const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
       if (result && !result.upsell) {
@@ -382,6 +386,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
         jurisdiction: 'scotland',
         extracted,
         answers,
+        extractionQuality,
       });
       const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
       if (result && !result.upsell) {
@@ -402,6 +407,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
         jurisdiction: 'england',
         extracted,
         answers,
+        extractionQuality,
       });
       const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
       if (result && !result.upsell) {
@@ -422,6 +428,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
         jurisdiction: 'england',
         extracted,
         answers,
+        extractionQuality,
       });
       const missingEvidence = collectMissingEvidence(requirement?.requiredEvidence, input.facts);
       if (result && !result.upsell) {

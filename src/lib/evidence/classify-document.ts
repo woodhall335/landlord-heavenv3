@@ -1,9 +1,24 @@
+// Debug logging helper - controlled by DEBUG_EVIDENCE env var
+const DEBUG = process.env.DEBUG_EVIDENCE === 'true';
+function debugLog(label: string, data: any): void {
+  if (DEBUG) {
+    console.log(`[DEBUG_EVIDENCE][classify][${label}]`, typeof data === 'object' ? JSON.stringify(data, null, 2) : data);
+  }
+}
+
 export interface DocumentClassificationInput {
   fileName: string;
   mimeType?: string | null;
   extractedText?: string | null;
   /** Category hint from validator context (e.g., 'notice_s21' when uploading to Section 21 validator) */
   categoryHint?: string | null;
+  /** Extraction quality info - helps decide whether to trust content analysis */
+  extractionQuality?: {
+    text_extraction_method?: string;
+    text_length?: number;
+    regex_fields_found?: number;
+    llm_extraction_ran?: boolean;
+  };
 }
 
 export interface DocumentClassificationResult {
@@ -11,6 +26,8 @@ export interface DocumentClassificationResult {
   confidence: number;
   reasons: string[];
   strongMarkersFound?: string[];
+  /** Whether classification primarily relied on user's category hint due to weak content signals */
+  usedCategoryHint?: boolean;
 }
 
 /**
@@ -115,16 +132,75 @@ function findStrongMarkerMatch(text: string): {
   return bestMatch;
 }
 
+/**
+ * Check if a filename looks like a UUID (no meaningful extension hints).
+ */
+function isUuidLikeFilename(filename: string): boolean {
+  const name = filename.toLowerCase().replace(/\.(pdf|jpg|jpeg|png|gif|webp)$/i, '');
+  // UUID pattern: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx or similar
+  const uuidPattern = /^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
+  const hexPattern = /^[0-9a-f]{24,}$/i;
+  return uuidPattern.test(name) || hexPattern.test(name);
+}
+
+/**
+ * Known document type categories that we can trust from validator context.
+ */
+const KNOWN_CATEGORY_HINTS = new Set([
+  'notice_s21', 'notice_s8', 'tenancy_agreement', 'wales_notice',
+  'scotland_notice_to_leave', 'rent_schedule', 'arrears_ledger',
+  'bank_statement', 'deposit_protection', 'prescribed_info',
+  'how_to_rent', 'gas_safety', 'epc', 'eicr', 'correspondence',
+  'lba_letter', 'court_claim_draft',
+]);
+
 export function classifyDocument(input: DocumentClassificationInput): DocumentClassificationResult {
   const sourceText = `${input.fileName || ''}\n${input.extractedText || ''}`;
   const text = normalizeText(sourceText);
   const reasons: string[] = [];
+
+  debugLog('input', {
+    fileName: input.fileName,
+    categoryHint: input.categoryHint,
+    extractedTextLength: input.extractedText?.length || 0,
+    extractionQuality: input.extractionQuality,
+  });
+
+  // Check extraction quality - if we failed to extract content and have a UUID filename,
+  // we should strongly trust the category hint
+  const hasLimitedContent = !input.extractedText || input.extractedText.length < 50;
+  const isUuidFilename = isUuidLikeFilename(input.fileName || '');
+  const extractionFailed = input.extractionQuality?.text_extraction_method === 'failed' ||
+    (input.extractionQuality && !input.extractionQuality.llm_extraction_ran &&
+     input.extractionQuality.regex_fields_found === 0);
+
+  debugLog('quality_check', {
+    hasLimitedContent,
+    isUuidFilename,
+    extractionFailed,
+  });
+
+  // If we have a valid category hint and extraction quality was poor, trust the hint immediately
+  if (input.categoryHint && KNOWN_CATEGORY_HINTS.has(input.categoryHint)) {
+    if ((hasLimitedContent && isUuidFilename) || extractionFailed) {
+      reasons.push(`Using validator context: ${input.categoryHint}`);
+      reasons.push('Content extraction was limited; trusting upload context');
+      debugLog('using_category_hint_early', { hint: input.categoryHint, reason: 'limited_extraction' });
+      return {
+        docType: input.categoryHint,
+        confidence: 0.70, // Good confidence - user explicitly chose this validator
+        reasons,
+        usedCategoryHint: true,
+      };
+    }
+  }
 
   // First, check for strong marker combinations (high-confidence patterns)
   const strongMatch = findStrongMarkerMatch(text);
   if (strongMatch) {
     reasons.push(`Strong match: ${strongMatch.description}`);
     reasons.push(...strongMatch.markersFound.map((m) => `Matched marker: "${m}"`));
+    debugLog('strong_match', { docType: strongMatch.docType, confidence: strongMatch.confidence });
     return {
       docType: strongMatch.docType,
       confidence: strongMatch.confidence,
@@ -157,24 +233,28 @@ export function classifyDocument(input: DocumentClassificationInput): DocumentCl
     }
   });
 
-  if (bestMatch.docType === 'other') {
-    // No keyword match found - check if we have a category hint from the validator context
-    if (input.categoryHint) {
-      // Validate the hint is a known document type
-      const knownDocTypes = RULES.map((r) => r.docType);
-      const isKnownType = knownDocTypes.includes(input.categoryHint) ||
-        ['notice_s21', 'notice_s8', 'tenancy_agreement', 'wales_notice', 'scotland_notice_to_leave'].includes(input.categoryHint);
+  debugLog('keyword_match', { docType: bestMatch.docType, score: bestMatch.score });
 
-      if (isKnownType) {
-        reasons.push(`Using validator context hint: ${input.categoryHint}`);
-        reasons.push('Document content could not be extracted or analyzed');
-        return {
-          docType: input.categoryHint,
-          confidence: 0.65, // Moderate confidence - we trust the user's upload context
-          reasons,
-        };
+  // If keyword matching found "other" or has very weak match (score <= 1), use category hint
+  if ((bestMatch.docType === 'other' || bestMatch.score <= 1) && input.categoryHint) {
+    if (KNOWN_CATEGORY_HINTS.has(input.categoryHint)) {
+      reasons.push(`Using validator context: ${input.categoryHint}`);
+      if (bestMatch.score === 0) {
+        reasons.push('No keywords matched in document');
+      } else {
+        reasons.push(`Weak keyword match only (score: ${bestMatch.score})`);
       }
+      debugLog('using_category_hint', { hint: input.categoryHint, originalScore: bestMatch.score });
+      return {
+        docType: input.categoryHint,
+        confidence: 0.70, // Good confidence - user chose this validator context
+        reasons,
+        usedCategoryHint: true,
+      };
     }
+  }
+
+  if (bestMatch.docType === 'other') {
     reasons.push('No strong keyword match found.');
   } else {
     reasons.push(...bestMatch.reasons);
@@ -185,9 +265,12 @@ export function classifyDocument(input: DocumentClassificationInput): DocumentCl
 
   // Boost confidence if category hint matches the detected type
   if (input.categoryHint && input.categoryHint === bestMatch.docType && confidence < 0.85) {
-    confidence = Math.min(0.85, confidence + 0.15);
+    confidence = Math.min(0.88, confidence + 0.15);
     reasons.push('Confidence boosted by matching validator context');
+    debugLog('confidence_boost', { newConfidence: confidence });
   }
+
+  debugLog('final_result', { docType: bestMatch.docType, confidence, reasons });
 
   return {
     docType: bestMatch.docType,
