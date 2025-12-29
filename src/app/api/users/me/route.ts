@@ -45,10 +45,12 @@ export async function GET() {
       },
     });
   } catch (error: any) {
-    if (error.message === 'Unauthorized') {
+    // Handle auth errors (requireServerAuth throws 'Unauthorized - Please log in')
+    if (error?.message?.includes('Unauthorized') || error?.message?.includes('not authenticated')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    console.error('[API /api/users/me GET] Unexpected error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -105,10 +107,12 @@ export async function PUT(request: NextRequest) {
       },
     });
   } catch (error: any) {
-    if (error.message === 'Unauthorized') {
+    // Handle auth errors (requireServerAuth throws 'Unauthorized - Please log in')
+    if (error?.message?.includes('Unauthorized') || error?.message?.includes('not authenticated')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    console.error('[API /api/users/me PUT] Unexpected error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -151,10 +155,12 @@ export async function DELETE() {
       message: 'Account deleted successfully',
     });
   } catch (error: any) {
-    if (error.message === 'Unauthorized') {
+    // Handle auth errors (requireServerAuth throws 'Unauthorized - Please log in')
+    if (error?.message?.includes('Unauthorized') || error?.message?.includes('not authenticated')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    console.error('[API /api/users/me DELETE] Unexpected error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

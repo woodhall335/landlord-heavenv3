@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
@@ -14,7 +14,8 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { TealHero } from '@/components/ui';
-import { RiFileTextLine, RiBookOpenLine, RiCustomerService2Line } from 'react-icons/ri';
+import { RiFileTextLine, RiBookOpenLine, RiCustomerService2Line, RiLoginBoxLine } from 'react-icons/ri';
+import { useAuthCheck } from '@/hooks/useAuthCheck';
 
 interface Case {
   id: string;
@@ -35,16 +36,16 @@ interface Document {
 
 export default function DashboardPage() {
   const router = useRouter();
+  const { isLoading: authLoading, isAuthenticated } = useAuthCheck();
   const [cases, setCases] = useState<Case[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [stats, setStats] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingData, setIsLoadingData] = useState(false);
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
+  const fetchDashboardData = useCallback(async () => {
+    if (!isAuthenticated) return;
 
-  const fetchDashboardData = async () => {
+    setIsLoadingData(true);
     try {
       const [casesRes, docsRes, statsRes] = await Promise.all([
         fetch('/api/cases'),
@@ -69,9 +70,16 @@ export default function DashboardPage() {
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
     } finally {
-      setIsLoading(false);
+      setIsLoadingData(false);
     }
-  };
+  }, [isAuthenticated]);
+
+  // Only fetch data once auth check completes and user is authenticated
+  useEffect(() => {
+    if (!authLoading && isAuthenticated) {
+      fetchDashboardData();
+    }
+  }, [authLoading, isAuthenticated, fetchDashboardData]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {
@@ -81,12 +89,52 @@ export default function DashboardPage() {
     });
   };
 
-  if (isLoading) {
+  // Show loading while checking auth
+  if (authLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login prompt if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card padding="large" className="max-w-md mx-auto text-center">
+          <RiLoginBoxLine className="w-16 h-16 text-primary mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Login Required</h1>
+          <p className="text-gray-600 mb-6">
+            Please log in to access your dashboard and manage your cases.
+          </p>
+          <div className="flex flex-col gap-3">
+            <Link href="/auth/login">
+              <Button variant="primary" size="large" className="w-full">
+                Log In
+              </Button>
+            </Link>
+            <Link href="/auth/signup">
+              <Button variant="secondary" size="large" className="w-full">
+                Create Account
+              </Button>
+            </Link>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  // Show loading while fetching data
+  if (isLoadingData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Loading your data...</p>
         </div>
       </div>
     );
@@ -250,11 +298,11 @@ export default function DashboardPage() {
             <Card padding="medium">
               <h3 className="font-semibold text-charcoal mb-4">Need Help?</h3>
               <div className="space-y-3 text-sm">
-                <Link href="/docs" className="flex items-center gap-2 text-gray-700 hover:text-primary">
+                <Link href="/help" className="flex items-center gap-2 text-gray-700 hover:text-primary">
                   <RiBookOpenLine className="w-5 h-5 text-[#7C3AED]" />
-                  Documentation
+                  Help Center
                 </Link>
-                <Link href="/support" className="flex items-center gap-2 text-gray-700 hover:text-primary">
+                <Link href="/contact" className="flex items-center gap-2 text-gray-700 hover:text-primary">
                   <RiCustomerService2Line className="w-5 h-5 text-[#7C3AED]" />
                   Contact Support
                 </Link>
