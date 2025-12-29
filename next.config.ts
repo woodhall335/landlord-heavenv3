@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   reactCompiler: true,
   devIndicators: false,
   allowedDevOrigins: ["*"],
+  // Exclude PDF libraries from webpack bundling to avoid ESM/CJS conflicts
+  serverExternalPackages: ['pdfjs-dist', 'pdf-parse', 'canvas'],
   experimental: {
     serverActions: {
       allowedOrigins: ["*"],
