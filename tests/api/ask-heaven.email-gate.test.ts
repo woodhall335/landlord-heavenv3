@@ -7,24 +7,18 @@
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { POST } from '@/app/api/ask-heaven/chat/route';
 
-// Mock rate limiter
+// Mock rate limiter (uses 'wizard' limiter, not 'askHeaven')
 vi.mock('@/lib/rate-limit', () => ({
   rateLimiters: {
-    askHeaven: { check: vi.fn(async () => ({ success: true })) },
+    wizard: vi.fn(async () => ({ success: true, reset: Date.now() + 60000 })),
   },
 }));
 
-// Mock OpenAI
-vi.mock('openai', () => ({
-  default: class MockOpenAI {
-    chat = {
-      completions: {
-        create: vi.fn(async () => ({
-          choices: [{ message: { content: 'Test response' } }],
-        })),
-      },
-    };
-  },
+// Mock jsonCompletion from @/lib/ai
+vi.mock('@/lib/ai', () => ({
+  jsonCompletion: vi.fn(async () => ({
+    json: { reply: 'Test AI response' },
+  })),
 }));
 
 // Mock logger

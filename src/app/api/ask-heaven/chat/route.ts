@@ -22,6 +22,9 @@ const chatSchema = z.object({
       }),
     )
     .min(1),
+  // Email gate parameters (optional for backward compatibility)
+  messageCount: z.number().optional(),
+  emailCaptured: z.boolean().optional(),
 });
 
 export const dynamic = 'force-dynamic';
@@ -46,7 +49,25 @@ export async function POST(req: NextRequest): Promise<Response> {
     const json = await req.json();
     const parsed = chatSchema.parse(json);
 
-    const { case_id, case_type, jurisdiction, product, messages } = parsed;
+    const { case_id, case_type, jurisdiction, product, messages, messageCount, emailCaptured } = parsed;
+
+    // Email gate enforcement: require email after 3 messages (unless case_id present or already captured)
+    const EMAIL_GATE_THRESHOLD = 3;
+    if (
+      !case_id &&
+      messageCount !== undefined &&
+      messageCount >= EMAIL_GATE_THRESHOLD &&
+      emailCaptured === false
+    ) {
+      return NextResponse.json(
+        {
+          requires_email: true,
+          message: 'Enter your email to continue your conversation.',
+          suggestedCTAs: [],
+        },
+        { status: 200 }
+      );
+    }
 
     const systemContent = `
 ${ASK_HEAVEN_BASE_SYSTEM_PROMPT}
