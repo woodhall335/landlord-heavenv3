@@ -2,25 +2,92 @@ import { describe, expect, it } from 'vitest';
 import { classifyDocument } from '@/lib/evidence/classify-document';
 
 describe('classifyDocument', () => {
-  it('classifies section 21 notices deterministically', () => {
-    const result = classifyDocument({
-      fileName: 'Form 6A Section 21 Notice.pdf',
-      mimeType: 'application/pdf',
-      extractedText: 'This is a Section 21 notice served using Form 6A.',
+  describe('basic classification', () => {
+    it('classifies section 21 notices deterministically', () => {
+      const result = classifyDocument({
+        fileName: 'Form 6A Section 21 Notice.pdf',
+        mimeType: 'application/pdf',
+        extractedText: 'This is a Section 21 notice served using Form 6A.',
+      });
+
+      expect(result.docType).toBe('notice_s21');
+      expect(result.confidence).toBeGreaterThan(0.3);
+      expect(result.reasons.length).toBeGreaterThan(0);
     });
 
-    expect(result.docType).toBe('notice_s21');
-    expect(result.confidence).toBeGreaterThan(0.3);
-    expect(result.reasons.length).toBeGreaterThan(0);
+    it('returns other when no keywords match', () => {
+      const result = classifyDocument({
+        fileName: 'random.pdf',
+        mimeType: 'application/pdf',
+        extractedText: 'miscellaneous notes without keywords',
+      });
+
+      expect(result.docType).toBe('other');
+    });
   });
 
-  it('returns other when no keywords match', () => {
-    const result = classifyDocument({
-      fileName: 'random.pdf',
-      mimeType: 'application/pdf',
-      extractedText: 'miscellaneous notes without keywords',
+  describe('strong marker detection', () => {
+    it('classifies Form 6A + Section 21 with high confidence >= 0.88', () => {
+      const result = classifyDocument({
+        fileName: 'notice.pdf',
+        mimeType: 'application/pdf',
+        extractedText: 'This is a Form 6A notice under Section 21 of the Housing Act 1988.',
+      });
+
+      expect(result.docType).toBe('notice_s21');
+      expect(result.confidence).toBeGreaterThanOrEqual(0.88);
+      expect(result.strongMarkersFound).toBeDefined();
+      expect(result.strongMarkersFound).toContain('form 6a');
+      expect(result.strongMarkersFound).toContain('section 21');
     });
 
-    expect(result.docType).toBe('other');
+    it('classifies Form 3 + Section 8 with high confidence >= 0.88', () => {
+      const result = classifyDocument({
+        fileName: 'section8_notice.pdf',
+        mimeType: 'application/pdf',
+        extractedText: 'Form 3 - Notice seeking possession under Section 8 of the Housing Act 1988',
+      });
+
+      expect(result.docType).toBe('notice_s8');
+      expect(result.confidence).toBeGreaterThanOrEqual(0.88);
+      expect(result.strongMarkersFound).toBeDefined();
+    });
+
+    it('classifies Scotland Notice to Leave with high confidence', () => {
+      const result = classifyDocument({
+        fileName: 'scotland_notice.pdf',
+        mimeType: 'application/pdf',
+        extractedText: 'Notice to Leave - First-tier Tribunal for Scotland Housing and Property Chamber',
+      });
+
+      expect(result.docType).toBe('scotland_notice_to_leave');
+      expect(result.confidence).toBeGreaterThanOrEqual(0.85);
+    });
+
+    it('classifies Wales RHW16 notice with high confidence', () => {
+      const result = classifyDocument({
+        fileName: 'wales_notice.pdf',
+        mimeType: 'application/pdf',
+        extractedText: 'RHW16 - Notice under the Renting Homes (Wales) Act for occupation contract',
+      });
+
+      expect(result.docType).toBe('wales_notice');
+      expect(result.confidence).toBeGreaterThanOrEqual(0.85);
+    });
+  });
+
+  describe('keyword fallback', () => {
+    it('classifies with lower confidence when only one keyword matches', () => {
+      const result = classifyDocument({
+        fileName: 'document.pdf',
+        mimeType: 'application/pdf',
+        extractedText: 'This is a section 21 notice.',
+      });
+
+      expect(result.docType).toBe('notice_s21');
+      expect(result.confidence).toBeGreaterThanOrEqual(0.4);
+      expect(result.confidence).toBeLessThan(0.88);
+      expect(result.strongMarkersFound).toBeUndefined();
+    });
   });
 });
