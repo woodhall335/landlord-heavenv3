@@ -1,8 +1,13 @@
 import { z } from 'zod';
 import { getOpenAIClient } from '@/lib/ai/openai-client';
 import { isPdfMimeType, isImageMimeType } from '@/lib/evidence/schema';
-import pdfParse from 'pdf-parse';
 import puppeteer from 'puppeteer';
+
+// pdf-parse is a CommonJS module, use dynamic import
+async function getPdfParser(): Promise<(buffer: Buffer) => Promise<{ text: string }>> {
+  const pdfParse = await import('pdf-parse').then((m) => m.default || m);
+  return pdfParse;
+}
 
 export interface EvidenceAnalysisInput {
   storageBucket: string;
@@ -83,6 +88,7 @@ async function loadBuffer(input: EvidenceAnalysisInput): Promise<Buffer> {
 }
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
+  const pdfParse = await getPdfParser();
   const data = await pdfParse(buffer);
   return data.text || '';
 }
