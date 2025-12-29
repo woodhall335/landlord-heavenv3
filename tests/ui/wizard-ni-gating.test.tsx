@@ -57,7 +57,7 @@ describe('Wizard selection UI Northern Ireland gating', () => {
     fireEvent.click(screen.getByRole('button', { name: /Start Wizard/i }));
 
     expect(pushMock).toHaveBeenCalledWith(
-      '/wizard/flow?type=tenancy_agreement&jurisdiction=northern-ireland'
+      '/wizard/flow?type=tenancy_agreement&jurisdiction=northern-ireland&product=tenancy_agreement'
     );
   });
 });

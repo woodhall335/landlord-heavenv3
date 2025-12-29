@@ -529,9 +529,14 @@ describe('AUDIT: No Raw Artifacts in Output', () => {
 
     const result = await generateNoticeToLeave(testData, false, 'html');
 
-    expect(result.html).not.toContain('[object Object]');
-    expect(result.html).not.toContain('##');
-    expect(result.html).not.toContain('**');
+    // Check for raw markdown artifacts in visible content
+    // Note: CSS comments (/** ... */) legitimately use ** so we exclude them
+    const visibleHtml = result.html
+      .replace(/\{\{!.*?\}\}/g, '') // Remove Handlebars comments
+      .replace(/\/\*[\s\S]*?\*\//g, ''); // Remove CSS comments
+    expect(visibleHtml).not.toContain('[object Object]');
+    expect(visibleHtml).not.toMatch(/^##/m); // No line starting with ##
+    expect(visibleHtml).not.toMatch(/\*\*[a-zA-Z]/); // No **word (markdown bold)
   });
 });
 

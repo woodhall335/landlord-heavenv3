@@ -13,7 +13,7 @@
  * - Simple Procedure Claim Form (Form 3A): Money claims up to £5,000
  */
 
-import { PDFDocument, PDFForm } from 'pdf-lib';
+import { PDFDocument, PDFForm, PDFName, PDFDict, PDFBool } from 'pdf-lib';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -123,6 +123,8 @@ export interface ScotlandMoneyClaimData {
 
 /**
  * Load an official PDF form
+ * Note: Some official forms may be encrypted (copy-protected but fillable).
+ * We use ignoreEncryption to load them for form filling purposes.
  */
 async function loadOfficialForm(formName: string): Promise<PDFDocument> {
   const formPath = path.join(process.cwd(), 'public', 'official-forms', 'scotland', formName);
@@ -130,11 +132,31 @@ async function loadOfficialForm(formName: string): Promise<PDFDocument> {
   try {
     const pdfBytes = await fs.readFile(formPath);
     const byteSource = pdfBytes instanceof Uint8Array ? pdfBytes : new Uint8Array(pdfBytes as any);
-    const pdfDoc = await PDFDocument.load(byteSource);
+    // Some official forms are encrypted (copy-protected but still fillable)
+    // ignoreEncryption allows us to load and fill them
+    const pdfDoc = await PDFDocument.load(byteSource, { ignoreEncryption: true });
     return pdfDoc;
   } catch (error) {
     throw new Error(`Failed to load official form "${formName}". Make sure the PDF exists in /public/official-forms/scotland/. Error: ${error}`);
   }
+}
+
+/**
+ * Sanitize text for PDF WinAnsi encoding.
+ * Replaces or removes characters that cannot be encoded in WinAnsi.
+ */
+function sanitizeForPdf(text: string): string {
+  // Replace common problematic Unicode characters with ASCII equivalents
+  return text
+    .replace(/[\u2018\u2019\u201A\u2039\u203A]/g, "'")  // Smart quotes → straight
+    .replace(/[\u201C\u201D\u201E]/g, '"')              // Smart double quotes
+    .replace(/[\u2013\u2014]/g, '-')                     // En/em dashes
+    .replace(/[\u2026]/g, '...')                         // Ellipsis
+    .replace(/[\u2022]/g, '-')                           // Bullet
+    .replace(/[\u2713\u2714]/g, 'X')                     // Checkmarks → X
+    .replace(/[\u00A0]/g, ' ')                           // Non-breaking space
+    .replace(/[\u02DA\u00B0]/g, ' degrees')              // Ring above / degree → text
+    .replace(/[^\x00-\xFF]/g, '');                       // Remove other non-Latin1 chars
 }
 
 /**
@@ -145,7 +167,12 @@ function fillTextField(form: PDFForm, fieldName: string, value: string | undefin
 
   try {
     const field = form.getTextField(fieldName);
-    field.setText(value);
+    // Sanitize text to ensure WinAnsi compatibility
+    const sanitized = sanitizeForPdf(value);
+    // Clear the field first to remove any problematic existing content
+    field.setText('');
+    // Then set the sanitized value
+    field.setText(sanitized);
   } catch (error) {
     console.warn(`Field "${fieldName}" not found in form, skipping: ${error}`);
   }
@@ -400,15 +427,16 @@ export async function fillFormE(data: ScotlandCaseData): Promise<Uint8Array> {
 
   // =========================================================================
   // Section 6: Required Documents
+  // NOTE: Use ASCII-safe bullet characters (- ) instead of Unicode (✓) for PDF compatibility
   // =========================================================================
   const requiredDocs = [
-    '✓ Copy of Notice to Leave',
-    '✓ Proof of service of Notice to Leave',
-    '✓ Copy of tenancy agreement',
+    '- Copy of Notice to Leave',
+    '- Proof of service of Notice to Leave',
+    '- Copy of tenancy agreement',
   ];
 
   if (data.deposit_amount) {
-    requiredDocs.push('✓ Deposit protection certificate');
+    requiredDocs.push('- Deposit protection certificate');
     requiredDocs.push(`  Scheme: ${data.deposit_scheme_name || data.deposit_scheme || 'N/A'}`);
     requiredDocs.push(`  Reference: ${data.deposit_reference || 'N/A'}`);
   }
@@ -416,8 +444,8 @@ export async function fillFormE(data: ScotlandCaseData): Promise<Uint8Array> {
   // Add ground-specific documents
   const hasRentArrears = data.grounds.some(g => g.code === 'Ground 1');
   if (hasRentArrears) {
-    requiredDocs.push('✓ Rent statement showing arrears');
-    requiredDocs.push('✓ Evidence of pre-action requirements compliance');
+    requiredDocs.push('- Rent statement showing arrears');
+    requiredDocs.push('- Evidence of pre-action requirements compliance');
   }
 
   fillTextField(form, 'reqd attach', requiredDocs.join('\n'));
@@ -546,7 +574,15 @@ export async function fillSimpleProcedureClaim(data: ScotlandMoneyClaimData): Pr
     fillTextField(form, 'Text24', sigDate.year);
   }
 
-  const pdfBytes = await pdfDoc.save();
+  // Set needAppearances flag to let PDF viewer generate appearances on-the-fly
+  // This avoids encoding issues with problematic characters in existing form content
+  const acroForm = pdfDoc.catalog.lookup(pdfDoc.catalog.get(PDFName.of('AcroForm')));
+  if (acroForm instanceof PDFDict) {
+    acroForm.set(PDFName.of('NeedAppearances'), PDFBool.True);
+  }
+
+  // Save without updating appearances (use updateFieldAppearances: false)
+  const pdfBytes = await pdfDoc.save({ updateFieldAppearances: false });
   console.log('✅ Simple Procedure Claim Form filled successfully');
 
   return pdfBytes;

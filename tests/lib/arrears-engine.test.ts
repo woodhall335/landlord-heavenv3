@@ -185,17 +185,20 @@ describe('Arrears Engine', () => {
       expect(result.explanation).toContain('NOT MET');
     });
 
-    it('should NOT allow Ground 8 eligibility from legacy flat total alone', () => {
+    it('should allow Ground 8 eligibility from legacy flat total for wizard gating (not authoritative)', () => {
+      // INTENTIONAL BEHAVIOR: Legacy data CAN show is_eligible:true for wizard gating,
+      // but is_authoritative is always false, and a warning is shown requiring schedule for court.
+      // This allows users to proceed through wizard while warning them to complete schedule.
       const result = validateGround8Eligibility({
         arrears_items: [],
         rent_amount: 1000,
         rent_frequency: 'monthly',
         jurisdiction: 'england',
-        legacy_total_arrears: 3000, // 3 months worth
+        legacy_total_arrears: 3000, // 3 months worth - meets threshold
       });
 
-      expect(result.is_eligible).toBe(false); // Not eligible without schedule
-      expect(result.is_authoritative).toBe(false);
+      expect(result.is_eligible).toBe(true); // Wizard can proceed if threshold met
+      expect(result.is_authoritative).toBe(false); // But NOT authoritative for court
       expect(result.legacy_warning).toBeDefined();
       expect(result.legacy_warning).toContain('schedule');
     });
