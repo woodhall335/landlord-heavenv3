@@ -1,5 +1,7 @@
 /**
  * Tenancy Agreement Validator Page
+ *
+ * Supports all UK jurisdictions - user selects during validation.
  */
 
 import { ValidatorPage } from '@/components/validators/ValidatorPage';
@@ -10,7 +12,7 @@ export default function TenancyAgreementValidatorPage() {
       validatorKey="tenancy_agreement"
       title="Tenancy Agreement Validator"
       description="Check your tenancy agreement for missing or problematic clauses"
-      jurisdiction="england"
+      jurisdiction="all"
       caseType="tenancy_agreement"
       productVariant="ast_standard"
       features={[
