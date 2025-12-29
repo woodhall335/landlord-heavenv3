@@ -20,6 +20,10 @@ export interface EvidenceAnalysisInput {
   signedUrl?: string | null;
   fileBuffer?: Buffer | null;
   openAIClient?: ReturnType<typeof getOpenAIClient> | null;
+  /** Validator key for context-specific extraction (e.g., 'tenancy_agreement', 'section_21') */
+  validatorKey?: string | null;
+  /** Jurisdiction for context-specific rules */
+  jurisdiction?: string | null;
 }
 
 export interface EvidenceAnalysisResult {
@@ -41,25 +45,205 @@ const AnalysisSchema = z.object({
 const MAX_TEXT_CHARS = 6000;
 const MIN_TEXT_LENGTH = 50;
 
+/**
+ * Validator-specific extraction instructions for compliance checks.
+ * These prompts tell the AI what specific fields to look for based on the validator.
+ */
+const VALIDATOR_PROMPTS: Record<string, string> = {
+  tenancy_agreement: `
+TENANCY AGREEMENT COMPLIANCE ANALYSIS:
+You MUST extract these specific fields in extracted_fields:
+
+BASIC INFO:
+- tenancy_type: "ast" | "prt" | "occupation_contract" | "other" (AST for England, PRT for Scotland, Occupation Contract for Wales)
+- start_date: tenancy start date (YYYY-MM-DD)
+- end_date: fixed term end date if specified (YYYY-MM-DD)
+- rent_amount: monthly/weekly rent amount (number)
+- rent_frequency: "weekly" | "monthly" | "quarterly"
+- deposit_amount: deposit amount (number)
+- deposit_scheme: name of deposit protection scheme if mentioned
+- property_address: full property address
+- tenant_names: array of tenant names
+- landlord_name: landlord or agent name
+
+COMPLIANCE FLAGS (critical for validation):
+- prohibited_fees_present: true/false - Look for ANY fees charged to tenant beyond rent and deposit:
+  * Admin fees, reference fees, checkout fees, inventory fees, renewal fees, guarantor fees
+  * These are BANNED under the Tenant Fees Act 2019 (England) and similar laws
+- unfair_terms_present: true/false - Look for one-sided or unconscionable terms:
+  * Excessive penalty clauses, unreasonable restrictions, waiver of statutory rights
+  * Terms that heavily favor landlord with no tenant protections
+- missing_clauses: true/false - Check if these REQUIRED clauses are present:
+  * Deposit protection details (scheme, certificate reference)
+  * Right to quiet enjoyment
+  * Landlord repair obligations
+  * Break clause terms (if fixed term)
+  * How to serve notices
+
+JURISDICTION DETECTION:
+- jurisdiction: "england" | "wales" | "scotland" | "northern_ireland"
+  * Look for references to "Assured Shorthold Tenancy" (England)
+  * Look for "Occupation Contract" or "Renting Homes Wales Act" (Wales)
+  * Look for "Private Residential Tenancy" or "Housing Scotland Act" (Scotland)
+`,
+
+  section_21: `
+SECTION 21 NOTICE ANALYSIS:
+You MUST extract these specific fields in extracted_fields:
+
+NOTICE DETAILS:
+- notice_type: should contain "section 21" or "s21" or "Form 6A"
+- date_served: date notice was served (YYYY-MM-DD)
+- expiry_date: when notice expires (YYYY-MM-DD)
+- property_address: full property address
+- tenant_names: array of all tenant names on notice
+- landlord_name: landlord name
+- signature_present: true/false - is notice signed?
+
+COMPLIANCE MENTIONS (look for statements about):
+- deposit_protected: true/false - does notice mention deposit protection?
+- prescribed_info_served: true/false - mentions prescribed information given?
+- gas_safety_mentioned: true/false - references gas safety certificate?
+- epc_mentioned: true/false - references EPC?
+- how_to_rent_mentioned: true/false - references "How to Rent" guide?
+- form_6a_used: true/false - is this the correct Form 6A?
+`,
+
+  section_8: `
+SECTION 8 NOTICE ANALYSIS:
+You MUST extract these specific fields in extracted_fields:
+
+NOTICE DETAILS:
+- notice_type: should contain "section 8" or "s8" or "Form 3"
+- grounds_cited: array of ground numbers cited (e.g., [8, 10, 11])
+- date_served: date notice was served (YYYY-MM-DD)
+- notice_period: notice period given (e.g., "2 weeks", "2 months")
+- expiry_date: when notice expires (YYYY-MM-DD)
+- property_address: full property address
+- tenant_names: tenant names
+- tenant_details: any additional tenant info
+
+ARREARS INFO (for Ground 8):
+- rent_arrears_stated: amount of arrears claimed (number)
+- rent_amount: periodic rent amount
+- rent_frequency: "weekly" | "monthly" | "quarterly"
+- arrears_period: period arrears cover
+
+GROUND ANALYSIS:
+- mandatory_grounds: array of mandatory grounds (1, 2, 5, 6, 7, 7A, 7B, 8)
+- discretionary_grounds: array of discretionary grounds (9-17)
+`,
+
+  wales_notice: `
+WALES OCCUPATION CONTRACT NOTICE ANALYSIS:
+You MUST extract these specific fields in extracted_fields:
+
+NOTICE DETAILS:
+- rhw_form_number: "RHW16" | "RHW17" | "RHW23" | other form number
+- bilingual_text_present: true/false - CRITICAL: Wales notices MUST have Welsh and English
+- notice_type: type of notice
+- date_served: service date (YYYY-MM-DD)
+- expiry_date: expiry date (YYYY-MM-DD)
+- contract_holder_details: contract holder (tenant) names/details
+- landlord_details: landlord name
+
+COMPLIANCE (Renting Homes Wales Act 2016):
+- written_statement_referenced: true/false - references written statement?
+- fitness_for_habitation_confirmed: true/false - confirms property is fit?
+- deposit_protection_confirmed: true/false - references deposit protection?
+- occupation_type: "standard" | "secure" occupation contract type
+`,
+
+  scotland_notice_to_leave: `
+SCOTLAND NOTICE TO LEAVE ANALYSIS:
+You MUST extract these specific fields in extracted_fields:
+
+NOTICE DETAILS:
+- ground_cited: specific ground for eviction (1-18)
+- ground_description: text description of ground
+- notice_period: notice period given
+- date_served: service date (YYYY-MM-DD)
+- property_address: property address
+- tenant_name: tenant name
+
+PRT COMPLIANCE:
+- ground_mandatory: true/false - is this a mandatory ground?
+- ground_evidence_mentioned: true/false - does notice reference supporting evidence?
+- tenancy_start_date: when tenancy started
+- tribunal_reference: First-tier Tribunal reference if mentioned
+`,
+
+  money_claim: `
+MONEY CLAIM / ARREARS DOCUMENTATION ANALYSIS:
+You MUST extract these specific fields in extracted_fields:
+
+CLAIM DETAILS:
+- claim_amount: total amount claimed (number)
+- arrears_breakdown: breakdown of arrears if provided
+- claim_period: period the claim covers
+- parties: plaintiff and defendant names
+
+RENT SCHEDULE:
+- rent_amount: periodic rent amount
+- rent_frequency: "weekly" | "monthly"
+- payment_history: any payment history mentioned
+- last_payment_date: date of last payment received
+- outstanding_balance: current balance owed
+
+PRE-ACTION COMPLIANCE:
+- lba_sent: true/false - Letter Before Action mentioned?
+- lba_date: date of LBA if mentioned
+- response_received: true/false - did debtor respond?
+- payment_plan_offered: true/false - was payment plan discussed?
+`,
+};
+
+/**
+ * Build an AI extraction prompt with validator-specific instructions
+ */
 function buildPrompt(context: {
   filename: string;
   mimeType: string;
   category?: string | null;
   questionId?: string | null;
   caseId: string;
+  validatorKey?: string | null;
+  jurisdiction?: string | null;
   extra?: string;
 }): string {
-  const { filename, mimeType, category, questionId, caseId, extra } = context;
-  return `You are a UK landlord-tenant document extraction assistant.\n\n` +
-    `Return ONLY JSON with keys: detected_type, extracted_fields, confidence, warnings.\n` +
-    `Document types (detected_type) must be one of: tenancy, s21_notice, s8_notice, rent_schedule, bank_statement, arrears_ledger, correspondence, gas_safety_certificate, epc, deposit_certificate, prescribed_info, how_to_rent, other.\n` +
-    `Do not guess; if unsure, leave fields blank.\n\n` +
-    `Case: ${caseId}\n` +
-    `Question: ${questionId ?? 'unknown'}\n` +
-    `Category: ${category ?? 'unspecified'}\n` +
-    `Filename: ${filename}\n` +
-    `Mime: ${mimeType}\n` +
-    `${extra ?? ''}`;
+  const { filename, mimeType, category, questionId, caseId, validatorKey, jurisdiction, extra } = context;
+
+  // Base prompt
+  let prompt = `You are a UK landlord-tenant document extraction assistant specializing in legal compliance analysis.\n\n` +
+    `Return ONLY valid JSON with keys: detected_type, extracted_fields, confidence, warnings.\n` +
+    `Document types (detected_type) must be one of: tenancy, s21_notice, s8_notice, rent_schedule, bank_statement, arrears_ledger, correspondence, gas_safety_certificate, epc, deposit_certificate, prescribed_info, how_to_rent, other.\n\n`;
+
+  // Add validator-specific instructions
+  if (validatorKey && VALIDATOR_PROMPTS[validatorKey]) {
+    prompt += VALIDATOR_PROMPTS[validatorKey] + '\n\n';
+  }
+
+  // Add jurisdiction context
+  if (jurisdiction) {
+    prompt += `JURISDICTION: ${jurisdiction.toUpperCase()}\n`;
+    prompt += `Apply ${jurisdiction}-specific rules when analyzing.\n\n`;
+  }
+
+  // Add file context
+  prompt += `DOCUMENT CONTEXT:\n`;
+  prompt += `- Case: ${caseId}\n`;
+  prompt += `- Question: ${questionId ?? 'unknown'}\n`;
+  prompt += `- Category: ${category ?? 'unspecified'}\n`;
+  prompt += `- Filename: ${filename}\n`;
+  prompt += `- Type: ${mimeType}\n`;
+
+  if (extra) {
+    prompt += `\n${extra}`;
+  }
+
+  prompt += `\n\nIMPORTANT: Extract ALL compliance-relevant fields. Set boolean fields to true/false based on what you find in the document. If unsure about a field, set it to null rather than guessing.`;
+
+  return prompt;
 }
 
 async function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
@@ -289,6 +473,8 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
       category: input.category,
       questionId: input.questionId,
       caseId: input.caseId,
+      validatorKey: input.validatorKey,
+      jurisdiction: input.jurisdiction,
     });
 
     if (isPdfMimeType(input.mimeType)) {

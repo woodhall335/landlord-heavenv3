@@ -178,21 +178,22 @@ function buildUpsell(product: string | null, facts: Record<string, any>) {
   return undefined;
 }
 
-function buildSection21Answers(facts: Record<string, any>) {
-  const depositProtected = getFactValue(facts, ['deposit_protected', 'tenancy.deposit_protected']);
-  const prescribedInfo = getFactValue(facts, [
+function buildSection21Answers(facts: Record<string, any>, extracted?: Record<string, any>) {
+  const ext = extracted || {};
+  const depositProtected = ext.deposit_protected ?? getFactValue(facts, ['deposit_protected', 'tenancy.deposit_protected']);
+  const prescribedInfo = ext.prescribed_info_served ?? getFactValue(facts, [
     'prescribed_info_given',
     'prescribed_info_provided',
     'prescribed_info_served',
     'tenancy.prescribed_info_given',
   ]);
-  const gasCert = getFactValue(facts, [
+  const gasCert = ext.gas_safety_mentioned ?? getFactValue(facts, [
     'gas_certificate_provided',
     'gas_safety_cert_provided',
     'property.gas_certificate_provided',
   ]);
-  const epcProvided = getFactValue(facts, ['epc_provided', 'property.epc_provided']);
-  const howToRent = getFactValue(facts, ['how_to_rent_provided', 'tenancy.how_to_rent_provided']);
+  const epcProvided = ext.epc_mentioned ?? getFactValue(facts, ['epc_provided', 'property.epc_provided']);
+  const howToRent = ext.how_to_rent_mentioned ?? getFactValue(facts, ['how_to_rent_provided', 'tenancy.how_to_rent_provided']);
   const licensingStatus = getFactValue(facts, ['property_licensing_status', 'property.licensing_status']);
   const propertyLicensed = licensingStatus === 'unlicensed'
     ? 'no'
@@ -221,22 +222,23 @@ function buildSection21Answers(facts: Record<string, any>) {
   };
 }
 
-function buildSection8Answers(facts: Record<string, any>) {
-  const rentFrequency = getFactValue(facts, ['rent_frequency', 'tenancy.rent_frequency']);
-  const rentAmount = getFactValue(facts, ['rent_amount', 'tenancy.rent_amount']);
-  const arrearsTotal = getFactValue(facts, [
+function buildSection8Answers(facts: Record<string, any>, extracted?: Record<string, any>) {
+  const ext = extracted || {};
+  const rentFrequency = ext.rent_frequency ?? getFactValue(facts, ['rent_frequency', 'tenancy.rent_frequency']);
+  const rentAmount = ext.rent_amount ?? getFactValue(facts, ['rent_amount', 'tenancy.rent_amount']);
+  const arrearsTotal = ext.rent_arrears_stated ?? getFactValue(facts, [
     'arrears_amount',
     'arrears_total',
     'issues.rent_arrears.total_arrears',
   ]);
-  const tenantNames = getFactValue(facts, ['tenant_names', 'tenant_full_name', 'tenants']);
+  const tenantNames = ext.tenant_names ?? getFactValue(facts, ['tenant_names', 'tenant_full_name', 'tenants']);
   const jointTenants = Array.isArray(tenantNames) ? tenantNames.length > 1 : undefined;
 
   return {
     rent_frequency: toYesNo(rentFrequency),
     rent_amount: rentAmount,
     current_arrears: arrearsTotal,
-    payment_history: toYesNo(getFactValue(facts, ['payment_history'])),
+    payment_history: toYesNo(ext.payment_history ?? getFactValue(facts, ['payment_history'])),
     joint_tenants: toYesNo(getFactValue(facts, ['joint_tenants']) ?? jointTenants),
     benefit_delays: toYesNo(getFactValue(facts, ['benefit_delays'])),
     disrepair_counterclaims: toYesNo(getFactValue(facts, ['disrepair_counterclaims'])),
@@ -244,44 +246,56 @@ function buildSection8Answers(facts: Record<string, any>) {
   };
 }
 
-function buildWalesAnswers(facts: Record<string, any>) {
+function buildWalesAnswers(facts: Record<string, any>, extracted?: Record<string, any>) {
+  const ext = extracted || {};
   return {
-    written_statement_provided: toYesNo(getFactValue(facts, ['written_statement_provided'])),
-    fitness_for_habitation: toYesNo(getFactValue(facts, ['fitness_for_habitation'])),
-    deposit_protected: toYesNo(getFactValue(facts, ['deposit_protected'])),
-    occupation_type_confirmed: toYesNo(getFactValue(facts, ['occupation_type_confirmed'])),
+    written_statement_provided: toYesNo(ext.written_statement_referenced ?? getFactValue(facts, ['written_statement_provided'])),
+    fitness_for_habitation: toYesNo(ext.fitness_for_habitation_confirmed ?? getFactValue(facts, ['fitness_for_habitation'])),
+    deposit_protected: toYesNo(ext.deposit_protection_confirmed ?? getFactValue(facts, ['deposit_protected'])),
+    occupation_type_confirmed: toYesNo(ext.occupation_type ? true : getFactValue(facts, ['occupation_type_confirmed'])),
     retaliatory_eviction: toYesNo(getFactValue(facts, ['retaliatory_eviction'])),
     council_involvement: toYesNo(getFactValue(facts, ['council_involvement'])),
   };
 }
 
-function buildScotlandAnswers(facts: Record<string, any>) {
+function buildScotlandAnswers(facts: Record<string, any>, extracted?: Record<string, any>) {
+  const ext = extracted || {};
   return {
-    ground_evidence: toYesNo(getFactValue(facts, ['ground_evidence'])),
-    tenancy_length_confirmed: toYesNo(getFactValue(facts, ['tenancy_length_confirmed'])),
-    tribunal_served: toYesNo(getFactValue(facts, ['tribunal_served'])),
+    ground_evidence: toYesNo(ext.ground_evidence_mentioned ?? getFactValue(facts, ['ground_evidence'])),
+    tenancy_length_confirmed: toYesNo(ext.tenancy_start_date ? true : getFactValue(facts, ['tenancy_length_confirmed'])),
+    tribunal_served: toYesNo(ext.tribunal_reference ? true : getFactValue(facts, ['tribunal_served'])),
     covid_protections: toYesNo(getFactValue(facts, ['covid_protections'])),
     rent_pressure_zone: toYesNo(getFactValue(facts, ['rent_pressure_zone'])),
     disrepair: toYesNo(getFactValue(facts, ['disrepair'])),
-    ground_mandatory: toYesNo(getFactValue(facts, ['ground_mandatory'])),
+    ground_mandatory: toYesNo(ext.ground_mandatory ?? getFactValue(facts, ['ground_mandatory'])),
   };
 }
 
-function buildTenancyAgreementAnswers(facts: Record<string, any>) {
+function buildTenancyAgreementAnswers(facts: Record<string, any>, extracted?: Record<string, any>) {
+  // Merge facts with AI-extracted fields - extracted takes precedence for compliance checks
+  const ext = extracted || {};
   return {
-    jurisdiction: resolveJurisdiction(facts, null),
-    intended_use: getFactValue(facts, ['intended_use', 'tenancy_type']),
-    prohibited_fees_present: toYesNo(getFactValue(facts, ['prohibited_fees_present'])),
-    missing_clauses: toYesNo(getFactValue(facts, ['missing_clauses'])),
-    unfair_terms_present: toYesNo(getFactValue(facts, ['unfair_terms_present'])),
+    jurisdiction: resolveJurisdiction(facts, null) || ext.jurisdiction,
+    intended_use: getFactValue(facts, ['intended_use', 'tenancy_type']) || ext.tenancy_type,
+    // Compliance flags - check extracted fields first (from AI analysis), then facts
+    prohibited_fees_present: toYesNo(
+      ext.prohibited_fees_present ?? getFactValue(facts, ['prohibited_fees_present'])
+    ),
+    missing_clauses: toYesNo(
+      ext.missing_clauses ?? getFactValue(facts, ['missing_clauses'])
+    ),
+    unfair_terms_present: toYesNo(
+      ext.unfair_terms_present ?? getFactValue(facts, ['unfair_terms_present'])
+    ),
   };
 }
 
-function buildMoneyClaimAnswers(facts: Record<string, any>) {
+function buildMoneyClaimAnswers(facts: Record<string, any>, extracted?: Record<string, any>) {
+  const ext = extracted || {};
   return {
-    pre_action_steps: toYesNo(getFactValue(facts, ['pre_action_steps'])),
+    pre_action_steps: toYesNo(ext.lba_sent ?? getFactValue(facts, ['pre_action_steps'])),
     joint_liability_confirmed: toYesNo(getFactValue(facts, ['joint_liability_confirmed'])),
-    payments_since: toYesNo(getFactValue(facts, ['payments_since'])),
+    payments_since: toYesNo(ext.payment_plan_offered ?? getFactValue(facts, ['payments_since'])),
   };
 }
 
@@ -301,7 +315,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
   }
 
   if (product === 'tenancy_agreement') {
-    const answers = buildTenancyAgreementAnswers(input.facts);
+    const answers = buildTenancyAgreementAnswers(input.facts, extracted);
     const result = validateTenancyAgreement({
       jurisdiction: jurisdiction ?? undefined,
       extracted,
@@ -321,7 +335,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
   }
 
   if (product === 'money_claim') {
-    const answers = buildMoneyClaimAnswers(input.facts);
+    const answers = buildMoneyClaimAnswers(input.facts, extracted);
     const result = validateMoneyClaim({
       jurisdiction: jurisdiction ?? undefined,
       extracted,
@@ -343,7 +357,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
   if (product === 'notice_only' || product === 'complete_pack') {
     const route = resolveNoticeRoute(input.facts).toLowerCase();
     if ((jurisdiction || '').toLowerCase() === 'wales') {
-      const answers = buildWalesAnswers(input.facts);
+      const answers = buildWalesAnswers(input.facts, extracted);
       const result = validateWalesNotice({
         jurisdiction: 'wales',
         extracted,
@@ -363,7 +377,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
     }
 
     if ((jurisdiction || '').toLowerCase() === 'scotland') {
-      const answers = buildScotlandAnswers(input.facts);
+      const answers = buildScotlandAnswers(input.facts, extracted);
       const result = validateScotlandNoticeToLeave({
         jurisdiction: 'scotland',
         extracted,
@@ -383,7 +397,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
     }
 
     if (route.includes('section_21') || route.includes('section 21')) {
-      const answers = buildSection21Answers(input.facts);
+      const answers = buildSection21Answers(input.facts, extracted);
       const result = validateSection21Notice({
         jurisdiction: 'england',
         extracted,
@@ -403,7 +417,7 @@ export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValida
     }
 
     if (route.includes('section_8') || route.includes('section 8')) {
-      const answers = buildSection8Answers(input.facts);
+      const answers = buildSection8Answers(input.facts, extracted);
       const result = validateSection8Notice({
         jurisdiction: 'england',
         extracted,

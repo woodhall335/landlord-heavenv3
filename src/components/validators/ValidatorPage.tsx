@@ -29,8 +29,8 @@ export interface ValidatorPageProps {
   title: string;
   /** Page description */
   description: string;
-  /** Jurisdiction for this validator */
-  jurisdiction: Jurisdiction;
+  /** Jurisdiction for this validator - use 'all' to show a selector */
+  jurisdiction: Jurisdiction | 'all';
   /** Case type for wizard/start */
   caseType: 'eviction' | 'money_claim' | 'tenancy_agreement';
   /** Product variant for wizard/start */
@@ -43,35 +43,56 @@ export interface ValidatorPageProps {
   additionalInfo?: string;
 }
 
+const JURISDICTION_OPTIONS: { value: Jurisdiction; label: string }[] = [
+  { value: 'england', label: 'England' },
+  { value: 'wales', label: 'Wales' },
+  { value: 'scotland', label: 'Scotland' },
+  { value: 'northern_ireland', label: 'Northern Ireland' },
+];
+
 export function ValidatorPage({
   validatorKey,
   title,
   description,
-  jurisdiction,
+  jurisdiction: jurisdictionProp,
   caseType,
   productVariant,
   ctas,
   features = [],
   additionalInfo,
 }: ValidatorPageProps): React.ReactElement {
+  const needsJurisdictionSelector = jurisdictionProp === 'all';
+  const [selectedJurisdiction, setSelectedJurisdiction] = useState<Jurisdiction | null>(
+    needsJurisdictionSelector ? null : (jurisdictionProp as Jurisdiction)
+  );
   const [caseId, setCaseId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(!needsJurisdictionSelector);
   const [error, setError] = useState<string | null>(null);
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailStatus, setEmailStatus] = useState<string | null>(null);
 
-  // Create anonymous case on mount
+  // Effective jurisdiction (either fixed or user-selected)
+  const effectiveJurisdiction = selectedJurisdiction;
+
+  // Create anonymous case when jurisdiction is known
   useEffect(() => {
+    // Don't create case until jurisdiction is selected
+    if (!effectiveJurisdiction) return;
+    // Don't re-create if we already have a case
+    if (caseId) return;
+
     const createCase = async () => {
+      setIsLoading(true);
       try {
         const response = await fetch('/api/wizard/start', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            jurisdiction,
+            jurisdiction: effectiveJurisdiction,
             case_type: caseType,
             product: caseType === 'eviction' ? 'notice_only' : caseType === 'money_claim' ? 'money_claim' : 'tenancy_agreement',
             product_variant: productVariant,
+            validator_key: validatorKey,
           }),
         });
 
@@ -91,7 +112,7 @@ export function ValidatorPage({
     };
 
     void createCase();
-  }, [jurisdiction, caseType, productVariant]);
+  }, [effectiveJurisdiction, caseType, productVariant, validatorKey, caseId]);
 
   const primaryCta = ctas.find((c) => c.primary) || ctas[0];
   const secondaryCtas = ctas.filter((c) => c !== primaryCta);
@@ -152,7 +173,31 @@ export function ValidatorPage({
                 Upload Your Document
               </h2>
 
-              {isLoading && (
+              {/* Jurisdiction Selector (when needed) */}
+              {needsJurisdictionSelector && !selectedJurisdiction && (
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Where is the property located?
+                  </label>
+                  <p className="text-xs text-gray-500 mb-3">
+                    Different rules apply in each jurisdiction. Select the correct location for accurate validation.
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    {JURISDICTION_OPTIONS.map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => setSelectedJurisdiction(option.value)}
+                        className="rounded-lg border-2 border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition-all hover:border-primary-400 hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {isLoading && selectedJurisdiction && (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600 mx-auto mb-4" />
                   <p className="text-sm text-gray-600">Starting validation session...</p>
@@ -171,8 +216,26 @@ export function ValidatorPage({
                 </div>
               )}
 
-              {caseId && !isLoading && (
+              {caseId && !isLoading && effectiveJurisdiction && (
                 <>
+                  {needsJurisdictionSelector && (
+                    <div className="mb-4 flex items-center justify-between rounded-lg bg-gray-50 px-4 py-2">
+                      <span className="text-sm text-gray-600">
+                        Validating for: <strong className="text-gray-900">{JURISDICTION_OPTIONS.find(j => j.value === effectiveJurisdiction)?.label}</strong>
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedJurisdiction(null);
+                          setCaseId(null);
+                        }}
+                        className="text-xs text-primary-600 hover:underline"
+                      >
+                        Change
+                      </button>
+                    </div>
+                  )}
+
                   <p className="text-sm text-gray-600 mb-6">
                     Upload your document (PDF or image) and our AI will analyze it for compliance issues.
                   </p>
@@ -180,9 +243,10 @@ export function ValidatorPage({
                   <UploadField
                     caseId={caseId}
                     questionId={`validator_${validatorKey}`}
-                    jurisdiction={jurisdiction}
+                    jurisdiction={effectiveJurisdiction}
                     label="Document Upload"
                     description="Drag and drop or click to upload your document"
+                    evidenceCategory={validatorKey}
                   />
 
                   {/* Email Report Section */}
@@ -281,7 +345,7 @@ export function ValidatorPage({
         open={emailOpen}
         onClose={() => setEmailOpen(false)}
         source={`validator:${validatorKey}`}
-        jurisdiction={jurisdiction}
+        jurisdiction={effectiveJurisdiction ?? 'england'}
         caseId={caseId ?? undefined}
         tags={['validator', validatorKey]}
         title="Email me this report"

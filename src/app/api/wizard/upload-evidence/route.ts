@@ -333,6 +333,11 @@ export async function POST(request: Request) {
         .from('documents')
         .createSignedUrl(objectKey, 60);
 
+      // Extract validatorKey from questionId (e.g., "validator_tenancy_agreement" -> "tenancy_agreement")
+      const validatorKey = questionId.startsWith('validator_')
+        ? questionId.replace('validator_', '')
+        : validatedCategory ?? null;
+
       const analysis = await analyzeEvidence({
         storageBucket: 'documents',
         storagePath: objectKey,
@@ -343,6 +348,8 @@ export async function POST(request: Request) {
         category: validatedCategory,
         signedUrl: signed.data?.signedUrl ?? null,
         fileBuffer,
+        validatorKey,
+        jurisdiction: caseRow.jurisdiction,
       });
 
       analysisResult = analysis;
