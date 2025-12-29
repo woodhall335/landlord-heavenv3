@@ -249,11 +249,11 @@ export function ValidatorPage({
                     evidenceCategory={validatorKey}
                   />
 
-                  {/* Email Report Section */}
+                  {/* Email Report Section - Single unified CTA */}
                   <div className="mt-8 rounded-lg border border-gray-200 bg-gray-50 p-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="font-semibold text-gray-700">Email me my report</p>
+                        <p className="font-semibold text-gray-700">Get your report by email</p>
                         <p className="text-xs text-gray-500">Get a copy of your validation results</p>
                       </div>
                       <button
@@ -261,7 +261,7 @@ export function ValidatorPage({
                         className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
                         onClick={() => setEmailOpen(true)}
                       >
-                        Email report
+                        Email my report
                       </button>
                     </div>
                     {emailStatus && (
@@ -340,7 +340,7 @@ export function ValidatorPage({
         </Container>
       </div>
 
-      {/* Email Report Modal */}
+      {/* Email Report Modal - Single unified component */}
       <EmailCaptureModal
         open={emailOpen}
         onClose={() => setEmailOpen(false)}
@@ -348,13 +348,13 @@ export function ValidatorPage({
         jurisdiction={effectiveJurisdiction ?? 'england'}
         caseId={caseId ?? undefined}
         tags={['validator', validatorKey]}
-        title="Email me this report"
+        title="Email my report"
         description="We'll send you a copy of your validation report and helpful resources."
         primaryLabel="Send report"
         includeEmailReport={true}
         reportCaseId={caseId ?? undefined}
         onSuccess={() => {
-          setEmailStatus('Report queued. Check your inbox soon.');
+          setEmailStatus('Report queued — check your inbox soon.');
         }}
       />
     </div>

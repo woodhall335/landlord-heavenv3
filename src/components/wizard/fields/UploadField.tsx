@@ -31,6 +31,8 @@ interface UploadFieldProps {
   value?: EvidenceFileSummary[];
   onChange?: (files: EvidenceFileSummary[]) => void;
   onUploadingChange?: (uploading: boolean) => void;
+  /** Hide email/report CTA in UploadField - default true to avoid duplication with parent */
+  hideEmailActions?: boolean;
 }
 
 interface UploadValidationSummary {
@@ -53,6 +55,7 @@ export const UploadField: React.FC<UploadFieldProps> = ({
   value,
   onChange,
   onUploadingChange,
+  hideEmailActions = true,
 }) => {
   const [uploadedFiles, setUploadedFiles] = useState<EvidenceFileSummary[]>(value ?? []);
   const [pendingFiles, setPendingFiles] = useState<File[]>([]);
@@ -67,9 +70,6 @@ export const UploadField: React.FC<UploadFieldProps> = ({
   const [questionAnswers, setQuestionAnswers] = useState<Record<string, any>>({});
   const [questionErrors, setQuestionErrors] = useState<Record<string, string>>({});
   const [answerSubmitting, setAnswerSubmitting] = useState(false);
-  const [emailOpen, setEmailOpen] = useState(false);
-  const [emailInput, setEmailInput] = useState('');
-  const [emailStatus, setEmailStatus] = useState<string | null>(null);
 
   const updateAnswer = (factKey: string, value: any) => {
     setQuestionAnswers((prev) => ({ ...prev, [factKey]: value }));
@@ -558,94 +558,6 @@ export const UploadField: React.FC<UploadFieldProps> = ({
             })()}
           </div>
 
-          <div className="mt-3 rounded-md border border-gray-200 bg-gray-50 p-3 text-xs text-gray-600">
-            <div className="flex items-center justify-between">
-              <p className="font-semibold text-gray-700">Email me my report/checklist</p>
-              <button
-                type="button"
-                className="rounded border border-gray-300 px-2 py-1 text-xs text-gray-700"
-                onClick={() => setEmailOpen(true)}
-              >
-                Email me this report
-              </button>
-            </div>
-            {emailStatus && <p className="mt-2 text-xs text-gray-500">{emailStatus}</p>}
-          </div>
-        </div>
-      )}
-
-      {emailOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="w-full max-w-sm rounded-lg bg-white p-4 text-sm shadow-lg">
-            <div className="flex items-center justify-between">
-              <p className="font-semibold">Email me this report</p>
-              <button
-                type="button"
-                className="text-xs text-gray-500"
-                onClick={() => setEmailOpen(false)}
-              >
-                Close
-              </button>
-            </div>
-            <input
-              type="email"
-              className="mt-3 w-full rounded border border-gray-200 px-2 py-2 text-sm"
-              placeholder="you@example.com"
-              value={emailInput}
-              onChange={(event) => setEmailInput(event.target.value)}
-            />
-            <div className="mt-3 flex justify-end gap-2">
-              <button
-                type="button"
-                className="rounded border border-gray-300 px-3 py-2 text-xs"
-                onClick={() => setEmailOpen(false)}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="rounded bg-purple-600 px-3 py-2 text-xs text-white"
-                onClick={async () => {
-                  try {
-                    setEmailStatus(null);
-                    const email = emailInput.trim();
-                    if (!email) {
-                      setEmailStatus('Please enter a valid email.');
-                      return;
-                    }
-                    await fetch('/api/leads/capture', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        email,
-                        source: 'validator',
-                        jurisdiction: normalizeJurisdiction(jurisdiction) ?? jurisdiction,
-                        caseId,
-                        tags: ['report'],
-                      }),
-                    });
-                    await fetch('/api/leads/email-report', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({
-                        email,
-                        source: 'validator',
-                        jurisdiction: normalizeJurisdiction(jurisdiction) ?? jurisdiction,
-                        caseId,
-                      }),
-                    });
-                    setEmailStatus('Report queued. Check your inbox soon.');
-                    setEmailOpen(false);
-                  } catch (err) {
-                    console.error('Failed to capture email', err);
-                    setEmailStatus('Unable to send email right now.');
-                  }
-                }}
-              >
-                Send report
-              </button>
-            </div>
-          </div>
         </div>
       )}
     </div>
