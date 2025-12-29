@@ -507,9 +507,599 @@ export function extractS21FieldsWithRegex(text: string): RegexExtractionResult {
 }
 
 /**
- * Convert regex extraction result to extracted_fields format
+ * Regex-based extraction for Section 8 / Form 3 documents.
+ * Extracts grounds, arrears, dates, and tenant details.
  */
-function regexToExtractedFields(regex: RegexExtractionResult): Record<string, any> {
+export interface S8RegexExtractionResult {
+  form_3_detected: boolean;
+  section_8_detected: boolean;
+  notice_type: string | null;
+  grounds_cited: number[];
+  date_served: string | null;
+  expiry_date: string | null;
+  notice_period: string | null;
+  rent_arrears_stated: string | null;
+  rent_amount: string | null;
+  property_address: string | null;
+  tenant_names: string[];
+  landlord_name: string | null;
+  housing_act_1988_mentioned: boolean;
+  fields_found: string[];
+}
+
+export function extractS8FieldsWithRegex(text: string): S8RegexExtractionResult {
+  const originalText = text;
+
+  const result: S8RegexExtractionResult = {
+    form_3_detected: false,
+    section_8_detected: false,
+    notice_type: null,
+    grounds_cited: [],
+    date_served: null,
+    expiry_date: null,
+    notice_period: null,
+    rent_arrears_stated: null,
+    rent_amount: null,
+    property_address: null,
+    tenant_names: [],
+    landlord_name: null,
+    housing_act_1988_mentioned: false,
+    fields_found: [],
+  };
+
+  // Form 3 detection
+  const form3Patterns = [
+    /form\s*3\b/i,
+    /form\s*no\.?\s*3\b/i,
+    /notice\s*seeking\s*possession/i,
+  ];
+  result.form_3_detected = form3Patterns.some(p => p.test(text));
+  if (result.form_3_detected) result.fields_found.push('form_3_detected');
+
+  // Section 8 detection
+  const s8Patterns = [
+    /section\s*8/i,
+    /s\.?\s*8\b/i,
+    /\bs8\b/i,
+  ];
+  result.section_8_detected = s8Patterns.some(p => p.test(text));
+  if (result.section_8_detected) result.fields_found.push('section_8_detected');
+
+  // Housing Act 1988 mention
+  result.housing_act_1988_mentioned = /housing\s*act\s*1988/i.test(text);
+  if (result.housing_act_1988_mentioned) result.fields_found.push('housing_act_1988');
+
+  // Set notice type
+  if (result.form_3_detected || result.section_8_detected) {
+    result.notice_type = 'section_8';
+  }
+
+  // Extract grounds cited (Ground 1-17)
+  const groundPatterns = [
+    /ground\s*(\d+)/gi,
+    /grounds?\s*:?\s*([\d,\s]+(?:and\s*\d+)?)/i,
+    /schedule\s*2\s*ground\s*(\d+)/gi,
+  ];
+  const groundsSet = new Set<number>();
+  for (const pattern of groundPatterns) {
+    let match;
+    while ((match = pattern.exec(text)) !== null) {
+      // Parse numbers from match
+      const nums = match[1].match(/\d+/g);
+      if (nums) {
+        nums.forEach(n => {
+          const num = parseInt(n, 10);
+          if (num >= 1 && num <= 17) {
+            groundsSet.add(num);
+          }
+        });
+      }
+    }
+  }
+  result.grounds_cited = Array.from(groundsSet).sort((a, b) => a - b);
+  if (result.grounds_cited.length > 0) result.fields_found.push('grounds_cited');
+
+  // Date patterns (UK format)
+  const servedDatePatterns = [
+    /(?:served|service|dated|issued)\s*(?:on|:)?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    /(?:date\s*of\s*(?:service|issue))[\s:]*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+  ];
+  for (const pattern of servedDatePatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      result.date_served = match[1];
+      result.fields_found.push('date_served');
+      break;
+    }
+  }
+
+  // Expiry/possession date
+  const expiryDatePatterns = [
+    /(?:expire|expiry|expiration|proceedings?\s*after)\s*(?:on|:)?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    /(?:on\s*or\s*after)\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+  ];
+  for (const pattern of expiryDatePatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      result.expiry_date = match[1];
+      result.fields_found.push('expiry_date');
+      break;
+    }
+  }
+
+  // Notice period
+  const noticePeriodPatterns = [
+    /(?:notice\s*period|minimum\s*period)\s*(?:of|:)?\s*(\d+\s*(?:weeks?|months?|days?))/i,
+    /(\d+)\s*(?:weeks?|months?)\s*(?:notice|period)/i,
+    /(?:two|2)\s*weeks?\s*notice/i,
+    /(?:two|2)\s*months?\s*notice/i,
+  ];
+  for (const pattern of noticePeriodPatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      result.notice_period = match[0].trim();
+      result.fields_found.push('notice_period');
+      break;
+    }
+  }
+
+  // Rent arrears amount
+  const arrearsPatterns = [
+    /(?:arrears|owed|outstanding|unpaid\s*rent)\s*(?:of|:)?\s*£?([\d,]+(?:\.\d{2})?)/i,
+    /£([\d,]+(?:\.\d{2})?)\s*(?:arrears|owed|outstanding)/i,
+    /(?:rent\s*arrears|amount\s*owed)\s*[:=]?\s*£?([\d,]+(?:\.\d{2})?)/i,
+  ];
+  for (const pattern of arrearsPatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      result.rent_arrears_stated = match[1].replace(/,/g, '');
+      result.fields_found.push('rent_arrears_stated');
+      break;
+    }
+  }
+
+  // Rent amount
+  const rentPatterns = [
+    /(?:rent|monthly\s*rent|periodic\s*rent)\s*(?:of|:)?\s*£?([\d,]+(?:\.\d{2})?)/i,
+    /£([\d,]+(?:\.\d{2})?)\s*(?:per|a)\s*(?:month|week)/i,
+  ];
+  for (const pattern of rentPatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      result.rent_amount = match[1].replace(/,/g, '');
+      result.fields_found.push('rent_amount');
+      break;
+    }
+  }
+
+  // Property address extraction (same as S21)
+  const addressPatterns = [
+    /(?:property|premises|dwelling|address)[\s:]+([^\n]{10,80})/i,
+    /(?:at|of)\s+(\d+[^\n,]+(?:,\s*[^\n]+)?(?:,\s*[A-Z]{1,2}\d{1,2}\s*\d[A-Z]{2})?)/i,
+  ];
+  for (const pattern of addressPatterns) {
+    const match = pattern.exec(originalText);
+    if (match) {
+      const address = match[1].trim();
+      if (/\d/.test(address) || /[A-Z]{1,2}\d/.test(address)) {
+        result.property_address = address;
+        result.fields_found.push('property_address');
+        break;
+      }
+    }
+  }
+
+  // Tenant name extraction
+  const tenantPatterns = [
+    /(?:tenant|tenants?)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/g,
+    /(?:to|addressed\s*to)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/g,
+    /(?:mr|mrs|ms|miss|dr)\.?\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/gi,
+  ];
+  const tenantNamesSet = new Set<string>();
+  for (const pattern of tenantPatterns) {
+    let match;
+    while ((match = pattern.exec(originalText)) !== null) {
+      const name = match[1].trim();
+      if (name.length >= 4 && name.length <= 60) {
+        tenantNamesSet.add(name);
+      }
+    }
+  }
+  result.tenant_names = Array.from(tenantNamesSet);
+  if (result.tenant_names.length > 0) result.fields_found.push('tenant_names');
+
+  // Landlord name extraction
+  const landlordPatterns = [
+    /(?:landlord|landlord's?\s*name)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/i,
+    /(?:signed|from|by)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)(?:\s*\(landlord\))?/i,
+  ];
+  for (const pattern of landlordPatterns) {
+    const match = pattern.exec(originalText);
+    if (match) {
+      result.landlord_name = match[1].trim();
+      result.fields_found.push('landlord_name');
+      break;
+    }
+  }
+
+  debugLog('s8_regex_extraction', {
+    section_8: result.section_8_detected,
+    grounds: result.grounds_cited,
+    fields_found: result.fields_found,
+  });
+
+  return result;
+}
+
+/**
+ * Regex-based extraction for Wales RHW notices.
+ * Extracts form number, bilingual markers, dates, and contract holder details.
+ */
+export interface WalesRegexExtractionResult {
+  rhw_form_detected: boolean;
+  rhw_form_number: string | null;
+  bilingual_text_present: boolean;
+  renting_homes_act_mentioned: boolean;
+  notice_type: string | null;
+  date_served: string | null;
+  expiry_date: string | null;
+  property_address: string | null;
+  contract_holder_names: string[];
+  landlord_name: string | null;
+  occupation_contract_mentioned: boolean;
+  fields_found: string[];
+}
+
+export function extractWalesFieldsWithRegex(text: string): WalesRegexExtractionResult {
+  const originalText = text;
+
+  const result: WalesRegexExtractionResult = {
+    rhw_form_detected: false,
+    rhw_form_number: null,
+    bilingual_text_present: false,
+    renting_homes_act_mentioned: false,
+    notice_type: null,
+    date_served: null,
+    expiry_date: null,
+    property_address: null,
+    contract_holder_names: [],
+    landlord_name: null,
+    occupation_contract_mentioned: false,
+    fields_found: [],
+  };
+
+  // RHW form number detection
+  const rhwPatterns = [
+    /\b(rhw\s*16)\b/i,
+    /\b(rhw\s*17)\b/i,
+    /\b(rhw\s*23)\b/i,
+    /\b(rhw\d{1,2})\b/i,
+  ];
+  for (const pattern of rhwPatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      result.rhw_form_detected = true;
+      result.rhw_form_number = match[1].toUpperCase().replace(/\s/g, '');
+      result.fields_found.push('rhw_form_number');
+      break;
+    }
+  }
+
+  // Bilingual text detection (Welsh language markers)
+  const welshMarkers = [
+    /hysbysiad/i, // "notice" in Welsh
+    /meddiannaeth/i, // "occupation" in Welsh
+    /contract/i,
+    /landlord/i,
+    /rhentu\s*cartrefi/i, // "renting homes" in Welsh
+    /cymru/i, // "Wales" in Welsh
+    /eiddo/i, // "property" in Welsh
+  ];
+  // Check for mix of Welsh and English words
+  const hasWelsh = welshMarkers.filter(p => p.test(text)).length >= 2;
+  const hasEnglish = /notice|landlord|tenant|property|contract/i.test(text);
+  result.bilingual_text_present = hasWelsh && hasEnglish;
+  if (result.bilingual_text_present) result.fields_found.push('bilingual_text_present');
+
+  // Renting Homes (Wales) Act mention
+  result.renting_homes_act_mentioned = /renting\s*homes\s*\(?wales\)?\s*act/i.test(text);
+  if (result.renting_homes_act_mentioned) result.fields_found.push('renting_homes_act');
+
+  // Occupation contract mention
+  result.occupation_contract_mentioned = /occupation\s*contract/i.test(text);
+  if (result.occupation_contract_mentioned) result.fields_found.push('occupation_contract');
+
+  // Set notice type
+  if (result.rhw_form_detected || result.renting_homes_act_mentioned || result.occupation_contract_mentioned) {
+    result.notice_type = 'wales_notice';
+  }
+
+  // Date patterns
+  const servedDatePatterns = [
+    /(?:served|service|dated|issued)\s*(?:on|:)?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    /(?:date\s*of\s*(?:service|issue))[\s:]*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+  ];
+  for (const pattern of servedDatePatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      result.date_served = match[1];
+      result.fields_found.push('date_served');
+      break;
+    }
+  }
+
+  // Expiry date
+  const expiryDatePatterns = [
+    /(?:expire|expiry|expiration)\s*(?:on|:)?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    /(?:on\s*or\s*after)\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+  ];
+  for (const pattern of expiryDatePatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      result.expiry_date = match[1];
+      result.fields_found.push('expiry_date');
+      break;
+    }
+  }
+
+  // Property address
+  const addressPatterns = [
+    /(?:property|premises|dwelling|address|eiddo)[\s:]+([^\n]{10,80})/i,
+    /(?:at|of)\s+(\d+[^\n,]+(?:,\s*[^\n]+)?(?:,\s*[A-Z]{1,2}\d{1,2}\s*\d[A-Z]{2})?)/i,
+  ];
+  for (const pattern of addressPatterns) {
+    const match = pattern.exec(originalText);
+    if (match) {
+      const address = match[1].trim();
+      if (/\d/.test(address) || /[A-Z]{1,2}\d/.test(address)) {
+        result.property_address = address;
+        result.fields_found.push('property_address');
+        break;
+      }
+    }
+  }
+
+  // Contract holder (tenant) name extraction
+  const contractHolderPatterns = [
+    /(?:contract\s*holder|tenant|tenants?)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/g,
+    /(?:mr|mrs|ms|miss|dr)\.?\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/gi,
+  ];
+  const namesSet = new Set<string>();
+  for (const pattern of contractHolderPatterns) {
+    let match;
+    while ((match = pattern.exec(originalText)) !== null) {
+      const name = match[1].trim();
+      if (name.length >= 4 && name.length <= 60) {
+        namesSet.add(name);
+      }
+    }
+  }
+  result.contract_holder_names = Array.from(namesSet);
+  if (result.contract_holder_names.length > 0) result.fields_found.push('contract_holder_names');
+
+  // Landlord name
+  const landlordPatterns = [
+    /(?:landlord|landlord's?\s*name)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/i,
+    /(?:signed|from|by)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/i,
+  ];
+  for (const pattern of landlordPatterns) {
+    const match = pattern.exec(originalText);
+    if (match) {
+      result.landlord_name = match[1].trim();
+      result.fields_found.push('landlord_name');
+      break;
+    }
+  }
+
+  debugLog('wales_regex_extraction', {
+    rhw_form: result.rhw_form_number,
+    bilingual: result.bilingual_text_present,
+    fields_found: result.fields_found,
+  });
+
+  return result;
+}
+
+/**
+ * Regex-based extraction for Scotland Notice to Leave.
+ * Extracts ground cited, notice period, property details.
+ */
+export interface ScotlandRegexExtractionResult {
+  notice_to_leave_detected: boolean;
+  prt_mentioned: boolean;
+  notice_type: string | null;
+  ground_cited: number | null;
+  ground_description: string | null;
+  notice_period: string | null;
+  date_served: string | null;
+  property_address: string | null;
+  tenant_names: string[];
+  landlord_name: string | null;
+  tribunal_mentioned: boolean;
+  housing_scotland_act_mentioned: boolean;
+  fields_found: string[];
+}
+
+export function extractScotlandFieldsWithRegex(text: string): ScotlandRegexExtractionResult {
+  const originalText = text;
+
+  const result: ScotlandRegexExtractionResult = {
+    notice_to_leave_detected: false,
+    prt_mentioned: false,
+    notice_type: null,
+    ground_cited: null,
+    ground_description: null,
+    notice_period: null,
+    date_served: null,
+    property_address: null,
+    tenant_names: [],
+    landlord_name: null,
+    tribunal_mentioned: false,
+    housing_scotland_act_mentioned: false,
+    fields_found: [],
+  };
+
+  // Notice to Leave detection
+  const ntlPatterns = [
+    /notice\s*to\s*leave/i,
+    /ntl\b/i,
+  ];
+  result.notice_to_leave_detected = ntlPatterns.some(p => p.test(text));
+  if (result.notice_to_leave_detected) result.fields_found.push('notice_to_leave_detected');
+
+  // PRT (Private Residential Tenancy) mention
+  result.prt_mentioned = /private\s*residential\s*tenancy/i.test(text) || /\bprt\b/i.test(text);
+  if (result.prt_mentioned) result.fields_found.push('prt_mentioned');
+
+  // Housing (Scotland) Act mention
+  result.housing_scotland_act_mentioned = /housing\s*\(?scotland\)?\s*act/i.test(text);
+  if (result.housing_scotland_act_mentioned) result.fields_found.push('housing_scotland_act');
+
+  // First-tier Tribunal mention
+  result.tribunal_mentioned = /first[\s-]*tier\s*tribunal/i.test(text) || /housing\s*and\s*property\s*chamber/i.test(text);
+  if (result.tribunal_mentioned) result.fields_found.push('tribunal_mentioned');
+
+  // Set notice type
+  if (result.notice_to_leave_detected || result.prt_mentioned) {
+    result.notice_type = 'scotland_notice_to_leave';
+  }
+
+  // Extract ground cited (Scotland has grounds 1-18)
+  const groundPatterns = [
+    /ground\s*(\d+)/i,
+    /eviction\s*ground\s*(\d+)/i,
+    /schedule\s*3\s*ground\s*(\d+)/i,
+  ];
+  for (const pattern of groundPatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      const num = parseInt(match[1], 10);
+      if (num >= 1 && num <= 18) {
+        result.ground_cited = num;
+        result.fields_found.push('ground_cited');
+        break;
+      }
+    }
+  }
+
+  // Ground description (common Scotland grounds)
+  const groundDescriptions: Record<number, string> = {
+    1: 'Landlord intends to sell',
+    2: 'Property to be sold by lender',
+    3: 'Landlord intends to refurbish',
+    4: 'Landlord intends to live in property',
+    5: 'Landlord intends to use for non-residential purpose',
+    6: 'Landlord intends to use for religious purpose',
+    7: 'Tenant no longer an employee',
+    8: 'Tenant no longer needs supported accommodation',
+    9: 'Tenant no longer a student',
+    10: 'Not an employee of relevant organisation',
+    11: 'Property required for homeless person',
+    12: 'Rent arrears',
+    13: 'Criminal conviction',
+    14: 'Anti-social behaviour',
+    15: 'Association with antisocial behaviour',
+    16: 'Abandonment',
+    17: 'Breach of tenancy agreement',
+    18: 'Subletting without permission',
+  };
+  if (result.ground_cited && groundDescriptions[result.ground_cited]) {
+    result.ground_description = groundDescriptions[result.ground_cited];
+    result.fields_found.push('ground_description');
+  }
+
+  // Notice period
+  const noticePeriodPatterns = [
+    /(?:notice\s*period|minimum\s*period)\s*(?:of|:)?\s*(\d+\s*(?:weeks?|months?|days?))/i,
+    /(\d+)\s*(?:weeks?|months?|days?)\s*(?:notice|period)/i,
+    /(?:28|84)\s*days?\s*notice/i,
+  ];
+  for (const pattern of noticePeriodPatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      result.notice_period = match[0].trim();
+      result.fields_found.push('notice_period');
+      break;
+    }
+  }
+
+  // Date served
+  const servedDatePatterns = [
+    /(?:served|service|dated|issued)\s*(?:on|:)?\s*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+    /(?:date\s*of\s*(?:service|issue))[\s:]*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{4})/i,
+  ];
+  for (const pattern of servedDatePatterns) {
+    const match = pattern.exec(text);
+    if (match) {
+      result.date_served = match[1];
+      result.fields_found.push('date_served');
+      break;
+    }
+  }
+
+  // Property address
+  const addressPatterns = [
+    /(?:property|premises|dwelling|address)[\s:]+([^\n]{10,80})/i,
+    /(?:at|of)\s+(\d+[^\n,]+(?:,\s*[^\n]+)?(?:,\s*[A-Z]{1,2}\d{1,2}\s*\d[A-Z]{2})?)/i,
+  ];
+  for (const pattern of addressPatterns) {
+    const match = pattern.exec(originalText);
+    if (match) {
+      const address = match[1].trim();
+      if (/\d/.test(address) || /[A-Z]{1,2}\d/.test(address)) {
+        result.property_address = address;
+        result.fields_found.push('property_address');
+        break;
+      }
+    }
+  }
+
+  // Tenant name extraction
+  const tenantPatterns = [
+    /(?:tenant|tenants?)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/g,
+    /(?:to|addressed\s*to)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/g,
+    /(?:mr|mrs|ms|miss|dr)\.?\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/gi,
+  ];
+  const tenantNamesSet = new Set<string>();
+  for (const pattern of tenantPatterns) {
+    let match;
+    while ((match = pattern.exec(originalText)) !== null) {
+      const name = match[1].trim();
+      if (name.length >= 4 && name.length <= 60) {
+        tenantNamesSet.add(name);
+      }
+    }
+  }
+  result.tenant_names = Array.from(tenantNamesSet);
+  if (result.tenant_names.length > 0) result.fields_found.push('tenant_names');
+
+  // Landlord name
+  const landlordPatterns = [
+    /(?:landlord|landlord's?\s*name)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/i,
+    /(?:signed|from|by)[\s:]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/i,
+  ];
+  for (const pattern of landlordPatterns) {
+    const match = pattern.exec(originalText);
+    if (match) {
+      result.landlord_name = match[1].trim();
+      result.fields_found.push('landlord_name');
+      break;
+    }
+  }
+
+  debugLog('scotland_regex_extraction', {
+    notice_to_leave: result.notice_to_leave_detected,
+    ground: result.ground_cited,
+    fields_found: result.fields_found,
+  });
+
+  return result;
+}
+
+/**
+ * Convert S21 regex extraction result to extracted_fields format
+ */
+function s21RegexToExtractedFields(regex: RegexExtractionResult): Record<string, any> {
   const fields: Record<string, any> = {};
 
   if (regex.notice_type) {
@@ -539,6 +1129,183 @@ function regexToExtractedFields(regex: RegexExtractionResult): Record<string, an
   fields.signature_present = regex.signature_present;
 
   return fields;
+}
+
+/**
+ * Convert S8 regex extraction result to extracted_fields format
+ */
+function s8RegexToExtractedFields(regex: S8RegexExtractionResult): Record<string, any> {
+  const fields: Record<string, any> = {};
+
+  if (regex.notice_type) {
+    fields.notice_type = regex.notice_type;
+  }
+  if (regex.form_3_detected) {
+    fields.form_3_used = true;
+  }
+  if (regex.section_8_detected) {
+    fields.section_8_detected = true;
+  }
+  if (regex.grounds_cited.length > 0) {
+    fields.grounds_cited = regex.grounds_cited;
+  }
+  if (regex.date_served) {
+    fields.date_served = regex.date_served;
+  }
+  if (regex.expiry_date) {
+    fields.expiry_date = regex.expiry_date;
+  }
+  if (regex.notice_period) {
+    fields.notice_period = regex.notice_period;
+  }
+  if (regex.rent_arrears_stated) {
+    fields.rent_arrears_stated = parseFloat(regex.rent_arrears_stated);
+  }
+  if (regex.rent_amount) {
+    fields.rent_amount = parseFloat(regex.rent_amount);
+  }
+  if (regex.property_address) {
+    fields.property_address = regex.property_address;
+  }
+  if (regex.tenant_names.length > 0) {
+    fields.tenant_names = regex.tenant_names;
+    fields.tenant_details = regex.tenant_names.join(', ');
+  }
+  if (regex.landlord_name) {
+    fields.landlord_name = regex.landlord_name;
+  }
+
+  return fields;
+}
+
+/**
+ * Convert Wales regex extraction result to extracted_fields format
+ */
+function walesRegexToExtractedFields(regex: WalesRegexExtractionResult): Record<string, any> {
+  const fields: Record<string, any> = {};
+
+  if (regex.notice_type) {
+    fields.notice_type = regex.notice_type;
+  }
+  if (regex.rhw_form_number) {
+    fields.rhw_form_number = regex.rhw_form_number;
+  }
+  fields.bilingual_text_present = regex.bilingual_text_present;
+  if (regex.date_served) {
+    fields.service_date = regex.date_served;
+    fields.date_served = regex.date_served;
+  }
+  if (regex.expiry_date) {
+    fields.expiry_date = regex.expiry_date;
+  }
+  if (regex.property_address) {
+    fields.property_address = regex.property_address;
+  }
+  if (regex.contract_holder_names.length > 0) {
+    fields.contract_holder_details = regex.contract_holder_names.join(', ');
+    fields.tenant_names = regex.contract_holder_names;
+  }
+  if (regex.landlord_name) {
+    fields.landlord_details = regex.landlord_name;
+    fields.landlord_name = regex.landlord_name;
+  }
+  if (regex.occupation_contract_mentioned) {
+    fields.occupation_contract_mentioned = true;
+  }
+
+  return fields;
+}
+
+/**
+ * Convert Scotland regex extraction result to extracted_fields format
+ */
+function scotlandRegexToExtractedFields(regex: ScotlandRegexExtractionResult): Record<string, any> {
+  const fields: Record<string, any> = {};
+
+  if (regex.notice_type) {
+    fields.notice_type = regex.notice_type;
+  }
+  if (regex.ground_cited) {
+    fields.ground_cited = regex.ground_cited;
+  }
+  if (regex.ground_description) {
+    fields.ground_description = regex.ground_description;
+  }
+  if (regex.notice_period) {
+    fields.notice_period = regex.notice_period;
+  }
+  if (regex.date_served) {
+    fields.date_served = regex.date_served;
+  }
+  if (regex.property_address) {
+    fields.property_address = regex.property_address;
+  }
+  if (regex.tenant_names.length > 0) {
+    fields.tenant_name = regex.tenant_names[0];
+    fields.tenant_names = regex.tenant_names;
+  }
+  if (regex.landlord_name) {
+    fields.landlord_name = regex.landlord_name;
+  }
+  if (regex.tribunal_mentioned) {
+    fields.tribunal_mentioned = true;
+  }
+  if (regex.prt_mentioned) {
+    fields.prt_confirmed = true;
+  }
+
+  return fields;
+}
+
+/**
+ * Generic type for any regex result
+ */
+type AnyRegexResult = RegexExtractionResult | S8RegexExtractionResult | WalesRegexExtractionResult | ScotlandRegexExtractionResult;
+
+/**
+ * Determine which regex extractor to use based on validator key and category
+ */
+function getRegexExtractor(validatorKey?: string | null, category?: string | null): {
+  extract: (text: string) => AnyRegexResult;
+  toFields: (result: AnyRegexResult) => Record<string, any>;
+  type: 's21' | 's8' | 'wales' | 'scotland';
+} | null {
+  const key = (validatorKey || '').toLowerCase();
+  const cat = (category || '').toLowerCase();
+
+  if (key === 'section_21' || cat === 'notice_s21' || cat.includes('s21') || cat.includes('section 21')) {
+    return {
+      extract: extractS21FieldsWithRegex,
+      toFields: s21RegexToExtractedFields as (result: AnyRegexResult) => Record<string, any>,
+      type: 's21',
+    };
+  }
+
+  if (key === 'section_8' || cat === 'notice_s8' || cat.includes('s8') || cat.includes('section 8')) {
+    return {
+      extract: extractS8FieldsWithRegex,
+      toFields: s8RegexToExtractedFields as (result: AnyRegexResult) => Record<string, any>,
+      type: 's8',
+    };
+  }
+
+  if (key === 'wales_notice' || cat === 'wales_notice' || cat.includes('wales') || cat.includes('rhw')) {
+    return {
+      extract: extractWalesFieldsWithRegex,
+      toFields: walesRegexToExtractedFields as (result: AnyRegexResult) => Record<string, any>,
+      type: 'wales',
+    };
+  }
+
+  if (key === 'scotland_notice_to_leave' || cat === 'scotland_notice_to_leave' || cat.includes('scotland') || cat.includes('ntl')) {
+    return {
+      extract: extractScotlandFieldsWithRegex,
+      toFields: scotlandRegexToExtractedFields as (result: AnyRegexResult) => Record<string, any>,
+      type: 'scotland',
+    };
+  }
+
+  return null;
 }
 
 /**
@@ -836,7 +1603,8 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
   });
 
   // Track regex extraction results even if LLM fails
-  let regexResult: RegexExtractionResult | null = null;
+  let regexResult: AnyRegexResult | null = null;
+  let regexExtractor: ReturnType<typeof getRegexExtractor> = null;
   let extractedPdfText: string = '';
 
   try {
@@ -855,6 +1623,10 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
       jurisdiction: input.jurisdiction,
     });
 
+    // Determine which regex extractor to use based on validator/category
+    regexExtractor = getRegexExtractor(input.validatorKey, input.category);
+    debugLog('regex_extractor_selected', { type: regexExtractor?.type ?? 'none' });
+
     if (isPdfMimeType(input.mimeType)) {
       debugLog('processing_pdf', true);
       console.log('[analyzeEvidence] Processing PDF...');
@@ -872,9 +1644,9 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
         warnings.push(`PDF metadata extraction failed: ${error.message}`);
       }
 
-      // Step 2: If we have a validator context for S21, run regex extraction
+      // Step 2: Run regex extraction if we have a context-specific extractor
       // This provides baseline fields even without LLM
-      if (input.validatorKey === 'section_21' || input.category === 'notice_s21') {
+      if (regexExtractor) {
         // Try vision-based text extraction for regex analysis
         try {
           const images = await renderPdfPagesToImages(buffer, 2);
@@ -887,14 +1659,14 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
           // Vision rendering failed, continue with what we have
         }
 
-        // If we managed to get some text, run regex
+        // If we managed to get some text, run regex extraction
         if (extractedPdfText.length > 0) {
-          regexResult = extractS21FieldsWithRegex(extractedPdfText);
+          regexResult = regexExtractor.extract(extractedPdfText);
           qualityMeta.regex_fields_found = regexResult.fields_found.length;
           debugLog('regex_result', {
+            type: regexExtractor.type,
             fields_found: regexResult.fields_found.length,
-            form_6a: regexResult.form_6a_detected,
-            section_21: regexResult.section_21_detected,
+            fields: regexResult.fields_found,
           });
         }
       }
@@ -929,13 +1701,13 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
             });
 
             // Merge regex and LLM results
-            const mergedFields = regexResult
-              ? mergeExtractionResults(regexToExtractedFields(regexResult), llmResult.extracted_fields)
+            const mergedFields = (regexResult && regexExtractor)
+              ? mergeExtractionResults(regexExtractor.toFields(regexResult), llmResult.extracted_fields)
               : llmResult.extracted_fields;
 
-            // Boost confidence if regex confirmed key fields
+            // Boost confidence if regex confirmed key document markers
             let finalConfidence = llmResult.confidence;
-            if (regexResult?.form_6a_detected || regexResult?.section_21_detected) {
+            if (regexResult && regexResult.fields_found.length >= 2) {
               finalConfidence = Math.min(1, finalConfidence + 0.15);
             }
 
@@ -982,13 +1754,13 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
           });
 
           // Merge regex and vision results
-          const mergedFields = regexResult
-            ? mergeExtractionResults(regexToExtractedFields(regexResult), visionResult.extracted_fields)
+          const mergedFields = (regexResult && regexExtractor)
+            ? mergeExtractionResults(regexExtractor.toFields(regexResult), visionResult.extracted_fields)
             : visionResult.extracted_fields;
 
-          // Boost confidence if regex confirmed key fields
+          // Boost confidence if regex confirmed key document markers
           let finalConfidence = visionResult.confidence;
-          if (regexResult?.form_6a_detected || regexResult?.section_21_detected) {
+          if (regexResult && regexResult.fields_found.length >= 2) {
             finalConfidence = Math.min(1, finalConfidence + 0.15);
           }
 
@@ -1014,23 +1786,44 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
       }
 
       // If LLM failed but we have regex results, use them
-      if (regexResult && regexResult.fields_found.length > 0) {
-        debugLog('using_regex_fallback', { fields: regexResult.fields_found });
+      if (regexResult && regexExtractor && regexResult.fields_found.length > 0) {
+        debugLog('using_regex_fallback', { type: regexExtractor.type, fields: regexResult.fields_found });
         console.log('[analyzeEvidence] Using regex extraction fallback');
 
-        const regexFields = regexToExtractedFields(regexResult);
-        let detectedType = 'unknown';
-        let confidence = 0.5;
+        const regexFields = regexExtractor.toFields(regexResult);
 
-        if (regexResult.form_6a_detected && regexResult.section_21_detected) {
-          detectedType = 's21_notice';
-          confidence = 0.75;
-        } else if (regexResult.section_21_detected) {
-          detectedType = 's21_notice';
-          confidence = 0.65;
-        } else if (regexResult.form_6a_detected) {
-          detectedType = 's21_notice';
-          confidence = 0.60;
+        // Determine detected type and confidence based on extractor type
+        let detectedType = 'unknown';
+        let confidence = 0.5 + (regexResult.fields_found.length * 0.05);
+        confidence = Math.min(confidence, 0.75);
+
+        if (regexExtractor.type === 's21') {
+          const s21Result = regexResult as RegexExtractionResult;
+          if (s21Result.form_6a_detected && s21Result.section_21_detected) {
+            detectedType = 's21_notice';
+            confidence = 0.75;
+          } else if (s21Result.section_21_detected || s21Result.form_6a_detected) {
+            detectedType = 's21_notice';
+            confidence = 0.65;
+          }
+        } else if (regexExtractor.type === 's8') {
+          const s8Result = regexResult as S8RegexExtractionResult;
+          if (s8Result.section_8_detected || s8Result.form_3_detected) {
+            detectedType = 's8_notice';
+            confidence = s8Result.grounds_cited.length > 0 ? 0.75 : 0.65;
+          }
+        } else if (regexExtractor.type === 'wales') {
+          const walesResult = regexResult as WalesRegexExtractionResult;
+          if (walesResult.rhw_form_detected || walesResult.renting_homes_act_mentioned) {
+            detectedType = 'wales_notice';
+            confidence = walesResult.bilingual_text_present ? 0.75 : 0.65;
+          }
+        } else if (regexExtractor.type === 'scotland') {
+          const scotlandResult = regexResult as ScotlandRegexExtractionResult;
+          if (scotlandResult.notice_to_leave_detected || scotlandResult.prt_mentioned) {
+            detectedType = 'scotland_notice_to_leave';
+            confidence = scotlandResult.ground_cited ? 0.75 : 0.65;
+          }
         }
 
         qualityMeta.text_extraction_method = 'regex_only';
@@ -1102,7 +1895,7 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
 
     return {
       detected_type: input.category || input.mimeType || 'unknown',
-      extracted_fields: regexResult ? regexToExtractedFields(regexResult) : {},
+      extracted_fields: (regexResult && regexExtractor) ? regexExtractor.toFields(regexResult) : {},
       confidence: regexResult && regexResult.fields_found.length > 0 ? 0.4 : 0.1,
       warnings: ['Document analysis incomplete; limited extraction available.', ...warnings],
       source: regexResult ? 'regex' : undefined,
@@ -1114,7 +1907,7 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
 
     return {
       detected_type: input.category || 'unknown',
-      extracted_fields: regexResult ? regexToExtractedFields(regexResult) : {},
+      extracted_fields: (regexResult && regexExtractor) ? regexExtractor.toFields(regexResult) : {},
       confidence: 0.1,
       warnings: [`Evidence analysis failed: ${error.message}`, ...warnings],
       extraction_quality: qualityMeta,
