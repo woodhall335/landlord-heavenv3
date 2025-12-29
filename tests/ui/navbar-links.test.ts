@@ -14,14 +14,6 @@ describe('NavBar Links', () => {
   const navbarContent = fs.readFileSync(NAVBAR_PATH, 'utf-8');
 
   describe('Free Tools links', () => {
-    it('should have /tools in freeToolsLinks', () => {
-      expect(navbarContent).toContain('href: "/tools"');
-    });
-
-    it('should have "All Free Tools" label for /tools', () => {
-      expect(navbarContent).toContain('label: "All Free Tools"');
-    });
-
     it('should link to /tools/validators', () => {
       expect(navbarContent).toContain('href: "/tools/validators"');
     });

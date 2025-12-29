@@ -81,7 +81,7 @@ export function ValidatorPage({
         }
 
         const data = await response.json();
-        setCaseId(data.caseId);
+        setCaseId(data.case_id);
       } catch (err) {
         console.error('Failed to create case:', err);
         setError(err instanceof Error ? err.message : 'Failed to start validation session');
