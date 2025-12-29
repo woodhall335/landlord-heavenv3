@@ -6,14 +6,8 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-
-// Polyfill for pdfjs-dist in Node.js environment
-if (typeof globalThis !== 'undefined' && typeof (globalThis as any).document === 'undefined') {
-  (globalThis as any).document = {
-    createElement: () => ({ getContext: () => null }),
-    documentElement: { style: {} },
-  };
-}
+import { fileURLToPath } from 'url';
+import { PDFParse, VerbosityLevel } from 'pdf-parse';
 
 async function extractPdfText(filePath: string): Promise<string> {
   console.log('Reading file:', filePath);
@@ -21,48 +15,42 @@ async function extractPdfText(filePath: string): Promise<string> {
   console.log('File size:', buffer.length, 'bytes');
 
   try {
-    console.log('Importing pdfjs-dist...');
-    const pdfjsModule = await import('pdfjs-dist');
-    const pdfjsLib = pdfjsModule.default || pdfjsModule;
-    console.log('pdfjs-dist loaded, keys:', Object.keys(pdfjsLib));
+    console.log('Creating PDFParse instance...');
 
-    const getDocument = pdfjsLib.getDocument;
-    if (!getDocument) {
-      throw new Error('getDocument not found in pdfjs-dist');
-    }
+    // Get the worker path
+    const workerPath = path.resolve(
+      process.cwd(),
+      'node_modules/pdf-parse/dist/worker/pdf.worker.mjs'
+    );
+    console.log('Worker path:', workerPath);
 
-    // Disable worker
-    if (pdfjsLib.GlobalWorkerOptions) {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = '';
-    }
+    // Convert to file:// URL for Node.js
+    const workerUrl = `file://${workerPath}`;
+    console.log('Worker URL:', workerUrl);
 
-    const data = new Uint8Array(buffer);
-    console.log('Loading PDF document...');
+    // Set worker using file URL
+    PDFParse.setWorker(workerUrl);
 
-    const loadingTask = getDocument({
-      data,
+    const parser = new PDFParse({
+      data: buffer,
+      verbosity: VerbosityLevel.ERRORS,
       disableFontFace: true,
       useSystemFonts: true,
     });
 
-    const pdf = await loadingTask.promise;
-    console.log('PDF loaded, pages:', pdf.numPages);
+    console.log('Loading PDF...');
+    const info = await parser.getInfo();
+    console.log('PDF loaded successfully');
+    console.log('Total pages:', info.total);
+    console.log('Info:', JSON.stringify(info.info, null, 2));
 
-    const textParts: string[] = [];
-    const maxPages = Math.min(pdf.numPages, 5);
+    console.log('Extracting text...');
+    const textResult = await parser.getText({ first: 10 });
+    const text = textResult.text;
 
-    for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
-      console.log(`Extracting text from page ${pageNum}...`);
-      const page = await pdf.getPage(pageNum);
-      const textContent = await page.getTextContent();
-      const pageText = textContent.items
-        .map((item: any) => item.str || '')
-        .join(' ');
-      textParts.push(pageText);
-      console.log(`Page ${pageNum}: ${pageText.length} characters`);
-    }
+    await parser.destroy();
 
-    return textParts.join('\n');
+    return text || '';
   } catch (error: any) {
     console.error('Extraction failed:', error.message);
     console.error('Stack:', error.stack);
@@ -75,7 +63,7 @@ async function main() {
   if (!pdfPath) {
     console.log('Usage: npx ts-node scripts/test-pdf-extraction.ts <path-to-pdf>');
     console.log('');
-    console.log('Example: npx ts-node scripts/test-pdf-extraction.ts fixtures/test.pdf');
+    console.log('Example: npx ts-node scripts/test-pdf-extraction.ts tests/fixtures/sample.pdf');
     process.exit(1);
   }
 

@@ -1,12 +1,21 @@
 import { describe, expect, it, vi, beforeEach, beforeAll } from 'vitest';
 import { getOpenAIClient } from '@/lib/ai/openai-client';
-import pdfParse from 'pdf-parse';
 
-vi.mock('pdf-parse', () => ({
-  default: vi.fn(async () => ({
-    text: 'Tenancy Agreement\nRent: 1000\nTenant: Jane Doe\nLandlord: John Smith\nProperty: 10 High Street\nTerm: 12 months\nDeposit: 1000',
-  })),
-}));
+// Mock the PDFParse class from pdf-parse v2
+vi.mock('pdf-parse', () => {
+  const mockParser = {
+    getInfo: vi.fn(async () => ({ total: 1 })),
+    getText: vi.fn(async () => ({
+      text: 'Tenancy Agreement\nRent: 1000\nTenant: Jane Doe\nLandlord: John Smith\nProperty: 10 High Street\nTerm: 12 months\nDeposit: 1000',
+    })),
+    destroy: vi.fn(async () => {}),
+  };
+
+  return {
+    PDFParse: vi.fn(() => mockParser),
+    VerbosityLevel: { ERRORS: 0 },
+  };
+});
 
 vi.mock('@/lib/ai/openai-client', () => ({
   getOpenAIClient: vi.fn(),
@@ -28,10 +37,12 @@ const mockChat = vi.fn(async () => ({
 }));
 
 let analyzeEvidence: typeof import('@/lib/evidence/analyze-evidence').analyzeEvidence;
-const mockedPdfParse = vi.mocked(pdfParse);
+let PDFParseMock: any;
 
 beforeAll(async () => {
   process.env.OPENAI_API_KEY = 'test-key';
+  const pdfParseModule = await import('pdf-parse');
+  PDFParseMock = pdfParseModule.PDFParse;
   const module = await import('@/lib/evidence/analyze-evidence');
   analyzeEvidence = module.analyzeEvidence;
 });
@@ -66,7 +77,7 @@ describe('analyzeEvidence', () => {
       } as any,
     });
 
-    expect(mockedPdfParse).toHaveBeenCalled();
+    expect(PDFParseMock).toHaveBeenCalled();
     expect(mockChat).toHaveBeenCalled();
     expect(result.source).toBe('pdf_text');
   });

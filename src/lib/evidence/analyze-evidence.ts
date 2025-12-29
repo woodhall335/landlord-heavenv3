@@ -1,66 +1,54 @@
 import { z } from 'zod';
+import * as path from 'path';
 import { getOpenAIClient } from '@/lib/ai/openai-client';
 import { isPdfMimeType, isImageMimeType } from '@/lib/evidence/schema';
 import puppeteer from 'puppeteer';
+import { PDFParse, VerbosityLevel } from 'pdf-parse';
 
-// Polyfill for pdfjs-dist in Node.js environment
-if (typeof globalThis !== 'undefined' && typeof globalThis.document === 'undefined') {
-  // @ts-ignore - Create minimal DOM-like environment for pdfjs-dist
-  globalThis.document = {
-    createElement: () => ({ getContext: () => null }),
-    documentElement: { style: {} },
-  };
+// Configure pdf-parse worker for Node.js environment
+let workerConfigured = false;
+function configurePdfParseWorker() {
+  if (workerConfigured) return;
+  try {
+    // Set the worker path for pdf-parse/pdfjs-dist
+    const workerPath = path.resolve(
+      process.cwd(),
+      'node_modules/pdf-parse/dist/worker/pdf.worker.mjs'
+    );
+    const workerUrl = `file://${workerPath}`;
+    PDFParse.setWorker(workerUrl);
+    workerConfigured = true;
+    console.log('[configurePdfParseWorker] Worker configured:', workerUrl);
+  } catch (error: any) {
+    console.error('[configurePdfParseWorker] Failed to configure worker:', error.message);
+  }
 }
 
-// Use pdfjs-dist directly for more reliable PDF text extraction
-async function extractPdfTextWithPdfJs(buffer: Buffer): Promise<string> {
+// Use pdf-parse for reliable PDF text extraction
+async function extractPdfTextWithPdfParse(buffer: Buffer): Promise<string> {
   try {
-    // Set up environment for pdfjs-dist
-    const isNode = typeof window === 'undefined';
+    configurePdfParseWorker();
 
-    // Dynamic import
-    const pdfjsModule = await import('pdfjs-dist');
-    const pdfjsLib = pdfjsModule.default || pdfjsModule;
-
-    // Handle different export styles
-    const getDocument = pdfjsLib.getDocument;
-    if (!getDocument) {
-      throw new Error('pdfjs-dist getDocument not found');
-    }
-
-    // Disable worker for Node.js environment
-    if (isNode && pdfjsLib.GlobalWorkerOptions) {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = '';
-    }
-
-    // Create a typed array from the buffer
-    const data = new Uint8Array(buffer);
-
-    // Load the PDF document with worker disabled for server-side
-    const loadingTask = getDocument({
-      data,
+    const parser = new PDFParse({
+      data: buffer,
+      verbosity: VerbosityLevel.ERRORS,
       disableFontFace: true,
       useSystemFonts: true,
-      standardFontDataUrl: undefined,
     });
-    const pdf = await loadingTask.promise;
 
-    const textParts: string[] = [];
+    // Load and get info
+    const info = await parser.getInfo();
+    console.log('[extractPdfTextWithPdfParse] PDF loaded, pages:', info.total);
 
-    // Extract text from each page (limit to first 10 pages for performance)
-    const maxPages = Math.min(pdf.numPages, 10);
-    for (let pageNum = 1; pageNum <= maxPages; pageNum++) {
-      const page = await pdf.getPage(pageNum);
-      const textContent = await page.getTextContent();
-      const pageText = textContent.items
-        .map((item: any) => item.str || '')
-        .join(' ');
-      textParts.push(pageText);
-    }
+    // Extract text from first 10 pages
+    const textResult = await parser.getText({ first: 10 });
+    const text = textResult.text || '';
 
-    return textParts.join('\n');
+    await parser.destroy();
+
+    return text;
   } catch (error: any) {
-    console.error('[extractPdfTextWithPdfJs] Failed:', error.message, error.stack);
+    console.error('[extractPdfTextWithPdfParse] Failed:', error.message, error.stack);
     throw error;
   }
 }
@@ -328,30 +316,8 @@ async function loadBuffer(input: EvidenceAnalysisInput): Promise<Buffer> {
 }
 
 async function extractPdfText(buffer: Buffer): Promise<string> {
-  // Try pdfjs-dist first, fall back to pdf-parse if it fails
-  try {
-    return await extractPdfTextWithPdfJs(buffer);
-  } catch (pdfjsError: any) {
-    console.warn('[extractPdfText] pdfjs-dist failed, trying pdf-parse:', pdfjsError.message);
-
-    // Fallback to pdf-parse with proper configuration
-    try {
-      // Set up environment for pdf-parse
-      const pdfParseModule = await import('pdf-parse');
-      const pdfParse = pdfParseModule.default || pdfParseModule;
-
-      // pdf-parse expects a Buffer
-      const result = await pdfParse(buffer, {
-        // Disable test mode which causes issues
-        max: 10, // Max pages
-      });
-
-      return result.text || '';
-    } catch (parseError: any) {
-      console.error('[extractPdfText] pdf-parse also failed:', parseError.message);
-      throw new Error(`PDF text extraction failed: ${pdfjsError.message} | ${parseError.message}`);
-    }
-  }
+  // Use pdf-parse with proper worker configuration
+  return await extractPdfTextWithPdfParse(buffer);
 }
 
 async function renderPdfPagesToImages(buffer: Buffer, maxPages: number): Promise<string[]> {
