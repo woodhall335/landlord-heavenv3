@@ -36,6 +36,12 @@ const startWizardSchema = z.object({
   ]),
   jurisdiction: z.enum(['england', 'wales', 'scotland', 'northern-ireland']),
   case_id: z.string().uuid().optional(),
+  // Used by standalone validators (e.g., /tools/validators/section-21) to set the notice route
+  // so runLegalValidator knows which validator to apply
+  validator_key: z.string().optional(),
+  // Additional metadata from validator pages
+  case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']).optional(),
+  product_variant: z.string().optional(),
 });
 
 type StartProduct =
@@ -124,7 +130,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const { product, jurisdiction, case_id } = validationResult.data;
+    const { product, jurisdiction, case_id, validator_key, product_variant } = validationResult.data;
     const resolvedCaseType = productToCaseType(product as StartProduct);
     const normalizedProduct = normalizeProduct(product as StartProduct);
     const effectiveJurisdiction = resolveJurisdiction(product as StartProduct, jurisdiction);
@@ -215,12 +221,18 @@ export async function POST(request: Request) {
           product: normalizedProduct as string | null,
           original_product: product as string | null,
           ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
+          // Store validator_key so we can track which validator was used
+          ...(validator_key ? { validator_key: validator_key as string | null } : {}),
+          ...(product_variant ? { product_variant: product_variant as string | null } : {}),
         },
         // IMPORTANT: root-level product_tier so MQS version questions see it as answered
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         // These help downstream normalization / analysis before property questions are answered
         property_country: effectiveJurisdiction,
         jurisdiction: effectiveJurisdiction,
+        // CRITICAL: Set selected_notice_route from validator_key so runLegalValidator
+        // knows which validator to apply (e.g., "section_21" → validateSection21Notice)
+        ...(validator_key ? { selected_notice_route: validator_key } : {}),
       };
 
       const { data, error } = await supabase
@@ -256,6 +268,8 @@ export async function POST(request: Request) {
         product: normalizedProduct as string | null,
         original_product: product as string | null,
         ...(tierLabel ? { product_tier: tierLabel as string | null } : {}),
+        ...(validator_key ? { validator_key: validator_key as string | null } : {}),
+        ...(product_variant ? { product_variant: product_variant as string | null } : {}),
       };
 
       const updatedFacts: any = {
@@ -264,6 +278,8 @@ export async function POST(request: Request) {
         ...(tierLabel ? { product_tier: tierLabel } : {}),
         property_country: facts.property_country ?? effectiveJurisdiction,
         jurisdiction: facts.jurisdiction ?? effectiveJurisdiction,
+        // Ensure selected_notice_route is set for validators
+        ...(validator_key && !facts.selected_notice_route ? { selected_notice_route: validator_key } : {}),
       };
 
       const { error: updateError } = await supabase
