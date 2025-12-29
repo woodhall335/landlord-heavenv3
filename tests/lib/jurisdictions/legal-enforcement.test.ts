@@ -6,6 +6,9 @@ import { evaluateWizardGate } from '@/lib/wizard/gating';
 import { GET as noticeOnlyPreview } from '@/app/api/notice-only/preview/[caseId]/route';
 import * as supabaseServer from '@/lib/supabase/server';
 import * as noticeOnlyModule from '@/lib/documents/noticeOnly';
+vi.mock('@/lib/payments/entitlement', () => ({
+  assertPaidEntitlement: vi.fn(async () => ({})),
+}));
 
 const baseDepositFacts = {
   deposit_taken: true,
@@ -268,6 +271,7 @@ describe('jurisdiction gating enforcement', () => {
     } as any;
 
     vi.spyOn(supabaseServer, 'createServerSupabaseClient').mockResolvedValue(supabaseClient);
+    vi.spyOn(supabaseServer, 'tryGetServerUser').mockResolvedValue({ id: 'user-1' } as any);
 
     const validationSpy = vi
       .spyOn(noticeOnlyModule, 'validateNoticeOnlyBeforeRender')

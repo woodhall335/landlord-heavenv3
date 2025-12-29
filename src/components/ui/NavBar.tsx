@@ -26,6 +26,7 @@ const primaryLinks: NavItem[] = [
 ];
 
 const freeToolsLinks: NavItem[] = [
+  { href: "/tools", label: "All Free Tools" },
   { href: "/tools/free-section-21-notice-generator", label: "Section 21 Notice" },
   { href: "/tools/free-section-8-notice-generator", label: "Section 8 Notice" },
   { href: "/tools/rent-arrears-calculator", label: "Rent Arrears Calculator" },

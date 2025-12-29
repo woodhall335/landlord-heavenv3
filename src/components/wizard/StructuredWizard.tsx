@@ -2373,6 +2373,7 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
           <UploadField
             caseId={caseId}
             questionId={currentQuestion.id}
+            jurisdiction={jurisdiction || 'england'}
             // Some MQS questions include a separate label, but it's not in the TS type.
             // Fall back to the main question text when label is missing.
             label={(currentQuestion as any).label ?? currentQuestion.question}

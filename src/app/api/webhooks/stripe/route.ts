@@ -9,12 +9,8 @@ import { createAdminClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { sendPurchaseConfirmation } from '@/lib/email/resend';
-import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
-import {
-  mapCaseFactsToMoneyClaimCase,
-  mapCaseFactsToScotlandMoneyClaimCase,
-} from '@/lib/documents/money-claim-wizard-mapper';
 import { logger } from '@/lib/logger';
+import { fulfillOrder } from '@/lib/payments/fulfillment';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-12-15.clover',
@@ -22,7 +18,88 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+function redactStripePayload(event: Stripe.Event) {
+  const dataObject = event.data.object as any;
+  return {
+    id: event.id,
+    type: event.type,
+    created: event.created,
+    data: {
+      object: {
+        id: dataObject?.id,
+        metadata: dataObject?.metadata,
+        payment_intent: dataObject?.payment_intent,
+        customer: dataObject?.customer,
+        subscription: dataObject?.subscription,
+        mode: dataObject?.mode,
+      },
+    },
+  };
+}
+
+async function findOrderForCheckoutSession(
+  supabase: ReturnType<typeof createAdminClient>,
+  session: Stripe.Checkout.Session,
+) {
+  const orderId = session.metadata?.order_id;
+  if (orderId) {
+    const { data: order } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', orderId)
+      .single();
+    return order;
+  }
+
+  if (session.id) {
+    const { data: orderBySession } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('stripe_session_id', session.id)
+      .maybeSingle();
+    if (orderBySession) return orderBySession;
+  }
+
+  if (session.payment_intent) {
+    const { data: orderByIntent } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('stripe_payment_intent_id', session.payment_intent as string)
+      .maybeSingle();
+    if (orderByIntent) return orderByIntent;
+  }
+
+  return null;
+}
+
+async function findOrderForPaymentIntent(
+  supabase: ReturnType<typeof createAdminClient>,
+  paymentIntent: Stripe.PaymentIntent,
+) {
+  const orderId = paymentIntent.metadata?.order_id;
+  if (orderId) {
+    const { data: order } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', orderId)
+      .single();
+    return order;
+  }
+
+  const { data: orderByIntent } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('stripe_payment_intent_id', paymentIntent.id)
+    .maybeSingle();
+
+  return orderByIntent;
+}
+
 export async function POST(request: Request) {
+  let eventId: string | null = null;
   try {
     const body = await request.text();
     const signature = request.headers.get('stripe-signature');
@@ -47,10 +124,49 @@ export async function POST(request: Request) {
       );
     }
 
+    eventId = event.id;
     logger.info('Stripe webhook received', { eventType: event.type });
 
     // Use admin client to bypass RLS
     const supabase = createAdminClient();
+
+    const { data: existingLog } = await supabase
+      .from('webhook_logs')
+      .select('id, status')
+      .eq('stripe_event_id', event.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (existingLog && ['processing', 'completed'].includes(existingLog.status)) {
+      return NextResponse.json(
+        { received: true, event: event.type, duplicate: true },
+        { status: 200 }
+      );
+    }
+
+    const receivedAt = new Date().toISOString();
+    const { data: logRow } = await supabase
+      .from('webhook_logs')
+      .insert({
+        event_type: event.type,
+        stripe_event_id: event.id,
+        payload: redactStripePayload(event),
+        status: 'received',
+        received_at: receivedAt,
+      })
+      .select('id')
+      .single();
+
+    const logId = logRow?.id;
+    if (logId) {
+      await supabase
+        .from('webhook_logs')
+        .update({ status: 'processing' })
+        .eq('id', logId);
+    }
+
+    let processingResult = 'unhandled_event';
 
     // Handle the event
     switch (event.type) {
@@ -61,377 +177,102 @@ export async function POST(request: Request) {
         const session = event.data.object as Stripe.Checkout.Session;
 
         if (session.mode === 'payment') {
-          // Handle one-time payment
-          const userId = session.metadata?.user_id;
-          const orderId = session.metadata?.order_id;
-          const caseId = session.metadata?.case_id;
-          const productType = session.metadata?.product_type;
+          const caseId = session.metadata?.case_id || null;
+          const productType = session.metadata?.product_type || session.metadata?.product || null;
+          const userId = session.metadata?.user_id || null;
 
-          if (!userId || !orderId) {
-            logger.error('Missing metadata in checkout session');
-            break;
+          const order = await findOrderForCheckoutSession(supabase, session);
+
+          if (!order) {
+            throw new Error('Order not found for checkout session');
           }
 
-          // Update order status
-          await supabase
-            .from('orders')
-            .update({
-              payment_status: 'paid',
-              stripe_payment_intent_id: session.payment_intent as string,
-              paid_at: new Date().toISOString(),
-              fulfillment_status: 'processing',
-            })
-            .eq('id', orderId);
+          if ((order as any).payment_status !== 'paid') {
+            await supabase
+              .from('orders')
+              .update({
+                payment_status: 'paid',
+                stripe_payment_intent_id: session.payment_intent as string,
+                stripe_session_id: session.id,
+                paid_at: new Date().toISOString(),
+                fulfillment_status: 'ready_to_generate',
+              })
+              .eq('id', (order as any).id);
+          }
 
-          console.log(`[Stripe] Payment successful for order: ${orderId}`);
+          const resolvedCaseId = caseId || (order as any).case_id;
+          const resolvedProductType = productType || (order as any).product_type;
 
-          // Generate final documents (without watermark) if case_id exists
-          if (caseId && productType) {
+          if (resolvedCaseId && resolvedProductType) {
+            await supabase
+              .from('orders')
+              .update({ fulfillment_status: 'processing' })
+              .eq('id', (order as any).id);
+
             try {
-              // Fetch case data
-              const { data: caseData, error: caseError } = await supabase
-                .from('cases')
-                .select('*')
-                .eq('id', caseId)
-                .single();
-
-              if (caseError || !caseData) {
-                console.error('[Fulfillment] Case not found:', caseError);
-              } else {
-                const wizardFacts = (caseData as any).collected_facts;
-                const caseFacts = wizardFactsToCaseFacts(wizardFacts as any);
-
-                // Handle eviction packs (notice_only and complete_pack)
-                if (productType === 'notice_only' || productType === 'complete_pack') {
-                  const { generateNoticeOnlyPack, generateCompleteEvictionPack } = await import('@/lib/documents/eviction-pack-generator');
-
-                  console.log(`[Fulfillment] Generating ${productType} for case ${caseId}...`);
-
-                  let evictionPack: any;
-                  if (productType === 'notice_only') {
-                    evictionPack = await generateNoticeOnlyPack(wizardFacts);
-                  } else {
-                    evictionPack = await generateCompleteEvictionPack(wizardFacts);
-                  }
-
-                  console.log(`[Fulfillment] Generated ${evictionPack.documents.length} documents in eviction pack`);
-
-                  // Upload all documents to storage and save to database
-                  for (const doc of evictionPack.documents) {
-                    if (doc.pdf) {
-                      const fileName = `${userId}/${caseId}/${doc.file_name}`;
-                      const { error: uploadError } = await supabase.storage
-                        .from('documents')
-                        .upload(fileName, doc.pdf, {
-                          contentType: 'application/pdf',
-                          upsert: false,
-                        });
-
-                      if (!uploadError) {
-                        const { data: publicUrlData } = supabase.storage
-                          .from('documents')
-                          .getPublicUrl(fileName);
-
-                        // Save document record
-                        await supabase.from('documents').insert({
-                          user_id: userId,
-                          case_id: caseId,
-                          document_type: doc.category,
-                          document_title: doc.title,
-                          jurisdiction: (caseData as any).jurisdiction,
-                          html_content: doc.html || null,
-                          pdf_url: publicUrlData.publicUrl,
-                          is_preview: false,
-                          qa_passed: true,
-                          metadata: { description: doc.description, pack_type: productType },
-                        });
-
-                        console.log(`[Fulfillment] Uploaded document: ${doc.title}`);
-                      } else {
-                        console.error(`[Fulfillment] Failed to upload ${doc.title}:`, uploadError);
-                      }
-                    }
-                  }
-
-                  // Mark fulfillment as completed
-                  await supabase
-                    .from('orders')
-                    .update({
-                      fulfillment_status: 'completed',
-                      fulfilled_at: new Date().toISOString(),
-                      metadata: {
-                        total_documents: evictionPack.documents.length,
-                        pack_type: evictionPack.pack_type,
-                        jurisdiction: evictionPack.jurisdiction,
-                      },
-                    })
-                    .eq('id', orderId);
-
-                  console.log(`[Fulfillment] Eviction pack fulfilled: ${orderId}`);
-
-                } else if (productType === 'money_claim') {
-                  const { generateMoneyClaimPack } = await import('@/lib/documents/money-claim-pack-generator');
-
-                  console.log(`[Fulfillment] Generating money claim pack for case ${caseId}...`);
-                  const pack = await generateMoneyClaimPack({
-                    ...mapCaseFactsToMoneyClaimCase(caseFacts),
-                    case_id: caseId,
-                  });
-
-                  for (const doc of pack.documents) {
-                    if (!doc.pdf) continue;
-
-                    const fileName = `${userId}/${caseId}/${doc.file_name}`;
-                    const { error: uploadError } = await supabase.storage
-                      .from('documents')
-                      .upload(fileName, doc.pdf, {
-                        contentType: 'application/pdf',
-                        upsert: false,
-                      });
-
-                    if (uploadError) {
-                      console.error(`[Fulfillment] Failed to upload ${doc.title}:`, uploadError);
-                      continue;
-                    }
-
-                    const { data: publicUrlData } = supabase.storage
-                      .from('documents')
-                      .getPublicUrl(fileName);
-
-                    await supabase.from('documents').insert({
-                      user_id: userId,
-                      case_id: caseId,
-                      document_type: doc.category,
-                      document_title: doc.title,
-                      jurisdiction: (caseData as any).jurisdiction,
-                      html_content: doc.html || null,
-                      pdf_url: publicUrlData.publicUrl,
-                      is_preview: false,
-                      qa_passed: true,
-                      metadata: { description: doc.description, pack_type: productType },
-                    });
-                  }
-
-                  await supabase
-                    .from('orders')
-                    .update({
-                      fulfillment_status: 'completed',
-                      fulfilled_at: new Date().toISOString(),
-                      metadata: {
-                        total_documents: pack.documents.length,
-                        pack_type: pack.pack_type,
-                        jurisdiction: pack.jurisdiction,
-                      },
-                    })
-                    .eq('id', orderId);
-
-                  console.log(`[Fulfillment] Money claim pack fulfilled: ${orderId}`);
-
-                } else if (productType === 'sc_money_claim') {
-                  const { generateScotlandMoneyClaim } = await import('@/lib/documents/scotland-money-claim-pack-generator');
-
-                  console.log(`[Fulfillment] Generating Scotland money claim pack for case ${caseId}...`);
-                  const pack = await generateScotlandMoneyClaim({
-                    ...mapCaseFactsToScotlandMoneyClaimCase(caseFacts),
-                    case_id: caseId,
-                  });
-
-                  for (const doc of pack.documents) {
-                    if (!doc.pdf) continue;
-
-                    const fileName = `${userId}/${caseId}/${doc.file_name}`;
-                    const { error: uploadError } = await supabase.storage
-                      .from('documents')
-                      .upload(fileName, doc.pdf, {
-                        contentType: 'application/pdf',
-                        upsert: false,
-                      });
-
-                    if (uploadError) {
-                      console.error(`[Fulfillment] Failed to upload ${doc.title}:`, uploadError);
-                      continue;
-                    }
-
-                    const { data: publicUrlData } = supabase.storage
-                      .from('documents')
-                      .getPublicUrl(fileName);
-
-                    await supabase.from('documents').insert({
-                      user_id: userId,
-                      case_id: caseId,
-                      document_type: doc.category,
-                      document_title: doc.title,
-                      jurisdiction: (caseData as any).jurisdiction,
-                      html_content: doc.html || null,
-                      pdf_url: publicUrlData.publicUrl,
-                      is_preview: false,
-                      qa_passed: true,
-                      metadata: { description: doc.description, pack_type: productType },
-                    });
-                  }
-
-                  await supabase
-                    .from('orders')
-                    .update({
-                      fulfillment_status: 'completed',
-                      fulfilled_at: new Date().toISOString(),
-                      metadata: {
-                        total_documents: pack.documents.length,
-                        pack_type: pack.pack_type,
-                        jurisdiction: pack.jurisdiction,
-                      },
-                    })
-                    .eq('id', orderId);
-
-                  console.log(`[Fulfillment] Scotland money claim pack fulfilled: ${orderId}`);
-
-                } else {
-                  // Handle AST and other single document types
-                  const { generateStandardAST, generatePremiumAST } = await import('@/lib/documents/ast-generator');
-
-                  let generatedDoc: any;
-                  let documentTitle = '';
-                  let documentType = '';
-
-                  // Generate document based on type
-                  switch (productType) {
-                    case 'ast_standard':
-                      generatedDoc = await generateStandardAST(wizardFacts);
-                      documentTitle = 'Assured Shorthold Tenancy Agreement - Standard';
-                      documentType = 'ast_standard';
-                      break;
-                    case 'ast_premium':
-                      generatedDoc = await generatePremiumAST(wizardFacts);
-                      documentTitle = 'Assured Shorthold Tenancy Agreement - Premium';
-                      documentType = 'ast_premium';
-                      break;
-                    default:
-                      console.error('[Fulfillment] Unsupported product type:', productType);
-                  }
-
-                  if (generatedDoc) {
-                    // Upload PDF to storage
-                    let pdfUrl: string | null = null;
-                    if (generatedDoc.pdf) {
-                      const fileName = `${userId}/${caseId}/${documentType}_final_${Date.now()}.pdf`;
-                      const { error: uploadError } = await supabase.storage
-                        .from('documents')
-                        .upload(fileName, generatedDoc.pdf, {
-                          contentType: 'application/pdf',
-                          upsert: false,
-                        });
-
-                      if (!uploadError) {
-                        const { data: publicUrlData } = supabase.storage
-                          .from('documents')
-                          .getPublicUrl(fileName);
-                        pdfUrl = publicUrlData.publicUrl;
-                      } else {
-                        console.error('[Fulfillment] Failed to upload PDF:', uploadError);
-                      }
-                    }
-
-                    // Save final document to database
-                    const { data: finalDoc, error: docError } = await supabase
-                      .from('documents')
-                      .insert({
-                        user_id: userId,
-                        case_id: caseId,
-                        document_type: documentType,
-                        document_title: documentTitle,
-                        jurisdiction: (caseData as any).jurisdiction,
-                        html_content: generatedDoc.html,
-                        pdf_url: pdfUrl,
-                        is_preview: false,
-                        qa_passed: false,
-                        qa_score: null,
-                        qa_issues: [],
-                      })
-                      .select()
-                      .single();
-
-                    if (docError) {
-                      console.error('[Fulfillment] Failed to save final document:', docError);
-                    } else {
-                      console.log(`[Fulfillment] Final document generated: ${(finalDoc as any).id}`);
-
-                      // Mark fulfillment as completed
-                      await supabase
-                        .from('orders')
-                        .update({
-                          fulfillment_status: 'completed',
-                          fulfilled_at: new Date().toISOString(),
-                        })
-                        .eq('id', orderId);
-
-                      console.log(`[Fulfillment] Order fulfilled: ${orderId}`);
-                    }
-                  }
-                }
-              }
+              const fulfillment = await fulfillOrder({
+                orderId: (order as any).id,
+                caseId: resolvedCaseId,
+                productType: resolvedProductType,
+                userId,
+              });
+              processingResult = fulfillment.status;
             } catch (fulfillmentError: any) {
-              console.error('[Fulfillment] Error generating documents:', fulfillmentError);
-              // Don't fail the webhook - mark as failed fulfillment
               await supabase
                 .from('orders')
-                .update({
-                  fulfillment_status: 'failed',
-                })
-                .eq('id', orderId);
+                .update({ fulfillment_status: 'failed' })
+                .eq('id', (order as any).id);
+              throw fulfillmentError;
             }
+          } else {
+            processingResult = 'order_paid_without_fulfillment';
           }
 
           // Send purchase confirmation email
           try {
-            // Fetch order and user details
-            const { data: order } = await supabase
+            const { data: orderRow } = await supabase
               .from('orders')
               .select('*, user_id')
-              .eq('id', orderId)
+              .eq('id', (order as any).id)
               .single();
 
-            const { data: user } = await supabase
-              .from('users')
-              .select('email, full_name')
-              .eq('id', userId)
-              .single();
+            if (orderRow && userId) {
+              const { data: user } = await supabase
+                .from('users')
+                .select('email, full_name')
+                .eq('id', userId)
+                .single();
 
-            if (order && user?.email) {
-              const dashboardUrl = caseId
-                ? `${process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk'}/dashboard/cases/${caseId}`
-                : `${process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk'}/dashboard`;
+              if (user?.email) {
+                const dashboardUrl = resolvedCaseId
+                  ? `${process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk'}/dashboard/cases/${resolvedCaseId}`
+                  : `${process.env.NEXT_PUBLIC_APP_URL || 'https://landlordheaven.co.uk'}/dashboard`;
 
-              await sendPurchaseConfirmation({
-                to: user.email,
-                customerName: user.full_name || 'there',
-                productName: (order as any).product_name,
-                amount: Math.round((order as any).total_amount * 100),
-                orderNumber: (order as any).id.substring(0, 8).toUpperCase(),
-                downloadUrl: dashboardUrl,
-              });
-
-              console.log(`[Email] Purchase confirmation sent to ${user.email}`);
+                await sendPurchaseConfirmation({
+                  to: user.email,
+                  customerName: user.full_name || 'there',
+                  productName: (orderRow as any).product_name,
+                  amount: Math.round((orderRow as any).total_amount * 100),
+                  orderNumber: (orderRow as any).id.substring(0, 8).toUpperCase(),
+                  downloadUrl: dashboardUrl,
+                });
+              }
             }
           } catch (emailError: any) {
             console.error('[Email] Failed to send purchase confirmation:', emailError);
-            // Don't fail the webhook if email fails
           }
         } else if (session.mode === 'subscription') {
-          // Handle subscription checkout
           const userId = session.metadata?.user_id;
           const tier = session.metadata?.tier;
           const subscriptionId = session.subscription as string;
 
           if (!userId) {
-            console.error('Missing user_id in subscription session');
-            break;
+            throw new Error('Missing user_id in subscription session');
           }
 
-          // Calculate trial end date (7 days from now)
           const trialEndsAt = new Date();
           trialEndsAt.setDate(trialEndsAt.getDate() + 7);
 
-          // Update user with subscription details
           await supabase
             .from('users')
             .update({
@@ -442,37 +283,45 @@ export async function POST(request: Request) {
             })
             .eq('id', userId);
 
-          console.log(`[Stripe] Subscription activated for user: ${userId}`);
+          processingResult = 'subscription_activated';
         }
         break;
       }
 
       case 'payment_intent.succeeded': {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
-        console.log(`[Stripe] PaymentIntent succeeded: ${paymentIntent.id}`);
+        const order = await findOrderForPaymentIntent(supabase, paymentIntent);
+
+        if (order) {
+          await supabase
+            .from('orders')
+            .update({
+              payment_status: 'paid',
+              stripe_payment_intent_id: paymentIntent.id,
+              paid_at: new Date().toISOString(),
+              fulfillment_status: 'ready_to_generate',
+            })
+            .eq('id', (order as any).id);
+
+          processingResult = 'payment_intent_paid';
+        } else {
+          processingResult = 'payment_intent_no_order';
+        }
         break;
       }
 
       case 'payment_intent.payment_failed': {
         const paymentIntent = event.data.object as Stripe.PaymentIntent;
 
-        // Find order by payment intent
-        const { data: orders } = await supabase
+        await supabase
           .from('orders')
-          .select('*')
+          .update({
+            payment_status: 'failed',
+            fulfillment_status: 'failed',
+          })
           .eq('stripe_payment_intent_id', paymentIntent.id);
 
-        if (orders && orders.length > 0) {
-          await supabase
-            .from('orders')
-            .update({
-              payment_status: 'failed',
-              fulfillment_status: 'failed',
-            })
-            .eq('stripe_payment_intent_id', paymentIntent.id);
-        }
-
-        console.log(`[Stripe] PaymentIntent failed: ${paymentIntent.id}`);
+        processingResult = 'payment_intent_failed';
         break;
       }
 
@@ -492,7 +341,7 @@ export async function POST(request: Request) {
             .eq('id', userId);
         }
 
-        console.log(`[Stripe] Subscription created: ${subscription.id}`);
+        processingResult = 'subscription_created';
         break;
       }
 
@@ -503,8 +352,6 @@ export async function POST(request: Request) {
         if (!userId) break;
 
         const isActive = subscription.status === 'active' || subscription.status === 'trialing';
-
-        // Calculate subscription end date
         let subscriptionEndsAt = null;
         if ((subscription as any).current_period_end) {
           subscriptionEndsAt = new Date((subscription as any).current_period_end * 1000).toISOString();
@@ -518,7 +365,7 @@ export async function POST(request: Request) {
           })
           .eq('id', userId);
 
-        console.log(`[Stripe] Subscription updated: ${subscription.id}, Active: ${isActive}`);
+        processingResult = 'subscription_updated';
         break;
       }
 
@@ -528,7 +375,6 @@ export async function POST(request: Request) {
 
         if (!userId) break;
 
-        // Deactivate HMO Pro
         await supabase
           .from('users')
           .update({
@@ -538,30 +384,28 @@ export async function POST(request: Request) {
           })
           .eq('id', userId);
 
-        console.log(`[Stripe] Subscription cancelled: ${subscription.id}`);
+        processingResult = 'subscription_cancelled';
         break;
       }
 
-      case 'invoice.paid': {
+      case 'invoice.paid':
+      case 'invoice.payment_succeeded': {
         const invoice = event.data.object as Stripe.Invoice;
         const subscriptionId = (invoice as any).subscription as string;
 
         if (subscriptionId) {
-          // Retrieve subscription to get user_id
           const subscription = await stripe.subscriptions.retrieve(subscriptionId);
           const userId = subscription.metadata?.user_id;
 
           if (userId) {
             await supabase
               .from('users')
-              .update({
-                hmo_pro_active: true,
-              })
+              .update({ hmo_pro_active: true })
               .eq('id', userId);
           }
         }
 
-        console.log(`[Stripe] Invoice paid: ${invoice.id}`);
+        processingResult = 'invoice_paid';
         break;
       }
 
@@ -570,22 +414,18 @@ export async function POST(request: Request) {
         const subscriptionId = (invoice as any).subscription as string;
 
         if (subscriptionId) {
-          // Retrieve subscription to get user_id
           const subscription = await stripe.subscriptions.retrieve(subscriptionId);
           const userId = subscription.metadata?.user_id;
 
           if (userId) {
-            // Deactivate on payment failure
             await supabase
               .from('users')
-              .update({
-                hmo_pro_active: false,
-              })
+              .update({ hmo_pro_active: false })
               .eq('id', userId);
           }
         }
 
-        console.log(`[Stripe] Invoice payment failed: ${invoice.id}`);
+        processingResult = 'invoice_failed';
         break;
       }
 
@@ -605,12 +445,23 @@ export async function POST(request: Request) {
             .eq('id', userId);
         }
 
-        console.log(`[Stripe] Customer created: ${customer.id}`);
+        processingResult = 'customer_created';
         break;
       }
 
       default:
-        console.log(`[Stripe] Unhandled event type: ${event.type}`);
+        processingResult = 'ignored';
+    }
+
+    if (logId) {
+      await supabase
+        .from('webhook_logs')
+        .update({
+          status: 'completed',
+          processed_at: new Date().toISOString(),
+          processing_result: processingResult,
+        })
+        .eq('id', logId);
     }
 
     return NextResponse.json(
@@ -619,6 +470,22 @@ export async function POST(request: Request) {
     );
   } catch (error: any) {
     logger.error('Stripe webhook error', { error: error?.message });
+    try {
+      const supabase = createAdminClient();
+      if (eventId) {
+        await supabase
+          .from('webhook_logs')
+          .update({
+            status: 'failed',
+            processed_at: new Date().toISOString(),
+            processing_result: 'error',
+            error_message: error?.message || 'Webhook processing error',
+          })
+          .eq('stripe_event_id', eventId);
+      }
+    } catch (logError) {
+      logger.error('Failed to update webhook log', { error: (logError as Error)?.message });
+    }
     return NextResponse.json(
       { error: 'Webhook handler failed', message: error.message },
       { status: 500 }

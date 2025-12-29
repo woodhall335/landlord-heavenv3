@@ -17,16 +17,25 @@
  */
 export enum EvidenceCategory {
   TENANCY_AGREEMENT = 'tenancy_agreement',
+  RENT_SCHEDULE = 'rent_schedule',
+  ARREARS_LEDGER = 'arrears_ledger',
   BANK_STATEMENTS = 'bank_statements',
+  BANK_STATEMENT = 'bank_statement',
+  NOTICE_S21 = 'notice_s21',
+  NOTICE_S8 = 'notice_s8',
   DEPOSIT_PROTECTION_CERTIFICATE = 'deposit_protection_certificate',
   PRESCRIBED_INFORMATION_PROOF = 'prescribed_information_proof',
   HOW_TO_RENT_PROOF = 'how_to_rent_proof',
   EPC = 'epc',
   GAS_SAFETY_CERTIFICATE = 'gas_safety_certificate',
+  EICR = 'eicr',
   LICENSING = 'licensing',
   HMO_LICENSE = 'hmo_license',
   NOTICE_SERVED_PROOF = 'notice_served_proof',
   CORRESPONDENCE = 'correspondence',
+  DEPOSIT_PROTECTION = 'deposit_protection',
+  LBA_LETTER = 'lba_letter',
+  COURT_CLAIM_DRAFT = 'court_claim_draft',
   REPAIR_COMPLAINTS = 'repair_complaints',
   RETALIATORY_EVIDENCE = 'retaliatory_evidence',
   OTHER = 'other',
@@ -37,16 +46,25 @@ export enum EvidenceCategory {
  */
 export const EVIDENCE_CATEGORY_LABELS: Record<EvidenceCategory, string> = {
   [EvidenceCategory.TENANCY_AGREEMENT]: 'Tenancy Agreement',
+  [EvidenceCategory.RENT_SCHEDULE]: 'Rent Schedule / Ledger',
+  [EvidenceCategory.ARREARS_LEDGER]: 'Arrears Ledger',
   [EvidenceCategory.BANK_STATEMENTS]: 'Bank Statements / Rent Records',
+  [EvidenceCategory.BANK_STATEMENT]: 'Bank Statement',
+  [EvidenceCategory.NOTICE_S21]: 'Section 21 Notice',
+  [EvidenceCategory.NOTICE_S8]: 'Section 8 Notice',
   [EvidenceCategory.DEPOSIT_PROTECTION_CERTIFICATE]: 'Deposit Protection Certificate',
   [EvidenceCategory.PRESCRIBED_INFORMATION_PROOF]: 'Prescribed Information Proof',
   [EvidenceCategory.HOW_TO_RENT_PROOF]: 'How to Rent Guide Proof',
   [EvidenceCategory.EPC]: 'Energy Performance Certificate (EPC)',
   [EvidenceCategory.GAS_SAFETY_CERTIFICATE]: 'Gas Safety Certificate',
+  [EvidenceCategory.EICR]: 'Electrical Installation Condition Report (EICR)',
   [EvidenceCategory.LICENSING]: 'Property Licensing Documents',
   [EvidenceCategory.HMO_LICENSE]: 'HMO License',
   [EvidenceCategory.NOTICE_SERVED_PROOF]: 'Notice Service Proof',
   [EvidenceCategory.CORRESPONDENCE]: 'Tenant Correspondence',
+  [EvidenceCategory.DEPOSIT_PROTECTION]: 'Deposit Protection Evidence',
+  [EvidenceCategory.LBA_LETTER]: 'Letter Before Action (LBA)',
+  [EvidenceCategory.COURT_CLAIM_DRAFT]: 'Court Claim Draft',
   [EvidenceCategory.REPAIR_COMPLAINTS]: 'Repair Complaints',
   [EvidenceCategory.RETALIATORY_EVIDENCE]: 'Retaliatory Eviction Evidence',
   [EvidenceCategory.OTHER]: 'Other Documents',
@@ -58,8 +76,18 @@ export const EVIDENCE_CATEGORY_LABELS: Record<EvidenceCategory, string> = {
 export const EVIDENCE_CATEGORY_HELPER_TEXT: Record<EvidenceCategory, string> = {
   [EvidenceCategory.TENANCY_AGREEMENT]:
     'Upload the signed tenancy agreement or AST. Used to verify tenant/landlord names, property address, rent amount, and tenancy start date.',
+  [EvidenceCategory.RENT_SCHEDULE]:
+    'Upload a rent schedule or ledger showing payment history and arrears.',
+  [EvidenceCategory.ARREARS_LEDGER]:
+    'Upload an arrears ledger or rent statement that shows arrears totals and dates.',
   [EvidenceCategory.BANK_STATEMENTS]:
     'Upload bank statements or rent payment records showing rent payments received.',
+  [EvidenceCategory.BANK_STATEMENT]:
+    'Upload a bank statement showing rent payments.',
+  [EvidenceCategory.NOTICE_S21]:
+    'Upload the Section 21 notice served to the tenant.',
+  [EvidenceCategory.NOTICE_S8]:
+    'Upload the Section 8 notice served to the tenant.',
   [EvidenceCategory.DEPOSIT_PROTECTION_CERTIFICATE]:
     'Upload the deposit protection certificate from DPS, MyDeposits, or TDS.',
   [EvidenceCategory.PRESCRIBED_INFORMATION_PROOF]:
@@ -70,6 +98,8 @@ export const EVIDENCE_CATEGORY_HELPER_TEXT: Record<EvidenceCategory, string> = {
     'Upload the current Energy Performance Certificate for the property.',
   [EvidenceCategory.GAS_SAFETY_CERTIFICATE]:
     'Upload the current Gas Safety Certificate (CP12) for the property.',
+  [EvidenceCategory.EICR]:
+    'Upload the Electrical Installation Condition Report (EICR) for the property.',
   [EvidenceCategory.LICENSING]:
     'Upload any required property licensing documents.',
   [EvidenceCategory.HMO_LICENSE]:
@@ -78,6 +108,12 @@ export const EVIDENCE_CATEGORY_HELPER_TEXT: Record<EvidenceCategory, string> = {
     'Upload proof of notice service (photo, proof of postage, email confirmation).',
   [EvidenceCategory.CORRESPONDENCE]:
     'Upload relevant correspondence with the tenant(s).',
+  [EvidenceCategory.DEPOSIT_PROTECTION]:
+    'Upload evidence of deposit protection or prescribed information service.',
+  [EvidenceCategory.LBA_LETTER]:
+    'Upload the Letter Before Action or pre-action correspondence sent to tenants.',
+  [EvidenceCategory.COURT_CLAIM_DRAFT]:
+    'Upload any draft court claim forms prepared so far.',
   [EvidenceCategory.REPAIR_COMPLAINTS]:
     'Upload any repair complaints or related communications.',
   [EvidenceCategory.RETALIATORY_EVIDENCE]:

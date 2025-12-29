@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import {
   createServerSupabaseClient,
-  requireServerAuth,
+  createAdminClient,
+  tryGetServerUser,
 } from '@/lib/supabase/server';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
@@ -10,6 +11,7 @@ import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generat
 import { deriveCanonicalJurisdiction, type CanonicalJurisdiction } from '@/lib/types/jurisdiction';
 import { validateForGenerate } from '@/lib/validation/previewValidation';
 import JSZip from 'jszip';
+import { assertPaidEntitlement } from '@/lib/payments/entitlement';
 
 // If you have a proper Case row type somewhere, you can replace this `any`
 type CaseRow = any;
@@ -18,30 +20,24 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ caseId: string }> }
 ) {
-  // Step 1: Check authentication
-  let user;
-  try {
-    user = await requireServerAuth();
-  } catch (authError) {
-    console.error('Money claim pack auth error:', authError);
-    return NextResponse.json(
-      { error: 'Please sign in to generate your money claim pack' },
-      { status: 401 }
-    );
-  }
+  const user = await tryGetServerUser();
 
   const { caseId } = await params;
 
   // Step 2: Fetch case data
   let caseRow: CaseRow;
   try {
-    const supabase = await createServerSupabaseClient();
-    const { data, error } = await supabase
+    const supabase = user ? await createServerSupabaseClient() : createAdminClient();
+    let query = supabase
       .from('cases')
       .select('*')
-      .eq('id', caseId)
-      .eq('user_id', user.id)
-      .single();
+      .eq('id', caseId);
+
+    if (user) {
+      query = query.eq('user_id', user.id);
+    }
+
+    const { data, error } = await query.single();
 
     if (error || !data) {
       console.error('Money claim case not found:', error);
@@ -118,6 +114,9 @@ export async function GET(
       );
     }
 
+    const entitlementProduct = jurisdiction === 'scotland' ? 'sc_money_claim' : 'money_claim';
+    await assertPaidEntitlement({ caseId, product: entitlementProduct });
+
     // ============================================================================
     // UNIFIED VALIDATION VIA REQUIREMENTS ENGINE
     // ============================================================================
@@ -140,6 +139,9 @@ export async function GET(
     caseFacts = wizardFactsToCaseFacts(wizardFacts) as CaseFacts;
     moneyClaimCase = mapCaseFactsToMoneyClaimCase(caseFacts);
   } catch (mapError) {
+    if (mapError instanceof Response) {
+      return mapError;
+    }
     console.error('Money claim data mapping error:', mapError);
     return NextResponse.json(
       { error: 'Unable to process case data. Please check all required fields are filled.' },
