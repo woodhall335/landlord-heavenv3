@@ -18,7 +18,12 @@ export interface DocumentClassificationInput {
     text_length?: number;
     regex_fields_found?: number;
     llm_extraction_ran?: boolean;
+    is_low_text?: boolean;
+    is_metadata_only?: boolean;
+    document_markers?: string[];
   };
+  /** Extracted fields from analysis - can be used to boost classification confidence */
+  extractedFields?: Record<string, any> | null;
 }
 
 export interface DocumentClassificationResult {
@@ -164,7 +169,90 @@ export function classifyDocument(input: DocumentClassificationInput): DocumentCl
     categoryHint: input.categoryHint,
     extractedTextLength: input.extractedText?.length || 0,
     extractionQuality: input.extractionQuality,
+    hasExtractedFields: !!input.extractedFields,
   });
+
+  // Check extracted fields for classification signals
+  const extractedFields = input.extractedFields || {};
+  const documentMarkers = input.extractionQuality?.document_markers || [];
+
+  // High-confidence classification from extracted field signals
+  const hasForm6aFlag = extractedFields.form_6a_used === true || extractedFields.form_6a_detected === true;
+  const hasSection21Flag = extractedFields.section_21_detected === true;
+  const hasSection8Flag = extractedFields.section_8_detected === true || extractedFields.form_3_detected === true;
+  const hasWalesFlag = !!extractedFields.rhw_form_number || extractedFields.occupation_contract_mentioned === true;
+  const hasScotlandFlag = extractedFields.notice_to_leave_detected === true || extractedFields.prt_mentioned === true;
+
+  // Use document markers from extraction quality
+  const markersSet = new Set(documentMarkers);
+  const hasForm6aMarker = markersSet.has('form_6a');
+  const hasSection21Marker = markersSet.has('section_21');
+  const hasSection8Marker = markersSet.has('section_8');
+  const hasWalesMarker = markersSet.has('wales_rhw');
+  const hasScotlandMarker = markersSet.has('scotland_ntl');
+  const hasTenancyMarker = markersSet.has('tenancy_agreement');
+
+  // Immediate high-confidence classification from extracted flags/markers
+  if ((hasForm6aFlag || hasForm6aMarker) && (hasSection21Flag || hasSection21Marker)) {
+    reasons.push('Detected Form 6A and Section 21 markers from extraction');
+    debugLog('early_s21_match', { hasForm6aFlag, hasSection21Flag, hasForm6aMarker, hasSection21Marker });
+    return {
+      docType: 'notice_s21',
+      confidence: 0.92,
+      reasons,
+      strongMarkersFound: ['form 6a', 'section 21'],
+    };
+  }
+
+  if (hasSection21Flag || hasSection21Marker || hasForm6aFlag || hasForm6aMarker) {
+    reasons.push('Detected Section 21 / Form 6A markers from extraction');
+    return {
+      docType: 'notice_s21',
+      confidence: 0.85,
+      reasons,
+      strongMarkersFound: hasForm6aFlag || hasForm6aMarker ? ['form 6a'] : ['section 21'],
+    };
+  }
+
+  if (hasSection8Flag || hasSection8Marker) {
+    reasons.push('Detected Section 8 / Form 3 markers from extraction');
+    return {
+      docType: 'notice_s8',
+      confidence: 0.85,
+      reasons,
+      strongMarkersFound: ['section 8'],
+    };
+  }
+
+  if (hasWalesFlag || hasWalesMarker) {
+    reasons.push('Detected Wales RHW notice markers from extraction');
+    return {
+      docType: 'wales_notice',
+      confidence: 0.85,
+      reasons,
+      strongMarkersFound: ['wales rhw'],
+    };
+  }
+
+  if (hasScotlandFlag || hasScotlandMarker) {
+    reasons.push('Detected Scotland Notice to Leave markers from extraction');
+    return {
+      docType: 'scotland_notice_to_leave',
+      confidence: 0.85,
+      reasons,
+      strongMarkersFound: ['notice to leave'],
+    };
+  }
+
+  if (hasTenancyMarker) {
+    reasons.push('Detected tenancy agreement markers from extraction');
+    return {
+      docType: 'tenancy_agreement',
+      confidence: 0.80,
+      reasons,
+      strongMarkersFound: ['tenancy agreement'],
+    };
+  }
 
   // Check extraction quality - if we failed to extract content and have a UUID filename,
   // we should strongly trust the category hint

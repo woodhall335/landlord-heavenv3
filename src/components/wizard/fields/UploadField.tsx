@@ -43,6 +43,27 @@ interface UploadValidationSummary {
   upsell?: { product: string; reason: string } | null;
 }
 
+interface ExtractedFieldsSummary {
+  notice_type?: string;
+  date_served?: string;
+  service_date?: string;
+  expiry_date?: string;
+  property_address?: string;
+  tenant_names?: string | string[];
+  landlord_name?: string;
+  signature_present?: boolean;
+  form_6a_used?: boolean;
+  section_21_detected?: boolean;
+  [key: string]: any;
+}
+
+interface ExtractionQualitySummary {
+  text_extraction_method?: string;
+  is_low_text?: boolean;
+  is_metadata_only?: boolean;
+  document_markers?: string[];
+}
+
 export const UploadField: React.FC<UploadFieldProps> = ({
   caseId,
   questionId,
@@ -67,6 +88,8 @@ export const UploadField: React.FC<UploadFieldProps> = ({
   >([]);
   const [nextQuestions, setNextQuestions] = useState<QuestionDefinition[]>([]);
   const [analysisSummary, setAnalysisSummary] = useState<{ detected_type?: string; confidence?: number } | null>(null);
+  const [extractedFields, setExtractedFields] = useState<ExtractedFieldsSummary | null>(null);
+  const [extractionQuality, setExtractionQuality] = useState<ExtractionQualitySummary | null>(null);
   const [questionAnswers, setQuestionAnswers] = useState<Record<string, any>>({});
   const [questionErrors, setQuestionErrors] = useState<Record<string, string>>({});
   const [answerSubmitting, setAnswerSubmitting] = useState(false);
@@ -288,6 +311,20 @@ export const UploadField: React.FC<UploadFieldProps> = ({
           });
         }
 
+        // Capture extracted fields for display
+        if (data?.evidence?.analysis?.extracted_fields) {
+          setExtractedFields(data.evidence.analysis.extracted_fields);
+        } else if (data?.evidence?.extracted_fields) {
+          setExtractedFields(data.evidence.extracted_fields);
+        }
+
+        // Capture extraction quality info
+        if (data?.evidence?.analysis?.extraction_quality) {
+          setExtractionQuality(data.evidence.analysis.extraction_quality);
+        } else if (data?.evidence?.extraction_quality) {
+          setExtractionQuality(data.evidence.extraction_quality);
+        }
+
         const evidenceFiles: any[] = Array.isArray(data?.evidence?.files)
           ? data.evidence.files
           : [];
@@ -410,13 +447,90 @@ export const UploadField: React.FC<UploadFieldProps> = ({
 
       {analysisSummary && (
         <div className="rounded-lg border border-gray-200 bg-white p-4 text-sm">
-          <p className="font-medium text-charcoal">Document classification</p>
+          <div className="flex items-center justify-between">
+            <p className="font-medium text-charcoal">Document classification</p>
+            {extractionQuality?.is_low_text && (
+              <span className="rounded bg-amber-100 px-2 py-0.5 text-[10px] font-medium text-amber-800">
+                Vision extraction
+              </span>
+            )}
+          </div>
           <p className="text-xs text-gray-600">
             {analysisSummary.detected_type || 'unknown'}{' '}
             {analysisSummary.confidence !== undefined && (
               <span className="text-gray-500">({Math.round(analysisSummary.confidence * 100)}% confidence)</span>
             )}
           </p>
+        </div>
+      )}
+
+      {extractedFields && Object.keys(extractedFields).length > 0 && (
+        <div className="rounded-lg border border-blue-100 bg-blue-50 p-4 text-sm">
+          <div className="flex items-center justify-between mb-2">
+            <p className="font-medium text-blue-900">Extracted fields</p>
+            {extractionQuality?.text_extraction_method === 'vision' && (
+              <span className="rounded bg-blue-200 px-2 py-0.5 text-[10px] font-medium text-blue-800">
+                AI Vision
+              </span>
+            )}
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            {(extractedFields.date_served || extractedFields.service_date) && (
+              <div>
+                <span className="text-gray-500">Service date:</span>
+                <span className="ml-1 text-gray-900">{extractedFields.date_served || extractedFields.service_date}</span>
+              </div>
+            )}
+            {extractedFields.expiry_date && (
+              <div>
+                <span className="text-gray-500">Expiry date:</span>
+                <span className="ml-1 text-gray-900">{extractedFields.expiry_date}</span>
+              </div>
+            )}
+            {extractedFields.property_address && (
+              <div className="col-span-2">
+                <span className="text-gray-500">Address:</span>
+                <span className="ml-1 text-gray-900">{extractedFields.property_address}</span>
+              </div>
+            )}
+            {extractedFields.tenant_names && (
+              <div>
+                <span className="text-gray-500">Tenant(s):</span>
+                <span className="ml-1 text-gray-900">
+                  {Array.isArray(extractedFields.tenant_names)
+                    ? extractedFields.tenant_names.join(', ')
+                    : extractedFields.tenant_names}
+                </span>
+              </div>
+            )}
+            {extractedFields.landlord_name && (
+              <div>
+                <span className="text-gray-500">Landlord:</span>
+                <span className="ml-1 text-gray-900">{extractedFields.landlord_name}</span>
+              </div>
+            )}
+            {extractedFields.signature_present !== undefined && (
+              <div>
+                <span className="text-gray-500">Signature:</span>
+                <span className={`ml-1 ${extractedFields.signature_present ? 'text-green-700' : 'text-amber-700'}`}>
+                  {extractedFields.signature_present ? 'Detected' : 'Not detected'}
+                </span>
+              </div>
+            )}
+            {(extractedFields.form_6a_used || extractedFields.section_21_detected) && (
+              <div>
+                <span className="text-gray-500">Form type:</span>
+                <span className="ml-1 text-green-700">
+                  {extractedFields.form_6a_used ? 'Form 6A' : 'Section 21'}
+                </span>
+              </div>
+            )}
+          </div>
+          {extractionQuality?.is_low_text && (
+            <p className="mt-2 text-[11px] text-blue-700">
+              Note: This document had limited text content. AI vision was used for extraction.
+            </p>
+          )}
         </div>
       )}
 

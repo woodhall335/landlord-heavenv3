@@ -66,31 +66,51 @@ const LOW_CONFIDENCE_THRESHOLD = 0.40;
 /**
  * Mapping from extraction field names to canonical fact keys.
  * Supports multiple source keys mapping to a single canonical key.
+ *
+ * IMPORTANT: Some validators expect specific field names (e.g., date_served vs service_date).
+ * We maintain aliases to ensure compatibility.
  */
 const EXTRACTION_TO_FACT_MAPPING: Array<{
   sources: string[];
   target: string;
   transform?: (value: any) => any;
+  /** Optional: also output to these alias keys for validator compatibility */
+  aliases?: string[];
 }> = [
   // Basic tenant/landlord info
-  { sources: ['tenant_full_name', 'tenant_name', 'tenant_names', 'tenant'], target: 'tenant_full_name', transform: normalizeNames },
-  { sources: ['landlord_full_name', 'landlord_name', 'landlord'], target: 'landlord_full_name' },
+  {
+    sources: ['tenant_full_name', 'tenant_name', 'tenant_names', 'tenant'],
+    target: 'tenant_full_name',
+    transform: normalizeNames,
+    aliases: ['tenant_names', 'tenant_name'], // Validators may expect either
+  },
+  { sources: ['landlord_full_name', 'landlord_name', 'landlord'], target: 'landlord_full_name', aliases: ['landlord_name'] },
 
   // Property info
-  { sources: ['property_address', 'address', 'property_address_line1', 'address_line1'], target: 'property_address_line1' },
+  { sources: ['property_address', 'address', 'property_address_line1', 'address_line1'], target: 'property_address_line1', aliases: ['property_address'] },
 
   // Tenancy details
   { sources: ['tenancy_type', 'agreement_type'], target: 'tenancy_type' },
   { sources: ['tenancy_start_date', 'start_date', 'commencement_date'], target: 'tenancy_start_date', transform: normalizeDate },
-  { sources: ['tenancy_end_date', 'end_date', 'fixed_term_end_date', 'expiry_date'], target: 'tenancy_end_date', transform: normalizeDate },
+  { sources: ['tenancy_end_date', 'end_date', 'fixed_term_end_date'], target: 'tenancy_end_date', transform: normalizeDate },
   { sources: ['rent_amount', 'monthly_rent', 'rent'], target: 'rent_amount', transform: normalizeAmount },
   { sources: ['rent_frequency', 'rent_period', 'payment_frequency'], target: 'rent_frequency' },
   { sources: ['deposit_amount', 'deposit'], target: 'deposit_amount', transform: normalizeAmount },
   { sources: ['deposit_scheme', 'deposit_provider', 'deposit_scheme_name'], target: 'deposit_scheme' },
 
-  // Notice dates
-  { sources: ['notice_date', 'date_served', 'service_date', 'issue_date'], target: 'notice_date', transform: normalizeDate },
-  { sources: ['notice_expiry', 'expiry_date', 'notice_expiry_date'], target: 'notice_expiry_date', transform: normalizeDate },
+  // Notice dates - CRITICAL: output both date_served and service_date for validator compatibility
+  {
+    sources: ['notice_date', 'date_served', 'service_date', 'issue_date'],
+    target: 'notice_date',
+    transform: normalizeDate,
+    aliases: ['date_served', 'service_date'], // S21 validators may check either
+  },
+  {
+    sources: ['notice_expiry', 'expiry_date', 'notice_expiry_date'],
+    target: 'notice_expiry_date',
+    transform: normalizeDate,
+    aliases: ['expiry_date'],
+  },
   { sources: ['notice_period'], target: 'notice_period' },
 
   // Section 21 compliance flags
@@ -232,8 +252,9 @@ export function mergeExtractedFacts(input: MergeExtractedFactsInput): MergeExtra
       // Apply transform if defined
       const value = mapping.transform ? mapping.transform(rawValue) : rawValue;
 
-      // Skip if transform returned null
+      // Skip if transform returned null or empty
       if (value === null || value === undefined) continue;
+      if (typeof value === 'string' && value.trim() === '') continue;
 
       // Calculate effective confidence
       // Boost confidence for certain field types that are usually accurate
@@ -258,6 +279,17 @@ export function mergeExtractedFacts(input: MergeExtractedFactsInput): MergeExtra
           mergedFactsPatch[mapping.target] = value;
           provenance[mapping.target] = provenanceEntry;
           confidenceMap[mapping.target] = effectiveConfidence;
+
+          // Also set aliases for validator compatibility
+          if (mapping.aliases) {
+            for (const alias of mapping.aliases) {
+              if (!confidenceMap[alias] || confidenceMap[alias] < effectiveConfidence) {
+                mergedFactsPatch[alias] = value;
+                provenance[alias] = { ...provenanceEntry, original_key: `${sourceKey}→${alias}` };
+                confidenceMap[alias] = effectiveConfidence;
+              }
+            }
+          }
         }
       } else if (effectiveConfidence >= LOW_CONFIDENCE_THRESHOLD) {
         // Track as low confidence - needs user confirmation
@@ -404,4 +436,93 @@ export function generateConfirmationQuestions(
       factKey: key,
       ...QUESTION_TEMPLATES[key],
     }));
+}
+
+/**
+ * Merge multiple extraction outputs into a single facts patch.
+ * Uses confidence-based rules to determine which value wins when there are conflicts.
+ *
+ * @param outputs - Array of MergeExtractedFactsOutput from multiple evidence files
+ * @returns Combined merge output with best values
+ */
+export function mergeMultipleExtractions(
+  outputs: MergeExtractedFactsOutput[]
+): MergeExtractedFactsOutput {
+  const combinedFacts: Record<string, any> = {};
+  const combinedProvenance: Record<string, ExtractionProvenance> = {};
+  const combinedConfidence: Record<string, number> = {};
+  const allLowConfidenceKeys: Set<string> = new Set();
+  const allRawExtracted: Record<string, any> = {};
+
+  debugLog('multi_merge_start', { outputCount: outputs.length });
+
+  for (const output of outputs) {
+    // Collect all raw extracted for debugging
+    Object.assign(allRawExtracted, output.rawExtracted);
+
+    // Collect low confidence keys
+    for (const key of output.lowConfidenceKeys) {
+      allLowConfidenceKeys.add(key);
+    }
+
+    // Merge facts with confidence-based priority
+    for (const [key, value] of Object.entries(output.mergedFactsPatch)) {
+      const newConfidence = output.confidenceMap[key] ?? 0;
+      const existingConfidence = combinedConfidence[key] ?? 0;
+
+      // Skip null/undefined/empty values
+      if (value === null || value === undefined) continue;
+      if (typeof value === 'string' && value.trim() === '') continue;
+
+      // Higher confidence wins
+      if (newConfidence > existingConfidence) {
+        combinedFacts[key] = value;
+        combinedConfidence[key] = newConfidence;
+        if (output.provenance[key]) {
+          combinedProvenance[key] = output.provenance[key];
+        }
+        // Remove from low confidence if now high confidence
+        if (newConfidence >= HIGH_CONFIDENCE_THRESHOLD) {
+          allLowConfidenceKeys.delete(key);
+        }
+      } else if (newConfidence === existingConfidence && !combinedFacts[key]) {
+        // Equal confidence but no existing value - use new value
+        combinedFacts[key] = value;
+        combinedConfidence[key] = newConfidence;
+        if (output.provenance[key]) {
+          combinedProvenance[key] = output.provenance[key];
+        }
+      }
+    }
+  }
+
+  debugLog('multi_merge_complete', {
+    combinedFactsCount: Object.keys(combinedFacts).length,
+    lowConfidenceCount: allLowConfidenceKeys.size,
+    keys: Object.keys(combinedFacts),
+  });
+
+  // Get the best extraction quality from all outputs
+  const bestQuality = outputs.reduce((best, curr) => {
+    if (!curr.extractionQuality) return best;
+    if (!best) return curr.extractionQuality;
+    // Prefer non-failed methods, then higher text length
+    if (curr.extractionQuality.text_extraction_method !== 'failed' &&
+        best.text_extraction_method === 'failed') {
+      return curr.extractionQuality;
+    }
+    if ((curr.extractionQuality.text_length ?? 0) > (best.text_length ?? 0)) {
+      return curr.extractionQuality;
+    }
+    return best;
+  }, outputs[0]?.extractionQuality);
+
+  return {
+    mergedFactsPatch: combinedFacts,
+    provenance: combinedProvenance,
+    confidenceMap: combinedConfidence,
+    lowConfidenceKeys: Array.from(allLowConfidenceKeys),
+    rawExtracted: allRawExtracted,
+    extractionQuality: bestQuality,
+  };
 }
