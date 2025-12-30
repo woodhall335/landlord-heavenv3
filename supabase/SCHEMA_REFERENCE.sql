@@ -1,8 +1,24 @@
 -- =============================================================================
--- LANDLORD HEAVEN - COMPLETE DATABASE SCHEMA
+-- LANDLORD HEAVEN - SCHEMA REFERENCE (DO NOT RUN DIRECTLY)
 -- =============================================================================
--- Run this entire script in Supabase SQL Editor
--- This creates all tables, RLS policies, indexes, and triggers
+--
+-- ⚠️  WARNING: This file is for REFERENCE ONLY
+-- ⚠️  DO NOT run this file directly in Supabase SQL Editor
+--
+-- This is a snapshot of the initial schema. For the actual database setup,
+-- run the migrations in order from the /migrations folder:
+--   001_initial_schema.sql
+--   002_councils_table.sql
+--   003_ai_usage_table.sql
+--   004_allow_anonymous_wizard.sql
+--   005_allow_anonymous_documents.sql
+--   006_email_leads.sql
+--   007_webhook_logs_processing_result.sql
+--   008_fix_anonymous_case_rls.sql
+--   009_seo_automation_schema.sql
+--   010_schema_cleanup.sql
+--
+-- Or use: supabase db push (if using Supabase CLI)
 -- =============================================================================
 
 -- Enable required extensions
