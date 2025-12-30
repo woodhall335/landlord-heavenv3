@@ -28,14 +28,31 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/products/notice-only', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/complete-pack', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/money-claim', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/products/ast', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/hmo-pro', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/ask-heaven', priority: 0.8, changeFrequency: 'weekly' as const },
+  ];
+
+  // Tenancy agreement pages
+  const tenancyPages = [
     { path: '/tenancy-agreements', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreements/standard', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/tenancy-agreements/premium', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreements/england-wales', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreements/scotland', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreements/northern-ireland', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
-  // Tool pages
+  // Tool pages - Free tools for SEO traffic
   const toolPages = [
     { path: '/tools', priority: 0.7, changeFrequency: 'monthly' as const },
+    { path: '/tools/free-section-21-notice-generator', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/tools/free-section-8-notice-generator', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/tools/rent-arrears-calculator', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tools/hmo-license-checker', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tools/free-rent-demand-letter', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tools/validators', priority: 0.7, changeFrequency: 'monthly' as const },
+    { path: '/tools/validators/scotland-notice-to-leave', priority: 0.7, changeFrequency: 'monthly' as const },
   ];
 
   // Auth entry points (login/signup visible to crawlers)
@@ -47,6 +64,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const allPages = [
     ...marketingPages,
     ...productPages,
+    ...tenancyPages,
     ...toolPages,
     ...authEntryPages,
   ];
