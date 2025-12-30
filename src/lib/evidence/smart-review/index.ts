@@ -65,3 +65,15 @@ export {
   type ComparisonConfig,
   type ComparisonResult,
 } from './compare';
+
+// Storage utilities
+export {
+  fetchDocumentFromStorage,
+  fetchPdfText,
+  fetchDocumentAsBase64,
+  prepareDocumentForSmartReview,
+  renderPdfPagesToBase64,
+  type DocumentFetchResult,
+  type PdfTextResult,
+  type Base64ConversionResult,
+} from './storage';
