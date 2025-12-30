@@ -76,12 +76,15 @@ describe('Money Claim Wizard UX Regression Tests', () => {
 
   describe('Claiming Flags Derivation', () => {
     // These tests verify the claiming flag logic implemented in ClaimDetailsSection
+    // Helper function to derive claiming flags from primaryIssue
+    const deriveClaimingFlags = (primaryIssue: string) => ({
+      claiming_rent_arrears: primaryIssue === 'unpaid_rent_only' || primaryIssue === 'unpaid_rent_and_damage',
+      claiming_damages: primaryIssue === 'unpaid_rent_and_damage' || primaryIssue === 'damage_only',
+      claiming_other: primaryIssue === 'other_debt',
+    });
 
     test('unpaid_rent_only sets claiming_rent_arrears=true, claiming_damages=false', () => {
-      const primaryIssue = 'unpaid_rent_only';
-      const claiming_rent_arrears = primaryIssue === 'unpaid_rent_only' || primaryIssue === 'unpaid_rent_and_damage';
-      const claiming_damages = primaryIssue === 'unpaid_rent_and_damage' || primaryIssue === 'damage_only';
-      const claiming_other = primaryIssue === 'other_debt';
+      const { claiming_rent_arrears, claiming_damages, claiming_other } = deriveClaimingFlags('unpaid_rent_only');
 
       expect(claiming_rent_arrears).toBe(true);
       expect(claiming_damages).toBe(false);
@@ -89,10 +92,7 @@ describe('Money Claim Wizard UX Regression Tests', () => {
     });
 
     test('unpaid_rent_and_damage sets both claiming_rent_arrears and claiming_damages', () => {
-      const primaryIssue = 'unpaid_rent_and_damage';
-      const claiming_rent_arrears = primaryIssue === 'unpaid_rent_only' || primaryIssue === 'unpaid_rent_and_damage';
-      const claiming_damages = primaryIssue === 'unpaid_rent_and_damage' || primaryIssue === 'damage_only';
-      const claiming_other = primaryIssue === 'other_debt';
+      const { claiming_rent_arrears, claiming_damages, claiming_other } = deriveClaimingFlags('unpaid_rent_and_damage');
 
       expect(claiming_rent_arrears).toBe(true);
       expect(claiming_damages).toBe(true);
@@ -100,10 +100,7 @@ describe('Money Claim Wizard UX Regression Tests', () => {
     });
 
     test('damage_only sets claiming_damages=true, claiming_rent_arrears=false', () => {
-      const primaryIssue = 'damage_only';
-      const claiming_rent_arrears = primaryIssue === 'unpaid_rent_only' || primaryIssue === 'unpaid_rent_and_damage';
-      const claiming_damages = primaryIssue === 'unpaid_rent_and_damage' || primaryIssue === 'damage_only';
-      const claiming_other = primaryIssue === 'other_debt';
+      const { claiming_rent_arrears, claiming_damages, claiming_other } = deriveClaimingFlags('damage_only');
 
       expect(claiming_rent_arrears).toBe(false);
       expect(claiming_damages).toBe(true);
@@ -111,10 +108,7 @@ describe('Money Claim Wizard UX Regression Tests', () => {
     });
 
     test('other_debt sets claiming_other=true only', () => {
-      const primaryIssue = 'other_debt';
-      const claiming_rent_arrears = primaryIssue === 'unpaid_rent_only' || primaryIssue === 'unpaid_rent_and_damage';
-      const claiming_damages = primaryIssue === 'unpaid_rent_and_damage' || primaryIssue === 'damage_only';
-      const claiming_other = primaryIssue === 'other_debt';
+      const { claiming_rent_arrears, claiming_damages, claiming_other } = deriveClaimingFlags('other_debt');
 
       expect(claiming_rent_arrears).toBe(false);
       expect(claiming_damages).toBe(false);

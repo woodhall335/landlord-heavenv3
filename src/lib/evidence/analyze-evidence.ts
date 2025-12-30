@@ -35,7 +35,7 @@ export interface EvidenceAnalysisInput {
 }
 
 export interface ExtractionQualityMeta {
-  text_extraction_method: 'pdf_parse' | 'pdf_lib' | 'vision' | 'regex_only' | 'failed';
+  text_extraction_method: 'pdf_parse' | 'pdf_lib' | 'pdf_lib_metadata' | 'vision' | 'regex_only' | 'failed';
   text_length: number;
   regex_fields_found: number;
   llm_extraction_ran: boolean;
@@ -1395,11 +1395,11 @@ async function renderPdfPagesToImages(buffer: Buffer, maxPages: number): Promise
 </html>`;
     await page.setContent(html, { waitUntil: 'networkidle0' });
     const dataUrls = await page.evaluate(async () => {
-      // @ts-ignore
-      if (window.renderError) {
-        throw new Error(window.renderError);
+      // @ts-ignore - window properties are defined in the injected script
+      if ((window as any).renderError) {
+        throw new Error((window as any).renderError);
       }
-      return await window.renderPages();
+      return await (window as any).renderPages();
     });
     return Array.isArray(dataUrls) ? dataUrls : [];
   } catch (error: any) {

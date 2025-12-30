@@ -129,7 +129,8 @@ export async function GET(request: Request) {
     // =========================================================================
     // LOAD EVIDENCE FROM CANONICAL SOURCE (facts.evidence.files[])
     // =========================================================================
-    const facts = await getOrCreateWizardFacts(supabase as any, caseId);
+    // caseId is guaranteed to be non-null at this point due to earlier validation
+    const facts = await getOrCreateWizardFacts(supabase as any, caseId!);
     const evidenceFiles: EvidenceFile[] = (facts as any)?.evidence?.files || [];
 
     // Find the specific evidence file by ID

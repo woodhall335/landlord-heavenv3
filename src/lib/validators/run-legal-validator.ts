@@ -35,7 +35,7 @@ function getFactValue(facts: Record<string, any>, paths: string[]): any {
   return undefined;
 }
 
-function resolveNoticeRoute(facts: Record<string, any>): string | undefined {
+function resolveNoticeRoute(facts: Record<string, any>): string {
   return (
     getFactValue(facts, ['selected_notice_route', 'eviction_route', 'notice_type']) || ''
   ).toString();

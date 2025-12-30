@@ -636,7 +636,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
 
 interface SectionProps {
   facts: any;
-  onUpdate: (updates: Record<string, any>) => Promise<void>;
+  onUpdate?: (updates: Record<string, any>) => Promise<void>;
   jurisdiction?: Jurisdiction;
   caseId?: string;
 }

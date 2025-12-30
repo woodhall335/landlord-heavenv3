@@ -30,6 +30,7 @@ export interface EvidenceRecord {
 export interface EvidenceAnalysisRecord {
   detected_type?: string | null;
   extracted_fields?: Record<string, any> | null;
+  confidence?: number | null;
 }
 
 export interface EvidenceMapInput {
@@ -120,7 +121,8 @@ export function mapEvidenceToFacts(input: EvidenceMapInput): CaseFacts {
   };
 
   const mergeFlag = (flag: keyof CaseFacts['evidence']) => {
-    flags[flag] = true;
+    // Type assertion is safe because we only set boolean flags from CATEGORY_FLAG_MAP and DOC_TYPE_FLAG_MAP
+    (flags as Record<string, boolean>)[flag] = true;
   };
 
   for (const file of evidenceFiles) {

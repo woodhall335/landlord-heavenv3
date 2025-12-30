@@ -186,6 +186,13 @@ export interface EvidenceFacts {
   photos_uploaded?: boolean;
   missing_evidence_notes: string[];
   analysis?: Record<string, any>;
+  // Evidence files array - dynamically populated from wizard facts
+  files?: Array<{
+    id?: string;
+    category?: string;
+    file_name?: string;
+    [key: string]: any;
+  }>;
 }
 
 export interface ServiceContactFacts {

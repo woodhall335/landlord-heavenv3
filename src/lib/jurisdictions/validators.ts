@@ -1,6 +1,6 @@
 import { type DecisionRules, type FactsSchema, type JurisdictionKey, loadJurisdictionRuleBundle } from './rulesLoader';
 
-export type ValidationStage = 'wizard' | 'preview' | 'generate';
+export type ValidationStage = 'wizard' | 'preview' | 'generate' | 'generation';
 
 export type ProductKey = 'notice_only' | 'eviction_pack' | 'complete_pack' | 'money_claim' | 'tenancy_agreement' | 'unknown';
 

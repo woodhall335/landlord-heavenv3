@@ -21,7 +21,7 @@ function debugLog(label: string, data: any): void {
 
 export interface ExtractionProvenance {
   evidence_id: string;
-  method: 'pdf_text' | 'vision' | 'image' | 'unknown';
+  method: 'pdf_text' | 'vision' | 'image' | 'regex' | 'unknown';
   model: string;
   extracted_at: string;
   original_key: string;

@@ -499,7 +499,12 @@ export async function POST(request: Request) {
       const filteredConfirmationQuestions = confirmationQuestions.filter(
         q => !validatorFactKeys.has(q.factKey)
       );
-      validationNextQuestions = [...validatorQuestions, ...filteredConfirmationQuestions];
+      // Map confirmation questions to have id property for compatibility
+      const mappedConfirmationQuestions = filteredConfirmationQuestions.map(q => ({
+        id: q.factKey,
+        question: q.question,
+      }));
+      validationNextQuestions = [...validatorQuestions, ...mappedConfirmationQuestions];
 
       if (validationResult) {
         validationSummary = {

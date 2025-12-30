@@ -2,11 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { mapEvidenceToFacts } from '@/lib/evidence/map-evidence-to-facts';
 import type { CaseFacts } from '@/lib/case-facts/schema';
 
+// Use type assertion through unknown since we're creating a minimal mock
 const baseFacts = {
   evidence: {
     files: [],
   },
-} as CaseFacts;
+} as unknown as CaseFacts;
 
 describe('mapEvidenceToFacts', () => {
   it('sets evidence flags based on categories', () => {
