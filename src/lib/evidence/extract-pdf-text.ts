@@ -7,14 +7,19 @@
  * Fallback for scanned/image PDFs: marks as LOW_TEXT for vision processing.
  */
 
-// Dynamic import to avoid issues with Next.js bundling
-let pdfParse: typeof import('pdf-parse') | null = null;
+// pdf-parse v2 uses a class-based API: PDFParse
+// We cache the class reference for performance
+let PDFParseClass: any = null;
 
-async function getPdfParse(): Promise<typeof import('pdf-parse')> {
-  if (!pdfParse) {
-    pdfParse = (await import('pdf-parse')).default;
+async function getPDFParseClass(): Promise<any> {
+  if (!PDFParseClass) {
+    const module = await import('pdf-parse');
+    PDFParseClass = module.PDFParse;
+    if (!PDFParseClass) {
+      throw new Error('PDFParse class not found in pdf-parse module');
+    }
   }
-  return pdfParse as typeof import('pdf-parse');
+  return PDFParseClass;
 }
 
 // Debug logging helper
@@ -122,19 +127,23 @@ export async function extractPdfText(
   debugLog('extract_start', { bufferSize: buffer.length, maxPages });
 
   try {
-    const parse = await getPdfParse();
+    const PDFParse = await getPDFParseClass();
 
-    // pdf-parse options
-    const options = {
-      // Limit pages for performance
-      max: maxPages,
-    };
+    // pdf-parse v2 uses class-based API with 'data' parameter for buffers
+    const parser = new PDFParse({ data: buffer });
 
-    const data = await parse(buffer, options);
+    // Get text content using the getText() method
+    // Use partial option to limit pages if needed
+    const parseOptions = maxPages < 100 ? { partial: Array.from({ length: maxPages }, (_, i) => i + 1) } : {};
+    const result = await parser.getText(parseOptions);
 
-    const rawText = data.text || '';
+    const rawText = result.text || '';
     const cleanedText = cleanExtractedText(rawText);
-    const pageCount = data.numpages || 0;
+    // numPages may be undefined in v2, use pages array or get from getInfo if needed
+    const pageCount = result.numPages || result.pages?.length || 0;
+
+    // Clean up parser resources
+    await parser.destroy().catch(() => {/* ignore cleanup errors */});
 
     debugLog('extract_result', {
       rawLength: rawText.length,
