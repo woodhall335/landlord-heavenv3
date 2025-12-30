@@ -318,7 +318,7 @@ export default function RentDemandLetterGenerator() {
       });
 
       // Footer
-      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.com`, {
+      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.co.uk`, {
         x: 50,
         y: 50,
         size: 8,

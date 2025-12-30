@@ -122,14 +122,14 @@ describe('Markdown Artifact Prevention', () => {
     // It doesn't have h2 tags, but has h1 and strong
     expect(result.html).toContain('<h1>');
     expect(result.html).toContain('<strong>');
-    expect(result.html).toContain('landlordheaven.com');
+    expect(result.html).toContain('landlordheaven.co.uk');
 
     // Dates should not contain literal "undefined" or [object Object]
     expect(result.html).not.toContain('undefined');
     expect(result.html).not.toContain('[object Object]');
   });
 
-  test('Site domain is landlordheaven.com in generated documents', async () => {
+  test('Site domain is landlordheaven.co.uk in generated documents', async () => {
     const testData = {
       landlord_full_name: 'John Smith',
       landlord_address: '123 Main St, London, SW1A 1AA',
@@ -157,8 +157,8 @@ describe('Markdown Artifact Prevention', () => {
 
     const result = await generateSection8Notice(testData, false);
 
-    // Should contain landlordheaven.com domain
-    expect(result.html).toContain('landlordheaven.com');
+    // Should contain landlordheaven.co.uk domain
+    expect(result.html).toContain('landlordheaven.co.uk');
   });
 });
 

@@ -35,7 +35,7 @@ STRIPE_PRODUCT_HMO_PRO_16_20="price_xxx"
 
 # Resend (Email)
 RESEND_API_KEY="re_QZ7CMDpx_12DonT5VxP2pMHB9wteNN2XV"
-RESEND_FROM_EMAIL="noreply@landlordheaven.com"
+RESEND_FROM_EMAIL="noreply@landlordheaven.co.uk"
 
 # Analytics (optional)
 NEXT_PUBLIC_GA_MEASUREMENT_ID="G-XXXXXXXXXX"
