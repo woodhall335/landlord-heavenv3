@@ -437,7 +437,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
       case 'premium':
         return <PremiumSection facts={facts} onUpdate={handleUpdate} jurisdiction={jurisdiction} />;
       case 'review':
-        return <ReviewSection facts={facts} caseId={caseId} jurisdiction={jurisdiction} />;
+        return <ReviewSection facts={facts} onUpdate={handleUpdate} caseId={caseId} jurisdiction={jurisdiction} />;
       default:
         return <div>Unknown section: {currentSection.id}</div>;
     }
@@ -636,7 +636,7 @@ export const TenancySectionFlow: React.FC<TenancySectionFlowProps> = ({
 
 interface SectionProps {
   facts: any;
-  onUpdate?: (updates: Record<string, any>) => Promise<void>;
+  onUpdate: (updates: Record<string, any>) => Promise<void>;
   jurisdiction?: Jurisdiction;
   caseId?: string;
 }
