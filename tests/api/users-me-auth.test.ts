@@ -54,18 +54,18 @@ describe('API: /api/users/me authentication', () => {
     });
 
     it('should handle null/undefined error messages gracefully', async () => {
-      const nullError = { message: null };
-      const undefinedError = { message: undefined };
+      const nullError: { message: string | null } = { message: null };
+      const undefinedError: { message: string | undefined } = { message: undefined };
       const noMessageError = {} as { message?: string };
 
       // These should NOT throw and should return false
       const isNullAuthError =
-        nullError?.message?.includes?.('Unauthorized') ||
-        nullError?.message?.includes?.('not authenticated');
+        (nullError?.message as string | null)?.includes?.('Unauthorized') ||
+        (nullError?.message as string | null)?.includes?.('not authenticated');
 
       const isUndefinedAuthError =
-        undefinedError?.message?.includes?.('Unauthorized') ||
-        undefinedError?.message?.includes?.('not authenticated');
+        (undefinedError?.message as string | undefined)?.includes?.('Unauthorized') ||
+        (undefinedError?.message as string | undefined)?.includes?.('not authenticated');
 
       const isNoMessageAuthError =
         noMessageError?.message?.includes?.('Unauthorized') ||

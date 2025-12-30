@@ -2,7 +2,8 @@ import path from 'path';
 import { describe, it } from 'vitest';
 
 const caseId = process.env.E2E_CASE_ID;
-const playwright = await import('@playwright/test').catch(() => null);
+// @ts-ignore - @playwright/test is an optional dev dependency
+const playwright = await import('@playwright/test').catch(() => null) as typeof import('@playwright/test') | null;
 
 if (!playwright) {
   describe('upload evidence (notice only)', () => {
@@ -19,7 +20,7 @@ if (!playwright) {
   const { test, expect } = playwright;
 
   test.describe('upload evidence (notice only)', () => {
-    test('shows validation summary after upload', async ({ page }) => {
+    test('shows validation summary after upload', async ({ page }: { page: any }) => {
       const filePath = path.resolve('tests/fixtures/sample.pdf');
       const url = `/wizard/flow?type=eviction&jurisdiction=scotland&product=notice_only&case_id=${caseId}&mode=edit&jump_to=evidence_uploads`;
 

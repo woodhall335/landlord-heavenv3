@@ -47,7 +47,7 @@ const JURISDICTION_OPTIONS: { value: Jurisdiction; label: string }[] = [
   { value: 'england', label: 'England' },
   { value: 'wales', label: 'Wales' },
   { value: 'scotland', label: 'Scotland' },
-  { value: 'northern_ireland', label: 'Northern Ireland' },
+  { value: 'northern-ireland', label: 'Northern Ireland' },
 ];
 
 /**

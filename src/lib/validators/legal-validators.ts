@@ -68,7 +68,7 @@ export interface ValidatorDefinition {
 }
 
 export interface ExtractionQuality {
-  text_extraction_method?: 'pdf_lib' | 'vision' | 'regex_only' | 'failed';
+  text_extraction_method?: 'pdf_parse' | 'pdf_lib' | 'pdf_lib_metadata' | 'vision' | 'regex_only' | 'failed';
   text_length?: number;
   regex_fields_found?: number;
   llm_extraction_ran?: boolean;

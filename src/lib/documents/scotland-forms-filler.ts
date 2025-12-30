@@ -576,9 +576,12 @@ export async function fillSimpleProcedureClaim(data: ScotlandMoneyClaimData): Pr
 
   // Set needAppearances flag to let PDF viewer generate appearances on-the-fly
   // This avoids encoding issues with problematic characters in existing form content
-  const acroForm = pdfDoc.catalog.lookup(pdfDoc.catalog.get(PDFName.of('AcroForm')));
-  if (acroForm instanceof PDFDict) {
-    acroForm.set(PDFName.of('NeedAppearances'), PDFBool.True);
+  const acroFormRef = pdfDoc.catalog.get(PDFName.of('AcroForm'));
+  if (acroFormRef) {
+    const acroForm = pdfDoc.catalog.lookup(acroFormRef as PDFName);
+    if (acroForm instanceof PDFDict) {
+      acroForm.set(PDFName.of('NeedAppearances'), PDFBool.True);
+    }
   }
 
   // Save without updating appearances (use updateFieldAppearances: false)

@@ -27,7 +27,9 @@ describe('P0-B: Form 6A HBS Alignment', () => {
       property_address: '456 Property Lane',
       tenancy_start_date: '2024-01-01',
       rent_amount: 1000,
-      rent_frequency: 'monthly',
+      rent_frequency: 'monthly' as const,
+      signatory_name: 'Test Landlord',
+      signature_date: '2024-01-01',
     };
 
     await expect(fillForm6A(mockData)).rejects.toThrow(/DEPRECATED.*fillForm6A is disabled/);
@@ -41,7 +43,9 @@ describe('P0-B: Form 6A HBS Alignment', () => {
       property_address: '456 Property Lane',
       tenancy_start_date: '2024-01-01',
       rent_amount: 1000,
-      rent_frequency: 'monthly',
+      rent_frequency: 'monthly' as const,
+      signatory_name: 'Test Landlord',
+      signature_date: '2024-01-01',
     };
 
     await expect(fillOfficialForm('form6a', mockData)).rejects.toThrow(

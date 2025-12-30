@@ -6,7 +6,7 @@ import { RiSparklingLine, RiChat1Line, RiLoader4Line, RiErrorWarningLine } from 
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
-type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
+type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement' | 'ast_standard' | 'ast_premium';
 
 interface AskHeavenPanelProps {
   caseId: string;

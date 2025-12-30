@@ -43,7 +43,7 @@ describe('Ask Heaven Email Gate', () => {
       }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as any);
     const payload = await response.json();
 
     expect(response.status).toBe(200);
@@ -63,7 +63,7 @@ describe('Ask Heaven Email Gate', () => {
       }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as any);
     const payload = await response.json();
 
     expect(response.status).toBe(200);
@@ -82,7 +82,7 @@ describe('Ask Heaven Email Gate', () => {
       }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as any);
     const payload = await response.json();
 
     expect(response.status).toBe(200);
@@ -102,7 +102,7 @@ describe('Ask Heaven Email Gate', () => {
       }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as any);
     const payload = await response.json();
 
     expect(response.status).toBe(200);
@@ -123,7 +123,7 @@ describe('Ask Heaven Email Gate', () => {
       }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as any);
     const payload = await response.json();
 
     expect(response.status).toBe(200);
@@ -143,7 +143,7 @@ describe('Ask Heaven Email Gate', () => {
       }),
     });
 
-    const response = await POST(request);
+    const response = await POST(request as any);
     const payload = await response.json();
 
     expect(response.status).toBe(200);

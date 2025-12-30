@@ -7,10 +7,11 @@
  * These wrap your existing /api/wizard/case/[caseId] and /api/wizard/checkpoint routes.
  */
 
-// What the checkpoint route needs (mirrors the route’s Zod schema)
+// What the checkpoint route needs (mirrors the route's Zod schema)
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement' | null;
 type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
-type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement' | null;
+// Product includes both core products and tenancy agreement tier variants
+type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement' | 'ast_standard' | 'ast_premium' | null;
 
 interface SaveFactsMeta {
   jurisdiction: Jurisdiction;

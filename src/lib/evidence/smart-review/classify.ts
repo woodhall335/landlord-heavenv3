@@ -218,6 +218,20 @@ const DOCUMENT_TYPE_KEYWORDS: Record<EvidenceCategory, string[]> = {
     'assured tenancy',
     'ast',
   ],
+  [EvidenceCategory.RENT_SCHEDULE]: [
+    'rent schedule',
+    'rent ledger',
+    'payment schedule',
+    'rent due',
+    'rent history',
+  ],
+  [EvidenceCategory.ARREARS_LEDGER]: [
+    'arrears ledger',
+    'arrears schedule',
+    'outstanding rent',
+    'rent arrears',
+    'balance owed',
+  ],
   [EvidenceCategory.DEPOSIT_PROTECTION_CERTIFICATE]: [
     'deposit protection',
     'tenancy deposit scheme',
@@ -259,6 +273,13 @@ const DOCUMENT_TYPE_KEYWORDS: Record<EvidenceCategory, string[]> = {
     'gas safe',
     'boiler service',
   ],
+  [EvidenceCategory.EICR]: [
+    'electrical installation',
+    'eicr',
+    'electrical safety',
+    'condition report',
+    'electrical certificate',
+  ],
   [EvidenceCategory.BANK_STATEMENTS]: [
     'bank statement',
     'account statement',
@@ -266,6 +287,23 @@ const DOCUMENT_TYPE_KEYWORDS: Record<EvidenceCategory, string[]> = {
     'balance',
     'standing order',
     'rent payment',
+  ],
+  [EvidenceCategory.BANK_STATEMENT]: [
+    'bank statement',
+    'account statement',
+    'transaction',
+  ],
+  [EvidenceCategory.NOTICE_S21]: [
+    'section 21',
+    'form 6a',
+    'notice requiring possession',
+    'assured shorthold',
+  ],
+  [EvidenceCategory.NOTICE_S8]: [
+    'section 8',
+    'notice seeking possession',
+    'ground',
+    'housing act 1988',
   ],
   [EvidenceCategory.NOTICE_SERVED_PROOF]: [
     'notice seeking possession',
@@ -283,6 +321,24 @@ const DOCUMENT_TYPE_KEYWORDS: Record<EvidenceCategory, string[]> = {
     'regarding your tenancy',
     'rent arrears',
     'breach of tenancy',
+  ],
+  [EvidenceCategory.DEPOSIT_PROTECTION]: [
+    'deposit protection',
+    'deposit scheme',
+    'protected deposit',
+  ],
+  [EvidenceCategory.LBA_LETTER]: [
+    'letter before action',
+    'pre-action protocol',
+    'final warning',
+    'legal proceedings',
+  ],
+  [EvidenceCategory.COURT_CLAIM_DRAFT]: [
+    'claim form',
+    'particulars of claim',
+    'court claim',
+    'n1 form',
+    'n5 form',
   ],
   [EvidenceCategory.REPAIR_COMPLAINTS]: [
     'repair',
