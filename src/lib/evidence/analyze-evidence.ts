@@ -2,6 +2,12 @@ import { z } from 'zod';
 import { getOpenAIClient } from '@/lib/ai/openai-client';
 import { isPdfMimeType, isImageMimeType } from '@/lib/evidence/schema';
 import { PDFDocument } from 'pdf-lib';
+import {
+  extractPdfText,
+  analyzeTextForDocumentMarkers,
+  LOW_TEXT_THRESHOLD,
+  type PdfExtractionResult,
+} from './extract-pdf-text';
 
 // Debug logging helper - controlled by DEBUG_EVIDENCE env var
 const DEBUG = process.env.DEBUG_EVIDENCE === 'true';
@@ -29,12 +35,18 @@ export interface EvidenceAnalysisInput {
 }
 
 export interface ExtractionQualityMeta {
-  text_extraction_method: 'pdf_lib' | 'vision' | 'regex_only' | 'failed';
+  text_extraction_method: 'pdf_parse' | 'pdf_lib' | 'vision' | 'regex_only' | 'failed';
   text_length: number;
   regex_fields_found: number;
   llm_extraction_ran: boolean;
   llm_extraction_skipped_reason?: string;
   confidence_breakdown?: Record<string, number>;
+  /** True if text extraction returned very little usable text (likely scanned PDF) */
+  is_low_text?: boolean;
+  /** True if text appears to be metadata only (no actual document content) */
+  is_metadata_only?: boolean;
+  /** Document markers found in extracted text */
+  document_markers?: string[];
 }
 
 export interface EvidenceAnalysisResult {
@@ -55,7 +67,8 @@ const AnalysisSchema = z.object({
 });
 
 const MAX_TEXT_CHARS = 6000;
-const MIN_TEXT_LENGTH = 50;
+// Use the threshold from extract-pdf-text module for consistency
+const MIN_TEXT_LENGTH = LOW_TEXT_THRESHOLD;
 
 /**
  * Validator-specific extraction instructions for compliance checks.
@@ -105,7 +118,8 @@ You MUST extract these specific fields in extracted_fields:
 
 NOTICE DETAILS:
 - notice_type: should contain "section 21" or "s21" or "Form 6A"
-- date_served: date notice was served (YYYY-MM-DD)
+- date_served: date notice was served (YYYY-MM-DD) - ALSO output as "service_date" with same value
+- service_date: same as date_served (for compatibility)
 - expiry_date: when notice expires (YYYY-MM-DD)
 - property_address: full property address
 - tenant_names: array of all tenant names on notice
@@ -119,6 +133,8 @@ COMPLIANCE MENTIONS (look for statements about):
 - epc_mentioned: true/false - references EPC?
 - how_to_rent_mentioned: true/false - references "How to Rent" guide?
 - form_6a_used: true/false - is this the correct Form 6A?
+
+IMPORTANT: Always output BOTH date_served AND service_date with the same value for compatibility.
 `,
 
   section_8: `
@@ -1112,7 +1128,9 @@ function s21RegexToExtractedFields(regex: RegexExtractionResult): Record<string,
     fields.section_21_detected = true;
   }
   if (regex.date_served) {
+    // Output both date_served and service_date for compatibility
     fields.date_served = regex.date_served;
+    fields.service_date = regex.date_served;
   }
   if (regex.expiry_date) {
     fields.expiry_date = regex.expiry_date;
@@ -1122,6 +1140,8 @@ function s21RegexToExtractedFields(regex: RegexExtractionResult): Record<string,
   }
   if (regex.tenant_names.length > 0) {
     fields.tenant_names = regex.tenant_names;
+    // Also output as tenant_name for validators that expect singular
+    fields.tenant_name = regex.tenant_names[0];
   }
   if (regex.landlord_name) {
     fields.landlord_name = regex.landlord_name;
@@ -1631,54 +1651,75 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
       debugLog('processing_pdf', true);
       console.log('[analyzeEvidence] Processing PDF...');
 
-      // Step 1: Try to extract text with pdf-lib (for metadata)
+      // Step 1: Extract text using pdf-parse (real text extraction, not just metadata)
+      let pdfExtractionResult: PdfExtractionResult | null = null;
       try {
-        const pdfLibText = await withTimeout(extractPdfTextWithPdfLib(buffer), 3000, 'PDF metadata extraction');
-        if (pdfLibText.length > 0) {
-          extractedPdfText = pdfLibText;
-          qualityMeta.text_extraction_method = 'pdf_lib';
-        }
-        debugLog('pdf_lib_result', { textLength: pdfLibText.length });
-      } catch (error: any) {
-        debugLog('pdf_lib_error', { error: error.message });
-        warnings.push(`PDF metadata extraction failed: ${error.message}`);
-      }
+        pdfExtractionResult = await withTimeout(
+          extractPdfText(buffer, 10),
+          10000,
+          'PDF text extraction'
+        );
 
-      // Step 2: Run regex extraction if we have a context-specific extractor
-      // This provides baseline fields even without LLM
-      if (regexExtractor) {
-        // Try vision-based text extraction for regex analysis
-        try {
-          const images = await renderPdfPagesToImages(buffer, 2);
-          if (images.length > 0) {
-            // We have images - we can use vision for both regex patterns and LLM
-            qualityMeta.text_extraction_method = 'vision';
-            debugLog('vision_images_rendered', { count: images.length });
-          }
-        } catch {
-          // Vision rendering failed, continue with what we have
+        if (pdfExtractionResult.text.length > 0) {
+          extractedPdfText = pdfExtractionResult.text;
+          qualityMeta.text_extraction_method = pdfExtractionResult.method;
+          qualityMeta.is_low_text = pdfExtractionResult.isLowText;
+          qualityMeta.is_metadata_only = pdfExtractionResult.isMetadataOnly;
         }
 
-        // If we managed to get some text, run regex extraction
+        debugLog('pdf_parse_result', {
+          textLength: pdfExtractionResult.text.length,
+          pageCount: pdfExtractionResult.pageCount,
+          isLowText: pdfExtractionResult.isLowText,
+          isMetadataOnly: pdfExtractionResult.isMetadataOnly,
+          method: pdfExtractionResult.method,
+        });
+
+        // Analyze text for document type markers
         if (extractedPdfText.length > 0) {
-          regexResult = regexExtractor.extract(extractedPdfText);
-          qualityMeta.regex_fields_found = regexResult.fields_found.length;
-          debugLog('regex_result', {
-            type: regexExtractor.type,
-            fields_found: regexResult.fields_found.length,
-            fields: regexResult.fields_found,
-          });
+          const markers = analyzeTextForDocumentMarkers(extractedPdfText);
+          qualityMeta.document_markers = markers.markers;
+          debugLog('document_markers', markers);
         }
+      } catch (error: any) {
+        debugLog('pdf_parse_error', { error: error.message });
+        console.error('[analyzeEvidence] PDF text extraction failed:', error.message);
+        warnings.push(`PDF text extraction failed: ${error.message}`);
+        // Mark as failed - will trigger vision fallback
+        qualityMeta.text_extraction_method = 'failed';
+        qualityMeta.is_low_text = true;
       }
 
-      // Step 3: Try LLM extraction (text-based if we have text, vision otherwise)
+      qualityMeta.text_length = extractedPdfText.length;
+
+      // Step 2: Run regex extraction if we have text and a context-specific extractor
+      // This provides baseline fields even without LLM
+      if (regexExtractor && extractedPdfText.length > 0) {
+        regexResult = regexExtractor.extract(extractedPdfText);
+        qualityMeta.regex_fields_found = regexResult.fields_found.length;
+        debugLog('regex_result', {
+          type: regexExtractor.type,
+          fields_found: regexResult.fields_found.length,
+          fields: regexResult.fields_found,
+        });
+      }
+
+      // Determine if we should use vision extraction
+      const shouldUseVision =
+        pdfExtractionResult?.isLowText ||
+        pdfExtractionResult?.isMetadataOnly ||
+        qualityMeta.text_extraction_method === 'failed' ||
+        extractedPdfText.length < MIN_TEXT_LENGTH;
+
+      // Step 3: Try LLM extraction (text-based if we have good text, vision if LOW_TEXT)
       if (process.env.OPENAI_API_KEY) {
         qualityMeta.llm_extraction_ran = true;
 
-        if (extractedPdfText.length >= MIN_TEXT_LENGTH) {
-          // Use text-based extraction
-          debugLog('llm_text_extraction', { textLength: extractedPdfText.length });
-          console.log('[analyzeEvidence] Calling OpenAI text analysis...');
+        // Use vision extraction if text is low quality, otherwise use text
+        if (!shouldUseVision && extractedPdfText.length >= MIN_TEXT_LENGTH) {
+          // Use text-based extraction - we have good extracted text
+          debugLog('llm_text_extraction', { textLength: extractedPdfText.length, shouldUseVision: false });
+          console.log('[analyzeEvidence] Calling OpenAI text analysis (good text quality)...');
 
           try {
             const trimmedText = extractedPdfText.slice(0, MAX_TEXT_CHARS);
@@ -1725,9 +1766,12 @@ export async function analyzeEvidence(input: EvidenceAnalysisInput): Promise<Evi
           }
         }
 
-        // Fall back to vision analysis
-        debugLog('falling_back_to_vision', { reason: extractedPdfText.length < MIN_TEXT_LENGTH ? 'insufficient_text' : 'text_extraction_failed' });
-        console.log('[analyzeEvidence] Starting vision analysis...');
+        // Use vision analysis (either as primary choice for LOW_TEXT or as fallback)
+        const visionReason = shouldUseVision
+          ? (qualityMeta.is_metadata_only ? 'metadata_only' : 'low_text_detected')
+          : 'text_extraction_failed';
+        debugLog('using_vision', { reason: visionReason, shouldUseVision, textLength: extractedPdfText.length });
+        console.log('[analyzeEvidence] Starting vision analysis (reason: ' + visionReason + ')...');
 
         try {
           const visionResult = await withTimeout(

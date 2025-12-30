@@ -10,6 +10,7 @@ import {
   mergeExtractedFacts,
   applyMergedFacts,
   generateConfirmationQuestions,
+  mergeMultipleExtractions,
 } from '../merge-extracted-facts';
 import type { WizardFacts } from '@/lib/case-facts/schema';
 
@@ -357,5 +358,294 @@ describe('generateConfirmationQuestions', () => {
 
     const depositQuestion = questions.find(q => q.factKey === 'deposit_protected');
     expect(depositQuestion?.helpText).toBeDefined();
+  });
+});
+
+describe('field aliasing', () => {
+  describe('date_served / service_date aliasing', () => {
+    it('should output both date_served and service_date aliases for notice dates', () => {
+      const result = mergeExtractedFacts({
+        caseId: 'case-123',
+        evidenceId: 'evidence-456',
+        analysisResult: {
+          detected_type: 's21_notice',
+          extracted_fields: {
+            date_served: '2024-04-01',
+          },
+          confidence: 0.8,
+          warnings: [],
+        },
+      });
+
+      // Should have canonical key AND aliases
+      expect(result.mergedFactsPatch.notice_date).toBe('2024-04-01');
+      expect(result.mergedFactsPatch.date_served).toBe('2024-04-01');
+      expect(result.mergedFactsPatch.service_date).toBe('2024-04-01');
+    });
+
+    it('should accept service_date as input and produce all aliases', () => {
+      const result = mergeExtractedFacts({
+        caseId: 'case-123',
+        evidenceId: 'evidence-456',
+        analysisResult: {
+          detected_type: 's21_notice',
+          extracted_fields: {
+            service_date: '2024-05-15',
+          },
+          confidence: 0.8,
+          warnings: [],
+        },
+      });
+
+      // Should normalize to canonical AND produce aliases
+      expect(result.mergedFactsPatch.notice_date).toBe('2024-05-15');
+      expect(result.mergedFactsPatch.date_served).toBe('2024-05-15');
+      expect(result.mergedFactsPatch.service_date).toBe('2024-05-15');
+    });
+  });
+
+  describe('expiry_date aliasing', () => {
+    it('should output expiry_date alias', () => {
+      const result = mergeExtractedFacts({
+        caseId: 'case-123',
+        evidenceId: 'evidence-456',
+        analysisResult: {
+          detected_type: 's21_notice',
+          extracted_fields: {
+            expiry_date: '2024-06-01',
+          },
+          confidence: 0.8,
+          warnings: [],
+        },
+      });
+
+      expect(result.mergedFactsPatch.notice_expiry_date).toBe('2024-06-01');
+      expect(result.mergedFactsPatch.expiry_date).toBe('2024-06-01');
+    });
+  });
+
+  describe('tenant name aliasing', () => {
+    it('should output tenant_names and tenant_name aliases', () => {
+      const result = mergeExtractedFacts({
+        caseId: 'case-123',
+        evidenceId: 'evidence-456',
+        analysisResult: {
+          detected_type: 's21_notice',
+          extracted_fields: {
+            tenant_names: ['John Smith', 'Jane Doe'],
+          },
+          confidence: 0.8,
+          warnings: [],
+        },
+      });
+
+      expect(result.mergedFactsPatch.tenant_full_name).toBe('John Smith, Jane Doe');
+      expect(result.mergedFactsPatch.tenant_names).toBe('John Smith, Jane Doe');
+      expect(result.mergedFactsPatch.tenant_name).toBe('John Smith, Jane Doe');
+    });
+  });
+
+  describe('property address aliasing', () => {
+    it('should output property_address alias', () => {
+      const result = mergeExtractedFacts({
+        caseId: 'case-123',
+        evidenceId: 'evidence-456',
+        analysisResult: {
+          detected_type: 's21_notice',
+          extracted_fields: {
+            property_address: '123 High Street, London, SW1A 1AA',
+          },
+          confidence: 0.8,
+          warnings: [],
+        },
+      });
+
+      expect(result.mergedFactsPatch.property_address_line1).toBe('123 High Street, London, SW1A 1AA');
+      expect(result.mergedFactsPatch.property_address).toBe('123 High Street, London, SW1A 1AA');
+    });
+  });
+
+  describe('landlord name aliasing', () => {
+    it('should output landlord_name alias', () => {
+      const result = mergeExtractedFacts({
+        caseId: 'case-123',
+        evidenceId: 'evidence-456',
+        analysisResult: {
+          detected_type: 's21_notice',
+          extracted_fields: {
+            landlord_name: 'Robert Jones',
+          },
+          confidence: 0.8,
+          warnings: [],
+        },
+      });
+
+      expect(result.mergedFactsPatch.landlord_full_name).toBe('Robert Jones');
+      expect(result.mergedFactsPatch.landlord_name).toBe('Robert Jones');
+    });
+  });
+});
+
+describe('mergeMultipleExtractions', () => {
+  it('should merge facts from multiple documents', () => {
+    const output1 = mergeExtractedFacts({
+      caseId: 'case-123',
+      evidenceId: 'evidence-1',
+      analysisResult: {
+        detected_type: 's21_notice',
+        extracted_fields: {
+          date_served: '2024-04-01',
+          property_address: '123 High Street',
+        },
+        confidence: 0.8,
+        warnings: [],
+      },
+    });
+
+    const output2 = mergeExtractedFacts({
+      caseId: 'case-123',
+      evidenceId: 'evidence-2',
+      analysisResult: {
+        detected_type: 's21_notice',
+        extracted_fields: {
+          landlord_name: 'Robert Jones',
+          expiry_date: '2024-06-01',
+        },
+        confidence: 0.75,
+        warnings: [],
+      },
+    });
+
+    const combined = mergeMultipleExtractions([output1, output2]);
+
+    // Should have fields from both documents
+    expect(combined.mergedFactsPatch.notice_date).toBe('2024-04-01');
+    expect(combined.mergedFactsPatch.property_address_line1).toBe('123 High Street');
+    expect(combined.mergedFactsPatch.landlord_full_name).toBe('Robert Jones');
+    expect(combined.mergedFactsPatch.notice_expiry_date).toBe('2024-06-01');
+  });
+
+  it('should prefer higher confidence values in conflicts', () => {
+    const lowConfidence = mergeExtractedFacts({
+      caseId: 'case-123',
+      evidenceId: 'evidence-1',
+      analysisResult: {
+        detected_type: 's21_notice',
+        extracted_fields: {
+          landlord_name: 'Wrong Name',
+        },
+        confidence: 0.65,
+        warnings: [],
+      },
+    });
+
+    const highConfidence = mergeExtractedFacts({
+      caseId: 'case-123',
+      evidenceId: 'evidence-2',
+      analysisResult: {
+        detected_type: 's21_notice',
+        extracted_fields: {
+          landlord_name: 'Correct Name',
+        },
+        confidence: 0.9,
+        warnings: [],
+      },
+    });
+
+    const combined = mergeMultipleExtractions([lowConfidence, highConfidence]);
+
+    // Should use higher confidence value
+    expect(combined.mergedFactsPatch.landlord_full_name).toBe('Correct Name');
+    expect(combined.confidenceMap.landlord_full_name).toBe(0.9);
+  });
+
+  it('should not overwrite with empty values', () => {
+    const withValue = mergeExtractedFacts({
+      caseId: 'case-123',
+      evidenceId: 'evidence-1',
+      analysisResult: {
+        detected_type: 's21_notice',
+        extracted_fields: {
+          landlord_name: 'Robert Jones',
+        },
+        confidence: 0.8,
+        warnings: [],
+      },
+    });
+
+    const withEmpty = {
+      mergedFactsPatch: {
+        landlord_full_name: '',
+        landlord_name: '',
+      },
+      provenance: {},
+      confidenceMap: { landlord_full_name: 0.7, landlord_name: 0.7 },
+      lowConfidenceKeys: [],
+      rawExtracted: {},
+    };
+
+    const combined = mergeMultipleExtractions([withValue, withEmpty]);
+
+    // Should keep the non-empty value
+    expect(combined.mergedFactsPatch.landlord_full_name).toBe('Robert Jones');
+  });
+
+  it('should combine low confidence keys from all sources', () => {
+    const output1 = {
+      mergedFactsPatch: {},
+      provenance: {},
+      confidenceMap: {},
+      lowConfidenceKeys: ['deposit_protected'],
+      rawExtracted: {},
+    };
+
+    const output2 = {
+      mergedFactsPatch: {},
+      provenance: {},
+      confidenceMap: {},
+      lowConfidenceKeys: ['gas_safety_pre_move_in'],
+      rawExtracted: {},
+    };
+
+    const combined = mergeMultipleExtractions([output1, output2]);
+
+    expect(combined.lowConfidenceKeys).toContain('deposit_protected');
+    expect(combined.lowConfidenceKeys).toContain('gas_safety_pre_move_in');
+  });
+
+  it('should remove from lowConfidenceKeys when high confidence value found', () => {
+    const lowConfOutput = {
+      mergedFactsPatch: {},
+      provenance: {},
+      confidenceMap: { deposit_protected: 0.5 },
+      lowConfidenceKeys: ['deposit_protected'],
+      rawExtracted: {},
+    };
+
+    const highConfidence = mergeExtractedFacts({
+      caseId: 'case-123',
+      evidenceId: 'evidence-2',
+      analysisResult: {
+        detected_type: 's21_notice',
+        extracted_fields: {
+          deposit_protected: true,
+        },
+        confidence: 0.9, // High confidence
+        warnings: [],
+      },
+    });
+
+    const combined = mergeMultipleExtractions([lowConfOutput, highConfidence]);
+
+    // Should NOT be in low confidence anymore since high confidence found
+    expect(combined.lowConfidenceKeys).not.toContain('deposit_protected');
+    expect(combined.mergedFactsPatch.deposit_protected).toBe(true);
+  });
+
+  it('should handle empty inputs', () => {
+    const combined = mergeMultipleExtractions([]);
+
+    expect(combined.mergedFactsPatch).toEqual({});
+    expect(combined.lowConfidenceKeys).toHaveLength(0);
   });
 });

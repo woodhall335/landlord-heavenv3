@@ -230,14 +230,27 @@ export function validateSection21Notice(input: ValidatorInput): ValidatorResult 
   const blockers: ValidationIssue[] = [];
   const warnings: ValidationIssue[] = [];
 
+  // Check for Section 21 / Form 6A indicators in notice_type or direct detection flags
   const noticeType = String(input.extracted.notice_type || '').toLowerCase();
-  if (!noticeType.includes('section 21') && !noticeType.includes('s21') && !noticeType.includes('form 6a')) {
+  const hasForm6aFlag = input.extracted.form_6a_used === true || input.extracted.form_6a_detected === true;
+  const hasSection21Flag = input.extracted.section_21_detected === true;
+  const isValidNoticeType =
+    noticeType.includes('section 21') ||
+    noticeType.includes('section_21') ||
+    noticeType.includes('s21') ||
+    noticeType.includes('form 6a') ||
+    noticeType.includes('form_6a') ||
+    hasForm6aFlag ||
+    hasSection21Flag;
+
+  if (!isValidNoticeType) {
     addIssue(blockers, 'S21-WRONG-FORM', 'Notice must be a Section 21 Form 6A notice.', 'blocking');
   }
 
   const quality = input.extractionQuality;
-  const serviceDate = parseDate(input.extracted.date_served);
-  const expiryDate = parseDate(input.extracted.expiry_date);
+  // Accept both date_served and service_date for compatibility
+  const serviceDate = parseDate(input.extracted.date_served || input.extracted.service_date);
+  const expiryDate = parseDate(input.extracted.expiry_date || input.extracted.notice_expiry_date);
   if (!serviceDate) {
     addTruthfulIssue(warnings, 'S21-SERVICE-DATE-MISSING', 'Service date not found in notice', 'warning', quality);
   }
@@ -252,17 +265,26 @@ export function validateSection21Notice(input: ValidatorInput): ValidatorResult 
     }
   }
 
-  const propertyAddress = input.extracted.property_address;
+  // Accept various address field names
+  const propertyAddress =
+    input.extracted.property_address ||
+    input.extracted.property_address_line1 ||
+    input.extracted.address;
   if (isMissing(propertyAddress)) {
     addTruthfulIssue(warnings, 'S21-PROPERTY-ADDRESS-MISSING', 'Property address not found in notice', 'warning', quality);
   }
 
-  const tenantNames = input.extracted.tenant_names || input.extracted.tenant_name;
+  // Accept both singular and plural tenant name fields
+  const tenantNames =
+    input.extracted.tenant_names ||
+    input.extracted.tenant_name ||
+    input.extracted.tenant_full_name;
   if (isMissing(tenantNames)) {
     addTruthfulIssue(warnings, 'S21-TENANT-NAME-MISSING', 'Tenant name(s) not found in notice', 'warning', quality);
   }
 
-  const landlordName = input.extracted.landlord_name;
+  // Accept various landlord name fields
+  const landlordName = input.extracted.landlord_name || input.extracted.landlord_full_name;
   if (isMissing(landlordName)) {
     addTruthfulIssue(warnings, 'S21-LANDLORD-NAME-MISSING', 'Landlord name not found in notice', 'warning', quality);
   }
@@ -563,11 +585,21 @@ export function validateScotlandNoticeToLeave(input: ValidatorInput): ValidatorR
     addTruthfulIssue(warnings, 'NTL-PERIOD-MISSING', 'Notice period not found in notice', 'warning', quality);
   }
 
-  if (isMissing(input.extracted.property_address)) {
+  // Accept various address field names
+  const propertyAddress =
+    input.extracted.property_address ||
+    input.extracted.property_address_line1 ||
+    input.extracted.address;
+  if (isMissing(propertyAddress)) {
     addTruthfulIssue(warnings, 'NTL-ADDRESS-MISSING', 'Property address not found in notice', 'warning', quality);
   }
 
-  if (isMissing(input.extracted.tenant_name)) {
+  // Accept various tenant name field variants
+  const tenantName =
+    input.extracted.tenant_name ||
+    input.extracted.tenant_names ||
+    input.extracted.tenant_full_name;
+  if (isMissing(tenantName)) {
     addTruthfulIssue(warnings, 'NTL-TENANT-MISSING', 'Tenant name not found in notice', 'warning', quality);
   }
 
