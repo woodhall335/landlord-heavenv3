@@ -12,6 +12,7 @@ import { Button, Input, Card } from '@/components/ui';
 import type { ExtendedWizardQuestion, StepFlags, WizardValidationIssue } from '@/lib/wizard/types';
 import { GuidanceTips } from '@/components/wizard/GuidanceTips';
 import { AskHeavenPanel } from '@/components/wizard/AskHeavenPanel';
+import { AskHeavenInlineEnhancer } from '@/components/wizard/AskHeavenInlineEnhancer';
 import { SmartReviewPanel } from '@/components/wizard/SmartReviewPanel';
 import { UploadField, type EvidenceFileSummary } from '@/components/wizard/fields/UploadField';
 import { formatGroundTitle, getGroundTypeBadgeClasses, type GroundMetadata } from '@/lib/grounds/format-ground-title';
@@ -2295,17 +2296,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                       rows={4}
                     />
                     <div className="mt-2 flex justify-end">
-                      <AskHeavenPanel
+                      <AskHeavenInlineEnhancer
                         caseId={caseId}
-                        caseType={caseType}
-                        jurisdiction={jurisdiction || 'england'}
-                        product={product}
-                        currentQuestionId={currentQuestion.id}
-                        currentQuestionText={currentQuestion.question}
-                        currentAnswer={groundParticulars.summary || ''}
-                        variant="inline"
-                        onImproveClick={() => setActiveTextFieldPath(`${groundId}.summary`)}
-                        onApplySuggestion={handleApplySuggestion}
+                        questionId={currentQuestion.id}
+                        questionText={currentQuestion.question}
+                        answer={groundParticulars.summary || ''}
+                        onApply={handleApplySuggestion}
+                        context={{ jurisdiction: jurisdiction || 'england', caseType, product }}
+                        apiMode="generic"
                       />
                     </div>
                   </div>
@@ -2350,17 +2348,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
               rows={4}
             />
             <div className="flex justify-end">
-              <AskHeavenPanel
+              <AskHeavenInlineEnhancer
                 caseId={caseId}
-                caseType={caseType}
-                jurisdiction={jurisdiction || 'england'}
-                product={product}
-                currentQuestionId={currentQuestion.id}
-                currentQuestionText={currentQuestion.question}
-                currentAnswer={typeof value === 'string' ? value : ''}
-                variant="inline"
-                onImproveClick={() => setActiveTextFieldPath(currentQuestion.id)}
-                onApplySuggestion={handleApplySuggestion}
+                questionId={currentQuestion.id}
+                questionText={currentQuestion.question}
+                answer={typeof value === 'string' ? value : ''}
+                onApply={handleApplySuggestion}
+                context={{ jurisdiction: jurisdiction || 'england', caseType, product }}
+                apiMode="generic"
               />
             </div>
           </div>
@@ -2540,21 +2535,14 @@ export const StructuredWizard: React.FC<StructuredWizardProps> = ({
                         rows={3}
                       />
                       <div className="flex justify-end">
-                        <AskHeavenPanel
+                        <AskHeavenInlineEnhancer
                           caseId={caseId}
-                          caseType={caseType}
-                          jurisdiction={jurisdiction || 'england'}
-                          product={product}
-                          currentQuestionId={currentQuestion.id}
-                          currentQuestionText={currentQuestion.question}
-                          currentAnswer={fieldValue || ''}
-                          variant="inline"
-                          onImproveClick={() =>
-                            setActiveTextFieldPath(
-                              (field.maps_to && field.maps_to[0]) || field.id,
-                            )
-                          }
-                          onApplySuggestion={handleApplySuggestion}
+                          questionId={currentQuestion.id}
+                          questionText={currentQuestion.question}
+                          answer={fieldValue || ''}
+                          onApply={handleApplySuggestion}
+                          context={{ jurisdiction: jurisdiction || 'england', caseType, product }}
+                          apiMode="generic"
                         />
                       </div>
                     </div>
