@@ -33,11 +33,16 @@ CREATE TABLE public.users (
   stripe_customer_id TEXT UNIQUE,
   stripe_subscription_id TEXT,
 
-  -- HMO Pro subscription
+  -- HMO Pro subscription (canonical columns)
   hmo_pro_active BOOLEAN DEFAULT FALSE,
-  hmo_pro_tier TEXT, -- 'starter', 'growth', 'professional', 'enterprise'
+  hmo_pro_tier TEXT, -- 'hmo_pro_1_5', 'hmo_pro_6_10', 'hmo_pro_11_15', 'hmo_pro_16_20'
   hmo_pro_trial_ends_at TIMESTAMPTZ,
   hmo_pro_subscription_ends_at TIMESTAMPTZ,
+
+  -- Subscription columns (aliases used by some parts of codebase)
+  subscription_tier TEXT, -- Same values as hmo_pro_tier
+  subscription_status TEXT DEFAULT 'inactive', -- 'active', 'trialing', 'canceled', 'inactive'
+  trial_ends_at TIMESTAMPTZ,
 
   -- Activity tracking
   last_sign_in_at TIMESTAMPTZ,
