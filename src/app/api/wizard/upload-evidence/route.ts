@@ -366,6 +366,10 @@ export async function POST(request: Request) {
 
       analysisResult = analysis;
 
+      // Debug logging for extracted fields - helps diagnose validator field matching issues
+      console.log('[upload-evidence] Extracted fields:', JSON.stringify(analysis.extracted_fields, null, 2));
+      console.log('[upload-evidence] Extraction quality:', JSON.stringify(analysis.extraction_quality, null, 2));
+
       docClassification = classifyDocument({
         fileName: file.name || safeFilename,
         mimeType: (file as any).type || null,

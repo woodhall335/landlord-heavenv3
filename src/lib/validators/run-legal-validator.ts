@@ -75,6 +75,107 @@ function isMissingAnswer(value: any): boolean {
   return false;
 }
 
+/**
+ * Normalize extracted field names to match what validators expect.
+ *
+ * The LLM may return field names in different formats:
+ * - camelCase (tenantName) vs snake_case (tenant_name)
+ * - Singular (tenant_name) vs plural (tenant_names)
+ * - Different variations (tenant vs tenant_names)
+ *
+ * This function maps all variations to the canonical names expected by validators.
+ */
+function normalizeExtractedFields(raw: Record<string, any>): Record<string, any> {
+  const normalized: Record<string, any> = {};
+
+  // Define field name mappings: [source variations] -> target name
+  const FIELD_MAPPINGS: Array<{ sources: string[]; target: string }> = [
+    // Tenant names - validators expect tenant_names or tenant_name
+    { sources: ['tenant_names', 'tenant_name', 'tenantNames', 'tenantName', 'tenant', 'tenants', 'contract_holder_names', 'contractHolderNames'], target: 'tenant_names' },
+    // Landlord name
+    { sources: ['landlord_name', 'landlordName', 'landlord', 'landlord_details', 'landlordDetails'], target: 'landlord_name' },
+    // Property address
+    { sources: ['property_address', 'propertyAddress', 'address', 'property', 'premises_address', 'premisesAddress'], target: 'property_address' },
+    // Date served
+    { sources: ['date_served', 'dateServed', 'service_date', 'serviceDate', 'served_date', 'servedDate', 'issue_date', 'issueDate'], target: 'date_served' },
+    // Expiry date
+    { sources: ['expiry_date', 'expiryDate', 'expiry', 'notice_expiry', 'noticeExpiry', 'possession_date', 'possessionDate'], target: 'expiry_date' },
+    // Notice type
+    { sources: ['notice_type', 'noticeType', 'type', 'form_type', 'formType'], target: 'notice_type' },
+    // Signature
+    { sources: ['signature_present', 'signaturePresent', 'signed', 'has_signature', 'hasSignature', 'is_signed', 'isSigned'], target: 'signature_present' },
+    // Form 6A
+    { sources: ['form_6a_used', 'form6aUsed', 'form_6a', 'form6a', 'is_form_6a', 'isForm6a'], target: 'form_6a_used' },
+    // Section 21 detected
+    { sources: ['section_21_detected', 'section21Detected', 's21_detected', 's21Detected'], target: 'section_21_detected' },
+    // Housing Act mention
+    { sources: ['housing_act_1988_mentioned', 'housingAct1988Mentioned', 'housing_act_mentioned', 'housingActMentioned'], target: 'housing_act_1988_mentioned' },
+    // Deposit protected
+    { sources: ['deposit_protected', 'depositProtected', 'deposit_protection', 'depositProtection'], target: 'deposit_protected' },
+    // Prescribed info
+    { sources: ['prescribed_info_served', 'prescribedInfoServed', 'prescribed_information', 'prescribedInformation'], target: 'prescribed_info_served' },
+    // Gas safety
+    { sources: ['gas_safety_mentioned', 'gasSafetyMentioned', 'gas_safety', 'gasSafety', 'gas_certificate'], target: 'gas_safety_mentioned' },
+    // EPC
+    { sources: ['epc_mentioned', 'epcMentioned', 'epc', 'energy_performance_certificate'], target: 'epc_mentioned' },
+    // How to rent
+    { sources: ['how_to_rent_mentioned', 'howToRentMentioned', 'how_to_rent', 'howToRent'], target: 'how_to_rent_mentioned' },
+    // Section 8 fields
+    { sources: ['grounds_cited', 'groundsCited', 'grounds', 'eviction_grounds', 'evictionGrounds'], target: 'grounds_cited' },
+    { sources: ['rent_arrears_stated', 'rentArrearsStated', 'arrears_amount', 'arrearsAmount', 'rent_arrears'], target: 'rent_arrears_stated' },
+    { sources: ['tenant_details', 'tenantDetails'], target: 'tenant_details' },
+    { sources: ['notice_period', 'noticePeriod'], target: 'notice_period' },
+    { sources: ['rent_amount', 'rentAmount', 'rent'], target: 'rent_amount' },
+    { sources: ['rent_frequency', 'rentFrequency'], target: 'rent_frequency' },
+    // Wales fields
+    { sources: ['rhw_form_number', 'rhwFormNumber', 'rhw_form', 'rhwForm'], target: 'rhw_form_number' },
+    { sources: ['bilingual_text_present', 'bilingualTextPresent', 'bilingual', 'is_bilingual', 'isBilingual'], target: 'bilingual_text_present' },
+    { sources: ['contract_holder_details', 'contractHolderDetails'], target: 'contract_holder_details' },
+    { sources: ['written_statement_referenced', 'writtenStatementReferenced'], target: 'written_statement_referenced' },
+    { sources: ['fitness_for_habitation_confirmed', 'fitnessForHabitationConfirmed'], target: 'fitness_for_habitation_confirmed' },
+    { sources: ['deposit_protection_confirmed', 'depositProtectionConfirmed'], target: 'deposit_protection_confirmed' },
+    { sources: ['occupation_type', 'occupationType'], target: 'occupation_type' },
+    // Scotland fields
+    { sources: ['ground_cited', 'groundCited', 'scotland_ground', 'scotlandGround'], target: 'ground_cited' },
+    { sources: ['ground_description', 'groundDescription'], target: 'ground_description' },
+    { sources: ['ground_mandatory', 'groundMandatory', 'is_mandatory', 'isMandatory'], target: 'ground_mandatory' },
+    { sources: ['ground_evidence_mentioned', 'groundEvidenceMentioned'], target: 'ground_evidence_mentioned' },
+    { sources: ['tribunal_reference', 'tribunalReference'], target: 'tribunal_reference' },
+    { sources: ['tenancy_start_date', 'tenancyStartDate', 'start_date', 'startDate'], target: 'tenancy_start_date' },
+    // Tenancy agreement fields
+    { sources: ['tenancy_type', 'tenancyType', 'agreement_type', 'agreementType'], target: 'tenancy_type' },
+    { sources: ['prohibited_fees_present', 'prohibitedFeesPresent'], target: 'prohibited_fees_present' },
+    { sources: ['unfair_terms_present', 'unfairTermsPresent'], target: 'unfair_terms_present' },
+    { sources: ['missing_clauses', 'missingClauses'], target: 'missing_clauses' },
+    // Money claim fields
+    { sources: ['claim_amount', 'claimAmount'], target: 'claim_amount' },
+    { sources: ['lba_sent', 'lbaSent', 'letter_before_action'], target: 'lba_sent' },
+    { sources: ['lba_date', 'lbaDate'], target: 'lba_date' },
+    { sources: ['payment_plan_offered', 'paymentPlanOffered'], target: 'payment_plan_offered' },
+    { sources: ['payment_history', 'paymentHistory'], target: 'payment_history' },
+  ];
+
+  // First, copy all original fields
+  for (const [key, value] of Object.entries(raw)) {
+    normalized[key] = value;
+  }
+
+  // Then apply mappings - find the first source that exists and map to target
+  for (const mapping of FIELD_MAPPINGS) {
+    for (const source of mapping.sources) {
+      if (raw[source] !== undefined && raw[source] !== null) {
+        // Only set if target isn't already set (prefer earlier sources in list)
+        if (normalized[mapping.target] === undefined || normalized[mapping.target] === null) {
+          normalized[mapping.target] = raw[source];
+        }
+        break;
+      }
+    }
+  }
+
+  return normalized;
+}
+
 function collectMissingQuestions(questions: QuestionDefinition[], facts: Record<string, any>) {
   return questions.filter((question) => {
     const value = getFactValue(facts, [question.factKey]);
@@ -302,8 +403,23 @@ function buildMoneyClaimAnswers(facts: Record<string, any>, extracted?: Record<s
 export function runLegalValidator(input: RunLegalValidatorInput): RunLegalValidatorResult {
   const product = resolveProduct(input.facts, input.product);
   const jurisdiction = resolveJurisdiction(input.facts, input.jurisdiction);
-  const extracted = input.analysis?.extracted_fields || {};
+  // Normalize extracted field names to handle LLM variations (camelCase, singular/plural, etc.)
+  const rawExtracted = input.analysis?.extracted_fields || {};
+  const extracted = normalizeExtractedFields(rawExtracted);
   const extractionQuality = input.analysis?.extraction_quality || undefined;
+
+  // Debug logging for field normalization
+  const rawKeys = Object.keys(rawExtracted);
+  const normalizedKeys = Object.keys(extracted);
+  const newKeys = normalizedKeys.filter(k => !rawKeys.includes(k));
+  if (newKeys.length > 0) {
+    console.log('[runLegalValidator] Field normalization applied:', {
+      rawFieldCount: rawKeys.length,
+      normalizedFieldCount: normalizedKeys.length,
+      newMappedFields: newKeys,
+    });
+  }
+
   const requirementKey = resolveRequirementKey({
     product,
     jurisdiction,
