@@ -153,6 +153,15 @@ vi.mock('@/lib/law-profile', () => ({
 describe('Wizard API Checkpoint', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Re-establish mock chains after clearAllMocks
+    supabaseClientMock.from.mockReturnValue(supabaseClientMock);
+    supabaseClientMock.select.mockReturnValue(supabaseClientMock);
+    supabaseClientMock.eq.mockReturnValue(supabaseClientMock);
+    supabaseClientMock.is.mockReturnValue(supabaseClientMock);
+    // update() must return an object with eq() that returns a Promise
+    supabaseClientMock.update.mockReturnValue({
+      eq: vi.fn().mockResolvedValue({ data: null, error: null }),
+    });
     supabaseClientMock.single.mockResolvedValue({
       data: {
         id: '123e4567-e89b-12d3-a456-426614174000',
@@ -164,7 +173,6 @@ describe('Wizard API Checkpoint', () => {
       },
       error: null,
     });
-    supabaseClientMock.update.mockResolvedValue({ data: null, error: null });
   });
 
   it('accepts case_id and returns structured response', async () => {
@@ -186,6 +194,10 @@ describe('Wizard API Checkpoint', () => {
   });
 
   it('persists recommended_route to cases table', async () => {
+    // Create a specific mock for eq to verify it was called
+    const eqMock = vi.fn().mockResolvedValue({ data: null, error: null });
+    supabaseClientMock.update.mockReturnValue({ eq: eqMock });
+
     const request = new Request('http://localhost/api/wizard/checkpoint', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -197,7 +209,7 @@ describe('Wizard API Checkpoint', () => {
     expect(supabaseClientMock.update).toHaveBeenCalledWith({
       recommended_route: 'section_8',
     });
-    expect(supabaseClientMock.eq).toHaveBeenCalledWith('id', '123e4567-e89b-12d3-a456-426614174000');
+    expect(eqMock).toHaveBeenCalledWith('id', '123e4567-e89b-12d3-a456-426614174000');
   });
 
   it('returns structured error for missing case_id', async () => {

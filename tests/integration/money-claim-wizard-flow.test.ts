@@ -121,9 +121,14 @@ vi.mock('@/lib/documents/generator', async () => {
   };
 });
 
-vi.mock('@/lib/ai/ask-heaven', () => ({
-  enhanceAnswer: vi.fn(async () => null),
-}));
+vi.mock('@/lib/ai/ask-heaven', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/lib/ai/ask-heaven')>();
+  return {
+    ...actual,
+    ASK_HEAVEN_BASE_SYSTEM_PROMPT: 'mocked prompt for testing',
+    enhanceAnswer: vi.fn(async () => null),
+  };
+});
 
 import { POST as wizardStart } from '@/app/api/wizard/start/route';
 import { POST as wizardAnswer } from '@/app/api/wizard/answer/route';
