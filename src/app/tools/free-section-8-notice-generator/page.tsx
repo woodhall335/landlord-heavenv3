@@ -233,7 +233,7 @@ export default function FreeSection8Tool() {
       });
 
       // Add footer
-      page.drawText('www.LandlordHeaven.com', {
+      page.drawText('www.LandlordHeaven.co.uk', {
         x: 50,
         y: 50,
         size: 8,

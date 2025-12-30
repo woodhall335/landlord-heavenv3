@@ -7,18 +7,18 @@
 
 export const SITE_CONFIG = {
   // Domain & URLs
-  domain: 'landlordheaven.com',
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://landlordheaven.com',
+  domain: 'landlordheaven.co.uk',
+  url: process.env.NEXT_PUBLIC_SITE_URL || 'https://landlordheaven.co.uk',
 
   // Branding
   name: 'Landlord Heaven',
   tagline: 'Professional Legal Documents for UK Landlords',
 
   // Contact
-  support_email: 'support@landlordheaven.com',
-  refunds_email: 'refunds@landlordheaven.com',
-  sales_email: 'sales@landlordheaven.com',
-  privacy_email: 'privacy@landlordheaven.com',
+  support_email: 'support@landlordheaven.co.uk',
+  refunds_email: 'refunds@landlordheaven.co.uk',
+  sales_email: 'sales@landlordheaven.co.uk',
+  privacy_email: 'privacy@landlordheaven.co.uk',
 
   // Legal
   company_name: 'Landlord Heaven Ltd',
