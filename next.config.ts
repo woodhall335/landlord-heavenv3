@@ -4,12 +4,19 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
   devIndicators: false,
-  allowedDevOrigins: ["*"],
+  // Allow localhost for development
+  allowedDevOrigins: ['localhost:5000', 'localhost:3000'],
   // Exclude PDF libraries from webpack bundling to avoid ESM/CJS conflicts
   serverExternalPackages: ['pdfjs-dist', 'pdf-parse', 'canvas'],
   experimental: {
     serverActions: {
-      allowedOrigins: ["*"],
+      // Restrict to production domain and localhost for development
+      allowedOrigins: [
+        'localhost:5000',
+        'localhost:3000',
+        'landlordheaven.co.uk',
+        'www.landlordheaven.co.uk',
+      ],
     },
   },
   webpack: (config) => {

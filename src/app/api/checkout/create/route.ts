@@ -142,7 +142,11 @@ export async function POST(request: Request) {
     }
 
     // Create Stripe checkout session
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    // Use NEXT_PUBLIC_APP_URL in production, fallback to localhost only in development
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ||
+      (process.env.NODE_ENV === 'production'
+        ? 'https://landlordheaven.co.uk'
+        : 'http://localhost:5000');
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: 'payment',

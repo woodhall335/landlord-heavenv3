@@ -10,11 +10,12 @@
 // - NEVER return storage paths to unauthorized users
 // - Signed URLs expire after 15 minutes (900s default)
 // - Validate case ownership before generating signed URL
-// - For anonymous cases, validate using session or case-bound token
+// - For anonymous cases, validate using session token from x-session-token header
 
 import { NextResponse } from 'next/server';
 import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
+import { getSessionTokenFromRequest } from '@/lib/session-token';
 
 export const runtime = 'nodejs';
 
@@ -69,10 +70,10 @@ export async function GET(request: Request) {
       }
     }
 
-    // Load case to verify ownership
+    // Load case to verify ownership (include session_token for anonymous validation)
     const { data: caseRow, error: caseError } = await supabase
       .from('cases')
-      .select('id, user_id')
+      .select('id, user_id, session_token')
       .eq('id', caseId)
       .maybeSingle();
 
@@ -89,12 +90,9 @@ export async function GET(request: Request) {
     // OWNERSHIP VALIDATION
     // =========================================================================
     // If the case has an owner, only that user can download evidence.
-    // For anonymous cases (user_id is null), we allow download if:
-    //   1. User is authenticated but case was started anonymously (migration case)
-    //   2. User is anonymous but owns the case session (future: add session validation)
-    //
-    // NOTE: Anonymous case downloads should ideally be further restricted
-    // by session token, but for now we follow the same pattern as upload.
+    // For anonymous cases (user_id is null), we require:
+    //   1. A matching session token from the x-session-token header
+    //   2. OR the user is now authenticated (migration case - anonymous to signed up)
     // =========================================================================
 
     if (caseRow.user_id) {
@@ -102,11 +100,31 @@ export async function GET(request: Request) {
       if (!user || caseRow.user_id !== user.id) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
+    } else {
+      // Anonymous case - validate session token
+      // If user is now authenticated, allow access (they signed up after starting anonymously)
+      if (!user) {
+        // Anonymous user - must have matching session token
+        const requestSessionToken = getSessionTokenFromRequest(request);
+        const caseSessionToken = (caseRow as any).session_token;
+
+        // If case has a session token, require it to match
+        if (caseSessionToken) {
+          if (!requestSessionToken || requestSessionToken !== caseSessionToken) {
+            console.warn('[evidence/download] Session token mismatch for anonymous case', {
+              caseId,
+              hasRequestToken: !!requestSessionToken,
+              hasCaseToken: !!caseSessionToken,
+            });
+            return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+          }
+        }
+        // If case has no session token (legacy), allow access for backwards compatibility
+        // New cases will have session tokens set on creation
+      }
+      // If user is authenticated, allow access to anonymous cases
+      // (they may have started anonymous and then signed up)
     }
-    // For anonymous cases (caseRow.user_id === null):
-    // - If user is logged in, allow access (they may be the anonymous creator)
-    // - If user is not logged in, allow access (anonymous session)
-    // This mirrors the upload behavior for consistency.
 
     // =========================================================================
     // LOAD EVIDENCE FROM CANONICAL SOURCE (facts.evidence.files[])
