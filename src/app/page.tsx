@@ -62,13 +62,13 @@ export default function Home() {
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-primary/20 rounded-full px-5 py-2.5 mb-6 shadow-sm">
-              <span className="text-sm font-bold text-primary">☁️ Trusted by 10,000+ UK Landlords</span>
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">☁️ Trusted by 10,000+ UK Landlords</span>
             </div>
 
             {/* Main Headline - Value-focused */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
-              Court-Ready Legal Documents
+              Legal Documents
               <span className="block text-primary">in Minutes, Not Days</span>
             </h1>
 
