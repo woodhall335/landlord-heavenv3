@@ -54,7 +54,7 @@ export function CostComparison() {
           {/* Comparison Cards */}
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
             {/* Solicitor Column */}
-            <div className="bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:shadow-lg transition-all duration-300">
+            <div className="bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:border-primary hover:shadow-lg transition-all duration-300 cursor-default">
               <div className="text-center mb-8">
                 <div className="text-gray-500 text-sm font-semibold uppercase tracking-wide mb-2">
                   Typical Solicitor
@@ -194,10 +194,10 @@ function PriceAnchor({
   return (
     <Link
       href={href}
-      className={`block rounded-xl p-4 text-center border-2 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-1 cursor-pointer group ${
+      className={`block rounded-xl p-4 text-center border-2 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-1 cursor-pointer group hover:border-primary ${
         highlighted
-          ? 'bg-primary/5 border-primary/30 hover:border-primary'
-          : 'bg-gray-50 border-gray-100 hover:border-primary/30'
+          ? 'bg-primary/5 border-primary/30'
+          : 'bg-gray-50 border-gray-100'
       }`}
     >
       <div className="text-sm font-medium text-gray-700 mb-2 group-hover:text-primary transition-colors">{product}</div>
