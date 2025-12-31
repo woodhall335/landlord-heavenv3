@@ -67,7 +67,7 @@ function StarRating({ rating }: { rating: number }) {
 
 function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow h-full flex flex-col">
+    <div className="bg-white rounded-2xl p-8 shadow-sm border-2 border-gray-100 hover:shadow-xl hover:border-primary/20 hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
       {/* Rating */}
       <div className="flex items-center justify-between mb-4">
         <StarRating rating={testimonial.rating} />
@@ -103,7 +103,7 @@ export function Testimonials() {
       <Container>
         {/* Section Header */}
         <div className="text-center mb-14">
-          <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
+          <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
             <span className="text-sm font-semibold text-primary">Trusted by UK Landlords</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">

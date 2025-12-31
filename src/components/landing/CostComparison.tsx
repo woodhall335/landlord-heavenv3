@@ -1,13 +1,18 @@
 /**
- * CostComparison Component
+ * CostComparison Component (Fixed)
  *
  * Shows "vs Solicitor" pricing comparison to anchor value proposition.
- * This is a key conversion driver - makes cost savings immediately obvious.
+ *
+ * Fixes Applied:
+ * - Complete Pack solicitor price updated to £1,500-2,500
+ * - Added hover effects to price anchor cards
+ * - Uses hero-btn-primary class for CTA
+ * - Enhanced animations and transitions
  */
 
 import Link from 'next/link';
 import { Container } from '@/components/ui';
-import { RiTimeLine, RiCalendarLine, RiCloseLine, RiCheckLine, RiMoneyPoundCircleLine, RiFlashlightLine, RiCustomerService2Line, RiEditLine } from 'react-icons/ri';
+import { RiCloseLine, RiCheckLine } from 'react-icons/ri';
 
 function ComparisonItem({
   positive,
@@ -49,15 +54,15 @@ export function CostComparison() {
           {/* Comparison Cards */}
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
             {/* Solicitor Column */}
-            <div className="bg-gray-50 rounded-2xl p-8 border-2 border-gray-200">
+            <div className="bg-gray-50 rounded-2xl p-8 border-2 border-gray-200 hover:shadow-lg transition-all duration-300">
               <div className="text-center mb-8">
                 <div className="text-gray-500 text-sm font-semibold uppercase tracking-wide mb-2">
                   Typical Solicitor
                 </div>
                 <div className="text-4xl md:text-5xl font-bold text-gray-400 line-through decoration-red-400 decoration-2">
-                  £200-500
+                  £300-2,500
                 </div>
-                <div className="text-gray-500 mt-1">per document</div>
+                <div className="text-gray-500 mt-1">depending on case</div>
               </div>
 
               <ul className="space-y-4">
@@ -86,10 +91,10 @@ export function CostComparison() {
             </div>
 
             {/* Landlord Heaven Column */}
-            <div className="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-8 border-2 border-primary relative shadow-lg">
+            <div className="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-8 border-2 border-primary relative shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
               {/* Popular Badge */}
               <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                <span className="bg-primary text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md">
+                <span className="bg-primary text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md animate-subtle-pulse">
                   SAVE 80%+
                 </span>
               </div>
@@ -125,7 +130,7 @@ export function CostComparison() {
               <div className="mt-8">
                 <Link
                   href="/wizard"
-                  className="block w-full text-center bg-primary hover:bg-primary-dark text-white font-semibold py-4 px-6 rounded-xl transition-all hover:shadow-lg"
+                  className="hero-btn-primary block w-full text-center"
                 >
                   Start Saving Now →
                 </Link>
@@ -133,7 +138,7 @@ export function CostComparison() {
             </div>
           </div>
 
-          {/* Product Price Anchors */}
+          {/* Product Price Anchors - Updated with correct solicitor prices and hover effects */}
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
             <PriceAnchor
               product="Eviction Notices"
@@ -144,8 +149,9 @@ export function CostComparison() {
             <PriceAnchor
               product="Complete Pack"
               ourPrice="£149.99"
-              solicitorPrice="£500-800"
-              savings="£350+"
+              solicitorPrice="£1,500-2,500"
+              savings="£1,350+"
+              highlighted
             />
             <PriceAnchor
               product="Money Claims"
@@ -171,18 +177,26 @@ function PriceAnchor({
   ourPrice,
   solicitorPrice,
   savings,
+  highlighted,
 }: {
   product: string;
   ourPrice: string;
   solicitorPrice: string;
   savings: string;
+  highlighted?: boolean;
 }) {
   return (
-    <div className="bg-gray-50 rounded-xl p-4 text-center border border-gray-100">
+    <div className={`rounded-xl p-4 text-center border-2 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-1 cursor-default ${
+      highlighted
+        ? 'bg-primary/5 border-primary/30 hover:border-primary'
+        : 'bg-gray-50 border-gray-100 hover:border-primary/30'
+    }`}>
       <div className="text-sm font-medium text-gray-700 mb-2">{product}</div>
       <div className="text-xl font-bold text-primary">{ourPrice}</div>
       <div className="text-xs text-gray-400 line-through">{solicitorPrice}</div>
-      <div className="text-xs font-semibold text-green-600 mt-1">Save {savings}</div>
+      <div className={`text-xs font-semibold mt-1 ${highlighted ? 'text-primary' : 'text-green-600'}`}>
+        Save {savings}
+      </div>
     </div>
   );
 }

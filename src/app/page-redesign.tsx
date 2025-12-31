@@ -1,25 +1,15 @@
 /**
- * Landing Page - Redesigned
+ * Landing Page - Redesigned (Fixed)
  *
  * High-converting landing page for Landlord Heaven.
- * Optimized for trust, value clarity, and conversion.
+ * Updated to match existing design patterns from pricing and AST pages.
  *
- * Section Order (optimized for conversion):
- * 1. Hero - Value proposition and primary CTA
- * 2. Trust Bar - Immediate credibility signals
- * 3. Cost Comparison - Anchor value vs solicitors
- * 4. How It Works - Reduce anxiety, show simplicity
- * 5. Products - Clear offerings with pricing
- * 6. Testimonials - Social proof with outcomes
- * 7. UK Coverage - Jurisdiction-specific reassurance
- * 8. FAQ - Address objections
- * 9. Final CTA - Strong closing with value recap
- *
- * Design Principles:
- * - Trust-first: Professional, clean, credible
- * - Value clarity: Savings immediately obvious
- * - Anxiety reduction: Simple process, support available
- * - Action-oriented: Single primary CTA per section
+ * Fixes Applied:
+ * - Hero badge matches AST page "Professional Tenancies" badge
+ * - Hero buttons use hero-btn-primary/secondary from globals.css
+ * - Final CTA uses pastel gradient matching pricing page
+ * - Complete Pack solicitor price updated to £1,500-2,500
+ * - Enhanced hover effects on all cards
  */
 
 "use client";
@@ -35,14 +25,14 @@ export default function Home() {
       {/* ============================================================
           HERO SECTION
           Purpose: Clear value proposition, primary CTA, trust indicators
+          Matches: AST page hero styling
           ============================================================ */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-24">
         <Container>
           <div className="max-w-4xl mx-auto text-center">
-            {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 mb-6 shadow-sm border border-purple-100">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-gray-700">Trusted by 10,000+ UK Landlords</span>
+            {/* Trust Badge - Matches AST "Professional Tenancies" badge exactly */}
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">☁️ Trusted by 10,000+ UK Landlords</span>
             </div>
 
             {/* Main Headline - Value-focused */}
@@ -57,42 +47,20 @@ export default function Home() {
               <span className="font-semibold text-gray-800"> save 80%+ vs solicitor fees</span>.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
-              <Link
-                href="/wizard"
-                className="group flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg"
-              >
-                Generate Your Documents
-                <RiArrowRightLine className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            {/* CTA Buttons - Uses hero-btn-primary/secondary from globals.css */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link href="/wizard" className="hero-btn-primary">
+                Generate Your Documents →
               </Link>
-              <Link
-                href="/pricing"
-                className="text-gray-700 hover:text-primary font-semibold px-6 py-4 transition-colors"
-              >
-                View Pricing →
+              <Link href="/pricing" className="hero-btn-secondary">
+                View Pricing
               </Link>
             </div>
 
             {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-500">
-              <span className="flex items-center gap-1.5">
-                <RiCheckLine className="w-4 h-4 text-green-500" />
-                Instant download
-              </span>
-              <span className="flex items-center gap-1.5">
-                <RiCheckLine className="w-4 h-4 text-green-500" />
-                Court-ready format
-              </span>
-              <span className="flex items-center gap-1.5">
-                <RiCheckLine className="w-4 h-4 text-green-500" />
-                All UK jurisdictions
-              </span>
-              <span className="flex items-center gap-1.5">
-                <RiCheckLine className="w-4 h-4 text-green-500" />
-                No legal experience needed
-              </span>
-            </div>
+            <p className="mt-4 text-sm text-gray-600">
+              Instant download • Court-ready format • All UK jurisdictions • No legal experience needed
+            </p>
           </div>
         </Container>
       </section>
@@ -116,7 +84,7 @@ export default function Home() {
       <section className="py-20 md:py-24 bg-gray-50">
         <Container>
           <div className="text-center mb-14">
-            <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
               <span className="text-sm font-semibold text-primary">Simple 3-Step Process</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -157,14 +125,10 @@ export default function Home() {
             </div>
 
             <div className="mt-14 text-center">
-              <Link
-                href="/wizard"
-                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg"
-              >
-                Start Your Documents Now
-                <RiArrowRightLine className="w-5 h-5" />
+              <Link href="/wizard" className="hero-btn-primary">
+                Start Your Documents Now →
               </Link>
-              <p className="mt-4 text-sm text-gray-500">Free to start • Pay only when you're ready</p>
+              <p className="mt-4 text-sm text-gray-600">Free to start • Pay only when you're ready</p>
             </div>
           </div>
         </Container>
@@ -173,11 +137,12 @@ export default function Home() {
       {/* ============================================================
           PRODUCTS
           Purpose: Clear product offerings with pricing
+          Updated: Complete Pack solicitor price = £1,500-2,500
           ============================================================ */}
       <section className="py-20 md:py-24 bg-white">
         <Container>
           <div className="text-center mb-14">
-            <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
               <span className="text-sm font-semibold text-primary">Our Products</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -202,7 +167,7 @@ export default function Home() {
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
               price="£149.99"
-              solicitorPrice="£500-800"
+              solicitorPrice="£1,500-2,500"
               icon={<RiScales3Line className="w-7 h-7" />}
               popular
             />
@@ -227,7 +192,7 @@ export default function Home() {
           <div className="mt-12 text-center">
             <Link
               href="/pricing"
-              className="text-primary hover:text-primary-dark font-semibold inline-flex items-center gap-2"
+              className="text-primary hover:text-primary-dark font-semibold inline-flex items-center gap-2 transition-colors"
             >
               Compare all products and features
               <RiArrowRightLine className="w-5 h-5" />
@@ -249,7 +214,7 @@ export default function Home() {
       <section className="py-20 md:py-24 bg-white">
         <Container>
           <div className="text-center mb-14">
-            <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-4">
               <span className="text-sm font-semibold text-primary">UK-Wide Coverage</span>
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -294,43 +259,32 @@ export default function Home() {
       {/* ============================================================
           FINAL CTA
           Purpose: Strong closing with value recap
+          Fixed: Uses pastel gradient matching pricing page
           ============================================================ */}
-      <section className="py-20 md:py-24 bg-gradient-to-br from-primary to-primary-dark">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
               Ready to Get Your Documents?
             </h2>
-            <p className="text-xl text-purple-100 mb-8">
+            <p className="text-xl mb-8 text-gray-600">
               Join 10,000+ landlords saving time and money.
-              <span className="font-semibold text-white"> Start in under 2 minutes.</span>
+              <span className="font-semibold text-gray-800"> Start in under 2 minutes.</span>
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-              <Link
-                href="/wizard"
-                className="group flex items-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg w-full sm:w-auto justify-center"
-              >
-                Generate Your Documents
-                <RiArrowRightLine className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link href="/wizard" className="hero-btn-primary">
+                Generate Your Documents →
+              </Link>
+              <Link href="/ask-heaven" className="hero-btn-secondary">
+                Ask Heaven a Question
               </Link>
             </div>
 
             {/* Final trust indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-purple-100">
-              <span className="flex items-center gap-2">
-                <RiFlashlightLine className="w-5 h-5" />
-                Instant download
-              </span>
-              <span className="flex items-center gap-2">
-                <RiShieldCheckLine className="w-5 h-5" />
-                Court-ready guarantee
-              </span>
-              <span className="flex items-center gap-2">
-                <RiGlobalLine className="w-5 h-5" />
-                All UK jurisdictions
-              </span>
-            </div>
+            <p className="mt-4 text-sm text-gray-600">
+              Court-ready documents • Expert guidance • Lifetime storage
+            </p>
           </div>
         </Container>
       </section>
@@ -386,15 +340,15 @@ function ProductCard({
   popular?: boolean;
 }) {
   return (
-    <Link href={href} className="group relative">
+    <Link href={href} className="group relative block">
       {popular && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-          <span className="bg-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+          <span className="bg-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow animate-subtle-pulse">
             MOST POPULAR
           </span>
         </div>
       )}
-      <div className={`bg-white rounded-2xl border-2 p-8 h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${popular ? 'border-primary' : 'border-gray-100 hover:border-primary'}`}>
+      <div className={`bg-white rounded-2xl border-2 p-8 h-full transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] ${popular ? 'border-primary shadow-lg' : 'border-gray-200 hover:border-primary'}`}>
         <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white group-hover:scale-110 transition-all duration-300">
           {icon}
         </div>
@@ -410,7 +364,7 @@ function ProductCard({
             <span className="text-sm text-gray-400 line-through">{solicitorPrice}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-xs text-green-600 font-medium">vs solicitor</span>
+            <span className="text-xs text-green-600 font-semibold">vs solicitor</span>
             <span className="text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
               Learn more →
             </span>
@@ -431,7 +385,7 @@ function JurisdictionCard({
   forms: string[];
 }) {
   return (
-    <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:shadow-md hover:border-primary/20 transition-all">
+    <div className="bg-gray-50 rounded-2xl p-6 border-2 border-gray-100 hover:shadow-lg hover:border-primary/30 hover:-translate-y-1 transition-all duration-300 cursor-default">
       <div className="flex items-center gap-3 mb-4">
         <img
           src={flag}
