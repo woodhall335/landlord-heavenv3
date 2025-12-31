@@ -26,6 +26,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Container } from "@/components/ui";
 import { TrustBar, CostComparison, Testimonials, FAQ } from "@/components/landing";
@@ -608,9 +609,9 @@ function JurisdictionCard({
   forms: string[];
 }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center transition-all duration-300 hover:shadow-lg hover:border-primary/30 group">
-      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary text-2xl font-bold mx-auto mb-4 transition-all duration-300 group-hover:bg-primary group-hover:text-white">
-        {title.charAt(0)}
+    <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center transition-all duration-300 hover:shadow-lg hover:border-primary cursor-default group">
+      <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:scale-110 overflow-hidden">
+        <Image src={flag} alt={title} width={40} height={40} className="w-10 h-10 object-contain" />
       </div>
       <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">{title}</h3>
       <ul className="text-sm text-gray-600 space-y-1">
