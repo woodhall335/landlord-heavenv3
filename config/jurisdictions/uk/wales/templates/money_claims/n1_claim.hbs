@@ -1,0 +1,477 @@
+{{! Form N1 - Claim form (for money claims) }}
+{{! This template replicates the exact structure of the official HMCTS Form N1 }}
+{{! Used for rent arrears and property damage claims in Wales }}
+{{! Wales uses the same County Court system as England }}
+{{! Last updated format: December 2024 }}
+
+{{#if pdf_generation}}
+<style>
+  @page {
+    size: A4;
+    margin: 0;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 10pt;
+    margin: 0;
+    padding: 15mm 20mm;
+    line-height: 1.3;
+  }
+  .form-header {
+    border-bottom: 3px solid black;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+  }
+  .royal-arms {
+    float: left;
+    width: 45mm;
+    height: 45mm;
+    margin-right: 10mm;
+  }
+  .court-stamp {
+    float: right;
+    width: 65mm;
+    height: 50mm;
+    border: 2px solid black;
+    text-align: center;
+    padding-top: 12mm;
+    font-size: 9pt;
+  }
+  .section-heading {
+    background-color: #000000;
+    color: white;
+    padding: 4px 8px;
+    font-weight: bold;
+    font-size: 10pt;
+    margin-top: 12px;
+    margin-bottom: 8px;
+  }
+  .field-label {
+    font-weight: bold;
+    font-size: 9pt;
+  }
+  .fill-box {
+    border-bottom: 1px solid black;
+    min-height: 18px;
+    margin-bottom: 4px;
+  }
+  .checkbox {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid black;
+    margin-right: 5px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  .checkbox.checked::before {
+    content: "✓";
+    font-weight: bold;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  table, th, td {
+    border: 1px solid black;
+  }
+  th, td {
+    padding: 6px;
+    text-align: left;
+  }
+  .notes-box {
+    border: 1px solid #666;
+    padding: 8px;
+    background-color: #f5f5f5;
+    font-size: 9pt;
+    margin: 8px 0;
+  }
+  .amount-box {
+    border: 2px solid black;
+    padding: 10px;
+    background-color: #ffffcc;
+    margin: 10px 0;
+  }
+</style>
+{{/if}}
+
+<!-- HEADER WITH ROYAL ARMS -->
+<div class="form-header">
+  <div class="royal-arms">
+    {{#if royal_arms_image}}
+    <img src="{{royal_arms_image}}" style="width: 100%; height: 100%;" alt="Royal Arms" />
+    {{else}}
+    <div style="border: 1px solid #ccc; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 8pt; color: #999;">
+      Royal Arms
+    </div>
+    {{/if}}
+  </div>
+
+  <div class="court-stamp">
+    <div style="font-size: 8pt; margin-bottom: 6mm; font-weight: bold;">Seal</div>
+    <div style="font-size: 9pt;">Claim No.</div>
+    <div style="border-top: 1.5px solid black; margin: 6mm 12mm; padding-top: 3mm; font-size: 11pt; font-weight: bold;">
+      {{#if claim_number}}{{claim_number}}{{else}}&nbsp;{{/if}}
+    </div>
+    <div style="font-size: 8pt; margin-top: 6mm;">Issue date</div>
+  </div>
+
+  <div style="clear: both; margin-top: 8px;">
+    <div style="font-size: 18pt; font-weight: bold;">Claim Form</div>
+  </div>
+</div>
+
+<div style="text-align: right; font-size: 22pt; font-weight: bold; margin-bottom: 12px;">N1</div>
+
+<!-- CLAIMANT DETAILS -->
+<div class="section-heading">Claimant</div>
+
+<table style="margin-bottom: 12px;">
+  <tr>
+    <td style="width: 70%; vertical-align: top;">
+      <div class="field-label">Claimant's full name and address (including postcode)</div>
+      <div style="margin-top: 6px; line-height: 1.5;">
+        <strong>{{landlord_full_name}}</strong>{{#if landlord_2_name}}<br><strong>{{landlord_2_name}}</strong>{{/if}}
+        <br>{{landlord_address}}
+      </div>
+    </td>
+    <td style="width: 30%; vertical-align: top;">
+      <div class="field-label">Postcode</div>
+      <div style="margin-top: 6px;">
+        <strong>{{landlord_postcode}}</strong>
+      </div>
+    </td>
+  </tr>
+</table>
+
+{{#if landlord_phone}}
+<div style="margin: 8px 0;">
+  <span class="field-label">Telephone no.:</span> {{landlord_phone}}
+</div>
+{{/if}}
+
+{{#if landlord_email}}
+<div style="margin: 8px 0;">
+  <span class="field-label">Email address:</span> {{landlord_email}}
+</div>
+{{/if}}
+
+{{#if claimant_reference}}
+<div style="margin: 8px 0;">
+  <span class="field-label">Claimant's reference:</span> {{claimant_reference}}
+</div>
+{{/if}}
+
+<!-- DEFENDANT DETAILS -->
+<div class="section-heading">Defendant (Contract-Holder)</div>
+
+<table style="margin-bottom: 12px;">
+  <tr>
+    <td style="width: 70%; vertical-align: top;">
+      <div class="field-label">Defendant's full name and address (including postcode)</div>
+      <div style="margin-top: 6px; line-height: 1.5;">
+        <strong>{{tenant_full_name}}</strong>{{#if tenant_2_name}}<br><strong>{{tenant_2_name}}</strong>{{/if}}
+        <br>{{property_address}}
+      </div>
+    </td>
+    <td style="width: 30%; vertical-align: top;">
+      <div class="field-label">Postcode</div>
+      <div style="margin-top: 6px;">
+        <strong>{{property_postcode}}</strong>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<!-- COURT DETAILS -->
+<div style="margin: 15px 0; border: 2px solid black; padding: 10px; background-color: #f0f0f0;">
+  <div class="field-label">In the</div>
+  <div class="fill-box" style="font-weight: bold; font-size: 11pt;">{{court_name}}</div>
+  <div class="field-label" style="margin-top: 8px;">County Court Money Claims Centre</div>
+  <div style="margin-top: 5px; font-size: 9pt; font-style: italic;">
+    (or name of County Court hearing centre if not CCMCC)
+  </div>
+</div>
+
+<!-- BRIEF DETAILS OF CLAIM -->
+<div class="section-heading">Brief details of claim</div>
+
+<div class="notes-box">
+  You must give enough information for the defendant to know the reason for your claim. If your claim is for a specific sum of money, say how much. If your claim is for an amount to be decided by the court, say what you are claiming for (for example, compensation for personal injury).
+</div>
+
+<div style="border: 1px solid black; padding: 12px; margin: 10px 0; min-height: 80px;">
+{{brief_details}}
+
+{{#if default_brief_details}}
+The Claimant claims:
+
+{{#if claiming_rent_arrears}}
+1. Rent arrears of £{{total_rent_arrears}} for the period {{arrears_start_date}} to {{arrears_end_date}} relating to an occupation contract governed by the Renting Homes (Wales) Act 2016
+{{/if}}
+
+{{#if claiming_damages}}
+{{#if claiming_rent_arrears}}2{{else}}1{{/if}}. Damages for breach of occupation contract and/or property damage amounting to £{{total_damages}}
+{{/if}}
+
+{{#if claiming_interest}}
+{{#if claiming_damages}}{{#if claiming_rent_arrears}}3{{else}}2{{/if}}{{else}}{{#if claiming_rent_arrears}}2{{else}}1{{/if}}{{/if}}. Interest on the above sum(s)
+{{/if}}
+
+Full particulars are set out in the attached Particulars of Claim.
+{{/if}}
+</div>
+
+<!-- VALUE -->
+<div class="section-heading">Value</div>
+
+<div class="notes-box">
+  State the value of your claim. For claims under £100,000, tick the appropriate box. For claims over £100,000, state the amount you are claiming.
+</div>
+
+<div style="margin: 12px 0;">
+  <div>
+    <span class="checkbox{{#if value_not_exceeding_5000}} checked{{/if}}"></span>
+    The claimant expects to recover not more than £5,000
+  </div>
+  <div style="margin-top: 5px;">
+    <span class="checkbox{{#if value_between_5000_and_10000}} checked{{/if}}"></span>
+    The claimant expects to recover more than £5,000 but not more than £10,000
+  </div>
+  <div style="margin-top: 5px;">
+    <span class="checkbox{{#if value_between_10000_and_25000}} checked{{/if}}"></span>
+    The claimant expects to recover more than £10,000 but not more than £25,000
+  </div>
+  <div style="margin-top: 5px;">
+    <span class="checkbox{{#if value_between_25000_and_100000}} checked{{/if}}"></span>
+    The claimant expects to recover more than £25,000 but not more than £100,000
+  </div>
+  <div style="margin-top: 5px;">
+    <span class="checkbox{{#if value_over_100000}} checked{{/if}}"></span>
+    The claimant expects to recover more than £100,000
+    {{#if value_over_100000}}
+    <div style="margin-left: 30px; margin-top: 5px;">
+      <span class="field-label">Amount claimed:</span> <span class="fill-box">£{{claim_amount}}</span>
+    </div>
+    {{/if}}
+  </div>
+</div>
+
+<!-- AMOUNT CLAIMED -->
+<div class="section-heading">Amount claimed</div>
+
+<div class="amount-box">
+  <table style="border: none; background-color: transparent;">
+    <tr>
+      <td style="border: none; width: 60%;">
+        <strong>Claim amount</strong>
+      </td>
+      <td style="border: none; width: 40%; text-align: right;">
+        <strong>£{{total_claim_amount}}</strong>
+      </td>
+    </tr>
+    {{#if court_fee}}
+    <tr>
+      <td style="border: none;">
+        Court fee
+      </td>
+      <td style="border: none; text-align: right;">
+        £{{court_fee}}
+      </td>
+    </tr>
+    {{/if}}
+    {{#if solicitor_costs}}
+    <tr>
+      <td style="border: none;">
+        Solicitor's costs
+      </td>
+      <td style="border: none; text-align: right;">
+        £{{solicitor_costs}}
+      </td>
+    </tr>
+    {{/if}}
+    <tr style="border-top: 2px solid black;">
+      <td style="border: none;">
+        <strong>Total amount</strong>
+      </td>
+      <td style="border: none; text-align: right;">
+        <strong>£{{total_amount}}</strong>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- PARTICULARS OF CLAIM -->
+<div class="section-heading">Particulars of Claim (attached)</div>
+
+<div class="notes-box">
+  You must attach a separate sheet setting out your claim in full. This should include:
+  <ul style="margin: 5px 0; padding-left: 20px;">
+    <li>Full details of the claim</li>
+    <li>Breakdown of amounts claimed</li>
+    <li>Copies of any relevant documents</li>
+    <li>A statement of truth</li>
+  </ul>
+</div>
+
+<div style="margin: 10px 0;">
+  <div>
+    <span class="checkbox checked"></span>
+    <span class="field-label">Particulars of claim are attached</span>
+  </div>
+</div>
+
+<!-- INTEREST -->
+{{#if claiming_interest}}
+<div class="section-heading">Interest on the amount claimed</div>
+
+<div style="margin: 10px 0;">
+  <div>
+    <span class="checkbox{{#if interest_contractual}} checked{{/if}}"></span>
+    The claimant is claiming interest under the terms of the contract at a rate of {{interest_rate}}%
+  </div>
+  <div style="margin-top: 5px;">
+    <span class="checkbox{{#if interest_statutory}} checked{{/if}}"></span>
+    The claimant is claiming interest under section 69 of the County Courts Act 1984 at a rate of {{#if interest_statutory}}8%{{else}}{{interest_rate}}%{{/if}} per year
+  </div>
+  <div style="margin-top: 5px;">
+    <span class="checkbox{{#if interest_other}} checked{{/if}}"></span>
+    Other (specify):
+    {{#if interest_other_details}}
+    <div class="fill-box">{{interest_other_details}}</div>
+    {{/if}}
+  </div>
+</div>
+
+{{#if interest_calculated}}
+<div style="margin: 15px 0;">
+  <div class="field-label">Interest calculation:</div>
+  <div style="margin-left: 20px; margin-top: 5px;">
+    <div>From: <span class="fill-box">{{interest_from_date}}</span></div>
+    <div style="margin-top: 5px;">To: <span class="fill-box">{{interest_to_date}}</span></div>
+    <div style="margin-top: 5px;">Amount: <span class="fill-box">£{{interest_amount}}</span></div>
+    <div style="margin-top: 5px;">Daily rate after {{interest_to_date}}: <span class="fill-box">£{{interest_daily_rate}}</span></div>
+  </div>
+</div>
+{{/if}}
+{{/if}}
+
+<!-- STATEMENT OF TRUTH -->
+<div class="section-heading">Statement of Truth</div>
+
+<div class="notes-box">
+  <strong>*[I believe] [The claimant believes] that the facts stated in this claim form and any attached documents are true.</strong>
+  <div style="margin-top: 5px; font-size: 8pt;">
+    *I am duly authorised by the claimant to sign this statement
+  </div>
+  <div style="margin-top: 5px; font-size: 8pt; font-style: italic;">
+    Delete as appropriate
+  </div>
+</div>
+
+<div style="margin: 15px 0;">
+  <table style="border: none;">
+    <tr>
+      <td style="border: none; width: 50%;">
+        <div class="field-label">Full name</div>
+        <div class="fill-box">{{signatory_name}}</div>
+      </td>
+      <td style="border: none; width: 50%;">
+        <div class="field-label">Name of claimant's solicitor's firm</div>
+        <div class="fill-box">{{solicitor_firm}}</div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div style="margin: 15px 0;">
+  <table style="border: none;">
+    <tr>
+      <td style="border: none; width: 70%;">
+        <div class="field-label">Signed</div>
+        <div style="margin-top: 20px; border-bottom: 2px solid black; min-height: 30px;">
+          {{#if signature_image}}
+          <img src="{{signature_image}}" style="max-height: 28px;" />
+          {{/if}}
+        </div>
+        <div style="font-size: 8pt; margin-top: 3px; font-style: italic;">
+          *(Claimant)(Litigation friend)(Claimant's solicitor)
+        </div>
+        <div style="font-size: 8pt; font-style: italic;">
+          *Delete as appropriate
+        </div>
+      </td>
+      <td style="border: none; width: 30%; vertical-align: bottom;">
+        <div class="field-label">Date</div>
+        <div class="fill-box">{{signature_date}}</div>
+      </td>
+    </tr>
+  </table>
+</div>
+
+<div style="margin: 15px 0;">
+  <div class="field-label">Position or office held</div>
+  <div class="fill-box">{{signatory_position}}</div>
+  <div style="font-size: 8pt; margin-top: 2px; font-style: italic;">
+    (if signing on behalf of firm or company)
+  </div>
+</div>
+
+<!-- CLAIMANT'S ADDRESS FOR SERVICE -->
+<div class="section-heading">Claimant's or claimant's solicitor's address to which documents or payments should be sent</div>
+
+<div style="margin: 10px 0;">
+  {{#if solicitor_firm}}
+  <div><strong>{{solicitor_firm}}</strong></div>
+  <div>{{solicitor_address}}</div>
+  {{#if solicitor_postcode}}
+  <div style="margin-top: 5px;">
+    <span class="field-label">Postcode:</span> {{solicitor_postcode}}
+  </div>
+  {{/if}}
+  {{#if solicitor_reference}}
+  <div style="margin-top: 5px;">
+    <span class="field-label">Ref no.:</span> {{solicitor_reference}}
+  </div>
+  {{/if}}
+  {{#if solicitor_phone}}
+  <div><span class="field-label">Tel no.:</span> {{solicitor_phone}}</div>
+  {{/if}}
+  {{#if solicitor_fax}}
+  <div><span class="field-label">Fax no.:</span> {{solicitor_fax}}</div>
+  {{/if}}
+  {{#if solicitor_dx}}
+  <div><span class="field-label">DX no.:</span> {{solicitor_dx}}</div>
+  {{/if}}
+  {{#if solicitor_email}}
+  <div><span class="field-label">Email:</span> {{solicitor_email}}</div>
+  {{/if}}
+  {{else}}
+  <div>{{landlord_full_name}}</div>
+  <div>{{landlord_address}}</div>
+  {{#if landlord_postcode}}
+  <div style="margin-top: 5px;">
+    <span class="field-label">Postcode:</span> {{landlord_postcode}}
+  </div>
+  {{/if}}
+  {{#if landlord_phone}}
+  <div style="margin-top: 5px;"><span class="field-label">Tel no.:</span> {{landlord_phone}}</div>
+  {{/if}}
+  {{#if landlord_email}}
+  <div><span class="field-label">Email:</span> {{landlord_email}}</div>
+  {{/if}}
+  {{/if}}
+</div>
+
+<!-- FOOTER -->
+<div style="margin-top: 30px; border-top: 2px solid black; padding-top: 10px; font-size: 8pt; color: #666;">
+  <div style="float: left;">N1 Claim form (12.24)</div>
+  <div style="float: right;">© Crown copyright 2024</div>
+  <div style="clear: both;"></div>
+</div>
+
+{{#if is_preview}}
+<div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); font-size: 72pt; color: rgba(255, 0, 0, 0.1); font-weight: bold; z-index: 9999; pointer-events: none;">
+  PREVIEW
+</div>
+{{/if}}
