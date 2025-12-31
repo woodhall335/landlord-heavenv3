@@ -12,9 +12,6 @@ import { EmailCaptureModal } from '@/components/leads/EmailCaptureModal';
 import { Container } from '@/components/ui';
 import { RiSendPlaneFill, RiArrowLeftLine, RiCheckLine, RiQuestionLine } from 'react-icons/ri';
 
-type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
-type Product = 'notice_only' | 'complete_pack' | 'money_claim' | 'tenancy_agreement';
-
 type ChatRole = 'user' | 'assistant';
 
 interface ChatMessage {
@@ -22,7 +19,31 @@ interface ChatMessage {
   role: ChatRole;
   content: string;
   createdAt: string;
+  suggestedProduct?: string | null;
 }
+
+const PRODUCT_CTA_MAP: Record<string, { label: string; href: string; description: string }> = {
+  notice_only: {
+    label: 'Generate Eviction Notice',
+    href: '/wizard?product=notice_only',
+    description: 'Create a compliant Section 21, Section 8, or Notice to Leave',
+  },
+  complete_pack: {
+    label: 'Get Complete Eviction Pack',
+    href: '/wizard?product=complete_pack',
+    description: 'Full bundle with notice, court forms, and guidance',
+  },
+  money_claim: {
+    label: 'Start Money Claim',
+    href: '/wizard?product=money_claim',
+    description: 'Recover rent arrears through the courts',
+  },
+  tenancy_agreement: {
+    label: 'Create Tenancy Agreement',
+    href: '/wizard?product=tenancy_agreement',
+    description: 'Generate a compliant AST or PRT',
+  },
+};
 
 interface EvidenceSummary {
   id: string;
@@ -47,8 +68,6 @@ interface CaseContext {
 }
 
 const defaultJurisdiction: Jurisdiction = 'england';
-const defaultCaseType: CaseType = 'eviction';
-const defaultProduct: Product = 'notice_only';
 
 const exampleQuestions = [
   "How do I evict a tenant for rent arrears?",
@@ -59,8 +78,6 @@ const exampleQuestions = [
 
 export default function AskHeavenPage(): React.ReactElement {
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction>(defaultJurisdiction);
-  const [caseType, setCaseType] = useState<CaseType>(defaultCaseType);
-  const [product, setProduct] = useState<Product>(defaultProduct);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isSending, setIsSending] = useState(false);
@@ -113,8 +130,6 @@ export default function AskHeavenPage(): React.ReactElement {
         body: JSON.stringify({
           case_id: caseId ?? undefined,
           jurisdiction,
-          case_type: caseType,
-          product,
           messages: [{ role: userMsg.role, content: userMsg.content }],
         }),
       });
@@ -125,7 +140,7 @@ export default function AskHeavenPage(): React.ReactElement {
         return;
       }
 
-      const body = (await res.json()) as { reply: string };
+      const body = (await res.json()) as { reply: string; suggested_product?: string | null };
 
       if (!body.reply || body.reply.includes('could not generate a reply')) {
         setError('Ask Heaven is having trouble responding. Please try again in a moment.');
@@ -137,6 +152,7 @@ export default function AskHeavenPage(): React.ReactElement {
         role: 'assistant',
         content: body.reply,
         createdAt: new Date().toISOString(),
+        suggestedProduct: body.suggested_product,
       };
 
       setChatMessages([userMsg, assistantMsg]);
@@ -145,7 +161,7 @@ export default function AskHeavenPage(): React.ReactElement {
     } finally {
       setIsSending(false);
     }
-  }, [caseId, jurisdiction, caseType, product]);
+  }, [caseId, jurisdiction]);
 
   useEffect(() => {
     if (initialQuestion && !hasAutoSubmitted.current && chatMessages.length === 0) {
@@ -303,8 +319,6 @@ export default function AskHeavenPage(): React.ReactElement {
         body: JSON.stringify({
           case_id: caseId ?? undefined,
           jurisdiction,
-          case_type: caseType,
-          product,
           messages: nextMessages.map((m) => ({
             role: m.role,
             content: m.content,
@@ -318,7 +332,7 @@ export default function AskHeavenPage(): React.ReactElement {
         return;
       }
 
-      const body = (await res.json()) as { reply: string };
+      const body = (await res.json()) as { reply: string; suggested_product?: string | null };
 
       if (!body.reply || body.reply.includes('could not generate a reply')) {
         setError('Ask Heaven is having trouble responding. Please try again in a moment.');
@@ -330,6 +344,7 @@ export default function AskHeavenPage(): React.ReactElement {
         role: 'assistant',
         content: body.reply,
         createdAt: new Date().toISOString(),
+        suggestedProduct: body.suggested_product,
       };
 
       setChatMessages((prev) => [...prev, assistantMsg]);
@@ -338,7 +353,7 @@ export default function AskHeavenPage(): React.ReactElement {
     } finally {
       setIsSending(false);
     }
-  }, [chatMessages, jurisdiction, caseType, product, caseId]);
+  }, [chatMessages, jurisdiction, caseId]);
 
   const handleSend = useCallback(async () => {
     await submitQuestion(input);
@@ -384,50 +399,22 @@ export default function AskHeavenPage(): React.ReactElement {
 
       <Container>
         <div className="max-w-4xl mx-auto py-6">
-          {/* Settings Panel (collapsible) */}
+          {/* Settings Panel (collapsible) - Just jurisdiction */}
           {showSettings && (
             <div className="mb-6 p-4 bg-white rounded-2xl border border-gray-200 shadow-sm">
-              <div className="flex flex-wrap gap-4">
-                <div className="flex flex-col gap-1 min-w-[140px]">
-                  <label className="text-xs font-semibold text-gray-700">Jurisdiction</label>
-                  <select
-                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    value={jurisdiction}
-                    onChange={(e) => setJurisdiction(e.target.value as Jurisdiction)}
-                  >
-                    <option value="england">England</option>
-                    <option value="wales">Wales</option>
-                    <option value="scotland">Scotland</option>
-                    <option value="northern-ireland">Northern Ireland</option>
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-1 min-w-[160px]">
-                  <label className="text-xs font-semibold text-gray-700">Scenario</label>
-                  <select
-                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    value={caseType}
-                    onChange={(e) => setCaseType(e.target.value as CaseType)}
-                  >
-                    <option value="eviction">Eviction / Notice</option>
-                    <option value="money_claim">Money claim (rent arrears)</option>
-                    <option value="tenancy_agreement">Tenancy agreements</option>
-                  </select>
-                </div>
-
-                <div className="flex flex-col gap-1 min-w-[160px]">
-                  <label className="text-xs font-semibold text-gray-700">Product stage</label>
-                  <select
-                    className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                    value={product}
-                    onChange={(e) => setProduct(e.target.value as Product)}
-                  >
-                    <option value="notice_only">Notice only</option>
-                    <option value="complete_pack">Court/tribunal pack</option>
-                    <option value="money_claim">Money claim pack</option>
-                    <option value="tenancy_agreement">Tenancy agreement</option>
-                  </select>
-                </div>
+              <div className="flex flex-col gap-1 max-w-[200px]">
+                <label className="text-xs font-semibold text-gray-700">Your property location</label>
+                <select
+                  className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  value={jurisdiction}
+                  onChange={(e) => setJurisdiction(e.target.value as Jurisdiction)}
+                >
+                  <option value="england">England</option>
+                  <option value="wales">Wales</option>
+                  <option value="scotland">Scotland</option>
+                  <option value="northern-ireland">Northern Ireland</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">Housing law differs by jurisdiction</p>
               </div>
             </div>
           )}
@@ -573,7 +560,7 @@ export default function AskHeavenPage(): React.ReactElement {
                   </div>
                   <h2 className="text-xl font-bold text-gray-900 mb-2">Ask me anything</h2>
                   <p className="text-gray-500 mb-6 max-w-md">
-                    Get instant answers about UK landlord-tenant law. I'm here to help with evictions, notices, rent arrears, and more.
+                    Get plain-English explanations about UK landlord problems. I help you understand notices, eviction routes, money claims, and tenancy agreements so you can speak to tenants, agents, or your own solicitor with confidence.
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-lg">
                     {exampleQuestions.map((question) => (
@@ -612,6 +599,26 @@ export default function AskHeavenPage(): React.ReactElement {
                     <p className={`whitespace-pre-wrap text-sm leading-relaxed ${m.role === 'user' ? 'text-white' : 'text-gray-700'}`}>
                       {m.content}
                     </p>
+                    {/* Product CTA */}
+                    {m.role === 'assistant' && m.suggestedProduct && PRODUCT_CTA_MAP[m.suggestedProduct] && (
+                      <div className="mt-4 pt-3 border-t border-gray-100">
+                        <Link
+                          href={PRODUCT_CTA_MAP[m.suggestedProduct].href}
+                          className="block p-3 bg-primary/5 hover:bg-primary/10 rounded-xl border border-primary/20 transition-all group"
+                        >
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm font-semibold text-primary group-hover:text-primary-700">
+                                {PRODUCT_CTA_MAP[m.suggestedProduct].label} →
+                              </p>
+                              <p className="text-xs text-gray-500 mt-0.5">
+                                {PRODUCT_CTA_MAP[m.suggestedProduct].description}
+                              </p>
+                            </div>
+                          </div>
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}

@@ -86,10 +86,17 @@ Additional instructions for CHAT MODE:
 - Focus on explaining options, risks, timelines, and evidence, not telling the user exactly what to do.
 - Use short sections and bullet points where helpful.
 
+PRODUCT RECOMMENDATIONS:
+When the landlord's question indicates they need a specific document or service, suggest the appropriate product:
+- For eviction/serving notice questions → suggest "Eviction Notice" (generates Section 21/Section 8/Notice to Leave)
+- For court/tribunal/possession proceedings → suggest "Complete Eviction Pack" (full bundle with court forms)
+- For rent arrears/money claims/debt recovery → suggest "Money Claim Pack" (court forms for recovering rent)
+- For tenancy agreement/AST questions → suggest "Tenancy Agreement" (compliant AST/PRT generation)
+
+Only suggest ONE product per response if clearly relevant. Do NOT force a product suggestion if the question is general.
+
 Context (if provided):
-${jurisdiction ? `- Jurisdiction: ${jurisdiction}` : ''}
-${case_type ? `- Case type: ${case_type}` : ''}
-${product ? `- Product stage: ${product}` : ''}
+${jurisdiction ? `- Jurisdiction: ${jurisdiction}` : '- Jurisdiction: Not specified (assume England unless user indicates otherwise)'}
 ${case_id ? '- You are chatting about a specific internal case. NEVER show the case_id or any internal IDs to the user.' : ''}
 `.trim();
 
@@ -108,6 +115,11 @@ ${case_id ? '- You are chatting about a specific internal case. NEVER show the c
           description:
             'Helpful, grounded reply to the landlord. Use clear structure and plain language, like a cautious senior housing solicitor, without giving personalised legal advice.',
         },
+        suggested_product: {
+          type: 'string',
+          enum: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement', null],
+          description: 'If the question clearly relates to a product, suggest one. null if general question.',
+        },
       },
       required: ['reply'],
       additionalProperties: false,
@@ -118,15 +130,16 @@ ${case_id ? '- You are chatting about a specific internal case. NEVER show the c
       temperature: 0.2,
     };
 
-    const result = await jsonCompletion<{ reply: string }>(
+    const result = await jsonCompletion<{ reply: string; suggested_product?: string | null }>(
       fullMessages,
       schema as Record<string, unknown>,
       options,
     );
 
     const reply = result.json?.reply ?? 'Sorry, Ask Heaven could not generate a reply this time.';
+    const suggestedProduct = result.json?.suggested_product ?? null;
 
-    return NextResponse.json({ reply }, { status: 200 });
+    return NextResponse.json({ reply, suggested_product: suggestedProduct }, { status: 200 });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return NextResponse.json(
