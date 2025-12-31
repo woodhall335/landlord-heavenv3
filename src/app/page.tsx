@@ -54,11 +54,11 @@ export default function Home() {
   return (
     <div className="bg-white">
       {/* HERO — match Complete Eviction Pack hero style */}
-      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">☁️ Trusted by UK Landlords</span>
+            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-primary/20 rounded-full px-5 py-2.5 mb-6 shadow-sm">
+              <span className="text-sm font-bold text-primary">☁️ Trusted by 10,000+ UK Landlords</span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
@@ -123,6 +123,7 @@ export default function Home() {
               desc="Full bundle from notice to possession order with court forms and guidance."
               price="£149.99"
               icon={<RiScales3Line className="w-7 h-7 text-primary group-hover:text-white transition-colors" />}
+              popular={true}
             />
             <ProductCard
               href="/products/money-claim"
@@ -143,7 +144,7 @@ export default function Home() {
       </section>
 
       {/* ASK HEAVEN — LIGHT (no dark purple) */}
-      <section className="py-20 md:py-24 bg-linear-to-br from-purple-50 to-white">
+      <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 to-white">
         <Container>
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -376,7 +377,7 @@ export default function Home() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="py-20 md:py-24 bg-linear-to-br from-purple-50 via-purple-100 to-purple-50">
+      <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -409,8 +410,8 @@ export default function Home() {
 
 function ProofStat({ k, v }: { k: string; v: string }) {
   return (
-    <div className="rounded-xl bg-white border border-gray-100 p-6 shadow-sm">
-      <div className="text-3xl font-bold text-gray-900">{k}</div>
+    <div className="rounded-xl bg-white border border-gray-100 p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/30 group">
+      <div className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors">{k}</div>
       <div className="text-sm text-gray-500">{v}</div>
     </div>
   );
@@ -422,16 +423,25 @@ function ProductCard({
   desc,
   price,
   icon,
+  popular = false,
 }: {
   href: string;
   title: string;
   desc: string;
   price: string;
   icon: React.ReactNode;
+  popular?: boolean;
 }) {
   return (
-    <Link href={href} className="group">
-      <div className="bg-white rounded-2xl border-2 border-gray-100 p-8 h-full transition-all duration-300 hover:border-primary hover:shadow-xl hover:-translate-y-1">
+    <Link href={href} className="group relative">
+      {popular && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+          <span className="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg animate-pulse">
+            MOST POPULAR
+          </span>
+        </div>
+      )}
+      <div className={`bg-white rounded-2xl border-2 p-8 h-full transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${popular ? 'border-primary shadow-lg' : 'border-gray-100 hover:border-primary'}`}>
         <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
           {icon}
         </div>
@@ -443,8 +453,9 @@ function ProductCard({
 
         <div className="flex items-center justify-between">
           <span className="text-primary font-bold">{price}</span>
-          <span className="text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-            Learn more →
+          <span className="text-primary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
+            Learn more
+            <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
           </span>
         </div>
       </div>
@@ -454,11 +465,11 @@ function ProductCard({
 
 function Step({ n, title, desc }: { n: string; title: string; desc: string }) {
   return (
-    <div className="text-center">
-      <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
+    <div className="text-center group">
+      <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/30">
         {n}
       </div>
-      <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
+      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">{title}</h3>
       <p className="text-gray-600">{desc}</p>
     </div>
   );
@@ -466,12 +477,12 @@ function Step({ n, title, desc }: { n: string; title: string; desc: string }) {
 
 function Tick({ title, desc }: { title: string; desc: string }) {
   return (
-    <div className="flex items-start gap-4">
-      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center shrink-0">
-        <RiCheckLine className="w-5 h-5 text-primary" />
+    <div className="flex items-start gap-4 group">
+      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300 group-hover:bg-primary group-hover:scale-105">
+        <RiCheckLine className="w-5 h-5 text-primary group-hover:text-white transition-colors" />
       </div>
       <div>
-        <h3 className="font-bold text-gray-900 mb-1">{title}</h3>
+        <h3 className="font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">{title}</h3>
         <p className="text-gray-600">{desc}</p>
       </div>
     </div>
@@ -480,8 +491,8 @@ function Tick({ title, desc }: { title: string; desc: string }) {
 
 function Metric({ k, v }: { k: string; v: string }) {
   return (
-    <div className="bg-gray-50 rounded-2xl p-6 text-center">
-      <div className="text-4xl font-bold text-primary mb-2">{k}</div>
+    <div className="bg-gray-50 rounded-2xl p-6 text-center transition-all duration-300 hover:bg-primary/5 hover:shadow-md group">
+      <div className="text-4xl font-bold text-primary mb-2 transition-transform duration-300 group-hover:scale-105">{k}</div>
       <div className="text-gray-600">{v}</div>
     </div>
   );
@@ -489,9 +500,9 @@ function Metric({ k, v }: { k: string; v: string }) {
 
 function Region({ emoji, title, desc }: { emoji: string; title: string; desc: string }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 p-6 text-center hover:shadow-lg transition-shadow">
-      <div className="text-4xl mb-4">{emoji}</div>
-      <h3 className="font-bold text-gray-900 mb-2">{title}</h3>
+    <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 text-center transition-all duration-300 hover:shadow-xl hover:border-primary hover:-translate-y-1 group cursor-pointer">
+      <div className="text-4xl mb-4 transition-transform duration-300 group-hover:scale-110">{emoji}</div>
+      <h3 className="font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{title}</h3>
       <p className="text-sm text-gray-600">{desc}</p>
     </div>
   );
@@ -499,9 +510,9 @@ function Region({ emoji, title, desc }: { emoji: string; title: string; desc: st
 
 function MiniBadge({ top, label }: { top: string; label: string }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-gray-50 py-3">
-      <div className="text-xl">{top}</div>
-      <div className="text-xs font-semibold text-gray-700">{label}</div>
+    <div className="rounded-xl border border-gray-200 bg-gray-50 py-3 transition-all duration-300 hover:border-primary/30 hover:bg-primary/5 group cursor-default">
+      <div className="text-xl transition-transform duration-300 group-hover:scale-110">{top}</div>
+      <div className="text-xs font-semibold text-gray-700 group-hover:text-primary transition-colors">{label}</div>
     </div>
   );
 }
