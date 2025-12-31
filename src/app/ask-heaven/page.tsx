@@ -5,12 +5,11 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import type { QuestionDefinition } from '@/lib/validators/question-schema';
-import { getWizardCta } from '@/lib/checkout/cta-mapper';
 import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
 import { EmailCaptureModal } from '@/components/leads/EmailCaptureModal';
 import { Container } from '@/components/ui';
-import { RiSendPlaneFill, RiArrowLeftLine, RiCheckLine, RiQuestionLine } from 'react-icons/ri';
+import { RiSendPlaneFill, RiCheckLine, RiQuestionLine } from 'react-icons/ri';
 
 type ChatRole = 'user' | 'assistant';
 
@@ -89,7 +88,6 @@ export default function AskHeavenPage(): React.ReactElement {
   const [answersSubmitting, setAnswersSubmitting] = useState(false);
   const [emailOpen, setEmailOpen] = useState(false);
   const [emailStatus, setEmailStatus] = useState<string | null>(null);
-  const [showSettings, setShowSettings] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement>(null);
   const hasAutoSubmitted = useRef(false);
@@ -142,8 +140,8 @@ export default function AskHeavenPage(): React.ReactElement {
 
       const body = (await res.json()) as { reply: string; suggested_product?: string | null };
 
-      if (!body.reply || body.reply.includes('could not generate a reply')) {
-        setError('Ask Heaven is having trouble responding. Please try again in a moment.');
+      if (!body.reply) {
+        setError('Ask Heaven returned an empty response. Please try again.');
         return;
       }
 
@@ -156,7 +154,8 @@ export default function AskHeavenPage(): React.ReactElement {
       };
 
       setChatMessages([userMsg, assistantMsg]);
-    } catch {
+    } catch (err) {
+      console.error('Ask Heaven error:', err);
       setError('Unable to reach Ask Heaven. Please check your connection and try again.');
     } finally {
       setIsSending(false);
@@ -334,8 +333,8 @@ export default function AskHeavenPage(): React.ReactElement {
 
       const body = (await res.json()) as { reply: string; suggested_product?: string | null };
 
-      if (!body.reply || body.reply.includes('could not generate a reply')) {
-        setError('Ask Heaven is having trouble responding. Please try again in a moment.');
+      if (!body.reply) {
+        setError('Ask Heaven returned an empty response. Please try again.');
         return;
       }
 
@@ -348,7 +347,8 @@ export default function AskHeavenPage(): React.ReactElement {
       };
 
       setChatMessages((prev) => [...prev, assistantMsg]);
-    } catch {
+    } catch (err) {
+      console.error('Ask Heaven error:', err);
       setError('Unable to reach Ask Heaven. Please check your connection and try again.');
     } finally {
       setIsSending(false);
@@ -364,60 +364,33 @@ export default function AskHeavenPage(): React.ReactElement {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50">
-      {/* Header */}
-      <header className="bg-white/80 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-10">
-        <Container>
-          <div className="flex items-center justify-between py-4">
-            <div className="flex items-center gap-4">
-              <Link
-                href="/"
-                className="flex items-center gap-2 text-gray-600 hover:text-primary transition-colors"
-              >
-                <RiArrowLeftLine className="w-5 h-5" />
-                <span className="text-sm font-medium hidden sm:inline">Back</span>
-              </Link>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-xl">
-                  ☁️
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold text-gray-900">Ask Heaven</h1>
-                  <p className="text-xs text-gray-500 hidden sm:block">UK Landlord Law Assistant</p>
-                </div>
-              </div>
-            </div>
-            <button
-              onClick={() => setShowSettings(!showSettings)}
-              className="px-3 py-2 text-sm font-medium text-gray-600 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors"
-            >
-              {showSettings ? 'Hide Settings' : 'Settings'}
-            </button>
-          </div>
-        </Container>
-      </header>
-
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50 pt-8">
       <Container>
         <div className="max-w-4xl mx-auto py-6">
-          {/* Settings Panel (collapsible) - Just jurisdiction */}
-          {showSettings && (
-            <div className="mb-6 p-4 bg-white rounded-2xl border border-gray-200 shadow-sm">
-              <div className="flex flex-col gap-1 max-w-[200px]">
-                <label className="text-xs font-semibold text-gray-700">Your property location</label>
-                <select
-                  className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                  value={jurisdiction}
-                  onChange={(e) => setJurisdiction(e.target.value as Jurisdiction)}
-                >
-                  <option value="england">England</option>
-                  <option value="wales">Wales</option>
-                  <option value="scotland">Scotland</option>
-                  <option value="northern-ireland">Northern Ireland</option>
-                </select>
-                <p className="text-xs text-gray-500 mt-1">Housing law differs by jurisdiction</p>
+          {/* Page Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-2xl">
+                ☁️
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Ask Heaven</h1>
+                <p className="text-sm text-gray-500">Free UK landlord law assistant</p>
               </div>
             </div>
-          )}
+            <div className="flex items-center gap-2">
+              <select
+                className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
+                value={jurisdiction}
+                onChange={(e) => setJurisdiction(e.target.value as Jurisdiction)}
+              >
+                <option value="england">England</option>
+                <option value="wales">Wales</option>
+                <option value="scotland">Scotland</option>
+                <option value="northern-ireland">Northern Ireland</option>
+              </select>
+            </div>
+          </div>
 
           {/* Case Context Panel (if caseId present) */}
           {caseId && caseContext && (
