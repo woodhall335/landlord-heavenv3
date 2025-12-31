@@ -32,17 +32,12 @@ import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine,
 export default function Home() {
   return (
     <div className="bg-white">
-      {/* ============================================================
-          HERO SECTION
-          Purpose: Clear value proposition, primary CTA, trust indicators
-          ============================================================ */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-24">
+      {/* HERO — match Complete Eviction Pack hero style */}
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Trust Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-4 py-2 mb-6 shadow-sm border border-purple-100">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-gray-700">Trusted by 10,000+ UK Landlords</span>
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-primary/20 rounded-full px-5 py-2.5 mb-6 shadow-sm">
+              <span className="text-sm font-bold text-primary">☁️ Trusted by 10,000+ UK Landlords</span>
             </div>
 
             {/* Main Headline - Value-focused */}
@@ -202,9 +197,8 @@ export default function Home() {
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
               price="£149.99"
-              solicitorPrice="£500-800"
-              icon={<RiScales3Line className="w-7 h-7" />}
-              popular
+              icon={<RiScales3Line className="w-7 h-7 text-primary group-hover:text-white transition-colors" />}
+              popular={true}
             />
             <ProductCard
               href="/products/money-claim"
@@ -219,8 +213,148 @@ export default function Home() {
               title="Tenancy Agreements"
               description="Compliant ASTs with optional clauses for HMOs and students."
               price="From £9.99"
-              solicitorPrice="£150-400"
-              icon={<RiClipboardLine className="w-7 h-7" />}
+              icon={<RiClipboardLine className="w-7 h-7 text-primary group-hover:text-white transition-colors" />}
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* ASK HEAVEN — LIGHT (no dark purple) */}
+      <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 to-white">
+        <Container>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+                <span className="text-sm font-semibold text-primary">☁️ Ask Heaven (Free)</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Ask Heaven</h2>
+              <p className="text-xl text-gray-600 mb-2">
+                Your instant UK landlord and tenant law assistant
+              </p>
+              <p className="text-gray-500">
+                Get answers to any tenancy question — no sign-up required
+              </p>
+            </div>
+
+            <div className="grid lg:grid-cols-2 gap-10 items-start">
+              {/* Example Questions */}
+              <div>
+                <p className="text-sm font-medium text-gray-500 mb-4">
+                  Try a common question:
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {exampleQuestions.map((question) => (
+                    <button
+                      key={question}
+                      onClick={() => handleExampleQuestion(question)}
+                      className="text-left p-4 bg-white rounded-xl border border-gray-200 hover:border-primary/40 hover:shadow-md transition-all text-sm text-gray-700"
+                      type="button"
+                    >
+                      {question}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="mt-6 bg-white rounded-xl border border-gray-200 p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-xl">
+                      ☁️
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">Powered by Ask Heaven</h3>
+                      <p className="text-gray-600 text-sm">
+                        Designed for UK landlord scenarios across all 4 jurisdictions.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 grid grid-cols-3 gap-3 text-center">
+                    <MiniBadge top="⚡" label="Instant" />
+                    <MiniBadge top="🇬🇧" label="UK Focused" />
+                    <MiniBadge top="💯" label="Free" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Chat Box */}
+              <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-lg">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Ask a question
+                </label>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <input
+                    type="text"
+                    value={askQuestion}
+                    onChange={(e) => setAskQuestion(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleAskQuestion()}
+                    placeholder="Ask me anything about UK landlord-tenant law..."
+                    className="flex-1 px-5 py-4 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    disabled={isLoading}
+                  />
+                  <button
+                    onClick={handleAskQuestion}
+                    disabled={isLoading || !askQuestion.trim()}
+                    className="px-8 py-4 bg-primary hover:bg-primary-700 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+                    type="button"
+                  >
+                    {isLoading ? "Thinking..." : "Ask Heaven"}
+                  </button>
+                </div>
+
+                {showResponse && (
+                  <div className="mt-6 p-6 bg-gray-50 border border-gray-200 rounded-xl">
+                    <div className="flex items-start gap-4">
+                      <div className="text-3xl">☁️</div>
+                      <div className="flex-1">
+                        <p className="font-semibold text-gray-900 mb-2">Ask Heaven says:</p>
+                        <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                          {responseText}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <p className="mt-4 text-xs text-gray-500">
+                  For guidance and document generation only — not legal advice.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="py-20 md:py-24 bg-gray-50">
+        <Container>
+          <div className="text-center mb-16">
+            <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-4">
+              <span className="text-sm font-semibold text-primary">How It Works</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Get Court-Ready Documents in 3 Steps
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Our guided wizard makes creating professional legal documents simple
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <Step
+              n="1"
+              title="Answer Questions"
+              desc="Tell us about your situation — property details, tenant information, and what you need to achieve."
+            />
+            <Step
+              n="2"
+              title="Review Documents"
+              desc="We generate jurisdiction-specific documents. Review, customize if needed, and approve."
+            />
+            <Step
+              n="3"
+              title="Download & Serve"
+              desc="Instantly download your documents with service instructions and evidence checklists."
             />
           </div>
 
@@ -285,17 +419,34 @@ export default function Home() {
         </Container>
       </section>
 
-      {/* ============================================================
-          FAQ
-          Purpose: Address objections, reduce friction
-          ============================================================ */}
-      <FAQ />
+      {/* TESTIMONIAL */}
+      <section className="py-20 md:py-24 bg-white">
+        <Container>
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-block bg-primary/10 rounded-full px-4 py-2 mb-8">
+              <span className="text-sm font-semibold text-primary">What Landlords Say</span>
+            </div>
 
-      {/* ============================================================
-          FINAL CTA
-          Purpose: Strong closing with value recap
-          ============================================================ */}
-      <section className="py-20 md:py-24 bg-gradient-to-br from-primary to-primary-dark">
+            <blockquote className="text-2xl md:text-3xl font-medium text-gray-900 mb-8 leading-relaxed">
+              "As a landlord managing multiple properties, trusting the legal documents you generate is everything.
+              They need to be compliant, court-ready, and actually work — and Landlord Heaven has delivered on all fronts."
+            </blockquote>
+
+            <div className="flex items-center justify-center gap-4">
+              <div className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold text-gray-600">
+                SJ
+              </div>
+              <div className="text-left">
+                <div className="font-bold text-gray-900">Sarah Johnson</div>
+                <div className="text-gray-500">Property Portfolio Manager, Urban Estates Ltd</div>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* FINAL CTA */}
+      <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
@@ -354,16 +505,9 @@ function Step({
   time: string;
 }) {
   return (
-    <div className="text-center relative">
-      <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 relative z-10 shadow-lg">
-        {number}
-      </div>
-      <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
-      <p className="text-gray-600 mb-4">{description}</p>
-      <div className="inline-flex items-center gap-1.5 text-sm font-medium text-primary bg-primary/10 px-3 py-1.5 rounded-full">
-        <RiTimeLine className="w-4 h-4" />
-        {time}
-      </div>
+    <div className="rounded-xl bg-white border border-gray-100 p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/30 group">
+      <div className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors">{k}</div>
+      <div className="text-sm text-gray-500">{v}</div>
     </div>
   );
 }
@@ -375,7 +519,7 @@ function ProductCard({
   price,
   solicitorPrice,
   icon,
-  popular,
+  popular = false,
 }: {
   href: string;
   title: string;
@@ -389,13 +533,13 @@ function ProductCard({
     <Link href={href} className="group relative">
       {popular && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-          <span className="bg-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+          <span className="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg animate-pulse">
             MOST POPULAR
           </span>
         </div>
       )}
-      <div className={`bg-white rounded-2xl border-2 p-8 h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${popular ? 'border-primary' : 'border-gray-100 hover:border-primary'}`}>
-        <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-white group-hover:scale-110 transition-all duration-300">
+      <div className={`bg-white rounded-2xl border-2 p-8 h-full transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${popular ? 'border-primary shadow-lg' : 'border-gray-100 hover:border-primary'}`}>
+        <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
           {icon}
         </div>
 
@@ -404,17 +548,12 @@ function ProductCard({
         </h3>
         <p className="text-gray-600 mb-4 text-sm">{description}</p>
 
-        <div className="border-t border-gray-100 pt-4 mt-auto">
-          <div className="flex items-baseline gap-2 mb-1">
-            <span className="text-2xl font-bold text-primary">{price}</span>
-            <span className="text-sm text-gray-400 line-through">{solicitorPrice}</span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-green-600 font-medium">vs solicitor</span>
-            <span className="text-primary font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-              Learn more →
-            </span>
-          </div>
+        <div className="flex items-center justify-between">
+          <span className="text-primary font-bold">{price}</span>
+          <span className="text-primary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
+            Learn more
+            <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+          </span>
         </div>
       </div>
     </Link>
@@ -431,23 +570,54 @@ function JurisdictionCard({
   forms: string[];
 }) {
   return (
-    <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:shadow-md hover:border-primary/20 transition-all">
-      <div className="flex items-center gap-3 mb-4">
-        <img
-          src={flag}
-          alt={title}
-          className="w-10 h-7 rounded border border-gray-200"
-        />
-        <h3 className="font-bold text-gray-900 text-lg">{title}</h3>
+    <div className="text-center group">
+      <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/30">
+        {n}
       </div>
-      <ul className="space-y-2">
-        {forms.map((form, index) => (
-          <li key={index} className="flex items-start gap-2 text-sm text-gray-600">
-            <RiCheckLine className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
-            {form}
-          </li>
-        ))}
-      </ul>
+      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">{title}</h3>
+      <p className="text-gray-600">{desc}</p>
+    </div>
+  );
+}
+
+function Tick({ title, desc }: { title: string; desc: string }) {
+  return (
+    <div className="flex items-start gap-4 group">
+      <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center shrink-0 transition-all duration-300 group-hover:bg-primary group-hover:scale-105">
+        <RiCheckLine className="w-5 h-5 text-primary group-hover:text-white transition-colors" />
+      </div>
+      <div>
+        <h3 className="font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">{title}</h3>
+        <p className="text-gray-600">{desc}</p>
+      </div>
+    </div>
+  );
+}
+
+function Metric({ k, v }: { k: string; v: string }) {
+  return (
+    <div className="bg-gray-50 rounded-2xl p-6 text-center transition-all duration-300 hover:bg-primary/5 hover:shadow-md group">
+      <div className="text-4xl font-bold text-primary mb-2 transition-transform duration-300 group-hover:scale-105">{k}</div>
+      <div className="text-gray-600">{v}</div>
+    </div>
+  );
+}
+
+function Region({ emoji, title, desc }: { emoji: string; title: string; desc: string }) {
+  return (
+    <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 text-center transition-all duration-300 hover:shadow-xl hover:border-primary hover:-translate-y-1 group cursor-pointer">
+      <div className="text-4xl mb-4 transition-transform duration-300 group-hover:scale-110">{emoji}</div>
+      <h3 className="font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{title}</h3>
+      <p className="text-sm text-gray-600">{desc}</p>
+    </div>
+  );
+}
+
+function MiniBadge({ top, label }: { top: string; label: string }) {
+  return (
+    <div className="rounded-xl border border-gray-200 bg-gray-50 py-3 transition-all duration-300 hover:border-primary/30 hover:bg-primary/5 group cursor-default">
+      <div className="text-xl transition-transform duration-300 group-hover:scale-110">{top}</div>
+      <div className="text-xs font-semibold text-gray-700 group-hover:text-primary transition-colors">{label}</div>
     </div>
   );
 }
