@@ -24,12 +24,38 @@
 
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Container } from "@/components/ui";
 import { TrustBar, CostComparison, Testimonials, FAQ } from "@/components/landing";
 import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiTimeLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine } from 'react-icons/ri';
 
+const exampleQuestions = [
+  "How do I evict a tenant for rent arrears?",
+  "What notice period do I need to give?",
+  "Can I increase the rent mid-tenancy?",
+  "What are my repair obligations?",
+];
+
 export default function Home() {
+  const router = useRouter();
+  const [askQuestion, setAskQuestion] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [showResponse, setShowResponse] = useState(false);
+  const [responseText, setResponseText] = useState("");
+
+  const handleExampleQuestion = (question: string) => {
+    setAskQuestion(question);
+  };
+
+  const handleAskQuestion = async () => {
+    if (!askQuestion.trim()) return;
+
+    // Navigate to Ask Heaven page with the question as a query parameter
+    router.push(`/ask?q=${encodeURIComponent(askQuestion)}`);
+  };
+
   return (
     <div className="bg-white">
       {/* HERO — match Complete Eviction Pack hero style */}
@@ -495,19 +521,34 @@ export default function Home() {
 
 function Step({
   number,
+  n,
   title,
   description,
+  desc,
   time,
 }: {
-  number: string;
+  number?: string;
+  n?: string;
   title: string;
-  description: string;
-  time: string;
+  description?: string;
+  desc?: string;
+  time?: string;
 }) {
+  const stepNumber = number || n || "1";
+  const stepDescription = description || desc || "";
+
   return (
-    <div className="rounded-xl bg-white border border-gray-100 p-6 shadow-sm transition-all duration-300 hover:shadow-md hover:border-primary/30 group">
-      <div className="text-3xl font-bold text-gray-900 group-hover:text-primary transition-colors">{k}</div>
-      <div className="text-sm text-gray-500">{v}</div>
+    <div className="text-center group">
+      <div className="relative z-10">
+        <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/30">
+          {stepNumber}
+        </div>
+      </div>
+      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">{title}</h3>
+      <p className="text-gray-600">{stepDescription}</p>
+      {time && (
+        <p className="text-sm text-primary mt-2 font-medium">{time}</p>
+      )}
     </div>
   );
 }
@@ -525,7 +566,7 @@ function ProductCard({
   title: string;
   description: string;
   price: string;
-  solicitorPrice: string;
+  solicitorPrice?: string;
   icon: React.ReactNode;
   popular?: boolean;
 }) {
@@ -570,12 +611,19 @@ function JurisdictionCard({
   forms: string[];
 }) {
   return (
-    <div className="text-center group">
-      <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-primary/30">
-        {n}
+    <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center transition-all duration-300 hover:shadow-lg hover:border-primary/30 group">
+      <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary text-2xl font-bold mx-auto mb-4 transition-all duration-300 group-hover:bg-primary group-hover:text-white">
+        {title.charAt(0)}
       </div>
-      <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">{title}</h3>
-      <p className="text-gray-600">{desc}</p>
+      <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">{title}</h3>
+      <ul className="text-sm text-gray-600 space-y-1">
+        {forms.map((form) => (
+          <li key={form} className="flex items-center justify-center gap-1.5">
+            <RiCheckLine className="w-3 h-3 text-green-500 shrink-0" />
+            {form}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
