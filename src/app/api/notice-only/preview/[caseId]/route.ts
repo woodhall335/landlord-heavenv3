@@ -610,6 +610,26 @@ export async function GET(
       } catch (err) {
         console.error(`[NOTICE-PREVIEW-API] ${checklistRoute} checklist generation failed:`, err);
       }
+
+      // 4. Generate compliance checklist (pre-service verification)
+      console.log('[NOTICE-PREVIEW-API] Generating England compliance checklist');
+      try {
+        const complianceDoc = await generateDocument({
+          templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
+          data: templateData,
+          outputFormat: 'pdf',
+        });
+
+        if (complianceDoc.pdf) {
+          documents.push({
+            title: 'Pre-Service Compliance Checklist',
+            category: 'checklist',
+            pdf: complianceDoc.pdf,
+          });
+        }
+      } catch (err) {
+        console.error('[NOTICE-PREVIEW-API] England compliance checklist generation failed:', err);
+      }
     }
 
     // ===========================================================================
@@ -822,6 +842,26 @@ export async function GET(
       } catch (err) {
         console.error(`[NOTICE-PREVIEW-API] Wales ${checklistRoute} checklist generation failed:`, err);
       }
+
+      // 4. Generate compliance checklist (pre-service verification)
+      console.log('[NOTICE-PREVIEW-API] Generating Wales compliance checklist');
+      try {
+        const complianceDoc = await generateDocument({
+          templatePath: 'uk/wales/templates/eviction/compliance_checklist.hbs',
+          data: templateData,
+          outputFormat: 'pdf',
+        });
+
+        if (complianceDoc.pdf) {
+          documents.push({
+            title: 'Pre-Service Compliance Checklist (Wales)',
+            category: 'checklist',
+            pdf: complianceDoc.pdf,
+          });
+        }
+      } catch (err) {
+        console.error('[NOTICE-PREVIEW-API] Wales compliance checklist generation failed:', err);
+      }
     }
 
     // ===========================================================================
@@ -997,6 +1037,26 @@ export async function GET(
         }
       } catch (err) {
         console.error('[NOTICE-PREVIEW-API] Notice to Leave checklist generation failed:', err);
+      }
+
+      // 4. Generate compliance checklist (pre-service verification)
+      console.log('[NOTICE-PREVIEW-API] Generating Scotland compliance checklist');
+      try {
+        const complianceDoc = await generateDocument({
+          templatePath: 'uk/scotland/templates/eviction/compliance_checklist.hbs',
+          data: templateData,
+          outputFormat: 'pdf',
+        });
+
+        if (complianceDoc.pdf) {
+          documents.push({
+            title: 'Pre-Service Compliance Checklist (Scotland)',
+            category: 'checklist',
+            pdf: complianceDoc.pdf,
+          });
+        }
+      } catch (err) {
+        console.error('[NOTICE-PREVIEW-API] Scotland compliance checklist generation failed:', err);
       }
     }
 

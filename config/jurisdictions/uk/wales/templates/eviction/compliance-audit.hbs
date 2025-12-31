@@ -1,0 +1,177 @@
+---
+title: Eviction Compliance Audit Report
+category: supporting_documents
+description: Comprehensive compliance check for Wales eviction proceedings
+filename: compliance-audit.pdf
+---
+
+EVICTION COMPLIANCE AUDIT REPORT - WALES
+
+==================================================================
+
+LANDLORD: {{landlord_name}}
+PROPERTY: {{property_address}}
+CONTRACT-HOLDER: {{tenant_name}}
+JURISDICTION: Wales (Renting Homes (Wales) Act 2016)
+NOTICE TYPE: {{notice_type}}
+AUDIT DATE: {{current_date}}
+
+==================================================================
+
+OVERALL ASSESSMENT: {{compliance_audit.overall_status}}
+
+{{#if (eq compliance_audit.overall_status "ready")}}
+✅ Your case appears compliant and ready to proceed with eviction.
+{{else if (eq compliance_audit.overall_status "needs_work")}}
+⚠️  Your case has some issues that should be addressed to strengthen your position.
+{{else}}
+❌ Your case has CRITICAL issues that block eviction. You must resolve these before proceeding.
+{{/if}}
+
+==================================================================
+
+WALES-SPECIFIC COMPLIANCE CHECKLIST
+
+1. RENT SMART WALES REGISTRATION (CRITICAL)
+{{compliance_audit.rent_smart_wales}}
+
+⚠️  CRITICAL: Without Rent Smart Wales registration, you CANNOT serve a valid
+Section 173 notice. Your possession claim will fail.
+
+2. WRITTEN STATEMENT PROVIDED
+{{compliance_audit.written_statement}}
+
+The written statement must have been provided within 14 days of occupation
+commencing under the Renting Homes (Wales) Act 2016.
+
+3. DEPOSIT PROTECTION
+{{compliance_audit.deposit_protection}}
+
+If a deposit was taken, it must be protected in a government-approved scheme.
+
+4. SECTION 173 TIMING REQUIREMENTS
+{{compliance_audit.section_173_timing}}
+
+A Section 173 notice cannot be served in the first 6 months of occupation.
+The notice period is a minimum of 6 months.
+
+5. GAS SAFETY CERTIFICATE
+{{compliance_audit.gas_safety}}
+
+6. ELECTRICAL SAFETY CERTIFICATE
+{{compliance_audit.electrical_safety}}
+
+7. ENERGY PERFORMANCE CERTIFICATE (EPC)
+{{compliance_audit.epc}}
+
+8. DISREPAIR ISSUES
+{{compliance_audit.disrepair_risk}}
+
+==================================================================
+
+SECTION 173 VALIDITY
+
+Section 173 Valid: {{#if compliance_audit.s173_valid}}✅ YES{{else}}❌ NO{{/if}}
+
+{{#if compliance_audit.s173_blocking_issues}}
+{{#if (gt compliance_audit.s173_blocking_issues.length 0)}}
+Blocking Issues:
+{{#each compliance_audit.s173_blocking_issues}}
+- {{this}}
+{{/each}}
+{{/if}}
+{{/if}}
+
+==================================================================
+
+FAULT-BASED GROUNDS ANALYSIS (if applicable)
+
+Available Grounds under Renting Homes (Wales) Act 2016:
+{{#if compliance_audit.fault_grounds}}
+{{#each compliance_audit.fault_grounds}}
+- {{this}}
+{{/each}}
+{{else}}
+Section 157: Serious rent arrears (2+ months)
+Section 159: Other rent arrears
+Section 161: Anti-social behaviour
+Section 162: Contract-holder's notice to leave
+{{/if}}
+
+Recommendations:
+{{#if compliance_audit.fault_recommendations}}
+{{#each compliance_audit.fault_recommendations}}
+- {{this}}
+{{/each}}
+{{else}}
+No specific fault-based recommendations at this time.
+{{/if}}
+
+==================================================================
+
+ACTION PLAN
+
+{{#if compliance_audit.critical_actions}}
+{{#if (gt compliance_audit.critical_actions.length 0)}}
+CRITICAL ACTIONS (Must Complete Before Proceeding):
+{{#each compliance_audit.critical_actions}}
+{{@index}}. {{this}}
+{{/each}}
+
+{{/if}}
+{{/if}}
+
+{{#if compliance_audit.recommended_actions}}
+{{#if (gt compliance_audit.recommended_actions.length 0)}}
+RECOMMENDED ACTIONS (Should Complete to Strengthen Case):
+{{#each compliance_audit.recommended_actions}}
+{{@index}}. {{this}}
+{{/each}}
+
+{{/if}}
+{{/if}}
+
+{{#unless compliance_audit.critical_actions}}
+{{#unless compliance_audit.recommended_actions}}
+No immediate actions required. Your compliance appears to be in order.
+{{/unless}}
+{{/unless}}
+
+==================================================================
+
+IMPORTANT NOTES FOR WALES:
+
+1. Rent Smart Wales is MANDATORY. If you are not registered, register
+   immediately at rentsmartswales.gov.wales before serving any notice.
+
+2. The Renting Homes (Wales) Act 2016 uses different terminology:
+   - "Contract-holder" instead of "tenant"
+   - "Occupation contract" instead of "tenancy agreement"
+   - "Written statement" instead of "tenancy agreement" for document
+
+3. Section 173 (no-fault) notices in Wales require:
+   - Rent Smart Wales registration
+   - 6 months minimum notice
+   - Cannot be served in first 6 months
+   - Written statement must have been provided
+
+4. Prescribed forms for Wales begin with "RHW" (Renting Homes Wales):
+   - RHW16: Section 173 notice (standard contract, first 6-12 months)
+   - RHW17: Section 173 notice (standard contract, after 12 months)
+   - RHW23: Notice before possession claim (fault-based)
+
+5. Courts in Wales will strictly check Rent Smart Wales compliance.
+   Bring your registration confirmation to any hearing.
+
+==================================================================
+
+NEXT STEPS:
+
+1. Address all CRITICAL ACTIONS listed above (if any)
+2. Ensure Rent Smart Wales registration is current
+3. Gather evidence of compliance (certificates, written statement, deposits)
+4. Use correct Welsh prescribed notice forms (RHW series)
+5. Serve notice only when fully compliant
+6. Keep detailed records of all communications and actions
+
+==================================================================

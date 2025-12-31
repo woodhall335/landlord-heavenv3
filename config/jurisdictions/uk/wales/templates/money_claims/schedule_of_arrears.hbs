@@ -1,0 +1,33 @@
+<h1>Schedule of Rent Arrears</h1>
+<p><em>Wales - Renting Homes (Wales) Act 2016</em></p>
+<p>Claim reference: {{claimant_reference}}</p>
+
+<table border="1" cellpadding="6" cellspacing="0" width="100%">
+  <thead>
+    <tr>
+      <th>Period</th>
+      <th>Due date</th>
+      <th>Amount due</th>
+      <th>Amount paid</th>
+      <th>Arrears</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each arrears_schedule}}
+    <tr>
+      <td>{{period}}</td>
+      <td>{{due_date}}</td>
+      <td>{{currency amount_due}}</td>
+      <td>{{currency amount_paid}}</td>
+      <td>{{currency arrears}}</td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+<p><strong>Total arrears:</strong> {{currency arrears_total}}</p>
+
+<p>
+  Attach proof of payments received, bank statements and rent ledgers behind this schedule. The County Court
+  expects a clear period-by-period breakdown matching the occupation contract rent frequency.
+</p>
