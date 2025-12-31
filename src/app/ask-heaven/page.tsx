@@ -9,7 +9,8 @@ import { normalizeJurisdiction } from '@/lib/jurisdiction/normalize';
 import type { Jurisdiction } from '@/lib/jurisdiction/types';
 import { EmailCaptureModal } from '@/components/leads/EmailCaptureModal';
 import { Container } from '@/components/ui';
-import { RiSendPlaneFill, RiCheckLine, RiQuestionLine } from 'react-icons/ri';
+import { RiSendPlaneFill, RiCheckLine, RiQuestionLine, RiBookLine } from 'react-icons/ri';
+import ReactMarkdown from 'react-markdown';
 
 type ChatRole = 'user' | 'assistant';
 
@@ -19,6 +20,8 @@ interface ChatMessage {
   content: string;
   createdAt: string;
   suggestedProduct?: string | null;
+  followUpQuestions?: string[];
+  sources?: string[];
 }
 
 const PRODUCT_CTA_MAP: Record<string, { label: string; href: string; description: string }> = {
@@ -68,12 +71,51 @@ interface CaseContext {
 
 const defaultJurisdiction: Jurisdiction = 'england';
 
-const exampleQuestions = [
-  "How do I evict a tenant for rent arrears?",
-  "What notice period do I need to give?",
-  "Can I increase the rent mid-tenancy?",
-  "What are my repair obligations?",
-];
+const exampleQuestionsByJurisdiction: Record<Jurisdiction, string[]> = {
+  england: [
+    "How do I serve a Section 21 notice?",
+    "What are the grounds for Section 8?",
+    "Can I increase rent on an AST?",
+    "What's the notice period for rent arrears?",
+  ],
+  wales: [
+    "How do I serve a Section 173 notice?",
+    "What changed with the Renting Homes Act?",
+    "What notice do I give a contract holder?",
+    "Do I need Rent Smart Wales registration?",
+  ],
+  scotland: [
+    "How do I serve a Notice to Leave?",
+    "What are the eviction grounds in Scotland?",
+    "Do I need pre-action requirements?",
+    "How does the First-tier Tribunal work?",
+  ],
+  'northern-ireland': [
+    "How do I serve a Notice to Quit in NI?",
+    "What are my landlord obligations in NI?",
+    "What notice period do I need to give?",
+    "How do I recover rent arrears?",
+  ],
+};
+
+const jurisdictionWelcome: Record<Jurisdiction, { title: string; subtitle: string }> = {
+  england: {
+    title: "Ask me about English landlord law",
+    subtitle: "Section 21, Section 8, ASTs, and more",
+  },
+  wales: {
+    title: "Ask me about Welsh landlord law",
+    subtitle: "Renting Homes Act, occupation contracts, and more",
+  },
+  scotland: {
+    title: "Ask me about Scottish landlord law",
+    subtitle: "Notice to Leave, PRT, First-tier Tribunal, and more",
+  },
+  'northern-ireland': {
+    title: "Ask me about NI landlord law",
+    subtitle: "Notice to Quit, tenancy agreements, and more",
+  },
+};
 
 export default function AskHeavenPage(): React.ReactElement {
   const [jurisdiction, setJurisdiction] = useState<Jurisdiction>(defaultJurisdiction);
@@ -138,7 +180,12 @@ export default function AskHeavenPage(): React.ReactElement {
         return;
       }
 
-      const body = (await res.json()) as { reply: string; suggested_product?: string | null };
+      const body = (await res.json()) as {
+        reply: string;
+        suggested_product?: string | null;
+        follow_up_questions?: string[];
+        sources?: string[];
+      };
 
       if (!body.reply) {
         setError('Ask Heaven returned an empty response. Please try again.');
@@ -151,6 +198,8 @@ export default function AskHeavenPage(): React.ReactElement {
         content: body.reply,
         createdAt: new Date().toISOString(),
         suggestedProduct: body.suggested_product,
+        followUpQuestions: body.follow_up_questions,
+        sources: body.sources,
       };
 
       setChatMessages([userMsg, assistantMsg]);
@@ -331,7 +380,12 @@ export default function AskHeavenPage(): React.ReactElement {
         return;
       }
 
-      const body = (await res.json()) as { reply: string; suggested_product?: string | null };
+      const body = (await res.json()) as {
+        reply: string;
+        suggested_product?: string | null;
+        follow_up_questions?: string[];
+        sources?: string[];
+      };
 
       if (!body.reply) {
         setError('Ask Heaven returned an empty response. Please try again.');
@@ -344,6 +398,8 @@ export default function AskHeavenPage(): React.ReactElement {
         content: body.reply,
         createdAt: new Date().toISOString(),
         suggestedProduct: body.suggested_product,
+        followUpQuestions: body.follow_up_questions,
+        sources: body.sources,
       };
 
       setChatMessages((prev) => [...prev, assistantMsg]);
@@ -364,11 +420,11 @@ export default function AskHeavenPage(): React.ReactElement {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50 pt-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50">
       <Container>
-        <div className="max-w-4xl mx-auto py-6">
+        <div className="max-w-4xl mx-auto pt-12 pb-6">
           {/* Page Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-2xl">
                 ☁️
@@ -531,12 +587,17 @@ export default function AskHeavenPage(): React.ReactElement {
                   <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl mb-4">
                     ☁️
                   </div>
-                  <h2 className="text-xl font-bold text-gray-900 mb-2">Ask me anything</h2>
-                  <p className="text-gray-500 mb-6 max-w-md">
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">
+                    {jurisdictionWelcome[jurisdiction].title}
+                  </h2>
+                  <p className="text-sm text-primary font-medium mb-2">
+                    {jurisdictionWelcome[jurisdiction].subtitle}
+                  </p>
+                  <p className="text-gray-500 mb-6 max-w-md text-sm">
                     Get plain-English explanations about UK landlord problems. I help you understand notices, eviction routes, money claims, and tenancy agreements so you can speak to tenants, agents, or your own solicitor with confidence.
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-lg">
-                    {exampleQuestions.map((question) => (
+                    {exampleQuestionsByJurisdiction[jurisdiction].map((question) => (
                       <button
                         key={question}
                         onClick={() => handleExampleQuestion(question)}
@@ -557,8 +618,8 @@ export default function AskHeavenPage(): React.ReactElement {
                   className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   {m.role === 'user' ? (
-                    <div className="max-w-[85%] md:max-w-[75%] rounded-2xl rounded-br-md px-4 py-3 bg-primary">
-                      <p className="whitespace-pre-wrap text-sm leading-relaxed text-white">
+                    <div className="max-w-[85%] md:max-w-[75%] rounded-2xl rounded-br-md px-4 py-3 bg-primary-600">
+                      <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: '#ffffff' }}>
                         {m.content}
                       </p>
                     </div>
@@ -568,9 +629,50 @@ export default function AskHeavenPage(): React.ReactElement {
                         <span className="text-lg">☁️</span>
                         <span className="text-xs font-semibold text-primary">Ask Heaven</span>
                       </div>
-                      <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
-                        {m.content}
-                      </p>
+                      {/* Markdown-rendered response */}
+                      <div className="prose prose-sm prose-gray max-w-none text-gray-700 [&>p]:mb-2 [&>ul]:my-2 [&>ol]:my-2 [&>li]:my-0.5 [&>h1]:text-base [&>h2]:text-sm [&>h3]:text-sm [&>h1]:font-bold [&>h2]:font-semibold [&>h3]:font-semibold [&>strong]:text-gray-900 [&>p:last-child]:mb-0">
+                        <ReactMarkdown>{m.content}</ReactMarkdown>
+                      </div>
+
+                      {/* Sources citations */}
+                      {m.sources && m.sources.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-gray-100">
+                          <div className="flex items-center gap-1.5 mb-2">
+                            <RiBookLine className="w-3.5 h-3.5 text-gray-400" />
+                            <span className="text-xs font-medium text-gray-500">Sources</span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {m.sources.map((source, idx) => (
+                              <span
+                                key={idx}
+                                className="inline-flex items-center px-2 py-1 bg-gray-100 text-xs text-gray-600 rounded-md"
+                              >
+                                {source}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Follow-up questions */}
+                      {m.followUpQuestions && m.followUpQuestions.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-gray-100">
+                          <p className="text-xs font-medium text-gray-500 mb-2">Follow-up questions</p>
+                          <div className="flex flex-col gap-1.5">
+                            {m.followUpQuestions.map((question, idx) => (
+                              <button
+                                key={idx}
+                                type="button"
+                                onClick={() => setInput(question)}
+                                className="text-left text-xs px-3 py-2 bg-primary/5 hover:bg-primary/10 text-primary rounded-lg border border-primary/20 transition-colors"
+                              >
+                                {question}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
                       {/* Product CTA */}
                       {m.suggestedProduct && PRODUCT_CTA_MAP[m.suggestedProduct] && (
                         <div className="mt-4 pt-3 border-t border-gray-100">

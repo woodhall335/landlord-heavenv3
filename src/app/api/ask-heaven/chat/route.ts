@@ -99,15 +99,25 @@ Context:
 ${jurisdiction ? `- Jurisdiction: ${jurisdiction}` : '- Jurisdiction: Not specified (assume England unless user indicates otherwise)'}
 ${case_id ? '- You are chatting about a specific internal case. NEVER show the case_id or any internal IDs to the user.' : ''}
 
+RESPONSE FORMATTING:
+- Use markdown formatting in your reply: **bold** for emphasis, bullet points for lists
+- When citing legislation, include the specific section (e.g. "Section 21 of the Housing Act 1988")
+- At the end of detailed answers, include a "Sources" section listing relevant legislation
+
 CRITICAL - JSON RESPONSE FORMAT:
 You MUST respond with a JSON object containing exactly these fields:
 {
-  "reply": "Your helpful response text here",
-  "suggested_product": "notice_only" | "complete_pack" | "money_claim" | "tenancy_agreement" | null
+  "reply": "Your helpful response with **markdown** formatting",
+  "suggested_product": "notice_only" | "complete_pack" | "money_claim" | "tenancy_agreement" | null,
+  "follow_up_questions": ["Question 1?", "Question 2?"],
+  "sources": ["Housing Act 1988 s.21", "Deregulation Act 2015"]
 }
 
-The "reply" field is REQUIRED and must contain your full response to the landlord.
-The "suggested_product" field should be one of the product codes above, or null if no product is relevant.
+Field requirements:
+- "reply" (REQUIRED): Your full response to the landlord with markdown formatting
+- "suggested_product": One of the product codes above, or null if no product is relevant
+- "follow_up_questions": Array of 2-3 relevant follow-up questions the landlord might ask
+- "sources": Array of legislation/regulations cited in your answer (empty array if none)
 `.trim();
 
     const systemMessage: ChatMessage = {
@@ -122,13 +132,22 @@ The "suggested_product" field should be one of the product codes above, or null 
       properties: {
         reply: {
           type: 'string',
-          description:
-            'Helpful, grounded reply to the landlord. Use clear structure and plain language, like a cautious senior housing solicitor, without giving personalised legal advice.',
+          description: 'Helpful response with markdown formatting',
         },
         suggested_product: {
           type: 'string',
           enum: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement', null],
-          description: 'If the question clearly relates to a product, suggest one. null if general question.',
+          description: 'Product code or null',
+        },
+        follow_up_questions: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '2-3 relevant follow-up questions',
+        },
+        sources: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Legislation/regulations cited',
         },
       },
       required: ['reply'],
@@ -149,7 +168,14 @@ The "suggested_product" field should be one of the product codes above, or null 
       );
     }
 
-    const result = await jsonCompletion<{ reply: string; suggested_product?: string | null }>(
+    interface AskHeavenResponse {
+      reply: string;
+      suggested_product?: string | null;
+      follow_up_questions?: string[];
+      sources?: string[];
+    }
+
+    const result = await jsonCompletion<AskHeavenResponse>(
       fullMessages,
       schema as Record<string, unknown>,
       options,
@@ -164,6 +190,8 @@ The "suggested_product" field should be one of the product codes above, or null 
 
     const reply = result.json?.reply ?? 'Sorry, Ask Heaven could not generate a reply this time.';
     const suggestedProduct = result.json?.suggested_product ?? null;
+    const followUpQuestions = result.json?.follow_up_questions ?? [];
+    const sources = result.json?.sources ?? [];
 
     // Debug: Log if reply was missing
     if (!result.json?.reply) {
@@ -173,7 +201,12 @@ The "suggested_product" field should be one of the product codes above, or null 
       });
     }
 
-    return NextResponse.json({ reply, suggested_product: suggestedProduct }, { status: 200 });
+    return NextResponse.json({
+      reply,
+      suggested_product: suggestedProduct,
+      follow_up_questions: followUpQuestions,
+      sources,
+    }, { status: 200 });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return NextResponse.json(
