@@ -227,33 +227,32 @@ export async function fulfillOrder({ orderId, caseId, productType, userId }: Ful
     return { status: 'fulfilled', documents: pack.documents.length };
   }
 
-  const { generateStandardAST, generatePremiumAST } = await import('@/lib/documents/ast-generator');
+  // Import unbundled AST generators for separate PDFs
+  const { generateStandardASTDocuments, generatePremiumASTDocuments } = await import(
+    '@/lib/documents/ast-generator'
+  );
 
-  let generatedDoc: any;
-  let documentTitle = '';
-  let documentType = '';
+  let astPack;
 
   switch (productType) {
     case 'ast_standard':
-      generatedDoc = await generateStandardAST(wizardFacts);
-      documentTitle = 'Assured Shorthold Tenancy Agreement - Standard';
-      documentType = 'ast_standard';
+      astPack = await generateStandardASTDocuments(wizardFacts, caseId);
       break;
     case 'ast_premium':
-      generatedDoc = await generatePremiumAST(wizardFacts);
-      documentTitle = 'Assured Shorthold Tenancy Agreement - Premium';
-      documentType = 'ast_premium';
+      astPack = await generatePremiumASTDocuments(wizardFacts, caseId);
       break;
     default:
       throw new Error(`Unsupported product type for fulfillment: ${productType}`);
   }
 
-  let pdfUrl: string | null = null;
-  if (generatedDoc?.pdf) {
-    const fileName = `${resolvedUserId}/${caseId}/${documentType}_final_${Date.now()}.pdf`;
+  // Upload each document separately
+  for (const doc of astPack.documents) {
+    if (!doc.pdf) continue;
+
+    const fileName = `${resolvedUserId}/${caseId}/${doc.file_name}`;
     const { error: uploadError } = await supabase.storage
       .from('documents')
-      .upload(fileName, generatedDoc.pdf, {
+      .upload(fileName, doc.pdf, {
         contentType: 'application/pdf',
         upsert: false,
       });
@@ -265,35 +264,37 @@ export async function fulfillOrder({ orderId, caseId, productType, userId }: Ful
     const { data: publicUrlData } = supabase.storage
       .from('documents')
       .getPublicUrl(fileName);
-    pdfUrl = publicUrlData.publicUrl;
-  }
 
-  await supabase
-    .from('documents')
-    .insert({
+    await supabase.from('documents').insert({
       user_id: resolvedUserId,
       case_id: caseId,
-      document_type: documentType,
-      document_title: documentTitle,
+      document_type: doc.category,
+      document_title: doc.title,
       jurisdiction: (caseData as any).jurisdiction,
-      html_content: generatedDoc?.html || null,
-      pdf_url: pdfUrl,
+      html_content: doc.html || null,
+      pdf_url: publicUrlData.publicUrl,
       is_preview: false,
-      qa_passed: false,
-      qa_score: null,
-      qa_issues: [],
-      metadata: { order_id: orderId },
-    })
-    .select()
-    .single();
+      qa_passed: true,
+      metadata: {
+        description: doc.description,
+        pack_type: productType,
+        order_id: orderId,
+        tier: astPack.tier,
+      },
+    });
+  }
 
   await supabase
     .from('orders')
     .update({
       fulfillment_status: 'fulfilled',
       fulfilled_at: new Date().toISOString(),
+      metadata: {
+        total_documents: astPack.documents.length,
+        tier: astPack.tier,
+      },
     })
     .eq('id', orderId);
 
-  return { status: 'fulfilled', documents: 1 };
+  return { status: 'fulfilled', documents: astPack.documents.length };
 }

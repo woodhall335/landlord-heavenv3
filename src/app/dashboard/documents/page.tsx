@@ -22,6 +22,11 @@ interface Document {
   is_preview: boolean;
   pdf_url: string | null;  // Correct field name from schema
   created_at: string;
+  metadata?: {
+    description?: string;
+    pack_type?: string;
+    tier?: string;
+  };
 }
 
 type FilterType = 'all' | 'eviction' | 'money_claim' | 'tenancy_agreement';
@@ -297,10 +302,26 @@ export default function DocumentsPage() {
                             Preview
                           </Badge>
                         )}
+                        {doc.metadata?.pack_type && (
+                          <Badge variant="neutral" size="small">
+                            {doc.metadata.pack_type === 'notice_only' ? 'Notice Pack' :
+                             doc.metadata.pack_type === 'complete_pack' ? 'Complete Pack' :
+                             doc.metadata.pack_type === 'money_claim' ? 'Money Claim' :
+                             doc.metadata.pack_type === 'ast_standard' ? 'Standard AST' :
+                             doc.metadata.pack_type === 'ast_premium' ? 'Premium AST' :
+                             doc.metadata.pack_type}
+                          </Badge>
+                        )}
                       </div>
-                      <p className="text-sm text-gray-600 mb-2">
-                        {getDocumentTypeLabel(doc.document_type)}
-                      </p>
+                      {doc.metadata?.description ? (
+                        <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                          {doc.metadata.description}
+                        </p>
+                      ) : (
+                        <p className="text-sm text-gray-600 mb-2">
+                          {getDocumentTypeLabel(doc.document_type)}
+                        </p>
+                      )}
                       <div className="text-xs text-gray-500">
                         Created {formatDate(doc.created_at)}
                       </div>
