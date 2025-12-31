@@ -3,6 +3,21 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 import { RiCheckboxCircleLine, RiCloseLine, RiAlertLine } from "react-icons/ri";
+import {
+  Sparkles,
+  ScrollText,
+  ClipboardCheck,
+  BarChart3,
+  FileText,
+  Scale,
+  BookOpen,
+  Target,
+  FolderOpen,
+  Star,
+  BadgePoundSterling,
+  Package,
+  Clock
+} from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Complete Eviction Pack - Full DIY Eviction Bundle | Landlord Heaven",
@@ -30,7 +45,10 @@ export default function CompleteEvictionPackPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">☁️ Ask Heaven-Powered</span>
+              <span className="text-sm font-semibold text-primary flex items-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                Ask Heaven-Powered
+              </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Ask Heaven-Powered Complete Eviction Pack</h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
@@ -57,7 +75,9 @@ export default function CompleteEvictionPackPage() {
         <Container>
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <div className="text-6xl mb-4">☁️</div>
+              <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-primary" />
+              </div>
               <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
                 Ask Heaven AI Features (Included!)
               </h2>
@@ -72,8 +92,10 @@ export default function CompleteEvictionPackPage() {
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               {/* Witness Statement */}
               <div className="bg-white rounded-xl border-2 border-blue-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <ScrollText className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Ask Heaven Witness Statement</h3>
                 </div>
                 <div className="mb-4">
@@ -106,8 +128,10 @@ export default function CompleteEvictionPackPage() {
 
               {/* Compliance Audit */}
               <div className="bg-white rounded-xl border-2 border-purple-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <ClipboardCheck className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Compliance Audit Report</h3>
                 </div>
                 <div className="mb-4">
@@ -140,8 +164,10 @@ export default function CompleteEvictionPackPage() {
 
               {/* Risk Assessment */}
               <div className="bg-white rounded-xl border-2 border-green-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <BarChart3 className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Case Risk Assessment</h3>
                 </div>
                 <div className="mb-4">
@@ -190,8 +216,10 @@ export default function CompleteEvictionPackPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* All Notices */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">📄</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">All Notices</h3>
                 </div>
                 <ul className="space-y-3">
@@ -216,8 +244,10 @@ export default function CompleteEvictionPackPage() {
 
               {/* Court Forms */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">⚖️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Scale className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">Court Forms</h3>
                 </div>
                 <ul className="space-y-3">
@@ -248,8 +278,10 @@ export default function CompleteEvictionPackPage() {
 
               {/* Step-by-Step Guidance */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">📋</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <BookOpen className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">Expert Guidance</h3>
                 </div>
                 <ul className="space-y-3">
@@ -274,8 +306,10 @@ export default function CompleteEvictionPackPage() {
 
               {/* Grounds Coverage */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">🎯</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Target className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">All Grounds</h3>
                 </div>
                 <ul className="space-y-3">
@@ -300,8 +334,10 @@ export default function CompleteEvictionPackPage() {
 
               {/* Evidence & Organization */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">📁</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <FolderOpen className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">Evidence Tools</h3>
                 </div>
                 <ul className="space-y-3">
@@ -326,8 +362,10 @@ export default function CompleteEvictionPackPage() {
 
               {/* Premium Features */}
               <div className="bg-primary-subtle rounded-lg border border-primary/20 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">✨</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Star className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">Premium Features</h3>
                 </div>
                 <ul className="space-y-3">
@@ -527,7 +565,9 @@ export default function CompleteEvictionPackPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💰</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <BadgePoundSterling className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Save £1,000s vs Solicitors</h3>
                 <p className="text-gray-700">
                   Eviction solicitors charge £1,500-3,000+ for the same documents. Our Complete Pack gives you everything
@@ -536,7 +576,9 @@ export default function CompleteEvictionPackPage() {
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">📦</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Package className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">All-in-One Solution</h3>
                 <p className="text-gray-700">
                   No more piecing together forms from different sources. Get notice, court forms, guidance, evidence
@@ -545,7 +587,9 @@ export default function CompleteEvictionPackPage() {
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">⚖️</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Scale className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Court-Ready Official Forms</h3>
                 <p className="text-gray-700">
                   We use genuine HMCTS official forms (N5, N5B, N119, Form 6A) auto-filled with your case details. These
@@ -554,7 +598,9 @@ export default function CompleteEvictionPackPage() {
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🎯</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Target className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Grounds-Aware Guidance</h3>
                 <p className="text-gray-700">
                   Your bundle adapts to your specific grounds (rent arrears, ASB, breach, etc.) with tailored evidence
@@ -563,7 +609,7 @@ export default function CompleteEvictionPackPage() {
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="mb-3">
+                <div className="mb-4">
                   <Image src="/lgb.svg" alt="UK Coverage" width={48} height={48} className="w-12 h-12" />
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">UK-Wide Coverage</h3>
@@ -574,7 +620,9 @@ export default function CompleteEvictionPackPage() {
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">⏱️</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Clock className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Instant Delivery</h3>
                 <p className="text-gray-700">
                   Complete your case details (15-20 minutes), review your pack, pay, and download immediately. No waiting

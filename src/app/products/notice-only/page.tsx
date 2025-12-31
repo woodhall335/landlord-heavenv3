@@ -3,6 +3,17 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 import { RiCheckboxCircleLine } from "react-icons/ri";
+import {
+  Sparkles,
+  Compass,
+  Target,
+  Calendar,
+  ShieldCheck,
+  Zap,
+  CheckCircle2,
+  BadgePoundSterling,
+  FileCheck
+} from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Notice Only - Section 8 & 21 Eviction Notices | Landlord Heaven",
@@ -18,7 +29,10 @@ export default function NoticeOnlyPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">☁️ Ask Heaven Smart Guidance</span>
+              <span className="text-sm font-semibold text-primary flex items-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                Ask Heaven Smart Guidance
+              </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Notice Only with Ask Heaven Smart Guidance</h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
@@ -43,7 +57,9 @@ export default function NoticeOnlyPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <div className="text-6xl mb-4">☁️</div>
+              <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-primary" />
+              </div>
               <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
                 Ask Heaven Smart Guidance (Included!)
               </h2>
@@ -58,8 +74,10 @@ export default function NoticeOnlyPage() {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Route Recommendation */}
               <div className="bg-white rounded-xl border-2 border-blue-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Compass className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Smart Route Recommendation</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
@@ -87,8 +105,10 @@ export default function NoticeOnlyPage() {
 
               {/* Ground Recommendations */}
               <div className="bg-white rounded-xl border-2 border-green-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Target className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Ground Recommendations</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
@@ -116,8 +136,10 @@ export default function NoticeOnlyPage() {
 
               {/* Auto-Calculated Dates */}
               <div className="bg-white rounded-xl border-2 border-purple-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Calendar className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Auto-Calculated Dates</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
@@ -145,8 +167,10 @@ export default function NoticeOnlyPage() {
 
               {/* Compliance Checks */}
               <div className="bg-white rounded-xl border-2 border-orange-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <ShieldCheck className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Compliance Verification</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
@@ -272,8 +296,10 @@ export default function NoticeOnlyPage() {
 
               {/* Bonus Features */}
               <div className="bg-primary-subtle rounded-lg border border-primary/20 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">Ask Heaven Features</h3>
                 </div>
                 <ul className="space-y-3">
@@ -359,7 +385,9 @@ export default function NoticeOnlyPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">⚡</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Zap className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Fast - 5 Minutes</h3>
                 <p className="text-gray-700">
                   No more hours researching forms. Answer questions, get your notice instantly. Solicitors charge £200+
@@ -368,7 +396,9 @@ export default function NoticeOnlyPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">✅</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <CheckCircle2 className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Court-Ready</h3>
                 <p className="text-gray-700">
                   All notices use official government formats (Form 6A, AT6, etc.). Accepted by all UK courts and
@@ -377,7 +407,7 @@ export default function NoticeOnlyPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="mb-3">
+                <div className="mb-4">
                   <Image src="/lgb.svg" alt="UK Coverage" width={48} height={48} className="w-12 h-12" />
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Full UK Coverage - Separate Frameworks</h3>
@@ -387,7 +417,9 @@ export default function NoticeOnlyPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🤖</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <ShieldCheck className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Smart Validation</h3>
                 <p className="text-gray-700">
                   Our system validates your case, checks notice periods, suggests grounds, and ensures compliance
@@ -396,7 +428,9 @@ export default function NoticeOnlyPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💰</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <BadgePoundSterling className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Save £170+</h3>
                 <p className="text-gray-700">
                   Solicitors charge £200-300 per notice. Our £29.99 one-time fee saves you money with no quality
@@ -405,7 +439,9 @@ export default function NoticeOnlyPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🔒</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <FileCheck className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Professional Documents</h3>
                 <p className="text-gray-700">
                   Legally compliant documents generated instantly. Accepted by all UK courts and tribunals.

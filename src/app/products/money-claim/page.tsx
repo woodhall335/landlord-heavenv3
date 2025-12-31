@@ -2,6 +2,16 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import { RiCheckboxCircleLine } from "react-icons/ri";
+import {
+  Sparkles,
+  FileText,
+  Mail,
+  BadgePoundSterling,
+  ClipboardList,
+  Send,
+  Calculator,
+  BookOpen
+} from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Money Claim Pack - Recover Rent Arrears | Landlord Heaven",
@@ -17,7 +27,10 @@ export default function MoneyClaimPage() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">☁️ Ask Heaven-Powered</span>
+              <span className="text-sm font-semibold text-primary flex items-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                Ask Heaven-Powered
+              </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Ask Heaven Money Claim Pack</h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
@@ -44,7 +57,9 @@ export default function MoneyClaimPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <div className="text-6xl mb-4">☁️</div>
+              <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-primary" />
+              </div>
               <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
                 Ask Heaven AI Drafting (Included!)
               </h2>
@@ -59,8 +74,10 @@ export default function MoneyClaimPage() {
             <div className="grid md:grid-cols-2 gap-6 mb-8">
               {/* Particulars of Claim */}
               <div className="bg-white rounded-xl border-2 border-blue-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Ask Heaven-Drafted Particulars of Claim</h3>
                 </div>
                 <div className="mb-4">
@@ -97,8 +114,10 @@ export default function MoneyClaimPage() {
 
               {/* Letter Before Action */}
               <div className="bg-white rounded-xl border-2 border-purple-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Send className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Ask Heaven Letter Before Action</h3>
                 </div>
                 <div className="mb-4">
@@ -136,7 +155,10 @@ export default function MoneyClaimPage() {
 
             {/* Value Callout */}
             <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 text-center">
-              <h3 className="text-2xl font-bold mb-3">💰 Ask Heaven Saves £300-600 in Legal Fees</h3>
+              <h3 className="text-2xl font-bold mb-3 flex items-center justify-center gap-2">
+                <BadgePoundSterling className="w-7 h-7" />
+                Ask Heaven Saves £300-600 in Legal Fees
+              </h3>
               <p className="text-lg mb-4">
                 Solicitors charge £300-600 to draft Particulars of Claim and Letters Before Action
               </p>
@@ -160,7 +182,9 @@ export default function MoneyClaimPage() {
             <div className="grid md:grid-cols-2 gap-6">
               {/* Court Forms */}
               <div className="bg-white rounded-lg border-2 border-primary p-6">
-                <div className="text-3xl mb-3">📋</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <ClipboardList className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-4">Court Claim Forms</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
@@ -192,7 +216,9 @@ export default function MoneyClaimPage() {
 
               {/* Pre-Action Compliance */}
               <div className="bg-white rounded-lg border-2 border-primary p-6">
-                <div className="text-3xl mb-3">✉️</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Mail className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-4">Pre-Action Compliance</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
@@ -224,7 +250,9 @@ export default function MoneyClaimPage() {
 
               {/* Arrears & Interest */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">📊</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Calculator className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-4">Arrears & Interest Documentation</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
@@ -256,7 +284,9 @@ export default function MoneyClaimPage() {
 
               {/* Filing Guides & Strategy */}
               <div className="bg-primary-50 rounded-lg border border-primary-200 p-6">
-                <div className="text-3xl mb-3">📚</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <BookOpen className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-4">Filing Guides & Strategy</h3>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
