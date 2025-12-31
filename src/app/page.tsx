@@ -222,7 +222,7 @@ export default function Home() {
               title="Complete Eviction Pack"
               description="Full bundle from notice to possession order with court forms and guidance."
               price="£149.99"
-              icon={<RiScales3Line className="w-7 h-7 text-primary group-hover:text-white transition-colors" />}
+              icon={<RiScales3Line className="w-7 h-7" />}
               popular={true}
             />
             <ProductCard
@@ -238,7 +238,7 @@ export default function Home() {
               title="Tenancy Agreements"
               description="Compliant ASTs with optional clauses for HMOs and students."
               price="From £9.99"
-              icon={<RiClipboardLine className="w-7 h-7 text-primary group-hover:text-white transition-colors" />}
+              icon={<RiClipboardLine className="w-7 h-7" />}
             />
           </div>
         </Container>
@@ -577,8 +577,8 @@ function ProductCard({
           </span>
         </div>
       )}
-      <div className={`bg-white rounded-2xl border-2 p-8 h-full transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${popular ? 'border-primary shadow-lg' : 'border-gray-100 hover:border-primary'}`}>
-        <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+      <div className={`bg-white rounded-2xl border-2 p-8 h-full transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-2 ${popular ? 'border-primary shadow-lg' : 'border-gray-100 group-hover:border-primary'}`}>
+        <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300 text-primary group-hover:text-white">
           {icon}
         </div>
 
