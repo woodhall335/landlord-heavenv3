@@ -40,7 +40,9 @@ export default function ContactPage() {
             </p>
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">
-                <RiMailLine className="w-5 h-5 text-[#7C3AED]" />
+                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                  <RiMailLine className="w-4 h-4 text-primary" />
+                </div>
                 <a
                   href="mailto:support@landlordheaven.co.uk"
                   className="text-primary hover:underline font-semibold"
@@ -49,7 +51,9 @@ export default function ContactPage() {
                 </a>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-600">
-                <RiTimeLine className="w-5 h-5 text-[#7C3AED]" />
+                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                  <RiTimeLine className="w-4 h-4 text-primary" />
+                </div>
                 <span>Average response time: 24 hours (weekdays)</span>
               </div>
             </div>
@@ -70,7 +74,9 @@ export default function ContactPage() {
             </p>
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">
-                <RiMailLine className="w-5 h-5 text-[#7C3AED]" />
+                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                  <RiMailLine className="w-4 h-4 text-primary" />
+                </div>
                 <a
                   href="mailto:refunds@landlordheaven.co.uk"
                   className="text-primary hover:underline font-semibold"
@@ -79,7 +85,9 @@ export default function ContactPage() {
                 </a>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-600">
-                <RiTimeLine className="w-5 h-5 text-[#7C3AED]" />
+                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                  <RiTimeLine className="w-4 h-4 text-primary" />
+                </div>
                 <span>Processing time: 5-7 business days</span>
               </div>
             </div>
@@ -101,7 +109,9 @@ export default function ContactPage() {
             </p>
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">
-                <RiMailLine className="w-5 h-5 text-[#7C3AED]" />
+                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                  <RiMailLine className="w-4 h-4 text-primary" />
+                </div>
                 <a
                   href="mailto:sales@landlordheaven.co.uk"
                   className="text-primary hover:underline font-semibold"
@@ -110,7 +120,9 @@ export default function ContactPage() {
                 </a>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-600">
-                <RiTimeLine className="w-5 h-5 text-[#7C3AED]" />
+                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                  <RiTimeLine className="w-4 h-4 text-primary" />
+                </div>
                 <span>Custom pricing available for 10+ documents/month</span>
               </div>
             </div>
@@ -131,7 +143,9 @@ export default function ContactPage() {
             </p>
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3">
-                <RiMailLine className="w-5 h-5 text-[#7C3AED]" />
+                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                  <RiMailLine className="w-4 h-4 text-primary" />
+                </div>
                 <a
                   href="mailto:privacy@landlordheaven.co.uk"
                   className="text-primary hover:underline font-semibold"
@@ -140,7 +154,9 @@ export default function ContactPage() {
                 </a>
               </div>
               <div className="flex items-center gap-3 text-sm text-gray-600">
-                <RiTimeLine className="w-5 h-5 text-[#7C3AED]" />
+                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                  <RiTimeLine className="w-4 h-4 text-primary" />
+                </div>
                 <span>Response time: 30 days (as required by GDPR)</span>
               </div>
             </div>

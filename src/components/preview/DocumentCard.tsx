@@ -34,10 +34,10 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
   const IconComponent = iconMap[document.icon] || FileText;
 
   return (
-    <div className={`border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-all ${isLocked ? 'border-gray-200' : 'border-green-200'}`}>
+    <div className={`border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-all ${isLocked ? 'border-gray-200' : 'border-primary/20'}`}>
       <div className="flex items-start gap-4">
-        <div className={`p-3 rounded-lg flex-shrink-0 ${isLocked ? 'bg-gray-100' : 'bg-green-50'}`}>
-          <IconComponent className={`w-6 h-6 ${isLocked ? 'text-gray-400' : 'text-green-600'}`} />
+        <div className={`p-3 rounded-xl flex-shrink-0 ${isLocked ? 'bg-gray-100' : 'bg-purple-100'}`}>
+          <IconComponent className={`w-6 h-6 ${isLocked ? 'text-gray-400' : 'text-primary'}`} />
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-gray-900 truncate">{document.title}</h3>
@@ -65,7 +65,7 @@ export function DocumentCard({ document, isLocked, onUnlock, onDownload }: Docum
           ) : (
             <button
               onClick={onDownload}
-              className="flex items-center gap-2 px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors text-sm font-medium"
+              className="flex items-center gap-2 px-4 py-2 bg-purple-100 text-primary rounded-lg hover:bg-primary hover:text-white transition-colors text-sm font-medium"
             >
               <Download className="w-4 h-4" />
               <span className="hidden sm:inline">Download</span>

@@ -106,7 +106,9 @@ export default function DashboardPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <Card padding="large" className="max-w-md mx-auto text-center">
-          <RiLoginBoxLine className="w-16 h-16 text-primary mx-auto mb-4" />
+          <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+            <RiLoginBoxLine className="w-8 h-8 text-primary" />
+          </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Login Required</h1>
           <p className="text-gray-600 mb-6">
             Please log in to access your dashboard and manage your cases.
@@ -254,7 +256,9 @@ export default function DashboardPage() {
                       className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary transition-colors"
                     >
                       <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <RiFileTextLine className="w-8 h-8 text-[#7C3AED] shrink-0" />
+                        <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                          <RiFileTextLine className="w-5 h-5 text-primary" />
+                        </div>
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-charcoal truncate">{doc.document_title}</div>
                           <div className="text-xs text-gray-500">{formatDate(doc.created_at)}</div>
@@ -298,12 +302,16 @@ export default function DashboardPage() {
             <Card padding="medium">
               <h3 className="font-semibold text-charcoal mb-4">Need Help?</h3>
               <div className="space-y-3 text-sm">
-                <Link href="/help" className="flex items-center gap-2 text-gray-700 hover:text-primary">
-                  <RiBookOpenLine className="w-5 h-5 text-[#7C3AED]" />
+                <Link href="/help" className="flex items-center gap-3 text-gray-700 hover:text-primary">
+                  <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                    <RiBookOpenLine className="w-4 h-4 text-primary" />
+                  </div>
                   Help Center
                 </Link>
-                <Link href="/contact" className="flex items-center gap-2 text-gray-700 hover:text-primary">
-                  <RiCustomerService2Line className="w-5 h-5 text-[#7C3AED]" />
+                <Link href="/contact" className="flex items-center gap-3 text-gray-700 hover:text-primary">
+                  <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                    <RiCustomerService2Line className="w-4 h-4 text-primary" />
+                  </div>
                   Contact Support
                 </Link>
               </div>

@@ -6,7 +6,7 @@
  */
 
 import { Container } from '@/components/ui';
-import { RiShieldCheckLine, RiLockLine, RiCheckboxCircleLine, RiMapPinLine, RiUserStarLine } from 'react-icons/ri';
+import { RiShieldCheckLine, RiLockLine, RiMapPinLine, RiUserStarLine } from 'react-icons/ri';
 
 interface TrustBadgeProps {
   icon: React.ReactNode;
@@ -16,8 +16,10 @@ interface TrustBadgeProps {
 
 function TrustBadge({ icon, label, sublabel }: TrustBadgeProps) {
   return (
-    <div className="flex items-center gap-2 text-gray-600">
-      <div className="text-primary">{icon}</div>
+    <div className="flex items-center gap-3 text-gray-600">
+      <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-primary shrink-0">
+        {icon}
+      </div>
       <div>
         <span className="text-sm font-medium text-gray-700">{label}</span>
         {sublabel && <span className="text-xs text-gray-500 block">{sublabel}</span>}
