@@ -577,7 +577,7 @@ function ProductCard({
           </span>
         </div>
       )}
-      <div className={`bg-white rounded-2xl border-2 p-8 h-full transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-2 ${popular ? 'border-primary shadow-lg' : 'border-gray-100 group-hover:border-primary'}`}>
+      <div className={`bg-white rounded-2xl border-2 p-8 h-full transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-2 ${popular ? 'border-[#7C3AED] shadow-lg' : 'border-gray-100 group-hover:border-[#7C3AED]'}`}>
         <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300 text-primary group-hover:text-white">
           {icon}
         </div>
@@ -609,7 +609,7 @@ function JurisdictionCard({
   forms: string[];
 }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 text-center transition-all duration-300 hover:shadow-lg hover:border-primary cursor-default group">
+    <div className="bg-white rounded-2xl border-2 border-gray-100 p-6 text-center transition-all duration-300 hover:shadow-lg hover:border-[#7C3AED] cursor-default group">
       <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:scale-110 overflow-hidden">
         <Image src={flag} alt={title} width={40} height={40} className="w-10 h-10 object-contain" />
       </div>
