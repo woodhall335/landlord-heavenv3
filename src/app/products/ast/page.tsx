@@ -3,6 +3,12 @@ import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
 import { RiCheckboxCircleLine, RiCloseLine } from "react-icons/ri";
+import {
+  Home,
+  GraduationCap,
+  Briefcase,
+  BadgePoundSterling
+} from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Tenancy Agreements - AST, PRT, NI | Landlord Heaven",
@@ -302,7 +308,9 @@ export default function ASTPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🏠</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Home className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">HMOs & Multi-Tenant</h3>
                 <p className="text-gray-700 mb-3">
                   If you're letting to multiple unrelated tenants, Premium is essential. It includes:
@@ -316,7 +324,9 @@ export default function ASTPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🎓</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <GraduationCap className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Student Lettings</h3>
                 <p className="text-gray-700 mb-3">Premium protects you from common student tenancy risks:</p>
                 <ul className="text-sm text-gray-700 space-y-1">
@@ -328,7 +338,9 @@ export default function ASTPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💼</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Briefcase className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Professional Landlords</h3>
                 <p className="text-gray-700 mb-3">Managing multiple properties? Premium offers:</p>
                 <ul className="text-sm text-gray-700 space-y-1">
@@ -340,7 +352,9 @@ export default function ASTPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💰</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <BadgePoundSterling className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">High-Value Properties</h3>
                 <p className="text-gray-700 mb-3">
                   For properties worth £300k+ or rent £1,500+/month, Premium provides:
