@@ -105,8 +105,8 @@ export default function ValidatorsHubPage() {
                 className="group block rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-primary-300"
               >
                 <div className="flex items-start gap-4">
-                  <div className="rounded-lg bg-primary-100 p-3">
-                    <RiFileCheckLine className="h-6 w-6 text-primary-600" />
+                  <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+                    <RiFileCheckLine className="h-6 w-6 text-primary group-hover:text-white" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
@@ -140,7 +140,7 @@ export default function ValidatorsHubPage() {
             </h2>
             <div className="grid md:grid-cols-3 gap-8">
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-100 text-primary-600 font-bold text-xl mb-4">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-purple-100 text-primary font-bold text-xl mb-4">
                   1
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Upload Your Document</h3>
@@ -149,7 +149,7 @@ export default function ValidatorsHubPage() {
                 </p>
               </div>
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-100 text-primary-600 font-bold text-xl mb-4">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-purple-100 text-primary font-bold text-xl mb-4">
                   2
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">AI Analysis</h3>
@@ -158,7 +158,7 @@ export default function ValidatorsHubPage() {
                 </p>
               </div>
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-primary-100 text-primary-600 font-bold text-xl mb-4">
+                <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-purple-100 text-primary font-bold text-xl mb-4">
                   3
                 </div>
                 <h3 className="font-semibold text-gray-900 mb-2">Get Your Report</h3>

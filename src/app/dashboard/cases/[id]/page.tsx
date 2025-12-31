@@ -389,7 +389,9 @@ export default function CaseDetailPage() {
       <div className="min-h-screen flex items-center justify-center">
         <Card padding="large">
           <div className="text-center py-8">
-            <RiErrorWarningLine className="w-16 h-16 text-[#7C3AED] mx-auto mb-4" />
+            <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+              <RiErrorWarningLine className="w-8 h-8 text-primary" />
+            </div>
             <h2 className="text-xl font-semibold text-charcoal mb-2">{error}</h2>
             <Link href="/dashboard/cases">
               <Button variant="primary">Back to Cases</Button>
@@ -711,7 +713,9 @@ export default function CaseDetailPage() {
                       className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
                     >
                       <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <RiFileTextLine className="w-8 h-8 text-[#7C3AED] shrink-0" />
+                        <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                          <RiFileTextLine className="w-5 h-5 text-primary" />
+                        </div>
                         <div className="flex-1 min-w-0">
                           <div className="font-medium text-charcoal truncate">
                             {doc.document_title}
@@ -734,7 +738,7 @@ export default function CaseDetailPage() {
                             rel="noopener noreferrer"
                             className="text-primary hover:text-primary-dark"
                           >
-                            <RiExternalLinkLine className="w-5 h-5 text-[#7C3AED]" />
+                            <RiExternalLinkLine className="w-5 h-5 text-primary" />
                           </a>
                         )}
                       </div>
@@ -786,16 +790,20 @@ export default function CaseDetailPage() {
               <div className="space-y-3 text-sm">
                 <Link
                   href="/help"
-                  className="flex items-center gap-2 text-gray-700 hover:text-primary"
+                  className="flex items-center gap-3 text-gray-700 hover:text-primary"
                 >
-                  <RiBookOpenLine className="w-5 h-5 text-[#7C3AED]" />
+                  <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                    <RiBookOpenLine className="w-4 h-4 text-primary" />
+                  </div>
                   Help Center
                 </Link>
                 <Link
                   href="/contact"
-                  className="flex items-center gap-2 text-gray-700 hover:text-primary"
+                  className="flex items-center gap-3 text-gray-700 hover:text-primary"
                 >
-                  <RiCustomerService2Line className="w-5 h-5 text-[#7C3AED]" />
+                  <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
+                    <RiCustomerService2Line className="w-4 h-4 text-primary" />
+                  </div>
                   Contact Support
                 </Link>
               </div>

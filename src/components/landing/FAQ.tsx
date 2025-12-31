@@ -115,7 +115,7 @@ export function FAQ() {
           <div className="mt-10 text-center">
             <div className="inline-flex flex-col sm:flex-row items-center gap-4 bg-purple-50 rounded-2xl px-8 py-6">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
                   <RiCustomerService2Line className="w-6 h-6 text-primary" />
                 </div>
                 <div className="text-left">

@@ -44,3 +44,4 @@ export { Table } from "./Table";
 export { Tabs } from "./Tabs";
 export { Select } from "./Select";
 export { ValidationErrors, type ValidationErrorsProps, type ValidationIssue } from "./ValidationErrors";
+export { IconWrapper, type IconWrapperProps, type IconWrapperSize } from "./IconWrapper";
