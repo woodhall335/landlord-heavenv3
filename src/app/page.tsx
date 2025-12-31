@@ -54,7 +54,7 @@ export default function Home() {
     if (!askQuestion.trim()) return;
 
     // Navigate to Ask Heaven page with the question as a query parameter
-    router.push(`/ask?q=${encodeURIComponent(askQuestion)}`);
+    router.push(`/ask-heaven?q=${encodeURIComponent(askQuestion)}`);
   };
 
   return (
