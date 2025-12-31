@@ -569,7 +569,7 @@ function ProductCard({
   popular?: boolean;
 }) {
   return (
-    <Link href={href} className="group relative cursor-pointer">
+    <Link href={href} className="product-card-wrapper group relative cursor-pointer">
       {popular && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
           <span className="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
@@ -577,7 +577,7 @@ function ProductCard({
           </span>
         </div>
       )}
-      <div className={`bg-white rounded-2xl border-2 p-8 h-full transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-2 ${popular ? 'border-[#7C3AED] shadow-lg' : 'border-gray-100 group-hover:border-[#7C3AED]'}`}>
+      <div className={`product-card-inner bg-white rounded-2xl p-8 h-full transition-all duration-300 group-hover:shadow-2xl group-hover:-translate-y-2 ${popular ? 'border-2 border-[#7C3AED] shadow-lg' : 'card-hover-border'}`}>
         <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:scale-110 transition-all duration-300 text-primary group-hover:text-white">
           {icon}
         </div>
@@ -609,7 +609,7 @@ function JurisdictionCard({
   forms: string[];
 }) {
   return (
-    <div className="bg-white rounded-2xl border-2 border-gray-100 p-6 text-center transition-all duration-300 hover:shadow-lg hover:border-[#7C3AED] cursor-default group">
+    <div className="card-hover-border bg-white rounded-2xl p-6 text-center transition-all duration-300 hover:shadow-lg cursor-default group">
       <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 group-hover:scale-110 overflow-hidden">
         <Image src={flag} alt={title} width={40} height={40} className="w-10 h-10 object-contain" />
       </div>

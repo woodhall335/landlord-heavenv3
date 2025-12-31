@@ -268,3 +268,18 @@ div.ask-heaven-panel,
   padding-bottom: 24px !important;
   padding-top: 48px !important;
 }
+
+/* Card hover border effect - explicit CSS for reliability */
+.card-hover-border {
+  border: 2px solid #e5e7eb; /* gray-200 */
+  transition: all 0.3s ease;
+}
+
+.card-hover-border:hover {
+  border-color: #7C3AED !important;
+}
+
+/* Product card hover - for group hover pattern */
+.product-card-wrapper:hover .product-card-inner {
+  border-color: #7C3AED !important;
+}
