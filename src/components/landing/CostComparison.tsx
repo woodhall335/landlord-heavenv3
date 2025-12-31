@@ -145,12 +145,14 @@ export function CostComparison() {
               ourPrice="£29.99"
               solicitorPrice="£200-300"
               savings="£170+"
+              href="/products/notice-only"
             />
             <PriceAnchor
               product="Complete Pack"
               ourPrice="£149.99"
               solicitorPrice="£1,500-2,500"
               savings="£1,350+"
+              href="/products/complete-pack"
               highlighted
             />
             <PriceAnchor
@@ -158,12 +160,14 @@ export function CostComparison() {
               ourPrice="£179.99"
               solicitorPrice="£400-600"
               savings="£220+"
+              href="/products/money-claim"
             />
             <PriceAnchor
               product="Tenancy Agreements"
               ourPrice="£9.99"
               solicitorPrice="£150-400"
               savings="£140+"
+              href="/products/ast"
             />
           </div>
         </div>
@@ -178,26 +182,31 @@ function PriceAnchor({
   solicitorPrice,
   savings,
   highlighted,
+  href,
 }: {
   product: string;
   ourPrice: string;
   solicitorPrice: string;
   savings: string;
   highlighted?: boolean;
+  href: string;
 }) {
   return (
-    <div className={`rounded-xl p-4 text-center border-2 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-1 cursor-default ${
-      highlighted
-        ? 'bg-primary/5 border-primary/30 hover:border-primary'
-        : 'bg-gray-50 border-gray-100 hover:border-primary/30'
-    }`}>
-      <div className="text-sm font-medium text-gray-700 mb-2">{product}</div>
+    <Link
+      href={href}
+      className={`block rounded-xl p-4 text-center border-2 transition-all duration-300 hover:scale-105 hover:shadow-xl hover:-translate-y-1 cursor-pointer group ${
+        highlighted
+          ? 'bg-primary/5 border-primary/30 hover:border-primary'
+          : 'bg-gray-50 border-gray-100 hover:border-primary/30'
+      }`}
+    >
+      <div className="text-sm font-medium text-gray-700 mb-2 group-hover:text-primary transition-colors">{product}</div>
       <div className="text-xl font-bold text-primary">{ourPrice}</div>
       <div className="text-xs text-gray-400 line-through">{solicitorPrice}</div>
       <div className={`text-xs font-semibold mt-1 ${highlighted ? 'text-primary' : 'text-green-600'}`}>
         Save {savings}
       </div>
-    </div>
+    </Link>
   );
 }
 

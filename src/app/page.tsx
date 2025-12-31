@@ -62,13 +62,13 @@ export default function Home() {
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm border border-primary/20 rounded-full px-5 py-2.5 mb-6 shadow-sm">
-              <span className="text-sm font-bold text-primary">☁️ Trusted by 10,000+ UK Landlords</span>
+            <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+              <span className="text-sm font-semibold text-primary">☁️ Trusted by 10,000+ UK Landlords</span>
             </div>
 
             {/* Main Headline - Value-focused */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 leading-tight">
-              Court-Ready Legal Documents
+              Legal Documents
               <span className="block text-primary">in Minutes, Not Days</span>
             </h1>
 
@@ -79,17 +79,16 @@ export default function Home() {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
               <Link
                 href="/wizard"
-                className="group flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg"
+                className="hero-btn-primary"
               >
-                Generate Your Documents
-                <RiArrowRightLine className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                Generate Your Documents →
               </Link>
               <Link
                 href="/pricing"
-                className="text-gray-700 hover:text-primary font-semibold px-6 py-4 transition-colors"
+                className="hero-btn-secondary"
               >
                 View Pricing →
               </Link>
@@ -180,10 +179,9 @@ export default function Home() {
             <div className="mt-14 text-center">
               <Link
                 href="/wizard"
-                className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg"
+                className="hero-btn-primary"
               >
-                Start Your Documents Now
-                <RiArrowRightLine className="w-5 h-5" />
+                Start Your Documents Now →
               </Link>
               <p className="mt-4 text-sm text-gray-500">Free to start • Pay only when you're ready</p>
             </div>
@@ -273,7 +271,7 @@ export default function Home() {
                     <button
                       key={question}
                       onClick={() => handleExampleQuestion(question)}
-                      className="text-left p-4 bg-white rounded-xl border border-gray-200 hover:border-primary/40 hover:shadow-md transition-all text-sm text-gray-700"
+                      className="text-left p-4 bg-white rounded-xl border border-gray-200 hover:border-primary/40 hover:shadow-md transition-all text-sm text-gray-700 cursor-pointer hover:bg-primary/5"
                       type="button"
                     >
                       {question}
@@ -321,7 +319,7 @@ export default function Home() {
                   <button
                     onClick={handleAskQuestion}
                     disabled={isLoading || !askQuestion.trim()}
-                    className="px-8 py-4 bg-primary hover:bg-primary-700 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+                    className="px-8 py-4 bg-primary hover:bg-primary-700 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap cursor-pointer"
                     type="button"
                   >
                     {isLoading ? "Thinking..." : "Ask Heaven"}
@@ -387,7 +385,7 @@ export default function Home() {
           <div className="mt-12 text-center">
             <Link
               href="/pricing"
-              className="text-primary hover:text-primary-dark font-semibold inline-flex items-center gap-2"
+              className="text-primary hover:text-primary-dark font-semibold inline-flex items-center gap-2 cursor-pointer transition-colors"
             >
               Compare all products and features
               <RiArrowRightLine className="w-5 h-5" />
@@ -475,36 +473,35 @@ export default function Home() {
       <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Ready to Get Your Documents?
             </h2>
-            <p className="text-xl text-purple-100 mb-8">
+            <p className="text-xl text-gray-600 mb-8">
               Join 10,000+ landlords saving time and money.
-              <span className="font-semibold text-white"> Start in under 2 minutes.</span>
+              <span className="font-semibold text-gray-800"> Start in under 2 minutes.</span>
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
               <Link
                 href="/wizard"
-                className="group flex items-center gap-2 bg-white text-primary hover:bg-gray-100 font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all text-lg w-full sm:w-auto justify-center"
+                className="hero-btn-primary"
               >
-                Generate Your Documents
-                <RiArrowRightLine className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                Generate Your Documents →
               </Link>
             </div>
 
             {/* Final trust indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-purple-100">
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-gray-500">
               <span className="flex items-center gap-2">
-                <RiFlashlightLine className="w-5 h-5" />
+                <RiFlashlightLine className="w-5 h-5 text-primary" />
                 Instant download
               </span>
               <span className="flex items-center gap-2">
-                <RiShieldCheckLine className="w-5 h-5" />
+                <RiShieldCheckLine className="w-5 h-5 text-primary" />
                 Court-ready guarantee
               </span>
               <span className="flex items-center gap-2">
-                <RiGlobalLine className="w-5 h-5" />
+                <RiGlobalLine className="w-5 h-5 text-primary" />
                 All UK jurisdictions
               </span>
             </div>
@@ -571,10 +568,10 @@ function ProductCard({
   popular?: boolean;
 }) {
   return (
-    <Link href={href} className="group relative">
+    <Link href={href} className="group relative cursor-pointer">
       {popular && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
-          <span className="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg animate-pulse">
+          <span className="bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg">
             MOST POPULAR
           </span>
         </div>

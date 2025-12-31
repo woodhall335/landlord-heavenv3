@@ -87,10 +87,18 @@ p {
 a {
   color: #7C3AED;
   transition: color 0.25s ease;
+  cursor: pointer;
 }
 
 a:hover {
   color: #6D28D9;
+}
+
+/* Ensure all clickable elements have pointer cursor */
+button,
+[role="button"],
+.cursor-pointer {
+  cursor: pointer;
 }
 
 /* Ensure buttons styled as links respect their text color classes */
@@ -129,6 +137,7 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
   transition: all 0.25s ease;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   border: 2px solid #7C3AED;
+  cursor: pointer;
 }
 
 .hero-btn-primary:hover {
@@ -148,6 +157,7 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
   transition: all 0.25s ease;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   border: 2px solid transparent;
+  cursor: pointer;
 }
 
 .hero-btn-secondary:hover {
