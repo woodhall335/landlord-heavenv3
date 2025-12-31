@@ -130,14 +130,38 @@ ${case_id ? '- You are chatting about a specific internal case. NEVER show the c
       temperature: 0.2,
     };
 
+    // Debug: Check if OPENAI_API_KEY is set
+    if (!process.env.OPENAI_API_KEY) {
+      logger.error('OPENAI_API_KEY is not set');
+      return NextResponse.json(
+        { error: 'OpenAI API key is not configured. Please check server configuration.' },
+        { status: 500 }
+      );
+    }
+
     const result = await jsonCompletion<{ reply: string; suggested_product?: string | null }>(
       fullMessages,
       schema as Record<string, unknown>,
       options,
     );
 
+    // Debug: Log the raw response
+    logger.info('Ask Heaven raw response', {
+      hasJson: !!result.json,
+      jsonKeys: result.json ? Object.keys(result.json) : [],
+      contentPreview: result.content?.substring(0, 200),
+    });
+
     const reply = result.json?.reply ?? 'Sorry, Ask Heaven could not generate a reply this time.';
     const suggestedProduct = result.json?.suggested_product ?? null;
+
+    // Debug: Log if reply was missing
+    if (!result.json?.reply) {
+      logger.warn('Ask Heaven response missing reply field', {
+        rawJson: JSON.stringify(result.json),
+        content: result.content,
+      });
+    }
 
     return NextResponse.json({ reply, suggested_product: suggestedProduct }, { status: 200 });
   } catch (err) {

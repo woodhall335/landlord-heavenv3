@@ -525,7 +525,7 @@ export default function AskHeavenPage(): React.ReactElement {
           {/* Main Chat Area */}
           <div className="bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
             {/* Chat Messages */}
-            <div className="h-[400px] md:h-[500px] overflow-y-auto p-4 md:p-6 space-y-4 bg-gradient-to-b from-gray-50 to-white">
+            <div className="min-h-[300px] max-h-[400px] overflow-y-auto p-4 md:p-6 space-y-4 bg-gradient-to-b from-gray-50 to-white">
               {chatMessages.length === 0 && !isSending && (
                 <div className="h-full flex flex-col items-center justify-center text-center px-4">
                   <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-3xl mb-4">
@@ -556,43 +556,43 @@ export default function AskHeavenPage(): React.ReactElement {
                   key={m.id}
                   className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <div
-                    className={`max-w-[85%] md:max-w-[75%] rounded-2xl px-4 py-3 ${
-                      m.role === 'user'
-                        ? 'bg-primary text-white rounded-br-md'
-                        : 'bg-white border border-gray-200 shadow-sm rounded-bl-md'
-                    }`}
-                  >
-                    {m.role === 'assistant' && (
+                  {m.role === 'user' ? (
+                    <div className="max-w-[85%] md:max-w-[75%] rounded-2xl rounded-br-md px-4 py-3 bg-primary">
+                      <p className="whitespace-pre-wrap text-sm leading-relaxed text-white">
+                        {m.content}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="max-w-[85%] md:max-w-[75%] rounded-2xl rounded-bl-md px-4 py-3 bg-white border border-gray-200 shadow-sm">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-lg">☁️</span>
                         <span className="text-xs font-semibold text-primary">Ask Heaven</span>
                       </div>
-                    )}
-                    <p className={`whitespace-pre-wrap text-sm leading-relaxed ${m.role === 'user' ? 'text-white' : 'text-gray-700'}`}>
-                      {m.content}
-                    </p>
-                    {/* Product CTA */}
-                    {m.role === 'assistant' && m.suggestedProduct && PRODUCT_CTA_MAP[m.suggestedProduct] && (
-                      <div className="mt-4 pt-3 border-t border-gray-100">
-                        <Link
-                          href={PRODUCT_CTA_MAP[m.suggestedProduct].href}
-                          className="block p-3 bg-primary/5 hover:bg-primary/10 rounded-xl border border-primary/20 transition-all group"
-                        >
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm font-semibold text-primary group-hover:text-primary-700">
-                                {PRODUCT_CTA_MAP[m.suggestedProduct].label} →
-                              </p>
-                              <p className="text-xs text-gray-500 mt-0.5">
-                                {PRODUCT_CTA_MAP[m.suggestedProduct].description}
-                              </p>
+                      <p className="whitespace-pre-wrap text-sm leading-relaxed text-gray-700">
+                        {m.content}
+                      </p>
+                      {/* Product CTA */}
+                      {m.suggestedProduct && PRODUCT_CTA_MAP[m.suggestedProduct] && (
+                        <div className="mt-4 pt-3 border-t border-gray-100">
+                          <Link
+                            href={PRODUCT_CTA_MAP[m.suggestedProduct].href}
+                            className="block p-3 bg-primary/5 hover:bg-primary/10 rounded-xl border border-primary/20 transition-all group"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="text-sm font-semibold text-primary group-hover:text-primary-700">
+                                  {PRODUCT_CTA_MAP[m.suggestedProduct].label} →
+                                </p>
+                                <p className="text-xs text-gray-500 mt-0.5">
+                                  {PRODUCT_CTA_MAP[m.suggestedProduct].description}
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        </Link>
-                      </div>
-                    )}
-                  </div>
+                          </Link>
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
 
