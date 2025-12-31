@@ -420,9 +420,9 @@ export default function AskHeavenPage(): React.ReactElement {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-purple-50 pt-24">
       <Container>
-        <div className="max-w-4xl mx-auto pt-12 pb-6">
+        <div className="max-w-4xl mx-auto pb-6">
           {/* Page Header */}
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
@@ -618,7 +618,10 @@ export default function AskHeavenPage(): React.ReactElement {
                   className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   {m.role === 'user' ? (
-                    <div className="max-w-[85%] md:max-w-[75%] rounded-2xl rounded-br-md px-4 py-3 bg-primary-600">
+                    <div
+                      className="max-w-[85%] md:max-w-[75%] rounded-2xl rounded-br-md px-4 py-3"
+                      style={{ backgroundColor: '#7C3AED' }}
+                    >
                       <p className="whitespace-pre-wrap text-sm leading-relaxed" style={{ color: '#ffffff' }}>
                         {m.content}
                       </p>
