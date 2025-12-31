@@ -87,17 +87,27 @@ Additional instructions for CHAT MODE:
 - Use short sections and bullet points where helpful.
 
 PRODUCT RECOMMENDATIONS:
-When the landlord's question indicates they need a specific document or service, suggest the appropriate product:
-- For eviction/serving notice questions → suggest "Eviction Notice" (generates Section 21/Section 8/Notice to Leave)
-- For court/tribunal/possession proceedings → suggest "Complete Eviction Pack" (full bundle with court forms)
-- For rent arrears/money claims/debt recovery → suggest "Money Claim Pack" (court forms for recovering rent)
-- For tenancy agreement/AST questions → suggest "Tenancy Agreement" (compliant AST/PRT generation)
+When the landlord's question indicates they need a specific document or service, suggest the appropriate product code:
+- notice_only - For eviction/serving notice questions
+- complete_pack - For court/tribunal/possession proceedings
+- money_claim - For rent arrears/money claims/debt recovery
+- tenancy_agreement - For tenancy agreement/AST questions
 
-Only suggest ONE product per response if clearly relevant. Do NOT force a product suggestion if the question is general.
+Only suggest ONE product per response if clearly relevant. Use null if the question is general.
 
-Context (if provided):
+Context:
 ${jurisdiction ? `- Jurisdiction: ${jurisdiction}` : '- Jurisdiction: Not specified (assume England unless user indicates otherwise)'}
 ${case_id ? '- You are chatting about a specific internal case. NEVER show the case_id or any internal IDs to the user.' : ''}
+
+CRITICAL - JSON RESPONSE FORMAT:
+You MUST respond with a JSON object containing exactly these fields:
+{
+  "reply": "Your helpful response text here",
+  "suggested_product": "notice_only" | "complete_pack" | "money_claim" | "tenancy_agreement" | null
+}
+
+The "reply" field is REQUIRED and must contain your full response to the landlord.
+The "suggested_product" field should be one of the product codes above, or null if no product is relevant.
 `.trim();
 
     const systemMessage: ChatMessage = {
@@ -130,14 +140,38 @@ ${case_id ? '- You are chatting about a specific internal case. NEVER show the c
       temperature: 0.2,
     };
 
+    // Debug: Check if OPENAI_API_KEY is set
+    if (!process.env.OPENAI_API_KEY) {
+      logger.error('OPENAI_API_KEY is not set');
+      return NextResponse.json(
+        { error: 'OpenAI API key is not configured. Please check server configuration.' },
+        { status: 500 }
+      );
+    }
+
     const result = await jsonCompletion<{ reply: string; suggested_product?: string | null }>(
       fullMessages,
       schema as Record<string, unknown>,
       options,
     );
 
+    // Debug: Log the raw response
+    logger.info('Ask Heaven raw response', {
+      hasJson: !!result.json,
+      jsonKeys: result.json ? Object.keys(result.json) : [],
+      contentPreview: result.content?.substring(0, 200),
+    });
+
     const reply = result.json?.reply ?? 'Sorry, Ask Heaven could not generate a reply this time.';
     const suggestedProduct = result.json?.suggested_product ?? null;
+
+    // Debug: Log if reply was missing
+    if (!result.json?.reply) {
+      logger.warn('Ask Heaven response missing reply field', {
+        rawJson: JSON.stringify(result.json),
+        content: result.content,
+      });
+    }
 
     return NextResponse.json({ reply, suggested_product: suggestedProduct }, { status: 200 });
   } catch (err) {
