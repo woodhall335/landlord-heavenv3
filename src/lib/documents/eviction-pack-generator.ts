@@ -1090,7 +1090,11 @@ export async function generateCompleteEvictionPack(
 /**
  * Generate Notice Only Pack (£29.99)
  *
- * Includes only the eviction notice (Section 8/21, Notice to Leave, or Notice to Quit)
+ * Includes:
+ * - Eviction notice (Section 8/21, Notice to Leave)
+ * - Service Instructions
+ * - Service & Validity Checklist
+ * - Pre-Service Compliance Declaration
  */
 export async function generateNoticeOnlyPack(
   wizardFacts: any
@@ -1131,12 +1135,23 @@ export async function generateNoticeOnlyPack(
   const groundsData = await loadEvictionGrounds(jurisdiction as Jurisdiction);
   const documents: EvictionPackDocument[] = [];
 
+  // Determine notice route for template selection
+  const noticeRoute = wizardFacts?.selected_notice_route ||
+    wizardFacts?.eviction_route ||
+    wizardFacts?.recommended_route ||
+    'section_8';
+
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
     const { evictionCase } = wizardFactsToEnglandWalesEviction(caseId, wizardFacts);
     evictionCase.jurisdiction = jurisdiction as Jurisdiction;
 
     // Section 8 or Section 21
-    if (evictionCase.case_type === 'no_fault') {
+    const isSection21 = evictionCase.case_type === 'no_fault' ||
+      noticeRoute === 'section_21' ||
+      noticeRoute === 'accelerated_possession' ||
+      noticeRoute === 'accelerated_section21';
+
+    if (isSection21) {
       // Section 21 is England-only
       if (jurisdiction !== 'england') {
         throw new Error(
@@ -1169,7 +1184,7 @@ export async function generateNoticeOnlyPack(
         epc_rating: evictionCase.epc_rating,
       };
 
-      // Use canonical Section 21 notice generator (single source of truth)
+      // 1. Generate Section 21 Notice
       const section21Doc = await generateSection21Notice(section21Data, false);
       documents.push({
         title: 'Section 21 Notice - Form 6A',
@@ -1179,7 +1194,68 @@ export async function generateNoticeOnlyPack(
         pdf: section21Doc.pdf,
         file_name: 'section21_form6a.pdf',
       });
+
+      // 2. Generate Service Instructions (Section 21)
+      try {
+        const serviceInstructionsDoc = await generateDocument({
+          templatePath: 'uk/england/templates/eviction/service_instructions_section_21.hbs',
+          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          isPreview: false,
+          outputFormat: 'both',
+        });
+        documents.push({
+          title: 'Service Instructions',
+          description: 'How to legally serve your Section 21 notice',
+          category: 'guidance',
+          html: serviceInstructionsDoc.html,
+          pdf: serviceInstructionsDoc.pdf,
+          file_name: 'service_instructions_s21.pdf',
+        });
+      } catch (err) {
+        console.warn('Failed to generate service instructions:', err);
+      }
+
+      // 3. Generate Service & Validity Checklist (Section 21)
+      try {
+        const checklistDoc = await generateDocument({
+          templatePath: 'uk/england/templates/eviction/checklist_section_21.hbs',
+          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          isPreview: false,
+          outputFormat: 'both',
+        });
+        documents.push({
+          title: 'Service & Validity Checklist',
+          description: 'Verify your notice meets all legal requirements',
+          category: 'guidance',
+          html: checklistDoc.html,
+          pdf: checklistDoc.pdf,
+          file_name: 'validity_checklist_s21.pdf',
+        });
+      } catch (err) {
+        console.warn('Failed to generate validity checklist:', err);
+      }
+
+      // 4. Generate Compliance Declaration
+      try {
+        const complianceDoc = await generateDocument({
+          templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
+          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          isPreview: false,
+          outputFormat: 'both',
+        });
+        documents.push({
+          title: 'Pre-Service Compliance Declaration',
+          description: 'Evidence of deposit, EPC, gas safety & How to Rent compliance',
+          category: 'guidance',
+          html: complianceDoc.html,
+          pdf: complianceDoc.pdf,
+          file_name: 'compliance_declaration.pdf',
+        });
+      } catch (err) {
+        console.warn('Failed to generate compliance declaration:', err);
+      }
     } else {
+      // Section 8
       const section8Doc = await generateSection8Notice(
         {
           landlord_full_name: evictionCase.landlord_full_name,
@@ -1213,25 +1289,149 @@ export async function generateNoticeOnlyPack(
         pdf: section8Doc.pdf,
         file_name: 'section8_notice.pdf',
       });
+
+      // 2. Generate Service Instructions (Section 8)
+      try {
+        const serviceInstructionsDoc = await generateDocument({
+          templatePath: 'uk/england/templates/eviction/service_instructions_section_8.hbs',
+          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          isPreview: false,
+          outputFormat: 'both',
+        });
+        documents.push({
+          title: 'Service Instructions',
+          description: 'How to legally serve your Section 8 notice',
+          category: 'guidance',
+          html: serviceInstructionsDoc.html,
+          pdf: serviceInstructionsDoc.pdf,
+          file_name: 'service_instructions_s8.pdf',
+        });
+      } catch (err) {
+        console.warn('Failed to generate service instructions:', err);
+      }
+
+      // 3. Generate Service & Validity Checklist (Section 8)
+      try {
+        const checklistDoc = await generateDocument({
+          templatePath: 'uk/england/templates/eviction/checklist_section_8.hbs',
+          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          isPreview: false,
+          outputFormat: 'both',
+        });
+        documents.push({
+          title: 'Service & Validity Checklist',
+          description: 'Verify your notice meets all legal requirements',
+          category: 'guidance',
+          html: checklistDoc.html,
+          pdf: checklistDoc.pdf,
+          file_name: 'validity_checklist_s8.pdf',
+        });
+      } catch (err) {
+        console.warn('Failed to generate validity checklist:', err);
+      }
+
+      // 4. Generate Compliance Declaration
+      try {
+        const complianceDoc = await generateDocument({
+          templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
+          data: { ...evictionCase, ...wizardFacts, current_date: new Date().toISOString().split('T')[0] },
+          isPreview: false,
+          outputFormat: 'both',
+        });
+        documents.push({
+          title: 'Pre-Service Compliance Declaration',
+          description: 'Evidence of your compliance with landlord obligations',
+          category: 'guidance',
+          html: complianceDoc.html,
+          pdf: complianceDoc.pdf,
+          file_name: 'compliance_declaration.pdf',
+        });
+      } catch (err) {
+        console.warn('Failed to generate compliance declaration:', err);
+      }
     }
   } else if (jurisdiction === 'scotland') {
     const { scotlandCaseData } = wizardFactsToScotlandEviction(caseId, wizardFacts);
     const evictionCase = buildScotlandEvictionCase(caseId, scotlandCaseData);
+
+    // 1. Generate Notice to Leave
     const noticeDoc = await generateDocument({
-      templatePath: 'uk/scotland/templates/notice_to_leave.hbs',
+      templatePath: 'uk/scotland/templates/eviction/notice_to_leave.hbs',
       data: { ...evictionCase, ...scotlandCaseData },
       isPreview: false,
       outputFormat: 'both',
     });
     documents.push({
       title: 'Notice to Leave',
-      description: 'Statutory eviction notice',
+      description: 'Statutory eviction notice for PRT',
       category: 'notice',
       html: noticeDoc.html,
       pdf: noticeDoc.pdf,
       file_name: 'notice_to_leave.pdf',
     });
+
+    // 2. Generate Service Instructions (Scotland)
+    try {
+      const serviceInstructionsDoc = await generateDocument({
+        templatePath: 'uk/scotland/templates/eviction/service_instructions_notice_to_leave.hbs',
+        data: { ...evictionCase, ...scotlandCaseData, current_date: new Date().toISOString().split('T')[0] },
+        isPreview: false,
+        outputFormat: 'both',
+      });
+      documents.push({
+        title: 'Service Instructions (Scotland)',
+        description: 'How to properly serve your Notice to Leave',
+        category: 'guidance',
+        html: serviceInstructionsDoc.html,
+        pdf: serviceInstructionsDoc.pdf,
+        file_name: 'service_instructions_scotland.pdf',
+      });
+    } catch (err) {
+      console.warn('Failed to generate service instructions:', err);
+    }
+
+    // 3. Generate Service & Validity Checklist (Scotland)
+    try {
+      const checklistDoc = await generateDocument({
+        templatePath: 'uk/scotland/templates/eviction/checklist_notice_to_leave.hbs',
+        data: { ...evictionCase, ...scotlandCaseData, current_date: new Date().toISOString().split('T')[0] },
+        isPreview: false,
+        outputFormat: 'both',
+      });
+      documents.push({
+        title: 'Service & Validity Checklist (Scotland)',
+        description: 'Scottish tenancy law compliance checklist',
+        category: 'guidance',
+        html: checklistDoc.html,
+        pdf: checklistDoc.pdf,
+        file_name: 'validity_checklist_scotland.pdf',
+      });
+    } catch (err) {
+      console.warn('Failed to generate validity checklist:', err);
+    }
+
+    // 4. Generate Compliance Declaration (Scotland)
+    try {
+      const complianceDoc = await generateDocument({
+        templatePath: 'uk/scotland/templates/eviction/compliance_checklist.hbs',
+        data: { ...evictionCase, ...scotlandCaseData, current_date: new Date().toISOString().split('T')[0] },
+        isPreview: false,
+        outputFormat: 'both',
+      });
+      documents.push({
+        title: 'Pre-Service Compliance Declaration',
+        description: 'Evidence of landlord registration and deposit compliance',
+        category: 'guidance',
+        html: complianceDoc.html,
+        pdf: complianceDoc.pdf,
+        file_name: 'compliance_declaration_scotland.pdf',
+      });
+    } catch (err) {
+      console.warn('Failed to generate compliance declaration:', err);
+    }
   }
+
+  console.log(`✅ Generated ${documents.length} documents for Notice Only pack`);
 
   return {
     case_id: caseId,
@@ -1242,9 +1442,9 @@ export async function generateNoticeOnlyPack(
     metadata: {
       total_documents: documents.length,
       includes_court_forms: false,
-      includes_expert_guidance: false,
+      includes_expert_guidance: true,
       includes_evidence_tools: false,
-      premium_features: ['Single Notice Generation'],
+      premium_features: ['Notice + Service Instructions + Checklists'],
     },
   };
 }

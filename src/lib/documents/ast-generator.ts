@@ -548,6 +548,355 @@ export async function generatePremiumAST(
 }
 
 // ============================================================================
+// UNBUNDLED DOCUMENT GENERATION (Separate PDFs)
+// ============================================================================
+
+export interface ASTPackDocument {
+  title: string;
+  description: string;
+  category: 'agreement' | 'schedule' | 'checklist' | 'guidance';
+  html: string;
+  pdf?: Buffer;
+  file_name: string;
+}
+
+export interface ASTDocumentPack {
+  case_id: string;
+  tier: 'standard' | 'premium';
+  generated_at: string;
+  documents: ASTPackDocument[];
+}
+
+/**
+ * Generate Standard AST as separate documents (unbundled)
+ * Returns array of individual documents instead of merged PDF
+ */
+export async function generateStandardASTDocuments(
+  data: ASTData,
+  caseId?: string
+): Promise<ASTDocumentPack> {
+  const errors = validateASTData(data);
+  if (errors.length > 0) {
+    throw new Error(`AST validation failed:\n${errors.join('\n')}`);
+  }
+
+  // Set defaults
+  if (!data.jurisdiction_england && !data.jurisdiction_wales) {
+    data.jurisdiction_england = true;
+  }
+  if (!data.rent_period) data.rent_period = 'month';
+  if (!data.tenant_notice_period) data.tenant_notice_period = '1 month';
+
+  const generationTimestamp = new Date().toISOString();
+  const documentId = `AST-STD-${Date.now()}`;
+
+  const enrichedData = {
+    ...data,
+    premium: false,
+    product_tier: data.product_tier || 'Standard AST',
+    generation_timestamp: generationTimestamp,
+    document_id: documentId,
+    jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
+    current_date: new Date().toISOString().split('T')[0],
+  };
+
+  const documents: ASTPackDocument[] = [];
+
+  // Import generateDocument for individual templates
+  const { generateDocument } = await import('./generator');
+
+  // 1. Main Agreement
+  try {
+    const agreementDoc = await generateDocument({
+      templatePath: 'uk/england/templates/standard_ast_formatted.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Assured Shorthold Tenancy Agreement',
+      description: 'Comprehensive AST compliant with Housing Act 1988',
+      category: 'agreement',
+      html: agreementDoc.html,
+      pdf: agreementDoc.pdf,
+      file_name: 'tenancy_agreement.pdf',
+    });
+  } catch (err) {
+    console.error('Failed to generate AST agreement:', err);
+    throw err;
+  }
+
+  // 2. Terms and Conditions
+  try {
+    const termsDoc = await generateDocument({
+      templatePath: 'shared/templates/terms_and_conditions.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Terms & Conditions Schedule',
+      description: 'Detailed tenancy terms, obligations, and conditions',
+      category: 'schedule',
+      html: termsDoc.html,
+      pdf: termsDoc.pdf,
+      file_name: 'terms_and_conditions.pdf',
+    });
+  } catch (err) {
+    console.warn('Failed to generate terms and conditions:', err);
+  }
+
+  // 3. Certificate of Curation
+  try {
+    const certDoc = await generateDocument({
+      templatePath: 'shared/templates/certificate_of_curation.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Certificate of Curation',
+      description: 'Verification certificate confirming agreement completeness',
+      category: 'checklist',
+      html: certDoc.html,
+      pdf: certDoc.pdf,
+      file_name: 'certificate_of_curation.pdf',
+    });
+  } catch (err) {
+    console.warn('Failed to generate certificate:', err);
+  }
+
+  // 4. Legal Validity Summary
+  try {
+    const validityDoc = await generateDocument({
+      templatePath: 'uk/england/templates/ast_legal_validity_summary.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Legal Validity Summary',
+      description: 'Summary of legal compliance with current legislation',
+      category: 'guidance',
+      html: validityDoc.html,
+      pdf: validityDoc.pdf,
+      file_name: 'legal_validity_summary.pdf',
+    });
+  } catch (err) {
+    console.warn('Failed to generate validity summary:', err);
+  }
+
+  // 5. Government Model Clauses
+  try {
+    const modelDoc = await generateDocument({
+      templatePath: 'uk/england/templates/government_model_clauses.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Government Model Clauses',
+      description: 'Recommended clauses from official government guidance',
+      category: 'guidance',
+      html: modelDoc.html,
+      pdf: modelDoc.pdf,
+      file_name: 'government_model_clauses.pdf',
+    });
+  } catch (err) {
+    console.warn('Failed to generate model clauses:', err);
+  }
+
+  // 6. Deposit Protection Certificate
+  try {
+    const depositDoc = await generateDocument({
+      templatePath: 'shared/templates/deposit_protection_certificate.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Deposit Protection Certificate',
+      description: 'Template for recording deposit protection details',
+      category: 'checklist',
+      html: depositDoc.html,
+      pdf: depositDoc.pdf,
+      file_name: 'deposit_protection_certificate.pdf',
+    });
+  } catch (err) {
+    console.warn('Failed to generate deposit certificate:', err);
+  }
+
+  // 7. Inventory Template
+  try {
+    const inventoryDoc = await generateDocument({
+      templatePath: 'shared/templates/inventory_template.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Inventory Template',
+      description: 'Comprehensive property contents and condition record',
+      category: 'checklist',
+      html: inventoryDoc.html,
+      pdf: inventoryDoc.pdf,
+      file_name: 'inventory_template.pdf',
+    });
+  } catch (err) {
+    console.warn('Failed to generate inventory:', err);
+  }
+
+  console.log(`✅ Generated ${documents.length} documents for Standard AST pack`);
+
+  return {
+    case_id: caseId || documentId,
+    tier: 'standard',
+    generated_at: generationTimestamp,
+    documents,
+  };
+}
+
+/**
+ * Generate Premium AST as separate documents (unbundled)
+ * Returns array of individual documents instead of merged PDF
+ */
+export async function generatePremiumASTDocuments(
+  data: ASTData,
+  caseId?: string
+): Promise<ASTDocumentPack> {
+  // Start with standard documents
+  const standardPack = await generateStandardASTDocuments(data, caseId);
+  const documents = [...standardPack.documents];
+
+  // Update tier
+  const generationTimestamp = new Date().toISOString();
+  const documentId = `AST-PREM-${Date.now()}`;
+
+  const enrichedData = {
+    ...data,
+    premium: true,
+    product_tier: 'Premium AST',
+    generation_timestamp: generationTimestamp,
+    document_id: documentId,
+    jurisdiction_name: data.jurisdiction_england ? 'England & Wales' : 'England & Wales',
+    current_date: new Date().toISOString().split('T')[0],
+  };
+
+  const { generateDocument } = await import('./generator');
+
+  // Add Premium-exclusive documents
+
+  // 8. Key Schedule
+  try {
+    const keyDoc = await generateDocument({
+      templatePath: 'uk/england/templates/premium/key_schedule.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Key Schedule',
+      description: 'Detailed record of all keys provided to tenant',
+      category: 'checklist',
+      html: keyDoc.html,
+      pdf: keyDoc.pdf,
+      file_name: 'key_schedule.pdf',
+    });
+  } catch (err) {
+    console.warn('Failed to generate key schedule:', err);
+  }
+
+  // 9. Tenant Welcome Pack
+  try {
+    const welcomeDoc = await generateDocument({
+      templatePath: 'uk/england/templates/premium/tenant_welcome_pack.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Tenant Welcome Pack',
+      description: 'Comprehensive move-in guide with property information',
+      category: 'guidance',
+      html: welcomeDoc.html,
+      pdf: welcomeDoc.pdf,
+      file_name: 'tenant_welcome_pack.pdf',
+    });
+  } catch (err) {
+    console.warn('Failed to generate welcome pack:', err);
+  }
+
+  // 10. Property Maintenance Guide
+  try {
+    const maintenanceDoc = await generateDocument({
+      templatePath: 'uk/england/templates/premium/property_maintenance_guide.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Property Maintenance Guide',
+      description: 'Clear breakdown of tenant and landlord responsibilities',
+      category: 'guidance',
+      html: maintenanceDoc.html,
+      pdf: maintenanceDoc.pdf,
+      file_name: 'property_maintenance_guide.pdf',
+    });
+  } catch (err) {
+    console.warn('Failed to generate maintenance guide:', err);
+  }
+
+  // 11. Move-In Condition Report
+  try {
+    const conditionDoc = await generateDocument({
+      templatePath: 'uk/england/templates/premium/move_in_condition_report.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Move-In Condition Report',
+      description: 'Detailed room-by-room property condition assessment',
+      category: 'checklist',
+      html: conditionDoc.html,
+      pdf: conditionDoc.pdf,
+      file_name: 'move_in_condition_report.pdf',
+    });
+  } catch (err) {
+    console.warn('Failed to generate condition report:', err);
+  }
+
+  // 12. Checkout Procedure
+  try {
+    const checkoutDoc = await generateDocument({
+      templatePath: 'uk/england/templates/premium/checkout_procedure.hbs',
+      data: enrichedData,
+      isPreview: false,
+      outputFormat: 'both',
+    });
+    documents.push({
+      title: 'Checkout Procedure',
+      description: 'End of tenancy process and expectations guide',
+      category: 'guidance',
+      html: checkoutDoc.html,
+      pdf: checkoutDoc.pdf,
+      file_name: 'checkout_procedure.pdf',
+    });
+  } catch (err) {
+    console.warn('Failed to generate checkout procedure:', err);
+  }
+
+  console.log(`✅ Generated ${documents.length} documents for Premium AST pack`);
+
+  return {
+    case_id: caseId || documentId,
+    tier: 'premium',
+    generated_at: generationTimestamp,
+    documents,
+  };
+}
+
+// ============================================================================
 // HELPER FUNCTIONS
 // ============================================================================
 
