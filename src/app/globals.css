@@ -283,3 +283,43 @@ div.ask-heaven-panel,
 .product-card-wrapper:hover .product-card-inner {
   border-color: #7C3AED !important;
 }
+
+/* =============================================
+   Section 21 Banner - Fixed Header Integration
+   ============================================= */
+
+:root {
+  --s21-banner-height: 0px;
+}
+
+/* When banner is visible, set the height variable */
+body.s21-banner-visible {
+  --s21-banner-height: 44px;
+}
+
+/* Section 21 Banner - Fixed at very top */
+.s21-header-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 60; /* Above header which is z-50 */
+  height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* Header offset - pushed down when banner is visible */
+header.site-header {
+  top: var(--s21-banner-height) !important;
+}
+
+/* Body padding to account for fixed header + banner */
+body {
+  padding-top: calc(80px + var(--s21-banner-height));
+}
+
+/* Smooth transition for banner appearance */
+body.s21-banner-visible header.site-header {
+  transition: top 0.3s ease;
+}
