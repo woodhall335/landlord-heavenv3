@@ -31,25 +31,12 @@ import { useRouter } from "next/navigation";
 import { Container } from "@/components/ui";
 import { TrustBar, CostComparison, Testimonials, FAQ } from "@/components/landing";
 import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
-import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiTimeLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine } from 'react-icons/ri';
-
-const exampleQuestions = [
-  "How do I evict a tenant for rent arrears?",
-  "What notice period do I need to give?",
-  "Can I increase the rent mid-tenancy?",
-  "What are my repair obligations?",
-];
+import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiTimeLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine, RiSendPlaneFill } from 'react-icons/ri';
 
 export default function Home() {
   const router = useRouter();
   const [askQuestion, setAskQuestion] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [showResponse, setShowResponse] = useState(false);
-  const [responseText, setResponseText] = useState("");
-
-  const handleExampleQuestion = (question: string) => {
-    setAskQuestion(question);
-  };
 
   const handleAskQuestion = async () => {
     if (!askQuestion.trim()) return;
@@ -253,10 +240,10 @@ export default function Home() {
       {/* ASK HEAVEN — LIGHT (no dark purple) */}
       <section className="py-20 md:py-24 bg-gradient-to-br from-purple-50 to-white">
         <Container>
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-12">
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-10">
               <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-                <span className="text-sm font-semibold text-primary">☁️ Ask Heaven (Free)</span>
+                <span className="text-sm font-semibold text-primary">Ask Heaven (Free)</span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Ask Heaven</h2>
               <p className="text-xl text-gray-600 mb-2">
@@ -267,90 +254,36 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid lg:grid-cols-2 gap-10 items-start">
-              {/* Example Questions */}
-              <div>
-                <p className="text-sm font-medium text-gray-500 mb-4">
-                  Try a common question:
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {exampleQuestions.map((question) => (
-                    <button
-                      key={question}
-                      onClick={() => handleExampleQuestion(question)}
-                      className="text-left p-4 bg-white rounded-xl border border-gray-200 hover:border-primary/40 hover:shadow-md transition-all text-sm text-gray-700 cursor-pointer hover:bg-primary/5"
-                      type="button"
-                    >
-                      {question}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="mt-6 bg-white rounded-xl border border-gray-200 p-6">
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary text-xl">
-                      ☁️
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900 mb-1">Powered by Ask Heaven</h3>
-                      <p className="text-gray-600 text-sm">
-                        Designed for UK landlord scenarios across all 4 jurisdictions.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-5 grid grid-cols-3 gap-3 text-center">
-                    <MiniBadge top="⚡" label="Instant" />
-                    <MiniBadge top="🇬🇧" label="UK Focused" />
-                    <MiniBadge top="💯" label="Free" />
-                  </div>
-                </div>
+            {/* Centered Chat Input Box */}
+            <div className="bg-white rounded-2xl border border-gray-200 p-6 md:p-8 shadow-xl">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={askQuestion}
+                  onChange={(e) => setAskQuestion(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleAskQuestion()}
+                  placeholder="Ask me anything about UK landlord-tenant law..."
+                  className="w-full px-5 py-4 pr-14 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent focus:bg-white transition-all"
+                  disabled={isLoading}
+                />
+                <button
+                  onClick={handleAskQuestion}
+                  disabled={isLoading || !askQuestion.trim()}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 bg-primary hover:bg-primary-dark text-white rounded-lg flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+                  type="button"
+                  aria-label="Send question"
+                >
+                  {isLoading ? (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <RiSendPlaneFill className="w-5 h-5" />
+                  )}
+                </button>
               </div>
 
-              {/* Chat Box */}
-              <div className="bg-white rounded-2xl border border-gray-200 p-6 shadow-lg">
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Ask a question
-                </label>
-
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <input
-                    type="text"
-                    value={askQuestion}
-                    onChange={(e) => setAskQuestion(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleAskQuestion()}
-                    placeholder="Ask me anything about UK landlord-tenant law..."
-                    className="flex-1 px-5 py-4 bg-white border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    disabled={isLoading}
-                  />
-                  <button
-                    onClick={handleAskQuestion}
-                    disabled={isLoading || !askQuestion.trim()}
-                    className="px-8 py-4 bg-primary hover:bg-primary-700 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap cursor-pointer"
-                    type="button"
-                  >
-                    {isLoading ? "Thinking..." : "Ask Heaven"}
-                  </button>
-                </div>
-
-                {showResponse && (
-                  <div className="mt-6 p-6 bg-gray-50 border border-gray-200 rounded-xl">
-                    <div className="flex items-start gap-4">
-                      <div className="text-3xl">☁️</div>
-                      <div className="flex-1">
-                        <p className="font-semibold text-gray-900 mb-2">Ask Heaven says:</p>
-                        <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                          {responseText}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                <p className="mt-4 text-xs text-gray-500">
-                  For guidance and document generation only — not legal advice.
-                </p>
-              </div>
+              <p className="mt-4 text-center text-sm text-gray-500">
+                For guidance and document generation only — not legal advice.
+              </p>
             </div>
           </div>
         </Container>
@@ -665,11 +598,3 @@ function Region({ emoji, title, desc }: { emoji: string; title: string; desc: st
   );
 }
 
-function MiniBadge({ top, label }: { top: string; label: string }) {
-  return (
-    <div className="rounded-xl border border-gray-200 bg-gray-50 py-3 transition-all duration-300 hover:border-primary/30 hover:bg-primary/5 group cursor-default">
-      <div className="text-xl transition-transform duration-300 group-hover:scale-110">{top}</div>
-      <div className="text-xs font-semibold text-gray-700 group-hover:text-primary transition-colors">{label}</div>
-    </div>
-  );
-}
