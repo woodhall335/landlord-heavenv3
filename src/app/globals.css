@@ -68,15 +68,23 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Footer text styling */
 footer h1, footer h2, footer h3, footer h4, footer h5, footer h6 {
-  color: #4A5568 !important;
+  color: #bdbdbd !important;
+}
+
+footer p {
+  color: #bdbdbd !important;
+}
+
+footer span {
+  color: #bdbdbd !important;
 }
 
 footer a {
-  color: #4A5568 !important;
+  color: #bdbdbd !important;
 }
 
 footer a:hover {
-  color: #718096 !important;
+  color: #ffffff !important;
 }
 
 p {

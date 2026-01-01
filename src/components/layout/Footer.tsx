@@ -19,7 +19,7 @@ export function Footer() {
                 className="h-8 w-auto"
               />
             </div>
-            <p className="text-base text-gray-300 leading-relaxed mb-6">
+            <p className="text-base leading-relaxed mb-6" style={{ color: '#bdbdbd' }}>
               Professional legal documents for UK landlords. Court-ready, compliant, instantly delivered.
             </p>
             <div className="flex flex-col gap-2 text-sm">
@@ -68,7 +68,7 @@ export function Footer() {
 
           {/* Column 2: Products */}
           <div>
-            <h5 className="text-base font-bold mb-6 text-gray-300"><u>Products</u></h5>
+            <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Products</u></h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
@@ -120,7 +120,7 @@ export function Footer() {
 
           {/* Column 3: Legal */}
           <div>
-            <h5 className="text-base font-bold mb-6 text-gray-300"><u>Legal</u></h5>
+            <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Legal</u></h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
@@ -163,7 +163,7 @@ export function Footer() {
 
           {/* Column 4: Account */}
           <div>
-            <h5 className="text-base font-bold mb-6 text-gray-300"><u>Account</u></h5>
+            <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Account</u></h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
@@ -208,15 +208,15 @@ export function Footer() {
         {/* Bottom Row */}
         <div className="mt-16 pt-10 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-sm text-gray-600 text-center md:text-left">
+            <p className="text-sm text-center md:text-left" style={{ color: '#bdbdbd' }}>
               © {currentYear} Landlord Heaven. All rights reserved.
             </p>
 
-            <div className="flex items-center gap-6 text-sm text-gray-400">
+            <div className="flex items-center gap-6 text-sm" style={{ color: '#bdbdbd' }}>
               <span className="font-medium">UK-Wide Coverage</span>
-              <span className="text-gray-600">•</span>
+              <span style={{ color: '#bdbdbd' }}>•</span>
               <span className="font-medium">Court-Ready Documents</span>
-              <span className="text-gray-600">•</span>
+              <span style={{ color: '#bdbdbd' }}>•</span>
               <span className="font-medium">Instant Delivery</span>
             </div>
           </div>
