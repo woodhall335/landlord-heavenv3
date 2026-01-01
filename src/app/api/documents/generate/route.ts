@@ -189,6 +189,284 @@ function missingFieldsForSection21(caseData: Record<string, any>): string[] {
   return missing;
 }
 
+/**
+ * Build ground-specific evidence requirements for evidence checklist
+ */
+function buildGroundSpecificEvidence(selectedGrounds: string[]): Array<{ ground: string; title: string; evidence_items: string[] }> {
+  if (!Array.isArray(selectedGrounds) || selectedGrounds.length === 0) {
+    return [];
+  }
+
+  const groundEvidenceMap: Record<string, { title: string; evidence_items: string[] }> = {
+    '8': {
+      title: 'Rent Arrears (Mandatory)',
+      evidence_items: [
+        'Rent payment schedule showing all payments due and received',
+        'Bank statements showing rent transactions',
+        'Copies of rent demand letters sent to tenant',
+        'Schedule of arrears with running balance',
+        'Current arrears figure at time of notice AND at time of hearing',
+      ],
+    },
+    '10': {
+      title: 'Rent Arrears (Discretionary)',
+      evidence_items: [
+        'Rent payment schedule showing all payments due and received',
+        'Bank statements showing rent transactions',
+        'Evidence of arrears at notice date and hearing date',
+      ],
+    },
+    '11': {
+      title: 'Persistent Delay in Paying Rent',
+      evidence_items: [
+        'Full rent payment history showing pattern of late payments',
+        'Records of reminders/demands sent',
+        'Evidence of dates rent was due vs. dates paid',
+      ],
+    },
+    '12': {
+      title: 'Breach of Tenancy Agreement',
+      evidence_items: [
+        'Copy of tenancy agreement highlighting breached clause',
+        'Evidence of the breach (photos, correspondence, complaints)',
+        'Copies of warning letters sent to tenant',
+      ],
+    },
+    '13': {
+      title: 'Waste or Neglect',
+      evidence_items: [
+        'Dated photographs showing condition of property',
+        'Inventory/check-in report for comparison',
+        'Repair quotes or invoices for damage',
+        'Any correspondence about maintenance issues',
+      ],
+    },
+    '14': {
+      title: 'Nuisance or Annoyance',
+      evidence_items: [
+        'Incident log with dates, times, descriptions',
+        'Complaint letters from neighbours',
+        'Police reports or crime reference numbers',
+        'Witness statements from affected parties',
+        'Any relevant court orders (injunctions, ASBOs)',
+      ],
+    },
+    '14A': {
+      title: 'Domestic Violence',
+      evidence_items: [
+        'Court orders or injunctions',
+        'Police reports',
+        'Partner/tenant departure evidence',
+      ],
+    },
+    '15': {
+      title: 'Deterioration of Furniture',
+      evidence_items: [
+        'Inventory showing original condition',
+        'Photographs of current condition',
+        'Receipts for original furniture',
+      ],
+    },
+    '17': {
+      title: 'False Statement to Obtain Tenancy',
+      evidence_items: [
+        'Original application form or references',
+        'Evidence of false information provided',
+        'Correspondence about the discovered falsehood',
+      ],
+    },
+  };
+
+  return selectedGrounds.map((ground) => {
+    const match = ground.match(/ground\s*([0-9a-z]+)/i);
+    const groundNum = match ? match[1].toUpperCase() : ground;
+    const groundInfo = groundEvidenceMap[groundNum];
+
+    if (groundInfo) {
+      return {
+        ground: `Ground ${groundNum}`,
+        title: groundInfo.title,
+        evidence_items: groundInfo.evidence_items,
+      };
+    }
+
+    // Default for unknown grounds
+    return {
+      ground: `Ground ${groundNum}`,
+      title: ground,
+      evidence_items: ['Gather evidence specific to this ground'],
+    };
+  });
+}
+
+/**
+ * Format a date string to UK format (DD/MM/YYYY)
+ */
+function formatDateUK(dateStr: string | undefined | null): string {
+  if (!dateStr) return '';
+  try {
+    // Parse as UTC to avoid DST issues
+    const d = new Date(dateStr + (typeof dateStr === 'string' && !dateStr.includes('T') ? 'T00:00:00.000Z' : ''));
+    if (isNaN(d.getTime())) return '';
+    const day = String(d.getUTCDate()).padStart(2, '0');
+    const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const year = d.getUTCFullYear();
+    return `${day}/${month}/${year}`;
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Prepares guidance document data from wizard facts.
+ * This function transforms raw wizard facts into the format expected by guidance templates:
+ * - Constructs full addresses from parts
+ * - Formats dates to UK format (DD/MM/YYYY)
+ * - Adds field aliases for template compatibility
+ * - Extracts grounds data for Section 8 checklists
+ */
+function prepareGuidanceDocumentData(
+  wizardFacts: Record<string, any>,
+  caseFacts: any,
+  jurisdiction: string,
+  route: string
+): Record<string, any> {
+  // Build full property address from parts
+  const propertyAddress = wizardFacts.property_address ||
+    buildAddress(
+      wizardFacts.property_address_line1,
+      wizardFacts.property_address_line2,
+      wizardFacts.property_address_town || wizardFacts.property_address_city,
+      wizardFacts.property_address_county,
+      wizardFacts.property_address_postcode
+    ) || caseFacts.property?.address_line1 || '';
+
+  // Build full landlord address from parts
+  const landlordAddress = wizardFacts.landlord_address ||
+    buildAddress(
+      wizardFacts.landlord_address_line1,
+      wizardFacts.landlord_address_line2,
+      wizardFacts.landlord_address_town || wizardFacts.landlord_address_city,
+      wizardFacts.landlord_address_county,
+      wizardFacts.landlord_address_postcode
+    ) || '';
+
+  // Format dates
+  const tenancyStartDate = wizardFacts.tenancy_start_date || caseFacts.tenancy?.start_date;
+  const serviceDate = wizardFacts.notice_served_date || wizardFacts.notice_date || wizardFacts.service_date;
+  const expiryDate = wizardFacts.notice_expiry_date || wizardFacts.earliest_possession_date ||
+                     wizardFacts.earliest_leaving_date || caseFacts.notice?.expiry_date;
+  const contractStartDate = wizardFacts.contract_start_date || wizardFacts.tenancy_start_date;
+  const noticeDate = wizardFacts.notice_date || wizardFacts.notice_served_date;
+
+  // Extract grounds data for Section 8
+  const selectedGrounds = wizardFacts.selected_grounds ||
+                          caseFacts.issues?.section8_grounds?.selected_grounds || [];
+  const groundDescriptions = Array.isArray(selectedGrounds)
+    ? selectedGrounds.map((g: string) => {
+        const match = g.match(/ground\s*([0-9a-z]+)/i);
+        return match ? `Ground ${match[1].toUpperCase()}` : g;
+      }).join(', ')
+    : '';
+
+  // Determine if any mandatory ground is claimed
+  const mandatoryGroundNumbers = ['8', '1', '2', '3', '4', '5', '6', '7', '9', '16'];
+  const hasMandatoryGround = Array.isArray(selectedGrounds) && selectedGrounds.some((g: string) => {
+    const match = g.match(/ground\s*([0-9a-z]+)/i);
+    if (!match) return false;
+    return mandatoryGroundNumbers.includes(match[1].toUpperCase());
+  });
+
+  // Check for Ground 1 (Scotland rent arrears)
+  const ground1Claimed = Array.isArray(selectedGrounds) && selectedGrounds.some((g: string) =>
+    g.toLowerCase().includes('ground 1') || g.toLowerCase().includes('ground1')
+  );
+
+  // Map grounds to Scotland format (array with number property)
+  const scotlandGrounds = Array.isArray(selectedGrounds)
+    ? selectedGrounds.map((g: string) => {
+        const match = g.match(/ground\s*([0-9a-z]+)/i);
+        return { number: match ? match[1].toUpperCase() : g };
+      })
+    : [];
+
+  // Calculate notice period in days (for Scotland)
+  let noticePeriodDays = 28;
+  if (ground1Claimed) {
+    noticePeriodDays = 84;
+  }
+
+  // Determine notice type label
+  const noticeType = route === 'section_21' ? 'Section 21 Notice'
+    : route === 'section_8' ? 'Section 8 Notice'
+    : route === 'section_173' || route === 'wales_section_173' ? 'Section 173 Notice'
+    : route === 'notice_to_leave' ? 'Notice to Leave'
+    : route === 'fault_based' || route === 'wales_fault_based' ? 'Fault-Based Notice'
+    : 'Notice';
+
+  // Determine case type
+  const caseType = route === 'section_21' ? 'No-fault eviction'
+    : route === 'section_8' ? 'Rent arrears / breach'
+    : route === 'section_173' ? 'No-fault eviction (Wales)'
+    : route === 'notice_to_leave' ? 'PRT eviction (Scotland)'
+    : 'Eviction';
+
+  const generated_date = new Date().toLocaleDateString('en-GB');
+
+  // Build ground-specific required evidence items
+  const requiredEvidence = buildGroundSpecificEvidence(selectedGrounds);
+
+  return {
+    // Spread original wizard facts
+    ...wizardFacts,
+
+    // Core fields with proper construction
+    property_address: propertyAddress,
+    landlord_address: landlordAddress,
+
+    // Field aliases for template compatibility
+    tenant_name: wizardFacts.tenant_full_name || caseFacts.parties?.tenants?.[0]?.name || '',
+    landlord_name: wizardFacts.landlord_full_name || caseFacts.parties?.landlord?.name || '',
+    contract_holder_full_name: wizardFacts.tenant_full_name || caseFacts.parties?.tenants?.[0]?.name || '', // Wales terminology
+
+    // Formatted dates (UK format: DD/MM/YYYY)
+    tenancy_start_date_formatted: formatDateUK(tenancyStartDate),
+    service_date_formatted: formatDateUK(serviceDate),
+    earliest_possession_date_formatted: formatDateUK(expiryDate),
+    display_possession_date_formatted: formatDateUK(expiryDate),
+    contract_start_date_formatted: formatDateUK(contractStartDate),
+    notice_date_formatted: formatDateUK(noticeDate),
+    earliest_leaving_date_formatted: formatDateUK(expiryDate),
+    expiry_date: formatDateUK(expiryDate),
+
+    // Grounds data
+    grounds: scotlandGrounds,
+    ground_descriptions: groundDescriptions,
+    has_mandatory_ground: hasMandatoryGround,
+    ground_1_claimed: ground1Claimed,
+    notice_period_days: noticePeriodDays,
+    required_evidence: requiredEvidence,
+
+    // Fixed term detection
+    is_fixed_term: wizardFacts.is_fixed_term || wizardFacts.fixed_term ||
+                   wizardFacts.tenancy_type === 'fixed_term' ||
+                   caseFacts.tenancy?.fixed_term || false,
+    fixed_term: wizardFacts.is_fixed_term || wizardFacts.fixed_term ||
+                wizardFacts.tenancy_type === 'fixed_term' ||
+                caseFacts.tenancy?.fixed_term || false,
+
+    // Notice and case type labels
+    notice_type: noticeType,
+    case_type: caseType,
+
+    // Standard metadata
+    jurisdiction,
+    route,
+    generated_date,
+    current_date: generated_date,
+  };
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -689,16 +967,17 @@ export async function POST(request: Request) {
           const caseFacts = wizardFactsToCaseFacts(wizardFacts);
           const complianceContext = extractComplianceAuditContext(caseFacts);
           const complianceContent = await generateComplianceAudit(caseFacts, complianceContext);
+          const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+          const guidanceData = prepareGuidanceDocumentData(wizardFacts, caseFacts, canonicalJurisdiction, route);
 
           const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
 
           generatedDoc = await generateDocument({
             templatePath: `uk/${jurisdictionKey}/templates/eviction/compliance-audit.hbs`,
             data: {
-              landlord_name: wizardFacts.landlord_full_name || 'Landlord',
-              property_address: wizardFacts.property_address || '',
+              ...guidanceData,
+              landlord_name: guidanceData.landlord_name || wizardFacts.landlord_full_name || 'Landlord',
               compliance_audit: complianceContent,
-              current_date: new Date().toLocaleDateString('en-GB'),
             },
             isPreview: is_preview,
             outputFormat: 'both',
@@ -740,15 +1019,12 @@ export async function POST(request: Request) {
         case 'eviction_roadmap': {
           const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
           const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const guidanceData = prepareGuidanceDocumentData(wizardFacts, caseFacts, canonicalJurisdiction, route);
 
           generatedDoc = await generateDocument({
             templatePath: `uk/${jurisdictionKey}/templates/eviction/eviction_roadmap.hbs`,
-            data: {
-              ...wizardFacts,
-              jurisdiction: canonicalJurisdiction,
-              route,
-              current_date: new Date().toLocaleDateString('en-GB'),
-            },
+            data: guidanceData,
             isPreview: is_preview,
             outputFormat: 'both',
           });
@@ -760,6 +1036,8 @@ export async function POST(request: Request) {
         case 'service_instructions': {
           const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
           const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const guidanceData = prepareGuidanceDocumentData(wizardFacts, caseFacts, canonicalJurisdiction, route);
 
           // Select route-specific template if available
           let templatePath = `uk/${jurisdictionKey}/templates/eviction/service_instructions.hbs`;
@@ -767,16 +1045,17 @@ export async function POST(request: Request) {
             templatePath = `uk/england/templates/eviction/service_instructions_section_21.hbs`;
           } else if (route === 'section_8' && canonicalJurisdiction === 'england') {
             templatePath = `uk/england/templates/eviction/service_instructions_section_8.hbs`;
+          } else if ((route === 'section_173' || route === 'wales_section_173') && canonicalJurisdiction === 'wales') {
+            templatePath = `uk/wales/templates/eviction/service_instructions_section_173.hbs`;
+          } else if ((route === 'fault_based' || route === 'wales_fault_based') && canonicalJurisdiction === 'wales') {
+            templatePath = `uk/wales/templates/eviction/service_instructions_fault_based.hbs`;
+          } else if (route === 'notice_to_leave' && canonicalJurisdiction === 'scotland') {
+            templatePath = `uk/scotland/templates/eviction/service_instructions_notice_to_leave.hbs`;
           }
 
           generatedDoc = await generateDocument({
             templatePath,
-            data: {
-              ...wizardFacts,
-              jurisdiction: canonicalJurisdiction,
-              route,
-              current_date: new Date().toLocaleDateString('en-GB'),
-            },
+            data: guidanceData,
             isPreview: is_preview,
             outputFormat: 'both',
           });
@@ -788,6 +1067,8 @@ export async function POST(request: Request) {
         case 'service_checklist': {
           const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
           const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const guidanceData = prepareGuidanceDocumentData(wizardFacts, caseFacts, canonicalJurisdiction, route);
 
           // Select route-specific checklist
           let templatePath = `uk/${jurisdictionKey}/templates/eviction/compliance_checklist.hbs`;
@@ -795,16 +1076,17 @@ export async function POST(request: Request) {
             templatePath = `uk/england/templates/eviction/checklist_section_21.hbs`;
           } else if (route === 'section_8' && canonicalJurisdiction === 'england') {
             templatePath = `uk/england/templates/eviction/checklist_section_8.hbs`;
+          } else if ((route === 'section_173' || route === 'wales_section_173') && canonicalJurisdiction === 'wales') {
+            templatePath = `uk/wales/templates/eviction/checklist_section_173.hbs`;
+          } else if ((route === 'fault_based' || route === 'wales_fault_based') && canonicalJurisdiction === 'wales') {
+            templatePath = `uk/wales/templates/eviction/checklist_fault_based.hbs`;
+          } else if (route === 'notice_to_leave' && canonicalJurisdiction === 'scotland') {
+            templatePath = `uk/scotland/templates/eviction/checklist_notice_to_leave.hbs`;
           }
 
           generatedDoc = await generateDocument({
             templatePath,
-            data: {
-              ...wizardFacts,
-              jurisdiction: canonicalJurisdiction,
-              route,
-              current_date: new Date().toLocaleDateString('en-GB'),
-            },
+            data: guidanceData,
             isPreview: is_preview,
             outputFormat: 'both',
           });
@@ -815,14 +1097,13 @@ export async function POST(request: Request) {
 
         case 'expert_guidance': {
           const jurisdictionKey = canonicalJurisdiction === 'scotland' ? 'scotland' : 'england';
+          const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const guidanceData = prepareGuidanceDocumentData(wizardFacts, caseFacts, canonicalJurisdiction, route);
 
           generatedDoc = await generateDocument({
             templatePath: `uk/${jurisdictionKey}/templates/eviction/expert_guidance.hbs`,
-            data: {
-              ...wizardFacts,
-              jurisdiction: canonicalJurisdiction,
-              current_date: new Date().toLocaleDateString('en-GB'),
-            },
+            data: guidanceData,
             isPreview: is_preview,
             outputFormat: 'both',
           });
@@ -832,13 +1113,13 @@ export async function POST(request: Request) {
         }
 
         case 'eviction_timeline': {
+          const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const guidanceData = prepareGuidanceDocumentData(wizardFacts, caseFacts, canonicalJurisdiction, route);
+
           generatedDoc = await generateDocument({
             templatePath: 'shared/templates/eviction_timeline.hbs',
-            data: {
-              ...wizardFacts,
-              jurisdiction: canonicalJurisdiction,
-              current_date: new Date().toLocaleDateString('en-GB'),
-            },
+            data: guidanceData,
             isPreview: is_preview,
             outputFormat: 'both',
           });
@@ -850,15 +1131,15 @@ export async function POST(request: Request) {
         case 'case_summary': {
           const caseFacts = wizardFactsToCaseFacts(wizardFacts);
           const { caseData } = wizardFactsToEnglandWalesEviction(case_id, wizardFacts);
+          const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+          const guidanceData = prepareGuidanceDocumentData(wizardFacts, caseFacts, canonicalJurisdiction, route);
 
           generatedDoc = await generateDocument({
             templatePath: 'shared/templates/case_summary.hbs',
             data: {
               ...caseData,
-              ...wizardFacts,
+              ...guidanceData,
               caseFacts,
-              jurisdiction: canonicalJurisdiction,
-              current_date: new Date().toLocaleDateString('en-GB'),
             },
             isPreview: is_preview,
             outputFormat: 'both',
@@ -874,14 +1155,19 @@ export async function POST(request: Request) {
 
         case 'evidence_checklist': {
           const route = wizardFacts.eviction_route || wizardFacts.selected_notice_route || 'section_8';
+          const caseFacts = wizardFactsToCaseFacts(wizardFacts);
+          const guidanceData = prepareGuidanceDocumentData(wizardFacts, caseFacts, canonicalJurisdiction, route);
+
+          // Build ground-specific evidence requirements
+          const selectedGrounds = wizardFacts.selected_grounds ||
+                                  caseFacts.issues?.section8_grounds?.selected_grounds || [];
+          const requiredEvidence = buildGroundSpecificEvidence(selectedGrounds);
 
           generatedDoc = await generateDocument({
             templatePath: 'shared/templates/evidence_collection_checklist.hbs',
             data: {
-              ...wizardFacts,
-              jurisdiction: canonicalJurisdiction,
-              route,
-              current_date: new Date().toLocaleDateString('en-GB'),
+              ...guidanceData,
+              required_evidence: requiredEvidence,
             },
             isPreview: is_preview,
             outputFormat: 'both',
