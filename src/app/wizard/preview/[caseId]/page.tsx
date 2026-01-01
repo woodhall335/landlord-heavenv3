@@ -33,6 +33,12 @@ interface CaseData {
   created_at: string;
 }
 
+interface GeneratedDocument {
+  id: string;
+  document_type: string;
+  title: string;
+}
+
 export default function WizardPreviewPage() {
   const params = useParams();
   const router = useRouter();
@@ -47,6 +53,7 @@ export default function WizardPreviewPage() {
   const [validationErrors, setValidationErrors] = useState<{ blocking_issues: ValidationIssue[]; warnings: ValidationIssue[] } | null>(null);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
+  const [generatedDocs, setGeneratedDocs] = useState<GeneratedDocument[]>([]);
 
   // Fetch case data
   useEffect(() => {
@@ -124,6 +131,23 @@ export default function WizardPreviewPage() {
           }
         }
 
+        // Fetch generated documents for this case (for thumbnails)
+        try {
+          const docsResponse = await fetch(`/api/cases/${caseId}/documents`);
+          if (docsResponse.ok) {
+            const docsResult = await docsResponse.json();
+            if (docsResult.documents && Array.isArray(docsResult.documents)) {
+              setGeneratedDocs(docsResult.documents.map((doc: any) => ({
+                id: doc.id,
+                document_type: doc.document_type,
+                title: doc.title,
+              })));
+            }
+          }
+        } catch (docsError) {
+          console.log('Could not fetch generated documents:', docsError);
+        }
+
         // Try to load preview URL
         try {
           const isNoticeOnly = inferredProduct === 'notice_only';
@@ -147,6 +171,19 @@ export default function WizardPreviewPage() {
             } else {
               const previewResult = await previewResponse.json();
               if (previewResult.document?.id) {
+                // Also add this document to generated docs for thumbnails
+                setGeneratedDocs(prev => {
+                  const exists = prev.some(d => d.id === previewResult.document.id);
+                  if (!exists) {
+                    return [...prev, {
+                      id: previewResult.document.id,
+                      document_type: previewResult.document.document_type,
+                      title: previewResult.document.title,
+                    }];
+                  }
+                  return prev;
+                });
+
                 const signedUrlResponse = await fetch(
                   `/api/documents/preview/${previewResult.document.id}`
                 );
@@ -196,7 +233,7 @@ export default function WizardPreviewPage() {
     return 'section8_notice';
   };
 
-  // Get documents based on product and case type
+  // Get documents based on product and case type, enriched with generated document IDs
   const getDocuments = (): DocumentInfo[] => {
     if (!caseData) return [];
 
@@ -206,29 +243,51 @@ export default function WizardPreviewPage() {
     const noticeRoute = caseData.recommended_route || facts.selected_notice_route || facts.eviction_route || 'section_21';
     const caseType = caseData.case_type;
 
+    let baseDocuments: DocumentInfo[];
+
     switch (product) {
       case 'notice_only':
-        return getNoticeOnlyDocuments(jurisdiction, noticeRoute);
+        baseDocuments = getNoticeOnlyDocuments(jurisdiction, noticeRoute);
+        break;
       case 'complete_pack':
-        return getCompletePackDocuments(jurisdiction, noticeRoute);
+        baseDocuments = getCompletePackDocuments(jurisdiction, noticeRoute);
+        break;
       case 'money_claim':
       case 'sc_money_claim':
-        return getMoneyClaimDocuments(jurisdiction);
+        baseDocuments = getMoneyClaimDocuments(jurisdiction);
+        break;
       case 'ast_standard':
       case 'tenancy_agreement':
-        return getASTDocuments(jurisdiction, 'standard');
+        baseDocuments = getASTDocuments(jurisdiction, 'standard');
+        break;
       case 'ast_premium':
-        return getASTDocuments(jurisdiction, 'premium');
+        baseDocuments = getASTDocuments(jurisdiction, 'premium');
+        break;
       default:
         // Infer from case type
         if (caseType === 'money_claim') {
-          return getMoneyClaimDocuments(jurisdiction);
+          baseDocuments = getMoneyClaimDocuments(jurisdiction);
         } else if (caseType === 'tenancy_agreement') {
-          return getASTDocuments(jurisdiction, 'standard');
+          baseDocuments = getASTDocuments(jurisdiction, 'standard');
         } else {
-          return getNoticeOnlyDocuments(jurisdiction, noticeRoute);
+          baseDocuments = getNoticeOnlyDocuments(jurisdiction, noticeRoute);
         }
     }
+
+    // Enrich documents with generated document IDs for thumbnails
+    return baseDocuments.map(doc => {
+      // Try to find a matching generated document by document_type
+      const matchingGenDoc = generatedDocs.find(
+        gd => gd.document_type === doc.id ||
+              gd.document_type.includes(doc.id) ||
+              doc.id.includes(gd.document_type)
+      );
+
+      return {
+        ...doc,
+        documentId: matchingGenDoc?.id,
+      };
+    });
   };
 
   // Get product metadata
