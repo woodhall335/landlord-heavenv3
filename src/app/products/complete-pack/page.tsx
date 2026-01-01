@@ -18,7 +18,6 @@ import {
   Package,
   Clock
 } from "lucide-react";
-import { Section21UrgencyAlert } from "@/components/ui/Section21Banner";
 
 export const metadata: Metadata = {
   title: "Complete Eviction Pack - Full DIY Eviction Bundle | Landlord Heaven",
@@ -68,13 +67,6 @@ export default function CompleteEvictionPackPage() {
               Court-ready documents • Expert guidance • Lifetime storage
             </p>
           </div>
-        </Container>
-      </section>
-
-      {/* Section 21 Urgency Alert */}
-      <section className="py-6 bg-white border-b border-gray-200">
-        <Container>
-          <Section21UrgencyAlert />
         </Container>
       </section>
 

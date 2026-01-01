@@ -31,7 +31,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/products/ast', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/hmo-pro', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/ask-heaven', priority: 0.8, changeFrequency: 'weekly' as const },
-    { path: '/section-21-ban', priority: 1.0, changeFrequency: 'daily' as const }, // High priority urgency page
   ];
 
   // Tenancy agreement pages
