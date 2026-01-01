@@ -1070,3 +1070,200 @@ export async function savePdf(pdfBuffer: Buffer, outputPath: string): Promise<vo
   const fs = await import('fs/promises');
   await fs.writeFile(outputPath, pdfBuffer);
 }
+
+// ============================================================================
+// PREVIEW THUMBNAIL GENERATION
+// ============================================================================
+
+/**
+ * Generate a watermarked JPEG thumbnail of the first page of a document
+ * Used for document preview cards on the checkout page
+ */
+export async function htmlToPreviewThumbnail(
+  html: string,
+  options?: {
+    width?: number;
+    height?: number;
+    quality?: number;
+    watermarkText?: string;
+  }
+): Promise<Buffer> {
+  const width = options?.width || 400;
+  const height = options?.height || 566; // A4 aspect ratio (1:1.414)
+  const quality = options?.quality || 80;
+  const watermarkText = options?.watermarkText || 'PREVIEW';
+
+  let browser;
+
+  try {
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+
+    const page = await browser.newPage();
+
+    // Set viewport to A4-like dimensions for rendering
+    await page.setViewport({
+      width: 794, // A4 width at 96 DPI
+      height: 1123, // A4 height at 96 DPI
+      deviceScaleFactor: 1,
+    });
+
+    // Add watermark overlay to the HTML
+    const watermarkedHtml = addWatermarkOverlay(html, watermarkText);
+
+    // Check if it's a full HTML document or fragment
+    const finalHtml = isFullHtmlDocument(watermarkedHtml)
+      ? watermarkedHtml
+      : wrapHtmlFragment(watermarkedHtml);
+
+    await page.setContent(finalHtml, {
+      waitUntil: 'networkidle0',
+      timeout: 30000,
+    });
+
+    // Take screenshot of the first page only
+    const screenshot = await page.screenshot({
+      type: 'jpeg',
+      quality,
+      clip: {
+        x: 0,
+        y: 0,
+        width: 794,
+        height: 1123,
+      },
+    });
+
+    // Close browser
+    await browser.close();
+
+    // Resize if needed (Puppeteer returns full size, we may want smaller)
+    // For now, return as-is - can add sharp/jimp for resizing if needed
+    return screenshot as Buffer;
+  } catch (error) {
+    if (browser) {
+      await browser.close();
+    }
+    throw error;
+  }
+}
+
+/**
+ * Add a diagonal watermark overlay to HTML content
+ */
+function addWatermarkOverlay(html: string, watermarkText: string): string {
+  const watermarkStyles = `
+    <style>
+      .preview-watermark-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 9999;
+        overflow: hidden;
+      }
+      .preview-watermark-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        font-size: 120px;
+        font-weight: bold;
+        color: rgba(200, 200, 200, 0.3);
+        white-space: nowrap;
+        font-family: Arial, sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 20px;
+      }
+      .preview-watermark-repeat {
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        top: -50%;
+        left: -50%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        transform: rotate(-45deg);
+      }
+      .preview-watermark-item {
+        font-size: 48px;
+        font-weight: bold;
+        color: rgba(180, 180, 180, 0.15);
+        padding: 60px 80px;
+        font-family: Arial, sans-serif;
+        text-transform: uppercase;
+      }
+    </style>
+  `;
+
+  // Create repeating watermark pattern
+  const watermarkItems = Array(20).fill(`<span class="preview-watermark-item">${watermarkText}</span>`).join('');
+
+  const watermarkOverlay = `
+    <div class="preview-watermark-overlay">
+      <div class="preview-watermark-text">${watermarkText}</div>
+      <div class="preview-watermark-repeat">
+        ${watermarkItems}
+      </div>
+    </div>
+  `;
+
+  // Inject watermark into HTML
+  if (html.toLowerCase().includes('</body>')) {
+    // Insert before closing body tag
+    return html.replace(
+      /<\/body>/i,
+      `${watermarkStyles}${watermarkOverlay}</body>`
+    );
+  } else if (html.toLowerCase().includes('</html>')) {
+    // Insert before closing html tag
+    return html.replace(
+      /<\/html>/i,
+      `${watermarkStyles}${watermarkOverlay}</html>`
+    );
+  } else {
+    // Append to end
+    return html + watermarkStyles + watermarkOverlay;
+  }
+}
+
+/**
+ * Wrap an HTML fragment in a basic document structure for thumbnail rendering
+ */
+function wrapHtmlFragment(fragment: string): string {
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        * { box-sizing: border-box; }
+        body {
+          font-family: 'Times New Roman', Times, serif;
+          font-size: 12pt;
+          line-height: 1.5;
+          margin: 0;
+          padding: 40px;
+          background: white;
+        }
+        h1 { font-size: 18pt; font-weight: bold; margin: 0 0 15px 0; }
+        h2 { font-size: 14pt; font-weight: bold; margin: 15px 0 10px 0; }
+        h3 { font-size: 13pt; font-weight: bold; margin: 12px 0 8px 0; }
+        p { margin: 8px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        table, th, td { border: 1px solid #000; }
+        th, td { padding: 8px; text-align: left; }
+        th { background-color: #f0f0f0; font-weight: bold; }
+      </style>
+    </head>
+    <body>
+      ${fragment}
+    </body>
+    </html>
+  `;
+}
