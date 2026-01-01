@@ -54,6 +54,68 @@ export default function WizardPreviewPage() {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [generatedDocs, setGeneratedDocs] = useState<GeneratedDocument[]>([]);
 
+  // Helper to get all document types that should be generated for a product
+  const getDocumentTypesForProduct = (product: string, jurisdiction: string, noticeRoute: string): string[] => {
+    const types: string[] = [];
+
+    // Determine the main notice type
+    const getNoticeType = (): string => {
+      if (jurisdiction === 'scotland') return 'notice_to_leave';
+      if (noticeRoute === 'section_21' || noticeRoute === 'accelerated_possession') return 'section21_notice';
+      return 'section8_notice';
+    };
+
+    if (product === 'notice_only') {
+      // Notice only: just the main notice + guidance
+      types.push(getNoticeType());
+      types.push('service_instructions');
+      types.push('service_checklist');
+    } else if (product === 'complete_pack') {
+      // Complete pack: all eviction documents
+      types.push(getNoticeType());
+
+      // Court forms (England/Wales only)
+      if (jurisdiction === 'england' || jurisdiction === 'wales') {
+        types.push('n5_claim');
+        types.push('n119_particulars');
+        // N5B only for Section 21
+        if (noticeRoute === 'section_21' || noticeRoute === 'accelerated_possession') {
+          types.push('n5b_claim');
+        }
+      }
+
+      // AI-generated documents
+      types.push('witness_statement');
+      types.push('compliance_audit');
+      types.push('risk_assessment');
+
+      // Guidance documents
+      types.push('service_instructions');
+      types.push('service_checklist');
+      types.push('eviction_roadmap');
+      types.push('expert_guidance');
+      types.push('eviction_timeline');
+      types.push('case_summary');
+
+      if (jurisdiction === 'england' || jurisdiction === 'wales') {
+        types.push('court_filing_guide');
+      } else if (jurisdiction === 'scotland') {
+        types.push('tribunal_lodging_guide');
+      }
+
+      // Evidence documents
+      types.push('evidence_checklist');
+      types.push('proof_of_service');
+      types.push('arrears_schedule');
+    } else if (product === 'ast_standard' || product === 'tenancy_agreement') {
+      types.push('ast_standard');
+    } else if (product === 'ast_premium') {
+      types.push('ast_premium');
+    }
+
+    return types;
+  };
+
   // Fetch case data
   useEffect(() => {
     const fetchCase = async () => {
@@ -147,37 +209,68 @@ export default function WizardPreviewPage() {
           console.log('Could not fetch generated documents:', docsError);
         }
 
-        // Generate preview documents for thumbnails
+        // Generate ALL preview documents for thumbnails based on product
         try {
-          const isNoticeOnly = inferredProduct === 'notice_only';
-          if (!isNoticeOnly) {
-            const previewResponse = await fetch('/api/documents/generate', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                case_id: caseId,
-                document_type: getDocumentType(fetchedCase),
-                is_preview: true,
-              }),
-            });
+          const documentTypesToGenerate = getDocumentTypesForProduct(
+            inferredProduct || 'notice_only',
+            fetchedCase.jurisdiction || 'england',
+            fetchedCase.recommended_route || 'section_8'
+          );
 
-            if (previewResponse.ok) {
-              const previewResult = await previewResponse.json();
-              if (previewResult.document?.id) {
-                // Add this document to generated docs for thumbnails
-                setGeneratedDocs(prev => {
-                  const exists = prev.some(d => d.id === previewResult.document.id);
-                  if (!exists) {
-                    return [...prev, {
-                      id: previewResult.document.id,
-                      document_type: previewResult.document.document_type,
-                      title: previewResult.document.title,
-                    }];
-                  }
-                  return prev;
-                });
+          console.log('[Preview] Generating preview documents:', documentTypesToGenerate);
+
+          // Generate documents in parallel (but limit concurrency to avoid overwhelming server)
+          const generateDoc = async (docType: string) => {
+            try {
+              const response = await fetch('/api/documents/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  case_id: caseId,
+                  document_type: docType,
+                  is_preview: true,
+                }),
+              });
+
+              if (response.ok) {
+                const result = await response.json();
+                if (result.document?.id) {
+                  return {
+                    id: result.document.id,
+                    document_type: result.document.document_type,
+                    title: result.document.document_title || result.document.title,
+                  };
+                }
               }
+              return null;
+            } catch (err) {
+              console.log(`[Preview] Failed to generate ${docType}:`, err);
+              return null;
             }
+          };
+
+          // Generate in batches of 3 to avoid overwhelming the server
+          const batchSize = 3;
+          const newDocs: GeneratedDocument[] = [];
+
+          for (let i = 0; i < documentTypesToGenerate.length; i += batchSize) {
+            const batch = documentTypesToGenerate.slice(i, i + batchSize);
+            const results = await Promise.all(batch.map(generateDoc));
+            results.forEach(doc => {
+              if (doc) newDocs.push(doc);
+            });
+          }
+
+          if (newDocs.length > 0) {
+            setGeneratedDocs(prev => {
+              const combined = [...prev];
+              newDocs.forEach(newDoc => {
+                if (!combined.some(d => d.id === newDoc.id)) {
+                  combined.push(newDoc);
+                }
+              });
+              return combined;
+            });
           }
         } catch (previewError) {
           console.log('Preview generation not available:', previewError);
