@@ -64,10 +64,10 @@ export default function NoticeOnlyPage() {
                 Ask Heaven Smart Guidance (Included!)
               </h2>
               <p className="text-xl text-gray-700 mb-2">
-                AI-powered recommendations to maximize your success
+                AI-powered recommendations to maximise your success
               </p>
               <p className="text-gray-600">
-                Ask Heaven analyzes your case and provides expert guidance at every step
+                Ask Heaven analyses your case and provides expert guidance at every step
               </p>
             </div>
 

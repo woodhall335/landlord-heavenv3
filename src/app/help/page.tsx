@@ -363,7 +363,7 @@ export default function HelpPage() {
                     requirements like deposit protection) - we can help regenerate but can't offer a refund.
                   </p>
                   <p className="mt-3">
-                    Our system validates your inputs to minimize errors, but you're responsible for providing accurate
+                    Our system validates your inputs to minimise errors, but you're responsible for providing accurate
                     information.
                   </p>
                 </div>

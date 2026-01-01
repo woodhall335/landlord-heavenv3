@@ -374,7 +374,7 @@ export default function Home() {
             <Step
               n="2"
               title="Review Documents"
-              desc="We generate jurisdiction-specific documents. Review, customize if needed, and approve."
+              desc="We generate jurisdiction-specific documents. Review, customise if needed, and approve."
             />
             <Step
               n="3"
