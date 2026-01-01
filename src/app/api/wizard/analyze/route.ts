@@ -8,7 +8,7 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import { wizardFactsToCaseFacts } from '@/lib/case-facts/normalize';
 import type { CaseFacts } from '@/lib/case-facts/schema';
@@ -589,24 +589,22 @@ export async function POST(request: Request) {
 
     const { case_id, question } = validation.data;
 
-    // Create properly typed Supabase client
-    const supabase = await createServerSupabaseClient();
+    // Use admin client to bypass RLS - we do our own access control below
+    const adminSupabase = createAdminClient();
 
-    let query = supabase.from('cases').select('*').eq('id', case_id);
-    if (user) {
-      query = query.eq('user_id', user.id);
-    } else {
-      query = query.is('user_id', null);
-    }
-
-    const { data, error: caseError } = await query.single();
+    // Fetch the case using admin client (bypasses RLS)
+    const { data, error: caseError } = await adminSupabase
+      .from('cases')
+      .select('*')
+      .eq('id', case_id)
+      .single();
 
     if (caseError || !data) {
       console.error('Case not found:', caseError);
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
-    // Type assertion: we know data exists after the null check
+    // Type assertion for the case record properties we need
     const caseData = data as {
       id: string;
       jurisdiction: string;
@@ -615,10 +613,21 @@ export async function POST(request: Request) {
       wizard_progress: number | null;
     };
 
+    // Manual access control: user can access if:
+    // 1. They own the case (user_id matches)
+    // 2. The case is anonymous (user_id is null) - anyone can access
+    const isOwner = user && caseData.user_id === user.id;
+    const isAnonymousCase = caseData.user_id === null;
+
+    if (!isOwner && !isAnonymousCase) {
+      console.error('Access denied to case:', { case_id, userId: user?.id, caseUserId: caseData.user_id });
+      return NextResponse.json({ error: 'Case not found' }, { status: 404 });
+    }
+
     let canonicalJurisdiction = normalizeJurisdiction(caseData.jurisdiction);
 
     // Load flat WizardFacts from DB and convert to nested CaseFacts for analysis
-    const wizardFacts = await getOrCreateWizardFacts(supabase, case_id);
+    const wizardFacts = await getOrCreateWizardFacts(adminSupabase, case_id);
     const facts = wizardFactsToCaseFacts(wizardFacts);
 
     if (!canonicalJurisdiction) {
@@ -888,7 +897,7 @@ export async function POST(request: Request) {
       finalRecommendedRoute = route;
     }
 
-    await supabase
+    await adminSupabase
       .from('cases')
       .update({
         recommended_route: finalRecommendedRoute,
