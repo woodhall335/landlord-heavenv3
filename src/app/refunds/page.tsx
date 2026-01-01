@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
+import { FileText, XCircle, CheckCircle2, Mail } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Refund Policy | Landlord Heaven",
@@ -30,7 +31,10 @@ export default function RefundsPage() {
           <p className="text-sm text-gray-500 mb-8">Last updated: November 22, 2025</p>
 
           <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
-            <p className="text-charcoal font-semibold mb-2">📄 Digital Products Policy</p>
+            <p className="text-charcoal font-semibold mb-2 flex items-center gap-2">
+              <FileText className="w-5 h-5 text-blue-500" />
+              Digital Products Policy
+            </p>
             <p className="text-gray-700">
               All products are instantly delivered digital documents. Please review our refund policy below.
             </p>
@@ -45,7 +49,10 @@ export default function RefundsPage() {
               </p>
             </div>
 
-            <h3 className="text-xl font-semibold text-charcoal mt-6 mb-3">❌ No Refunds For:</h3>
+            <h3 className="text-xl font-semibold text-charcoal mt-6 mb-3 flex items-center gap-2">
+              <XCircle className="w-6 h-6 text-red-500" />
+              No Refunds For:
+            </h3>
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
               <li>
                 <strong>One-Time Products:</strong> Notice Only, Complete Eviction Pack, Money Claim Pack, Standard
@@ -63,7 +70,10 @@ export default function RefundsPage() {
               </li>
             </ul>
 
-            <h3 className="text-xl font-semibold text-charcoal mt-6 mb-3">✅ Exceptions:</h3>
+            <h3 className="text-xl font-semibold text-charcoal mt-6 mb-3 flex items-center gap-2">
+              <CheckCircle2 className="w-6 h-6 text-green-500" />
+              Exceptions:
+            </h3>
             <ul className="list-disc pl-6 mb-4 text-gray-700 space-y-2">
               <li>
                 <strong>Technical Errors:</strong> If you were unable to access your documents due to a system error on our end
@@ -79,7 +89,10 @@ export default function RefundsPage() {
             <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">2. How to Report Issues</h2>
 
             <div className="bg-primary-subtle border border-primary/20 rounded-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-charcoal mb-4">📧 Contact Support:</h3>
+              <h3 className="text-lg font-semibold text-charcoal mb-4 flex items-center gap-2">
+                <Mail className="w-5 h-5 text-primary" />
+                Contact Support:
+              </h3>
 
               <p className="text-gray-700 mb-4">
                 If you experienced a technical issue, duplicate charge, or unauthorized transaction, please contact us immediately:

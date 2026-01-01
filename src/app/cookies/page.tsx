@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Container, TealHero } from "@/components/ui";
 import Link from "next/link";
+import { Cookie, Lock, CreditCard, BarChart3, AlertTriangle } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Cookie Policy | Landlord Heaven",
@@ -17,7 +18,10 @@ export default function CookiesPage() {
           <p className="text-sm text-gray-500 mb-8">Last updated: November 22, 2025</p>
 
           <div className="bg-primary-subtle border-l-4 border-primary p-4 mb-8">
-            <p className="text-charcoal font-semibold mb-2">🍪 What Are Cookies?</p>
+            <p className="text-charcoal font-semibold mb-2 flex items-center gap-2">
+              <Cookie className="w-5 h-5 text-primary" />
+              What Are Cookies?
+            </p>
             <p className="text-gray-700 text-sm">
               Cookies are small text files stored on your device when you visit our website. They help us provide you
               with a better experience by remembering your preferences and improving our services.
@@ -101,7 +105,12 @@ export default function CookiesPage() {
 
             <div className="grid gap-4 mb-4">
               <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold text-charcoal mb-2">🔐 Supabase (Authentication)</h4>
+                <h4 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Lock className="w-4 h-4 text-primary" />
+                  </div>
+                  Supabase (Authentication)
+                </h4>
                 <p className="text-sm text-gray-700 mb-2">
                   <strong>Purpose:</strong> User authentication and session management
                 </p>
@@ -114,7 +123,12 @@ export default function CookiesPage() {
               </div>
 
               <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold text-charcoal mb-2">💳 Stripe (Payments)</h4>
+                <h4 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <CreditCard className="w-4 h-4 text-primary" />
+                  </div>
+                  Stripe (Payments)
+                </h4>
                 <p className="text-sm text-gray-700 mb-2">
                   <strong>Purpose:</strong> Fraud prevention and payment processing
                 </p>
@@ -127,7 +141,12 @@ export default function CookiesPage() {
               </div>
 
               <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold text-charcoal mb-2">📊 Google Analytics (Optional)</h4>
+                <h4 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <BarChart3 className="w-4 h-4 text-primary" />
+                  </div>
+                  Google Analytics (Optional)
+                </h4>
                 <p className="text-sm text-gray-700 mb-2">
                   <strong>Purpose:</strong> Website analytics and usage tracking
                 </p>
@@ -178,7 +197,10 @@ export default function CookiesPage() {
             </ul>
 
             <div className="bg-warning/10 border-l-4 border-warning p-4 mb-4">
-              <p className="text-charcoal font-semibold mb-2">⚠️ Important</p>
+              <p className="text-charcoal font-semibold mb-2 flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-warning" />
+                Important
+              </p>
               <p className="text-gray-700 text-sm">
                 Blocking essential cookies will prevent you from logging in and using key features of our service. We
                 recommend only blocking optional analytics and marketing cookies if you have privacy concerns.
