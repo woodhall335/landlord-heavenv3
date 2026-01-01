@@ -1118,9 +1118,11 @@ export async function htmlToPreviewThumbnail(
       ? watermarkedHtml
       : wrapHtmlFragment(watermarkedHtml);
 
+    // Use 'domcontentloaded' instead of 'networkidle0' for faster rendering
+    // since we're setting content directly, not loading external resources
     await page.setContent(finalHtml, {
-      waitUntil: 'networkidle0',
-      timeout: 30000,
+      waitUntil: 'domcontentloaded',
+      timeout: 15000,
     });
 
     // Take screenshot of the first page only
@@ -1413,7 +1415,8 @@ export async function pdfToPreviewThumbnail(
     `;
 
     await watermarkPage.setContent(watermarkHtml, {
-      waitUntil: 'networkidle0',
+      waitUntil: 'domcontentloaded',
+      timeout: 15000,
     });
 
     // Take final screenshot with watermark
