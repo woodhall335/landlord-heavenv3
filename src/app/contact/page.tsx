@@ -2,6 +2,16 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import { RiMailLine, RiTimeLine } from 'react-icons/ri';
+import {
+  MessageCircle,
+  BadgePoundSterling,
+  Briefcase,
+  ShieldCheck,
+  Clock,
+  Mail,
+  FileText,
+  AlertTriangle
+} from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Contact Us | Landlord Heaven",
@@ -33,7 +43,9 @@ export default function ContactPage() {
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           {/* General Support */}
           <div className="bg-white rounded-lg border-2 border-primary p-8">
-            <div className="text-4xl mb-4">💬</div>
+            <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+              <MessageCircle className="w-7 h-7 text-primary" />
+            </div>
             <h2 className="text-2xl font-bold text-charcoal mb-3">General Support</h2>
             <p className="text-gray-700 mb-6">
               Questions about using our services, documents, account issues, or technical problems.
@@ -67,7 +79,9 @@ export default function ContactPage() {
 
           {/* Refunds */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-8">
-            <div className="text-4xl mb-4">💰</div>
+            <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+              <BadgePoundSterling className="w-7 h-7 text-primary" />
+            </div>
             <h2 className="text-2xl font-bold text-charcoal mb-3">Refunds</h2>
             <p className="text-gray-700 mb-6">
               Request a refund for technical errors, duplicate charges, or unauthorized transactions. Include your order number and email address.
@@ -101,7 +115,9 @@ export default function ContactPage() {
 
           {/* Sales */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-8">
-            <div className="text-4xl mb-4">💼</div>
+            <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+              <Briefcase className="w-7 h-7 text-primary" />
+            </div>
             <h2 className="text-2xl font-bold text-charcoal mb-3">Sales & Partnerships</h2>
             <p className="text-gray-700 mb-6">
               Bulk pricing for portfolio landlords, letting agent partnerships, white-label solutions, or custom
@@ -136,7 +152,9 @@ export default function ContactPage() {
 
           {/* Privacy & Legal */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-8">
-            <div className="text-4xl mb-4">🔒</div>
+            <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+              <ShieldCheck className="w-7 h-7 text-primary" />
+            </div>
             <h2 className="text-2xl font-bold text-charcoal mb-3">Privacy & Legal</h2>
             <p className="text-gray-700 mb-6">
               Data protection requests (GDPR), privacy concerns, data deletion, or legal compliance questions.
@@ -189,7 +207,9 @@ export default function ContactPage() {
 
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="text-3xl mb-3">⏰</div>
+              <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <Clock className="w-7 h-7 text-primary" />
+              </div>
               <h3 className="font-semibold text-charcoal mb-2">Response Time</h3>
               <p className="text-sm text-gray-700">
                 We aim to respond to all inquiries within 24 hours on weekdays. Weekend emails are answered on Monday.
@@ -197,7 +217,9 @@ export default function ContactPage() {
             </div>
 
             <div className="text-center">
-              <div className="text-3xl mb-3">📧</div>
+              <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <Mail className="w-7 h-7 text-primary" />
+              </div>
               <h3 className="font-semibold text-charcoal mb-2">Check Spam</h3>
               <p className="text-sm text-gray-700">
                 If you don't receive a response within 48 hours, check your spam folder. Add @landlordheaven.co.uk to
@@ -206,7 +228,9 @@ export default function ContactPage() {
             </div>
 
             <div className="text-center">
-              <div className="text-3xl mb-3">📝</div>
+              <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                <FileText className="w-7 h-7 text-primary" />
+              </div>
               <h3 className="font-semibold text-charcoal mb-2">Include Details</h3>
               <p className="text-sm text-gray-700">
                 Help us help you faster: include your account email, order number, and specific details about your
@@ -227,7 +251,10 @@ export default function ContactPage() {
 
         {/* Emergency Notice */}
         <div className="mt-8 bg-warning/10 border-l-4 border-warning p-6 rounded-r-lg">
-          <p className="text-charcoal font-semibold mb-2">⚠️ Not for Legal Emergencies</p>
+          <p className="text-charcoal font-semibold mb-2 flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-warning" />
+            Not for Legal Emergencies
+          </p>
           <p className="text-gray-700 text-sm">
             Landlord Heaven provides document generation services, NOT legal advice or emergency legal support. If
             you're facing an imminent court hearing or urgent legal issue, contact a solicitor immediately. We cannot
