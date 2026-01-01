@@ -7,7 +7,7 @@
  */
 
 import { NextResponse } from 'next/server';
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { createServerSupabaseClient, createAdminClient, getServerUser } from '@/lib/supabase/server';
 import {
   getNextMQSQuestion,
   loadMQS,
@@ -188,11 +188,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Invalid case_id' }, { status: 400 });
     }
 
-    // Create properly typed Supabase client
+    // Create properly typed Supabase client for user-scoped operations
     const supabase = await createServerSupabaseClient();
 
-    // RLS policies handle access control - no need for manual user_id filtering
-    const { data, error: caseError } = await supabase
+    // Admin client bypasses RLS - used for case operations for anonymous users
+    const adminSupabase = createAdminClient();
+
+    // Use admin client to support anonymous users
+    const { data, error: caseError } = await adminSupabase
       .from('cases')
       .select('*')
       .eq('id', case_id)
@@ -251,7 +254,8 @@ export async function POST(request: Request) {
     );
     const mqs = product ? loadMQS(product, canonicalJurisdiction) : null;
 
-    const facts = await getOrCreateWizardFacts(supabase, case_id);
+    // Use admin client to support anonymous users
+    const facts = await getOrCreateWizardFacts(adminSupabase, case_id);
 
     if (!mqs) {
       const aiResponse = await getNextAIQuestion({

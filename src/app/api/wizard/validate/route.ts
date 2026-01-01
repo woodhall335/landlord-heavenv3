@@ -8,7 +8,7 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/server';
 import { validateFlow, create422Response } from '@/lib/validation/validateFlow';
 import { deriveCanonicalJurisdiction, normalizeJurisdiction } from '@/lib/types/jurisdiction';
 import type { Product } from '@/lib/jurisdictions/capabilities/matrix';
@@ -35,10 +35,12 @@ export async function POST(request: Request) {
     }
 
     const { case_id, stage } = parsedBody.data;
-    const supabase = await createServerSupabaseClient();
+
+    // Use admin client to support anonymous users
+    const adminSupabase = createAdminClient();
 
     // Load case data
-    const { data: caseData, error: fetchError } = await supabase
+    const { data: caseData, error: fetchError } = await adminSupabase
       .from('cases')
       .select('*')
       .eq('id', case_id)
