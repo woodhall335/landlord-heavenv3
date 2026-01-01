@@ -35,14 +35,14 @@ interface SocialProofCounterProps {
 
 const COUNTER_CONFIG = {
   today: {
-    base: 5000,
-    dailyGrowth: 2500, // Grows by ~2500 throughout the day
+    base: 0,
+    dailyGrowth: 5000, // Grows from 0 to ~5000 throughout the day
     text: 'landlords used this today',
     Icon: RiGroupLine,
   },
   week: {
-    base: 25000,
-    dailyGrowth: 5000,
+    base: 20000,
+    dailyGrowth: 10000,
     text: 'documents generated this week',
     Icon: RiFileTextLine,
   },
