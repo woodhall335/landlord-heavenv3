@@ -12,7 +12,7 @@ export function Footer() {
           <div>
             <div className="mb-6">
               <Image
-                src="/footerlogo2.png"
+                src="/footerlogo3.png"
                 alt="Landlord Heaven"
                 width={200}
                 height={40}
@@ -22,58 +22,46 @@ export function Footer() {
             <p className="text-base text-gray-300 leading-relaxed mb-6">
               Professional legal documents for UK landlords. Court-ready, compliant, instantly delivered.
             </p>
-            <div className="flex flex-col gap-2 text-sm text-gray-400">
+            <div className="flex flex-col gap-2 text-sm">
               <div className="flex items-center gap-2">
-                <div className="relative w-7 h-5">
-                  <Image
-                    src="/gb-eng.svg"
-                    alt="England"
-                    width={20}
-                    height={20}
-                    className="w-7 h-5"
-                  />
-                  <div className="absolute inset-0 bg-[#4A5568] opacity-60 pointer-events-none" />
-                </div>
-                <span style={{ color: '#4A5568' }}>England</span>
+                <Image
+                  src="/gb-eng.svg"
+                  alt="England"
+                  width={20}
+                  height={20}
+                  className="w-7 h-5"
+                />
+                <span style={{ color: '#bdbdbd' }}>England</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="relative w-7 h-5">
-                  <Image
-                    src="/gb-wls.svg"
-                    alt="Wales"
-                    width={20}
-                    height={20}
-                    className="w-7 h-5"
-                  />
-                  <div className="absolute inset-0 bg-[#4A5568] opacity-60 pointer-events-none" />
-                </div>
-                <span style={{ color: '#4A5568' }}>Wales</span>
+                <Image
+                  src="/gb-wls.svg"
+                  alt="Wales"
+                  width={20}
+                  height={20}
+                  className="w-7 h-5"
+                />
+                <span style={{ color: '#bdbdbd' }}>Wales</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="relative w-7 h-5">
-                  <Image
-                    src="/gb-sct.svg"
-                    alt="Scotland"
-                    width={20}
-                    height={20}
-                    className="w-7 h-5"
-                  />
-                  <div className="absolute inset-0 bg-[#4A5568] opacity-60 pointer-events-none" />
-                </div>
-                <span style={{ color: '#4A5568' }}>Scotland</span>
+                <Image
+                  src="/gb-sct.svg"
+                  alt="Scotland"
+                  width={20}
+                  height={20}
+                  className="w-7 h-5"
+                />
+                <span style={{ color: '#bdbdbd' }}>Scotland</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="relative w-7 h-5">
-                  <Image
-                    src="/gb-nir.svg"
-                    alt="Northern Ireland"
-                    width={20}
-                    height={20}
-                    className="w-7 h-5"
-                  />
-                  <div className="absolute inset-0 bg-[#4A5568] opacity-60 pointer-events-none" />
-                </div>
-                <span style={{ color: '#4A5568' }}>Northern Ireland</span>
+                <Image
+                  src="/gb-nir.svg"
+                  alt="Northern Ireland"
+                  width={20}
+                  height={20}
+                  className="w-7 h-5"
+                />
+                <span style={{ color: '#bdbdbd' }}>Northern Ireland</span>
               </div>
             </div>
           </div>
@@ -86,6 +74,7 @@ export function Footer() {
                 <Link
                   href="/products/notice-only"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Notice Only
                 </Link>
@@ -94,6 +83,7 @@ export function Footer() {
                 <Link
                   href="/products/complete-pack"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Complete Eviction Pack
                 </Link>
@@ -102,6 +92,7 @@ export function Footer() {
                 <Link
                   href="/products/money-claim"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Money Claim Pack
                 </Link>
@@ -110,6 +101,7 @@ export function Footer() {
                 <Link
                   href="/products/ast"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Tenancy Agreements
                 </Link>
@@ -118,6 +110,7 @@ export function Footer() {
                 <Link
                   href="/hmo-pro"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   HMO Pro Membership
                 </Link>
@@ -133,6 +126,7 @@ export function Footer() {
                 <Link
                   href="/terms"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Terms & Conditions
                 </Link>
@@ -141,6 +135,7 @@ export function Footer() {
                 <Link
                   href="/privacy"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Privacy Policy
                 </Link>
@@ -149,6 +144,7 @@ export function Footer() {
                 <Link
                   href="/refunds"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Refund Policy
                 </Link>
@@ -157,6 +153,7 @@ export function Footer() {
                 <Link
                   href="/cookies"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Cookie Policy
                 </Link>
@@ -172,6 +169,7 @@ export function Footer() {
                 <Link
                   href="/auth/login"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Login
                 </Link>
@@ -180,6 +178,7 @@ export function Footer() {
                 <Link
                   href="/auth/signup"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Register
                 </Link>
@@ -188,6 +187,7 @@ export function Footer() {
                 <Link
                   href="/contact"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Contact Us
                 </Link>
@@ -196,6 +196,7 @@ export function Footer() {
                 <Link
                   href="/about"
                   className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   About Us
                 </Link>
