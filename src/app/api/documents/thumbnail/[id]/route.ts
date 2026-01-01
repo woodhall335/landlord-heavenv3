@@ -3,11 +3,12 @@
  *
  * GET /api/documents/thumbnail/[id]
  * Generates a watermarked JPEG thumbnail of the first page of a document
+ * Supports both HTML documents and PDF documents
  * ALLOWS ANONYMOUS ACCESS - Users can preview their anonymous documents
  */
 
 import { getServerUser, createAdminClient } from '@/lib/supabase/server';
-import { htmlToPreviewThumbnail } from '@/lib/documents/generator';
+import { htmlToPreviewThumbnail, pdfToPreviewThumbnail } from '@/lib/documents/generator';
 import { NextResponse } from 'next/server';
 
 export async function GET(
@@ -24,7 +25,7 @@ export async function GET(
     // Fetch document using admin client (bypasses RLS)
     const { data: document, error } = await adminSupabase
       .from('documents')
-      .select('id, user_id, case_id, document_type, html_content, document_title')
+      .select('id, user_id, case_id, document_type, html_content, pdf_url, document_title')
       .eq('id', id)
       .single();
 
@@ -43,6 +44,7 @@ export async function GET(
       case_id: string;
       document_type: string;
       html_content: string | null;
+      pdf_url: string | null;
       document_title: string | null;
     };
 
@@ -60,20 +62,29 @@ export async function GET(
       );
     }
 
-    // Check if we have HTML content to generate thumbnail from
-    if (!docRecord.html_content) {
-      return NextResponse.json(
-        { error: 'No HTML content available for thumbnail generation' },
-        { status: 404 }
-      );
-    }
-
     try {
-      // Generate watermarked JPEG thumbnail
-      const thumbnail = await htmlToPreviewThumbnail(docRecord.html_content, {
-        quality: 75,
-        watermarkText: 'PREVIEW',
-      });
+      let thumbnail: Buffer;
+
+      // Try HTML content first, then fall back to PDF
+      if (docRecord.html_content) {
+        // Generate watermarked JPEG thumbnail from HTML
+        thumbnail = await htmlToPreviewThumbnail(docRecord.html_content, {
+          quality: 75,
+          watermarkText: 'PREVIEW',
+        });
+      } else if (docRecord.pdf_url) {
+        // Generate watermarked JPEG thumbnail from PDF
+        console.log(`[Thumbnail] Generating PDF thumbnail for ${docRecord.document_type}`);
+        thumbnail = await pdfToPreviewThumbnail(docRecord.pdf_url, {
+          quality: 75,
+          watermarkText: 'PREVIEW',
+        });
+      } else {
+        return NextResponse.json(
+          { error: 'No content available for thumbnail generation' },
+          { status: 404 }
+        );
+      }
 
       // Convert Buffer to Uint8Array for NextResponse
       const uint8Array = new Uint8Array(thumbnail);

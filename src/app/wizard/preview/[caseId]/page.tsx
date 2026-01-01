@@ -363,7 +363,7 @@ export default function WizardPreviewPage() {
       'notice-fault-based': ['fault_based_notice', 'wales_fault_based'],
       // Scotland
       'notice-to-leave': ['notice_to_leave', 'scotland_notice_to_leave'],
-      // Court forms
+      // Court forms (PDF-based - no HTML thumbnails)
       'form-n5': ['n5_claim', 'form_n5'],
       'form-n119': ['n119_particulars', 'form_n119'],
       'form-n5b': ['n5b_claim', 'form_n5b'],
@@ -372,9 +372,27 @@ export default function WizardPreviewPage() {
       'witness-statement': ['witness_statement'],
       'compliance-audit': ['compliance_audit'],
       'risk-assessment': ['risk_assessment'],
+      // Service instructions (various routes)
+      'service-instructions-s8': ['service_instructions'],
+      'service-instructions-s21': ['service_instructions'],
+      'service-instructions-s173': ['service_instructions'],
+      'service-instructions-fault': ['service_instructions'],
+      'service-instructions-ntl': ['service_instructions'],
+      // Validity/Service checklists
+      'validity-checklist-s8': ['service_checklist'],
+      'validity-checklist-s21': ['service_checklist'],
+      'validity-checklist-s173': ['service_checklist'],
+      'validity-checklist-fault': ['service_checklist'],
+      'validity-checklist-ntl': ['service_checklist'],
+      // Compliance checklists (these are static, not generated)
+      'compliance-checklist': ['compliance_checklist'],
+      'compliance-checklist-wales': ['compliance_checklist'],
+      'compliance-checklist-scotland': ['compliance_checklist'],
       // Guidance docs
       'eviction-roadmap': ['eviction_roadmap'],
       'expert-guidance': ['expert_guidance'],
+      'timeline-expectations': ['eviction_timeline'],
+      'case-summary': ['case_summary'],
       'court-filing-guide': ['court_filing_guide'],
       'tribunal-lodging-guide': ['tribunal_lodging_guide'],
       // Evidence

@@ -1267,3 +1267,174 @@ function wrapHtmlFragment(fragment: string): string {
     </html>
   `;
 }
+
+/**
+ * Generate a watermarked JPEG thumbnail from a PDF URL
+ * Uses Puppeteer to render the first page of the PDF
+ */
+export async function pdfToPreviewThumbnail(
+  pdfUrl: string,
+  options?: {
+    width?: number;
+    height?: number;
+    quality?: number;
+    watermarkText?: string;
+  }
+): Promise<Buffer> {
+  const width = options?.width || 400;
+  const height = options?.height || 566; // A4 aspect ratio (1:1.414)
+  const quality = options?.quality || 80;
+  const watermarkText = options?.watermarkText || 'PREVIEW';
+
+  let browser;
+
+  try {
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+
+    const page = await browser.newPage();
+
+    // Set viewport to A4-like dimensions for rendering
+    await page.setViewport({
+      width: 794, // A4 width at 96 DPI
+      height: 1123, // A4 height at 96 DPI
+      deviceScaleFactor: 1,
+    });
+
+    // Navigate to the PDF URL - Puppeteer can render PDFs natively
+    await page.goto(pdfUrl, {
+      waitUntil: 'networkidle0',
+      timeout: 30000,
+    });
+
+    // Wait a moment for PDF to fully render
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    // Take screenshot of first page
+    const screenshot = await page.screenshot({
+      type: 'jpeg',
+      quality,
+      clip: {
+        x: 0,
+        y: 0,
+        width: 794,
+        height: 1123,
+      },
+    });
+
+    await browser.close();
+
+    // Now we need to add watermark to the screenshot
+    // Re-open browser to add watermark overlay
+    browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+
+    const watermarkPage = await browser.newPage();
+    await watermarkPage.setViewport({
+      width: 794,
+      height: 1123,
+      deviceScaleFactor: 1,
+    });
+
+    // Create HTML with the screenshot as background and watermark overlay
+    const base64Image = (screenshot as Buffer).toString('base64');
+    const watermarkHtml = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body {
+            width: 794px;
+            height: 1123px;
+            position: relative;
+            background-image: url(data:image/jpeg;base64,${base64Image});
+            background-size: cover;
+            background-position: top left;
+          }
+          .watermark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+          }
+          .watermark-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 120px;
+            font-weight: bold;
+            color: rgba(200, 200, 200, 0.4);
+            white-space: nowrap;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 20px;
+          }
+          .watermark-repeat {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            transform: rotate(-45deg);
+          }
+          .watermark-item {
+            font-size: 48px;
+            font-weight: bold;
+            color: rgba(180, 180, 180, 0.2);
+            padding: 60px 80px;
+            font-family: Arial, sans-serif;
+            text-transform: uppercase;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="watermark-overlay">
+          <div class="watermark-text">${watermarkText}</div>
+          <div class="watermark-repeat">
+            ${Array(20).fill(`<span class="watermark-item">${watermarkText}</span>`).join('')}
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    await watermarkPage.setContent(watermarkHtml, {
+      waitUntil: 'networkidle0',
+    });
+
+    // Take final screenshot with watermark
+    const finalScreenshot = await watermarkPage.screenshot({
+      type: 'jpeg',
+      quality,
+      clip: {
+        x: 0,
+        y: 0,
+        width: width,
+        height: height,
+      },
+    });
+
+    await browser.close();
+
+    return finalScreenshot as Buffer;
+  } catch (error) {
+    if (browser) {
+      await browser.close();
+    }
+    throw error;
+  }
+}
