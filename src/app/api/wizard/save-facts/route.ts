@@ -7,7 +7,7 @@
  * - cases.collected_facts (mirrored copy)
  */
 
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createServerSupabaseClient, createAdminClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -30,6 +30,9 @@ export async function POST(request: NextRequest) {
     }
 
     const supabase = await createServerSupabaseClient();
+
+    // Admin client bypasses RLS - used for creating cases/case_facts for anonymous users
+    const adminSupabase = createAdminClient();
 
     // Try to get the user (but don't require auth for wizard saves)
     const { data: { user } } = await supabase.auth.getUser();
@@ -73,7 +76,8 @@ export async function POST(request: NextRequest) {
     if (existingCase) {
       // Update existing case - write to BOTH tables for consistency
       // 1. Update case_facts.facts (source of truth)
-      const { data: existingCaseFacts } = await supabase
+      // Use admin client to bypass RLS for anonymous users
+      const { data: existingCaseFacts } = await adminSupabase
         .from('case_facts')
         .select('version')
         .eq('case_id', case_id)
@@ -81,7 +85,8 @@ export async function POST(request: NextRequest) {
 
       if (existingCaseFacts) {
         // Update existing case_facts row
-        const { error: caseFactsError } = await supabase
+        // Use admin client to bypass RLS for anonymous users
+        const { error: caseFactsError } = await adminSupabase
           .from('case_facts')
           .update({
             facts: mergedFacts,
@@ -96,7 +101,8 @@ export async function POST(request: NextRequest) {
         }
       } else {
         // Create case_facts row if it doesn't exist
-        const { error: insertCaseFactsError } = await supabase
+        // Use admin client to bypass RLS for anonymous users
+        const { error: insertCaseFactsError } = await adminSupabase
           .from('case_facts')
           .insert({
             case_id,
@@ -111,7 +117,8 @@ export async function POST(request: NextRequest) {
       }
 
       // 2. Update cases.collected_facts (mirrored copy)
-      const { error: updateError } = await supabase
+      // Use admin client to bypass RLS for anonymous users
+      const { error: updateError } = await adminSupabase
         .from('cases')
         .update({
           collected_facts: mergedFacts,
@@ -139,7 +146,8 @@ export async function POST(request: NextRequest) {
       const caseType = meta.case_type || 'money_claim';
 
       // Allow anonymous case creation (user_id can be null for "try before you buy")
-      const { error: insertError } = await supabase
+      // Use admin client to bypass RLS for anonymous users
+      const { error: insertError } = await adminSupabase
         .from('cases')
         .insert({
           id: case_id,
@@ -159,7 +167,8 @@ export async function POST(request: NextRequest) {
       }
 
       // Also create case_facts row (source of truth)
-      const { error: insertCaseFactsError } = await supabase
+      // Use admin client to bypass RLS for anonymous users
+      const { error: insertCaseFactsError } = await adminSupabase
         .from('case_facts')
         .insert({
           case_id,

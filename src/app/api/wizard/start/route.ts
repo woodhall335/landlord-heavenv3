@@ -8,7 +8,7 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { createServerSupabaseClient, createAdminClient, getServerUser } from '@/lib/supabase/server';
 import { createEmptyWizardFacts } from '@/lib/case-facts/schema';
 import { getOrCreateWizardFacts } from '@/lib/case-facts/store';
 import {
@@ -170,8 +170,12 @@ export async function POST(request: Request) {
       );
     }
 
-    // Create properly typed Supabase client
+    // Create properly typed Supabase client for user-scoped queries
     const supabase = await createServerSupabaseClient();
+
+    // Admin client bypasses RLS - used for creating cases for anonymous users
+    // The regular client would be blocked by RLS policies when user_id is null
+    const adminSupabase = createAdminClient();
 
     let caseRecord: any = null;
 
@@ -235,7 +239,9 @@ export async function POST(request: Request) {
         ...(validator_key ? { selected_notice_route: validator_key } : {}),
       };
 
-      const { data, error } = await supabase
+      // Use admin client to bypass RLS for anonymous case creation
+      // This is safe because we control all the data being inserted
+      const { data, error } = await adminSupabase
         .from('cases')
         .insert({
           user_id: user ? user.id : null,
@@ -259,7 +265,8 @@ export async function POST(request: Request) {
     // ------------------------------------------------
     // 3. Ensure case_facts row exists and load facts
     // ------------------------------------------------
-    let facts = await getOrCreateWizardFacts(supabase, caseRecord.id);
+    // Use admin client for case_facts operations to support anonymous users
+    let facts = await getOrCreateWizardFacts(adminSupabase, caseRecord.id);
 
     // For newly created cases, mirror meta + country into case_facts.facts
     if (!case_id) {
@@ -282,7 +289,8 @@ export async function POST(request: Request) {
         ...(validator_key && !facts.selected_notice_route ? { selected_notice_route: validator_key } : {}),
       };
 
-      const { error: updateError } = await supabase
+      // Use admin client for case_facts update to support anonymous users
+      const { error: updateError } = await adminSupabase
         .from('case_facts')
         .update({ facts: updatedFacts as any })
         .eq('case_id', caseRecord.id);
