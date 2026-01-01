@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
 import Link from "next/link";
 import Image from "next/image";
 import { RiCheckboxCircleLine } from "react-icons/ri";
@@ -16,9 +17,13 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Notice Only - Section 8 & 21 Eviction Notices | Landlord Heaven",
+  title: "Section 21 & 8 Eviction Notices - Court-Ready from £29.99",
   description:
-    "Generate court-ready eviction notices for England, Wales, and Scotland in minutes. £29.99 one-time payment. Instant download. Section 8, Section 21, Section 173, and Notice to Leave.",
+    "Section 21 ends May 2026 - serve your no-fault eviction notice now. Court-ready documents in minutes. £29.99 one-time. England, Wales & Scotland.",
+  openGraph: {
+    title: "Section 21 & 8 Eviction Notices - Court-Ready from £29.99",
+    description: "Section 21 ends May 2026 - serve your no-fault eviction notice now. Court-ready documents in minutes.",
+  },
 };
 
 export default function NoticeOnlyPage() {
@@ -47,7 +52,10 @@ export default function NoticeOnlyPage() {
             >
               Get Your Notice Now →
             </Link>
-            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
+            <div className="mt-4 mb-2">
+              <SocialProofCounter variant="today" baseNumber={34} className="mx-auto" />
+            </div>
+            <p className="text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
           </div>
         </Container>
       </section>
