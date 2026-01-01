@@ -37,18 +37,12 @@ export async function POST(request: NextRequest) {
     // Try to get the user (but don't require auth for wizard saves)
     const { data: { user } } = await supabase.auth.getUser();
 
-    // First, check if the case exists
-    let query = supabase
+    // First, check if the case exists using admin client to support anonymous users
+    const { data: existingCase, error: fetchError } = await adminSupabase
       .from('cases')
       .select('id, user_id, collected_facts')
-      .eq('id', case_id);
-
-    // If logged in, also check ownership
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data: existingCase, error: fetchError } = await query.single();
+      .eq('id', case_id)
+      .single();
 
     if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = not found
       console.error('Error fetching case:', fetchError);
