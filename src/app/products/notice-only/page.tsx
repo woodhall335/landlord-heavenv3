@@ -14,11 +14,21 @@ import {
   BadgePoundSterling,
   FileCheck
 } from "lucide-react";
+import { Section21UrgencyAlert } from "@/components/ui/Section21Banner";
 
 export const metadata: Metadata = {
   title: "Notice Only - Section 8 & 21 Eviction Notices | Landlord Heaven",
   description:
-    "Generate court-ready eviction notices for England, Wales, and Scotland in minutes. £29.99 one-time payment. Instant download. Section 8, Section 21, Section 173, and Notice to Leave.",
+    "Generate court-ready eviction notices for England, Wales, and Scotland in minutes. Section 21 ends May 2026 - act now. £29.99 one-time payment. Instant download.",
+  keywords: [
+    "section 21 notice",
+    "section 8 notice",
+    "eviction notice",
+    "section 21 ban",
+    "no fault eviction",
+    "landlord eviction",
+    "court ready notice",
+  ],
 };
 
 export default function NoticeOnlyPage() {
@@ -49,6 +59,13 @@ export default function NoticeOnlyPage() {
             </Link>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
           </div>
+        </Container>
+      </section>
+
+      {/* Section 21 Urgency Alert */}
+      <section className="py-6 bg-white border-b border-gray-200">
+        <Container>
+          <Section21UrgencyAlert />
         </Container>
       </section>
 
