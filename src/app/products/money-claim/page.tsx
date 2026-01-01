@@ -54,7 +54,7 @@ export default function MoneyClaimPage() {
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England &amp; Wales or Scotland</p>
             <div className="mt-6">
-              <SocialProofCounter variant="today" baseNumber={42} className="mx-auto" />
+              <SocialProofCounter variant="today" className="mx-auto" />
             </div>
           </div>
         </Container>

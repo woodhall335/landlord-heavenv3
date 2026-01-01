@@ -69,7 +69,7 @@ export default function CompleteEvictionPackPage() {
               Start Your Eviction Pack →
             </Link>
             <div className="mt-4 mb-2">
-              <SocialProofCounter variant="today" baseNumber={28} className="mx-auto" />
+              <SocialProofCounter variant="today" className="mx-auto" />
             </div>
             <p className="text-sm text-gray-600">
               Court-ready documents • Expert guidance • Lifetime storage

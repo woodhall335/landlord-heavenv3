@@ -381,7 +381,7 @@ export default function HMOLicenseChecker() {
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
             <div className="mt-6">
-              <SocialProofCounter variant="today" baseNumber={28} className="mx-auto" />
+              <SocialProofCounter variant="today" className="mx-auto" />
             </div>
           </div>
         </Container>
