@@ -6,24 +6,29 @@
  * DELETE /api/cases/[id] - Delete case
  */
 
-import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
+import { createAdminClient, createServerSupabaseClient, getServerUser, requireServerAuth } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 /**
  * GET - Fetch specific case by ID
+ * ALLOWS ANONYMOUS ACCESS - Users can access their anonymous cases
  */
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Allow anonymous access - RLS policies will handle authorization
-    const supabase = await createServerSupabaseClient();
     const { id } = await params;
 
-    // Fetch case - RLS will automatically filter based on user_id or anonymous_user_id
-    const { data: caseData, error } = await supabase
+    // Use admin client to bypass RLS - we do our own access control below
+    const adminSupabase = createAdminClient();
+
+    // Try to get a user, but don't fail if unauthenticated
+    const user = await getServerUser();
+
+    // Fetch the case using admin client (bypasses RLS)
+    const { data: caseData, error } = await adminSupabase
       .from('cases')
       .select('*')
       .eq('id', id)
@@ -37,8 +42,29 @@ export async function GET(
       );
     }
 
+    // Type assertion for the case record properties we need
+    const caseRecord = caseData as {
+      id: string;
+      user_id: string | null;
+      [key: string]: unknown;
+    };
+
+    // Manual access control: user can access if:
+    // 1. They own the case (user_id matches)
+    // 2. The case is anonymous (user_id is null) - anyone can access
+    const isOwner = user && caseRecord.user_id === user.id;
+    const isAnonymousCase = caseRecord.user_id === null;
+
+    if (!isOwner && !isAnonymousCase) {
+      console.error('Access denied to case:', { id, userId: user?.id, caseUserId: caseRecord.user_id });
+      return NextResponse.json(
+        { error: 'Case not found' },
+        { status: 404 }
+      );
+    }
+
     // Fetch associated documents count
-    const { count: documentCount } = await supabase
+    const { count: documentCount } = await adminSupabase
       .from('documents')
       .select('*', { count: 'exact', head: true })
       .eq('case_id', id);
