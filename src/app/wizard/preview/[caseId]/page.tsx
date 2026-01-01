@@ -47,7 +47,6 @@ export default function WizardPreviewPage() {
   const caseId = params.caseId as string;
 
   const [caseData, setCaseData] = useState<CaseData | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [validationErrors, setValidationErrors] = useState<{ blocking_issues: ValidationIssue[]; warnings: ValidationIssue[] } | null>(null);
@@ -148,30 +147,24 @@ export default function WizardPreviewPage() {
           console.log('Could not fetch generated documents:', docsError);
         }
 
-        // Try to load preview URL
+        // Generate preview documents for thumbnails
         try {
           const isNoticeOnly = inferredProduct === 'notice_only';
-          const previewResponse = isNoticeOnly
-            ? await fetch(`/api/notice-only/preview/${caseId}`)
-            : await fetch('/api/documents/generate', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  case_id: caseId,
-                  document_type: getDocumentType(fetchedCase),
-                  is_preview: true,
-                }),
-              });
+          if (!isNoticeOnly) {
+            const previewResponse = await fetch('/api/documents/generate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                case_id: caseId,
+                document_type: getDocumentType(fetchedCase),
+                is_preview: true,
+              }),
+            });
 
-          if (previewResponse.ok) {
-            if (isNoticeOnly) {
-              const pdfBlob = await previewResponse.blob();
-              const blobUrl = URL.createObjectURL(pdfBlob);
-              setPreviewUrl(blobUrl);
-            } else {
+            if (previewResponse.ok) {
               const previewResult = await previewResponse.json();
               if (previewResult.document?.id) {
-                // Also add this document to generated docs for thumbnails
+                // Add this document to generated docs for thumbnails
                 setGeneratedDocs(prev => {
                   const exists = prev.some(d => d.id === previewResult.document.id);
                   if (!exists) {
@@ -183,19 +176,11 @@ export default function WizardPreviewPage() {
                   }
                   return prev;
                 });
-
-                const signedUrlResponse = await fetch(
-                  `/api/documents/preview/${previewResult.document.id}`
-                );
-                if (signedUrlResponse.ok) {
-                  const signedUrlResult = await signedUrlResponse.json();
-                  setPreviewUrl(signedUrlResult.preview_url);
-                }
               }
             }
           }
         } catch (previewError) {
-          console.log('Preview not available:', previewError);
+          console.log('Preview generation not available:', previewError);
         }
       } catch (err: any) {
         console.error('Error loading case:', err);
@@ -418,15 +403,6 @@ export default function WizardPreviewPage() {
   const product = getProduct();
   const productMeta = getProductMeta(product);
 
-  // Optional preview content
-  const previewContent = previewUrl ? (
-    <iframe
-      src={previewUrl}
-      className="w-full h-[500px]"
-      title="Document Preview"
-    />
-  ) : null;
-
   return (
     <>
       <PreviewPageLayout
@@ -437,7 +413,6 @@ export default function WizardPreviewPage() {
         originalPrice={productMeta.originalPrice}
         savings={productMeta.savings}
         documents={documents}
-        previewContent={previewContent}
         features={productMeta.features}
       />
 
