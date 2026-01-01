@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import { RiCheckboxCircleLine } from "react-icons/ri";
+import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
 import {
   Sparkles,
   FileText,
@@ -14,9 +15,13 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Money Claim Pack - Recover Rent Arrears | Landlord Heaven",
+  title: "Money Claim Pack - Recover Rent Arrears Through Courts",
   description:
-    "Claim unpaid rent arrears through UK courts. PAP-DEBT compliance, N1 claim form, arrears schedule, interest calculator. £179.99 one-time payment. England & Wales + Scotland.",
+    "Recover unpaid rent arrears through UK courts. AI-drafted Particulars of Claim saves £300-600. PAP-DEBT compliance, N1 form, interest calculator. £179.99 one-time.",
+  openGraph: {
+    title: "Money Claim Pack - Recover Rent Arrears Through Courts",
+    description: "Recover unpaid rent arrears through UK courts. AI-drafted documents save £300-600. £179.99 one-time.",
+  },
 };
 
 export default function MoneyClaimPage() {
@@ -48,6 +53,9 @@ export default function MoneyClaimPage() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England &amp; Wales or Scotland</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" baseNumber={42} className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>

@@ -5,6 +5,7 @@ import { DocumentList } from './DocumentList';
 import { DocumentInfo } from './DocumentCard';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { CheckCircle, Shield, Clock, Download } from 'lucide-react';
+import { trackBeginCheckout } from '@/lib/analytics';
 
 interface PreviewPageLayoutProps {
   caseId: string;
@@ -69,6 +70,10 @@ export function PreviewPageLayout({
       }
 
       if (data.session_url) {
+        // Track checkout initiation in analytics (GA4 + FB Pixel)
+        const priceValue = parseFloat(price.replace(/[£,]/g, '')) || 0;
+        trackBeginCheckout(product, productName, priceValue);
+
         window.location.href = data.session_url;
       }
     } catch (err) {

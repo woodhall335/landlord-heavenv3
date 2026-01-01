@@ -30,6 +30,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Container } from "@/components/ui";
 import { TrustBar, CostComparison, Testimonials, FAQ } from "@/components/landing";
+import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
 import { RiFileTextLine, RiScales3Line, RiMoneyPoundCircleLine, RiClipboardLine, RiCheckLine, RiArrowRightLine, RiTimeLine, RiShieldCheckLine, RiGlobalLine, RiFlashlightLine } from 'react-icons/ri';
 
 const exampleQuestions = [
@@ -93,6 +94,11 @@ export default function Home() {
               >
                 View Pricing →
               </Link>
+            </div>
+
+            {/* Social Proof Counter */}
+            <div className="mb-6">
+              <SocialProofCounter variant="today" baseNumber={47} className="mx-auto" />
             </div>
 
             {/* Trust Indicators */}

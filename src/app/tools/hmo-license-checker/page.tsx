@@ -1,9 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import councilsData from '@/config/jurisdictions/uk/england/councils.json';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 
 // Function to lookup council by postcode
 function getCouncilByPostcode(postcode: string): { name: string; website: string } | null {
@@ -30,7 +33,8 @@ export default function HMOLicenseChecker() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
 
-  const handleGenerate = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     setIsGenerating(true);
 
     try {
@@ -325,6 +329,17 @@ export default function HMOLicenseChecker() {
       setIsGenerating(false);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [formData]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:hmo-license-checker',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleGenerate = () => {
+    gate.checkGateAndProceed();
   };
 
   const isFormValid =
@@ -365,6 +380,9 @@ export default function HMOLicenseChecker() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" baseNumber={28} className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>
@@ -699,6 +717,16 @@ export default function HMOLicenseChecker() {
           </div>
         </Container>
       </div>
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="HMO License Assessment"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }

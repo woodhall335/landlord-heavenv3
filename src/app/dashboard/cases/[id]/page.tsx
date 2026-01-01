@@ -14,6 +14,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { RiErrorWarningLine, RiEditLine, RiFileTextLine, RiExternalLinkLine, RiBookOpenLine, RiCustomerService2Line } from 'react-icons/ri';
+import { trackPurchase } from '@/lib/analytics';
 
 interface CaseDetails {
   id: string;
@@ -141,6 +142,32 @@ export default function CaseDetailPage() {
     fetchCaseDocuments();
     runAskHeaven();
   }, [caseId, fetchCaseDetails, fetchCaseDocuments, runAskHeaven]);
+
+  // Track purchase conversion when payment is successful
+  useEffect(() => {
+    if (paymentSuccess && caseDetails) {
+      // Prevent duplicate tracking by checking sessionStorage
+      const purchaseKey = `purchase_tracked_${caseId}`;
+      if (sessionStorage.getItem(purchaseKey)) return;
+
+      // Get product info from case type
+      const productName = getCaseTypeLabel(caseDetails.case_type);
+
+      // Track purchase in analytics (GA4 + FB Pixel)
+      // Note: We use case_id as transaction_id, value is approximate
+      trackPurchase(caseId, 29.99, 'GBP', [
+        {
+          item_id: caseDetails.case_type,
+          item_name: productName,
+          item_category: 'legal_document',
+          price: 29.99,
+          quantity: 1,
+        },
+      ]);
+
+      sessionStorage.setItem(purchaseKey, 'true');
+    }
+  }, [paymentSuccess, caseDetails, caseId]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-GB', {

@@ -95,22 +95,25 @@ export function generateMetadata(config: SEOMetadataConfig): Metadata {
  */
 export const defaultMetadata: Metadata = {
   title: {
-    default: "Landlord Heaven - Legal Documents for UK Landlords",
+    default: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
     template: "%s | Landlord Heaven"
   },
-  description: "Court-ready eviction notices, tenancy agreements & legal documents for UK landlords. UK-wide coverage - England & Wales, Scotland, Northern Ireland.",
+  description: "Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026 - act now. UK-wide coverage.",
   keywords: [
-    "section 8 notice",
     "section 21 notice",
+    "section 8 notice",
     "eviction notice",
+    "section 21 ban 2026",
     "tenancy agreement",
     "landlord legal documents",
     "UK landlord",
     "rent arrears",
+    "money claim",
+    "possession order",
     "HMO licence",
     "AST",
     "PRT Scotland",
-    "Northern Ireland tenancy"
+    "court-ready documents"
   ],
   authors: [{ name: "Landlord Heaven" }],
   creator: "Landlord Heaven",
@@ -121,21 +124,22 @@ export const defaultMetadata: Metadata = {
     locale: 'en_GB',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Landlord Heaven - Legal Documents for UK Landlords",
-    description: "Court-ready eviction notices, tenancy agreements & legal documents for UK landlords. UK-wide coverage.",
+    title: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
+    description: "Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026.",
     images: [
       {
         url: DEFAULT_OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "Landlord Heaven"
+        alt: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
+        type: 'image/png',
       }
     ]
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Landlord Heaven - Legal Documents for UK Landlords",
-    description: "Court-ready eviction notices, tenancy agreements & legal documents for UK landlords.",
+    title: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
+    description: "Generate court-ready eviction notices and legal documents. Save 80%+ vs solicitors. Section 21 ends May 2026.",
     images: [DEFAULT_OG_IMAGE],
     creator: '@LandlordHeaven',
     site: '@LandlordHeaven',
