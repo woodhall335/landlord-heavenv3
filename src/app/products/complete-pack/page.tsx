@@ -863,7 +863,7 @@ export default function CompleteEvictionPackPage() {
                   What if I make a mistake on the forms?
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
-                  Our system validates all your inputs to minimize errors (e.g., dates, arrears calculations, notice periods).
+                  Our system validates all your inputs to minimise errors (e.g., dates, arrears calculations, notice periods).
                   You can preview all documents before paying. If you spot an error after purchase, you get unlimited
                   regenerations - just update your case details and regenerate the pack at no extra cost.
                 </div>

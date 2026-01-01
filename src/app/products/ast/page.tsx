@@ -255,7 +255,7 @@ export default function ASTPage() {
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Agreement Generated</h3>
                 <p className="text-gray-600">
                   We create a jurisdiction-specific agreement with all clauses pre-filled based on your answers. Review and
-                  customize if needed.
+                  customise if needed.
                 </p>
               </div>
 
