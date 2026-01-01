@@ -24,7 +24,7 @@ export async function GET(
     // Fetch document using admin client (bypasses RLS)
     const { data: document, error } = await adminSupabase
       .from('documents')
-      .select('id, user_id, case_id, document_type, html_content, title')
+      .select('id, user_id, case_id, document_type, html_content, document_title')
       .eq('id', id)
       .single();
 
@@ -43,7 +43,7 @@ export async function GET(
       case_id: string;
       document_type: string;
       html_content: string | null;
-      title: string | null;
+      document_title: string | null;
     };
 
     // Manual access control: user can access if:
