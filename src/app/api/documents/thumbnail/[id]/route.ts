@@ -75,7 +75,37 @@ export async function GET(
       } else if (docRecord.pdf_url) {
         // Generate watermarked JPEG thumbnail from PDF
         console.log(`[Thumbnail] Generating PDF thumbnail for ${docRecord.document_type}`);
-        thumbnail = await pdfToPreviewThumbnail(docRecord.pdf_url, {
+
+        // Extract file path from the public URL to create a signed URL
+        // Public URL format: https://<project>.supabase.co/storage/v1/object/public/documents/<path>
+        let pdfAccessUrl = docRecord.pdf_url;
+
+        try {
+          const publicMarker = '/storage/v1/object/public/documents/';
+          const publicIndex = docRecord.pdf_url.indexOf(publicMarker);
+
+          if (publicIndex !== -1) {
+            const filePath = docRecord.pdf_url.substring(publicIndex + publicMarker.length);
+            console.log(`[Thumbnail] Extracting file path: ${filePath}`);
+
+            // Create a signed URL using admin client (bypasses RLS/bucket policies)
+            const { data: signedUrlData, error: signedUrlError } = await adminSupabase
+              .storage
+              .from('documents')
+              .createSignedUrl(filePath, 60); // 60 seconds expiry
+
+            if (signedUrlError) {
+              console.error('[Thumbnail] Failed to create signed URL:', signedUrlError);
+            } else if (signedUrlData?.signedUrl) {
+              pdfAccessUrl = signedUrlData.signedUrl;
+              console.log(`[Thumbnail] Using signed URL for PDF access`);
+            }
+          }
+        } catch (urlError) {
+          console.error('[Thumbnail] Error creating signed URL, falling back to public URL:', urlError);
+        }
+
+        thumbnail = await pdfToPreviewThumbnail(pdfAccessUrl, {
           quality: 75,
           watermarkText: 'PREVIEW',
         });
