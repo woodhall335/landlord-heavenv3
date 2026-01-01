@@ -18,28 +18,41 @@ export function Section21HeaderBanner() {
   const isExcluded = EXCLUDED_PATHS.some(path => pathname?.startsWith(path));
 
   useEffect(() => {
-    if (isExcluded) return;
+    if (isExcluded) {
+      // Remove body class if navigating to excluded path
+      document.body.classList.remove('s21-banner-visible');
+      return;
+    }
 
     const dismissed = localStorage.getItem(STORAGE_KEY);
     if (dismissed) {
       const dismissedTime = parseInt(dismissed, 10);
       if (Date.now() - dismissedTime < DISMISS_DURATION) {
+        document.body.classList.remove('s21-banner-visible');
         return; // Still within 7-day dismiss period
       }
     }
+
     setIsVisible(true);
+    document.body.classList.add('s21-banner-visible');
+
+    // Cleanup on unmount
+    return () => {
+      document.body.classList.remove('s21-banner-visible');
+    };
   }, [isExcluded]);
 
   const handleDismiss = () => {
     localStorage.setItem(STORAGE_KEY, Date.now().toString());
     setIsVisible(false);
+    document.body.classList.remove('s21-banner-visible');
   };
 
   if (!isVisible || isExcluded) return null;
 
   return (
-    <div className="bg-gradient-to-r from-primary to-primary/90 text-white py-2.5 px-4">
-      <div className="container mx-auto flex items-center justify-between gap-2 sm:gap-4 text-sm sm:text-base">
+    <div className="s21-header-banner bg-gradient-to-r from-primary to-primary/90 text-white px-4">
+      <div className="container mx-auto flex items-center justify-between gap-2 sm:gap-4 text-sm sm:text-base h-full">
         {/* Spacer for balance on desktop */}
         <div className="hidden sm:block w-8" />
 
