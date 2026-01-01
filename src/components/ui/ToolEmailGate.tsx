@@ -10,6 +10,7 @@
 import { useState } from 'react';
 import { RiCloseLine, RiMailLine, RiLoader4Line } from 'react-icons/ri';
 import { captureLead } from '@/components/leads/useLeadCapture';
+import { trackLead } from '@/lib/analytics';
 
 interface ToolEmailGateProps {
   /** Display name of the tool (e.g., "Section 21 Notice Generator") */
@@ -64,6 +65,9 @@ export function ToolEmailGate({
         setIsLoading(false);
         return;
       }
+
+      // Track lead conversion in analytics (GA4 + FB Pixel)
+      trackLead(source, trimmedEmail);
 
       onEmailCaptured(trimmedEmail);
     } catch (err) {

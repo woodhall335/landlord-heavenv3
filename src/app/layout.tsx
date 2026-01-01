@@ -11,6 +11,7 @@ import {
   localBusinessSchema
 } from "@/lib/seo/structured-data";
 import { PopupProvider } from "@/components/providers/PopupProvider";
+import { TrackingPixels } from "@/components/analytics/TrackingPixels";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -87,6 +88,7 @@ export default async function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </PopupProvider>
+        <TrackingPixels />
       </body>
     </html>
   );
