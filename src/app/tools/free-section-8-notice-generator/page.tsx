@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 
 const COMMON_GROUNDS = [
   { id: 'ground8', name: 'Ground 8', description: 'Rent arrears (8+ weeks/2+ months)' },
@@ -313,6 +314,9 @@ export default function FreeSection8Tool() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" baseNumber={34} className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>

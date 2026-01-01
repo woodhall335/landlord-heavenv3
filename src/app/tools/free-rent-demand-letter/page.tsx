@@ -6,6 +6,7 @@ import { Container } from '@/components/ui/Container';
 import { RiAlertLine, RiInformationLine, RiExternalLinkLine, RiCheckboxCircleLine } from 'react-icons/ri';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 
 export default function RentDemandLetterGenerator() {
   const [formData, setFormData] = useState({
@@ -408,6 +409,9 @@ URL.revokeObjectURL(url);
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" baseNumber={45} className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>

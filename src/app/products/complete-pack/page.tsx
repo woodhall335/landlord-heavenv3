@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
 import Link from "next/link";
 import Image from "next/image";
 import { RiCheckboxCircleLine, RiCloseLine, RiAlertLine } from "react-icons/ri";
@@ -63,7 +64,10 @@ export default function CompleteEvictionPackPage() {
             >
               Start Your Eviction Pack →
             </Link>
-            <p className="mt-4 text-sm text-gray-600">
+            <div className="mt-4 mb-2">
+              <SocialProofCounter variant="today" baseNumber={28} className="mx-auto" />
+            </div>
+            <p className="text-sm text-gray-600">
               Court-ready documents • Expert guidance • Lifetime storage
             </p>
           </div>

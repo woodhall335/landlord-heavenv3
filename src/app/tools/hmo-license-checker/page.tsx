@@ -6,6 +6,7 @@ import { Container } from '@/components/ui/Container';
 import councilsData from '@/config/jurisdictions/uk/england/councils.json';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 
 // Function to lookup council by postcode
 function getCouncilByPostcode(postcode: string): { name: string; website: string } | null {
@@ -379,6 +380,9 @@ export default function HMOLicenseChecker() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" baseNumber={28} className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
 import Link from "next/link";
 import Image from "next/image";
 import { RiCheckboxCircleLine } from "react-icons/ri";
@@ -47,7 +48,10 @@ export default function NoticeOnlyPage() {
             >
               Get Your Notice Now →
             </Link>
-            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
+            <div className="mt-4 mb-2">
+              <SocialProofCounter variant="today" baseNumber={34} className="mx-auto" />
+            </div>
+            <p className="text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
           </div>
         </Container>
       </section>

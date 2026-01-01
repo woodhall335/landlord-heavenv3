@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import { RiCheckboxCircleLine } from "react-icons/ri";
+import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
 import {
   Sparkles,
   FileText,
@@ -48,6 +49,9 @@ export default function MoneyClaimPage() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England &amp; Wales or Scotland</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" baseNumber={42} className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>

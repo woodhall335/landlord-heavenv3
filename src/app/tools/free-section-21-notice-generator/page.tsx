@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 
 // SEO Metadata (exported from separate metadata.ts file for client components)
 // See: src/app/tools/free-section-21-notice-generator/metadata.ts
@@ -269,6 +270,9 @@ export default function FreeSection21Tool() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" baseNumber={52} className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>

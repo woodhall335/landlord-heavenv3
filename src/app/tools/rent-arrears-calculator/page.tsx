@@ -6,6 +6,7 @@ import { Button, Card, Container, Input } from '@/components/ui';
 import { RiAlertLine } from 'react-icons/ri';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
 
 // Note: Metadata moved to layout.tsx (client components cannot export metadata)
 
@@ -369,6 +370,9 @@ link.href = url;
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant calculation • Professional summary • Upgrade for court claims</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" baseNumber={63} className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>
