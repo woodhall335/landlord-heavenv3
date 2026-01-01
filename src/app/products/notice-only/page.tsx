@@ -17,9 +17,13 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Notice Only - Section 8 & 21 Eviction Notices | Landlord Heaven",
+  title: "Section 21 & 8 Eviction Notices - Court-Ready from £29.99",
   description:
-    "Generate court-ready eviction notices for England, Wales, and Scotland in minutes. £29.99 one-time payment. Instant download. Section 8, Section 21, Section 173, and Notice to Leave.",
+    "Section 21 ends May 2026 - serve your no-fault eviction notice now. Court-ready documents in minutes. £29.99 one-time. England, Wales & Scotland.",
+  openGraph: {
+    title: "Section 21 & 8 Eviction Notices - Court-Ready from £29.99",
+    description: "Section 21 ends May 2026 - serve your no-fault eviction notice now. Court-ready documents in minutes.",
+  },
 };
 
 export default function NoticeOnlyPage() {

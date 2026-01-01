@@ -21,9 +21,13 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Complete Eviction Pack - Full DIY Eviction Bundle | Landlord Heaven",
+  title: "Complete Eviction Pack - Last Chance Before Section 21 Ban",
   description:
-    "Complete DIY eviction solution from notice to possession order. Includes all court forms (N5, N5B, N119), step-by-step guidance, evidence checklists, and timeline. £149.99 one-time payment.",
+    "Last chance for Section 21. Complete eviction pack with all court forms before no-fault evictions banned 1 May 2026. £149.99 one-time. Notices + N5 + N119 forms.",
+  openGraph: {
+    title: "Complete Eviction Pack - Last Chance Before Section 21 Ban",
+    description: "Last chance for Section 21. Complete eviction pack before no-fault evictions banned 1 May 2026. £149.99.",
+  },
   keywords: [
     "complete eviction pack",
     "eviction bundle UK",
