@@ -34,14 +34,6 @@ export function getNoticeOnlyDocuments(jurisdiction: string, noticeRoute: string
           icon: 'checklist',
           pages: '2 pages',
           category: 'Checklists',
-        },
-        {
-          id: 'compliance-checklist',
-          title: 'Pre-Service Compliance Declaration',
-          description: 'Court-ready evidence of your compliance with deposit, EPC, gas safety & How to Rent requirements',
-          icon: 'compliance',
-          pages: '2-3 pages',
-          category: 'Checklists',
         }
       );
     } else if (noticeRoute === 'section_8' || noticeRoute === 'section-8') {
@@ -68,14 +60,6 @@ export function getNoticeOnlyDocuments(jurisdiction: string, noticeRoute: string
           description: 'Pre-service checklist to ensure your notice meets all legal requirements',
           icon: 'checklist',
           pages: '2 pages',
-          category: 'Checklists',
-        },
-        {
-          id: 'compliance-checklist',
-          title: 'Pre-Service Compliance Declaration',
-          description: 'Court-ready evidence of your compliance with landlord obligations',
-          icon: 'compliance',
-          pages: '2-3 pages',
           category: 'Checklists',
         }
       );
@@ -109,14 +93,6 @@ export function getNoticeOnlyDocuments(jurisdiction: string, noticeRoute: string
           icon: 'checklist',
           pages: '2 pages',
           category: 'Checklists',
-        },
-        {
-          id: 'compliance-checklist-wales',
-          title: 'Pre-Service Compliance Declaration',
-          description: 'Evidence of Rent Smart Wales registration and deposit compliance',
-          icon: 'compliance',
-          pages: '2 pages',
-          category: 'Checklists',
         }
       );
     } else if (noticeRoute === 'fault_based' || noticeRoute === 'fault-based' || noticeRoute === 'wales_fault_based') {
@@ -142,14 +118,6 @@ export function getNoticeOnlyDocuments(jurisdiction: string, noticeRoute: string
           title: 'Service & Validity Checklist (Wales)',
           description: 'Welsh law compliance checklist for fault-based notices',
           icon: 'checklist',
-          pages: '2 pages',
-          category: 'Checklists',
-        },
-        {
-          id: 'compliance-checklist-wales',
-          title: 'Pre-Service Compliance Declaration',
-          description: 'Evidence of Rent Smart Wales registration and deposit compliance',
-          icon: 'compliance',
           pages: '2 pages',
           category: 'Checklists',
         }
@@ -181,14 +149,6 @@ export function getNoticeOnlyDocuments(jurisdiction: string, noticeRoute: string
           icon: 'checklist',
           pages: '2 pages',
           category: 'Checklists',
-        },
-        {
-          id: 'compliance-checklist-wales',
-          title: 'Pre-Service Compliance Declaration',
-          description: 'Court-ready evidence of your compliance with landlord obligations',
-          icon: 'compliance',
-          pages: '2-3 pages',
-          category: 'Checklists',
         }
       );
     }
@@ -218,14 +178,6 @@ export function getNoticeOnlyDocuments(jurisdiction: string, noticeRoute: string
         title: 'Service & Validity Checklist (Scotland)',
         description: 'Scottish tenancy law compliance checklist',
         icon: 'checklist',
-        pages: '2 pages',
-        category: 'Checklists',
-      },
-      {
-        id: 'compliance-checklist-scotland',
-        title: 'Pre-Service Compliance Declaration',
-        description: 'Evidence of landlord registration and deposit compliance',
-        icon: 'compliance',
         pages: '2 pages',
         category: 'Checklists',
       }
@@ -319,38 +271,14 @@ export function getCompletePackDocuments(jurisdiction: string, noticeRoute: stri
     }
   );
 
-  // Guidance Documents
+  // Guidance Documents - Eviction Roadmap consolidates timeline and expert tips
   documents.push(
     {
       id: 'eviction-roadmap',
-      title: 'Eviction Roadmap',
-      description: 'Step-by-step guide through the entire eviction process from start to finish',
+      title: 'Eviction Roadmap & Timeline',
+      description: 'Complete visual guide with step-by-step stages, timelines, costs, and expert tips',
       icon: 'guidance',
-      pages: '4-6 pages',
-      category: 'Guidance',
-    },
-    {
-      id: 'expert-guidance',
-      title: 'Expert Eviction Guidance',
-      description: 'Professional tips and strategies for a successful eviction',
-      icon: 'guidance',
-      pages: '3 pages',
-      category: 'Guidance',
-    },
-    {
-      id: 'timeline-expectations',
-      title: 'Timeline & Expectations',
-      description: 'Realistic timelines for each stage of the eviction process',
-      icon: 'guidance',
-      pages: '2 pages',
-      category: 'Guidance',
-    },
-    {
-      id: 'case-summary',
-      title: 'Eviction Case Summary',
-      description: 'Overview of your case facts and key details',
-      icon: 'guidance',
-      pages: '2 pages',
+      pages: '5-7 pages',
       category: 'Guidance',
     }
   );

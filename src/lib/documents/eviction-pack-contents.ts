@@ -177,39 +177,15 @@ const RISK_ASSESSMENT: PackDocument = {
 
 const EVICTION_ROADMAP: PackDocument = {
   id: 'eviction_roadmap',
-  title: 'Step-by-Step Eviction Roadmap',
-  description: 'Complete guide from notice to possession order',
+  title: 'Eviction Roadmap & Timeline',
+  description: 'Complete visual guide with timeline, key stages, and what to expect',
   category: 'guidance',
   icon: '🗺️',
   documentType: 'eviction_roadmap',
 };
 
-const EXPERT_GUIDANCE: PackDocument = {
-  id: 'expert_guidance',
-  title: 'Expert Eviction Guidance',
-  description: 'Professional tips and common pitfalls to avoid',
-  category: 'guidance',
-  icon: '💡',
-  documentType: 'expert_guidance',
-};
-
-const TIMELINE_EXPECTATIONS: PackDocument = {
-  id: 'timeline_expectations',
-  title: 'Eviction Timeline & Expectations',
-  description: 'Realistic timelines and what to expect at each stage',
-  category: 'guidance',
-  icon: '📅',
-  documentType: 'eviction_timeline',
-};
-
-const CASE_SUMMARY: PackDocument = {
-  id: 'case_summary',
-  title: 'Eviction Case Summary',
-  description: 'Overview of your case facts and key details',
-  category: 'guidance',
-  icon: '📄',
-  documentType: 'case_summary',
-};
+// REMOVED: Expert Guidance, Timeline & Expectations, Case Summary
+// These have been consolidated into the comprehensive Eviction Roadmap document
 
 const COURT_FILING_GUIDE: PackDocument = {
   id: 'court_filing_guide',
@@ -409,11 +385,9 @@ export function getEvictionPackContents(options: PackContentsOptions): PackCateg
   const guidance: PackDocument[] = [SERVICE_INSTRUCTIONS, SERVICE_VALIDITY_CHECKLIST];
 
   if (packType === 'complete_pack') {
-    // Add all guidance documents for complete pack
+    // Add guidance documents for complete pack
+    // Eviction Roadmap now includes timeline and expert tips (consolidated)
     guidance.unshift(EVICTION_ROADMAP);
-    guidance.push(EXPERT_GUIDANCE);
-    guidance.push(TIMELINE_EXPECTATIONS);
-    guidance.push(CASE_SUMMARY);
 
     if (jurisdiction === 'scotland') {
       guidance.push(TRIBUNAL_LODGING_GUIDE);
