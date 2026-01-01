@@ -89,13 +89,10 @@ export default function WizardPreviewPage() {
       types.push('compliance_audit');
       types.push('risk_assessment');
 
-      // Guidance documents
+      // Guidance documents (consolidated - expert guidance, timeline, case summary merged into roadmap)
       types.push('service_instructions');
       types.push('service_checklist');
       types.push('eviction_roadmap');
-      types.push('expert_guidance');
-      types.push('eviction_timeline');
-      types.push('case_summary');
 
       if (jurisdiction === 'england' || jurisdiction === 'wales') {
         types.push('court_filing_guide');
@@ -384,15 +381,8 @@ export default function WizardPreviewPage() {
       'validity-checklist-s173': ['service_checklist'],
       'validity-checklist-fault': ['service_checklist'],
       'validity-checklist-ntl': ['service_checklist'],
-      // Compliance checklists (these are static, not generated)
-      'compliance-checklist': ['compliance_checklist'],
-      'compliance-checklist-wales': ['compliance_checklist'],
-      'compliance-checklist-scotland': ['compliance_checklist'],
-      // Guidance docs
+      // Guidance docs (consolidated - expert guidance, timeline, case summary merged into roadmap)
       'eviction-roadmap': ['eviction_roadmap'],
-      'expert-guidance': ['expert_guidance'],
-      'timeline-expectations': ['eviction_timeline'],
-      'case-summary': ['case_summary'],
       'court-filing-guide': ['court_filing_guide'],
       'tribunal-lodging-guide': ['tribunal_lodging_guide'],
       // Evidence

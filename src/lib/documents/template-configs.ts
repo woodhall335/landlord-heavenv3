@@ -48,14 +48,6 @@ export function getNoticeOnlyTemplates(jurisdiction: string, noticeRoute: string
           type: 'checklist',
           description: 'Ensure your notice meets all legal requirements',
           category: 'checklist',
-        },
-        {
-          id: 'compliance-checklist',
-          templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
-          title: 'Pre-Service Compliance Declaration',
-          type: 'checklist',
-          description: 'Evidence of your compliance with landlord obligations',
-          category: 'checklist',
         }
       );
     } else if (noticeRoute === 'section_8' || noticeRoute === 'section-8') {
@@ -82,14 +74,6 @@ export function getNoticeOnlyTemplates(jurisdiction: string, noticeRoute: string
           title: 'Service & Validity Checklist',
           type: 'checklist',
           description: 'Ensure your notice meets all legal requirements',
-          category: 'checklist',
-        },
-        {
-          id: 'compliance-checklist',
-          templatePath: 'uk/england/templates/eviction/compliance_checklist.hbs',
-          title: 'Pre-Service Compliance Declaration',
-          type: 'checklist',
-          description: 'Evidence of your compliance with landlord obligations',
           category: 'checklist',
         }
       );
@@ -123,14 +107,6 @@ export function getNoticeOnlyTemplates(jurisdiction: string, noticeRoute: string
           type: 'checklist',
           description: 'Welsh law compliance checklist',
           category: 'checklist',
-        },
-        {
-          id: 'compliance-checklist-wales',
-          templatePath: 'uk/wales/templates/eviction/compliance_checklist.hbs',
-          title: 'Pre-Service Compliance Declaration',
-          type: 'checklist',
-          description: 'Evidence of Rent Smart Wales and deposit compliance',
-          category: 'checklist',
         }
       );
     } else if (noticeRoute === 'fault_based' || noticeRoute === 'fault-based' || noticeRoute === 'wales_fault_based') {
@@ -157,14 +133,6 @@ export function getNoticeOnlyTemplates(jurisdiction: string, noticeRoute: string
           title: 'Service & Validity Checklist (Wales)',
           type: 'checklist',
           description: 'Welsh law compliance checklist for fault-based notices',
-          category: 'checklist',
-        },
-        {
-          id: 'compliance-checklist-wales',
-          templatePath: 'uk/wales/templates/eviction/compliance_checklist.hbs',
-          title: 'Pre-Service Compliance Declaration',
-          type: 'checklist',
-          description: 'Evidence of Rent Smart Wales and deposit compliance',
           category: 'checklist',
         }
       );
@@ -194,14 +162,6 @@ export function getNoticeOnlyTemplates(jurisdiction: string, noticeRoute: string
           title: 'Service & Validity Checklist',
           type: 'checklist',
           description: 'Ensure your notice meets all legal requirements',
-          category: 'checklist',
-        },
-        {
-          id: 'compliance-checklist-wales',
-          templatePath: 'uk/wales/templates/eviction/compliance_checklist.hbs',
-          title: 'Pre-Service Compliance Declaration',
-          type: 'checklist',
-          description: 'Evidence of your compliance with landlord obligations',
           category: 'checklist',
         }
       );
@@ -234,14 +194,6 @@ export function getNoticeOnlyTemplates(jurisdiction: string, noticeRoute: string
         type: 'checklist',
         description: 'Scottish tenancy law compliance checklist',
         category: 'checklist',
-      },
-      {
-        id: 'compliance-checklist-scotland',
-        templatePath: 'uk/scotland/templates/eviction/compliance_checklist.hbs',
-        title: 'Pre-Service Compliance Declaration',
-        type: 'checklist',
-        description: 'Evidence of landlord registration and deposit compliance',
-        category: 'checklist',
       }
     );
   }
@@ -263,23 +215,15 @@ export function getCompletePackTemplates(jurisdiction: string, noticeRoute: stri
   // Add court forms (note: these are filled PDFs, not HBS templates)
   // The generator handles N5, N119, N5B via pdf-lib
 
-  // Add guidance templates
+  // Add guidance templates - Eviction Roadmap now consolidates timeline and expert tips
   if (jurisdiction === 'england' || jurisdiction === 'wales') {
     templates.push(
       {
         id: 'eviction-roadmap',
         templatePath: `uk/${jurisdiction}/templates/eviction/eviction_roadmap.hbs`,
-        title: 'Step-by-Step Eviction Roadmap',
+        title: 'Eviction Roadmap & Timeline',
         type: 'guidance',
-        description: 'Complete guide from notice to possession order',
-        category: 'guidance',
-      },
-      {
-        id: 'expert-guidance',
-        templatePath: `uk/${jurisdiction}/templates/eviction/expert_guidance.hbs`,
-        title: 'Expert Eviction Guidance',
-        type: 'guidance',
-        description: 'Professional tips and common pitfalls to avoid',
+        description: 'Complete visual guide with stages, timelines, costs, and expert tips',
         category: 'guidance',
       },
       {
@@ -298,17 +242,9 @@ export function getCompletePackTemplates(jurisdiction: string, noticeRoute: stri
       {
         id: 'eviction-roadmap',
         templatePath: 'uk/scotland/templates/eviction/eviction_roadmap.hbs',
-        title: 'Step-by-Step Eviction Roadmap',
+        title: 'Eviction Roadmap & Timeline',
         type: 'guidance',
-        description: 'Complete guide from notice to tribunal',
-        category: 'guidance',
-      },
-      {
-        id: 'expert-guidance',
-        templatePath: 'uk/scotland/templates/eviction/expert_guidance.hbs',
-        title: 'Expert Eviction Guidance',
-        type: 'guidance',
-        description: 'Professional tips for Scottish tribunal',
+        description: 'Complete visual guide with stages, timelines, costs, and expert tips',
         category: 'guidance',
       },
       {
