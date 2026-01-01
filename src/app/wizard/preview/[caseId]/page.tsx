@@ -139,7 +139,7 @@ export default function WizardPreviewPage() {
               setGeneratedDocs(docsResult.documents.map((doc: any) => ({
                 id: doc.id,
                 document_type: doc.document_type,
-                title: doc.title,
+                title: doc.document_title,
               })));
             }
           }

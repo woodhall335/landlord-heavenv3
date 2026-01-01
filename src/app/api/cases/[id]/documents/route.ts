@@ -58,7 +58,7 @@ export async function GET(
     // Fetch all documents for this case
     const { data: documents, error: docsError } = await adminSupabase
       .from('documents')
-      .select('id, document_type, title, created_at, status')
+      .select('id, document_type, document_title, created_at')
       .eq('case_id', caseId)
       .order('created_at', { ascending: false });
 
