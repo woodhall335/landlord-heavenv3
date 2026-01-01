@@ -36,14 +36,21 @@ export async function GET(
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
+    // Type assertion for the case record properties we need
+    const caseRecord = caseData as {
+      id: string;
+      user_id: string | null;
+      [key: string]: unknown;
+    };
+
     // Manual access control: user can access if:
     // 1. They own the case (user_id matches)
     // 2. The case is anonymous (user_id is null) - anyone can access
-    const isOwner = user && caseData.user_id === user.id;
-    const isAnonymousCase = caseData.user_id === null;
+    const isOwner = user && caseRecord.user_id === user.id;
+    const isAnonymousCase = caseRecord.user_id === null;
 
     if (!isOwner && !isAnonymousCase) {
-      console.error('Access denied to case:', { caseId, userId: user?.id, caseUserId: caseData.user_id });
+      console.error('Access denied to case:', { caseId, userId: user?.id, caseUserId: caseRecord.user_id });
       return NextResponse.json({ error: 'Case not found' }, { status: 404 });
     }
 
