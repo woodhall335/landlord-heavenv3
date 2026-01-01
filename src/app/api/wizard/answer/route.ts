@@ -8,7 +8,7 @@
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { createServerSupabaseClient, getServerUser } from '@/lib/supabase/server';
+import { createServerSupabaseClient, createAdminClient, getServerUser } from '@/lib/supabase/server';
 import {
   loadMQS,
   getNextMQSQuestion,
@@ -575,14 +575,16 @@ export async function POST(request: Request) {
     const isReviewMode =
       !isEnhanceOnly && (mode === 'edit' || include_answered === true || review_mode === true);
 
-    // Create properly typed Supabase client
+    // Create properly typed Supabase client for user-scoped operations
     const supabase = await createServerSupabaseClient();
 
+    // Admin client bypasses RLS - used for case operations for anonymous users
+    const adminSupabase = createAdminClient();
+
     // ---------------------------------------
-    // 1. Load case - RLS policies handle access control
-    //    No need for manual user_id filtering
+    // 1. Load case - use admin client to support anonymous users
     // ---------------------------------------
-    const { data, error: fetchError } = await supabase
+    const { data, error: fetchError } = await adminSupabase
       .from('cases')
       .select('*')
       .eq('id', case_id)
@@ -841,7 +843,8 @@ export async function POST(request: Request) {
     // ---------------------------------------
     // 3. Merge into WizardFacts (flat DB format)
     // ---------------------------------------
-    const currentFacts = await getOrCreateWizardFacts(supabase, case_id);
+    // Use admin client to support anonymous users
+    const currentFacts = await getOrCreateWizardFacts(adminSupabase, case_id);
 
     // PHASE 1: Debug instrumentation - log incoming answer
     debugLog('Incoming', {
@@ -1335,7 +1338,8 @@ export async function POST(request: Request) {
       }
     }
 
-    const newFacts = await updateWizardFacts(supabase, case_id, () => mergedFacts, {
+    // Use admin client to support anonymous users
+    const newFacts = await updateWizardFacts(adminSupabase, case_id, () => mergedFacts, {
       meta: (collectedFacts as any).__meta,
     });
 
@@ -1543,7 +1547,8 @@ export async function POST(request: Request) {
           costUsd: responseData.smart_review?.cost_usd,
         };
 
-        await updateWizardFacts(supabase, case_id, (current) => ({
+        // Use admin client to support anonymous users
+        await updateWizardFacts(adminSupabase, case_id, (current) => ({
           ...current,
           __smart_review: persistedSmartReview,
         }));
@@ -1581,7 +1586,8 @@ export async function POST(request: Request) {
       updatePayload.wizard_completed_at = isComplete ? new Date().toISOString() : null;
     }
 
-    await supabase.from('cases').update(updatePayload as any).eq('id', case_id);
+    // Use admin client to support anonymous users
+    await adminSupabase.from('cases').update(updatePayload as any).eq('id', case_id);
 
     return NextResponse.json({
       case_id,
