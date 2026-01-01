@@ -259,13 +259,46 @@ export default function WizardPreviewPage() {
         }
     }
 
+    // Mapping from config document IDs to database document_type values
+    const docTypeMapping: Record<string, string[]> = {
+      // Section 8 / Form 3
+      'notice-section-8': ['section8_notice', 'form_3_section8'],
+      // Section 21 / Form 6A
+      'notice-section-21': ['section21_notice', 'form_6a_section21'],
+      // Wales
+      'notice-section-173': ['section173_notice', 'wales_section_173'],
+      'notice-fault-based': ['fault_based_notice', 'wales_fault_based'],
+      // Scotland
+      'notice-to-leave': ['notice_to_leave', 'scotland_notice_to_leave'],
+      // Court forms
+      'form-n5': ['n5_claim', 'form_n5'],
+      'form-n119': ['n119_particulars', 'form_n119'],
+      'form-n5b': ['n5b_claim', 'form_n5b'],
+      'form-e': ['form_e', 'tribunal_application'],
+      // AI documents
+      'witness-statement': ['witness_statement'],
+      'compliance-audit': ['compliance_audit'],
+      'risk-assessment': ['risk_assessment'],
+      // Guidance docs
+      'eviction-roadmap': ['eviction_roadmap'],
+      'expert-guidance': ['expert_guidance'],
+      'court-filing-guide': ['court_filing_guide'],
+      'tribunal-lodging-guide': ['tribunal_lodging_guide'],
+      // Evidence
+      'arrears-schedule': ['arrears_schedule'],
+      'evidence-checklist': ['evidence_checklist'],
+      'proof-of-service': ['proof_of_service'],
+    };
+
     // Enrich documents with generated document IDs for thumbnails
     return baseDocuments.map(doc => {
-      // Try to find a matching generated document by document_type
+      // Try to find a matching generated document
+      const possibleTypes = docTypeMapping[doc.id] || [doc.id];
       const matchingGenDoc = generatedDocs.find(
-        gd => gd.document_type === doc.id ||
-              gd.document_type.includes(doc.id) ||
-              doc.id.includes(gd.document_type)
+        gd => possibleTypes.includes(gd.document_type) ||
+              gd.document_type === doc.id ||
+              gd.document_type.replace(/_/g, '-') === doc.id ||
+              doc.id.replace(/-/g, '_') === gd.document_type
       );
 
       return {
