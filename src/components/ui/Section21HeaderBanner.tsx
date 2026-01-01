@@ -38,26 +38,33 @@ export function Section21HeaderBanner() {
   if (!isVisible || isExcluded) return null;
 
   return (
-    <div className="bg-gradient-to-r from-primary to-primary/90 text-white py-2.5 px-4 relative">
-      <div className="container mx-auto flex items-center justify-center gap-2 sm:gap-4 text-sm sm:text-base">
-        {/* Desktop */}
-        <span className="hidden sm:inline">⚠️ Section 21 ends 1 May 2026 —</span>
-        {/* Mobile */}
-        <span className="sm:hidden">⚠️ S21 ends May 2026 —</span>
+    <div className="bg-gradient-to-r from-primary to-primary/90 text-white py-2.5 px-4">
+      <div className="container mx-auto flex items-center justify-between gap-2 sm:gap-4 text-sm sm:text-base">
+        {/* Spacer for balance on desktop */}
+        <div className="hidden sm:block w-8" />
 
-        <Section21Countdown variant="compact" className="text-white" />
+        {/* Center content */}
+        <div className="flex items-center justify-center gap-2 sm:gap-4 flex-1">
+          {/* Desktop */}
+          <span className="hidden sm:inline">⚠️ Section 21 ends 1 May 2026 —</span>
+          {/* Mobile */}
+          <span className="sm:hidden">⚠️ S21 ends May 2026 —</span>
 
-        <Link
-          href="/products/notice-only"
-          className="underline hover:no-underline font-medium ml-1"
-        >
-          <span className="hidden sm:inline">Serve Your Notice Now →</span>
-          <span className="sm:hidden">Act Now →</span>
-        </Link>
+          <Section21Countdown variant="compact" className="text-white" />
 
+          <Link
+            href="/products/notice-only"
+            className="underline hover:no-underline font-medium ml-1"
+          >
+            <span className="hidden sm:inline">Serve Your Notice Now →</span>
+            <span className="sm:hidden">Act Now →</span>
+          </Link>
+        </div>
+
+        {/* Close button - in flow, not absolute */}
         <button
           onClick={handleDismiss}
-          className="absolute right-2 sm:right-4 p-1 hover:bg-white/10 rounded transition-colors"
+          className="flex-shrink-0 p-1 hover:bg-white/10 rounded transition-colors"
           aria-label="Dismiss banner"
         >
           <X className="w-4 h-4" />
