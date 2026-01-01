@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 
 const COMMON_GROUNDS = [
   { id: 'ground8', name: 'Ground 8', description: 'Rent arrears (8+ weeks/2+ months)' },
@@ -33,7 +35,8 @@ export default function FreeSection8Tool() {
     }));
   };
 
-  const handleGenerate = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     setIsGenerating(true);
 
     try {
@@ -259,6 +262,17 @@ export default function FreeSection8Tool() {
       setIsGenerating(false);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [formData]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:section-8-generator',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleGenerate = () => {
+    gate.checkGateAndProceed();
   };
 
   const isFormValid =
@@ -462,6 +476,16 @@ export default function FreeSection8Tool() {
           </div>
         </Container>
       </div>
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="Section 8 Notice"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }

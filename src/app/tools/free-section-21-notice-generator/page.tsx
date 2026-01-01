@@ -1,8 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 
 // SEO Metadata (exported from separate metadata.ts file for client components)
 // See: src/app/tools/free-section-21-notice-generator/metadata.ts
@@ -17,7 +19,8 @@ export default function FreeSection21Tool() {
 
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleGenerate = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     setIsGenerating(true);
 
     try {
@@ -216,6 +219,17 @@ export default function FreeSection21Tool() {
       setIsGenerating(false);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [formData]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:section-21-generator',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleGenerate = () => {
+    gate.checkGateAndProceed();
   };
 
   const isFormValid =
@@ -486,6 +500,16 @@ export default function FreeSection21Tool() {
           </div>
         </Container>
       </div>
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="Section 21 Notice"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }

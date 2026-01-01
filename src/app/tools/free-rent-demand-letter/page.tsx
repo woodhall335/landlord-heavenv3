@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { RiAlertLine, RiInformationLine, RiExternalLinkLine, RiCheckboxCircleLine } from 'react-icons/ri';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 
 export default function RentDemandLetterGenerator() {
   const [formData, setFormData] = useState({
@@ -29,7 +31,8 @@ export default function RentDemandLetterGenerator() {
     setFormData((prev) => ({ ...prev, paymentDeadline: formattedDate }));
   }, []);
 
-  const handleGenerate = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     // Validate all required fields
     if (!formData.landlordName?.trim()) {
       alert('Please enter your name');
@@ -351,6 +354,17 @@ URL.revokeObjectURL(url);
       setIsGenerating(false);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [formData]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:rent-demand-letter',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleGenerate = () => {
+    gate.checkGateAndProceed();
   };
 
   const isFormValid =
@@ -872,6 +886,16 @@ URL.revokeObjectURL(url);
           </div>
         </Container>
       </div>
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="Rent Demand Letter"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }

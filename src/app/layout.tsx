@@ -10,6 +10,7 @@ import {
   softwareApplicationSchema,
   localBusinessSchema
 } from "@/lib/seo/structured-data";
+import { PopupProvider } from "@/components/providers/PopupProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -81,9 +82,11 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}>
-        <Header user={headerUser} />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <PopupProvider>
+          <Header user={headerUser} />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </PopupProvider>
       </body>
     </html>
   );

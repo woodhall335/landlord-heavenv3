@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Button, Card, Container, Input } from '@/components/ui';
 import { RiAlertLine } from 'react-icons/ri';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 
 // Note: Metadata moved to layout.tsx (client components cannot export metadata)
 
@@ -148,7 +150,8 @@ export default function RentArrearsCalculator() {
     setSchedule((prev) => (prev.length > 1 ? prev.filter((item) => item.id !== id) : prev));
   };
 
-  const handleSavePDF = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     if (schedule.length === 0 || totals.totalOutstanding === 0) {
       alert('Please add at least one arrears period first');
       return;
@@ -322,6 +325,17 @@ link.href = url;
       console.error('PDF error:', error);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [schedule, totals, rentAmount, estimatedInterest, daysOutstanding]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:rent-arrears-calculator',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleSavePDF = () => {
+    gate.checkGateAndProceed();
   };
 
   return (
@@ -641,6 +655,16 @@ link.href = url;
           </div>
         </Card>
       </Container>
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="Rent Arrears Schedule"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }
