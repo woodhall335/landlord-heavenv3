@@ -98,7 +98,7 @@ export default function Home() {
 
             {/* Social Proof Counter */}
             <div className="mb-6">
-              <SocialProofCounter variant="today" baseNumber={47} className="mx-auto" />
+              <SocialProofCounter variant="today" className="mx-auto" />
             </div>
 
             {/* Trust Indicators */}

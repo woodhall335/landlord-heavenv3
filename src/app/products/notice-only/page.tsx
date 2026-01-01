@@ -53,7 +53,7 @@ export default function NoticeOnlyPage() {
               Get Your Notice Now →
             </Link>
             <div className="mt-4 mb-2">
-              <SocialProofCounter variant="today" baseNumber={34} className="mx-auto" />
+              <SocialProofCounter variant="today" className="mx-auto" />
             </div>
             <p className="text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
           </div>

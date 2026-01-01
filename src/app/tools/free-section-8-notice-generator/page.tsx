@@ -315,7 +315,7 @@ export default function FreeSection8Tool() {
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Basic template • Upgrade for legal compliance</p>
             <div className="mt-6">
-              <SocialProofCounter variant="today" baseNumber={34} className="mx-auto" />
+              <SocialProofCounter variant="today" className="mx-auto" />
             </div>
           </div>
         </Container>

@@ -371,7 +371,7 @@ link.href = url;
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant calculation • Professional summary • Upgrade for court claims</p>
             <div className="mt-6">
-              <SocialProofCounter variant="today" baseNumber={63} className="mx-auto" />
+              <SocialProofCounter variant="today" className="mx-auto" />
             </div>
           </div>
         </Container>

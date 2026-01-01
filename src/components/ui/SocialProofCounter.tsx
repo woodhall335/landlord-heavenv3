@@ -2,7 +2,12 @@
  * Social Proof Counter Component
  *
  * Displays dynamic usage statistics to build trust and FOMO.
- * Includes animated count-up effect and realistic time-based variations.
+ * Includes animated count-up effect and realistic time-based progression.
+ *
+ * Features:
+ * - Numbers only ever go UP on refresh (stored in localStorage)
+ * - Gradual increase throughout the day (5000 base, grows to ~7500+ by evening)
+ * - Resets at midnight to new base
  *
  * Variants:
  * - today: "X landlords used this today" (for product/tool pages)
@@ -22,8 +27,6 @@ interface SocialProofCounterProps {
   variant: CounterVariant;
   /** Override the base number (optional) */
   baseNumber?: number;
-  /** Override the variance range (optional) */
-  variance?: number;
   /** Additional CSS classes */
   className?: string;
   /** Show/hide icon (default: true) */
@@ -32,29 +35,71 @@ interface SocialProofCounterProps {
 
 const COUNTER_CONFIG = {
   today: {
-    base: 38,
-    variance: 12,
+    base: 0,
+    dailyGrowth: 5000, // Grows from 0 to ~5000 throughout the day
     text: 'landlords used this today',
     Icon: RiGroupLine,
   },
   week: {
-    base: 285,
-    variance: 45,
+    base: 20000,
+    dailyGrowth: 10000,
     text: 'documents generated this week',
     Icon: RiFileTextLine,
   },
   total: {
-    base: 10000,
-    variance: 0,
+    base: 50000,
+    dailyGrowth: 0,
     text: 'UK landlords',
     Icon: RiUserStarLine,
   },
 };
 
+/**
+ * Get or create a persistent counter value that only increases
+ */
+function getPersistedCount(storageKey: string, baseCount: number, dailyGrowth: number): number {
+  const now = new Date();
+  const today = now.toDateString();
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+
+  // Calculate time-based progression (0 at midnight, 1 at 11:59pm)
+  const dayProgress = (hour * 60 + minute) / (24 * 60);
+
+  // Calculate minimum count for this time of day
+  // Starts at base, grows throughout the day
+  const timeBasedMin = Math.floor(baseCount + (dailyGrowth * dayProgress));
+
+  try {
+    const stored = localStorage.getItem(storageKey);
+    if (stored) {
+      const { date, count } = JSON.parse(stored);
+
+      // Same day: ensure count only goes up
+      if (date === today) {
+        // If stored count is lower than time-based minimum, catch up
+        // If stored count is higher, add small increment (1-5)
+        const increment = Math.floor(Math.random() * 5) + 1;
+        const newCount = Math.max(timeBasedMin, count + increment);
+        localStorage.setItem(storageKey, JSON.stringify({ date: today, count: newCount }));
+        return newCount;
+      }
+    }
+
+    // New day or first visit: start fresh with time-based count + small random
+    const initialVariance = Math.floor(Math.random() * 50);
+    const newCount = timeBasedMin + initialVariance;
+    localStorage.setItem(storageKey, JSON.stringify({ date: today, count: newCount }));
+    return newCount;
+  } catch {
+    // localStorage not available (SSR or privacy mode)
+    return timeBasedMin + Math.floor(Math.random() * 50);
+  }
+}
+
 export function SocialProofCounter({
   variant,
   baseNumber,
-  variance,
   className = '',
   showIcon = true,
 }: SocialProofCounterProps) {
@@ -63,21 +108,15 @@ export function SocialProofCounter({
 
   const config = COUNTER_CONFIG[variant];
   const finalBase = baseNumber ?? config.base;
-  const finalVariance = variance ?? config.variance;
   const Icon = config.Icon;
 
   useEffect(() => {
-    // Generate realistic count based on time of day
-    const hour = new Date().getHours();
-    // Busier during work hours (9am-6pm)
-    const dayMultiplier = hour >= 9 && hour <= 18 ? 1.2 : 0.8;
-    // Add some randomness
-    const randomVariance = Math.floor(Math.random() * finalVariance * 2) - finalVariance;
-    const targetCount = Math.max(1, Math.floor(finalBase * dayMultiplier + randomVariance));
+    const storageKey = `social_proof_${variant}`;
+    const targetCount = getPersistedCount(storageKey, finalBase, config.dailyGrowth);
 
     // Animate count up effect
     const duration = 1200; // 1.2 seconds
-    const steps = 25;
+    const steps = 30;
     const increment = targetCount / steps;
     let current = 0;
 
@@ -93,7 +132,7 @@ export function SocialProofCounter({
     }, duration / steps);
 
     return () => clearInterval(timer);
-  }, [finalBase, finalVariance]);
+  }, [variant, finalBase, config.dailyGrowth]);
 
   // Total variant - larger, more prominent (for landing page)
   if (variant === 'total') {
