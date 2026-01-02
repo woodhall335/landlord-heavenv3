@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { clsx } from "clsx";
-import { RiArrowDownSLine, RiMenuLine } from 'react-icons/ri';
+import { RiArrowDownSLine, RiMenuLine, RiLogoutBoxLine } from 'react-icons/ri';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 
 interface NavItem {
   href: string;
@@ -37,10 +38,26 @@ const freeToolsLinks: NavItem[] = [
 
 export function NavBar({ user }: NavBarProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [showFreeTools, setShowFreeTools] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showMenu, setShowMenu] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      const supabase = getSupabaseBrowserClient();
+      await supabase.auth.signOut();
+      router.push('/');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -151,6 +168,14 @@ export function NavBar({ user }: NavBarProps) {
               <Link href="/dashboard" className="text-primary hover:text-primary-dark font-semibold">
                 Dashboard
               </Link>
+              <button
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="text-gray-500 hover:text-red-600 transition-colors"
+                title="Logout"
+              >
+                <RiLogoutBoxLine className="h-5 w-5" />
+              </button>
             </div>
           ) : (
             <Link href="/auth/login" className="header-login-btn">
@@ -203,10 +228,53 @@ export function NavBar({ user }: NavBarProps) {
               ))}
             </div>
 
-            {user && (
-              <div className="flex items-center gap-3 pt-2">
-                <Link href="/dashboard" className="text-sm font-semibold text-primary">
-                  Go to dashboard
+            {user ? (
+              <div className="border-t border-gray-200 pt-4 mt-2">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white font-bold">
+                    {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
+                  </span>
+                  <div>
+                    <p className="font-semibold text-charcoal">{user.name || user.email}</p>
+                    {user.name && <p className="text-xs text-gray-500">{user.email}</p>}
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center gap-2 py-2 text-sm font-semibold text-primary"
+                    onClick={() => setOpen(false)}
+                  >
+                    Go to Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setOpen(false);
+                      handleLogout();
+                    }}
+                    disabled={isLoggingOut}
+                    className="flex items-center gap-2 py-2 text-sm font-semibold text-red-600 hover:text-red-700"
+                  >
+                    <RiLogoutBoxLine className="h-4 w-4" />
+                    {isLoggingOut ? 'Logging out...' : 'Logout'}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="border-t border-gray-200 pt-4 mt-2">
+                <Link
+                  href="/auth/login"
+                  className="block py-2 text-sm font-semibold text-primary"
+                  onClick={() => setOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className="block py-2 text-sm font-semibold text-charcoal"
+                  onClick={() => setOpen(false)}
+                >
+                  Create Account
                 </Link>
               </div>
             )}
