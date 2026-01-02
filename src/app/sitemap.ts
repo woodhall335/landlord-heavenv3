@@ -29,7 +29,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/products/complete-pack', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/money-claim', priority: 0.9, changeFrequency: 'weekly' as const },
     { path: '/products/ast', priority: 0.9, changeFrequency: 'weekly' as const },
-    { path: '/hmo-pro', priority: 0.8, changeFrequency: 'weekly' as const },
+    // HMO Pro removed - parked for later review
+    // { path: '/hmo-pro', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/ask-heaven', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 

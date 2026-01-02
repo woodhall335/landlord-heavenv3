@@ -285,11 +285,7 @@ export default function DashboardPage() {
                     📝 Create New Document
                   </button>
                 </Link>
-                <Link href="/dashboard/hmo">
-                  <button className="w-full px-4 py-3 bg-linear-to-r from-secondary to-primary text-white rounded-lg hover:opacity-90 transition-opacity text-left font-medium">
-                    🏘️ HMO Pro Dashboard
-                  </button>
-                </Link>
+                {/* HMO Pro Dashboard removed - parked for later review */}
                 <Link href="/dashboard/settings">
                   <button className="w-full px-4 py-3 bg-gray-100 text-charcoal rounded-lg hover:bg-gray-200 transition-colors text-left font-medium">
                     ⚙️ Account Settings
