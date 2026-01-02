@@ -81,7 +81,9 @@ export default function LoginPage() {
       }
 
       if (data.session) {
-        // Session is now stored - redirect to appropriate dashboard
+        // Session is now stored - refresh to update server-side layout (header)
+        router.refresh();
+        // Then redirect to appropriate dashboard
         const dashboardUrl = await getDashboardUrl();
         router.push(dashboardUrl);
       } else {
