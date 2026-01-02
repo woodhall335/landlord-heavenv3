@@ -36,7 +36,7 @@ interface Document {
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { isLoading: authLoading, isAuthenticated } = useAuthCheck();
+  const { isLoading: authLoading, isAuthenticated, user } = useAuthCheck();
   const [cases, setCases] = useState<Case[]>([]);
   const [documents, setDocuments] = useState<Document[]>([]);
   const [stats, setStats] = useState<any>(null);
@@ -146,22 +146,19 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-gray-50">
       <TealHero
         title="Dashboard"
-        subtitle="Overview of your cases & activity"
-        eyebrow="Workspace"
-        actions={
-          <Link href="/wizard">
-            <Button variant="primary" size="large">
-              + New Document
-            </Button>
-          </Link>
+        subtitle={
+          <a href="#total-cases" className="hero-btn-pulse">
+            Overview of your cases & activity →
+          </a>
         }
+        eyebrow={`Welcome${user?.full_name ? `, ${user.full_name}` : ''}`}
         align="left"
       />
 
       <Container size="large" className="py-8">
         {/* Stats Overview */}
         {stats && (
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div id="total-cases" className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 scroll-mt-8">
             <Card padding="medium">
               <div className="text-sm text-gray-600 mb-1">Total Cases</div>
               <div className="text-3xl font-bold text-charcoal">{stats.overview.total}</div>

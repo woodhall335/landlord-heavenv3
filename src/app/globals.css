@@ -154,6 +154,37 @@ a[class*="text-white"]:not([class*="hover:"]):hover {
   border-color: #7C3AED;
 }
 
+.hero-btn-pulse {
+  display: inline-block;
+  background-color: #7C3AED;
+  color: #ffffff;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.25s ease;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 2px solid #7C3AED;
+  cursor: pointer;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.hero-btn-pulse:hover {
+  background-color: transparent;
+  color: #7C3AED;
+  border-color: #7C3AED;
+  animation: none;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(124, 58, 237, 0.4);
+  }
+  50% {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 0 0 10px rgba(124, 58, 237, 0);
+  }
+}
+
 .hero-btn-secondary {
   display: inline-block;
   background-color: #ffffff;
