@@ -197,6 +197,26 @@ export interface EvidenceFacts {
     file_name?: string;
     [key: string]: any;
   }>;
+  // Money claim evidence descriptions
+  tenancy_type?: string | null;
+  tenancy_written_or_verbal?: string | null;
+  rent_clause_description?: string | null;
+  arrears_calculation_method?: string | null;
+  arrears_ledger_available?: boolean | null;
+  arrears_period_description?: string | null;
+  bank_statements_available?: boolean | null;
+  inventory_checkout_available?: boolean | null;
+  damage_photos_available?: boolean | null;
+  damage_photos_description?: string | null;
+  repair_quotes_description?: string | null;
+  before_photos_available?: boolean | null;
+  correspondence_preserved?: boolean | null;
+  correspondence_format?: string[] | null;
+  key_correspondence_summary?: string | null;
+  money_claim_evidence_uploaded?: boolean | null;
+  // Wales-specific
+  contract_type?: string | null;
+  contract_written_or_verbal?: string | null;
 }
 
 export interface ServiceContactFacts {
@@ -434,6 +454,7 @@ export interface Ground17Facts {
 // =============================================================================
 
 export interface RiskFacts {
+  // Core eviction risk indicators
   known_tenant_defences: string | null;
   previous_court_proceedings: boolean | null;
   previous_proceedings_details: string | null;
@@ -442,6 +463,20 @@ export interface RiskFacts {
   disrepair_issues_list: string | null;
   tenant_vulnerability: boolean | null;
   tenant_vulnerability_details: string | null;
+  // Money claim risk indicators
+  tenant_disputes_claim?: boolean | null;
+  contract_holder_disputes_claim?: boolean | null; // Wales terminology
+  defender_disputes_claim?: boolean | null; // Scotland terminology
+  dispute_details?: string | null;
+  deposit_dispute_pending?: boolean | null;
+  deposit_dispute_amount?: number | null;
+  tenant_counterclaim_likely?: boolean | null;
+  contract_holder_counterclaim_likely?: boolean | null; // Wales terminology
+  defender_counterclaim_likely?: boolean | null; // Scotland terminology
+  counterclaim_grounds?: string[] | null;
+  payment_plan_offered?: boolean | null;
+  payment_plan_response?: string | null;
+  rent_smart_wales_compliant?: boolean | null; // Wales specific
 }
 
 // =============================================================================
@@ -457,6 +492,20 @@ export interface CommunicationEntry {
 export interface CommunicationTimelineFacts {
   entries: CommunicationEntry[];
   narrative: string | null;
+  // Money claim communication timeline
+  first_arrears_notice_date?: string | null;
+  first_notice_method?: string | null;
+  subsequent_reminders_sent?: number | null;
+  final_demand_date?: string | null;
+  tenant_acknowledged_debt?: boolean | null;
+  contract_holder_acknowledged_debt?: boolean | null; // Wales terminology
+  defender_acknowledged_debt?: boolean | null; // Scotland terminology
+  acknowledgment_date?: string | null;
+  tenant_made_partial_payment?: boolean | null;
+  contract_holder_made_partial_payment?: boolean | null; // Wales terminology
+  defender_made_partial_payment?: boolean | null; // Scotland terminology
+  last_partial_payment_date?: string | null;
+  last_partial_payment_amount?: number | null;
 }
 
 // =============================================================================
@@ -786,10 +835,38 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     disrepair_issues_list: null,
     tenant_vulnerability: null,
     tenant_vulnerability_details: null,
+    // Money claim risk indicators
+    tenant_disputes_claim: null,
+    contract_holder_disputes_claim: null,
+    defender_disputes_claim: null,
+    dispute_details: null,
+    deposit_dispute_pending: null,
+    deposit_dispute_amount: null,
+    tenant_counterclaim_likely: null,
+    contract_holder_counterclaim_likely: null,
+    defender_counterclaim_likely: null,
+    counterclaim_grounds: null,
+    payment_plan_offered: null,
+    payment_plan_response: null,
+    rent_smart_wales_compliant: null,
   },
   communication_timeline: {
     entries: [],
     narrative: null,
+    // Money claim communication timeline
+    first_arrears_notice_date: null,
+    first_notice_method: null,
+    subsequent_reminders_sent: null,
+    final_demand_date: null,
+    tenant_acknowledged_debt: null,
+    contract_holder_acknowledged_debt: null,
+    defender_acknowledged_debt: null,
+    acknowledgment_date: null,
+    tenant_made_partial_payment: null,
+    contract_holder_made_partial_payment: null,
+    defender_made_partial_payment: null,
+    last_partial_payment_date: null,
+    last_partial_payment_amount: null,
   },
   scotland_pre_action: {
     rent_statement_sent: null,
