@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
           full_name: full_name || null,
           phone: phone || null,
         },
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/callback`,
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/confirm`,
       },
     });
 
