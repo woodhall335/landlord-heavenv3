@@ -13,6 +13,7 @@ import {
   Calculator,
   BookOpen
 } from "lucide-react";
+import { StructuredData, productSchema, faqPageSchema } from "@/lib/seo/structured-data";
 
 export const metadata: Metadata = {
   title: "Money Claim Pack - Recover Rent Arrears Through Courts",
@@ -24,9 +25,46 @@ export const metadata: Metadata = {
   },
 };
 
+// FAQ data for structured data
+const faqs = [
+  {
+    question: "Can I claim arrears if the tenant has already left?",
+    answer: "Yes! You have 6 years from the date arrears became due to make a claim. Many landlords successfully claim arrears after tenancy ends. You'll need tenant's current address for court service."
+  },
+  {
+    question: "What if I don't know where the tenant lives?",
+    answer: "You can apply to court for 'alternative service' (e.g., email, Facebook, last known address). However, if you can't locate them for enforcement, winning the claim won't help you collect."
+  },
+  {
+    question: "Can I claim interest on the arrears?",
+    answer: "Yes! You can claim 8% statutory interest per year on rent arrears (or the rate in your tenancy agreement if higher). Our interest calculator works this out automatically."
+  },
+  {
+    question: "What happens if the tenant defends the claim?",
+    answer: "If tenant submits a defense, the court will schedule a hearing. You'll need to attend (in person or by phone) and present your evidence. Most landlords win if they have proper documentation."
+  },
+  {
+    question: "How do I actually collect the money after winning?",
+    answer: "After judgment, if tenant doesn't pay voluntarily, you can use: Bailiffs (High Court Enforcement Officers) - most effective; Attachment of Earnings - deduct from wages; Charging Order - secure against tenant's property. We include guides for all enforcement methods."
+  },
+  {
+    question: "When should I use Money Claims?",
+    answer: "Use Money Claims when you need to recover rent arrears through the county court. This product focuses specifically on the financial claim process. If your tenant is still in the property and you need to evict them first, start with our Notices product."
+  }
+];
+
 export default function MoneyClaimPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Structured Data for SEO */}
+      <StructuredData data={productSchema({
+        name: "Money Claim Pack - Recover Rent Arrears Through Courts",
+        description: "Recover unpaid rent arrears through UK courts. AI-drafted Particulars of Claim and Letter Before Action. PAP-DEBT compliance, N1 form, interest calculator, and enforcement guidance included.",
+        price: "179.99",
+        url: "https://landlordheaven.co.uk/products/money-claim"
+      })} />
+      <StructuredData data={faqPageSchema(faqs)} />
+
       {/* Hero Section */}
       <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>

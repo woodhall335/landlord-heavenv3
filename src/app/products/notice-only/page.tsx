@@ -15,6 +15,7 @@ import {
   BadgePoundSterling,
   FileCheck
 } from "lucide-react";
+import { StructuredData, productSchema, faqPageSchema } from "@/lib/seo/structured-data";
 
 export const metadata: Metadata = {
   title: "Section 21 & 8 Eviction Notices - Court-Ready from £29.99",
@@ -26,9 +27,46 @@ export const metadata: Metadata = {
   },
 };
 
+// FAQ data for structured data
+const faqs = [
+  {
+    question: "Is this legal? Will courts accept this?",
+    answer: "Yes! Our notices use official government forms (Form 6A for Section 21, AT6 for Scotland, etc.). They are identical to what solicitors use and are accepted by all UK courts and tribunals. However, we are NOT a law firm and don't provide legal advice - consult a solicitor for complex cases."
+  },
+  {
+    question: "What if I choose the wrong notice type?",
+    answer: "Our wizard analyzes your case and recommends the correct notice type based on your jurisdiction, tenancy type, and eviction grounds. You'll see a clear explanation of why each notice is recommended."
+  },
+  {
+    question: "Can I use this for HMO properties?",
+    answer: "Yes! Notice Only works for all tenancy types including HMOs."
+  },
+  {
+    question: "What happens after I serve the notice?",
+    answer: "After the notice period expires, if the tenant doesn't leave, you'll need to apply to court for a possession order. Our Legal Proceedings products include court claim forms to continue the process."
+  },
+  {
+    question: "What if my notice is rejected by court?",
+    answer: "If your notice is rejected due to an error in our document generation, we'll regenerate a corrected notice for free. However, if it's rejected due to incorrect information you provided or procedural issues (like missing deposit protection), we cannot offer a refund but will help you fix it."
+  },
+  {
+    question: "Can I generate multiple notices?",
+    answer: "£29.99 covers ONE notice for ONE property/tenant. Need multiple notices? You can purchase additional notices as needed. Each purchase includes unlimited regenerations before final download for that specific case."
+  }
+];
+
 export default function NoticeOnlyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Structured Data for SEO */}
+      <StructuredData data={productSchema({
+        name: "Notice Only Pack - Section 21 & 8 Eviction Notices",
+        description: "Court-ready eviction notices for UK landlords. Section 21 (Form 6A), Section 8, and Notice to Leave for Scotland. AI-powered route selection and compliance checking included.",
+        price: "29.99",
+        url: "https://landlordheaven.co.uk/products/notice-only"
+      })} />
+      <StructuredData data={faqPageSchema(faqs)} />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
