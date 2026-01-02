@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import { RiLockLine, RiGroupLine, RiFileTextLine, RiMoneyDollarCircleLine, RiWalletLine } from 'react-icons/ri';
+import { RiLockLine, RiGroupLine, RiFileTextLine, RiMoneyDollarCircleLine, RiWalletLine, RiMailLine, RiAlertLine, RiCpuLine } from 'react-icons/ri';
 
 interface AdminStats {
   users: {
@@ -291,6 +291,45 @@ export default function AdminDashboardPage() {
               {stats.users.subscribers} subscribers
             </div>
           </Card>
+        </div>
+
+        {/* Quick Links */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <Link href="/dashboard/admin/orders" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
+            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+              <RiFileTextLine className="w-5 h-5 text-blue-600" />
+            </div>
+            <p className="font-medium text-charcoal">Orders</p>
+            <p className="text-xs text-gray-500">Manage & refund</p>
+          </Link>
+          <Link href="/dashboard/admin/users" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
+            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3">
+              <RiGroupLine className="w-5 h-5 text-green-600" />
+            </div>
+            <p className="font-medium text-charcoal">Users</p>
+            <p className="text-xs text-gray-500">View accounts</p>
+          </Link>
+          <Link href="/dashboard/admin/email-previews" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
+            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
+              <RiMailLine className="w-5 h-5 text-purple-600" />
+            </div>
+            <p className="font-medium text-charcoal">Email Previews</p>
+            <p className="text-xs text-gray-500">View templates</p>
+          </Link>
+          <Link href="/dashboard/admin/ai-usage" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
+            <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mb-3">
+              <RiCpuLine className="w-5 h-5 text-orange-600" />
+            </div>
+            <p className="font-medium text-charcoal">AI Usage</p>
+            <p className="text-xs text-gray-500">Cost tracking</p>
+          </Link>
+          <Link href="/dashboard/admin/failed-payments" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
+            <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center mb-3">
+              <RiAlertLine className="w-5 h-5 text-red-600" />
+            </div>
+            <p className="font-medium text-charcoal">Failed Payments</p>
+            <p className="text-xs text-gray-500">Review issues</p>
+          </Link>
         </div>
 
         {/* Content Grid */}
