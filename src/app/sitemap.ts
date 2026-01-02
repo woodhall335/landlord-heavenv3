@@ -45,6 +45,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/tenancy-agreements/northern-ireland', priority: 0.8, changeFrequency: 'weekly' as const },
   ];
 
+  // Long-tail landing pages - SEO targeted
+  const landingPages = [
+    { path: '/section-21-notice-template', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/eviction-notice-template', priority: 0.9, changeFrequency: 'weekly' as const },
+    { path: '/section-8-notice-template', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/rent-arrears-letter-template', priority: 0.8, changeFrequency: 'weekly' as const },
+    { path: '/tenancy-agreement-template', priority: 0.8, changeFrequency: 'weekly' as const },
+  ];
+
   // Tool pages - Free tools for SEO traffic
   const toolPages = [
     { path: '/tools', priority: 0.7, changeFrequency: 'monthly' as const },
@@ -75,6 +84,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...marketingPages,
     ...productPages,
     ...tenancyPages,
+    ...landingPages,
     ...toolPages,
     ...authEntryPages,
     { path: '/blog', priority: 0.9, changeFrequency: 'weekly' as const },
