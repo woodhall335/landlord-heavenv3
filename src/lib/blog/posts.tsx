@@ -64,7 +64,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-renters-reform-overview.svg"
           alt="Renters Reform Bill Overview - Key Changes for UK Landlords"
           caption="The Renters Reform Bill introduces sweeping changes affecting every private landlord in England"
-          aspectRatio="wide"
+          aspectRatio="hero"
         />
 
         <h2 id="what-is-renters-reform" className="scroll-mt-24">What Is the Renters Reform Bill?</h2>
