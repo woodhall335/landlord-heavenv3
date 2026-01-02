@@ -2,12 +2,13 @@
  * Next.js Middleware
  *
  * Handles:
+ * - Supabase session refresh (critical for auth to work)
  * - CORS for API routes (environment-aware)
- * - Other cross-cutting concerns can be added here
  */
 
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { createServerClient } from '@supabase/ssr';
 
 /**
  * Get allowed origins based on environment
@@ -89,29 +90,78 @@ function addCorsHeaders(
   return response;
 }
 
-export function middleware(request: NextRequest) {
+/**
+ * Refresh Supabase session
+ * This is critical for auth to work across server and client
+ */
+async function refreshSupabaseSession(request: NextRequest, response: NextResponse) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  // Skip if Supabase not configured
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return response;
+  }
+
+  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
+    cookies: {
+      getAll() {
+        return request.cookies.getAll();
+      },
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value }) => {
+          request.cookies.set(name, value);
+        });
+        cookiesToSet.forEach(({ name, value, options }) => {
+          response.cookies.set(name, value, options);
+        });
+      },
+    },
+  });
+
+  // Refresh session - this updates the cookies if needed
+  await supabase.auth.getUser();
+
+  return response;
+}
+
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const origin = request.headers.get('origin');
 
-  // Only handle CORS for API routes
-  if (pathname.startsWith('/api/')) {
-    // Handle preflight OPTIONS request
-    if (request.method === 'OPTIONS') {
-      const response = new NextResponse(null, { status: 204 });
-      return addCorsHeaders(response, origin);
-    }
-
-    // For other requests, add CORS headers to the response
-    const response = NextResponse.next();
+  // Handle CORS preflight for API routes
+  if (pathname.startsWith('/api/') && request.method === 'OPTIONS') {
+    const response = new NextResponse(null, { status: 204 });
     return addCorsHeaders(response, origin);
   }
 
-  return NextResponse.next();
+  // Create base response
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
+
+  // Refresh Supabase session for all routes
+  response = await refreshSupabaseSession(request, response);
+
+  // Add CORS headers for API routes
+  if (pathname.startsWith('/api/')) {
+    response = addCorsHeaders(response, origin);
+  }
+
+  return response;
 }
 
 export const config = {
   matcher: [
-    // Match all API routes
-    '/api/:path*',
+    /*
+     * Match all request paths except:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder files
+     */
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };
