@@ -63,16 +63,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/auth/signup', priority: 0.5, changeFrequency: 'monthly' as const },
   ];
 
-  // Blog pages
-  const blogPages = [
-    { path: '/blog', priority: 0.9, changeFrequency: 'weekly' as const },
-    ...blogPosts.map((post) => ({
-      path: `/blog/${post.slug}`,
-      priority: 0.8,
-      changeFrequency: 'monthly' as const,
-      lastModified: new Date(post.updatedDate || post.date),
-    })),
-  ];
+  // Blog pages with explicit lastModified dates
+  const blogPostPages = blogPosts.map((post) => ({
+    url: `${siteUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedDate || post.date),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }));
 
   const allPages = [
     ...marketingPages,
@@ -80,13 +77,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...tenancyPages,
     ...toolPages,
     ...authEntryPages,
-    ...blogPages,
+    { path: '/blog', priority: 0.9, changeFrequency: 'weekly' as const },
   ];
 
-  return allPages.map((page) => ({
-    url: `${siteUrl}${page.path}`,
-    lastModified: 'lastModified' in page ? page.lastModified : now,
-    changeFrequency: page.changeFrequency,
-    priority: page.priority,
-  }));
+  return [
+    ...allPages.map((page) => ({
+      url: `${siteUrl}${page.path}`,
+      lastModified: now,
+      changeFrequency: page.changeFrequency,
+      priority: page.priority,
+    })),
+    ...blogPostPages,
+  ];
 }
