@@ -42,6 +42,10 @@ interface AdminStats {
     total_cost_usd: number;
     this_month_cost: number;
   };
+  leads: {
+    total: number;
+    this_month: number;
+  };
 }
 
 interface RecentOrder {
@@ -308,6 +312,13 @@ export default function AdminDashboardPage() {
             </div>
             <p className="font-medium text-charcoal">Users</p>
             <p className="text-xs text-gray-500">View accounts</p>
+          </Link>
+          <Link href="/dashboard/admin/leads" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
+            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mb-3">
+              <RiMailLine className="w-5 h-5 text-amber-600" />
+            </div>
+            <p className="font-medium text-charcoal">Email Leads</p>
+            <p className="text-xs text-gray-500">{stats.leads?.total || 0} captured</p>
           </Link>
           <Link href="/dashboard/admin/email-previews" className="bg-white rounded-lg border border-gray-200 p-4 hover:border-primary hover:shadow-md transition-all">
             <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3">

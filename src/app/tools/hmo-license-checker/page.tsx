@@ -7,6 +7,8 @@ import councilsData from '@/config/jurisdictions/uk/england/councils.json';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 
 // Function to lookup council by postcode
 function getCouncilByPostcode(postcode: string): { name: string; website: string } | null {
@@ -717,6 +719,17 @@ export default function HMOLicenseChecker() {
           </div>
         </Container>
       </div>
+
+      {/* Related Resources */}
+      <RelatedLinks
+        title="Related Resources"
+        links={[
+          productLinks.tenancyAgreement,
+          toolLinks.rentArrearsCalculator,
+          toolLinks.section21Generator,
+          toolLinks.section8Generator,
+        ]}
+      />
 
       {/* Email Gate Modal */}
       {gate.showGate && (
