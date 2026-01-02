@@ -199,76 +199,7 @@ export default function BillingPage() {
             </div>
           )}
 
-          {/* Subscription Status */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
-            <h2 className="text-xl font-semibold text-charcoal mb-4">HMO Pro Subscription</h2>
-
-            {subscription ? (
-              <div className="space-y-4">
-                <div className="grid md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="text-sm text-gray-600 mb-1">Status</p>
-                    <p className="font-semibold text-charcoal">
-                      <span className="inline-block px-3 py-1 rounded-full text-sm bg-success/10 text-success">
-                        {subscription.hmo_pro_active ? "Active" : "Inactive"}
-                      </span>
-                    </p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-gray-600 mb-1">Tier</p>
-                    <p className="font-semibold text-charcoal">
-                      {subscription.hmo_pro_tier || "Standard"}
-                    </p>
-                  </div>
-
-                  {subscription.hmo_pro_trial_ends_at && (
-                    <div>
-                      <p className="text-sm text-gray-600 mb-1">Trial Ends</p>
-                      <p className="font-semibold text-charcoal">
-                        {new Date(subscription.hmo_pro_trial_ends_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  )}
-
-                  {subscription.hmo_pro_subscription_ends_at && (
-                    <div>
-                      <p className="text-sm text-gray-600 mb-1">Next Billing Date</p>
-                      <p className="font-semibold text-charcoal">
-                        {new Date(subscription.hmo_pro_subscription_ends_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex gap-3 pt-4 border-t">
-                  <button
-                    onClick={handleManagePaymentMethod}
-                    className="bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
-                  >
-                    Manage Payment Method
-                  </button>
-
-                  <button
-                    onClick={handleCancelSubscription}
-                    className="bg-error text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors"
-                  >
-                    Cancel Subscription
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-600 mb-4">You don't have an active HMO Pro subscription.</p>
-                <Link
-                  href="/hmo-pro"
-                  className="inline-block bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
-                >
-                  Start Free Trial
-                </Link>
-              </div>
-            )}
-          </div>
+          {/* HMO Pro Subscription - Parked for later review */}
 
           {/* Order History */}
           <div className="bg-white rounded-lg border border-gray-200 p-6">

@@ -106,15 +106,7 @@ export function Footer() {
                   Tenancy Agreements
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/hmo-pro"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
-                  HMO Pro Membership
-                </Link>
-              </li>
+{/* HMO Pro removed - parked for later review */}
             </ul>
           </div>
 
