@@ -19,6 +19,7 @@ import {
   Package,
   Clock
 } from "lucide-react";
+import { StructuredData, productSchema, faqPageSchema } from "@/lib/seo/structured-data";
 
 export const metadata: Metadata = {
   title: "Complete Eviction Pack - Last Chance Before Section 21 Ban",
@@ -42,9 +43,58 @@ export const metadata: Metadata = {
   ],
 };
 
+// FAQ data for structured data
+const faqs = [
+  {
+    question: "Do I get all the court forms I need?",
+    answer: "Yes. The Complete Pack includes all forms required from start to finish: eviction notice (Section 8/21/Notice to Leave), possession claim forms (N5, N5B, N119 for England & Wales; First-tier Tribunal forms for Scotland; Civil Bill for Northern Ireland), and evidence bundling guides."
+  },
+  {
+    question: "Are these genuine official court forms?",
+    answer: "Absolutely. We use official HMCTS forms (Her Majesty's Courts & Tribunals Service) for England & Wales, Scottish Courts & Tribunals Service forms for Scotland, and NI Courts Service forms for Northern Ireland. These are the exact same forms you'd download from government websites, but pre-filled with your case details."
+  },
+  {
+    question: "How long does the eviction process take?",
+    answer: "It varies by jurisdiction and grounds. England & Wales: 3-6 months (Section 8 rent arrears: 3-4 months; Section 21: 4-5 months; contested cases: 6+ months). Scotland: 4-8 months (First-tier Tribunal process). Northern Ireland: 3-6 months."
+  },
+  {
+    question: "What if my tenant contests the eviction?",
+    answer: "The Complete Pack includes guidance for contested cases. You'll get evidence checklists to strengthen your case and advice on attending the possession hearing."
+  },
+  {
+    question: "Can I use this if I've already served a notice?",
+    answer: "Yes! If you've already served your Section 8/21 notice and now need the court forms, the Complete Pack is perfect. Just tell our wizard you've already served notice, provide the notice date and type, and we'll generate the court claim forms and guidance for the next steps."
+  },
+  {
+    question: "What grounds for eviction do you support?",
+    answer: "All of them. We support all 17 grounds under the Housing Act 1988 (England & Wales), all 18 grounds for eviction under the Private Housing (Tenancies) (Scotland) Act 2016, and all statutory grounds for Northern Ireland."
+  },
+  {
+    question: "Is this cheaper than using a solicitor?",
+    answer: "Yes, significantly. Eviction solicitors typically charge £1,500-3,000+ for preparing notices, court forms, and representing you at hearings. The Complete Pack gives you all the documents and guidance for £149.99 one-time."
+  },
+  {
+    question: "What if I make a mistake on the forms?",
+    answer: "Our system validates all your inputs to minimise errors. You can preview all documents before paying. If you spot an error after purchase, you get unlimited regenerations - just update your case details and regenerate the pack at no extra cost."
+  },
+  {
+    question: "Do you provide legal advice?",
+    answer: "No. Landlord Heaven is a document generation service, not a law firm. We provide legally compliant forms and plain-English guidance on the eviction process, but we do not provide legal advice tailored to your specific circumstances."
+  }
+];
+
 export default function CompleteEvictionPackPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Structured Data for SEO */}
+      <StructuredData data={productSchema({
+        name: "Complete Eviction Pack - Full DIY Eviction Bundle",
+        description: "Complete eviction bundle with all court forms from notice to possession order. Includes N5, N5B, N119 forms, AI-drafted witness statements, compliance audit, and step-by-step guidance. Save £1,000s vs solicitors.",
+        price: "149.99",
+        url: "https://landlordheaven.co.uk/products/complete-pack"
+      })} />
+      <StructuredData data={faqPageSchema(faqs)} />
+
       {/* Hero Section */}
       <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>

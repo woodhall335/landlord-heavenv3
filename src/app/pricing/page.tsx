@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import { generateMetadata } from "@/lib/seo";
+import { StructuredData, faqPageSchema } from "@/lib/seo/structured-data";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - Compare All Products",
@@ -17,9 +18,36 @@ export const metadata: Metadata = generateMetadata({
   ]
 });
 
+// FAQ data for structured data
+const faqs = [
+  {
+    question: "Are there any hidden fees?",
+    answer: "No. The prices shown are what you pay. No setup fees, no processing fees, no surprise charges. The only additional cost is court fees (paid directly to the court when filing)."
+  },
+  {
+    question: "What is your refund policy?",
+    answer: "All products are instantly delivered digital documents. Due to the instant nature of our digital products, we cannot offer refunds once documents have been generated and delivered. Refunds are only available for technical errors, duplicate charges, or unauthorized transactions."
+  },
+  {
+    question: "Do you offer discounts for multiple documents?",
+    answer: "For portfolio landlords needing multiple documents per month, contact sales@landlordheaven.co.uk for custom pricing and volume discounts."
+  },
+  {
+    question: "How much do solicitors charge for the same services?",
+    answer: "Typical solicitor fees: Eviction notice £200-300, Court claim preparation £300-500, Money claim £200-350, Tenancy agreement £150-400, HMO compliance consultation £500+ per year. You save £200-400 per case using Landlord Heaven."
+  },
+  {
+    question: "Can I purchase additional products later?",
+    answer: "Yes! You can purchase any product at any time. Each product is independent and addresses different landlord needs."
+  }
+];
+
 export default function PricingPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Structured Data for SEO */}
+      <StructuredData data={faqPageSchema(faqs)} />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>

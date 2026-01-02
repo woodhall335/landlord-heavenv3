@@ -9,3 +9,4 @@ export { TrustBar } from './TrustBar';
 export { CostComparison } from './CostComparison';
 export { Testimonials } from './Testimonials';
 export { FAQ } from './FAQ';
+export { default as HomeContent } from './HomeContent';

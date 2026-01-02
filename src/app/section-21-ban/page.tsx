@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Container } from '@/components/ui';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { AlertTriangle, Calendar, Scale, CheckCircle } from 'lucide-react';
+import { StructuredData, faqPageSchema } from '@/lib/seo/structured-data';
 
 export const metadata: Metadata = {
   title: 'Section 21 Ban 2026 - Last Chance for No-Fault Evictions',
@@ -13,9 +14,35 @@ export const metadata: Metadata = {
   },
 };
 
+// FAQ data for structured data
+const faqs = [
+  {
+    question: "Can I serve Section 21 after 1 May 2026?",
+    answer: "No. From 1 May 2026, Section 21 notices become illegal. You will only be able to evict tenants using Section 8, which requires proving specific grounds."
+  },
+  {
+    question: "What if I've already served a Section 21 notice?",
+    answer: "If you served your notice before 1 May 2026, you must start court proceedings by 31 July 2026 at the latest. After that date, you cannot use Section 21."
+  },
+  {
+    question: "What is Section 8?",
+    answer: "Section 8 is a grounds-based eviction. You must prove one of the legal grounds for possession, such as rent arrears, anti-social behaviour, or needing the property for yourself. It requires a court hearing."
+  },
+  {
+    question: "Do you help with Section 8 evictions too?",
+    answer: "Yes! Our Complete Eviction Pack includes Section 8 notices and all court forms. It's designed for the post-ban world where Section 8 will be your only option."
+  },
+  {
+    question: "How long does Section 21 take?",
+    answer: "A Section 21 notice gives tenants 2 months to leave. If they don't leave voluntarily, you can apply for a possession order, which typically takes another 4-8 weeks through the courts."
+  }
+];
+
 export default function Section21BanPage() {
   return (
     <main>
+      {/* Structured Data for SEO */}
+      <StructuredData data={faqPageSchema(faqs)} />
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-primary to-primary/80 text-white py-16 sm:py-24">
         <Container>
