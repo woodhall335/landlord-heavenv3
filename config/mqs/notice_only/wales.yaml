@@ -290,6 +290,124 @@ questions:
     maps_to:
       - deposit_scheme
 
+  # ============================================================
+  # COMPLIANCE CERTIFICATE DATES (Wales)
+  # ============================================================
+
+  - id: compliance_dates_wales
+    section: Compliance Certificates
+    question: "Compliance certificate dates"
+    inputType: group
+    helperText: "Provide dates for your compliance certificates."
+    fields:
+      - id: gas_cert_date
+        label: "Gas safety certificate date"
+        inputType: date
+        helperText: "Date of most recent gas safety certificate"
+        width: half
+      - id: gas_cert_expiry
+        label: "Gas certificate expiry date"
+        inputType: date
+        helperText: "Expires 12 months after issue"
+        width: half
+      - id: epc_certificate_date
+        label: "EPC date"
+        inputType: date
+        helperText: "Energy Performance Certificate date"
+        width: half
+      - id: eicr_date
+        label: "Electrical safety (EICR) date"
+        inputType: date
+        helperText: "Electrical Installation Condition Report date"
+        width: half
+      - id: written_statement_date
+        label: "Written statement provided date"
+        inputType: date
+        helperText: "Date written statement of contract was provided"
+        width: half
+      - id: prescribed_info_date
+        label: "Deposit prescribed info date"
+        inputType: date
+        helperText: "Date prescribed information was served"
+        width: half
+    maps_to:
+      - compliance.gas_cert_date
+      - compliance.gas_cert_expiry
+      - compliance.epc_certificate_date
+      - compliance.eicr_date
+      - wales_compliance.written_statement_date
+      - compliance.prescribed_info_date
+
+  # ============================================================
+  # RISK INDICATORS (Wales)
+  # ============================================================
+
+  - id: risk_indicators_wales
+    section: Risk Assessment
+    question: "Risk factors"
+    inputType: group
+    helperText: "This information helps identify potential issues with your notice."
+    fields:
+      - id: known_tenant_defences
+        label: "Are you aware of any defences the contract holder may raise?"
+        inputType: textarea
+        helperText: "E.g., claims of disrepair, fitness for habitation issues, harassment"
+        placeholder: "Describe any known or anticipated defences..."
+        width: full
+      - id: disrepair_complaints
+        label: "Has the contract holder complained about disrepair?"
+        inputType: yes_no
+        helperText: "IMPORTANT: May affect validity of Section 173 notice"
+        width: half
+      - id: disrepair_complaint_date
+        label: "Date of disrepair complaint"
+        inputType: date
+        width: half
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: disrepair_issues_list
+        label: "List the disrepair issues"
+        inputType: textarea
+        width: full
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: previous_court_proceedings
+        label: "Previous court proceedings about this contract?"
+        inputType: yes_no
+        width: half
+      - id: previous_proceedings_details
+        label: "Previous proceedings details"
+        inputType: textarea
+        helperText: "Dates, case numbers, outcomes"
+        width: full
+        dependsOn:
+          fieldId: previous_court_proceedings
+          value: true
+      - id: tenant_vulnerability
+        label: "Are you aware of any contract holder vulnerabilities?"
+        inputType: yes_no
+        helperText: "E.g., elderly, disabled, mental health issues, children"
+        width: half
+      - id: tenant_vulnerability_details
+        label: "Vulnerability details"
+        inputType: textarea
+        helperText: "Courts may consider this when deciding reasonableness"
+        width: full
+        dependsOn:
+          fieldId: tenant_vulnerability
+          value: true
+    maps_to:
+      - risk.known_tenant_defences
+      - risk.disrepair_complaints
+      - risk.disrepair_complaint_date
+      - risk.disrepair_issues_list
+      - risk.previous_court_proceedings
+      - risk.previous_proceedings_details
+      - risk.tenant_vulnerability
+      - risk.tenant_vulnerability_details
+
   # ========================================
   # NOTICE SERVICE + EXPIRY (needed for compliance checks)
   # ========================================
@@ -436,3 +554,59 @@ questions:
     helperText: "Specify which contract term was breached and how"
     maps_to:
       - breach_description
+
+  # ============================================================
+  # EVIDENCE WITH DESCRIBE OPTION
+  # ============================================================
+
+  - id: evidence_tenancy_agreement
+    section: Evidence
+    question: "Occupation Contract"
+    inputType: group
+    helperText: "Upload your occupation contract or summarize key terms."
+    fields:
+      - id: tenancy_agreement_upload
+        label: "Upload occupation contract"
+        inputType: upload
+        helperText: "Upload a copy of the written statement"
+        width: full
+      - id: tenancy_agreement_describe
+        label: "Or summarize key terms"
+        inputType: textarea
+        helperText: "If unable to upload, describe: start date, rent amount, key terms"
+        placeholder: "E.g., Standard occupation contract started 01/01/2024, rent £1,200pcm due 1st..."
+        width: full
+    maps_to:
+      - evidence.tenancy_agreement_uploads
+      - evidence.tenancy_agreement_description
+
+  - id: evidence_notice_service
+    section: Evidence
+    question: "Notice Service Evidence"
+    inputType: group
+    helperText: "Upload proof of notice service or describe how notice will be served."
+    fields:
+      - id: notice_service_upload
+        label: "Upload proof of service"
+        inputType: upload
+        helperText: "Proof of posting, signed receipt, etc."
+        width: full
+      - id: notice_service_describe
+        label: "Or describe service method"
+        inputType: textarea
+        helperText: "Describe how and when notice will be served"
+        placeholder: "E.g., Will send Section 173 notice by recorded delivery on [date]..."
+        width: full
+    maps_to:
+      - evidence.notice_service_uploads
+      - evidence.notice_service_description
+
+  - id: evidence_other
+    section: Evidence
+    question: "Other Supporting Documents"
+    inputType: upload
+    helperText: "Upload any other supporting documents (Rent Smart Wales registration, bank statements, etc.)"
+    validation:
+      required: false
+    maps_to:
+      - evidence.other_uploads
