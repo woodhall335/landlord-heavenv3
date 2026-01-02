@@ -415,6 +415,128 @@ questions:
     maps_to:
       - recent_repair_complaints
 
+  # ============================================================
+  # COMPLIANCE CERTIFICATE DATES
+  # ============================================================
+
+  - id: compliance_dates
+    section: Compliance Certificates
+    question: "Compliance certificate dates"
+    inputType: group
+    helperText: "Provide dates for your compliance certificates. This helps verify they were valid when required."
+    fields:
+      - id: gas_cert_date
+        label: "Gas safety certificate date"
+        inputType: date
+        helperText: "Date of most recent gas safety certificate"
+        width: half
+        dependsOn:
+          fieldId: has_gas_appliances
+          value: true
+      - id: gas_cert_expiry
+        label: "Gas certificate expiry date"
+        inputType: date
+        helperText: "Expires 12 months after issue"
+        width: half
+        dependsOn:
+          fieldId: has_gas_appliances
+          value: true
+      - id: epc_certificate_date
+        label: "EPC date"
+        inputType: date
+        helperText: "Energy Performance Certificate date"
+        width: half
+      - id: eicr_provided
+        label: "Was an EICR provided?"
+        inputType: yes_no
+        helperText: "Electrical Installation Condition Report - required since April 2021"
+        width: half
+      - id: eicr_date
+        label: "EICR date"
+        inputType: date
+        helperText: "Date of electrical safety report"
+        width: half
+        dependsOn:
+          fieldId: eicr_provided
+          value: true
+      - id: how_to_rent_date
+        label: "How to Rent guide provided date"
+        inputType: date
+        helperText: "Date the How to Rent guide was given to tenant"
+        width: half
+      - id: prescribed_info_date
+        label: "Deposit prescribed info date"
+        inputType: date
+        helperText: "Date prescribed information was served"
+        width: half
+    maps_to:
+      - compliance.gas_cert_date
+      - compliance.gas_cert_expiry
+      - compliance.epc_certificate_date
+      - compliance.eicr_provided
+      - compliance.eicr_date
+      - compliance.how_to_rent_date
+      - compliance.prescribed_info_date
+
+  # ============================================================
+  # RISK INDICATORS
+  # ============================================================
+
+  - id: risk_indicators
+    section: Risk Assessment
+    question: "Risk factors"
+    inputType: group
+    helperText: "This information helps identify potential issues with your notice."
+    fields:
+      - id: disrepair_complaint_date
+        label: "Date of any disrepair complaint"
+        inputType: date
+        helperText: "CRITICAL: Section 21 invalid if served within 6 months of complaint to council"
+        width: half
+        dependsOn:
+          fieldId: recent_repair_complaints_s21
+          value: true
+      - id: disrepair_issues_list
+        label: "List the disrepair issues"
+        inputType: textarea
+        helperText: "What repairs did the tenant complain about?"
+        width: full
+        dependsOn:
+          fieldId: recent_repair_complaints_s21
+          value: true
+      - id: previous_court_proceedings
+        label: "Previous court proceedings about this tenancy?"
+        inputType: yes_no
+        width: half
+      - id: previous_proceedings_details
+        label: "Previous proceedings details"
+        inputType: textarea
+        helperText: "Dates, case numbers, outcomes"
+        width: full
+        dependsOn:
+          fieldId: previous_court_proceedings
+          value: true
+      - id: tenant_vulnerability
+        label: "Are you aware of any tenant vulnerabilities?"
+        inputType: yes_no
+        helperText: "E.g., elderly, disabled, mental health issues, children"
+        width: half
+      - id: tenant_vulnerability_details
+        label: "Vulnerability details"
+        inputType: textarea
+        helperText: "Courts may consider this when deciding reasonableness"
+        width: full
+        dependsOn:
+          fieldId: tenant_vulnerability
+          value: true
+    maps_to:
+      - risk.disrepair_complaint_date
+      - risk.disrepair_issues_list
+      - risk.previous_court_proceedings
+      - risk.previous_proceedings_details
+      - risk.tenant_vulnerability
+      - risk.tenant_vulnerability_details
+
   # ========================================
   # SECTION 8 ARREARS DETAILS (CRITICAL FOR GROUND 8 VALIDATION)
   # ========================================
@@ -576,3 +698,59 @@ questions:
       - notice_service.notice_expiry_date
       - notice_service.service_method
       - notice_service.served_by
+
+  # ============================================================
+  # EVIDENCE WITH DESCRIBE OPTION
+  # ============================================================
+
+  - id: evidence_tenancy_agreement
+    section: Evidence
+    question: "Tenancy Agreement"
+    inputType: group
+    helperText: "Upload your tenancy agreement or summarize key terms."
+    fields:
+      - id: tenancy_agreement_upload
+        label: "Upload tenancy agreement"
+        inputType: upload
+        helperText: "Upload a copy of the AST"
+        width: full
+      - id: tenancy_agreement_describe
+        label: "Or summarize key terms"
+        inputType: textarea
+        helperText: "If unable to upload, describe: start date, rent amount, key terms"
+        placeholder: "E.g., AST started 01/01/2024, rent £1,200pcm due 1st of each month..."
+        width: full
+    maps_to:
+      - evidence.tenancy_agreement_uploads
+      - evidence.tenancy_agreement_description
+
+  - id: evidence_notice_service
+    section: Evidence
+    question: "Notice Service Evidence"
+    inputType: group
+    helperText: "Upload proof of notice service or describe how the notice will be served."
+    fields:
+      - id: notice_service_upload
+        label: "Upload proof of service"
+        inputType: upload
+        helperText: "Proof of posting, signed receipt, etc."
+        width: full
+      - id: notice_service_describe
+        label: "Or describe service method"
+        inputType: textarea
+        helperText: "Describe how and when notice will be served"
+        placeholder: "E.g., Will send by recorded delivery on [date], tracking number to be retained..."
+        width: full
+    maps_to:
+      - evidence.notice_service_uploads
+      - evidence.notice_service_description
+
+  - id: evidence_other
+    section: Evidence
+    question: "Other Supporting Documents"
+    inputType: upload
+    helperText: "Upload any other supporting documents (rent statements, correspondence, etc.)"
+    validation:
+      required: false
+    maps_to:
+      - evidence.other_uploads

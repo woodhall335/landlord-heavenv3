@@ -686,3 +686,416 @@ questions:
     maps_to:
       - signature_date
     conditions: []
+
+  # ================================
+  # 15. RISK INDICATORS
+  # ================================
+  - id: defender_disputes_claim
+    section: risk_assessment
+    question: "Has the defender disputed any amount claimed?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Indicate if the defender has challenged any part of the claim."
+    maps_to:
+      - risk.defender_disputes_claim
+    conditions: []
+
+  - id: dispute_details
+    section: risk_assessment
+    question: "What has been disputed?"
+    type: longtext
+    required: false
+    suggestion_prompt: "Describe what the defender has challenged (e.g., damage pre-existing, arrears calculation wrong)."
+    maps_to:
+      - risk.dispute_details
+    conditions:
+      - depends_on: defender_disputes_claim
+        value: yes
+
+  - id: deposit_dispute_pending
+    section: risk_assessment
+    question: "Is there a pending deposit dispute?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Indicate if there is an active tenancy deposit dispute that may affect the claim."
+    maps_to:
+      - risk.deposit_dispute_pending
+    conditions: []
+
+  - id: deposit_dispute_amount
+    section: risk_assessment
+    question: "Amount in deposit dispute (£)"
+    type: currency
+    required: false
+    suggestion_prompt: "Enter the amount currently in dispute with the deposit scheme."
+    maps_to:
+      - risk.deposit_dispute_amount
+    conditions:
+      - depends_on: deposit_dispute_pending
+        value: yes
+
+  - id: defender_counterclaim_likely
+    section: risk_assessment
+    question: "Is the defender likely to counter-claim?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Indicate if the defender may raise a counter-claim (e.g., for disrepair, deposit return)."
+    maps_to:
+      - risk.defender_counterclaim_likely
+    conditions: []
+
+  - id: counterclaim_grounds
+    section: risk_assessment
+    question: "Likely counter-claim grounds"
+    type: multi-select
+    required: false
+    options:
+      - disrepair_claims
+      - deposit_not_protected
+      - harassment_or_illegal_eviction
+      - overcharging
+      - deductions_already_made
+    suggestion_prompt: "Select all grounds the defender might use for a counter-claim."
+    maps_to:
+      - risk.counterclaim_grounds
+    conditions:
+      - depends_on: defender_counterclaim_likely
+        value: yes
+
+  - id: payment_plan_offered
+    section: risk_assessment
+    question: "Was a payment plan offered to the defender?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Indicate if you offered the defender an opportunity to pay in instalments."
+    maps_to:
+      - risk.payment_plan_offered
+    conditions: []
+
+  - id: payment_plan_response
+    section: risk_assessment
+    question: "Defender's response to payment plan"
+    type: select
+    required: false
+    options:
+      - accepted_and_kept
+      - accepted_but_defaulted
+      - rejected
+      - no_response
+    suggestion_prompt: "Describe how the defender responded to the payment plan offer."
+    maps_to:
+      - risk.payment_plan_response
+    conditions:
+      - depends_on: payment_plan_offered
+        value: yes
+
+  - id: defender_vulnerability_known
+    section: risk_assessment
+    question: "Are you aware of any vulnerability factors?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Sheriffs may consider vulnerability (mental health, disability, children) when making orders."
+    maps_to:
+      - risk.defender_vulnerability_known
+    conditions: []
+
+  - id: vulnerability_details
+    section: risk_assessment
+    question: "Known vulnerability factors"
+    type: longtext
+    required: false
+    suggestion_prompt: "Briefly describe any known vulnerabilities for the court's awareness."
+    maps_to:
+      - risk.vulnerability_details
+    conditions:
+      - depends_on: defender_vulnerability_known
+        value: yes
+
+  # ================================
+  # 16. COMMUNICATION TIMELINE
+  # ================================
+  - id: first_arrears_notice_date
+    section: communication_timeline
+    question: "When did you first notify defender of arrears?"
+    type: date
+    required: true
+    suggestion_prompt: "Provide the date you first informed the tenant that rent was overdue."
+    maps_to:
+      - communication.first_arrears_notice_date
+    conditions: []
+
+  - id: first_notice_method
+    section: communication_timeline
+    question: "Method of first notification"
+    type: select
+    required: true
+    options:
+      - email
+      - letter_posted
+      - letter_hand_delivered
+      - text_message
+      - phone_call
+      - in_person
+    suggestion_prompt: "Select how you first notified the defender of the arrears."
+    maps_to:
+      - communication.first_notice_method
+    conditions: []
+
+  - id: subsequent_reminders_count
+    section: communication_timeline
+    question: "How many reminder letters/emails sent?"
+    type: text
+    required: false
+    suggestion_prompt: "Enter the number of follow-up reminders sent before taking court action."
+    maps_to:
+      - communication.subsequent_reminders_sent
+    conditions: []
+
+  - id: final_demand_date
+    section: communication_timeline
+    question: "Date of final demand before court action"
+    type: date
+    required: false
+    suggestion_prompt: "Provide the date of your final written demand for payment."
+    maps_to:
+      - communication.final_demand_date
+    conditions: []
+
+  - id: defender_acknowledged_debt
+    section: communication_timeline
+    question: "Has the defender acknowledged the debt?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "A written acknowledgment may restart the prescription period."
+    maps_to:
+      - communication.defender_acknowledged_debt
+    conditions: []
+
+  - id: acknowledgment_date
+    section: communication_timeline
+    question: "Date of acknowledgment"
+    type: date
+    required: false
+    suggestion_prompt: "Provide the date the defender acknowledged the debt in writing."
+    maps_to:
+      - communication.acknowledgment_date
+    conditions:
+      - depends_on: defender_acknowledged_debt
+        value: yes
+
+  - id: defender_made_partial_payment
+    section: communication_timeline
+    question: "Has the defender made any partial payments?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Partial payments can constitute acknowledgment of the debt."
+    maps_to:
+      - communication.defender_made_partial_payment
+    conditions: []
+
+  - id: last_partial_payment_date
+    section: communication_timeline
+    question: "Date of last partial payment"
+    type: date
+    required: false
+    suggestion_prompt: "Provide the date of the most recent partial payment received."
+    maps_to:
+      - communication.last_partial_payment_date
+    conditions:
+      - depends_on: defender_made_partial_payment
+        value: yes
+
+  - id: last_partial_payment_amount
+    section: communication_timeline
+    question: "Amount of last partial payment (£)"
+    type: currency
+    required: false
+    suggestion_prompt: "Enter the amount of the most recent partial payment."
+    maps_to:
+      - communication.last_partial_payment_amount
+    conditions:
+      - depends_on: defender_made_partial_payment
+        value: yes
+
+  # ================================
+  # 17. EVIDENCE DESCRIPTIONS
+  # ================================
+  - id: tenancy_type
+    section: evidence_descriptions
+    question: "Type of tenancy agreement"
+    type: select
+    required: true
+    options:
+      - private_residential_tenancy
+      - short_assured_tenancy
+      - assured_tenancy
+      - other
+    suggestion_prompt: "Select the type of tenancy that governs this let."
+    maps_to:
+      - evidence.tenancy_type
+    conditions: []
+
+  - id: tenancy_written_or_verbal
+    section: evidence_descriptions
+    question: "Written or verbal agreement?"
+    type: select
+    required: true
+    options:
+      - written_and_signed
+      - written_but_unsigned
+      - verbal_only
+    suggestion_prompt: "Confirm whether the tenancy agreement was in writing and signed."
+    maps_to:
+      - evidence.tenancy_written_or_verbal
+    conditions: []
+
+  - id: rent_clause_description
+    section: evidence_descriptions
+    question: "Describe the rent payment terms"
+    type: longtext
+    required: false
+    suggestion_prompt: "E.g., £1,200 per month payable on 1st of each month by standing order."
+    maps_to:
+      - evidence.rent_clause_description
+    conditions: []
+
+  - id: arrears_calculation_method
+    section: evidence_descriptions
+    question: "How have you calculated the arrears?"
+    type: select
+    required: true
+    options:
+      - rent_ledger_spreadsheet
+      - bank_statements
+      - letting_agent_records
+      - manual_calculation
+    suggestion_prompt: "Select the method used to calculate the total arrears."
+    maps_to:
+      - evidence.arrears_calculation_method
+    conditions: []
+
+  - id: arrears_ledger_available
+    section: evidence_descriptions
+    question: "Do you have a rent ledger available?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Confirm you can provide a rent ledger or schedule showing missed payments."
+    maps_to:
+      - evidence.arrears_ledger_available
+    conditions: []
+
+  - id: arrears_period_description
+    section: evidence_descriptions
+    question: "Describe the arrears period"
+    type: longtext
+    required: true
+    suggestion_prompt: "E.g., Tenant stopped paying in March 2025, no payments since except £200 in May."
+    maps_to:
+      - evidence.arrears_period_description
+    conditions: []
+
+  - id: bank_statements_available
+    section: evidence_descriptions
+    question: "Do you have bank statements showing non-payment?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Bank statements can corroborate the rent ledger."
+    maps_to:
+      - evidence.bank_statements_available
+    conditions: []
+
+  - id: inventory_checkout_available
+    section: evidence_descriptions
+    question: "Do you have an inventory/check-out report?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "An inventory report helps evidence the condition at start and end of tenancy."
+    maps_to:
+      - evidence.inventory_checkout_available
+    conditions:
+      - depends_on: claim_damages
+        value: yes
+
+  - id: damage_photos_available
+    section: evidence_descriptions
+    question: "Do you have dated photos of damage?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Dated photographs help prove the damage and when it was discovered."
+    maps_to:
+      - evidence.damage_photos_available
+    conditions:
+      - depends_on: claim_damages
+        value: yes
+
+  - id: damage_photos_description
+    section: evidence_descriptions
+    question: "Describe the photos you have"
+    type: longtext
+    required: false
+    suggestion_prompt: "E.g., Photos taken 15/06/2025 showing holes in bedroom wall, stained carpets in living room."
+    maps_to:
+      - evidence.damage_photos_description
+    conditions:
+      - depends_on: damage_photos_available
+        value: yes
+
+  - id: repair_quotes_description
+    section: evidence_descriptions
+    question: "Describe repair quotes obtained"
+    type: longtext
+    required: false
+    suggestion_prompt: "E.g., ABC Builders quoted £450 for wall repairs, Carpet Co quoted £800 for carpet replacement."
+    maps_to:
+      - evidence.repair_quotes_description
+    conditions:
+      - depends_on: claim_damages
+        value: yes
+
+  - id: before_photos_available
+    section: evidence_descriptions
+    question: "Do you have 'before' photos (check-in condition)?"
+    type: yes_no
+    required: false
+    suggestion_prompt: "Check-in photos establish baseline condition for damage claims."
+    maps_to:
+      - evidence.before_photos_available
+    conditions:
+      - depends_on: claim_damages
+        value: yes
+
+  - id: correspondence_preserved
+    section: evidence_descriptions
+    question: "Have you preserved copies of all correspondence?"
+    type: yes_no
+    required: true
+    suggestion_prompt: "Confirm you have copies of all written communications about the debt."
+    maps_to:
+      - evidence.correspondence_preserved
+    conditions: []
+
+  - id: correspondence_format
+    section: evidence_descriptions
+    question: "Format of correspondence"
+    type: multi-select
+    required: false
+    options:
+      - emails
+      - letters
+      - text_messages
+      - whatsapp_messaging
+      - letting_agent_portal
+    suggestion_prompt: "Select all formats used for communications about the debt."
+    maps_to:
+      - evidence.correspondence_format
+    conditions: []
+
+  - id: key_correspondence_summary
+    section: evidence_descriptions
+    question: "Summarise key correspondence"
+    type: longtext
+    required: false
+    suggestion_prompt: "E.g., Sent arrears letter 01/03/2025, defender replied promising to pay 15/03, no payment received, sent final demand 01/04/2025."
+    maps_to:
+      - evidence.key_correspondence_summary
+    conditions: []

@@ -61,6 +61,28 @@ function coerceBoolean(value: any): boolean | null {
   return Boolean(value);
 }
 
+function coerceNumber(value: any): number | null {
+  if (value === null || value === undefined) return null;
+  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+  if (typeof value === 'string') {
+    const parsed = Number.parseFloat(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+  return null;
+}
+
+function coerceStringArray(value: any): string[] | null {
+  if (value === null || value === undefined) return null;
+  if (Array.isArray(value)) {
+    return value.filter((v) => typeof v === 'string' || (v && typeof v === 'object' && v.value))
+      .map((v) => (typeof v === 'string' ? v : v.value || String(v)));
+  }
+  if (typeof value === 'string') {
+    return value.split(',').map((s) => s.trim()).filter(Boolean);
+  }
+  return null;
+}
+
 function parseCurrencyAmount(value: any): number | null {
   if (value === null || value === undefined) return null;
   if (typeof value === 'number') return Number.isFinite(value) ? value : null;
@@ -966,6 +988,174 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
     'false_statement_description',
   ]);
 
+  // =============================================================================
+  // GROUND-SPECIFIC DETAILED FACTS (Section 8 per-ground questions)
+  // =============================================================================
+
+  // Ground 8 - Serious Rent Arrears
+  base.ground_8 = {
+    arrears_at_notice: parseCurrencyAmount(getWizardValue(wizard, 'ground_8.arrears_at_notice') ?? getWizardValue(wizard, 'g8_arrears_at_notice')),
+    arrears_current: parseCurrencyAmount(getWizardValue(wizard, 'ground_8.arrears_current') ?? getWizardValue(wizard, 'g8_arrears_current')),
+    last_payment_date: getWizardValue(wizard, 'ground_8.last_payment_date') ?? getWizardValue(wizard, 'g8_last_payment_date'),
+    last_payment_amount: parseCurrencyAmount(getWizardValue(wizard, 'ground_8.last_payment_amount') ?? getWizardValue(wizard, 'g8_last_payment_amount')),
+    payment_demands_sent: getWizardValue(wizard, 'ground_8.payment_demands_sent') ?? getWizardValue(wizard, 'g8_payment_demands_sent'),
+    tenant_response: getWizardValue(wizard, 'ground_8.tenant_response') ?? getWizardValue(wizard, 'g8_tenant_response'),
+  };
+
+  // Ground 10 - Some Rent Arrears
+  base.ground_10 = {
+    arrears_amount: parseCurrencyAmount(getWizardValue(wizard, 'ground_10.arrears_amount') ?? getWizardValue(wizard, 'g10_arrears_amount')),
+    arrears_history: getWizardValue(wizard, 'ground_10.arrears_history') ?? getWizardValue(wizard, 'g10_arrears_history'),
+    attempts_to_recover: getWizardValue(wizard, 'ground_10.attempts_to_recover') ?? getWizardValue(wizard, 'g10_attempts_to_recover'),
+  };
+
+  // Ground 11 - Persistent Delay
+  base.ground_11 = {
+    pattern_description: getWizardValue(wizard, 'ground_11.pattern_description') ?? getWizardValue(wizard, 'g11_pattern_description'),
+    late_payment_dates: getWizardValue(wizard, 'ground_11.late_payment_dates') ?? getWizardValue(wizard, 'g11_late_payment_dates'),
+    warnings_issued: getWizardValue(wizard, 'ground_11.warnings_issued') ?? getWizardValue(wizard, 'g11_warnings_issued'),
+  };
+
+  // Ground 12 - Breach of Tenancy
+  const g12BreachType = getWizardValue(wizard, 'ground_12.breach_type') ?? getWizardValue(wizard, 'g12_breach_type');
+  base.ground_12 = {
+    breach_type: Array.isArray(g12BreachType) ? g12BreachType : (g12BreachType ? [g12BreachType] : null),
+    tenancy_clause: getWizardValue(wizard, 'ground_12.tenancy_clause') ?? getWizardValue(wizard, 'g12_tenancy_clause'),
+    breach_dates: getWizardValue(wizard, 'ground_12.breach_dates') ?? getWizardValue(wizard, 'g12_breach_dates'),
+    breach_evidence: getWizardValue(wizard, 'ground_12.breach_evidence') ?? getWizardValue(wizard, 'g12_breach_evidence'),
+    warnings_issued: getWizardValue(wizard, 'ground_12.warnings_issued') ?? getWizardValue(wizard, 'g12_warnings_issued'),
+  };
+
+  // Ground 13 - Waste/Neglect/Damage
+  base.ground_13 = {
+    damage_description: getWizardValue(wizard, 'ground_13.damage_description') ?? getWizardValue(wizard, 'g13_damage_description'),
+    damage_discovered_date: getWizardValue(wizard, 'ground_13.damage_discovered_date') ?? getWizardValue(wizard, 'g13_damage_discovered_date'),
+    damage_cost: parseCurrencyAmount(getWizardValue(wizard, 'ground_13.damage_cost') ?? getWizardValue(wizard, 'g13_damage_cost')),
+    evidence_available: getWizardValue(wizard, 'ground_13.evidence_available') ?? getWizardValue(wizard, 'g13_evidence_available'),
+    tenant_notified: coerceBoolean(getWizardValue(wizard, 'ground_13.tenant_notified') ?? getWizardValue(wizard, 'g13_tenant_notified')),
+    tenant_response: getWizardValue(wizard, 'ground_13.tenant_response') ?? getWizardValue(wizard, 'g13_tenant_response'),
+  };
+
+  // Ground 14 - Nuisance/Annoyance
+  const g14BehaviourType = getWizardValue(wizard, 'ground_14.behaviour_type') ?? getWizardValue(wizard, 'g14_behaviour_type');
+  base.ground_14 = {
+    behaviour_type: Array.isArray(g14BehaviourType) ? g14BehaviourType : (g14BehaviourType ? [g14BehaviourType] : null),
+    incident_count: parseCurrencyAmount(getWizardValue(wizard, 'ground_14.incident_count') ?? getWizardValue(wizard, 'g14_incident_count')),
+    incidents_description: getWizardValue(wizard, 'ground_14.incidents_description') ?? getWizardValue(wizard, 'g14_incidents_description'),
+    affected_parties: getWizardValue(wizard, 'ground_14.affected_parties') ?? getWizardValue(wizard, 'g14_affected_parties'),
+    witnesses: coerceBoolean(getWizardValue(wizard, 'ground_14.witnesses') ?? getWizardValue(wizard, 'g14_witnesses')),
+    witness_names: getWizardValue(wizard, 'ground_14.witness_names') ?? getWizardValue(wizard, 'g14_witness_names'),
+    police_involved: coerceBoolean(getWizardValue(wizard, 'ground_14.police_involved') ?? getWizardValue(wizard, 'g14_police_involved')),
+    police_reference: getWizardValue(wizard, 'ground_14.police_reference') ?? getWizardValue(wizard, 'g14_police_reference'),
+    council_involved: coerceBoolean(getWizardValue(wizard, 'ground_14.council_involved') ?? getWizardValue(wizard, 'g14_council_involved')),
+    council_reference: getWizardValue(wizard, 'ground_14.council_reference') ?? getWizardValue(wizard, 'g14_council_reference'),
+    warnings_issued: getWizardValue(wizard, 'ground_14.warnings_issued') ?? getWizardValue(wizard, 'g14_warnings_issued'),
+  };
+
+  // Ground 15 - Damage to Furniture
+  base.ground_15 = {
+    furniture_damaged: getWizardValue(wizard, 'ground_15.furniture_damaged') ?? getWizardValue(wizard, 'g15_furniture_damaged'),
+    damage_cost: parseCurrencyAmount(getWizardValue(wizard, 'ground_15.damage_cost') ?? getWizardValue(wizard, 'g15_damage_cost')),
+    inventory_available: coerceBoolean(getWizardValue(wizard, 'ground_15.inventory_available') ?? getWizardValue(wizard, 'g15_inventory_available')),
+    evidence_description: getWizardValue(wizard, 'ground_15.evidence_description') ?? getWizardValue(wizard, 'g15_evidence_description'),
+  };
+
+  // Ground 17 - False Statement
+  base.ground_17 = {
+    statement_made: getWizardValue(wizard, 'ground_17.statement_made') ?? getWizardValue(wizard, 'g17_statement_made'),
+    statement_date: getWizardValue(wizard, 'ground_17.statement_date') ?? getWizardValue(wizard, 'g17_statement_date'),
+    how_statement_made: getWizardValue(wizard, 'ground_17.how_statement_made') ?? getWizardValue(wizard, 'g17_how_statement_made'),
+    true_facts: getWizardValue(wizard, 'ground_17.true_facts') ?? getWizardValue(wizard, 'g17_true_facts'),
+    reliance_on_statement: getWizardValue(wizard, 'ground_17.reliance_on_statement') ?? getWizardValue(wizard, 'g17_reliance_on_statement'),
+    discovery_date: getWizardValue(wizard, 'ground_17.discovery_date') ?? getWizardValue(wizard, 'g17_discovery_date'),
+    discovery_method: getWizardValue(wizard, 'ground_17.discovery_method') ?? getWizardValue(wizard, 'g17_discovery_method'),
+  };
+
+  // =============================================================================
+  // RISK INDICATORS
+  // =============================================================================
+
+  base.risk = {
+    // Core eviction risk indicators
+    known_tenant_defences: getWizardValue(wizard, 'risk.known_tenant_defences') ?? getWizardValue(wizard, 'known_tenant_defences'),
+    previous_court_proceedings: coerceBoolean(getWizardValue(wizard, 'risk.previous_court_proceedings') ?? getWizardValue(wizard, 'previous_court_proceedings')),
+    previous_proceedings_details: getWizardValue(wizard, 'risk.previous_proceedings_details') ?? getWizardValue(wizard, 'previous_proceedings_details'),
+    disrepair_complaints: coerceBoolean(getWizardValue(wizard, 'risk.disrepair_complaints') ?? getWizardValue(wizard, 'disrepair_complaints')),
+    disrepair_complaint_date: getWizardValue(wizard, 'risk.disrepair_complaint_date') ?? getWizardValue(wizard, 'disrepair_complaint_date'),
+    disrepair_issues_list: getWizardValue(wizard, 'risk.disrepair_issues_list') ?? getWizardValue(wizard, 'disrepair_issues_list'),
+    tenant_vulnerability: coerceBoolean(getWizardValue(wizard, 'risk.tenant_vulnerability') ?? getWizardValue(wizard, 'tenant_vulnerability')),
+    tenant_vulnerability_details: getWizardValue(wizard, 'risk.tenant_vulnerability_details') ?? getWizardValue(wizard, 'tenant_vulnerability_details'),
+    // Money claim risk indicators
+    tenant_disputes_claim: coerceBoolean(getWizardValue(wizard, 'risk.tenant_disputes_claim')),
+    contract_holder_disputes_claim: coerceBoolean(getWizardValue(wizard, 'risk.contract_holder_disputes_claim')),
+    defender_disputes_claim: coerceBoolean(getWizardValue(wizard, 'risk.defender_disputes_claim')),
+    dispute_details: getWizardValue(wizard, 'risk.dispute_details'),
+    deposit_dispute_pending: coerceBoolean(getWizardValue(wizard, 'risk.deposit_dispute_pending')),
+    deposit_dispute_amount: coerceNumber(getWizardValue(wizard, 'risk.deposit_dispute_amount')),
+    tenant_counterclaim_likely: coerceBoolean(getWizardValue(wizard, 'risk.tenant_counterclaim_likely')),
+    contract_holder_counterclaim_likely: coerceBoolean(getWizardValue(wizard, 'risk.contract_holder_counterclaim_likely')),
+    defender_counterclaim_likely: coerceBoolean(getWizardValue(wizard, 'risk.defender_counterclaim_likely')),
+    counterclaim_grounds: coerceStringArray(getWizardValue(wizard, 'risk.counterclaim_grounds')),
+    payment_plan_offered: coerceBoolean(getWizardValue(wizard, 'risk.payment_plan_offered')),
+    payment_plan_response: getWizardValue(wizard, 'risk.payment_plan_response'),
+    rent_smart_wales_compliant: coerceBoolean(getWizardValue(wizard, 'risk.rent_smart_wales_compliant')),
+  };
+
+  // =============================================================================
+  // COMMUNICATION TIMELINE
+  // =============================================================================
+
+  const commEntries: any[] = [];
+  // Try to parse communication timeline entries array
+  const rawCommEntries = getWizardValue(wizard, 'communication_timeline.entries') ?? getWizardValue(wizard, 'communication_entries');
+  if (Array.isArray(rawCommEntries)) {
+    for (const entry of rawCommEntries) {
+      if (entry && typeof entry === 'object') {
+        commEntries.push({
+          date: entry.date ?? entry.comm_date ?? null,
+          method: entry.method ?? entry.comm_method ?? null,
+          summary: entry.summary ?? entry.comm_summary ?? null,
+        });
+      }
+    }
+  }
+  base.communication_timeline = {
+    entries: commEntries,
+    narrative: getWizardValue(wizard, 'communication_timeline.narrative') ?? getWizardValue(wizard, 'communication_narrative'),
+    // Money claim communication timeline fields
+    first_arrears_notice_date: getWizardValue(wizard, 'communication.first_arrears_notice_date'),
+    first_notice_method: getWizardValue(wizard, 'communication.first_notice_method'),
+    subsequent_reminders_sent: coerceNumber(getWizardValue(wizard, 'communication.subsequent_reminders_sent')),
+    final_demand_date: getWizardValue(wizard, 'communication.final_demand_date'),
+    tenant_acknowledged_debt: coerceBoolean(getWizardValue(wizard, 'communication.tenant_acknowledged_debt')),
+    contract_holder_acknowledged_debt: coerceBoolean(getWizardValue(wizard, 'communication.contract_holder_acknowledged_debt')),
+    defender_acknowledged_debt: coerceBoolean(getWizardValue(wizard, 'communication.defender_acknowledged_debt')),
+    acknowledgment_date: getWizardValue(wizard, 'communication.acknowledgment_date'),
+    tenant_made_partial_payment: coerceBoolean(getWizardValue(wizard, 'communication.tenant_made_partial_payment')),
+    contract_holder_made_partial_payment: coerceBoolean(getWizardValue(wizard, 'communication.contract_holder_made_partial_payment')),
+    defender_made_partial_payment: coerceBoolean(getWizardValue(wizard, 'communication.defender_made_partial_payment')),
+    last_partial_payment_date: getWizardValue(wizard, 'communication.last_partial_payment_date'),
+    last_partial_payment_amount: coerceNumber(getWizardValue(wizard, 'communication.last_partial_payment_amount')),
+  };
+
+  // =============================================================================
+  // SCOTLAND PRE-ACTION PROTOCOL
+  // =============================================================================
+
+  const scotlandSignposted = getWizardValue(wizard, 'scotland_pre_action.signposted_to') ?? getWizardValue(wizard, 'signposted_to');
+  base.scotland_pre_action = {
+    rent_statement_sent: coerceBoolean(getWizardValue(wizard, 'scotland_pre_action.rent_statement_sent') ?? getWizardValue(wizard, 'rent_statement_sent')),
+    rent_statement_date: getWizardValue(wizard, 'scotland_pre_action.rent_statement_date') ?? getWizardValue(wizard, 'rent_statement_date'),
+    advice_signposting: coerceBoolean(getWizardValue(wizard, 'scotland_pre_action.advice_signposting') ?? getWizardValue(wizard, 'advice_signposting')),
+    signposted_to: Array.isArray(scotlandSignposted) ? scotlandSignposted : (scotlandSignposted ? [scotlandSignposted] : null),
+    reasonable_time_given: coerceBoolean(getWizardValue(wizard, 'scotland_pre_action.reasonable_time_given') ?? getWizardValue(wizard, 'reasonable_time_given')),
+    time_given_details: getWizardValue(wizard, 'scotland_pre_action.time_given_details') ?? getWizardValue(wizard, 'time_given_details'),
+    payment_plan_offered: coerceBoolean(getWizardValue(wizard, 'scotland_pre_action.payment_plan_offered') ?? getWizardValue(wizard, 'payment_plan_offered')),
+    payment_plan_details: getWizardValue(wizard, 'scotland_pre_action.payment_plan_details') ?? getWizardValue(wizard, 'payment_plan_details'),
+    housing_benefit_check: coerceBoolean(getWizardValue(wizard, 'scotland_pre_action.housing_benefit_check') ?? getWizardValue(wizard, 'housing_benefit_check')),
+    housing_benefit_details: getWizardValue(wizard, 'scotland_pre_action.housing_benefit_details') ?? getWizardValue(wizard, 'housing_benefit_details'),
+  };
+
   // N5B AST verification (for accelerated possession)
   const astIsAst = getFirstValue(wizard, [
     'case_facts.issues.ast_verification.is_ast',
@@ -1232,6 +1422,103 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
       'other_evidence_uploaded',
     ]) ?? base.evidence.other_evidence_uploaded
   );
+
+  // Evidence description fields (describe instead of upload)
+  base.evidence.tenancy_agreement_description = getFirstValue(wizard, [
+    'evidence.tenancy_agreement_description',
+    'tenancy_agreement_describe',
+  ]);
+  base.evidence.bank_statements_description = getFirstValue(wizard, [
+    'evidence.bank_statements_description',
+    'bank_statements_describe',
+  ]);
+  base.evidence.notice_service_description = getFirstValue(wizard, [
+    'evidence.notice_service_description',
+    'notice_service_describe',
+  ]);
+  base.evidence.correspondence_description = getFirstValue(wizard, [
+    'evidence.correspondence_description',
+    'correspondence_describe',
+  ]);
+
+  // =============================================================================
+  // MONEY CLAIM EVIDENCE DESCRIPTIONS
+  // =============================================================================
+  base.evidence.tenancy_type = getFirstValue(wizard, [
+    'evidence.tenancy_type',
+    'tenancy_type',
+  ]);
+  base.evidence.tenancy_written_or_verbal = getFirstValue(wizard, [
+    'evidence.tenancy_written_or_verbal',
+    'tenancy_written_or_verbal',
+  ]);
+  base.evidence.rent_clause_description = getFirstValue(wizard, [
+    'evidence.rent_clause_description',
+    'rent_clause_description',
+  ]);
+  base.evidence.arrears_calculation_method = getFirstValue(wizard, [
+    'evidence.arrears_calculation_method',
+    'arrears_calculation_method',
+  ]);
+  base.evidence.arrears_ledger_available = coerceBoolean(getFirstValue(wizard, [
+    'evidence.arrears_ledger_available',
+    'arrears_ledger_available',
+  ]));
+  base.evidence.arrears_period_description = getFirstValue(wizard, [
+    'evidence.arrears_period_description',
+    'arrears_period_description',
+  ]);
+  base.evidence.bank_statements_available = coerceBoolean(getFirstValue(wizard, [
+    'evidence.bank_statements_available',
+    'bank_statements_available',
+  ]));
+  base.evidence.inventory_checkout_available = coerceBoolean(getFirstValue(wizard, [
+    'evidence.inventory_checkout_available',
+    'inventory_checkout_available',
+  ]));
+  base.evidence.damage_photos_available = coerceBoolean(getFirstValue(wizard, [
+    'evidence.damage_photos_available',
+    'damage_photos_available',
+  ]));
+  base.evidence.damage_photos_description = getFirstValue(wizard, [
+    'evidence.damage_photos_description',
+    'damage_photos_description',
+  ]);
+  base.evidence.repair_quotes_description = getFirstValue(wizard, [
+    'evidence.repair_quotes_description',
+    'repair_quotes_description',
+  ]);
+  base.evidence.before_photos_available = coerceBoolean(getFirstValue(wizard, [
+    'evidence.before_photos_available',
+    'before_photos_available',
+  ]));
+  base.evidence.correspondence_preserved = coerceBoolean(getFirstValue(wizard, [
+    'evidence.correspondence_preserved',
+    'correspondence_preserved',
+  ]));
+  const correspondenceFormat = getFirstValue(wizard, [
+    'evidence.correspondence_format',
+    'correspondence_format',
+  ]);
+  base.evidence.correspondence_format = coerceStringArray(correspondenceFormat);
+  base.evidence.key_correspondence_summary = getFirstValue(wizard, [
+    'evidence.key_correspondence_summary',
+    'key_correspondence_summary',
+  ]);
+  base.evidence.money_claim_evidence_uploaded = coerceBoolean(getFirstValue(wizard, [
+    'evidence.money_claim_evidence_uploaded',
+    'money_claim_evidence_uploaded',
+  ]));
+  // Wales-specific evidence fields
+  base.evidence.contract_type = getFirstValue(wizard, [
+    'evidence.contract_type',
+    'contract_type',
+  ]);
+  base.evidence.contract_written_or_verbal = getFirstValue(wizard, [
+    'evidence.contract_written_or_verbal',
+    'contract_written_or_verbal',
+  ]);
+
   const missingEvidenceNotes = getFirstValue(wizard, [
     'case_facts.evidence.missing_evidence_notes',
     'evidence.missing_evidence_notes',
@@ -1624,6 +1911,50 @@ export function wizardFactsToCaseFacts(wizard: WizardFacts): CaseFacts {
   ]);
   if (howToRent !== null && howToRent !== undefined) {
     base.compliance.how_to_rent_given = coerceBoolean(howToRent);
+  }
+
+  // Compliance dates (Phase 1 enhancements)
+  base.compliance.gas_safety_cert_date = getFirstValue(wizard, [
+    'compliance.gas_cert_date',
+    'gas_cert_date',
+  ]);
+  base.compliance.gas_safety_cert_expiry = getFirstValue(wizard, [
+    'compliance.gas_cert_expiry',
+    'gas_cert_expiry',
+  ]);
+  base.compliance.epc_date = getFirstValue(wizard, [
+    'compliance.epc_certificate_date',
+    'epc_certificate_date',
+  ]);
+  base.compliance.how_to_rent_date = getFirstValue(wizard, [
+    'compliance.how_to_rent_date',
+    'how_to_rent_date',
+  ]);
+  base.compliance.prescribed_info_date = getFirstValue(wizard, [
+    'compliance.prescribed_info_date',
+    'prescribed_info_date',
+  ]);
+
+  // EICR (Electrical Safety)
+  const eicrProvided = getFirstValue(wizard, [
+    'compliance.eicr_provided',
+    'eicr_provided',
+    'electrical_safety_cert_provided',
+  ]);
+  if (eicrProvided !== null && eicrProvided !== undefined) {
+    base.compliance.eicr_provided = coerceBoolean(eicrProvided);
+  }
+  base.compliance.eicr_date = getFirstValue(wizard, [
+    'compliance.eicr_date',
+    'eicr_date',
+    'eicr_report_date',
+  ]);
+  const eicrSatisfactory = getFirstValue(wizard, [
+    'compliance.eicr_satisfactory',
+    'eicr_satisfactory',
+  ]);
+  if (eicrSatisfactory !== null && eicrSatisfactory !== undefined) {
+    base.compliance.eicr_satisfactory = coerceBoolean(eicrSatisfactory);
   }
 
   // Recent repair complaints (retaliatory eviction protection)

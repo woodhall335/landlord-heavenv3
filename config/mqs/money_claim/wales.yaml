@@ -289,7 +289,197 @@ questions:
     maps_to:
       - preferred_court
 
-  # 10. Evidence
+  # ================================
+  # 10. RISK INDICATORS
+  # ================================
+  - id: risk_indicators
+    section: Risk Assessment
+    question: "Risk factors that may affect your claim"
+    inputType: group
+    helperText: "These factors help assess potential defences and counter-claims"
+    fields:
+      - id: contract_holder_disputes_claim
+        label: "Has the contract holder disputed any amount claimed?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: dispute_details
+        label: "What has been disputed?"
+        inputType: textarea
+        dependsOn:
+          questionId: contract_holder_disputes_claim
+          value: true
+        placeholder: "E.g., Contract holder claims damage was pre-existing, disputes arrears calculation"
+        width: full
+      - id: deposit_dispute_pending
+        label: "Is there a pending deposit dispute?"
+        inputType: yes_no
+        helperText: "Active deposit scheme dispute may affect your claim"
+        validation:
+          required: true
+        width: half
+      - id: deposit_dispute_amount
+        label: "Amount in dispute (£)"
+        inputType: currency
+        dependsOn:
+          questionId: deposit_dispute_pending
+          value: true
+        width: half
+      - id: contract_holder_counterclaim_likely
+        label: "Is the contract holder likely to counter-claim?"
+        inputType: yes_no
+        helperText: "E.g., for disrepair, return of deposit, harassment"
+        validation:
+          required: true
+        width: half
+      - id: counterclaim_grounds
+        label: "Likely counter-claim grounds"
+        inputType: multiselect
+        dependsOn:
+          questionId: contract_holder_counterclaim_likely
+          value: true
+        options:
+          - "Disrepair claims"
+          - "Deposit not protected"
+          - "Breach of fitness for human habitation (FFHH)"
+          - "Harassment or illegal eviction"
+          - "Overcharging (rent or utilities)"
+          - "Deductions already made"
+        width: full
+      - id: payment_plan_offered
+        label: "Was a payment plan offered to the contract holder?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: payment_plan_response
+        label: "Contract holder's response to payment plan"
+        inputType: select
+        dependsOn:
+          questionId: payment_plan_offered
+          value: true
+        options:
+          - "Accepted and kept to plan"
+          - "Accepted but defaulted"
+          - "Rejected"
+          - "No response"
+        width: half
+      - id: contract_holder_vulnerability_known
+        label: "Are you aware of any vulnerability factors?"
+        inputType: yes_no
+        helperText: "E.g., mental health, disability, dependent children - courts consider this"
+        width: half
+      - id: vulnerability_details
+        label: "Known vulnerability factors"
+        inputType: textarea
+        dependsOn:
+          questionId: contract_holder_vulnerability_known
+          value: true
+        placeholder: "Brief description for court awareness"
+        width: full
+      - id: rent_smart_wales_compliant
+        label: "Are you fully Rent Smart Wales compliant?"
+        inputType: yes_no
+        helperText: "Lack of registration/licensing can be raised as a defence"
+        validation:
+          required: true
+        width: half
+    maps_to:
+      - risk.contract_holder_disputes_claim
+      - risk.dispute_details
+      - risk.deposit_dispute_pending
+      - risk.deposit_dispute_amount
+      - risk.contract_holder_counterclaim_likely
+      - risk.counterclaim_grounds
+      - risk.payment_plan_offered
+      - risk.payment_plan_response
+      - risk.contract_holder_vulnerability_known
+      - risk.vulnerability_details
+      - risk.rent_smart_wales_compliant
+
+  # ================================
+  # 11. COMMUNICATION TIMELINE
+  # ================================
+  - id: communication_timeline
+    section: Communication History
+    question: "Timeline of communications about the debt"
+    inputType: group
+    helperText: "Courts expect landlords to have communicated clearly before claiming"
+    fields:
+      - id: first_arrears_notice_date
+        label: "When did you first notify contract holder of arrears?"
+        inputType: date
+        validation:
+          required: true
+        width: half
+      - id: first_notice_method
+        label: "Method of first notification"
+        inputType: select
+        options:
+          - "Email"
+          - "Letter (posted)"
+          - "Letter (hand delivered)"
+          - "Text message"
+          - "Phone call"
+          - "In person"
+        validation:
+          required: true
+        width: half
+      - id: subsequent_reminders_sent
+        label: "How many reminder letters/emails sent?"
+        inputType: number
+        placeholder: "E.g., 3"
+        width: half
+      - id: final_demand_date
+        label: "Date of final demand before court action"
+        inputType: date
+        width: half
+      - id: contract_holder_acknowledged_debt
+        label: "Has the contract holder acknowledged the debt?"
+        inputType: yes_no
+        helperText: "Written acknowledgment restarts limitation period"
+        width: half
+      - id: acknowledgment_date
+        label: "Date of acknowledgment"
+        inputType: date
+        dependsOn:
+          questionId: contract_holder_acknowledged_debt
+          value: true
+        width: half
+      - id: contract_holder_made_partial_payment
+        label: "Has the contract holder made any partial payments?"
+        inputType: yes_no
+        helperText: "Partial payment is acknowledgment of debt"
+        width: half
+      - id: last_partial_payment_date
+        label: "Date of last partial payment"
+        inputType: date
+        dependsOn:
+          questionId: contract_holder_made_partial_payment
+          value: true
+        width: half
+      - id: last_partial_payment_amount
+        label: "Amount of last partial payment (£)"
+        inputType: currency
+        dependsOn:
+          questionId: contract_holder_made_partial_payment
+          value: true
+        width: half
+    maps_to:
+      - communication.first_arrears_notice_date
+      - communication.first_notice_method
+      - communication.subsequent_reminders_sent
+      - communication.final_demand_date
+      - communication.contract_holder_acknowledged_debt
+      - communication.acknowledgment_date
+      - communication.contract_holder_made_partial_payment
+      - communication.last_partial_payment_date
+      - communication.last_partial_payment_amount
+
+  # ================================
+  # 12. EVIDENCE & DOCUMENTATION
+  # ================================
   - id: evidence_uploads
     section: Evidence
     question: "Upload supporting evidence"
@@ -299,3 +489,159 @@ questions:
       required: false
     maps_to:
       - evidence.money_claim_evidence_uploaded
+
+  # Evidence descriptions (for AI document generation)
+  - id: occupation_contract_description
+    section: Evidence
+    question: "Describe the occupation contract"
+    inputType: group
+    helperText: "If you cannot upload, describe the key terms"
+    fields:
+      - id: contract_type
+        label: "Type of occupation contract"
+        inputType: select
+        options:
+          - "Standard occupation contract"
+          - "Secure contract (social landlord)"
+          - "Converted AST (pre-2022)"
+          - "Other"
+        validation:
+          required: true
+        width: half
+      - id: contract_written_or_verbal
+        label: "Written or verbal agreement?"
+        inputType: select
+        options:
+          - "Written statement provided"
+          - "Written but no statement"
+          - "Verbal only"
+        validation:
+          required: true
+        width: half
+      - id: rent_clause_description
+        label: "Describe the rent payment terms"
+        inputType: textarea
+        placeholder: "E.g., £1,200 per month payable on 1st of each month by standing order"
+        width: full
+    maps_to:
+      - evidence.contract_type
+      - evidence.contract_written_or_verbal
+      - evidence.rent_clause_description
+
+  - id: arrears_evidence_description
+    section: Evidence
+    question: "Describe your arrears evidence"
+    inputType: group
+    helperText: "Describe the evidence you have for the arrears claim"
+    fields:
+      - id: arrears_calculation_method
+        label: "How have you calculated the arrears?"
+        inputType: select
+        options:
+          - "Rent ledger/spreadsheet"
+          - "Bank statements"
+          - "Letting agent records"
+          - "Manual calculation"
+        validation:
+          required: true
+        width: half
+      - id: arrears_ledger_available
+        label: "Do you have a rent ledger available?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: arrears_period_description
+        label: "Describe the arrears period"
+        inputType: textarea
+        placeholder: "E.g., Contract holder stopped paying in March 2025, no payments since except £200 in May"
+        validation:
+          required: true
+        width: full
+      - id: bank_statements_available
+        label: "Do you have bank statements showing non-payment?"
+        inputType: yes_no
+        width: half
+    maps_to:
+      - evidence.arrears_calculation_method
+      - evidence.arrears_ledger_available
+      - evidence.arrears_period_description
+      - evidence.bank_statements_available
+
+  - id: damage_evidence_description
+    section: Evidence
+    question: "Describe your damage evidence"
+    inputType: group
+    dependsOn:
+      questionId: basis_of_claim
+      value: "Property damage"
+    helperText: "Describe evidence of property damage"
+    fields:
+      - id: inventory_checkout_available
+        label: "Do you have an inventory/check-out report?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: damage_photos_available
+        label: "Do you have dated photos of damage?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: damage_photos_description
+        label: "Describe the photos you have"
+        inputType: textarea
+        dependsOn:
+          questionId: damage_photos_available
+          value: true
+        placeholder: "E.g., Photos taken 15/06/2025 showing holes in bedroom wall, stained carpets in living room"
+        width: full
+      - id: repair_quotes_description
+        label: "Describe repair quotes obtained"
+        inputType: textarea
+        placeholder: "E.g., ABC Builders quoted £450 for wall repairs, Carpet Co quoted £800 for carpet replacement"
+        width: full
+      - id: before_photos_available
+        label: "Do you have 'before' photos (check-in condition)?"
+        inputType: yes_no
+        helperText: "Check-in photos establish baseline condition"
+        width: half
+    maps_to:
+      - evidence.inventory_checkout_available
+      - evidence.damage_photos_available
+      - evidence.damage_photos_description
+      - evidence.repair_quotes_description
+      - evidence.before_photos_available
+
+  - id: correspondence_description
+    section: Evidence
+    question: "Describe correspondence with the contract holder"
+    inputType: group
+    helperText: "Summary of written communications about the debt"
+    fields:
+      - id: correspondence_preserved
+        label: "Have you preserved copies of all correspondence?"
+        inputType: yes_no
+        validation:
+          required: true
+        width: half
+      - id: correspondence_format
+        label: "Format of correspondence"
+        inputType: multiselect
+        options:
+          - "Emails"
+          - "Letters"
+          - "Text messages"
+          - "WhatsApp/messaging apps"
+          - "Letting agent portal"
+        width: half
+      - id: key_correspondence_summary
+        label: "Summarise key correspondence"
+        inputType: textarea
+        placeholder: "E.g., Sent arrears letter 01/03/2025, contract holder replied promising to pay 15/03, no payment received, sent final demand 01/04/2025"
+        width: full
+    maps_to:
+      - evidence.correspondence_preserved
+      - evidence.correspondence_format
+      - evidence.key_correspondence_summary
