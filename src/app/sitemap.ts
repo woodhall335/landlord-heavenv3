@@ -6,6 +6,7 @@
  */
 
 import { MetadataRoute } from 'next';
+import { blogPosts } from '@/lib/blog/posts';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://landlordheaven.co.uk';
@@ -62,17 +63,29 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/auth/signup', priority: 0.5, changeFrequency: 'monthly' as const },
   ];
 
+  // Blog pages
+  const blogPages = [
+    { path: '/blog', priority: 0.9, changeFrequency: 'weekly' as const },
+    ...blogPosts.map((post) => ({
+      path: `/blog/${post.slug}`,
+      priority: 0.8,
+      changeFrequency: 'monthly' as const,
+      lastModified: new Date(post.updatedDate || post.date),
+    })),
+  ];
+
   const allPages = [
     ...marketingPages,
     ...productPages,
     ...tenancyPages,
     ...toolPages,
     ...authEntryPages,
+    ...blogPages,
   ];
 
   return allPages.map((page) => ({
     url: `${siteUrl}${page.path}`,
-    lastModified: now,
+    lastModified: 'lastModified' in page ? page.lastModified : now,
     changeFrequency: page.changeFrequency,
     priority: page.priority,
   }));
