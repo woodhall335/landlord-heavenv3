@@ -362,7 +362,7 @@ export default function SettingsPage() {
             </form>
           </Card>
 
-          {/* Subscription */}
+          {/* HMO Pro Subscription - Hidden for V1, keeping code for future release
           <Card padding="large">
             <h2 className="text-xl font-semibold text-charcoal mb-6">HMO Pro Subscription</h2>
 
@@ -418,6 +418,7 @@ export default function SettingsPage() {
               </div>
             )}
           </Card>
+          */}
 
           {/* Account Actions */}
           <Card padding="large">
