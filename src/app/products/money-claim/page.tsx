@@ -14,6 +14,8 @@ import {
   BookOpen
 } from "lucide-react";
 import { StructuredData, productSchema, faqPageSchema } from "@/lib/seo/structured-data";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 
 export const metadata: Metadata = {
   title: "Money Claim Pack - Recover Rent Arrears Through Courts",
@@ -641,6 +643,25 @@ export default function MoneyClaimPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Related Resources */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <RelatedLinks
+              title="Related Resources"
+              links={[
+                productLinks.completePack,
+                productLinks.noticeOnly,
+                toolLinks.rentArrearsCalculator,
+                toolLinks.section8Generator,
+                blogLinks.rentArrearsEviction,
+                landingPageLinks.rentArrearsTemplate,
+              ]}
+            />
           </div>
         </Container>
       </section>

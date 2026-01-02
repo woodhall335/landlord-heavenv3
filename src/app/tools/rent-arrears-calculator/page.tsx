@@ -7,6 +7,8 @@ import { RiAlertLine } from 'react-icons/ri';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, blogLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 
 // Note: Metadata moved to layout.tsx (client components cannot export metadata)
 
@@ -658,6 +660,20 @@ link.href = url;
             </div>
           </div>
         </Card>
+      </Container>
+
+      {/* Related Resources */}
+      <Container className="pb-12">
+        <RelatedLinks
+          title="Related Resources"
+          links={[
+            productLinks.moneyClaim,
+            productLinks.completePack,
+            toolLinks.section8Generator,
+            blogLinks.rentArrearsEviction,
+            landingPageLinks.rentArrearsTemplate,
+          ]}
+        />
       </Container>
 
       {/* Email Gate Modal */}

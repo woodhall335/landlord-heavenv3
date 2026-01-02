@@ -20,6 +20,8 @@ import {
   Clock
 } from "lucide-react";
 import { StructuredData, productSchema, faqPageSchema } from "@/lib/seo/structured-data";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 
 export const metadata: Metadata = {
   title: "Complete Eviction Pack - Last Chance Before Section 21 Ban",
@@ -967,6 +969,25 @@ export default function CompleteEvictionPackPage() {
             <p className="mt-4 text-sm text-gray-600">
               Instant download • Court-ready documents • Lifetime storage • Priority support
             </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Related Resources */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <RelatedLinks
+              title="Related Resources"
+              links={[
+                productLinks.noticeOnly,
+                productLinks.moneyClaim,
+                toolLinks.section21Generator,
+                toolLinks.section8Generator,
+                blogLinks.evictionTimeline,
+                landingPageLinks.section21Template,
+              ]}
+            />
           </div>
         </Container>
       </section>

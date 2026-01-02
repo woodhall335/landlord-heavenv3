@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { StructuredData } from '@/lib/seo/structured-data';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import {
   CheckCircle,
   FileText,
@@ -516,6 +518,25 @@ export default function Section21NoticeTemplatePage() {
               <p className="mt-8 text-white/70 text-sm">
                 Official Form 6A &bull; AI Compliance Check &bull; Court-Ready Guaranteed
               </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Related Resources */}
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <RelatedLinks
+                title="Related Resources"
+                links={[
+                  productLinks.noticeOnly,
+                  productLinks.completePack,
+                  toolLinks.section21Generator,
+                  blogLinks.whatIsSection21,
+                  blogLinks.howToServeNotice,
+                  landingPageLinks.evictionTemplate,
+                ]}
+              />
             </div>
           </div>
         </section>

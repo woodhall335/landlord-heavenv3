@@ -9,6 +9,8 @@ import {
   Briefcase,
   BadgePoundSterling
 } from "lucide-react";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-links";
 
 export const metadata: Metadata = {
   title: "Tenancy Agreements - AST, PRT, NI | Landlord Heaven",
@@ -552,6 +554,24 @@ export default function ASTPage() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription required</p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Related Resources */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <RelatedLinks
+              title="Related Resources"
+              links={[
+                productLinks.noticeOnly,
+                productLinks.completePack,
+                toolLinks.hmoChecker,
+                toolLinks.section21Generator,
+                landingPageLinks.tenancyTemplate,
+              ]}
+            />
           </div>
         </Container>
       </section>

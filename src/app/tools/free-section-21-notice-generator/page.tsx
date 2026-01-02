@@ -6,6 +6,8 @@ import { Container } from '@/components/ui/Container';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 
 // SEO Metadata (exported from separate metadata.ts file for client components)
 // See: src/app/tools/free-section-21-notice-generator/metadata.ts
@@ -504,6 +506,18 @@ export default function FreeSection21Tool() {
           </div>
         </Container>
       </div>
+
+      {/* Related Resources */}
+      <RelatedLinks
+        title="Related Resources"
+        links={[
+          productLinks.noticeOnly,
+          productLinks.completePack,
+          blogLinks.whatIsSection21,
+          blogLinks.howToServeNotice,
+          landingPageLinks.section21Template,
+        ]}
+      />
 
       {/* Email Gate Modal */}
       {gate.showGate && (

@@ -2,6 +2,8 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { StructuredData } from '@/lib/seo/structured-data';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, toolLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 import {
   CheckCircle,
   FileText,
@@ -659,6 +661,25 @@ export default function Section8NoticeTemplatePage() {
               <p className="mt-8 text-white/70 text-sm">
                 17 Grounds Covered &bull; AI Recommendations &bull; Court-Ready Guaranteed
               </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Related Resources */}
+        <section className="py-16 lg:py-20">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <RelatedLinks
+                title="Related Resources"
+                links={[
+                  productLinks.noticeOnly,
+                  productLinks.completePack,
+                  toolLinks.section8Generator,
+                  blogLinks.section21VsSection8,
+                  blogLinks.rentArrearsEviction,
+                  landingPageLinks.evictionTemplate,
+                ]}
+              />
             </div>
           </div>
         </section>

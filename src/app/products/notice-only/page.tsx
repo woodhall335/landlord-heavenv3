@@ -16,6 +16,8 @@ import {
   FileCheck
 } from "lucide-react";
 import { StructuredData, productSchema, faqPageSchema } from "@/lib/seo/structured-data";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 
 export const metadata: Metadata = {
   title: "Section 21 & 8 Eviction Notices - Court-Ready from £29.99",
@@ -574,6 +576,25 @@ export default function NoticeOnlyPage() {
                 </p>
               </div>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Related Resources */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <RelatedLinks
+              title="Related Resources"
+              links={[
+                productLinks.completePack,
+                toolLinks.section21Generator,
+                toolLinks.section8Generator,
+                blogLinks.whatIsSection21,
+                blogLinks.section21VsSection8,
+                landingPageLinks.evictionTemplate,
+              ]}
+            />
           </div>
         </Container>
       </section>

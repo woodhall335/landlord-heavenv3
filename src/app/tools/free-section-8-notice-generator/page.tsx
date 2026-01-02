@@ -6,6 +6,8 @@ import { Container } from '@/components/ui/Container';
 import { useEmailGate } from '@/hooks/useEmailGate';
 import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
 import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, blogLinks, landingPageLinks } from '@/lib/seo/internal-links';
 
 const COMMON_GROUNDS = [
   { id: 'ground8', name: 'Ground 8', description: 'Rent arrears (8+ weeks/2+ months)' },
@@ -480,6 +482,18 @@ export default function FreeSection8Tool() {
           </div>
         </Container>
       </div>
+
+      {/* Related Resources */}
+      <RelatedLinks
+        title="Related Resources"
+        links={[
+          productLinks.noticeOnly,
+          productLinks.completePack,
+          blogLinks.section21VsSection8,
+          blogLinks.rentArrearsEviction,
+          landingPageLinks.section8Template,
+        ]}
+      />
 
       {/* Email Gate Modal */}
       {gate.showGate && (
