@@ -91,6 +91,16 @@ export async function GET() {
     // Calculate MRR from subscriptions (assuming £9.99/month for HMO Pro)
     const subscriptionsMRR = totalSubscribers * 999; // £9.99 in pence
 
+    // Fetch email leads stats
+    const { count: totalLeads } = await supabase
+      .from('email_subscribers')
+      .select('*', { count: 'exact', head: true });
+
+    const { count: leadsThisMonth } = await supabase
+      .from('email_subscribers')
+      .select('*', { count: 'exact', head: true })
+      .gte('created_at', startOfThisMonth);
+
     // Fetch AI usage stats
     const { data: allAIUsage } = await supabase
       .from('ai_usage_logs')
@@ -138,6 +148,10 @@ export async function GET() {
             total_tokens: totalTokens,
             total_cost_usd: totalCostUSD,
             this_month_cost: thisMonthCostUSD,
+          },
+          leads: {
+            total: totalLeads || 0,
+            this_month: leadsThisMonth || 0,
           },
         },
       },
