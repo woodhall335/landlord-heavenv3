@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Column 1: About */}
           <div>
             <div className="mb-6">
@@ -110,59 +110,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Templates */}
-          <div>
-            <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Templates</u></h5>
-            <ul className="space-y-3.5">
-              <li>
-                <Link
-                  href="/section-21-notice-template"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
-                  Section 21 Template
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/section-8-notice-template"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
-                  Section 8 Template
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/eviction-notice-template"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
-                  Eviction Notice Template
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/rent-arrears-letter-template"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
-                  Rent Arrears Letter
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/tenancy-agreement-template"
-                  className="text-sm transition-colors inline-block"
-                  style={{ color: '#bdbdbd' }}
-                >
-                  Tenancy Agreement
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Column 4: Legal */}
+          {/* Column 3: Legal */}
           <div>
             <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Legal</u></h5>
             <ul className="space-y-3.5">
@@ -205,7 +153,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Column 5: Account */}
+          {/* Column 4: Account */}
           <div>
             <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Account</u></h5>
             <ul className="space-y-3.5">
