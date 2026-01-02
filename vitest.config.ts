@@ -10,6 +10,17 @@ export default defineConfig({
     environmentMatchGlobs: [
       ['tests/components/**', 'jsdom'],
     ],
+    // Isolate test files to prevent mock bleed between files
+    // Each test file runs with fresh module state
+    isolate: true,
+    // Use threads pool for better isolation
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: false,
+        isolate: true,
+      },
+    },
   },
   resolve: {
     alias: {
