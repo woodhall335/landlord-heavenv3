@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { clsx } from "clsx";
 import { RiArrowDownSLine, RiMenuLine, RiLogoutBoxLine } from 'react-icons/ri';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
@@ -13,8 +13,13 @@ interface NavItem {
   label: string;
 }
 
+interface NavBarUser {
+  email: string;
+  name?: string;
+}
+
 interface NavBarProps {
-  user?: { email: string; name?: string } | null;
+  user?: NavBarUser | null;
 }
 
 const primaryLinks: NavItem[] = [
@@ -36,7 +41,7 @@ const freeToolsLinks: NavItem[] = [
   { href: "/tools/free-rent-demand-letter", label: "Rent Demand Letter" },
 ];
 
-export function NavBar({ user }: NavBarProps) {
+export function NavBar({ user: serverUser }: NavBarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -45,11 +50,66 @@ export function NavBar({ user }: NavBarProps) {
   const [showMenu, setShowMenu] = useState(true);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
+  // Client-side auth state - starts with server prop, updates on auth changes
+  const [clientUser, setClientUser] = useState<NavBarUser | null>(serverUser || null);
+
+  // Check auth state on mount and listen for changes
+  const checkAuthState = useCallback(async () => {
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+
+      if (authUser) {
+        setClientUser({
+          email: authUser.email || '',
+          name: authUser.user_metadata?.full_name,
+        });
+      } else {
+        setClientUser(null);
+      }
+    } catch {
+      // Keep current state on error
+    }
+  }, []);
+
+  useEffect(() => {
+    // Check auth state on mount
+    checkAuthState();
+
+    // Listen for auth state changes
+    const supabase = getSupabaseBrowserClient();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session?.user) {
+          setClientUser({
+            email: session.user.email || '',
+            name: session.user.user_metadata?.full_name,
+          });
+        } else if (event === 'SIGNED_OUT') {
+          setClientUser(null);
+        } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+          setClientUser({
+            email: session.user.email || '',
+            name: session.user.user_metadata?.full_name,
+          });
+        }
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [checkAuthState]);
+
+  // Use client-side state (more up-to-date than server prop)
+  const user = clientUser;
+
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
       const supabase = getSupabaseBrowserClient();
       await supabase.auth.signOut();
+      setClientUser(null);
       router.push('/');
       router.refresh();
     } catch (error) {

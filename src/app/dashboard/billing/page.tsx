@@ -182,10 +182,23 @@ export default function BillingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
-      <Container>
+    <div className="min-h-screen bg-gray-50">
+      <div className="bg-white border-b border-gray-200">
+        <Container>
+          <div className="py-6 max-w-4xl mx-auto">
+            <Link
+              href="/dashboard"
+              className="text-sm text-primary hover:text-primary-dark font-medium mb-2 inline-block"
+            >
+              ← Back to Dashboard
+            </Link>
+            <h1 className="text-3xl font-bold text-charcoal">Billing & Orders</h1>
+            <p className="text-gray-600 mt-1">View your order history and manage payments</p>
+          </div>
+        </Container>
+      </div>
+      <Container className="py-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-3xl font-bold text-charcoal mb-8">Billing & Subscription</h1>
 
           {message && (
             <div

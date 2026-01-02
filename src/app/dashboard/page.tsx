@@ -286,6 +286,11 @@ export default function DashboardPage() {
                   </button>
                 </Link>
                 {/* HMO Pro Dashboard removed - parked for later review */}
+                <Link href="/dashboard/billing">
+                  <button className="w-full px-4 py-3 bg-gray-100 text-charcoal rounded-lg hover:bg-gray-200 transition-colors text-left font-medium">
+                    💳 Billing & Orders
+                  </button>
+                </Link>
                 <Link href="/dashboard/settings">
                   <button className="w-full px-4 py-3 bg-gray-100 text-charcoal rounded-lg hover:bg-gray-200 transition-colors text-left font-medium">
                     ⚙️ Account Settings
