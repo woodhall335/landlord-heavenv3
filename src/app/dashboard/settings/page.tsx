@@ -14,6 +14,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 
 interface UserProfile {
   id: string;
@@ -49,6 +50,16 @@ export default function SettingsPage() {
 
   const fetchProfile = async () => {
     try {
+      // First check auth with browser Supabase client
+      const supabase = getSupabaseBrowserClient();
+      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+
+      if (authError || !authUser) {
+        router.push('/auth/login');
+        return;
+      }
+
+      // Then fetch profile data from API
       const response = await fetch('/api/users/me');
 
       if (response.ok) {
@@ -57,7 +68,19 @@ export default function SettingsPage() {
         setFullName(data.user.full_name || '');
         setPhone(data.user.phone || '');
       } else {
-        setError('Failed to load profile');
+        // API failed but user is authenticated - use basic info
+        setProfile({
+          id: authUser.id,
+          email: authUser.email || '',
+          full_name: authUser.user_metadata?.full_name || null,
+          phone: authUser.user_metadata?.phone || null,
+          subscription_tier: null,
+          subscription_status: null,
+          trial_ends_at: null,
+          created_at: authUser.created_at || new Date().toISOString(),
+        });
+        setFullName(authUser.user_metadata?.full_name || '');
+        setPhone(authUser.user_metadata?.phone || '');
       }
     } catch {
       setError('Failed to load profile');

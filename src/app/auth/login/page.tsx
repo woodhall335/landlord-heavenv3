@@ -3,12 +3,13 @@
  *
  * User authentication with email/password
  * Redirects to appropriate dashboard based on user role
+ * Supports redirect param for returning to checkout flow
  */
 
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
@@ -54,12 +55,57 @@ async function getDashboardUrl(): Promise<string> {
   }
 }
 
-export default function LoginPage() {
+/**
+ * Links a case to the current user
+ */
+async function linkCaseToUser(caseId: string): Promise<boolean> {
+  try {
+    const response = await fetch(`/api/cases/${caseId}/link`, { method: 'POST' });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Claims any orphan cases that might belong to this user
+ * (anonymous cases with matching email in collected_facts)
+ */
+async function claimOrphanCases(): Promise<void> {
+  try {
+    await fetch('/api/cases/claim-orphans', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    });
+  } catch {
+    // Silently ignore errors - this is a best-effort recovery
+  }
+}
+
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get redirect and case_id from URL params
+  const redirectUrl = searchParams.get('redirect');
+  const caseId = searchParams.get('case_id');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // Store redirect info in localStorage (in case user was sent here from signup)
+  useEffect(() => {
+    if (redirectUrl || caseId) {
+      localStorage.setItem('auth_redirect', JSON.stringify({
+        url: redirectUrl || null,
+        caseId: caseId || null,
+        timestamp: Date.now(),
+      }));
+    }
+  }, [redirectUrl, caseId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,9 +127,46 @@ export default function LoginPage() {
       }
 
       if (data.session) {
-        // Session is now stored - redirect to appropriate dashboard
-        const dashboardUrl = await getDashboardUrl();
-        router.push(dashboardUrl);
+        // Session is now stored - refresh to update server-side layout (header)
+        router.refresh();
+
+        // Claim any orphan cases (async, best-effort)
+        claimOrphanCases();
+
+        // Check for redirect info from URL params or localStorage
+        let targetUrl = redirectUrl;
+        let targetCaseId = caseId;
+
+        if (!targetUrl && !targetCaseId) {
+          // Check localStorage for redirect info from signup flow
+          try {
+            const stored = localStorage.getItem('auth_redirect');
+            if (stored) {
+              const parsed = JSON.parse(stored);
+              // Only use if less than 1 hour old
+              if (parsed.timestamp && Date.now() - parsed.timestamp < 3600000) {
+                targetUrl = parsed.url;
+                targetCaseId = parsed.caseId;
+              }
+              localStorage.removeItem('auth_redirect');
+            }
+          } catch {
+            // Ignore localStorage errors
+          }
+        }
+
+        // Link case to user if case_id is provided
+        if (targetCaseId) {
+          await linkCaseToUser(targetCaseId);
+        }
+
+        // Redirect to target URL or dashboard
+        if (targetUrl) {
+          router.push(targetUrl);
+        } else {
+          const dashboardUrl = await getDashboardUrl();
+          router.push(dashboardUrl);
+        }
       } else {
         setError('Login failed - no session returned');
       }
@@ -174,7 +257,7 @@ export default function LoginPage() {
             <p className="text-center text-sm text-gray-600">
               Don't have an account?{' '}
               <Link
-                href="/auth/signup"
+                href={`/auth/signup${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}${caseId ? `${redirectUrl ? '&' : '?'}case_id=${caseId}` : ''}`}
                 className="text-primary hover:text-primary-dark font-medium"
               >
                 Sign up
@@ -194,5 +277,17 @@ export default function LoginPage() {
       </Container>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

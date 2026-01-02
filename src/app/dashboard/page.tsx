@@ -150,7 +150,7 @@ export default function DashboardPage() {
         eyebrow="Workspace"
         actions={
           <Link href="/wizard">
-            <Button variant="secondary" size="large" className="bg-white text-primary hover:bg-white/90">
+            <Button variant="primary" size="large">
               + New Document
             </Button>
           </Link>
@@ -286,6 +286,11 @@ export default function DashboardPage() {
                   </button>
                 </Link>
                 {/* HMO Pro Dashboard removed - parked for later review */}
+                <Link href="/dashboard/billing">
+                  <button className="w-full px-4 py-3 bg-gray-100 text-charcoal rounded-lg hover:bg-gray-200 transition-colors text-left font-medium">
+                    💳 Billing & Orders
+                  </button>
+                </Link>
                 <Link href="/dashboard/settings">
                   <button className="w-full px-4 py-3 bg-gray-100 text-charcoal rounded-lg hover:bg-gray-200 transition-colors text-left font-medium">
                     ⚙️ Account Settings
