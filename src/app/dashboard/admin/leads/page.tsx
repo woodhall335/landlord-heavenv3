@@ -349,7 +349,7 @@ export default function AdminLeadsPage() {
                             <span className="font-medium text-gray-900">{lead.email}</span>
                           </td>
                           <td className="px-6 py-4">
-                            <Badge variant="secondary">{formatSource(lead.source)}</Badge>
+                            <Badge variant="neutral">{formatSource(lead.source)}</Badge>
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex flex-wrap gap-1">
