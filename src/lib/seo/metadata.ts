@@ -119,6 +119,11 @@ export const defaultMetadata: Metadata = {
   creator: "Landlord Heaven",
   publisher: "Landlord Heaven",
   metadataBase: new URL(SITE_URL),
+  icons: {
+    icon: '/favicon.png',
+    shortcut: '/favicon.png',
+    apple: '/favicon.png',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_GB',
@@ -128,7 +133,7 @@ export const defaultMetadata: Metadata = {
     description: "Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026.",
     images: [
       {
-        url: DEFAULT_OG_IMAGE,
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
@@ -140,7 +145,7 @@ export const defaultMetadata: Metadata = {
     card: 'summary_large_image',
     title: "Landlord Heaven - Court-Ready Legal Documents for UK Landlords",
     description: "Generate court-ready eviction notices and legal documents. Save 80%+ vs solicitors. Section 21 ends May 2026.",
-    images: [DEFAULT_OG_IMAGE],
+    images: ['/og-image.png'],
     creator: '@LandlordHeaven',
     site: '@LandlordHeaven',
   },
