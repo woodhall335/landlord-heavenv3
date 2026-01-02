@@ -5,6 +5,582 @@ import { BlogPost } from './types';
 
 export const blogPosts: BlogPost[] = [
   // ============================================
+  // POST 0: Renters Reform Bill (FEATURED - URGENT)
+  // Target: 2,000+ words
+  // ============================================
+  {
+    slug: 'renters-reform-bill-what-landlords-need-to-know',
+    title: 'Renters Reform Bill 2025: What Every UK Landlord Must Know Before May 2026',
+    description: 'The biggest change to landlord rights in 35 years is here. Learn what the Renters Reform Bill means for your properties, why you must act now, and how to protect your investments.',
+    metaDescription: 'Complete guide to the Renters Reform Bill 2025. Section 21 ends May 2026. Learn the changes, new grounds, and why landlords must start eviction proceedings now.',
+    date: '2026-01-02',
+    updatedDate: '2026-01-02',
+    readTime: '15 min read',
+    wordCount: 2150,
+    category: 'Legal Updates',
+    tags: ['Renters Reform Bill', 'Section 21 Ban', 'Renters Rights Act', 'Landlord Law', 'Property Law 2026'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-renters-reform-bill.svg',
+    heroImageAlt: 'Renters Reform Bill 2025 - Complete Guide for UK Landlords',
+    showUrgencyBanner: true,
+    targetKeyword: 'renters reform bill',
+    secondaryKeywords: ['renters rights act', 'section 21 ban', 'landlord law changes 2026', 'rental reform', 'eviction law changes'],
+    tableOfContents: [
+      { id: 'what-is-renters-reform', title: 'What Is the Renters Reform Bill?', level: 2 },
+      { id: 'key-changes', title: 'Key Changes for Landlords', level: 2 },
+      { id: 'section-21-abolition', title: 'Section 21 Abolition Explained', level: 2 },
+      { id: 'new-section-8-grounds', title: 'New Section 8 Grounds', level: 2 },
+      { id: 'periodic-tenancies', title: 'All Tenancies Become Periodic', level: 2 },
+      { id: 'rent-increases', title: 'Rent Increase Rules', level: 2 },
+      { id: 'pet-keeping', title: 'Pets and Property Rights', level: 2 },
+      { id: 'property-portal', title: 'Property Portal & Ombudsman', level: 2 },
+      { id: 'why-act-now', title: 'Why You Must Act Now', level: 2 },
+      { id: 'renters-reform-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['what-is-section-21-notice', 'section-21-vs-section-8', 'how-long-does-eviction-take-uk'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          The <strong>Renters Reform Bill</strong>—now enacted as the <strong>Renters&apos; Rights Act 2025</strong>—represents
+          the most significant overhaul of private rental law in England since the Housing Act 1988. For landlords, this
+          legislation fundamentally changes how you manage tenancies, evict problem tenants, and protect your property
+          investments. Understanding these changes isn&apos;t optional—it&apos;s essential for your financial survival.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-red-800 text-lg mb-2">Critical Action Required</p>
+          <p className="text-red-700">
+            <strong>Section 21 no-fault evictions end on 1 May 2026.</strong> If you have any tenancies where you may
+            need to regain possession, you must serve your Section 21 notice before <strong>30 April 2026</strong>.
+            After this date, you&apos;ll only be able to evict using Section 8, which requires proving specific grounds.
+            <strong> Do not wait—start proceedings now.</strong>
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-renters-reform-overview.svg"
+          alt="Renters Reform Bill Overview - Key Changes for UK Landlords"
+          caption="The Renters Reform Bill introduces sweeping changes affecting every private landlord in England"
+          aspectRatio="wide"
+        />
+
+        <h2 id="what-is-renters-reform" className="scroll-mt-24">What Is the Renters Reform Bill?</h2>
+
+        <p>
+          The Renters Reform Bill was introduced to Parliament in May 2023 and received Royal Assent in late 2025,
+          becoming the <strong>Renters&apos; Rights Act 2025</strong>. The government&apos;s stated aim was to create
+          a &quot;fairer private rented sector&quot; with greater security for tenants while maintaining a
+          &quot;viable rental market&quot; for landlords.
+        </p>
+
+        <p>
+          In practice, this legislation significantly shifts the balance of power towards tenants. The headline
+          change—the abolition of Section 21 no-fault evictions—is just the beginning. The Act introduces:
+        </p>
+
+        <ul>
+          <li>Abolition of Section 21 no-fault evictions (from 1 May 2026)</li>
+          <li>Conversion of all tenancies to rolling periodic tenancies</li>
+          <li>New and amended grounds for possession under Section 8</li>
+          <li>Restrictions on rent increases to once per year</li>
+          <li>Tenant rights to request pets (landlords cannot unreasonably refuse)</li>
+          <li>A new Property Portal for landlord registration</li>
+          <li>Mandatory membership of a new Private Rented Sector Ombudsman</li>
+          <li>A Decent Homes Standard applied to the private sector</li>
+          <li>Extended local authority enforcement powers</li>
+        </ul>
+
+        <p>
+          Let&apos;s examine each of these changes in detail and understand what they mean for your portfolio.
+        </p>
+
+        <BlogCTA variant="urgency" />
+
+        <h2 id="key-changes" className="scroll-mt-24">Key Changes for Landlords</h2>
+
+        <p>
+          The Renters&apos; Rights Act 2025 brings fundamental changes to how landlords operate. Understanding
+          the full scope of these changes is crucial for compliance and protecting your investment.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-key-changes-timeline.svg"
+          alt="Renters Reform Bill Key Changes Timeline"
+          caption="Implementation timeline for the Renters Rights Act 2025"
+        />
+
+        <h3>Implementation Timeline</h3>
+
+        <p>
+          The Act&apos;s provisions are being phased in over several months:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Date</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Change</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Impact</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="p-4 border-b font-medium">1 January 2026</td>
+                <td className="p-4 border-b">Rent increase rules</td>
+                <td className="p-4 border-b">Once per year maximum</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium">1 January 2026</td>
+                <td className="p-4 border-b">Pet request rights</td>
+                <td className="p-4 border-b">Cannot unreasonably refuse</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium">30 April 2026</td>
+                <td className="p-4 border-b text-red-600 font-semibold">Last day for Section 21</td>
+                <td className="p-4 border-b text-red-600">Final deadline to serve notices</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium">1 May 2026</td>
+                <td className="p-4 border-b">Section 21 abolished</td>
+                <td className="p-4 border-b">No new S21 notices allowed</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium">1 May 2026</td>
+                <td className="p-4 border-b">All tenancies periodic</td>
+                <td className="p-4 border-b">Fixed terms no longer binding</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium">Q3 2026</td>
+                <td className="p-4 border-b">Property Portal launches</td>
+                <td className="p-4 border-b">Mandatory landlord registration</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium">Q4 2026</td>
+                <td className="p-4 border-b">Ombudsman mandatory</td>
+                <td className="p-4 border-b">All landlords must join</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="section-21-abolition" className="scroll-mt-24">Section 21 Abolition: What It Really Means</h2>
+
+        <p>
+          The abolition of Section 21 is the most impactful change for landlords. For 35 years, Section 21 has
+          been the reliable, predictable route to regaining possession of your property. From 1 May 2026,
+          this option no longer exists.
+        </p>
+
+        <h3>What You&apos;re Losing</h3>
+
+        <p>
+          Section 21 allowed landlords to evict tenants without giving any reason. You simply served
+          Form 6A with 2 months&apos; notice, and if your paperwork was in order, the court <strong>had to</strong>
+          grant possession. This certainty is now gone.
+        </p>
+
+        <p>
+          Without Section 21, you cannot evict a tenant unless you can prove one of the Section 8 grounds.
+          If you can&apos;t prove grounds, the tenant can stay indefinitely—even if you want to sell the property,
+          move family in, or simply don&apos;t want them as a tenant anymore.
+        </p>
+
+        <h3>The Reality for Landlords</h3>
+
+        <p>
+          Consider this scenario: You have a tenant who pays rent on time but is constantly rude to neighbours,
+          creates minor disturbances, and makes the property difficult to maintain. Currently, you could serve
+          Section 21 and regain possession within 4-6 months.
+        </p>
+
+        <p>
+          After May 2026, if this behaviour doesn&apos;t meet the threshold for anti-social behaviour grounds,
+          you may have no legal route to eviction. The tenant can stay as long as they keep paying rent.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-section-21-end.svg"
+          alt="Section 21 Abolition Impact on Landlords"
+          caption="The end of no-fault evictions fundamentally changes landlord-tenant dynamics"
+        />
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-amber-800 text-lg mb-2">Why You Must Serve Section 21 Now</p>
+          <p className="text-amber-700">
+            If you have <strong>any doubt</strong> about whether you may need to regain possession of a property
+            in the next 12-18 months, serve Section 21 now. A served notice remains valid for 6 months after
+            it expires. By serving in early 2026, you preserve your options even if the ban takes effect.
+            Once the ban is in place, this option is gone forever.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="new-section-8-grounds" className="scroll-mt-24">New Section 8 Grounds for Possession</h2>
+
+        <p>
+          To partially compensate for the loss of Section 21, the government has introduced new mandatory
+          grounds for possession under Section 8. These are designed to give landlords legitimate routes
+          to regain possession in specific circumstances.
+        </p>
+
+        <h3>New Mandatory Grounds</h3>
+
+        <p>
+          The following new grounds are being added to Section 8:
+        </p>
+
+        <div className="space-y-4 my-8">
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <p className="font-semibold text-green-800">Ground 1A: Landlord Wants to Sell</p>
+            <p className="text-green-700 text-sm mt-1">
+              Landlord intends to sell the property. Must give 4 months&apos; notice. Cannot be used within
+              first 12 months of tenancy. Mandatory ground—court must grant possession.
+            </p>
+          </div>
+
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <p className="font-semibold text-green-800">Ground 1B: Landlord or Family Wants to Move In</p>
+            <p className="text-green-700 text-sm mt-1">
+              Landlord or close family member wants to occupy as their home. Must give 4 months&apos; notice.
+              Cannot be used within first 12 months. Mandatory ground.
+            </p>
+          </div>
+
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+            <p className="font-semibold text-green-800">Ground 6A: Superior Lease Ending</p>
+            <p className="text-green-700 text-sm mt-1">
+              The landlord&apos;s own lease on the property is ending. 2 months&apos; notice required. Mandatory ground.
+            </p>
+          </div>
+        </div>
+
+        <h3>Amended Existing Grounds</h3>
+
+        <p>
+          Several existing Section 8 grounds have also been strengthened:
+        </p>
+
+        <ul>
+          <li><strong>Ground 8 (Rent Arrears):</strong> Remains at 2 months, but calculation rules clarified</li>
+          <li><strong>Ground 14 (Anti-Social Behaviour):</strong> Threshold lowered, evidence requirements relaxed</li>
+          <li><strong>Ground 14A (Domestic Abuse):</strong> Expanded to cover more situations</li>
+        </ul>
+
+        <h3>Critical Limitations</h3>
+
+        <p>
+          Despite the new grounds, there are significant limitations:
+        </p>
+
+        <ul>
+          <li><strong>12-month restriction:</strong> Grounds 1A and 1B cannot be used in first year of tenancy</li>
+          <li><strong>4-month notice:</strong> Longer than Section 21&apos;s 2-month notice period</li>
+          <li><strong>Evidence required:</strong> Unlike Section 21, you must prove your intention</li>
+          <li><strong>Court hearings:</strong> Section 8 usually requires hearings; Section 21 often didn&apos;t</li>
+          <li><strong>Tenant defences:</strong> Tenants can challenge whether your intention is genuine</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-section-8-grounds.svg"
+          alt="New Section 8 Grounds Under Renters Reform Bill"
+          caption="New mandatory grounds partially compensate for Section 21 loss, but with limitations"
+        />
+
+        <h2 id="periodic-tenancies" className="scroll-mt-24">All Tenancies Become Periodic</h2>
+
+        <p>
+          From 1 May 2026, <strong>all assured shorthold tenancies become periodic from day one</strong>.
+          Fixed-term tenancies are effectively abolished. What does this mean in practice?
+        </p>
+
+        <h3>No More Fixed Terms</h3>
+
+        <p>
+          Currently, most tenancies start with a 6 or 12-month fixed term. During this period, neither
+          landlord nor tenant can end the tenancy (except for breach). This gave landlords security of
+          income for the fixed period.
+        </p>
+
+        <p>
+          Under the new rules, tenants can give <strong>2 months&apos; notice at any time</strong>. There&apos;s no
+          minimum tenancy period. A tenant could move in and leave 2 months later, leaving you with void
+          periods, re-letting costs, and potentially lost rent.
+        </p>
+
+        <h3>Impact on Landlord Planning</h3>
+
+        <p>
+          This change makes financial planning significantly harder:
+        </p>
+
+        <ul>
+          <li><strong>Uncertain rental income:</strong> Tenants can leave at any time with 2 months&apos; notice</li>
+          <li><strong>Higher void risk:</strong> More frequent tenant turnover possible</li>
+          <li><strong>Increased costs:</strong> More frequent referencing, inventory, and re-marketing</li>
+          <li><strong>Mortgage concerns:</strong> Some lenders may view periodic tenancies as higher risk</li>
+        </ul>
+
+        <h2 id="rent-increases" className="scroll-mt-24">New Rent Increase Restrictions</h2>
+
+        <p>
+          The Act introduces new rules on how and when you can increase rent:
+        </p>
+
+        <ul>
+          <li><strong>Maximum frequency:</strong> Once per 12-month period only</li>
+          <li><strong>Notice period:</strong> 2 months&apos; notice required</li>
+          <li><strong>Tribunal challenges:</strong> Tenants can challenge increases at tribunal</li>
+          <li><strong>Market rent assessment:</strong> Tribunal will assess what market rent should be</li>
+        </ul>
+
+        <p>
+          This restricts your ability to respond quickly to market changes. If costs increase significantly
+          mid-tenancy (e.g., mortgage rates rise), you cannot pass these on until the next permitted increase date.
+        </p>
+
+        <h2 id="pet-keeping" className="scroll-mt-24">Pets and Property Rights</h2>
+
+        <p>
+          One of the more controversial changes gives tenants the right to request to keep pets.
+          Landlords cannot &quot;unreasonably refuse&quot; such requests.
+        </p>
+
+        <h3>How It Works</h3>
+
+        <ol>
+          <li>Tenant makes written request to keep a pet</li>
+          <li>Landlord must respond within 42 days</li>
+          <li>Landlord can only refuse on reasonable grounds</li>
+          <li>If refusing, landlord must give written reasons</li>
+          <li>Tenant can challenge unreasonable refusals</li>
+        </ol>
+
+        <h3>What Are Reasonable Grounds?</h3>
+
+        <p>
+          The Act doesn&apos;t define &quot;reasonable,&quot; but government guidance suggests these may be valid reasons:
+        </p>
+
+        <ul>
+          <li>Property too small for the type of pet requested</li>
+          <li>Lease or superior landlord prohibits pets</li>
+          <li>Insurance policy excludes certain pets</li>
+          <li>Specific pet would damage property (evidence required)</li>
+        </ul>
+
+        <p>
+          <strong>Pet damage insurance:</strong> Landlords can require tenants to obtain pet damage insurance
+          as a condition of approval. This provides some protection against damage costs.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-pet-rights.svg"
+          alt="Tenant Pet Rights Under Renters Reform Bill"
+          caption="Tenants can request pets and landlords cannot unreasonably refuse"
+        />
+
+        <h2 id="property-portal" className="scroll-mt-24">Property Portal and Ombudsman</h2>
+
+        <p>
+          The Act creates two new bodies that all landlords must engage with:
+        </p>
+
+        <h3>Private Rented Sector Property Portal</h3>
+
+        <p>
+          All landlords must register their properties on a new government database. This portal will:
+        </p>
+
+        <ul>
+          <li>Record all private rented properties in England</li>
+          <li>Display landlord and property compliance status</li>
+          <li>Show enforcement actions against landlords</li>
+          <li>Enable tenants to check landlord credentials</li>
+          <li>Allow local authorities to target enforcement</li>
+        </ul>
+
+        <p>
+          Registration fees have not yet been confirmed but are expected to be £20-50 per property.
+        </p>
+
+        <h3>Private Rented Sector Ombudsman</h3>
+
+        <p>
+          All landlords must join the new Ombudsman service, which will:
+        </p>
+
+        <ul>
+          <li>Handle tenant complaints about landlord behaviour</li>
+          <li>Have power to order compensation (up to £25,000)</li>
+          <li>Order landlords to take specific actions</li>
+          <li>Report persistent offenders to local authorities</li>
+        </ul>
+
+        <p>
+          Membership fees are estimated at £50-100 per year for portfolio landlords. Failing to join
+          will make it impossible to evict tenants.
+        </p>
+
+        <h2 id="why-act-now" className="scroll-mt-24">Why You Must Act Now: The Urgency Explained</h2>
+
+        <p>
+          If you&apos;ve read this far, the message should be clear: the rules are changing fundamentally, and
+          landlords who don&apos;t prepare will suffer the consequences. Here&apos;s why immediate action is essential:
+        </p>
+
+        <h3>The Section 21 Window Is Closing</h3>
+
+        <p>
+          You have until <strong>30 April 2026</strong> to serve Section 21 notices. After this date,
+          no new Section 21 notices can be served—ever. If you have any tenancy where you might need
+          possession in the next 1-2 years, serving Section 21 now preserves your options.
+        </p>
+
+        <h3>Court Backlogs Will Worsen</h3>
+
+        <p>
+          As the deadline approaches, expect a surge in Section 21 applications. Courts are already
+          dealing with backlogs. Starting your proceedings early gives you the best chance of completing
+          the process before the system becomes overwhelmed.
+        </p>
+
+        <h3>Section 8 Is Harder</h3>
+
+        <p>
+          After May 2026, Section 8 is your only eviction option. This means:
+        </p>
+
+        <ul>
+          <li>You must prove grounds—no more &quot;no-fault&quot; evictions</li>
+          <li>Court hearings are usually required (more time and cost)</li>
+          <li>Tenants have more opportunities to defend</li>
+          <li>Some situations have no grounds at all</li>
+        </ul>
+
+        <h3>Property Portfolio Decisions</h3>
+
+        <p>
+          Many landlords are reconsidering their portfolios in light of these changes. If you&apos;re thinking
+          about selling properties, you&apos;ll need vacant possession—which means serving Section 21 now.
+        </p>
+
+        <div className="bg-primary/10 border border-primary/20 rounded-xl p-6 my-8">
+          <h3 className="font-semibold text-gray-900 mb-3">Take Action Today</h3>
+          <p className="text-gray-700 mb-4">
+            Don&apos;t wait until April 2026 when everyone is scrambling. Generate your court-ready
+            Section 21 notice now and preserve your options before the ban takes effect.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <Link
+              href="/products/notice-only"
+              className="inline-flex items-center bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-lg transition-colors"
+            >
+              Get Section 21 Notice — £29.99
+            </Link>
+            <Link
+              href="/products/complete-pack"
+              className="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-lg transition-colors"
+            >
+              Complete Eviction Pack — £149.99
+            </Link>
+          </div>
+        </div>
+
+        <h2 id="renters-reform-faq" className="scroll-mt-24">Renters Reform Bill FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">When does Section 21 actually end?</h3>
+            <p className="text-gray-600">
+              Section 21 is abolished on <strong>1 May 2026</strong>. The last day to serve a valid Section 21 notice
+              is <strong>30 April 2026</strong>. Notices served before this date remain valid and can proceed through
+              court even after the ban takes effect.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I still evict tenants after May 2026?</h3>
+            <p className="text-gray-600">
+              Yes, but only using Section 8 grounds. You&apos;ll need to prove specific reasons such as rent arrears,
+              anti-social behaviour, wanting to sell, or wanting to move in. No-fault evictions will no longer be possible.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my Section 21 is already served but not completed?</h3>
+            <p className="text-gray-600">
+              Notices served before 1 May 2026 remain valid. You can continue to court and obtain possession even after
+              the ban takes effect, as long as the notice was served before the deadline.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do these rules apply in Scotland and Wales?</h3>
+            <p className="text-gray-600">
+              No. The Renters&apos; Rights Act 2025 applies to <strong>England only</strong>. Scotland already has different
+              rules, and Wales may implement similar changes separately.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I sell my rental property?</h3>
+            <p className="text-gray-600">
+              This depends on your circumstances. Many landlords are reviewing their portfolios. If you&apos;re considering
+              selling, remember you&apos;ll need vacant possession—which means serving Section 21 now while you still can.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How do I prove I want to sell (Ground 1A)?</h3>
+            <p className="text-gray-600">
+              You&apos;ll need evidence of genuine intention to sell—such as estate agent marketing agreement, valuation,
+              or sale memorandum. The court can reject claims if they appear to be pretexts for eviction.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What happens if I don&apos;t register on the Property Portal?</h3>
+            <p className="text-gray-600">
+              Unregistered landlords cannot serve valid Section 8 notices. This means you cannot evict tenants for any
+              reason until you register. Non-compliance may also result in fines.
+            </p>
+          </div>
+        </div>
+
+        <h2>Final Thoughts: Protect Your Investment</h2>
+
+        <p>
+          The Renters Reform Bill represents a fundamental shift in UK landlord-tenant law. Whether you agree
+          with the changes or not, they are now law. The landlords who will thrive are those who understand
+          the new rules and take action to protect their positions.
+        </p>
+
+        <p>
+          If there&apos;s one message to take away: <strong>serve Section 21 now if you have any doubt about
+          needing possession in the next 12-18 months</strong>. This is your last chance to use the
+          no-fault eviction route that landlords have relied on for 35 years.
+        </p>
+
+        <ul>
+          <li><Link href="/products/notice-only" className="text-primary hover:underline">
+            Generate Court-Ready Section 21 Notice — £29.99</Link></li>
+          <li><Link href="/products/complete-pack" className="text-primary hover:underline">
+            Complete Eviction Pack (notices + court forms) — £149.99</Link></li>
+          <li><Link href="/blog/what-is-section-21-notice" className="text-primary hover:underline">
+            Complete Section 21 Guide</Link></li>
+          <li><Link href="/blog/section-21-vs-section-8" className="text-primary hover:underline">
+            Section 21 vs Section 8 Comparison</Link></li>
+        </ul>
+      </>
+    ),
+  },
+
+  // ============================================
   // POST 1: What Is Section 21 (3,600 searches/month)
   // Target: 1,200+ words
   // ============================================
