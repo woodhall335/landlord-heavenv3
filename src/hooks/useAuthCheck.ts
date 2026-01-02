@@ -2,13 +2,14 @@
  * useAuthCheck Hook
  *
  * Client-side hook to check if user is authenticated.
- * Calls /api/users/me and returns auth state.
+ * Uses browser Supabase client directly for reliable auth state.
  *
  * Use this to gate API calls in dashboard pages that require authentication.
  */
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 
 interface User {
   id: string;
@@ -16,6 +17,7 @@ interface User {
   full_name?: string;
   subscription_tier?: string;
   subscription_status?: string;
+  is_admin?: boolean;
 }
 
 interface AuthCheckResult {
@@ -47,30 +49,52 @@ export function useAuthCheck(options: UseAuthCheckOptions = {}): AuthCheckResult
       setIsLoading(true);
       setError(null);
 
-      const response = await fetch('/api/users/me', {
-        method: 'GET',
-        credentials: 'include',
-      });
+      // Use browser Supabase client directly for reliable auth check
+      const supabase = getSupabaseBrowserClient();
+      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
 
-      if (response.ok) {
-        const data = await response.json();
-        setUser(data.user);
-        setIsAuthenticated(true);
-      } else if (response.status === 401) {
+      if (authError || !authUser) {
         setUser(null);
         setIsAuthenticated(false);
         if (redirectToLogin) {
           router.push(loginPath);
         }
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-        setError('Failed to check authentication status');
+        return;
       }
+
+      // User is authenticated - fetch profile data from API
+      try {
+        const response = await fetch('/api/users/me', {
+          method: 'GET',
+          credentials: 'include',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data.user);
+        } else {
+          // API failed but we know user is authenticated from Supabase
+          // Use basic user info from auth
+          setUser({
+            id: authUser.id,
+            email: authUser.email || '',
+            full_name: authUser.user_metadata?.full_name,
+          });
+        }
+      } catch {
+        // API failed but user is still authenticated
+        setUser({
+          id: authUser.id,
+          email: authUser.email || '',
+          full_name: authUser.user_metadata?.full_name,
+        });
+      }
+
+      setIsAuthenticated(true);
     } catch (err) {
       setUser(null);
       setIsAuthenticated(false);
-      setError('Network error checking authentication');
+      setError('Error checking authentication');
     } finally {
       setIsLoading(false);
     }
@@ -78,7 +102,27 @@ export function useAuthCheck(options: UseAuthCheckOptions = {}): AuthCheckResult
 
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+
+    // Listen for auth state changes
+    const supabase = getSupabaseBrowserClient();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          checkAuth();
+        } else if (event === 'SIGNED_OUT') {
+          setUser(null);
+          setIsAuthenticated(false);
+          if (redirectToLogin) {
+            router.push(loginPath);
+          }
+        }
+      }
+    );
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [checkAuth, redirectToLogin, loginPath, router]);
 
   return {
     isLoading,
