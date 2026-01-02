@@ -56,6 +56,69 @@ async function getDashboardUrl(): Promise<string> {
   }
 }
 
+/**
+ * Links a case to the current user
+ */
+async function linkCaseToUser(caseId: string): Promise<boolean> {
+  try {
+    const response = await fetch(`/api/cases/${caseId}/link`, { method: 'POST' });
+    return response.ok;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Claims any orphan cases that might belong to this user
+ * (anonymous cases with matching email in collected_facts)
+ */
+async function claimOrphanCases(): Promise<void> {
+  try {
+    await fetch('/api/cases/claim-orphans', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({}),
+    });
+  } catch {
+    // Silently ignore errors - this is a best-effort recovery
+  }
+}
+
+/**
+ * Gets redirect URL and case_id from localStorage (set during signup)
+ * Also handles linking the case to the user and claiming orphan cases
+ */
+async function getRedirectUrl(): Promise<string> {
+  // Claim any orphan cases (async, best-effort)
+  claimOrphanCases();
+
+  try {
+    const stored = localStorage.getItem('auth_redirect');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      // Only use if less than 1 hour old
+      if (parsed.timestamp && Date.now() - parsed.timestamp < 3600000) {
+        // Link case to user if case_id is provided
+        if (parsed.caseId) {
+          await linkCaseToUser(parsed.caseId);
+        }
+        // Clear the stored redirect
+        localStorage.removeItem('auth_redirect');
+        // Return the redirect URL or fall back to dashboard
+        if (parsed.url) {
+          return parsed.url;
+        }
+      }
+      localStorage.removeItem('auth_redirect');
+    }
+  } catch {
+    // Ignore localStorage errors
+  }
+
+  // Fall back to role-based dashboard URL
+  return getDashboardUrl();
+}
+
 function ConfirmEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -90,8 +153,8 @@ function ConfirmEmailContent() {
         if (session) {
           // Session already exists - user is confirmed
           setState('success');
-          const dashboardUrl = await getDashboardUrl();
-          setTimeout(() => router.push(dashboardUrl), 2000);
+          const redirectUrl = await getRedirectUrl();
+          setTimeout(() => router.push(redirectUrl), 2000);
           return;
         }
 
@@ -112,8 +175,8 @@ function ConfirmEmailContent() {
             // Clean up URL
             window.history.replaceState({}, document.title, window.location.pathname);
             setState('success');
-            const dashboardUrl = await getDashboardUrl();
-            setTimeout(() => router.push(dashboardUrl), 2000);
+            const redirectUrl = await getRedirectUrl();
+            setTimeout(() => router.push(redirectUrl), 2000);
             return;
           }
         }
@@ -125,8 +188,8 @@ function ConfirmEmailContent() {
 
           if (!error) {
             setState('success');
-            const dashboardUrl = await getDashboardUrl();
-            setTimeout(() => router.push(dashboardUrl), 2000);
+            const redirectUrl = await getRedirectUrl();
+            setTimeout(() => router.push(redirectUrl), 2000);
             return;
           }
 
@@ -159,8 +222,8 @@ function ConfirmEmailContent() {
 
           if (!error) {
             setState('success');
-            const dashboardUrl = await getDashboardUrl();
-            setTimeout(() => router.push(dashboardUrl), 2000);
+            const redirectUrl = await getRedirectUrl();
+            setTimeout(() => router.push(redirectUrl), 2000);
             return;
           }
 
@@ -174,8 +237,8 @@ function ConfirmEmailContent() {
         const { data: { session: finalCheck } } = await supabase.auth.getSession();
         if (finalCheck) {
           setState('success');
-          const dashboardUrl = await getDashboardUrl();
-          setTimeout(() => router.push(dashboardUrl), 2000);
+          const redirectUrl = await getRedirectUrl();
+          setTimeout(() => router.push(redirectUrl), 2000);
           return;
         }
 

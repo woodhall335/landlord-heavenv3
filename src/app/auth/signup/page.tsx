@@ -3,20 +3,27 @@
  *
  * User registration with email/password
  * Creates auth account + user profile
+ * Supports redirect param for returning to checkout flow
  */
 
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
 
-export default function SignupPage() {
+function SignupContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get redirect and case_id from URL params (passed from preview page)
+  const redirectUrl = searchParams.get('redirect');
+  const caseId = searchParams.get('case_id');
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -27,6 +34,17 @@ export default function SignupPage() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+
+  // Store redirect info in localStorage for after email confirmation
+  useEffect(() => {
+    if (redirectUrl || caseId) {
+      localStorage.setItem('auth_redirect', JSON.stringify({
+        url: redirectUrl || null,
+        caseId: caseId || null,
+        timestamp: Date.now(),
+      }));
+    }
+  }, [redirectUrl, caseId]);
 
   const handleChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
@@ -193,7 +211,7 @@ export default function SignupPage() {
             <p className="text-center text-sm text-gray-600">
               Already have an account?{' '}
               <Link
-                href="/auth/login"
+                href={`/auth/login${redirectUrl ? `?redirect=${encodeURIComponent(redirectUrl)}` : ''}${caseId ? `${redirectUrl ? '&' : '?'}case_id=${caseId}` : ''}`}
                 className="text-primary hover:text-primary-dark font-medium"
               >
                 Log in
@@ -213,5 +231,17 @@ export default function SignupPage() {
       </Container>
       </div>
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    }>
+      <SignupContent />
+    </Suspense>
   );
 }
