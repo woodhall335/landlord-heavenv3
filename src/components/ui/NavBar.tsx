@@ -21,6 +21,7 @@ const primaryLinks: NavItem[] = [
   { href: "/products/complete-pack", label: "Eviction Pack" },
   { href: "/products/money-claim", label: "Money Claims" },
   { href: "/products/ast", label: "Tenancy Agreements" },
+  { href: "/blog", label: "Guides" },
   // HMO Pro removed from navigation for V1 - will be re-enabled in V2
   // { href: "/hmo-pro", label: "HMO Pro" },
 ];
