@@ -366,14 +366,33 @@ export interface ComplianceFacts {
   gas_safety_cert_provided?: boolean | null;
   gas_safety_cert_date?: string | null;
   gas_safety_cert_expiry?: string | null;
+  // Aliases for MQS compatibility
+  gas_cert_date?: string | null;
+  gas_cert_expiry?: string | null;
   epc_provided?: boolean | null;
   epc_date?: string | null;
+  epc_certificate_date?: string | null; // Alias for MQS
   how_to_rent_given?: boolean | null;
   how_to_rent_date?: string | null;
   prescribed_info_date?: string | null;
   eicr_provided?: boolean | null;
   eicr_date?: string | null;
   eicr_satisfactory?: boolean | null;
+}
+
+// =============================================================================
+// SECTION 21 COMPLIANCE FACTS
+// =============================================================================
+
+export interface Section21Facts {
+  prescribed_info_date?: string | null;
+  how_to_rent_date?: string | null;
+  epc_certificate_date?: string | null;
+  gas_cert_date?: string | null;
+  gas_cert_expiry?: string | null;
+  eicr_provided?: boolean | null;
+  eicr_date?: string | null;
+  eicr_expiry?: string | null;
 }
 
 // =============================================================================
@@ -447,6 +466,12 @@ export interface Ground17Facts {
   reliance_on_statement: string | null;
   discovery_date: string | null;
   discovery_method: string | null;
+  // Aliases for MQS compatibility
+  false_statement?: string | null;
+  when_discovered?: string | null;
+  how_discovered?: string | null;
+  evidence?: string | null;
+  induced_granting?: boolean | null;
 }
 
 // =============================================================================
@@ -463,6 +488,9 @@ export interface RiskFacts {
   disrepair_issues_list: string | null;
   tenant_vulnerability: boolean | null;
   tenant_vulnerability_details: string | null;
+  // Aliases for MQS compatibility
+  tenant_vulnerability_known?: boolean | null;
+  vulnerability_details?: string | null;
   // Money claim risk indicators
   tenant_disputes_claim?: boolean | null;
   contract_holder_disputes_claim?: boolean | null; // Wales terminology
@@ -492,6 +520,10 @@ export interface CommunicationEntry {
 export interface CommunicationTimelineFacts {
   entries: CommunicationEntry[];
   narrative: string | null;
+  // Complete pack communication fields
+  log?: string | null;
+  total_attempts?: number | null;
+  tenant_responsiveness?: string | null;
   // Money claim communication timeline
   first_arrears_notice_date?: string | null;
   first_notice_method?: string | null;
@@ -538,6 +570,8 @@ export interface CaseFacts {
   meta: MetaFacts;
   case_health: CaseHealth;
   compliance: ComplianceFacts;
+  // Section 21 specific compliance data
+  section21?: Section21Facts;
   // Ground-specific details (Section 8)
   ground_8?: Ground8Facts;
   ground_10?: Ground10Facts;
@@ -755,14 +789,28 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     gas_safety_cert_provided: null,
     gas_safety_cert_date: null,
     gas_safety_cert_expiry: null,
+    gas_cert_date: null,
+    gas_cert_expiry: null,
     epc_provided: null,
     epc_date: null,
+    epc_certificate_date: null,
     how_to_rent_given: null,
     how_to_rent_date: null,
     prescribed_info_date: null,
     eicr_provided: null,
     eicr_date: null,
     eicr_satisfactory: null,
+  },
+  // Section 21 specific compliance data
+  section21: {
+    prescribed_info_date: null,
+    how_to_rent_date: null,
+    epc_certificate_date: null,
+    gas_cert_date: null,
+    gas_cert_expiry: null,
+    eicr_provided: null,
+    eicr_date: null,
+    eicr_expiry: null,
   },
   // Ground-specific details (Section 8)
   ground_8: {
@@ -825,6 +873,12 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     reliance_on_statement: null,
     discovery_date: null,
     discovery_method: null,
+    // Aliases for MQS compatibility
+    false_statement: null,
+    when_discovered: null,
+    how_discovered: null,
+    evidence: null,
+    induced_granting: null,
   },
   risk: {
     known_tenant_defences: null,
@@ -835,6 +889,9 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
     disrepair_issues_list: null,
     tenant_vulnerability: null,
     tenant_vulnerability_details: null,
+    // Aliases for MQS compatibility
+    tenant_vulnerability_known: null,
+    vulnerability_details: null,
     // Money claim risk indicators
     tenant_disputes_claim: null,
     contract_holder_disputes_claim: null,
@@ -853,6 +910,10 @@ export const createEmptyCaseFacts = (): CaseFacts => ({
   communication_timeline: {
     entries: [],
     narrative: null,
+    // Complete pack communication fields
+    log: null,
+    total_attempts: null,
+    tenant_responsiveness: null,
     // Money claim communication timeline
     first_arrears_notice_date: null,
     first_notice_method: null,
