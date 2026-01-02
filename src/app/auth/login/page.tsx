@@ -2,7 +2,7 @@
  * Login Page
  *
  * User authentication with email/password
- * Redirects to dashboard on success
+ * Redirects to appropriate dashboard based on user role
  */
 
 'use client';
@@ -14,6 +14,45 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import { Card } from '@/components/ui/Card';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+
+interface UserProfile {
+  is_admin?: boolean;
+  subscription_tier?: string | null;
+  subscription_status?: string | null;
+}
+
+/**
+ * Determines the appropriate dashboard URL based on user role/subscription
+ */
+async function getDashboardUrl(): Promise<string> {
+  try {
+    const response = await fetch('/api/users/me');
+    if (!response.ok) {
+      return '/dashboard';
+    }
+    const data = await response.json();
+    const user: UserProfile = data.user;
+
+    // Admin users go to admin dashboard
+    if (user.is_admin) {
+      return '/dashboard/admin';
+    }
+
+    // HMO Pro subscribers go to HMO dashboard
+    const hasActiveSub =
+      user.subscription_tier &&
+      (user.subscription_status === 'active' || user.subscription_status === 'trialing');
+    if (hasActiveSub) {
+      return '/dashboard/hmo';
+    }
+
+    // Default user dashboard
+    return '/dashboard';
+  } catch {
+    return '/dashboard';
+  }
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -28,18 +67,25 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      // Use the browser Supabase client for login
+      // This ensures the session is properly stored in cookies
+      const supabase = getSupabaseBrowserClient();
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
 
-      const data = await response.json();
+      if (authError) {
+        setError(authError.message || 'Invalid email or password');
+        return;
+      }
 
-      if (response.ok && data.success) {
-        router.push('/dashboard');
+      if (data.session) {
+        // Session is now stored - redirect to appropriate dashboard
+        const dashboardUrl = await getDashboardUrl();
+        router.push(dashboardUrl);
       } else {
-        setError(data.error || 'Invalid email or password');
+        setError('Login failed - no session returned');
       }
     } catch {
       setError('Something went wrong. Please try again.');

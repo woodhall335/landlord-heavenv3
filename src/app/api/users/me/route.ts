@@ -32,6 +32,10 @@ export async function GET() {
       );
     }
 
+    // Check if user is admin by comparing against ADMIN_USER_IDS env var
+    const adminIds = process.env.ADMIN_USER_IDS?.split(',').map((id) => id.trim()) || [];
+    const isAdmin = adminIds.includes(user.id);
+
     return NextResponse.json({
       user: {
         id: (profile as any).id,
@@ -42,6 +46,7 @@ export async function GET() {
         subscription_status: (profile as any).subscription_status,
         trial_ends_at: (profile as any).trial_ends_at,
         created_at: (profile as any).created_at,
+        is_admin: isAdmin,
       },
     });
   } catch (error: any) {
