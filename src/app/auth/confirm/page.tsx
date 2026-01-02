@@ -18,6 +18,44 @@ import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 
 type ConfirmState = 'loading' | 'success' | 'error';
 
+interface UserProfile {
+  is_admin?: boolean;
+  subscription_tier?: string | null;
+  subscription_status?: string | null;
+}
+
+/**
+ * Determines the appropriate dashboard URL based on user role/subscription
+ */
+async function getDashboardUrl(): Promise<string> {
+  try {
+    const response = await fetch('/api/users/me');
+    if (!response.ok) {
+      return '/dashboard';
+    }
+    const data = await response.json();
+    const user: UserProfile = data.user;
+
+    // Admin users go to admin dashboard
+    if (user.is_admin) {
+      return '/dashboard/admin';
+    }
+
+    // HMO Pro subscribers go to HMO dashboard
+    const hasActiveSub =
+      user.subscription_tier &&
+      (user.subscription_status === 'active' || user.subscription_status === 'trialing');
+    if (hasActiveSub) {
+      return '/dashboard/hmo';
+    }
+
+    // Default user dashboard
+    return '/dashboard';
+  } catch {
+    return '/dashboard';
+  }
+}
+
 function ConfirmEmailContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -52,7 +90,8 @@ function ConfirmEmailContent() {
         if (session) {
           // Session already exists - user is confirmed
           setState('success');
-          setTimeout(() => router.push('/dashboard'), 2000);
+          const dashboardUrl = await getDashboardUrl();
+          setTimeout(() => router.push(dashboardUrl), 2000);
           return;
         }
 
@@ -73,7 +112,8 @@ function ConfirmEmailContent() {
             // Clean up URL
             window.history.replaceState({}, document.title, window.location.pathname);
             setState('success');
-            setTimeout(() => router.push('/dashboard'), 2000);
+            const dashboardUrl = await getDashboardUrl();
+            setTimeout(() => router.push(dashboardUrl), 2000);
             return;
           }
         }
@@ -85,7 +125,8 @@ function ConfirmEmailContent() {
 
           if (!error) {
             setState('success');
-            setTimeout(() => router.push('/dashboard'), 2000);
+            const dashboardUrl = await getDashboardUrl();
+            setTimeout(() => router.push(dashboardUrl), 2000);
             return;
           }
 
@@ -118,7 +159,8 @@ function ConfirmEmailContent() {
 
           if (!error) {
             setState('success');
-            setTimeout(() => router.push('/dashboard'), 2000);
+            const dashboardUrl = await getDashboardUrl();
+            setTimeout(() => router.push(dashboardUrl), 2000);
             return;
           }
 
@@ -132,7 +174,8 @@ function ConfirmEmailContent() {
         const { data: { session: finalCheck } } = await supabase.auth.getSession();
         if (finalCheck) {
           setState('success');
-          setTimeout(() => router.push('/dashboard'), 2000);
+          const dashboardUrl = await getDashboardUrl();
+          setTimeout(() => router.push(dashboardUrl), 2000);
           return;
         }
 
