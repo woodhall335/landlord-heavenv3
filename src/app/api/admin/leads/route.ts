@@ -15,6 +15,15 @@
 import { createServerSupabaseClient, requireServerAuth } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
+interface EmailSubscriber {
+  email: string;
+  source?: string;
+  jurisdiction?: string;
+  tags?: string[];
+  created_at: string;
+  last_seen_at?: string;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const user = await requireServerAuth();
@@ -54,7 +63,7 @@ export async function GET(request: NextRequest) {
     // Apply pagination
     query = query.range(offset, offset + limit - 1);
 
-    const { data: leads, count, error } = await query;
+    const { data: leads, count, error } = await query as { data: EmailSubscriber[] | null; count: number | null; error: any };
 
     if (error) {
       console.error('[admin/leads] Query error:', error);
