@@ -18603,6 +18603,864 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 47: Wales Fitness for Human Habitation
+  {
+    slug: 'wales-fitness-human-habitation',
+    title: 'Fitness for Human Habitation Wales - Complete Guide 2026',
+    description: 'Complete guide to fitness for human habitation requirements in Wales. Learn about the 29 matters, landlord obligations, and tenant rights under Welsh law.',
+    metaDescription: 'Guide to fitness for human habitation requirements in Wales. 29 matters, landlord obligations, and compliance under the Renting Homes Act.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1620,
+    category: 'Welsh Law',
+    tags: ['fitness for habitation', 'Wales', 'property standards', 'landlord obligations', 'HHSRS'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-fitness.svg',
+    heroImageAlt: 'Wales Fitness for Human Habitation Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'fitness for human habitation wales',
+    secondaryKeywords: ['wales property standards', 'habitation requirements wales', 'landlord property obligations wales', '29 matters wales'],
+    tableOfContents: [
+      { id: 'fitness-overview', title: 'Fitness Requirements Overview', level: 2 },
+      { id: '29-matters', title: 'The 29 Matters', level: 2 },
+      { id: 'landlord-duties', title: 'Landlord Duties', level: 2 },
+      { id: 'tenant-remedies', title: 'Tenant Remedies', level: 2 },
+      { id: 'compliance-steps', title: 'Ensuring Compliance', level: 2 },
+      { id: 'fitness-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-renting-homes-act', 'wales-standard-occupation-contract', 'wales-eviction-process'],
+    content: (
+      <>
+        <p className="lead">
+          Under the Renting Homes (Wales) Act 2016, landlords have a fundamental obligation
+          to ensure their property is fit for human habitation. This guide explains what
+          this means in practice and how to comply.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Fundamental Term</h4>
+          <p className="text-blue-800">
+            The fitness for human habitation requirement is a fundamental term of every
+            occupation contract in Wales. It cannot be excluded or modified, and applies
+            at the start and throughout the tenancy.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-fitness-overview.svg"
+          alt="Wales Fitness for Human Habitation Overview"
+          caption="Properties must meet 29 specific fitness matters under Welsh law"
+          aspectRatio="video"
+        />
+
+        <h2 id="fitness-overview" className="scroll-mt-24">Fitness Requirements Overview</h2>
+
+        <p>
+          The Renting Homes Act introduced comprehensive fitness for human habitation
+          requirements that go beyond the previous implied repairing obligations.
+        </p>
+
+        <p>Key points about the fitness requirement:</p>
+
+        <ul>
+          <li>The property must be fit at the start of the occupation contract</li>
+          <li>The property must remain fit throughout the tenancy</li>
+          <li>It covers 29 specific matters prescribed in regulations</li>
+          <li>Contract-holders can take action if the property becomes unfit</li>
+          <li>Courts can order works and award damages</li>
+        </ul>
+
+        <h2 id="29-matters" className="scroll-mt-24">The 29 Matters</h2>
+
+        <p>
+          The fitness for human habitation requirement covers 29 prescribed matters.
+          These are grouped into several categories:
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h4 className="font-semibold text-gray-900 mb-3">Structure & Stability</h4>
+            <ul className="text-sm text-gray-600 space-y-2">
+              <li>1. Damp and mould growth</li>
+              <li>2. Excess cold</li>
+              <li>3. Excess heat</li>
+              <li>4. Asbestos and MMF</li>
+              <li>5. Biocides</li>
+              <li>6. Carbon monoxide and fuel combustion products</li>
+              <li>7. Lead</li>
+            </ul>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h4 className="font-semibold text-gray-900 mb-3">Safety Hazards</h4>
+            <ul className="text-sm text-gray-600 space-y-2">
+              <li>8. Radiation</li>
+              <li>9. Uncombusted fuel gas</li>
+              <li>10. Volatile organic compounds</li>
+              <li>11. Crowding and space</li>
+              <li>12. Entry by intruders</li>
+              <li>13. Lighting</li>
+              <li>14. Noise</li>
+            </ul>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h4 className="font-semibold text-gray-900 mb-3">Physical Hazards</h4>
+            <ul className="text-sm text-gray-600 space-y-2">
+              <li>15. Domestic hygiene, pests and refuse</li>
+              <li>16. Food safety</li>
+              <li>17. Personal hygiene, sanitation and drainage</li>
+              <li>18. Water supply</li>
+              <li>19. Falls associated with baths etc</li>
+              <li>20. Falls on level surfaces</li>
+              <li>21. Falls on stairs</li>
+            </ul>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h4 className="font-semibold text-gray-900 mb-3">Building Hazards</h4>
+            <ul className="text-sm text-gray-600 space-y-2">
+              <li>22. Falls between levels</li>
+              <li>23. Electrical hazards</li>
+              <li>24. Fire</li>
+              <li>25. Flames, hot surfaces</li>
+              <li>26. Collision and entrapment</li>
+              <li>27. Explosions</li>
+              <li>28. Position and operability of amenities</li>
+              <li>29. Structural collapse and falling elements</li>
+            </ul>
+          </div>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="landlord-duties" className="scroll-mt-24">Landlord Duties</h2>
+
+        <p>
+          As a landlord, you must take reasonable steps to ensure the property is fit.
+          This includes:
+        </p>
+
+        <h3>Before Letting</h3>
+
+        <ul>
+          <li>Conduct a thorough property inspection</li>
+          <li>Address any hazards identified</li>
+          <li>Obtain required safety certificates (gas, electrical)</li>
+          <li>Ensure adequate heating and insulation</li>
+          <li>Check for damp and treat if necessary</li>
+        </ul>
+
+        <h3>During the Tenancy</h3>
+
+        <ul>
+          <li>Respond promptly to reports of unfitness</li>
+          <li>Carry out regular inspections</li>
+          <li>Maintain heating and hot water systems</li>
+          <li>Address damp and mould issues quickly</li>
+          <li>Keep the structure in good repair</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-fitness-inspection.svg"
+          alt="Property Inspection for Fitness Wales"
+          caption="Regular inspections help identify and address fitness issues"
+          aspectRatio="video"
+        />
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Tenant Damage Exception</h4>
+          <p className="text-amber-800">
+            You are not required to keep the property fit if the unfitness is caused
+            by the contract-holder&apos;s own actions or failure to use the property
+            in a tenant-like manner.
+          </p>
+        </div>
+
+        <h2 id="tenant-remedies" className="scroll-mt-24">Tenant Remedies</h2>
+
+        <p>
+          If a property is not fit for human habitation, the contract-holder has several
+          options:
+        </p>
+
+        <h3>Notify the Landlord</h3>
+
+        <p>
+          The contract-holder should first notify you of the issue in writing. You then
+          have a reasonable time to carry out works.
+        </p>
+
+        <h3>Apply to Court</h3>
+
+        <p>
+          If you fail to address the issue, the contract-holder can apply to the County
+          Court. The court can:
+        </p>
+
+        <ul>
+          <li>Order you to carry out specific works</li>
+          <li>Award damages for inconvenience and loss</li>
+          <li>Reduce the rent payable</li>
+          <li>In extreme cases, allow the tenant to end the contract</li>
+        </ul>
+
+        <h3>Environmental Health</h3>
+
+        <p>
+          Contract-holders can also report issues to the local authority environmental
+          health team, who may take enforcement action.
+        </p>
+
+        <h2 id="compliance-steps" className="scroll-mt-24">Ensuring Compliance</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-8">
+          <h4 className="font-semibold text-gray-900 mb-4">Compliance Checklist</h4>
+          <ul className="space-y-2 text-gray-700">
+            <li>☐ Check for and treat any damp or mould</li>
+            <li>☐ Ensure adequate heating and insulation</li>
+            <li>☐ Obtain valid Gas Safety Certificate</li>
+            <li>☐ Obtain Electrical Installation Condition Report</li>
+            <li>☐ Install smoke alarms on each storey</li>
+            <li>☐ Install CO alarms where required</li>
+            <li>☐ Check all windows and doors are secure</li>
+            <li>☐ Ensure water supply is safe and adequate</li>
+            <li>☐ Check for trip and fall hazards</li>
+            <li>☐ Verify kitchen and bathroom are hygienic</li>
+          </ul>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Property Compliance Help</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides property inspection checklists and compliance
+            guides to help you meet Welsh fitness requirements.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Property Templates →
+          </Link>
+        </div>
+
+        <h2 id="fitness-faq" className="scroll-mt-24">Fitness for Habitation FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the property was fit when let but becomes unfit?</h3>
+            <p className="text-gray-600">
+              You remain responsible for maintaining fitness throughout the tenancy.
+              If the property becomes unfit due to disrepair or other issues, you must
+              address this within a reasonable time.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can the tenant withhold rent for unfitness?</h3>
+            <p className="text-gray-600">
+              Tenants should not withhold rent without a court order. They should apply
+              to court if you fail to address fitness issues. The court can then reduce
+              or suspend rent.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How quickly must I fix fitness issues?</h3>
+            <p className="text-gray-600">
+              The law requires action within a &quot;reasonable time.&quot; This depends
+              on the severity - urgent issues like no heating in winter require faster
+              response than minor issues.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Does this apply to older properties?</h3>
+            <p className="text-gray-600">
+              Yes. The fitness requirement applies to all rental properties regardless
+              of age. However, what&apos;s considered reasonable may account for the
+              property&apos;s age and character.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 48: Wales Possession Grounds
+  {
+    slug: 'wales-possession-grounds',
+    title: 'Wales Possession Grounds - Complete Guide to Eviction Reasons 2026',
+    description: 'Complete guide to all possession grounds under the Renting Homes (Wales) Act. Learn about mandatory and discretionary grounds for eviction in Wales.',
+    metaDescription: 'Complete guide to possession grounds in Wales. Mandatory and discretionary grounds, notice periods, and requirements under the Renting Homes Act.',
+    date: '2026-01-03',
+    readTime: '15 min read',
+    wordCount: 1820,
+    category: 'Welsh Law',
+    tags: ['possession grounds', 'Wales', 'eviction', 'mandatory grounds', 'discretionary grounds'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-grounds.svg',
+    heroImageAlt: 'Wales Possession Grounds Guide',
+    showUrgencyBanner: true,
+    targetKeyword: 'wales possession grounds eviction',
+    secondaryKeywords: ['eviction grounds wales', 'renting homes act grounds', 'welsh eviction reasons', 'mandatory grounds wales'],
+    tableOfContents: [
+      { id: 'grounds-overview', title: 'Possession Grounds Overview', level: 2 },
+      { id: 'mandatory-grounds', title: 'Mandatory Grounds', level: 2 },
+      { id: 'discretionary-grounds', title: 'Discretionary Grounds', level: 2 },
+      { id: 'estate-management', title: 'Estate Management Grounds', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'grounds-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-eviction-process', 'wales-standard-occupation-contract', 'wales-renting-homes-act'],
+    content: (
+      <>
+        <p className="lead">
+          Under the Renting Homes (Wales) Act 2016, landlords can seek possession using
+          various grounds. Understanding the difference between mandatory and discretionary
+          grounds is essential for successful eviction.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Use Correct Grounds</h4>
+          <p className="text-red-800">
+            Using the wrong ground or incorrect procedure can invalidate your claim.
+            Always ensure you use the correct form and notice period for your chosen
+            ground.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-grounds-overview.svg"
+          alt="Wales Possession Grounds Overview"
+          caption="Different grounds have different requirements and notice periods"
+          aspectRatio="video"
+        />
+
+        <h2 id="grounds-overview" className="scroll-mt-24">Possession Grounds Overview</h2>
+
+        <p>
+          The Renting Homes Act provides two categories of possession grounds:
+        </p>
+
+        <ul>
+          <li><strong>Mandatory grounds:</strong> If proven, the court must order possession</li>
+          <li><strong>Discretionary grounds:</strong> The court considers if it&apos;s reasonable to order possession</li>
+        </ul>
+
+        <p>
+          You can use multiple grounds in the same claim if several apply to your situation.
+        </p>
+
+        <h2 id="mandatory-grounds" className="scroll-mt-24">Mandatory Grounds</h2>
+
+        <p>
+          With mandatory grounds, if you prove the ground exists at the hearing, the
+          court must order possession. There is no discretion.
+        </p>
+
+        <h3>Serious Rent Arrears (Ground 1)</h3>
+
+        <p>
+          This is the most commonly used mandatory ground. Requirements:
+        </p>
+
+        <ul>
+          <li>At least 2 months&apos; rent must be outstanding</li>
+          <li>Arrears must exist at the date of the notice AND at the hearing</li>
+          <li>Only 14 days&apos; notice is required</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Arrears Must Persist</h4>
+          <p className="text-amber-800">
+            If the contract-holder pays down the arrears to below 2 months before
+            the hearing, this ground fails. You would need to rely on discretionary
+            grounds instead.
+          </p>
+        </div>
+
+        <h3>Other Mandatory Grounds</h3>
+
+        <ul>
+          <li><strong>Death of contract-holder:</strong> Where there is no successor</li>
+          <li><strong>Prohibited conduct (final warning):</strong> After formal warning for serious issues</li>
+        </ul>
+
+        <h2 id="discretionary-grounds" className="scroll-mt-24">Discretionary Grounds</h2>
+
+        <p>
+          With discretionary grounds, the court considers whether it&apos;s reasonable
+          to order possession, even if the ground is proven.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-discretionary.svg"
+          alt="Discretionary Grounds Wales"
+          caption="Courts weigh up all circumstances with discretionary grounds"
+          aspectRatio="video"
+        />
+
+        <h3>Breach of Contract (Ground 12)</h3>
+
+        <p>
+          The contract-holder has breached a term of the occupation contract. Examples:
+        </p>
+
+        <ul>
+          <li>Unauthorized subletting</li>
+          <li>Keeping pets contrary to the contract</li>
+          <li>Running a business from the property</li>
+          <li>Causing damage beyond fair wear and tear</li>
+        </ul>
+
+        <h3>Anti-Social Behaviour (Ground 13)</h3>
+
+        <p>
+          The contract-holder (or their visitors) has engaged in anti-social behaviour.
+          This includes:
+        </p>
+
+        <ul>
+          <li>Noise nuisance affecting neighbours</li>
+          <li>Harassment of neighbours</li>
+          <li>Criminal activity at the property</li>
+          <li>Violence or threats of violence</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Evidence is Key</h4>
+          <p className="text-blue-800">
+            For anti-social behaviour, you&apos;ll need strong evidence such as incident
+            logs, witness statements, police reports, or local authority records.
+          </p>
+        </div>
+
+        <h3>Some Rent Arrears (Ground 11)</h3>
+
+        <p>
+          Any rent is outstanding. Unlike the mandatory ground, there&apos;s no minimum
+          amount, but the court considers whether it&apos;s reasonable to evict.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="estate-management" className="scroll-mt-24">Estate Management Grounds</h2>
+
+        <p>
+          These grounds relate to the landlord&apos;s plans for the property:
+        </p>
+
+        <h3>Landlord Wants to Sell (Ground 3)</h3>
+
+        <ul>
+          <li>You intend to sell the property</li>
+          <li>Sale would be significantly harder with tenant in situ</li>
+          <li>6 months&apos; notice required</li>
+        </ul>
+
+        <h3>Landlord Wants to Live There (Ground 4)</h3>
+
+        <ul>
+          <li>You or a family member intends to live in the property</li>
+          <li>Must be a genuine intention</li>
+          <li>6 months&apos; notice required</li>
+        </ul>
+
+        <h3>Major Works Required (Ground 5)</h3>
+
+        <ul>
+          <li>Substantial works are needed that require vacant possession</li>
+          <li>Works cannot reasonably be carried out with tenant present</li>
+          <li>2 months&apos; notice required</li>
+        </ul>
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ground</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notice Period</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Serious rent arrears</td>
+                <td className="px-6 py-4 text-sm text-gray-600">14 days</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Mandatory</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Some rent arrears</td>
+                <td className="px-6 py-4 text-sm text-gray-600">1 month</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Discretionary</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Breach of contract</td>
+                <td className="px-6 py-4 text-sm text-gray-600">1 month</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Discretionary</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Anti-social behaviour</td>
+                <td className="px-6 py-4 text-sm text-gray-600">48 hours to 1 month</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Discretionary</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Landlord sale/occupation</td>
+                <td className="px-6 py-4 text-sm text-gray-600">6 months</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Discretionary</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Major works</td>
+                <td className="px-6 py-4 text-sm text-gray-600">2 months</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Discretionary</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need Eviction Guidance?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides Welsh eviction notice templates and step-by-step
+            guides for each possession ground.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Templates →
+          </Link>
+        </div>
+
+        <h2 id="grounds-faq" className="scroll-mt-24">Possession Grounds FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use multiple grounds in one claim?</h3>
+            <p className="text-gray-600">
+              Yes. You can rely on multiple grounds in the same claim. This is often
+              advisable as a backup - for example, claiming serious arrears (mandatory)
+              and some arrears (discretionary) together.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What factors does the court consider for discretionary grounds?</h3>
+            <p className="text-gray-600">
+              The court considers all circumstances including: the severity of the breach,
+              whether it&apos;s ongoing, the tenant&apos;s housing needs, any vulnerability,
+              and whether the landlord has contributed to the situation.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I evict for a single incident of anti-social behaviour?</h3>
+            <p className="text-gray-600">
+              Possibly, if it&apos;s serious enough. A single serious incident (like violence)
+              could justify eviction. Minor one-off incidents are less likely to succeed
+              as courts want to see a pattern or serious harm.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to prove I really want to sell/live there?</h3>
+            <p className="text-gray-600">
+              Yes. For estate management grounds, you must demonstrate a genuine intention.
+              If you claim you want to live there then immediately re-let, the tenant
+              could claim damages for misrepresentation.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 49: Wales Landlord Obligations Checklist
+  {
+    slug: 'wales-landlord-obligations-checklist',
+    title: 'Wales Landlord Obligations - Complete Checklist 2026',
+    description: 'Complete checklist of landlord obligations in Wales. Covers Rent Smart Wales, safety requirements, occupation contracts, and ongoing duties.',
+    metaDescription: 'Complete checklist of Wales landlord obligations. Safety certificates, Rent Smart Wales, occupation contracts, and compliance requirements.',
+    date: '2026-01-03',
+    readTime: '11 min read',
+    wordCount: 1450,
+    category: 'Welsh Law',
+    tags: ['landlord obligations', 'Wales', 'compliance', 'checklist', 'legal requirements'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-checklist.svg',
+    heroImageAlt: 'Wales Landlord Obligations Checklist',
+    showUrgencyBanner: false,
+    targetKeyword: 'wales landlord obligations checklist',
+    secondaryKeywords: ['welsh landlord requirements', 'landlord legal duties wales', 'wales rental compliance', 'landlord checklist wales'],
+    tableOfContents: [
+      { id: 'before-letting', title: 'Before Letting', level: 2 },
+      { id: 'at-start', title: 'At Start of Tenancy', level: 2 },
+      { id: 'during-tenancy', title: 'During the Tenancy', level: 2 },
+      { id: 'annual-requirements', title: 'Annual Requirements', level: 2 },
+      { id: 'end-of-tenancy', title: 'End of Tenancy', level: 2 },
+      { id: 'checklist-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['rent-smart-wales', 'wales-renting-homes-act', 'wales-standard-occupation-contract'],
+    content: (
+      <>
+        <p className="lead">
+          Welsh landlords face a range of legal obligations before, during, and after
+          letting a property. Use this comprehensive checklist to ensure you meet all
+          your legal requirements.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Compliance is Essential</h4>
+          <p className="text-amber-800">
+            Failure to meet these obligations can prevent you from evicting tenants,
+            result in fines, and lead to rent repayment orders. Stay compliant to
+            protect your investment.
+          </p>
+        </div>
+
+        <h2 id="before-letting" className="scroll-mt-24">Before Letting</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-8">
+          <h4 className="font-semibold text-gray-900 mb-4">Pre-Letting Checklist</h4>
+          <ul className="space-y-3 text-gray-700">
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Rent Smart Wales Registration</strong> - Register and obtain licence if self-managing</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Gas Safety Certificate</strong> - From a Gas Safe registered engineer</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>EICR</strong> - Electrical Installation Condition Report</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>EPC</strong> - Energy Performance Certificate (minimum rating E)</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Smoke Alarms</strong> - On each storey, tested and working</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>CO Alarms</strong> - In rooms with solid fuel appliances or flues</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Fitness Check</strong> - Property meets 29 matters of fitness</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Written Statement</strong> - Prepare occupation contract</span>
+            </li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-before-letting.svg"
+          alt="Before Letting Checklist Wales"
+          caption="Complete all pre-letting requirements before the tenant moves in"
+          aspectRatio="video"
+        />
+
+        <h2 id="at-start" className="scroll-mt-24">At Start of Tenancy</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-8">
+          <h4 className="font-semibold text-gray-900 mb-4">Move-In Checklist</h4>
+          <ul className="space-y-3 text-gray-700">
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Written Statement</strong> - Provide within 14 days of occupation</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Gas Certificate Copy</strong> - Give to contract-holder</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>EPC Copy</strong> - Give to contract-holder</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Protect Deposit</strong> - Within 30 days in approved scheme</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Prescribed Information</strong> - Serve deposit details</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Inventory</strong> - Complete and get signed</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>How to Rent Wales</strong> - Provide Welsh Government guide</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Contact Details</strong> - Provide your address and contact info</span>
+            </li>
+          </ul>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="during-tenancy" className="scroll-mt-24">During the Tenancy</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-8">
+          <h4 className="font-semibold text-gray-900 mb-4">Ongoing Obligations</h4>
+          <ul className="space-y-3 text-gray-700">
+            <li className="flex items-start gap-3">
+              <span className="text-blue-600 mt-1">→</span>
+              <span><strong>Maintain Property</strong> - Keep fit for human habitation</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-blue-600 mt-1">→</span>
+              <span><strong>Respond to Repairs</strong> - Address issues within reasonable time</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-blue-600 mt-1">→</span>
+              <span><strong>Give Notice for Access</strong> - 24 hours for routine visits</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-blue-600 mt-1">→</span>
+              <span><strong>Rent Reviews</strong> - Follow proper procedures for increases</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-blue-600 mt-1">→</span>
+              <span><strong>Maintain Registration</strong> - Keep Rent Smart Wales current</span>
+            </li>
+          </ul>
+        </div>
+
+        <h2 id="annual-requirements" className="scroll-mt-24">Annual Requirements</h2>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requirement</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Frequency</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Gas Safety Check</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Annual</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Provide copy to tenant</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">EICR</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Every 5 years</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Or as recommended</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Smoke Alarm Check</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Annual</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Test and replace batteries</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">CO Alarm Check</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Annual</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Test and replace as needed</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Rent Smart Wales</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Every 5 years</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Renew before expiry</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="end-of-tenancy" className="scroll-mt-24">End of Tenancy</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-8">
+          <h4 className="font-semibold text-gray-900 mb-4">End of Tenancy Checklist</h4>
+          <ul className="space-y-3 text-gray-700">
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Check-Out Inspection</strong> - Compare to inventory</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Return Deposit</strong> - Within 10 days if no disputes</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Final Meter Readings</strong> - Record and notify suppliers</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Collect Keys</strong> - Get all keys back</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="text-green-600 mt-1">☐</span>
+              <span><strong>Council Tax</strong> - Notify council of vacancy</span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Download Compliance Checklists</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides downloadable compliance checklists and templates
+            for Welsh landlords.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Checklist Templates →
+          </Link>
+        </div>
+
+        <h2 id="checklist-faq" className="scroll-mt-24">Landlord Obligations FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What happens if I miss a requirement?</h3>
+            <p className="text-gray-600">
+              Missing requirements can have serious consequences. You may be unable to
+              evict tenants, face fines from the local authority, or have tenants claim
+              rent repayment orders against you.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Does my agent handle all this?</h3>
+            <p className="text-gray-600">
+              If you use a managing agent, they typically handle many obligations. However,
+              you remain legally responsible as landlord. Ensure your agent is licensed
+              with Rent Smart Wales and check they&apos;re completing all requirements.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Are there different rules for HMOs?</h3>
+            <p className="text-gray-600">
+              Yes. HMOs have additional requirements including HMO licensing, fire safety
+              measures, and specific management regulations. All standard landlord
+              obligations also apply.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
