@@ -123,16 +123,16 @@ export default function ASTPage() {
               </div>
 
               {/* Premium AST */}
-              <div className="bg-white rounded-lg border-2 border-primary overflow-hidden shadow-lg relative">
+              <div className="bg-white rounded-lg border-2 border-[#7C3AED] overflow-hidden shadow-lg relative">
                 <div className="absolute top-4 right-4 bg-primary-600 text-white text-xs font-bold px-3 py-1 rounded-full">
                   RECOMMENDED
                 </div>
-                <div className="bg-linear-to-br from-primary to-emerald-600 text-white p-6 text-center">
-                  <h3 className="text-2xl font-bold mb-2">Premium AST</h3>
+                <div className="bg-[#f8f1ff] p-6 text-center">
+                  <h3 className="text-2xl font-bold mb-2 text-gray-900">Premium AST</h3>
                   <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-4xl font-bold">£14.99</span>
+                    <span className="text-4xl font-bold text-gray-900">£14.99</span>
                   </div>
-                  <p className="text-sm text-white/90">Maximum protection & customization</p>
+                  <p className="text-sm text-gray-700">Maximum protection & customization</p>
                 </div>
 
                 <div className="p-6">
@@ -531,6 +531,24 @@ export default function ASTPage() {
         </Container>
       </section>
 
+      {/* Related Resources */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <RelatedLinks
+              title="Related Resources"
+              links={[
+                productLinks.noticeOnly,
+                productLinks.completePack,
+                toolLinks.hmoChecker,
+                toolLinks.section21Generator,
+                landingPageLinks.tenancyTemplate,
+              ]}
+            />
+          </div>
+        </Container>
+      </section>
+
       {/* CTA */}
       <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
@@ -554,24 +572,6 @@ export default function ASTPage() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription required</p>
-          </div>
-        </Container>
-      </section>
-
-      {/* Related Resources */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <RelatedLinks
-              title="Related Resources"
-              links={[
-                productLinks.noticeOnly,
-                productLinks.completePack,
-                toolLinks.hmoChecker,
-                toolLinks.section21Generator,
-                landingPageLinks.tenancyTemplate,
-              ]}
-            />
           </div>
         </Container>
       </section>

@@ -110,7 +110,7 @@ export function RelatedLinks({
   const showControls = links.length > itemsPerView;
 
   return (
-    <section className={`py-12 ${className}`}>
+    <section className={`${className}`}>
       <div className="container mx-auto px-4">
         <div className="max-w-5xl mx-auto">
           <div className="flex items-center justify-between mb-6">
