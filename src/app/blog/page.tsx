@@ -4,7 +4,7 @@ import { StructuredData } from '@/lib/seo/structured-data';
 import { BlogCard } from '@/components/blog/BlogCard';
 import { blogPosts } from '@/lib/blog/posts';
 import { Section21Countdown } from '@/components/ui/Section21Countdown';
-import { FileText, Scale, Clock, ArrowRight } from 'lucide-react';
+import { FileText, Scale, Clock, ArrowRight, Zap, ShieldCheck, Globe } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Landlord Guides & Legal Resources | Landlord Heaven Blog',
@@ -152,34 +152,47 @@ export default function BlogPage() {
         )}
 
         {/* CTA Section */}
-        <section className="py-16 lg:py-20">
+        <section className="py-16 lg:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary to-primary/90 rounded-3xl p-8 lg:p-12 text-white text-center">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
                 Need to Serve an Eviction Notice?
               </h2>
-              <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-                Generate court-ready eviction notices in minutes. Our AI-powered system
-                ensures your documents are legally compliant and accepted by courts.
+              <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                Generate court-ready eviction notices in minutes.
+                <span className="font-semibold text-gray-800"> AI-powered compliance, 80% cheaper than solicitors.</span>
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
                 <Link
                   href="/products/notice-only"
-                  className="bg-white text-primary hover:bg-gray-100 font-semibold py-4 px-8 rounded-lg transition-colors inline-flex items-center justify-center"
+                  className="hero-btn-primary"
                 >
-                  Section 21 Notice — £29.99
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  Section 21 Notice — £29.99 →
                 </Link>
                 <Link
                   href="/products/complete-pack"
-                  className="bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-8 rounded-lg border border-white/30 transition-colors"
+                  className="hero-btn-secondary"
                 >
-                  Complete Pack — £149.99
+                  Complete Pack — £149.99 →
                 </Link>
               </div>
-              <p className="mt-8 text-white/70 text-sm">
-                Court-ready documents • AI-powered compliance • 80% cheaper than solicitors
-              </p>
+
+              {/* Trust indicators */}
+              <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-gray-500">
+                <span className="flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-primary" />
+                  Instant download
+                </span>
+                <span className="flex items-center gap-2">
+                  <ShieldCheck className="w-5 h-5 text-primary" />
+                  Court-ready guarantee
+                </span>
+                <span className="flex items-center gap-2">
+                  <Globe className="w-5 h-5 text-primary" />
+                  All UK jurisdictions
+                </span>
+              </div>
             </div>
           </div>
         </section>
