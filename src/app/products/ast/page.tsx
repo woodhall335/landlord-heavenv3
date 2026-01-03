@@ -69,7 +69,7 @@ export default function ASTPage() {
               {/* Standard AST */}
               <div className="bg-white rounded-lg border-2 border-gray-200 overflow-hidden">
                 <div className="bg-gray-100 p-6 text-center">
-                  <h3 className="text-2xl font-bold text-charcoal mb-2">Standard AST</h3>
+                  <h3 className="text-2xl font-bold text-charcoal mb-2">Standard Tenancy Agreement</h3>
                   <div className="flex items-baseline justify-center gap-2 mb-2">
                     <span className="text-4xl font-bold text-charcoal">£9.99</span>
                   </div>
@@ -124,11 +124,11 @@ export default function ASTPage() {
 
               {/* Premium AST */}
               <div className="bg-white rounded-lg border-2 border-[#7C3AED] overflow-hidden shadow-lg relative">
-                <div className="absolute top-4 right-4 bg-primary-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                <div className="absolute top-4 right-4 bg-[#7C3AED] text-white text-xs font-bold px-3 py-1 rounded-full">
                   RECOMMENDED
                 </div>
                 <div className="bg-[#f8f1ff] p-6 text-center">
-                  <h3 className="text-2xl font-bold mb-2 text-gray-900">Premium AST</h3>
+                  <h3 className="text-2xl font-bold mb-2 text-gray-900">Premium Tenancy Agreement</h3>
                   <div className="flex items-baseline justify-center gap-2 mb-2">
                     <span className="text-4xl font-bold text-gray-900">£14.99</span>
                   </div>
