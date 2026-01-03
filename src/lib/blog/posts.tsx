@@ -24208,6 +24208,1244 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 65: UK Gas Safety Requirements
+  {
+    slug: 'uk-gas-safety-landlords',
+    title: 'UK Gas Safety for Landlords - Complete Compliance Guide 2026',
+    description: 'Essential guide to gas safety requirements for UK landlords. Learn about Gas Safety Certificates, CP12 records, annual checks, and legal obligations.',
+    metaDescription: 'UK landlord gas safety guide 2026. Gas Safety Certificates, CP12 requirements, annual checks, Gas Safe Register engineers, and compliance obligations.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1720,
+    category: 'Safety Compliance',
+    tags: ['gas safety', 'landlord obligations', 'Gas Safe Register', 'CP12', 'safety certificates', 'UK property'],
+    author: {
+      name: 'Landlord Heaven Safety Team',
+      role: 'Property Safety Specialists',
+    },
+    heroImage: '/images/blog/placeholder-gas-safety.svg',
+    heroImageAlt: 'UK Gas Safety Requirements for Landlords',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord gas safety requirements UK',
+    secondaryKeywords: ['gas safety certificate', 'CP12', 'Gas Safe Register', 'annual gas check'],
+    tableOfContents: [
+      { id: 'legal-requirements', title: 'Legal Requirements', level: 2 },
+      { id: 'gas-safety-certificate', title: 'Gas Safety Certificate (CP12)', level: 2 },
+      { id: 'annual-checks', title: 'Annual Safety Checks', level: 2 },
+      { id: 'gas-safe-engineers', title: 'Gas Safe Registered Engineers', level: 2 },
+      { id: 'tenant-responsibilities', title: 'Tenant Access and Responsibilities', level: 2 },
+      { id: 'record-keeping', title: 'Record Keeping Requirements', level: 2 },
+      { id: 'emergencies', title: 'Gas Emergencies', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'gas-faq', title: 'Gas Safety FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-landlord-insurance-guide', 'uk-electrical-safety-landlords', 'uk-fire-safety-landlords'],
+    content: (
+      <>
+        <p className="lead">
+          Gas safety is one of the most critical legal obligations for UK landlords. Failure to
+          comply can result in serious criminal penalties, including imprisonment, and puts
+          tenants at risk of carbon monoxide poisoning or explosions. This guide covers everything
+          you need to know about gas safety compliance.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">⚠️ Critical Safety Warning</h4>
+          <p className="text-red-800">
+            Gas safety failures can be fatal. Carbon monoxide is odorless and kills approximately
+            50 people annually in the UK. Legal compliance is the minimum - prioritize tenant safety.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/gas-safety-check.svg"
+          alt="Gas Safe engineer conducting safety check"
+          caption="Annual gas safety checks must be conducted by Gas Safe registered engineers"
+          aspectRatio="video"
+        />
+
+        <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
+
+        <p>
+          The Gas Safety (Installation and Use) Regulations 1998 set out landlord obligations
+          for gas safety. These regulations apply to all rented properties in England, Wales,
+          and Scotland with gas appliances, fittings, or flues.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Requirement</th>
+                <th className="border p-3 text-left font-semibold">Frequency</th>
+                <th className="border p-3 text-left font-semibold">Who Can Do It</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Gas Safety Check</td>
+                <td className="border p-3">Annual (every 12 months)</td>
+                <td className="border p-3">Gas Safe registered engineer</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">CP12 Certificate</td>
+                <td className="border p-3">After each annual check</td>
+                <td className="border p-3">Gas Safe registered engineer</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Provide certificate to tenant</td>
+                <td className="border p-3">Within 28 days of check</td>
+                <td className="border p-3">Landlord/agent</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Certificate to new tenant</td>
+                <td className="border p-3">Before moving in</td>
+                <td className="border p-3">Landlord/agent</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Your duties as a landlord include maintaining all gas pipework, flues, and appliances
+          in safe condition, ensuring annual safety checks, and keeping records of all inspections.
+        </p>
+
+        <h2 id="gas-safety-certificate" className="scroll-mt-24">Gas Safety Certificate (CP12)</h2>
+
+        <p>
+          The Gas Safety Certificate, commonly called a CP12, is the official record of your
+          annual gas safety check. It must be issued by a Gas Safe registered engineer after
+          inspecting all gas appliances in the property.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">What a CP12 Must Include</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-1">
+            <li>Description and location of each appliance checked</li>
+            <li>Name and registration number of the Gas Safe engineer</li>
+            <li>Date of the inspection</li>
+            <li>Address of the property</li>
+            <li>Results of safety checks for each appliance</li>
+            <li>Any defects identified and action taken</li>
+            <li>Next check due date</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/cp12-certificate.svg"
+          alt="Example Gas Safety Certificate CP12"
+          caption="A valid CP12 certificate is essential documentation for landlords"
+          aspectRatio="video"
+        />
+
+        <p>
+          You must keep copies of gas safety certificates for at least two years. Many landlords
+          keep records longer for liability protection. Digital copies are acceptable as long
+          as they are legible and accessible.
+        </p>
+
+        <h2 id="annual-checks" className="scroll-mt-24">Annual Safety Checks</h2>
+
+        <p>
+          Gas safety checks must be carried out every 12 months. You can conduct checks up to
+          two months early without losing your anniversary date - this is called the MOT-style
+          system introduced in 2018.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">MOT-Style Flexibility</h4>
+          <p className="text-green-800">
+            If your check is due on 15th June, you can have it done anytime from 15th April
+            onwards and your next check will still be due on 15th June the following year.
+            This helps with scheduling and avoids the risk of missing deadlines.
+          </p>
+        </div>
+
+        <p>What gets checked during an annual gas safety inspection:</p>
+
+        <ul className="list-disc ml-6 space-y-2 my-4">
+          <li>Gas boilers, fires, and water heaters</li>
+          <li>Gas cookers and hobs (if landlord-provided)</li>
+          <li>Pipework and gas meters</li>
+          <li>Flues and ventilation</li>
+          <li>Combustion analysis and pressure tests</li>
+          <li>Carbon monoxide alarm testing</li>
+          <li>Visual inspection for damage or deterioration</li>
+        </ul>
+
+        <h2 id="gas-safe-engineers" className="scroll-mt-24">Gas Safe Registered Engineers</h2>
+
+        <p>
+          Only engineers registered with Gas Safe Register can legally work on gas appliances.
+          The Gas Safe Register replaced CORGI in 2009 and is the official gas registration
+          body in the UK.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/gas-safe-id.svg"
+          alt="Gas Safe Register ID card"
+          caption="Always verify your engineer's Gas Safe credentials before any work"
+          aspectRatio="video"
+        />
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">How to Verify an Engineer</h4>
+          <ul className="list-disc ml-4 text-amber-800 space-y-2">
+            <li>Ask to see their Gas Safe ID card</li>
+            <li>Check the card is in date (valid for 12 months)</li>
+            <li>Verify the categories on the back match the work needed</li>
+            <li>Call Gas Safe Register: 0800 408 5500</li>
+            <li>Check online at GasSafeRegister.co.uk</li>
+          </ul>
+        </div>
+
+        <p>
+          Using an unregistered engineer is illegal and dangerous. If caught, you could face
+          prosecution even if no incident occurs. Always verify credentials before any gas work.
+        </p>
+
+        <h2 id="tenant-responsibilities" className="scroll-mt-24">Tenant Access and Responsibilities</h2>
+
+        <p>
+          While landlords bear the legal responsibility for gas safety, tenants must allow
+          reasonable access for safety checks. If a tenant refuses access, document your
+          attempts thoroughly.
+        </p>
+
+        <p>Steps to take if access is refused:</p>
+
+        <ol className="list-decimal ml-6 space-y-2 my-4">
+          <li>Give written notice with multiple appointment options</li>
+          <li>Send at least three written requests</li>
+          <li>Keep copies of all correspondence</li>
+          <li>Consider posting through the door if no response</li>
+          <li>As a last resort, seek a court injunction</li>
+        </ol>
+
+        <p>
+          Tenants are responsible for reporting any gas-related concerns, not interfering with
+          gas appliances, and ensuring appliances they own are safe. They cannot prevent access
+          for safety checks.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="record-keeping" className="scroll-mt-24">Record Keeping Requirements</h2>
+
+        <p>
+          Landlords must maintain comprehensive records of all gas safety activities. Good
+          record keeping protects you legally and demonstrates due diligence.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Record Type</th>
+                <th className="border p-3 text-left font-semibold">Retention Period</th>
+                <th className="border p-3 text-left font-semibold">Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">CP12 Certificates</td>
+                <td className="border p-3">Minimum 2 years</td>
+                <td className="border p-3">Keep longer for protection</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Tenant provision records</td>
+                <td className="border p-3">Duration of tenancy + 2 years</td>
+                <td className="border p-3">Proof of compliance</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Repair/maintenance records</td>
+                <td className="border p-3">6 years recommended</td>
+                <td className="border p-3">Liability protection</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Access attempt documentation</td>
+                <td className="border p-3">6 years</td>
+                <td className="border p-3">Defense if check delayed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="emergencies" className="scroll-mt-24">Gas Emergencies</h2>
+
+        <p>
+          Ensure tenants know what to do in a gas emergency. Provide clear instructions at
+          the start of the tenancy and consider posting emergency procedures in the property.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Gas Emergency Procedure</h4>
+          <ol className="list-decimal ml-4 text-red-800 space-y-2">
+            <li>Open doors and windows for ventilation</li>
+            <li>Turn off gas at the meter if safe to do so</li>
+            <li>Do not use electrical switches (including lights)</li>
+            <li>Do not smoke or use naked flames</li>
+            <li>Leave the property immediately</li>
+            <li>Call National Gas Emergency: 0800 111 999</li>
+            <li>Do not return until cleared by an engineer</li>
+          </ol>
+        </div>
+
+        <p>
+          Carbon monoxide detectors are now mandatory in properties with gas appliances
+          (from October 2022 in England). They provide an essential early warning of leaks.
+        </p>
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <p>
+          Gas safety violations are treated seriously by the courts. Penalties can be severe,
+          especially if tenants are harmed or put at risk.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Violation</th>
+                <th className="border p-3 text-left font-semibold">Maximum Penalty</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">No valid Gas Safety Certificate</td>
+                <td className="border p-3">Unlimited fine + up to 6 months prison</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Using unregistered engineer</td>
+                <td className="border p-3">Unlimited fine + up to 6 months prison</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Failing to maintain appliances</td>
+                <td className="border p-3">Unlimited fine</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Death caused by negligence</td>
+                <td className="border p-3">Manslaughter - up to life imprisonment</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Beyond criminal penalties, non-compliance affects Section 21 notices (you cannot
+          serve valid notice without a current CP12), insurance claims may be rejected, and
+          you could face civil liability for injuries.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/gas-safety-compliance.svg"
+          alt="Gas safety compliance checklist"
+          caption="Stay compliant with regular checks and proper documentation"
+          aspectRatio="video"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Gas Safety Document Management</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven helps you track gas safety certificate expiry dates, store
+            digital copies securely, and send automatic reminders before checks are due.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            Manage Gas Safety Records →
+          </Link>
+        </div>
+
+        <h2 id="gas-faq" className="scroll-mt-24">Gas Safety FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my tenant's cooker needs checking?</h3>
+            <p className="text-gray-600">
+              If the cooker belongs to the tenant, it's their responsibility. However, if
+              you provided it (even if left by a previous tenant), you must include it in
+              the annual check. Best practice: clearly state in the inventory what's included.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I do gas checks myself?</h3>
+            <p className="text-gray-600">
+              No. Only Gas Safe registered engineers can conduct safety checks. Even if
+              you're a qualified engineer, you cannot certify your own rental property -
+              an independent engineer must do it.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about properties with no gas?</h3>
+            <p className="text-gray-600">
+              If your property has no gas supply and no gas appliances, you don't need a
+              Gas Safety Certificate. Keep proof the property is all-electric. If gas is
+              capped but present, get advice - you may still need a check.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How much should a gas safety check cost?</h3>
+            <p className="text-gray-600">
+              Typically £60-£100 for a standard property with one boiler. Prices vary by
+              location and number of appliances. Be wary of very cheap quotes - quality
+              matters for safety. Get multiple quotes from Gas Safe registered engineers.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 66: UK Electrical Safety for Landlords
+  {
+    slug: 'uk-electrical-safety-landlords',
+    title: 'UK Electrical Safety for Landlords - EICR Guide 2026',
+    description: 'Complete guide to electrical safety requirements for UK landlords. Learn about EICR certificates, testing intervals, qualified electricians, and compliance.',
+    metaDescription: 'UK landlord electrical safety guide 2026. EICR requirements, electrical testing, qualified electricians, PAT testing, and legal compliance explained.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Safety Compliance',
+    tags: ['electrical safety', 'EICR', 'landlord obligations', 'electrical testing', 'safety certificates', 'UK property'],
+    author: {
+      name: 'Landlord Heaven Safety Team',
+      role: 'Property Safety Specialists',
+    },
+    heroImage: '/images/blog/placeholder-electrical-safety.svg',
+    heroImageAlt: 'UK Electrical Safety Requirements for Landlords',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord electrical safety requirements UK',
+    secondaryKeywords: ['EICR certificate', 'electrical safety inspection', 'landlord EICR', 'electrical testing rental'],
+    tableOfContents: [
+      { id: 'legal-requirements', title: 'Legal Requirements', level: 2 },
+      { id: 'eicr-explained', title: 'EICR Explained', level: 2 },
+      { id: 'testing-frequency', title: 'Testing Frequency', level: 2 },
+      { id: 'qualified-persons', title: 'Qualified Persons', level: 2 },
+      { id: 'eicr-codes', title: 'Understanding EICR Codes', level: 2 },
+      { id: 'remedial-work', title: 'Remedial Work Requirements', level: 2 },
+      { id: 'pat-testing', title: 'PAT Testing', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'electrical-faq', title: 'Electrical Safety FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-gas-safety-landlords', 'uk-fire-safety-landlords', 'uk-landlord-insurance-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Electrical safety regulations for landlords in England came into force in June 2020,
+          making Electrical Installation Condition Reports (EICRs) mandatory for all private
+          rental properties. This guide explains your legal obligations and how to ensure
+          compliance with electrical safety standards.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Key Compliance Dates</h4>
+          <ul className="list-disc ml-4 text-amber-800 space-y-1">
+            <li>New tenancies from 1 July 2020: EICR required before tenant moves in</li>
+            <li>Existing tenancies: EICR required by 1 April 2021</li>
+            <li>All private rentals in England must now have valid EICRs</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/electrical-inspection.svg"
+          alt="Electrician conducting EICR inspection"
+          caption="Electrical inspections must be conducted by qualified persons"
+          aspectRatio="video"
+        />
+
+        <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
+
+        <p>
+          The Electrical Safety Standards in the Private Rented Sector (England) Regulations
+          2020 require landlords to ensure electrical installations are inspected and tested
+          by a qualified person at least every five years.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Requirement</th>
+                <th className="border p-3 text-left font-semibold">Timing</th>
+                <th className="border p-3 text-left font-semibold">Who Can Do It</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">EICR inspection</td>
+                <td className="border p-3">Every 5 years (or as recommended)</td>
+                <td className="border p-3">Qualified electrician</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Provide EICR to tenant</td>
+                <td className="border p-3">Within 28 days of inspection</td>
+                <td className="border p-3">Landlord/agent</td>
+              </tr>
+              <tr>
+                <td className="border p-3">EICR to new tenant</td>
+                <td className="border p-3">Before they move in</td>
+                <td className="border p-3">Landlord/agent</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Complete remedial work</td>
+                <td className="border p-3">Within 28 days (or as specified)</td>
+                <td className="border p-3">Qualified electrician</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Provide EICR to local authority</td>
+                <td className="border p-3">Within 7 days if requested</td>
+                <td className="border p-3">Landlord/agent</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          The regulations apply to all private residential tenancies in England, including
+          assured shorthold tenancies, licences to occupy, and student accommodation.
+        </p>
+
+        <h2 id="eicr-explained" className="scroll-mt-24">EICR Explained</h2>
+
+        <p>
+          An Electrical Installation Condition Report (EICR) is a formal document produced
+          after inspection and testing of the electrical installation in a property. It
+          identifies any damage, deterioration, defects, or dangerous conditions.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">What an EICR Covers</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-1">
+            <li>Consumer unit (fuse box) condition and safety</li>
+            <li>Wiring condition and adequacy</li>
+            <li>Earthing and bonding</li>
+            <li>Socket outlets and switches</li>
+            <li>Light fittings and accessories</li>
+            <li>Fixed electrical installations throughout</li>
+          </ul>
+        </div>
+
+        <p>
+          The EICR does not cover portable appliances - that's what PAT testing is for.
+          It focuses on the fixed electrical installation that's part of the property.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/eicr-report.svg"
+          alt="Example EICR report document"
+          caption="An EICR report details the condition of all electrical installations"
+          aspectRatio="video"
+        />
+
+        <h2 id="testing-frequency" className="scroll-mt-24">Testing Frequency</h2>
+
+        <p>
+          While the regulations specify a maximum of five years between inspections, the
+          electrician may recommend a shorter interval based on the installation's condition.
+          You must follow the recommended timescale.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">When to Get an EICR</h4>
+          <ul className="list-disc ml-4 text-green-800 space-y-2">
+            <li><strong>Before a new tenancy:</strong> Must be valid when tenant moves in</li>
+            <li><strong>Every 5 years:</strong> Maximum interval required by law</li>
+            <li><strong>After major works:</strong> Following electrical renovations</li>
+            <li><strong>When recommended:</strong> If previous EICR states shorter interval</li>
+            <li><strong>Change of property use:</strong> Converting to rental</li>
+          </ul>
+        </div>
+
+        <p>
+          Properties with older wiring or identified issues may need testing every three
+          years or even annually. The condition report will specify the recommended interval.
+        </p>
+
+        <h2 id="qualified-persons" className="scroll-mt-24">Qualified Persons</h2>
+
+        <p>
+          The regulations require inspections by a "qualified and competent person." This
+          typically means an electrician registered with a competent person scheme recognized
+          by the government.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Scheme</th>
+                <th className="border p-3 text-left font-semibold">Website</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">NICEIC</td>
+                <td className="border p-3">niceic.com</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">NAPIT</td>
+                <td className="border p-3">napit.org.uk</td>
+              </tr>
+              <tr>
+                <td className="border p-3">ELECSA</td>
+                <td className="border p-3">elecsa.co.uk</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">STROMA</td>
+                <td className="border p-3">stroma.com</td>
+              </tr>
+              <tr>
+                <td className="border p-3">BRE</td>
+                <td className="border p-3">bregroup.com</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Always verify an electrician's registration before commissioning work. Ask for
+          their registration number and check it online with the relevant scheme.
+        </p>
+
+        <h2 id="eicr-codes" className="scroll-mt-24">Understanding EICR Codes</h2>
+
+        <p>
+          EICRs use classification codes to indicate the severity of any issues found.
+          Understanding these codes is essential for knowing what action you need to take.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Code</th>
+                <th className="border p-3 text-left font-semibold">Description</th>
+                <th className="border p-3 text-left font-semibold">Action Required</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-bold text-red-600">C1</td>
+                <td className="border p-3">Danger present - risk of injury</td>
+                <td className="border p-3">Immediate remedial action required</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-bold text-orange-600">C2</td>
+                <td className="border p-3">Potentially dangerous</td>
+                <td className="border p-3">Urgent remedial action required</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-bold text-yellow-600">C3</td>
+                <td className="border p-3">Improvement recommended</td>
+                <td className="border p-3">Recommended but not mandatory</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-bold text-blue-600">FI</td>
+                <td className="border p-3">Further investigation required</td>
+                <td className="border p-3">Investigation needed before rating</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">⚠️ C1 and C2 Codes</h4>
+          <p className="text-red-800">
+            If your EICR contains any C1 or C2 codes, the overall result will be "Unsatisfactory"
+            and you must complete remedial work within 28 days (or less if the report specifies).
+            C1 issues should be addressed immediately.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/eicr-codes.svg"
+          alt="EICR classification codes explained"
+          caption="Understanding EICR codes helps prioritize remedial work"
+          aspectRatio="video"
+        />
+
+        <h2 id="remedial-work" className="scroll-mt-24">Remedial Work Requirements</h2>
+
+        <p>
+          If your EICR identifies C1, C2, or FI codes, you must take action. The regulations
+          set specific timescales for completing remedial work.
+        </p>
+
+        <ol className="list-decimal ml-6 space-y-2 my-4">
+          <li>Receive EICR with unsatisfactory result</li>
+          <li>Complete remedial work within 28 days (or shorter if specified)</li>
+          <li>Obtain written confirmation from a qualified person</li>
+          <li>Supply confirmation to tenant within 28 days of completion</li>
+          <li>Supply to local authority within 28 days if requested</li>
+        </ol>
+
+        <p>
+          The written confirmation of remedial work can be a new EICR, a Minor Electrical
+          Installation Works Certificate, or a signed statement from a qualified person.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="pat-testing" className="scroll-mt-24">PAT Testing</h2>
+
+        <p>
+          Portable Appliance Testing (PAT) covers electrical items that plug into sockets
+          rather than the fixed installation. While not a legal requirement for landlords,
+          it's strongly recommended for any appliances you provide.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Appliances to Consider PAT Testing</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-1">
+            <li>Washing machines and dishwashers</li>
+            <li>Fridges and freezers</li>
+            <li>Electric cookers (freestanding)</li>
+            <li>Microwaves and kettles</li>
+            <li>Vacuum cleaners</li>
+            <li>Any portable electrical items you provide</li>
+          </ul>
+        </div>
+
+        <p>
+          Even though PAT testing isn't mandatory, you have a duty to ensure provided
+          appliances are safe. Regular testing protects both tenants and your liability.
+        </p>
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <p>
+          Local authorities can enforce electrical safety standards and impose significant
+          penalties for non-compliance.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Breach</th>
+                <th className="border p-3 text-left font-semibold">Penalty</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">No valid EICR</td>
+                <td className="border p-3">Up to £30,000 civil penalty</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Failure to complete remedial work</td>
+                <td className="border p-3">Up to £30,000 civil penalty</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Not providing EICR to tenant</td>
+                <td className="border p-3">Up to £30,000 civil penalty</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Not providing EICR to local authority</td>
+                <td className="border p-3">Up to £30,000 civil penalty</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Additionally, a valid EICR is required before you can serve a valid Section 21
+          notice in England. Without it, you cannot regain possession using the no-fault
+          eviction route.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Electrical Safety Tracking</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven helps you track EICR expiry dates, store certificates securely,
+            and receive reminders before your next inspection is due.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            Manage EICR Records →
+          </Link>
+        </div>
+
+        <h2 id="electrical-faq" className="scroll-mt-24">Electrical Safety FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How much does an EICR cost?</h3>
+            <p className="text-gray-600">
+              Typically £150-£350 depending on property size and location. Larger properties
+              with more circuits cost more. Get multiple quotes from registered electricians.
+              Be wary of very cheap quotes - thorough testing takes time.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if remedial work can't be done in 28 days?</h3>
+            <p className="text-gray-600">
+              You must provide written evidence to your local authority explaining the delay
+              and demonstrating you've taken all reasonable steps. Document everything - parts
+              shortages, contractor availability, etc. The authority may grant an extension.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Does the EICR cover the whole building?</h3>
+            <p className="text-gray-600">
+              The EICR should cover all parts of the electrical installation that serve your
+              tenant's dwelling. In flats, this includes the individual unit and any landlord
+              supply. Common areas may need separate testing.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can my tenant refuse access for electrical testing?</h3>
+            <p className="text-gray-600">
+              Tenants cannot unreasonably refuse access for electrical inspections. Give
+              reasonable notice (24-48 hours), offer alternative times, and document all
+              attempts. If access is consistently refused, seek legal advice.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 67: UK Fire Safety for Landlords
+  {
+    slug: 'uk-fire-safety-landlords',
+    title: 'UK Fire Safety for Landlords - Complete Compliance Guide 2026',
+    description: 'Essential fire safety guide for UK landlords. Learn about smoke alarms, carbon monoxide detectors, fire doors, furniture regulations, and HMO requirements.',
+    metaDescription: 'UK landlord fire safety guide 2026. Smoke alarm rules, CO detectors, fire doors, furniture regulations, HMO requirements, and compliance explained.',
+    date: '2026-01-03',
+    readTime: '15 min read',
+    wordCount: 1850,
+    category: 'Safety Compliance',
+    tags: ['fire safety', 'smoke alarms', 'carbon monoxide', 'landlord obligations', 'HMO', 'UK property'],
+    author: {
+      name: 'Landlord Heaven Safety Team',
+      role: 'Property Safety Specialists',
+    },
+    heroImage: '/images/blog/placeholder-fire-safety.svg',
+    heroImageAlt: 'UK Fire Safety Requirements for Landlords',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord fire safety requirements UK',
+    secondaryKeywords: ['smoke alarm regulations', 'carbon monoxide alarm', 'fire safety rental', 'landlord fire compliance'],
+    tableOfContents: [
+      { id: 'legal-framework', title: 'Legal Framework', level: 2 },
+      { id: 'smoke-alarms', title: 'Smoke Alarm Requirements', level: 2 },
+      { id: 'co-alarms', title: 'Carbon Monoxide Alarms', level: 2 },
+      { id: 'fire-doors', title: 'Fire Doors', level: 2 },
+      { id: 'furniture-regulations', title: 'Furniture and Furnishings', level: 2 },
+      { id: 'escape-routes', title: 'Escape Routes', level: 2 },
+      { id: 'hmo-requirements', title: 'HMO Fire Safety', level: 2 },
+      { id: 'fire-risk-assessment', title: 'Fire Risk Assessments', level: 2 },
+      { id: 'fire-faq', title: 'Fire Safety FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-gas-safety-landlords', 'uk-electrical-safety-landlords', 'uk-landlord-insurance-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Fire safety is a critical responsibility for all UK landlords. Recent regulatory
+          changes have strengthened requirements, making compliance more important than ever.
+          This comprehensive guide covers everything from smoke alarms to HMO-specific
+          requirements to help you protect your tenants and meet your legal obligations.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">⚠️ 2022 Regulation Changes</h4>
+          <p className="text-red-800">
+            From 1 October 2022, landlords in England must ensure smoke alarms on every
+            storey with living accommodation and carbon monoxide alarms in rooms with
+            fixed combustion appliances (excluding gas cookers). These must be checked
+            at the start of each new tenancy.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/fire-safety-equipment.svg"
+          alt="Fire safety equipment including smoke and CO alarms"
+          caption="Proper fire safety equipment is essential in every rental property"
+          aspectRatio="video"
+        />
+
+        <h2 id="legal-framework" className="scroll-mt-24">Legal Framework</h2>
+
+        <p>
+          Fire safety for rental properties is governed by multiple pieces of legislation,
+          depending on property type and location. Understanding which laws apply to your
+          property is essential for compliance.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Legislation</th>
+                <th className="border p-3 text-left font-semibold">Applies To</th>
+                <th className="border p-3 text-left font-semibold">Key Requirements</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Smoke and CO Alarm Regulations 2015 (amended 2022)</td>
+                <td className="border p-3">All private rentals in England</td>
+                <td className="border p-3">Smoke and CO alarms</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Housing Act 2004</td>
+                <td className="border p-3">All rentals (HHSRS)</td>
+                <td className="border p-3">Fire hazard assessment</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Furniture Regulations 1988/1993</td>
+                <td className="border p-3">Furnished properties</td>
+                <td className="border p-3">Fire-resistant furniture</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Regulatory Reform (Fire Safety) Order 2005</td>
+                <td className="border p-3">HMOs and common areas</td>
+                <td className="border p-3">Fire risk assessment</td>
+              </tr>
+              <tr>
+                <td className="border p-3">HMO Management Regulations</td>
+                <td className="border p-3">Houses in Multiple Occupation</td>
+                <td className="border p-3">Enhanced fire measures</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          In Scotland and Wales, slightly different regulations apply. Scottish landlords
+          must meet requirements under the Housing (Scotland) Act, while Welsh landlords
+          follow regulations under the Renting Homes (Wales) Act 2016.
+        </p>
+
+        <h2 id="smoke-alarms" className="scroll-mt-24">Smoke Alarm Requirements</h2>
+
+        <p>
+          Since October 2022, landlords in England must install at least one smoke alarm
+          on every storey of their property where there is living accommodation. This
+          includes hallways, landings, and open-plan living areas.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Smoke Alarm Placement Rules</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-2">
+            <li>At least one alarm per storey with living accommodation</li>
+            <li>Ideally in circulation spaces (hallways, landings)</li>
+            <li>Ceiling mounted, at least 30cm from walls</li>
+            <li>Away from kitchens to avoid false alarms</li>
+            <li>Tested and working at start of each tenancy</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/smoke-alarm-placement.svg"
+          alt="Correct smoke alarm placement diagram"
+          caption="Smoke alarms should be ceiling-mounted in optimal positions"
+          aspectRatio="video"
+        />
+
+        <p>
+          Types of smoke alarms suitable for rental properties include optical alarms
+          (best for slow-burning fires), ionization alarms (best for fast-flaming fires),
+          and combined heat and smoke detectors. Mains-powered alarms with battery backup
+          are recommended for reliability.
+        </p>
+
+        <h2 id="co-alarms" className="scroll-mt-24">Carbon Monoxide Alarms</h2>
+
+        <p>
+          Carbon monoxide (CO) is an odorless, invisible gas that kills approximately 50
+          people in the UK each year. Since October 2022, CO alarms are mandatory in any
+          room containing a fixed combustion appliance (except gas cookers).
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Appliances Requiring CO Alarms</h4>
+          <ul className="list-disc ml-4 text-amber-800 space-y-2">
+            <li><strong>Gas boilers</strong> - most common requirement</li>
+            <li><strong>Gas fires</strong> - including decorative fires</li>
+            <li><strong>Oil boilers and heaters</strong> - often overlooked</li>
+            <li><strong>Wood burning stoves</strong> - increasingly popular</li>
+            <li><strong>Coal fires</strong> - including multi-fuel stoves</li>
+            <li><strong>Gas cookers</strong> - NOT required (but recommended)</li>
+          </ul>
+        </div>
+
+        <p>
+          CO alarms should be placed at head height (1-3 meters from the appliance) or on
+          the ceiling. They must comply with BS 50291 and be tested at the start of each
+          new tenancy.
+        </p>
+
+        <h2 id="fire-doors" className="scroll-mt-24">Fire Doors</h2>
+
+        <p>
+          Fire doors are designed to compartmentalize fires and provide escape routes.
+          While not mandatory in all rental properties, they're required in HMOs and
+          buildings converted into flats.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Property Type</th>
+                <th className="border p-3 text-left font-semibold">Fire Door Requirements</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Single dwelling house</td>
+                <td className="border p-3">Not legally required (but recommended for kitchens)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Purpose-built flats</td>
+                <td className="border p-3">Fire doors to flat entrance and internal where specified</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Converted flats</td>
+                <td className="border p-3">Fire doors typically required (30-minute rating)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">HMOs (3+ storeys)</td>
+                <td className="border p-3">Fire doors to all letting rooms and kitchens</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Fire doors must be FD30 rated (30 minutes fire resistance), properly fitted with
+          intumescent strips and smoke seals, and equipped with self-closing devices. They
+          should never be propped open or have their closers disabled.
+        </p>
+
+        <h2 id="furniture-regulations" className="scroll-mt-24">Furniture and Furnishings</h2>
+
+        <p>
+          The Furniture and Furnishings (Fire) (Safety) Regulations 1988 (amended 1993)
+          apply to all furnished rental properties. Non-compliant furniture is a serious
+          fire risk and legal breach.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Items That Must Comply</h4>
+          <ul className="list-disc ml-4 text-green-800 space-y-1">
+            <li>Sofas and armchairs</li>
+            <li>Beds and mattresses</li>
+            <li>Headboards with upholstery</li>
+            <li>Cushions and pillows</li>
+            <li>Children's furniture</li>
+            <li>Garden furniture used indoors</li>
+          </ul>
+        </div>
+
+        <p>
+          Compliant items display a permanent label showing they meet fire safety requirements.
+          Items manufactured before 1988 may not comply and should be replaced. Second-hand
+          furniture is particularly risky - always check for labels before using in rentals.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/furniture-label.svg"
+          alt="Fire safety furniture label example"
+          caption="Check for fire safety labels on all upholstered furniture"
+          aspectRatio="video"
+        />
+
+        <h2 id="escape-routes" className="scroll-mt-24">Escape Routes</h2>
+
+        <p>
+          Every occupant must have a safe means of escape in case of fire. This is assessed
+          under the Housing Health and Safety Rating System (HHSRS) and is particularly
+          important in HMOs.
+        </p>
+
+        <ul className="list-disc ml-6 space-y-2 my-4">
+          <li>Clear, unobstructed escape routes from all rooms</li>
+          <li>Adequate lighting in corridors and stairways</li>
+          <li>Windows in upper floors that open sufficiently for escape</li>
+          <li>Doors that can be opened without keys from inside</li>
+          <li>No fire hazards blocking escape paths</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Common Escape Route Issues</h4>
+          <ul className="list-disc ml-4 text-red-800 space-y-1">
+            <li>Deadlocks without thumb-turns on final exit doors</li>
+            <li>Storage blocking hallways or stairways</li>
+            <li>Non-functioning emergency lighting in common areas</li>
+            <li>Window restrictors preventing escape</li>
+            <li>Inadequate inner room arrangements</li>
+          </ul>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="hmo-requirements" className="scroll-mt-24">HMO Fire Safety</h2>
+
+        <p>
+          Houses in Multiple Occupation face the strictest fire safety requirements due to
+          higher occupancy and shared facilities. If you operate an HMO, additional measures
+          are mandatory.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Requirement</th>
+                <th className="border p-3 text-left font-semibold">Small HMO (2 storey)</th>
+                <th className="border p-3 text-left font-semibold">Larger HMO (3+ storey)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Fire doors</td>
+                <td className="border p-3">Recommended</td>
+                <td className="border p-3">Required (FD30)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Fire alarm system</td>
+                <td className="border p-3">Interlinked smoke alarms</td>
+                <td className="border p-3">Grade A fire alarm</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Emergency lighting</td>
+                <td className="border p-3">Not usually required</td>
+                <td className="border p-3">Required in escape routes</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Fire extinguishers</td>
+                <td className="border p-3">Recommended</td>
+                <td className="border p-3">Often required</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Fire blankets</td>
+                <td className="border p-3">Required in kitchens</td>
+                <td className="border p-3">Required in kitchens</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Fire risk assessment</td>
+                <td className="border p-3">Required</td>
+                <td className="border p-3">Required</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Local authorities may impose additional requirements through HMO licensing conditions.
+          Always check with your council for specific requirements in your area.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/hmo-fire-safety.svg"
+          alt="HMO fire safety requirements diagram"
+          caption="HMOs require comprehensive fire safety measures throughout"
+          aspectRatio="video"
+        />
+
+        <h2 id="fire-risk-assessment" className="scroll-mt-24">Fire Risk Assessments</h2>
+
+        <p>
+          A fire risk assessment is required for HMOs and common areas of buildings containing
+          flats. It identifies fire hazards, people at risk, and necessary precautions.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Fire Risk Assessment Steps</h4>
+          <ol className="list-decimal ml-4 text-blue-800 space-y-2">
+            <li>Identify fire hazards (ignition sources, fuel, oxygen)</li>
+            <li>Identify people at risk (occupants, visitors, vulnerable persons)</li>
+            <li>Evaluate risks and decide on precautions</li>
+            <li>Record findings and implement measures</li>
+            <li>Review regularly and update when circumstances change</li>
+          </ol>
+        </div>
+
+        <p>
+          While landlords can conduct simple fire risk assessments themselves for smaller
+          properties, complex HMOs should be assessed by a competent professional. Fire risk
+          assessors can be found through professional bodies like the IFE or FIA.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Fire Safety Compliance Tools</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides fire safety checklists, alarm testing schedules, and
+            reminder systems to help you stay compliant with all fire safety requirements.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Fire Safety Tools →
+          </Link>
+        </div>
+
+        <h2 id="fire-faq" className="scroll-mt-24">Fire Safety FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to test alarms during the tenancy?</h3>
+            <p className="text-gray-600">
+              You must test alarms at the start of each new tenancy. During the tenancy,
+              testing responsibility typically passes to the tenant, but you should remind
+              them to test regularly (monthly recommended) and replace batteries as needed.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What's the penalty for not having smoke alarms?</h3>
+            <p className="text-gray-600">
+              Local authorities can issue remedial notices and, if not complied with, impose
+              fines up to £5,000. Additionally, lack of smoke alarms may invalidate insurance
+              and expose you to civil liability if a fire occurs.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Are battery alarms acceptable?</h3>
+            <p className="text-gray-600">
+              Yes, battery-powered smoke and CO alarms meet the legal minimum. However,
+              mains-powered alarms with battery backup are more reliable. Long-life sealed
+              battery units (10-year life) are a good compromise.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How often should fire extinguishers be serviced?</h3>
+            <p className="text-gray-600">
+              Fire extinguishers should be serviced annually by a competent person and visually
+              checked monthly. They typically need replacing after 5-10 years depending on type.
+              In HMOs, maintenance records should be kept.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to provide fire safety information to tenants?</h3>
+            <p className="text-gray-600">
+              While not legally mandatory for single dwellings, it's best practice to provide
+              fire safety information including escape routes, alarm testing procedures, and
+              emergency contacts. For HMOs, a fire action notice is typically required.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
