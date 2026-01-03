@@ -2314,7 +2314,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ast-overview.svg"
           alt="Assured Shorthold Tenancy Overview - England"
           caption="The AST has been the standard tenancy type in England since 1997"
-          aspectRatio="wide"
+          aspectRatio="hero"
         />
 
         <h2 id="what-is-ast" className="scroll-mt-24">What Is an Assured Shorthold Tenancy?</h2>
@@ -2755,7 +2755,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-section-21-flowchart.svg"
           alt="Section 21 Eviction Process Flowchart"
           caption="The Section 21 process from notice to possession"
-          aspectRatio="wide"
+          aspectRatio="hero"
         />
 
         <h2 id="section-21-overview" className="scroll-mt-24">Section 21 Overview</h2>
@@ -3213,7 +3213,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-section-8-overview.svg"
           alt="Section 8 Eviction Overview England"
           caption="Section 8 requires proving specific grounds for possession"
-          aspectRatio="wide"
+          aspectRatio="hero"
         />
 
         <h2 id="what-is-section-8" className="scroll-mt-24">What Is Section 8?</h2>
@@ -3702,7 +3702,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ground-8-overview.svg"
           alt="Ground 8 Mandatory Rent Arrears Eviction Overview"
           caption="Ground 8 provides mandatory possession for serious rent arrears"
-          aspectRatio="wide"
+          aspectRatio="hero"
         />
 
         <h2 id="what-is-ground-8" className="scroll-mt-24">What Is Ground 8?</h2>
