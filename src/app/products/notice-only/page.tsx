@@ -246,8 +246,8 @@ export default function NoticeOnlyPage() {
             </div>
 
             {/* Value Callout */}
-            <div className="mt-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-6 text-center">
-              <p className="text-lg">
+            <div className="mt-8 bg-[#f8f1ff] rounded-xl p-6 text-center">
+              <p className="text-lg text-gray-900">
                 <strong className="font-bold">Ask Heaven Smart Guidance saves hours of research</strong> and prevents costly mistakes like serving invalid notices or choosing weak grounds
               </p>
             </div>

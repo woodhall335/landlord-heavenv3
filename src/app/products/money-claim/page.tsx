@@ -202,15 +202,15 @@ export default function MoneyClaimPage() {
             </div>
 
             {/* Value Callout */}
-            <div className="bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 text-center">
-              <h3 className="text-2xl font-bold mb-3 flex items-center justify-center gap-2">
-                <BadgePoundSterling className="w-7 h-7" />
+            <div className="bg-[#f8f1ff] rounded-xl p-8 text-center">
+              <h3 className="text-2xl font-bold mb-3 flex items-center justify-center gap-2 text-gray-900">
+                <BadgePoundSterling className="w-7 h-7 text-primary" />
                 Ask Heaven Saves £300-600 in Legal Fees
               </h3>
-              <p className="text-lg mb-4">
+              <p className="text-lg mb-4 text-gray-700">
                 Solicitors charge £300-600 to draft Particulars of Claim and Letters Before Action
               </p>
-              <p className="text-white/90 text-base">
+              <p className="text-gray-600 text-base">
                 With Ask Heaven at £179.99, you get AI-drafted documents PLUS all court forms, arrears schedules, and filing guides
               </p>
             </div>

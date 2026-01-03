@@ -944,6 +944,25 @@ export default function CompleteEvictionPackPage() {
         </Container>
       </section>
 
+      {/* Related Resources */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <RelatedLinks
+              title="Related Resources"
+              links={[
+                productLinks.noticeOnly,
+                productLinks.moneyClaim,
+                toolLinks.section21Generator,
+                toolLinks.section8Generator,
+                blogLinks.evictionTimeline,
+                landingPageLinks.section21Template,
+              ]}
+            />
+          </div>
+        </Container>
+      </section>
+
       {/* Final CTA */}
       <section className="py-16 md:py-20 bg-linear-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
@@ -969,25 +988,6 @@ export default function CompleteEvictionPackPage() {
             <p className="mt-4 text-sm text-gray-600">
               Instant download • Court-ready documents • Lifetime storage • Priority support
             </p>
-          </div>
-        </Container>
-      </section>
-
-      {/* Related Resources */}
-      <section className="py-16 md:py-20">
-        <Container>
-          <div className="max-w-4xl mx-auto">
-            <RelatedLinks
-              title="Related Resources"
-              links={[
-                productLinks.noticeOnly,
-                productLinks.moneyClaim,
-                toolLinks.section21Generator,
-                toolLinks.section8Generator,
-                blogLinks.evictionTimeline,
-                landingPageLinks.section21Template,
-              ]}
-            />
           </div>
         </Container>
       </section>
