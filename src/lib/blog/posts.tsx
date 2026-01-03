@@ -22267,6 +22267,1000 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 59: Northern Ireland Private Tenancies Order
+  {
+    slug: 'northern-ireland-private-tenancies-order',
+    title: 'Private Tenancies Order NI - Complete Landlord Guide 2026',
+    description: 'Complete guide to the Private Tenancies (Northern Ireland) Order 2006. Landlord obligations, tenant rights, and compliance requirements for NI landlords.',
+    metaDescription: 'Northern Ireland Private Tenancies Order guide 2026. NI landlord obligations, tenant rights, and legal compliance requirements for rental properties.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1720,
+    category: 'Northern Ireland Law',
+    tags: ['Northern Ireland', 'Private Tenancies Order', 'landlord law', 'NI tenancy', 'landlord obligations', 'tenant rights'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ni-tenancies.svg',
+    heroImageAlt: 'Northern Ireland Private Tenancies Order Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'private tenancies order northern ireland',
+    secondaryKeywords: ['NI landlord law', 'Northern Ireland tenancy', 'PTO NI', 'private rented sector NI'],
+    tableOfContents: [
+      { id: 'pto-overview', title: 'Order Overview', level: 2 },
+      { id: 'landlord-obligations', title: 'Landlord Obligations', level: 2 },
+      { id: 'tenant-rights', title: 'Tenant Rights', level: 2 },
+      { id: 'rent-books', title: 'Rent Books and Statements', level: 2 },
+      { id: 'fitness-standard', title: 'Fitness Standard', level: 2 },
+      { id: 'enforcement', title: 'Enforcement and Penalties', level: 2 },
+      { id: 'pto-faq', title: 'PTO FAQ', level: 2 },
+    ],
+    relatedPosts: ['ni-landlord-registration', 'ni-eviction-process', 'ni-deposit-protection'],
+    content: (
+      <>
+        <p className="lead">
+          The Private Tenancies (Northern Ireland) Order 2006 is the primary legislation
+          governing private rented accommodation in Northern Ireland. Every landlord
+          letting property in NI must understand and comply with this Order. This
+          guide covers all the key requirements for 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ni-pto-hero.svg"
+          alt="Northern Ireland Private Tenancies Order"
+          caption="The PTO sets out the legal framework for private lettings in NI"
+          aspectRatio="video"
+        />
+
+        <h2 id="pto-overview" className="scroll-mt-24">Order Overview</h2>
+
+        <p>
+          The Private Tenancies (Northern Ireland) Order 2006, along with subsequent
+          amendments, establishes the legal framework for private rental properties
+          in Northern Ireland. Key features include:
+        </p>
+
+        <ul>
+          <li>Mandatory landlord registration</li>
+          <li>Fitness standard for rental properties</li>
+          <li>Tenant rights and protections</li>
+          <li>Rent book and information requirements</li>
+          <li>Enforcement powers for councils</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Key Difference from GB</h4>
+          <p className="text-blue-800">
+            Northern Ireland has its own distinct tenancy law separate from England,
+            Scotland, and Wales. Landlords operating in NI must comply with NI-specific
+            legislation, not UK-wide laws.
+          </p>
+        </div>
+
+        <h2 id="landlord-obligations" className="scroll-mt-24">Landlord Obligations</h2>
+
+        <p>
+          Under the PTO, landlords in Northern Ireland must:
+        </p>
+
+        <h3>Registration Requirements</h3>
+
+        <ul>
+          <li>Register with the NI landlord registration scheme</li>
+          <li>Renew registration as required</li>
+          <li>Update registration when details change</li>
+          <li>Display registration number on advertisements</li>
+        </ul>
+
+        <h3>Property Standards</h3>
+
+        <ul>
+          <li>Ensure property meets fitness standard at start of tenancy</li>
+          <li>Maintain property in good repair</li>
+          <li>Keep installations in working order</li>
+          <li>Provide essential amenities</li>
+        </ul>
+
+        <h3>Information Requirements</h3>
+
+        <ul>
+          <li>Provide tenant with rent book or statement of tenancy terms</li>
+          <li>Give tenant landlord&apos;s name and address</li>
+          <li>Provide information about deposit protection</li>
+          <li>Give required notices before taking action</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ni-obligations.svg"
+          alt="NI Landlord Obligations"
+          caption="NI landlords have specific legal obligations under the PTO"
+          aspectRatio="video"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="tenant-rights" className="scroll-mt-24">Tenant Rights</h2>
+
+        <p>
+          Tenants in Northern Ireland have various rights protected by law:
+        </p>
+
+        <h3>Right to a Written Document</h3>
+
+        <p>
+          Tenants are entitled to receive either:
+        </p>
+
+        <ul>
+          <li>A rent book (for weekly/fortnightly tenancies)</li>
+          <li>A statement of tenancy terms (for monthly+ tenancies)</li>
+          <li>This must be provided within 28 days</li>
+        </ul>
+
+        <h3>Right to a Fit Property</h3>
+
+        <ul>
+          <li>Property must meet the fitness standard</li>
+          <li>Landlord must carry out necessary repairs</li>
+          <li>Tenant can report unfit properties to council</li>
+        </ul>
+
+        <h3>Protection from Eviction</h3>
+
+        <ul>
+          <li>Cannot be evicted without proper notice</li>
+          <li>Court order required for possession</li>
+          <li>Protection from harassment and illegal eviction</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Notice to Quit</h4>
+          <p className="text-amber-800">
+            In NI, landlords must give at least 4 weeks&apos; notice to quit for weekly
+            tenancies, or notice equivalent to the rental period (up to a maximum
+            of 4 weeks) for other periodic tenancies.
+          </p>
+        </div>
+
+        <h2 id="rent-books" className="scroll-mt-24">Rent Books and Statements</h2>
+
+        <p>
+          The PTO requires landlords to provide written documentation about the
+          tenancy:
+        </p>
+
+        <h3>Rent Book (Weekly/Fortnightly Tenancies)</h3>
+
+        <p>
+          A rent book must contain:
+        </p>
+
+        <ul>
+          <li>Landlord&apos;s name and address</li>
+          <li>Tenant&apos;s name</li>
+          <li>Property address</li>
+          <li>Amount of rent and when payable</li>
+          <li>Any other payments required</li>
+          <li>Record of payments made</li>
+        </ul>
+
+        <h3>Statement of Tenancy Terms (Monthly+ Tenancies)</h3>
+
+        <p>
+          A statement must include:
+        </p>
+
+        <ul>
+          <li>Names of landlord and tenant</li>
+          <li>Property address</li>
+          <li>Tenancy start date</li>
+          <li>Duration or periodic nature</li>
+          <li>Rent amount and payment frequency</li>
+          <li>Any other charges</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ni-rent-book.svg"
+          alt="NI Rent Book Requirements"
+          caption="Written documentation must be provided within 28 days"
+          aspectRatio="video"
+        />
+
+        <h2 id="fitness-standard" className="scroll-mt-24">Fitness Standard</h2>
+
+        <p>
+          Properties must meet the statutory fitness standard, which requires:
+        </p>
+
+        <h3>Structural Requirements</h3>
+
+        <ul>
+          <li>Structurally stable</li>
+          <li>Free from serious disrepair</li>
+          <li>Free from dampness prejudicial to health</li>
+          <li>Adequate natural lighting</li>
+          <li>Adequate ventilation</li>
+        </ul>
+
+        <h3>Essential Facilities</h3>
+
+        <ul>
+          <li>Adequate water supply</li>
+          <li>Satisfactory facilities for cooking</li>
+          <li>Suitable sink with hot and cold water</li>
+          <li>Bathroom with bath or shower and toilet</li>
+          <li>Effective drainage</li>
+        </ul>
+
+        <h3>Safety Requirements</h3>
+
+        <ul>
+          <li>Satisfactory heating facilities</li>
+          <li>Safe electrical installations</li>
+          <li>Safe gas installations (where applicable)</li>
+          <li>Fire safety provisions</li>
+        </ul>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requirement</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Standard</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Heating</td>
+                <td className="px-6 py-4">Capable of heating main living room to 21°C</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Hot water</td>
+                <td className="px-6 py-4">Constant supply at kitchen and bathroom</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Electrical safety</td>
+                <td className="px-6 py-4">Safe and functional wiring</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Fire safety</td>
+                <td className="px-6 py-4">Smoke alarms on each floor, escape routes</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="enforcement" className="scroll-mt-24">Enforcement and Penalties</h2>
+
+        <p>
+          Local councils enforce the PTO and can take action against non-compliant
+          landlords:
+        </p>
+
+        <h3>Council Powers</h3>
+
+        <ul>
+          <li>Inspect properties for fitness</li>
+          <li>Serve improvement notices</li>
+          <li>Prohibit occupation of unfit properties</li>
+          <li>Carry out works in default</li>
+          <li>Prosecute for offences</li>
+        </ul>
+
+        <h3>Penalties</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Offence</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Maximum Penalty</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Failure to register</td>
+                <td className="px-6 py-4">Fine up to £2,500</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Failure to provide rent book</td>
+                <td className="px-6 py-4">Fine up to £2,500</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Letting unfit property</td>
+                <td className="px-6 py-4">Fine up to £5,000</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Harassment/illegal eviction</td>
+                <td className="px-6 py-4">Criminal prosecution, fines, imprisonment</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Rent Penalty Notices</h4>
+          <p className="text-red-800">
+            For certain offences, tenants may be able to recover up to 6 months&apos;
+            rent through a rent penalty notice. This is in addition to any fines
+            imposed on the landlord.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ni-enforcement.svg"
+          alt="NI Enforcement and Penalties"
+          caption="Councils have significant enforcement powers under the PTO"
+          aspectRatio="video"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">NI Compliance Pack</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides all documents required for NI compliance,
+            including rent books, statements of tenancy terms, and registration
+            guidance.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View NI Templates →
+          </Link>
+        </div>
+
+        <h2 id="pto-faq" className="scroll-mt-24">PTO FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Does the PTO apply to all rental properties?</h3>
+            <p className="text-gray-600">
+              The PTO applies to most private tenancies in NI. Some exceptions exist,
+              such as holiday lets under 6 months, student accommodation, and
+              properties let with substantial board.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use an English tenancy agreement in NI?</h3>
+            <p className="text-gray-600">
+              No, you should use an agreement specifically drafted for NI law.
+              English agreements reference different legislation and may not be
+              valid or enforceable in Northern Ireland.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How do I register as a landlord in NI?</h3>
+            <p className="text-gray-600">
+              You must register with the NI landlord registration scheme before
+              letting any property. Registration is done online and there is a
+              registration fee.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What happens if my property fails the fitness standard?</h3>
+            <p className="text-gray-600">
+              The council may serve an improvement notice requiring you to carry
+              out works within a specified time. Failure to comply can lead to
+              prosecution, prohibition orders, or the council doing the work and
+              charging you.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 60: Northern Ireland Landlord Registration
+  {
+    slug: 'northern-ireland-landlord-registration',
+    title: 'NI Landlord Registration - Complete Guide 2026',
+    description: 'How to register as a landlord in Northern Ireland. Registration requirements, fees, renewal process, and consequences of non-registration.',
+    metaDescription: 'Northern Ireland landlord registration guide 2026. How to register, fees, renewal requirements, and penalties for non-registration.',
+    date: '2026-01-03',
+    readTime: '11 min read',
+    wordCount: 1540,
+    category: 'Northern Ireland Law',
+    tags: ['Northern Ireland', 'landlord registration', 'NI registration', 'landlord compliance', 'private tenancies'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ni-registration.svg',
+    heroImageAlt: 'Northern Ireland Landlord Registration Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'northern ireland landlord registration',
+    secondaryKeywords: ['NI landlord register', 'register as landlord NI', 'landlord registration scheme NI', 'NI private tenancies registration'],
+    tableOfContents: [
+      { id: 'registration-overview', title: 'Registration Overview', level: 2 },
+      { id: 'who-must-register', title: 'Who Must Register', level: 2 },
+      { id: 'how-to-register', title: 'How to Register', level: 2 },
+      { id: 'fees-renewal', title: 'Fees and Renewal', level: 2 },
+      { id: 'non-registration', title: 'Non-Registration Consequences', level: 2 },
+      { id: 'registration-faq', title: 'Registration FAQ', level: 2 },
+    ],
+    relatedPosts: ['northern-ireland-private-tenancies-order', 'ni-eviction-process', 'ni-deposit-protection'],
+    content: (
+      <>
+        <p className="lead">
+          All landlords letting private residential property in Northern Ireland
+          must register with the Landlord Registration Scheme. This is a legal
+          requirement and failure to register is a criminal offence. This guide
+          explains everything you need to know about NI landlord registration.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ni-reg-hero.svg"
+          alt="NI Landlord Registration"
+          caption="Registration is mandatory for all NI landlords"
+          aspectRatio="video"
+        />
+
+        <h2 id="registration-overview" className="scroll-mt-24">Registration Overview</h2>
+
+        <p>
+          The Landlord Registration Scheme was introduced to improve standards
+          in the private rented sector and protect tenants. Key features include:
+        </p>
+
+        <ul>
+          <li>Mandatory registration for all private landlords</li>
+          <li>Publicly searchable register of landlords</li>
+          <li>Requirement to display registration number</li>
+          <li>Periodic renewal required</li>
+          <li>Enforcement by local councils</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Scheme Purpose</h4>
+          <p className="text-blue-800">
+            The registration scheme helps councils identify and contact landlords,
+            enables tenants to verify their landlord is registered, and provides
+            a mechanism for ensuring compliance with housing standards.
+          </p>
+        </div>
+
+        <h2 id="who-must-register" className="scroll-mt-24">Who Must Register</h2>
+
+        <p>
+          You must register if you:
+        </p>
+
+        <ul>
+          <li>Are the owner of a property let privately in NI</li>
+          <li>Receive rent from tenants for residential accommodation</li>
+          <li>Are an agent acting on behalf of a landlord</li>
+        </ul>
+
+        <h3>Properties Covered</h3>
+
+        <ul>
+          <li>Houses and flats let on private tenancies</li>
+          <li>Rooms let in a shared house</li>
+          <li>HMOs (Houses in Multiple Occupation)</li>
+          <li>Properties let to housing associations for sub-letting</li>
+        </ul>
+
+        <h3>Exemptions</h3>
+
+        <p>
+          Some properties are exempt from registration:
+        </p>
+
+        <ul>
+          <li>Holiday lets for less than 6 months</li>
+          <li>Properties let to close family members</li>
+          <li>Student accommodation provided by educational institutions</li>
+          <li>Social housing let by registered housing associations</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-who-registers.svg"
+          alt="Who Must Register NI"
+          caption="Most private landlords must register with the scheme"
+          aspectRatio="video"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="how-to-register" className="scroll-mt-24">How to Register</h2>
+
+        <p>
+          Registration is done online through the NI Landlord Registration website.
+          Follow these steps:
+        </p>
+
+        <h3>Step 1: Gather Information</h3>
+
+        <p>
+          You will need:
+        </p>
+
+        <ul>
+          <li>Personal details (name, address, contact information)</li>
+          <li>Details of all rental properties</li>
+          <li>Agent details (if using one)</li>
+          <li>Payment method for the registration fee</li>
+        </ul>
+
+        <h3>Step 2: Complete Online Form</h3>
+
+        <ul>
+          <li>Visit the official registration website</li>
+          <li>Create an account if new</li>
+          <li>Enter all required details accurately</li>
+          <li>Declare compliance with landlord obligations</li>
+        </ul>
+
+        <h3>Step 3: Pay the Fee</h3>
+
+        <ul>
+          <li>Pay the registration fee online</li>
+          <li>Fee is per landlord, not per property</li>
+          <li>Additional fees for additional properties</li>
+        </ul>
+
+        <h3>Step 4: Receive Confirmation</h3>
+
+        <ul>
+          <li>Registration number issued</li>
+          <li>Confirmation email sent</li>
+          <li>Certificate available to download</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Display Requirements</h4>
+          <p className="text-green-800">
+            Once registered, you must include your registration number in all
+            property advertisements, including online listings, newspaper ads,
+            and to-let boards.
+          </p>
+        </div>
+
+        <h2 id="fees-renewal" className="scroll-mt-24">Fees and Renewal</h2>
+
+        <p>
+          Registration involves fees and periodic renewal:
+        </p>
+
+        <h3>Registration Fees</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Registration Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Initial registration (first property)</td>
+                <td className="px-6 py-4">Check current NI rates</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Additional properties</td>
+                <td className="px-6 py-4">Additional fee per property</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Renewal</td>
+                <td className="px-6 py-4">Same as initial registration</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Renewal Process</h3>
+
+        <ul>
+          <li>Registration must be renewed periodically</li>
+          <li>Reminder sent before expiry</li>
+          <li>Same online process as initial registration</li>
+          <li>Must update any changed details</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ni-renewal.svg"
+          alt="NI Registration Renewal"
+          caption="Set reminders to renew registration before expiry"
+          aspectRatio="video"
+        />
+
+        <h2 id="non-registration" className="scroll-mt-24">Non-Registration Consequences</h2>
+
+        <p>
+          Failing to register as a landlord in NI has serious consequences:
+        </p>
+
+        <h3>Criminal Offence</h3>
+
+        <ul>
+          <li>Letting without registration is a criminal offence</li>
+          <li>Maximum fine up to £2,500</li>
+          <li>Prosecuted in the magistrates&apos; court</li>
+        </ul>
+
+        <h3>Rent Penalty Notice</h3>
+
+        <ul>
+          <li>Tenant can apply for a rent penalty notice</li>
+          <li>Recovery of up to 6 months&apos; rent</li>
+          <li>Cannot be recovered from the tenant</li>
+        </ul>
+
+        <h3>Restrictions on Notices</h3>
+
+        <ul>
+          <li>May be unable to serve valid notices to quit</li>
+          <li>Possession proceedings may be affected</li>
+          <li>Court may refuse to grant possession</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Register Before Letting</h4>
+          <p className="text-red-800">
+            You must be registered before you let any property or advertise it
+            for rent. Registering after the tenancy starts may not protect you
+            from penalties for the period before registration.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">NI Landlord Starter Pack</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides a complete starter pack for NI landlords,
+            including registration guidance, tenancy documents, and compliance
+            checklists.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View NI Starter Pack →
+          </Link>
+        </div>
+
+        <h2 id="registration-faq" className="scroll-mt-24">Registration FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can tenants check if their landlord is registered?</h3>
+            <p className="text-gray-600">
+              Yes, the landlord register is publicly searchable. Tenants can check
+              if their landlord is registered using their name or address.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to register separately for each property?</h3>
+            <p className="text-gray-600">
+              No, you register as a landlord once, then add each property to your
+              registration. There may be additional fees for multiple properties.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I use a letting agent?</h3>
+            <p className="text-gray-600">
+              You must still register as the landlord. You can add your agent&apos;s
+              details to the registration and they can manage the tenancy on your
+              behalf, but the registration is in your name.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What happens if I forget to renew?</h3>
+            <p className="text-gray-600">
+              If your registration lapses, you are effectively unregistered.
+              This is an offence and you should renew immediately. Tenants may
+              be able to claim a rent penalty notice for the unregistered period.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 61: Northern Ireland Deposit Protection
+  {
+    slug: 'northern-ireland-deposit-protection',
+    title: 'NI Tenancy Deposit Protection - Complete Guide 2026',
+    description: 'How to protect tenancy deposits in Northern Ireland. Deposit scheme requirements, protection deadlines, and returning deposits at end of tenancy.',
+    metaDescription: 'Northern Ireland deposit protection guide 2026. NI deposit scheme requirements, protection deadlines, prescribed information, and dispute resolution.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1620,
+    category: 'Northern Ireland Law',
+    tags: ['Northern Ireland', 'deposit protection', 'tenancy deposit', 'NI deposit scheme', 'landlord compliance'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ni-deposit.svg',
+    heroImageAlt: 'Northern Ireland Deposit Protection Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'northern ireland deposit protection',
+    secondaryKeywords: ['NI deposit scheme', 'tenancy deposit NI', 'protect deposit Northern Ireland', 'NI landlord deposit'],
+    tableOfContents: [
+      { id: 'deposit-overview', title: 'Deposit Protection Overview', level: 2 },
+      { id: 'protection-requirements', title: 'Protection Requirements', level: 2 },
+      { id: 'prescribed-information', title: 'Prescribed Information', level: 2 },
+      { id: 'returning-deposit', title: 'Returning the Deposit', level: 2 },
+      { id: 'disputes', title: 'Deposit Disputes', level: 2 },
+      { id: 'deposit-faq', title: 'Deposit FAQ', level: 2 },
+    ],
+    relatedPosts: ['northern-ireland-private-tenancies-order', 'northern-ireland-landlord-registration', 'ni-eviction-process'],
+    content: (
+      <>
+        <p className="lead">
+          Landlords in Northern Ireland must protect tenancy deposits in a
+          government-approved scheme. This requirement, introduced in 2013,
+          protects tenants from unfair deposit deductions and provides a
+          dispute resolution process. This guide explains all requirements.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ni-deposit-hero.svg"
+          alt="NI Tenancy Deposit Protection"
+          caption="Deposits must be protected in an approved scheme within 14 days"
+          aspectRatio="video"
+        />
+
+        <h2 id="deposit-overview" className="scroll-mt-24">Deposit Protection Overview</h2>
+
+        <p>
+          Under the Tenancy Deposit Schemes Regulations (Northern Ireland) 2012,
+          landlords must protect deposits taken for private tenancies. Key features:
+        </p>
+
+        <ul>
+          <li>Applies to all deposits taken for private tenancies</li>
+          <li>Must be protected within 14 days of receipt</li>
+          <li>Prescribed information must be given to tenant</li>
+          <li>Free dispute resolution service available</li>
+          <li>Penalties for non-compliance</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Approved Scheme</h4>
+          <p className="text-blue-800">
+            The Tenancy Deposit Scheme (TDS) operates in Northern Ireland. This is
+            a custodial-style scheme where the deposit is held by the scheme rather
+            than the landlord.
+          </p>
+        </div>
+
+        <h2 id="protection-requirements" className="scroll-mt-24">Protection Requirements</h2>
+
+        <h3>What Must Be Protected</h3>
+
+        <ul>
+          <li>Any deposit (money paid as security)</li>
+          <li>Regardless of amount</li>
+          <li>Including deposits held by agents</li>
+          <li>For all private tenancies starting after 1 April 2013</li>
+        </ul>
+
+        <h3>Timing Requirements</h3>
+
+        <ul>
+          <li>Deposit must be protected within 14 days of receipt</li>
+          <li>Prescribed information within 28 days</li>
+          <li>Must remain protected throughout the tenancy</li>
+        </ul>
+
+        <h3>How to Protect</h3>
+
+        <ol>
+          <li>Receive deposit from tenant</li>
+          <li>Submit deposit to TDS within 14 days</li>
+          <li>Complete required information online</li>
+          <li>Pay any administration fees</li>
+          <li>Receive confirmation from scheme</li>
+        </ol>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-protect-deposit.svg"
+          alt="How to Protect Deposit NI"
+          caption="Follow the scheme process to protect deposits correctly"
+          aspectRatio="video"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="prescribed-information" className="scroll-mt-24">Prescribed Information</h2>
+
+        <p>
+          Within 28 days of receiving the deposit, you must give the tenant
+          certain prescribed information:
+        </p>
+
+        <h3>Information Required</h3>
+
+        <ul>
+          <li>Amount of deposit protected</li>
+          <li>Property address</li>
+          <li>Landlord&apos;s contact details</li>
+          <li>Name and contact details of deposit scheme</li>
+          <li>Purpose of the deposit</li>
+          <li>How to apply for release at end of tenancy</li>
+          <li>What to do in case of dispute</li>
+          <li>Circumstances where deductions may be made</li>
+        </ul>
+
+        <h3>How to Provide</h3>
+
+        <ul>
+          <li>In writing to the tenant</li>
+          <li>Keep proof of service</li>
+          <li>TDS provides template documents</li>
+          <li>Must be provided even if deposit paid by third party</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Evidence of Compliance</h4>
+          <p className="text-amber-800">
+            Keep copies of all documents given to the tenant and proof of when
+            they were provided. You may need to prove compliance if challenged.
+          </p>
+        </div>
+
+        <h2 id="returning-deposit" className="scroll-mt-24">Returning the Deposit</h2>
+
+        <p>
+          At the end of the tenancy, the deposit return process is:
+        </p>
+
+        <h3>Where No Deductions</h3>
+
+        <ol>
+          <li>Tenant applies to TDS for release</li>
+          <li>Landlord confirms agreement to full return</li>
+          <li>TDS releases deposit to tenant</li>
+          <li>Usually processed within 10 working days</li>
+        </ol>
+
+        <h3>Where Deductions Proposed</h3>
+
+        <ol>
+          <li>Landlord proposes deductions with evidence</li>
+          <li>Tenant agrees or disputes</li>
+          <li>If agreed, deposit split accordingly</li>
+          <li>If disputed, goes to adjudication</li>
+        </ol>
+
+        <h3>Valid Deduction Reasons</h3>
+
+        <ul>
+          <li>Damage beyond fair wear and tear</li>
+          <li>Unpaid rent</li>
+          <li>Breach of tenancy agreement</li>
+          <li>Cleaning costs (if beyond normal standards)</li>
+          <li>Missing items</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-returning-deposit.svg"
+          alt="Returning Deposit NI"
+          caption="Document property condition at start and end of tenancy"
+          aspectRatio="video"
+        />
+
+        <h2 id="disputes" className="scroll-mt-24">Deposit Disputes</h2>
+
+        <p>
+          If landlord and tenant disagree about deductions:
+        </p>
+
+        <h3>Adjudication Process</h3>
+
+        <ul>
+          <li>Either party can request adjudication through TDS</li>
+          <li>Free service (included in protection fee)</li>
+          <li>Both parties submit evidence</li>
+          <li>Independent adjudicator makes decision</li>
+          <li>Decision is binding</li>
+        </ul>
+
+        <h3>Evidence to Submit</h3>
+
+        <ul>
+          <li>Tenancy agreement</li>
+          <li>Inventory and check-in report</li>
+          <li>Check-out report</li>
+          <li>Photos (dated)</li>
+          <li>Quotes or invoices for repairs/cleaning</li>
+          <li>Correspondence about issues</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Inventory Importance</h4>
+          <p className="text-green-800">
+            A detailed, dated inventory with photos at the start of tenancy is
+            essential for any deduction claim. Without this evidence, adjudicators
+            typically rule in the tenant&apos;s favour.
+          </p>
+        </div>
+
+        <h3>Non-Compliance Penalties</h3>
+
+        <p>
+          If you fail to protect the deposit correctly:
+        </p>
+
+        <ul>
+          <li>Cannot serve a valid notice to quit</li>
+          <li>Court may award tenant 1-3x deposit amount</li>
+          <li>Must return full deposit regardless of damage</li>
+          <li>May face rent penalty notice claim</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">NI Deposit Documentation</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides inventory templates, check-in/check-out
+            reports, and prescribed information templates for NI landlords.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View NI Templates →
+          </Link>
+        </div>
+
+        <h2 id="deposit-faq" className="scroll-mt-24">Deposit FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is NI deposit protection different from England?</h3>
+            <p className="text-gray-600">
+              Yes, NI has its own scheme (TDS Northern Ireland) with different
+              rules. The 14-day protection deadline is shorter than England&apos;s
+              30 days, and NI uses a custodial-only model.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I hold the deposit myself?</h3>
+            <p className="text-gray-600">
+              No, in NI the deposit must be transferred to the TDS scheme.
+              This is a custodial scheme where TDS holds the actual money,
+              unlike insurance-based schemes in England.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What is the maximum deposit I can take?</h3>
+            <p className="text-gray-600">
+              There is no legal maximum for deposits in NI, unlike England.
+              However, practical considerations and market norms typically
+              mean deposits of 1-2 months&apos; rent.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant paid through benefits?</h3>
+            <p className="text-gray-600">
+              If a third party (like a council or charity) paid the deposit on
+              behalf of the tenant, the same protection requirements apply. The
+              prescribed information must still be given to the tenant.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
