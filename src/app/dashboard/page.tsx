@@ -6,7 +6,7 @@
 
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
@@ -41,6 +41,13 @@ export default function DashboardPage() {
   const [documents, setDocuments] = useState<Document[]>([]);
   const [stats, setStats] = useState<any>(null);
   const [isLoadingData, setIsLoadingData] = useState(false);
+  const statsSectionRef = useRef<HTMLDivElement>(null);
+
+  const handleScrollToStats = () => {
+    setTimeout(() => {
+      statsSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  };
 
   const fetchDashboardData = useCallback(async () => {
     if (!isAuthenticated) return;
@@ -147,9 +154,9 @@ export default function DashboardPage() {
       <TealHero
         title="Dashboard"
         subtitle={
-          <a href="#total-cases" className="hero-btn-pulse">
+          <button onClick={handleScrollToStats} className="hero-btn-pulse">
             Overview of your cases & activity →
-          </a>
+          </button>
         }
         eyebrow={`Welcome${user?.full_name ? `, ${user.full_name}` : ''}`}
         align="left"
@@ -158,7 +165,7 @@ export default function DashboardPage() {
       <Container size="large" className="py-8">
         {/* Stats Overview */}
         {stats && (
-          <div id="total-cases" className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 scroll-mt-8">
+          <div ref={statsSectionRef} className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 scroll-mt-8">
             <Card padding="medium">
               <div className="text-sm text-gray-600 mb-1">Total Cases</div>
               <div className="text-3xl font-bold text-charcoal">{stats.overview.total}</div>
