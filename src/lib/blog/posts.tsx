@@ -8534,6 +8534,1301 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+  // ============================================
+  // POST 16: County Court Eviction Forms
+  // Target: 1,500+ words
+  // ============================================
+  {
+    slug: 'england-county-court-forms',
+    title: 'County Court Eviction Forms Explained - N5, N5B, N119 (England 2026)',
+    description: 'Confused by eviction court forms? This guide explains N5, N5B, N119, N325 and other key forms you need for possession proceedings in England.',
+    metaDescription: 'County court eviction forms explained. N5, N5B, N119, N325 forms for landlord possession claims. Which form to use and how to complete them correctly.',
+    date: '2026-01-03',
+    updatedDate: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1720,
+    category: 'Eviction Process',
+    tags: ['Court Forms', 'N5 Form', 'N5B Form', 'Possession Claim', 'County Court'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-court-forms.svg',
+    heroImageAlt: 'County Court Eviction Forms - N5, N5B, N119',
+    showUrgencyBanner: false,
+    targetKeyword: 'county court eviction forms',
+    secondaryKeywords: ['N5 form', 'N5B form', 'N119 form', 'possession claim form', 'eviction paperwork'],
+    tableOfContents: [
+      { id: 'overview', title: 'Overview of Court Forms', level: 2 },
+      { id: 'n5-form', title: 'Form N5 - Standard Possession', level: 2 },
+      { id: 'n5b-form', title: 'Form N5B - Accelerated Possession', level: 2 },
+      { id: 'n119-form', title: 'Form N119 - Particulars of Claim', level: 2 },
+      { id: 'other-forms', title: 'Other Important Forms', level: 2 },
+      { id: 'completing-forms', title: 'Completing Forms Correctly', level: 2 },
+      { id: 'forms-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-possession-hearing', 'england-section-21-process', 'england-section-8-process'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          Navigating the county court system requires completing the right forms correctly. Using the
+          wrong form or making errors can delay your possession claim by weeks or even result in
+          dismissal. This guide explains every form you&apos;ll need for eviction proceedings in England,
+          when to use each one, and how to complete them properly.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-blue-800 text-lg mb-2">Forms Are Free to Download</p>
+          <p className="text-blue-700">
+            All court forms are available free from GOV.UK and HMCTS. However, you must pay court
+            fees when submitting your claim. Our Complete Eviction Pack includes pre-filled forms
+            based on your specific situation.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-court-forms-overview.svg"
+          alt="County Court Eviction Forms Overview"
+          caption="Understanding which form to use is the first step in court proceedings"
+          aspectRatio="hero"
+        />
+
+        <h2 id="overview" className="scroll-mt-24">Overview of Court Forms</h2>
+
+        <p>
+          The forms you need depend on which eviction route you&apos;re using:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Eviction Type</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Main Form</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Additional Forms</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="p-4 border-b">Section 21 (Accelerated)</td>
+                <td className="p-4 border-b font-medium">N5B</td>
+                <td className="p-4 border-b">None required</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b">Section 21 (Standard)</td>
+                <td className="p-4 border-b font-medium">N5</td>
+                <td className="p-4 border-b">N119 (Particulars of Claim)</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b">Section 8</td>
+                <td className="p-4 border-b font-medium">N5</td>
+                <td className="p-4 border-b">N119 (Particulars of Claim)</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b">Warrant/Bailiff</td>
+                <td className="p-4 border-b font-medium">N325</td>
+                <td className="p-4 border-b">N244 (if suspended order)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Court Fees (2026)</h3>
+        <ul>
+          <li><strong>N5B (Accelerated possession):</strong> £365</li>
+          <li><strong>N5 (Standard possession):</strong> £365</li>
+          <li><strong>N325 (Warrant of possession):</strong> £130</li>
+          <li><strong>N244 (Application notice):</strong> £119</li>
+        </ul>
+
+        <h2 id="n5-form" className="scroll-mt-24">Form N5 - Claim for Possession of Property</h2>
+
+        <p>
+          Form N5 is the standard possession claim form used for most eviction proceedings. You&apos;ll
+          use this for:
+        </p>
+        <ul>
+          <li>All Section 8 claims (rent arrears, antisocial behaviour, breach, etc.)</li>
+          <li>Section 21 claims where you&apos;re also claiming rent arrears</li>
+          <li>Any possession claim that doesn&apos;t qualify for the accelerated procedure</li>
+        </ul>
+
+        <h3>What N5 Requires</h3>
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <ul className="space-y-2">
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Property address and description</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Landlord&apos;s name and address (claimant)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Tenant&apos;s name and address (defendant)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Type of tenancy and start date</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Current rent amount and payment frequency</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Amount of any rent arrears (if claiming)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Daily rate of rent (for ongoing arrears calculation)</span>
+            </li>
+          </ul>
+        </div>
+
+        <h3>N5 Must Be Accompanied By</h3>
+        <ul>
+          <li>Form N119 (Particulars of Claim) - detailing the grounds and evidence</li>
+          <li>Copy of the tenancy agreement</li>
+          <li>Copy of the Section 8 or Section 21 notice you served</li>
+          <li>Proof of service of the notice</li>
+          <li>Court fee payment</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-n5-form.svg"
+          alt="Form N5 - Claim for Possession"
+          caption="Form N5 is the standard possession claim form for Section 8 cases"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="n5b-form" className="scroll-mt-24">Form N5B - Accelerated Possession Claim</h2>
+
+        <p>
+          Form N5B is specifically designed for Section 21 accelerated possession claims. This is the
+          faster route because it&apos;s usually decided on paper without a hearing.
+        </p>
+
+        <h3>When You Can Use N5B</h3>
+        <p>
+          You can only use the accelerated procedure if:
+        </p>
+        <ul>
+          <li>The tenancy is an assured shorthold tenancy (AST)</li>
+          <li>The tenancy was granted on or after 15 January 1989</li>
+          <li>You served a valid Section 21 notice (Form 6A)</li>
+          <li>You are <strong>not</strong> claiming any rent arrears in this claim</li>
+          <li>The notice period has expired</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-amber-800 text-lg mb-2">No Rent Claims With N5B</p>
+          <p className="text-amber-700">
+            If you want to claim rent arrears at the same time as possession, you <strong>cannot</strong>
+            use N5B. You must use N5 instead, which means a standard (slower) possession claim with
+            a hearing.
+          </p>
+        </div>
+
+        <h3>What N5B Requires</h3>
+        <p>
+          N5B is more comprehensive than N5 because it contains the particulars of claim within it:
+        </p>
+        <ul>
+          <li>Property details and tenancy information</li>
+          <li>Confirmation of AST status and how it arose</li>
+          <li>Details of the Section 21 notice served</li>
+          <li>Confirmation of deposit protection compliance</li>
+          <li>Confirmation you provided the prescribed information (EPC, Gas Certificate, How to Rent)</li>
+          <li>Statement of truth signed by the landlord</li>
+        </ul>
+
+        <h3>Documents to Attach to N5B</h3>
+        <ul>
+          <li>Copy of the tenancy agreement</li>
+          <li>Copy of the Section 21 notice (Form 6A)</li>
+          <li>Proof of service of the notice</li>
+          <li>Copy of the EPC</li>
+          <li>Copy of the Gas Safety Certificate</li>
+          <li>Proof the How to Rent guide was provided</li>
+          <li>Deposit protection certificate and prescribed information</li>
+        </ul>
+
+        <h3>What Happens After Filing N5B</h3>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Court sends claim to tenant with 14 days to respond</li>
+          <li>If no defence filed, judge reviews papers</li>
+          <li>If satisfied, judge makes possession order (no hearing)</li>
+          <li>If defence filed or issues identified, hearing scheduled</li>
+        </ol>
+
+        <h2 id="n119-form" className="scroll-mt-24">Form N119 - Particulars of Claim</h2>
+
+        <p>
+          Form N119 accompanies Form N5. It&apos;s where you set out the detailed grounds for your
+          claim and the evidence supporting it.
+        </p>
+
+        <h3>Structure of N119</h3>
+        <p>
+          The form asks for:
+        </p>
+        <ul>
+          <li><strong>Type of property:</strong> House, flat, room, etc.</li>
+          <li><strong>Type of tenancy:</strong> AST, assured, other</li>
+          <li><strong>Grounds relied upon:</strong> Which Section 8 grounds you&apos;re using</li>
+          <li><strong>Details of each ground:</strong> Specific facts supporting the ground</li>
+          <li><strong>Rent arrears details:</strong> If applicable, amounts and dates</li>
+          <li><strong>Previous possession orders:</strong> If any exist for this property</li>
+        </ul>
+
+        <h3>Writing Effective Particulars</h3>
+        <p>
+          Your particulars should be:
+        </p>
+        <ul>
+          <li><strong>Specific:</strong> Include dates, amounts, incident details</li>
+          <li><strong>Evidenced:</strong> Reference attached documents</li>
+          <li><strong>Complete:</strong> Cover all elements the ground requires</li>
+          <li><strong>Chronological:</strong> Present events in order</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-green-800 text-lg mb-2">Attach a Rent Schedule</p>
+          <p className="text-green-700">
+            For rent arrears claims, attach a detailed rent schedule showing every payment due,
+            every payment received, and the running balance. This is often more effective than
+            trying to fit everything in the form itself.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-n119-form.svg"
+          alt="Form N119 - Particulars of Claim"
+          caption="N119 is where you detail your grounds and evidence"
+        />
+
+        <h2 id="other-forms" className="scroll-mt-24">Other Important Forms</h2>
+
+        <h3>Form N325 - Request for Warrant of Possession</h3>
+        <p>
+          Used after you have a possession order and the tenant hasn&apos;t left. This requests the
+          court to issue a warrant for bailiffs to enforce eviction.
+        </p>
+        <ul>
+          <li><strong>When to use:</strong> After the possession order date has passed</li>
+          <li><strong>Fee:</strong> £130</li>
+          <li><strong>Processing:</strong> Court issues warrant, bailiffs schedule eviction</li>
+        </ul>
+
+        <h3>Form N244 - Application Notice</h3>
+        <p>
+          A general application form used for various requests during proceedings:
+        </p>
+        <ul>
+          <li>Applying to enforce a suspended possession order</li>
+          <li>Requesting an adjournment</li>
+          <li>Asking for costs</li>
+          <li>Other procedural applications</li>
+        </ul>
+
+        <h3>Form N215 - Certificate of Service</h3>
+        <p>
+          Confirms how and when you served documents on the tenant. Important for proving proper service.
+        </p>
+
+        <h3>Form N260 - Statement of Costs</h3>
+        <p>
+          If you&apos;re claiming legal costs beyond the fixed costs, you&apos;ll need to detail them
+          on this form.
+        </p>
+
+        <h3>Form N54 - Defendant&apos;s Reply to Possession Claim</h3>
+        <p>
+          This is what the tenant uses to file a defence. Understanding this form helps you anticipate
+          what defences might be raised.
+        </p>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="completing-forms" className="scroll-mt-24">Completing Forms Correctly</h2>
+
+        <h3>Common Mistakes to Avoid</h3>
+        <ul>
+          <li><strong>Wrong defendant name:</strong> Use the exact name on the tenancy agreement</li>
+          <li><strong>Incorrect property address:</strong> Match the tenancy agreement exactly</li>
+          <li><strong>Missing signatures:</strong> All forms need the statement of truth signed</li>
+          <li><strong>Calculation errors:</strong> Double-check rent arrears figures</li>
+          <li><strong>Missing documents:</strong> Attach everything required</li>
+          <li><strong>Wrong court:</strong> File at the court covering the property location</li>
+        </ul>
+
+        <h3>Statement of Truth</h3>
+        <p>
+          Every claim form requires a statement of truth:
+        </p>
+        <blockquote className="border-l-4 border-purple-500 pl-4 my-6 italic text-gray-700">
+          &quot;I believe that the facts stated in this claim form are true. I understand that proceedings
+          for contempt of court may be brought against anyone who makes, or causes to be made, a false
+          statement in a document verified by a statement of truth without an honest belief in its truth.&quot;
+        </blockquote>
+        <p>
+          This must be signed by you (the landlord) personally, not your agent, unless the agent has
+          specific authority to sign on your behalf.
+        </p>
+
+        <h3>Filing Methods</h3>
+        <ul>
+          <li><strong>Online:</strong> Via Possession Claim Online (PCOL) - faster and cheaper</li>
+          <li><strong>Post:</strong> Send to the county court covering the property</li>
+          <li><strong>In person:</strong> Deliver to the court counter</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-filing-forms.svg"
+          alt="Filing Court Forms Correctly"
+          caption="Accurate completion and proper filing prevents delays"
+        />
+
+        <h2 id="forms-faq" className="scroll-mt-24">Court Forms FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim rent arrears with an accelerated claim?</h3>
+            <p className="text-gray-600">
+              No. If you use Form N5B (accelerated procedure), you cannot claim rent arrears. You would
+              need to make a separate money claim later. If you want possession and rent arrears together,
+              use Form N5 instead (standard procedure).
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I make a mistake on the form?</h3>
+            <p className="text-gray-600">
+              Minor errors can sometimes be corrected. Significant errors may require you to start again.
+              It&apos;s best to check everything carefully before filing. If you&apos;ve already filed and
+              notice a mistake, contact the court immediately.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How many copies do I need?</h3>
+            <p className="text-gray-600">
+              Submit the original plus one copy for each defendant (tenant). Keep a copy for yourself.
+              For example: 1 tenant = 2 copies total for court, plus your own copy = 3 copies minimum.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can my agent sign the forms?</h3>
+            <p className="text-gray-600">
+              The statement of truth should generally be signed by the landlord. An agent can sign if
+              they have specific written authority and genuinely believe the facts are true. When in
+              doubt, sign it yourself.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Which court do I file at?</h3>
+            <p className="text-gray-600">
+              File at the county court covering the area where the property is located. You can find
+              this on the court finder at GOV.UK. Some areas have a designated county court hearing centre.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does processing take?</h3>
+            <p className="text-gray-600">
+              After filing, the court typically processes claims within 1-2 weeks. The tenant then has
+              14 days to respond. For N5B (accelerated), if no defence, a decision can come within 4-6
+              weeks. Standard N5 cases will have a hearing date set, usually 4-8 weeks out.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Get Pre-Filled Court Forms</h3>
+          <p className="text-gray-700 mb-6">
+            Our Complete Eviction Pack includes all court forms pre-filled based on your specific
+            situation—N5, N5B, N119, N325—plus supporting documents and step-by-step guidance.
+          </p>
+          <Link
+            href="/products/complete-pack"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            Get Complete Eviction Pack — £149.99
+          </Link>
+        </div>
+      </>
+    ),
+  },
+  // ============================================
+  // POST 17: Deposit Protection England
+  // Target: 1,500+ words
+  // ============================================
+  {
+    slug: 'england-deposit-protection',
+    title: 'Deposit Protection England - Schemes Compared 2026',
+    description: 'Everything landlords need to know about tenancy deposit protection in England. Compare TDS, DPS, and MyDeposits schemes, learn the rules, and avoid costly penalties.',
+    metaDescription: 'Tenancy deposit protection England 2026. Compare DPS, TDS, MyDeposits schemes. Rules, deadlines, penalties for non-compliance. Complete landlord guide.',
+    date: '2026-01-03',
+    updatedDate: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1680,
+    category: 'Compliance',
+    tags: ['Deposit Protection', 'TDS', 'DPS', 'MyDeposits', 'Landlord Compliance'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-deposit-protection.svg',
+    heroImageAlt: 'Deposit Protection Schemes England',
+    showUrgencyBanner: false,
+    targetKeyword: 'deposit protection england',
+    secondaryKeywords: ['tenancy deposit scheme', 'TDS', 'DPS', 'MyDeposits', 'deposit rules landlord'],
+    tableOfContents: [
+      { id: 'legal-requirements', title: 'Legal Requirements', level: 2 },
+      { id: 'schemes-compared', title: 'Schemes Compared', level: 2 },
+      { id: 'custodial-vs-insured', title: 'Custodial vs Insured', level: 2 },
+      { id: 'prescribed-information', title: 'Prescribed Information', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'end-of-tenancy', title: 'End of Tenancy Process', level: 2 },
+      { id: 'deposit-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-assured-shorthold-tenancy-guide', 'england-section-21-process', 'england-section-8-process'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          If you take a deposit from a tenant in England, you <strong>must</strong> protect it in a
+          government-approved tenancy deposit scheme within 30 days. This isn&apos;t optional—failure
+          to comply can result in penalties of up to 3x the deposit amount and will prevent you from
+          using Section 21 to evict. This guide covers everything you need to know about deposit
+          protection in 2026.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-red-800 text-lg mb-2">Critical Compliance Requirement</p>
+          <p className="text-red-700">
+            Unprotected deposits block Section 21 notices entirely. Even if your notice is otherwise
+            valid, you cannot use Section 21 if the deposit isn&apos;t protected. With Section 21
+            ending May 2026, this makes deposit compliance more important than ever.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-deposit-schemes.svg"
+          alt="Deposit Protection Schemes England"
+          caption="Three government-approved schemes protect tenant deposits in England"
+          aspectRatio="hero"
+        />
+
+        <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
+
+        <p>
+          The Housing Act 2004 (as amended) sets out the deposit protection requirements:
+        </p>
+
+        <h3>What Must Be Protected</h3>
+        <ul>
+          <li>Any deposit taken for an assured shorthold tenancy (AST) in England</li>
+          <li>This includes holding deposits that become part of the tenancy deposit</li>
+          <li>Deposits taken before 6 April 2007 only need protection if the tenancy renewed after that date</li>
+        </ul>
+
+        <h3>The 30-Day Deadline</h3>
+        <p>
+          You must:
+        </p>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Protect the deposit in an approved scheme within <strong>30 days</strong> of receiving it</li>
+          <li>Provide the tenant with prescribed information within <strong>30 days</strong> of receiving the deposit</li>
+        </ol>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-amber-800 text-lg mb-2">Both Steps Required</p>
+          <p className="text-amber-700">
+            Protecting the deposit alone isn&apos;t enough. You must also serve the prescribed
+            information. Missing either step within 30 days puts you in breach of the regulations.
+          </p>
+        </div>
+
+        <h3>Maximum Deposit Amount</h3>
+        <p>
+          Since 1 June 2019, deposits for new tenancies are capped at:
+        </p>
+        <ul>
+          <li><strong>5 weeks&apos; rent</strong> if annual rent is under £50,000</li>
+          <li><strong>6 weeks&apos; rent</strong> if annual rent is £50,000 or more</li>
+        </ul>
+
+        <h2 id="schemes-compared" className="scroll-mt-24">The Three Approved Schemes</h2>
+
+        <p>
+          There are three government-approved tenancy deposit protection schemes in England:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Scheme</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Custodial</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Insured</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="p-4 border-b font-medium">Deposit Protection Service (DPS)</td>
+                <td className="p-4 border-b text-green-600">✓ Free</td>
+                <td className="p-4 border-b text-green-600">✓ £Varies</td>
+                <td className="p-4 border-b">Most landlords (free custodial)</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium">Tenancy Deposit Scheme (TDS)</td>
+                <td className="p-4 border-b text-green-600">✓ Free</td>
+                <td className="p-4 border-b text-green-600">✓ £Varies</td>
+                <td className="p-4 border-b">Agents and portfolio landlords</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium">MyDeposits</td>
+                <td className="p-4 border-b text-green-600">✓ Free</td>
+                <td className="p-4 border-b text-green-600">✓ £Varies</td>
+                <td className="p-4 border-b">Landlords wanting choice</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Deposit Protection Service (DPS)</h3>
+        <p>
+          The DPS is the original government-backed scheme and remains the most popular for individual
+          landlords due to its free custodial option.
+        </p>
+        <ul>
+          <li><strong>Custodial:</strong> Free—you send the deposit to DPS who hold it</li>
+          <li><strong>Insured:</strong> You keep the deposit but pay for insurance</li>
+          <li><strong>Dispute resolution:</strong> Free alternative dispute resolution service</li>
+        </ul>
+
+        <h3>Tenancy Deposit Scheme (TDS)</h3>
+        <p>
+          TDS is popular with letting agents and professional landlords. It offers both custodial
+          and insured options with additional services for portfolio management.
+        </p>
+        <ul>
+          <li><strong>Custodial:</strong> Free—deposit held by TDS</li>
+          <li><strong>Insured:</strong> Annual fee or per-deposit fee options</li>
+          <li><strong>Additional services:</strong> Inventory tools, landlord resources</li>
+        </ul>
+
+        <h3>MyDeposits</h3>
+        <p>
+          MyDeposits (run by Tenancy Deposit Solutions) offers flexible options and is known for
+          good customer service.
+        </p>
+        <ul>
+          <li><strong>Custodial:</strong> Free—deposit held by MyDeposits</li>
+          <li><strong>Insured:</strong> Competitive fees for landlords and agents</li>
+          <li><strong>Member benefits:</strong> Resources and support services</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-scheme-comparison.svg"
+          alt="Deposit Scheme Comparison"
+          caption="All three schemes offer free custodial protection"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="custodial-vs-insured" className="scroll-mt-24">Custodial vs Insured Protection</h2>
+
+        <h3>Custodial Schemes</h3>
+        <p>
+          With custodial protection, you send the deposit to the scheme who hold it until the tenancy ends.
+        </p>
+        <ul>
+          <li><strong>Pros:</strong> Free to use, money held securely, no insurance to manage</li>
+          <li><strong>Cons:</strong> You don&apos;t have access to the money during the tenancy</li>
+        </ul>
+
+        <h3>Insured Schemes</h3>
+        <p>
+          With insured protection, you keep the deposit yourself but pay for insurance that guarantees
+          the tenant can claim if you don&apos;t return it properly.
+        </p>
+        <ul>
+          <li><strong>Pros:</strong> You retain the cash, can earn interest, more control</li>
+          <li><strong>Cons:</strong> Annual or per-deposit fees, must ensure repayment at end</li>
+        </ul>
+
+        <h3>Which Should You Choose?</h3>
+        <p>
+          For most individual landlords, <strong>custodial (free)</strong> is the simplest choice.
+          The money is held safely, there are no fees, and at tenancy end the scheme manages the
+          return process.
+        </p>
+        <p>
+          <strong>Insured</strong> makes sense if you:
+        </p>
+        <ul>
+          <li>Want to retain the cash for investment or cashflow</li>
+          <li>Are a letting agent managing multiple deposits</li>
+          <li>Prefer more direct control over the funds</li>
+        </ul>
+
+        <h2 id="prescribed-information" className="scroll-mt-24">Prescribed Information</h2>
+
+        <p>
+          Within 30 days of receiving the deposit, you must give the tenant (and any &quot;relevant person&quot;)
+          the prescribed information. This includes:
+        </p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-3">Required Prescribed Information:</h4>
+          <ul className="space-y-2">
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Amount of deposit paid</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Property address</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Landlord&apos;s name and contact details</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Name and contact details of the scheme administrator</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Information about the scheme&apos;s dispute resolution service</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Circumstances when deductions may be made</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>How to apply for deposit return at tenancy end</span>
+            </li>
+          </ul>
+        </div>
+
+        <p>
+          Most schemes provide a template certificate containing this information. Have the tenant
+          sign to acknowledge receipt.
+        </p>
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <h3>Financial Penalties</h3>
+        <p>
+          The tenant can claim compensation of <strong>1x to 3x the deposit amount</strong>. Courts
+          typically award 1x for first-time or minor breaches, increasing for deliberate non-compliance.
+        </p>
+
+        <h3>Section 21 Block</h3>
+        <p>
+          You <strong>cannot serve a valid Section 21 notice</strong> if:
+        </p>
+        <ul>
+          <li>The deposit wasn&apos;t protected within 30 days</li>
+          <li>Prescribed information wasn&apos;t provided within 30 days</li>
+          <li>The deposit remains unprotected at the time of serving notice</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-red-800 text-lg mb-2">Can You Fix It?</p>
+          <p className="text-red-700">
+            If you protect a deposit late, you can potentially cure the defect by returning the deposit
+            before serving Section 21 or by protecting it and providing prescribed information. However,
+            the tenant may still claim penalties, and some case law suggests late compliance doesn&apos;t
+            fully cure the breach. Protect on time to avoid risk.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-deposit-penalties.svg"
+          alt="Deposit Protection Penalties"
+          caption="Non-compliance can cost up to 3x the deposit amount"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="end-of-tenancy" className="scroll-mt-24">End of Tenancy Process</h2>
+
+        <h3>Agreeing Deductions</h3>
+        <p>
+          At tenancy end, you must agree with the tenant how the deposit will be returned:
+        </p>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Conduct a check-out inspection (compare against check-in inventory)</li>
+          <li>Identify any damage beyond fair wear and tear</li>
+          <li>Calculate cleaning costs if property left dirty</li>
+          <li>Add any rent arrears</li>
+          <li>Propose deductions to the tenant in writing</li>
+        </ol>
+
+        <h3>If You Agree</h3>
+        <p>
+          Both parties confirm the amount to be returned to the tenant and any amount retained by
+          the landlord. The scheme releases funds accordingly within 10 days.
+        </p>
+
+        <h3>If You Disagree</h3>
+        <p>
+          Use the scheme&apos;s free alternative dispute resolution (ADR) service:
+        </p>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Either party initiates dispute resolution through the scheme</li>
+          <li>Both submit evidence (photos, inventory, quotes, etc.)</li>
+          <li>An independent adjudicator reviews and makes a binding decision</li>
+          <li>Scheme releases deposit according to the decision</li>
+        </ol>
+
+        <h3>Time Limits</h3>
+        <ul>
+          <li>Return undisputed amounts within 10 days of agreement</li>
+          <li>Disputes should be raised within 3 months of tenancy end</li>
+          <li>Keep evidence for at least 6 years (limitation period for claims)</li>
+        </ul>
+
+        <h2 id="deposit-faq" className="scroll-mt-24">Deposit Protection FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I forgot to protect the deposit?</h3>
+            <p className="text-gray-600">
+              Protect it immediately and provide prescribed information. You&apos;re still in breach
+              and the tenant can claim compensation, but curing the defect is better than leaving it
+              unprotected. Consider returning the deposit before serving Section 21 to avoid that notice
+              being invalid.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to re-protect for each renewal?</h3>
+            <p className="text-gray-600">
+              For a statutory periodic tenancy (rolling on after fixed term), no—the original protection
+              continues. For a new contractual periodic or a new fixed term, check with your scheme as
+              some require you to update the protection details.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant paid the deposit before the tenancy started?</h3>
+            <p className="text-gray-600">
+              The 30-day deadline runs from when you received the deposit, not when the tenancy started.
+              If you received a holding deposit that became the tenancy deposit, protect within 30 days
+              of receiving that initial payment.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I keep the deposit if the tenant leaves owing rent?</h3>
+            <p className="text-gray-600">
+              You can make deductions for rent arrears, but must follow the proper process. Propose
+              deductions to the tenant, and if they disagree, use the scheme&apos;s dispute resolution.
+              You cannot simply keep the deposit without following procedures.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What evidence do I need for deductions?</h3>
+            <p className="text-gray-600">
+              Photos comparing check-in and check-out condition, the inventory, quotes or receipts for
+              repairs/cleaning, rent statements, and any correspondence about issues during the tenancy.
+              The more evidence, the stronger your case.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Does deposit protection apply to lodgers?</h3>
+            <p className="text-gray-600">
+              No. Deposit protection only applies to assured shorthold tenancies. Lodgers (who live
+              with the landlord) and other excluded occupiers are not covered by these rules. However,
+              you should still handle any deposit fairly.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Ensure Full Compliance</h3>
+          <p className="text-gray-700 mb-6">
+            Deposit protection issues can derail your Section 21 eviction. Our tools help you verify
+            compliance before you serve notice, avoiding costly court rejections.
+          </p>
+          <Link
+            href="/products/notice-only"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            Check Section 21 Requirements →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+  // ============================================
+  // POST 18: HMO Licensing England
+  // Target: 1,500+ words
+  // ============================================
+  {
+    slug: 'england-hmo-licensing',
+    title: 'HMO Licensing England - Complete Guide 2026',
+    description: 'Does your property need an HMO licence? This guide explains mandatory and additional licensing schemes, how to apply, conditions, and penalties for non-compliance.',
+    metaDescription: 'HMO licensing England 2026. Mandatory licensing rules, additional licensing schemes, how to apply, costs, conditions, and penalties. Complete landlord guide.',
+    date: '2026-01-03',
+    updatedDate: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Compliance',
+    tags: ['HMO Licensing', 'House in Multiple Occupation', 'Landlord Licensing', 'Property Compliance'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-hmo-licensing.svg',
+    heroImageAlt: 'HMO Licensing England Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'hmo licensing england',
+    secondaryKeywords: ['hmo licence', 'house multiple occupation', 'mandatory licensing', 'hmo rules'],
+    tableOfContents: [
+      { id: 'what-is-hmo', title: 'What Is an HMO?', level: 2 },
+      { id: 'mandatory-licensing', title: 'Mandatory Licensing', level: 2 },
+      { id: 'additional-licensing', title: 'Additional Licensing Schemes', level: 2 },
+      { id: 'how-to-apply', title: 'How to Apply', level: 2 },
+      { id: 'licence-conditions', title: 'Licence Conditions', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'hmo-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-deposit-protection', 'england-assured-shorthold-tenancy-guide', 'uk-gas-safety-landlords'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          If you rent a property to multiple tenants who aren&apos;t from the same household, you may
+          be operating a House in Multiple Occupation (HMO). Many HMOs require a licence from the
+          local council, and operating without one can result in fines of up to £30,000, rent
+          repayment orders, and an inability to evict tenants. This guide explains everything you
+          need to know about HMO licensing in England.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-red-800 text-lg mb-2">Operating Without a Licence</p>
+          <p className="text-red-700">
+            If your property needs an HMO licence and you don&apos;t have one, you cannot use Section 21
+            to evict tenants, and tenants can apply for a rent repayment order to recover up to 12
+            months&apos; rent. The council can also prosecute, with unlimited fines for serious cases.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-hmo-overview.svg"
+          alt="HMO Licensing Overview"
+          caption="HMO licensing protects tenants and ensures property safety standards"
+          aspectRatio="hero"
+        />
+
+        <h2 id="what-is-hmo" className="scroll-mt-24">What Is an HMO?</h2>
+
+        <p>
+          A House in Multiple Occupation (HMO) is a property rented out by at least 3 people who
+          are not from the same household (e.g., family), but share facilities like the bathroom
+          or kitchen.
+        </p>
+
+        <h3>The Standard Test</h3>
+        <p>
+          A property is an HMO if it meets all of these conditions:
+        </p>
+        <ul>
+          <li>Occupied by 3 or more persons</li>
+          <li>Those persons form 2 or more households</li>
+          <li>They share one or more amenities (bathroom, toilet, kitchen)</li>
+          <li>The property is their only or main residence</li>
+          <li>Rent is payable (or other consideration)</li>
+        </ul>
+
+        <h3>What Counts as a &quot;Household&quot;?</h3>
+        <p>
+          A household is typically:
+        </p>
+        <ul>
+          <li>A single person living alone</li>
+          <li>Members of the same family living together (couples, parents/children, siblings)</li>
+          <li>Cohabiting couples (whether married, civil partners, or unmarried)</li>
+        </ul>
+        <p>
+          Unrelated individuals—like friends sharing a house, students, or professionals—are
+          separate households even if they share one tenancy agreement.
+        </p>
+
+        <h3>Common HMO Scenarios</h3>
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr>
+                <th className="text-left p-4 bg-gray-100 font-semibold">Scenario</th>
+                <th className="text-left p-4 bg-gray-100 font-semibold">HMO?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="p-4 border-b">3 unrelated friends sharing a house</td>
+                <td className="p-4 border-b text-green-600 font-medium">Yes</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b">Couple plus 2 unrelated lodgers</td>
+                <td className="p-4 border-b text-green-600 font-medium">Yes (3 households)</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b">4 students in a shared house</td>
+                <td className="p-4 border-b text-green-600 font-medium">Yes</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b">Family of 5 renting a house</td>
+                <td className="p-4 border-b text-red-600 font-medium">No (1 household)</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b">Couple renting a 1-bed flat</td>
+                <td className="p-4 border-b text-red-600 font-medium">No (1 household)</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b">2 unrelated people sharing</td>
+                <td className="p-4 border-b text-amber-600 font-medium">HMO but no licence needed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="mandatory-licensing" className="scroll-mt-24">Mandatory Licensing</h2>
+
+        <p>
+          Since 1 October 2018, <strong>mandatory HMO licensing</strong> applies across England
+          to any HMO that is:
+        </p>
+        <ul>
+          <li>Occupied by <strong>5 or more</strong> persons</li>
+          <li>Forming <strong>2 or more</strong> households</li>
+          <li>Sharing facilities (bathroom, kitchen, toilet)</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-blue-800 text-lg mb-2">The Storey Requirement Removed</p>
+          <p className="text-blue-700">
+            Before October 2018, mandatory licensing only applied to HMOs of 3+ storeys. This
+            requirement was removed—now any HMO with 5+ occupants needs a licence regardless of
+            the number of floors.
+          </p>
+        </div>
+
+        <h3>Who Applies for the Licence?</h3>
+        <p>
+          The person having control of or managing the property must apply. This is usually:
+        </p>
+        <ul>
+          <li>The landlord (owner)</li>
+          <li>The managing agent if they have day-to-day control</li>
+        </ul>
+
+        <h3>Licence Duration</h3>
+        <p>
+          HMO licences are typically granted for <strong>5 years</strong>. Some councils issue
+          shorter licences (1-3 years) for new landlords or properties with compliance issues.
+        </p>
+
+        <h3>Licence Fees</h3>
+        <p>
+          Fees vary by council but typically range from:
+        </p>
+        <ul>
+          <li><strong>New application:</strong> £500 - £1,500</li>
+          <li><strong>Renewal:</strong> £400 - £1,200</li>
+          <li><strong>Additional charges:</strong> For late applications, inspections, variations</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-mandatory-licensing.svg"
+          alt="Mandatory HMO Licensing Requirements"
+          caption="5+ occupants from 2+ households requires mandatory licensing"
+        />
+
+        <h2 id="additional-licensing" className="scroll-mt-24">Additional Licensing Schemes</h2>
+
+        <p>
+          Many councils operate <strong>additional licensing schemes</strong> covering HMOs that
+          don&apos;t meet mandatory criteria. These are local schemes—you must check with your
+          specific council.
+        </p>
+
+        <h3>What Additional Licensing Covers</h3>
+        <p>
+          Typically, additional licensing covers:
+        </p>
+        <ul>
+          <li>HMOs with 3-4 occupants from 2+ households</li>
+          <li>Properties above or below commercial premises</li>
+          <li>Specific areas designated by the council</li>
+        </ul>
+
+        <h3>How to Check If Additional Licensing Applies</h3>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Visit your local council website</li>
+          <li>Search for &quot;HMO licensing&quot; or &quot;additional licensing&quot;</li>
+          <li>Check if your property falls within a designated scheme area</li>
+          <li>Contact the housing team if unsure</li>
+        </ol>
+
+        <h3>Selective Licensing</h3>
+        <p>
+          Some councils also operate <strong>selective licensing</strong>, which covers all
+          private rented properties in designated areas—not just HMOs. If your area has selective
+          licensing, you need a licence even for single-family lettings.
+        </p>
+
+        <h2 id="how-to-apply" className="scroll-mt-24">How to Apply for an HMO Licence</h2>
+
+        <h3>Step 1: Check Requirements</h3>
+        <p>
+          Before applying, ensure your property meets the council&apos;s standards for:
+        </p>
+        <ul>
+          <li>Room sizes (minimum bedroom sizes for occupation)</li>
+          <li>Fire safety (alarms, escapes, doors)</li>
+          <li>Kitchen facilities (adequate for number of occupants)</li>
+          <li>Bathroom facilities (adequate for number of occupants)</li>
+          <li>General condition and maintenance</li>
+        </ul>
+
+        <h3>Step 2: Gather Documentation</h3>
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-3">You&apos;ll Typically Need:</h4>
+          <ul className="space-y-2">
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Floor plans showing room sizes and layout</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Current Gas Safety Certificate</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Current EICR (Electrical Installation Condition Report)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Energy Performance Certificate (EPC)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Fire safety risk assessment</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Proof of ownership or management responsibility</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span>Details of the manager/licence holder</span>
+            </li>
+          </ul>
+        </div>
+
+        <h3>Step 3: Complete the Application</h3>
+        <p>
+          Most councils have online application portals. You&apos;ll provide:
+        </p>
+        <ul>
+          <li>Property details and layout</li>
+          <li>Proposed number of occupants and households</li>
+          <li>Your details as proposed licence holder</li>
+          <li>Manager details (if different)</li>
+          <li>Declaration of &quot;fit and proper person&quot; status</li>
+          <li>Fee payment</li>
+        </ul>
+
+        <h3>Step 4: Inspection</h3>
+        <p>
+          The council will usually inspect the property. They&apos;ll check:
+        </p>
+        <ul>
+          <li>Room sizes meet minimum standards</li>
+          <li>Fire safety measures are adequate</li>
+          <li>Kitchen and bathroom facilities are sufficient</li>
+          <li>General condition is satisfactory</li>
+        </ul>
+
+        <h3>Step 5: Licence Issued</h3>
+        <p>
+          If satisfied, the council issues the licence with conditions. Processing typically takes
+          2-6 months depending on the council.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-hmo-application.svg"
+          alt="HMO Licence Application Process"
+          caption="Allow 2-6 months for application processing"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="licence-conditions" className="scroll-mt-24">Licence Conditions</h2>
+
+        <p>
+          HMO licences come with conditions you must comply with throughout the licence period:
+        </p>
+
+        <h3>Mandatory Conditions</h3>
+        <ul>
+          <li><strong>Gas safety:</strong> Annual Gas Safety Certificate</li>
+          <li><strong>Electrical safety:</strong> EICR every 5 years</li>
+          <li><strong>Smoke alarms:</strong> Working alarms on every floor</li>
+          <li><strong>Carbon monoxide:</strong> Detectors where required</li>
+          <li><strong>Tenancy references:</strong> References for new occupiers</li>
+          <li><strong>Terms of occupation:</strong> Written statement to each occupier</li>
+        </ul>
+
+        <h3>Common Additional Conditions</h3>
+        <ul>
+          <li>Maximum number of occupants per room</li>
+          <li>Regular property inspections</li>
+          <li>Waste management arrangements</li>
+          <li>External appearance and maintenance</li>
+          <li>Display of licence or emergency contacts</li>
+          <li>Notifying the council of changes</li>
+        </ul>
+
+        <h3>Room Size Requirements</h3>
+        <p>
+          Minimum sleeping room sizes (per person):
+        </p>
+        <ul>
+          <li><strong>1 person (10+ years):</strong> 6.51 m²</li>
+          <li><strong>2 persons (10+ years):</strong> 10.22 m²</li>
+          <li><strong>1 child (under 10):</strong> 4.64 m²</li>
+        </ul>
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <h3>Criminal Prosecution</h3>
+        <p>
+          Operating an unlicensed HMO that requires a licence is a criminal offence:
+        </p>
+        <ul>
+          <li><strong>Civil penalty:</strong> Up to £30,000 per offence</li>
+          <li><strong>Criminal fine:</strong> Unlimited (for prosecution through courts)</li>
+          <li><strong>Criminal record:</strong> Potential conviction</li>
+        </ul>
+
+        <h3>Rent Repayment Orders</h3>
+        <p>
+          Tenants (or the council) can apply to the First-tier Tribunal for a rent repayment order:
+        </p>
+        <ul>
+          <li>Covers up to 12 months&apos; rent</li>
+          <li>Tribunal decides the amount based on circumstances</li>
+          <li>Order made against the landlord personally</li>
+        </ul>
+
+        <h3>Section 21 Block</h3>
+        <p>
+          You cannot serve a valid Section 21 notice while the property requires but lacks an HMO
+          licence. Any Section 21 served will be invalid.
+        </p>
+
+        <h3>Breach of Licence Conditions</h3>
+        <p>
+          Breaching licence conditions can result in:
+        </p>
+        <ul>
+          <li>Civil penalties</li>
+          <li>Licence revocation</li>
+          <li>Management orders (council takes over management)</li>
+          <li>Prosecution for serious breaches</li>
+        </ul>
+
+        <h2 id="hmo-faq" className="scroll-mt-24">HMO Licensing FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">My property has 3 tenants—do I need a licence?</h3>
+            <p className="text-gray-600">
+              If they&apos;re from 2+ households and share facilities, it&apos;s an HMO. You don&apos;t need
+              a mandatory licence (that&apos;s 5+ occupants), but check if your council has an additional
+              licensing scheme that covers smaller HMOs.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I&apos;m waiting for my licence application?</h3>
+            <p className="text-gray-600">
+              If you&apos;ve applied and are waiting for processing, you&apos;re generally protected from
+              prosecution. Keep proof of your application. However, you must still comply with all
+              HMO management regulations.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I refuse a licence application?</h3>
+            <p className="text-gray-600">
+              The council can refuse if the property doesn&apos;t meet standards, you&apos;re not a &quot;fit
+              and proper person,&quot; or the proposed management arrangements are inadequate. You can
+              appeal to the First-tier Tribunal.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What makes someone &quot;fit and proper&quot;?</h3>
+            <p className="text-gray-600">
+              You may fail the fit and proper test if you have relevant criminal convictions, have
+              previously breached housing law, or have been involved in unlawful discrimination. Most
+              landlords pass this test.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need planning permission for an HMO?</h3>
+            <p className="text-gray-600">
+              Possibly. Converting a family home to a small HMO (3-6 unrelated people) is often
+              permitted development. Larger HMOs or HMOs in Article 4 areas need planning permission.
+              Check with your council—planning and licensing are separate requirements.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about insurance for HMOs?</h3>
+            <p className="text-gray-600">
+              Standard landlord insurance often doesn&apos;t cover HMOs. You need specialist HMO
+              insurance that covers multiple tenancies, higher risk, and HMO-specific requirements.
+              Inform your insurer of the HMO status.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Manage Your HMO Compliance</h3>
+          <p className="text-gray-700 mb-6">
+            HMO landlords have additional compliance requirements. Our tools help you track
+            certifications, manage tenancies, and ensure you&apos;re meeting all your legal obligations.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View All Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
