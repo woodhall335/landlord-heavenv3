@@ -9829,6 +9829,3826 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 19: Money Claim Online (MCOL) Guide
+  {
+    slug: 'england-money-claim-online',
+    title: 'Money Claim Online (MCOL) - England & Wales Guide 2026',
+    description: 'Complete guide to using Money Claim Online to recover rent arrears. Learn the MCOL process, fees, timescales, and how to enforce your judgment against tenants.',
+    metaDescription: 'Use Money Claim Online to recover rent arrears from tenants. Complete MCOL guide for landlords covering claims, fees, and enforcement in 2026.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1720,
+    category: 'Money Claims',
+    tags: ['money claim online', 'MCOL', 'rent arrears', 'county court', 'debt recovery', 'England'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-mcol.svg',
+    heroImageAlt: 'Money Claim Online Guide for Landlords',
+    showUrgencyBanner: false,
+    targetKeyword: 'money claim online landlord',
+    secondaryKeywords: ['MCOL rent arrears', 'recover rent from tenant', 'county court money claim', 'debt recovery landlord'],
+    tableOfContents: [
+      { id: 'what-is-mcol', title: 'What Is Money Claim Online?', level: 2 },
+      { id: 'when-to-use', title: 'When to Use MCOL', level: 2 },
+      { id: 'before-claiming', title: 'Before You Make a Claim', level: 2 },
+      { id: 'claim-process', title: 'The MCOL Process', level: 2 },
+      { id: 'fees', title: 'Court Fees', level: 2 },
+      { id: 'defendant-response', title: 'Defendant Responses', level: 2 },
+      { id: 'judgment', title: 'Getting Judgment', level: 2 },
+      { id: 'enforcement', title: 'Enforcing Your Judgment', level: 2 },
+      { id: 'mcol-faq', title: 'MCOL FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-particulars-of-claim', 'england-section-8-ground-8', 'england-section-8-ground-10-11'],
+    content: (
+      <>
+        <p className="lead">
+          When a tenant owes you money and won&apos;t pay voluntarily, Money Claim Online (MCOL)
+          provides a straightforward way to pursue them through the courts. This guide explains
+          how to use MCOL effectively to recover rent arrears, deposit shortfalls, or damages
+          left by tenants in England and Wales.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Key Information</h4>
+          <p className="text-blue-800 mt-2">
+            MCOL is the online system for making money claims in England and Wales. It&apos;s
+            designed for claims between £25 and £100,000 against defendants with UK addresses.
+            The process is entirely online and significantly faster than paper claims.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-mcol-overview.svg"
+          alt="Money Claim Online Overview"
+          caption="MCOL provides a straightforward online process for landlords to recover money owed"
+        />
+
+        <h2 id="what-is-mcol" className="scroll-mt-24">What Is Money Claim Online?</h2>
+
+        <p>
+          Money Claim Online is a government service that allows you to make money claims
+          against individuals or businesses through the County Court. For landlords, it&apos;s
+          typically used to recover:
+        </p>
+        <ul>
+          <li><strong>Rent arrears:</strong> Outstanding rent owed by current or former tenants</li>
+          <li><strong>Damage to property:</strong> Costs beyond the security deposit</li>
+          <li><strong>Unpaid bills:</strong> Utility or council tax debts the tenant should have paid</li>
+          <li><strong>Cleaning costs:</strong> Professional cleaning beyond normal wear and tear</li>
+          <li><strong>Other financial losses:</strong> Related to the tenancy</li>
+        </ul>
+
+        <h3>Benefits of MCOL</h3>
+        <ul>
+          <li><strong>24/7 availability:</strong> Submit claims any time, not just court hours</li>
+          <li><strong>Lower fees:</strong> Online fees are lower than paper claims</li>
+          <li><strong>Faster processing:</strong> Claims are processed more quickly</li>
+          <li><strong>Track progress:</strong> Monitor your claim status online</li>
+          <li><strong>No court visits:</strong> Many claims are resolved without attending court</li>
+        </ul>
+
+        <h3>Limitations</h3>
+        <ul>
+          <li>Maximum claim value: £100,000 (plus interest and costs)</li>
+          <li>Defendant must have a UK address</li>
+          <li>You must have an email address</li>
+          <li>Cannot be used for certain types of claims (e.g., possession)</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="when-to-use" className="scroll-mt-24">When to Use MCOL</h2>
+
+        <h3>MCOL Is Appropriate When:</h3>
+        <ul>
+          <li>The tenant owes you a fixed sum of money</li>
+          <li>You have evidence of what they owe (rent records, invoices, photos)</li>
+          <li>You&apos;ve already tried to recover the money informally</li>
+          <li>You have the tenant&apos;s current address (or can trace them)</li>
+          <li>The debt is less than 6 years old (limitation period)</li>
+        </ul>
+
+        <h3>MCOL Is NOT Suitable When:</h3>
+        <ul>
+          <li>You want to evict the tenant (use possession proceedings instead)</li>
+          <li>You don&apos;t know how much they owe (amount must be specific)</li>
+          <li>The tenant has left the country with no UK address</li>
+          <li>The debt is over 6 years old</li>
+          <li>The claim exceeds £100,000</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Money Claim vs Possession</h4>
+          <p className="text-amber-800 mt-2">
+            If you want to evict a tenant AND claim rent arrears, you typically pursue possession
+            first (using Section 8 or Section 21). You can include money claims within possession
+            proceedings. MCOL is most useful when the tenant has already left but still owes money.
+          </p>
+        </div>
+
+        <h2 id="before-claiming" className="scroll-mt-24">Before You Make a Claim</h2>
+
+        <h3>Pre-Action Protocol</h3>
+        <p>
+          Before making a court claim, you should follow the Pre-Action Protocol for Debt Claims.
+          This requires you to:
+        </p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-3">Required Steps:</h4>
+          <ol className="space-y-3">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <span><strong>Send a Letter Before Action (LBA):</strong> A formal letter giving the tenant 30 days to pay or propose a payment plan</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <span><strong>Provide debt information:</strong> Clear breakdown of what is owed and how it was calculated</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <span><strong>Include reply form:</strong> Allow them to respond with their position</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold flex-shrink-0">4</span>
+              <span><strong>Consider their response:</strong> If they propose reasonable payments, consider accepting</span>
+            </li>
+          </ol>
+        </div>
+
+        <p>
+          The court expects you to have followed this protocol. If you haven&apos;t, costs
+          penalties may apply even if you win.
+        </p>
+
+        <h3>Gather Your Evidence</h3>
+        <p>Before starting your claim, collect:</p>
+        <ul>
+          <li>Tenancy agreement showing rent amount and payment terms</li>
+          <li>Rent payment records (bank statements, rent book)</li>
+          <li>Correspondence about arrears (letters, emails, texts)</li>
+          <li>Your Letter Before Action and proof of sending</li>
+          <li>Any response from the tenant</li>
+          <li>For damage claims: photos, quotes, invoices, inventory/check-out reports</li>
+          <li>The tenant&apos;s current address for service</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-evidence-gather.svg"
+          alt="Gathering Evidence for Money Claim"
+          caption="Thorough evidence gathering is essential before making a claim"
+        />
+
+        <h2 id="claim-process" className="scroll-mt-24">The MCOL Process</h2>
+
+        <h3>Step 1: Register on MCOL</h3>
+        <p>
+          Go to the Money Claim Online website (www.moneyclaim.gov.uk) and create an account.
+          You&apos;ll need:
+        </p>
+        <ul>
+          <li>Email address</li>
+          <li>Your details (name, address, contact information)</li>
+          <li>Payment method for court fees</li>
+        </ul>
+
+        <h3>Step 2: Enter Claim Details</h3>
+        <p>You&apos;ll complete an online form covering:</p>
+        <ul>
+          <li><strong>Claimant details:</strong> Your information</li>
+          <li><strong>Defendant details:</strong> The tenant&apos;s name and address</li>
+          <li><strong>Claim amount:</strong> How much they owe</li>
+          <li><strong>Interest:</strong> Whether you&apos;re claiming interest (and at what rate)</li>
+          <li><strong>Particulars of claim:</strong> Brief explanation of why money is owed</li>
+        </ul>
+
+        <h3>Step 3: Write Your Particulars of Claim</h3>
+        <p>
+          The particulars of claim explain what the debt is for. Keep it clear and factual:
+        </p>
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <p className="text-gray-700 italic">
+            &quot;The Claimant is the landlord of [property address]. The Defendant was the tenant
+            under an Assured Shorthold Tenancy dated [date]. The Defendant failed to pay rent
+            due under the tenancy. The total rent arrears from [date] to [date] amount to
+            [£amount]. Despite demand, the Defendant has not paid this sum. The Claimant claims
+            [£amount] plus interest and costs.&quot;
+          </p>
+        </div>
+
+        <h3>Step 4: Pay the Court Fee</h3>
+        <p>
+          Fees are paid online by debit or credit card. The claim is issued once payment is
+          processed.
+        </p>
+
+        <h3>Step 5: Claim Is Served</h3>
+        <p>
+          The court sends the claim to the defendant by post. They have 14 days to respond
+          (extended to 28 days if they acknowledge service but need more time to prepare
+          their defence).
+        </p>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="fees" className="scroll-mt-24">Court Fees</h2>
+
+        <p>MCOL fees (as of 2026) are based on the claim value:</p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Claim Value</th>
+                <th className="border p-3 text-left font-semibold">Online Fee (MCOL)</th>
+                <th className="border p-3 text-left font-semibold">Paper Fee</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Up to £300</td>
+                <td className="border p-3">£35</td>
+                <td className="border p-3">£50</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£300.01 - £500</td>
+                <td className="border p-3">£50</td>
+                <td className="border p-3">£70</td>
+              </tr>
+              <tr>
+                <td className="border p-3">£500.01 - £1,000</td>
+                <td className="border p-3">£70</td>
+                <td className="border p-3">£80</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£1,000.01 - £1,500</td>
+                <td className="border p-3">£80</td>
+                <td className="border p-3">£115</td>
+              </tr>
+              <tr>
+                <td className="border p-3">£1,500.01 - £3,000</td>
+                <td className="border p-3">£115</td>
+                <td className="border p-3">£205</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£3,000.01 - £5,000</td>
+                <td className="border p-3">£205</td>
+                <td className="border p-3">£455</td>
+              </tr>
+              <tr>
+                <td className="border p-3">£5,000.01 - £10,000</td>
+                <td className="border p-3">£455</td>
+                <td className="border p-3">5% of claim value</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£10,000.01 - £100,000</td>
+                <td className="border p-3">5% of claim value</td>
+                <td className="border p-3">5% of claim value</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          You can add the court fee to your claim, so the defendant pays it if you win.
+        </p>
+
+        <h2 id="defendant-response" className="scroll-mt-24">Defendant Responses</h2>
+
+        <p>The defendant (tenant) can respond in several ways:</p>
+
+        <h3>1. Pay the Claim</h3>
+        <p>
+          If they pay the full amount (claim + fee + any interest), the case is closed.
+          This is the best outcome.
+        </p>
+
+        <h3>2. Admit the Claim</h3>
+        <p>
+          They accept they owe the money but may request time to pay. You can:
+        </p>
+        <ul>
+          <li>Accept their payment proposal</li>
+          <li>Reject it and ask the court to decide payment terms</li>
+        </ul>
+
+        <h3>3. Dispute the Claim (Defence)</h3>
+        <p>
+          They deny owing the money (or the amount). The case will proceed to a hearing
+          unless you can settle.
+        </p>
+
+        <h3>4. No Response</h3>
+        <p>
+          If they don&apos;t respond within the time limit, you can request &quot;judgment in
+          default&quot; - the court automatically rules in your favour.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-mcol-response.svg"
+          alt="Possible Defendant Responses"
+          caption="The defendant has 14-28 days to respond to your claim"
+        />
+
+        <h2 id="judgment" className="scroll-mt-24">Getting Judgment</h2>
+
+        <h3>Judgment by Default</h3>
+        <p>
+          If the defendant doesn&apos;t respond, you can request judgment online. The court
+          will issue a County Court Judgment (CCJ) ordering them to pay. This is recorded
+          on their credit file for 6 years (unless paid within 30 days).
+        </p>
+
+        <h3>Judgment by Admission</h3>
+        <p>
+          If they admit the debt, you can request judgment for the admitted amount. You&apos;ll
+          need to decide whether to accept their proposed payment terms.
+        </p>
+
+        <h3>Judgment After Hearing</h3>
+        <p>
+          If they defend the claim, a hearing will be listed. For small claims (under £10,000),
+          this is usually informal and held in private. The judge will review evidence and
+          decide who wins.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Small Claims Track</h4>
+          <p className="text-green-800 mt-2">
+            Most landlord money claims under £10,000 go to the &quot;small claims track.&quot;
+            This means simpler procedures, limited costs recovery, and hearings are designed
+            for people without lawyers. You won&apos;t recover legal fees even if you win.
+          </p>
+        </div>
+
+        <h2 id="enforcement" className="scroll-mt-24">Enforcing Your Judgment</h2>
+
+        <p>
+          Getting a CCJ doesn&apos;t automatically mean you&apos;ll be paid. If the defendant
+          doesn&apos;t pay voluntarily, you&apos;ll need to enforce the judgment. Options include:
+        </p>
+
+        <h3>Warrant of Control (Bailiffs)</h3>
+        <ul>
+          <li>Bailiffs seize and sell goods to pay the debt</li>
+          <li>Fee: £77 (debts up to £5,000)</li>
+          <li>Works if the defendant has valuable assets</li>
+        </ul>
+
+        <h3>Attachment of Earnings</h3>
+        <ul>
+          <li>Money deducted directly from their wages</li>
+          <li>Fee: £130</li>
+          <li>Only works if they&apos;re employed</li>
+        </ul>
+
+        <h3>Third Party Debt Order</h3>
+        <ul>
+          <li>Freezes money in their bank account</li>
+          <li>Fee: £130</li>
+          <li>Requires knowing their bank details</li>
+        </ul>
+
+        <h3>Charging Order</h3>
+        <ul>
+          <li>Secures debt against their property</li>
+          <li>Fee: £130</li>
+          <li>Only works if they own property</li>
+        </ul>
+
+        <h3>Order to Obtain Information</h3>
+        <p>
+          If you don&apos;t know the defendant&apos;s financial position, you can apply for an
+          order requiring them to attend court and disclose their assets, income, and
+          outgoings. Fee: £59.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-enforcement.svg"
+          alt="Judgment Enforcement Options"
+          caption="Multiple enforcement options are available if the defendant doesn&apos;t pay voluntarily"
+        />
+
+        <h2 id="mcol-faq" className="scroll-mt-24">MCOL FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does MCOL take?</h3>
+            <p className="text-gray-600">
+              If the defendant doesn&apos;t respond, you can get judgment in default within 3-4
+              weeks. If they defend, a hearing may take 2-4 months. Enforcement can add further
+              time. The entire process from claim to payment can take anywhere from 1 month to
+              over a year.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim interest on rent arrears?</h3>
+            <p className="text-gray-600">
+              Yes. Check your tenancy agreement - it may specify an interest rate for late payment.
+              If not, you can claim statutory interest at 8% per year. Interest runs from when
+              each payment was due.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I can&apos;t find the tenant&apos;s address?</h3>
+            <p className="text-gray-600">
+              You need a valid address to serve the claim. Try: their guarantor, previous employer,
+              forwarding address from Royal Mail, tracing agents, or searching the electoral roll.
+              Without an address, you cannot proceed.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is it worth claiming small amounts?</h3>
+            <p className="text-gray-600">
+              Consider the economics. A £500 claim costs £50 in fees. If the defendant has no
+              money or assets, even a CCJ may not result in payment. For very small debts,
+              weigh the cost, time, and likelihood of recovery.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What happens if they defend the claim?</h3>
+            <p className="text-gray-600">
+              The case is transferred to the defendant&apos;s local court (usually). A hearing
+              will be listed where you both present evidence. The judge decides who wins. For
+              small claims, this is usually informal and lasts 30-60 minutes.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use MCOL for deposit disputes?</h3>
+            <p className="text-gray-600">
+              If the deposit is protected, you must use the deposit scheme&apos;s dispute
+              resolution service first. MCOL is for additional amounts beyond the deposit, or
+              if the deposit wasn&apos;t protected and you&apos;re claiming damages.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need Help With Your Money Claim?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides comprehensive tools to help you recover money owed by tenants.
+            From template letters before action to guidance on writing particulars of claim.
+          </p>
+          <Link
+            href="/products/money-claim"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Money Claim Pack →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 20: How to Write Particulars of Claim
+  {
+    slug: 'england-particulars-of-claim',
+    title: 'How to Write Particulars of Claim - Rent Arrears (England 2026)',
+    description: 'Learn how to write effective particulars of claim for rent arrears cases. Step-by-step guide with examples for County Court money claims against tenants.',
+    metaDescription: 'Write effective particulars of claim for rent arrears. Step-by-step guide with examples for County Court money claims against tenants in England.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1580,
+    category: 'Money Claims',
+    tags: ['particulars of claim', 'rent arrears', 'county court', 'money claim', 'legal drafting', 'England'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-particulars.svg',
+    heroImageAlt: 'How to Write Particulars of Claim',
+    showUrgencyBanner: false,
+    targetKeyword: 'particulars of claim rent arrears',
+    secondaryKeywords: ['write particulars of claim', 'county court claim', 'rent arrears claim', 'money claim particulars'],
+    tableOfContents: [
+      { id: 'what-are-particulars', title: 'What Are Particulars of Claim?', level: 2 },
+      { id: 'key-elements', title: 'Key Elements to Include', level: 2 },
+      { id: 'rent-arrears-example', title: 'Rent Arrears Example', level: 2 },
+      { id: 'damage-example', title: 'Property Damage Example', level: 2 },
+      { id: 'combined-claim', title: 'Combined Arrears and Damage', level: 2 },
+      { id: 'common-mistakes', title: 'Common Mistakes to Avoid', level: 2 },
+      { id: 'interest-claims', title: 'Claiming Interest', level: 2 },
+      { id: 'particulars-faq', title: 'Particulars of Claim FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-money-claim-online', 'england-section-8-ground-8', 'england-section-8-ground-10-11'],
+    content: (
+      <>
+        <p className="lead">
+          Particulars of claim are the foundation of your County Court money claim. Getting them
+          right is essential - poorly drafted particulars can lead to your claim being struck
+          out or failing at trial. This guide shows you exactly how to write effective particulars
+          for rent arrears and related claims.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">What You&apos;ll Learn</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li>The essential elements every particulars of claim must include</li>
+            <li>Templates for rent arrears, property damage, and combined claims</li>
+            <li>How to claim interest correctly</li>
+            <li>Common mistakes that can undermine your case</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-particulars-intro.svg"
+          alt="Particulars of Claim Introduction"
+          caption="Clear, well-drafted particulars are essential for successful money claims"
+        />
+
+        <h2 id="what-are-particulars" className="scroll-mt-24">What Are Particulars of Claim?</h2>
+
+        <p>
+          Particulars of claim are a formal document that explains to the court (and the
+          defendant) why you are owed money. They must set out:
+        </p>
+        <ul>
+          <li>The facts that give rise to the claim</li>
+          <li>The legal basis for your claim</li>
+          <li>What you are claiming and how much</li>
+        </ul>
+
+        <p>
+          For money claims through MCOL, the particulars are entered into an online form
+          with a character limit. You must be concise while including all essential information.
+        </p>
+
+        <h3>The Purpose</h3>
+        <p>
+          Good particulars achieve several things:
+        </p>
+        <ul>
+          <li><strong>Inform the defendant:</strong> They need to understand the case against them</li>
+          <li><strong>Assist the court:</strong> The judge needs to know what the dispute is about</li>
+          <li><strong>Focus the issues:</strong> Clear particulars help identify what is (and isn&apos;t) disputed</li>
+          <li><strong>Enable judgment:</strong> If the defendant doesn&apos;t respond, the court can enter judgment based on your particulars</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="key-elements" className="scroll-mt-24">Key Elements to Include</h2>
+
+        <p>Every particulars of claim for a landlord-tenant money dispute should include:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Essential Elements Checklist:</h4>
+          <ol className="space-y-3">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>Identity of parties:</strong>
+                <p className="text-gray-600 text-sm">Who is the claimant (landlord) and who is the defendant (tenant)?</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>The property:</strong>
+                <p className="text-gray-600 text-sm">Full address of the rental property</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <div>
+                <strong>The tenancy:</strong>
+                <p className="text-gray-600 text-sm">Type of tenancy, start date, and key terms (especially rent amount and due date)</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold flex-shrink-0">4</span>
+              <div>
+                <strong>The breach:</strong>
+                <p className="text-gray-600 text-sm">What the defendant did (or failed to do) that gives rise to the claim</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold flex-shrink-0">5</span>
+              <div>
+                <strong>The amount:</strong>
+                <p className="text-gray-600 text-sm">How much is owed and how it was calculated</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-semibold flex-shrink-0">6</span>
+              <div>
+                <strong>Demand for payment:</strong>
+                <p className="text-gray-600 text-sm">That you have demanded payment and the defendant has failed to pay</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <h2 id="rent-arrears-example" className="scroll-mt-24">Rent Arrears Example</h2>
+
+        <p>
+          Here is a template for a straightforward rent arrears claim. Adapt it to your
+          specific circumstances:
+        </p>
+
+        <div className="bg-gray-100 rounded-lg p-6 my-6 font-mono text-sm">
+          <p className="mb-4">
+            1. The Claimant is and was at all material times the landlord of the property
+            known as [FULL ADDRESS INCLUDING POSTCODE] (&quot;the Property&quot;).
+          </p>
+          <p className="mb-4">
+            2. By a written Assured Shorthold Tenancy agreement dated [DATE], the Claimant
+            let the Property to the Defendant for a term of [LENGTH, e.g., 12 months]
+            commencing on [START DATE].
+          </p>
+          <p className="mb-4">
+            3. Under the tenancy agreement, the Defendant agreed to pay rent of £[AMOUNT]
+            per calendar month, payable in advance on the [DAY] of each month.
+          </p>
+          <p className="mb-4">
+            4. The Defendant failed to pay rent as follows:
+          </p>
+          <ul className="mb-4 ml-4">
+            <li>[DATE]: £[AMOUNT] due, unpaid</li>
+            <li>[DATE]: £[AMOUNT] due, unpaid</li>
+            <li>[Continue for each missed payment]</li>
+          </ul>
+          <p className="mb-4">
+            5. The total rent arrears as at [DATE] amount to £[TOTAL].
+          </p>
+          <p className="mb-4">
+            6. The tenancy ended on [DATE]. Despite written demand dated [DATE], the
+            Defendant has failed to pay the arrears.
+          </p>
+          <p className="mb-4">
+            7. The Claimant claims:
+          </p>
+          <ul className="mb-4 ml-4">
+            <li>(a) £[AMOUNT] being rent arrears;</li>
+            <li>(b) Interest pursuant to [section 69 of the County Courts Act 1984 / the tenancy agreement] at [RATE]% per annum;</li>
+            <li>(c) Costs.</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-rent-arrears-template.svg"
+          alt="Rent Arrears Particulars Template"
+          caption="A clear structure makes your claim easier to understand"
+        />
+
+        <h2 id="damage-example" className="scroll-mt-24">Property Damage Example</h2>
+
+        <p>
+          For claims where the tenant caused damage beyond normal wear and tear:
+        </p>
+
+        <div className="bg-gray-100 rounded-lg p-6 my-6 font-mono text-sm">
+          <p className="mb-4">
+            1. The Claimant is the landlord of [ADDRESS] (&quot;the Property&quot;).
+          </p>
+          <p className="mb-4">
+            2. By a written Assured Shorthold Tenancy dated [DATE], the Property was let
+            to the Defendant from [START DATE] to [END DATE].
+          </p>
+          <p className="mb-4">
+            3. Under clause [NUMBER] of the tenancy agreement, the Defendant agreed to keep
+            the Property in good condition, not to cause damage, and to return the Property
+            at the end of the tenancy in the same condition as at the start (fair wear and
+            tear excepted).
+          </p>
+          <p className="mb-4">
+            4. At the start of the tenancy, an inventory was prepared recording the
+            condition of the Property. At the end of the tenancy, a check-out report was
+            prepared on [DATE].
+          </p>
+          <p className="mb-4">
+            5. In breach of the tenancy agreement, the Defendant caused or permitted the
+            following damage to the Property:
+          </p>
+          <ul className="mb-4 ml-4">
+            <li>(a) [Description of damage] - Cost of repair/replacement: £[AMOUNT]</li>
+            <li>(b) [Description of damage] - Cost of repair/replacement: £[AMOUNT]</li>
+            <li>(c) Professional cleaning required due to condition: £[AMOUNT]</li>
+          </ul>
+          <p className="mb-4">
+            6. The total cost of making good the damage is £[TOTAL].
+          </p>
+          <p className="mb-4">
+            7. A security deposit of £[AMOUNT] was held. After deduction of agreed amounts,
+            the Defendant owes an additional £[AMOUNT].
+          </p>
+          <p className="mb-4">
+            8. Despite demand dated [DATE], the Defendant has failed to pay.
+          </p>
+          <p className="mb-4">
+            9. The Claimant claims £[AMOUNT], interest, and costs.
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="combined-claim" className="scroll-mt-24">Combined Arrears and Damage</h2>
+
+        <p>
+          If you are claiming both rent arrears and damage, combine the elements:
+        </p>
+
+        <div className="bg-gray-100 rounded-lg p-6 my-6 font-mono text-sm">
+          <p className="mb-4">
+            1. The Claimant is the landlord of [ADDRESS] (&quot;the Property&quot;).
+          </p>
+          <p className="mb-4">
+            2. By a written Assured Shorthold Tenancy dated [DATE], the Property was let
+            to the Defendant from [START DATE]. The tenancy ended on [DATE].
+          </p>
+          <p className="mb-4">
+            3. Under the tenancy agreement, the Defendant agreed to pay rent of £[AMOUNT]
+            per month on the [DAY] of each month.
+          </p>
+          <p className="mb-4">
+            4. The Defendant also agreed to keep the Property in good condition and return
+            it at the end of the tenancy in the same condition as at the start.
+          </p>
+          <p className="mb-4">
+            <strong>RENT ARREARS</strong>
+          </p>
+          <p className="mb-4">
+            5. The Defendant failed to pay rent from [DATE] to [DATE], totalling £[AMOUNT].
+          </p>
+          <p className="mb-4">
+            <strong>DAMAGE</strong>
+          </p>
+          <p className="mb-4">
+            6. In breach of the tenancy agreement, the Defendant caused the following damage:
+            [Brief description]. The cost of repair is £[AMOUNT].
+          </p>
+          <p className="mb-4">
+            7. A deposit of £[AMOUNT] was held. After deducting [WHAT], the balance owed
+            is £[AMOUNT].
+          </p>
+          <p className="mb-4">
+            8. Despite demand, the Defendant has not paid.
+          </p>
+          <p className="mb-4">
+            9. The Claimant claims £[TOTAL], interest, and costs.
+          </p>
+        </div>
+
+        <h2 id="common-mistakes" className="scroll-mt-24">Common Mistakes to Avoid</h2>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900">Critical Errors</h4>
+          <ul className="text-red-800 mt-2 space-y-2">
+            <li><strong>Wrong defendant:</strong> Make sure you sue the right person - check the tenancy agreement for the correct name</li>
+            <li><strong>No figures:</strong> You must state specific amounts, not vague claims</li>
+            <li><strong>Missing dates:</strong> Include dates for the tenancy, breaches, and demands</li>
+            <li><strong>Exaggeration:</strong> Only claim what you can prove - inflated claims damage credibility</li>
+          </ul>
+        </div>
+
+        <h3>Other Common Problems</h3>
+        <ul>
+          <li><strong>Too much detail:</strong> Be concise. Save the full evidence for later.</li>
+          <li><strong>Legal jargon:</strong> Plain English is better than Latin phrases</li>
+          <li><strong>Missing the contract:</strong> You must establish there was a tenancy agreement</li>
+          <li><strong>No demand:</strong> Show you asked for payment before suing</li>
+          <li><strong>Wrong interest rate:</strong> Check whether contractual or statutory interest applies</li>
+          <li><strong>Claiming deposit incorrectly:</strong> If you&apos;re claiming damages, explain what the deposit covered</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-common-mistakes.svg"
+          alt="Common Mistakes in Particulars of Claim"
+          caption="Avoid these common errors to strengthen your case"
+        />
+
+        <h2 id="interest-claims" className="scroll-mt-24">Claiming Interest</h2>
+
+        <p>
+          You can claim interest on money owed. There are two options:
+        </p>
+
+        <h3>Contractual Interest</h3>
+        <p>
+          If your tenancy agreement specifies an interest rate for late payment, you can
+          claim at that rate. Quote the relevant clause in your particulars.
+        </p>
+
+        <h3>Statutory Interest</h3>
+        <p>
+          If the contract doesn&apos;t specify interest, you can claim under section 69 of
+          the County Courts Act 1984 at 8% per year simple interest.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Calculating Interest</h4>
+          <p className="text-green-800 mt-2">
+            Interest at 8% per year = 0.022% per day.<br />
+            Example: £5,000 debt for 90 days = £5,000 × 0.00022 × 90 = £99 interest.<br />
+            State in your particulars: &quot;Interest at 8% per annum from [DATE] to [DATE] = £[AMOUNT], and continuing at £[DAILY RATE] per day until judgment.&quot;
+          </p>
+        </div>
+
+        <h2 id="particulars-faq" className="scroll-mt-24">Particulars of Claim FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long should particulars of claim be?</h3>
+            <p className="text-gray-600">
+              For MCOL, you&apos;re limited to 1,080 characters (about 150-200 words). Be concise.
+              You can attach a longer document if needed, but the basics should fit in the form.
+              For paper claims, 2-3 pages is normal for a straightforward rent arrears case.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to attach evidence?</h3>
+            <p className="text-gray-600">
+              Not at the particulars stage. You&apos;re just setting out your claim. Evidence
+              (tenancy agreement, rent records, photos) comes later if the defendant disputes
+              the claim. Keep your evidence ready.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I amend my particulars later?</h3>
+            <p className="text-gray-600">
+              Yes, but it requires court permission after certain stages. It&apos;s better to
+              get them right first time. If you need to amend, apply promptly - late amendments
+              may not be allowed.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I use a solicitor?</h3>
+            <p className="text-gray-600">
+              For straightforward rent arrears under £10,000, you can handle it yourself.
+              The small claims track is designed for litigants in person. For larger or
+              complex claims, legal advice may be worthwhile.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I make a mistake?</h3>
+            <p className="text-gray-600">
+              Minor errors (typos, wrong dates) can usually be corrected. Fundamental errors
+              (wrong defendant, wrong amount) are more serious. If in doubt, withdraw and
+              reissue the claim - this is usually possible early on.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about jointly liable tenants?</h3>
+            <p className="text-gray-600">
+              If multiple tenants signed the tenancy, they are usually jointly and severally
+              liable. You can sue all of them, or any one of them for the full amount.
+              State in your particulars that they are jointly liable.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Get Professional Templates</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven&apos;s Money Claim Pack includes professionally drafted particulars
+            of claim templates for rent arrears, property damage, and combined claims - plus
+            letters before action and enforcement guidance.
+          </p>
+          <Link
+            href="/products/money-claim"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Money Claim Pack →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 21: Scotland Private Residential Tenancy Guide
+  {
+    slug: 'scotland-private-residential-tenancy',
+    title: 'Private Residential Tenancy (PRT) Guide - Scotland 2026',
+    description: 'Complete guide to Scotland Private Residential Tenancy. Learn about PRT rules, tenant rights, landlord obligations, rent increases, and how PRTs differ from ASTs.',
+    metaDescription: 'Scotland Private Residential Tenancy (PRT) guide for landlords. Learn PRT rules, notice periods, rent increases, and eviction grounds in 2026.',
+    date: '2026-01-03',
+    readTime: '15 min read',
+    wordCount: 1850,
+    category: 'Scottish Law',
+    tags: ['private residential tenancy', 'PRT', 'Scotland', 'tenancy agreement', 'Scottish landlord', 'tenant rights'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-prt.svg',
+    heroImageAlt: 'Private Residential Tenancy Scotland Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'private residential tenancy scotland',
+    secondaryKeywords: ['PRT Scotland', 'Scottish tenancy agreement', 'Scotland landlord PRT', 'private rental Scotland'],
+    tableOfContents: [
+      { id: 'what-is-prt', title: 'What Is a Private Residential Tenancy?', level: 2 },
+      { id: 'key-features', title: 'Key Features of PRTs', level: 2 },
+      { id: 'tenancy-terms', title: 'Tenancy Terms', level: 2 },
+      { id: 'rent-rules', title: 'Rent and Rent Increases', level: 2 },
+      { id: 'landlord-obligations', title: 'Landlord Obligations', level: 2 },
+      { id: 'ending-prt', title: 'Ending a PRT', level: 2 },
+      { id: 'eviction-grounds', title: 'Eviction Grounds Overview', level: 2 },
+      { id: 'prt-faq', title: 'PRT FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-notice-to-leave', 'scotland-first-tier-tribunal'],
+    content: (
+      <>
+        <p className="lead">
+          Since December 2017, the Private Residential Tenancy (PRT) has been the standard
+          tenancy type for most private rentals in Scotland. Unlike England&apos;s fixed-term
+          Assured Shorthold Tenancies, PRTs have no end date and give tenants significantly
+          more security. This guide explains everything landlords need to know about PRTs.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Scotland Is Different</h4>
+          <p className="text-blue-800 mt-2">
+            Scottish tenancy law is completely separate from English law. There is no Section
+            21 in Scotland, no Assured Shorthold Tenancy, and eviction must be through the
+            First-tier Tribunal (not the County Court). Make sure you&apos;re following the
+            correct procedures.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-prt-overview.svg"
+          alt="Private Residential Tenancy Overview"
+          caption="PRTs provide open-ended tenancies with enhanced tenant security"
+        />
+
+        <h2 id="what-is-prt" className="scroll-mt-24">What Is a Private Residential Tenancy?</h2>
+
+        <p>
+          A Private Residential Tenancy is the standard tenancy type for most private sector
+          lettings in Scotland. It was introduced by the Private Housing (Tenancies) (Scotland)
+          Act 2016 to replace the previous Assured Tenancy and Short Assured Tenancy.
+        </p>
+
+        <h3>When Does a PRT Apply?</h3>
+        <p>A PRT is created when all of these conditions are met:</p>
+        <ul>
+          <li>The property is let as a separate dwelling</li>
+          <li>The tenant is an individual (not a company)</li>
+          <li>The property is the tenant&apos;s only or principal home</li>
+          <li>The landlord is not resident in the property</li>
+          <li>The tenancy doesn&apos;t fall into an exempt category</li>
+        </ul>
+
+        <h3>Exempt Tenancies</h3>
+        <p>PRTs do not apply to:</p>
+        <ul>
+          <li>Holiday lets</li>
+          <li>Student accommodation let by educational institutions</li>
+          <li>Resident landlord arrangements</li>
+          <li>Agricultural tenancies</li>
+          <li>Homeless temporary accommodation provided by councils</li>
+          <li>Properties with very high rents</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="key-features" className="scroll-mt-24">Key Features of PRTs</h2>
+
+        <h3>No Fixed Term (Open-Ended)</h3>
+        <p>
+          Unlike English ASTs, PRTs do not have an end date. The tenancy continues
+          indefinitely until either:
+        </p>
+        <ul>
+          <li>The tenant gives notice to leave, or</li>
+          <li>The landlord obtains an eviction order from the First-tier Tribunal using one of the 18 statutory grounds</li>
+        </ul>
+
+        <h3>Statutory Terms</h3>
+        <p>
+          All PRTs automatically include certain statutory terms set out in legislation.
+          You cannot contract out of these terms - any clause that contradicts them is void.
+        </p>
+
+        <h3>Model Tenancy Agreement</h3>
+        <p>
+          The Scottish Government provides a model tenancy agreement that landlords should use.
+          Using the official template ensures compliance with statutory requirements.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">No &quot;No-Fault&quot; Eviction</h4>
+          <p className="text-amber-800 mt-2">
+            Scotland abolished &quot;no-fault&quot; eviction when it introduced PRTs. You cannot
+            evict a tenant simply because you want them to leave or because a fixed term has
+            ended. You must prove one of the statutory grounds applies, and the First-tier
+            Tribunal must grant an eviction order.
+          </p>
+        </div>
+
+        <h2 id="tenancy-terms" className="scroll-mt-24">Tenancy Terms</h2>
+
+        <h3>Mandatory Statutory Terms</h3>
+        <p>
+          Every PRT includes these terms by law, regardless of what your written agreement says:
+        </p>
+        <ul>
+          <li><strong>Rent and payment:</strong> How much rent is payable and when</li>
+          <li><strong>Deposits:</strong> How deposits must be handled</li>
+          <li><strong>Rent increases:</strong> The process for increasing rent</li>
+          <li><strong>Tenant&apos;s right to end the tenancy:</strong> Notice period and process</li>
+          <li><strong>Landlord&apos;s duty to provide information:</strong> What the landlord must tell the tenant</li>
+          <li><strong>Notifications:</strong> How notices must be served</li>
+          <li><strong>Subletting and assignation:</strong> Rules about subletting</li>
+          <li><strong>Access for repairs:</strong> The landlord&apos;s right to enter for repairs</li>
+        </ul>
+
+        <h3>Discretionary Terms</h3>
+        <p>
+          You can add additional terms to your PRT, provided they don&apos;t contradict the
+          statutory terms or are unfair. Common additions include:
+        </p>
+        <ul>
+          <li>Pet policies</li>
+          <li>Garden maintenance responsibilities</li>
+          <li>Rules about guests</li>
+          <li>Smoking policies</li>
+          <li>Decoration and alterations</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-prt-terms.svg"
+          alt="PRT Tenancy Terms"
+          caption="PRTs include mandatory statutory terms that cannot be overridden"
+        />
+
+        <h2 id="rent-rules" className="scroll-mt-24">Rent and Rent Increases</h2>
+
+        <h3>Setting the Initial Rent</h3>
+        <p>
+          You can set the initial rent at any level. Scotland doesn&apos;t have rent controls
+          for new tenancies (unlike some other countries). The market determines initial rent.
+        </p>
+
+        <h3>Rent Increases</h3>
+        <p>
+          During the tenancy, there are strict rules about rent increases:
+        </p>
+        <ul>
+          <li><strong>Frequency:</strong> Only once every 12 months</li>
+          <li><strong>Notice:</strong> At least 3 months&apos; written notice</li>
+          <li><strong>Form:</strong> Must use the prescribed form (Form RR1)</li>
+          <li><strong>Challenge:</strong> Tenant can refer the increase to Rent Service Scotland</li>
+        </ul>
+
+        <h3>Rent Pressure Zones</h3>
+        <p>
+          Local authorities can apply to have areas designated as &quot;Rent Pressure Zones&quot;
+          where rent increases are capped. As of 2026, check whether your property is in a
+          designated zone.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900">Rent Freeze History</h4>
+          <p className="text-red-800 mt-2">
+            Scotland implemented temporary rent freezes and eviction bans during the cost-of-living
+            crisis. Always check the current rules, as emergency legislation may affect your
+            ability to increase rent or evict tenants.
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="landlord-obligations" className="scroll-mt-24">Landlord Obligations</h2>
+
+        <h3>Before the Tenancy</h3>
+        <ul>
+          <li><strong>Landlord registration:</strong> You must be registered with the local council</li>
+          <li><strong>Written agreement:</strong> Provide a written tenancy agreement (use the model PRT)</li>
+          <li><strong>Tenant information pack:</strong> Give the tenant prescribed information</li>
+          <li><strong>Deposit protection:</strong> Protect the deposit within 30 working days</li>
+        </ul>
+
+        <h3>During the Tenancy</h3>
+        <ul>
+          <li><strong>Repairing standard:</strong> Keep the property in good repair (Scottish repairing standard applies)</li>
+          <li><strong>Safety certificates:</strong> Gas safety certificate annually, EICR every 5 years</li>
+          <li><strong>Fire safety:</strong> Interlinked fire alarms and carbon monoxide detectors</li>
+          <li><strong>Legionella risk assessment:</strong> Assess and manage legionella risks</li>
+          <li><strong>24-48 hours&apos; notice:</strong> Before entering the property (except emergencies)</li>
+        </ul>
+
+        <h3>Tenant Information Pack</h3>
+        <p>
+          You must provide tenants with specific information, including:
+        </p>
+        <ul>
+          <li>Your name and address (or agent&apos;s details)</li>
+          <li>Your landlord registration number</li>
+          <li>EPC for the property</li>
+          <li>Information about deposit protection</li>
+          <li>The Easy Read Notes for the Scottish Model Tenancy Agreement</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-landlord-duties.svg"
+          alt="Landlord Obligations in Scotland"
+          caption="Scottish landlords have specific legal duties to tenants"
+        />
+
+        <h2 id="ending-prt" className="scroll-mt-24">Ending a PRT</h2>
+
+        <h3>Tenant Ends Tenancy</h3>
+        <p>
+          Tenants can end a PRT at any time by giving written notice. The minimum notice period is:
+        </p>
+        <ul>
+          <li><strong>28 days:</strong> If notice is given on any day</li>
+        </ul>
+        <p>
+          The tenancy ends on the day stated in the notice (which must be at least 28 days
+          from when notice is given), regardless of rent payment dates.
+        </p>
+
+        <h3>Landlord Ends Tenancy</h3>
+        <p>
+          Landlords cannot simply &quot;end&quot; a PRT. You must:
+        </p>
+        <ol>
+          <li>Identify a valid eviction ground</li>
+          <li>Serve a Notice to Leave with the correct notice period</li>
+          <li>Apply to the First-tier Tribunal for an eviction order</li>
+          <li>If granted, apply to sheriff officers to enforce the order</li>
+        </ol>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Notice to Leave Periods</h4>
+          <p className="text-green-800 mt-2">
+            The notice period varies depending on the ground and how long the tenant has lived
+            in the property. It ranges from 28 days to 84 days. Some grounds have different
+            periods depending on tenancy length.
+          </p>
+        </div>
+
+        <h2 id="eviction-grounds" className="scroll-mt-24">Eviction Grounds Overview</h2>
+
+        <p>
+          There are 18 grounds for eviction under the PRT. They fall into two categories:
+        </p>
+
+        <h3>Mandatory Grounds</h3>
+        <p>
+          If you prove the ground applies, the Tribunal must grant an eviction order:
+        </p>
+        <ul>
+          <li><strong>Ground 1:</strong> Landlord intends to sell</li>
+          <li><strong>Ground 2:</strong> Property to be sold by lender</li>
+          <li><strong>Ground 3:</strong> Landlord intends to refurbish</li>
+          <li><strong>Ground 4:</strong> Landlord or family member intends to live in property</li>
+          <li><strong>Ground 5:</strong> Property needed for religious worker</li>
+          <li><strong>Ground 6:</strong> Landlord intends to use for non-residential purpose</li>
+          <li><strong>Ground 7:</strong> Property to be demolished</li>
+          <li><strong>Ground 8:</strong> Tenant no longer needs supported accommodation</li>
+          <li><strong>Ground 10:</strong> Not occupying as only or principal home</li>
+          <li><strong>Ground 12:</strong> Rent arrears (at least 3 consecutive months)</li>
+        </ul>
+
+        <h3>Discretionary Grounds</h3>
+        <p>
+          The Tribunal may grant an eviction order if it is reasonable to do so:
+        </p>
+        <ul>
+          <li><strong>Ground 9:</strong> Tenant is an employee and employment has ended</li>
+          <li><strong>Ground 11:</strong> Breach of tenancy agreement</li>
+          <li><strong>Ground 12:</strong> Rent arrears (less than 3 months but substantial)</li>
+          <li><strong>Ground 13:</strong> Criminal behaviour</li>
+          <li><strong>Ground 14:</strong> Antisocial behaviour</li>
+          <li><strong>Ground 15:</strong> Association with person who has behaved antisocially</li>
+          <li><strong>Ground 16:</strong> Landlord has had registration refused or revoked</li>
+          <li><strong>Ground 17:</strong> HMO licence has been revoked</li>
+          <li><strong>Ground 18:</strong> Overcrowding statutory notice</li>
+        </ul>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Ground</th>
+                <th className="border p-3 text-left font-semibold">Reason</th>
+                <th className="border p-3 text-left font-semibold">Type</th>
+                <th className="border p-3 text-left font-semibold">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Ground 1</td>
+                <td className="border p-3">Landlord selling</td>
+                <td className="border p-3">Mandatory</td>
+                <td className="border p-3">28/84 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Ground 4</td>
+                <td className="border p-3">Landlord/family moving in</td>
+                <td className="border p-3">Mandatory</td>
+                <td className="border p-3">28/84 days</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Ground 11</td>
+                <td className="border p-3">Breach of agreement</td>
+                <td className="border p-3">Discretionary</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Ground 12</td>
+                <td className="border p-3">Rent arrears</td>
+                <td className="border p-3">Both*</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Ground 14</td>
+                <td className="border p-3">Antisocial behaviour</td>
+                <td className="border p-3">Discretionary</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-sm text-gray-600">* Ground 12 is mandatory if arrears are 3+ months; discretionary otherwise</p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-eviction-grounds-scotland.svg"
+          alt="Scotland Eviction Grounds Overview"
+          caption="Landlords must prove one of 18 grounds to evict a PRT tenant"
+        />
+
+        <h2 id="prt-faq" className="scroll-mt-24">PRT FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use a break clause in a PRT?</h3>
+            <p className="text-gray-600">
+              No. PRTs don&apos;t have fixed terms, so break clauses don&apos;t apply. The
+              tenant can leave with 28 days&apos; notice at any time. The landlord can only
+              end the tenancy using one of the 18 statutory grounds.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my tenant signed before December 2017?</h3>
+            <p className="text-gray-600">
+              Tenancies that started before 1 December 2017 may still be Assured or Short
+              Assured Tenancies under the old rules. Check your tenancy type carefully -
+              the rules are different.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does eviction take in Scotland?</h3>
+            <p className="text-gray-600">
+              From serving the Notice to Leave to the tenant leaving, expect 3-6 months
+              minimum. Complex cases or appeals can take longer. The First-tier Tribunal
+              process adds time compared to some court processes.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I refuse to renew a PRT?</h3>
+            <p className="text-gray-600">
+              You don&apos;t &quot;renew&quot; a PRT - it continues indefinitely. There is no
+              equivalent to refusing to renew at the end of a fixed term. You can only end
+              the tenancy by proving a ground and getting a Tribunal order.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What deposit scheme should I use?</h3>
+            <p className="text-gray-600">
+              Scotland has three approved schemes: SafeDeposits Scotland, Letting Protection
+              Service Scotland, and mydeposits Scotland. You must protect the deposit within
+              30 working days of receiving it.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is landlord registration mandatory?</h3>
+            <p className="text-gray-600">
+              Yes. All private landlords in Scotland must be registered with the local authority
+              where their rental property is located. Operating without registration is a
+              criminal offence with significant penalties.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need a Scotland Tenancy Agreement?</h3>
+          <p className="text-gray-700 mb-6">
+            Get a compliant Private Residential Tenancy agreement for Scotland. Our template
+            follows the Scottish Government&apos;s model agreement and includes all required
+            statutory terms.
+          </p>
+          <Link
+            href="/products/tenancy-agreement"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Tenancy Agreement →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 22: Scotland Eviction Process
+  {
+    slug: 'scotland-eviction-process',
+    title: 'Scotland Eviction Process - Complete Landlord Guide 2026',
+    description: 'Complete guide to the Scotland eviction process for landlords. Learn about Notice to Leave, First-tier Tribunal applications, eviction orders, and enforcement.',
+    metaDescription: 'Scotland eviction process guide for landlords. Learn Notice to Leave, Tribunal applications, eviction orders, and enforcement steps in 2026.',
+    date: '2026-01-03',
+    readTime: '16 min read',
+    wordCount: 1920,
+    category: 'Scottish Law',
+    tags: ['Scotland eviction', 'eviction process', 'First-tier Tribunal', 'Notice to Leave', 'PRT eviction', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-scotland-eviction.svg',
+    heroImageAlt: 'Scotland Eviction Process Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland eviction process',
+    secondaryKeywords: ['evict tenant Scotland', 'First-tier Tribunal eviction', 'Notice to Leave Scotland', 'PRT eviction'],
+    tableOfContents: [
+      { id: 'overview', title: 'Eviction Process Overview', level: 2 },
+      { id: 'step-1-grounds', title: 'Step 1: Identify Your Ground', level: 2 },
+      { id: 'step-2-notice', title: 'Step 2: Serve Notice to Leave', level: 2 },
+      { id: 'step-3-tribunal', title: 'Step 3: Apply to the Tribunal', level: 2 },
+      { id: 'step-4-hearing', title: 'Step 4: The Tribunal Hearing', level: 2 },
+      { id: 'step-5-enforcement', title: 'Step 5: Enforcement', level: 2 },
+      { id: 'timescales', title: 'Realistic Timescales', level: 2 },
+      { id: 'scotland-eviction-faq', title: 'Eviction FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-private-residential-tenancy', 'scotland-notice-to-leave', 'scotland-first-tier-tribunal'],
+    content: (
+      <>
+        <p className="lead">
+          Evicting a tenant in Scotland requires following a specific legal process through the
+          First-tier Tribunal (Housing and Property Chamber). Unlike England, there is no
+          &quot;no-fault&quot; eviction - you must prove one of 18 statutory grounds applies.
+          This guide walks you through each step of the Scottish eviction process.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li>All evictions must go through the First-tier Tribunal</li>
+            <li>You must serve a valid Notice to Leave before applying</li>
+            <li>The process typically takes 3-6 months minimum</li>
+            <li>Illegal eviction is a criminal offence with severe penalties</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-scotland-eviction-overview.svg"
+          alt="Scotland Eviction Process Overview"
+          caption="The Scottish eviction process has several mandatory steps"
+        />
+
+        <h2 id="overview" className="scroll-mt-24">Eviction Process Overview</h2>
+
+        <p>
+          The Scottish eviction process for Private Residential Tenancies (PRTs) follows
+          these mandatory steps:
+        </p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Five Steps to Eviction:</h4>
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>Identify a valid eviction ground</strong>
+                <p className="text-gray-600 text-sm">Choose from the 18 statutory grounds - you must have evidence</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>Serve a Notice to Leave</strong>
+                <p className="text-gray-600 text-sm">Give the correct notice period (28-84 days depending on ground and tenancy length)</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <div>
+                <strong>Apply to the First-tier Tribunal</strong>
+                <p className="text-gray-600 text-sm">Submit your application with evidence after the notice period expires</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">4</span>
+              <div>
+                <strong>Attend the Tribunal hearing</strong>
+                <p className="text-gray-600 text-sm">Present your case - the Tribunal decides whether to grant an eviction order</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">5</span>
+              <div>
+                <strong>Enforce the order</strong>
+                <p className="text-gray-600 text-sm">If the tenant doesn&apos;t leave, instruct sheriff officers to carry out the eviction</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900">Never Self-Evict</h4>
+          <p className="text-red-800 mt-2">
+            Changing locks, removing belongings, cutting utilities, or harassing a tenant to
+            leave is illegal eviction in Scotland. It&apos;s a criminal offence punishable by
+            unlimited fines and imprisonment. The tenant can also claim substantial damages.
+            Always follow the legal process.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="step-1-grounds" className="scroll-mt-24">Step 1: Identify Your Ground</h2>
+
+        <p>
+          You must have a valid reason (ground) to evict a PRT tenant. There are 18 grounds
+          in total, divided into mandatory and discretionary grounds.
+        </p>
+
+        <h3>Most Common Grounds for Landlords</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Ground</th>
+                <th className="border p-3 text-left font-semibold">Reason</th>
+                <th className="border p-3 text-left font-semibold">Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Ground 1</td>
+                <td className="border p-3">Landlord intends to sell the property</td>
+                <td className="border p-3">Mandatory</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Ground 4</td>
+                <td className="border p-3">Landlord or family member intends to live in property</td>
+                <td className="border p-3">Mandatory</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Ground 11</td>
+                <td className="border p-3">Tenant has breached the tenancy agreement</td>
+                <td className="border p-3">Discretionary</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Ground 12</td>
+                <td className="border p-3">Rent arrears</td>
+                <td className="border p-3">Both*</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Ground 14</td>
+                <td className="border p-3">Tenant has behaved antisocially</td>
+                <td className="border p-3">Discretionary</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="text-sm text-gray-600 mb-6">* Ground 12 is mandatory if arrears are 3+ consecutive months at both notice and hearing; otherwise discretionary</p>
+
+        <h3>Mandatory vs Discretionary</h3>
+        <ul>
+          <li><strong>Mandatory:</strong> If you prove the ground applies, the Tribunal MUST grant an eviction order</li>
+          <li><strong>Discretionary:</strong> Even if the ground applies, the Tribunal will only grant eviction if it&apos;s reasonable in all the circumstances</li>
+        </ul>
+
+        <h2 id="step-2-notice" className="scroll-mt-24">Step 2: Serve Notice to Leave</h2>
+
+        <p>
+          Before applying to the Tribunal, you must serve a Notice to Leave on the tenant.
+          This is a formal notice stating your intention to seek eviction and the ground(s)
+          you&apos;re relying on.
+        </p>
+
+        <h3>Notice Periods</h3>
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Ground</th>
+                <th className="border p-3 text-left font-semibold">Under 6 Months</th>
+                <th className="border p-3 text-left font-semibold">6 Months or More</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Grounds 1-8, 10</td>
+                <td className="border p-3">28 days</td>
+                <td className="border p-3">84 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Grounds 9, 11-18</td>
+                <td className="border p-3">28 days</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-notice-to-leave.svg"
+          alt="Notice to Leave Scotland"
+          caption="The notice period varies by ground and tenancy length"
+        />
+
+        <h2 id="step-3-tribunal" className="scroll-mt-24">Step 3: Apply to the Tribunal</h2>
+
+        <p>
+          Once the notice period has expired (and the tenant hasn&apos;t left), apply to the
+          First-tier Tribunal (Housing and Property Chamber) for an eviction order.
+        </p>
+
+        <h3>Application Requirements</h3>
+        <ul>
+          <li>Completed application form</li>
+          <li>Copy of the tenancy agreement</li>
+          <li>Copy of the Notice to Leave</li>
+          <li>Proof of service</li>
+          <li>Evidence supporting your ground(s)</li>
+          <li>Application fee</li>
+        </ul>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="step-4-hearing" className="scroll-mt-24">Step 4: The Tribunal Hearing</h2>
+
+        <p>
+          After your application is accepted, the Tribunal schedules a Case Management
+          Discussion (CMD) and possibly a full hearing.
+        </p>
+
+        <h3>Case Management Discussion</h3>
+        <p>
+          The CMD is a preliminary hearing, usually by phone or video. The Tribunal checks
+          the application, identifies issues, and decides if a full hearing is needed.
+        </p>
+
+        <h3>Full Hearing</h3>
+        <p>
+          At the full hearing, you present your evidence and arguments. The tenant can
+          present their case. The Tribunal decides whether to grant the eviction order.
+        </p>
+
+        <h2 id="step-5-enforcement" className="scroll-mt-24">Step 5: Enforcement</h2>
+
+        <p>
+          If the tenant doesn&apos;t leave after the eviction order is granted, you&apos;ll need
+          to enforce it using sheriff officers.
+        </p>
+
+        <h3>Instructing Sheriff Officers</h3>
+        <ol>
+          <li>Contact a sheriff officer firm</li>
+          <li>Provide them with the eviction order</li>
+          <li>They charge the tenant and give a deadline</li>
+          <li>If necessary, they physically remove the tenant</li>
+        </ol>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-sheriff-officer.svg"
+          alt="Sheriff Officer Enforcement"
+          caption="Only sheriff officers can enforce an eviction order"
+        />
+
+        <h2 id="timescales" className="scroll-mt-24">Realistic Timescales</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Typical Timeline:</h4>
+          <ul className="space-y-3">
+            <li><strong>28-84 days:</strong> Notice period</li>
+            <li><strong>1-2 weeks:</strong> Preparing and submitting application</li>
+            <li><strong>4-8 weeks:</strong> Tribunal processing and CMD</li>
+            <li><strong>2-6 weeks:</strong> Full hearing (if needed)</li>
+            <li><strong>1-2 weeks:</strong> Decision</li>
+            <li><strong>2-4 weeks:</strong> Enforcement (if needed)</li>
+          </ul>
+          <p className="mt-4 font-semibold">Total: 3-7 months</p>
+        </div>
+
+        <h2 id="scotland-eviction-faq" className="scroll-mt-24">Eviction FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use multiple grounds?</h3>
+            <p className="text-gray-600">
+              Yes. You can state multiple grounds in your Notice to Leave to have backup options.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant pays arrears before the hearing?</h3>
+            <p className="text-gray-600">
+              For Ground 12, arrears must exist at both notice and hearing for the mandatory element.
+              If paid, the ground becomes discretionary.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a solicitor?</h3>
+            <p className="text-gray-600">
+              You can represent yourself at the Tribunal. It&apos;s designed for self-representation.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can the tenant appeal?</h3>
+            <p className="text-gray-600">
+              Yes, to the Upper Tribunal within 30 days on a point of law.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need Help With Your Eviction?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides Scotland-specific eviction guides and templates to help you
+            navigate the Tribunal process.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 23: Scotland Notice to Leave
+  {
+    slug: 'scotland-notice-to-leave',
+    title: 'Scotland Notice to Leave - Complete Guide 2026',
+    description: 'Complete guide to serving a Notice to Leave in Scotland. Learn notice periods, prescribed form requirements, service methods, and common mistakes to avoid.',
+    metaDescription: 'How to serve a Notice to Leave in Scotland. Guide to notice periods, prescribed forms, service methods, and requirements for PRT evictions.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1650,
+    category: 'Scottish Law',
+    tags: ['Notice to Leave', 'Scotland', 'PRT', 'eviction notice', 'Scottish landlord', 'notice period'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-notice-leave.svg',
+    heroImageAlt: 'Scotland Notice to Leave Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'notice to leave scotland',
+    secondaryKeywords: ['Scotland eviction notice', 'PRT notice period', 'Notice to Leave form', 'Scottish landlord notice'],
+    tableOfContents: [
+      { id: 'what-is-notice', title: 'What Is a Notice to Leave?', level: 2 },
+      { id: 'when-required', title: 'When Is It Required?', level: 2 },
+      { id: 'notice-periods', title: 'Notice Periods', level: 2 },
+      { id: 'prescribed-form', title: 'The Prescribed Form', level: 2 },
+      { id: 'serving-notice', title: 'How to Serve the Notice', level: 2 },
+      { id: 'common-mistakes', title: 'Common Mistakes', level: 2 },
+      { id: 'after-notice', title: 'What Happens After Service', level: 2 },
+      { id: 'notice-faq', title: 'Notice to Leave FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-private-residential-tenancy', 'scotland-first-tier-tribunal'],
+    content: (
+      <>
+        <p className="lead">
+          The Notice to Leave is the first formal step in the Scottish eviction process. Before
+          you can apply to the First-tier Tribunal for an eviction order, you must serve a valid
+          Notice to Leave and wait for the notice period to expire.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Critical Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li>You MUST use the prescribed form</li>
+            <li>Notice periods range from 28 to 84 days</li>
+            <li>Keep proof of service</li>
+            <li>Notice is valid for 6 months after expiry</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-notice-overview.svg"
+          alt="Notice to Leave Overview"
+          caption="The Notice to Leave is the essential first step to eviction in Scotland"
+        />
+
+        <h2 id="what-is-notice" className="scroll-mt-24">What Is a Notice to Leave?</h2>
+
+        <p>
+          A Notice to Leave is the formal document a landlord must give a tenant to begin the
+          eviction process for a Private Residential Tenancy (PRT) in Scotland. It informs
+          the tenant you want them to leave, states the eviction ground(s), and gives a deadline.
+        </p>
+
+        <p>
+          The Notice to Leave is NOT an eviction order. Even after receiving it, the tenant
+          has no legal obligation to leave until a Tribunal order is obtained.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="when-required" className="scroll-mt-24">When Is It Required?</h2>
+
+        <p>
+          You must serve a Notice to Leave before applying to the First-tier Tribunal. You
+          cannot apply until the notice period has fully expired and the tenant hasn&apos;t left.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Notice Validity Period</h4>
+          <p className="text-amber-800 mt-2">
+            A Notice to Leave is valid for 6 months from the date the notice period expires.
+            If you don&apos;t apply to the Tribunal within this time, you&apos;ll need a new notice.
+          </p>
+        </div>
+
+        <h2 id="notice-periods" className="scroll-mt-24">Notice Periods</h2>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Ground</th>
+                <th className="border p-3 text-left font-semibold">Under 6 Months</th>
+                <th className="border p-3 text-left font-semibold">6+ Months</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Ground 1 (Selling)</td>
+                <td className="border p-3">28 days</td>
+                <td className="border p-3">84 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Ground 4 (Landlord moving in)</td>
+                <td className="border p-3">28 days</td>
+                <td className="border p-3">84 days</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Ground 11 (Breach)</td>
+                <td className="border p-3">28 days</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Ground 12 (Rent arrears)</td>
+                <td className="border p-3">28 days</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Ground 14 (Antisocial)</td>
+                <td className="border p-3">28 days</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-notice-calculation.svg"
+          alt="Notice Period Calculation"
+          caption="Calculate the notice period carefully"
+        />
+
+        <h2 id="prescribed-form" className="scroll-mt-24">The Prescribed Form</h2>
+
+        <p>
+          You MUST use the prescribed form for the Notice to Leave. No other format is valid.
+          The form includes property details, tenant names, eviction grounds with checkboxes,
+          the leave date, and landlord signature.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Use Current Version</h4>
+          <p className="text-green-800 mt-2">
+            Always download a fresh copy of the form from the Scottish Government website
+            to ensure you&apos;re using the current version.
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="serving-notice" className="scroll-mt-24">How to Serve the Notice</h2>
+
+        <h3>Acceptable Methods</h3>
+        <ul>
+          <li><strong>Personal delivery:</strong> Hand it directly to the tenant</li>
+          <li><strong>Recorded delivery:</strong> Post with Royal Mail tracking</li>
+          <li><strong>Email:</strong> Only if the tenant agreed to receive notices by email</li>
+          <li><strong>Leaving at property:</strong> If personal delivery fails</li>
+        </ul>
+
+        <h3>Proof of Service</h3>
+        <p>Keep evidence such as:</p>
+        <ul>
+          <li>Royal Mail tracking/receipt</li>
+          <li>Signed witness statement</li>
+          <li>Email delivery receipt</li>
+          <li>Dated photograph</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-serving-notice.svg"
+          alt="Serving Notice to Leave"
+          caption="Keep proof of service for the Tribunal"
+        />
+
+        <h2 id="common-mistakes" className="scroll-mt-24">Common Mistakes</h2>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900">Critical Errors</h4>
+          <ul className="text-red-800 mt-2 space-y-2">
+            <li><strong>Wrong form:</strong> Using an informal letter</li>
+            <li><strong>Wrong notice period:</strong> Giving 28 days when 84 is required</li>
+            <li><strong>No proof of service:</strong> Can&apos;t prove when/how served</li>
+            <li><strong>Applying too early:</strong> Before notice period expires</li>
+          </ul>
+        </div>
+
+        <h2 id="after-notice" className="scroll-mt-24">What Happens After Service</h2>
+
+        <h3>Tenant Options</h3>
+        <ul>
+          <li>Leave by the deadline</li>
+          <li>Negotiate an alternative</li>
+          <li>Stay and wait for Tribunal proceedings</li>
+          <li>Seek advice</li>
+        </ul>
+
+        <h3>Landlord Next Steps</h3>
+        <p>
+          If the tenant doesn&apos;t leave, wait for the notice period to expire, then submit
+          your Tribunal application with all evidence.
+        </p>
+
+        <h2 id="notice-faq" className="scroll-mt-24">Notice to Leave FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I withdraw a Notice to Leave?</h3>
+            <p className="text-gray-600">
+              There&apos;s no formal withdrawal. If you don&apos;t apply to the Tribunal within
+              6 months of expiry, it becomes invalid.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I change the ground after serving?</h3>
+            <p className="text-gray-600">
+              Not on the same notice. You&apos;ll need to serve a new Notice to Leave with the
+              correct ground(s).
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I serve notice by WhatsApp?</h3>
+            <p className="text-gray-600">
+              Only email is specifically valid for electronic service (if agreed). WhatsApp is
+              risky - stick to recorded delivery.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about multiple tenants?</h3>
+            <p className="text-gray-600">
+              You must serve the notice on ALL joint tenants. Serving only one may not be valid.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Get Your Notice to Leave Template</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides compliant Notice to Leave templates for Scotland with
+            step-by-step guidance.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Notice Templates →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 24: Scotland First-tier Tribunal
+  {
+    slug: 'scotland-first-tier-tribunal',
+    title: 'Scotland First-tier Tribunal - Landlord Guide 2026',
+    description: 'Complete guide to the First-tier Tribunal (Housing and Property Chamber) in Scotland. Learn how to apply for eviction orders, what to expect at hearings, and how to prepare.',
+    metaDescription: 'First-tier Tribunal Scotland guide for landlords. Learn how to apply for eviction orders, prepare for hearings, and navigate the Tribunal process.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Scottish Law',
+    tags: ['First-tier Tribunal', 'Scotland', 'eviction order', 'Housing and Property Chamber', 'Tribunal hearing', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-tribunal.svg',
+    heroImageAlt: 'Scotland First-tier Tribunal Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'first tier tribunal scotland landlord',
+    secondaryKeywords: ['Housing and Property Chamber', 'Scotland Tribunal eviction', 'FTT Scotland', 'Tribunal hearing landlord'],
+    tableOfContents: [
+      { id: 'what-is-tribunal', title: 'What Is the First-tier Tribunal?', level: 2 },
+      { id: 'applying', title: 'Applying to the Tribunal', level: 2 },
+      { id: 'after-application', title: 'After You Apply', level: 2 },
+      { id: 'cmd', title: 'Case Management Discussion', level: 2 },
+      { id: 'hearing', title: 'The Full Hearing', level: 2 },
+      { id: 'decision', title: 'The Decision', level: 2 },
+      { id: 'costs', title: 'Costs and Expenses', level: 2 },
+      { id: 'tribunal-faq', title: 'Tribunal FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-notice-to-leave', 'scotland-private-residential-tenancy'],
+    content: (
+      <>
+        <p className="lead">
+          The First-tier Tribunal (Housing and Property Chamber) is the body that decides
+          eviction cases in Scotland. All landlords seeking to evict PRT tenants must apply
+          here. This guide explains the Tribunal process and how to navigate it successfully.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li>All PRT evictions must go through the Tribunal</li>
+            <li>Designed for self-representation</li>
+            <li>Less formal than court</li>
+            <li>Decisions can be appealed</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ftt-overview.svg"
+          alt="First-tier Tribunal Overview"
+          caption="The First-tier Tribunal handles all PRT eviction applications"
+        />
+
+        <h2 id="what-is-tribunal" className="scroll-mt-24">What Is the First-tier Tribunal?</h2>
+
+        <p>
+          The First-tier Tribunal (Housing and Property Chamber) is a specialist tribunal
+          handling housing disputes including evictions, rent disputes, and repairing
+          standard complaints.
+        </p>
+
+        <h3>How It Differs From Courts</h3>
+        <ul>
+          <li><strong>Less formal:</strong> More accessible proceedings</li>
+          <li><strong>Specialist:</strong> Members are housing experts</li>
+          <li><strong>Accessible:</strong> Designed for self-representation</li>
+          <li><strong>Inquisitorial:</strong> Tribunal can ask questions</li>
+          <li><strong>Lower costs:</strong> Generally cheaper than court</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="applying" className="scroll-mt-24">Applying to the Tribunal</h2>
+
+        <h3>When to Apply</h3>
+        <p>Apply once your Notice to Leave has expired and the tenant hasn&apos;t left.</p>
+
+        <h3>Required Documents</h3>
+        <ul>
+          <li>Completed application form</li>
+          <li>Copy of tenancy agreement</li>
+          <li>Copy of Notice to Leave</li>
+          <li>Proof of service</li>
+          <li>Evidence for your ground(s)</li>
+        </ul>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-3">Evidence by Ground:</h4>
+          <ul className="space-y-2">
+            <li><strong>Ground 1:</strong> Estate agent instructions, marketing materials</li>
+            <li><strong>Ground 4:</strong> Statement of intention, current accommodation details</li>
+            <li><strong>Ground 11:</strong> Details of breaches, warnings, photos</li>
+            <li><strong>Ground 12:</strong> Rent statements, payment demands</li>
+            <li><strong>Ground 14:</strong> Incident log, witness statements</li>
+          </ul>
+        </div>
+
+        <h3>Application Fee</h3>
+        <p>Typically £50-100 - check current fees on the Scottish Courts website.</p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tribunal-application.svg"
+          alt="Tribunal Application"
+          caption="Submit your application online with supporting evidence"
+        />
+
+        <h2 id="after-application" className="scroll-mt-24">After You Apply</h2>
+
+        <p>
+          You&apos;ll receive an acknowledgment with your case reference. The Tribunal validates
+          the application (1-2 weeks), serves it on the tenant, and the tenant has time to
+          respond.
+        </p>
+
+        <h3>Tenant Response Options</h3>
+        <ul>
+          <li>Not respond (case may proceed without hearing)</li>
+          <li>Accept and agree to leave</li>
+          <li>Contest the application</li>
+        </ul>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="cmd" className="scroll-mt-24">Case Management Discussion</h2>
+
+        <p>
+          A Case Management Discussion (CMD) is a preliminary hearing, usually by phone or
+          video, to prepare for the case.
+        </p>
+
+        <h3>Purpose</h3>
+        <ul>
+          <li>Check parties understand the process</li>
+          <li>Identify what&apos;s in dispute</li>
+          <li>See if resolution is possible without full hearing</li>
+          <li>Give directions for next steps</li>
+          <li>Schedule full hearing if necessary</li>
+        </ul>
+
+        <h3>Possible Outcomes</h3>
+        <ul>
+          <li>Decision made at CMD</li>
+          <li>Full hearing scheduled</li>
+          <li>Directions for more information</li>
+          <li>Case adjourned</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-cmd.svg"
+          alt="Case Management Discussion"
+          caption="CMDs are usually by phone or video"
+        />
+
+        <h2 id="hearing" className="scroll-mt-24">The Full Hearing</h2>
+
+        <h3>Format</h3>
+        <ul>
+          <li><strong>Location:</strong> Usually video call</li>
+          <li><strong>Duration:</strong> 30-60 minutes typically</li>
+          <li><strong>Formality:</strong> Less formal than court</li>
+        </ul>
+
+        <h3>What Happens</h3>
+        <ol>
+          <li>Tribunal introduces the case</li>
+          <li>You present your case and evidence</li>
+          <li>Tenant presents their response</li>
+          <li>Tribunal asks questions</li>
+          <li>Closing statements</li>
+          <li>Decision reserved</li>
+        </ol>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Tips for the Hearing</h4>
+          <ul className="text-green-800 mt-2 space-y-1">
+            <li>Test video/audio beforehand</li>
+            <li>Have all documents organized</li>
+            <li>Write notes on key points</li>
+            <li>Speak clearly</li>
+            <li>Ask for clarification if needed</li>
+          </ul>
+        </div>
+
+        <h2 id="decision" className="scroll-mt-24">The Decision</h2>
+
+        <p>
+          The written decision is usually issued within 2-4 weeks. If successful, the
+          eviction order specifies when the tenant must leave (usually 14 days).
+        </p>
+
+        <h3>If Unsuccessful</h3>
+        <p>
+          The decision explains why. You may apply again if circumstances change, or
+          appeal on a point of law within 30 days.
+        </p>
+
+        <h2 id="costs" className="scroll-mt-24">Costs and Expenses</h2>
+
+        <ul>
+          <li><strong>Application fee:</strong> Paid upfront, not recoverable</li>
+          <li><strong>Legal fees:</strong> Generally not recoverable</li>
+          <li><strong>Sheriff officers:</strong> Separate enforcement costs (£200-500+)</li>
+        </ul>
+
+        <h2 id="tribunal-faq" className="scroll-mt-24">Tribunal FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does the process take?</h3>
+            <p className="text-gray-600">
+              From application to decision, expect 2-4 months for straightforward cases.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I bring witnesses?</h3>
+            <p className="text-gray-600">
+              Yes. Inform the Tribunal in advance. They can attend the video hearing or
+              provide written statements.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant doesn&apos;t attend?</h3>
+            <p className="text-gray-600">
+              The hearing can proceed. You still need to prove your case - absence doesn&apos;t
+              mean automatic success.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim rent arrears too?</h3>
+            <p className="text-gray-600">
+              Yes, you can apply for a payment order alongside the eviction order.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I postpone the hearing?</h3>
+            <p className="text-gray-600">
+              You can request postponement with good reason. Contact the Tribunal early if
+              you have a problem.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Prepare for the Tribunal</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides comprehensive guides and templates for navigating the
+            First-tier Tribunal process in Scotland.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 25: Scotland Ground 12 (Rent Arrears)
+  {
+    slug: 'scotland-eviction-ground-12',
+    title: 'Scotland Ground 12 - Rent Arrears Eviction Guide 2026',
+    description: 'Complete guide to Ground 12 rent arrears eviction in Scotland. Learn when Ground 12 is mandatory vs discretionary, notice requirements, and Tribunal process.',
+    metaDescription: 'Scotland Ground 12 rent arrears eviction guide. Learn mandatory vs discretionary grounds, notice periods, and Tribunal process for 2026.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1720,
+    category: 'Scottish Law',
+    tags: ['Ground 12', 'rent arrears', 'Scotland', 'PRT eviction', 'Scottish landlord', 'First-tier Tribunal'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-12-scotland.svg',
+    heroImageAlt: 'Scotland Ground 12 Rent Arrears Eviction',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland ground 12 rent arrears',
+    secondaryKeywords: ['PRT Ground 12', 'Scotland rent arrears eviction', 'mandatory eviction Scotland', 'three months arrears'],
+    tableOfContents: [
+      { id: 'what-is-ground-12', title: 'What Is Ground 12?', level: 2 },
+      { id: 'mandatory-vs-discretionary', title: 'Mandatory vs Discretionary', level: 2 },
+      { id: 'proving-arrears', title: 'Proving Rent Arrears', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'tenant-defences', title: 'Common Tenant Defences', level: 2 },
+      { id: 'ground-12-faq', title: 'Ground 12 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-first-tier-tribunal', 'scotland-notice-to-leave'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 12 is the most commonly used eviction ground in Scotland, allowing landlords
+          to recover their property when tenants have accumulated significant rent arrears.
+          Understanding whether Ground 12 applies as mandatory or discretionary is crucial
+          to your eviction strategy.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 12 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Mandatory:</strong> When tenant owes 3+ consecutive months at both notice AND hearing</li>
+            <li><strong>Discretionary:</strong> When arrears are substantial but less than 3 months</li>
+            <li><strong>Notice period:</strong> 28 days (regardless of tenancy length)</li>
+            <li><strong>Evidence:</strong> Rent statements showing arrears history</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ground-12-overview.svg"
+          alt="Ground 12 Rent Arrears Overview"
+          caption="Ground 12 is the primary ground for rent arrears evictions in Scotland"
+        />
+
+        <h2 id="what-is-ground-12" className="scroll-mt-24">What Is Ground 12?</h2>
+
+        <p>
+          Ground 12 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          allows landlords to seek eviction when the tenant has accumulated rent arrears.
+          The ground applies when:
+        </p>
+        <ul>
+          <li>The tenant is in rent arrears</li>
+          <li>At the date of the Notice to Leave</li>
+          <li>And at the date of the Tribunal hearing</li>
+        </ul>
+
+        <p>
+          The unique feature of Ground 12 is that it can be either mandatory or discretionary,
+          depending on the amount and duration of the arrears.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="mandatory-vs-discretionary" className="scroll-mt-24">Mandatory vs Discretionary</h2>
+
+        <h3>When Ground 12 Is Mandatory</h3>
+        <p>
+          The Tribunal MUST grant an eviction order if:
+        </p>
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Both Conditions Must Be Met:</h4>
+          <ol className="text-green-800 mt-2 space-y-2">
+            <li><strong>1.</strong> The tenant owes at least 3 consecutive months&apos; rent at the date of the Notice to Leave</li>
+            <li><strong>2.</strong> The tenant STILL owes at least 3 consecutive months&apos; rent at the date of the Tribunal hearing</li>
+          </ol>
+        </div>
+
+        <p>
+          If both conditions are satisfied, the Tribunal has no discretion - it must grant
+          the eviction order. The tenant&apos;s personal circumstances, reasons for non-payment,
+          or partial payments don&apos;t matter.
+        </p>
+
+        <h3>When Ground 12 Is Discretionary</h3>
+        <p>
+          Ground 12 becomes discretionary when:
+        </p>
+        <ul>
+          <li>Arrears are less than 3 months at the notice date</li>
+          <li>Arrears fall below 3 months before the hearing (tenant made payments)</li>
+          <li>Arrears are for non-consecutive months</li>
+        </ul>
+
+        <p>
+          For discretionary Ground 12, the Tribunal considers whether it&apos;s reasonable
+          to grant eviction, weighing factors like:
+        </p>
+        <ul>
+          <li>Amount of arrears</li>
+          <li>Payment history</li>
+          <li>Reasons for falling into arrears</li>
+          <li>Tenant&apos;s efforts to reduce the debt</li>
+          <li>Impact of eviction on the tenant</li>
+          <li>Landlord&apos;s need to recover the property</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Strategic Payment by Tenants</h4>
+          <p className="text-amber-800 mt-2">
+            Some tenants strategically pay just enough before the hearing to bring arrears
+            below 3 months, converting mandatory Ground 12 to discretionary. While frustrating,
+            this is a legitimate defence. Consider whether you have other grounds available.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-mandatory-discretionary.svg"
+          alt="Mandatory vs Discretionary Ground 12"
+          caption="The 3-month threshold determines whether Ground 12 is mandatory"
+        />
+
+        <h2 id="proving-arrears" className="scroll-mt-24">Proving Rent Arrears</h2>
+
+        <h3>Documentation Required</h3>
+        <p>You&apos;ll need to provide the Tribunal with:</p>
+        <ul>
+          <li><strong>Tenancy agreement:</strong> Showing the rent amount and due dates</li>
+          <li><strong>Rent statement:</strong> Complete history of rent due and payments received</li>
+          <li><strong>Bank statements:</strong> Showing payments (or lack of) received</li>
+          <li><strong>Arrears letters:</strong> Any formal demands you&apos;ve sent</li>
+          <li><strong>Communication:</strong> Emails/texts about the arrears</li>
+        </ul>
+
+        <h3>Calculating Arrears</h3>
+        <p>For the 3-month mandatory threshold:</p>
+        <ul>
+          <li>Calculate the total rent due for 3 consecutive months</li>
+          <li>If the tenant owes this amount or more, the threshold is met</li>
+          <li>Partial months don&apos;t count - it must be 3 FULL months</li>
+          <li>The months must be consecutive (e.g., January, February, March)</li>
+        </ul>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-3">Example Calculation:</h4>
+          <p className="text-gray-700">
+            <strong>Rent:</strong> £1,000 per month<br />
+            <strong>3 months&apos; rent:</strong> £3,000<br />
+            <strong>Current arrears:</strong> £3,500<br />
+            <strong>Result:</strong> Mandatory Ground 12 applies (if still £3,000+ at hearing)
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Period</h3>
+        <p>
+          For Ground 12, the notice period is <strong>28 days</strong> regardless of how
+          long the tenant has been in the property. This is shorter than many other grounds
+          which require 84 days for tenancies over 6 months.
+        </p>
+
+        <h3>Notice to Leave Content</h3>
+        <p>Your Notice to Leave must:</p>
+        <ul>
+          <li>Use the prescribed form</li>
+          <li>Tick Ground 12 as the eviction ground</li>
+          <li>State the amount of arrears at the notice date</li>
+          <li>Be served correctly on the tenant</li>
+        </ul>
+
+        <h3>Multiple Grounds</h3>
+        <p>
+          Consider including other applicable grounds in your notice:
+        </p>
+        <ul>
+          <li><strong>Ground 11 (Breach):</strong> Non-payment is a breach of the tenancy</li>
+          <li><strong>Ground 1 (Selling):</strong> If you intend to sell due to financial pressure</li>
+        </ul>
+        <p>
+          Having backup grounds protects you if the tenant reduces arrears below 3 months.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-notice-ground-12.svg"
+          alt="Notice to Leave for Ground 12"
+          caption="Use the prescribed form and specify the arrears amount"
+        />
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>
+          After the 28-day notice expires, apply to the First-tier Tribunal with:
+        </p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Rent statement showing arrears at notice date</li>
+          <li>Updated rent statement for the hearing</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will check:</p>
+        <ol>
+          <li>Was the notice validly served?</li>
+          <li>Were there 3+ months arrears at the notice date?</li>
+          <li>Are there still 3+ months arrears now?</li>
+          <li>If mandatory: Grant the eviction order</li>
+          <li>If discretionary: Consider reasonableness</li>
+        </ol>
+
+        <h3>Payment Orders</h3>
+        <p>
+          You can also apply for a <strong>payment order</strong> requiring the tenant to
+          pay the arrears. This can be combined with your eviction application.
+        </p>
+
+        <h2 id="tenant-defences" className="scroll-mt-24">Common Tenant Defences</h2>
+
+        <h3>For Mandatory Ground 12</h3>
+        <p>Tenants have limited defences when the ground is mandatory:</p>
+        <ul>
+          <li><strong>Notice invalid:</strong> Wrong form, wrong service, miscalculated dates</li>
+          <li><strong>Arrears disputed:</strong> Claiming payments weren&apos;t credited</li>
+          <li><strong>Paid below threshold:</strong> Reduced arrears before hearing to under 3 months</li>
+        </ul>
+
+        <h3>For Discretionary Ground 12</h3>
+        <p>Additional arguments the tenant may raise:</p>
+        <ul>
+          <li>Temporary financial difficulty (job loss, illness)</li>
+          <li>Awaiting benefits payments</li>
+          <li>Making regular partial payments</li>
+          <li>Vulnerability factors</li>
+          <li>Impact on children/dependents</li>
+        </ul>
+
+        <h2 id="ground-12-faq" className="scroll-mt-24">Ground 12 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if arrears are partly Housing Benefit?</h3>
+            <p className="text-gray-600">
+              Arrears are arrears, regardless of source. However, if the tenant is waiting for
+              Housing Benefit payments due to council delays, the Tribunal may consider this
+              for discretionary Ground 12.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim arrears and eviction together?</h3>
+            <p className="text-gray-600">
+              Yes. You can apply for both an eviction order and a payment order in the same
+              Tribunal application. The payment order creates a debt you can enforce.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant pays in full before the hearing?</h3>
+            <p className="text-gray-600">
+              If arrears are cleared completely before the hearing, Ground 12 no longer applies.
+              You could still proceed under Ground 11 (breach) as a discretionary ground, but
+              success is less certain.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does the process take?</h3>
+            <p className="text-gray-600">
+              From serving the Notice to Leave to obtaining an eviction order: typically 2-4
+              months. Add enforcement time if the tenant doesn&apos;t leave voluntarily.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I wait for more arrears before serving notice?</h3>
+            <p className="text-gray-600">
+              If arrears are approaching 3 months, it may be worth waiting to meet the mandatory
+              threshold. However, don&apos;t delay too long - more arrears means more loss if the
+              tenant can&apos;t pay.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Track Your Rent Arrears</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides rent tracking tools and arrears management guides to
+            help you document everything you need for a successful Ground 12 eviction.
+          </p>
+          <Link
+            href="/products/rent-tracker"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Rent Tracker →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 26: Scotland Ground 1 (Landlord Selling)
+  {
+    slug: 'scotland-eviction-ground-1',
+    title: 'Scotland Ground 1 - Landlord Selling Property Guide 2026',
+    description: 'Complete guide to Ground 1 eviction in Scotland when selling your rental property. Learn requirements, notice periods, and how to prove genuine intention to sell.',
+    metaDescription: 'Scotland Ground 1 eviction guide for landlords selling their property. Learn notice periods, evidence requirements, and Tribunal process for 2026.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1580,
+    category: 'Scottish Law',
+    tags: ['Ground 1', 'selling property', 'Scotland', 'PRT eviction', 'Scottish landlord', 'property sale'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-1.svg',
+    heroImageAlt: 'Scotland Ground 1 Landlord Selling Property',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland ground 1 selling property',
+    secondaryKeywords: ['PRT Ground 1', 'sell rental property Scotland', 'evict to sell Scotland', 'landlord selling tenant'],
+    tableOfContents: [
+      { id: 'what-is-ground-1', title: 'What Is Ground 1?', level: 2 },
+      { id: 'requirements', title: 'Requirements to Use Ground 1', level: 2 },
+      { id: 'proving-intention', title: 'Proving Your Intention to Sell', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'after-eviction', title: 'What Happens After Eviction', level: 2 },
+      { id: 'ground-1-faq', title: 'Ground 1 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-notice-to-leave', 'scotland-first-tier-tribunal'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 1 allows landlords to recover their property when they intend to sell it.
+          As a mandatory ground, the Tribunal must grant an eviction order if you prove you
+          genuinely intend to sell. This guide explains how to use Ground 1 successfully.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 1 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Mandatory (Tribunal must grant if proved)</li>
+            <li><strong>Notice period:</strong> 28 days (under 6 months) or 84 days (6+ months)</li>
+            <li><strong>Key requirement:</strong> Genuine intention to sell on the open market</li>
+            <li><strong>Evidence:</strong> Marketing instructions, estate agent correspondence</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-selling-property.svg"
+          alt="Selling Rental Property"
+          caption="Ground 1 is mandatory if you prove genuine intention to sell"
+        />
+
+        <h2 id="what-is-ground-1" className="scroll-mt-24">What Is Ground 1?</h2>
+
+        <p>
+          Ground 1 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          states that the landlord &quot;intends to sell the let property.&quot;
+        </p>
+
+        <p>
+          This is a <strong>mandatory ground</strong>, meaning the Tribunal has no discretion
+          once you prove the ground applies. The tenant&apos;s personal circumstances don&apos;t
+          affect the decision.
+        </p>
+
+        <h3>Who Can Use Ground 1?</h3>
+        <ul>
+          <li>Owner-landlords who want to sell</li>
+          <li>Landlords selling due to financial reasons</li>
+          <li>Landlords exiting the rental market</li>
+          <li>Executors of deceased landlords selling an inherited property</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="requirements" className="scroll-mt-24">Requirements to Use Ground 1</h2>
+
+        <p>To successfully use Ground 1, you must prove:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">The Two Requirements:</h4>
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>You intend to sell the property</strong>
+                <p className="text-gray-600 text-sm">A genuine intention at the time of the Tribunal hearing</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>You intend to sell on the open market</strong>
+                <p className="text-gray-600 text-sm">Not a private sale to family or at undervalue to avoid the ground</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <h2 id="proving-intention" className="scroll-mt-24">Proving Your Intention to Sell</h2>
+
+        <h3>Evidence That Helps</h3>
+        <ul>
+          <li><strong>Estate agent instructions:</strong> Written confirmation you&apos;ve instructed agents</li>
+          <li><strong>Marketing materials:</strong> Particulars, photos, listing drafts</li>
+          <li><strong>Valuation reports:</strong> Professional valuations obtained</li>
+          <li><strong>Correspondence:</strong> Emails with agents about marketing strategy</li>
+          <li><strong>Your statement:</strong> Explaining why you want to sell</li>
+        </ul>
+
+        <h3>Timing of Marketing</h3>
+        <p>
+          You don&apos;t need to have already marketed the property, but evidence of concrete
+          steps toward sale strengthens your case. Many landlords instruct agents before
+          serving the Notice to Leave.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Genuineness Is Key</h4>
+          <p className="text-amber-800 mt-2">
+            The Tribunal will assess whether your intention is genuine. If you evict using
+            Ground 1 but then don&apos;t sell (or re-let the property), the tenant may have
+            grounds for a wrongful termination claim.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-evidence-sale.svg"
+          alt="Evidence for Ground 1"
+          caption="Estate agent instructions and marketing materials support your application"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Periods</h3>
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Tenancy Length</th>
+                <th className="border p-3 text-left font-semibold">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Under 6 months</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">6 months or more</td>
+                <td className="border p-3">84 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          The 84-day period for established tenancies gives the tenant time to find
+          alternative accommodation.
+        </p>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice period expires, apply to the Tribunal with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Evidence of intention to sell</li>
+          <li>Your statement explaining your plans</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will ask you to confirm:</p>
+        <ul>
+          <li>You own the property</li>
+          <li>You intend to sell it</li>
+          <li>What steps you&apos;ve taken toward sale</li>
+          <li>Your reasons for selling</li>
+        </ul>
+
+        <h3>If Successful</h3>
+        <p>
+          The Tribunal grants an eviction order. The tenant must leave by the specified date
+          (usually 14 days from the order). If they don&apos;t, you can instruct sheriff officers.
+        </p>
+
+        <h2 id="after-eviction" className="scroll-mt-24">What Happens After Eviction</h2>
+
+        <h3>You Must Follow Through</h3>
+        <p>
+          If you used Ground 1, you should actually sell the property. While there&apos;s no
+          strict legal timeline, failing to sell may expose you to:
+        </p>
+        <ul>
+          <li>Claims of bad faith</li>
+          <li>Wrongful termination damages</li>
+          <li>Difficulty using the ground in future</li>
+        </ul>
+
+        <h3>Selling With Vacant Possession</h3>
+        <p>
+          The property will be vacant, making sale easier. You can market immediately,
+          conduct viewings, and complete the sale without tenant complications.
+        </p>
+
+        <h2 id="ground-1-faq" className="scroll-mt-24">Ground 1 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I sell with the tenant in place instead?</h3>
+            <p className="text-gray-600">
+              Yes, you can sell to another landlord who will take over the tenancy. But if
+              you want vacant possession (often needed for sale to owner-occupiers), you
+              need to evict first.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I change my mind after eviction?</h3>
+            <p className="text-gray-600">
+              If you don&apos;t sell and instead re-let the property, the former tenant may
+              claim wrongful termination. You could be liable for their costs and damages.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a confirmed buyer?</h3>
+            <p className="text-gray-600">
+              No. You need to prove intention to sell, not a completed sale. Evidence that
+              you&apos;ve instructed agents or are actively marketing is sufficient.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can my tenant buy the property?</h3>
+            <p className="text-gray-600">
+              Yes, and this can be a good outcome. If the tenant wants to buy, you can
+              negotiate directly. The eviction may not be necessary if you agree a sale.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Selling Your Rental Property?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides guides and templates for landlords selling their
+            properties, including notice templates and Tribunal application support.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 27: Scotland Ground 4 (Landlord Moving In)
+  {
+    slug: 'scotland-eviction-ground-4',
+    title: 'Scotland Ground 4 - Landlord Moving In Guide 2026',
+    description: 'Complete guide to Ground 4 eviction in Scotland when you or family want to live in the property. Learn requirements, qualifying family members, and Tribunal process.',
+    metaDescription: 'Scotland Ground 4 eviction guide when landlord or family needs to move in. Learn requirements, notice periods, and Tribunal process for 2026.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1620,
+    category: 'Scottish Law',
+    tags: ['Ground 4', 'landlord moving in', 'Scotland', 'PRT eviction', 'family member', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-4.svg',
+    heroImageAlt: 'Scotland Ground 4 Landlord Moving In',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland ground 4 landlord moving in',
+    secondaryKeywords: ['PRT Ground 4', 'family member moving in Scotland', 'evict family occupation', 'landlord occupy property'],
+    tableOfContents: [
+      { id: 'what-is-ground-4', title: 'What Is Ground 4?', level: 2 },
+      { id: 'who-qualifies', title: 'Who Qualifies as Family?', level: 2 },
+      { id: 'proving-intention', title: 'Proving Your Intention', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'after-eviction', title: 'After the Eviction', level: 2 },
+      { id: 'ground-4-faq', title: 'Ground 4 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-notice-to-leave', 'scotland-eviction-ground-1'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 4 allows landlords to recover their property when they or a family member
+          intend to live in it. As a mandatory ground, the Tribunal must grant eviction if
+          you prove a genuine intention. This guide explains how to use Ground 4 correctly.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 4 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Mandatory ground</li>
+            <li><strong>Notice period:</strong> 28 days (under 6 months) or 84 days (6+ months)</li>
+            <li><strong>Key requirement:</strong> Genuine intention to use as main residence</li>
+            <li><strong>Family:</strong> Specific family members qualify</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-moving-in.svg"
+          alt="Landlord Moving In"
+          caption="Ground 4 is mandatory if you prove genuine intention to live in the property"
+        />
+
+        <h2 id="what-is-ground-4" className="scroll-mt-24">What Is Ground 4?</h2>
+
+        <p>
+          Ground 4 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          states that the landlord intends to live in the let property, OR that a family
+          member of the landlord intends to live in it.
+        </p>
+
+        <p>
+          The property must become the person&apos;s <strong>only or principal home</strong>.
+          You can&apos;t use Ground 4 for a second home or occasional use.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="who-qualifies" className="scroll-mt-24">Who Qualifies as Family?</h2>
+
+        <p>Under Ground 4, &quot;family member&quot; is defined specifically:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Qualifying Family Members:</h4>
+          <ul className="space-y-2">
+            <li className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>Spouse or civil partner of the landlord</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>Person living with the landlord as husband/wife or civil partner</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>Parent or grandparent of the landlord (or partner)</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>Child or grandchild of the landlord (or partner)</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>Brother or sister of the landlord (or partner)</span>
+            </li>
+          </ul>
+        </div>
+
+        <h3>Who Does NOT Qualify</h3>
+        <ul>
+          <li>Aunts, uncles, cousins</li>
+          <li>In-laws (beyond those listed)</li>
+          <li>Friends, no matter how close</li>
+          <li>Business partners</li>
+        </ul>
+
+        <h2 id="proving-intention" className="scroll-mt-24">Proving Your Intention</h2>
+
+        <h3>What You Need to Show</h3>
+        <ul>
+          <li>You (or family member) genuinely intend to live in the property</li>
+          <li>It will become their only or principal home</li>
+          <li>The intention is current and real (not speculative)</li>
+        </ul>
+
+        <h3>Evidence That Helps</h3>
+        <ul>
+          <li><strong>Your statement:</strong> Explaining why you need to move in</li>
+          <li><strong>Current housing situation:</strong> Lease ending, selling current home, etc.</li>
+          <li><strong>Work location:</strong> If moving for work near the property</li>
+          <li><strong>Family circumstances:</strong> Elderly parent needing to be nearby, etc.</li>
+          <li><strong>Family member statement:</strong> If they&apos;re moving in, their confirmation</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Must Be Genuine</h4>
+          <p className="text-amber-800 mt-2">
+            The Tribunal will assess genuineness. If you evict using Ground 4 but then
+            don&apos;t move in (or let to someone else), the tenant may claim wrongful
+            termination damages.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-family-move.svg"
+          alt="Family Moving In"
+          caption="Prove a genuine intention with concrete plans and circumstances"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Periods</h3>
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Tenancy Length</th>
+                <th className="border p-3 text-left font-semibold">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Under 6 months</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">6 months or more</td>
+                <td className="border p-3">84 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice period expires, apply with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Statement explaining your intention</li>
+          <li>Supporting evidence of circumstances</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will ask about:</p>
+        <ul>
+          <li>Who will be living in the property</li>
+          <li>Their current living situation</li>
+          <li>Why they need this particular property</li>
+          <li>When they intend to move in</li>
+          <li>How long they plan to stay</li>
+        </ul>
+
+        <h2 id="after-eviction" className="scroll-mt-24">After the Eviction</h2>
+
+        <h3>You Must Follow Through</h3>
+        <p>
+          After obtaining the eviction order, you (or the family member) should actually
+          move in. While there&apos;s no strict legal timeline, failing to do so may result in:
+        </p>
+        <ul>
+          <li>Wrongful termination claims</li>
+          <li>Damages payable to the former tenant</li>
+          <li>Difficulty using the ground in future</li>
+        </ul>
+
+        <h3>Living in the Property</h3>
+        <p>
+          The person must use it as their only or principal home. This doesn&apos;t mean they
+          can never be away, but it must be their main residence.
+        </p>
+
+        <h2 id="ground-4-faq" className="scroll-mt-24">Ground 4 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long must I live there?</h3>
+            <p className="text-gray-600">
+              There&apos;s no minimum period specified in law. However, moving in briefly then
+              reletting suggests bad faith. Plan to live there genuinely for the foreseeable
+              future.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I rent out a room while living there?</h3>
+            <p className="text-gray-600">
+              If you live in the property as your home, you can take in a lodger. The key
+              is that you&apos;re genuinely living there, not running it as a rental.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my adult child only stays temporarily?</h3>
+            <p className="text-gray-600">
+              They must intend it to be their only or principal home. If they&apos;re just
+              staying while between homes, that may not meet the threshold. The intention
+              must be genuine at the time.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 4 if I own multiple properties?</h3>
+            <p className="text-gray-600">
+              Yes, if you genuinely intend to make this property your only or principal
+              home. You may be leaving your current home or changing which property is
+              your main residence.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need to Move Into Your Rental?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides Notice to Leave templates and guidance for Ground 4
+            evictions in Scotland.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 28: Scotland Ground 11 (Breach of Tenancy Agreement)
+  {
+    slug: 'scotland-eviction-ground-11',
+    title: 'Scotland Ground 11 - Breach of Tenancy Agreement Guide 2026',
+    description: 'Complete guide to Ground 11 eviction in Scotland for breach of tenancy agreement. Learn what constitutes a breach, evidence required, and Tribunal considerations.',
+    metaDescription: 'Scotland Ground 11 eviction guide for breach of tenancy. Learn what constitutes breach, evidence needed, and Tribunal process for 2026.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1680,
+    category: 'Scottish Law',
+    tags: ['Ground 11', 'breach of tenancy', 'Scotland', 'PRT eviction', 'Scottish landlord', 'tenancy terms'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-11.svg',
+    heroImageAlt: 'Scotland Ground 11 Breach of Tenancy',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland ground 11 breach tenancy',
+    secondaryKeywords: ['PRT Ground 11', 'tenant breach Scotland', 'breach tenancy agreement Scotland', 'discretionary eviction'],
+    tableOfContents: [
+      { id: 'what-is-ground-11', title: 'What Is Ground 11?', level: 2 },
+      { id: 'types-of-breach', title: 'Types of Breach', level: 2 },
+      { id: 'evidence-required', title: 'Evidence Required', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'reasonableness', title: 'Reasonableness Factors', level: 2 },
+      { id: 'ground-11-faq', title: 'Ground 11 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-private-residential-tenancy', 'scotland-eviction-ground-12'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 11 allows landlords to seek eviction when a tenant has breached their
+          tenancy agreement. As a discretionary ground, success depends on proving both
+          the breach and that eviction is a reasonable response. This guide explains
+          how to use Ground 11 effectively.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 11 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Discretionary (Tribunal considers reasonableness)</li>
+            <li><strong>Notice period:</strong> 28 days (regardless of tenancy length)</li>
+            <li><strong>Key requirement:</strong> Prove both breach AND that eviction is reasonable</li>
+            <li><strong>Evidence:</strong> Terms breached, warnings given, impact of breach</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-breach-tenancy.svg"
+          alt="Breach of Tenancy Agreement"
+          caption="Ground 11 covers all breaches of tenancy terms"
+        />
+
+        <h2 id="what-is-ground-11" className="scroll-mt-24">What Is Ground 11?</h2>
+
+        <p>
+          Ground 11 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          applies when the tenant has &quot;breached a term of the tenancy.&quot;
+        </p>
+
+        <p>
+          This is a <strong>discretionary ground</strong>, meaning even if you prove a
+          breach occurred, the Tribunal will only grant eviction if it considers it
+          reasonable in all the circumstances.
+        </p>
+
+        <h3>What Counts as a Breach?</h3>
+        <p>
+          A breach is any violation of the tenancy agreement terms. This can include
+          written terms you agreed AND statutory terms implied by law.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="types-of-breach" className="scroll-mt-24">Types of Breach</h2>
+
+        <h3>Common Breaches</h3>
+        <ul>
+          <li><strong>Non-payment of rent:</strong> Also covered by Ground 12</li>
+          <li><strong>Subletting without permission:</strong> Letting to others without consent</li>
+          <li><strong>Keeping pets:</strong> When the agreement prohibits pets</li>
+          <li><strong>Damage to property:</strong> Beyond normal wear and tear</li>
+          <li><strong>Business use:</strong> Running a business when prohibited</li>
+          <li><strong>Alterations:</strong> Making changes without permission</li>
+          <li><strong>Overcrowding:</strong> Having more occupants than agreed</li>
+          <li><strong>Nuisance:</strong> Causing problems for neighbours</li>
+        </ul>
+
+        <h3>Statutory Term Breaches</h3>
+        <p>
+          PRTs include statutory terms that tenants must follow, such as:
+        </p>
+        <ul>
+          <li>Allowing access for repairs with reasonable notice</li>
+          <li>Not assigning without written permission</li>
+          <li>Not subletting without written permission</li>
+          <li>Using the property only as a private dwelling</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Severity Matters</h4>
+          <p className="text-amber-800 mt-2">
+            Minor breaches rarely justify eviction. The Tribunal considers whether the
+            breach is serious enough to warrant losing their home. A one-off minor breach
+            is very different from persistent, serious violations.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-breach-types.svg"
+          alt="Types of Tenancy Breach"
+          caption="Different breaches have different levels of severity"
+        />
+
+        <h2 id="evidence-required" className="scroll-mt-24">Evidence Required</h2>
+
+        <h3>Proving the Breach</h3>
+        <ul>
+          <li><strong>Tenancy agreement:</strong> Showing the term that was breached</li>
+          <li><strong>Photos/videos:</strong> Evidence of the breach (damage, pets, etc.)</li>
+          <li><strong>Inspection reports:</strong> Professional assessments if relevant</li>
+          <li><strong>Correspondence:</strong> Emails, letters about the issue</li>
+          <li><strong>Witness statements:</strong> Neighbours or others who observed the breach</li>
+        </ul>
+
+        <h3>Showing Reasonableness</h3>
+        <p>You should also show:</p>
+        <ul>
+          <li>You warned the tenant about the breach</li>
+          <li>You gave them opportunity to remedy it</li>
+          <li>The breach continued or was not adequately addressed</li>
+          <li>The impact of the breach on you, the property, or neighbours</li>
+        </ul>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Period</h3>
+        <p>
+          For Ground 11, the notice period is <strong>28 days</strong> regardless of
+          tenancy length.
+        </p>
+
+        <h3>Notice Content</h3>
+        <p>Your Notice to Leave should:</p>
+        <ul>
+          <li>Use the prescribed form</li>
+          <li>Tick Ground 11 as the eviction ground</li>
+          <li>Describe the breach clearly</li>
+          <li>Be served correctly on the tenant</li>
+        </ul>
+
+        <h3>Prior Warning</h3>
+        <p>
+          Before serving notice, it&apos;s advisable to warn the tenant in writing about
+          the breach and give them reasonable time to remedy it. This strengthens your
+          case at the Tribunal.
+        </p>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice expires, apply to the Tribunal with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement (highlighting breached terms)</li>
+          <li>Evidence of the breach</li>
+          <li>Records of warnings and tenant responses</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will consider:</p>
+        <ol>
+          <li>Did a breach occur?</li>
+          <li>What was the nature and severity of the breach?</li>
+          <li>Did the landlord warn the tenant?</li>
+          <li>Did the tenant have opportunity to remedy it?</li>
+          <li>Is eviction a proportionate response?</li>
+        </ol>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tribunal-ground-11.svg"
+          alt="Tribunal Hearing for Ground 11"
+          caption="The Tribunal weighs breach severity against tenant circumstances"
+        />
+
+        <h2 id="reasonableness" className="scroll-mt-24">Reasonableness Factors</h2>
+
+        <p>The Tribunal considers many factors when deciding if eviction is reasonable:</p>
+
+        <h3>Factors in Landlord&apos;s Favour</h3>
+        <ul>
+          <li>Serious or repeated breaches</li>
+          <li>Clear warnings were given</li>
+          <li>Tenant refused or failed to remedy the breach</li>
+          <li>Significant harm caused (to property, neighbours, etc.)</li>
+          <li>Pattern of problematic behaviour</li>
+        </ul>
+
+        <h3>Factors in Tenant&apos;s Favour</h3>
+        <ul>
+          <li>Minor or one-off breach</li>
+          <li>Breach has now been remedied</li>
+          <li>No prior warnings from landlord</li>
+          <li>Tenant&apos;s vulnerability</li>
+          <li>Impact of eviction on tenant/family</li>
+        </ul>
+
+        <h2 id="ground-11-faq" className="scroll-mt-24">Ground 11 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 11 for rent arrears?</h3>
+            <p className="text-gray-600">
+              Yes, non-payment is a breach. However, Ground 12 is usually better for rent
+              arrears because it can be mandatory. Ground 11 is always discretionary.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant fixes the breach?</h3>
+            <p className="text-gray-600">
+              If the breach is fully remedied before the hearing, the Tribunal is less likely
+              to grant eviction. However, you may still succeed for persistent breaches that
+              keep recurring.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to give a formal warning first?</h3>
+            <p className="text-gray-600">
+              It&apos;s not legally required, but it significantly strengthens your case. A
+              written warning giving the tenant time to remedy the breach shows you acted
+              reasonably before seeking eviction.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I combine Ground 11 with other grounds?</h3>
+            <p className="text-gray-600">
+              Yes. Many landlords cite Ground 11 alongside Ground 12 (arrears) or Ground 14
+              (antisocial behaviour). This provides backup options.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Dealing With Tenancy Breaches?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides template warning letters and guidance for documenting
+            breaches and building a strong eviction case.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 29: Scotland Ground 3 (Refurbishment)
+  {
+    slug: 'scotland-eviction-ground-3',
+    title: 'Scotland Ground 3 - Property Refurbishment Guide 2026',
+    description: 'Complete guide to Ground 3 eviction in Scotland for property refurbishment. Learn requirements, evidence needed, and how to prove genuine refurbishment plans.',
+    metaDescription: 'Scotland Ground 3 eviction guide for property refurbishment. Learn requirements, evidence, and Tribunal process for landlords in 2026.',
+    date: '2026-01-03',
+    readTime: '11 min read',
+    wordCount: 1520,
+    category: 'Scottish Law',
+    tags: ['Ground 3', 'refurbishment', 'Scotland', 'PRT eviction', 'property works', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-3.svg',
+    heroImageAlt: 'Scotland Ground 3 - Landlord Refurbishment Eviction',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland ground 3 refurbishment eviction',
+    secondaryKeywords: ['landlord refurbishment scotland', 'PRT ground 3', 'eviction for property works', 'tenant eviction refurbishment'],
+    tableOfContents: [
+      { id: 'what-is-ground-3', title: 'What Is Ground 3?', level: 2 },
+      { id: 'requirements', title: 'Requirements', level: 2 },
+      { id: 'proving-refurbishment', title: 'Proving Refurbishment Plans', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'ground-3-faq', title: 'Ground 3 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-eviction-ground-1', 'scotland-notice-to-leave'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 3 allows landlords to recover their property when they intend to carry
+          out significant refurbishment works that cannot be done with the tenant in
+          residence. As a mandatory ground, the Tribunal must grant eviction if you
+          prove your case.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 3 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Mandatory ground</li>
+            <li><strong>Notice period:</strong> 28 days (under 6 months) or 84 days (6+ months)</li>
+            <li><strong>Key requirement:</strong> Works cannot be carried out with tenant in place</li>
+            <li><strong>Evidence:</strong> Plans, quotes, contractor schedules</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-refurbishment.svg"
+          alt="Property Refurbishment"
+          caption="Ground 3 requires works that necessitate vacant possession"
+        />
+
+        <h2 id="what-is-ground-3" className="scroll-mt-24">What Is Ground 3?</h2>
+
+        <p>
+          Ground 3 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          applies when the landlord intends to refurbish the property and the works
+          &quot;are such that the tenant cannot reasonably continue to occupy it.&quot;
+        </p>
+
+        <p>
+          This is a <strong>mandatory ground</strong>. If you prove your intention and
+          that the works require vacant possession, the Tribunal must grant eviction.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="requirements" className="scroll-mt-24">Requirements</h2>
+
+        <p>To use Ground 3, you must show:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Three Requirements:</h4>
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>You intend to carry out refurbishment works</strong>
+                <p className="text-gray-600 text-sm">Genuine intention to refurbish the property</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>The works require vacant possession</strong>
+                <p className="text-gray-600 text-sm">The tenant cannot reasonably remain during works</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <div>
+                <strong>The works will actually be carried out</strong>
+                <p className="text-gray-600 text-sm">Not just a plan to evict for other reasons</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <h3>What Counts as Refurbishment?</h3>
+        <ul>
+          <li>Major structural works</li>
+          <li>Complete rewiring or replumbing</li>
+          <li>Removing and replacing the kitchen and bathroom</li>
+          <li>Extensive damp treatment</li>
+          <li>Reconfiguring the property layout</li>
+          <li>Works requiring scaffolding and major disruption</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Minor Works Won&apos;t Qualify</h4>
+          <p className="text-amber-800 mt-2">
+            Routine maintenance, repainting, or minor repairs don&apos;t justify Ground 3.
+            The works must be so extensive that it&apos;s genuinely unreasonable for the
+            tenant to stay.
+          </p>
+        </div>
+
+        <h2 id="proving-refurbishment" className="scroll-mt-24">Proving Refurbishment Plans</h2>
+
+        <h3>Evidence That Helps</h3>
+        <ul>
+          <li><strong>Architect/surveyor plans:</strong> Professional drawings of proposed works</li>
+          <li><strong>Contractor quotes:</strong> Written estimates with scope of works</li>
+          <li><strong>Building warrant applications:</strong> If planning permission needed</li>
+          <li><strong>Timeline/schedule:</strong> When works will start and expected duration</li>
+          <li><strong>Your statement:</strong> Explaining why works are needed</li>
+        </ul>
+
+        <h3>Why Vacant Possession Is Needed</h3>
+        <p>Explain clearly why the tenant cannot stay:</p>
+        <ul>
+          <li>Health and safety concerns during works</li>
+          <li>No usable kitchen or bathroom</li>
+          <li>Property will be uninhabitable</li>
+          <li>Contractors need full access</li>
+          <li>Duration of works makes living there impractical</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-building-plans.svg"
+          alt="Building Plans and Evidence"
+          caption="Professional plans and contractor quotes strengthen your application"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Periods</h3>
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Tenancy Length</th>
+                <th className="border p-3 text-left font-semibold">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Under 6 months</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">6 months or more</td>
+                <td className="border p-3">84 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice expires, apply with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Plans, quotes, and schedules for the works</li>
+          <li>Explanation of why vacant possession is needed</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will assess:</p>
+        <ul>
+          <li>Is your intention genuine?</li>
+          <li>Are the works substantial?</li>
+          <li>Do they really require the tenant to leave?</li>
+          <li>Are you likely to actually carry out the works?</li>
+        </ul>
+
+        <h2 id="ground-3-faq" className="scroll-mt-24">Ground 3 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I let the property again after works?</h3>
+            <p className="text-gray-600">
+              Yes. Unlike Ground 4 (moving in yourself), there&apos;s no restriction on
+              reletting after refurbishment. You can let to a new tenant at market rent.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I don&apos;t do the works?</h3>
+            <p className="text-gray-600">
+              If you evict using Ground 3 but don&apos;t carry out the works, the tenant may
+              claim wrongful termination. Ensure your intention is genuine.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need planning permission first?</h3>
+            <p className="text-gray-600">
+              Not necessarily, but having a building warrant application helps prove
+              serious intent. At minimum, have professional plans and quotes.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can the tenant return after works?</h3>
+            <p className="text-gray-600">
+              There&apos;s no legal right to return. You can offer a new tenancy, but you&apos;re
+              not obligated to. The original tenancy ends with the eviction.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Planning Property Works?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides guidance and templates for landlords planning
+            refurbishment projects that require tenant eviction.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 30: Scotland Ground 14 (Antisocial Behaviour)
+  {
+    slug: 'scotland-eviction-ground-14',
+    title: 'Scotland Ground 14 - Antisocial Behaviour Eviction Guide 2026',
+    description: 'Complete guide to Ground 14 eviction in Scotland for antisocial behaviour. Learn what constitutes antisocial behaviour, evidence required, and Tribunal process.',
+    metaDescription: 'Scotland Ground 14 antisocial behaviour eviction guide. Learn evidence requirements, Tribunal process, and tips for landlords in 2026.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Scottish Law',
+    tags: ['Ground 14', 'antisocial behaviour', 'Scotland', 'PRT eviction', 'nuisance', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-14.svg',
+    heroImageAlt: 'Scotland Ground 14 - Antisocial Behaviour Eviction',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland ground 14 antisocial behaviour eviction',
+    secondaryKeywords: ['antisocial behaviour scotland', 'PRT ground 14', 'tenant nuisance eviction', 'problem tenant scotland'],
+    tableOfContents: [
+      { id: 'what-is-ground-14', title: 'What Is Ground 14?', level: 2 },
+      { id: 'definition', title: 'Defining Antisocial Behaviour', level: 2 },
+      { id: 'evidence-required', title: 'Evidence Required', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'reasonableness', title: 'Reasonableness Factors', level: 2 },
+      { id: 'ground-14-faq', title: 'Ground 14 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-eviction-ground-11', 'scotland-first-tier-tribunal'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 14 allows landlords to seek eviction when a tenant (or their household
+          or visitors) has engaged in antisocial behaviour. This is a discretionary
+          ground, so you must prove both the behaviour and that eviction is reasonable.
+          This guide explains how to build a strong Ground 14 case.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 14 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Discretionary ground</li>
+            <li><strong>Notice period:</strong> 28 days (regardless of tenancy length)</li>
+            <li><strong>Covers:</strong> Tenant, household members, and visitors</li>
+            <li><strong>Evidence:</strong> Incident log, witness statements, police reports</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-antisocial.svg"
+          alt="Antisocial Behaviour"
+          caption="Ground 14 covers behaviour that causes nuisance or harm"
+        />
+
+        <h2 id="what-is-ground-14" className="scroll-mt-24">What Is Ground 14?</h2>
+
+        <p>
+          Ground 14 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          applies when the tenant, someone living with them, or a visitor &quot;has engaged
+          in relevant antisocial behaviour.&quot;
+        </p>
+
+        <p>
+          This is a <strong>discretionary ground</strong>. The Tribunal will consider
+          all circumstances and decide if eviction is reasonable.
+        </p>
+
+        <h3>Who Can Be Responsible?</h3>
+        <ul>
+          <li>The tenant themselves</li>
+          <li>Members of the tenant&apos;s household</li>
+          <li>Visitors to the property</li>
+        </ul>
+
+        <p>
+          The tenant doesn&apos;t have to personally commit the behaviour. They can be
+          evicted for the actions of people they allow into the property.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="definition" className="scroll-mt-24">Defining Antisocial Behaviour</h2>
+
+        <p>
+          &quot;Antisocial behaviour&quot; under the legislation means behaviour that causes
+          or is likely to cause alarm, distress, nuisance, or annoyance to others.
+        </p>
+
+        <h3>Examples of Antisocial Behaviour</h3>
+        <ul>
+          <li><strong>Noise:</strong> Loud music, parties, shouting at unsociable hours</li>
+          <li><strong>Harassment:</strong> Threatening or intimidating neighbours</li>
+          <li><strong>Violence:</strong> Assaults or threats of violence</li>
+          <li><strong>Vandalism:</strong> Damage to common areas or neighbours&apos; property</li>
+          <li><strong>Drug activity:</strong> Drug dealing or use causing problems</li>
+          <li><strong>Drunken behaviour:</strong> Regular disturbances when intoxicated</li>
+          <li><strong>Verbal abuse:</strong> Offensive language, insults, discrimination</li>
+          <li><strong>Environmental:</strong> Rubbish, smells, pests affecting neighbours</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Pattern Usually Required</h4>
+          <p className="text-amber-800 mt-2">
+            A single incident is rarely enough for Ground 14. The Tribunal usually looks
+            for a pattern of behaviour. Exceptions might be made for very serious single
+            incidents (e.g., violence).
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-noise-complaints.svg"
+          alt="Recording Antisocial Behaviour"
+          caption="Document incidents thoroughly with dates, times, and witnesses"
+        />
+
+        <h2 id="evidence-required" className="scroll-mt-24">Evidence Required</h2>
+
+        <h3>Building Your Case</h3>
+        <ul>
+          <li><strong>Incident log:</strong> Dates, times, descriptions of each incident</li>
+          <li><strong>Witness statements:</strong> Signed statements from neighbours</li>
+          <li><strong>Police reports:</strong> If police were called, get incident numbers</li>
+          <li><strong>Council records:</strong> Environmental health complaints, noise reports</li>
+          <li><strong>Photos/videos:</strong> Evidence of damage, mess, or behaviour (where legal)</li>
+          <li><strong>Correspondence:</strong> Complaints from neighbours, warnings you sent</li>
+        </ul>
+
+        <h3>Keeping an Incident Log</h3>
+        <p>For each incident, record:</p>
+        <ul>
+          <li>Date and time</li>
+          <li>What happened</li>
+          <li>Who was involved</li>
+          <li>How long it lasted</li>
+          <li>Who witnessed it</li>
+          <li>What impact it had</li>
+          <li>Any action taken (police called, etc.)</li>
+        </ul>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Period</h3>
+        <p>
+          For Ground 14, the notice period is <strong>28 days</strong> regardless of
+          how long the tenant has been in the property.
+        </p>
+
+        <h3>Notice Content</h3>
+        <p>Your Notice to Leave should:</p>
+        <ul>
+          <li>Use the prescribed form</li>
+          <li>Tick Ground 14 as the eviction ground</li>
+          <li>Describe the antisocial behaviour</li>
+          <li>Be served correctly on the tenant</li>
+        </ul>
+
+        <h3>Prior Warnings</h3>
+        <p>
+          While not strictly required, written warnings to the tenant about the
+          behaviour strengthen your case. They show you gave opportunity to change.
+        </p>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice expires, apply with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Detailed incident log</li>
+          <li>Witness statements</li>
+          <li>Any police or council records</li>
+          <li>Your warning letters and tenant responses</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will consider:</p>
+        <ol>
+          <li>Did antisocial behaviour occur?</li>
+          <li>Was the tenant responsible (directly or indirectly)?</li>
+          <li>What was the impact on others?</li>
+          <li>Did the landlord warn the tenant?</li>
+          <li>Is eviction reasonable in all circumstances?</li>
+        </ol>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tribunal-asb.svg"
+          alt="Tribunal Hearing for Antisocial Behaviour"
+          caption="Present a clear timeline of incidents and evidence"
+        />
+
+        <h2 id="reasonableness" className="scroll-mt-24">Reasonableness Factors</h2>
+
+        <p>The Tribunal weighs many factors:</p>
+
+        <h3>Favouring Eviction</h3>
+        <ul>
+          <li>Persistent, repeated incidents</li>
+          <li>Serious behaviour (violence, threats)</li>
+          <li>Clear impact on neighbours&apos; wellbeing</li>
+          <li>Tenant ignored warnings</li>
+          <li>Behaviour continues despite intervention</li>
+        </ul>
+
+        <h3>Against Eviction</h3>
+        <ul>
+          <li>Isolated incident(s)</li>
+          <li>Behaviour has stopped</li>
+          <li>Tenant took steps to address it</li>
+          <li>Tenant&apos;s vulnerability or health issues</li>
+          <li>Impact on tenant&apos;s family (children)</li>
+        </ul>
+
+        <h2 id="ground-14-faq" className="scroll-mt-24">Ground 14 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if it&apos;s the tenant&apos;s guests causing problems?</h3>
+            <p className="text-gray-600">
+              Ground 14 specifically covers visitors. If the tenant allows people into
+              the property who then cause problems, the tenant can be held responsible.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do neighbours need to give evidence?</h3>
+            <p className="text-gray-600">
+              Neighbour witness statements are valuable but not always essential. Some
+              may be willing to provide written statements but not attend. Police and
+              council records can also support your case.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I involve the police?</h3>
+            <p className="text-gray-600">
+              Yes, if behaviour is criminal or threatening. Police reports provide
+              independent evidence. Even if no charges result, the call records help.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I combine Ground 14 with Ground 11?</h3>
+            <p className="text-gray-600">
+              Yes. If the antisocial behaviour also breaches tenancy terms, you can cite
+              both grounds. This gives the Tribunal more options.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant denies everything?</h3>
+            <p className="text-gray-600">
+              Prepare thorough evidence. Multiple independent witnesses, police reports,
+              and council records are more credible than a tenant&apos;s denial. Keep
+              contemporaneous records.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Dealing With Problem Tenants?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides incident log templates, warning letter templates,
+            and step-by-step guidance for antisocial behaviour cases.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
