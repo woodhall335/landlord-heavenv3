@@ -3397,7 +3397,7 @@ export const blogPosts: BlogPost[] = [
           caption="The 17 grounds for possession under Section 8"
         />
 
-        <BlogCTA variant="notice" />
+        <BlogCTA variant="default" />
 
         <h2 id="notice-periods" className="scroll-mt-24">Notice Periods</h2>
 
@@ -3797,7 +3797,7 @@ export const blogPosts: BlogPost[] = [
           caption="The arrears threshold must be met on both dates"
         />
 
-        <BlogCTA variant="notice" />
+        <BlogCTA variant="default" />
 
         <h2 id="calculating-arrears" className="scroll-mt-24">Calculating Rent Arrears</h2>
 
@@ -4792,7 +4792,7 @@ export const blogPosts: BlogPost[] = [
           will set a hearing date, typically 4-8 weeks after issue, and notify all parties.
         </p>
 
-        <BlogCTA variant="primary" />
+        <BlogCTA variant="default" />
 
         <h2 id="court-hearing" className="scroll-mt-24">The Court Hearing</h2>
 
@@ -5303,7 +5303,7 @@ export const blogPosts: BlogPost[] = [
           </table>
         </div>
 
-        <BlogCTA variant="primary" />
+        <BlogCTA variant="default" />
 
         <h2 id="reasonableness" className="scroll-mt-24">The Reasonableness Test</h2>
 
@@ -5711,7 +5711,7 @@ export const blogPosts: BlogPost[] = [
           <li>State the notice period (or that proceedings may begin immediately)</li>
         </ul>
 
-        <BlogCTA variant="primary" />
+        <BlogCTA variant="default" />
 
         <h2 id="gathering-evidence" className="scroll-mt-24">Gathering Evidence</h2>
 
@@ -6146,7 +6146,7 @@ export const blogPosts: BlogPost[] = [
           </p>
         </div>
 
-        <BlogCTA variant="primary" />
+        <BlogCTA variant="default" />
 
         <h2 id="induced-requirement" className="scroll-mt-24">The Inducement Requirement</h2>
 
@@ -6446,7 +6446,7 @@ export const blogPosts: BlogPost[] = [
           caption="Prior notice should be given before or at the start of the tenancy"
         />
 
-        <BlogCTA variant="primary" />
+        <BlogCTA variant="default" />
 
         <h2 id="who-can-use" className="scroll-mt-24">Who Can Use Ground 1?</h2>
 
@@ -6787,7 +6787,7 @@ export const blogPosts: BlogPost[] = [
           <li>The circumstances of the landlord&apos;s default</li>
         </ul>
 
-        <BlogCTA variant="primary" />
+        <BlogCTA variant="default" />
 
         <h2 id="tenant-rights" className="scroll-mt-24">Tenant Rights</h2>
 
@@ -7100,7 +7100,7 @@ export const blogPosts: BlogPost[] = [
           <li>Other Section 8 grounds if applicable (e.g., rent arrears)</li>
         </ul>
 
-        <BlogCTA variant="primary" />
+        <BlogCTA variant="default" />
 
         <h2 id="using-ground-7" className="scroll-mt-24">Using Ground 7</h2>
 
