@@ -12820,6 +12820,787 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 28: Scotland Ground 11 (Breach of Tenancy Agreement)
+  {
+    slug: 'scotland-eviction-ground-11',
+    title: 'Scotland Ground 11 - Breach of Tenancy Agreement Guide 2026',
+    description: 'Complete guide to Ground 11 eviction in Scotland for breach of tenancy agreement. Learn what constitutes a breach, evidence required, and Tribunal considerations.',
+    metaDescription: 'Scotland Ground 11 eviction guide for breach of tenancy. Learn what constitutes breach, evidence needed, and Tribunal process for 2026.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1680,
+    category: 'Scottish Law',
+    tags: ['Ground 11', 'breach of tenancy', 'Scotland', 'PRT eviction', 'Scottish landlord', 'tenancy terms'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-11.svg',
+    tableOfContents: [
+      { id: 'what-is-ground-11', title: 'What Is Ground 11?', level: 2 },
+      { id: 'types-of-breach', title: 'Types of Breach', level: 2 },
+      { id: 'evidence-required', title: 'Evidence Required', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'reasonableness', title: 'Reasonableness Factors', level: 2 },
+      { id: 'ground-11-faq', title: 'Ground 11 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-private-residential-tenancy', 'scotland-eviction-ground-12'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 11 allows landlords to seek eviction when a tenant has breached their
+          tenancy agreement. As a discretionary ground, success depends on proving both
+          the breach and that eviction is a reasonable response. This guide explains
+          how to use Ground 11 effectively.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 11 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Discretionary (Tribunal considers reasonableness)</li>
+            <li><strong>Notice period:</strong> 28 days (regardless of tenancy length)</li>
+            <li><strong>Key requirement:</strong> Prove both breach AND that eviction is reasonable</li>
+            <li><strong>Evidence:</strong> Terms breached, warnings given, impact of breach</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-breach-tenancy.svg"
+          alt="Breach of Tenancy Agreement"
+          caption="Ground 11 covers all breaches of tenancy terms"
+        />
+
+        <h2 id="what-is-ground-11" className="scroll-mt-24">What Is Ground 11?</h2>
+
+        <p>
+          Ground 11 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          applies when the tenant has &quot;breached a term of the tenancy.&quot;
+        </p>
+
+        <p>
+          This is a <strong>discretionary ground</strong>, meaning even if you prove a
+          breach occurred, the Tribunal will only grant eviction if it considers it
+          reasonable in all the circumstances.
+        </p>
+
+        <h3>What Counts as a Breach?</h3>
+        <p>
+          A breach is any violation of the tenancy agreement terms. This can include
+          written terms you agreed AND statutory terms implied by law.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="types-of-breach" className="scroll-mt-24">Types of Breach</h2>
+
+        <h3>Common Breaches</h3>
+        <ul>
+          <li><strong>Non-payment of rent:</strong> Also covered by Ground 12</li>
+          <li><strong>Subletting without permission:</strong> Letting to others without consent</li>
+          <li><strong>Keeping pets:</strong> When the agreement prohibits pets</li>
+          <li><strong>Damage to property:</strong> Beyond normal wear and tear</li>
+          <li><strong>Business use:</strong> Running a business when prohibited</li>
+          <li><strong>Alterations:</strong> Making changes without permission</li>
+          <li><strong>Overcrowding:</strong> Having more occupants than agreed</li>
+          <li><strong>Nuisance:</strong> Causing problems for neighbours</li>
+        </ul>
+
+        <h3>Statutory Term Breaches</h3>
+        <p>
+          PRTs include statutory terms that tenants must follow, such as:
+        </p>
+        <ul>
+          <li>Allowing access for repairs with reasonable notice</li>
+          <li>Not assigning without written permission</li>
+          <li>Not subletting without written permission</li>
+          <li>Using the property only as a private dwelling</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Severity Matters</h4>
+          <p className="text-amber-800 mt-2">
+            Minor breaches rarely justify eviction. The Tribunal considers whether the
+            breach is serious enough to warrant losing their home. A one-off minor breach
+            is very different from persistent, serious violations.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-breach-types.svg"
+          alt="Types of Tenancy Breach"
+          caption="Different breaches have different levels of severity"
+        />
+
+        <h2 id="evidence-required" className="scroll-mt-24">Evidence Required</h2>
+
+        <h3>Proving the Breach</h3>
+        <ul>
+          <li><strong>Tenancy agreement:</strong> Showing the term that was breached</li>
+          <li><strong>Photos/videos:</strong> Evidence of the breach (damage, pets, etc.)</li>
+          <li><strong>Inspection reports:</strong> Professional assessments if relevant</li>
+          <li><strong>Correspondence:</strong> Emails, letters about the issue</li>
+          <li><strong>Witness statements:</strong> Neighbours or others who observed the breach</li>
+        </ul>
+
+        <h3>Showing Reasonableness</h3>
+        <p>You should also show:</p>
+        <ul>
+          <li>You warned the tenant about the breach</li>
+          <li>You gave them opportunity to remedy it</li>
+          <li>The breach continued or was not adequately addressed</li>
+          <li>The impact of the breach on you, the property, or neighbours</li>
+        </ul>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Period</h3>
+        <p>
+          For Ground 11, the notice period is <strong>28 days</strong> regardless of
+          tenancy length.
+        </p>
+
+        <h3>Notice Content</h3>
+        <p>Your Notice to Leave should:</p>
+        <ul>
+          <li>Use the prescribed form</li>
+          <li>Tick Ground 11 as the eviction ground</li>
+          <li>Describe the breach clearly</li>
+          <li>Be served correctly on the tenant</li>
+        </ul>
+
+        <h3>Prior Warning</h3>
+        <p>
+          Before serving notice, it&apos;s advisable to warn the tenant in writing about
+          the breach and give them reasonable time to remedy it. This strengthens your
+          case at the Tribunal.
+        </p>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice expires, apply to the Tribunal with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement (highlighting breached terms)</li>
+          <li>Evidence of the breach</li>
+          <li>Records of warnings and tenant responses</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will consider:</p>
+        <ol>
+          <li>Did a breach occur?</li>
+          <li>What was the nature and severity of the breach?</li>
+          <li>Did the landlord warn the tenant?</li>
+          <li>Did the tenant have opportunity to remedy it?</li>
+          <li>Is eviction a proportionate response?</li>
+        </ol>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tribunal-ground-11.svg"
+          alt="Tribunal Hearing for Ground 11"
+          caption="The Tribunal weighs breach severity against tenant circumstances"
+        />
+
+        <h2 id="reasonableness" className="scroll-mt-24">Reasonableness Factors</h2>
+
+        <p>The Tribunal considers many factors when deciding if eviction is reasonable:</p>
+
+        <h3>Factors in Landlord&apos;s Favour</h3>
+        <ul>
+          <li>Serious or repeated breaches</li>
+          <li>Clear warnings were given</li>
+          <li>Tenant refused or failed to remedy the breach</li>
+          <li>Significant harm caused (to property, neighbours, etc.)</li>
+          <li>Pattern of problematic behaviour</li>
+        </ul>
+
+        <h3>Factors in Tenant&apos;s Favour</h3>
+        <ul>
+          <li>Minor or one-off breach</li>
+          <li>Breach has now been remedied</li>
+          <li>No prior warnings from landlord</li>
+          <li>Tenant&apos;s vulnerability</li>
+          <li>Impact of eviction on tenant/family</li>
+        </ul>
+
+        <h2 id="ground-11-faq" className="scroll-mt-24">Ground 11 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 11 for rent arrears?</h3>
+            <p className="text-gray-600">
+              Yes, non-payment is a breach. However, Ground 12 is usually better for rent
+              arrears because it can be mandatory. Ground 11 is always discretionary.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant fixes the breach?</h3>
+            <p className="text-gray-600">
+              If the breach is fully remedied before the hearing, the Tribunal is less likely
+              to grant eviction. However, you may still succeed for persistent breaches that
+              keep recurring.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to give a formal warning first?</h3>
+            <p className="text-gray-600">
+              It&apos;s not legally required, but it significantly strengthens your case. A
+              written warning giving the tenant time to remedy the breach shows you acted
+              reasonably before seeking eviction.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I combine Ground 11 with other grounds?</h3>
+            <p className="text-gray-600">
+              Yes. Many landlords cite Ground 11 alongside Ground 12 (arrears) or Ground 14
+              (antisocial behaviour). This provides backup options.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Dealing With Tenancy Breaches?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides template warning letters and guidance for documenting
+            breaches and building a strong eviction case.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 29: Scotland Ground 3 (Refurbishment)
+  {
+    slug: 'scotland-eviction-ground-3',
+    title: 'Scotland Ground 3 - Property Refurbishment Guide 2026',
+    description: 'Complete guide to Ground 3 eviction in Scotland for property refurbishment. Learn requirements, evidence needed, and how to prove genuine refurbishment plans.',
+    metaDescription: 'Scotland Ground 3 eviction guide for property refurbishment. Learn requirements, evidence, and Tribunal process for landlords in 2026.',
+    date: '2026-01-03',
+    readTime: '11 min read',
+    wordCount: 1520,
+    category: 'Scottish Law',
+    tags: ['Ground 3', 'refurbishment', 'Scotland', 'PRT eviction', 'property works', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-3.svg',
+    tableOfContents: [
+      { id: 'what-is-ground-3', title: 'What Is Ground 3?', level: 2 },
+      { id: 'requirements', title: 'Requirements', level: 2 },
+      { id: 'proving-refurbishment', title: 'Proving Refurbishment Plans', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'ground-3-faq', title: 'Ground 3 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-eviction-ground-1', 'scotland-notice-to-leave'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 3 allows landlords to recover their property when they intend to carry
+          out significant refurbishment works that cannot be done with the tenant in
+          residence. As a mandatory ground, the Tribunal must grant eviction if you
+          prove your case.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 3 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Mandatory ground</li>
+            <li><strong>Notice period:</strong> 28 days (under 6 months) or 84 days (6+ months)</li>
+            <li><strong>Key requirement:</strong> Works cannot be carried out with tenant in place</li>
+            <li><strong>Evidence:</strong> Plans, quotes, contractor schedules</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-refurbishment.svg"
+          alt="Property Refurbishment"
+          caption="Ground 3 requires works that necessitate vacant possession"
+        />
+
+        <h2 id="what-is-ground-3" className="scroll-mt-24">What Is Ground 3?</h2>
+
+        <p>
+          Ground 3 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          applies when the landlord intends to refurbish the property and the works
+          &quot;are such that the tenant cannot reasonably continue to occupy it.&quot;
+        </p>
+
+        <p>
+          This is a <strong>mandatory ground</strong>. If you prove your intention and
+          that the works require vacant possession, the Tribunal must grant eviction.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="requirements" className="scroll-mt-24">Requirements</h2>
+
+        <p>To use Ground 3, you must show:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Three Requirements:</h4>
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>You intend to carry out refurbishment works</strong>
+                <p className="text-gray-600 text-sm">Genuine intention to refurbish the property</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>The works require vacant possession</strong>
+                <p className="text-gray-600 text-sm">The tenant cannot reasonably remain during works</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <div>
+                <strong>The works will actually be carried out</strong>
+                <p className="text-gray-600 text-sm">Not just a plan to evict for other reasons</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <h3>What Counts as Refurbishment?</h3>
+        <ul>
+          <li>Major structural works</li>
+          <li>Complete rewiring or replumbing</li>
+          <li>Removing and replacing the kitchen and bathroom</li>
+          <li>Extensive damp treatment</li>
+          <li>Reconfiguring the property layout</li>
+          <li>Works requiring scaffolding and major disruption</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Minor Works Won&apos;t Qualify</h4>
+          <p className="text-amber-800 mt-2">
+            Routine maintenance, repainting, or minor repairs don&apos;t justify Ground 3.
+            The works must be so extensive that it&apos;s genuinely unreasonable for the
+            tenant to stay.
+          </p>
+        </div>
+
+        <h2 id="proving-refurbishment" className="scroll-mt-24">Proving Refurbishment Plans</h2>
+
+        <h3>Evidence That Helps</h3>
+        <ul>
+          <li><strong>Architect/surveyor plans:</strong> Professional drawings of proposed works</li>
+          <li><strong>Contractor quotes:</strong> Written estimates with scope of works</li>
+          <li><strong>Building warrant applications:</strong> If planning permission needed</li>
+          <li><strong>Timeline/schedule:</strong> When works will start and expected duration</li>
+          <li><strong>Your statement:</strong> Explaining why works are needed</li>
+        </ul>
+
+        <h3>Why Vacant Possession Is Needed</h3>
+        <p>Explain clearly why the tenant cannot stay:</p>
+        <ul>
+          <li>Health and safety concerns during works</li>
+          <li>No usable kitchen or bathroom</li>
+          <li>Property will be uninhabitable</li>
+          <li>Contractors need full access</li>
+          <li>Duration of works makes living there impractical</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-building-plans.svg"
+          alt="Building Plans and Evidence"
+          caption="Professional plans and contractor quotes strengthen your application"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Periods</h3>
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Tenancy Length</th>
+                <th className="border p-3 text-left font-semibold">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Under 6 months</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">6 months or more</td>
+                <td className="border p-3">84 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice expires, apply with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Plans, quotes, and schedules for the works</li>
+          <li>Explanation of why vacant possession is needed</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will assess:</p>
+        <ul>
+          <li>Is your intention genuine?</li>
+          <li>Are the works substantial?</li>
+          <li>Do they really require the tenant to leave?</li>
+          <li>Are you likely to actually carry out the works?</li>
+        </ul>
+
+        <h2 id="ground-3-faq" className="scroll-mt-24">Ground 3 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I let the property again after works?</h3>
+            <p className="text-gray-600">
+              Yes. Unlike Ground 4 (moving in yourself), there&apos;s no restriction on
+              reletting after refurbishment. You can let to a new tenant at market rent.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I don&apos;t do the works?</h3>
+            <p className="text-gray-600">
+              If you evict using Ground 3 but don&apos;t carry out the works, the tenant may
+              claim wrongful termination. Ensure your intention is genuine.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need planning permission first?</h3>
+            <p className="text-gray-600">
+              Not necessarily, but having a building warrant application helps prove
+              serious intent. At minimum, have professional plans and quotes.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can the tenant return after works?</h3>
+            <p className="text-gray-600">
+              There&apos;s no legal right to return. You can offer a new tenancy, but you&apos;re
+              not obligated to. The original tenancy ends with the eviction.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Planning Property Works?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides guidance and templates for landlords planning
+            refurbishment projects that require tenant eviction.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 30: Scotland Ground 14 (Antisocial Behaviour)
+  {
+    slug: 'scotland-eviction-ground-14',
+    title: 'Scotland Ground 14 - Antisocial Behaviour Eviction Guide 2026',
+    description: 'Complete guide to Ground 14 eviction in Scotland for antisocial behaviour. Learn what constitutes antisocial behaviour, evidence required, and Tribunal process.',
+    metaDescription: 'Scotland Ground 14 antisocial behaviour eviction guide. Learn evidence requirements, Tribunal process, and tips for landlords in 2026.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Scottish Law',
+    tags: ['Ground 14', 'antisocial behaviour', 'Scotland', 'PRT eviction', 'nuisance', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-14.svg',
+    tableOfContents: [
+      { id: 'what-is-ground-14', title: 'What Is Ground 14?', level: 2 },
+      { id: 'definition', title: 'Defining Antisocial Behaviour', level: 2 },
+      { id: 'evidence-required', title: 'Evidence Required', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'reasonableness', title: 'Reasonableness Factors', level: 2 },
+      { id: 'ground-14-faq', title: 'Ground 14 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-eviction-ground-11', 'scotland-first-tier-tribunal'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 14 allows landlords to seek eviction when a tenant (or their household
+          or visitors) has engaged in antisocial behaviour. This is a discretionary
+          ground, so you must prove both the behaviour and that eviction is reasonable.
+          This guide explains how to build a strong Ground 14 case.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 14 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Discretionary ground</li>
+            <li><strong>Notice period:</strong> 28 days (regardless of tenancy length)</li>
+            <li><strong>Covers:</strong> Tenant, household members, and visitors</li>
+            <li><strong>Evidence:</strong> Incident log, witness statements, police reports</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-antisocial.svg"
+          alt="Antisocial Behaviour"
+          caption="Ground 14 covers behaviour that causes nuisance or harm"
+        />
+
+        <h2 id="what-is-ground-14" className="scroll-mt-24">What Is Ground 14?</h2>
+
+        <p>
+          Ground 14 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          applies when the tenant, someone living with them, or a visitor &quot;has engaged
+          in relevant antisocial behaviour.&quot;
+        </p>
+
+        <p>
+          This is a <strong>discretionary ground</strong>. The Tribunal will consider
+          all circumstances and decide if eviction is reasonable.
+        </p>
+
+        <h3>Who Can Be Responsible?</h3>
+        <ul>
+          <li>The tenant themselves</li>
+          <li>Members of the tenant&apos;s household</li>
+          <li>Visitors to the property</li>
+        </ul>
+
+        <p>
+          The tenant doesn&apos;t have to personally commit the behaviour. They can be
+          evicted for the actions of people they allow into the property.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="definition" className="scroll-mt-24">Defining Antisocial Behaviour</h2>
+
+        <p>
+          &quot;Antisocial behaviour&quot; under the legislation means behaviour that causes
+          or is likely to cause alarm, distress, nuisance, or annoyance to others.
+        </p>
+
+        <h3>Examples of Antisocial Behaviour</h3>
+        <ul>
+          <li><strong>Noise:</strong> Loud music, parties, shouting at unsociable hours</li>
+          <li><strong>Harassment:</strong> Threatening or intimidating neighbours</li>
+          <li><strong>Violence:</strong> Assaults or threats of violence</li>
+          <li><strong>Vandalism:</strong> Damage to common areas or neighbours&apos; property</li>
+          <li><strong>Drug activity:</strong> Drug dealing or use causing problems</li>
+          <li><strong>Drunken behaviour:</strong> Regular disturbances when intoxicated</li>
+          <li><strong>Verbal abuse:</strong> Offensive language, insults, discrimination</li>
+          <li><strong>Environmental:</strong> Rubbish, smells, pests affecting neighbours</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Pattern Usually Required</h4>
+          <p className="text-amber-800 mt-2">
+            A single incident is rarely enough for Ground 14. The Tribunal usually looks
+            for a pattern of behaviour. Exceptions might be made for very serious single
+            incidents (e.g., violence).
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-noise-complaints.svg"
+          alt="Recording Antisocial Behaviour"
+          caption="Document incidents thoroughly with dates, times, and witnesses"
+        />
+
+        <h2 id="evidence-required" className="scroll-mt-24">Evidence Required</h2>
+
+        <h3>Building Your Case</h3>
+        <ul>
+          <li><strong>Incident log:</strong> Dates, times, descriptions of each incident</li>
+          <li><strong>Witness statements:</strong> Signed statements from neighbours</li>
+          <li><strong>Police reports:</strong> If police were called, get incident numbers</li>
+          <li><strong>Council records:</strong> Environmental health complaints, noise reports</li>
+          <li><strong>Photos/videos:</strong> Evidence of damage, mess, or behaviour (where legal)</li>
+          <li><strong>Correspondence:</strong> Complaints from neighbours, warnings you sent</li>
+        </ul>
+
+        <h3>Keeping an Incident Log</h3>
+        <p>For each incident, record:</p>
+        <ul>
+          <li>Date and time</li>
+          <li>What happened</li>
+          <li>Who was involved</li>
+          <li>How long it lasted</li>
+          <li>Who witnessed it</li>
+          <li>What impact it had</li>
+          <li>Any action taken (police called, etc.)</li>
+        </ul>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Period</h3>
+        <p>
+          For Ground 14, the notice period is <strong>28 days</strong> regardless of
+          how long the tenant has been in the property.
+        </p>
+
+        <h3>Notice Content</h3>
+        <p>Your Notice to Leave should:</p>
+        <ul>
+          <li>Use the prescribed form</li>
+          <li>Tick Ground 14 as the eviction ground</li>
+          <li>Describe the antisocial behaviour</li>
+          <li>Be served correctly on the tenant</li>
+        </ul>
+
+        <h3>Prior Warnings</h3>
+        <p>
+          While not strictly required, written warnings to the tenant about the
+          behaviour strengthen your case. They show you gave opportunity to change.
+        </p>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice expires, apply with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Detailed incident log</li>
+          <li>Witness statements</li>
+          <li>Any police or council records</li>
+          <li>Your warning letters and tenant responses</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will consider:</p>
+        <ol>
+          <li>Did antisocial behaviour occur?</li>
+          <li>Was the tenant responsible (directly or indirectly)?</li>
+          <li>What was the impact on others?</li>
+          <li>Did the landlord warn the tenant?</li>
+          <li>Is eviction reasonable in all circumstances?</li>
+        </ol>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tribunal-asb.svg"
+          alt="Tribunal Hearing for Antisocial Behaviour"
+          caption="Present a clear timeline of incidents and evidence"
+        />
+
+        <h2 id="reasonableness" className="scroll-mt-24">Reasonableness Factors</h2>
+
+        <p>The Tribunal weighs many factors:</p>
+
+        <h3>Favouring Eviction</h3>
+        <ul>
+          <li>Persistent, repeated incidents</li>
+          <li>Serious behaviour (violence, threats)</li>
+          <li>Clear impact on neighbours&apos; wellbeing</li>
+          <li>Tenant ignored warnings</li>
+          <li>Behaviour continues despite intervention</li>
+        </ul>
+
+        <h3>Against Eviction</h3>
+        <ul>
+          <li>Isolated incident(s)</li>
+          <li>Behaviour has stopped</li>
+          <li>Tenant took steps to address it</li>
+          <li>Tenant&apos;s vulnerability or health issues</li>
+          <li>Impact on tenant&apos;s family (children)</li>
+        </ul>
+
+        <h2 id="ground-14-faq" className="scroll-mt-24">Ground 14 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if it&apos;s the tenant&apos;s guests causing problems?</h3>
+            <p className="text-gray-600">
+              Ground 14 specifically covers visitors. If the tenant allows people into
+              the property who then cause problems, the tenant can be held responsible.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do neighbours need to give evidence?</h3>
+            <p className="text-gray-600">
+              Neighbour witness statements are valuable but not always essential. Some
+              may be willing to provide written statements but not attend. Police and
+              council records can also support your case.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I involve the police?</h3>
+            <p className="text-gray-600">
+              Yes, if behaviour is criminal or threatening. Police reports provide
+              independent evidence. Even if no charges result, the call records help.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I combine Ground 14 with Ground 11?</h3>
+            <p className="text-gray-600">
+              Yes. If the antisocial behaviour also breaches tenancy terms, you can cite
+              both grounds. This gives the Tribunal more options.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant denies everything?</h3>
+            <p className="text-gray-600">
+              Prepare thorough evidence. Multiple independent witnesses, police reports,
+              and council records are more credible than a tenant&apos;s denial. Keep
+              contemporaneous records.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Dealing With Problem Tenants?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides incident log templates, warning letter templates,
+            and step-by-step guidance for antisocial behaviour cases.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
