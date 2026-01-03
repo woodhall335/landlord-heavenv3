@@ -2436,7 +2436,7 @@ export const blogPosts: BlogPost[] = [
           </p>
         </div>
 
-        <BlogCTA variant="ast" />
+        <BlogCTA variant="default" />
 
         <h2 id="landlord-obligations" className="scroll-mt-24">Landlord Obligations</h2>
 
