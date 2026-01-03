@@ -20052,6 +20052,2221 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 53: Wales Gas & Electrical Safety
+  {
+    slug: 'wales-gas-electrical-safety',
+    title: 'Gas & Electrical Safety Wales - Landlord Requirements 2026',
+    description: 'Complete guide to gas and electrical safety requirements for landlords in Wales under the Renting Homes (Wales) Act 2016. Certificates, testing intervals, and compliance.',
+    metaDescription: 'Wales landlord gas & electrical safety guide 2026. EICR requirements, gas safety certificates, testing intervals, and compliance under Renting Homes Act.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1680,
+    category: 'Welsh Law',
+    tags: ['gas safety', 'electrical safety', 'Wales', 'EICR', 'gas safety certificate', 'landlord compliance', 'Renting Homes Act'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-safety.svg',
+    heroImageAlt: 'Wales Gas and Electrical Safety Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'wales landlord gas electrical safety',
+    secondaryKeywords: ['EICR Wales landlord', 'gas safety certificate Wales', 'electrical testing rental property Wales', 'Wales landlord safety requirements'],
+    tableOfContents: [
+      { id: 'safety-overview', title: 'Safety Requirements Overview', level: 2 },
+      { id: 'gas-safety', title: 'Gas Safety Requirements', level: 2 },
+      { id: 'electrical-safety', title: 'Electrical Safety Requirements', level: 2 },
+      { id: 'testing-frequency', title: 'Testing Frequency', level: 2 },
+      { id: 'certificate-requirements', title: 'Certificate Requirements', level: 2 },
+      { id: 'penalties', title: 'Non-Compliance Penalties', level: 2 },
+      { id: 'safety-faq', title: 'Safety Requirements FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-landlord-obligations-checklist', 'wales-fitness-human-habitation', 'wales-standard-occupation-contract'],
+    content: (
+      <>
+        <p className="lead">
+          Gas and electrical safety are fundamental requirements for all landlords in Wales.
+          Under the Renting Homes (Wales) Act 2016, landlords must ensure their properties
+          meet strict safety standards before and during occupation contracts. This guide
+          covers all requirements for 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-safety-hero.svg"
+          alt="Wales Gas and Electrical Safety Requirements"
+          caption="Gas and electrical safety certificates are mandatory for Welsh landlords"
+          aspectRatio="video"
+        />
+
+        <h2 id="safety-overview" className="scroll-mt-24">Safety Requirements Overview</h2>
+
+        <p>
+          Welsh landlords must comply with both UK-wide regulations and Wales-specific
+          requirements under the Renting Homes Act. The key legislation includes:
+        </p>
+
+        <ul>
+          <li>Gas Safety (Installation and Use) Regulations 1998</li>
+          <li>Electrical Safety Standards in the Private Rented Sector (England) Regulations 2020 (applied in Wales)</li>
+          <li>Renting Homes (Wales) Act 2016 - fitness requirements</li>
+          <li>Rent Smart Wales licensing conditions</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Rent Smart Wales Link</h4>
+          <p className="text-blue-800">
+            Rent Smart Wales licensing includes conditions about maintaining valid
+            gas and electrical safety certificates. Failure to comply can affect
+            your licence status.
+          </p>
+        </div>
+
+        <h2 id="gas-safety" className="scroll-mt-24">Gas Safety Requirements</h2>
+
+        <p>
+          All gas appliances, fittings, and flues provided by the landlord must be
+          checked annually by a Gas Safe registered engineer. This applies to:
+        </p>
+
+        <ul>
+          <li>Gas boilers and central heating systems</li>
+          <li>Gas fires and heaters</li>
+          <li>Gas cookers and hobs</li>
+          <li>Gas water heaters</li>
+          <li>Pipework and flues</li>
+        </ul>
+
+        <h3>Gas Safety Certificate (CP12)</h3>
+
+        <p>
+          After each annual check, you must receive a Gas Safety Record (commonly
+          called a CP12). This must include:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Information Required</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Property address</td>
+                <td className="px-6 py-4">Full address of the rental property</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Landlord details</td>
+                <td className="px-6 py-4">Name and address of landlord/agent</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Engineer details</td>
+                <td className="px-6 py-4">Name, signature, Gas Safe registration number</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Appliance details</td>
+                <td className="px-6 py-4">Each appliance checked with location</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Check results</td>
+                <td className="px-6 py-4">Results and any defects identified</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Date of check</td>
+                <td className="px-6 py-4">Date inspection was carried out</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="electrical-safety" className="scroll-mt-24">Electrical Safety Requirements</h2>
+
+        <p>
+          Since 2022, landlords in Wales must ensure the electrical installations in
+          their properties are inspected and tested by a qualified person. An
+          Electrical Installation Condition Report (EICR) must be obtained.
+        </p>
+
+        <h3>EICR Requirements</h3>
+
+        <ul>
+          <li>Must be carried out by a qualified and competent person</li>
+          <li>Valid for 5 years (or less if specified on the report)</li>
+          <li>Must be &quot;satisfactory&quot; - no code C1 or C2 issues unresolved</li>
+          <li>Copy given to contract-holders within 28 days</li>
+          <li>Kept for duration of occupation contract</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-eicr-wales.svg"
+          alt="EICR Requirements Wales"
+          caption="EICRs must be obtained every 5 years or when specified"
+          aspectRatio="video"
+        />
+
+        <h3>EICR Classification Codes</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Meaning</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action Required</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 font-semibold text-red-600">C1</td>
+                <td className="px-6 py-4">Danger present</td>
+                <td className="px-6 py-4">Immediate remedial action required</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold text-orange-600">C2</td>
+                <td className="px-6 py-4">Potentially dangerous</td>
+                <td className="px-6 py-4">Urgent remedial action required</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold text-yellow-600">C3</td>
+                <td className="px-6 py-4">Improvement recommended</td>
+                <td className="px-6 py-4">Not mandatory but advised</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold text-blue-600">FI</td>
+                <td className="px-6 py-4">Further investigation</td>
+                <td className="px-6 py-4">Additional testing needed</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Critical Warning</h4>
+          <p className="text-red-800">
+            If your EICR shows C1 or C2 codes, remedial work must be completed
+            within 28 days (or immediately for C1). Failure to do so is a criminal
+            offence and can result in penalties up to £30,000.
+          </p>
+        </div>
+
+        <h2 id="testing-frequency" className="scroll-mt-24">Testing Frequency</h2>
+
+        <p>
+          Different safety checks have different frequency requirements:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Check Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Frequency</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Gas Safety Check</td>
+                <td className="px-6 py-4">Every 12 months</td>
+                <td className="px-6 py-4">Before expiry of previous certificate</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">EICR</td>
+                <td className="px-6 py-4">Every 5 years</td>
+                <td className="px-6 py-4">Or as specified on report if sooner</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Smoke Alarms</td>
+                <td className="px-6 py-4">Check at each new contract</td>
+                <td className="px-6 py-4">Must be working at start of occupation</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Carbon Monoxide Alarms</td>
+                <td className="px-6 py-4">Check at each new contract</td>
+                <td className="px-6 py-4">Required in rooms with solid fuel appliances</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-safety-calendar.svg"
+          alt="Safety Check Calendar Wales"
+          caption="Set reminders to ensure safety certificates don't expire"
+          aspectRatio="video"
+        />
+
+        <h2 id="certificate-requirements" className="scroll-mt-24">Certificate Requirements</h2>
+
+        <p>
+          You must provide copies of safety certificates to contract-holders at
+          specific times:
+        </p>
+
+        <h3>Gas Safety Certificate</h3>
+
+        <ul>
+          <li>Before occupation begins (new contract-holders)</li>
+          <li>Within 28 days of each annual check</li>
+          <li>Upon request from contract-holder</li>
+        </ul>
+
+        <h3>EICR</h3>
+
+        <ul>
+          <li>Before occupation begins (new contract-holders)</li>
+          <li>Within 28 days of any new report</li>
+          <li>Within 28 days of any remedial work being completed</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Record Keeping</h4>
+          <p className="text-green-800">
+            Keep copies of all safety certificates for at least 6 years. Landlord
+            Heaven&apos;s document management system helps you store and track all
+            compliance documents.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="penalties" className="scroll-mt-24">Non-Compliance Penalties</h2>
+
+        <p>
+          Failing to comply with gas and electrical safety requirements can result
+          in serious consequences:
+        </p>
+
+        <h3>Gas Safety Penalties</h3>
+
+        <ul>
+          <li>Criminal prosecution - unlimited fines</li>
+          <li>Imprisonment up to 6 months</li>
+          <li>Manslaughter charges if death results</li>
+          <li>Civil liability for injuries or damage</li>
+        </ul>
+
+        <h3>Electrical Safety Penalties</h3>
+
+        <ul>
+          <li>Civil penalty up to £30,000 per breach</li>
+          <li>Local authority can arrange remedial work at landlord&apos;s cost</li>
+          <li>Criminal prosecution in serious cases</li>
+          <li>Rent repayment orders</li>
+        </ul>
+
+        <h3>Impact on Rent Smart Wales Licence</h3>
+
+        <p>
+          Non-compliance with safety requirements can affect your Rent Smart Wales
+          registration and licence:
+        </p>
+
+        <ul>
+          <li>Licence conditions require valid certificates</li>
+          <li>Enforcement action against your licence</li>
+          <li>Potential licence revocation</li>
+          <li>Unable to serve valid possession notices</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-compliance-penalties.svg"
+          alt="Non-Compliance Penalties Wales"
+          caption="Penalties for non-compliance can be severe"
+          aspectRatio="video"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Compliance Made Easy</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides certificate tracking, reminder systems, and
+            compliance checklists to help Welsh landlords stay compliant.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Compliance Tools →
+          </Link>
+        </div>
+
+        <h2 id="safety-faq" className="scroll-mt-24">Safety Requirements FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Who can carry out a gas safety check?</h3>
+            <p className="text-gray-600">
+              Only a Gas Safe registered engineer can carry out a landlord gas safety
+              check. You can verify registration at the Gas Safe Register website
+              using their ID card number.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Who can carry out an EICR?</h3>
+            <p className="text-gray-600">
+              An EICR must be carried out by a qualified and competent person. This
+              typically means someone registered with an approved scheme like NICEIC,
+              NAPIT, or ELECSA.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my tenant refuses access for safety checks?</h3>
+            <p className="text-gray-600">
+              Document all attempts to gain access in writing. If reasonable access
+              is refused, you may need to serve notice under the terms of the contract.
+              Keep records of all communication attempts.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need certificates before issuing a written statement?</h3>
+            <p className="text-gray-600">
+              Yes, you must have valid gas and electrical safety certificates before
+              the contract-holder occupies the property. These should be provided
+              alongside the written statement.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 54: Wales EPC Requirements
+  {
+    slug: 'wales-epc-requirements',
+    title: 'EPC Requirements Wales - Landlord Energy Efficiency Guide 2026',
+    description: 'Complete guide to Energy Performance Certificate requirements for landlords in Wales. MEES regulations, minimum ratings, exemptions, and compliance guidance.',
+    metaDescription: 'Wales landlord EPC requirements 2026. Minimum E rating, MEES regulations, exemptions, and energy efficiency compliance for Welsh rental properties.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1620,
+    category: 'Welsh Law',
+    tags: ['EPC', 'Wales', 'energy efficiency', 'MEES', 'landlord compliance', 'energy rating', 'rental property'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-epc.svg',
+    heroImageAlt: 'Wales EPC Requirements Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'wales landlord epc requirements',
+    secondaryKeywords: ['EPC Wales rental', 'MEES Wales landlord', 'energy efficiency Wales', 'minimum EPC rating Wales'],
+    tableOfContents: [
+      { id: 'epc-overview', title: 'EPC Overview', level: 2 },
+      { id: 'when-required', title: 'When You Need an EPC', level: 2 },
+      { id: 'mees-regulations', title: 'MEES Regulations', level: 2 },
+      { id: 'exemptions', title: 'Exemptions', level: 2 },
+      { id: 'improving-rating', title: 'Improving Your Rating', level: 2 },
+      { id: 'future-changes', title: 'Future Changes', level: 2 },
+      { id: 'epc-faq', title: 'EPC FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-landlord-obligations-checklist', 'wales-fitness-human-habitation', 'wales-gas-electrical-safety'],
+    content: (
+      <>
+        <p className="lead">
+          Energy Performance Certificates (EPCs) are a legal requirement for rental
+          properties in Wales. The Minimum Energy Efficiency Standards (MEES)
+          regulations set the minimum acceptable rating, with proposals for higher
+          standards in coming years. This guide explains all EPC requirements for
+          Welsh landlords.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-epc-hero.svg"
+          alt="Wales EPC Requirements"
+          caption="EPCs rate properties from A (most efficient) to G (least efficient)"
+          aspectRatio="video"
+        />
+
+        <h2 id="epc-overview" className="scroll-mt-24">EPC Overview</h2>
+
+        <p>
+          An Energy Performance Certificate rates your property&apos;s energy efficiency
+          on a scale from A (most efficient) to G (least efficient). The certificate
+          includes:
+        </p>
+
+        <ul>
+          <li>Current energy efficiency rating</li>
+          <li>Potential rating if improvements made</li>
+          <li>Environmental impact rating</li>
+          <li>Estimated energy costs</li>
+          <li>Recommendations for improvements</li>
+        </ul>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SAP Points</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status for Letting</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr className="bg-green-50">
+                <td className="px-6 py-4 font-semibold">A</td>
+                <td className="px-6 py-4">92-100</td>
+                <td className="px-6 py-4">Can let</td>
+              </tr>
+              <tr className="bg-green-50">
+                <td className="px-6 py-4 font-semibold">B</td>
+                <td className="px-6 py-4">81-91</td>
+                <td className="px-6 py-4">Can let</td>
+              </tr>
+              <tr className="bg-green-50">
+                <td className="px-6 py-4 font-semibold">C</td>
+                <td className="px-6 py-4">69-80</td>
+                <td className="px-6 py-4">Can let</td>
+              </tr>
+              <tr className="bg-yellow-50">
+                <td className="px-6 py-4 font-semibold">D</td>
+                <td className="px-6 py-4">55-68</td>
+                <td className="px-6 py-4">Can let</td>
+              </tr>
+              <tr className="bg-yellow-50">
+                <td className="px-6 py-4 font-semibold">E</td>
+                <td className="px-6 py-4">39-54</td>
+                <td className="px-6 py-4">Minimum standard (can let)</td>
+              </tr>
+              <tr className="bg-red-50">
+                <td className="px-6 py-4 font-semibold">F</td>
+                <td className="px-6 py-4">21-38</td>
+                <td className="px-6 py-4">Cannot let (unless exempt)</td>
+              </tr>
+              <tr className="bg-red-50">
+                <td className="px-6 py-4 font-semibold">G</td>
+                <td className="px-6 py-4">1-20</td>
+                <td className="px-6 py-4">Cannot let (unless exempt)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="when-required" className="scroll-mt-24">When You Need an EPC</h2>
+
+        <p>
+          You must have a valid EPC in the following situations:
+        </p>
+
+        <ul>
+          <li>Before marketing a property for rent</li>
+          <li>When entering into a new occupation contract</li>
+          <li>When renewing or extending an existing contract</li>
+          <li>Upon request from a prospective contract-holder</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">EPC Validity</h4>
+          <p className="text-blue-800">
+            EPCs are valid for 10 years from the date of issue. However, if you make
+            significant improvements to energy efficiency, consider getting a new
+            assessment to reflect the improvements.
+          </p>
+        </div>
+
+        <h3>Providing the EPC</h3>
+
+        <p>
+          You must provide the EPC to prospective contract-holders:
+        </p>
+
+        <ul>
+          <li>Free of charge</li>
+          <li>At the earliest opportunity</li>
+          <li>Before an occupation contract is entered into</li>
+          <li>In property listings and advertisements</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="mees-regulations" className="scroll-mt-24">MEES Regulations</h2>
+
+        <p>
+          The Minimum Energy Efficiency Standards (MEES) regulations apply in Wales.
+          Key requirements include:
+        </p>
+
+        <h3>Current Requirements</h3>
+
+        <ul>
+          <li>Minimum EPC rating of E required</li>
+          <li>Applies to new tenancies since April 2018</li>
+          <li>Applies to all existing tenancies since April 2020</li>
+          <li>Properties rated F or G cannot be legally let (unless exempt)</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-mees-wales.svg"
+          alt="MEES Requirements Wales"
+          caption="Properties must meet minimum energy efficiency standards"
+          aspectRatio="video"
+        />
+
+        <h3>Penalties for Non-Compliance</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Breach</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penalty (less than 3 months)</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Penalty (3+ months)</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Letting a sub-standard property</td>
+                <td className="px-6 py-4">10% of rateable value (min £5,000)</td>
+                <td className="px-6 py-4">20% of rateable value (min £10,000)</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Providing false/misleading information</td>
+                <td className="px-6 py-4" colSpan={2}>Up to £5,000</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Failure to comply with compliance notice</td>
+                <td className="px-6 py-4" colSpan={2}>Up to £5,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Maximum Penalty</h4>
+          <p className="text-red-800">
+            The maximum penalty for a single property is capped at £5,000 for a single
+            penalty notice, with a maximum of £30,000 over 18 months across all breaches.
+          </p>
+        </div>
+
+        <h2 id="exemptions" className="scroll-mt-24">Exemptions</h2>
+
+        <p>
+          If your property cannot reach an E rating, you may be eligible for an
+          exemption. Exemptions must be registered on the PRS Exemptions Register.
+        </p>
+
+        <h3>Types of Exemption</h3>
+
+        <ul>
+          <li><strong>Cost cap exemption:</strong> All relevant improvements would cost more than £3,500 (inc. VAT)</li>
+          <li><strong>Third party consent:</strong> Required consent (e.g., planning) has been refused</li>
+          <li><strong>Devaluation:</strong> An independent surveyor confirms improvements would reduce property value by more than 5%</li>
+          <li><strong>Wall insulation:</strong> Expert advice says wall insulation would damage the property</li>
+        </ul>
+
+        <h3>Registering an Exemption</h3>
+
+        <ul>
+          <li>Exemptions are valid for 5 years</li>
+          <li>Must be registered on the national PRS Exemptions Register</li>
+          <li>Supporting evidence must be provided</li>
+          <li>New landlord cannot rely on previous owner&apos;s exemption</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-epc-exemptions.svg"
+          alt="EPC Exemptions Wales"
+          caption="Exemptions must be properly registered with supporting evidence"
+          aspectRatio="video"
+        />
+
+        <h2 id="improving-rating" className="scroll-mt-24">Improving Your Rating</h2>
+
+        <p>
+          Common improvements to boost your EPC rating include:
+        </p>
+
+        <h3>Low-Cost Improvements</h3>
+
+        <ul>
+          <li>LED lighting throughout</li>
+          <li>Loft insulation (270mm recommended)</li>
+          <li>Draft proofing windows and doors</li>
+          <li>Hot water cylinder insulation</li>
+          <li>Thermostatic radiator valves</li>
+        </ul>
+
+        <h3>Higher-Cost Improvements</h3>
+
+        <ul>
+          <li>Double or triple glazing</li>
+          <li>Cavity wall insulation</li>
+          <li>External or internal wall insulation</li>
+          <li>New efficient boiler</li>
+          <li>Solar panels</li>
+          <li>Heat pump installation</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Welsh Government Grants</h4>
+          <p className="text-green-800">
+            The Welsh Government offers various grants and schemes to help improve
+            energy efficiency, including the Warm Homes Programme. Check eligibility
+            for funding before making improvements.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="future-changes" className="scroll-mt-24">Future Changes</h2>
+
+        <p>
+          The Welsh Government is considering raising minimum EPC standards in line
+          with net zero commitments. Proposed changes include:
+        </p>
+
+        <ul>
+          <li>Potential increase to minimum C rating</li>
+          <li>Phased implementation for existing properties</li>
+          <li>Higher cost cap for required improvements</li>
+          <li>Integration with Warm Homes Programme</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Forward Planning</h4>
+          <p className="text-amber-800">
+            Even if not yet required, consider improving properties to C rating now.
+            This future-proofs your investment and can make properties more attractive
+            to tenants concerned about energy costs.
+          </p>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">EPC Compliance Support</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides EPC tracking, improvement recommendations, and
+            compliance documentation for Welsh landlords.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Compliance Tools →
+          </Link>
+        </div>
+
+        <h2 id="epc-faq" className="scroll-mt-24">EPC FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a new EPC for each new contract-holder?</h3>
+            <p className="text-gray-600">
+              No, as long as your current EPC is still valid (within 10 years) and
+              meets the minimum E rating, you can use the same certificate. You must
+              provide a copy to each new contract-holder.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my EPC expires during an occupation contract?</h3>
+            <p className="text-gray-600">
+              You need a valid EPC when entering into a contract, but expiry during
+              the contract doesn&apos;t require immediate renewal. You&apos;ll need a new
+              EPC before any new letting or marketing.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can contract-holders see my EPC online?</h3>
+            <p className="text-gray-600">
+              Yes, EPCs are public documents. Anyone can search for a property&apos;s
+              EPC on the government&apos;s EPC register using the address.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Who can produce an EPC?</h3>
+            <p className="text-gray-600">
+              Only accredited Domestic Energy Assessors can produce EPCs. Ensure
+              your assessor is registered with an approved accreditation scheme.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 55: Wales Anti-Social Behaviour Grounds
+  {
+    slug: 'wales-anti-social-behaviour-possession',
+    title: 'Anti-Social Behaviour Eviction Wales - Possession Grounds Guide 2026',
+    description: 'Complete guide to using anti-social behaviour grounds for possession in Wales. Evidence requirements, procedures, and obtaining possession orders under Welsh law.',
+    metaDescription: 'Wales anti-social behaviour eviction guide 2026. Possession grounds, evidence requirements, procedures, and court process for ASB under Welsh law.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Welsh Law',
+    tags: ['anti-social behaviour', 'Wales', 'eviction', 'possession grounds', 'ASB', 'nuisance', 'Renting Homes Act'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-asb.svg',
+    heroImageAlt: 'Wales Anti-Social Behaviour Eviction Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'wales anti social behaviour eviction',
+    secondaryKeywords: ['ASB possession Wales', 'nuisance eviction Wales', 'anti-social behaviour ground Wales', 'problem tenant Wales'],
+    tableOfContents: [
+      { id: 'asb-overview', title: 'Anti-Social Behaviour Overview', level: 2 },
+      { id: 'asb-grounds', title: 'ASB Possession Grounds', level: 2 },
+      { id: 'evidence-requirements', title: 'Evidence Requirements', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'court-process', title: 'Court Process', level: 2 },
+      { id: 'serious-asb', title: 'Serious ASB Cases', level: 2 },
+      { id: 'asb-faq', title: 'ASB FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-eviction-process', 'wales-possession-grounds', 'wales-renting-homes-act'],
+    content: (
+      <>
+        <p className="lead">
+          Anti-social behaviour by contract-holders can seriously affect neighbours
+          and the wider community. Under the Renting Homes (Wales) Act 2016, landlords
+          have specific grounds to seek possession when contract-holders engage in
+          ASB. This guide explains how to use these grounds effectively.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-asb-hero.svg"
+          alt="Anti-Social Behaviour Eviction Wales"
+          caption="ASB can be grounds for possession but requires proper evidence"
+          aspectRatio="video"
+        />
+
+        <h2 id="asb-overview" className="scroll-mt-24">Anti-Social Behaviour Overview</h2>
+
+        <p>
+          Anti-social behaviour in the context of rental properties includes conduct
+          that causes or is likely to cause nuisance or annoyance. This can include:
+        </p>
+
+        <ul>
+          <li>Excessive noise (loud music, parties, shouting)</li>
+          <li>Verbal abuse or harassment of neighbours</li>
+          <li>Violence or threats of violence</li>
+          <li>Drug dealing or use on the premises</li>
+          <li>Criminal activity at or near the property</li>
+          <li>Damage to neighbouring properties</li>
+          <li>Allowing visitors who cause problems</li>
+          <li>Accumulation of rubbish causing health hazards</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Important Note</h4>
+          <p className="text-blue-800">
+            Contract-holders are responsible for the behaviour of anyone at the
+            property, including visitors, children, and other household members.
+            ASB by these individuals can be grounds for possession against the
+            contract-holder.
+          </p>
+        </div>
+
+        <h2 id="asb-grounds" className="scroll-mt-24">ASB Possession Grounds</h2>
+
+        <p>
+          Under the Renting Homes (Wales) Act 2016, there are specific grounds
+          relating to anti-social behaviour:
+        </p>
+
+        <h3>Ground 12: Estate Management Grounds (includes ASB)</h3>
+
+        <p>
+          This ground covers behaviour that causes nuisance or annoyance to people
+          in the locality of the dwelling. The court must be satisfied that:
+        </p>
+
+        <ul>
+          <li>The contract-holder or person residing at or visiting the property</li>
+          <li>Has been guilty of conduct causing or likely to cause</li>
+          <li>Nuisance or annoyance to a person residing, visiting, or engaged in lawful activity in the locality</li>
+        </ul>
+
+        <h3>Ground 13: Serious Rent Arrears</h3>
+
+        <p>
+          While primarily about rent, serious arrears cases often accompany ASB issues
+          and can strengthen your overall case.
+        </p>
+
+        <h3>Ground 14: Breach of Contract Terms</h3>
+
+        <p>
+          If your occupation contract contains terms about behaviour (which it should),
+          ASB may constitute a breach giving rise to this ground.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-asb-grounds.svg"
+          alt="ASB Possession Grounds Wales"
+          caption="Multiple grounds may apply in ASB cases"
+          aspectRatio="video"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="evidence-requirements" className="scroll-mt-24">Evidence Requirements</h2>
+
+        <p>
+          Strong evidence is essential for ASB possession cases. The court will
+          need to be satisfied of the behaviour before making a possession order.
+        </p>
+
+        <h3>Types of Evidence</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Evidence Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Examples</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Strength</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Witness statements</td>
+                <td className="px-6 py-4">Neighbours, other residents, visitors</td>
+                <td className="px-6 py-4">Strong (if willing to attend court)</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Diary logs</td>
+                <td className="px-6 py-4">Detailed contemporaneous records</td>
+                <td className="px-6 py-4">Strong (if detailed and consistent)</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Photos/videos</td>
+                <td className="px-6 py-4">Damage, rubbish, incidents</td>
+                <td className="px-6 py-4">Strong (if clearly dated)</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Police reports</td>
+                <td className="px-6 py-4">Crime reference numbers, incident reports</td>
+                <td className="px-6 py-4">Very strong</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Council records</td>
+                <td className="px-6 py-4">Noise complaints, ASB team involvement</td>
+                <td className="px-6 py-4">Strong</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Professional witnesses</td>
+                <td className="px-6 py-4">Managing agents, contractors</td>
+                <td className="px-6 py-4">Very strong</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Building Your Evidence Pack</h3>
+
+        <ul>
+          <li>Keep detailed records of all incidents</li>
+          <li>Include dates, times, and duration</li>
+          <li>Record who was affected and how</li>
+          <li>Note any warnings given to the contract-holder</li>
+          <li>Keep copies of all correspondence</li>
+          <li>Encourage affected neighbours to keep diaries</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Witness Reluctance</h4>
+          <p className="text-amber-800">
+            Many neighbours are reluctant to give evidence due to fear of reprisal.
+            Consider professional witness services or ask if they would provide
+            statements anonymously (though this carries less weight).
+          </p>
+        </div>
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <p>
+          Before seeking possession, you must serve the correct notice. For ASB
+          grounds, you can use:
+        </p>
+
+        <h3>Standard Notice (Section 173)</h3>
+
+        <ul>
+          <li>Minimum notice period: 1 month</li>
+          <li>Can be served during any periodic standard contract</li>
+          <li>Must specify the ground(s) being relied upon</li>
+        </ul>
+
+        <h3>Landlord&apos;s Break Notice (Section 186)</h3>
+
+        <ul>
+          <li>For fixed-term contracts with break clause</li>
+          <li>Must comply with any notice period in the contract</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-asb-notice.svg"
+          alt="ASB Notice Requirements Wales"
+          caption="Correct notice must be served before court proceedings"
+          aspectRatio="video"
+        />
+
+        <h2 id="court-process" className="scroll-mt-24">Court Process</h2>
+
+        <p>
+          The court process for ASB possession follows these steps:
+        </p>
+
+        <ol>
+          <li>Serve the appropriate notice</li>
+          <li>Wait for notice period to expire</li>
+          <li>Issue possession claim at county court</li>
+          <li>Attend hearing with all evidence</li>
+          <li>Court decides whether to grant possession</li>
+        </ol>
+
+        <h3>Court Considerations</h3>
+
+        <p>
+          For discretionary grounds (which most ASB grounds are), the court must
+          consider:
+        </p>
+
+        <ul>
+          <li>Whether the ground is established on the evidence</li>
+          <li>Whether it is reasonable to make the order</li>
+          <li>The impact on the contract-holder and any children</li>
+          <li>Any disability or vulnerability considerations</li>
+          <li>Whether the behaviour has stopped or is likely to resume</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Order Types</h4>
+          <p className="text-green-800">
+            The court may grant an outright possession order, a suspended possession
+            order (with conditions), or adjourn the case. Even if ASB has stopped,
+            historical evidence may still support an order.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="serious-asb" className="scroll-mt-24">Serious ASB Cases</h2>
+
+        <p>
+          In cases of serious anti-social behaviour, there are additional options
+          and expedited processes available.
+        </p>
+
+        <h3>What Constitutes Serious ASB?</h3>
+
+        <ul>
+          <li>Violence or threats of violence</li>
+          <li>Drug dealing on the premises</li>
+          <li>Serious criminal activity</li>
+          <li>Harassment of neighbours</li>
+          <li>Behaviour causing significant distress</li>
+        </ul>
+
+        <h3>Expedited Possession</h3>
+
+        <p>
+          In serious cases, you may be able to:
+        </p>
+
+        <ul>
+          <li>Apply for an accelerated hearing</li>
+          <li>Request interim possession in extreme cases</li>
+          <li>Work with police for closure orders</li>
+          <li>Seek injunctions alongside possession</li>
+        </ul>
+
+        <h3>Working with Authorities</h3>
+
+        <p>
+          For serious ASB, coordinate with:
+        </p>
+
+        <ul>
+          <li><strong>Police:</strong> Report crimes and request regular patrols</li>
+          <li><strong>Council ASB team:</strong> They can take action and provide evidence</li>
+          <li><strong>Environmental health:</strong> For noise and health hazards</li>
+          <li><strong>Housing enforcement:</strong> May support your case</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-serious-asb.svg"
+          alt="Serious ASB Cases Wales"
+          caption="Serious ASB cases may involve multiple agencies"
+          aspectRatio="video"
+        />
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Safety First</h4>
+          <p className="text-red-800">
+            In cases involving violence or serious criminality, do not put yourself
+            at risk. Work through solicitors and avoid direct confrontation. Consider
+            seeking a non-molestation order if threats are made.
+          </p>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">ASB Documentation Pack</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides incident log templates, witness statement forms,
+            and warning letter templates for managing ASB situations.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View ASB Templates →
+          </Link>
+        </div>
+
+        <h2 id="asb-faq" className="scroll-mt-24">ASB FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I evict for a single incident of ASB?</h3>
+            <p className="text-gray-600">
+              Generally, courts expect to see a pattern of behaviour. However, a
+              single very serious incident (such as violence) could be sufficient.
+              The more serious the incident, the less pattern is needed.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my contract-holder denies the behaviour?</h3>
+            <p className="text-gray-600">
+              This is common. Strong documentary evidence and independent witnesses
+              are crucial. The court will weigh the evidence from both sides.
+              Professional evidence (police, council) carries significant weight.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I include ASB clauses in the occupation contract?</h3>
+            <p className="text-gray-600">
+              Yes, your written statement can include terms about behaviour. Breach
+              of these terms can itself be a ground for possession, alongside the
+              specific ASB ground.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if neighbours won&apos;t provide evidence?</h3>
+            <p className="text-gray-600">
+              This is a significant challenge. Try to gather other evidence - CCTV,
+              professional witnesses, police reports. Council ASB teams can sometimes
+              provide evidence without naming individual complainants.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I try mediation first?</h3>
+            <p className="text-gray-600">
+              Courts look favourably on landlords who have tried to resolve issues
+              before eviction. For low-level ASB, a warning letter and mediation
+              attempt strengthens your case if court becomes necessary.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 56: Wales Notice Periods Summary
+  {
+    slug: 'wales-notice-periods-landlords',
+    title: 'Wales Notice Periods - Complete Landlord Reference Guide 2026',
+    description: 'Complete reference guide to all notice periods for landlords in Wales. Section 173, Section 186, and other notices under the Renting Homes (Wales) Act 2016.',
+    metaDescription: 'Wales landlord notice periods 2026. Section 173, Section 186, and all required notices under Renting Homes Act. Complete quick reference guide.',
+    date: '2026-01-03',
+    readTime: '11 min read',
+    wordCount: 1580,
+    category: 'Welsh Law',
+    tags: ['notice periods', 'Wales', 'Section 173', 'Section 186', 'eviction notice', 'Renting Homes Act', 'landlord notices'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-notices.svg',
+    heroImageAlt: 'Wales Notice Periods Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'wales landlord notice periods',
+    secondaryKeywords: ['Section 173 notice Wales', 'Section 186 notice', 'Wales eviction notice period', 'Renting Homes Act notices'],
+    tableOfContents: [
+      { id: 'notice-overview', title: 'Notice Periods Overview', level: 2 },
+      { id: 'section-173', title: 'Section 173 No-Fault Notice', level: 2 },
+      { id: 'section-186', title: 'Section 186 Break Notice', level: 2 },
+      { id: 'possession-grounds', title: 'Possession Ground Notices', level: 2 },
+      { id: 'other-notices', title: 'Other Important Notices', level: 2 },
+      { id: 'serving-notices', title: 'How to Serve Notices', level: 2 },
+      { id: 'notice-faq', title: 'Notice FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-eviction-process', 'wales-possession-grounds', 'wales-standard-occupation-contract'],
+    content: (
+      <>
+        <p className="lead">
+          Getting notice periods right is critical for Welsh landlords. Under the
+          Renting Homes (Wales) Act 2016, different situations require different
+          notice periods. This guide provides a comprehensive reference to help
+          you serve the correct notice every time.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-notice-periods-hero.svg"
+          alt="Wales Landlord Notice Periods"
+          caption="Different situations require different notice periods under Welsh law"
+          aspectRatio="video"
+        />
+
+        <h2 id="notice-overview" className="scroll-mt-24">Notice Periods Overview</h2>
+
+        <p>
+          Welsh landlord notices fall into several categories depending on the
+          type of contract and the reason for seeking possession:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notice Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Minimum Period</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">When Used</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 font-semibold">Section 173</td>
+                <td className="px-6 py-4">6 months</td>
+                <td className="px-6 py-4">No-fault notice for periodic standard contracts</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold">Section 186</td>
+                <td className="px-6 py-4">As per contract</td>
+                <td className="px-6 py-4">Break clause in fixed-term contracts</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold">Possession grounds</td>
+                <td className="px-6 py-4">1-2 months</td>
+                <td className="px-6 py-4">Specific grounds (rent arrears, breach, etc.)</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold">Rent increase</td>
+                <td className="px-6 py-4">2 months</td>
+                <td className="px-6 py-4">Increasing rent during contract</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Key Difference from England</h4>
+          <p className="text-blue-800">
+            Wales requires 6 months&apos; notice for no-fault possession (Section 173),
+            compared to 2 months in England. This is one of the most significant
+            differences in Welsh tenancy law.
+          </p>
+        </div>
+
+        <h2 id="section-173" className="scroll-mt-24">Section 173 No-Fault Notice</h2>
+
+        <p>
+          Section 173 allows landlords to end a periodic standard occupation contract
+          without giving a reason. Key requirements:
+        </p>
+
+        <h3>Notice Period</h3>
+
+        <ul>
+          <li>Minimum 6 months&apos; notice required</li>
+          <li>Cannot be served during the first 6 months of occupation</li>
+          <li>Notice expires 6 months after service date</li>
+        </ul>
+
+        <h3>Restrictions</h3>
+
+        <p>
+          You cannot serve a valid Section 173 notice if:
+        </p>
+
+        <ul>
+          <li>The property is not registered with Rent Smart Wales</li>
+          <li>You are not licensed (if required to be)</li>
+          <li>The written statement was not provided within 14 days</li>
+          <li>Required safety certificates were not provided</li>
+          <li>The deposit was not protected correctly</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-section-173.svg"
+          alt="Section 173 Notice Requirements"
+          caption="Section 173 notices require 6 months notice and full compliance"
+          aspectRatio="video"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="section-186" className="scroll-mt-24">Section 186 Break Notice</h2>
+
+        <p>
+          For fixed-term contracts with a break clause, Section 186 governs how
+          landlords can end the contract early.
+        </p>
+
+        <h3>Requirements</h3>
+
+        <ul>
+          <li>Break clause must be included in the written statement</li>
+          <li>Notice period as specified in the contract (minimum 2 months)</li>
+          <li>Can only be exercised after any minimum term specified</li>
+          <li>Must be in writing</li>
+        </ul>
+
+        <h3>Contract Wording</h3>
+
+        <p>
+          Your break clause should clearly state:
+        </p>
+
+        <ul>
+          <li>When the break can be exercised</li>
+          <li>How much notice is required</li>
+          <li>How notice must be given</li>
+          <li>Any conditions (e.g., rent up to date)</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Break Clause Tip</h4>
+          <p className="text-amber-800">
+            Include a break clause in fixed-term contracts to give flexibility.
+            Without one, you may need to wait for the fixed term to end before
+            seeking possession under Section 173.
+          </p>
+        </div>
+
+        <h2 id="possession-grounds" className="scroll-mt-24">Possession Ground Notices</h2>
+
+        <p>
+          When using specific possession grounds, notice periods vary:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ground</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reason</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Ground 1</td>
+                <td className="px-6 py-4">Landlord wants to live in property</td>
+                <td className="px-6 py-4">2 months</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Ground 2</td>
+                <td className="px-6 py-4">Property required for family member</td>
+                <td className="px-6 py-4">2 months</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Ground 5</td>
+                <td className="px-6 py-4">Sale of property</td>
+                <td className="px-6 py-4">2 months</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Ground 8</td>
+                <td className="px-6 py-4">Redevelopment</td>
+                <td className="px-6 py-4">2 months</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Ground 12</td>
+                <td className="px-6 py-4">Anti-social behaviour</td>
+                <td className="px-6 py-4">1 month</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Ground 13</td>
+                <td className="px-6 py-4">Serious rent arrears</td>
+                <td className="px-6 py-4">14 days (if 2+ months arrears)</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Ground 14</td>
+                <td className="px-6 py-4">Breach of contract</td>
+                <td className="px-6 py-4">1 month</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ground-notices.svg"
+          alt="Possession Ground Notice Periods"
+          caption="Notice periods vary depending on the ground for possession"
+          aspectRatio="video"
+        />
+
+        <h2 id="other-notices" className="scroll-mt-24">Other Important Notices</h2>
+
+        <h3>Rent Increase Notice</h3>
+
+        <ul>
+          <li>Minimum 2 months&apos; notice required</li>
+          <li>Must use prescribed form</li>
+          <li>Cannot increase within first 12 months</li>
+          <li>Only one increase per 12-month period</li>
+        </ul>
+
+        <h3>Access Notices</h3>
+
+        <ul>
+          <li>24 hours&apos; notice for routine inspections</li>
+          <li>Reasonable notice for repairs (unless emergency)</li>
+          <li>Must be at reasonable times</li>
+        </ul>
+
+        <h3>Contract Variation Notices</h3>
+
+        <ul>
+          <li>2 months&apos; notice for most contract changes</li>
+          <li>Contract-holder must agree to variations</li>
+          <li>Must be in writing</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="serving-notices" className="scroll-mt-24">How to Serve Notices</h2>
+
+        <p>
+          Proper service of notices is essential. Invalid service can make the
+          entire notice ineffective.
+        </p>
+
+        <h3>Valid Service Methods</h3>
+
+        <ul>
+          <li><strong>Personal delivery:</strong> Hand to contract-holder directly</li>
+          <li><strong>Post:</strong> First class post to the property address</li>
+          <li><strong>Leaving at property:</strong> Put through letterbox or fixed to door</li>
+          <li><strong>Email:</strong> Only if contract specifically allows electronic service</li>
+        </ul>
+
+        <h3>Service Dates</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Method</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deemed Served</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Personal delivery</td>
+                <td className="px-6 py-4">Date of delivery</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">First class post</td>
+                <td className="px-6 py-4">2 working days after posting</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Second class post</td>
+                <td className="px-6 py-4">4 working days after posting</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Left at property</td>
+                <td className="px-6 py-4">Date of leaving</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Best Practice</h4>
+          <p className="text-green-800">
+            Use recorded delivery or obtain a signature when serving important
+            notices. This provides evidence of service if disputed. Keep copies
+            of all notices served.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-serving-notices.svg"
+          alt="Serving Notices Wales"
+          caption="Keep proof of service for all notices"
+          aspectRatio="video"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Wales Notice Templates</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides all notice templates compliant with Welsh law,
+            including Section 173, Section 186, and possession ground notices.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Notice Templates →
+          </Link>
+        </div>
+
+        <h2 id="notice-faq" className="scroll-mt-24">Notice FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I give more notice than the minimum?</h3>
+            <p className="text-gray-600">
+              Yes, you can always give more notice than the minimum required. This
+              can be helpful if you want to give the contract-holder extra time to
+              find alternative accommodation.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my notice has an error?</h3>
+            <p className="text-gray-600">
+              Minor errors may not invalidate a notice, but significant errors can.
+              If in doubt, serve a new corrected notice. The court will consider
+              whether the error was prejudicial to the contract-holder.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I withdraw a notice once served?</h3>
+            <p className="text-gray-600">
+              Yes, you can choose not to act on a notice after serving it. However,
+              you cannot shorten the notice period. If you change your mind, simply
+              don&apos;t proceed with court action.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do weekends count in notice periods?</h3>
+            <p className="text-gray-600">
+              Generally, yes. Notice periods are calculated in calendar days or
+              months unless specified otherwise. The exception is postal service
+              dates which count working days.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 57: Wales Contract-Holder Rights
+  {
+    slug: 'wales-contract-holder-rights',
+    title: 'Contract-Holder Rights Wales - What Landlords Must Know 2026',
+    description: 'Understanding contract-holder rights under Welsh law. Landlord obligations, tenant protections, and avoiding disputes under the Renting Homes (Wales) Act.',
+    metaDescription: 'Wales contract-holder rights 2026. Tenant protections landlords must understand, legal obligations, and how to avoid disputes under Welsh law.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1690,
+    category: 'Welsh Law',
+    tags: ['contract-holder rights', 'Wales', 'tenant rights', 'landlord obligations', 'Renting Homes Act', 'occupation contract'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-rights.svg',
+    heroImageAlt: 'Wales Contract-Holder Rights Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'wales contract holder rights',
+    secondaryKeywords: ['Wales tenant rights', 'contract-holder protections', 'landlord obligations Wales', 'Renting Homes Act rights'],
+    tableOfContents: [
+      { id: 'rights-overview', title: 'Rights Overview', level: 2 },
+      { id: 'fundamental-terms', title: 'Fundamental Terms', level: 2 },
+      { id: 'repair-rights', title: 'Repair and Maintenance Rights', level: 2 },
+      { id: 'quiet-enjoyment', title: 'Right to Quiet Enjoyment', level: 2 },
+      { id: 'security-tenure', title: 'Security of Tenure', level: 2 },
+      { id: 'avoiding-disputes', title: 'Avoiding Disputes', level: 2 },
+      { id: 'rights-faq', title: 'Rights FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-landlord-obligations-checklist', 'wales-renting-homes-act', 'wales-standard-occupation-contract'],
+    content: (
+      <>
+        <p className="lead">
+          Understanding contract-holder rights is essential for Welsh landlords.
+          The Renting Homes (Wales) Act 2016 provides strong protections for
+          contract-holders, and respecting these rights helps avoid disputes,
+          complaints, and legal action. This guide explains what you need to know.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-rights-hero.svg"
+          alt="Contract-Holder Rights Wales"
+          caption="Understanding rights helps landlords avoid disputes"
+          aspectRatio="video"
+        />
+
+        <h2 id="rights-overview" className="scroll-mt-24">Rights Overview</h2>
+
+        <p>
+          Under Welsh law, contract-holders have various rights that landlords
+          must respect. These come from:
+        </p>
+
+        <ul>
+          <li>The Renting Homes (Wales) Act 2016</li>
+          <li>Fundamental terms incorporated into every contract</li>
+          <li>Supplementary terms (unless varied)</li>
+          <li>Additional terms in the written statement</li>
+          <li>General consumer protection law</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Key Principle</h4>
+          <p className="text-blue-800">
+            Fundamental terms cannot be changed or removed - they apply to every
+            occupation contract regardless of what the written statement says.
+            These provide minimum standards of protection.
+          </p>
+        </div>
+
+        <h2 id="fundamental-terms" className="scroll-mt-24">Fundamental Terms</h2>
+
+        <p>
+          Fundamental terms are built into every standard occupation contract by
+          law. Key rights include:
+        </p>
+
+        <h3>Right to Occupy</h3>
+
+        <ul>
+          <li>Right to occupy the dwelling as a home</li>
+          <li>Right to occupy the whole dwelling (not just part)</li>
+          <li>Right for permitted occupiers to live there</li>
+          <li>Cannot be excluded except by court order</li>
+        </ul>
+
+        <h3>Right to Information</h3>
+
+        <ul>
+          <li>Written statement within 14 days of occupation</li>
+          <li>Landlord&apos;s name and contact address</li>
+          <li>Any agent&apos;s details</li>
+          <li>Information about rent and payment</li>
+        </ul>
+
+        <h3>Property Condition</h3>
+
+        <ul>
+          <li>Dwelling fit for human habitation at start</li>
+          <li>Kept fit throughout the contract</li>
+          <li>Structure and exterior in repair</li>
+          <li>Installations for utilities in working order</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-fundamental-terms.svg"
+          alt="Fundamental Terms Wales"
+          caption="Fundamental terms provide core protections that cannot be removed"
+          aspectRatio="video"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="repair-rights" className="scroll-mt-24">Repair and Maintenance Rights</h2>
+
+        <p>
+          Contract-holders have significant rights regarding property condition
+          and repairs:
+        </p>
+
+        <h3>Landlord&apos;s Repair Obligations</h3>
+
+        <ul>
+          <li>Keep the structure and exterior in repair</li>
+          <li>Keep installations for water, gas, electricity in working order</li>
+          <li>Keep sanitation installations in working order</li>
+          <li>Keep heating and hot water installations in working order</li>
+        </ul>
+
+        <h3>Contract-Holder&apos;s Rights</h3>
+
+        <ul>
+          <li>Report disrepair and expect timely response</li>
+          <li>Have repairs carried out at no cost (for landlord obligations)</li>
+          <li>Claim compensation for failure to repair</li>
+          <li>Apply to court if repairs not done</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Response Timeframes</h4>
+          <p className="text-amber-800">
+            While the law doesn&apos;t specify exact timeframes, repairs should be
+            done within a reasonable time. Emergencies (no heating, water leak)
+            should be addressed within 24 hours. Routine repairs typically within
+            28 days.
+          </p>
+        </div>
+
+        <h2 id="quiet-enjoyment" className="scroll-mt-24">Right to Quiet Enjoyment</h2>
+
+        <p>
+          Contract-holders have a fundamental right to peaceful enjoyment of
+          their home. This means landlords must not:
+        </p>
+
+        <ul>
+          <li>Enter without proper notice (except emergencies)</li>
+          <li>Harass or intimidate contract-holders</li>
+          <li>Interfere with utilities or services</li>
+          <li>Make life uncomfortable to force them out</li>
+          <li>Enter at unreasonable times</li>
+        </ul>
+
+        <h3>Access Rights</h3>
+
+        <p>
+          Landlords can access the property, but must:
+        </p>
+
+        <ul>
+          <li>Give at least 24 hours&apos; notice (except emergencies)</li>
+          <li>Have a valid reason (inspections, repairs, viewings)</li>
+          <li>Attend at reasonable times</li>
+          <li>Not be excessive in frequency</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Illegal Eviction</h4>
+          <p className="text-red-800">
+            Entering without permission or changing locks to exclude a contract-holder
+            is illegal eviction - a criminal offence. Always use proper legal
+            processes to regain possession.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-quiet-enjoyment.svg"
+          alt="Right to Quiet Enjoyment"
+          caption="Contract-holders have the right to enjoy their home without interference"
+          aspectRatio="video"
+        />
+
+        <h2 id="security-tenure" className="scroll-mt-24">Security of Tenure</h2>
+
+        <p>
+          Welsh law provides contract-holders with significant security:
+        </p>
+
+        <h3>Protection from Eviction</h3>
+
+        <ul>
+          <li>Cannot be evicted without a court order</li>
+          <li>Minimum 6 months&apos; notice for no-fault possession</li>
+          <li>Possession requires proper grounds or Section 173</li>
+          <li>Right to challenge notices in court</li>
+        </ul>
+
+        <h3>Retaliatory Eviction Protection</h3>
+
+        <p>
+          Contract-holders are protected if they:
+        </p>
+
+        <ul>
+          <li>Complained about property condition</li>
+          <li>Contacted the local authority about disrepair</li>
+          <li>Improvement notice served on landlord</li>
+        </ul>
+
+        <p>
+          In these cases, a Section 173 notice may be invalid if served within
+          6 months of the complaint or notice.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="avoiding-disputes" className="scroll-mt-24">Avoiding Disputes</h2>
+
+        <p>
+          Understanding rights helps you avoid common disputes:
+        </p>
+
+        <h3>Best Practices</h3>
+
+        <ul>
+          <li>Provide complete written statement within 14 days</li>
+          <li>Respond promptly to repair requests</li>
+          <li>Always give proper notice before visiting</li>
+          <li>Keep clear records of all communications</li>
+          <li>Use proper legal processes for all actions</li>
+          <li>Never threaten or pressure contract-holders</li>
+        </ul>
+
+        <h3>Common Mistakes to Avoid</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mistake</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Risk</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Solution</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Entering without notice</td>
+                <td className="px-6 py-4">Harassment claim</td>
+                <td className="px-6 py-4">Always give 24 hours notice</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Ignoring repair requests</td>
+                <td className="px-6 py-4">Disrepair claim, council action</td>
+                <td className="px-6 py-4">Log and action all requests</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Changing locks</td>
+                <td className="px-6 py-4">Criminal prosecution</td>
+                <td className="px-6 py-4">Use court process only</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Withholding deposit unfairly</td>
+                <td className="px-6 py-4">Adjudication loss, penalties</td>
+                <td className="px-6 py-4">Follow scheme rules strictly</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-avoiding-disputes.svg"
+          alt="Avoiding Disputes Wales"
+          caption="Clear communication and proper processes prevent most disputes"
+          aspectRatio="video"
+        />
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Professional Approach</h4>
+          <p className="text-green-800">
+            Treating contract-holders fairly and respecting their rights isn&apos;t
+            just legally required - it leads to better relationships, longer
+            tenancies, and fewer voids.
+          </p>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Compliance Resources</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides templates and checklists to help you respect
+            contract-holder rights while protecting your interests.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Landlord Resources →
+          </Link>
+        </div>
+
+        <h2 id="rights-faq" className="scroll-mt-24">Rights FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I restrict pets or smoking?</h3>
+            <p className="text-gray-600">
+              Yes, these can be included as additional terms in the occupation
+              contract. However, you cannot change these terms during a contract
+              without the contract-holder&apos;s agreement.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can contract-holders refuse viewings?</h3>
+            <p className="text-gray-600">
+              Contract-holders can refuse access for viewings if not in the contract
+              terms. Even if allowed, viewings must be at reasonable times with
+              proper notice. They cannot be excessive in the final months.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if a contract-holder damages the property?</h3>
+            <p className="text-gray-600">
+              Contract-holders must not damage the property deliberately or through
+              neglect. You can claim from the deposit and/or pursue them for costs
+              beyond the deposit. Keep evidence of condition at start and end.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I increase rent whenever I want?</h3>
+            <p className="text-gray-600">
+              No. Rent can only be increased once every 12 months, with at least
+              2 months&apos; notice, using the prescribed form. Contract-holders can
+              challenge excessive increases through the Rent Assessment Committee.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 58: Wales Residential Property Tribunal
+  {
+    slug: 'wales-residential-property-tribunal',
+    title: 'Residential Property Tribunal Wales - Landlord Guide 2026',
+    description: 'Complete guide to the Residential Property Tribunal Wales. When to use it, procedures, costs, and what landlords should expect from tribunal hearings.',
+    metaDescription: 'Wales Residential Property Tribunal guide 2026. Applications, procedures, costs, and what landlords should expect from RPT Wales hearings.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1640,
+    category: 'Welsh Law',
+    tags: ['Residential Property Tribunal', 'Wales', 'RPT', 'disputes', 'landlord tribunal', 'rent disputes', 'property disputes'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-tribunal.svg',
+    heroImageAlt: 'Wales Residential Property Tribunal Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'residential property tribunal wales',
+    secondaryKeywords: ['RPT Wales', 'Wales property tribunal', 'rent tribunal Wales', 'landlord tribunal Wales'],
+    tableOfContents: [
+      { id: 'tribunal-overview', title: 'Tribunal Overview', level: 2 },
+      { id: 'types-cases', title: 'Types of Cases', level: 2 },
+      { id: 'application-process', title: 'Application Process', level: 2 },
+      { id: 'hearing-process', title: 'Hearing Process', level: 2 },
+      { id: 'costs', title: 'Costs and Fees', level: 2 },
+      { id: 'appeals', title: 'Appeals', level: 2 },
+      { id: 'tribunal-faq', title: 'Tribunal FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-rent-increases', 'wales-eviction-process', 'wales-landlord-obligations-checklist'],
+    content: (
+      <>
+        <p className="lead">
+          The Residential Property Tribunal (RPT) Wales handles disputes between
+          landlords and contract-holders that don&apos;t go through the county court.
+          Understanding how the tribunal works helps you navigate disputes
+          effectively and know what to expect.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tribunal-hero.svg"
+          alt="Residential Property Tribunal Wales"
+          caption="The RPT handles specific types of landlord-tenant disputes"
+          aspectRatio="video"
+        />
+
+        <h2 id="tribunal-overview" className="scroll-mt-24">Tribunal Overview</h2>
+
+        <p>
+          The Residential Property Tribunal Wales is part of the wider tribunal
+          system. It handles specific types of housing disputes that don&apos;t fall
+          under county court jurisdiction.
+        </p>
+
+        <h3>Key Features</h3>
+
+        <ul>
+          <li>Less formal than county courts</li>
+          <li>Decisions made by expert panels</li>
+          <li>Lower costs than court proceedings</li>
+          <li>Parties often represent themselves</li>
+          <li>Written evidence usually accepted</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Different from County Court</h4>
+          <p className="text-blue-800">
+            The RPT handles rent disputes, licensing issues, and some property
+            condition matters. Possession claims and deposit disputes go through
+            the county court or deposit schemes instead.
+          </p>
+        </div>
+
+        <h2 id="types-cases" className="scroll-mt-24">Types of Cases</h2>
+
+        <p>
+          The RPT Wales handles several types of cases relevant to landlords:
+        </p>
+
+        <h3>Rent Assessment</h3>
+
+        <ul>
+          <li>Contract-holder challenges to rent increases</li>
+          <li>Determining market rent levels</li>
+          <li>Disputes about rent review clauses</li>
+        </ul>
+
+        <h3>Licensing Appeals</h3>
+
+        <ul>
+          <li>Appeals against Rent Smart Wales decisions</li>
+          <li>HMO licensing disputes</li>
+          <li>Licence condition challenges</li>
+        </ul>
+
+        <h3>Fitness and Condition</h3>
+
+        <ul>
+          <li>Whether a property is fit for human habitation</li>
+          <li>Disputes about repair obligations</li>
+          <li>Improvement notice appeals</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tribunal-cases.svg"
+          alt="Types of Tribunal Cases"
+          caption="The RPT handles various housing disputes"
+          aspectRatio="video"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="application-process" className="scroll-mt-24">Application Process</h2>
+
+        <p>
+          To apply to the RPT Wales:
+        </p>
+
+        <h3>Step 1: Check Jurisdiction</h3>
+
+        <p>
+          Ensure your case is one the RPT handles. Contact the tribunal if unsure
+          - they can advise whether your case is suitable.
+        </p>
+
+        <h3>Step 2: Complete Application Form</h3>
+
+        <ul>
+          <li>Use the correct form for your type of case</li>
+          <li>Provide all requested information</li>
+          <li>Include supporting documents</li>
+          <li>Pay the application fee (if applicable)</li>
+        </ul>
+
+        <h3>Step 3: Submit Application</h3>
+
+        <ul>
+          <li>Submit online through the tribunal website</li>
+          <li>Or post to the tribunal office</li>
+          <li>Keep proof of submission</li>
+        </ul>
+
+        <h3>Step 4: Tribunal Response</h3>
+
+        <ul>
+          <li>Tribunal will acknowledge receipt</li>
+          <li>Copy sent to other party</li>
+          <li>Directions issued for next steps</li>
+          <li>Hearing date scheduled if required</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Time Limits</h4>
+          <p className="text-amber-800">
+            Some applications have strict time limits. For example, challenging a
+            rent increase must be done before the new rent takes effect. Check
+            deadlines carefully before applying.
+          </p>
+        </div>
+
+        <h2 id="hearing-process" className="scroll-mt-24">Hearing Process</h2>
+
+        <p>
+          If your case goes to a hearing:
+        </p>
+
+        <h3>Before the Hearing</h3>
+
+        <ul>
+          <li>Receive directions about evidence and documents</li>
+          <li>Submit any additional evidence by deadline</li>
+          <li>Prepare your arguments and key points</li>
+          <li>Arrange to attend (in person or video)</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+
+        <ul>
+          <li>Less formal than court - no wigs or gowns</li>
+          <li>Panel of 2-3 members (usually includes legal and expert members)</li>
+          <li>Each party presents their case</li>
+          <li>Panel may ask questions</li>
+          <li>Typically lasts 1-3 hours</li>
+        </ul>
+
+        <h3>After the Hearing</h3>
+
+        <ul>
+          <li>Decision may be given on the day or in writing later</li>
+          <li>Written reasons provided</li>
+          <li>Decision is legally binding</li>
+          <li>Limited appeal rights</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-hearing-process.svg"
+          alt="Tribunal Hearing Process"
+          caption="Tribunal hearings are less formal than court"
+          aspectRatio="video"
+        />
+
+        <h2 id="costs" className="scroll-mt-24">Costs and Fees</h2>
+
+        <p>
+          Tribunal costs are generally lower than court:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Application Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Rent assessment</td>
+                <td className="px-6 py-4">No fee for contract-holders</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Licensing appeal</td>
+                <td className="px-6 py-4">Varies - check with tribunal</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Fitness determination</td>
+                <td className="px-6 py-4">No fee typically</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Other Costs</h3>
+
+        <ul>
+          <li>Legal representation (optional)</li>
+          <li>Expert reports if needed</li>
+          <li>Travel to hearing</li>
+          <li>Time off work</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Cost Recovery</h4>
+          <p className="text-green-800">
+            Unlike courts, the tribunal rarely orders one party to pay the other&apos;s
+            costs. Each party usually bears their own costs regardless of outcome.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="appeals" className="scroll-mt-24">Appeals</h2>
+
+        <p>
+          If you disagree with a tribunal decision:
+        </p>
+
+        <h3>Permission to Appeal</h3>
+
+        <ul>
+          <li>Must usually request permission to appeal</li>
+          <li>Apply within 28 days of decision</li>
+          <li>Permission granted only if legal error</li>
+        </ul>
+
+        <h3>Appeal Routes</h3>
+
+        <ul>
+          <li>To the Upper Tribunal (Lands Chamber)</li>
+          <li>Must be on a point of law</li>
+          <li>Cannot simply disagree with facts</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Appeal Limits</h4>
+          <p className="text-red-800">
+            Appeals are only allowed on points of law - arguing the tribunal got
+            the law wrong. You cannot appeal simply because you disagree with the
+            tribunal&apos;s assessment of the facts.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tribunal-appeals.svg"
+          alt="Tribunal Appeals"
+          caption="Appeals are limited to points of law"
+          aspectRatio="video"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Tribunal Preparation</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides guidance and templates for preparing tribunal
+            applications and evidence packs.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Legal Resources →
+          </Link>
+        </div>
+
+        <h2 id="tribunal-faq" className="scroll-mt-24">Tribunal FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a solicitor?</h3>
+            <p className="text-gray-600">
+              No, many people represent themselves at the tribunal. The process is
+              designed to be accessible. However, for complex cases or high values,
+              legal advice may be helpful.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I have a witness?</h3>
+            <p className="text-gray-600">
+              Yes, you can bring witnesses to support your case. Notify the tribunal
+              in advance. Written witness statements may be accepted if the person
+              cannot attend.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does the process take?</h3>
+            <p className="text-gray-600">
+              Simple cases may be resolved within 2-3 months. Complex cases can take
+              6 months or longer. The tribunal will give estimated timeframes when
+              your case is registered.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is the hearing public?</h3>
+            <p className="text-gray-600">
+              Generally yes, tribunal hearings are public. In exceptional circumstances,
+              hearings can be held in private, but this is rare for standard landlord
+              and tenant matters.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I can&apos;t attend?</h3>
+            <p className="text-gray-600">
+              Request an adjournment with good reason, or ask for a video/telephone
+              hearing. If you simply don&apos;t attend, the case may proceed without you
+              and a decision made in your absence.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
