@@ -11988,6 +11988,838 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 25: Scotland Ground 12 (Rent Arrears)
+  {
+    slug: 'scotland-eviction-ground-12',
+    title: 'Scotland Ground 12 - Rent Arrears Eviction Guide 2026',
+    description: 'Complete guide to Ground 12 rent arrears eviction in Scotland. Learn when Ground 12 is mandatory vs discretionary, notice requirements, and Tribunal process.',
+    metaDescription: 'Scotland Ground 12 rent arrears eviction guide. Learn mandatory vs discretionary grounds, notice periods, and Tribunal process for 2026.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1720,
+    category: 'Scottish Law',
+    tags: ['Ground 12', 'rent arrears', 'Scotland', 'PRT eviction', 'Scottish landlord', 'First-tier Tribunal'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-12-scotland.svg',
+    tableOfContents: [
+      { id: 'what-is-ground-12', title: 'What Is Ground 12?', level: 2 },
+      { id: 'mandatory-vs-discretionary', title: 'Mandatory vs Discretionary', level: 2 },
+      { id: 'proving-arrears', title: 'Proving Rent Arrears', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'tenant-defences', title: 'Common Tenant Defences', level: 2 },
+      { id: 'ground-12-faq', title: 'Ground 12 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-first-tier-tribunal', 'scotland-notice-to-leave'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 12 is the most commonly used eviction ground in Scotland, allowing landlords
+          to recover their property when tenants have accumulated significant rent arrears.
+          Understanding whether Ground 12 applies as mandatory or discretionary is crucial
+          to your eviction strategy.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 12 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Mandatory:</strong> When tenant owes 3+ consecutive months at both notice AND hearing</li>
+            <li><strong>Discretionary:</strong> When arrears are substantial but less than 3 months</li>
+            <li><strong>Notice period:</strong> 28 days (regardless of tenancy length)</li>
+            <li><strong>Evidence:</strong> Rent statements showing arrears history</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ground-12-overview.svg"
+          alt="Ground 12 Rent Arrears Overview"
+          caption="Ground 12 is the primary ground for rent arrears evictions in Scotland"
+        />
+
+        <h2 id="what-is-ground-12" className="scroll-mt-24">What Is Ground 12?</h2>
+
+        <p>
+          Ground 12 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          allows landlords to seek eviction when the tenant has accumulated rent arrears.
+          The ground applies when:
+        </p>
+        <ul>
+          <li>The tenant is in rent arrears</li>
+          <li>At the date of the Notice to Leave</li>
+          <li>And at the date of the Tribunal hearing</li>
+        </ul>
+
+        <p>
+          The unique feature of Ground 12 is that it can be either mandatory or discretionary,
+          depending on the amount and duration of the arrears.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="mandatory-vs-discretionary" className="scroll-mt-24">Mandatory vs Discretionary</h2>
+
+        <h3>When Ground 12 Is Mandatory</h3>
+        <p>
+          The Tribunal MUST grant an eviction order if:
+        </p>
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Both Conditions Must Be Met:</h4>
+          <ol className="text-green-800 mt-2 space-y-2">
+            <li><strong>1.</strong> The tenant owes at least 3 consecutive months&apos; rent at the date of the Notice to Leave</li>
+            <li><strong>2.</strong> The tenant STILL owes at least 3 consecutive months&apos; rent at the date of the Tribunal hearing</li>
+          </ol>
+        </div>
+
+        <p>
+          If both conditions are satisfied, the Tribunal has no discretion - it must grant
+          the eviction order. The tenant&apos;s personal circumstances, reasons for non-payment,
+          or partial payments don&apos;t matter.
+        </p>
+
+        <h3>When Ground 12 Is Discretionary</h3>
+        <p>
+          Ground 12 becomes discretionary when:
+        </p>
+        <ul>
+          <li>Arrears are less than 3 months at the notice date</li>
+          <li>Arrears fall below 3 months before the hearing (tenant made payments)</li>
+          <li>Arrears are for non-consecutive months</li>
+        </ul>
+
+        <p>
+          For discretionary Ground 12, the Tribunal considers whether it&apos;s reasonable
+          to grant eviction, weighing factors like:
+        </p>
+        <ul>
+          <li>Amount of arrears</li>
+          <li>Payment history</li>
+          <li>Reasons for falling into arrears</li>
+          <li>Tenant&apos;s efforts to reduce the debt</li>
+          <li>Impact of eviction on the tenant</li>
+          <li>Landlord&apos;s need to recover the property</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Strategic Payment by Tenants</h4>
+          <p className="text-amber-800 mt-2">
+            Some tenants strategically pay just enough before the hearing to bring arrears
+            below 3 months, converting mandatory Ground 12 to discretionary. While frustrating,
+            this is a legitimate defence. Consider whether you have other grounds available.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-mandatory-discretionary.svg"
+          alt="Mandatory vs Discretionary Ground 12"
+          caption="The 3-month threshold determines whether Ground 12 is mandatory"
+        />
+
+        <h2 id="proving-arrears" className="scroll-mt-24">Proving Rent Arrears</h2>
+
+        <h3>Documentation Required</h3>
+        <p>You&apos;ll need to provide the Tribunal with:</p>
+        <ul>
+          <li><strong>Tenancy agreement:</strong> Showing the rent amount and due dates</li>
+          <li><strong>Rent statement:</strong> Complete history of rent due and payments received</li>
+          <li><strong>Bank statements:</strong> Showing payments (or lack of) received</li>
+          <li><strong>Arrears letters:</strong> Any formal demands you&apos;ve sent</li>
+          <li><strong>Communication:</strong> Emails/texts about the arrears</li>
+        </ul>
+
+        <h3>Calculating Arrears</h3>
+        <p>For the 3-month mandatory threshold:</p>
+        <ul>
+          <li>Calculate the total rent due for 3 consecutive months</li>
+          <li>If the tenant owes this amount or more, the threshold is met</li>
+          <li>Partial months don&apos;t count - it must be 3 FULL months</li>
+          <li>The months must be consecutive (e.g., January, February, March)</li>
+        </ul>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-3">Example Calculation:</h4>
+          <p className="text-gray-700">
+            <strong>Rent:</strong> £1,000 per month<br />
+            <strong>3 months&apos; rent:</strong> £3,000<br />
+            <strong>Current arrears:</strong> £3,500<br />
+            <strong>Result:</strong> Mandatory Ground 12 applies (if still £3,000+ at hearing)
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Period</h3>
+        <p>
+          For Ground 12, the notice period is <strong>28 days</strong> regardless of how
+          long the tenant has been in the property. This is shorter than many other grounds
+          which require 84 days for tenancies over 6 months.
+        </p>
+
+        <h3>Notice to Leave Content</h3>
+        <p>Your Notice to Leave must:</p>
+        <ul>
+          <li>Use the prescribed form</li>
+          <li>Tick Ground 12 as the eviction ground</li>
+          <li>State the amount of arrears at the notice date</li>
+          <li>Be served correctly on the tenant</li>
+        </ul>
+
+        <h3>Multiple Grounds</h3>
+        <p>
+          Consider including other applicable grounds in your notice:
+        </p>
+        <ul>
+          <li><strong>Ground 11 (Breach):</strong> Non-payment is a breach of the tenancy</li>
+          <li><strong>Ground 1 (Selling):</strong> If you intend to sell due to financial pressure</li>
+        </ul>
+        <p>
+          Having backup grounds protects you if the tenant reduces arrears below 3 months.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-notice-ground-12.svg"
+          alt="Notice to Leave for Ground 12"
+          caption="Use the prescribed form and specify the arrears amount"
+        />
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>
+          After the 28-day notice expires, apply to the First-tier Tribunal with:
+        </p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Rent statement showing arrears at notice date</li>
+          <li>Updated rent statement for the hearing</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will check:</p>
+        <ol>
+          <li>Was the notice validly served?</li>
+          <li>Were there 3+ months arrears at the notice date?</li>
+          <li>Are there still 3+ months arrears now?</li>
+          <li>If mandatory: Grant the eviction order</li>
+          <li>If discretionary: Consider reasonableness</li>
+        </ol>
+
+        <h3>Payment Orders</h3>
+        <p>
+          You can also apply for a <strong>payment order</strong> requiring the tenant to
+          pay the arrears. This can be combined with your eviction application.
+        </p>
+
+        <h2 id="tenant-defences" className="scroll-mt-24">Common Tenant Defences</h2>
+
+        <h3>For Mandatory Ground 12</h3>
+        <p>Tenants have limited defences when the ground is mandatory:</p>
+        <ul>
+          <li><strong>Notice invalid:</strong> Wrong form, wrong service, miscalculated dates</li>
+          <li><strong>Arrears disputed:</strong> Claiming payments weren&apos;t credited</li>
+          <li><strong>Paid below threshold:</strong> Reduced arrears before hearing to under 3 months</li>
+        </ul>
+
+        <h3>For Discretionary Ground 12</h3>
+        <p>Additional arguments the tenant may raise:</p>
+        <ul>
+          <li>Temporary financial difficulty (job loss, illness)</li>
+          <li>Awaiting benefits payments</li>
+          <li>Making regular partial payments</li>
+          <li>Vulnerability factors</li>
+          <li>Impact on children/dependents</li>
+        </ul>
+
+        <h2 id="ground-12-faq" className="scroll-mt-24">Ground 12 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if arrears are partly Housing Benefit?</h3>
+            <p className="text-gray-600">
+              Arrears are arrears, regardless of source. However, if the tenant is waiting for
+              Housing Benefit payments due to council delays, the Tribunal may consider this
+              for discretionary Ground 12.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim arrears and eviction together?</h3>
+            <p className="text-gray-600">
+              Yes. You can apply for both an eviction order and a payment order in the same
+              Tribunal application. The payment order creates a debt you can enforce.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant pays in full before the hearing?</h3>
+            <p className="text-gray-600">
+              If arrears are cleared completely before the hearing, Ground 12 no longer applies.
+              You could still proceed under Ground 11 (breach) as a discretionary ground, but
+              success is less certain.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does the process take?</h3>
+            <p className="text-gray-600">
+              From serving the Notice to Leave to obtaining an eviction order: typically 2-4
+              months. Add enforcement time if the tenant doesn&apos;t leave voluntarily.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I wait for more arrears before serving notice?</h3>
+            <p className="text-gray-600">
+              If arrears are approaching 3 months, it may be worth waiting to meet the mandatory
+              threshold. However, don&apos;t delay too long - more arrears means more loss if the
+              tenant can&apos;t pay.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Track Your Rent Arrears</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides rent tracking tools and arrears management guides to
+            help you document everything you need for a successful Ground 12 eviction.
+          </p>
+          <Link
+            href="/products/rent-tracker"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Rent Tracker →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 26: Scotland Ground 1 (Landlord Selling)
+  {
+    slug: 'scotland-eviction-ground-1',
+    title: 'Scotland Ground 1 - Landlord Selling Property Guide 2026',
+    description: 'Complete guide to Ground 1 eviction in Scotland when selling your rental property. Learn requirements, notice periods, and how to prove genuine intention to sell.',
+    metaDescription: 'Scotland Ground 1 eviction guide for landlords selling their property. Learn notice periods, evidence requirements, and Tribunal process for 2026.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1580,
+    category: 'Scottish Law',
+    tags: ['Ground 1', 'selling property', 'Scotland', 'PRT eviction', 'Scottish landlord', 'property sale'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-1.svg',
+    tableOfContents: [
+      { id: 'what-is-ground-1', title: 'What Is Ground 1?', level: 2 },
+      { id: 'requirements', title: 'Requirements to Use Ground 1', level: 2 },
+      { id: 'proving-intention', title: 'Proving Your Intention to Sell', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'after-eviction', title: 'What Happens After Eviction', level: 2 },
+      { id: 'ground-1-faq', title: 'Ground 1 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-notice-to-leave', 'scotland-first-tier-tribunal'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 1 allows landlords to recover their property when they intend to sell it.
+          As a mandatory ground, the Tribunal must grant an eviction order if you prove you
+          genuinely intend to sell. This guide explains how to use Ground 1 successfully.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 1 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Mandatory (Tribunal must grant if proved)</li>
+            <li><strong>Notice period:</strong> 28 days (under 6 months) or 84 days (6+ months)</li>
+            <li><strong>Key requirement:</strong> Genuine intention to sell on the open market</li>
+            <li><strong>Evidence:</strong> Marketing instructions, estate agent correspondence</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-selling-property.svg"
+          alt="Selling Rental Property"
+          caption="Ground 1 is mandatory if you prove genuine intention to sell"
+        />
+
+        <h2 id="what-is-ground-1" className="scroll-mt-24">What Is Ground 1?</h2>
+
+        <p>
+          Ground 1 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          states that the landlord &quot;intends to sell the let property.&quot;
+        </p>
+
+        <p>
+          This is a <strong>mandatory ground</strong>, meaning the Tribunal has no discretion
+          once you prove the ground applies. The tenant&apos;s personal circumstances don&apos;t
+          affect the decision.
+        </p>
+
+        <h3>Who Can Use Ground 1?</h3>
+        <ul>
+          <li>Owner-landlords who want to sell</li>
+          <li>Landlords selling due to financial reasons</li>
+          <li>Landlords exiting the rental market</li>
+          <li>Executors of deceased landlords selling an inherited property</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="requirements" className="scroll-mt-24">Requirements to Use Ground 1</h2>
+
+        <p>To successfully use Ground 1, you must prove:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">The Two Requirements:</h4>
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>You intend to sell the property</strong>
+                <p className="text-gray-600 text-sm">A genuine intention at the time of the Tribunal hearing</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>You intend to sell on the open market</strong>
+                <p className="text-gray-600 text-sm">Not a private sale to family or at undervalue to avoid the ground</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <h2 id="proving-intention" className="scroll-mt-24">Proving Your Intention to Sell</h2>
+
+        <h3>Evidence That Helps</h3>
+        <ul>
+          <li><strong>Estate agent instructions:</strong> Written confirmation you&apos;ve instructed agents</li>
+          <li><strong>Marketing materials:</strong> Particulars, photos, listing drafts</li>
+          <li><strong>Valuation reports:</strong> Professional valuations obtained</li>
+          <li><strong>Correspondence:</strong> Emails with agents about marketing strategy</li>
+          <li><strong>Your statement:</strong> Explaining why you want to sell</li>
+        </ul>
+
+        <h3>Timing of Marketing</h3>
+        <p>
+          You don&apos;t need to have already marketed the property, but evidence of concrete
+          steps toward sale strengthens your case. Many landlords instruct agents before
+          serving the Notice to Leave.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Genuineness Is Key</h4>
+          <p className="text-amber-800 mt-2">
+            The Tribunal will assess whether your intention is genuine. If you evict using
+            Ground 1 but then don&apos;t sell (or re-let the property), the tenant may have
+            grounds for a wrongful termination claim.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-evidence-sale.svg"
+          alt="Evidence for Ground 1"
+          caption="Estate agent instructions and marketing materials support your application"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Periods</h3>
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Tenancy Length</th>
+                <th className="border p-3 text-left font-semibold">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Under 6 months</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">6 months or more</td>
+                <td className="border p-3">84 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          The 84-day period for established tenancies gives the tenant time to find
+          alternative accommodation.
+        </p>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice period expires, apply to the Tribunal with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Evidence of intention to sell</li>
+          <li>Your statement explaining your plans</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will ask you to confirm:</p>
+        <ul>
+          <li>You own the property</li>
+          <li>You intend to sell it</li>
+          <li>What steps you&apos;ve taken toward sale</li>
+          <li>Your reasons for selling</li>
+        </ul>
+
+        <h3>If Successful</h3>
+        <p>
+          The Tribunal grants an eviction order. The tenant must leave by the specified date
+          (usually 14 days from the order). If they don&apos;t, you can instruct sheriff officers.
+        </p>
+
+        <h2 id="after-eviction" className="scroll-mt-24">What Happens After Eviction</h2>
+
+        <h3>You Must Follow Through</h3>
+        <p>
+          If you used Ground 1, you should actually sell the property. While there&apos;s no
+          strict legal timeline, failing to sell may expose you to:
+        </p>
+        <ul>
+          <li>Claims of bad faith</li>
+          <li>Wrongful termination damages</li>
+          <li>Difficulty using the ground in future</li>
+        </ul>
+
+        <h3>Selling With Vacant Possession</h3>
+        <p>
+          The property will be vacant, making sale easier. You can market immediately,
+          conduct viewings, and complete the sale without tenant complications.
+        </p>
+
+        <h2 id="ground-1-faq" className="scroll-mt-24">Ground 1 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I sell with the tenant in place instead?</h3>
+            <p className="text-gray-600">
+              Yes, you can sell to another landlord who will take over the tenancy. But if
+              you want vacant possession (often needed for sale to owner-occupiers), you
+              need to evict first.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I change my mind after eviction?</h3>
+            <p className="text-gray-600">
+              If you don&apos;t sell and instead re-let the property, the former tenant may
+              claim wrongful termination. You could be liable for their costs and damages.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a confirmed buyer?</h3>
+            <p className="text-gray-600">
+              No. You need to prove intention to sell, not a completed sale. Evidence that
+              you&apos;ve instructed agents or are actively marketing is sufficient.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can my tenant buy the property?</h3>
+            <p className="text-gray-600">
+              Yes, and this can be a good outcome. If the tenant wants to buy, you can
+              negotiate directly. The eviction may not be necessary if you agree a sale.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Selling Your Rental Property?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides guides and templates for landlords selling their
+            properties, including notice templates and Tribunal application support.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 27: Scotland Ground 4 (Landlord Moving In)
+  {
+    slug: 'scotland-eviction-ground-4',
+    title: 'Scotland Ground 4 - Landlord Moving In Guide 2026',
+    description: 'Complete guide to Ground 4 eviction in Scotland when you or family want to live in the property. Learn requirements, qualifying family members, and Tribunal process.',
+    metaDescription: 'Scotland Ground 4 eviction guide when landlord or family needs to move in. Learn requirements, notice periods, and Tribunal process for 2026.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1620,
+    category: 'Scottish Law',
+    tags: ['Ground 4', 'landlord moving in', 'Scotland', 'PRT eviction', 'family member', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-4.svg',
+    tableOfContents: [
+      { id: 'what-is-ground-4', title: 'What Is Ground 4?', level: 2 },
+      { id: 'who-qualifies', title: 'Who Qualifies as Family?', level: 2 },
+      { id: 'proving-intention', title: 'Proving Your Intention', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'after-eviction', title: 'After the Eviction', level: 2 },
+      { id: 'ground-4-faq', title: 'Ground 4 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-notice-to-leave', 'scotland-eviction-ground-1'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 4 allows landlords to recover their property when they or a family member
+          intend to live in it. As a mandatory ground, the Tribunal must grant eviction if
+          you prove a genuine intention. This guide explains how to use Ground 4 correctly.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 4 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Mandatory ground</li>
+            <li><strong>Notice period:</strong> 28 days (under 6 months) or 84 days (6+ months)</li>
+            <li><strong>Key requirement:</strong> Genuine intention to use as main residence</li>
+            <li><strong>Family:</strong> Specific family members qualify</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-moving-in.svg"
+          alt="Landlord Moving In"
+          caption="Ground 4 is mandatory if you prove genuine intention to live in the property"
+        />
+
+        <h2 id="what-is-ground-4" className="scroll-mt-24">What Is Ground 4?</h2>
+
+        <p>
+          Ground 4 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          states that the landlord intends to live in the let property, OR that a family
+          member of the landlord intends to live in it.
+        </p>
+
+        <p>
+          The property must become the person&apos;s <strong>only or principal home</strong>.
+          You can&apos;t use Ground 4 for a second home or occasional use.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="who-qualifies" className="scroll-mt-24">Who Qualifies as Family?</h2>
+
+        <p>Under Ground 4, &quot;family member&quot; is defined specifically:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Qualifying Family Members:</h4>
+          <ul className="space-y-2">
+            <li className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>Spouse or civil partner of the landlord</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>Person living with the landlord as husband/wife or civil partner</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>Parent or grandparent of the landlord (or partner)</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>Child or grandchild of the landlord (or partner)</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="text-green-500">✓</span>
+              <span>Brother or sister of the landlord (or partner)</span>
+            </li>
+          </ul>
+        </div>
+
+        <h3>Who Does NOT Qualify</h3>
+        <ul>
+          <li>Aunts, uncles, cousins</li>
+          <li>In-laws (beyond those listed)</li>
+          <li>Friends, no matter how close</li>
+          <li>Business partners</li>
+        </ul>
+
+        <h2 id="proving-intention" className="scroll-mt-24">Proving Your Intention</h2>
+
+        <h3>What You Need to Show</h3>
+        <ul>
+          <li>You (or family member) genuinely intend to live in the property</li>
+          <li>It will become their only or principal home</li>
+          <li>The intention is current and real (not speculative)</li>
+        </ul>
+
+        <h3>Evidence That Helps</h3>
+        <ul>
+          <li><strong>Your statement:</strong> Explaining why you need to move in</li>
+          <li><strong>Current housing situation:</strong> Lease ending, selling current home, etc.</li>
+          <li><strong>Work location:</strong> If moving for work near the property</li>
+          <li><strong>Family circumstances:</strong> Elderly parent needing to be nearby, etc.</li>
+          <li><strong>Family member statement:</strong> If they&apos;re moving in, their confirmation</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Must Be Genuine</h4>
+          <p className="text-amber-800 mt-2">
+            The Tribunal will assess genuineness. If you evict using Ground 4 but then
+            don&apos;t move in (or let to someone else), the tenant may claim wrongful
+            termination damages.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-family-move.svg"
+          alt="Family Moving In"
+          caption="Prove a genuine intention with concrete plans and circumstances"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Periods</h3>
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Tenancy Length</th>
+                <th className="border p-3 text-left font-semibold">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Under 6 months</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">6 months or more</td>
+                <td className="border p-3">84 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice period expires, apply with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Statement explaining your intention</li>
+          <li>Supporting evidence of circumstances</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will ask about:</p>
+        <ul>
+          <li>Who will be living in the property</li>
+          <li>Their current living situation</li>
+          <li>Why they need this particular property</li>
+          <li>When they intend to move in</li>
+          <li>How long they plan to stay</li>
+        </ul>
+
+        <h2 id="after-eviction" className="scroll-mt-24">After the Eviction</h2>
+
+        <h3>You Must Follow Through</h3>
+        <p>
+          After obtaining the eviction order, you (or the family member) should actually
+          move in. While there&apos;s no strict legal timeline, failing to do so may result in:
+        </p>
+        <ul>
+          <li>Wrongful termination claims</li>
+          <li>Damages payable to the former tenant</li>
+          <li>Difficulty using the ground in future</li>
+        </ul>
+
+        <h3>Living in the Property</h3>
+        <p>
+          The person must use it as their only or principal home. This doesn&apos;t mean they
+          can never be away, but it must be their main residence.
+        </p>
+
+        <h2 id="ground-4-faq" className="scroll-mt-24">Ground 4 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long must I live there?</h3>
+            <p className="text-gray-600">
+              There&apos;s no minimum period specified in law. However, moving in briefly then
+              reletting suggests bad faith. Plan to live there genuinely for the foreseeable
+              future.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I rent out a room while living there?</h3>
+            <p className="text-gray-600">
+              If you live in the property as your home, you can take in a lodger. The key
+              is that you&apos;re genuinely living there, not running it as a rental.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my adult child only stays temporarily?</h3>
+            <p className="text-gray-600">
+              They must intend it to be their only or principal home. If they&apos;re just
+              staying while between homes, that may not meet the threshold. The intention
+              must be genuine at the time.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 4 if I own multiple properties?</h3>
+            <p className="text-gray-600">
+              Yes, if you genuinely intend to make this property your only or principal
+              home. You may be leaving your current home or changing which property is
+              your main residence.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need to Move Into Your Rental?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides Notice to Leave templates and guidance for Ground 4
+            evictions in Scotland.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
