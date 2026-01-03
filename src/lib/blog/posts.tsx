@@ -14820,6 +14820,671 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 36: Scotland Simple Procedure (Rent Recovery)
+  {
+    slug: 'scotland-simple-procedure',
+    title: 'Simple Procedure Scotland - Recovering Rent Arrears Guide 2026',
+    description: 'Complete guide to using Simple Procedure in Scotland to recover rent arrears from tenants. Learn court fees, forms, and the step-by-step process.',
+    metaDescription: 'Scotland Simple Procedure guide for landlords. Recover rent arrears up to £5,000 through the Sheriff Court. Step-by-step process 2026.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1620,
+    category: 'Scottish Law',
+    tags: ['Simple Procedure', 'rent arrears', 'Scotland', 'Sheriff Court', 'debt recovery', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-simple-procedure.svg',
+    heroImageAlt: 'Scotland Simple Procedure - Rent Recovery',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland simple procedure rent arrears',
+    secondaryKeywords: ['recover rent scotland', 'sheriff court rent claim', 'small claims scotland', 'landlord debt recovery scotland'],
+    tableOfContents: [
+      { id: 'what-is-simple-procedure', title: 'What Is Simple Procedure?', level: 2 },
+      { id: 'when-to-use', title: 'When to Use Simple Procedure', level: 2 },
+      { id: 'court-fees', title: 'Court Fees', level: 2 },
+      { id: 'step-by-step', title: 'Step-by-Step Process', level: 2 },
+      { id: 'forms-required', title: 'Forms Required', level: 2 },
+      { id: 'the-hearing', title: 'The Hearing', level: 2 },
+      { id: 'enforcement', title: 'Enforcing the Decision', level: 2 },
+      { id: 'simple-procedure-faq', title: 'Simple Procedure FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-ground-12', 'scotland-eviction-process', 'scotland-private-residential-tenancy'],
+    content: (
+      <>
+        <p className="lead">
+          Simple Procedure is Scotland&apos;s streamlined court process for claims up to £5,000.
+          It&apos;s the primary way landlords recover unpaid rent from current or former tenants
+          without needing a solicitor.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Simple Procedure Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Claim limit:</strong> Up to £5,000</li>
+            <li><strong>Court:</strong> Sheriff Court</li>
+            <li><strong>Fees:</strong> £19 to £104 depending on claim amount</li>
+            <li><strong>Timeline:</strong> Typically 8-12 weeks to decision</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-sheriff-court.svg"
+          alt="Sheriff Court Scotland"
+          caption="Simple Procedure claims are heard in the Sheriff Court"
+        />
+
+        <h2 id="what-is-simple-procedure" className="scroll-mt-24">What Is Simple Procedure?</h2>
+
+        <p>
+          Simple Procedure replaced the Small Claims procedure in Scotland in 2016. It&apos;s
+          designed to be accessible to people without legal representation, with simplified
+          forms and informal hearings.
+        </p>
+
+        <p>Key features:</p>
+        <ul>
+          <li>Claims up to £5,000</li>
+          <li>Streamlined court forms</li>
+          <li>Informal hearing process</li>
+          <li>Limited expenses awards (so losing rarely costs much)</li>
+          <li>No need for a solicitor</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="when-to-use" className="scroll-mt-24">When to Use Simple Procedure</h2>
+
+        <h3>Good for:</h3>
+        <ul>
+          <li>Recovering rent arrears from current tenants</li>
+          <li>Claiming unpaid rent from former tenants</li>
+          <li>Recovering property damage costs</li>
+          <li>Claiming deposit shortfalls (after scheme deductions)</li>
+          <li>Utility bills left unpaid</li>
+        </ul>
+
+        <h3>Not suitable for:</h3>
+        <ul>
+          <li>Evicting tenants (use First-tier Tribunal)</li>
+          <li>Claims over £5,000 (use Ordinary Cause)</li>
+          <li>Complex legal disputes</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Before Going to Court</h4>
+          <p className="text-amber-800 mt-2">
+            Send a letter before action giving the tenant 14-28 days to pay. This shows
+            you tried to resolve matters and is expected by the court. Keep a copy for
+            your evidence.
+          </p>
+        </div>
+
+        <h2 id="court-fees" className="scroll-mt-24">Court Fees</h2>
+
+        <p>Court fees depend on the amount you&apos;re claiming:</p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Claim Amount</th>
+                <th className="border p-3 text-left font-semibold">Court Fee</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Up to £200</td>
+                <td className="border p-3">£19</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£200.01 - £300</td>
+                <td className="border p-3">£34</td>
+              </tr>
+              <tr>
+                <td className="border p-3">£300.01 - £500</td>
+                <td className="border p-3">£50</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£500.01 - £1,500</td>
+                <td className="border p-3">£73</td>
+              </tr>
+              <tr>
+                <td className="border p-3">£1,500.01 - £3,000</td>
+                <td className="border p-3">£89</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£3,000.01 - £5,000</td>
+                <td className="border p-3">£104</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          You can usually add the court fee to your claim, so the tenant pays if you win.
+        </p>
+
+        <h2 id="step-by-step" className="scroll-mt-24">Step-by-Step Process</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>Send Letter Before Action</strong>
+                <p className="text-gray-600 text-sm">Write to the tenant demanding payment within 14-28 days</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>Complete Form 3A (Claim Form)</strong>
+                <p className="text-gray-600 text-sm">Fill in the claimant (you) and respondent (tenant) details, plus the amount claimed</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <div>
+                <strong>Submit to Sheriff Court</strong>
+                <p className="text-gray-600 text-sm">Submit online or in person at the court covering the tenant&apos;s address</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">4</span>
+              <div>
+                <strong>Court Serves the Claim</strong>
+                <p className="text-gray-600 text-sm">The court sends the claim to the tenant (respondent)</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">5</span>
+              <div>
+                <strong>Tenant Responds (or Doesn&apos;t)</strong>
+                <p className="text-gray-600 text-sm">The tenant has 21 days to respond. If they don&apos;t, you may get automatic judgment</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">6</span>
+              <div>
+                <strong>Discussion or Hearing</strong>
+                <p className="text-gray-600 text-sm">If disputed, a discussion or hearing is scheduled</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">7</span>
+              <div>
+                <strong>Decision</strong>
+                <p className="text-gray-600 text-sm">The Sheriff makes a decision on the claim</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-court-forms.svg"
+          alt="Simple Procedure Forms"
+          caption="Forms can be completed online through the Scottish Courts website"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="forms-required" className="scroll-mt-24">Forms Required</h2>
+
+        <h3>Main Forms</h3>
+        <ul>
+          <li><strong>Form 3A:</strong> Claim Form (you complete this)</li>
+          <li><strong>Form 4A:</strong> Response Form (tenant uses this)</li>
+        </ul>
+
+        <h3>Evidence to Prepare</h3>
+        <ul>
+          <li>Tenancy agreement</li>
+          <li>Rent statements showing arrears</li>
+          <li>Bank statements showing missed payments</li>
+          <li>Letter before action and proof of postage</li>
+          <li>Any relevant correspondence</li>
+          <li>Calculation of the amount claimed</li>
+        </ul>
+
+        <h2 id="the-hearing" className="scroll-mt-24">The Hearing</h2>
+
+        <h3>If the Tenant Doesn&apos;t Respond</h3>
+        <p>
+          If the tenant doesn&apos;t respond within 21 days, you can apply for a Decision
+          without a hearing (Form 10A). The Sheriff will grant your claim if it&apos;s properly
+          documented.
+        </p>
+
+        <h3>If the Tenant Disputes</h3>
+        <p>
+          If the tenant responds and disputes the claim, there will be a Discussion
+          (informal meeting with the Sheriff) or a Hearing (more formal).
+        </p>
+
+        <h3>At the Hearing</h3>
+        <ul>
+          <li>Arrive on time with all your documents</li>
+          <li>Dress appropriately</li>
+          <li>Address the Sheriff as &quot;Sheriff&quot;</li>
+          <li>Explain your case clearly and calmly</li>
+          <li>Have your evidence organised and ready</li>
+          <li>Answer questions honestly</li>
+        </ul>
+
+        <h2 id="enforcement" className="scroll-mt-24">Enforcing the Decision</h2>
+
+        <p>
+          If you win but the tenant doesn&apos;t pay, you can enforce the decision using:
+        </p>
+
+        <h3>Sheriff Officers</h3>
+        <ul>
+          <li><strong>Earnings Arrestment:</strong> Deductions from wages</li>
+          <li><strong>Bank Arrestment:</strong> Freeze and seize bank funds</li>
+          <li><strong>Attachment:</strong> Seize and sell goods</li>
+        </ul>
+
+        <p>
+          You&apos;ll need an Extract Decree (certified copy of the decision) from the court
+          to instruct Sheriff Officers.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Add Interest</h4>
+          <p className="text-green-800 mt-2">
+            You can claim interest on the debt at the judicial rate (currently 8%). This
+            continues to accrue until the debt is paid.
+          </p>
+        </div>
+
+        <h2 id="simple-procedure-faq" className="scroll-mt-24">Simple Procedure FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim more than £5,000?</h3>
+            <p className="text-gray-600">
+              Not through Simple Procedure. For claims over £5,000, you need to use the
+              Ordinary Cause procedure, which is more complex and usually requires a solicitor.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Which court do I use?</h3>
+            <p className="text-gray-600">
+              Use the Sheriff Court covering the area where the tenant lives (or lived,
+              if a former tenant). You can find the correct court on the Scottish Courts
+              website.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a solicitor?</h3>
+            <p className="text-gray-600">
+              No. Simple Procedure is designed for people to use without legal representation.
+              However, you can use a solicitor if you prefer - but costs are rarely awarded.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I can&apos;t find the tenant?</h3>
+            <p className="text-gray-600">
+              You can apply to the court for alternative service methods. The court may
+              allow service by advertisement or posting to the last known address.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim legal expenses?</h3>
+            <p className="text-gray-600">
+              In Simple Procedure, expenses are rarely awarded. You can add the court fee
+              to your claim, but don&apos;t expect to recover solicitor costs.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need to Recover Rent Arrears?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides templates and guidance for recovering unpaid rent
+            through the Scottish courts.
+          </p>
+          <Link
+            href="/products/money-claim"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Money Claim Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 37: Scotland Deposit Protection
+  {
+    slug: 'scotland-deposit-protection',
+    title: 'Deposit Protection Scotland - Tenancy Deposit Schemes Guide 2026',
+    description: 'Complete guide to deposit protection in Scotland. Learn which schemes to use, deadlines, penalties for non-compliance, and how to handle deposit disputes.',
+    metaDescription: 'Scotland deposit protection guide for landlords. Tenancy deposit schemes, deadlines, penalties and disputes explained for 2026.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Scottish Law',
+    tags: ['deposit protection', 'tenancy deposit', 'Scotland', 'landlord compliance', 'PRT', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-deposit-protection.svg',
+    heroImageAlt: 'Scotland Deposit Protection Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland deposit protection tenancy',
+    secondaryKeywords: ['tenancy deposit scheme scotland', 'landlord deposit rules scotland', 'deposit dispute scotland', 'protecting tenant deposit'],
+    tableOfContents: [
+      { id: 'overview', title: 'Overview', level: 2 },
+      { id: 'schemes', title: 'Approved Schemes', level: 2 },
+      { id: 'deadlines', title: 'Protection Deadlines', level: 2 },
+      { id: 'tenant-information', title: 'Tenant Information Requirements', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'end-of-tenancy', title: 'End of Tenancy Process', level: 2 },
+      { id: 'disputes', title: 'Handling Disputes', level: 2 },
+      { id: 'deposit-faq', title: 'Deposit Protection FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-private-residential-tenancy', 'scotland-eviction-process', 'scotland-landlord-registration'],
+    content: (
+      <>
+        <p className="lead">
+          Scottish landlords must protect tenant deposits in an approved tenancy deposit
+          scheme within 30 working days of receiving them. Failure to comply can result
+          in penalties up to three times the deposit amount.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Deposit Protection Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Deadline:</strong> 30 working days from receiving deposit</li>
+            <li><strong>Schemes:</strong> 3 approved schemes in Scotland</li>
+            <li><strong>Penalty:</strong> Up to 3x deposit for non-compliance</li>
+            <li><strong>Maximum deposit:</strong> No statutory limit in Scotland (usually 1-2 months)</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-deposit-schemes.svg"
+          alt="Tenancy Deposit Schemes"
+          caption="All Scottish landlords must use an approved deposit protection scheme"
+        />
+
+        <h2 id="overview" className="scroll-mt-24">Overview</h2>
+
+        <p>
+          The Tenancy Deposit Schemes (Scotland) Regulations 2011 require landlords to
+          protect deposits paid by tenants. This applies to:
+        </p>
+
+        <ul>
+          <li>Private Residential Tenancies (PRTs)</li>
+          <li>Assured tenancies</li>
+          <li>Short assured tenancies</li>
+          <li>Any tenancy where a deposit is taken</li>
+        </ul>
+
+        <p>
+          The deposit must be protected for the duration of the tenancy and only released
+          at the end, with any agreed deductions for damage or unpaid rent.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="schemes" className="scroll-mt-24">Approved Schemes</h2>
+
+        <p>There are three approved tenancy deposit schemes in Scotland:</p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Scheme</th>
+                <th className="border p-3 text-left font-semibold">Type</th>
+                <th className="border p-3 text-left font-semibold">Website</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">SafeDeposits Scotland</td>
+                <td className="border p-3">Custodial</td>
+                <td className="border p-3">safedepositsscotland.com</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Letting Protection Service Scotland</td>
+                <td className="border p-3">Insurance-based</td>
+                <td className="border p-3">lettingprotectionscotland.com</td>
+              </tr>
+              <tr>
+                <td className="border p-3">mydeposits Scotland</td>
+                <td className="border p-3">Insurance-based</td>
+                <td className="border p-3">mydepositsscotland.co.uk</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Custodial vs Insurance-Based</h3>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Custodial Schemes</h4>
+          <ul className="space-y-2">
+            <li>You pay the deposit to the scheme</li>
+            <li>The scheme holds the money</li>
+            <li>Usually free to use</li>
+            <li>SafeDeposits Scotland is the only custodial option</li>
+          </ul>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Insurance-Based Schemes</h4>
+          <ul className="space-y-2">
+            <li>You keep the deposit in your account</li>
+            <li>You pay a fee to the scheme</li>
+            <li>The scheme provides insurance protection</li>
+            <li>Good if you want to retain the deposit funds</li>
+          </ul>
+        </div>
+
+        <h2 id="deadlines" className="scroll-mt-24">Protection Deadlines</h2>
+
+        <p>
+          You must protect the deposit within <strong>30 working days</strong> of receiving
+          it. This means:
+        </p>
+
+        <ul>
+          <li>Count from the day you receive the deposit (not tenancy start)</li>
+          <li>Exclude weekends and Scottish public holidays</li>
+          <li>The deposit must be registered with the scheme by the deadline</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900">Don&apos;t Miss the Deadline</h4>
+          <p className="text-red-800 mt-2">
+            If you miss the 30 working day deadline, you&apos;re in breach of the regulations.
+            The tenant can apply to the First-tier Tribunal for a penalty even years later.
+            There&apos;s no way to &quot;fix&quot; late protection.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-calendar-deadline.svg"
+          alt="Deposit Protection Deadline"
+          caption="Mark your 30 working day deadline as soon as you receive a deposit"
+        />
+
+        <h2 id="tenant-information" className="scroll-mt-24">Tenant Information Requirements</h2>
+
+        <p>
+          Within 30 working days of receiving the deposit, you must provide the tenant
+          with specific information:
+        </p>
+
+        <ul>
+          <li>Confirmation that the deposit is protected</li>
+          <li>The name and contact details of the scheme used</li>
+          <li>How to apply for the deposit&apos;s return</li>
+          <li>What to do if there&apos;s a dispute</li>
+          <li>The scheme&apos;s dispute resolution process</li>
+        </ul>
+
+        <p>
+          Most schemes provide a certificate or letter that meets these requirements.
+          Keep proof that you gave this information to the tenant.
+        </p>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <p>If you fail to protect a deposit or provide the required information:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Tenant Can Apply to Tribunal For:</h4>
+          <ul className="space-y-2">
+            <li><strong>Payment order:</strong> Up to 3x the deposit amount</li>
+            <li>This is a penalty, not compensation - the tenant keeps it</li>
+            <li>The tenant can also claim return of the deposit itself</li>
+          </ul>
+        </div>
+
+        <h3>When Penalties Apply</h3>
+        <ul>
+          <li>Deposit not protected at all</li>
+          <li>Protected late (after 30 working days)</li>
+          <li>Required information not given to tenant</li>
+          <li>Information given late</li>
+          <li>Wrong scheme used (unlikely but possible)</li>
+        </ul>
+
+        <h3>Tribunal Discretion</h3>
+        <p>
+          The Tribunal decides the penalty amount, up to 3x the deposit. Factors include:
+        </p>
+        <ul>
+          <li>How late the protection was</li>
+          <li>Whether it was deliberate or a mistake</li>
+          <li>Any harm to the tenant</li>
+          <li>The landlord&apos;s conduct overall</li>
+        </ul>
+
+        <h2 id="end-of-tenancy" className="scroll-mt-24">End of Tenancy Process</h2>
+
+        <h3>Step 1: Inspection</h3>
+        <p>
+          Conduct a thorough checkout inspection, comparing the property to the check-in
+          inventory. Note any damage beyond fair wear and tear.
+        </p>
+
+        <h3>Step 2: Deductions</h3>
+        <p>
+          If claiming deductions, provide the tenant with:
+        </p>
+        <ul>
+          <li>Itemised list of deductions</li>
+          <li>Photographs of damage</li>
+          <li>Quotes or invoices for repairs</li>
+          <li>Comparison to check-in inventory</li>
+        </ul>
+
+        <h3>Step 3: Agreement or Dispute</h3>
+        <p>
+          If the tenant agrees to deductions, both parties inform the scheme and the
+          deposit is released accordingly. If there&apos;s disagreement, use the scheme&apos;s
+          free dispute resolution service.
+        </p>
+
+        <h2 id="disputes" className="scroll-mt-24">Handling Disputes</h2>
+
+        <p>
+          All three Scottish schemes offer free Alternative Dispute Resolution (ADR):
+        </p>
+
+        <ol>
+          <li>Submit the dispute to the scheme</li>
+          <li>Provide your evidence (inventory, photos, invoices)</li>
+          <li>The tenant provides their evidence</li>
+          <li>An adjudicator makes a binding decision</li>
+          <li>The deposit is released according to the decision</li>
+        </ol>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Tip: Good Inventories Win Disputes</h4>
+          <p className="text-green-800 mt-2">
+            Detailed check-in and check-out inventories with dated photographs are crucial.
+            Without them, it&apos;s very difficult to prove damage occurred during the tenancy.
+          </p>
+        </div>
+
+        <h2 id="deposit-faq" className="scroll-mt-24">Deposit Protection FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is there a maximum deposit in Scotland?</h3>
+            <p className="text-gray-600">
+              Unlike England (where it&apos;s capped at 5 weeks&apos; rent), Scotland has no
+              statutory maximum. However, most landlords take 1-2 months&apos; rent.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I forget to protect the deposit?</h3>
+            <p className="text-gray-600">
+              Protect it immediately. You&apos;re still in breach, but the Tribunal considers
+              how long the delay was. The tenant can still claim a penalty, but it may be
+              lower if you acted quickly once you realised.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to re-protect if the tenancy changes?</h3>
+            <p className="text-gray-600">
+              If a Short Assured Tenancy becomes a PRT, you don&apos;t need to re-protect as long
+              as the original protection is still valid. The deposit remains protected.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use an English deposit scheme?</h3>
+            <p className="text-gray-600">
+              No. You must use one of the three approved Scottish schemes. English,
+              Welsh, and Northern Irish schemes are not valid in Scotland.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about deposits for HMO rooms?</h3>
+            <p className="text-gray-600">
+              The same rules apply. Each tenant&apos;s deposit must be protected within 30
+              working days of receipt, regardless of the property type.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Managing Tenancy Deposits?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides templates and guidance for Scottish landlords
+            managing deposits and tenancy compliance.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View All Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
