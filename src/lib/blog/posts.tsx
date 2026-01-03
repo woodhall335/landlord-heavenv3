@@ -16412,6 +16412,2197 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 41: Wales Standard Occupation Contract
+  {
+    slug: 'wales-standard-occupation-contract',
+    title: 'Standard Occupation Contract Wales - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to Standard Occupation Contracts under the Renting Homes (Wales) Act 2016. Understand your legal obligations as a Welsh landlord.',
+    metaDescription: 'Complete guide to Standard Occupation Contracts in Wales. Learn contract requirements, landlord obligations, and compliance under the Renting Homes Act 2016.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1720,
+    category: 'Welsh Law',
+    tags: ['occupation contract', 'Wales', 'renting homes act', 'landlord obligations', 'Welsh tenancy'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-contract.svg',
+    heroImageAlt: 'Wales Standard Occupation Contract Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'standard occupation contract wales',
+    secondaryKeywords: ['wales tenancy agreement', 'renting homes wales act', 'welsh landlord contract', 'occupation contract requirements'],
+    tableOfContents: [
+      { id: 'what-is-soc', title: 'What is a Standard Occupation Contract?', level: 2 },
+      { id: 'contract-types', title: 'Types of Occupation Contracts', level: 2 },
+      { id: 'fundamental-terms', title: 'Fundamental Terms', level: 2 },
+      { id: 'supplementary-terms', title: 'Supplementary Terms', level: 2 },
+      { id: 'written-statement', title: 'Written Statement Requirements', level: 2 },
+      { id: 'landlord-obligations', title: 'Landlord Obligations', level: 2 },
+      { id: 'contract-holder-rights', title: 'Contract-Holder Rights', level: 2 },
+      { id: 'ending-contract', title: 'Ending an Occupation Contract', level: 2 },
+      { id: 'soc-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-renting-homes-act', 'wales-eviction-process', 'wales-deposit-protection'],
+    content: (
+      <>
+        <p className="lead">
+          Since December 2022, all private sector tenancies in Wales are governed by the
+          Renting Homes (Wales) Act 2016. This replaced traditional assured shorthold
+          tenancies with Standard Occupation Contracts. Understanding these new contracts
+          is essential for every Welsh landlord.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Key Change for Landlords</h4>
+          <p className="text-blue-800">
+            The Renting Homes Act fundamentally changed Welsh tenancy law. Tenants are now
+            &quot;contract-holders&quot; and landlords must provide a written statement of
+            the occupation contract within 14 days of occupation.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-contract-overview.svg"
+          alt="Wales Standard Occupation Contract Overview"
+          caption="Standard Occupation Contracts replaced ASTs in Wales from December 2022"
+          aspectRatio="video"
+        />
+
+        <h2 id="what-is-soc" className="scroll-mt-24">What is a Standard Occupation Contract?</h2>
+
+        <p>
+          A Standard Occupation Contract (SOC) is the default contract type for private
+          landlords letting residential property in Wales. It replaces the assured shorthold
+          tenancy (AST) that still applies in England.
+        </p>
+
+        <p>
+          The key features of a Standard Occupation Contract include:
+        </p>
+
+        <ul>
+          <li>Clear written terms that both parties must follow</li>
+          <li>Mandatory &quot;fundamental terms&quot; set by law</li>
+          <li>Optional &quot;supplementary terms&quot; that can be modified</li>
+          <li>Stronger rights for contract-holders (tenants)</li>
+          <li>New requirements for landlords around fitness for human habitation</li>
+        </ul>
+
+        <p>
+          The Welsh Government provides model contracts that landlords can use, though
+          you can also create your own as long as it includes all mandatory terms.
+        </p>
+
+        <h2 id="contract-types" className="scroll-mt-24">Types of Occupation Contracts</h2>
+
+        <p>
+          There are two main types of occupation contract under the Renting Homes Act:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contract Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Used By</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Key Features</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Standard Contract</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Private landlords</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Periodic or fixed-term, landlord can end with notice</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Secure Contract</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Local authorities, housing associations</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Stronger security, can only end on specific grounds</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          As a private landlord, you&apos;ll issue Standard Occupation Contracts. These can be:
+        </p>
+
+        <ul>
+          <li><strong>Periodic contracts</strong> - rolling on a weekly or monthly basis</li>
+          <li><strong>Fixed-term contracts</strong> - for a set period (e.g., 6 or 12 months)</li>
+        </ul>
+
+        <h2 id="fundamental-terms" className="scroll-mt-24">Fundamental Terms</h2>
+
+        <p>
+          Fundamental terms are mandatory provisions set by law that cannot be changed or
+          removed from the contract. They protect both landlords and contract-holders.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Cannot Be Modified</h4>
+          <p className="text-amber-800">
+            Any attempt to change fundamental terms in a way that disadvantages the
+            contract-holder is void and unenforceable. Courts will apply the statutory
+            version instead.
+          </p>
+        </div>
+
+        <p>Key fundamental terms include:</p>
+
+        <ul>
+          <li>The landlord must keep the property fit for human habitation</li>
+          <li>The landlord must keep the structure and exterior in repair</li>
+          <li>The landlord must keep installations for water, gas, electricity, heating, and sanitation in repair</li>
+          <li>The contract-holder must not use the property for illegal purposes</li>
+          <li>The contract-holder must not cause nuisance or annoyance</li>
+          <li>Anti-social behaviour provisions</li>
+          <li>Provisions about joint contract-holders</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-fundamental-terms.svg"
+          alt="Fundamental Terms in Welsh Occupation Contracts"
+          caption="Fundamental terms are set by law and protect both parties"
+          aspectRatio="video"
+        />
+
+        <h2 id="supplementary-terms" className="scroll-mt-24">Supplementary Terms</h2>
+
+        <p>
+          Supplementary terms are default provisions that apply unless both parties agree
+          to modify or remove them. They cover practical matters of the tenancy.
+        </p>
+
+        <p>Common supplementary terms include:</p>
+
+        <ul>
+          <li>Requirements about pets (can be modified)</li>
+          <li>Provisions about decoration and alterations</li>
+          <li>Garden maintenance responsibilities</li>
+          <li>Requirements to notify of absences</li>
+          <li>Provisions about keys and access</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Pets Default Position</h4>
+          <p className="text-green-800">
+            Under the Act, the default position is that pets are allowed unless you
+            specifically modify this term. If you want a &quot;no pets&quot; clause,
+            you must include it as a modified supplementary term.
+          </p>
+        </div>
+
+        <h2 id="written-statement" className="scroll-mt-24">Written Statement Requirements</h2>
+
+        <p>
+          You must provide a written statement of the occupation contract to the
+          contract-holder within 14 days of them moving in. This is a legal requirement.
+        </p>
+
+        <p>The written statement must include:</p>
+
+        <ul>
+          <li>Names of the landlord and contract-holder(s)</li>
+          <li>The address of the property</li>
+          <li>The occupation date</li>
+          <li>All fundamental terms</li>
+          <li>All supplementary terms (including any modifications)</li>
+          <li>Any additional terms agreed between the parties</li>
+          <li>Information about the deposit (if taken)</li>
+          <li>The amount of rent and when it&apos;s due</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Penalty for Non-Compliance</h4>
+          <p className="text-red-800">
+            If you fail to provide a written statement within 14 days, the contract-holder
+            can apply to court. The court can order you to provide it and may award
+            compensation of up to two months&apos; rent.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="landlord-obligations" className="scroll-mt-24">Landlord Obligations</h2>
+
+        <p>
+          The Renting Homes Act places significant obligations on landlords. Key
+          responsibilities include:
+        </p>
+
+        <h3>Fitness for Human Habitation</h3>
+
+        <p>
+          You must ensure the property is fit for human habitation at the start of the
+          contract and throughout. This covers 29 matters including:
+        </p>
+
+        <ul>
+          <li>Repair and stability of the structure</li>
+          <li>Freedom from damp</li>
+          <li>Adequate ventilation and natural light</li>
+          <li>Water supply and drainage</li>
+          <li>Fire safety</li>
+          <li>Electrical safety</li>
+          <li>Carbon monoxide risks</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-fitness-habitation.svg"
+          alt="Fitness for Human Habitation Requirements Wales"
+          caption="Properties must meet 29 fitness standards under Welsh law"
+          aspectRatio="video"
+        />
+
+        <h3>Repair Obligations</h3>
+
+        <p>
+          As landlord, you must keep in repair:
+        </p>
+
+        <ul>
+          <li>The structure and exterior (including drains, gutters, external pipes)</li>
+          <li>Installations for water, gas, electricity, heating, and hot water</li>
+          <li>Common parts in multi-let properties</li>
+        </ul>
+
+        <h3>Safety Certifications</h3>
+
+        <p>Before the contract-holder moves in, you must provide:</p>
+
+        <ul>
+          <li>A valid Gas Safety Certificate (if gas appliances present)</li>
+          <li>An Electrical Installation Condition Report (EICR)</li>
+          <li>An Energy Performance Certificate (EPC)</li>
+          <li>Smoke alarms on each storey</li>
+          <li>Carbon monoxide alarms where required</li>
+        </ul>
+
+        <h2 id="contract-holder-rights" className="scroll-mt-24">Contract-Holder Rights</h2>
+
+        <p>
+          Contract-holders under the Renting Homes Act have stronger rights than under
+          the previous AST regime. Key rights include:
+        </p>
+
+        <ul>
+          <li><strong>Right to a written statement</strong> - must be provided within 14 days</li>
+          <li><strong>Right to a fit property</strong> - home must be fit for human habitation</li>
+          <li><strong>Right to repairs</strong> - landlord must maintain the property</li>
+          <li><strong>Protection from retaliatory eviction</strong> - if they report issues</li>
+          <li><strong>Minimum notice periods</strong> - cannot be evicted without proper notice</li>
+          <li><strong>Succession rights</strong> - certain people can inherit the contract</li>
+        </ul>
+
+        <h2 id="ending-contract" className="scroll-mt-24">Ending an Occupation Contract</h2>
+
+        <p>
+          There are specific rules about how occupation contracts can be ended:
+        </p>
+
+        <h3>Landlord Ending the Contract</h3>
+
+        <p>To end a standard occupation contract, you must:</p>
+
+        <ul>
+          <li>Give at least 6 months&apos; notice (for no-fault eviction)</li>
+          <li>Cannot serve notice in the first 6 months of the contract</li>
+          <li>Use the correct form (Section 173 notice)</li>
+          <li>Have provided a written statement of the contract</li>
+          <li>Have protected any deposit properly</li>
+          <li>Have provided required safety certificates</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Minimum 12-Month Protection</h4>
+          <p className="text-blue-800">
+            Combining the 6-month restriction on serving notice with the 6-month notice
+            period means contract-holders effectively have 12 months&apos; security
+            from the start of the contract.
+          </p>
+        </div>
+
+        <h3>Contract-Holder Ending the Contract</h3>
+
+        <p>
+          A contract-holder can end the contract by giving at least 4 weeks&apos; notice
+          (or one rental period, whichever is longer). They don&apos;t need to give a reason.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need a Compliant Welsh Contract?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven offers Welsh occupation contract templates that comply with
+            the Renting Homes (Wales) Act 2016.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Contract Templates →
+          </Link>
+        </div>
+
+        <h2 id="soc-faq" className="scroll-mt-24">Standard Occupation Contract FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do existing tenancies convert automatically?</h3>
+            <p className="text-gray-600">
+              Yes. All existing assured shorthold tenancies in Wales automatically converted
+              to standard occupation contracts on 1 December 2022. You should have issued
+              a written statement to existing tenants.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use an English AST for a Welsh property?</h3>
+            <p className="text-gray-600">
+              No. Properties in Wales must use occupation contracts under Welsh law. Using
+              an English AST would not comply with the Renting Homes Act and could cause
+              legal problems.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I don&apos;t provide a written statement?</h3>
+            <p className="text-gray-600">
+              The contract-holder can apply to court for an order requiring you to provide
+              it. You may also be ordered to pay compensation. Additionally, you cannot
+              use the no-fault eviction procedure until you&apos;ve provided the statement.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I ban pets completely?</h3>
+            <p className="text-gray-600">
+              Yes, but you must specifically include a &quot;no pets&quot; term as a modified
+              supplementary term. The default position under the Act is that pets are allowed.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What&apos;s the minimum tenancy length?</h3>
+            <p className="text-gray-600">
+              There&apos;s no minimum fixed term, but given you cannot serve a no-fault notice
+              in the first 6 months and must give 6 months&apos; notice, contract-holders
+              effectively have 12 months&apos; security from day one.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 42: Wales Renting Homes Act
+  {
+    slug: 'wales-renting-homes-act',
+    title: 'Renting Homes (Wales) Act 2016 - Complete Landlord Guide',
+    description: 'Everything landlords need to know about the Renting Homes (Wales) Act 2016. Key changes, compliance requirements, and practical guidance for Welsh landlords.',
+    metaDescription: 'Complete guide to the Renting Homes (Wales) Act 2016 for landlords. Understand key changes, compliance requirements, and how to stay legal in Wales.',
+    date: '2026-01-03',
+    readTime: '15 min read',
+    wordCount: 1850,
+    category: 'Welsh Law',
+    tags: ['renting homes act', 'Wales', 'Welsh tenancy law', 'landlord compliance', 'occupation contracts'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-renting-act.svg',
+    heroImageAlt: 'Renting Homes Wales Act 2016 Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'renting homes wales act 2016',
+    secondaryKeywords: ['welsh tenancy law', 'wales landlord law', 'renting homes act requirements', 'welsh housing legislation'],
+    tableOfContents: [
+      { id: 'act-overview', title: 'Overview of the Act', level: 2 },
+      { id: 'key-changes', title: 'Key Changes from ASTs', level: 2 },
+      { id: 'landlord-requirements', title: 'Landlord Requirements', level: 2 },
+      { id: 'fitness-habitation', title: 'Fitness for Human Habitation', level: 2 },
+      { id: 'notice-periods', title: 'Notice Periods', level: 2 },
+      { id: 'deposit-rules', title: 'Deposit Rules', level: 2 },
+      { id: 'compliance-checklist', title: 'Compliance Checklist', level: 2 },
+      { id: 'act-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-standard-occupation-contract', 'wales-eviction-process', 'wales-deposit-protection'],
+    content: (
+      <>
+        <p className="lead">
+          The Renting Homes (Wales) Act 2016 came into force on 1 December 2022, bringing
+          the biggest change to Welsh housing law in decades. This guide explains everything
+          landlords need to know about the Act and how to comply.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Wales-Specific Legislation</h4>
+          <p className="text-amber-800">
+            This Act only applies to properties in Wales. English properties continue to
+            use assured shorthold tenancies under the Housing Act 1988. If your property
+            is on the Welsh side of the border, you must comply with Welsh law.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-act-overview.svg"
+          alt="Renting Homes Wales Act Overview"
+          caption="The Renting Homes Act 2016 transformed Welsh tenancy law from December 2022"
+          aspectRatio="video"
+        />
+
+        <h2 id="act-overview" className="scroll-mt-24">Overview of the Act</h2>
+
+        <p>
+          The Renting Homes (Wales) Act 2016 was passed by the Welsh Parliament (Senedd)
+          to simplify and modernize Welsh tenancy law. It replaces various pieces of
+          legislation that previously governed renting in Wales.
+        </p>
+
+        <p>The Act aims to:</p>
+
+        <ul>
+          <li>Simplify the law by replacing multiple complex acts</li>
+          <li>Create clearer rights and responsibilities for all parties</li>
+          <li>Improve property conditions through fitness requirements</li>
+          <li>Provide greater security for those renting their homes</li>
+          <li>Standardize contract terms across the sector</li>
+        </ul>
+
+        <p>
+          Under the Act, tenants become &quot;contract-holders&quot; and tenancies become
+          &quot;occupation contracts.&quot; This isn&apos;t just a name change—it reflects
+          a fundamental shift in how the law treats rental relationships.
+        </p>
+
+        <h2 id="key-changes" className="scroll-mt-24">Key Changes from ASTs</h2>
+
+        <p>
+          If you previously let properties in Wales using assured shorthold tenancies,
+          here are the major changes you need to understand:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Area</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Previous (AST)</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Now (Occupation Contract)</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Written contract</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Recommended but not required</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Mandatory within 14 days</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">No-fault notice</td>
+                <td className="px-6 py-4 text-sm text-gray-600">2 months (Section 21)</td>
+                <td className="px-6 py-4 text-sm text-gray-600">6 months (Section 173)</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">When notice can be served</td>
+                <td className="px-6 py-4 text-sm text-gray-600">After 4 months</td>
+                <td className="px-6 py-4 text-sm text-gray-600">After 6 months</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Property standards</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Fit for habitation implied</td>
+                <td className="px-6 py-4 text-sm text-gray-600">29 specific fitness matters</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Pets</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Usually prohibited</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Allowed by default</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="landlord-requirements" className="scroll-mt-24">Landlord Requirements</h2>
+
+        <p>
+          The Act places specific requirements on landlords. Failure to comply can result
+          in penalties and may prevent you from evicting contract-holders.
+        </p>
+
+        <h3>Written Statement</h3>
+
+        <p>
+          You must provide a written statement of the occupation contract within 14 days
+          of the contract-holder taking up occupation. The statement must include:
+        </p>
+
+        <ul>
+          <li>All fundamental terms (set by law)</li>
+          <li>All supplementary terms (with any agreed modifications)</li>
+          <li>Any additional terms agreed between you</li>
+          <li>Key information about the property and parties</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-written-statement.svg"
+          alt="Written Statement Requirements Wales"
+          caption="A written statement must be provided within 14 days of occupation"
+          aspectRatio="video"
+        />
+
+        <h3>Rent Smart Wales Registration</h3>
+
+        <p>
+          All landlords in Wales must be registered with Rent Smart Wales. If you use
+          a letting agent, they must be licensed. This requirement predates the Renting
+          Homes Act but remains essential.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Registration is Mandatory</h4>
+          <p className="text-red-800">
+            Landlords who fail to register with Rent Smart Wales cannot legally serve
+            eviction notices. The penalty for non-registration can be up to £150,000
+            under Rent Repayment Orders.
+          </p>
+        </div>
+
+        <h3>Safety Requirements</h3>
+
+        <p>Before occupation begins, you must:</p>
+
+        <ul>
+          <li>Obtain a valid Gas Safety Certificate (annual)</li>
+          <li>Obtain an Electrical Installation Condition Report (every 5 years)</li>
+          <li>Provide an Energy Performance Certificate (minimum rating E)</li>
+          <li>Install smoke alarms on each storey</li>
+          <li>Install carbon monoxide alarms where there are fixed combustion appliances</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="fitness-habitation" className="scroll-mt-24">Fitness for Human Habitation</h2>
+
+        <p>
+          One of the most significant changes under the Act is the comprehensive fitness
+          for human habitation requirement. Your property must be fit at the start of
+          the contract and throughout.
+        </p>
+
+        <p>The 29 matters of fitness include:</p>
+
+        <div className="grid md:grid-cols-2 gap-4 my-8">
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Structure & Safety</h4>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>Repair and structural stability</li>
+              <li>Stability of the building</li>
+              <li>Freedom from damp</li>
+              <li>Internal arrangement</li>
+              <li>Natural lighting</li>
+            </ul>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Services & Facilities</h4>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>Ventilation</li>
+              <li>Water supply</li>
+              <li>Drainage and sanitation</li>
+              <li>Facilities for preparation of food</li>
+              <li>Heating</li>
+            </ul>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Hazards</h4>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>Fire safety</li>
+              <li>Carbon monoxide</li>
+              <li>Lead</li>
+              <li>Asbestos</li>
+              <li>Other environmental hazards</li>
+            </ul>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-4">
+            <h4 className="font-semibold text-gray-900 mb-2">Energy & Utilities</h4>
+            <ul className="text-sm text-gray-600 space-y-1">
+              <li>Energy performance</li>
+              <li>Electrical installations</li>
+              <li>Gas installations</li>
+              <li>Domestic water supply systems</li>
+              <li>Sanitary installations</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2 id="notice-periods" className="scroll-mt-24">Notice Periods</h2>
+
+        <p>
+          The Act significantly extended notice periods for landlords, providing greater
+          security for contract-holders.
+        </p>
+
+        <h3>No-Fault Eviction (Section 173)</h3>
+
+        <ul>
+          <li>You must give at least 6 months&apos; notice</li>
+          <li>You cannot serve notice in the first 6 months of the contract</li>
+          <li>This means contract-holders have at least 12 months&apos; security</li>
+        </ul>
+
+        <h3>Fault-Based Eviction (Section 181)</h3>
+
+        <p>
+          Where there are grounds for possession (such as rent arrears or breach of
+          contract), different notice periods apply depending on the ground:
+        </p>
+
+        <ul>
+          <li><strong>Serious rent arrears (2+ months):</strong> 14 days&apos; notice</li>
+          <li><strong>Anti-social behaviour:</strong> Can be immediate in serious cases</li>
+          <li><strong>Breach of contract:</strong> 1 month&apos;s notice</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-notice-periods.svg"
+          alt="Notice Periods Under Renting Homes Wales Act"
+          caption="Notice periods vary depending on the grounds for possession"
+          aspectRatio="video"
+        />
+
+        <h2 id="deposit-rules" className="scroll-mt-24">Deposit Rules</h2>
+
+        <p>
+          Deposit protection continues to apply in Wales. Key rules include:
+        </p>
+
+        <ul>
+          <li>Maximum deposit is equivalent to 2 months&apos; rent (holding deposit counts)</li>
+          <li>Must be protected in an approved scheme within 30 days</li>
+          <li>Prescribed information must be provided to the contract-holder</li>
+          <li>Failure to comply prevents serving Section 173 notices</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Deposit Scheme Options</h4>
+          <p className="text-green-800">
+            You can use any of the government-approved deposit protection schemes.
+            The Deposit Protection Service (DPS), MyDeposits, and Tenancy Deposit
+            Scheme (TDS) all operate in Wales.
+          </p>
+        </div>
+
+        <h2 id="compliance-checklist" className="scroll-mt-24">Compliance Checklist</h2>
+
+        <p>
+          Use this checklist to ensure you&apos;re complying with the Renting Homes Act:
+        </p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-8">
+          <h4 className="font-semibold text-gray-900 mb-4">Before Letting</h4>
+          <ul className="space-y-2 text-gray-700">
+            <li>☐ Register with Rent Smart Wales</li>
+            <li>☐ Obtain Gas Safety Certificate</li>
+            <li>☐ Obtain EICR (electrical safety)</li>
+            <li>☐ Obtain EPC (minimum E rating)</li>
+            <li>☐ Install smoke alarms on each storey</li>
+            <li>☐ Install CO alarms where required</li>
+            <li>☐ Prepare written statement of occupation contract</li>
+          </ul>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-8">
+          <h4 className="font-semibold text-gray-900 mb-4">At Start of Tenancy</h4>
+          <ul className="space-y-2 text-gray-700">
+            <li>☐ Provide written statement within 14 days</li>
+            <li>☐ Provide copy of Gas Safety Certificate</li>
+            <li>☐ Provide copy of EPC</li>
+            <li>☐ Provide How to Rent Wales guide</li>
+            <li>☐ Protect deposit within 30 days</li>
+            <li>☐ Serve deposit prescribed information</li>
+          </ul>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need Compliance Help?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides comprehensive compliance packs for Welsh landlords
+            including contract templates, checklists, and guidance.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Welsh Landlord Products →
+          </Link>
+        </div>
+
+        <h2 id="act-faq" className="scroll-mt-24">Renting Homes Act FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Does the Act apply to lodgers?</h3>
+            <p className="text-gray-600">
+              No. If you live in the property and share accommodation with the person
+              renting a room, the Renting Homes Act doesn&apos;t apply. This arrangement
+              creates a &quot;licensee&quot; relationship instead.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What happened to existing tenancies?</h3>
+            <p className="text-gray-600">
+              All existing assured shorthold tenancies, assured tenancies, and other
+              residential tenancies automatically converted to occupation contracts on
+              1 December 2022. Landlords should have provided written statements.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I still use Section 21?</h3>
+            <p className="text-gray-600">
+              No. Section 21 notices don&apos;t exist in Wales. The equivalent is a
+              Section 173 notice under the Renting Homes Act, but it requires 6 months&apos;
+              notice and cannot be served in the first 6 months.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my property crosses the border?</h3>
+            <p className="text-gray-600">
+              The law that applies depends on where the property is located. If the
+              dwelling is in Wales, Welsh law applies regardless of where you or the
+              tenant live. Border cases should seek legal advice.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Are HMO rules different in Wales?</h3>
+            <p className="text-gray-600">
+              HMO licensing requirements remain similar, but occupation contracts apply
+              to each HMO room let. You must provide a written statement to each
+              contract-holder in an HMO.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 43: Wales Eviction Process
+  {
+    slug: 'wales-eviction-process',
+    title: 'Wales Eviction Process - Complete Landlord Guide 2026',
+    description: 'Step-by-step guide to evicting tenants in Wales under the Renting Homes Act. Learn about Section 173, Section 181, notice periods, and court procedures.',
+    metaDescription: 'Complete guide to the Wales eviction process under the Renting Homes Act. Section 173 and 181 notices, court procedures, and landlord requirements.',
+    date: '2026-01-03',
+    readTime: '16 min read',
+    wordCount: 1920,
+    category: 'Welsh Law',
+    tags: ['eviction', 'Wales', 'Section 173', 'Section 181', 'possession', 'renting homes act'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-eviction.svg',
+    heroImageAlt: 'Wales Eviction Process Guide',
+    showUrgencyBanner: true,
+    targetKeyword: 'wales eviction process',
+    secondaryKeywords: ['evict tenant wales', 'section 173 notice wales', 'section 181 wales', 'welsh possession proceedings'],
+    tableOfContents: [
+      { id: 'eviction-overview', title: 'Eviction in Wales Overview', level: 2 },
+      { id: 'section-173', title: 'Section 173 - No-Fault Eviction', level: 2 },
+      { id: 'section-181', title: 'Section 181 - Fault-Based Eviction', level: 2 },
+      { id: 'possession-grounds', title: 'Grounds for Possession', level: 2 },
+      { id: 'court-process', title: 'Court Process', level: 2 },
+      { id: 'common-mistakes', title: 'Common Mistakes to Avoid', level: 2 },
+      { id: 'eviction-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-standard-occupation-contract', 'wales-renting-homes-act', 'wales-deposit-protection'],
+    content: (
+      <>
+        <p className="lead">
+          Evicting a contract-holder in Wales follows different rules than in England.
+          The Renting Homes (Wales) Act 2016 introduced new procedures with longer notice
+          periods and stricter requirements. This guide explains exactly how to evict
+          legally in Wales.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Wales-Only Procedures</h4>
+          <p className="text-red-800">
+            The eviction procedures in this guide apply only to Wales. English Section 21
+            and Section 8 notices do not work for Welsh properties. Using the wrong notice
+            will invalidate your eviction.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-eviction-overview.svg"
+          alt="Wales Eviction Process Overview"
+          caption="Welsh eviction follows the Renting Homes Act procedures"
+          aspectRatio="video"
+        />
+
+        <h2 id="eviction-overview" className="scroll-mt-24">Eviction in Wales Overview</h2>
+
+        <p>
+          Under the Renting Homes (Wales) Act, there are two main routes to eviction:
+        </p>
+
+        <ul>
+          <li><strong>Section 173</strong> - No-fault eviction (landlord doesn&apos;t need a reason)</li>
+          <li><strong>Section 181</strong> - Fault-based eviction (breach of contract)</li>
+        </ul>
+
+        <p>
+          Before you can evict, you must ensure you&apos;ve complied with all your landlord
+          obligations. Any failures can block your eviction.
+        </p>
+
+        <h3>Pre-Requisites for Eviction</h3>
+
+        <p>To serve any eviction notice, you must have:</p>
+
+        <ul>
+          <li>Registered with Rent Smart Wales</li>
+          <li>Provided a written statement of the occupation contract</li>
+          <li>Protected any deposit and served prescribed information</li>
+          <li>Provided required safety certificates (gas, electrical)</li>
+          <li>Not committed any retaliatory eviction</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Check Compliance First</h4>
+          <p className="text-amber-800">
+            If you haven&apos;t complied with these requirements, fix them before serving
+            notice. A court can refuse possession if you haven&apos;t met your obligations,
+            regardless of which eviction route you use.
+          </p>
+        </div>
+
+        <h2 id="section-173" className="scroll-mt-24">Section 173 - No-Fault Eviction</h2>
+
+        <p>
+          Section 173 allows landlords to end a standard occupation contract without
+          needing to prove the contract-holder has done anything wrong. This is the
+          Welsh equivalent of the English Section 21 (now repealed in England).
+        </p>
+
+        <h3>Key Requirements</h3>
+
+        <ul>
+          <li><strong>Minimum 6 months&apos; notice</strong> - you must give at least 6 months</li>
+          <li><strong>Cannot serve in first 6 months</strong> - notice can only be served after 6 months from start</li>
+          <li><strong>Use correct form</strong> - must use the prescribed Section 173 form</li>
+          <li><strong>Specify correct end date</strong> - must be at least 6 months after service</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-section-173.svg"
+          alt="Section 173 Notice Requirements Wales"
+          caption="Section 173 requires 6 months notice after an initial 6-month protected period"
+          aspectRatio="video"
+        />
+
+        <h3>Section 173 Timeline</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stage</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timing</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Contract starts</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Day 1</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Protected period begins</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Can serve notice</td>
+                <td className="px-6 py-4 text-sm text-gray-600">After month 6</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Notice can now be served</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Notice expires</td>
+                <td className="px-6 py-4 text-sm text-gray-600">6 months after service</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Minimum month 12</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Apply to court</td>
+                <td className="px-6 py-4 text-sm text-gray-600">After notice expires</td>
+                <td className="px-6 py-4 text-sm text-gray-600">If contract-holder hasn&apos;t left</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Possession order</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Court hearing</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Usually 6-8 weeks after application</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Section 173 Notice Validity</h3>
+
+        <p>A Section 173 notice remains valid for 6 months after it expires. This means:</p>
+
+        <ul>
+          <li>You can apply to court any time within 6 months of the notice end date</li>
+          <li>If the contract-holder stays, you don&apos;t need to serve a new notice immediately</li>
+          <li>After 6 months, the notice lapses and you&apos;d need to start again</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="section-181" className="scroll-mt-24">Section 181 - Fault-Based Eviction</h2>
+
+        <p>
+          Section 181 allows landlords to seek possession where the contract-holder has
+          breached the occupation contract. Unlike Section 173, you must prove a breach.
+        </p>
+
+        <h3>When to Use Section 181</h3>
+
+        <ul>
+          <li>Rent arrears (the most common ground)</li>
+          <li>Breach of contract terms</li>
+          <li>Anti-social behaviour</li>
+          <li>Damage to the property</li>
+          <li>Using the property for illegal purposes</li>
+        </ul>
+
+        <h3>Notice Periods for Section 181</h3>
+
+        <p>
+          The notice period depends on the ground for possession:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ground</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notice Period</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mandatory?</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Serious rent arrears (2+ months)</td>
+                <td className="px-6 py-4 text-sm text-gray-600">14 days</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Yes (if arrears remain)</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Less serious rent arrears</td>
+                <td className="px-6 py-4 text-sm text-gray-600">1 month</td>
+                <td className="px-6 py-4 text-sm text-gray-600">No - discretionary</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Breach of contract</td>
+                <td className="px-6 py-4 text-sm text-gray-600">1 month</td>
+                <td className="px-6 py-4 text-sm text-gray-600">No - discretionary</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Serious anti-social behaviour</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Immediate or 48 hours</td>
+                <td className="px-6 py-4 text-sm text-gray-600">No - discretionary</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Mandatory vs Discretionary</h4>
+          <p className="text-blue-800">
+            For mandatory grounds, if you prove the ground exists, the court must order
+            possession. For discretionary grounds, the court considers whether it&apos;s
+            reasonable to make an order, even if the ground is proven.
+          </p>
+        </div>
+
+        <h2 id="possession-grounds" className="scroll-mt-24">Grounds for Possession</h2>
+
+        <p>
+          The Renting Homes Act includes various grounds for possession. Here are the
+          most commonly used:
+        </p>
+
+        <h3>Rent Arrears Grounds</h3>
+
+        <ul>
+          <li><strong>Serious rent arrears (mandatory):</strong> 2+ months&apos; rent unpaid at notice AND hearing</li>
+          <li><strong>Persistent rent arrears (discretionary):</strong> Frequent late payment pattern</li>
+          <li><strong>Some rent arrears (discretionary):</strong> Any arrears, but court considers reasonableness</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-possession-grounds.svg"
+          alt="Possession Grounds Under Welsh Law"
+          caption="Different grounds have different notice periods and court requirements"
+          aspectRatio="video"
+        />
+
+        <h3>Estate Management Grounds</h3>
+
+        <ul>
+          <li>Landlord wants to sell the property (6 months&apos; notice)</li>
+          <li>Landlord wants to live in the property (6 months&apos; notice)</li>
+          <li>Major works required (2 months&apos; notice)</li>
+        </ul>
+
+        <h3>Contract-Holder Behaviour Grounds</h3>
+
+        <ul>
+          <li>Anti-social behaviour</li>
+          <li>Damage to property</li>
+          <li>Illegal use of property</li>
+          <li>False statement to obtain the contract</li>
+          <li>Domestic abuse (by one joint contract-holder)</li>
+        </ul>
+
+        <h2 id="court-process" className="scroll-mt-24">Court Process</h2>
+
+        <p>
+          If the contract-holder doesn&apos;t leave after your notice expires, you must
+          apply to court for a possession order.
+        </p>
+
+        <h3>Step 1: Apply to Court</h3>
+
+        <p>
+          Complete claim form N5 (for standard cases) and submit to your local County Court.
+          You&apos;ll need:
+        </p>
+
+        <ul>
+          <li>Completed N5 claim form</li>
+          <li>Copy of the occupation contract</li>
+          <li>Copy of the notice you served</li>
+          <li>Proof of service</li>
+          <li>Court fee (currently around £355)</li>
+        </ul>
+
+        <h3>Step 2: Court Hearing</h3>
+
+        <p>
+          A hearing will be scheduled, usually 6-8 weeks after your application. At
+          the hearing:
+        </p>
+
+        <ul>
+          <li>Present your case for possession</li>
+          <li>The contract-holder can present a defence</li>
+          <li>The judge will decide whether to grant possession</li>
+        </ul>
+
+        <h3>Step 3: Possession Order</h3>
+
+        <p>
+          If successful, the court will make a possession order. This usually gives
+          the contract-holder 14 days to leave (28 days in exceptional circumstances).
+        </p>
+
+        <h3>Step 4: Warrant of Possession</h3>
+
+        <p>
+          If the contract-holder still doesn&apos;t leave, apply for a warrant of
+          possession (N325 form). County Court bailiffs will then enforce the order
+          and physically remove the occupants if necessary.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Never Self-Evict</h4>
+          <p className="text-red-800">
+            Never try to physically remove a contract-holder yourself, change locks while
+            they&apos;re living there, or cut off utilities. This is illegal eviction
+            and a criminal offence. Always use the court process.
+          </p>
+        </div>
+
+        <h2 id="common-mistakes" className="scroll-mt-24">Common Mistakes to Avoid</h2>
+
+        <div className="space-y-4 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h4 className="font-semibold text-gray-900 mb-2">Using English Forms</h4>
+            <p className="text-gray-600">
+              Section 21 and Section 8 notices don&apos;t work in Wales. Using them wastes
+              time and means starting again with the correct Welsh forms.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h4 className="font-semibold text-gray-900 mb-2">Serving Notice Too Early</h4>
+            <p className="text-gray-600">
+              A Section 173 notice served in the first 6 months is invalid. Wait until
+              day 183 to be safe, then serve notice.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h4 className="font-semibold text-gray-900 mb-2">Not Providing Written Statement</h4>
+            <p className="text-gray-600">
+              If you haven&apos;t given the contract-holder a written statement of the
+              contract, you cannot use Section 173. Provide it first, then wait 14 days
+              before serving notice.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h4 className="font-semibold text-gray-900 mb-2">Deposit Not Protected</h4>
+            <p className="text-gray-600">
+              Unprotected deposits block Section 173 notices. Protect the deposit and
+              serve prescribed information before serving eviction notice.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need Eviction Documents?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides Welsh eviction notice templates and guidance packs
+            to help you navigate the possession process correctly.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Templates →
+          </Link>
+        </div>
+
+        <h2 id="eviction-faq" className="scroll-mt-24">Wales Eviction FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does eviction take in Wales?</h3>
+            <p className="text-gray-600">
+              For a Section 173 no-fault eviction, the minimum is 12 months from start
+              of contract (6 months before serving notice + 6 months notice). Court
+              proceedings add another 2-4 months if needed.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I evict for rent arrears faster?</h3>
+            <p className="text-gray-600">
+              Yes. If there are 2+ months&apos; arrears, you can serve a Section 181
+              notice with only 14 days&apos; notice. If arrears remain at the hearing,
+              possession is mandatory.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the contract-holder has children?</h3>
+            <p className="text-gray-600">
+              Having children doesn&apos;t prevent eviction, but the court may consider
+              it when deciding timelines. For discretionary grounds, it may be a factor
+              in reasonableness. Local authority homelessness duties also apply.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I evict in winter?</h3>
+            <p className="text-gray-600">
+              Yes. Unlike some countries, there is no winter eviction ban in Wales.
+              The normal procedures apply year-round.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about retaliatory eviction?</h3>
+            <p className="text-gray-600">
+              If the contract-holder has made a legitimate complaint about the property
+              condition, a Section 173 notice may be defended as retaliatory. You cannot
+              evict someone simply because they complained about repairs.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 44: Wales Deposit Protection
+  {
+    slug: 'wales-deposit-protection',
+    title: 'Deposit Protection Wales - Complete Landlord Guide 2026',
+    description: 'Complete guide to protecting tenancy deposits in Wales. Learn about approved schemes, prescribed information, and compliance requirements under Welsh law.',
+    metaDescription: 'Complete guide to deposit protection in Wales. Approved schemes, prescribed information requirements, and compliance under the Renting Homes Act.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1580,
+    category: 'Welsh Law',
+    tags: ['deposit protection', 'Wales', 'tenancy deposit', 'prescribed information', 'security deposit'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-deposit.svg',
+    heroImageAlt: 'Wales Deposit Protection Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'deposit protection wales',
+    secondaryKeywords: ['wales tenancy deposit', 'deposit scheme wales', 'protect deposit wales', 'welsh deposit rules'],
+    tableOfContents: [
+      { id: 'deposit-overview', title: 'Deposit Protection Overview', level: 2 },
+      { id: 'deposit-limits', title: 'Deposit Limits in Wales', level: 2 },
+      { id: 'approved-schemes', title: 'Approved Protection Schemes', level: 2 },
+      { id: 'protection-deadline', title: 'Protection Deadlines', level: 2 },
+      { id: 'prescribed-information', title: 'Prescribed Information', level: 2 },
+      { id: 'deposit-disputes', title: 'Handling Deposit Disputes', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'deposit-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-standard-occupation-contract', 'wales-renting-homes-act', 'wales-eviction-process'],
+    content: (
+      <>
+        <p className="lead">
+          If you take a deposit from a contract-holder in Wales, you must protect it
+          in a government-approved scheme. This guide covers everything you need to
+          know about deposit protection under Welsh law.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Welsh Deposit Rules</h4>
+          <p className="text-blue-800">
+            Deposit protection in Wales follows similar rules to England, but with
+            some differences under the Renting Homes (Wales) Act 2016. The maximum
+            deposit is 2 months&apos; rent, and failure to protect blocks eviction notices.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-deposit-overview.svg"
+          alt="Wales Deposit Protection Overview"
+          caption="All deposits in Wales must be protected within 30 days"
+          aspectRatio="video"
+        />
+
+        <h2 id="deposit-overview" className="scroll-mt-24">Deposit Protection Overview</h2>
+
+        <p>
+          Since 2007, landlords in Wales have been required to protect tenancy deposits.
+          This requirement continues under the Renting Homes (Wales) Act 2016, which
+          now governs all residential lettings in Wales.
+        </p>
+
+        <p>Key requirements include:</p>
+
+        <ul>
+          <li>Protect the deposit in an approved scheme within 30 days</li>
+          <li>Provide prescribed information to the contract-holder</li>
+          <li>Keep the deposit protected throughout the tenancy</li>
+          <li>Follow proper procedures when returning or disputing the deposit</li>
+        </ul>
+
+        <h2 id="deposit-limits" className="scroll-mt-24">Deposit Limits in Wales</h2>
+
+        <p>
+          Under the Renting Homes Act, the maximum deposit you can take is limited:
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Maximum Deposit: 2 Months&apos; Rent</h4>
+          <p className="text-amber-800">
+            The total deposit (including any holding deposit) cannot exceed the
+            equivalent of 2 months&apos; rent. This applies to all standard occupation
+            contracts in Wales.
+          </p>
+        </div>
+
+        <p>
+          If you take more than 2 months&apos; rent as a deposit, the contract-holder
+          can apply to court to recover the excess. You may also face difficulties
+          enforcing the contract.
+        </p>
+
+        <h2 id="approved-schemes" className="scroll-mt-24">Approved Protection Schemes</h2>
+
+        <p>
+          There are three government-approved deposit protection schemes that operate
+          in Wales. You can use any of these:
+        </p>
+
+        <div className="grid md:grid-cols-3 gap-4 my-8">
+          <div className="bg-gray-50 rounded-lg p-6 text-center">
+            <h4 className="font-semibold text-gray-900 mb-2">DPS</h4>
+            <p className="text-sm text-gray-600">Deposit Protection Service</p>
+            <p className="text-xs text-gray-500 mt-2">Custodial (free) or Insured</p>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-6 text-center">
+            <h4 className="font-semibold text-gray-900 mb-2">MyDeposits</h4>
+            <p className="text-sm text-gray-600">MyDeposits Wales</p>
+            <p className="text-xs text-gray-500 mt-2">Custodial or Insured</p>
+          </div>
+          <div className="bg-gray-50 rounded-lg p-6 text-center">
+            <h4 className="font-semibold text-gray-900 mb-2">TDS</h4>
+            <p className="text-sm text-gray-600">Tenancy Deposit Scheme</p>
+            <p className="text-xs text-gray-500 mt-2">Custodial or Insured</p>
+          </div>
+        </div>
+
+        <h3>Custodial vs Insured Schemes</h3>
+
+        <ul>
+          <li><strong>Custodial:</strong> You pay the deposit to the scheme, which holds it. Usually free to landlords.</li>
+          <li><strong>Insured:</strong> You keep the deposit but pay a fee to insure it. The scheme guarantees protection.</li>
+        </ul>
+
+        <h2 id="protection-deadline" className="scroll-mt-24">Protection Deadlines</h2>
+
+        <p>
+          You must protect the deposit within 30 days of receiving it. This deadline
+          applies regardless of when the occupation contract actually starts.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-deposit-timeline.svg"
+          alt="Deposit Protection Timeline Wales"
+          caption="The 30-day deadline starts from when you receive the deposit"
+          aspectRatio="video"
+        />
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Best Practice</h4>
+          <p className="text-green-800">
+            Protect deposits as soon as you receive them—don&apos;t wait until close
+            to the deadline. This gives you time to serve the prescribed information
+            and correct any errors.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="prescribed-information" className="scroll-mt-24">Prescribed Information</h2>
+
+        <p>
+          After protecting the deposit, you must give the contract-holder certain
+          &quot;prescribed information&quot; within 30 days. This includes:
+        </p>
+
+        <ul>
+          <li>The amount of the deposit</li>
+          <li>The address of the property</li>
+          <li>Your name and contact details</li>
+          <li>Details of the protection scheme used</li>
+          <li>Information about the scheme&apos;s dispute resolution service</li>
+          <li>Information about what the deposit can be used for</li>
+          <li>The circumstances when deductions may be made</li>
+        </ul>
+
+        <p>
+          The protection schemes provide standard prescribed information documents
+          that you can use. Make sure the contract-holder signs to confirm receipt.
+        </p>
+
+        <h2 id="deposit-disputes" className="scroll-mt-24">Handling Deposit Disputes</h2>
+
+        <p>
+          At the end of the tenancy, you should:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Conduct a thorough check-out inspection</li>
+          <li>Compare the property condition to the inventory</li>
+          <li>Calculate any deductions you wish to make</li>
+          <li>Propose deductions to the contract-holder in writing</li>
+          <li>If agreed, release the deposit accordingly</li>
+          <li>If disputed, use the scheme&apos;s free dispute resolution service</li>
+        </ol>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Free Dispute Resolution</h4>
+          <p className="text-blue-800">
+            All approved schemes offer free alternative dispute resolution (ADR).
+            This is usually quicker and cheaper than court. Either party can request
+            ADR if you cannot agree on deductions.
+          </p>
+        </div>
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <p>
+          Failing to protect a deposit or provide prescribed information has serious
+          consequences:
+        </p>
+
+        <h3>Cannot Serve Section 173 Notice</h3>
+
+        <p>
+          You cannot use the no-fault eviction procedure (Section 173) until you have:
+        </p>
+
+        <ul>
+          <li>Protected the deposit properly</li>
+          <li>Served the prescribed information</li>
+          <li>Returned the deposit (if the tenancy has ended)</li>
+        </ul>
+
+        <h3>Compensation Claims</h3>
+
+        <p>
+          The contract-holder can apply to court for compensation of between 1x and
+          3x the deposit amount if you:
+        </p>
+
+        <ul>
+          <li>Failed to protect the deposit within 30 days</li>
+          <li>Failed to provide prescribed information</li>
+          <li>Provided incorrect prescribed information</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-deposit-penalties.svg"
+          alt="Penalties for Deposit Non-Compliance Wales"
+          caption="Non-compliance can result in compensation of up to 3x the deposit"
+          aspectRatio="video"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need Deposit Documentation?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides inventory templates, check-out forms, and deposit
+            protection guidance for Welsh landlords.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Landlord Templates →
+          </Link>
+        </div>
+
+        <h2 id="deposit-faq" className="scroll-mt-24">Wales Deposit Protection FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to re-protect the deposit if rent increases?</h3>
+            <p className="text-gray-600">
+              No. You only need to protect the deposit once, when you first receive it.
+              If the rent increases later, you don&apos;t need to take a higher deposit
+              or re-protect the existing one.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I inherit tenants with an unprotected deposit?</h3>
+            <p className="text-gray-600">
+              If you buy a property with existing tenants and the previous landlord
+              didn&apos;t protect the deposit, you should protect it immediately. You
+              may still face liability for the previous landlord&apos;s failure.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I keep the deposit if the tenant leaves without notice?</h3>
+            <p className="text-gray-600">
+              You can make deductions for rent arrears and any damage beyond fair wear
+              and tear. However, you cannot simply keep the entire deposit. Any dispute
+              should go through the scheme&apos;s ADR process.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does ADR take?</h3>
+            <p className="text-gray-600">
+              Typically 4-6 weeks from submission to decision. Both parties submit
+              evidence, an adjudicator reviews it, and a binding decision is made.
+              The process is free for both landlords and tenants.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I use a letting agent?</h3>
+            <p className="text-gray-600">
+              Your agent may protect the deposit on your behalf, but you remain
+              responsible as the landlord. Ensure your agent is protecting deposits
+              correctly and providing the prescribed information.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 45: Rent Smart Wales
+  {
+    slug: 'rent-smart-wales',
+    title: 'Rent Smart Wales - Complete Registration Guide 2026',
+    description: 'Everything landlords need to know about Rent Smart Wales registration and licensing. Learn requirements, fees, exemptions, and how to register.',
+    metaDescription: 'Complete guide to Rent Smart Wales registration for landlords. Registration requirements, fees, licensing, and compliance guidance.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1650,
+    category: 'Welsh Law',
+    tags: ['Rent Smart Wales', 'landlord registration', 'Wales', 'licensing', 'landlord compliance'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-rent-smart-wales.svg',
+    heroImageAlt: 'Rent Smart Wales Registration Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'rent smart wales registration',
+    secondaryKeywords: ['rent smart wales landlord', 'wales landlord registration', 'rsw registration', 'rent smart wales license'],
+    tableOfContents: [
+      { id: 'rsw-overview', title: 'What is Rent Smart Wales?', level: 2 },
+      { id: 'who-registers', title: 'Who Must Register?', level: 2 },
+      { id: 'registration-licensing', title: 'Registration vs Licensing', level: 2 },
+      { id: 'how-to-register', title: 'How to Register', level: 2 },
+      { id: 'fees', title: 'Fees and Costs', level: 2 },
+      { id: 'exemptions', title: 'Exemptions', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'rsw-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-standard-occupation-contract', 'wales-renting-homes-act', 'wales-eviction-process'],
+    content: (
+      <>
+        <p className="lead">
+          Rent Smart Wales is the Welsh Government&apos;s landlord registration and
+          licensing scheme. All landlords with rental properties in Wales must register,
+          and anyone carrying out letting or management activities must be licensed.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Mandatory Registration</h4>
+          <p className="text-red-800">
+            Operating without registration is a criminal offence. Unregistered landlords
+            cannot serve valid eviction notices and face fines of up to £150,000.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-rsw-overview.svg"
+          alt="Rent Smart Wales Overview"
+          caption="Rent Smart Wales has been mandatory since November 2016"
+          aspectRatio="video"
+        />
+
+        <h2 id="rsw-overview" className="scroll-mt-24">What is Rent Smart Wales?</h2>
+
+        <p>
+          Rent Smart Wales (RSW) is a national registration and licensing scheme for
+          private sector landlords and letting agents in Wales. It was introduced under
+          the Housing (Wales) Act 2014 and has been mandatory since 23 November 2016.
+        </p>
+
+        <p>The scheme aims to:</p>
+
+        <ul>
+          <li>Improve standards in the private rented sector</li>
+          <li>Ensure landlords and agents understand their legal obligations</li>
+          <li>Provide a public register of compliant landlords</li>
+          <li>Give local authorities powers to enforce housing standards</li>
+        </ul>
+
+        <h2 id="who-registers" className="scroll-mt-24">Who Must Register?</h2>
+
+        <p>
+          You must register with Rent Smart Wales if you are a landlord of residential
+          property in Wales. This applies whether you:
+        </p>
+
+        <ul>
+          <li>Own one property or multiple properties</li>
+          <li>Live in Wales or elsewhere (including overseas)</li>
+          <li>Let through an agent or manage yourself</li>
+          <li>Have properties in multiple local authority areas</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">One Registration Covers All</h4>
+          <p className="text-blue-800">
+            You only need one registration for all your Welsh properties, regardless
+            of how many you own or where in Wales they are located.
+          </p>
+        </div>
+
+        <h2 id="registration-licensing" className="scroll-mt-24">Registration vs Licensing</h2>
+
+        <p>
+          Rent Smart Wales has two components: registration and licensing. They are
+          different requirements:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requirement</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Who Needs It?</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">What It Involves</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Registration</td>
+                <td className="px-6 py-4 text-sm text-gray-600">All landlords</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Provide personal and property details</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Licensing</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Anyone doing letting/management activities</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Training and assessment</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>When Do You Need a Licence?</h3>
+
+        <p>
+          You need a licence if you carry out &quot;letting activities&quot; or
+          &quot;management activities.&quot; This includes:
+        </p>
+
+        <ul>
+          <li>Advertising properties for rent</li>
+          <li>Arranging viewings</li>
+          <li>Processing applications</li>
+          <li>Collecting rent</li>
+          <li>Arranging repairs and maintenance</li>
+          <li>Dealing with tenant queries</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-rsw-license-activities.svg"
+          alt="Rent Smart Wales Licensed Activities"
+          caption="Any hands-on landlord activities require a licence"
+          aspectRatio="video"
+        />
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Using a Licensed Agent</h4>
+          <p className="text-green-800">
+            If you use a fully licensed letting agent to handle all letting and
+            management activities, you only need to register—not get a licence yourself.
+            Ensure your agent is licensed with RSW.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="how-to-register" className="scroll-mt-24">How to Register</h2>
+
+        <p>
+          Registration is done online through the Rent Smart Wales website. The process
+          involves:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Create an account on the RSW website</li>
+          <li>Provide your personal details (name, address, contact information)</li>
+          <li>Add details of each rental property</li>
+          <li>Pay the registration fee</li>
+          <li>Receive your registration number</li>
+        </ol>
+
+        <h3>Getting a Licence</h3>
+
+        <p>If you also need a licence, you must:</p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Complete approved training (online or classroom)</li>
+          <li>Pass the assessment</li>
+          <li>Apply for your licence through RSW</li>
+          <li>Pay the licence fee</li>
+        </ol>
+
+        <p>
+          Training covers landlord and tenant law, property standards, tenancy management,
+          and other essential topics. It typically takes around 10 hours to complete.
+        </p>
+
+        <h2 id="fees" className="scroll-mt-24">Fees and Costs</h2>
+
+        <p>
+          Rent Smart Wales fees are set by regulation. Current fees are:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fee Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Validity</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Landlord Registration</td>
+                <td className="px-6 py-4 text-sm text-gray-600">£10.50</td>
+                <td className="px-6 py-4 text-sm text-gray-600">5 years</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Landlord Licence</td>
+                <td className="px-6 py-4 text-sm text-gray-600">£181.00</td>
+                <td className="px-6 py-4 text-sm text-gray-600">5 years</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">Agent Licence</td>
+                <td className="px-6 py-4 text-sm text-gray-600">£181.00</td>
+                <td className="px-6 py-4 text-sm text-gray-600">5 years</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Training costs are separate and vary depending on the provider. Budget around
+          £100-£200 for approved training courses.
+        </p>
+
+        <h2 id="exemptions" className="scroll-mt-24">Exemptions</h2>
+
+        <p>
+          Some landlords are exempt from Rent Smart Wales registration:
+        </p>
+
+        <ul>
+          <li>Local authorities and registered social landlords</li>
+          <li>Universities and colleges (for student accommodation)</li>
+          <li>Hostels and refuges</li>
+          <li>Care homes and supported living (regulated by Care Inspectorate Wales)</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Private Landlords: No Exemptions</h4>
+          <p className="text-amber-800">
+            There are no exemptions for private landlords based on the number of
+            properties, rental income, or personal circumstances. Even if you only
+            have one property let occasionally, you must register.
+          </p>
+        </div>
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <p>
+          Operating without Rent Smart Wales registration or licensing is a criminal
+          offence with serious penalties:
+        </p>
+
+        <h3>Criminal Penalties</h3>
+
+        <ul>
+          <li><strong>Fixed Penalty Notice:</strong> Up to £250</li>
+          <li><strong>Prosecution fine:</strong> Up to £150,000 (unlimited for repeated offences)</li>
+        </ul>
+
+        <h3>Civil Consequences</h3>
+
+        <ul>
+          <li><strong>Cannot serve eviction notices:</strong> Section 173 notices are invalid if you&apos;re not registered</li>
+          <li><strong>Rent Repayment Orders:</strong> Tenants can claim back up to 12 months&apos; rent</li>
+          <li><strong>Rent Stopping Orders:</strong> Local authorities can order tenants to stop paying rent</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-rsw-penalties.svg"
+          alt="Rent Smart Wales Penalties"
+          caption="Non-compliance can result in significant fines and loss of rent"
+          aspectRatio="video"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need Help with Compliance?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides compliance checklists and guidance for Welsh
+            landlords to ensure you meet all Rent Smart Wales requirements.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Compliance Products →
+          </Link>
+        </div>
+
+        <h2 id="rsw-faq" className="scroll-mt-24">Rent Smart Wales FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">I live in England but own a property in Wales - do I need to register?</h3>
+            <p className="text-gray-600">
+              Yes. If you own a rental property in Wales, you must register with Rent
+              Smart Wales regardless of where you personally live. Your location is
+              irrelevant; it&apos;s where the property is that matters.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">My registration expired - can I still serve eviction notices?</h3>
+            <p className="text-gray-600">
+              No. You must be currently registered to serve a valid Section 173 or
+              Section 181 notice. Renew your registration immediately if it has expired.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I get a refund if I sell my property?</h3>
+            <p className="text-gray-600">
+              No. The fees are non-refundable. However, your registration remains valid
+              for 5 years, so if you acquire another Welsh property within that time,
+              you won&apos;t need to re-register.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to update my registration if I buy more properties?</h3>
+            <p className="text-gray-600">
+              Yes. You should add new properties to your registration within 28 days
+              of acquiring them. There&apos;s no additional fee for adding properties.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is my registration number public?</h3>
+            <p className="text-gray-600">
+              Yes. There is a public register where tenants and others can check whether
+              a landlord is registered. This is searchable by landlord name or registration
+              number.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 46: Wales HMO Licensing
+  {
+    slug: 'wales-hmo-licensing',
+    title: 'HMO Licensing Wales - Complete Landlord Guide 2026',
+    description: 'Complete guide to HMO licensing in Wales. Learn about mandatory licensing, additional licensing schemes, standards, and compliance requirements.',
+    metaDescription: 'Complete guide to HMO licensing in Wales. Mandatory and additional licensing, standards, safety requirements, and how to apply.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Welsh Law',
+    tags: ['HMO', 'Wales', 'licensing', 'house in multiple occupation', 'landlord compliance'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-hmo.svg',
+    heroImageAlt: 'Wales HMO Licensing Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'hmo licensing wales',
+    secondaryKeywords: ['hmo licence wales', 'wales hmo requirements', 'house multiple occupation wales', 'hmo standards wales'],
+    tableOfContents: [
+      { id: 'hmo-definition', title: 'What is an HMO?', level: 2 },
+      { id: 'mandatory-licensing', title: 'Mandatory HMO Licensing', level: 2 },
+      { id: 'additional-licensing', title: 'Additional Licensing Schemes', level: 2 },
+      { id: 'hmo-standards', title: 'HMO Standards and Requirements', level: 2 },
+      { id: 'application-process', title: 'How to Apply', level: 2 },
+      { id: 'hmo-management', title: 'HMO Management Regulations', level: 2 },
+      { id: 'hmo-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-standard-occupation-contract', 'rent-smart-wales', 'wales-eviction-process'],
+    content: (
+      <>
+        <p className="lead">
+          Houses in Multiple Occupation (HMOs) in Wales face additional licensing and
+          standards requirements beyond standard rental properties. This guide explains
+          everything HMO landlords need to know about licensing in Wales.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Multiple Requirements Apply</h4>
+          <p className="text-amber-800">
+            HMO landlords in Wales must comply with HMO licensing, Rent Smart Wales
+            registration, and the Renting Homes (Wales) Act. All three sets of
+            requirements apply simultaneously.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-hmo-overview.svg"
+          alt="Wales HMO Licensing Overview"
+          caption="HMOs face stricter regulation due to higher occupancy and shared facilities"
+          aspectRatio="video"
+        />
+
+        <h2 id="hmo-definition" className="scroll-mt-24">What is an HMO?</h2>
+
+        <p>
+          A property is an HMO if it meets certain criteria relating to shared facilities
+          and multiple households. In Wales, a property is an HMO if:
+        </p>
+
+        <ul>
+          <li>It is occupied by 3 or more people forming 2 or more households</li>
+          <li>They share one or more basic amenity (bathroom, toilet, or cooking facilities)</li>
+          <li>It is their only or main residence</li>
+          <li>Rent is paid (or there is another form of consideration)</li>
+        </ul>
+
+        <h3>What Counts as a Household?</h3>
+
+        <p>A household is generally:</p>
+
+        <ul>
+          <li>A single person</li>
+          <li>A couple (married, civil partners, or cohabiting)</li>
+          <li>A family with children</li>
+          <li>Related people living together</li>
+        </ul>
+
+        <p>
+          Three unrelated friends sharing a house would be three separate households,
+          making the property an HMO.
+        </p>
+
+        <h2 id="mandatory-licensing" className="scroll-mt-24">Mandatory HMO Licensing</h2>
+
+        <p>
+          Mandatory HMO licensing applies across all of Wales. You must have a licence
+          if your property:
+        </p>
+
+        <ul>
+          <li>Is occupied by 5 or more people</li>
+          <li>Forming 2 or more households</li>
+          <li>Has shared facilities</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">No Storey Requirement</h4>
+          <p className="text-blue-800">
+            Unlike the previous rules, there is no longer a requirement that the property
+            be three or more storeys. All HMOs with 5+ occupants need a licence regardless
+            of building height.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-hmo-mandatory.svg"
+          alt="Mandatory HMO Licensing Criteria Wales"
+          caption="The 5+ person threshold triggers mandatory licensing"
+          aspectRatio="video"
+        />
+
+        <h2 id="additional-licensing" className="scroll-mt-24">Additional Licensing Schemes</h2>
+
+        <p>
+          Local authorities in Wales can introduce additional licensing schemes that
+          require smaller HMOs to be licensed. These schemes vary by area.
+        </p>
+
+        <p>
+          Additional licensing might require a licence for:
+        </p>
+
+        <ul>
+          <li>All HMOs with 3+ occupants in certain areas</li>
+          <li>Specific property types (e.g., converted buildings)</li>
+          <li>Properties in designated areas with housing problems</li>
+        </ul>
+
+        <p>
+          Check with your local authority to see if additional licensing applies to
+          your property. Areas with high student populations often have additional
+          licensing schemes.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="hmo-standards" className="scroll-mt-24">HMO Standards and Requirements</h2>
+
+        <p>
+          HMOs must meet specific standards beyond normal rental properties:
+        </p>
+
+        <h3>Fire Safety</h3>
+
+        <ul>
+          <li>Fire doors on all rooms opening onto escape routes</li>
+          <li>Fire detection systems (often Grade A or higher)</li>
+          <li>Emergency lighting on escape routes</li>
+          <li>Fire blankets in kitchens</li>
+          <li>Fire extinguishers in communal areas</li>
+          <li>Clearly marked escape routes</li>
+        </ul>
+
+        <h3>Kitchen Facilities</h3>
+
+        <p>
+          Kitchen facilities must be adequate for the number of occupants:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Persons Sharing</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cooking Rings</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Oven/Grills</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sinks</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">1-5</td>
+                <td className="px-6 py-4 text-sm text-gray-600">4</td>
+                <td className="px-6 py-4 text-sm text-gray-600">1</td>
+                <td className="px-6 py-4 text-sm text-gray-600">1</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">6-10</td>
+                <td className="px-6 py-4 text-sm text-gray-600">6</td>
+                <td className="px-6 py-4 text-sm text-gray-600">2</td>
+                <td className="px-6 py-4 text-sm text-gray-600">2</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-900">11+</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Additional per 5 persons</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Additional per 5 persons</td>
+                <td className="px-6 py-4 text-sm text-gray-600">Additional per 5 persons</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Bathroom Facilities</h3>
+
+        <ul>
+          <li>1 bathroom per 5 people (including toilet, bath/shower, and basin)</li>
+          <li>1 separate WC per 5 people if not en-suite</li>
+          <li>Hot and cold running water</li>
+          <li>Adequate ventilation</li>
+        </ul>
+
+        <h3>Room Sizes</h3>
+
+        <p>Minimum bedroom sizes apply:</p>
+
+        <ul>
+          <li><strong>Single room:</strong> 6.51 square metres</li>
+          <li><strong>Double room (2 persons):</strong> 10.22 square metres</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-hmo-standards.svg"
+          alt="HMO Standards and Requirements Wales"
+          caption="HMOs must meet specific standards for fire safety, facilities, and room sizes"
+          aspectRatio="video"
+        />
+
+        <h2 id="application-process" className="scroll-mt-24">How to Apply</h2>
+
+        <p>
+          HMO licence applications are made to your local authority housing team.
+          The process typically involves:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Complete the application form with property and landlord details</li>
+          <li>Provide floor plans showing room sizes and facilities</li>
+          <li>Submit evidence of fire safety measures</li>
+          <li>Provide gas and electrical safety certificates</li>
+          <li>Pay the application fee</li>
+          <li>Await inspection (the council may visit the property)</li>
+          <li>Receive your licence with any conditions</li>
+        </ol>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Licence Duration</h4>
+          <p className="text-green-800">
+            HMO licences in Wales are typically granted for 5 years. You&apos;ll need
+            to renew before expiry to continue letting the property as an HMO.
+          </p>
+        </div>
+
+        <h3>Fees</h3>
+
+        <p>
+          HMO licence fees vary by local authority. Typical fees range from £500 to
+          £1,500 for a 5-year licence. Check with your local council for exact fees.
+        </p>
+
+        <h2 id="hmo-management" className="scroll-mt-24">HMO Management Regulations</h2>
+
+        <p>
+          As an HMO landlord, you must comply with the Management of Houses in Multiple
+          Occupation (Wales) Regulations. Key requirements include:
+        </p>
+
+        <ul>
+          <li>Provide your name, address, and contact number to occupants</li>
+          <li>Maintain all means of escape from fire</li>
+          <li>Keep fire-fighting equipment in working order</li>
+          <li>Maintain the water supply and drainage</li>
+          <li>Maintain electricity and gas supply safely</li>
+          <li>Keep common areas clean and in good repair</li>
+          <li>Keep the property free from pests</li>
+          <li>Provide adequate rubbish disposal facilities</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">HMO Compliance Help</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides HMO checklists, fire safety guidance, and compliance
+            templates for Welsh HMO landlords.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View HMO Products →
+          </Link>
+        </div>
+
+        <h2 id="hmo-faq" className="scroll-mt-24">Wales HMO FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need planning permission for an HMO?</h3>
+            <p className="text-gray-600">
+              Possibly. In some areas, a change of use from C3 (dwelling) to C4 (small HMO)
+              or Sui Generis (large HMO) requires planning permission. Check with your
+              local planning department, especially in Article 4 direction areas.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What happens if I let an unlicensed HMO?</h3>
+            <p className="text-gray-600">
+              You can be prosecuted and fined up to £30,000 per offence. Additionally,
+              tenants can apply for a Rent Repayment Order to recover up to 12 months&apos;
+              rent. You cannot evict tenants using Section 173 until the HMO is licensed.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need separate occupation contracts for each room?</h3>
+            <p className="text-gray-600">
+              Yes. Under the Renting Homes (Wales) Act, each contract-holder needs their
+              own written statement of occupation contract. You should issue individual
+              contracts even if tenants share common areas.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can the council impose conditions on my licence?</h3>
+            <p className="text-gray-600">
+              Yes. Licences often come with conditions such as maximum occupancy numbers,
+              requirements for specific safety measures, or management standards. Breaching
+              conditions is an offence.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about Rent Smart Wales?</h3>
+            <p className="text-gray-600">
+              HMO landlords must still register with Rent Smart Wales AND obtain a
+              licence if they manage the property themselves. The HMO licence and
+              RSW licence are separate requirements.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
