@@ -10,7 +10,7 @@
 
 | Batch | Articles | Status | Date Completed |
 |-------|----------|--------|----------------|
-| Batch 1 | 1-20 | IN PROGRESS (10/20 complete) | - |
+| Batch 1 | 1-20 | IN PROGRESS (12/20 complete) | - |
 | Batch 2 | 21-40 | NOT STARTED | - |
 | Batch 3 | 41-60 | NOT STARTED | - |
 | Batch 4 | 61-80 | NOT STARTED | - |
@@ -40,8 +40,8 @@ Continue the blog content expansion plan. Read /home/user/landlord-heavenv3/docs
 | 8 | england-section-8-ground-14 | Section 8 Ground 14 - Antisocial Behaviour Eviction | Grounds | Notice Only | COMPLETE |
 | 9 | england-section-8-ground-17 | Section 8 Ground 17 - False Statement by Tenant | Grounds | Notice Only | COMPLETE |
 | 10 | england-section-8-ground-1 | Section 8 Ground 1 - Landlord Returning to Property | Grounds | Notice Only | COMPLETE |
-| 11 | england-section-8-ground-2 | Section 8 Ground 2 - Mortgage Lender Repossession | Grounds | Notice Only | NOT STARTED |
-| 12 | england-section-8-ground-7 | Section 8 Ground 7 - Death of Tenant | Grounds | Notice Only | NOT STARTED |
+| 11 | england-section-8-ground-2 | Section 8 Ground 2 - Mortgage Lender Repossession | Grounds | Notice Only | COMPLETE |
+| 12 | england-section-8-ground-7 | Section 8 Ground 7 - Death of Tenant | Grounds | Notice Only | COMPLETE |
 | 13 | england-section-8-ground-12 | Section 8 Ground 12 - Breach of Tenancy Terms | Grounds | Notice Only | NOT STARTED |
 | 14 | england-possession-hearing | What Happens at a Possession Hearing - England | Eviction | Complete Pack | NOT STARTED |
 | 15 | england-bailiff-eviction | Bailiff Eviction Day - What to Expect (England) | Eviction | Complete Pack | NOT STARTED |

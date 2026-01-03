@@ -6632,6 +6632,639 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+  // ============================================
+  // POST 16: Section 8 Ground 2 - Mortgage Lender
+  // Target: 1,500+ words - Lender repossession ground
+  // ============================================
+  {
+    slug: 'england-section-8-ground-2',
+    title: 'Section 8 Ground 2 - Mortgage Lender Repossession (England Guide)',
+    description: 'Ground 2 allows mortgage lenders to recover a property from tenants when the landlord defaults. Learn how this ground works and what it means for landlords and tenants.',
+    metaDescription: 'Section 8 Ground 2 mortgage lender repossession explained. What happens when landlords default on mortgages. Guide for England landlords and affected tenants.',
+    date: '2026-01-03',
+    updatedDate: '2026-01-03',
+    readTime: '10 min read',
+    wordCount: 1520,
+    category: 'Eviction Grounds',
+    tags: ['Ground 2', 'Section 8', 'Mortgage Lender', 'Repossession', 'Eviction'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-2.svg',
+    heroImageAlt: 'Section 8 Ground 2 - Mortgage Lender Repossession',
+    showUrgencyBanner: false,
+    targetKeyword: 'section 8 ground 2 mortgage lender',
+    secondaryKeywords: ['mortgage repossession tenant', 'lender possession', 'buy to let mortgage default', 'tenant rights repossession'],
+    tableOfContents: [
+      { id: 'what-is-ground-2', title: 'What Is Ground 2?', level: 2 },
+      { id: 'how-it-works', title: 'How Ground 2 Works', level: 2 },
+      { id: 'prior-notice-requirement', title: 'Prior Notice Requirement', level: 2 },
+      { id: 'tenant-rights', title: 'Tenant Rights', level: 2 },
+      { id: 'landlord-considerations', title: 'Landlord Considerations', level: 2 },
+      { id: 'ground-2-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-section-8-ground-1', 'england-section-8-process', 'england-standard-possession'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          <strong>Ground 2</strong> is a mandatory ground that allows mortgage lenders to recover possession
+          of a property when the landlord has defaulted on their mortgage. This ground primarily affects tenants
+          who find themselves living in a property that the lender is repossessing, but landlords should understand
+          it to manage their obligations and protect their tenants.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-blue-800 text-lg mb-2">Lender Ground</p>
+          <p className="text-blue-700">
+            Unlike most Section 8 grounds, Ground 2 is typically used by <strong>mortgage lenders</strong>,
+            not landlords. It allows lenders to remove tenants when taking possession of a mortgaged property.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ground-2-overview.svg"
+          alt="Ground 2 Mortgage Lender Repossession"
+          caption="Ground 2 enables lenders to recover properties when landlords default"
+          aspectRatio="hero"
+        />
+
+        <h2 id="what-is-ground-2" className="scroll-mt-24">What Is Ground 2?</h2>
+
+        <p>
+          Ground 2 is set out in Schedule 2, Part I of the Housing Act 1988. It applies where:
+        </p>
+
+        <blockquote className="border-l-4 border-purple-500 pl-4 my-6 italic text-gray-700">
+          &quot;The dwelling-house is subject to a mortgage granted before the beginning of the tenancy and—
+          (a) the mortgagee is entitled to exercise a power of sale... and (b) the mortgagee requires
+          possession of the dwelling-house for the purpose of disposing of it with vacant possession.&quot;
+        </blockquote>
+
+        <h3>Key Elements</h3>
+        <ul>
+          <li><strong>Mortgage existed first:</strong> The mortgage was in place before the tenancy started</li>
+          <li><strong>Power of sale:</strong> The lender has the legal right to sell (usually after default)</li>
+          <li><strong>Vacant possession needed:</strong> The lender needs the property empty to sell it</li>
+        </ul>
+
+        <h3>Ground Details</h3>
+        <ul>
+          <li><strong>Type:</strong> Mandatory (court must grant possession if conditions met)</li>
+          <li><strong>Prior notice:</strong> Required before tenancy started (usually)</li>
+          <li><strong>Notice period:</strong> 2 months on Section 8 notice</li>
+          <li><strong>Who uses it:</strong> Mortgage lenders, not landlords</li>
+        </ul>
+
+        <h2 id="how-it-works" className="scroll-mt-24">How Ground 2 Works</h2>
+
+        <p>
+          Here&apos;s the typical sequence of events:
+        </p>
+
+        <h3>1. Landlord Defaults on Mortgage</h3>
+        <p>
+          The landlord stops paying their mortgage. After a period of missed payments, the lender starts
+          possession proceedings against the landlord.
+        </p>
+
+        <h3>2. Lender Obtains Possession</h3>
+        <p>
+          The lender gets a possession order against the landlord under the mortgage terms. However, this
+          doesn&apos;t automatically give them rights against the tenant.
+        </p>
+
+        <h3>3. Lender Serves Section 8 Notice</h3>
+        <p>
+          To remove the tenant, the lender must serve a Section 8 notice specifying Ground 2. This requires
+          2 months&apos; notice.
+        </p>
+
+        <h3>4. Court Proceedings</h3>
+        <p>
+          If the tenant doesn&apos;t leave, the lender issues possession proceedings. If Ground 2 conditions
+          are met, the court must grant possession.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-amber-800 text-lg mb-2">Binding Tenancy?</p>
+          <p className="text-amber-700">
+            If the lender consented to the letting (giving permission for the tenancy), the tenancy may be
+            &quot;binding&quot; on them. In that case, Ground 2 may not apply and the lender might have to
+            honour the tenancy terms. Always check whether lender consent was obtained.
+          </p>
+        </div>
+
+        <h2 id="prior-notice-requirement" className="scroll-mt-24">Prior Notice Requirement</h2>
+
+        <p>
+          Like Ground 1, Ground 2 requires prior notice to the tenant:
+        </p>
+
+        <h3>What Notice Is Required</h3>
+        <p>
+          Before the tenancy began, the tenant must have been given written notice that:
+        </p>
+        <ul>
+          <li>The property is subject to a mortgage</li>
+          <li>Possession might be recovered under Ground 2</li>
+        </ul>
+
+        <h3>Who Gives the Notice</h3>
+        <p>
+          This notice should come from the landlord at the start of the tenancy. It&apos;s part of good
+          practice to include it in the tenancy agreement or as a separate document.
+        </p>
+
+        <h3>If No Prior Notice Was Given</h3>
+        <p>
+          The court has discretion to waive the prior notice requirement if it&apos;s &quot;just and equitable&quot;
+          to do so. Factors considered include:
+        </p>
+        <ul>
+          <li>Whether the tenant knew the property was mortgaged</li>
+          <li>Whether the lender consented to the tenancy</li>
+          <li>The circumstances of the landlord&apos;s default</li>
+        </ul>
+
+        <BlogCTA variant="primary" />
+
+        <h2 id="tenant-rights" className="scroll-mt-24">Tenant Rights</h2>
+
+        <p>
+          Tenants caught in Ground 2 situations have some protections:
+        </p>
+
+        <h3>Right to 2 Months&apos; Notice</h3>
+        <p>
+          Even when Ground 2 applies, the tenant is entitled to at least 2 months&apos; notice on the
+          Section 8 notice. They can&apos;t be immediately evicted.
+        </p>
+
+        <h3>Right to Court Process</h3>
+        <p>
+          The lender must go through proper court proceedings. The tenant has the right to:
+        </p>
+        <ul>
+          <li>Receive the court claim</li>
+          <li>Attend the hearing</li>
+          <li>Challenge whether the conditions are met</li>
+          <li>Request time to find alternative accommodation (usually 14-42 days)</li>
+        </ul>
+
+        <h3>Potential Defences</h3>
+        <p>
+          Tenants may be able to challenge Ground 2 if:
+        </p>
+        <ul>
+          <li>The lender consented to the tenancy (making it binding)</li>
+          <li>Prior notice wasn&apos;t given and it&apos;s not just and equitable to waive it</li>
+          <li>The tenancy actually started before the mortgage</li>
+          <li>Technical defects in the notice or proceedings</li>
+        </ul>
+
+        <h3>Deposit Protection</h3>
+        <p>
+          If the tenant paid a deposit, they should ensure they can recover it. If the landlord has
+          disappeared, the deposit scheme should still have the funds protected.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tenant-rights.svg"
+          alt="Tenant Rights Under Ground 2"
+          caption="Tenants have rights to proper notice and court process"
+        />
+
+        <h2 id="landlord-considerations" className="scroll-mt-24">Landlord Considerations</h2>
+
+        <p>
+          If you&apos;re a landlord, understanding Ground 2 helps you:
+        </p>
+
+        <h3>Protect Your Tenants</h3>
+        <ul>
+          <li><strong>Give prior notice:</strong> Always inform tenants that the property is mortgaged</li>
+          <li><strong>Get lender consent:</strong> If required by your mortgage, get written consent to let</li>
+          <li><strong>Communicate:</strong> If you&apos;re in financial difficulty, talk to your lender early</li>
+        </ul>
+
+        <h3>Buy-to-Let Mortgages</h3>
+        <p>
+          Most buy-to-let mortgages expect you to let the property. However, if you default, the lender can
+          still use Ground 2 to remove tenants. The mortgage agreement usually covers this.
+        </p>
+
+        <h3>Consent to Let</h3>
+        <p>
+          If you have a residential mortgage and are letting the property (perhaps temporarily), you must
+          get &quot;consent to let&quot; from your lender. Without this:
+        </p>
+        <ul>
+          <li>You may be breaching your mortgage terms</li>
+          <li>The lender may not be bound by the tenancy</li>
+          <li>Ground 2 may more easily apply</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-blue-800 text-lg mb-2">Staying Ahead</p>
+          <p className="text-blue-700">
+            If you&apos;re struggling with mortgage payments, contact your lender immediately. Many have
+            forbearance options. Letting the situation reach repossession hurts everyone—you, your tenant,
+            and your credit record.
+          </p>
+        </div>
+
+        <h2 id="ground-2-faq" className="scroll-mt-24">Ground 2 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I as a landlord use Ground 2?</h3>
+            <p className="text-gray-600">
+              No. Ground 2 is specifically for mortgagees (lenders), not landlords. If you want to recover
+              your property, use other grounds like Ground 1, Ground 8, or Section 21 (while available).
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the lender agreed to the tenancy?</h3>
+            <p className="text-gray-600">
+              If the lender gave written consent to the tenancy, they may be bound by its terms. In this case,
+              Ground 2 might not apply until the tenancy ends naturally, or they may need to use other grounds.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">As a tenant, will I get my deposit back?</h3>
+            <p className="text-gray-600">
+              Your deposit should be protected in a government-approved scheme. Contact the scheme directly
+              to claim it back. The landlord&apos;s financial problems shouldn&apos;t affect protected deposits.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim rent back if evicted under Ground 2?</h3>
+            <p className="text-gray-600">
+              Unfortunately, rent paid to the landlord is usually gone. You may have a claim against the
+              landlord for breach of contract or misrepresentation, but if they&apos;re in financial difficulty,
+              recovery may be impractical.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Does the 2-month notice apply?</h3>
+            <p className="text-gray-600">
+              Yes. Even under Ground 2, the Section 8 notice must give at least 2 months&apos; notice. The
+              tenant has this time to find alternative accommodation.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What happens to my belongings?</h3>
+            <p className="text-gray-600">
+              You should remove all belongings before the eviction date. If anything is left, the lender
+              must follow proper procedures under the Torts Act to store and eventually dispose of items.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Understand Your Eviction Rights</h3>
+          <p className="text-gray-700 mb-6">
+            Whether you&apos;re a landlord managing compliance or a tenant facing eviction, understanding
+            the grounds for possession is essential. Our guides cover all Section 8 grounds in detail.
+          </p>
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            Browse Our Guides →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+  // ============================================
+  // POST 17: Section 8 Ground 7 - Death of Tenant
+  // Target: 1,500+ words - Deceased tenant eviction
+  // ============================================
+  {
+    slug: 'england-section-8-ground-7',
+    title: 'Section 8 Ground 7 - Death of Tenant (England Guide)',
+    description: 'Ground 7 allows possession when the original tenant has died and proceedings are brought within 12 months. Learn succession rights, timing, and the court process.',
+    metaDescription: 'Section 8 Ground 7 death of tenant explained. Regain possession after a tenant dies. Succession rights, 12-month time limit, and step-by-step guide for England.',
+    date: '2026-01-03',
+    updatedDate: '2026-01-03',
+    readTime: '10 min read',
+    wordCount: 1500,
+    category: 'Eviction Grounds',
+    tags: ['Ground 7', 'Section 8', 'Death of Tenant', 'Succession', 'Eviction'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-7.svg',
+    heroImageAlt: 'Section 8 Ground 7 - Death of Tenant',
+    showUrgencyBanner: false,
+    targetKeyword: 'section 8 ground 7 death tenant',
+    secondaryKeywords: ['tenant died eviction', 'succession rights tenancy', 'deceased tenant', 'inherit tenancy'],
+    tableOfContents: [
+      { id: 'what-is-ground-7', title: 'What Is Ground 7?', level: 2 },
+      { id: 'succession-rights', title: 'Understanding Succession Rights', level: 2 },
+      { id: 'time-limit', title: 'The 12-Month Time Limit', level: 2 },
+      { id: 'using-ground-7', title: 'Using Ground 7', level: 2 },
+      { id: 'practical-steps', title: 'Practical Steps After a Death', level: 2 },
+      { id: 'ground-7-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-section-8-process', 'england-assured-shorthold-tenancy-guide', 'england-standard-possession'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          <strong>Ground 7</strong> is a discretionary ground that applies when the sole tenant under an assured
+          tenancy has died and no one has succeeded to the tenancy. It allows landlords to regain possession
+          from whoever is occupying the property, but only if proceedings are brought within 12 months of the
+          tenant&apos;s death (or within 12 months of the court accepting that death occurred).
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-blue-800 text-lg mb-2">Sensitive Situation</p>
+          <p className="text-blue-700">
+            The death of a tenant is a sensitive matter. While landlords need to manage their properties,
+            handling these situations with compassion is important. The law provides a reasonable process
+            that respects both property rights and human circumstances.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ground-7-overview.svg"
+          alt="Ground 7 Death of Tenant Overview"
+          caption="Ground 7 applies when the tenant has died and no succession has occurred"
+          aspectRatio="hero"
+        />
+
+        <h2 id="what-is-ground-7" className="scroll-mt-24">What Is Ground 7?</h2>
+
+        <p>
+          Ground 7 is set out in Schedule 2, Part II of the Housing Act 1988. It applies where:
+        </p>
+
+        <blockquote className="border-l-4 border-purple-500 pl-4 my-6 italic text-gray-700">
+          &quot;The tenancy is a periodic tenancy (including a statutory periodic tenancy) which has
+          devolved under the will or intestacy of the former tenant and the proceedings for the recovery
+          of possession are begun not later than twelve months after the death of the former tenant...&quot;
+        </blockquote>
+
+        <h3>Key Elements</h3>
+        <ul>
+          <li><strong>Periodic tenancy:</strong> Ground 7 applies to periodic tenancies (including ASTs that became periodic)</li>
+          <li><strong>Devolution:</strong> The tenancy passed to someone through will or intestacy</li>
+          <li><strong>No succession:</strong> The new occupier didn&apos;t succeed to the tenancy under the Housing Act</li>
+          <li><strong>12-month limit:</strong> Proceedings must start within 12 months of death</li>
+        </ul>
+
+        <h3>Ground Details</h3>
+        <ul>
+          <li><strong>Type:</strong> Discretionary (court considers reasonableness)</li>
+          <li><strong>Notice period:</strong> 2 months minimum</li>
+          <li><strong>Applies to:</strong> Periodic tenancies only</li>
+        </ul>
+
+        <h2 id="succession-rights" className="scroll-mt-24">Understanding Succession Rights</h2>
+
+        <p>
+          Before using Ground 7, understand whether someone has <strong>succeeded</strong> to the tenancy
+          under the Housing Act 1988:
+        </p>
+
+        <h3>Who Can Succeed?</h3>
+        <p>
+          Under an assured tenancy (including AST), the tenant&apos;s spouse or civil partner can succeed
+          if they were occupying the property as their only or principal home immediately before the
+          tenant&apos;s death.
+        </p>
+
+        <h3>Only One Succession</h3>
+        <p>
+          Only one succession is allowed under the Housing Act 1988. If the deceased tenant was already
+          a successor (inherited the tenancy from someone else), no further succession can occur.
+        </p>
+
+        <h3>Cohabitees and Family</h3>
+        <p>
+          Unlike Rent Act tenancies, there is no automatic succession right for cohabitees or family
+          members under assured tenancies. However, the tenancy may pass to them through the will or
+          intestacy—but this is <strong>devolution</strong>, not succession, and Ground 7 can apply.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-amber-800 text-lg mb-2">Succession vs. Devolution</p>
+          <p className="text-amber-700">
+            <strong>Succession</strong> gives the new tenant full rights under the Housing Act—Ground 7
+            doesn&apos;t apply. <strong>Devolution</strong> (through will or intestacy) passes the tenancy
+            but without the same protections—Ground 7 can apply.
+          </p>
+        </div>
+
+        <h2 id="time-limit" className="scroll-mt-24">The 12-Month Time Limit</h2>
+
+        <p>
+          Ground 7 has a strict 12-month time limit:
+        </p>
+
+        <h3>When Does the Clock Start?</h3>
+        <p>
+          The 12-month period begins from:
+        </p>
+        <ul>
+          <li>The date of the tenant&apos;s death, OR</li>
+          <li>If later, the date the court accepts that the tenant died (where death date is uncertain)</li>
+        </ul>
+
+        <h3>What Must Happen Within 12 Months?</h3>
+        <p>
+          You must <strong>begin proceedings</strong> within 12 months—this means issuing the court claim,
+          not just serving notice. Work backwards:
+        </p>
+        <ul>
+          <li>Issue court claim within 12 months of death</li>
+          <li>Serve Section 8 notice at least 2 months before issuing claim</li>
+          <li>Investigate succession rights before serving notice</li>
+        </ul>
+
+        <h3>What If You Miss the Deadline?</h3>
+        <p>
+          If 12 months pass without proceedings, Ground 7 is no longer available. You may still have other
+          options:
+        </p>
+        <ul>
+          <li>Section 21 notice (if still available before May 2026)</li>
+          <li>Other Section 8 grounds if applicable (e.g., rent arrears)</li>
+        </ul>
+
+        <BlogCTA variant="primary" />
+
+        <h2 id="using-ground-7" className="scroll-mt-24">Using Ground 7</h2>
+
+        <h3>Step 1: Confirm No Succession</h3>
+        <p>
+          Establish whether anyone has succeeded to the tenancy under the Housing Act. Ask:
+        </p>
+        <ul>
+          <li>Was the deceased tenant married or in a civil partnership?</li>
+          <li>Did the spouse/civil partner live there as their main home?</li>
+          <li>Was this already a succession?</li>
+        </ul>
+
+        <h3>Step 2: Identify Current Occupiers</h3>
+        <p>
+          Find out who is living in the property and their relationship to the deceased. They may have
+          inherited the tenancy through the will or intestacy.
+        </p>
+
+        <h3>Step 3: Serve Section 8 Notice</h3>
+        <p>
+          Serve Form 3 (Section 8 notice) specifying Ground 7. Give at least 2 months&apos; notice. The
+          notice goes to whoever is occupying the property—the &quot;personal representatives&quot; of the
+          deceased or any other occupier.
+        </p>
+
+        <h3>Step 4: Issue Court Proceedings</h3>
+        <p>
+          Use Form N5 (standard possession). Remember to issue within 12 months of the death date.
+        </p>
+
+        <h3>Step 5: Court Hearing</h3>
+        <p>
+          At the hearing, you must prove:
+        </p>
+        <ul>
+          <li>The original tenant has died</li>
+          <li>No one has succeeded under the Housing Act</li>
+          <li>Proceedings were begun within 12 months</li>
+          <li>The tenancy was periodic (not fixed-term)</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ground-7-process.svg"
+          alt="Ground 7 Process Timeline"
+          caption="Act quickly to stay within the 12-month window"
+        />
+
+        <h2 id="practical-steps" className="scroll-mt-24">Practical Steps After a Death</h2>
+
+        <p>
+          When you learn a tenant has died:
+        </p>
+
+        <h3>Immediate Actions</h3>
+        <ul>
+          <li><strong>Express condolences:</strong> Handle the situation sensitively</li>
+          <li><strong>Secure the property:</strong> If empty, ensure it&apos;s safe</li>
+          <li><strong>Document everything:</strong> Note the date you learned of the death</li>
+        </ul>
+
+        <h3>Within First Month</h3>
+        <ul>
+          <li>Identify who is occupying the property</li>
+          <li>Research succession rights</li>
+          <li>Contact the tenant&apos;s family or personal representatives</li>
+        </ul>
+
+        <h3>Key Decisions</h3>
+        <ul>
+          <li>Do you want to offer a new tenancy to the occupiers?</li>
+          <li>Are there rent arrears to address?</li>
+          <li>Will you pursue possession under Ground 7?</li>
+        </ul>
+
+        <h3>Timeline Awareness</h3>
+        <p>
+          Keep track of the 12-month deadline. Mark it in your calendar. If you decide to pursue Ground 7,
+          allow time for the notice period (2 months) and court processing.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-green-800 text-lg mb-2">Consider All Options</p>
+          <p className="text-green-700">
+            Before pursuing eviction, consider whether offering a new tenancy to existing occupiers makes
+            sense. They may be good tenants who have been paying rent. A new AST gives you a fresh start
+            with proper documentation.
+          </p>
+        </div>
+
+        <h2 id="ground-7-faq" className="scroll-mt-24">Ground 7 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant&apos;s spouse still lives there?</h3>
+            <p className="text-gray-600">
+              If the spouse or civil partner was living there as their main home, they have likely succeeded
+              to the tenancy under the Housing Act. Ground 7 doesn&apos;t apply to successors—they have the
+              same rights as the original tenant.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 7 for a fixed-term tenancy?</h3>
+            <p className="text-gray-600">
+              No. Ground 7 only applies to periodic tenancies. If the tenant died during a fixed term, the
+              tenancy continues until the term ends (and becomes periodic), at which point Ground 7 could
+              apply if still within 12 months of death.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Who do I serve the notice on?</h3>
+            <p className="text-gray-600">
+              Serve the Section 8 notice on the current occupiers. If you know the personal representatives
+              (executors of the will or administrators), serve them too. If you don&apos;t know who&apos;s there,
+              investigate before serving.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about rent arrears from before death?</h3>
+            <p className="text-gray-600">
+              Rent owed before death is a debt of the estate. You may be able to claim from the estate through
+              probate. Rent owed after death by occupiers who don&apos;t succeed may be claimed from them
+              directly or as a money claim alongside possession.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is Ground 7 mandatory or discretionary?</h3>
+            <p className="text-gray-600">
+              Discretionary. Even if you prove the ground, the court considers reasonableness—the circumstances
+              of the occupiers, impact of eviction, your needs, etc. Courts generally grant possession if
+              there&apos;s no good reason to refuse.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I want the tenant&apos;s family to stay?</h3>
+            <p className="text-gray-600">
+              You can offer them a new tenancy agreement. This is often the simplest solution—it creates a fresh
+              contractual relationship with proper documentation and may avoid the need for any proceedings.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Handle Complex Situations</h3>
+          <p className="text-gray-700 mb-6">
+            Death of a tenant situations require careful handling. Our eviction packs include Section 8
+            notices and guidance for Ground 7 cases. For complex succession issues, consider professional
+            legal advice.
+          </p>
+          <Link
+            href="/products/notice-only"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            Get Section 8 Notice →
+          </Link>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
