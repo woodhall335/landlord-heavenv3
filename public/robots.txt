@@ -26,7 +26,7 @@ Allow: /help
 Allow: /tenancy-agreements/
 
 # Sitemap location
-Sitemap: https://www.landlordheaven.co.uk/sitemap.xml
+Sitemap: https://landlordheaven.co.uk/sitemap.xml
 
 # Crawl-delay for respectful crawling
 Crawl-delay: 1
