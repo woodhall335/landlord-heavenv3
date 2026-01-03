@@ -1,0 +1,28 @@
+{
+  "ground": "breach_of_contract",
+  "type": "discretionary",
+  "category": "breach",
+  "name": "Breach of Occupation Contract",
+  "short_description": "Contract-holder breached a term other than rent payment",
+  "legal_basis": {
+    "act": "Renting Homes (Wales) Act 2016",
+    "section": "Section 159, Schedule 9 Ground 12",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "breach": "Identify specific contract term breached",
+    "evidence": "Show breach occurred and impact"
+  },
+  "notice_period": {
+    "minimum_days": 56,
+    "reference": "Section 159 discretionary ground"
+  },
+  "evidence_required": [
+    "Occupation contract clause reference",
+    "Photos or correspondence evidencing breach",
+    "Warning letters and timeline"
+  ],
+  "success_factors": {
+    "considerations": ["Seriousness of breach", "Remedial steps offered", "Impact on property or neighbours"]
+  }
+}

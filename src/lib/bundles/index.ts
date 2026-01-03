@@ -53,7 +53,7 @@ export async function generateCourtBundle(
       };
     }
 
-    if (jurisdiction !== 'england' && jurisdiction !== 'wales' && jurisdiction !== 'england-wales') {
+    if (jurisdiction !== 'england' && jurisdiction !== 'wales') {
       return {
         success: false,
         error: 'generateCourtBundle is for England & Wales only. Use generateTribunalBundle for Scotland.',
@@ -98,7 +98,7 @@ export async function generateCourtBundle(
     const bundleResult = await assembleBundlePDF(
       caseId,
       'court',
-      'england-wales',
+      jurisdiction, // Use actual jurisdiction (england or wales)
       sections,
       caseIntel,
       outputDir,

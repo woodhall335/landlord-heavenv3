@@ -2,18 +2,27 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import Image from "next/image";
+import { RiCheckboxCircleLine, RiCloseLine } from "react-icons/ri";
+import {
+  Home,
+  GraduationCap,
+  Briefcase,
+  BadgePoundSterling
+} from "lucide-react";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-links";
 
 export const metadata: Metadata = {
   title: "Tenancy Agreements - AST, PRT, NI | Landlord Heaven",
   description:
-    "Legally compliant tenancy agreements for UK landlords. Curated by Landlord Heaven. Standard (£39.99) or Premium (£59.00). Covers England, Wales, Scotland, and Northern Ireland.",
+    "Legally compliant tenancy agreements for UK landlords. Curated by Landlord Heaven. Standard (£9.99) or Premium (£14.99). Covers England, Wales, Scotland, and Northern Ireland.",
 };
 
 export default function ASTPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -24,21 +33,20 @@ export default function ASTPage() {
               Legally Compliant ASTs, PRTs & NI Tenancies
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
-              <span className="text-2xl text-gray-600">from</span>
-              <span className="text-5xl md:text-6xl font-bold text-gray-900">£39.99</span>
+              <span className="text-5xl md:text-6xl font-bold text-gray-900">£9.99</span>
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard?product=ast_standard"
                 className="hero-btn-primary"
               >
-                Standard - £39.99 →
+                Standard - £9.99 →
               </Link>
               <Link
                 href="/wizard?product=ast_premium"
                 className="hero-btn-secondary"
               >
-                Premium - £59.00 →
+                Premium - £14.99 →
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • England, Wales, Scotland, or Northern Ireland</p>
@@ -63,7 +71,7 @@ export default function ASTPage() {
                 <div className="bg-gray-100 p-6 text-center">
                   <h3 className="text-2xl font-bold text-charcoal mb-2">Standard AST</h3>
                   <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-4xl font-bold text-charcoal">£39.99</span>
+                    <span className="text-4xl font-bold text-charcoal">£9.99</span>
                   </div>
                   <p className="text-sm text-gray-600">Perfect for straightforward lettings</p>
                 </div>
@@ -72,63 +80,27 @@ export default function ASTPage() {
                   <h4 className="font-semibold text-charcoal mb-4">What's Included:</h4>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">Core clauses (rent, deposit, duration, notice)</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">Tenant responsibilities</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">Landlord access rights</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">Break clause (optional)</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">Pets clause (allowed/not allowed)</span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">Basic repair obligations</span>
                     </li>
                   </ul>
@@ -145,7 +117,7 @@ export default function ASTPage() {
                     href="/wizard?product=ast_standard"
                     className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
                   >
-                    Get Standard - £39.99
+                    Get Standard - £9.99
                   </Link>
                 </div>
               </div>
@@ -158,7 +130,7 @@ export default function ASTPage() {
                 <div className="bg-linear-to-br from-primary to-emerald-600 text-white p-6 text-center">
                   <h3 className="text-2xl font-bold mb-2">Premium AST</h3>
                   <div className="flex items-baseline justify-center gap-2 mb-2">
-                    <span className="text-4xl font-bold">£59.00</span>
+                    <span className="text-4xl font-bold">£14.99</span>
                   </div>
                   <p className="text-sm text-white/90">Maximum protection & customization</p>
                 </div>
@@ -167,109 +139,55 @@ export default function ASTPage() {
                   <h4 className="font-semibold text-charcoal mb-4">Everything in Standard, PLUS:</h4>
                   <ul className="space-y-3 mb-6">
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">
                         <strong>HMO-ready clauses</strong> (room licenses, shared facilities)
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">
                         <strong>Joint & several liability</strong> (all tenants responsible for full rent)
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">
                         <strong>Guarantor clauses</strong> (parent/employer guarantees)
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">
                         <strong>Rent increase provisions</strong> (RPI/CPI annual increases)
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">
                         <strong>Furnished inventory schedule</strong> (detailed item list)
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">
                         <strong>Professional cleaning clause</strong> (end of tenancy)
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">
                         <strong>Subletting prohibition</strong> (strict Airbnb prevention)
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">
                         <strong>Utility payment clauses</strong> (who pays what)
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                       <span className="text-gray-700 text-sm">
                         <strong>Insurance requirements</strong> (tenant contents insurance)
                       </span>
@@ -289,7 +207,7 @@ export default function ASTPage() {
                     href="/wizard?product=ast_premium"
                     className="block w-full bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold text-center hover:bg-primary-700 transition-colors"
                   >
-                    Get Premium - £59.00
+                    Get Premium - £14.99
                   </Link>
                 </div>
               </div>
@@ -339,7 +257,7 @@ export default function ASTPage() {
                 <h3 className="text-xl font-semibold text-charcoal mb-3">Agreement Generated</h3>
                 <p className="text-gray-600">
                   We create a jurisdiction-specific agreement with all clauses pre-filled based on your answers. Review and
-                  customize if needed.
+                  customise if needed.
                 </p>
               </div>
 
@@ -392,7 +310,9 @@ export default function ASTPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🏠</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Home className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">HMOs & Multi-Tenant</h3>
                 <p className="text-gray-700 mb-3">
                   If you're letting to multiple unrelated tenants, Premium is essential. It includes:
@@ -406,7 +326,9 @@ export default function ASTPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🎓</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <GraduationCap className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Student Lettings</h3>
                 <p className="text-gray-700 mb-3">Premium protects you from common student tenancy risks:</p>
                 <ul className="text-sm text-gray-700 space-y-1">
@@ -418,7 +340,9 @@ export default function ASTPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💼</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Briefcase className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Professional Landlords</h3>
                 <p className="text-gray-700 mb-3">Managing multiple properties? Premium offers:</p>
                 <ul className="text-sm text-gray-700 space-y-1">
@@ -430,7 +354,9 @@ export default function ASTPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💰</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <BadgePoundSterling className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">High-Value Properties</h3>
                 <p className="text-gray-700 mb-3">
                   For properties worth £300k+ or rent £1,500+/month, Premium provides:
@@ -565,7 +491,7 @@ export default function ASTPage() {
                   What's the difference between Standard and Premium?
                 </h3>
                 <p className="text-gray-700">
-                  Standard (£39.99) covers basic clauses for simple lettings. Premium (£59.00) adds 10+ advanced
+                  Standard (£9.99) covers basic clauses for simple lettings. Premium (£14.99) adds 10+ advanced
                   clauses: HMO provisions, guarantors, rent increases, detailed inventory, insurance requirements, and
                   stronger protections. See comparison table above.
                 </p>
@@ -606,28 +532,46 @@ export default function ASTPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 bg-linear-to-br from-primary to-emerald-600">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Create Your Tenancy Agreement?</h2>
-            <p className="text-xl mb-8 text-white/90">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Create Your Tenancy Agreement?</h2>
+            <p className="text-xl mb-8 text-gray-600">
               Choose Standard or Premium. Get your jurisdiction-specific agreement in 10 minutes.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard?product=ast_standard"
-                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors"
+                className="hero-btn-primary"
               >
-                Standard - £39.99 →
+                Standard - £9.99 →
               </Link>
               <Link
                 href="/wizard?product=ast_premium"
-                className="inline-block bg-charcoal text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors"
+                className="hero-btn-secondary"
               >
-                Premium - £59.00 →
+                Premium - £14.99 →
               </Link>
             </div>
-            <p className="mt-4 text-sm text-white/80">Instant download • Legally compliant • No subscription required</p>
+            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription required</p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Related Resources */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <RelatedLinks
+              title="Related Resources"
+              links={[
+                productLinks.noticeOnly,
+                productLinks.completePack,
+                toolLinks.hmoChecker,
+                toolLinks.section21Generator,
+                landingPageLinks.tenancyTemplate,
+              ]}
+            />
           </div>
         </Container>
       </section>

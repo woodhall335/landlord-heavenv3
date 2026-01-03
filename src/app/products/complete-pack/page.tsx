@@ -1,12 +1,36 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
 import Link from "next/link";
 import Image from "next/image";
+import { RiCheckboxCircleLine, RiCloseLine, RiAlertLine } from "react-icons/ri";
+import {
+  Sparkles,
+  ScrollText,
+  ClipboardCheck,
+  BarChart3,
+  FileText,
+  Scale,
+  BookOpen,
+  Target,
+  FolderOpen,
+  Star,
+  BadgePoundSterling,
+  Package,
+  Clock
+} from "lucide-react";
+import { StructuredData, productSchema, faqPageSchema } from "@/lib/seo/structured-data";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 
 export const metadata: Metadata = {
-  title: "Complete Eviction Pack - Full DIY Eviction Bundle | Landlord Heaven",
+  title: "Complete Eviction Pack - Last Chance Before Section 21 Ban",
   description:
-    "Complete DIY eviction solution from notice to possession order. Includes all court forms (N5, N5B, N119), step-by-step guidance, evidence checklists, and timeline. £149.99 one-time payment.",
+    "Last chance for Section 21. Complete eviction pack with all court forms before no-fault evictions banned 1 May 2026. £149.99 one-time. Notices + N5 + N119 forms.",
+  openGraph: {
+    title: "Complete Eviction Pack - Last Chance Before Section 21 Ban",
+    description: "Last chance for Section 21. Complete eviction pack before no-fault evictions banned 1 May 2026. £149.99.",
+  },
   keywords: [
     "complete eviction pack",
     "eviction bundle UK",
@@ -21,15 +45,67 @@ export const metadata: Metadata = {
   ],
 };
 
+// FAQ data for structured data
+const faqs = [
+  {
+    question: "Do I get all the court forms I need?",
+    answer: "Yes. The Complete Pack includes all forms required from start to finish: eviction notice (Section 8/21/Notice to Leave), possession claim forms (N5, N5B, N119 for England & Wales; First-tier Tribunal forms for Scotland; Civil Bill for Northern Ireland), and evidence bundling guides."
+  },
+  {
+    question: "Are these genuine official court forms?",
+    answer: "Absolutely. We use official HMCTS forms (Her Majesty's Courts & Tribunals Service) for England & Wales, Scottish Courts & Tribunals Service forms for Scotland, and NI Courts Service forms for Northern Ireland. These are the exact same forms you'd download from government websites, but pre-filled with your case details."
+  },
+  {
+    question: "How long does the eviction process take?",
+    answer: "It varies by jurisdiction and grounds. England & Wales: 3-6 months (Section 8 rent arrears: 3-4 months; Section 21: 4-5 months; contested cases: 6+ months). Scotland: 4-8 months (First-tier Tribunal process). Northern Ireland: 3-6 months."
+  },
+  {
+    question: "What if my tenant contests the eviction?",
+    answer: "The Complete Pack includes guidance for contested cases. You'll get evidence checklists to strengthen your case and advice on attending the possession hearing."
+  },
+  {
+    question: "Can I use this if I've already served a notice?",
+    answer: "Yes! If you've already served your Section 8/21 notice and now need the court forms, the Complete Pack is perfect. Just tell our wizard you've already served notice, provide the notice date and type, and we'll generate the court claim forms and guidance for the next steps."
+  },
+  {
+    question: "What grounds for eviction do you support?",
+    answer: "All of them. We support all 17 grounds under the Housing Act 1988 (England & Wales), all 18 grounds for eviction under the Private Housing (Tenancies) (Scotland) Act 2016, and all statutory grounds for Northern Ireland."
+  },
+  {
+    question: "Is this cheaper than using a solicitor?",
+    answer: "Yes, significantly. Eviction solicitors typically charge £1,500-3,000+ for preparing notices, court forms, and representing you at hearings. The Complete Pack gives you all the documents and guidance for £149.99 one-time."
+  },
+  {
+    question: "What if I make a mistake on the forms?",
+    answer: "Our system validates all your inputs to minimise errors. You can preview all documents before paying. If you spot an error after purchase, you get unlimited regenerations - just update your case details and regenerate the pack at no extra cost."
+  },
+  {
+    question: "Do you provide legal advice?",
+    answer: "No. Landlord Heaven is a document generation service, not a law firm. We provide legally compliant forms and plain-English guidance on the eviction process, but we do not provide legal advice tailored to your specific circumstances."
+  }
+];
+
 export default function CompleteEvictionPackPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Structured Data for SEO */}
+      <StructuredData data={productSchema({
+        name: "Complete Eviction Pack - Full DIY Eviction Bundle",
+        description: "Complete eviction bundle with all court forms from notice to possession order. Includes N5, N5B, N119 forms, AI-drafted witness statements, compliance audit, and step-by-step guidance. Save £1,000s vs solicitors.",
+        price: "149.99",
+        url: "https://landlordheaven.co.uk/products/complete-pack"
+      })} />
+      <StructuredData data={faqPageSchema(faqs)} />
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">☁️ Ask Heaven-Powered</span>
+              <span className="text-sm font-semibold text-primary flex items-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                Ask Heaven-Powered
+              </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Ask Heaven-Powered Complete Eviction Pack</h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
@@ -37,7 +113,6 @@ export default function CompleteEvictionPackPage() {
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">£149.99</span>
-              <span className="text-xl text-gray-600">one-time</span>
             </div>
             <Link
               href="/wizard?product=complete_pack"
@@ -45,7 +120,10 @@ export default function CompleteEvictionPackPage() {
             >
               Start Your Eviction Pack →
             </Link>
-            <p className="mt-4 text-sm text-gray-600">
+            <div className="mt-4 mb-2">
+              <SocialProofCounter variant="today" className="mx-auto" />
+            </div>
+            <p className="text-sm text-gray-600">
               Court-ready documents • Expert guidance • Lifetime storage
             </p>
           </div>
@@ -53,11 +131,13 @@ export default function CompleteEvictionPackPage() {
       </section>
 
       {/* Ask Heaven Features Section */}
-      <section className="py-16 md:py-20 bg-gradient-to-br from-blue-50 to-indigo-50">
+      <section className="py-16 md:py-20 bg-linear-to-br from-blue-50 to-indigo-50">
         <Container>
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <div className="text-6xl mb-4">☁️</div>
+              <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-primary" />
+              </div>
               <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
                 Ask Heaven AI Features (Included!)
               </h2>
@@ -72,8 +152,10 @@ export default function CompleteEvictionPackPage() {
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               {/* Witness Statement */}
               <div className="bg-white rounded-xl border-2 border-blue-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <ScrollText className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Ask Heaven Witness Statement</h3>
                 </div>
                 <div className="mb-4">
@@ -106,8 +188,10 @@ export default function CompleteEvictionPackPage() {
 
               {/* Compliance Audit */}
               <div className="bg-white rounded-xl border-2 border-purple-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <ClipboardCheck className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Compliance Audit Report</h3>
                 </div>
                 <div className="mb-4">
@@ -140,8 +224,10 @@ export default function CompleteEvictionPackPage() {
 
               {/* Risk Assessment */}
               <div className="bg-white rounded-xl border-2 border-green-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <BarChart3 className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Case Risk Assessment</h3>
                 </div>
                 <div className="mb-4">
@@ -173,16 +259,7 @@ export default function CompleteEvictionPackPage() {
               </div>
             </div>
 
-            {/* Value Callout */}
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 text-center">
-              <h3 className="text-2xl font-bold mb-3">💰 Total Ask Heaven Value: £650-1,400</h3>
-              <p className="text-lg mb-4">
-                These three AI-drafted documents alone would cost £650-1,400 if written by a solicitor
-              </p>
-              <p className="text-white/90 text-base">
-                With the Complete Pack at £149.99, you also get all court forms, notices, checklists, and guides - making this an incredible value
-              </p>
-            </div>
+            
           </div>
         </Container>
       </section>
@@ -199,49 +276,27 @@ export default function CompleteEvictionPackPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* All Notices */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">📄</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">All Notices</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Section 8 or Section 21 (E&W)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Notice to Leave (Scotland)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Notice to Quit (Northern Ireland)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Service instructions included</span>
                   </li>
                 </ul>
@@ -249,55 +304,33 @@ export default function CompleteEvictionPackPage() {
 
               {/* Court Forms */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">⚖️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Scale className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">Court Forms</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">
                       <strong>N5</strong> - Claim for Possession
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">
                       <strong>N5B</strong> - Accelerated Possession
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">
                       <strong>N119</strong> - Particulars of Claim
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Scotland Tribunal forms</span>
                   </li>
                 </ul>
@@ -305,49 +338,27 @@ export default function CompleteEvictionPackPage() {
 
               {/* Step-by-Step Guidance */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">📋</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <BookOpen className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">Expert Guidance</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Step-by-step eviction guide</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Timeline expectations</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Evidence checklist</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Bailiff/sheriff guidance</span>
                   </li>
                 </ul>
@@ -355,49 +366,27 @@ export default function CompleteEvictionPackPage() {
 
               {/* Grounds Coverage */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">🎯</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Target className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">All Grounds</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Rent arrears (Ground 8/10)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Anti-social behaviour (Ground 14)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Breach of tenancy (Ground 12)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">All 17 grounds supported</span>
                   </li>
                 </ul>
@@ -405,49 +394,27 @@ export default function CompleteEvictionPackPage() {
 
               {/* Evidence & Organization */}
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">📁</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <FolderOpen className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">Evidence Tools</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Evidence collection checklist</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Document organization tips</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">What to collect & when</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Proof of service templates</span>
                   </li>
                 </ul>
@@ -455,49 +422,27 @@ export default function CompleteEvictionPackPage() {
 
               {/* Premium Features */}
               <div className="bg-primary-subtle rounded-lg border border-primary/20 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">✨</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Star className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">Premium Features</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Lifetime cloud storage</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Priority email support</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Unlimited regenerations</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                     <span className="text-gray-700">Guided case analysis</span>
                   </li>
                 </ul>
@@ -561,7 +506,7 @@ export default function CompleteEvictionPackPage() {
             <div className="mt-12 text-center">
               <Link
                 href="/wizard?product=complete_pack"
-                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
+                className="hero-btn-primary"
               >
                 Start Your Complete Pack →
               </Link>
@@ -652,13 +597,7 @@ export default function CompleteEvictionPackPage() {
 
             <div className="mt-8 bg-primary-50 border border-primary-200 rounded-lg p-6">
               <div className="flex items-start gap-3">
-                <svg className="w-6 h-6 text-primary shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fillRule="evenodd"
-                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <RiAlertLine className="w-6 h-6 text-primary shrink-0" />
                 <div>
                   <h4 className="font-semibold text-charcoal mb-2">Total Timeline Estimate</h4>
                   <p className="text-gray-700">
@@ -686,7 +625,9 @@ export default function CompleteEvictionPackPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💰</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <BadgePoundSterling className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Save £1,000s vs Solicitors</h3>
                 <p className="text-gray-700">
                   Eviction solicitors charge £1,500-3,000+ for the same documents. Our Complete Pack gives you everything
@@ -695,7 +636,9 @@ export default function CompleteEvictionPackPage() {
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">📦</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Package className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">All-in-One Solution</h3>
                 <p className="text-gray-700">
                   No more piecing together forms from different sources. Get notice, court forms, guidance, evidence
@@ -704,16 +647,20 @@ export default function CompleteEvictionPackPage() {
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">⚖️</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Scale className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Court-Ready Official Forms</h3>
                 <p className="text-gray-700">
-                  We use genuine HMCTS official forms (N5, N5B, N119, Form 6A) filled with your case details. Judges and
-                  courts accept these without question.
+                  We use genuine HMCTS official forms (N5, N5B, N119, Form 6A) auto-filled with your case details. These
+                  are the same forms used by solicitors nationwide.
                 </p>
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🎯</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Target className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Grounds-Aware Guidance</h3>
                 <p className="text-gray-700">
                   Your bundle adapts to your specific grounds (rent arrears, ASB, breach, etc.) with tailored evidence
@@ -722,18 +669,20 @@ export default function CompleteEvictionPackPage() {
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="mb-3">
+                <div className="mb-4">
                   <Image src="/lgb.svg" alt="UK Coverage" width={48} height={48} className="w-12 h-12" />
                 </div>
-                <h3 className="text-xl font-semibold text-charcoal mb-2">All UK Jurisdictions</h3>
+                <h3 className="text-xl font-semibold text-charcoal mb-2">UK-Wide Coverage</h3>
                 <p className="text-gray-700">
-                  England & Wales, Scotland, and Northern Ireland fully supported with jurisdiction-specific forms, laws, and
-                  timelines.
+                  England & Wales and Scotland fully supported with jurisdiction-specific forms, laws, and
+                  timelines. Northern Ireland coming soon.
                 </p>
               </div>
 
               <div className="bg-gray-50 rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">⏱️</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Clock className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Instant Delivery</h3>
                 <p className="text-gray-700">
                   Complete your case details (15-20 minutes), review your pack, pay, and download immediately. No waiting
@@ -775,43 +724,19 @@ export default function CompleteEvictionPackPage() {
                       Eviction Notice (Section 8/21, etc.)
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <svg className="w-5 h-5 text-success mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
                     <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Court Forms (N5, N5B, N119)</td>
                     <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <svg className="w-5 h-5 text-gray-300 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
@@ -828,64 +753,28 @@ export default function CompleteEvictionPackPage() {
                   <tr>
                     <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Evidence Checklist</td>
                     <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <svg className="w-5 h-5 text-gray-300 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
                     <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Timeline Expectations</td>
                     <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <svg className="w-5 h-5 text-gray-300 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
                     <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Bailiff/Sheriff Guidance</td>
                     <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <svg className="w-5 h-5 text-gray-300 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
@@ -900,22 +789,10 @@ export default function CompleteEvictionPackPage() {
                   <tr>
                     <td className="px-6 py-4 text-sm text-gray-700 border-b border-gray-100">Priority Support</td>
                     <td className="px-6 py-4 text-center border-b border-gray-100">
-                      <svg className="w-5 h-5 text-gray-300 mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCloseLine className="w-5 h-5 text-gray-300 mx-auto" />
                     </td>
                     <td className="px-6 py-4 text-center border-b border-gray-100 bg-primary-subtle">
-                      <svg className="w-5 h-5 text-primary mx-auto" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <RiCheckboxCircleLine className="w-5 h-5 text-primary mx-auto" />
                     </td>
                   </tr>
                   <tr>
@@ -935,7 +812,7 @@ export default function CompleteEvictionPackPage() {
               <p className="text-gray-600 mb-6">Need the full solution to take your case to court?</p>
               <Link
                 href="/wizard?product=complete_pack"
-                className="inline-block bg-primary-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-primary-700 transition-colors"
+                className="hero-btn-primary"
               >
                 Get Complete Eviction Pack - £149.99 →
               </Link>
@@ -953,7 +830,7 @@ export default function CompleteEvictionPackPage() {
             </h2>
 
             <div className="space-y-6">
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   Do I get all the court forms I need?
                 </summary>
@@ -965,7 +842,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   Are these genuine official court forms?
                 </summary>
@@ -977,7 +854,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   How long does the eviction process take?
                 </summary>
@@ -991,7 +868,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   What if my tenant contests the eviction?
                 </summary>
@@ -1003,7 +880,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   Can I use this if I've already served a notice?
                 </summary>
@@ -1014,7 +891,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   What grounds for eviction do you support?
                 </summary>
@@ -1030,7 +907,7 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   Is this cheaper than using a solicitor?
                 </summary>
@@ -1041,18 +918,18 @@ export default function CompleteEvictionPackPage() {
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   What if I make a mistake on the forms?
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
-                  Our system validates all your inputs to minimize errors (e.g., dates, arrears calculations, notice periods).
+                  Our system validates all your inputs to minimise errors (e.g., dates, arrears calculations, notice periods).
                   You can preview all documents before paying. If you spot an error after purchase, you get unlimited
                   regenerations - just update your case details and regenerate the pack at no extra cost.
                 </div>
               </details>
 
-              <details className="bg-gray-50 rounded-lg border border-gray-200">
+              <details className="bg-[#F7EFFF] rounded-lg border border-gray-200">
                 <summary className="px-6 py-4 font-semibold text-charcoal cursor-pointer hover:text-primary">
                   Do you provide legal advice?
                 </summary>
@@ -1068,30 +945,49 @@ export default function CompleteEvictionPackPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 md:py-20 bg-linear-to-br from-primary to-emerald-600 text-white">
+      <section className="py-16 md:py-20 bg-linear-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Your Eviction?</h2>
-            <p className="text-xl mb-8 text-white/90">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Start Your Eviction?</h2>
+            <p className="text-xl mb-8 text-gray-600">
               Get your Complete Eviction Pack now and take control of your property with confidence.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/wizard?product=complete_pack"
-                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
+                className="hero-btn-primary"
               >
                 Get Complete Pack - £149.99 →
               </Link>
               <Link
                 href="/products/notice-only"
-                className="inline-block bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white/10 transition-colors"
+                className="hero-btn-secondary"
               >
                 Or Just Get Notice - £29.99
               </Link>
             </div>
-            <p className="text-sm text-white/80">
+            <p className="mt-4 text-sm text-gray-600">
               Instant download • Court-ready documents • Lifetime storage • Priority support
             </p>
+          </div>
+        </Container>
+      </section>
+
+      {/* Related Resources */}
+      <section className="py-16 md:py-20">
+        <Container>
+          <div className="max-w-4xl mx-auto">
+            <RelatedLinks
+              title="Related Resources"
+              links={[
+                productLinks.noticeOnly,
+                productLinks.moneyClaim,
+                toolLinks.section21Generator,
+                toolLinks.section8Generator,
+                blogLinks.evictionTimeline,
+                landingPageLinks.section21Template,
+              ]}
+            />
           </div>
         </Container>
       </section>

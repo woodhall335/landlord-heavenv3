@@ -787,12 +787,94 @@ questions:
       - ground_3_particulars
     conditions: []
 
-  # 8. Pre-action / attempts to resolve
+  # ============================================================
+  # 8. PRE-ACTION REQUIREMENTS (MANDATORY FOR SCOTLAND)
+  # The Private Housing (Tenancies) (Scotland) Act 2016 Pre-Action
+  # Requirements for Eviction Grounds (Scottish SI 2017/415)
+  # ============================================================
+  - id: pre_action_protocol
+    section: Pre-Action Protocol (Mandatory)
+    question: "Pre-Action Requirements Compliance"
+    inputType: group
+    helperText: "CRITICAL: The First-tier Tribunal REQUIRES evidence of pre-action protocol compliance before granting eviction orders. Failure to comply will result in refusal."
+    fields:
+      - id: pre_action_rent_statement
+        label: "Have you provided a clear rent statement showing arrears?"
+        inputType: yes_no
+        helperText: "Required: Statement must show dates, amounts due, amounts paid, running balance"
+        validation:
+          required: true
+        width: half
+      - id: pre_action_rent_statement_date
+        label: "Date rent statement was provided"
+        inputType: date
+        width: half
+      - id: pre_action_advice_signposting
+        label: "Have you signposted tenant to advice services?"
+        inputType: yes_no
+        helperText: "Required: Provide details of Citizens Advice, Shelter Scotland, local authority housing options"
+        validation:
+          required: true
+        width: half
+      - id: pre_action_advice_services
+        label: "Which advice services were signposted?"
+        inputType: textarea
+        helperText: "List the advice services you informed tenant about"
+        placeholder: "E.g., Citizens Advice Scotland, Shelter Scotland helpline, Local authority housing options team..."
+        width: full
+      - id: pre_action_reasonable_time
+        label: "Have you given tenant reasonable time to pay or address issues?"
+        inputType: yes_no
+        helperText: "Required: Usually at least 28 days"
+        validation:
+          required: true
+        width: half
+      - id: pre_action_time_given_days
+        label: "How many days were given?"
+        inputType: number
+        helperText: "Number of days tenant was given to resolve issues"
+        width: half
+      - id: pre_action_payment_plan
+        label: "Have you considered a payment plan?"
+        inputType: yes_no
+        helperText: "Required: Must show you considered whether a payment plan is feasible"
+        validation:
+          required: true
+        width: half
+      - id: pre_action_payment_plan_details
+        label: "Payment plan details"
+        inputType: textarea
+        helperText: "Describe any payment plan offered, tenant's response, and outcome"
+        width: full
+      - id: pre_action_housing_benefit
+        label: "Have you made enquiries about Housing Benefit/Universal Credit?"
+        inputType: yes_no
+        helperText: "Required: Must check if tenant eligible for housing support"
+        width: half
+      - id: pre_action_tenant_contact_dates
+        label: "List dates of contact with tenant"
+        inputType: textarea
+        helperText: "Document all dates you attempted to contact tenant"
+        validation:
+          required: true
+        width: full
+    maps_to:
+      - pre_action.rent_statement_provided
+      - pre_action.rent_statement_date
+      - pre_action.advice_signposted
+      - pre_action.advice_services
+      - pre_action.reasonable_time_given
+      - pre_action.time_given_days
+      - pre_action.payment_plan_considered
+      - pre_action.payment_plan_details
+      - pre_action.housing_benefit_checked
+      - pre_action.tenant_contact_dates
+
   - id: pre_action_steps
     section: Pre-action steps
-    question: "What have you done to resolve issues before applying?"
+    question: "Additional resolution attempts"
     inputType: group
-    helperText: "Tribunal expects reasonable contact attempts, especially for rent arrears."
+    helperText: "Document any additional steps taken to resolve issues."
     fields:
       - id: pre_action_letters_sent
         label: "Have you sent warning letters or emails?"

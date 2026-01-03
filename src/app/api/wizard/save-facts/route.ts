@@ -2,10 +2,12 @@
  * Wizard API - Save Facts
  *
  * POST /api/wizard/save-facts
- * Persists wizard facts to the cases table
+ * Persists wizard facts to both:
+ * - case_facts.facts (source of truth)
+ * - cases.collected_facts (mirrored copy)
  */
 
-import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { createServerSupabaseClient, createAdminClient } from '@/lib/supabase/server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -29,21 +31,18 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createServerSupabaseClient();
 
+    // Admin client bypasses RLS - used for creating cases/case_facts for anonymous users
+    const adminSupabase = createAdminClient();
+
     // Try to get the user (but don't require auth for wizard saves)
     const { data: { user } } = await supabase.auth.getUser();
 
-    // First, check if the case exists
-    let query = supabase
+    // First, check if the case exists using admin client to support anonymous users
+    const { data: existingCase, error: fetchError } = await adminSupabase
       .from('cases')
       .select('id, user_id, collected_facts')
-      .eq('id', case_id);
-
-    // If logged in, also check ownership
-    if (user) {
-      query = query.eq('user_id', user.id);
-    }
-
-    const { data: existingCase, error: fetchError } = await query.single();
+      .eq('id', case_id)
+      .single();
 
     if (fetchError && fetchError.code !== 'PGRST116') { // PGRST116 = not found
       console.error('Error fetching case:', fetchError);
@@ -66,13 +65,58 @@ export async function POST(request: NextRequest) {
       },
     };
 
+    const timestamp = new Date().toISOString();
+
     if (existingCase) {
-      // Update existing case
-      const { error: updateError } = await supabase
+      // Update existing case - write to BOTH tables for consistency
+      // 1. Update case_facts.facts (source of truth)
+      // Use admin client to bypass RLS for anonymous users
+      const { data: existingCaseFacts } = await adminSupabase
+        .from('case_facts')
+        .select('version')
+        .eq('case_id', case_id)
+        .maybeSingle();
+
+      if (existingCaseFacts) {
+        // Update existing case_facts row
+        // Use admin client to bypass RLS for anonymous users
+        const { error: caseFactsError } = await adminSupabase
+          .from('case_facts')
+          .update({
+            facts: mergedFacts,
+            version: (existingCaseFacts.version ?? 0) + 1,
+            updated_at: timestamp,
+          })
+          .eq('case_id', case_id);
+
+        if (caseFactsError) {
+          console.error('Error updating case_facts:', caseFactsError);
+          // Continue anyway - collected_facts is still useful
+        }
+      } else {
+        // Create case_facts row if it doesn't exist
+        // Use admin client to bypass RLS for anonymous users
+        const { error: insertCaseFactsError } = await adminSupabase
+          .from('case_facts')
+          .insert({
+            case_id,
+            facts: mergedFacts,
+            version: 1,
+          });
+
+        if (insertCaseFactsError) {
+          console.error('Error creating case_facts:', insertCaseFactsError);
+          // Continue anyway - collected_facts is still useful
+        }
+      }
+
+      // 2. Update cases.collected_facts (mirrored copy)
+      // Use admin client to bypass RLS for anonymous users
+      const { error: updateError } = await adminSupabase
         .from('cases')
         .update({
           collected_facts: mergedFacts,
-          updated_at: new Date().toISOString(),
+          updated_at: timestamp,
         })
         .eq('id', case_id);
 
@@ -92,11 +136,12 @@ export async function POST(request: NextRequest) {
       // Case doesn't exist - need to create it
       // Extract metadata from facts to set up the case
       const meta = facts?.__meta || {};
-      const jurisdiction = meta.jurisdiction || 'england-wales';
+      const jurisdiction = meta.jurisdiction || 'england';
       const caseType = meta.case_type || 'money_claim';
 
       // Allow anonymous case creation (user_id can be null for "try before you buy")
-      const { error: insertError } = await supabase
+      // Use admin client to bypass RLS for anonymous users
+      const { error: insertError } = await adminSupabase
         .from('cases')
         .insert({
           id: case_id,
@@ -113,6 +158,21 @@ export async function POST(request: NextRequest) {
           { error: 'Failed to create case' },
           { status: 500 }
         );
+      }
+
+      // Also create case_facts row (source of truth)
+      // Use admin client to bypass RLS for anonymous users
+      const { error: insertCaseFactsError } = await adminSupabase
+        .from('case_facts')
+        .insert({
+          case_id,
+          facts: mergedFacts,
+          version: 1,
+        });
+
+      if (insertCaseFactsError) {
+        console.error('Error creating case_facts:', insertCaseFactsError);
+        // Continue anyway - case was created successfully
       }
 
       return NextResponse.json({

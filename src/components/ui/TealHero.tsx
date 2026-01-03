@@ -3,7 +3,7 @@ import { clsx } from "clsx";
 
 interface TealHeroProps {
   title: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   eyebrow?: string;
   actions?: React.ReactNode;
   breadcrumb?: React.ReactNode;
@@ -39,7 +39,7 @@ export function TealHero({
           <h1 className="text-5xl font-black leading-[1.1] sm:text-6xl lg:text-7xl xl:text-7xl tracking-tight text-gray-900">
             {title}
           </h1>
-          {subtitle && <p className="max-w-3xl text-xl text-gray-700 sm:text-2xl font-normal leading-relaxed">{subtitle}</p>}
+          {subtitle && <div className="max-w-3xl text-xl text-gray-700 sm:text-2xl font-normal leading-relaxed">{subtitle}</div>}
           {actions && <div className="mt-8 flex flex-wrap items-center gap-4">{actions}</div>}
         </div>
       </div>

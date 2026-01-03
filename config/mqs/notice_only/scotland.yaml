@@ -217,6 +217,98 @@ questions:
       Ensure the landlord has attempted reasonable contact about arrears and signposted support before serving a Notice to Leave.
       Scotland law requires landlords to take specific pre-action steps before evicting for rent arrears.
 
+  # ============================================================
+  # SCOTLAND PRE-ACTION PROTOCOL (Expanded)
+  # Required for Ground 1 (Rent Arrears) - Tribunal will check
+  # ============================================================
+
+  - id: pre_action_protocol
+    section: Pre-Action Protocol
+    question: "Pre-action protocol compliance"
+    inputType: group
+    dependsOn:
+      questionId: rent_arrears
+      value: "Yes"
+    helperText: "Scotland requires specific pre-action steps before eviction for rent arrears. The tribunal WILL check this."
+    fields:
+      - id: rent_statement_sent
+        label: "Did you send the tenant a rent statement?"
+        inputType: yes_no
+        helperText: "Clear breakdown of rent due vs paid"
+        width: half
+      - id: rent_statement_date
+        label: "Rent statement date"
+        inputType: date
+        width: half
+        dependsOn:
+          fieldId: rent_statement_sent
+          value: true
+      - id: advice_signposting
+        label: "Did you signpost the tenant to advice services?"
+        inputType: yes_no
+        helperText: "Citizens Advice, Shelter Scotland, local council"
+        width: half
+      - id: signposted_to
+        label: "Which services did you signpost to?"
+        inputType: multiselect
+        options:
+          - "Citizens Advice Scotland"
+          - "Shelter Scotland"
+          - "Local council housing team"
+          - "Money Advice Scotland"
+          - "StepChange"
+          - "Other advice service"
+        width: full
+        dependsOn:
+          fieldId: advice_signposting
+          value: true
+      - id: reasonable_time_given
+        label: "Did you give the tenant reasonable time to pay?"
+        inputType: yes_no
+        helperText: "Typically at least 14 days"
+        width: half
+      - id: time_given_details
+        label: "How much time was given?"
+        inputType: textarea
+        placeholder: "E.g., Gave tenant 4 weeks to arrange payment plan..."
+        width: full
+        dependsOn:
+          fieldId: reasonable_time_given
+          value: true
+      - id: payment_plan_offered
+        label: "Did you offer a payment plan?"
+        inputType: yes_no
+        width: half
+      - id: payment_plan_details
+        label: "Payment plan details"
+        inputType: textarea
+        placeholder: "E.g., Offered to clear arrears over 6 months at £100/month..."
+        width: full
+        dependsOn:
+          fieldId: payment_plan_offered
+          value: true
+      - id: housing_benefit_check
+        label: "Did you check if tenant is claiming housing benefit?"
+        inputType: yes_no
+        helperText: "Required to check before proceeding"
+        width: half
+      - id: housing_benefit_details
+        label: "Housing benefit status"
+        inputType: textarea
+        placeholder: "E.g., Tenant confirmed not claiming benefits / Claim pending since..."
+        width: full
+    maps_to:
+      - scotland_pre_action.rent_statement_sent
+      - scotland_pre_action.rent_statement_date
+      - scotland_pre_action.advice_signposting
+      - scotland_pre_action.signposted_to
+      - scotland_pre_action.reasonable_time_given
+      - scotland_pre_action.time_given_details
+      - scotland_pre_action.payment_plan_offered
+      - scotland_pre_action.payment_plan_details
+      - scotland_pre_action.housing_benefit_check
+      - scotland_pre_action.housing_benefit_details
+
   - id: deposit_protection
     section: Deposit Protection
     question: "Deposit details"
@@ -255,6 +347,45 @@ questions:
     suggestion_prompt: >
       Highlight any missing safety documentation needed for tribunal compliance.
 
+  # ============================================================
+  # COMPLIANCE CERTIFICATE DATES
+  # ============================================================
+
+  - id: compliance_dates
+    section: Compliance Certificates
+    question: "Compliance certificate dates"
+    inputType: group
+    helperText: "Provide dates for your safety certificates."
+    dependsOn:
+      questionId: safety_checks
+      value: "Yes"
+    fields:
+      - id: gas_cert_date
+        label: "Gas safety certificate date"
+        inputType: date
+        helperText: "Date of most recent gas safety certificate"
+        width: half
+      - id: gas_cert_expiry
+        label: "Gas certificate expiry date"
+        inputType: date
+        helperText: "Expires 12 months after issue"
+        width: half
+      - id: eicr_date
+        label: "Electrical safety (EICR) date"
+        inputType: date
+        helperText: "Electrical Installation Condition Report date"
+        width: half
+      - id: smoke_alarm_check_date
+        label: "Smoke/heat alarm check date"
+        inputType: date
+        helperText: "Date alarms were last checked"
+        width: half
+    maps_to:
+      - compliance.gas_cert_date
+      - compliance.gas_cert_expiry
+      - compliance.eicr_date
+      - compliance.smoke_alarm_check_date
+
   - id: asb_details
     section: Antisocial Behaviour
     question: "Has there been any antisocial behaviour?"
@@ -276,6 +407,75 @@ questions:
       - issues.asb.incidents
     suggestion_prompt: >
       Summarise dates, witnesses, and any police or council involvement. Keep it factual.
+
+  # ============================================================
+  # RISK INDICATORS
+  # ============================================================
+
+  - id: risk_indicators
+    section: Risk Assessment
+    question: "Risk factors"
+    inputType: group
+    helperText: "This information helps identify potential issues with your case."
+    fields:
+      - id: known_tenant_defences
+        label: "Are you aware of any defences the tenant may raise?"
+        inputType: textarea
+        helperText: "E.g., claims of disrepair, harassment, discrimination"
+        placeholder: "Describe any known or anticipated tenant defences..."
+        width: full
+      - id: disrepair_complaints
+        label: "Has the tenant complained about disrepair?"
+        inputType: yes_no
+        width: half
+      - id: disrepair_complaint_date
+        label: "Date of disrepair complaint"
+        inputType: date
+        width: half
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: disrepair_issues_list
+        label: "List the disrepair issues"
+        inputType: textarea
+        width: full
+        dependsOn:
+          fieldId: disrepair_complaints
+          value: true
+      - id: previous_court_proceedings
+        label: "Previous tribunal proceedings about this tenancy?"
+        inputType: yes_no
+        width: half
+      - id: previous_proceedings_details
+        label: "Previous proceedings details"
+        inputType: textarea
+        helperText: "Dates, case numbers, outcomes"
+        width: full
+        dependsOn:
+          fieldId: previous_court_proceedings
+          value: true
+      - id: tenant_vulnerability
+        label: "Are you aware of any tenant vulnerabilities?"
+        inputType: yes_no
+        helperText: "E.g., elderly, disabled, mental health issues, children"
+        width: half
+      - id: tenant_vulnerability_details
+        label: "Vulnerability details"
+        inputType: textarea
+        helperText: "Tribunal may consider this when deciding reasonableness"
+        width: full
+        dependsOn:
+          fieldId: tenant_vulnerability
+          value: true
+    maps_to:
+      - risk.known_tenant_defences
+      - risk.disrepair_complaints
+      - risk.disrepair_complaint_date
+      - risk.disrepair_issues_list
+      - risk.previous_court_proceedings
+      - risk.previous_proceedings_details
+      - risk.tenant_vulnerability
+      - risk.tenant_vulnerability_details
 
   - id: eviction_grounds
     section: Grounds for Eviction
@@ -347,29 +547,88 @@ questions:
       - notice.service_method
       - notice.served_by
 
-  - id: evidence_uploads
+  # ============================================================
+  # EVIDENCE WITH DESCRIBE OPTION
+  # ============================================================
+
+  - id: evidence_tenancy_agreement
     section: Evidence
-    question: "Upload key documents (optional but recommended)"
+    question: "Tenancy Agreement"
+    inputType: group
+    helperText: "Upload your PRT agreement or summarize key terms."
+    fields:
+      - id: tenancy_agreement_upload
+        label: "Upload tenancy agreement"
+        inputType: upload
+        helperText: "Upload a copy of the PRT"
+        width: full
+      - id: tenancy_agreement_describe
+        label: "Or summarize key terms"
+        inputType: textarea
+        helperText: "If unable to upload, describe: start date, rent amount, key terms"
+        placeholder: "E.g., PRT started 01/01/2024, rent £950pcm due 1st of each month..."
+        width: full
+    maps_to:
+      - evidence.tenancy_agreement_uploads
+      - evidence.tenancy_agreement_description
+
+  - id: evidence_rent_schedule
+    section: Evidence
+    question: "Rent Payment Evidence"
+    inputType: group
+    helperText: "Upload rent schedule/statements or summarize payment history."
+    fields:
+      - id: rent_schedule_upload
+        label: "Upload rent schedule"
+        inputType: upload
+        helperText: "Upload rent ledger or bank statements"
+        width: full
+      - id: bank_statements_describe
+        label: "Or describe payment history"
+        inputType: textarea
+        helperText: "Summarize rent payment pattern"
+        placeholder: "E.g., Rent paid on time Jan-June. Payments stopped July. Last payment £450 on 15/08..."
+        width: full
+    maps_to:
+      - evidence.rent_schedule_uploads
+      - evidence.bank_statements_description
+
+  - id: evidence_correspondence
+    section: Evidence
+    question: "Correspondence with Tenant"
+    inputType: group
+    helperText: "Upload correspondence or summarize key communications."
+    fields:
+      - id: correspondence_upload
+        label: "Upload correspondence"
+        inputType: upload
+        helperText: "Warning letters, emails, texts with tenant"
+        width: full
+      - id: correspondence_describe
+        label: "Or summarize key correspondence"
+        inputType: textarea
+        helperText: "Summarize important communications"
+        placeholder: "E.g., 01/06/2024 - Sent rent arrears letter by recorded delivery..."
+        width: full
+    maps_to:
+      - evidence.correspondence_uploads
+      - evidence.correspondence_description
+
+  - id: evidence_other
+    section: Evidence
+    question: "Other Supporting Documents"
     inputType: upload
-    skip_if_evidence:
-      - tenancy_agreement_uploaded
-      - rent_schedule_uploaded
-      - correspondence_uploaded
-    helperText: "Add tenancy agreement/PRT, rent schedule, correspondence and photos to strengthen your notice. Once you complete this wizard, you'll see a complete preview of your Notice Only pack (Notice to Leave, service instructions, pre-action checklist, and tribunal guide) before purchasing."
+    helperText: "Upload any other supporting documents (photos, authority letters, police reports, etc.)"
+    validation:
+      required: false
     evidence_types:
-      - tenancy_agreement
-      - rent_schedule
-      - correspondence
       - photos
       - authority_letters
     maps_to:
-      - evidence.tenancy_agreement_uploaded
-      - evidence.rent_schedule_uploaded
-      - evidence.asb_evidence_uploaded
       - evidence.other_evidence_uploaded
     suggestion_prompt: >
-      Suggest the most useful evidence for a Scottish notice to leave: signed tenancy, arrears ledger, warning letters,
-      photos of issues, or any council/police correspondence.
+      Suggest the most useful evidence for a Scottish notice to leave: photos of issues,
+      council/police correspondence, ASB logs.
 
   - id: service_contact
     section: Service Contact

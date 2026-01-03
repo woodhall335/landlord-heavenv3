@@ -1,23 +1,83 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { SocialProofCounter } from "@/components/ui/SocialProofCounter";
 import Link from "next/link";
 import Image from "next/image";
+import { RiCheckboxCircleLine } from "react-icons/ri";
+import {
+  Sparkles,
+  Compass,
+  Target,
+  Calendar,
+  ShieldCheck,
+  Zap,
+  CheckCircle2,
+  BadgePoundSterling,
+  FileCheck
+} from "lucide-react";
+import { StructuredData, productSchema, faqPageSchema } from "@/lib/seo/structured-data";
+import { RelatedLinks } from "@/components/seo/RelatedLinks";
+import { productLinks, toolLinks, blogLinks, landingPageLinks } from "@/lib/seo/internal-links";
 
 export const metadata: Metadata = {
-  title: "Notice Only - Section 8 & 21 Eviction Notices | Landlord Heaven",
+  title: "Section 21 & 8 Eviction Notices - Court-Ready from £29.99",
   description:
-    "Generate court-ready eviction notices for England, Wales, and Scotland in minutes. £29.99 one-time payment. Instant download. Section 8, Section 21, Section 173, and Notice to Leave.",
+    "Section 21 ends May 2026 - serve your no-fault eviction notice now. Court-ready documents in minutes. £29.99 one-time. England, Wales & Scotland.",
+  openGraph: {
+    title: "Section 21 & 8 Eviction Notices - Court-Ready from £29.99",
+    description: "Section 21 ends May 2026 - serve your no-fault eviction notice now. Court-ready documents in minutes.",
+  },
 };
+
+// FAQ data for structured data
+const faqs = [
+  {
+    question: "Is this legal? Will courts accept this?",
+    answer: "Yes! Our notices use official government forms (Form 6A for Section 21, AT6 for Scotland, etc.). They are identical to what solicitors use and are accepted by all UK courts and tribunals. However, we are NOT a law firm and don't provide legal advice - consult a solicitor for complex cases."
+  },
+  {
+    question: "What if I choose the wrong notice type?",
+    answer: "Our wizard analyzes your case and recommends the correct notice type based on your jurisdiction, tenancy type, and eviction grounds. You'll see a clear explanation of why each notice is recommended."
+  },
+  {
+    question: "Can I use this for HMO properties?",
+    answer: "Yes! Notice Only works for all tenancy types including HMOs."
+  },
+  {
+    question: "What happens after I serve the notice?",
+    answer: "After the notice period expires, if the tenant doesn't leave, you'll need to apply to court for a possession order. Our Legal Proceedings products include court claim forms to continue the process."
+  },
+  {
+    question: "What if my notice is rejected by court?",
+    answer: "If your notice is rejected due to an error in our document generation, we'll regenerate a corrected notice for free. However, if it's rejected due to incorrect information you provided or procedural issues (like missing deposit protection), we cannot offer a refund but will help you fix it."
+  },
+  {
+    question: "Can I generate multiple notices?",
+    answer: "£29.99 covers ONE notice for ONE property/tenant. Need multiple notices? You can purchase additional notices as needed. Each purchase includes unlimited regenerations before final download for that specific case."
+  }
+];
 
 export default function NoticeOnlyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Structured Data for SEO */}
+      <StructuredData data={productSchema({
+        name: "Notice Only Pack - Section 21 & 8 Eviction Notices",
+        description: "Court-ready eviction notices for UK landlords. Section 21 (Form 6A), Section 8, and Notice to Leave for Scotland. AI-powered route selection and compliance checking included.",
+        price: "29.99",
+        url: "https://landlordheaven.co.uk/products/notice-only"
+      })} />
+      <StructuredData data={faqPageSchema(faqs)} />
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">☁️ Ask Heaven Smart Guidance</span>
+              <span className="text-sm font-semibold text-primary flex items-center gap-2">
+                <Sparkles className="w-4 h-4" />
+                Ask Heaven Smart Guidance
+              </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Notice Only with Ask Heaven Smart Guidance</h1>
             <p className="text-xl md:text-2xl mb-6 text-gray-600">
@@ -25,7 +85,6 @@ export default function NoticeOnlyPage() {
             </p>
             <div className="flex items-baseline justify-center gap-2 mb-8">
               <span className="text-5xl md:text-6xl font-bold text-gray-900">£29.99</span>
-              <span className="text-xl text-gray-600">one-time</span>
             </div>
             <Link
               href="/wizard?product=notice_only"
@@ -33,7 +92,10 @@ export default function NoticeOnlyPage() {
             >
               Get Your Notice Now →
             </Link>
-            <p className="mt-4 text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
+            <div className="mt-4 mb-2">
+              <SocialProofCounter variant="today" className="mx-auto" />
+            </div>
+            <p className="text-sm text-gray-600">Instant download • Legally compliant • No subscription</p>
           </div>
         </Container>
       </section>
@@ -43,23 +105,27 @@ export default function NoticeOnlyPage() {
         <Container>
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <div className="text-6xl mb-4">☁️</div>
+              <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-primary" />
+              </div>
               <h2 className="text-3xl md:text-4xl font-bold text-charcoal mb-4">
                 Ask Heaven Smart Guidance (Included!)
               </h2>
               <p className="text-xl text-gray-700 mb-2">
-                AI-powered recommendations to maximize your success
+                AI-powered recommendations to maximise your success
               </p>
               <p className="text-gray-600">
-                Ask Heaven analyzes your case and provides expert guidance at every step
+                Ask Heaven analyses your case and provides expert guidance at every step
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-6">
               {/* Route Recommendation */}
               <div className="bg-white rounded-xl border-2 border-blue-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Compass className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Smart Route Recommendation</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
@@ -87,8 +153,10 @@ export default function NoticeOnlyPage() {
 
               {/* Ground Recommendations */}
               <div className="bg-white rounded-xl border-2 border-green-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Target className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Ground Recommendations</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
@@ -116,8 +184,10 @@ export default function NoticeOnlyPage() {
 
               {/* Auto-Calculated Dates */}
               <div className="bg-white rounded-xl border-2 border-purple-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Calendar className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Auto-Calculated Dates</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
@@ -145,8 +215,10 @@ export default function NoticeOnlyPage() {
 
               {/* Compliance Checks */}
               <div className="bg-white rounded-xl border-2 border-orange-200 p-6 shadow-lg">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-3xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <ShieldCheck className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-bold text-charcoal">Compliance Verification</h3>
                 </div>
                 <p className="text-gray-700 mb-4">
@@ -201,37 +273,19 @@ export default function NoticeOnlyPage() {
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">
                       <strong>Section 8 Notice</strong> - Rent arrears, breach, antisocial behaviour
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">
                       <strong>Section 21 Notice (Form 6A)</strong> - No-fault eviction
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">Housing Act 1988 - AST framework</span>
                   </li>
                 </ul>
@@ -245,37 +299,19 @@ export default function NoticeOnlyPage() {
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">
                       <strong>Section 173 Notice</strong> - No-fault possession
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">
                       <strong>Fault-Based Notices</strong> - Rent arrears, breach, ASB
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">Renting Homes (Wales) Act 2016 - Occupation contracts</span>
                   </li>
                 </ul>
@@ -289,35 +325,17 @@ export default function NoticeOnlyPage() {
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">
                       <strong>Notice to Leave</strong> - For PRTs under 2016 Act
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">All 18 eviction grounds covered</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-success mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">Tribunal-ready format</span>
                   </li>
                 </ul>
@@ -326,39 +344,23 @@ export default function NoticeOnlyPage() {
 
               {/* Bonus Features */}
               <div className="bg-primary-subtle rounded-lg border border-primary/20 p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="text-2xl">☁️</span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                  </div>
                   <h3 className="text-xl font-semibold text-charcoal">Ask Heaven Features</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">Ask Heaven Smart Guidance (route, grounds, dates)</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">Instant PDF download</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <svg className="w-5 h-5 text-primary mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path
-                        fillRule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    <RiCheckboxCircleLine className="w-5 h-5 text-[#7C3AED] mt-0.5 shrink-0" />
                     <span className="text-gray-700">Serve by post or email guide</span>
                   </li>
                 </ul>
@@ -431,7 +433,9 @@ export default function NoticeOnlyPage() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">⚡</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <Zap className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Fast - 5 Minutes</h3>
                 <p className="text-gray-700">
                   No more hours researching forms. Answer questions, get your notice instantly. Solicitors charge £200+
@@ -440,7 +444,9 @@ export default function NoticeOnlyPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">✅</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <CheckCircle2 className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Court-Ready</h3>
                 <p className="text-gray-700">
                   All notices use official government formats (Form 6A, AT6, etc.). Accepted by all UK courts and
@@ -449,7 +455,7 @@ export default function NoticeOnlyPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="mb-3">
+                <div className="mb-4">
                   <Image src="/lgb.svg" alt="UK Coverage" width={48} height={48} className="w-12 h-12" />
                 </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Full UK Coverage - Separate Frameworks</h3>
@@ -459,7 +465,9 @@ export default function NoticeOnlyPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🤖</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <ShieldCheck className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Smart Validation</h3>
                 <p className="text-gray-700">
                   Our system validates your case, checks notice periods, suggests grounds, and ensures compliance
@@ -468,7 +476,9 @@ export default function NoticeOnlyPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">💰</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <BadgePoundSterling className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Save £170+</h3>
                 <p className="text-gray-700">
                   Solicitors charge £200-300 per notice. Our £29.99 one-time fee saves you money with no quality
@@ -477,7 +487,9 @@ export default function NoticeOnlyPage() {
               </div>
 
               <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="text-3xl mb-3">🔒</div>
+                <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
+                  <FileCheck className="w-7 h-7 text-primary" />
+                </div>
                 <h3 className="text-xl font-semibold text-charcoal mb-2">Professional Documents</h3>
                 <p className="text-gray-700">
                   Legally compliant documents generated instantly. Accepted by all UK courts and tribunals.
@@ -568,21 +580,42 @@ export default function NoticeOnlyPage() {
         </Container>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 md:py-20 bg-linear-to-br from-primary to-emerald-600">
+      {/* Related Resources */}
+      <section className="py-16 md:py-20">
         <Container>
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Your Notice?</h2>
-            <p className="text-xl mb-8 text-white/90">
+          <div className="max-w-4xl mx-auto">
+            <RelatedLinks
+              title="Related Resources"
+              links={[
+                productLinks.completePack,
+                toolLinks.section21Generator,
+                toolLinks.section8Generator,
+                blogLinks.whatIsSection21,
+                blogLinks.section21VsSection8,
+                landingPageLinks.evictionTemplate,
+              ]}
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Get Your Notice?</h2>
+            <p className="text-xl mb-8 text-gray-600">
               Join thousands of UK landlords who've successfully served eviction notices with Landlord Heaven
             </p>
-            <Link
-              href="/wizard?product=notice_only"
-              className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition-colors shadow-lg"
-            >
-              Start Your Notice - £29.99 →
-            </Link>
-            <p className="mt-4 text-sm text-white/80">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/wizard?product=notice_only"
+                className="hero-btn-primary"
+              >
+                Start Your Notice - £29.99 →
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-gray-600">
               Instant download • Legally compliant • No subscription
             </p>
           </div>

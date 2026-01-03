@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { ShieldCheck, Database, CreditCard, Sparkles, Mail, Send } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Landlord Heaven",
@@ -10,7 +11,7 @@ export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -29,7 +30,10 @@ export default function PrivacyPage() {
           <p className="text-sm text-gray-500 mb-8">Last updated: November 22, 2025</p>
 
           <div className="bg-primary-subtle border-l-4 border-primary p-4 mb-8">
-            <p className="text-charcoal font-semibold mb-2">🔒 Your Privacy Matters</p>
+            <p className="text-charcoal font-semibold mb-2 flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-primary" />
+              Your Privacy Matters
+            </p>
             <p className="text-gray-700 text-sm">
               Landlord Heaven is committed to protecting your privacy and complying with UK GDPR. This policy explains
               how we collect, use, and protect your personal data.
@@ -91,24 +95,44 @@ export default function PrivacyPage() {
 
             <div className="grid gap-4 mb-4">
               <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold text-charcoal mb-2">🗄️ Supabase (Database & Auth)</h4>
+                <h4 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Database className="w-4 h-4 text-primary" />
+                  </div>
+                  Supabase (Database & Auth)
+                </h4>
                 <p className="text-sm text-gray-700">Stores your account data and documents. UK/EU servers.</p>
               </div>
 
               <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold text-charcoal mb-2">💳 Stripe (Payments)</h4>
+                <h4 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <CreditCard className="w-4 h-4 text-primary" />
+                  </div>
+                  Stripe (Payments)
+                </h4>
                 <p className="text-sm text-gray-700">Processes payments securely. PCI-DSS compliant.</p>
               </div>
 
               <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold text-charcoal mb-2">🤖 Document Processing Services</h4>
+                <h4 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                  </div>
+                  Document Processing Services
+                </h4>
                 <p className="text-sm text-gray-700">
                   Process your case information to generate legal documents. Data is anonymized where possible.
                 </p>
               </div>
 
               <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-semibold text-charcoal mb-2">📧 Resend (Email)</h4>
+                <h4 className="font-semibold text-charcoal mb-2 flex items-center gap-2">
+                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Mail className="w-4 h-4 text-primary" />
+                  </div>
+                  Resend (Email)
+                </h4>
                 <p className="text-sm text-gray-700">Sends transactional emails and notifications.</p>
               </div>
             </div>
@@ -137,7 +161,10 @@ export default function PrivacyPage() {
             </ul>
 
             <div className="bg-primary-subtle border border-primary/20 rounded-lg p-4 mb-4">
-              <p className="text-charcoal font-semibold mb-2">📬 Exercise Your Rights</p>
+              <p className="text-charcoal font-semibold mb-2 flex items-center gap-2">
+                <Send className="w-5 h-5 text-primary" />
+                Exercise Your Rights
+              </p>
               <p className="text-gray-700 text-sm mb-2">
                 Email us at{" "}
                 <a href="mailto:privacy@landlordheaven.co.uk" className="text-primary hover:underline">

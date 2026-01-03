@@ -12,26 +12,26 @@ export function Footer() {
           <div>
             <div className="mb-6">
               <Image
-                src="/footerlogo.png"
+                src="/footerlogo3.png"
                 alt="Landlord Heaven"
                 width={200}
                 height={40}
                 className="h-8 w-auto"
               />
             </div>
-            <p className="text-base text-gray-300 leading-relaxed mb-6">
+            <p className="text-base leading-relaxed mb-6" style={{ color: '#bdbdbd' }}>
               Professional legal documents for UK landlords. Court-ready, compliant, instantly delivered.
             </p>
-            <div className="flex flex-col gap-2 text-sm text-gray-400">
+            <div className="flex flex-col gap-2 text-sm">
               <div className="flex items-center gap-2">
                 <Image
                   src="/gb-eng.svg"
                   alt="England"
                   width={20}
                   height={20}
-                  className="w-5 h-5"
+                  className="w-7 h-5"
                 />
-                <span>England</span>
+                <span style={{ color: '#bdbdbd' }}>England</span>
               </div>
               <div className="flex items-center gap-2">
                 <Image
@@ -39,9 +39,9 @@ export function Footer() {
                   alt="Wales"
                   width={20}
                   height={20}
-                  className="w-5 h-5"
+                  className="w-7 h-5"
                 />
-                <span>Wales</span>
+                <span style={{ color: '#bdbdbd' }}>Wales</span>
               </div>
               <div className="flex items-center gap-2">
                 <Image
@@ -49,9 +49,9 @@ export function Footer() {
                   alt="Scotland"
                   width={20}
                   height={20}
-                  className="w-5 h-5"
+                  className="w-7 h-5"
                 />
-                <span>Scotland</span>
+                <span style={{ color: '#bdbdbd' }}>Scotland</span>
               </div>
               <div className="flex items-center gap-2">
                 <Image
@@ -59,21 +59,22 @@ export function Footer() {
                   alt="Northern Ireland"
                   width={20}
                   height={20}
-                  className="w-5 h-5"
+                  className="w-7 h-5"
                 />
-                <span>Northern Ireland</span>
+                <span style={{ color: '#bdbdbd' }}>Northern Ireland</span>
               </div>
             </div>
           </div>
 
           {/* Column 2: Products */}
           <div>
-            <h5 className="text-base font-bold mb-6">Products</h5>
+            <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Products</u></h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
                   href="/products/notice-only"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Notice Only
                 </Link>
@@ -81,7 +82,8 @@ export function Footer() {
               <li>
                 <Link
                   href="/products/complete-pack"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Complete Eviction Pack
                 </Link>
@@ -89,7 +91,8 @@ export function Footer() {
               <li>
                 <Link
                   href="/products/money-claim"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Money Claim Pack
                 </Link>
@@ -97,30 +100,25 @@ export function Footer() {
               <li>
                 <Link
                   href="/products/ast"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Tenancy Agreements
                 </Link>
               </li>
-              <li>
-                <Link
-                  href="/hmo-pro"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
-                >
-                  HMO Pro Membership
-                </Link>
-              </li>
+{/* HMO Pro removed - parked for later review */}
             </ul>
           </div>
 
           {/* Column 3: Legal */}
           <div>
-            <h5 className="text-base font-bold mb-6">Legal</h5>
+            <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Legal</u></h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
                   href="/terms"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Terms & Conditions
                 </Link>
@@ -128,7 +126,8 @@ export function Footer() {
               <li>
                 <Link
                   href="/privacy"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Privacy Policy
                 </Link>
@@ -136,7 +135,8 @@ export function Footer() {
               <li>
                 <Link
                   href="/refunds"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Refund Policy
                 </Link>
@@ -144,7 +144,8 @@ export function Footer() {
               <li>
                 <Link
                   href="/cookies"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Cookie Policy
                 </Link>
@@ -154,12 +155,13 @@ export function Footer() {
 
           {/* Column 4: Account */}
           <div>
-            <h5 className="text-base font-bold mb-6">Account</h5>
+            <h5 className="text-base font-bold mb-6" style={{ color: '#bdbdbd' }}><u>Account</u></h5>
             <ul className="space-y-3.5">
               <li>
                 <Link
                   href="/auth/login"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Login
                 </Link>
@@ -167,7 +169,8 @@ export function Footer() {
               <li>
                 <Link
                   href="/auth/signup"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Register
                 </Link>
@@ -175,7 +178,8 @@ export function Footer() {
               <li>
                 <Link
                   href="/contact"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   Contact Us
                 </Link>
@@ -183,7 +187,8 @@ export function Footer() {
               <li>
                 <Link
                   href="/about"
-                  className="text-sm text-gray-300 hover:text-white transition-colors inline-block"
+                  className="text-sm transition-colors inline-block"
+                  style={{ color: '#bdbdbd' }}
                 >
                   About Us
                 </Link>
@@ -195,15 +200,15 @@ export function Footer() {
         {/* Bottom Row */}
         <div className="mt-16 pt-10 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-sm text-gray-400 text-center md:text-left">
+            <p className="text-sm text-center md:text-left" style={{ color: '#bdbdbd' }}>
               © {currentYear} Landlord Heaven. All rights reserved.
             </p>
 
-            <div className="flex items-center gap-6 text-sm text-gray-400">
-              <span className="font-medium">100% UK Coverage</span>
-              <span className="text-gray-600">•</span>
+            <div className="flex items-center gap-6 text-sm" style={{ color: '#bdbdbd' }}>
+              <span className="font-medium">UK-Wide Coverage</span>
+              <span style={{ color: '#bdbdbd' }}>•</span>
               <span className="font-medium">Court-Ready Documents</span>
-              <span className="text-gray-600">•</span>
+              <span style={{ color: '#bdbdbd' }}>•</span>
               <span className="font-medium">Instant Delivery</span>
             </div>
           </div>

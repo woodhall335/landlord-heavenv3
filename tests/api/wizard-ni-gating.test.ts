@@ -82,8 +82,10 @@ describe('Wizard API Northern Ireland gating', () => {
     );
 
     const body = await response.json();
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     expect(body.error).toBe(NI_DISABLED);
+    expect(body.blocking_issues).toEqual([]);
+    expect(body.warnings).toEqual([]);
     expect(supabaseClientMock.insert).not.toHaveBeenCalled();
   });
 
@@ -99,8 +101,10 @@ describe('Wizard API Northern Ireland gating', () => {
     );
 
     const body = await response.json();
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     expect(body.error).toBe(NI_DISABLED);
+    expect(body.blocking_issues).toEqual([]);
+    expect(body.warnings).toEqual([]);
     expect(supabaseClientMock.insert).not.toHaveBeenCalled();
   });
 
@@ -116,8 +120,10 @@ describe('Wizard API Northern Ireland gating', () => {
     );
 
     const body = await response.json();
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     expect(body.error).toBe(NI_DISABLED);
+    expect(body.blocking_issues).toEqual([]);
+    expect(body.warnings).toEqual([]);
     expect(supabaseClientMock.insert).not.toHaveBeenCalled();
   });
 
@@ -171,8 +177,10 @@ describe('Wizard API Northern Ireland gating', () => {
     );
 
     const body = await response.json();
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     expect(body.error).toBe(NI_DISABLED);
+    expect(body.blocking_issues).toEqual([]);
+    expect(body.warnings).toEqual([]);
   });
 
   it('rejects NI eviction analysis at /api/wizard/analyze', async () => {
@@ -196,8 +204,10 @@ describe('Wizard API Northern Ireland gating', () => {
     );
 
     const body = await response.json();
-    expect(response.status).toBe(400);
+    expect(response.status).toBe(422);
     expect(body.error).toBe(NI_DISABLED);
+    expect(body.blocking_issues).toEqual([]);
+    expect(body.warnings).toEqual([]);
     // Just cast to any for the matcher – no vi.Mock type needed
     expect(decisionEngine.analyzeCase as any).not.toHaveBeenCalled();
   });

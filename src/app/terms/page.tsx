@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui";
+import { AlertTriangle } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Terms & Conditions | Landlord Heaven",
@@ -10,7 +11,7 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -49,7 +50,10 @@ export default function TermsPage() {
 
             <h2 className="text-2xl font-semibold text-charcoal mt-8 mb-4">3. Not Legal Advice</h2>
             <div className="bg-warning/10 border-l-4 border-warning p-4 mb-4">
-              <p className="text-charcoal font-semibold mb-2">⚠️ Important Notice</p>
+              <p className="text-charcoal font-semibold mb-2 flex items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-warning" />
+                Important Notice
+              </p>
               <p className="text-gray-700">
                 <strong>Landlord Heaven is NOT a law firm and does NOT provide legal advice.</strong> Our services
                 generate documents based on information you provide. We do not review your specific circumstances or

@@ -1,0 +1,28 @@
+{
+  "ground": "some_rent_arrears",
+  "type": "discretionary",
+  "category": "rent_arrears",
+  "name": "Some Rent Arrears",
+  "short_description": "Arrears exist but are below serious threshold",
+  "legal_basis": {
+    "act": "Renting Homes (Wales) Act 2016",
+    "section": "Section 159, Schedule 9 Ground 10",
+    "statute_year": "2016"
+  },
+  "requirements": {
+    "arrears_at_notice": "Some rent unpaid at notice and hearing",
+    "threshold": "Below serious arrears amount"
+  },
+  "notice_period": {
+    "minimum_days": 56,
+    "reference": "Section 159 discretionary ground"
+  },
+  "evidence_required": [
+    "Rent account showing current arrears",
+    "Payment history",
+    "Correspondence regarding arrears"
+  ],
+  "success_factors": {
+    "considerations": ["Reasonableness test", "Payment plans offered", "Tenant vulnerability"]
+  }
+}

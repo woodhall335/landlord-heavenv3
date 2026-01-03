@@ -1,14 +1,16 @@
 // src/app/api/ask-heaven/chat/route.ts
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { jsonCompletion } from '@/lib/ai';
 import type { ChatMessage, ChatCompletionOptions } from '@/lib/ai';
 import { ASK_HEAVEN_BASE_SYSTEM_PROMPT } from '@/lib/ai/ask-heaven';
+import { rateLimiters } from '@/lib/rate-limit';
+import { logger } from '@/lib/logger';
 
 const chatSchema = z.object({
   case_id: z.string().optional(),
   case_type: z.enum(['eviction', 'money_claim', 'tenancy_agreement']).optional(),
-  jurisdiction: z.enum(['england-wales', 'scotland', 'northern-ireland']).optional(),
+  jurisdiction: z.enum(['england', 'wales', 'scotland', 'northern-ireland']).optional(),
   product: z
     .enum(['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement'])
     .optional(),
@@ -20,17 +22,52 @@ const chatSchema = z.object({
       }),
     )
     .min(1),
+  // Email gate parameters (optional for backward compatibility)
+  messageCount: z.number().optional(),
+  emailCaptured: z.boolean().optional(),
 });
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-export async function POST(req: Request): Promise<Response> {
+export async function POST(req: NextRequest): Promise<Response> {
   try {
+    // Apply rate limiting for AI endpoints
+    const rateLimitResult = await rateLimiters.wizard(req);
+    if (!rateLimitResult.success) {
+      return NextResponse.json(
+        { error: 'Rate limit exceeded. Please try again later.' },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil((rateLimitResult.reset - Date.now()) / 1000)),
+          },
+        }
+      );
+    }
+
     const json = await req.json();
     const parsed = chatSchema.parse(json);
 
-    const { case_id, case_type, jurisdiction, product, messages } = parsed;
+    const { case_id, case_type, jurisdiction, product, messages, messageCount, emailCaptured } = parsed;
+
+    // Email gate enforcement: require email after 3 messages (unless case_id present or already captured)
+    const EMAIL_GATE_THRESHOLD = 3;
+    if (
+      !case_id &&
+      messageCount !== undefined &&
+      messageCount >= EMAIL_GATE_THRESHOLD &&
+      emailCaptured === false
+    ) {
+      return NextResponse.json(
+        {
+          requires_email: true,
+          message: 'Enter your email to continue your conversation.',
+          suggestedCTAs: [],
+        },
+        { status: 200 }
+      );
+    }
 
     const systemContent = `
 ${ASK_HEAVEN_BASE_SYSTEM_PROMPT}
@@ -49,11 +86,38 @@ Additional instructions for CHAT MODE:
 - Focus on explaining options, risks, timelines, and evidence, not telling the user exactly what to do.
 - Use short sections and bullet points where helpful.
 
-Context (if provided):
-${jurisdiction ? `- Jurisdiction: ${jurisdiction}` : ''}
-${case_type ? `- Case type: ${case_type}` : ''}
-${product ? `- Product stage: ${product}` : ''}
+PRODUCT RECOMMENDATIONS:
+When the landlord's question indicates they need a specific document or service, suggest the appropriate product code:
+- notice_only - For eviction/serving notice questions
+- complete_pack - For court/tribunal/possession proceedings
+- money_claim - For rent arrears/money claims/debt recovery
+- tenancy_agreement - For tenancy agreement/AST questions
+
+Only suggest ONE product per response if clearly relevant. Use null if the question is general.
+
+Context:
+${jurisdiction ? `- Jurisdiction: ${jurisdiction}` : '- Jurisdiction: Not specified (assume England unless user indicates otherwise)'}
 ${case_id ? '- You are chatting about a specific internal case. NEVER show the case_id or any internal IDs to the user.' : ''}
+
+RESPONSE FORMATTING:
+- Use markdown formatting in your reply: **bold** for emphasis, bullet points for lists
+- When citing legislation, include the specific section (e.g. "Section 21 of the Housing Act 1988")
+- At the end of detailed answers, include a "Sources" section listing relevant legislation
+
+CRITICAL - JSON RESPONSE FORMAT:
+You MUST respond with a JSON object containing exactly these fields:
+{
+  "reply": "Your helpful response with **markdown** formatting",
+  "suggested_product": "notice_only" | "complete_pack" | "money_claim" | "tenancy_agreement" | null,
+  "follow_up_questions": ["Question 1?", "Question 2?"],
+  "sources": ["Housing Act 1988 s.21", "Deregulation Act 2015"]
+}
+
+Field requirements:
+- "reply" (REQUIRED): Your full response to the landlord with markdown formatting
+- "suggested_product": One of the product codes above, or null if no product is relevant
+- "follow_up_questions": Array of 2-3 relevant follow-up questions the landlord might ask
+- "sources": Array of legislation/regulations cited in your answer (empty array if none)
 `.trim();
 
     const systemMessage: ChatMessage = {
@@ -68,8 +132,22 @@ ${case_id ? '- You are chatting about a specific internal case. NEVER show the c
       properties: {
         reply: {
           type: 'string',
-          description:
-            'Helpful, grounded reply to the landlord. Use clear structure and plain language, like a cautious senior housing solicitor, without giving personalised legal advice.',
+          description: 'Helpful response with markdown formatting',
+        },
+        suggested_product: {
+          type: 'string',
+          enum: ['notice_only', 'complete_pack', 'money_claim', 'tenancy_agreement', null],
+          description: 'Product code or null',
+        },
+        follow_up_questions: {
+          type: 'array',
+          items: { type: 'string' },
+          description: '2-3 relevant follow-up questions',
+        },
+        sources: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Legislation/regulations cited',
         },
       },
       required: ['reply'],
@@ -81,15 +159,54 @@ ${case_id ? '- You are chatting about a specific internal case. NEVER show the c
       temperature: 0.2,
     };
 
-    const result = await jsonCompletion<{ reply: string }>(
+    // Debug: Check if OPENAI_API_KEY is set
+    if (!process.env.OPENAI_API_KEY) {
+      logger.error('OPENAI_API_KEY is not set');
+      return NextResponse.json(
+        { error: 'OpenAI API key is not configured. Please check server configuration.' },
+        { status: 500 }
+      );
+    }
+
+    interface AskHeavenResponse {
+      reply: string;
+      suggested_product?: string | null;
+      follow_up_questions?: string[];
+      sources?: string[];
+    }
+
+    const result = await jsonCompletion<AskHeavenResponse>(
       fullMessages,
       schema as Record<string, unknown>,
       options,
     );
 
-    const reply = result.json?.reply ?? 'Sorry, Ask Heaven could not generate a reply this time.';
+    // Debug: Log the raw response
+    logger.info('Ask Heaven raw response', {
+      hasJson: !!result.json,
+      jsonKeys: result.json ? Object.keys(result.json) : [],
+      contentPreview: result.content?.substring(0, 200),
+    });
 
-    return NextResponse.json({ reply }, { status: 200 });
+    const reply = result.json?.reply ?? 'Sorry, Ask Heaven could not generate a reply this time.';
+    const suggestedProduct = result.json?.suggested_product ?? null;
+    const followUpQuestions = result.json?.follow_up_questions ?? [];
+    const sources = result.json?.sources ?? [];
+
+    // Debug: Log if reply was missing
+    if (!result.json?.reply) {
+      logger.warn('Ask Heaven response missing reply field', {
+        rawJson: JSON.stringify(result.json),
+        content: result.content,
+      });
+    }
+
+    return NextResponse.json({
+      reply,
+      suggested_product: suggestedProduct,
+      follow_up_questions: followUpQuestions,
+      sources,
+    }, { status: 200 });
   } catch (err) {
     if (err instanceof z.ZodError) {
       return NextResponse.json(
@@ -98,6 +215,7 @@ ${case_id ? '- You are chatting about a specific internal case. NEVER show the c
       );
     }
 
+    logger.error('Ask Heaven chat error', { error: (err as Error)?.message });
     return NextResponse.json(
       { error: 'Ask Heaven chat is currently unavailable.' },
       { status: 500 },

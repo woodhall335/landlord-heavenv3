@@ -32,7 +32,7 @@ export async function POST(req: Request) {
   const {
     case_id,
     case_type = 'eviction',
-    jurisdiction = 'england-wales',
+    jurisdiction = 'england',
     product = 'notice_only',
     question_id,
     question_text,

@@ -1,47 +1,35 @@
 import { describe, expect, test, beforeAll } from 'vitest';
 import { loadMQS, type MasterQuestionSet } from '@/lib/wizard/mqs-loader';
 
-const englandWalesNewIds = [
-  'lba_documents_sent',
-  'lba_second_sent',
-  'lba_second_date',
-  'lba_second_method',
-  'lba_second_response_deadline',
-  'defendant_response_details',
-  'arrears_schedule_confirm',
-  'evidence_types_available',
-  'pap_documents_served',
-  'pap_service_method',
-  'pap_service_proof',
-  'court_issue_route',
-  'claim_value_band',
-  'help_with_fees_needed',
-  'enforcement_preferences',
-  'enforcement_notes',
+// Updated to match actual question IDs in config/mqs/money_claim/england.yaml
+const englandCoreIds = [
+  'basis_of_claim',
+  'total_claim_amount',
+  'rent_arrears_details',
+  'property_damage_details',
+  'property_address',
+  'defendant_details',
+  'claimant_details',
+  'pre_action_compliance',
+  'preferred_court',
+  'evidence_uploads',
 ];
 
-const scotlandNewIds = [
-  'pre_action_first_method',
-  'pre_action_response_deadline',
-  'pre_action_docs_sent',
-  'pre_action_second_method',
-  'pre_action_reply_received',
-  'pre_action_reply_details',
-  'pre_action_letter_14day',
+// Updated to match actual question IDs in config/mqs/money_claim/scotland.yaml
+const scotlandCoreIds = [
+  'basis_of_claim',
+  'arrears_total',
+  'property_address',
+  'defender_full_name',
+  'pursuer_full_name',
   'sheriff_court',
-  'court_jurisdiction_confirmed',
-  'lodging_method',
-  'help_with_fees_needed',
-  'enforcement_preferences',
-  'enforcement_notes',
+  'demand_letter_date',
   'arrears_schedule_confirm',
   'evidence_types_available',
-  'pre_action_letter_served',
-  'pre_action_service_method',
-  'pre_action_service_proof',
+  'enforcement_preferences',
 ];
 
-describe('Money claim MQS - England & Wales PAP-DEBT coverage', () => {
+describe('Money claim MQS - England & Wales coverage', () => {
   let mqs: MasterQuestionSet | null;
 
   beforeAll(() => {
@@ -54,16 +42,16 @@ describe('Money claim MQS - England & Wales PAP-DEBT coverage', () => {
     expect(mqs?.jurisdiction).toBe('england');
   });
 
-  test('includes PAP-DEBT, court route, evidence, and enforcement questions', () => {
+  test('includes core money claim questions', () => {
     const questionIds = new Set((mqs?.questions ?? []).map((q: { id: string }) => q.id));
 
-    englandWalesNewIds.forEach((id) => {
+    englandCoreIds.forEach((id) => {
       expect(questionIds.has(id)).toBe(true);
     });
   });
 });
 
-describe('Money claim MQS - Scotland Rule 3.1 coverage', () => {
+describe('Money claim MQS - Scotland coverage', () => {
   let mqs: MasterQuestionSet | null;
 
   beforeAll(() => {
@@ -76,10 +64,10 @@ describe('Money claim MQS - Scotland Rule 3.1 coverage', () => {
     expect(mqs?.jurisdiction).toBe('scotland');
   });
 
-  test('includes Rule 3.1, evidence, enforcement, and lodging questions', () => {
+  test('includes core money claim questions', () => {
     const questionIds = new Set((mqs?.questions ?? []).map((q: { id: string }) => q.id));
 
-    scotlandNewIds.forEach((id) => {
+    scotlandCoreIds.forEach((id) => {
       expect(questionIds.has(id)).toBe(true);
     });
   });

@@ -1,17 +1,26 @@
 /**
- * Google Analytics gtag.js TypeScript definitions
+ * Google Analytics gtag.js and Facebook Pixel TypeScript definitions
  */
 
 export {};
 
 declare global {
   interface Window {
+    // Google Analytics / Google Ads
     gtag: (
       command: 'config' | 'event' | 'js' | 'set',
       targetIdOrDate: string | Date,
       config?: Gtag.ControlParams | Gtag.EventParams | Gtag.CustomParams
     ) => void;
     dataLayer: any[];
+
+    // Facebook Pixel
+    fbq: (
+      command: 'init' | 'track' | 'trackCustom' | 'trackSingle' | 'trackSingleCustom',
+      eventNameOrPixelId: string,
+      params?: Record<string, any>
+    ) => void;
+    _fbq: any;
   }
 }
 

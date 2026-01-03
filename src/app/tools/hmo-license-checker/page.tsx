@@ -1,9 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Container } from '@/components/ui/Container';
-import councilsData from '@/config/jurisdictions/uk/england-wales/councils.json';
+import councilsData from '@/config/jurisdictions/uk/england/councils.json';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, toolLinks } from '@/lib/seo/internal-links';
 
 // Function to lookup council by postcode
 function getCouncilByPostcode(postcode: string): { name: string; website: string } | null {
@@ -30,7 +35,8 @@ export default function HMOLicenseChecker() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generated, setGenerated] = useState(false);
 
-  const handleGenerate = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     setIsGenerating(true);
 
     try {
@@ -294,7 +300,7 @@ export default function HMOLicenseChecker() {
       });
 
       // Footer
-      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.com`, {
+      page.drawText(`Generated: ${new Date().toLocaleDateString('en-GB')} | www.LandlordHeaven.co.uk`, {
         x: 50,
         y: 50,
         size: 8,
@@ -325,6 +331,17 @@ export default function HMOLicenseChecker() {
       setIsGenerating(false);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [formData]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:hmo-license-checker',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleGenerate = () => {
+    gate.checkGateAndProceed();
   };
 
   const isFormValid =
@@ -337,7 +354,7 @@ export default function HMOLicenseChecker() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -365,6 +382,9 @@ export default function HMOLicenseChecker() {
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant assessment • HMO guidance • Upgrade for professional agreements</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>
@@ -689,7 +709,7 @@ export default function HMOLicenseChecker() {
                 for all tenants. Individual agreements give you more flexibility (tenants can move out
                 independently) but require more administration. Joint agreements make all tenants
                 jointly and severally liable for the rent, providing more security. Our paid HMO
-                tenancy agreement product (£39.99) includes both options with HMO-specific terms.
+                tenancy agreement product (from £9.99) includes both options with HMO-specific terms.
               </p>
             </div>
           </div>
@@ -699,6 +719,27 @@ export default function HMOLicenseChecker() {
           </div>
         </Container>
       </div>
+
+      {/* Related Resources */}
+      <RelatedLinks
+        title="Related Resources"
+        links={[
+          productLinks.tenancyAgreement,
+          toolLinks.rentArrearsCalculator,
+          toolLinks.section21Generator,
+          toolLinks.section8Generator,
+        ]}
+      />
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="HMO License Assessment"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }

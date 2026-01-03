@@ -11,17 +11,17 @@ import { z } from 'zod';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-11-17.clover',
+  apiVersion: '2025-12-15.clover',
 });
 
 // Product pricing configuration
 const PRODUCT_PRICES = {
-  notice_only: { amount: 2999, name: 'Notice Only Pack', description: 'Single eviction notice generation', jurisdiction: 'england-wales' },
-  complete_pack: { amount: 14999, name: 'Complete Eviction Pack', description: 'All eviction documents + N5 claim form', jurisdiction: 'england-wales' },
-  money_claim: { amount: 17999, name: 'Money Claim Pack (England & Wales)', description: 'Complete money claim documents for England & Wales', jurisdiction: 'england-wales' },
+  notice_only: { amount: 2999, name: 'Notice Only Pack', description: 'Single eviction notice generation', jurisdiction: 'england' },
+  complete_pack: { amount: 14999, name: 'Complete Eviction Pack', description: 'All eviction documents + N5 claim form', jurisdiction: 'england' },
+  money_claim: { amount: 17999, name: 'Money Claim Pack (England & Wales)', description: 'Complete money claim documents for England & Wales', jurisdiction: 'england' },
   sc_money_claim: { amount: 17999, name: 'Simple Procedure Pack (Scotland)', description: 'Complete Simple Procedure money claim documents for Scotland', jurisdiction: 'scotland' },
-  ast_standard: { amount: 3999, name: 'Standard AST Agreement', description: 'Basic assured shorthold tenancy agreement', jurisdiction: 'england-wales' },
-  ast_premium: { amount: 5900, name: 'Premium AST Agreement', description: 'Comprehensive AST with all clauses', jurisdiction: 'england-wales' },
+  ast_standard: { amount: 999, name: 'Standard AST Agreement', description: 'Basic assured shorthold tenancy agreement', jurisdiction: 'england' },
+  ast_premium: { amount: 1499, name: 'Premium AST Agreement', description: 'Comprehensive AST with all clauses', jurisdiction: 'england' },
 } as const;
 
 // Validation schema
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
 
       if (caseData) {
         // Check money claim jurisdiction restrictions
-        if (product_type === 'money_claim' && caseData.jurisdiction !== 'england-wales') {
+        if (product_type === 'money_claim' && !['england', 'wales'].includes(caseData.jurisdiction)) {
           return NextResponse.json(
             { error: 'England & Wales Money Claim Pack can only be purchased for England & Wales cases' },
             { status: 400 }
@@ -142,7 +142,11 @@ export async function POST(request: Request) {
     }
 
     // Create Stripe checkout session
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    // Use NEXT_PUBLIC_APP_URL in production, fallback to localhost only in development
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ||
+      (process.env.NODE_ENV === 'production'
+        ? 'https://landlordheaven.co.uk'
+        : 'http://localhost:5000');
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       mode: 'payment',

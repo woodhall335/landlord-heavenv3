@@ -65,10 +65,10 @@ Upgraded the Money Claim Pack implementation from **5 basic documents** to **10+
 
 ### Scotland — MAJOR GAPS:
 
-#### 🔴 **CRITICAL BUG: Simple Procedure Form 3A PDF DOES NOT EXIST**
-- The file `public/official-forms/scotland/simple_procedure_claim_form.pdf` is **MISSING**
-- Code references it in `scotland-forms-filler.ts:376` but file does not exist
-- **IMPACT:** Pack generation will **CRASH at runtime**
+#### ✅ **RESOLVED: Simple Procedure Form 3A PDF**
+- The file `public/official-forms/scotland/form-3a.pdf` is now **PRESENT**
+- Code correctly references it in `scotland-forms-filler.ts`
+- **STATUS:** Fixed and verified
 
 #### ❌ **PRE-ACTION LETTER — MISSING**
 - **Legal Requirement:** Simple Procedure Rule 3.1 requires evidence of attempts to resolve
@@ -198,24 +198,13 @@ public/official-forms/scotland/
 
 ### **Scotland Simple Procedure Form 3A PDF**
 
-**STATUS:** ❌ **MISSING — MUST BE DOWNLOADED**
+**STATUS:** ✅ **PRESENT AND WORKING**
 
-The file `public/official-forms/scotland/simple_procedure_claim_form.pdf` does **NOT** exist.
+The file `public/official-forms/scotland/form-3a.pdf` exists and is properly mapped.
 
-**Impact:** Scotland Money Claim Pack generation will **CRASH** with error:
-```
-Failed to load official form "simple_procedure_claim_form.pdf".
-Make sure the PDF exists in /public/official-forms/scotland/.
-```
-
-**Action Required:**
-1. Download official Form 3A from Scottish Courts:
-   - https://www.scotcourts.gov.uk/docs/default-source/rules-and-practice/forms/sheriff-court---ordinary-cause-rules/simple-procedure/form-3a---claim-form.pdf
-2. Save as: `public/official-forms/scotland/simple_procedure_claim_form.pdf`
-3. Verify PDF is fillable (has form fields)
-4. Test generator
-
-**Warning created:** `public/official-forms/scotland/MISSING_FORM_3A.md`
+**Location:** `public/official-forms/scotland/form-3a.pdf`
+**Manifest Entry:** Correctly configured in `forms-manifest.json`
+**Code Reference:** `scotland-money-claim-pack-generator.ts` uses correct path
 
 ---
 
@@ -307,7 +296,7 @@ The `facts_schema.json` `money_claim_facts` section is minimal. To fully support
 
 Before merging to main:
 
-- [ ] Download Form 3A PDF and save to `public/official-forms/scotland/simple_procedure_claim_form.pdf`
+- [x] Form 3A PDF present at `public/official-forms/scotland/form-3a.pdf`
 - [ ] Test England & Wales pack generation end-to-end
 - [ ] Test Scotland pack generation end-to-end (after Form 3A added)
 - [ ] Review all generated PDFs for data accuracy

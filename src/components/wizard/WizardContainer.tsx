@@ -614,6 +614,7 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
         );
 
       // "textarea" is a purely UI-level hint; we still treat it as a multi-line text input.
+      // Enable Ask Heaven inline enhancement for all textarea inputs.
       case 'textarea':
         return (
           <TextInput
@@ -623,6 +624,12 @@ export const WizardContainer: React.FC<WizardContainerProps> = ({
             required={currentQuestion.is_required}
             multiline
             rows={5}
+            askHeavenConfig={{
+              caseId: caseId || undefined,
+              questionId: currentQuestion.question_id ?? currentQuestion.id ?? 'unknown',
+              questionText: currentQuestion.question_text ?? currentQuestion.question,
+              apiMode: caseId ? 'mqs' : 'generic',
+            }}
           />
         );
 

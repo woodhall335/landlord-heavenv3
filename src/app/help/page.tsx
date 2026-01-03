@@ -13,7 +13,7 @@ export default function HelpPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container size="large">
           <div className="text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -119,10 +119,10 @@ export default function HelpPage() {
                       <strong>Money Claims (£179.99):</strong> Tenant owes rent arrears. Includes claim forms, arrears schedules, and witness statements.
                     </li>
                     <li>
-                      <strong>Standard AST (£49.99):</strong> Simple tenancy agreement for standard lettings.
+                      <strong>Standard AST (£9.99):</strong> Simple tenancy agreement for standard lettings.
                     </li>
                     <li>
-                      <strong>Premium AST (£99.99):</strong> Advanced tenancy with HMO clauses, guarantors, rent
+                      <strong>Premium AST (£14.99):</strong> Advanced tenancy with HMO clauses, guarantors, rent
                       increases.
                     </li>
                     <li>
@@ -139,7 +139,7 @@ export default function HelpPage() {
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
                   <p className="mb-3">
-                    <strong>100% UK Coverage:</strong>
+                    <strong>UK-Wide Coverage:</strong>
                   </p>
                   <ul className="space-y-2">
                     <li className="flex items-start gap-2">
@@ -153,7 +153,7 @@ export default function HelpPage() {
                     </li>
                     <li className="flex items-start gap-2">
                       <Image src="/gb-nir.svg" alt="Northern Ireland" width={16} height={16} className="w-4 h-4 mt-0.5" />
-                      <span><strong>Northern Ireland:</strong> Notice to Quit, NI tenancy agreements, County Court forms</span>
+                      <span><strong>Northern Ireland:</strong> Tenancy agreements only (eviction notices planned for 2026)</span>
                     </li>
                   </ul>
                   <p className="mt-3">
@@ -179,9 +179,12 @@ export default function HelpPage() {
                 </summary>
                 <div className="px-6 pb-4 text-gray-700">
                   <p>
-                    <strong>Yes.</strong> Our documents use official government forms (Form 6A for Section 21, AT6 for
-                    Scotland, etc.) and are accepted by all UK courts and tribunals. Thousands of landlords have
+                    <strong>Yes.</strong> Our documents are based on official government forms (Form 6A for Section 21 in England,
+                    Notice to Leave for Scotland, RHW forms for Wales) and are accepted by UK courts and tribunals. Thousands of landlords have
                     successfully used them.
+                  </p>
+                  <p className="mt-2 text-sm text-gray-600">
+                    <strong>Note for Wales:</strong> Our Welsh notice forms (RHW16/17/23) are currently English-only. For bilingual versions, obtain official forms from gov.wales.
                   </p>
                   <p className="mt-3 bg-warning/10 border-l-4 border-warning p-3 rounded-r">
                     <strong>Important:</strong> We are NOT a law firm and don't provide legal advice. For complex cases
@@ -360,7 +363,7 @@ export default function HelpPage() {
                     requirements like deposit protection) - we can help regenerate but can't offer a refund.
                   </p>
                   <p className="mt-3">
-                    Our system validates your inputs to minimize errors, but you're responsible for providing accurate
+                    Our system validates your inputs to minimise errors, but you're responsible for providing accurate
                     information.
                   </p>
                 </div>

@@ -11,7 +11,16 @@ import React, { Suspense, useState, useEffect, useCallback, useRef } from 'react
 import { useSearchParams, useRouter } from 'next/navigation';
 import { StructuredWizard } from '@/components/wizard/StructuredWizard';
 import { MoneyClaimSectionFlow } from '@/components/wizard/flows/MoneyClaimSectionFlow';
+import { EvictionSectionFlow } from '@/components/wizard/flows/EvictionSectionFlow';
+import { NoticeOnlySectionFlow } from '@/components/wizard/flows/NoticeOnlySectionFlow';
+import { TenancySectionFlow } from '@/components/wizard/flows/TenancySectionFlow';
 import type { ExtendedWizardQuestion } from '@/lib/wizard/types';
+
+// Feature flags: Use new section-based flows
+// Set to true to enable the redesigned wizards, false to use legacy StructuredWizard
+const USE_EVICTION_SECTION_FLOW = true;
+const USE_NOTICE_ONLY_SECTION_FLOW = true;
+const USE_TENANCY_SECTION_FLOW = true;
 
 type CaseType = 'eviction' | 'money_claim' | 'tenancy_agreement';
 type Jurisdiction = 'england' | 'wales' | 'scotland' | 'northern-ireland' | null;
@@ -31,6 +40,9 @@ function WizardFlowContent() {
   const product = searchParams.get('product'); // Specific product (notice_only, complete_pack, etc.)
   const productVariant = searchParams.get('product_variant'); // e.g. money_claim_england_wales
   const editCaseId = searchParams.get('case_id'); // Case ID to edit
+  const mode = searchParams.get('mode');
+  const jumpTo = searchParams.get('jump_to'); // Question ID to jump to (from End Validator "Fix this" button)
+  const fixMode = searchParams.get('fix_mode') === 'true'; // Single-question fix mode (returns to validation after save)
 
   const hasRequiredParams = Boolean(type && jurisdiction);
 
@@ -73,6 +85,7 @@ function WizardFlowContent() {
       // Resume existing case if editing
       if (editCaseId) {
         setCaseId(editCaseId);
+        setLoading(false);
         return;
       }
 
@@ -206,7 +219,59 @@ function WizardFlowContent() {
     );
   }
 
-  // Use existing StructuredWizard for tenancy agreements and evictions
+  // 🟩 NEW: For eviction complete_pack in England/Wales, use the redesigned section-based flow
+  // This provides a logical, court-ready, jurisdiction-aware wizard experience.
+  if (
+    type === 'eviction' &&
+    askHeavenProduct === 'complete_pack' &&
+    USE_EVICTION_SECTION_FLOW &&
+    (jurisdiction === 'england' || jurisdiction === 'wales')
+  ) {
+    return (
+      <EvictionSectionFlow
+        caseId={caseId}
+        jurisdiction={jurisdiction as 'england' | 'wales'}
+      />
+    );
+  }
+
+  // 🟨 NEW: For eviction notice_only in England/Wales, use the redesigned section-based flow
+  // This matches the EvictionSectionFlow design for UI consistency.
+  if (
+    type === 'eviction' &&
+    askHeavenProduct === 'notice_only' &&
+    USE_NOTICE_ONLY_SECTION_FLOW &&
+    (jurisdiction === 'england' || jurisdiction === 'wales')
+  ) {
+    return (
+      <NoticeOnlySectionFlow
+        caseId={caseId}
+        jurisdiction={jurisdiction as 'england' | 'wales'}
+      />
+    );
+  }
+
+  // 🟪 NEW: For tenancy_agreement in England/Wales, use the redesigned section-based flow
+  // This provides a consistent tab-based UI matching MoneyClaimSectionFlow design.
+  if (
+    type === 'tenancy_agreement' &&
+    USE_TENANCY_SECTION_FLOW &&
+    (jurisdiction === 'england' || jurisdiction === 'wales')
+  ) {
+    return (
+      <TenancySectionFlow
+        caseId={caseId}
+        jurisdiction={jurisdiction as 'england' | 'wales'}
+        product={
+          normalizedProduct === 'ast_standard' || normalizedProduct === 'ast_premium'
+            ? normalizedProduct
+            : 'tenancy_agreement'
+        }
+      />
+    );
+  }
+
+  // Use existing StructuredWizard for Scotland/NI tenancy agreements and Scotland eviction flows
   if (type === 'tenancy_agreement' || type === 'eviction') {
     return (
       <StructuredWizard
@@ -221,6 +286,9 @@ function WizardFlowContent() {
         }
         initialQuestion={initialQuestion ?? undefined}
         onComplete={handleComplete}
+        mode={mode === 'edit' ? 'edit' : 'default'}
+        jumpToQuestionId={jumpTo ?? undefined}
+        fixMode={fixMode}
       />
     );
   }

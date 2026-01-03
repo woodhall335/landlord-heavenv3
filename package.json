@@ -9,7 +9,14 @@
     "lint": "eslint",
     "test": "vitest run",
     "test:pdf": "RUN_PDF_TESTS=true vitest run",
-    "law-monitor": "ts-node --esm scripts/law-monitor-run.ts"
+    "test:notice-compliance": "vitest run notice-compliance",
+    "law-monitor": "ts-node --esm scripts/law-monitor-run.ts",
+    "audit:notice-only": "npx tsx scripts/audit-notice-only-pdfs.ts",
+    "audit:notice-only:layout": "npx tsx scripts/audit-notice-only-layout.ts",
+    "audit:notice-only:visual": "npx tsx scripts/render-notice-only-snapshots.ts && npx tsx scripts/audit-notice-only-layout.ts",
+    "audit:notice-only:all": "npx tsx scripts/audit-notice-only-pdfs.ts && npx tsx scripts/render-notice-only-snapshots.ts && npx tsx scripts/audit-notice-only-layout.ts",
+    "prove:notice-only:e2e": "npx tsx scripts/prove-notice-only-e2e.ts",
+    "prove:notice-only:editable": "npx tsx scripts/prove-notice-only-editable-html.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.70.1",
@@ -20,6 +27,7 @@
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.7.0",
     "@supabase/supabase-js": "^2.84.0",
+    "@tailwindcss/typography": "^0.5.19",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
@@ -34,14 +42,18 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-hook-form": "^7.66.1",
+    "react-icons": "^5.5.0",
+    "react-markdown": "^10.1.0",
     "resend": "^6.5.2",
     "stripe": "^20.0.0",
     "tailwind-merge": "^3.4.0",
-    "zod": "4.1.12"
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.2.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -56,6 +68,6 @@
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5",
-    "vitest": "^2.1.4"
+    "vitest": "^2.1.9"
   }
 }

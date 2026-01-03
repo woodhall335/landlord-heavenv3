@@ -20,3 +20,15 @@ export {
 } from './structured-data';
 
 export type { Product, FAQItem } from './structured-data';
+
+export {
+  productLinks,
+  toolLinks,
+  blogLinks,
+  landingPageLinks,
+  evictionRelatedLinks,
+  section21RelatedLinks,
+  section8RelatedLinks,
+  rentArrearsRelatedLinks,
+  tenancyRelatedLinks,
+} from './internal-links';

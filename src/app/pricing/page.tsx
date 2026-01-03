@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui";
 import Link from "next/link";
 import { generateMetadata } from "@/lib/seo";
+import { StructuredData, faqPageSchema } from "@/lib/seo/structured-data";
 
 export const metadata: Metadata = generateMetadata({
   title: "Pricing - Compare All Products",
-  description: "Compare Landlord Heaven pricing. Notices £29.99, Money Claims £179.99, Tenancy Agreements £39.99-£59.00, HMO Pro £19.99-£34.99/month.",
+  description: "Compare Landlord Heaven pricing. Notices £29.99, Complete Eviction Pack £149.99, Money Claims £179.99, Tenancy Agreements £9.99-£14.99. All one-time payments.",
   path: "/pricing",
   keywords: [
     "landlord document pricing",
@@ -13,25 +14,52 @@ export const metadata: Metadata = generateMetadata({
     "tenancy agreement price",
     "landlord legal documents",
     "section 21 notice price",
-    "HMO compliance cost"
+    "complete eviction pack"
   ]
 });
+
+// FAQ data for structured data
+const faqs = [
+  {
+    question: "Are there any hidden fees?",
+    answer: "No. The prices shown are what you pay. No setup fees, no processing fees, no surprise charges. The only additional cost is court fees (paid directly to the court when filing)."
+  },
+  {
+    question: "What is your refund policy?",
+    answer: "All products are instantly delivered digital documents. Due to the instant nature of our digital products, we cannot offer refunds once documents have been generated and delivered. Refunds are only available for technical errors, duplicate charges, or unauthorized transactions."
+  },
+  {
+    question: "Do you offer discounts for multiple documents?",
+    answer: "For portfolio landlords needing multiple documents per month, contact sales@landlordheaven.co.uk for custom pricing and volume discounts."
+  },
+  {
+    question: "How much do solicitors charge for the same services?",
+    answer: "Typical solicitor fees: Eviction notice £200-300, Court claim preparation £300-500, Money claim £200-350, Tenancy agreement £150-400, HMO compliance consultation £500+ per year. You save £200-400 per case using Landlord Heaven."
+  },
+  {
+    question: "Can I purchase additional products later?",
+    answer: "Yes! You can purchase any product at any time. Each product is independent and addresses different landlord needs."
+  }
+];
 
 export default function PricingPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Structured Data for SEO */}
+      <StructuredData data={faqPageSchema(faqs)} />
+
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
-        <Container size="large">
-          <div className="text-center">
+      <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
               <span className="text-sm font-semibold text-primary">Transparent Pricing</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              No hidden fees. No surprises. Choose the product that fits your needs. All prices are one-time payments
-              except HMO Pro.
+            <p className="text-xl md:text-2xl mb-6 text-gray-600">
+              No hidden fees. No surprises. Choose the product that fits your needs.
             </p>
+            <p className="text-sm text-gray-600">All prices are one-time payments</p>
           </div>
         </Container>
       </section>
@@ -43,32 +71,33 @@ export default function PricingPage() {
           <table className="w-full bg-white shadow-lg rounded-lg overflow-hidden">
             <thead>
               <tr className="bg-gray-100">
-                <th className="text-left p-6 font-semibold text-charcoal w-1/4">Feature</th>
-                <th className="text-center p-6 w-1/6">
+                <th className="text-left p-6 font-semibold text-charcoal">Feature</th>
+                <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Notices</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£29.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£29.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
-                <th className="text-center p-6 w-1/6">
+                <th className="text-center p-6">
+                  <div className="font-semibold text-charcoal mb-2">Complete Pack</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£149.99</div>
+                  <div className="text-sm text-gray-600">One-time</div>
+                </th>
+                <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Money Claims</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£179.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£179.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
-                <th className="text-center p-6 w-1/6">
+                <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Standard AST</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£39.99</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£9.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
-                <th className="text-center p-6 w-1/6">
+                <th className="text-center p-6">
                   <div className="font-semibold text-charcoal mb-2">Premium AST</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£59.00</div>
+                  <div className="text-2xl font-bold text-primary mb-1">£14.99</div>
                   <div className="text-sm text-gray-600">One-time</div>
                 </th>
-                <th className="text-center p-6 w-1/6">
-                  <div className="font-semibold text-charcoal mb-2">HMO Pro</div>
-                  <div className="text-3xl font-bold text-primary mb-1">£19.99-£34.99</div>
-                  <div className="text-sm text-gray-600">/month</div>
-                </th>
+                {/* HMO Pro column removed - parked for later review */}
               </tr>
             </thead>
             <tbody className="text-sm">
@@ -80,7 +109,7 @@ export default function PricingPage() {
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Section 8/21 Notice</td>
                 <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -88,7 +117,7 @@ export default function PricingPage() {
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Court Possession Claim (N5/N5B)</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -97,23 +126,23 @@ export default function PricingPage() {
                 <td className="p-4 text-gray-700">Witness Statement</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
               </tr>
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Money Claim for Arrears</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">Rent Arrears Schedule</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
               </tr>
@@ -127,66 +156,28 @@ export default function PricingPage() {
                 <td className="p-4 text-gray-700">Assured Shorthold Tenancy (AST)</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
               </tr>
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Scotland PRT / NI Agreement</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
+                <td className="text-center p-4">✅</td>
               </tr>
               <tr className="border-t">
                 <td className="p-4 text-gray-700">HMO Clauses & Guarantors</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
               </tr>
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Rent Increase Provisions</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">❌</td>
-              </tr>
-
-              <tr className="border-t">
-                <td className="p-4 font-semibold text-charcoal bg-gray-50" colSpan={6}>
-                  HMO Compliance
-                </td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-4 text-gray-700">License Expiry Tracking</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-              </tr>
-              <tr className="border-t bg-gray-50">
-                <td className="p-4 text-gray-700">Fire Safety Reminders</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-              </tr>
-              <tr className="border-t">
-                <td className="p-4 text-gray-700">Gas/EICR Certificate Tracking</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">❌</td>
-                <td className="text-center p-4">✅</td>
-              </tr>
-              <tr className="border-t bg-gray-50">
-                <td className="p-4 text-gray-700">Tiered Pricing (1-20+ properties)</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
                 <td className="text-center p-4">❌</td>
@@ -205,7 +196,7 @@ export default function PricingPage() {
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">❌</td>
+                <td className="text-center p-4">✅</td>
               </tr>
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Full UK Coverage (Eng/Wales/Scot/NI)</td>
@@ -221,7 +212,7 @@ export default function PricingPage() {
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
                 <td className="text-center p-4">✅</td>
-                <td className="text-center p-4">7-day trial</td>
+                <td className="text-center p-4">✅</td>
               </tr>
               <tr className="border-t bg-gray-50">
                 <td className="p-4 text-gray-700">Email Support</td>
@@ -235,18 +226,18 @@ export default function PricingPage() {
                 <td className="p-4 text-gray-700">Document Storage</td>
                 <td className="text-center p-4">12 months</td>
                 <td className="text-center p-4">12 months</td>
+                <td className="text-center p-4">12 months</td>
                 <td className="text-center p-4">Lifetime</td>
                 <td className="text-center p-4">Lifetime</td>
-                <td className="text-center p-4">While active</td>
               </tr>
 
               <tr className="border-t bg-gray-100">
                 <td className="p-6 font-semibold text-charcoal">Best For:</td>
                 <td className="text-center p-6 text-xs text-gray-700">Simple eviction notices</td>
+                <td className="text-center p-6 text-xs text-gray-700">Full eviction process</td>
                 <td className="text-center p-6 text-xs text-gray-700">Rent arrears claims</td>
                 <td className="text-center p-6 text-xs text-gray-700">Standard lettings</td>
                 <td className="text-center p-6 text-xs text-gray-700">HMOs & complex</td>
-                <td className="text-center p-6 text-xs text-gray-700">Multi-HMO landlords</td>
               </tr>
 
               <tr className="border-t">
@@ -254,7 +245,15 @@ export default function PricingPage() {
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=notice_only"
-                    className="inline-block bg-gray-200 text-charcoal px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                  >
+                    Get Started
+                  </Link>
+                </td>
+                <td className="text-center p-6">
+                  <Link
+                    href="/wizard?product=complete_pack"
+                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
                   >
                     Get Started
                   </Link>
@@ -262,7 +261,7 @@ export default function PricingPage() {
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=money_claim"
-                    className="inline-block bg-gray-200 text-charcoal px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
                   >
                     Get Started
                   </Link>
@@ -270,7 +269,7 @@ export default function PricingPage() {
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=ast_standard"
-                    className="inline-block bg-gray-200 text-charcoal px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
                   >
                     Get Started
                   </Link>
@@ -278,17 +277,9 @@ export default function PricingPage() {
                 <td className="text-center p-6">
                   <Link
                     href="/wizard?product=ast_premium"
-                    className="inline-block bg-gray-200 text-charcoal px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
+                    className="inline-block bg-gray-200 text-charcoal px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
                   >
                     Get Started
-                  </Link>
-                </td>
-                <td className="text-center p-6">
-                  <Link
-                    href="/wizard?product=hmo_pro"
-                    className="inline-block bg-gray-200 text-charcoal px-6 py-2 rounded-lg font-semibold hover:bg-gray-300 transition-colors text-sm"
-                  >
-                    Free Trial
                   </Link>
                 </td>
               </tr>
@@ -316,6 +307,24 @@ export default function PricingPage() {
             </Link>
           </div>
 
+          {/* Complete Eviction Pack */}
+          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
+            <h3 className="text-2xl font-bold text-charcoal mb-2">Complete Pack</h3>
+            <div className="text-3xl font-bold text-primary mb-4">£149.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <ul className="space-y-2 mb-6 text-sm">
+              <li>✅ Section 8/21 Notice</li>
+              <li>✅ Court Possession Claim</li>
+              <li>✅ Witness Statement</li>
+              <li>✅ Full Eviction Bundle</li>
+            </ul>
+            <Link
+              href="/wizard?product=complete_pack"
+              className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
+            >
+              Get Started
+            </Link>
+          </div>
+
           {/* Money Claims */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Money Claims</h3>
@@ -337,7 +346,7 @@ export default function PricingPage() {
           {/* Standard AST */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Standard AST</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£39.99 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£9.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ AST/PRT/NI Agreement</li>
               <li>✅ Core Clauses</li>
@@ -355,7 +364,7 @@ export default function PricingPage() {
           {/* Premium AST */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
             <h3 className="text-2xl font-bold text-charcoal mb-2">Premium AST</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£59.00 <span className="text-sm text-gray-600">one-time</span></div>
+            <div className="text-3xl font-bold text-primary mb-4">£14.99 <span className="text-sm text-gray-600">one-time</span></div>
             <ul className="space-y-2 mb-6 text-sm">
               <li>✅ Everything in Standard</li>
               <li>✅ HMO Clauses</li>
@@ -371,23 +380,7 @@ export default function PricingPage() {
             </Link>
           </div>
 
-          {/* HMO Pro */}
-          <div className="bg-white rounded-lg border-2 border-gray-200 p-6">
-            <h3 className="text-2xl font-bold text-charcoal mb-2">HMO Pro</h3>
-            <div className="text-3xl font-bold text-primary mb-4">£19.99-£34.99 <span className="text-sm text-gray-600">/month</span></div>
-            <ul className="space-y-2 mb-6 text-sm">
-              <li>✅ Tiered by Property Count</li>
-              <li>✅ License Tracking</li>
-              <li>✅ Certificate Reminders</li>
-              <li>✅ 7-Day Free Trial</li>
-            </ul>
-            <Link
-              href="/wizard?product=hmo_pro"
-              className="block w-full bg-gray-200 text-charcoal px-6 py-3 rounded-lg font-semibold text-center hover:bg-gray-300 transition-colors"
-            >
-              Start Free Trial
-            </Link>
-          </div>
+          {/* HMO Pro removed - parked for later review */}
         </div>
 
         {/* FAQ */}
@@ -467,29 +460,34 @@ export default function PricingPage() {
             </details>
           </div>
         </div>
-
-        {/* CTA */}
-        <div className="mt-16 bg-linear-to-br from-primary to-emerald-600 text-white rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Still Have Questions?</h2>
-          <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-            Not sure which product is right for you? Our support team is here to help.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/contact"
-              className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
-            >
-              Contact Us
-            </Link>
-            <Link
-              href="/help"
-              className="inline-block bg-white/10 backdrop-blur-sm border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/20 transition-colors"
-            >
-              Browse FAQ
-            </Link>
-          </div>
-        </div>
       </Container>
+
+      {/* CTA */}
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Still Have Questions?</h2>
+            <p className="text-xl mb-8 text-gray-600">
+              Not sure which product is right for you? Our support team is here to help.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/contact"
+                className="hero-btn-primary"
+              >
+                Contact Us →
+              </Link>
+              <Link
+                href="/help"
+                className="hero-btn-secondary"
+              >
+                Browse FAQ →
+              </Link>
+            </div>
+            <p className="mt-4 text-sm text-gray-600">Quick response • Expert guidance • No obligation</p>
+          </div>
+        </Container>
+      </section>
     </div>
   );
 }

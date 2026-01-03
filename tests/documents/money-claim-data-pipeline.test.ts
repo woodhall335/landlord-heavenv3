@@ -24,6 +24,24 @@ vi.mock('@/lib/documents/official-forms-filler', () => ({
   fillN1Form: vi.fn().mockResolvedValue(Buffer.from('PDF_CONTENT')),
 }));
 
+// Mock the AI-powered Ask Heaven drafts to avoid timeout
+vi.mock('@/lib/documents/money-claim-askheaven', () => ({
+  generateMoneyClaimAskHeavenDrafts: vi.fn().mockResolvedValue({
+    letter_before_action: {
+      html: '<h1>Letter Before Action</h1><p>Mock LBA content</p>',
+      plain_text: 'Mock LBA content',
+    },
+    particulars_of_claim: {
+      html: '<h1>Particulars of Claim</h1><p>Mock PoC content</p>',
+      plain_text: 'Mock PoC content',
+    },
+    evidence_index: {
+      html: '<h1>Evidence Index</h1><p>Mock evidence index</p>',
+      plain_text: 'Mock evidence index',
+    },
+  }),
+}));
+
 import { generateMoneyClaimPack } from '@/lib/documents/money-claim-pack-generator';
 
 describe('Money claim data pipeline (wizard → caseFacts → pack)', () => {

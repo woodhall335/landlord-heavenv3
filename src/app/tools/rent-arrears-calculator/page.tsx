@@ -1,8 +1,14 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import Link from 'next/link';
 import { Button, Card, Container, Input } from '@/components/ui';
+import { RiAlertLine } from 'react-icons/ri';
+import { useEmailGate } from '@/hooks/useEmailGate';
+import { ToolEmailGate } from '@/components/ui/ToolEmailGate';
+import { SocialProofCounter } from '@/components/ui/SocialProofCounter';
+import { RelatedLinks } from '@/components/seo/RelatedLinks';
+import { productLinks, blogLinks, toolLinks, landingPageLinks } from '@/lib/seo/internal-links';
 
 // Note: Metadata moved to layout.tsx (client components cannot export metadata)
 
@@ -147,7 +153,8 @@ export default function RentArrearsCalculator() {
     setSchedule((prev) => (prev.length > 1 ? prev.filter((item) => item.id !== id) : prev));
   };
 
-  const handleSavePDF = async () => {
+  // PDF generation function (called after email captured)
+  const generatePDF = useCallback(async () => {
     if (schedule.length === 0 || totals.totalOutstanding === 0) {
       alert('Please add at least one arrears period first');
       return;
@@ -321,12 +328,23 @@ link.href = url;
       console.error('PDF error:', error);
       alert('Failed to generate PDF. Please try again.');
     }
+  }, [schedule, totals, rentAmount, estimatedInterest, daysOutstanding]);
+
+  // Email gate hook - requires email before PDF download
+  const gate = useEmailGate({
+    source: 'tool:rent-arrears-calculator',
+    onProceed: generatePDF,
+  });
+
+  // Handler that checks gate before generating
+  const handleSavePDF = () => {
+    gate.checkGateAndProceed();
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 py-16 md:py-24">
+      <section className="bg-linear-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -354,6 +372,9 @@ link.href = url;
               </Link>
             </div>
             <p className="mt-4 text-sm text-gray-600">Instant calculation • Professional summary • Upgrade for court claims</p>
+            <div className="mt-6">
+              <SocialProofCounter variant="today" className="mx-auto" />
+            </div>
           </div>
         </Container>
       </section>
@@ -496,9 +517,7 @@ link.href = url;
                     <strong>From:</strong> {interestFromDate ? new Date(interestFromDate + 'T00:00:00').toLocaleDateString('en-GB') : 'N/A'} to {new Date().toLocaleDateString('en-GB')} ({daysOutstanding} days)
                   </p>
                   <div className="flex items-start gap-2 mt-3 pt-3 border-t border-warning-300">
-                    <svg className="h-4 w-4 text-warning-600 shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                    </svg>
+                    <RiAlertLine className="h-4 w-4 text-[#7C3AED] shrink-0 mt-0.5" />
                     <p className="text-warning-800 font-medium">
                       <strong>Important:</strong> We use a simple 8% per annum rate on any outstanding balance from its due date up to today. Actual court awards may differ depending on jurisdiction and judge discretion. Use this as a directional estimate only.
                     </p>
@@ -642,6 +661,30 @@ link.href = url;
           </div>
         </Card>
       </Container>
+
+      {/* Related Resources */}
+      <Container className="pb-12">
+        <RelatedLinks
+          title="Related Resources"
+          links={[
+            productLinks.moneyClaim,
+            productLinks.completePack,
+            toolLinks.section8Generator,
+            blogLinks.rentArrearsEviction,
+            landingPageLinks.rentArrearsTemplate,
+          ]}
+        />
+      </Container>
+
+      {/* Email Gate Modal */}
+      {gate.showGate && (
+        <ToolEmailGate
+          toolName="Rent Arrears Schedule"
+          source={gate.source}
+          onEmailCaptured={gate.handleSuccess}
+          onClose={gate.handleClose}
+        />
+      )}
     </div>
   );
 }
