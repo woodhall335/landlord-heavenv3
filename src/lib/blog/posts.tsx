@@ -7265,6 +7265,1275 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+  // ============================================
+  // POST 13: Section 8 Ground 12 - Breach of Tenancy Terms
+  // Target: 1,500+ words
+  // ============================================
+  {
+    slug: 'england-section-8-ground-12',
+    title: 'Section 8 Ground 12 - Breach of Tenancy Terms (England Guide 2026)',
+    description: 'Ground 12 allows eviction when tenants breach any obligation of the tenancy agreement. Learn what counts as a breach, evidence requirements, and how to use this discretionary ground.',
+    metaDescription: 'Section 8 Ground 12 explained. Evict tenants for breach of tenancy terms in England. Evidence needed, notice periods, and step-by-step court process guide.',
+    date: '2026-01-03',
+    updatedDate: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1650,
+    category: 'Eviction Grounds',
+    tags: ['Ground 12', 'Section 8', 'Breach of Tenancy', 'Tenancy Agreement', 'Eviction England'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-12.svg',
+    heroImageAlt: 'Section 8 Ground 12 - Breach of Tenancy Terms',
+    showUrgencyBanner: false,
+    targetKeyword: 'section 8 ground 12 breach tenancy',
+    secondaryKeywords: ['tenant breach agreement', 'breach of tenancy terms', 'eviction breach contract', 'tenancy obligations'],
+    tableOfContents: [
+      { id: 'what-is-ground-12', title: 'What Is Ground 12?', level: 2 },
+      { id: 'common-breaches', title: 'Common Tenancy Breaches', level: 2 },
+      { id: 'evidence-requirements', title: 'Evidence Requirements', level: 2 },
+      { id: 'using-ground-12', title: 'Using Ground 12 Step by Step', level: 2 },
+      { id: 'court-discretion', title: 'Court Discretion Explained', level: 2 },
+      { id: 'combining-grounds', title: 'Combining With Other Grounds', level: 2 },
+      { id: 'ground-12-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-section-8-process', 'england-section-8-ground-14', 'england-standard-possession'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          <strong>Ground 12</strong> is one of the most versatile Section 8 grounds, allowing landlords to seek
+          possession when a tenant has breached <em>any</em> obligation of the tenancy agreement—other than paying rent.
+          Whether your tenant is subletting without permission, keeping unauthorised pets, running a business from the
+          property, or persistently causing minor nuisance, Ground 12 provides a legal pathway to eviction.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-blue-800 text-lg mb-2">Discretionary Ground</p>
+          <p className="text-blue-700">
+            Ground 12 is discretionary, meaning even if you prove the breach, the court will consider whether
+            it&apos;s reasonable to grant possession. Document breaches thoroughly and give tenants opportunity
+            to remedy issues before seeking eviction.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ground-12-overview.svg"
+          alt="Ground 12 Breach of Tenancy Overview"
+          caption="Ground 12 covers any breach of tenancy terms except non-payment of rent"
+          aspectRatio="hero"
+        />
+
+        <h2 id="what-is-ground-12" className="scroll-mt-24">What Is Ground 12?</h2>
+
+        <p>
+          Ground 12 is set out in Schedule 2, Part II of the Housing Act 1988. The ground states:
+        </p>
+
+        <blockquote className="border-l-4 border-purple-500 pl-4 my-6 italic text-gray-700">
+          &quot;Any obligation of the tenancy (other than one related to the payment of rent) has been broken or
+          not performed.&quot;
+        </blockquote>
+
+        <p>
+          This broad wording means Ground 12 can apply to virtually any clause in your tenancy agreement that the
+          tenant has failed to comply with. The key limitation is that it cannot be used for rent arrears—those
+          are covered by Grounds 8, 10, and 11 specifically.
+        </p>
+
+        <h3>Ground Details at a Glance</h3>
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <tbody>
+              <tr>
+                <td className="p-4 border-b font-medium bg-gray-50">Ground Type</td>
+                <td className="p-4 border-b">Discretionary</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium bg-gray-50">Notice Period</td>
+                <td className="p-4 border-b">2 weeks minimum</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium bg-gray-50">Court Form</td>
+                <td className="p-4 border-b">N5 (Standard Possession)</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium bg-gray-50">Applies To</td>
+                <td className="p-4 border-b">Assured and Assured Shorthold Tenancies</td>
+              </tr>
+              <tr>
+                <td className="p-4 border-b font-medium bg-gray-50">Evidence Needed</td>
+                <td className="p-4 border-b">Proof of breach + proof breach is ongoing or likely to recur</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Why Ground 12 Matters</h3>
+        <p>
+          With Section 21 no-fault evictions ending in May 2026, Ground 12 becomes increasingly important.
+          Previously, landlords dealing with problematic tenants who technically weren&apos;t breaking major
+          rules could simply serve Section 21. After the ban, you&apos;ll need grounds like Ground 12 to
+          address tenancy breaches that don&apos;t rise to the level of antisocial behaviour (Ground 14) or
+          other more serious grounds.
+        </p>
+
+        <h2 id="common-breaches" className="scroll-mt-24">Common Tenancy Breaches Covered by Ground 12</h2>
+
+        <p>
+          Ground 12 is flexible and can cover many different types of breach. Here are the most common
+          situations where landlords use this ground:
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-common-breaches.svg"
+          alt="Common Tenancy Breaches for Ground 12"
+          caption="Ground 12 covers a wide range of tenancy agreement violations"
+        />
+
+        <h3>Unauthorised Subletting or Lodgers</h3>
+        <p>
+          If your tenancy agreement prohibits subletting and the tenant has let rooms to others or moved out
+          entirely while subletting the whole property, this is a clear Ground 12 breach. Even taking in
+          lodgers without permission can qualify if the agreement requires consent.
+        </p>
+
+        <h3>Unauthorised Pets</h3>
+        <p>
+          Many tenancy agreements either prohibit pets entirely or require landlord consent. If a tenant
+          keeps a dog, cat, or other animal in breach of this clause, Ground 12 applies. Note that from
+          2026, new rules require landlords to consider pet requests reasonably—but existing &quot;no pets&quot;
+          clauses remain enforceable for breaches that occurred before the new rules took effect.
+        </p>
+
+        <h3>Running a Business</h3>
+        <p>
+          Residential tenancy agreements typically prohibit using the property for business purposes. If
+          your tenant is running a commercial operation—whether that&apos;s a shop, office, or even
+          significant internet-based business generating customer visits—this can constitute a breach.
+        </p>
+
+        <h3>Property Damage</h3>
+        <p>
+          While some damage may be covered by other grounds (waste, nuisance), deliberate damage or
+          significant alterations without consent breach most tenancy agreements&apos; clauses about
+          maintaining the property condition and not making alterations.
+        </p>
+
+        <h3>Excessive Noise and Nuisance</h3>
+        <p>
+          Although Ground 14 (antisocial behaviour) covers serious nuisance, lesser but persistent
+          disturbances that breach &quot;quiet enjoyment&quot; or nuisance clauses in the tenancy
+          agreement can be addressed under Ground 12.
+        </p>
+
+        <h3>Illegal Activity</h3>
+        <p>
+          Using the property for illegal purposes breaches standard tenancy clauses about lawful use.
+          While serious criminal activity may warrant Ground 14, lesser offences or activities that
+          breach the tenancy without being &quot;serious&quot; enough for Ground 14 can use Ground 12.
+        </p>
+
+        <h3>Failure to Allow Access</h3>
+        <p>
+          Most tenancy agreements require tenants to allow reasonable access for inspections, repairs,
+          and viewings (with proper notice). Persistent refusal to allow access is a breach.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="evidence-requirements" className="scroll-mt-24">Evidence Requirements for Ground 12</h2>
+
+        <p>
+          Because Ground 12 is discretionary, evidence quality is crucial. The court must be satisfied that:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>The tenancy agreement contains the relevant clause</li>
+          <li>The tenant has breached that clause</li>
+          <li>It is reasonable to grant possession</li>
+        </ol>
+
+        <h3>Essential Documentation</h3>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-3">You Will Need:</h4>
+          <ul className="space-y-2">
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span><strong>Signed tenancy agreement</strong> clearly showing the breached clause</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span><strong>Evidence of breach</strong>: photos, videos, witness statements, letters</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span><strong>Warning letters</strong> you&apos;ve sent about the breach (with proof of delivery)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span><strong>Timeline of events</strong> showing the breach is ongoing or repeated</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green-500 mt-1">✓</span>
+              <span><strong>Any tenant responses</strong> or acknowledgments</span>
+            </li>
+          </ul>
+        </div>
+
+        <h3>Strengthening Your Case</h3>
+        <p>
+          Courts look favourably on landlords who have:
+        </p>
+        <ul>
+          <li>Given clear written warnings before serving notice</li>
+          <li>Provided opportunity for the tenant to remedy the breach</li>
+          <li>Documented the breach thoroughly with dates and details</li>
+          <li>Acted proportionately to the severity of the breach</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-amber-800 text-lg mb-2">Warning Letters Matter</p>
+          <p className="text-amber-700">
+            Always send at least one formal warning letter before serving a Section 8 notice for breach.
+            The court will ask whether the tenant had opportunity to remedy the issue. Keep copies of
+            all correspondence and use tracked delivery or email with read receipts.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-evidence-gathering.svg"
+          alt="Evidence Gathering for Ground 12"
+          caption="Thorough documentation significantly improves your chances in court"
+        />
+
+        <h2 id="using-ground-12" className="scroll-mt-24">Using Ground 12 Step by Step</h2>
+
+        <h3>Step 1: Verify the Breach</h3>
+        <p>
+          Before taking action, confirm you have a genuine breach:
+        </p>
+        <ul>
+          <li>Check your tenancy agreement contains a clear, enforceable clause</li>
+          <li>Verify the tenant has actually breached it (not just rumour or suspicion)</li>
+          <li>Document the breach with evidence</li>
+        </ul>
+
+        <h3>Step 2: Issue Warning Letters</h3>
+        <p>
+          Send a formal written warning:
+        </p>
+        <ul>
+          <li>State the specific clause being breached</li>
+          <li>Describe the breach clearly</li>
+          <li>Request the tenant remedy the breach within a reasonable timeframe (14-28 days typically)</li>
+          <li>Warn that failure to comply may result in possession proceedings</li>
+          <li>Send by recorded delivery and keep a copy</li>
+        </ul>
+
+        <h3>Step 3: Allow Time for Remedy</h3>
+        <p>
+          Give the tenant genuine opportunity to fix the issue. If they remedy the breach, you cannot
+          proceed (the ground is that an obligation &quot;has been broken&quot;—past breaches that are
+          fully remedied weaken your case significantly).
+        </p>
+
+        <h3>Step 4: Serve Section 8 Notice</h3>
+        <p>
+          If the breach continues, serve a Section 8 notice (Form 3) specifying Ground 12:
+        </p>
+        <ul>
+          <li>Minimum notice period: 2 weeks</li>
+          <li>Clearly state Ground 12 and the specific breach</li>
+          <li>Include details of when/how the breach occurred</li>
+          <li>Serve correctly (personally, by post, or left at the property)</li>
+        </ul>
+
+        <h3>Step 5: Apply to Court</h3>
+        <p>
+          After the notice period expires, apply to the county court using Form N5 (standard possession claim).
+          Include your witness statement detailing the breach and evidence.
+        </p>
+
+        <h3>Step 6: Attend the Hearing</h3>
+        <p>
+          At the hearing, present your evidence. Be prepared for the tenant to:
+        </p>
+        <ul>
+          <li>Deny the breach</li>
+          <li>Claim they&apos;ve remedied it</li>
+          <li>Argue it&apos;s not reasonable to evict them</li>
+        </ul>
+
+        <h2 id="court-discretion" className="scroll-mt-24">Court Discretion: What Judges Consider</h2>
+
+        <p>
+          Because Ground 12 is discretionary, the court will assess whether granting possession is
+          <strong>reasonable</strong>. Factors considered include:
+        </p>
+
+        <h3>Severity of the Breach</h3>
+        <p>
+          A one-off minor breach is unlikely to result in possession. Serious or persistent breaches
+          are more likely to succeed.
+        </p>
+
+        <h3>Whether the Breach Continues</h3>
+        <p>
+          If the tenant has stopped the behaviour and remedied the situation, courts are less likely
+          to grant possession. Ongoing breaches are viewed more seriously.
+        </p>
+
+        <h3>Impact on Others</h3>
+        <p>
+          If the breach affects neighbours or causes damage, courts take this seriously. Breaches that
+          only affect the landlord contractually (rather than practically) may receive less weight.
+        </p>
+
+        <h3>Tenant&apos;s Circumstances</h3>
+        <p>
+          Courts consider the tenant&apos;s situation—vulnerability, children, health issues—when
+          deciding reasonableness. This doesn&apos;t excuse breaches but may affect the court&apos;s
+          decision or any suspended order terms.
+        </p>
+
+        <h3>Landlord&apos;s Response</h3>
+        <p>
+          Did you act promptly or wait years before taking action? Did you give warnings? Courts
+          expect landlords to address issues in a timely, proportionate manner.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-green-800 text-lg mb-2">Suspended Orders</p>
+          <p className="text-green-700">
+            Courts often grant &quot;suspended&quot; possession orders for Ground 12 cases, giving the
+            tenant one final chance. The order takes effect only if the breach continues. This is common
+            for first-time or less serious breaches.
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="combining-grounds" className="scroll-mt-24">Combining Ground 12 With Other Grounds</h2>
+
+        <p>
+          You&apos;re not limited to citing one ground. Many landlords combine Ground 12 with other
+          relevant grounds to strengthen their case:
+        </p>
+
+        <h3>Ground 12 + Ground 14 (Antisocial Behaviour)</h3>
+        <p>
+          If the breach also constitutes nuisance or annoyance, cite both. Ground 14 requires the behaviour
+          to cause nuisance to adjoining occupiers, while Ground 12 covers the contractual breach itself.
+        </p>
+
+        <h3>Ground 12 + Ground 13 (Deterioration of Property)</h3>
+        <p>
+          If the breach involves damaging the property, Ground 13 (waste or neglect causing deterioration)
+          may also apply.
+        </p>
+
+        <h3>Ground 12 + Rent Arrears Grounds</h3>
+        <p>
+          If there are also rent arrears, include Grounds 8, 10, or 11 as appropriate. Having multiple
+          grounds increases your chances of success.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-combining-grounds.svg"
+          alt="Combining Section 8 Grounds"
+          caption="Using multiple grounds where applicable strengthens your possession claim"
+        />
+
+        <h2 id="ground-12-faq" className="scroll-mt-24">Ground 12 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 12 if the tenant has fixed the breach?</h3>
+            <p className="text-gray-600">
+              Technically yes, as the ground covers breaches that &quot;have been broken&quot;—past tense.
+              However, courts are much less likely to grant possession for fully remedied breaches.
+              Your case is strongest when the breach is ongoing or has caused lasting damage.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What&apos;s the notice period for Ground 12?</h3>
+            <p className="text-gray-600">
+              The minimum notice period is 2 weeks. However, giving longer notice (4 weeks or more) can
+              demonstrate reasonableness and give the tenant final opportunity to remedy the breach.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I evict for keeping a pet without permission?</h3>
+            <p className="text-gray-600">
+              Yes, if your tenancy agreement prohibits pets or requires consent and the tenant has
+              breached this. However, consider the new pet rules from 2026—for new requests, landlords
+              cannot unreasonably refuse. Existing breaches remain actionable.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is subletting definitely a Ground 12 breach?</h3>
+            <p className="text-gray-600">
+              If your tenancy agreement prohibits subletting without consent and the tenant has sublet,
+              yes. Most standard AST agreements include such a clause. Whole-property subletting
+              (where the tenant moves out) is a serious breach courts take very seriously.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to prove financial loss?</h3>
+            <p className="text-gray-600">
+              No. Ground 12 doesn&apos;t require proving financial loss—only that the tenancy obligation
+              was breached. However, demonstrating actual harm (to you, the property, or neighbours)
+              strengthens your case for reasonableness.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can the tenant fix the breach after I serve notice?</h3>
+            <p className="text-gray-600">
+              Yes, and if they do, this affects the court&apos;s decision on reasonableness. You can still
+              proceed to court, but judges may refuse possession or grant only a suspended order if
+              the breach has been remedied.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if my tenancy agreement is vague?</h3>
+            <p className="text-gray-600">
+              The clause being breached must be clear enough to be enforceable. Vague terms like
+              &quot;tenant must behave reasonably&quot; are harder to enforce than specific prohibitions
+              like &quot;no pets without written consent.&quot; Courts interpret ambiguous terms against
+              the party who drafted them (usually the landlord).
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need a Section 8 Notice for Ground 12?</h3>
+          <p className="text-gray-700 mb-6">
+            Our Section 8 notice generator creates court-ready notices for Ground 12 and all other
+            grounds. Simply select your grounds, enter the breach details, and download your
+            professionally formatted notice.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <Link
+              href="/products/notice-only"
+              className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+            >
+              Get Section 8 Notice — £29.99
+            </Link>
+            <Link
+              href="/products/complete-pack"
+              className="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-medium py-3 px-6 rounded-lg transition-colors"
+            >
+              Complete Eviction Pack — £149.99
+            </Link>
+          </div>
+        </div>
+      </>
+    ),
+  },
+  // ============================================
+  // POST 14: Possession Hearing - What to Expect
+  // Target: 1,500+ words
+  // ============================================
+  {
+    slug: 'england-possession-hearing',
+    title: 'What Happens at a Possession Hearing - England Guide 2026',
+    description: 'Nervous about your possession hearing? Learn exactly what happens in court, how to prepare, what documents to bring, and what judges look for when deciding eviction cases.',
+    metaDescription: 'Possession hearing guide for landlords. What to expect at court, how to prepare, documents needed, and tips for success. England county court eviction process.',
+    date: '2026-01-03',
+    updatedDate: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Eviction Process',
+    tags: ['Possession Hearing', 'County Court', 'Eviction', 'Court Process', 'Landlord Guide'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-possession-hearing.svg',
+    heroImageAlt: 'Possession Hearing - What to Expect in Court',
+    showUrgencyBanner: false,
+    targetKeyword: 'possession hearing landlord',
+    secondaryKeywords: ['eviction court hearing', 'county court possession', 'what happens possession hearing', 'landlord court'],
+    tableOfContents: [
+      { id: 'before-hearing', title: 'Before the Hearing', level: 2 },
+      { id: 'arriving-court', title: 'Arriving at Court', level: 2 },
+      { id: 'hearing-process', title: 'The Hearing Process', level: 2 },
+      { id: 'what-judge-asks', title: 'What the Judge Will Ask', level: 2 },
+      { id: 'possible-outcomes', title: 'Possible Outcomes', level: 2 },
+      { id: 'after-hearing', title: 'After the Hearing', level: 2 },
+      { id: 'hearing-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-section-21-process', 'england-section-8-process', 'england-bailiff-eviction'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          If your tenant hasn&apos;t left after you served notice, the next step is court. Many landlords
+          feel anxious about attending a possession hearing—it&apos;s unfamiliar territory with formal
+          procedures and legal terminology. This guide explains exactly what happens, how to prepare,
+          and what to expect so you can approach your hearing with confidence.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-blue-800 text-lg mb-2">Most Hearings Are Straightforward</p>
+          <p className="text-blue-700">
+            The majority of possession hearings are relatively quick and procedural, especially for
+            Section 21 cases or uncontested Section 8 claims. If your paperwork is in order, you&apos;ll
+            likely spend more time waiting than in the actual hearing.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-court-building.svg"
+          alt="County Court Building - Possession Hearing"
+          caption="Possession hearings take place at your local county court"
+          aspectRatio="hero"
+        />
+
+        <h2 id="before-hearing" className="scroll-mt-24">Before the Hearing</h2>
+
+        <p>
+          Preparation is key to a successful possession hearing. In the weeks before your court date:
+        </p>
+
+        <h3>Review Your Documentation</h3>
+        <p>
+          Gather and organise all relevant documents:
+        </p>
+        <ul>
+          <li>Original tenancy agreement (signed by all parties)</li>
+          <li>Copy of the notice you served (Section 21 or Section 8)</li>
+          <li>Proof of service (certificate of service, recorded delivery receipt, photos)</li>
+          <li>For Section 21: Gas Safety Certificate, EPC, How to Rent guide, deposit protection proof</li>
+          <li>For Section 8: Evidence supporting your grounds (rent statements, photos, letters)</li>
+          <li>Any correspondence with the tenant</li>
+          <li>Copy of your court application (N5/N5B) and particulars of claim</li>
+        </ul>
+
+        <h3>Check for Tenant Defence</h3>
+        <p>
+          The tenant may file a defence challenging your claim. You&apos;ll receive this from the court
+          before the hearing. Read it carefully and prepare responses to any points raised. Common
+          defences include:
+        </p>
+        <ul>
+          <li>Claiming the notice wasn&apos;t served correctly</li>
+          <li>Disputing the amount of rent arrears</li>
+          <li>Arguing the deposit wasn&apos;t protected</li>
+          <li>Claiming you haven&apos;t complied with legal requirements</li>
+        </ul>
+
+        <h3>Prepare Your Witness Statement</h3>
+        <p>
+          For Section 8 claims particularly, you may need to present evidence. Write a clear,
+          chronological witness statement covering:
+        </p>
+        <ul>
+          <li>When the tenancy started</li>
+          <li>What the breach/problem is</li>
+          <li>When you became aware of it</li>
+          <li>What steps you took to resolve it</li>
+          <li>Why you&apos;re seeking possession</li>
+        </ul>
+
+        <h3>Bring Copies</h3>
+        <p>
+          Bring three copies of all documents: one for you, one for the judge, and one for the
+          tenant (if they attend). Organise them in a logical order, ideally in a ring binder
+          with numbered tabs.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-document-preparation.svg"
+          alt="Document Preparation for Possession Hearing"
+          caption="Well-organised documentation makes a strong impression"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="arriving-court" className="scroll-mt-24">Arriving at Court</h2>
+
+        <h3>Allow Extra Time</h3>
+        <p>
+          Arrive at least 30-45 minutes early. You&apos;ll need to:
+        </p>
+        <ul>
+          <li>Find parking or navigate public transport</li>
+          <li>Pass through security screening (like airport security)</li>
+          <li>Locate the correct courtroom or hearing room</li>
+          <li>Check in with court staff</li>
+        </ul>
+
+        <h3>What to Bring</h3>
+        <ul>
+          <li>All your documentation (organised with copies)</li>
+          <li>Photo ID</li>
+          <li>Your court notice showing date, time, and case number</li>
+          <li>Pen and notepad</li>
+          <li>Water (hearings can run late)</li>
+        </ul>
+
+        <h3>Dress Code</h3>
+        <p>
+          While there&apos;s no strict dress code, smart-casual or business attire shows respect for
+          the court. Avoid very casual clothing, hats, or anything with offensive slogans. You
+          don&apos;t need a suit, but look presentable.
+        </p>
+
+        <h3>Check In</h3>
+        <p>
+          Find the court usher or the listing board showing that day&apos;s cases. Let them know
+          you&apos;ve arrived. They&apos;ll tell you which room to wait in or when you&apos;ll be
+          called.
+        </p>
+
+        <h2 id="hearing-process" className="scroll-mt-24">The Hearing Process</h2>
+
+        <h3>Where Hearings Take Place</h3>
+        <p>
+          Possession hearings are usually held in the county court covering the property&apos;s location.
+          The setting varies:
+        </p>
+        <ul>
+          <li><strong>Courtroom:</strong> Formal setting with the judge on a raised bench</li>
+          <li><strong>Chambers:</strong> Smaller room with the judge at a desk (more informal)</li>
+          <li><strong>Video/telephone:</strong> Remote hearings became common after 2020 and continue for some cases</li>
+        </ul>
+
+        <h3>Who Will Be There</h3>
+        <ul>
+          <li><strong>District Judge or Deputy District Judge:</strong> Makes the decision</li>
+          <li><strong>You (the landlord/claimant):</strong> Or your representative</li>
+          <li><strong>The tenant (defendant):</strong> If they choose to attend</li>
+          <li><strong>Possibly:</strong> Legal representatives for either side, support workers for the tenant</li>
+        </ul>
+
+        <h3>Section 21 Hearings (Accelerated Procedure)</h3>
+        <p>
+          If you used the accelerated possession procedure (Form N5B), there&apos;s often no hearing at all.
+          The judge reviews papers and makes a decision. A hearing only happens if:
+        </p>
+        <ul>
+          <li>The tenant files a defence</li>
+          <li>The judge has questions or concerns</li>
+          <li>There&apos;s a dispute about the paperwork</li>
+        </ul>
+
+        <h3>Standard Possession Hearings</h3>
+        <p>
+          For Section 8 claims or contested Section 21 claims, hearings typically last 15-30 minutes
+          (though complex cases take longer). The process follows this pattern:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Judge introduces the case and confirms who&apos;s present</li>
+          <li>You (or your representative) present your case</li>
+          <li>The tenant (if present) responds or presents their defence</li>
+          <li>Judge asks questions to clarify points</li>
+          <li>Judge makes a decision (or reserves judgment for later)</li>
+        </ol>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-courtroom.svg"
+          alt="Courtroom Layout for Possession Hearing"
+          caption="Understanding the courtroom layout helps you feel more prepared"
+        />
+
+        <h2 id="what-judge-asks" className="scroll-mt-24">What the Judge Will Ask</h2>
+
+        <p>
+          Judges vary in their approach, but common questions include:
+        </p>
+
+        <h3>For Section 21 Claims</h3>
+        <ul>
+          <li>Can you confirm the tenancy started on [date] and is an AST?</li>
+          <li>Was the notice served correctly? How was it served?</li>
+          <li>Did you provide the prescribed information (gas certificate, EPC, How to Rent)?</li>
+          <li>Was the deposit protected within the required timeframe?</li>
+          <li>Is the notice in the correct form (Form 6A)?</li>
+        </ul>
+
+        <h3>For Section 8 Claims</h3>
+        <ul>
+          <li>Which grounds are you relying on?</li>
+          <li>What evidence do you have for each ground?</li>
+          <li>For rent arrears: What is owed? Is the tenant still in arrears?</li>
+          <li>For antisocial behaviour: What incidents occurred? Do you have evidence?</li>
+          <li>Did you serve the notice correctly?</li>
+          <li>Is it reasonable to grant possession?</li>
+        </ul>
+
+        <h3>Responding to Questions</h3>
+        <p>
+          When answering the judge:
+        </p>
+        <ul>
+          <li>Address them as &quot;Sir&quot; or &quot;Madam&quot; (or &quot;Your Honour&quot; for circuit judges)</li>
+          <li>Stand when speaking unless told otherwise</li>
+          <li>Answer clearly and directly</li>
+          <li>Refer to specific documents if relevant (&quot;As shown in tab 3, the rent statement...&quot;)</li>
+          <li>Don&apos;t argue with the judge—answer questions factually</li>
+        </ul>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="possible-outcomes" className="scroll-mt-24">Possible Outcomes</h2>
+
+        <h3>Outright Possession Order</h3>
+        <p>
+          The judge orders the tenant to leave by a specific date (usually 14 days for Section 21,
+          though can be extended to 42 days in cases of exceptional hardship). This is the outcome
+          you want.
+        </p>
+
+        <h3>Suspended Possession Order</h3>
+        <p>
+          Common in Section 8 rent arrears cases. The tenant can stay <strong>provided</strong> they
+          comply with conditions—typically paying current rent plus an amount towards arrears. If
+          they breach conditions, you can apply for a bailiff warrant without another hearing.
+        </p>
+
+        <h3>Postponed Possession Order</h3>
+        <p>
+          Similar to suspended orders but with a fixed future date. If the tenant doesn&apos;t comply
+          with conditions, possession takes effect on that date.
+        </p>
+
+        <h3>Adjournment</h3>
+        <p>
+          The judge postpones the hearing to another date. This happens if:
+        </p>
+        <ul>
+          <li>More evidence is needed</li>
+          <li>A party needs legal advice</li>
+          <li>There&apos;s not enough time to hear the case properly</li>
+          <li>Settlement discussions are ongoing</li>
+        </ul>
+
+        <h3>Case Dismissed</h3>
+        <p>
+          The judge rejects your claim. This might happen if:
+        </p>
+        <ul>
+          <li>The notice was defective</li>
+          <li>You didn&apos;t comply with legal requirements</li>
+          <li>For discretionary grounds, it&apos;s not reasonable to evict</li>
+          <li>You can&apos;t prove your case</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-amber-800 text-lg mb-2">If Your Case Is Dismissed</p>
+          <p className="text-amber-700">
+            A dismissed case is frustrating but not necessarily the end. You may be able to serve
+            a fresh notice and start again, addressing whatever defect caused the dismissal. Take
+            note of exactly why the judge dismissed the case.
+          </p>
+        </div>
+
+        <h2 id="after-hearing" className="scroll-mt-24">After the Hearing</h2>
+
+        <h3>If You Get a Possession Order</h3>
+        <p>
+          The order will specify the date by which the tenant must leave. Most tenants leave once
+          they have a court order. If they don&apos;t:
+        </p>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Wait until the date in the order passes</li>
+          <li>Apply for a warrant of possession (Form N325)</li>
+          <li>Court issues warrant to bailiffs</li>
+          <li>Bailiffs schedule eviction date (usually 2-4 weeks later)</li>
+          <li>Bailiffs physically remove tenant if necessary</li>
+        </ol>
+
+        <h3>If You Get a Suspended Order</h3>
+        <p>
+          Monitor whether the tenant complies with conditions. Keep records of all payments received.
+          If they breach conditions, you can apply for a bailiff warrant—but the tenant can apply
+          to have the warrant suspended, so keep good records.
+        </p>
+
+        <h3>If Your Case Is Adjourned</h3>
+        <p>
+          Note what the judge wants before the next hearing. Gather any additional evidence or
+          documentation required. The court will send you a new hearing date.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-after-hearing.svg"
+          alt="Steps After Possession Hearing"
+          caption="A possession order is often not the final step—be prepared for enforcement"
+        />
+
+        <h2 id="hearing-faq" className="scroll-mt-24">Possession Hearing FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant doesn&apos;t attend?</h3>
+            <p className="text-gray-600">
+              The hearing proceeds without them. In fact, this often makes things simpler—there&apos;s
+              no defence to contest. The judge will still check your paperwork is correct before
+              granting possession.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a solicitor?</h3>
+            <p className="text-gray-600">
+              Not necessarily. Many landlords represent themselves successfully, especially for
+              straightforward Section 21 claims. For complex Section 8 cases with multiple grounds
+              or substantial defences, legal representation can help.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I settle with the tenant outside court?</h3>
+            <p className="text-gray-600">
+              Yes. If the tenant agrees to leave by a certain date, you can ask the judge to make
+              a consent order reflecting this agreement. This avoids the uncertainty of a contested
+              hearing.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I can&apos;t attend on the scheduled date?</h3>
+            <p className="text-gray-600">
+              Contact the court as soon as possible to request an adjournment. Send someone to represent
+              you if possible (they&apos;ll need written authority). Missing a hearing without notice
+              could result in your claim being dismissed or struck out.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does a possession order take to enforce?</h3>
+            <p className="text-gray-600">
+              After the order date passes, you can apply for a bailiff warrant. Bailiffs typically
+              schedule eviction 2-4 weeks later. Total time from order to physical eviction is
+              usually 4-8 weeks.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim costs from the tenant?</h3>
+            <p className="text-gray-600">
+              You can ask for fixed costs in your claim. The court usually awards these if you win.
+              For more substantial legal costs, you&apos;d need to apply specifically—courts rarely
+              award full costs against tenants in possession cases.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Get Court-Ready Documents</h3>
+          <p className="text-gray-700 mb-6">
+            Our Complete Eviction Pack includes not just the notice, but all court forms and
+            supporting documents you need for your possession hearing. Don&apos;t go to court unprepared.
+          </p>
+          <Link
+            href="/products/complete-pack"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            Get Complete Eviction Pack — £149.99
+          </Link>
+        </div>
+      </>
+    ),
+  },
+  // ============================================
+  // POST 15: Bailiff Eviction Day
+  // Target: 1,500+ words
+  // ============================================
+  {
+    slug: 'england-bailiff-eviction',
+    title: 'Bailiff Eviction Day - What to Expect (England Guide 2026)',
+    description: 'The final step in eviction: bailiff enforcement. Learn what happens on eviction day, your rights and responsibilities, what bailiffs can and cannot do, and how to prepare.',
+    metaDescription: 'Bailiff eviction day explained. What happens when bailiffs enforce possession, your responsibilities as landlord, changing locks, tenant belongings. England guide.',
+    date: '2026-01-03',
+    updatedDate: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1680,
+    category: 'Eviction Process',
+    tags: ['Bailiff Eviction', 'Warrant of Possession', 'Eviction Enforcement', 'County Court Bailiff'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-bailiff-eviction.svg',
+    heroImageAlt: 'Bailiff Eviction Day - What to Expect',
+    showUrgencyBanner: false,
+    targetKeyword: 'bailiff eviction day',
+    secondaryKeywords: ['warrant of possession', 'eviction enforcement', 'county court bailiff', 'eviction day landlord'],
+    tableOfContents: [
+      { id: 'getting-warrant', title: 'Getting the Warrant', level: 2 },
+      { id: 'before-eviction', title: 'Before Eviction Day', level: 2 },
+      { id: 'eviction-day', title: 'What Happens on the Day', level: 2 },
+      { id: 'your-role', title: 'Your Role as Landlord', level: 2 },
+      { id: 'tenant-belongings', title: 'Dealing With Tenant Belongings', level: 2 },
+      { id: 'after-eviction', title: 'After the Eviction', level: 2 },
+      { id: 'bailiff-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['england-possession-hearing', 'england-section-21-process', 'england-county-court-forms'],
+    content: (
+      <>
+        <p className="text-xl text-gray-700 leading-relaxed">
+          You&apos;ve been through the entire process: served notice, attended court, and obtained a possession
+          order. But the tenant still hasn&apos;t left. The final step is bailiff enforcement—county court
+          bailiffs physically removing the tenant from your property. This guide explains exactly what
+          happens on eviction day and how to prepare.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-blue-800 text-lg mb-2">A Professional Process</p>
+          <p className="text-blue-700">
+            Bailiff evictions are controlled, professional proceedings. While they can be tense, bailiffs
+            are trained to handle these situations calmly. Your presence is helpful but not always required.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-bailiff-process.svg"
+          alt="Bailiff Eviction Process Overview"
+          caption="Bailiff enforcement is the final step in the eviction process"
+          aspectRatio="hero"
+        />
+
+        <h2 id="getting-warrant" className="scroll-mt-24">Getting the Warrant of Possession</h2>
+
+        <p>
+          Before bailiffs can act, you need a warrant of possession. This is a separate step after
+          obtaining your possession order.
+        </p>
+
+        <h3>When to Apply</h3>
+        <p>
+          You can apply for a warrant once:
+        </p>
+        <ul>
+          <li>The date in the possession order has passed (tenant was supposed to leave but didn&apos;t)</li>
+          <li>For suspended orders: the tenant has breached the conditions</li>
+        </ul>
+
+        <h3>How to Apply</h3>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Complete Form N325 (Request for Warrant of Possession)</li>
+          <li>Pay the court fee (£130 as of 2026)</li>
+          <li>Submit to the county court that made the order</li>
+        </ol>
+
+        <h3>Processing Time</h3>
+        <p>
+          After you submit the warrant application:
+        </p>
+        <ul>
+          <li>Court issues the warrant (typically 1-2 weeks)</li>
+          <li>Bailiffs schedule the eviction (typically 2-4 weeks after warrant issued)</li>
+          <li>Total time from application to eviction: usually 4-8 weeks</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-amber-800 text-lg mb-2">Court Backlogs</p>
+          <p className="text-amber-700">
+            Processing times vary significantly between courts. Some areas have substantial backlogs.
+            In busy areas, it may take longer than 8 weeks from warrant application to eviction.
+          </p>
+        </div>
+
+        <h3>Tenant&apos;s Right to Challenge</h3>
+        <p>
+          The tenant will be notified of the warrant. They can apply to have it:
+        </p>
+        <ul>
+          <li><strong>Suspended:</strong> If they can now pay arrears or comply with conditions</li>
+          <li><strong>Set aside:</strong> If there was an error in the original proceedings</li>
+        </ul>
+        <p>
+          If the tenant applies for suspension, this may delay the eviction while the court considers
+          their application.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="before-eviction" className="scroll-mt-24">Before Eviction Day</h2>
+
+        <h3>Notification</h3>
+        <p>
+          You&apos;ll receive notice from the court with the scheduled eviction date and approximate time
+          (usually given as a morning or afternoon slot rather than exact time). The tenant also receives
+          notice.
+        </p>
+
+        <h3>Prepare Your Property Arrangements</h3>
+        <p>
+          Before eviction day, arrange:
+        </p>
+        <ul>
+          <li><strong>Locksmith:</strong> Book a locksmith to attend and change locks immediately after eviction</li>
+          <li><strong>Transport:</strong> If you&apos;ll be there, plan how you&apos;ll get to the property</li>
+          <li><strong>Support:</strong> Consider bringing someone with you—these situations can be emotional</li>
+          <li><strong>Storage:</strong> Plan for what to do with any belongings left behind</li>
+        </ul>
+
+        <h3>Contact Details</h3>
+        <p>
+          Ensure the court and bailiff service have your current contact details. If the eviction is
+          postponed or rescheduled, you need to know.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-preparation-checklist.svg"
+          alt="Eviction Day Preparation Checklist"
+          caption="Proper preparation ensures a smoother eviction process"
+        />
+
+        <h2 id="eviction-day" className="scroll-mt-24">What Happens on Eviction Day</h2>
+
+        <h3>Bailiff Arrival</h3>
+        <p>
+          County court bailiffs (sometimes called enforcement officers) arrive at the property at the
+          scheduled time. They&apos;ll typically:
+        </p>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Knock on the door and announce themselves</li>
+          <li>Explain to anyone present that they have a warrant and the occupants must leave</li>
+          <li>Give a reasonable time for occupants to gather essential belongings</li>
+          <li>Supervise the occupants leaving the property</li>
+          <li>Hand possession to you (or your representative)</li>
+        </ol>
+
+        <h3>If the Tenant Is Present</h3>
+        <p>
+          Most tenants leave cooperatively, even if reluctantly. Bailiffs give them time to collect
+          personal items and essential belongings. The bailiff will ensure:
+        </p>
+        <ul>
+          <li>The tenant has opportunity to gather essentials (medication, documents, valuables)</li>
+          <li>Any children or vulnerable persons are handled appropriately</li>
+          <li>The situation remains calm and controlled</li>
+        </ul>
+
+        <h3>If the Tenant Refuses to Leave</h3>
+        <p>
+          Bailiffs have authority to physically remove occupants if necessary. In extreme cases, they
+          can request police assistance. However, this is rare—most tenants comply when faced with
+          an official bailiff with a warrant.
+        </p>
+
+        <h3>If the Property Is Empty</h3>
+        <p>
+          If no one&apos;s home, bailiffs will still execute the warrant. They&apos;ll wait for the
+          locksmith to change locks and hand you the keys.
+        </p>
+
+        <h3>Forced Entry</h3>
+        <p>
+          If no one answers and the property appears occupied, bailiffs can force entry. This is
+          legal under the warrant. A locksmith will handle this. You may be charged for locksmith
+          services in such cases.
+        </p>
+
+        <h2 id="your-role" className="scroll-mt-24">Your Role as Landlord</h2>
+
+        <h3>Should You Attend?</h3>
+        <p>
+          You don&apos;t have to attend personally, but it&apos;s often helpful:
+        </p>
+        <ul>
+          <li><strong>Pros:</strong> You can take immediate possession, assess property condition, secure the property</li>
+          <li><strong>Cons:</strong> Can be emotional or confrontational if the tenant is hostile</li>
+        </ul>
+        <p>
+          If you can&apos;t attend, send a representative with written authority. Someone needs to be
+          there to receive possession and change the locks.
+        </p>
+
+        <h3>What You Can Do</h3>
+        <ul>
+          <li>Be present to receive possession</li>
+          <li>Arrange lock changes</li>
+          <li>Document the property condition (photos/video)</li>
+          <li>Make the property secure</li>
+        </ul>
+
+        <h3>What You Must Not Do</h3>
+        <ul>
+          <li><strong>Don&apos;t</strong> get involved in removing the tenant—that&apos;s the bailiff&apos;s job</li>
+          <li><strong>Don&apos;t</strong> engage in arguments or confrontations</li>
+          <li><strong>Don&apos;t</strong> prevent the tenant from collecting belongings</li>
+          <li><strong>Don&apos;t</strong> damage or dispose of tenant property during the eviction</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8 rounded-r-lg">
+          <p className="font-semibold text-red-800 text-lg mb-2">Stay Professional</p>
+          <p className="text-red-700">
+            No matter how frustrated you are with the tenant, remain calm and professional. The
+            bailiff is in charge. Any confrontation could cause problems and may even delay the
+            eviction if it becomes unsafe.
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="tenant-belongings" className="scroll-mt-24">Dealing With Tenant Belongings</h2>
+
+        <p>
+          Tenants often leave belongings behind. You have legal obligations regarding these items.
+        </p>
+
+        <h3>The Torts (Interference with Goods) Act 1977</h3>
+        <p>
+          This Act governs what you must do with abandoned belongings:
+        </p>
+        <ul>
+          <li>You must take reasonable care of the items</li>
+          <li>You must give the tenant reasonable opportunity to collect them</li>
+          <li>You can eventually sell or dispose of items, but must follow proper procedures</li>
+        </ul>
+
+        <h3>Recommended Process</h3>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li><strong>Inventory:</strong> Make a detailed list of items left behind with photos</li>
+          <li><strong>Secure storage:</strong> Store items safely (on-site if secure, otherwise in storage)</li>
+          <li><strong>Written notice:</strong> Send the tenant a letter listing items and stating they have 14-28 days to collect</li>
+          <li><strong>Allow collection:</strong> Give reasonable opportunity for the tenant to collect</li>
+          <li><strong>After deadline:</strong> Items of value should be sold; proceeds (minus storage costs) go to the tenant. Low-value items can be disposed of.</li>
+        </ol>
+
+        <h3>What Counts as &quot;Belongings&quot;</h3>
+        <p>
+          Personal possessions that were the tenant&apos;s property. <strong>Not</strong> included:
+        </p>
+        <ul>
+          <li>Rubbish and waste</li>
+          <li>Items that were fixtures and fittings (your property)</li>
+          <li>Perishable goods that have spoiled</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tenant-belongings.svg"
+          alt="Handling Tenant Belongings After Eviction"
+          caption="Follow proper procedures when dealing with items left behind"
+        />
+
+        <h2 id="after-eviction" className="scroll-mt-24">After the Eviction</h2>
+
+        <h3>Immediate Steps</h3>
+        <ol className="list-decimal pl-6 space-y-2">
+          <li><strong>Change locks:</strong> Do this immediately—bailiffs don&apos;t do this for you</li>
+          <li><strong>Secure the property:</strong> Check all windows, doors, and access points</li>
+          <li><strong>Document condition:</strong> Take comprehensive photos and video of the property&apos;s state</li>
+          <li><strong>Utilities:</strong> Contact utility providers to transfer accounts</li>
+          <li><strong>Insurance:</strong> Notify your landlord insurance if the property is empty</li>
+        </ol>
+
+        <h3>Property Condition Assessment</h3>
+        <p>
+          Compare the property&apos;s current condition against the original inventory. Note any:
+        </p>
+        <ul>
+          <li>Damage beyond fair wear and tear</li>
+          <li>Missing items that belonged to you</li>
+          <li>Cleanliness issues</li>
+          <li>Repair needs</li>
+        </ul>
+
+        <h3>Deposit Claims</h3>
+        <p>
+          If you protected a deposit, you can now make deductions for damage and cleaning. Follow
+          the deposit scheme&apos;s process for making claims. Be prepared to evidence all deductions
+          with photos and receipts.
+        </p>
+
+        <h3>Money Claims</h3>
+        <p>
+          If the tenant owes rent arrears or you have damage costs exceeding the deposit, consider:
+        </p>
+        <ul>
+          <li>Money Claim Online for debts up to £100,000</li>
+          <li>Small claims track for amounts under £10,000</li>
+          <li>County Court Judgment (CCJ) if successful</li>
+        </ul>
+
+        <h2 id="bailiff-faq" className="scroll-mt-24">Bailiff Eviction FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can the tenant stop the eviction on the day?</h3>
+            <p className="text-gray-600">
+              Only if they have a court order suspending or setting aside the warrant. A last-minute
+              promise to pay or emotional appeal won&apos;t stop the bailiff. Once they arrive with a
+              valid warrant, the eviction proceeds.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What time do bailiffs arrive?</h3>
+            <p className="text-gray-600">
+              Usually between 9am and 5pm. You&apos;ll typically be given a morning or afternoon slot
+              rather than an exact time. Bailiffs often have multiple appointments and may not be
+              precisely on time.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I have to pay for the bailiff?</h3>
+            <p className="text-gray-600">
+              You pay the court fee for the warrant (£130). The bailiff service itself is included.
+              If forced entry requires a locksmith, you may pay additional costs. Lock changes are
+              your responsibility regardless.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if there are children or vulnerable people?</h3>
+            <p className="text-gray-600">
+              Bailiffs are trained to handle these situations sensitively. They may contact social
+              services or allow extra time. The eviction still proceeds, but with appropriate care
+              for vulnerable occupants.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use High Court Enforcement instead?</h3>
+            <p className="text-gray-600">
+              Yes, you can &quot;transfer up&quot; to High Court Enforcement Officers (HCEOs) for faster
+              action. This costs more but HCEOs typically execute warrants within days rather than
+              weeks. They&apos;re also perceived as more efficient.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant returns after eviction?</h3>
+            <p className="text-gray-600">
+              Once evicted, the tenant has no right to return. If they break in, it&apos;s criminal
+              trespass and potentially burglary. Call the police. You do <strong>not</strong> need
+              a new court order—the existing possession order remains valid.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need Help With the Eviction Process?</h3>
+          <p className="text-gray-700 mb-6">
+            Our Complete Eviction Pack guides you through every step, from notice to bailiff
+            enforcement. Includes all forms, court documents, and step-by-step instructions.
+          </p>
+          <Link
+            href="/products/complete-pack"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            Get Complete Eviction Pack — £149.99
+          </Link>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
