@@ -19461,6 +19461,597 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 50: Wales Rent Increases
+  {
+    slug: 'wales-rent-increases',
+    title: 'Rent Increases Wales - Complete Landlord Guide 2026',
+    description: 'Complete guide to increasing rent in Wales under the Renting Homes Act. Learn about notice periods, frequency limits, and tenant rights.',
+    metaDescription: 'Guide to rent increases in Wales. Notice periods, frequency limits, and procedures under the Renting Homes (Wales) Act 2016.',
+    date: '2026-01-03',
+    readTime: '11 min read',
+    wordCount: 1420,
+    category: 'Welsh Law',
+    tags: ['rent increase', 'Wales', 'rent review', 'occupation contract', 'landlord rights'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-rent.svg',
+    heroImageAlt: 'Wales Rent Increases Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'rent increase wales',
+    secondaryKeywords: ['raise rent wales', 'rent review wales', 'increase rent occupation contract', 'wales rent notice'],
+    tableOfContents: [
+      { id: 'rent-overview', title: 'Rent Increase Rules Overview', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'frequency-limits', title: 'Frequency Limits', level: 2 },
+      { id: 'tenant-rights', title: 'Contract-Holder Rights', level: 2 },
+      { id: 'rent-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-standard-occupation-contract', 'wales-renting-homes-act', 'wales-eviction-process'],
+    content: (
+      <>
+        <p className="lead">
+          Under the Renting Homes (Wales) Act, landlords can increase rent on occupation
+          contracts, but must follow specific procedures. This guide explains how to
+          raise rent legally in Wales.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Follow the Rules</h4>
+          <p className="text-blue-800">
+            Failing to follow correct procedures means your rent increase is not valid.
+            The contract-holder can continue paying the old rent until you serve a
+            proper notice.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-rent-overview.svg"
+          alt="Wales Rent Increase Overview"
+          caption="Rent increases must follow the Renting Homes Act procedures"
+          aspectRatio="video"
+        />
+
+        <h2 id="rent-overview" className="scroll-mt-24">Rent Increase Rules Overview</h2>
+
+        <p>
+          The Renting Homes Act provides a structured approach to rent increases for
+          standard occupation contracts. Key rules include:
+        </p>
+
+        <ul>
+          <li>You must give written notice using the prescribed form</li>
+          <li>Minimum notice period is 2 months</li>
+          <li>You can only increase rent once per year</li>
+          <li>The increase must be to a &quot;market rent&quot;</li>
+          <li>Contract-holders can challenge excessive increases</li>
+        </ul>
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <p>
+          To increase rent, you must serve a written notice that includes:
+        </p>
+
+        <ul>
+          <li>The current rent amount</li>
+          <li>The proposed new rent amount</li>
+          <li>The date the new rent takes effect</li>
+          <li>Information about the contract-holder&apos;s right to refer to a tribunal</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Use the Correct Form</h4>
+          <p className="text-amber-800">
+            The notice must be in the prescribed form. An informal letter or verbal
+            notice is not sufficient. Use the Welsh Government&apos;s standard rent
+            increase notice.
+          </p>
+        </div>
+
+        <h3>Notice Period</h3>
+
+        <p>
+          You must give at least 2 months&apos; notice before the new rent takes effect.
+          The new rent cannot take effect earlier than 12 months after:
+        </p>
+
+        <ul>
+          <li>The start of the occupation contract, or</li>
+          <li>The last rent increase (whichever is later)</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="frequency-limits" className="scroll-mt-24">Frequency Limits</h2>
+
+        <p>
+          There are strict limits on how often you can increase rent:
+        </p>
+
+        <ul>
+          <li><strong>Periodic contracts:</strong> Maximum once every 12 months</li>
+          <li><strong>Fixed-term contracts:</strong> Only if the contract allows it</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-rent-timeline.svg"
+          alt="Rent Increase Timeline Wales"
+          caption="You can only increase rent once per year"
+          aspectRatio="video"
+        />
+
+        <h2 id="tenant-rights" className="scroll-mt-24">Contract-Holder Rights</h2>
+
+        <p>
+          Contract-holders have rights when it comes to rent increases:
+        </p>
+
+        <h3>Right to Challenge</h3>
+
+        <p>
+          If the contract-holder believes the proposed rent is above market rent, they
+          can refer the matter to the Residential Property Tribunal Wales. The tribunal
+          will determine the appropriate market rent.
+        </p>
+
+        <h3>Time Limit</h3>
+
+        <p>
+          The contract-holder must make the referral before the rent increase takes
+          effect. If they miss this deadline, the new rent becomes payable.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need Rent Increase Forms?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides Welsh rent increase notice templates and guidance
+            for landlords.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Notice Templates →
+          </Link>
+        </div>
+
+        <h2 id="rent-faq" className="scroll-mt-24">Wales Rent Increase FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant doesn&apos;t pay the increased rent?</h3>
+            <p className="text-gray-600">
+              If you&apos;ve followed the correct procedure and the contract-holder hasn&apos;t
+              challenged the increase, they must pay the new rent. Non-payment would be
+              rent arrears, and you could seek possession.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I increase by any amount?</h3>
+            <p className="text-gray-600">
+              The increase should be to market rent. If you try to increase to an
+              unreasonably high amount, the contract-holder can challenge it at tribunal.
+              Research comparable rents in your area.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about fixed-term contracts?</h3>
+            <p className="text-gray-600">
+              You can only increase rent during a fixed term if the contract allows it.
+              Otherwise, you must wait until the fixed term ends and the contract becomes
+              periodic.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can we agree a different increase?</h3>
+            <p className="text-gray-600">
+              Yes. You and the contract-holder can agree to vary the rent at any time
+              by mutual written agreement. This doesn&apos;t require the formal notice
+              process.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 51: Wales Abandoned Property
+  {
+    slug: 'wales-abandoned-property',
+    title: 'Abandoned Property Wales - What Landlords Can Do 2026',
+    description: 'Guide for Welsh landlords dealing with abandoned properties. Learn about the abandonment process under the Renting Homes Act and recovering possession.',
+    metaDescription: 'Guide to handling abandoned property in Wales. Abandonment procedures, warning notices, and possession recovery under the Renting Homes Act.',
+    date: '2026-01-03',
+    readTime: '10 min read',
+    wordCount: 1320,
+    category: 'Welsh Law',
+    tags: ['abandoned property', 'Wales', 'possession', 'tenant abandonment', 'landlord rights'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-abandoned.svg',
+    heroImageAlt: 'Wales Abandoned Property Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'abandoned property wales landlord',
+    secondaryKeywords: ['tenant abandoned wales', 'abandoned tenancy wales', 'recover abandoned property', 'abandonment notice wales'],
+    tableOfContents: [
+      { id: 'abandonment-overview', title: 'Abandonment Overview', level: 2 },
+      { id: 'warning-notice', title: 'Warning Notice Process', level: 2 },
+      { id: 'recovering-possession', title: 'Recovering Possession', level: 2 },
+      { id: 'belongings', title: 'Dealing with Belongings', level: 2 },
+      { id: 'abandonment-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-eviction-process', 'wales-possession-grounds', 'wales-standard-occupation-contract'],
+    content: (
+      <>
+        <p className="lead">
+          The Renting Homes (Wales) Act provides a specific procedure for dealing with
+          properties that appear to have been abandoned. This allows landlords to recover
+          possession without court proceedings in genuine cases.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Follow the Procedure Carefully</h4>
+          <p className="text-red-800">
+            If you retake possession incorrectly and the property wasn&apos;t actually
+            abandoned, you could face claims for illegal eviction. Always follow the
+            statutory procedure.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-abandoned-overview.svg"
+          alt="Wales Abandoned Property Overview"
+          caption="A formal process must be followed for abandoned properties"
+          aspectRatio="video"
+        />
+
+        <h2 id="abandonment-overview" className="scroll-mt-24">Abandonment Overview</h2>
+
+        <p>
+          A property may be considered abandoned when:
+        </p>
+
+        <ul>
+          <li>The contract-holder has stopped living there</li>
+          <li>Rent payments have ceased</li>
+          <li>There&apos;s no indication the tenant intends to return</li>
+          <li>The property appears unoccupied</li>
+        </ul>
+
+        <p>
+          Signs of possible abandonment include mail piling up, utilities disconnected,
+          and neighbors confirming the tenant has left.
+        </p>
+
+        <h2 id="warning-notice" className="scroll-mt-24">Warning Notice Process</h2>
+
+        <p>
+          Before you can recover possession for abandonment, you must serve a warning
+          notice. The process is:
+        </p>
+
+        <ol className="list-decimal pl-6 space-y-2">
+          <li>Serve a written warning notice on the property</li>
+          <li>Send a copy to any known alternative address</li>
+          <li>The notice must give at least 4 weeks for response</li>
+          <li>State that you believe the property is abandoned</li>
+          <li>Warn that you will recover possession if no response</li>
+        </ol>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Keep Evidence</h4>
+          <p className="text-amber-800">
+            Document everything: take photos of mail build-up, record dates of visits,
+            note conversations with neighbors. This protects you if the tenant later
+            claims they hadn&apos;t abandoned.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="recovering-possession" className="scroll-mt-24">Recovering Possession</h2>
+
+        <p>
+          After the warning period expires with no response, you can recover possession.
+          The occupation contract ends on the date you recover possession.
+        </p>
+
+        <p>
+          When entering the property:
+        </p>
+
+        <ul>
+          <li>Take someone with you as a witness</li>
+          <li>Photograph the condition of the property</li>
+          <li>Change the locks immediately</li>
+          <li>Secure any belongings left behind</li>
+        </ul>
+
+        <h2 id="belongings" className="scroll-mt-24">Dealing with Belongings</h2>
+
+        <p>
+          If the contract-holder has left belongings behind, you must:
+        </p>
+
+        <ul>
+          <li>Store them safely for a reasonable period</li>
+          <li>Make reasonable efforts to notify the former tenant</li>
+          <li>Give them opportunity to collect their items</li>
+          <li>You may charge reasonable storage costs</li>
+        </ul>
+
+        <p>
+          After a reasonable period (typically 14-28 days), you can dispose of or sell
+          unclaimed items. Any sale proceeds should first cover your storage costs.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-belongings.svg"
+          alt="Dealing with Abandoned Belongings Wales"
+          caption="Store belongings safely and give reasonable time for collection"
+          aspectRatio="video"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Abandonment Notice Templates</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides Welsh abandonment warning notices and guidance
+            for handling abandoned properties.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Notice Templates →
+          </Link>
+        </div>
+
+        <h2 id="abandonment-faq" className="scroll-mt-24">Abandoned Property FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if they return after I&apos;ve changed the locks?</h3>
+            <p className="text-gray-600">
+              If you followed the proper procedure and the warning period has expired,
+              the contract has ended. They cannot simply move back in. However, if you
+              didn&apos;t follow procedures, they may have claims against you.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim for rent arrears?</h3>
+            <p className="text-gray-600">
+              Yes. The abandonment doesn&apos;t cancel any debt. You can still pursue
+              outstanding rent and any damage costs through the courts or use the deposit.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I&apos;m not sure it&apos;s abandoned?</h3>
+            <p className="text-gray-600">
+              If you&apos;re unsure, it&apos;s safer to use the court possession process.
+              The warning notice procedure is for clear abandonment cases. When in doubt,
+              seek legal advice.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 52: Wales Joint Tenancies
+  {
+    slug: 'wales-joint-tenancies',
+    title: 'Joint Occupation Contracts Wales - Complete Guide 2026',
+    description: 'Guide to joint occupation contracts in Wales. Learn about joint and several liability, adding/removing tenants, and what happens when one leaves.',
+    metaDescription: 'Complete guide to joint occupation contracts in Wales. Joint liability, adding tenants, succession, and managing joint tenancies.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1520,
+    category: 'Welsh Law',
+    tags: ['joint tenancy', 'Wales', 'occupation contract', 'joint contract-holders', 'succession'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-wales-joint.svg',
+    heroImageAlt: 'Wales Joint Occupation Contracts Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'joint occupation contract wales',
+    secondaryKeywords: ['joint tenancy wales', 'joint contract holders', 'wales joint tenants', 'multiple tenants wales'],
+    tableOfContents: [
+      { id: 'joint-overview', title: 'Joint Contracts Overview', level: 2 },
+      { id: 'joint-liability', title: 'Joint and Several Liability', level: 2 },
+      { id: 'adding-removing', title: 'Adding and Removing Contract-Holders', level: 2 },
+      { id: 'one-leaves', title: 'When One Contract-Holder Leaves', level: 2 },
+      { id: 'succession', title: 'Succession Rights', level: 2 },
+      { id: 'joint-faq', title: 'FAQ', level: 2 },
+    ],
+    relatedPosts: ['wales-standard-occupation-contract', 'wales-renting-homes-act', 'wales-eviction-process'],
+    content: (
+      <>
+        <p className="lead">
+          When two or more people rent a property together in Wales, they hold a joint
+          occupation contract. The Renting Homes Act provides specific rules for how
+          these arrangements work.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Joint Contract-Holders</h4>
+          <p className="text-blue-800">
+            Under Welsh law, tenants on a joint contract are called &quot;joint
+            contract-holders.&quot; They have equal rights and responsibilities
+            under the occupation contract.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-joint-overview.svg"
+          alt="Wales Joint Occupation Contracts Overview"
+          caption="Joint contract-holders share rights and responsibilities equally"
+          aspectRatio="video"
+        />
+
+        <h2 id="joint-overview" className="scroll-mt-24">Joint Contracts Overview</h2>
+
+        <p>
+          A joint occupation contract exists when the written statement names multiple
+          people as contract-holders. Key features include:
+        </p>
+
+        <ul>
+          <li>All named parties are contract-holders with equal rights</li>
+          <li>Each person can occupy the whole property</li>
+          <li>All are responsible for all obligations (not just their share)</li>
+          <li>Decisions about the contract generally require all to agree</li>
+        </ul>
+
+        <h2 id="joint-liability" className="scroll-mt-24">Joint and Several Liability</h2>
+
+        <p>
+          Under joint and several liability, you can pursue any one contract-holder
+          for the full amount of any debt. This means:
+        </p>
+
+        <ul>
+          <li>If rent is £1,000/month and there are two tenants, you can pursue either for the full £1,000</li>
+          <li>Each is responsible for the other&apos;s actions</li>
+          <li>Damage caused by one is the responsibility of all</li>
+          <li>You don&apos;t have to pursue them equally</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Practical Tip</h4>
+          <p className="text-amber-800">
+            If one contract-holder stops paying, pursue whoever can pay. They can
+            then recover from the other person themselves if they wish.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="adding-removing" className="scroll-mt-24">Adding and Removing Contract-Holders</h2>
+
+        <h3>Adding a New Contract-Holder</h3>
+
+        <p>
+          To add someone to a joint occupation contract:
+        </p>
+
+        <ul>
+          <li>All existing contract-holders must agree</li>
+          <li>The landlord must agree</li>
+          <li>A new written statement should be issued</li>
+          <li>Proper referencing is recommended</li>
+        </ul>
+
+        <h3>Removing a Contract-Holder</h3>
+
+        <p>
+          To remove someone from a joint contract:
+        </p>
+
+        <ul>
+          <li>All parties (including the landlord) must agree</li>
+          <li>A deed of surrender or variation is used</li>
+          <li>The remaining person(s) take on full responsibility</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-wales-joint-changes.svg"
+          alt="Adding and Removing Contract-Holders Wales"
+          caption="Changes to joint contracts require agreement from all parties"
+          aspectRatio="video"
+        />
+
+        <h2 id="one-leaves" className="scroll-mt-24">When One Contract-Holder Leaves</h2>
+
+        <p>
+          What happens when one joint contract-holder wants to leave but others want
+          to stay?
+        </p>
+
+        <h3>With Your Agreement</h3>
+
+        <p>
+          If you agree to let one person leave, you can vary the contract to remove
+          them. The remaining contract-holders continue with full responsibility.
+        </p>
+
+        <h3>Without Agreement</h3>
+
+        <p>
+          If the departing person serves a notice to end the contract, this can end
+          the contract for everyone. However, under Welsh law:
+        </p>
+
+        <ul>
+          <li>One contract-holder&apos;s notice doesn&apos;t automatically end the whole contract</li>
+          <li>The landlord can agree to continue with remaining contract-holders</li>
+          <li>You can issue a new contract to those staying</li>
+        </ul>
+
+        <h2 id="succession" className="scroll-mt-24">Succession Rights</h2>
+
+        <p>
+          If a joint contract-holder dies, the remaining contract-holders become the
+          sole contract-holders. This happens automatically - no new contract is needed.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Joint Tenancy Documents</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides variation agreements and notices for managing
+            joint occupation contracts in Wales.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Contract Templates →
+          </Link>
+        </div>
+
+        <h2 id="joint-faq" className="scroll-mt-24">Joint Tenancy FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I refuse to let someone leave?</h3>
+            <p className="text-gray-600">
+              You can refuse to vary the contract to release them from liability.
+              However, if they physically leave and stop paying, you would need to
+              pursue them for arrears or work with the remaining tenants.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I evict just one joint contract-holder?</h3>
+            <p className="text-gray-600">
+              Generally, possession proceedings are against all contract-holders
+              together. However, in domestic abuse situations, there are provisions
+              to remove one party while the other stays.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What deposit should I take for joint tenants?</h3>
+            <p className="text-gray-600">
+              Take one deposit for the property, protected in one scheme. All joint
+              contract-holders are jointly liable for the deposit and any deductions.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
