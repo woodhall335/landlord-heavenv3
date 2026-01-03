@@ -15485,6 +15485,933 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 38: Scotland Landlord Registration
+  {
+    slug: 'scotland-landlord-registration',
+    title: 'Landlord Registration Scotland - Complete Requirements Guide 2026',
+    description: 'Complete guide to landlord registration in Scotland. Learn registration requirements, fees, renewal process, and penalties for non-compliance.',
+    metaDescription: 'Scotland landlord registration guide. Requirements, fees, renewal process and penalties for Scottish landlords explained for 2026.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1580,
+    category: 'Scottish Law',
+    tags: ['landlord registration', 'Scotland', 'compliance', 'local authority', 'Scottish landlord', 'letting'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-landlord-registration.svg',
+    heroImageAlt: 'Scotland Landlord Registration Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland landlord registration requirements',
+    secondaryKeywords: ['register as landlord scotland', 'landlord registration fee scotland', 'scottish landlord register', 'letting registration scotland'],
+    tableOfContents: [
+      { id: 'overview', title: 'Overview', level: 2 },
+      { id: 'who-must-register', title: 'Who Must Register', level: 2 },
+      { id: 'registration-process', title: 'Registration Process', level: 2 },
+      { id: 'fees', title: 'Registration Fees', level: 2 },
+      { id: 'fit-and-proper', title: 'Fit and Proper Person Test', level: 2 },
+      { id: 'renewal', title: 'Renewal Process', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Registration', level: 2 },
+      { id: 'registration-faq', title: 'Registration FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-private-residential-tenancy', 'scotland-hmo-licensing', 'scotland-deposit-protection'],
+    content: (
+      <>
+        <p className="lead">
+          All private landlords in Scotland must register with their local council before
+          letting property. Registration is a legal requirement, and letting without
+          registration is a criminal offence that can result in significant penalties.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Landlord Registration Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Required:</strong> All private landlords in Scotland</li>
+            <li><strong>Register with:</strong> Local council where property is located</li>
+            <li><strong>Duration:</strong> 3 years before renewal required</li>
+            <li><strong>Penalty:</strong> Up to £50,000 for non-registration</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-registration.svg"
+          alt="Landlord Registration"
+          caption="Registration is mandatory for all private landlords in Scotland"
+        />
+
+        <h2 id="overview" className="scroll-mt-24">Overview</h2>
+
+        <p>
+          The Antisocial Behaviour etc. (Scotland) Act 2004 introduced mandatory landlord
+          registration. The Scottish Landlord Register is maintained by local authorities
+          but operates as a national database accessible at landlordregistrationscotland.gov.uk.
+        </p>
+
+        <p>
+          Registration aims to ensure that landlords are &quot;fit and proper&quot; persons to let
+          property and helps local authorities monitor the private rented sector.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="who-must-register" className="scroll-mt-24">Who Must Register</h2>
+
+        <h3>Must Register</h3>
+        <ul>
+          <li>Anyone letting residential property in Scotland</li>
+          <li>Joint landlords (all must be registered)</li>
+          <li>Company landlords (company and directors)</li>
+          <li>Landlords using letting agents</li>
+          <li>Landlords of HMOs</li>
+        </ul>
+
+        <h3>Exempt from Registration</h3>
+        <ul>
+          <li>Social landlords (councils, housing associations)</li>
+          <li>Holiday lets (short-term only, separate licensing applies)</li>
+          <li>Resident landlords sharing with lodgers</li>
+          <li>Certain family arrangements</li>
+          <li>Agricultural tenancies</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Register Before You Let</h4>
+          <p className="text-amber-800 mt-2">
+            You must be registered before entering into a tenancy agreement. Don&apos;t
+            wait until you find a tenant - register as soon as you decide to let.
+          </p>
+        </div>
+
+        <h2 id="registration-process" className="scroll-mt-24">Registration Process</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>Go to landlordregistrationscotland.gov.uk</strong>
+                <p className="text-gray-600 text-sm">The national online registration system</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>Create an account</strong>
+                <p className="text-gray-600 text-sm">You&apos;ll need an email address and to set a password</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <div>
+                <strong>Complete the application</strong>
+                <p className="text-gray-600 text-sm">Provide your details, property addresses, and agent details if applicable</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">4</span>
+              <div>
+                <strong>Pay the fee</strong>
+                <p className="text-gray-600 text-sm">Online payment by card</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">5</span>
+              <div>
+                <strong>Await approval</strong>
+                <p className="text-gray-600 text-sm">The council checks you pass the fit and proper person test</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <h2 id="fees" className="scroll-mt-24">Registration Fees</h2>
+
+        <p>Fees are set nationally and apply across all Scottish councils:</p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Fee Type</th>
+                <th className="border p-3 text-left font-semibold">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Principal landlord (main fee)</td>
+                <td className="border p-3">£70</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Each property registered</td>
+                <td className="border p-3">£15</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Additional joint landlord</td>
+                <td className="border p-3">£15</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Late application surcharge</td>
+                <td className="border p-3">Up to 50% extra</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Example: A single landlord with 3 properties pays £70 + (3 × £15) = £115.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-registration-fees.svg"
+          alt="Registration Fees"
+          caption="Fees are based on the number of landlords and properties"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="fit-and-proper" className="scroll-mt-24">Fit and Proper Person Test</h2>
+
+        <p>
+          The council must be satisfied that you are a &quot;fit and proper person&quot; to let
+          property. They consider:
+        </p>
+
+        <h3>Factors Considered</h3>
+        <ul>
+          <li>Criminal convictions (especially fraud, violence, drugs, sexual offences)</li>
+          <li>Antisocial behaviour</li>
+          <li>Contraventions of housing or landlord/tenant law</li>
+          <li>Discrimination</li>
+          <li>Previous refusal or revocation of registration</li>
+          <li>Whether an agent will manage (and their record)</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Spent Convictions</h4>
+          <p className="text-green-800 mt-2">
+            Not all convictions will prevent registration. Minor or old convictions
+            that are &quot;spent&quot; under the Rehabilitation of Offenders Act may not be
+            considered. Serious convictions are always relevant.
+          </p>
+        </div>
+
+        <h2 id="renewal" className="scroll-mt-24">Renewal Process</h2>
+
+        <p>Registration lasts 3 years. Before it expires:</p>
+
+        <ul>
+          <li>You&apos;ll receive reminder emails from the system</li>
+          <li>Apply to renew through the same website</li>
+          <li>Update any changed details</li>
+          <li>Pay the renewal fee (same as initial registration)</li>
+          <li>The fit and proper test is applied again</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900">Don&apos;t Let Registration Lapse</h4>
+          <p className="text-red-800 mt-2">
+            If your registration expires, you&apos;re letting illegally. Set a reminder
+            to renew at least a month before expiry. Late renewal may incur a surcharge.
+          </p>
+        </div>
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Registration</h2>
+
+        <h3>Criminal Penalties</h3>
+        <ul>
+          <li>Fine up to £50,000</li>
+          <li>Applies to letting without registration</li>
+          <li>Applies to acting as agent for unregistered landlord</li>
+        </ul>
+
+        <h3>Rent Penalty Notices</h3>
+        <p>
+          The council can issue a Rent Penalty Notice, which means:
+        </p>
+        <ul>
+          <li>Tenant doesn&apos;t have to pay rent while notice is in force</li>
+          <li>Landlord cannot recover that rent</li>
+          <li>Lasts until landlord registers (or for up to 12 months)</li>
+        </ul>
+
+        <h2 id="registration-faq" className="scroll-mt-24">Registration FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to register each property separately?</h3>
+            <p className="text-gray-600">
+              No. You register as a landlord and list all your properties in one
+              registration. You pay per property, but there&apos;s one registration.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I use a letting agent?</h3>
+            <p className="text-gray-600">
+              You still need to register as the landlord. Your agent must also be
+              registered with the Scottish Letting Agent Register (a separate requirement).
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can tenants check if I&apos;m registered?</h3>
+            <p className="text-gray-600">
+              Yes. The register is public. Anyone can search by landlord name or
+              property address at landlordregistrationscotland.gov.uk.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I buy a new property?</h3>
+            <p className="text-gray-600">
+              Add it to your existing registration. You&apos;ll pay £15 for the additional
+              property. Do this before letting it.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is registration the same as HMO licensing?</h3>
+            <p className="text-gray-600">
+              No. Landlord registration is required for all private landlords. HMO
+              licensing is an additional requirement for houses in multiple occupation.
+              You need both if your property is an HMO.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Managing Landlord Compliance?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides checklists and guidance for Scottish landlords
+            to ensure full compliance with registration and other requirements.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View All Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 39: Scotland HMO Licensing
+  {
+    slug: 'scotland-hmo-licensing',
+    title: 'HMO Licensing Scotland - Complete Guide 2026',
+    description: 'Complete guide to HMO licensing in Scotland. Learn when you need a licence, application process, conditions, fees, and penalties for non-compliance.',
+    metaDescription: 'Scotland HMO licensing guide for landlords. When you need a licence, fees, conditions, and penalties explained for 2026.',
+    date: '2026-01-03',
+    readTime: '15 min read',
+    wordCount: 1820,
+    category: 'Scottish Law',
+    tags: ['HMO', 'licensing', 'Scotland', 'multiple occupation', 'Scottish landlord', 'compliance'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-hmo-licensing.svg',
+    heroImageAlt: 'Scotland HMO Licensing Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland hmo licensing requirements',
+    secondaryKeywords: ['hmo licence scotland', 'house multiple occupation scotland', 'hmo application scotland', 'scottish hmo rules'],
+    tableOfContents: [
+      { id: 'what-is-hmo', title: 'What Is an HMO?', level: 2 },
+      { id: 'when-needed', title: 'When You Need a Licence', level: 2 },
+      { id: 'application-process', title: 'Application Process', level: 2 },
+      { id: 'fees', title: 'Licence Fees', level: 2 },
+      { id: 'conditions', title: 'Licence Conditions', level: 2 },
+      { id: 'safety-standards', title: 'Safety Standards', level: 2 },
+      { id: 'penalties', title: 'Penalties', level: 2 },
+      { id: 'hmo-faq', title: 'HMO Licensing FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-landlord-registration', 'scotland-private-residential-tenancy', 'scotland-repairing-standard'],
+    content: (
+      <>
+        <p className="lead">
+          If your Scottish property is let to three or more unrelated people who share
+          facilities, you need an HMO licence from the local council. Operating without
+          a licence is a criminal offence with serious consequences.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">HMO Licensing Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Definition:</strong> 3+ unrelated people sharing facilities</li>
+            <li><strong>Licence from:</strong> Local council</li>
+            <li><strong>Duration:</strong> Up to 3 years</li>
+            <li><strong>Penalty:</strong> Up to £50,000 and rent repayment orders</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-hmo-property.svg"
+          alt="HMO Property"
+          caption="HMOs require a licence from the local council before letting"
+        />
+
+        <h2 id="what-is-hmo" className="scroll-mt-24">What Is an HMO?</h2>
+
+        <p>
+          Under the Housing (Scotland) Act 2006, a property is an HMO (House in Multiple
+          Occupation) if:
+        </p>
+
+        <ul>
+          <li>It is the only or main residence of 3 or more people</li>
+          <li>From 3 or more families (i.e., unrelated people)</li>
+          <li>They share facilities (bathroom, kitchen, or toilet)</li>
+        </ul>
+
+        <h3>Examples of HMOs</h3>
+        <ul>
+          <li>Student flats with 3+ students from different families</li>
+          <li>Professional house-shares with 3+ unrelated adults</li>
+          <li>Bedsit properties with shared facilities</li>
+          <li>Hostels and guest houses</li>
+        </ul>
+
+        <h3>Not Usually HMOs</h3>
+        <ul>
+          <li>Properties let to one family</li>
+          <li>Properties let to couples</li>
+          <li>Owner-occupied with lodgers (under 3 unrelated)</li>
+          <li>Properties where each unit is self-contained</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="when-needed" className="scroll-mt-24">When You Need a Licence</h2>
+
+        <p>You need an HMO licence if your property meets the HMO definition. Unlike
+        England, Scotland requires licensing for all HMOs regardless of size - there&apos;s
+        no &quot;mandatory&quot; vs &quot;additional&quot; distinction.</p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Apply Before Letting</h4>
+          <p className="text-amber-800 mt-2">
+            You must have a licence before using a property as an HMO. Don&apos;t let to
+            tenants and then apply - this is operating illegally. Apply well in advance
+            as processing takes weeks or months.
+          </p>
+        </div>
+
+        <h2 id="application-process" className="scroll-mt-24">Application Process</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>Contact your local council</strong>
+                <p className="text-gray-600 text-sm">Find the HMO licensing team - usually in environmental health or housing</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>Complete the application form</strong>
+                <p className="text-gray-600 text-sm">Provide property details, floor plans, and landlord information</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <div>
+                <strong>Submit supporting documents</strong>
+                <p className="text-gray-600 text-sm">Gas safety certificate, EICR, fire safety documents, floor plans</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">4</span>
+              <div>
+                <strong>Pay the application fee</strong>
+                <p className="text-gray-600 text-sm">Fees vary by council and property size</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">5</span>
+              <div>
+                <strong>Property inspection</strong>
+                <p className="text-gray-600 text-sm">Council officers visit to check compliance with standards</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">6</span>
+              <div>
+                <strong>Consultation period</strong>
+                <p className="text-gray-600 text-sm">Neighbours and relevant parties are consulted</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">7</span>
+              <div>
+                <strong>Decision</strong>
+                <p className="text-gray-600 text-sm">Licence granted (with conditions) or refused</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <h2 id="fees" className="scroll-mt-24">Licence Fees</h2>
+
+        <p>
+          Fees are set by each council, so they vary. Typical ranges:
+        </p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Application Type</th>
+                <th className="border p-3 text-left font-semibold">Typical Fee Range</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">New licence (3-4 occupants)</td>
+                <td className="border p-3">£500 - £1,000</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">New licence (5+ occupants)</td>
+                <td className="border p-3">£800 - £1,500</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Renewal</td>
+                <td className="border p-3">£400 - £800</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Variation (change to existing)</td>
+                <td className="border p-3">£100 - £300</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Check your specific council&apos;s website for exact fees. Some councils charge
+          per occupant; others have fixed rates.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-hmo-inspection.svg"
+          alt="HMO Inspection"
+          caption="Council officers will inspect your property before granting a licence"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="conditions" className="scroll-mt-24">Licence Conditions</h2>
+
+        <p>
+          HMO licences come with mandatory conditions and may include additional conditions
+          specific to your property. Common conditions include:
+        </p>
+
+        <h3>Mandatory Conditions</h3>
+        <ul>
+          <li>Maximum number of occupants</li>
+          <li>Annual gas safety checks</li>
+          <li>Electrical installation inspection (EICR)</li>
+          <li>Smoke and heat detectors</li>
+          <li>Fire doors where required</li>
+          <li>Provision of fire extinguisher/blanket</li>
+          <li>Display of fire escape routes</li>
+        </ul>
+
+        <h3>Additional Conditions</h3>
+        <ul>
+          <li>Provision of specific furniture or facilities</li>
+          <li>Refuse storage requirements</li>
+          <li>Garden maintenance</li>
+          <li>Management standards</li>
+          <li>Reporting changes to the council</li>
+        </ul>
+
+        <h2 id="safety-standards" className="scroll-mt-24">Safety Standards</h2>
+
+        <h3>Fire Safety</h3>
+        <p>HMOs have stricter fire safety requirements than standard lets:</p>
+        <ul>
+          <li>Fire doors to kitchens, living rooms, and bedrooms</li>
+          <li>Interlinked smoke alarms on each level</li>
+          <li>Heat detector in kitchen</li>
+          <li>Emergency lighting in escape routes (larger HMOs)</li>
+          <li>Fire blanket in kitchen</li>
+          <li>Clear escape routes</li>
+        </ul>
+
+        <h3>Room Sizes</h3>
+        <p>Minimum room sizes typically apply:</p>
+        <ul>
+          <li>Single bedroom: Usually 6.5-7 m²</li>
+          <li>Double bedroom: Usually 10-11 m²</li>
+          <li>Kitchen: Depends on occupants</li>
+          <li>Living space: May be required</li>
+        </ul>
+
+        <h3>Facilities</h3>
+        <ul>
+          <li>Adequate bathroom facilities for the number of occupants</li>
+          <li>Sufficient kitchen facilities and storage</li>
+          <li>Heating in all habitable rooms</li>
+          <li>Adequate ventilation</li>
+        </ul>
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties</h2>
+
+        <h3>Operating Without a Licence</h3>
+        <ul>
+          <li>Criminal offence</li>
+          <li>Fine up to £50,000</li>
+          <li>Rent Repayment Order (tenant claims back rent)</li>
+          <li>Difficulty evicting tenants</li>
+        </ul>
+
+        <h3>Breaching Licence Conditions</h3>
+        <ul>
+          <li>Warning and requirement to remedy</li>
+          <li>Licence revocation</li>
+          <li>Prosecution for serious breaches</li>
+          <li>Rent Repayment Orders</li>
+        </ul>
+
+        <h2 id="hmo-faq" className="scroll-mt-24">HMO Licensing FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I let while my application is being processed?</h3>
+            <p className="text-gray-600">
+              Only if you&apos;ve been granted temporary permission. Don&apos;t assume you can let
+              just because you&apos;ve applied. Ask the council about their policy.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if neighbours object to my application?</h3>
+            <p className="text-gray-600">
+              The council considers objections but must make decisions based on the
+              legal criteria. Mere opposition from neighbours isn&apos;t grounds for refusal
+              if you meet all requirements.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need planning permission too?</h3>
+            <p className="text-gray-600">
+              Possibly. In some areas, changing a property to an HMO requires planning
+              permission (change of use). Check with the planning department separately
+              from the licensing team.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about short-term let licensing?</h3>
+            <p className="text-gray-600">
+              That&apos;s different. Short-term let licensing applies to holiday lets and
+              short stays. HMO licensing is for longer-term accommodation. You may need
+              both depending on how you use the property.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can my HMO licence be transferred?</h3>
+            <p className="text-gray-600">
+              No. If you sell the property, the new owner needs to apply for their own
+              licence. The licence is personal to you and specific to the property.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Managing an HMO?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides guidance and compliance checklists for HMO
+            landlords in Scotland.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View All Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 40: Scotland Repairing Standard
+  {
+    slug: 'scotland-repairing-standard',
+    title: 'Scottish Repairing Standard - Landlord Obligations Guide 2026',
+    description: 'Complete guide to the Repairing Standard in Scotland. Learn what landlords must provide, how to comply, and what happens if you breach the standard.',
+    metaDescription: 'Scotland Repairing Standard guide for landlords. Property condition obligations, compliance requirements, and enforcement explained 2026.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1650,
+    category: 'Scottish Law',
+    tags: ['repairing standard', 'Scotland', 'property condition', 'landlord obligations', 'Scottish landlord', 'compliance'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-repairing-standard.svg',
+    heroImageAlt: 'Scotland Repairing Standard Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland repairing standard landlord',
+    secondaryKeywords: ['scottish repairing standard', 'landlord property obligations scotland', 'housing standard scotland', 'tenant repairs scotland'],
+    tableOfContents: [
+      { id: 'overview', title: 'Overview', level: 2 },
+      { id: 'requirements', title: 'The Requirements', level: 2 },
+      { id: 'what-must-be-provided', title: 'What Must Be Provided', level: 2 },
+      { id: 'landlord-responsibilities', title: 'Landlord Responsibilities', level: 2 },
+      { id: 'tenant-responsibilities', title: 'Tenant Responsibilities', level: 2 },
+      { id: 'enforcement', title: 'Enforcement', level: 2 },
+      { id: 'repairing-faq', title: 'Repairing Standard FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-private-residential-tenancy', 'scotland-landlord-registration', 'scotland-hmo-licensing'],
+    content: (
+      <>
+        <p className="lead">
+          The Repairing Standard sets the minimum physical condition that private rented
+          properties in Scotland must meet. Landlords must ensure their properties comply
+          from the start of any tenancy and throughout its duration.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Repairing Standard Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Applies to:</strong> All private rented properties in Scotland</li>
+            <li><strong>When:</strong> From start of tenancy and throughout</li>
+            <li><strong>Enforcement:</strong> First-tier Tribunal</li>
+            <li><strong>Consequence:</strong> Repairing Standard Enforcement Orders</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-property-condition.svg"
+          alt="Property Condition"
+          caption="Properties must meet the Repairing Standard throughout any tenancy"
+        />
+
+        <h2 id="overview" className="scroll-mt-24">Overview</h2>
+
+        <p>
+          The Housing (Scotland) Act 2006 established the Repairing Standard, which was
+          enhanced by the Housing (Scotland) Act 2014. It applies to all private residential
+          tenancies, including PRTs, assured tenancies, and short assured tenancies.
+        </p>
+
+        <p>
+          The standard covers the physical condition of the property - structure, installations,
+          fixtures, and furnishings provided by the landlord.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="requirements" className="scroll-mt-24">The Requirements</h2>
+
+        <p>A property meets the Repairing Standard if:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <ol className="space-y-3">
+            <li><strong>1.</strong> The property is wind and watertight and reasonably fit for human habitation</li>
+            <li><strong>2.</strong> The structure and exterior are in reasonable repair</li>
+            <li><strong>3.</strong> Installations for water, gas, electricity, sanitation, heating, and hot water are in reasonable repair and proper working order</li>
+            <li><strong>4.</strong> Any fixtures, fittings, and appliances provided by the landlord are in reasonable repair and proper working order</li>
+            <li><strong>5.</strong> Any furnishings provided by the landlord are capable of safe use</li>
+            <li><strong>6.</strong> There is adequate fire detection (interlinked smoke and heat alarms)</li>
+            <li><strong>7.</strong> There are carbon monoxide detectors in rooms with fixed combustion appliances</li>
+            <li><strong>8.</strong> There is access to safe food preparation and storage facilities</li>
+            <li><strong>9.</strong> An electrical safety inspection has been carried out and any necessary work done</li>
+          </ol>
+        </div>
+
+        <h2 id="what-must-be-provided" className="scroll-mt-24">What Must Be Provided</h2>
+
+        <h3>Structure and Exterior</h3>
+        <ul>
+          <li>Roof in good condition, no leaks</li>
+          <li>Walls free from significant damp</li>
+          <li>Windows that open, close, and lock properly</li>
+          <li>External doors secure and weatherproof</li>
+          <li>Gutters and drains functioning</li>
+        </ul>
+
+        <h3>Installations</h3>
+        <ul>
+          <li>Working boiler and heating system</li>
+          <li>Hot and cold water to bathroom and kitchen</li>
+          <li>Working toilet with flushing mechanism</li>
+          <li>Electrical system that&apos;s safe (EICR required)</li>
+          <li>Gas system that&apos;s safe (annual Gas Safety Certificate)</li>
+        </ul>
+
+        <h3>Safety Equipment</h3>
+        <ul>
+          <li>Interlinked smoke alarms on each level</li>
+          <li>Heat detector in kitchen</li>
+          <li>Carbon monoxide detector near any fuel-burning appliance</li>
+        </ul>
+
+        <h3>Fire Safety (Since February 2022)</h3>
+        <p>
+          All smoke and heat alarms must be interlinked (when one sounds, they all sound).
+          This applies to all private rented properties.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-smoke-alarms.svg"
+          alt="Smoke Alarms"
+          caption="Interlinked smoke and heat alarms are now mandatory in Scotland"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="landlord-responsibilities" className="scroll-mt-24">Landlord Responsibilities</h2>
+
+        <h3>Before Tenancy Starts</h3>
+        <ul>
+          <li>Ensure property meets the full Repairing Standard</li>
+          <li>Get Gas Safety Certificate (within last 12 months)</li>
+          <li>Get EICR (within last 5 years)</li>
+          <li>Install interlinked fire detection</li>
+          <li>Install CO detectors where needed</li>
+        </ul>
+
+        <h3>During Tenancy</h3>
+        <ul>
+          <li>Maintain the property to the standard</li>
+          <li>Respond to repair requests promptly</li>
+          <li>Renew Gas Safety Certificate annually</li>
+          <li>Keep copies of safety certificates</li>
+          <li>Carry out repairs within reasonable time</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Response Times</h4>
+          <p className="text-green-800 mt-2">
+            While the law doesn&apos;t specify exact timescales, &quot;reasonable&quot; typically means:
+            emergency repairs (hours/1 day), urgent repairs (1-7 days), routine repairs
+            (28 days). Document everything.
+          </p>
+        </div>
+
+        <h2 id="tenant-responsibilities" className="scroll-mt-24">Tenant Responsibilities</h2>
+
+        <p>Tenants are expected to:</p>
+        <ul>
+          <li>Report defects and damage promptly</li>
+          <li>Allow access for inspections and repairs</li>
+          <li>Use the property reasonably</li>
+          <li>Not cause damage through misuse</li>
+          <li>Keep the property reasonably clean</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Tenant-Caused Damage</h4>
+          <p className="text-amber-800 mt-2">
+            If damage is caused by the tenant, you can charge for repairs. However, you
+            still need to carry out the repair to maintain the standard - you just
+            recover the cost from the tenant.
+          </p>
+        </div>
+
+        <h2 id="enforcement" className="scroll-mt-24">Enforcement</h2>
+
+        <h3>First-tier Tribunal</h3>
+        <p>
+          If you don&apos;t meet the Repairing Standard, tenants can apply to the First-tier
+          Tribunal (Housing and Property Chamber). The Tribunal can:
+        </p>
+
+        <ul>
+          <li>Inspect the property</li>
+          <li>Determine if the standard is met</li>
+          <li>Issue a Repairing Standard Enforcement Order (RSEO)</li>
+        </ul>
+
+        <h3>Repairing Standard Enforcement Order</h3>
+        <p>An RSEO requires you to:</p>
+        <ul>
+          <li>Carry out specified repairs</li>
+          <li>Complete them by a set deadline</li>
+          <li>The order goes on the Landlord Registration record</li>
+        </ul>
+
+        <h3>Non-Compliance with RSEO</h3>
+        <p>If you don&apos;t comply with an RSEO:</p>
+        <ul>
+          <li>The Tribunal can authorise the council to do the work</li>
+          <li>Costs are recovered from you</li>
+          <li>Rent Payment Orders can redirect rent to pay for repairs</li>
+          <li>It affects your landlord registration status</li>
+        </ul>
+
+        <h2 id="repairing-faq" className="scroll-mt-24">Repairing Standard FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What is &quot;reasonable repair&quot;?</h3>
+            <p className="text-gray-600">
+              It means the property functions properly and is safe. It doesn&apos;t mean
+              brand new or perfect. The age and character of the property are considered.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can the tenant withhold rent for disrepair?</h3>
+            <p className="text-gray-600">
+              Tenants should not withhold rent - they should apply to the Tribunal instead.
+              Withholding rent can lead to eviction for rent arrears, even if there are
+              genuine repair issues.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I can&apos;t get access to repair?</h3>
+            <p className="text-gray-600">
+              Document your attempts to arrange access. If the tenant unreasonably refuses
+              access, this is a breach of their tenancy obligations. Keep written records.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Am I responsible for appliances I didn&apos;t provide?</h3>
+            <p className="text-gray-600">
+              No. The Repairing Standard covers items provided by you as landlord. If the
+              tenant brings their own appliances, those are the tenant&apos;s responsibility.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about wear and tear?</h3>
+            <p className="text-gray-600">
+              Normal wear and tear is your responsibility to address. You can&apos;t claim
+              decoration costs from the tenant for normal use, but you should redecorate
+              between tenancies as needed.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Maintaining Your Property?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides maintenance checklists and compliance guides for
+            Scottish landlords to meet the Repairing Standard.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View All Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
