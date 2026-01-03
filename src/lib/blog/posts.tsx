@@ -25446,6 +25446,1232 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 68: UK Tenant Referencing Guide
+  {
+    slug: 'uk-tenant-referencing-guide',
+    title: 'UK Tenant Referencing - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to tenant referencing for UK landlords. Learn about credit checks, employment verification, landlord references, and choosing referencing services.',
+    metaDescription: 'UK tenant referencing guide 2026. Credit checks, employment verification, landlord references, referencing services, and best practices for landlords.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1680,
+    category: 'Tenant Management',
+    tags: ['tenant referencing', 'credit checks', 'landlord references', 'tenant screening', 'UK property'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-tenant-referencing.svg',
+    heroImageAlt: 'UK Tenant Referencing Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'tenant referencing UK landlords',
+    secondaryKeywords: ['tenant credit check', 'tenant screening', 'landlord reference', 'tenant vetting'],
+    tableOfContents: [
+      { id: 'why-reference', title: 'Why Reference Tenants', level: 2 },
+      { id: 'what-checks', title: 'What Checks Are Included', level: 2 },
+      { id: 'credit-checks', title: 'Credit Checks Explained', level: 2 },
+      { id: 'employment-verification', title: 'Employment Verification', level: 2 },
+      { id: 'landlord-references', title: 'Previous Landlord References', level: 2 },
+      { id: 'referencing-services', title: 'Referencing Services', level: 2 },
+      { id: 'red-flags', title: 'Red Flags to Watch For', level: 2 },
+      { id: 'gdpr-compliance', title: 'GDPR Compliance', level: 2 },
+      { id: 'referencing-faq', title: 'Referencing FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-right-to-rent-checks', 'uk-tenancy-agreements-guide', 'uk-landlord-insurance-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Tenant referencing is one of the most important steps in letting a property. A thorough
+          referencing process helps you find reliable tenants who will pay rent on time, look
+          after your property, and fulfill their tenancy obligations. This guide covers everything
+          you need to know about effective tenant screening.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Key Benefits of Referencing</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-1">
+            <li>Verify tenant identity and prevent fraud</li>
+            <li>Assess financial ability to pay rent</li>
+            <li>Check rental history and behavior</li>
+            <li>Reduce risk of rent arrears and eviction</li>
+            <li>Protect your property investment</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/tenant-referencing-process.svg"
+          alt="Tenant referencing process flowchart"
+          caption="A thorough referencing process protects landlords from problematic tenancies"
+          aspectRatio="video"
+        />
+
+        <h2 id="why-reference" className="scroll-mt-24">Why Reference Tenants</h2>
+
+        <p>
+          While it may be tempting to skip referencing to fill a vacancy quickly, the risks of
+          accepting an unvetted tenant far outweigh the time saved. Poor tenant selection is
+          the leading cause of landlord problems.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Risk</th>
+                <th className="border p-3 text-left font-semibold">Potential Cost</th>
+                <th className="border p-3 text-left font-semibold">Prevention</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Rent arrears</td>
+                <td className="border p-3">£3,000-£10,000+ in lost rent</td>
+                <td className="border p-3">Credit and affordability checks</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Property damage</td>
+                <td className="border p-3">£1,000-£20,000+ repairs</td>
+                <td className="border p-3">Previous landlord references</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Eviction costs</td>
+                <td className="border p-3">£5,000-£15,000 legal fees</td>
+                <td className="border p-3">Comprehensive referencing</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Fraud/identity theft</td>
+                <td className="border p-3">Property loss, legal issues</td>
+                <td className="border p-3">Identity verification</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Professional referencing typically costs £20-£50 per applicant - a small investment
+          compared to the potential losses from a problematic tenant.
+        </p>
+
+        <h2 id="what-checks" className="scroll-mt-24">What Checks Are Included</h2>
+
+        <p>
+          A comprehensive tenant reference includes multiple verification checks. Each element
+          provides different insights into the applicant's suitability.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Standard Reference Checks</h4>
+          <ul className="list-disc ml-4 text-green-800 space-y-2">
+            <li><strong>Identity verification:</strong> Passport, driving licence, proof of address</li>
+            <li><strong>Credit check:</strong> Credit score, CCJs, bankruptcies, IVAs</li>
+            <li><strong>Employment verification:</strong> Employer confirmation, salary details</li>
+            <li><strong>Affordability assessment:</strong> Rent-to-income ratio calculation</li>
+            <li><strong>Previous landlord reference:</strong> Payment history, property condition</li>
+            <li><strong>Right to Rent check:</strong> Immigration status verification</li>
+          </ul>
+        </div>
+
+        <p>
+          Some referencing services offer enhanced checks including social media screening,
+          adverse media searches, and county court judgment databases.
+        </p>
+
+        <h2 id="credit-checks" className="scroll-mt-24">Credit Checks Explained</h2>
+
+        <p>
+          Credit checks reveal a tenant's financial history and their likelihood of paying
+          rent consistently. Understanding what credit reports show helps you make informed
+          decisions.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/credit-check-report.svg"
+          alt="Example credit check report elements"
+          caption="Credit reports show financial history and payment behavior"
+          aspectRatio="video"
+        />
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Credit Item</th>
+                <th className="border p-3 text-left font-semibold">What It Means</th>
+                <th className="border p-3 text-left font-semibold">Concern Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">CCJ (County Court Judgment)</td>
+                <td className="border p-3">Court ordered debt repayment</td>
+                <td className="border p-3 text-red-600 font-semibold">High</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Bankruptcy</td>
+                <td className="border p-3">Unable to repay debts</td>
+                <td className="border p-3 text-red-600 font-semibold">High</td>
+              </tr>
+              <tr>
+                <td className="border p-3">IVA (Individual Voluntary Arrangement)</td>
+                <td className="border p-3">Formal debt agreement</td>
+                <td className="border p-3 text-orange-600 font-semibold">Medium-High</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Missed payments</td>
+                <td className="border p-3">Late or missed credit payments</td>
+                <td className="border p-3 text-orange-600 font-semibold">Medium</td>
+              </tr>
+              <tr>
+                <td className="border p-3">No credit history</td>
+                <td className="border p-3">New to credit/young tenant</td>
+                <td className="border p-3 text-yellow-600 font-semibold">Low-Medium</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          A perfect credit score isn't always necessary - consider the context. A single
+          missed payment from years ago is different from ongoing financial problems.
+        </p>
+
+        <h2 id="employment-verification" className="scroll-mt-24">Employment Verification</h2>
+
+        <p>
+          Confirming employment ensures the tenant has stable income to pay rent. Most
+          referencing services contact employers directly to verify details.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Employment Check Details</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-2">
+            <li>Job title and department</li>
+            <li>Employment start date</li>
+            <li>Contract type (permanent, fixed-term, casual)</li>
+            <li>Annual salary or hourly rate</li>
+            <li>Likelihood of continued employment</li>
+          </ul>
+        </div>
+
+        <p>For self-employed applicants, request:</p>
+
+        <ul className="list-disc ml-6 space-y-2 my-4">
+          <li>Last 2-3 years of tax returns (SA302)</li>
+          <li>Accountant's reference letter</li>
+          <li>Business bank statements (3-6 months)</li>
+          <li>Companies House records if applicable</li>
+        </ul>
+
+        <h2 id="landlord-references" className="scroll-mt-24">Previous Landlord References</h2>
+
+        <p>
+          References from previous landlords provide invaluable insight into how the tenant
+          actually behaved during a tenancy - something credit checks can't reveal.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/landlord-reference.svg"
+          alt="Landlord reference form example"
+          caption="Previous landlord references reveal actual tenancy behavior"
+          aspectRatio="video"
+        />
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Questions to Ask Previous Landlords</h4>
+          <ul className="list-disc ml-4 text-amber-800 space-y-2">
+            <li>Was rent always paid on time?</li>
+            <li>What condition was the property left in?</li>
+            <li>Were there any complaints from neighbors?</li>
+            <li>Did the tenant give proper notice?</li>
+            <li>Would you rent to them again?</li>
+            <li>Were there any tenancy breaches?</li>
+          </ul>
+        </div>
+
+        <p>
+          Be cautious with current landlord references - they may give a positive reference
+          just to move on a problem tenant. Previous landlords have less incentive to mislead.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="referencing-services" className="scroll-mt-24">Referencing Services</h2>
+
+        <p>
+          Professional referencing services streamline the process and provide standardized
+          reports. They have direct access to credit agencies and verification databases.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Service Type</th>
+                <th className="border p-3 text-left font-semibold">Cost Range</th>
+                <th className="border p-3 text-left font-semibold">Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Basic online</td>
+                <td className="border p-3">£15-£25</td>
+                <td className="border p-3">Simple credit check only</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Standard comprehensive</td>
+                <td className="border p-3">£25-£40</td>
+                <td className="border p-3">Most private landlords</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Premium with guarantor</td>
+                <td className="border p-3">£40-£60</td>
+                <td className="border p-3">Higher-risk applicants</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Agent-inclusive</td>
+                <td className="border p-3">Included in fees</td>
+                <td className="border p-3">Managed properties</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Popular UK referencing providers include Rightmove's tenant referencing, OpenRent,
+          HomeLet, and Tenant Verify. Compare features and turnaround times before choosing.
+        </p>
+
+        <h2 id="red-flags" className="scroll-mt-24">Red Flags to Watch For</h2>
+
+        <p>
+          Beyond formal checks, certain behaviors during the application process can indicate
+          potential problems.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Warning Signs</h4>
+          <ul className="list-disc ml-4 text-red-800 space-y-2">
+            <li>Reluctance to provide references or documentation</li>
+            <li>Pressure to move in immediately without proper checks</li>
+            <li>Offering to pay several months upfront (may indicate poor references)</li>
+            <li>Inconsistent information between application and documents</li>
+            <li>Unable to verify previous addresses or landlords</li>
+            <li>Defensive or evasive answers to reasonable questions</li>
+            <li>Wanting to pay only in cash</li>
+          </ul>
+        </div>
+
+        <p>
+          Trust your instincts - if something feels wrong, investigate further or consider
+          other applicants. It's better to have a brief void period than years of problems.
+        </p>
+
+        <h2 id="gdpr-compliance" className="scroll-mt-24">GDPR Compliance</h2>
+
+        <p>
+          When collecting and processing tenant data, you must comply with UK GDPR. This
+          protects tenants' personal information and sets rules for how you use it.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">GDPR Requirements</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-2">
+            <li>Obtain explicit consent before running checks</li>
+            <li>Only collect information necessary for the decision</li>
+            <li>Store data securely and limit access</li>
+            <li>Delete unsuccessful applicant data after reasonable time</li>
+            <li>Provide privacy notice explaining data use</li>
+            <li>Allow tenants to access their data on request</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/gdpr-tenant-data.svg"
+          alt="GDPR compliance for tenant data"
+          caption="Handle tenant data responsibly under GDPR requirements"
+          aspectRatio="video"
+        />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Tenant Referencing Tools</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides referencing checklists, application templates, and
+            integration with leading referencing services to streamline your tenant vetting.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Referencing Tools →
+          </Link>
+        </div>
+
+        <h2 id="referencing-faq" className="scroll-mt-24">Referencing FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I charge tenants for referencing?</h3>
+            <p className="text-gray-600">
+              No. Since the Tenant Fees Act 2019, landlords in England cannot charge tenants
+              for referencing. You must absorb this cost yourself or include it in your
+              overall letting costs. In Scotland and Wales, similar restrictions apply.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does referencing take?</h3>
+            <p className="text-gray-600">
+              Most references complete within 24-72 hours if all information is provided
+              promptly. Delays usually occur when employers or previous landlords are slow
+              to respond. Some services offer express options for faster turnaround.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if a tenant fails referencing?</h3>
+            <p className="text-gray-600">
+              Options include requesting a guarantor, asking for rent in advance (up to one
+              year in some cases), requiring a larger deposit (within legal limits), or
+              declining the application. Be consistent and non-discriminatory in your approach.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I reference all tenants in a shared house?</h3>
+            <p className="text-gray-600">
+              Yes, reference every adult who will be living in the property and named on the
+              tenancy. If one person fails, consider whether the others can cover the shortfall
+              or if a guarantor is needed for the weaker applicant.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 69: UK Right to Rent Checks
+  {
+    slug: 'uk-right-to-rent-checks',
+    title: 'UK Right to Rent Checks - Landlord Compliance Guide 2026',
+    description: 'Complete guide to Right to Rent checks for UK landlords. Learn about document verification, follow-up checks, digital verification, and avoiding discrimination.',
+    metaDescription: 'UK Right to Rent guide 2026. Document checks, digital verification, follow-up requirements, penalties, and discrimination avoidance for landlords.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Legal Compliance',
+    tags: ['right to rent', 'immigration checks', 'landlord obligations', 'document verification', 'UK property'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-right-to-rent.svg',
+    heroImageAlt: 'UK Right to Rent Checks Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'right to rent checks UK landlords',
+    secondaryKeywords: ['right to rent documents', 'immigration status landlords', 'right to rent penalties', 'tenant immigration check'],
+    tableOfContents: [
+      { id: 'what-is-right-to-rent', title: 'What is Right to Rent', level: 2 },
+      { id: 'who-must-check', title: 'Who Must Conduct Checks', level: 2 },
+      { id: 'acceptable-documents', title: 'Acceptable Documents', level: 2 },
+      { id: 'how-to-check', title: 'How to Conduct Checks', level: 2 },
+      { id: 'digital-verification', title: 'Digital Verification Service', level: 2 },
+      { id: 'follow-up-checks', title: 'Follow-Up Checks', level: 2 },
+      { id: 'avoiding-discrimination', title: 'Avoiding Discrimination', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'right-to-rent-faq', title: 'Right to Rent FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-tenant-referencing-guide', 'uk-tenancy-agreements-guide', 'england-section-21-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Right to Rent checks are a legal requirement for all landlords in England. You must
+          verify that every adult tenant has the legal right to rent residential property in
+          the UK before the tenancy begins. Failure to comply can result in significant civil
+          penalties or criminal prosecution.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Important Note</h4>
+          <p className="text-amber-800">
+            Right to Rent checks currently apply only in England. Scotland, Wales, and Northern
+            Ireland do not have equivalent requirements, though landlords should still verify
+            tenant identity as part of standard referencing.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/right-to-rent-documents.svg"
+          alt="Right to Rent acceptable documents"
+          caption="Various documents can prove right to rent in the UK"
+          aspectRatio="video"
+        />
+
+        <h2 id="what-is-right-to-rent" className="scroll-mt-24">What is Right to Rent</h2>
+
+        <p>
+          The Right to Rent scheme was introduced under the Immigration Act 2014 and expanded
+          nationwide in 2016. It requires landlords to check that tenants have immigration
+          permission to live in the UK.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Who Has Right to Rent</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-2">
+            <li><strong>British citizens:</strong> Unlimited right to rent</li>
+            <li><strong>Irish citizens:</strong> Unlimited right to rent</li>
+            <li><strong>EU Settlement Scheme holders:</strong> Unlimited or time-limited</li>
+            <li><strong>Visa holders:</strong> Time-limited based on visa expiry</li>
+            <li><strong>Refugees:</strong> Usually unlimited</li>
+            <li><strong>Asylum seekers:</strong> Depends on status</li>
+          </ul>
+        </div>
+
+        <p>
+          The scheme aims to prevent illegal immigration by limiting access to private rental
+          housing. As a landlord, you act as the first checkpoint in this system.
+        </p>
+
+        <h2 id="who-must-check" className="scroll-mt-24">Who Must Conduct Checks</h2>
+
+        <p>
+          The responsibility for Right to Rent checks lies with the landlord, but can be
+          delegated to an agent through a written agreement.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Scenario</th>
+                <th className="border p-3 text-left font-semibold">Responsible Party</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Self-managing landlord</td>
+                <td className="border p-3">Landlord</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Let-only service</td>
+                <td className="border p-3">Agent (if agreed) or Landlord</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Fully managed</td>
+                <td className="border p-3">Agent (usually in management agreement)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Lodger in your home</td>
+                <td className="border p-3">Not required (excluded accommodation)</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Social housing</td>
+                <td className="border p-3">Housing association</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          If using an agent, ensure your agreement clearly states who conducts the checks.
+          If the agent fails to check properly, liability may still fall on you.
+        </p>
+
+        <h2 id="acceptable-documents" className="scroll-mt-24">Acceptable Documents</h2>
+
+        <p>
+          The Home Office specifies which documents prove right to rent. Documents are divided
+          into List A (unlimited right) and List B (time-limited right requiring follow-up).
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">List A - Unlimited Right to Rent</h4>
+          <ul className="list-disc ml-4 text-green-800 space-y-1">
+            <li>UK or Irish passport (current or expired)</li>
+            <li>UK birth or adoption certificate + NI number evidence</li>
+            <li>Certificate of registration/naturalisation as British citizen</li>
+            <li>EU Settlement Scheme settled status share code</li>
+            <li>Permanent residence card</li>
+          </ul>
+        </div>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">List B - Time-Limited Right to Rent</h4>
+          <ul className="list-disc ml-4 text-amber-800 space-y-1">
+            <li>Current passport with valid visa</li>
+            <li>Biometric Residence Permit (BRP)</li>
+            <li>EU Settlement Scheme pre-settled status</li>
+            <li>Immigration status document with work/study permission</li>
+            <li>Application Registration Card (asylum seekers)</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/document-verification.svg"
+          alt="Document verification process"
+          caption="Carefully verify all documents match the tenant"
+          aspectRatio="video"
+        />
+
+        <h2 id="how-to-check" className="scroll-mt-24">How to Conduct Checks</h2>
+
+        <p>
+          Follow this process for every adult who will occupy the property as their only
+          or main home, regardless of whether they're named on the tenancy agreement.
+        </p>
+
+        <ol className="list-decimal ml-6 space-y-3 my-4">
+          <li>
+            <strong>Obtain original documents:</strong> The tenant must provide original
+            documents, not copies. View them in person or via video call.
+          </li>
+          <li>
+            <strong>Check validity:</strong> Verify documents haven't expired (unless
+            acceptable when expired), aren't damaged or tampered with.
+          </li>
+          <li>
+            <strong>Verify identity:</strong> Check the photo matches the person, the
+            date of birth is consistent, and names match across documents.
+          </li>
+          <li>
+            <strong>Take copies:</strong> Make clear copies of all documents and note
+            the date the check was made.
+          </li>
+          <li>
+            <strong>Record keeping:</strong> Store copies securely for the duration of
+            the tenancy plus one year after it ends.
+          </li>
+        </ol>
+
+        <h2 id="digital-verification" className="scroll-mt-24">Digital Verification Service</h2>
+
+        <p>
+          For many visa holders and EU Settlement Scheme applicants, you can verify their
+          status online using the Home Office's View and Prove service.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Online Check Process</h4>
+          <ol className="list-decimal ml-4 text-blue-800 space-y-2">
+            <li>Ask tenant for their share code (valid 90 days)</li>
+            <li>Get their date of birth</li>
+            <li>Visit gov.uk/view-right-to-rent</li>
+            <li>Enter share code and date of birth</li>
+            <li>View their immigration status and photo</li>
+            <li>Save or print the results page as your record</li>
+          </ol>
+        </div>
+
+        <p>
+          Identity Service Providers (IDSPs) can also conduct digital checks using certified
+          identity verification technology. This is particularly useful for remote lettings.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="follow-up-checks" className="scroll-mt-24">Follow-Up Checks</h2>
+
+        <p>
+          If a tenant has time-limited right to rent (List B documents), you must conduct
+          follow-up checks before their permission expires.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Document Type</th>
+                <th className="border p-3 text-left font-semibold">Follow-Up Required</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Visa with expiry date</td>
+                <td className="border p-3">Before visa expires</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">BRP with expiry date</td>
+                <td className="border p-3">Before BRP expires</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Pre-settled status</td>
+                <td className="border p-3">Before 5-year period ends</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Positive Verification Notice</td>
+                <td className="border p-3">6 months from notice date</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Set calendar reminders well in advance. If a follow-up check reveals the tenant
+          no longer has right to rent, you must report to the Home Office.
+        </p>
+
+        <h2 id="avoiding-discrimination" className="scroll-mt-24">Avoiding Discrimination</h2>
+
+        <p>
+          It's illegal to discriminate based on race, nationality, or ethnic origin when
+          conducting Right to Rent checks. You must apply checks equally to all tenants.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Discrimination Warning Signs</h4>
+          <ul className="list-disc ml-4 text-red-800 space-y-2">
+            <li>Only checking tenants who "look foreign"</li>
+            <li>Refusing to accept valid documents from certain nationalities</li>
+            <li>Applying different standards based on appearance or name</li>
+            <li>Asking for additional documents beyond legal requirements</li>
+            <li>Refusing British citizens because they don't have a passport</li>
+          </ul>
+        </div>
+
+        <p>
+          To avoid discrimination claims, check every tenant using the same process and
+          accept all documents on the approved lists equally.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/equal-treatment.svg"
+          alt="Equal treatment in tenant screening"
+          caption="Apply Right to Rent checks equally to all prospective tenants"
+          aspectRatio="video"
+        />
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <p>
+          Failing to conduct proper Right to Rent checks can result in civil penalties
+          and, in serious cases, criminal prosecution.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Breach</th>
+                <th className="border p-3 text-left font-semibold">Penalty</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">First breach - no check conducted</td>
+                <td className="border p-3">Up to £1,000 per lodger, £3,000 per tenant</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Repeat breach</td>
+                <td className="border p-3">Up to £3,000 per lodger, £10,000 per tenant</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Knowingly renting to illegal immigrant</td>
+                <td className="border p-3">Up to 5 years imprisonment</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          You can establish a statutory excuse against penalties by conducting and documenting
+          checks correctly, even if the tenant later turns out to lack right to rent.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Right to Rent Compliance Tools</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides Right to Rent checklists, document verification guides,
+            and follow-up reminder systems to ensure you stay compliant.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Compliance Tools →
+          </Link>
+        </div>
+
+        <h2 id="right-to-rent-faq" className="scroll-mt-24">Right to Rent FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to check children?</h3>
+            <p className="text-gray-600">
+              No, Right to Rent checks are only required for adults (18+). Children living
+              with checked parents don't need separate verification. If a child turns 18
+              during the tenancy, you should conduct a check at that point.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if someone can't provide documents?</h3>
+            <p className="text-gray-600">
+              Contact the Home Office Landlords Checking Service. They can verify status
+              for applicants who can't prove their right digitally. Response usually takes
+              2 working days. A Positive Verification Notice gives you a statutory excuse.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I refuse someone without right to rent?</h3>
+            <p className="text-gray-600">
+              Yes, you must refuse to rent to anyone who cannot demonstrate right to rent.
+              This isn't discrimination - it's legal compliance. However, you cannot refuse
+              someone who provides valid acceptable documents.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do checks apply to existing tenants?</h3>
+            <p className="text-gray-600">
+              Checks are required at the start of a new tenancy. For existing tenants who
+              had time-limited status, you need follow-up checks. If a tenancy continues
+              with no new agreement, continue follow-up checks as scheduled.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 70: UK HMO Regulations Guide
+  {
+    slug: 'uk-hmo-regulations-guide',
+    title: 'UK HMO Regulations - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to HMO regulations for UK landlords. Learn about licensing requirements, safety standards, management regulations, and penalties.',
+    metaDescription: 'UK HMO regulations guide 2026. Licensing requirements, mandatory licensing, safety standards, room sizes, management rules, and compliance explained.',
+    date: '2026-01-03',
+    readTime: '15 min read',
+    wordCount: 1850,
+    category: 'Legal Compliance',
+    tags: ['HMO', 'licensing', 'landlord regulations', 'house in multiple occupation', 'UK property'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-hmo-regulations.svg',
+    heroImageAlt: 'UK HMO Regulations Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'HMO regulations UK landlords',
+    secondaryKeywords: ['HMO licensing', 'house in multiple occupation', 'HMO requirements', 'HMO management'],
+    tableOfContents: [
+      { id: 'what-is-hmo', title: 'What is an HMO', level: 2 },
+      { id: 'mandatory-licensing', title: 'Mandatory Licensing', level: 2 },
+      { id: 'additional-licensing', title: 'Additional Licensing Schemes', level: 2 },
+      { id: 'license-application', title: 'Applying for a License', level: 2 },
+      { id: 'room-sizes', title: 'Minimum Room Sizes', level: 2 },
+      { id: 'safety-requirements', title: 'Safety Requirements', level: 2 },
+      { id: 'management-regulations', title: 'Management Regulations', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'hmo-faq', title: 'HMO FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-fire-safety-landlords', 'uk-electrical-safety-landlords', 'uk-landlord-insurance-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Houses in Multiple Occupation (HMOs) are subject to specific regulations designed to
+          protect tenants living in shared accommodation. If you let to three or more unrelated
+          people who share facilities, your property may be an HMO with legal requirements you
+          must meet. This guide explains everything you need to know about HMO compliance.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Why HMO Regulations Matter</h4>
+          <p className="text-amber-800">
+            HMOs present higher risks than single-household properties - more occupants, shared
+            facilities, and potential fire hazards. Regulations exist to ensure minimum safety
+            and living standards. Non-compliance can result in unlimited fines and rent repayment
+            orders.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/hmo-property.svg"
+          alt="Typical HMO property layout"
+          caption="HMOs require specific licensing and safety measures"
+          aspectRatio="video"
+        />
+
+        <h2 id="what-is-hmo" className="scroll-mt-24">What is an HMO</h2>
+
+        <p>
+          A property is an HMO if it meets the "standard test" - three or more tenants forming
+          two or more separate households, who share toilet, bathroom, or kitchen facilities.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">HMO Definitions</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-2">
+            <li><strong>Household:</strong> A single person, couple, or family living together</li>
+            <li><strong>Sharing facilities:</strong> Common use of kitchens, bathrooms, or toilets</li>
+            <li><strong>Main residence:</strong> The property is tenants' only or main home</li>
+            <li><strong>Rent or consideration:</strong> Payment of some kind is made</li>
+          </ul>
+        </div>
+
+        <p>Common HMO types include:</p>
+
+        <ul className="list-disc ml-6 space-y-2 my-4">
+          <li>Student house shares</li>
+          <li>Professional house shares</li>
+          <li>Bedsits with shared facilities</li>
+          <li>Converted buildings with self-contained flats (certain circumstances)</li>
+          <li>Hostels and B&Bs (not holiday lets)</li>
+        </ul>
+
+        <h2 id="mandatory-licensing" className="scroll-mt-24">Mandatory Licensing</h2>
+
+        <p>
+          Since October 2018, mandatory HMO licensing in England applies to properties occupied
+          by five or more people forming two or more households, regardless of storeys.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Criteria</th>
+                <th className="border p-3 text-left font-semibold">Pre-October 2018</th>
+                <th className="border p-3 text-left font-semibold">Current Rules</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Minimum occupants</td>
+                <td className="border p-3">5+ people</td>
+                <td className="border p-3">5+ people</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Minimum households</td>
+                <td className="border p-3">2+ households</td>
+                <td className="border p-3">2+ households</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Storey requirement</td>
+                <td className="border p-3">3+ storeys</td>
+                <td className="border p-3">Any number of storeys</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Purpose-built flats</td>
+                <td className="border p-3">Generally excluded</td>
+                <td className="border p-3">May be included</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          In Scotland, HMO licensing applies to all HMOs with 3+ unrelated people. Wales and
+          Northern Ireland have different thresholds. Always check local requirements.
+        </p>
+
+        <h2 id="additional-licensing" className="scroll-mt-24">Additional Licensing Schemes</h2>
+
+        <p>
+          Many local authorities operate additional licensing schemes that cover smaller HMOs
+          not caught by mandatory licensing. These vary significantly by area.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Additional Licensing Examples</h4>
+          <ul className="list-disc ml-4 text-green-800 space-y-2">
+            <li>All HMOs regardless of size (some London boroughs)</li>
+            <li>HMOs in specific wards or areas</li>
+            <li>Above-commercial HMOs</li>
+            <li>Converted properties with bedsits</li>
+            <li>Properties in areas with high ASB or poor conditions</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/hmo-licensing-map.svg"
+          alt="HMO licensing schemes vary by local authority"
+          caption="Check your local council for additional licensing requirements"
+          aspectRatio="video"
+        />
+
+        <p>
+          Some areas also have selective licensing covering all private rental properties,
+          not just HMOs. Contact your local council to understand which schemes apply to you.
+        </p>
+
+        <h2 id="license-application" className="scroll-mt-24">Applying for a License</h2>
+
+        <p>
+          HMO license applications are made to your local authority. The process typically
+          involves property inspection, fee payment, and proving you're a fit and proper person.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Requirement</th>
+                <th className="border p-3 text-left font-semibold">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Application fee</td>
+                <td className="border p-3">£500-£1,500+ depending on council</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Fit and proper person</td>
+                <td className="border p-3">No relevant criminal convictions, discrimination findings</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Property standards</td>
+                <td className="border p-3">Fire safety, amenities, room sizes</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Management arrangements</td>
+                <td className="border p-3">Demonstrable ability to manage the property</td>
+              </tr>
+              <tr>
+                <td className="border p-3">License duration</td>
+                <td className="border p-3">Up to 5 years</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Start your application early - processing can take months, and operating an
+          unlicensed HMO is an offense from day one.
+        </p>
+
+        <h2 id="room-sizes" className="scroll-mt-24">Minimum Room Sizes</h2>
+
+        <p>
+          National minimum room sizes apply to all licensed HMOs. Local authorities may
+          impose stricter requirements through license conditions.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">National Minimum Room Sizes</h4>
+          <ul className="list-disc ml-4 text-blue-800 space-y-2">
+            <li><strong>Single occupancy (1 person over 10):</strong> 6.51 square meters</li>
+            <li><strong>Double occupancy (2 people over 10):</strong> 10.22 square meters</li>
+            <li><strong>Child under 10:</strong> Counts as 0.5 person for calculation</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/room-size-measurement.svg"
+          alt="How to measure room sizes for HMO compliance"
+          caption="Measure usable floor space for room size calculations"
+          aspectRatio="video"
+        />
+
+        <p>
+          Only floor space with ceiling height of 1.5m+ counts toward room size. Sloping
+          ceilings, alcoves, and unusable space are excluded from the calculation.
+        </p>
+
+        <h2 id="safety-requirements" className="scroll-mt-24">Safety Requirements</h2>
+
+        <p>
+          HMOs must meet enhanced safety standards beyond those for standard rental properties.
+          These are typically enforced through license conditions.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Safety Area</th>
+                <th className="border p-3 text-left font-semibold">Typical Requirements</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Fire detection</td>
+                <td className="border p-3">Interlinked smoke/heat alarms, possibly Grade A system</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Fire doors</td>
+                <td className="border p-3">FD30 doors to bedrooms and kitchens</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Emergency lighting</td>
+                <td className="border p-3">In corridors and escape routes (larger HMOs)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Fire extinguishers</td>
+                <td className="border p-3">Often required in common areas and kitchens</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Fire blankets</td>
+                <td className="border p-3">Required in all kitchens</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Escape routes</td>
+                <td className="border p-3">Clear, unobstructed, with thumb-turn locks</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Gas safety certificates, EICRs, and energy performance certificates are also
+          mandatory for HMOs as with other rental properties.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="management-regulations" className="scroll-mt-24">Management Regulations</h2>
+
+        <p>
+          The Management of Houses in Multiple Occupation (England) Regulations 2006 impose
+          ongoing duties on HMO landlords beyond initial licensing.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Manager's Duties</h4>
+          <ul className="list-disc ml-4 text-green-800 space-y-2">
+            <li>Display name and contact details in the property</li>
+            <li>Maintain common areas, fixtures, and fittings</li>
+            <li>Keep escape routes clear and fire equipment maintained</li>
+            <li>Ensure water and gas supplies are safe</li>
+            <li>Provide adequate waste disposal facilities</li>
+            <li>Maintain living accommodation in good repair</li>
+          </ul>
+        </div>
+
+        <p>
+          Amenity standards also apply - adequate kitchen facilities, bathrooms, and toilets
+          for the number of occupants. Councils often specify ratios in license conditions.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Amenity</th>
+                <th className="border p-3 text-left font-semibold">Typical Ratio</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Bathrooms</td>
+                <td className="border p-3">1 per 5 occupants</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Toilets</td>
+                <td className="border p-3">1 per 5 occupants</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Kitchen sinks</td>
+                <td className="border p-3">1 per 5 occupants</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Cookers</td>
+                <td className="border p-3">1 per 5 occupants</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Fridges</td>
+                <td className="border p-3">1 per 5 occupants</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <p>
+          Operating an unlicensed HMO or breaching license conditions carries severe penalties.
+          Councils are actively enforcing HMO regulations.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Potential Penalties</h4>
+          <ul className="list-disc ml-4 text-red-800 space-y-2">
+            <li><strong>Unlicensed HMO:</strong> Unlimited fine (criminal) or up to £30,000 (civil)</li>
+            <li><strong>Breach of conditions:</strong> Up to £5,000 fine per breach</li>
+            <li><strong>Management failures:</strong> Up to £5,000 per breach</li>
+            <li><strong>Rent Repayment Orders:</strong> Up to 12 months' rent returned to tenants</li>
+            <li><strong>Banning orders:</strong> Prohibited from being a landlord</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/hmo-compliance-checklist.svg"
+          alt="HMO compliance checklist"
+          caption="Regular compliance checks help avoid penalties"
+          aspectRatio="video"
+        />
+
+        <p>
+          Tenants can apply for Rent Repayment Orders if you operate an unlicensed HMO,
+          potentially recovering up to 12 months' rent. Councils can also apply for RROs.
+        </p>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">HMO Compliance Tools</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides HMO compliance checklists, license renewal reminders,
+            and management templates to help you meet all regulatory requirements.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View HMO Tools →
+          </Link>
+        </div>
+
+        <h2 id="hmo-faq" className="scroll-mt-24">HMO FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do couples count as one or two households?</h3>
+            <p className="text-gray-600">
+              Couples living together as a household count as one household, regardless of
+              whether they're married. However, they count as two people for occupancy numbers
+              and room size calculations.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need planning permission for an HMO?</h3>
+            <p className="text-gray-600">
+              Possibly. Small HMOs (up to 6 people) usually fall under Use Class C4 and may
+              need permission if there's an Article 4 direction in your area. Larger HMOs
+              require sui generis planning permission. Check with your local planning authority.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use Section 21 for unlicensed HMO?</h3>
+            <p className="text-gray-600">
+              No. If your HMO requires a license but doesn't have one, you cannot serve a
+              valid Section 21 notice. You'll need to obtain the license first, then wait
+              for any required notice period before serving Section 21.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does an HMO license last?</h3>
+            <p className="text-gray-600">
+              HMO licenses are typically granted for 5 years, though councils can issue
+              shorter licenses if there are concerns. License conditions may require annual
+              inspections or certifications throughout the period.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I inherit an HMO without a license?</h3>
+            <p className="text-gray-600">
+              Apply for a license immediately. You may have a defense if you can show you
+              didn't know and couldn't reasonably have known licensing was required. However,
+              you must apply as soon as you become aware. Councils may show leniency for
+              inherited properties if you act promptly.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
