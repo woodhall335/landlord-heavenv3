@@ -23261,6 +23261,953 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 62: Northern Ireland Eviction Process
+  {
+    slug: 'northern-ireland-eviction-process',
+    title: 'NI Eviction Process - Complete Landlord Guide 2026',
+    description: 'Step-by-step guide to evicting tenants in Northern Ireland. Notice requirements, court process, and regaining possession under NI law.',
+    metaDescription: 'Northern Ireland eviction guide 2026. Notice to quit requirements, court process, grounds for possession, and regaining possession in NI.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1680,
+    category: 'Northern Ireland Law',
+    tags: ['Northern Ireland', 'eviction', 'possession', 'notice to quit', 'NI landlord', 'court process'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ni-eviction.svg',
+    heroImageAlt: 'Northern Ireland Eviction Process Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'northern ireland eviction process',
+    secondaryKeywords: ['NI eviction', 'notice to quit NI', 'evict tenant Northern Ireland', 'NI possession proceedings'],
+    tableOfContents: [
+      { id: 'eviction-overview', title: 'Eviction Overview', level: 2 },
+      { id: 'notice-quit', title: 'Notice to Quit', level: 2 },
+      { id: 'grounds-possession', title: 'Grounds for Possession', level: 2 },
+      { id: 'court-process', title: 'Court Process', level: 2 },
+      { id: 'enforcement', title: 'Enforcement', level: 2 },
+      { id: 'eviction-faq', title: 'Eviction FAQ', level: 2 },
+    ],
+    relatedPosts: ['northern-ireland-private-tenancies-order', 'northern-ireland-landlord-registration', 'northern-ireland-deposit-protection'],
+    content: (
+      <>
+        <p className="lead">
+          Evicting a tenant in Northern Ireland requires following the correct
+          legal process. Landlords cannot simply ask tenants to leave or change
+          locks - this is illegal eviction. This guide explains the proper
+          eviction process under NI law.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ni-eviction-hero.svg"
+          alt="NI Eviction Process"
+          caption="Follow the legal process carefully to avoid illegal eviction"
+          aspectRatio="video"
+        />
+
+        <h2 id="eviction-overview" className="scroll-mt-24">Eviction Overview</h2>
+
+        <p>
+          The eviction process in Northern Ireland typically involves:
+        </p>
+
+        <ol>
+          <li>Serving a valid Notice to Quit</li>
+          <li>Waiting for the notice period to expire</li>
+          <li>Applying to court for a possession order</li>
+          <li>If tenant doesn&apos;t leave, applying for enforcement</li>
+        </ol>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Court Order Required</h4>
+          <p className="text-blue-800">
+            You cannot evict a tenant without a court order. Even if they have
+            given up paying rent or breached the tenancy, you must go through
+            the courts. Self-help remedies like changing locks are criminal
+            offences.
+          </p>
+        </div>
+
+        <h2 id="notice-quit" className="scroll-mt-24">Notice to Quit</h2>
+
+        <p>
+          Before seeking possession, you must serve a valid Notice to Quit (NTQ).
+          The requirements depend on the type of tenancy:
+        </p>
+
+        <h3>Notice Periods</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tenancy Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Minimum Notice</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Weekly tenancy</td>
+                <td className="px-6 py-4">4 weeks</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Monthly tenancy</td>
+                <td className="px-6 py-4">4 weeks</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Yearly tenancy</td>
+                <td className="px-6 py-4">4 weeks</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Fixed term (during term)</td>
+                <td className="px-6 py-4">Only with break clause</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Notice Requirements</h3>
+
+        <p>
+          A valid Notice to Quit must:
+        </p>
+
+        <ul>
+          <li>Be in writing</li>
+          <li>Give the correct notice period</li>
+          <li>State the date on which the tenancy will end</li>
+          <li>Be properly served on the tenant</li>
+          <li>Include required statutory information</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ni-ntq.svg"
+          alt="Notice to Quit NI"
+          caption="Use the correct notice period and format"
+          aspectRatio="video"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="grounds-possession" className="scroll-mt-24">Grounds for Possession</h2>
+
+        <p>
+          In NI, landlords don&apos;t need to give a reason for seeking possession
+          of a private tenancy - you can simply serve a Notice to Quit. However,
+          having grounds can strengthen your case:
+        </p>
+
+        <h3>Common Reasons for Possession</h3>
+
+        <ul>
+          <li>Rent arrears</li>
+          <li>Breach of tenancy agreement</li>
+          <li>Damage to property</li>
+          <li>Anti-social behaviour</li>
+          <li>Landlord requires property for own use</li>
+          <li>End of fixed term</li>
+        </ul>
+
+        <h3>Rent Arrears Cases</h3>
+
+        <p>
+          If seeking possession for rent arrears:
+        </p>
+
+        <ul>
+          <li>Keep detailed records of all arrears</li>
+          <li>Document attempts to recover rent</li>
+          <li>Serve Notice to Quit as normal</li>
+          <li>Court will consider arrears when making decision</li>
+          <li>Can also claim for rent owed in same proceedings</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Alternative Approaches</h4>
+          <p className="text-amber-800">
+            Before starting eviction, consider whether negotiation, payment plans,
+            or mediation might resolve the issue. Eviction is costly and
+            time-consuming for both parties.
+          </p>
+        </div>
+
+        <h2 id="court-process" className="scroll-mt-24">Court Process</h2>
+
+        <p>
+          After the Notice to Quit expires, if the tenant hasn&apos;t left, you
+          must apply to court:
+        </p>
+
+        <h3>Step 1: Issue Proceedings</h3>
+
+        <ul>
+          <li>Complete the court application form</li>
+          <li>Include copy of Notice to Quit and tenancy agreement</li>
+          <li>Pay the court fee</li>
+          <li>Submit to the appropriate county court</li>
+        </ul>
+
+        <h3>Step 2: Hearing</h3>
+
+        <ul>
+          <li>Court will set a hearing date</li>
+          <li>Tenant will be notified</li>
+          <li>Both parties can attend and present their case</li>
+          <li>Judge decides whether to grant possession</li>
+        </ul>
+
+        <h3>Step 3: Possession Order</h3>
+
+        <p>
+          If successful, the court will grant a possession order. This may be:
+        </p>
+
+        <ul>
+          <li><strong>Immediate:</strong> Tenant must leave within a specified time (usually 14-28 days)</li>
+          <li><strong>Suspended:</strong> Order suspended on conditions (e.g., paying arrears)</li>
+          <li><strong>Postponed:</strong> Possession delayed for a period</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-ni-court.svg"
+          alt="NI Court Process"
+          caption="The court will decide whether to grant possession"
+          aspectRatio="video"
+        />
+
+        <h2 id="enforcement" className="scroll-mt-24">Enforcement</h2>
+
+        <p>
+          If the tenant doesn&apos;t leave after the possession order:
+        </p>
+
+        <h3>Enforcement Officers</h3>
+
+        <ul>
+          <li>Apply to court for warrant of possession</li>
+          <li>Enforcement officers will execute the warrant</li>
+          <li>Tenant will be physically removed if necessary</li>
+          <li>Landlord can then change locks and take possession</li>
+        </ul>
+
+        <h3>Costs</h3>
+
+        <ul>
+          <li>Additional court fee for warrant</li>
+          <li>Enforcement officer fees</li>
+          <li>May be recoverable from tenant (but often difficult)</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Never Self-Evict</h4>
+          <p className="text-red-800">
+            Changing locks, removing belongings, or harassing the tenant to leave
+            is illegal eviction - a criminal offence. Always wait for the court
+            process and use enforcement officers if needed.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">NI Eviction Documents</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides Notice to Quit templates and court form
+            guidance for Northern Ireland landlords.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View NI Templates →
+          </Link>
+        </div>
+
+        <h2 id="eviction-faq" className="scroll-mt-24">Eviction FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long does eviction take in NI?</h3>
+            <p className="text-gray-600">
+              From serving notice to enforcement can take 3-6 months or longer.
+              The notice period is typically 4 weeks, court proceedings can take
+              4-8 weeks, and enforcement a further few weeks.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I evict in winter?</h3>
+            <p className="text-gray-600">
+              There is no restriction on evicting during winter months in NI.
+              However, courts may consider vulnerability of tenants when setting
+              possession dates.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant has children?</h3>
+            <p className="text-gray-600">
+              The presence of children doesn&apos;t prevent eviction, but the court
+              may consider their welfare. The local council has duties toward
+              homeless families with children.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I recover my costs from the tenant?</h3>
+            <p className="text-gray-600">
+              You can ask the court to award costs, including court fees. However,
+              recovering money from a tenant who has been evicted can be difficult
+              if they have limited means.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 63: UK Landlord Insurance Guide
+  {
+    slug: 'uk-landlord-insurance-guide',
+    title: 'Landlord Insurance UK - Complete Coverage Guide 2026',
+    description: 'Everything you need to know about landlord insurance in the UK. Types of cover, what to look for, and protecting your rental investment.',
+    metaDescription: 'UK landlord insurance guide 2026. Buildings, contents, rent guarantee, legal expenses, and liability cover for rental properties.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'UK-Wide',
+    tags: ['landlord insurance', 'UK', 'buildings insurance', 'rent guarantee', 'legal expenses', 'liability cover'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-uk-insurance.svg',
+    heroImageAlt: 'UK Landlord Insurance Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord insurance uk',
+    secondaryKeywords: ['landlord buildings insurance', 'rent guarantee insurance', 'landlord legal expenses', 'buy to let insurance'],
+    tableOfContents: [
+      { id: 'insurance-overview', title: 'Insurance Overview', level: 2 },
+      { id: 'types-cover', title: 'Types of Cover', level: 2 },
+      { id: 'buildings-insurance', title: 'Buildings Insurance', level: 2 },
+      { id: 'contents-cover', title: 'Contents Cover', level: 2 },
+      { id: 'rent-guarantee', title: 'Rent Guarantee Insurance', level: 2 },
+      { id: 'legal-expenses', title: 'Legal Expenses Cover', level: 2 },
+      { id: 'insurance-faq', title: 'Insurance FAQ', level: 2 },
+    ],
+    relatedPosts: ['landlord-legal-obligations-uk', 'buy-to-let-tax-guide', 'landlord-safety-requirements'],
+    content: (
+      <>
+        <p className="lead">
+          The right insurance is essential protection for any landlord. Standard
+          home insurance won&apos;t cover rental properties - you need specific
+          landlord insurance. This guide explains the different types of cover
+          and helps you choose the right protection.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-insurance-hero.svg"
+          alt="UK Landlord Insurance"
+          caption="Proper insurance protects your rental investment"
+          aspectRatio="video"
+        />
+
+        <h2 id="insurance-overview" className="scroll-mt-24">Insurance Overview</h2>
+
+        <p>
+          Landlord insurance differs from standard home insurance in several ways:
+        </p>
+
+        <ul>
+          <li>Covers unoccupied periods between tenancies</li>
+          <li>Includes liability for tenant injuries</li>
+          <li>Can cover malicious damage by tenants</li>
+          <li>Offers rent guarantee options</li>
+          <li>Includes legal expenses for disputes</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Mortgage Requirement</h4>
+          <p className="text-blue-800">
+            Most buy-to-let mortgages require you to have buildings insurance
+            as a condition of the loan. Check your mortgage terms for minimum
+            cover requirements.
+          </p>
+        </div>
+
+        <h2 id="types-cover" className="scroll-mt-24">Types of Cover</h2>
+
+        <p>
+          Landlord insurance typically includes several elements:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cover Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">What It Covers</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Essential?</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4 font-semibold">Buildings</td>
+                <td className="px-6 py-4">Structure, fixtures, fittings</td>
+                <td className="px-6 py-4 text-green-600">Essential</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold">Contents</td>
+                <td className="px-6 py-4">Furniture, appliances you provide</td>
+                <td className="px-6 py-4 text-amber-600">If furnished</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold">Liability</td>
+                <td className="px-6 py-4">Claims by tenants/visitors</td>
+                <td className="px-6 py-4 text-green-600">Essential</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold">Rent Guarantee</td>
+                <td className="px-6 py-4">Lost rent if tenant defaults</td>
+                <td className="px-6 py-4 text-blue-600">Recommended</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4 font-semibold">Legal Expenses</td>
+                <td className="px-6 py-4">Eviction costs, disputes</td>
+                <td className="px-6 py-4 text-blue-600">Recommended</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="buildings-insurance" className="scroll-mt-24">Buildings Insurance</h2>
+
+        <p>
+          Buildings insurance covers the structure itself:
+        </p>
+
+        <h3>What&apos;s Covered</h3>
+
+        <ul>
+          <li>Walls, roof, floors, foundations</li>
+          <li>Windows, doors, gates</li>
+          <li>Fitted kitchens and bathrooms</li>
+          <li>Built-in wardrobes</li>
+          <li>Garages, outbuildings, fences</li>
+          <li>Driveways and paths</li>
+        </ul>
+
+        <h3>Covered Events</h3>
+
+        <ul>
+          <li>Fire, smoke, explosion</li>
+          <li>Storm and flood damage</li>
+          <li>Escape of water/oil</li>
+          <li>Theft and vandalism</li>
+          <li>Subsidence</li>
+          <li>Impact (vehicles, trees, etc.)</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-buildings-cover.svg"
+          alt="Buildings Insurance Cover"
+          caption="Buildings insurance covers the structure and fixtures"
+          aspectRatio="video"
+        />
+
+        <h3>Rebuild Value</h3>
+
+        <p>
+          Insure for the rebuild cost, not market value. Rebuild cost is
+          typically calculated by:
+        </p>
+
+        <ul>
+          <li>Square footage x rebuild cost per sq ft</li>
+          <li>Or use RICS calculator</li>
+          <li>Review annually for inflation</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="contents-cover" className="scroll-mt-24">Contents Cover</h2>
+
+        <p>
+          If you provide furnishings, you need contents cover:
+        </p>
+
+        <h3>What&apos;s Covered</h3>
+
+        <ul>
+          <li>Furniture (beds, sofas, tables)</li>
+          <li>White goods (fridge, washing machine)</li>
+          <li>Carpets and curtains</li>
+          <li>TVs and electronics</li>
+          <li>Kitchen equipment</li>
+        </ul>
+
+        <h3>Exclusions to Watch</h3>
+
+        <ul>
+          <li>Tenant&apos;s own belongings (their responsibility)</li>
+          <li>Gradual deterioration/wear and tear</li>
+          <li>Damage from lack of maintenance</li>
+          <li>Electrical/mechanical breakdown</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Accurate Valuation</h4>
+          <p className="text-amber-800">
+            Keep an inventory with values for all contents. Take photos and
+            keep receipts. Underinsurance can lead to reduced payouts.
+          </p>
+        </div>
+
+        <h2 id="rent-guarantee" className="scroll-mt-24">Rent Guarantee Insurance</h2>
+
+        <p>
+          Rent guarantee insurance (RGI) pays your rent if tenants default:
+        </p>
+
+        <h3>How It Works</h3>
+
+        <ul>
+          <li>Pays rent if tenant stops paying</li>
+          <li>Typically after 1 month excess period</li>
+          <li>Usually covers up to 6-12 months rent</li>
+          <li>May include legal costs for eviction</li>
+        </ul>
+
+        <h3>Requirements</h3>
+
+        <p>
+          Most policies require:
+        </p>
+
+        <ul>
+          <li>Proper tenant referencing before tenancy</li>
+          <li>Written tenancy agreement</li>
+          <li>Tenant to pass affordability checks</li>
+          <li>Prompt reporting of arrears</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-rent-guarantee.svg"
+          alt="Rent Guarantee Insurance"
+          caption="RGI protects your income if tenants stop paying"
+          aspectRatio="video"
+        />
+
+        <h2 id="legal-expenses" className="scroll-mt-24">Legal Expenses Cover</h2>
+
+        <p>
+          Legal expenses insurance covers costs of disputes:
+        </p>
+
+        <h3>What&apos;s Covered</h3>
+
+        <ul>
+          <li>Eviction proceedings</li>
+          <li>Rent recovery</li>
+          <li>Defending claims by tenants</li>
+          <li>Disputes with contractors</li>
+          <li>Tax investigations (some policies)</li>
+        </ul>
+
+        <h3>Typical Limits</h3>
+
+        <ul>
+          <li>£50,000 - £100,000 per claim</li>
+          <li>Telephone legal advice helpline</li>
+          <li>Access to solicitors on insurer panel</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Cost Effective</h4>
+          <p className="text-green-800">
+            Legal expenses cover typically costs £20-50 per year but can save
+            thousands if you need to pursue eviction through the courts.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Insurance Checklist</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides an insurance checklist to help you ensure
+            you have adequate cover for your rental properties.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Insurance Resources →
+          </Link>
+        </div>
+
+        <h2 id="insurance-faq" className="scroll-mt-24">Insurance FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use normal home insurance?</h3>
+            <p className="text-gray-600">
+              No. Standard home insurance excludes rented properties. If you
+              let a property without proper landlord insurance, you won&apos;t be
+              covered for any claims.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Does landlord insurance cover tenant damage?</h3>
+            <p className="text-gray-600">
+              Many policies cover malicious damage by tenants, but check the
+              terms. Accidental damage may not be covered, and there&apos;s usually
+              an excess to pay.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about HMO properties?</h3>
+            <p className="text-gray-600">
+              HMOs typically need specialist insurance due to higher risks.
+              Standard landlord policies may exclude HMOs or charge higher
+              premiums.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to tell insurers about tenants?</h3>
+            <p className="text-gray-600">
+              Yes, you must disclose material facts including tenant type
+              (students, DSS, etc.), any previous claims, and property
+              condition. Non-disclosure can void your policy.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 64: UK Landlord Tax Guide
+  {
+    slug: 'uk-landlord-tax-guide',
+    title: 'Landlord Tax UK - Complete Guide 2026',
+    description: 'Everything landlords need to know about tax in the UK. Income tax, allowable expenses, capital gains, and tax-efficient structures.',
+    metaDescription: 'UK landlord tax guide 2026. Income tax on rental profits, allowable expenses, mortgage interest relief, capital gains, and tax planning tips.',
+    date: '2026-01-03',
+    readTime: '15 min read',
+    wordCount: 1820,
+    category: 'UK-Wide',
+    tags: ['landlord tax', 'UK', 'income tax', 'capital gains', 'allowable expenses', 'tax relief'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-uk-tax.svg',
+    heroImageAlt: 'UK Landlord Tax Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord tax uk',
+    secondaryKeywords: ['rental income tax', 'landlord allowable expenses', 'buy to let tax', 'capital gains tax property'],
+    tableOfContents: [
+      { id: 'tax-overview', title: 'Tax Overview', level: 2 },
+      { id: 'income-tax', title: 'Income Tax on Rent', level: 2 },
+      { id: 'allowable-expenses', title: 'Allowable Expenses', level: 2 },
+      { id: 'mortgage-interest', title: 'Mortgage Interest', level: 2 },
+      { id: 'capital-gains', title: 'Capital Gains Tax', level: 2 },
+      { id: 'tax-faq', title: 'Tax FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-landlord-insurance-guide', 'landlord-legal-obligations-uk', 'buy-to-let-investment-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Understanding your tax obligations is essential for any landlord.
+          Rental income is taxable, but many expenses can be deducted. This
+          guide explains how landlord taxation works in the UK, helping you
+          stay compliant while minimizing your tax bill legally.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tax-hero.svg"
+          alt="UK Landlord Tax"
+          caption="Understanding tax helps you maximize rental profits"
+          aspectRatio="video"
+        />
+
+        <h2 id="tax-overview" className="scroll-mt-24">Tax Overview</h2>
+
+        <p>
+          Landlords in the UK face several types of tax:
+        </p>
+
+        <ul>
+          <li><strong>Income Tax:</strong> On rental profits each year</li>
+          <li><strong>Capital Gains Tax:</strong> When you sell a property</li>
+          <li><strong>Stamp Duty:</strong> When you buy a property (higher rates for BTL)</li>
+          <li><strong>Inheritance Tax:</strong> On property passed to heirs</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Self Assessment Required</h4>
+          <p className="text-blue-800">
+            If you earn more than £1,000 per year from property rental, you
+            must register for Self Assessment and file a tax return annually.
+            The deadline is 31 January following the tax year.
+          </p>
+        </div>
+
+        <h2 id="income-tax" className="scroll-mt-24">Income Tax on Rent</h2>
+
+        <p>
+          You pay income tax on your rental profit, not your total rent received.
+          Rental profit = Total rent - Allowable expenses.
+        </p>
+
+        <h3>Tax Rates (2025/26)</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tax Band</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Income Range</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rate</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              <tr>
+                <td className="px-6 py-4">Personal Allowance</td>
+                <td className="px-6 py-4">Up to £12,570</td>
+                <td className="px-6 py-4">0%</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Basic Rate</td>
+                <td className="px-6 py-4">£12,571 - £50,270</td>
+                <td className="px-6 py-4">20%</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Higher Rate</td>
+                <td className="px-6 py-4">£50,271 - £125,140</td>
+                <td className="px-6 py-4">40%</td>
+              </tr>
+              <tr>
+                <td className="px-6 py-4">Additional Rate</td>
+                <td className="px-6 py-4">Over £125,140</td>
+                <td className="px-6 py-4">45%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          <em>Note: Rental income is added to your other income (employment, etc.)
+          to determine your tax band.</em>
+        </p>
+
+        <h3>Property Allowance</h3>
+
+        <p>
+          If your rental income is under £1,000 per year, you don&apos;t need to
+          report it. Between £1,000 and £2,500, you can use the £1,000 property
+          allowance instead of claiming expenses.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-income-tax.svg"
+          alt="Rental Income Tax"
+          caption="Tax is calculated on rental profit after expenses"
+          aspectRatio="video"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="allowable-expenses" className="scroll-mt-24">Allowable Expenses</h2>
+
+        <p>
+          You can deduct certain expenses to reduce your taxable profit:
+        </p>
+
+        <h3>Fully Deductible Expenses</h3>
+
+        <ul>
+          <li>Letting agent fees and management costs</li>
+          <li>Legal fees for letting (not buying)</li>
+          <li>Accountant fees for rental accounts</li>
+          <li>Buildings and contents insurance</li>
+          <li>Ground rent and service charges</li>
+          <li>Council tax (when property empty)</li>
+          <li>Water rates (if you pay them)</li>
+          <li>Gas and electricity (if included in rent)</li>
+          <li>Advertising for tenants</li>
+          <li>Stationery and phone costs</li>
+        </ul>
+
+        <h3>Repair and Maintenance</h3>
+
+        <p>
+          Repairs are deductible, but improvements are not:
+        </p>
+
+        <ul>
+          <li><strong>Repairs (deductible):</strong> Fixing boiler, replacing broken window, repainting</li>
+          <li><strong>Improvements (not deductible):</strong> Extension, new kitchen upgrade, adding conservatory</li>
+          <li><strong>Replacements:</strong> Like-for-like replacement of domestic items (furniture, appliances)</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Keep All Receipts</h4>
+          <p className="text-amber-800">
+            HMRC can investigate your records for up to 6 years. Keep all
+            receipts, invoices, and bank statements to support your expense
+            claims.
+          </p>
+        </div>
+
+        <h2 id="mortgage-interest" className="scroll-mt-24">Mortgage Interest</h2>
+
+        <p>
+          Mortgage interest relief for landlords has changed significantly:
+        </p>
+
+        <h3>Current Rules</h3>
+
+        <p>
+          Since April 2020, landlords cannot deduct mortgage interest from
+          rental income. Instead, you receive a tax credit:
+        </p>
+
+        <ul>
+          <li>Tax credit = 20% of mortgage interest paid</li>
+          <li>Applies to all individual landlords</li>
+          <li>Companies can still deduct interest fully</li>
+        </ul>
+
+        <h3>Impact on Higher Rate Taxpayers</h3>
+
+        <p>
+          This particularly affects higher rate taxpayers:
+        </p>
+
+        <ul>
+          <li>Previously: 40% relief on interest</li>
+          <li>Now: Only 20% tax credit</li>
+          <li>Effective tax increase for many landlords</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-mortgage-interest.svg"
+          alt="Mortgage Interest Relief"
+          caption="Mortgage interest now gives a 20% tax credit"
+          aspectRatio="video"
+        />
+
+        <h2 id="capital-gains" className="scroll-mt-24">Capital Gains Tax</h2>
+
+        <p>
+          When you sell a rental property, you may owe Capital Gains Tax (CGT):
+        </p>
+
+        <h3>CGT Rates for Property</h3>
+
+        <ul>
+          <li>Basic rate taxpayers: 18%</li>
+          <li>Higher rate taxpayers: 24%</li>
+          <li>Annual exempt amount: £3,000 (2025/26)</li>
+        </ul>
+
+        <h3>Calculating the Gain</h3>
+
+        <p>
+          Your taxable gain is calculated as:
+        </p>
+
+        <ol>
+          <li>Sale price</li>
+          <li>Minus: Original purchase price</li>
+          <li>Minus: Purchase costs (stamp duty, legal fees)</li>
+          <li>Minus: Sale costs (agent fees, legal fees)</li>
+          <li>Minus: Capital improvements (extensions, etc.)</li>
+          <li>Equals: Taxable gain</li>
+        </ol>
+
+        <h3>Reporting Requirements</h3>
+
+        <ul>
+          <li>Report and pay within 60 days of completion</li>
+          <li>Use HMRC&apos;s online service</li>
+          <li>Include in Self Assessment too</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Private Residence Relief</h4>
+          <p className="text-green-800">
+            If you lived in the property as your main home at any time, you
+            may qualify for partial Private Residence Relief, reducing your
+            CGT bill. The last 9 months of ownership are always exempt.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Tax Resources for Landlords</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides tax calculators, expense tracking templates,
+            and guidance on tax-efficient property ownership.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Tax Resources →
+          </Link>
+        </div>
+
+        <h2 id="tax-faq" className="scroll-mt-24">Tax FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I use a limited company?</h3>
+            <p className="text-gray-600">
+              Companies pay corporation tax (25%) instead of income tax and
+              can deduct mortgage interest fully. However, there are costs and
+              complexity. It depends on your circumstances - seek professional
+              advice.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I offset losses against other income?</h3>
+            <p className="text-gray-600">
+              No, rental losses can only be offset against future rental profits,
+              not other income like employment. Losses can be carried forward
+              indefinitely.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need an accountant?</h3>
+            <p className="text-gray-600">
+              Not legally required, but recommended for most landlords. Accountants
+              often save more in tax than their fees and ensure compliance. At
+              minimum, get advice when starting out.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about joint ownership with spouse?</h3>
+            <p className="text-gray-600">
+              Rental income is usually split 50/50 between spouses unless you
+              make a declaration of unequal beneficial interests. This can
+              help if one spouse is in a lower tax band.
+            </p>
+          </div>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
