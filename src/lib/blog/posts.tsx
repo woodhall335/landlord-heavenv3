@@ -13649,6 +13649,1842 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 31: Scotland Ground 6 (Non-Residential Purpose)
+  {
+    slug: 'scotland-eviction-ground-6',
+    title: 'Scotland Ground 6 - Non-Residential Purpose Eviction Guide 2026',
+    description: 'Complete guide to Ground 6 eviction in Scotland when the landlord intends to use the property for a non-residential purpose. Learn requirements, evidence needed, and Tribunal process.',
+    metaDescription: 'Scotland Ground 6 non-residential purpose eviction guide. Learn requirements, evidence, and Tribunal process for landlords in 2026.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1580,
+    category: 'Scottish Law',
+    tags: ['Ground 6', 'non-residential', 'Scotland', 'PRT eviction', 'change of use', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-6.svg',
+    heroImageAlt: 'Scotland Ground 6 - Non-Residential Purpose Eviction',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland ground 6 non-residential eviction',
+    secondaryKeywords: ['change of use scotland', 'PRT ground 6', 'convert residential property', 'eviction for business use'],
+    tableOfContents: [
+      { id: 'what-is-ground-6', title: 'What Is Ground 6?', level: 2 },
+      { id: 'requirements', title: 'Requirements', level: 2 },
+      { id: 'evidence-needed', title: 'Evidence Needed', level: 2 },
+      { id: 'planning-permission', title: 'Planning Permission', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'ground-6-faq', title: 'Ground 6 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-eviction-ground-1', 'scotland-first-tier-tribunal'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 6 allows Scottish landlords to recover their property when they intend
+          to use it for a purpose other than housing. As a mandatory ground, the Tribunal
+          must grant eviction if you prove your genuine intention to change the property&apos;s use.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 6 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Mandatory ground</li>
+            <li><strong>Notice period:</strong> 28 days (under 6 months) or 84 days (6+ months)</li>
+            <li><strong>Key requirement:</strong> Genuine intention to use property for non-residential purpose</li>
+            <li><strong>Evidence:</strong> Planning applications, business plans, change of use documentation</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-change-of-use.svg"
+          alt="Property Change of Use"
+          caption="Ground 6 applies when converting residential property to non-residential use"
+        />
+
+        <h2 id="what-is-ground-6" className="scroll-mt-24">What Is Ground 6?</h2>
+
+        <p>
+          Ground 6 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          applies when the landlord intends to use the property for a purpose other than
+          providing a person with a home. This could include converting the property to:
+        </p>
+
+        <ul>
+          <li>Office or commercial premises</li>
+          <li>Retail space or shop</li>
+          <li>Holiday let or short-term accommodation</li>
+          <li>Storage or warehouse facility</li>
+          <li>Community or religious use</li>
+          <li>Any other non-residential purpose</li>
+        </ul>
+
+        <p>
+          This is a <strong>mandatory ground</strong>. If you prove your genuine intention
+          to change the property&apos;s use, the Tribunal must grant an eviction order.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="requirements" className="scroll-mt-24">Requirements</h2>
+
+        <p>To successfully use Ground 6, you must demonstrate:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Three Key Requirements:</h4>
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>Genuine intention to change use</strong>
+                <p className="text-gray-600 text-sm">You must have a real, settled intention to use the property for something other than housing</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>The new use is non-residential</strong>
+                <p className="text-gray-600 text-sm">The intended purpose must not be providing someone with a home</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <div>
+                <strong>You will actually carry out this change</strong>
+                <p className="text-gray-600 text-sm">Not just an excuse to remove the tenant</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <h3>What Counts as Non-Residential?</h3>
+
+        <p>
+          The key test is whether the property will be used to provide someone with a home.
+          If not, it qualifies as non-residential. Examples include:
+        </p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Non-Residential Uses</th>
+                <th className="border p-3 text-left font-semibold">Still Residential (Ground 6 Won&apos;t Work)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Office space</td>
+                <td className="border p-3">Letting to a different tenant</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Retail premises</td>
+                <td className="border p-3">Student accommodation</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Holiday let (short-term only)</td>
+                <td className="border p-3">HMO (shared housing)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Storage facility</td>
+                <td className="border p-3">Supported housing</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Holiday Lets: Be Careful</h4>
+          <p className="text-amber-800 mt-2">
+            Converting to a short-term holiday let may qualify as non-residential, but you
+            must check local licensing requirements. Many Scottish councils now require
+            short-term let licences, and some areas have control zones restricting new
+            holiday lets.
+          </p>
+        </div>
+
+        <h2 id="evidence-needed" className="scroll-mt-24">Evidence Needed</h2>
+
+        <p>
+          The Tribunal will want to see evidence that your intention is genuine. Stronger
+          evidence means a better chance of success.
+        </p>
+
+        <h3>Strong Evidence</h3>
+        <ul>
+          <li><strong>Planning permission:</strong> Application or approval for change of use</li>
+          <li><strong>Business plan:</strong> Detailed plans for the new use</li>
+          <li><strong>Building warrant:</strong> For any conversion works needed</li>
+          <li><strong>Contractor quotes:</strong> For conversion or renovation</li>
+          <li><strong>Licence applications:</strong> For short-term lets or other regulated uses</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-planning-documents.svg"
+          alt="Planning Documents"
+          caption="Planning applications and business plans strengthen your Ground 6 case"
+        />
+
+        <h2 id="planning-permission" className="scroll-mt-24">Planning Permission</h2>
+
+        <p>
+          Depending on the intended new use, you may need planning permission for change
+          of use. The Scottish planning system uses &quot;use classes&quot; to categorise properties.
+        </p>
+
+        <h3>When Planning Permission Is Required</h3>
+
+        <p>
+          A change from residential (Class 9) to another use class typically requires
+          planning permission. This includes:
+        </p>
+
+        <ul>
+          <li>Class 1 (Shops)</li>
+          <li>Class 2 (Financial and professional services)</li>
+          <li>Class 3 (Food and drink)</li>
+          <li>Class 4 (Business - offices, research)</li>
+          <li>Class 6 (Storage or distribution)</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Tip: Apply Early</h4>
+          <p className="text-green-800 mt-2">
+            Having a planning application submitted (even if not yet decided) significantly
+            strengthens your Ground 6 case. It shows genuine intention and commitment to
+            the change of use.
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice to Leave</h3>
+
+        <p>
+          You must serve a valid Notice to Leave citing Ground 6. The notice period
+          depends on tenancy length:
+        </p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Tenancy Length</th>
+                <th className="border p-3 text-left font-semibold">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Under 6 months</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">6 months or more</td>
+                <td className="border p-3">84 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+
+        <p>After the notice expires, apply to the First-tier Tribunal with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Evidence of your intended non-residential use</li>
+          <li>Planning applications or permissions</li>
+          <li>Business plans or proposals</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+
+        <p>The Tribunal will consider:</p>
+        <ul>
+          <li>Is your intention genuine?</li>
+          <li>Is the proposed use truly non-residential?</li>
+          <li>Do you have concrete plans to change the use?</li>
+          <li>Is there evidence you&apos;ll actually carry out the change?</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tribunal-hearing.svg"
+          alt="First-tier Tribunal Hearing"
+          caption="The Tribunal will assess whether your intention is genuine"
+        />
+
+        <h2 id="ground-6-faq" className="scroll-mt-24">Ground 6 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I change my mind after eviction?</h3>
+            <p className="text-gray-600">
+              If you evict using Ground 6 but then don&apos;t change the property&apos;s use, the
+              former tenant may have a claim for wrongful termination. The Tribunal expects
+              you to follow through on your stated intentions.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need planning permission before applying?</h3>
+            <p className="text-gray-600">
+              Not necessarily, but having a planning application in progress strengthens
+              your case significantly. At minimum, you should have investigated whether
+              permission is needed.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I convert to a holiday let?</h3>
+            <p className="text-gray-600">
+              Potentially yes, as holiday lets are generally non-residential. However, you&apos;ll
+              need a short-term let licence and may need planning permission in control areas.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if planning permission is refused?</h3>
+            <p className="text-gray-600">
+              If you&apos;ve already evicted the tenant and planning is then refused, you may face
+              problems. Consider waiting for planning approval before starting eviction.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I let the property residentially again later?</h3>
+            <p className="text-gray-600">
+              There&apos;s no specific time restriction, but immediately re-letting residentially
+              would suggest your Ground 6 application was not genuine.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Planning a Change of Use?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides guidance and templates for landlords looking to
+            convert residential property to other uses.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 32: Scotland Ground 7 (Demolition)
+  {
+    slug: 'scotland-eviction-ground-7',
+    title: 'Scotland Ground 7 - Property Demolition Eviction Guide 2026',
+    description: 'Complete guide to Ground 7 eviction in Scotland when the landlord intends to demolish the property. Learn requirements, evidence needed, and Tribunal process.',
+    metaDescription: 'Scotland Ground 7 demolition eviction guide. Learn requirements, evidence, and Tribunal process for Scottish landlords in 2026.',
+    date: '2026-01-03',
+    readTime: '11 min read',
+    wordCount: 1520,
+    category: 'Scottish Law',
+    tags: ['Ground 7', 'demolition', 'Scotland', 'PRT eviction', 'property development', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-7.svg',
+    heroImageAlt: 'Scotland Ground 7 - Property Demolition Eviction',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland ground 7 demolition eviction',
+    secondaryKeywords: ['demolish property scotland', 'PRT ground 7', 'property development eviction', 'tenant eviction demolition'],
+    tableOfContents: [
+      { id: 'what-is-ground-7', title: 'What Is Ground 7?', level: 2 },
+      { id: 'requirements', title: 'Requirements', level: 2 },
+      { id: 'evidence-needed', title: 'Evidence Needed', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'ground-7-faq', title: 'Ground 7 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-eviction-ground-3', 'scotland-first-tier-tribunal'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 7 allows Scottish landlords to recover their property when they intend
+          to demolish it. As a mandatory ground, the Tribunal must grant eviction if you
+          prove your genuine intention to demolish the building.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 7 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Mandatory ground</li>
+            <li><strong>Notice period:</strong> 28 days (under 6 months) or 84 days (6+ months)</li>
+            <li><strong>Key requirement:</strong> Genuine intention to demolish the property</li>
+            <li><strong>Evidence:</strong> Planning permission, demolition contracts, development plans</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-demolition.svg"
+          alt="Property Demolition"
+          caption="Ground 7 applies when you intend to demolish the let property"
+        />
+
+        <h2 id="what-is-ground-7" className="scroll-mt-24">What Is Ground 7?</h2>
+
+        <p>
+          Ground 7 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          applies when the landlord intends to demolish the let property. This ground is
+          typically used for:
+        </p>
+
+        <ul>
+          <li>Redevelopment projects requiring demolition and rebuild</li>
+          <li>Properties that are beyond economical repair</li>
+          <li>Site clearance for new construction</li>
+          <li>Properties affected by compulsory purchase orders</li>
+          <li>Dangerous buildings requiring removal</li>
+        </ul>
+
+        <p>
+          This is a <strong>mandatory ground</strong>. If you prove your genuine intention
+          to demolish, the Tribunal must grant an eviction order.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="requirements" className="scroll-mt-24">Requirements</h2>
+
+        <p>To successfully use Ground 7, you must demonstrate:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Key Requirements:</h4>
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>Genuine intention to demolish</strong>
+                <p className="text-gray-600 text-sm">You must have a real, settled intention to demolish the building</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>Demolition means complete removal</strong>
+                <p className="text-gray-600 text-sm">Partial demolition or major renovation uses Ground 3 (refurbishment) instead</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <div>
+                <strong>You will actually carry out the demolition</strong>
+                <p className="text-gray-600 text-sm">Not just an excuse to remove the tenant</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <h3>Demolition vs Refurbishment</h3>
+
+        <p>
+          Ground 7 applies to complete demolition. If you&apos;re keeping the building but
+          carrying out major works, use Ground 3 (refurbishment) instead.
+        </p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Ground 7 (Demolition)</th>
+                <th className="border p-3 text-left font-semibold">Ground 3 (Refurbishment)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Complete building removal</td>
+                <td className="border p-3">Building remains, major works</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Site clearance for rebuild</td>
+                <td className="border p-3">Renovation or reconfiguration</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Building condemned/dangerous</td>
+                <td className="border p-3">Building sound but needs updating</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Choose the Right Ground</h4>
+          <p className="text-amber-800 mt-2">
+            Using the wrong ground can result in your application being refused. If in
+            doubt about whether works constitute demolition or refurbishment, seek
+            professional advice before proceeding.
+          </p>
+        </div>
+
+        <h2 id="evidence-needed" className="scroll-mt-24">Evidence Needed</h2>
+
+        <p>
+          The Tribunal will want to see strong evidence that demolition is genuinely
+          planned and will happen.
+        </p>
+
+        <h3>Essential Evidence</h3>
+        <ul>
+          <li><strong>Planning permission:</strong> For demolition and any replacement development</li>
+          <li><strong>Building warrant:</strong> For demolition works</li>
+          <li><strong>Demolition contractor quotes:</strong> Written estimates with timelines</li>
+          <li><strong>Development plans:</strong> What will happen to the site after demolition</li>
+          <li><strong>Structural surveys:</strong> If demolition is due to building condition</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-development-plans.svg"
+          alt="Development Plans"
+          caption="Clear development plans strengthen your Ground 7 application"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Periods</h3>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Tenancy Length</th>
+                <th className="border p-3 text-left font-semibold">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Under 6 months</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">6 months or more</td>
+                <td className="border p-3">84 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice expires, apply to the First-tier Tribunal with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Planning permission and building warrant</li>
+          <li>Demolition contractor arrangements</li>
+          <li>Development or site plans</li>
+        </ul>
+
+        <h3>At the Hearing</h3>
+        <p>The Tribunal will assess:</p>
+        <ul>
+          <li>Is your intention to demolish genuine?</li>
+          <li>Do you have the necessary permissions?</li>
+          <li>Are contractors engaged or quotes obtained?</li>
+          <li>Is there a clear timeline for demolition?</li>
+        </ul>
+
+        <h2 id="ground-7-faq" className="scroll-mt-24">Ground 7 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if demolition is delayed after eviction?</h3>
+            <p className="text-gray-600">
+              Reasonable delays don&apos;t create problems, but if you abandon the demolition
+              plans entirely, the former tenant may have a wrongful termination claim.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need planning permission before applying?</h3>
+            <p className="text-gray-600">
+              Having planning permission significantly strengthens your case. Without it,
+              the Tribunal may question whether demolition will actually happen.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I rebuild residential property afterwards?</h3>
+            <p className="text-gray-600">
+              Yes. Ground 7 is about demolition, not what comes after. You can demolish
+              and rebuild residential, commercial, or any other type of property.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about dangerous buildings?</h3>
+            <p className="text-gray-600">
+              If a building is dangerous and requires demolition, this strengthens your
+              Ground 7 case. Obtain structural engineer reports to support your application.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can the tenant claim compensation?</h3>
+            <p className="text-gray-600">
+              There&apos;s no automatic compensation for Ground 7 eviction under the PRT.
+              However, check your tenancy agreement for any terms about this.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Planning a Development Project?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides guidance and templates for landlords undertaking
+            property development that requires tenant eviction.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 33: Scotland Ground 13 (Criminal Behaviour)
+  {
+    slug: 'scotland-eviction-ground-13',
+    title: 'Scotland Ground 13 - Criminal Behaviour Eviction Guide 2026',
+    description: 'Complete guide to Ground 13 eviction in Scotland for tenant criminal behaviour. Learn what convictions qualify, evidence requirements, and Tribunal process.',
+    metaDescription: 'Scotland Ground 13 criminal behaviour eviction guide. Learn qualifying convictions, evidence needs, and Tribunal process for landlords 2026.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1680,
+    category: 'Scottish Law',
+    tags: ['Ground 13', 'criminal behaviour', 'Scotland', 'PRT eviction', 'tenant conviction', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-13.svg',
+    heroImageAlt: 'Scotland Ground 13 - Criminal Behaviour Eviction',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland ground 13 criminal behaviour eviction',
+    secondaryKeywords: ['tenant conviction scotland', 'PRT ground 13', 'criminal tenant eviction', 'eviction for crime scotland'],
+    tableOfContents: [
+      { id: 'what-is-ground-13', title: 'What Is Ground 13?', level: 2 },
+      { id: 'qualifying-offences', title: 'Qualifying Offences', level: 2 },
+      { id: 'evidence-required', title: 'Evidence Required', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'ground-13-faq', title: 'Ground 13 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-eviction-ground-14', 'scotland-first-tier-tribunal'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 13 allows Scottish landlords to seek eviction when a tenant has been
+          convicted of a relevant criminal offence. As a discretionary ground, the
+          Tribunal must consider whether it&apos;s reasonable to grant eviction even if
+          the ground is proved.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 13 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Discretionary ground</li>
+            <li><strong>Notice period:</strong> 28 days (regardless of tenancy length)</li>
+            <li><strong>Key requirement:</strong> Conviction for offence at or near the property</li>
+            <li><strong>Evidence:</strong> Court conviction, police reports, impact statements</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-criminal-eviction.svg"
+          alt="Criminal Behaviour Eviction"
+          caption="Ground 13 applies when a tenant is convicted of a relevant criminal offence"
+        />
+
+        <h2 id="what-is-ground-13" className="scroll-mt-24">What Is Ground 13?</h2>
+
+        <p>
+          Ground 13 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          applies when the tenant (or someone living with them or visiting them) has been
+          convicted of an offence that was committed:
+        </p>
+
+        <ul>
+          <li>At the let property, or</li>
+          <li>In the locality of the let property, or</li>
+          <li>Elsewhere against the landlord or the landlord&apos;s property</li>
+        </ul>
+
+        <p>
+          This is a <strong>discretionary ground</strong>. Even if the conviction is proven,
+          the Tribunal must also decide whether it&apos;s reasonable to grant eviction.
+        </p>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Conviction Required</h4>
+          <p className="text-amber-800 mt-2">
+            Ground 13 requires an actual conviction. Suspected criminal activity, arrests,
+            or charges that don&apos;t result in conviction are not sufficient. For behaviour
+            that hasn&apos;t led to conviction, consider Ground 14 (antisocial behaviour) instead.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="qualifying-offences" className="scroll-mt-24">Qualifying Offences</h2>
+
+        <p>
+          The legislation doesn&apos;t limit Ground 13 to specific offences. Any criminal
+          conviction can potentially qualify if it has the required connection to the
+          property or landlord. Common examples include:
+        </p>
+
+        <h3>Offences at the Property</h3>
+        <ul>
+          <li>Drug dealing or drug production</li>
+          <li>Violence or assault</li>
+          <li>Weapons offences</li>
+          <li>Theft or burglary</li>
+          <li>Criminal damage</li>
+          <li>Fraud or dishonesty offences</li>
+        </ul>
+
+        <h3>Offences in the Locality</h3>
+        <ul>
+          <li>Assault on neighbours</li>
+          <li>Criminal damage to nearby property</li>
+          <li>Public order offences</li>
+          <li>Drug offences in the area</li>
+          <li>Harassment of local residents</li>
+        </ul>
+
+        <h3>Offences Against the Landlord</h3>
+        <ul>
+          <li>Fraud against the landlord</li>
+          <li>Theft from the landlord</li>
+          <li>Assault or threats against the landlord</li>
+          <li>Criminal damage to landlord&apos;s property</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-court-conviction.svg"
+          alt="Court Conviction"
+          caption="A court conviction is required - not just an arrest or charge"
+        />
+
+        <h2 id="evidence-required" className="scroll-mt-24">Evidence Required</h2>
+
+        <h3>Essential Evidence</h3>
+        <ul>
+          <li><strong>Proof of conviction:</strong> Court extract or certificate of conviction</li>
+          <li><strong>Details of the offence:</strong> What the conviction was for</li>
+          <li><strong>Connection to property/locality:</strong> Where the offence took place</li>
+          <li><strong>Date of conviction:</strong> Recent convictions carry more weight</li>
+        </ul>
+
+        <h3>Supporting Evidence</h3>
+        <ul>
+          <li>Police reports or crime reference numbers</li>
+          <li>Impact statements from neighbours</li>
+          <li>Your own statement about the impact</li>
+          <li>Any related antisocial behaviour evidence</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Getting Conviction Evidence</h4>
+          <p className="text-green-800 mt-2">
+            You can request an extract of conviction from the court where the case was
+            heard. The Tribunal can also request this information. Include the court,
+            date, and case reference in your application.
+          </p>
+        </div>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Period</h3>
+        <p>
+          Ground 13 has a fixed 28-day notice period regardless of how long the
+          tenancy has been running. This shorter period reflects the serious nature
+          of criminal behaviour.
+        </p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Tenancy Length</th>
+                <th className="border p-3 text-left font-semibold">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Any length</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice expires, apply to the First-tier Tribunal with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Evidence of the conviction</li>
+          <li>Statement explaining why eviction is reasonable</li>
+        </ul>
+
+        <h3>The Reasonableness Test</h3>
+        <p>
+          Because Ground 13 is discretionary, the Tribunal considers whether eviction
+          is reasonable. Factors include:
+        </p>
+
+        <h4>Favouring Eviction</h4>
+        <ul>
+          <li>Serious nature of the offence</li>
+          <li>Impact on neighbours or community</li>
+          <li>Repeated offending</li>
+          <li>Offence directly connected to the property</li>
+          <li>Risk of further offences</li>
+        </ul>
+
+        <h4>Against Eviction</h4>
+        <ul>
+          <li>Minor or isolated offence</li>
+          <li>Offence not connected to housing situation</li>
+          <li>Tenant has addressed underlying issues</li>
+          <li>Significant time since offence</li>
+          <li>Impact on tenant&apos;s family</li>
+        </ul>
+
+        <h2 id="ground-13-faq" className="scroll-mt-24">Ground 13 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the conviction is being appealed?</h3>
+            <p className="text-gray-600">
+              A conviction being appealed is still a conviction. However, the Tribunal
+              may take the appeal into account when considering reasonableness.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How old can the conviction be?</h3>
+            <p className="text-gray-600">
+              There&apos;s no time limit, but older convictions carry less weight. The Tribunal
+              will consider whether the conviction is still relevant.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if a visitor committed the offence?</h3>
+            <p className="text-gray-600">
+              Ground 13 covers offences by people living with or visiting the tenant.
+              However, the tenant must have some responsibility for the situation.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can minor offences lead to eviction?</h3>
+            <p className="text-gray-600">
+              Technically yes, but the Tribunal is unlikely to find eviction reasonable
+              for minor offences unless there&apos;s a pattern or significant impact.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 13 with Ground 14?</h3>
+            <p className="text-gray-600">
+              Yes. If behaviour is both criminal and antisocial, using both grounds
+              gives you more options at the Tribunal.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Dealing With Criminal Tenants?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides guidance and templates for landlords dealing with
+            serious tenant misconduct and criminal behaviour.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 35: Scotland Ground 15 (Association with Antisocial Person)
+  {
+    slug: 'scotland-eviction-ground-15',
+    title: 'Scotland Ground 15 - Antisocial Association Eviction Guide 2026',
+    description: 'Complete guide to Ground 15 eviction in Scotland when the tenant associates with someone who has behaved antisocially. Learn requirements and Tribunal process.',
+    metaDescription: 'Scotland Ground 15 antisocial association eviction guide. Requirements, evidence, and Tribunal process for Scottish landlords 2026.',
+    date: '2026-01-03',
+    readTime: '12 min read',
+    wordCount: 1520,
+    category: 'Scottish Law',
+    tags: ['Ground 15', 'antisocial behaviour', 'Scotland', 'PRT eviction', 'association', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-ground-15.svg',
+    heroImageAlt: 'Scotland Ground 15 - Antisocial Association Eviction',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland ground 15 antisocial association eviction',
+    secondaryKeywords: ['antisocial visitors scotland', 'PRT ground 15', 'tenant association eviction', 'problem visitors scotland'],
+    tableOfContents: [
+      { id: 'what-is-ground-15', title: 'What Is Ground 15?', level: 2 },
+      { id: 'requirements', title: 'Requirements', level: 2 },
+      { id: 'evidence-needed', title: 'Evidence Needed', level: 2 },
+      { id: 'notice-requirements', title: 'Notice Requirements', level: 2 },
+      { id: 'tribunal-process', title: 'Tribunal Process', level: 2 },
+      { id: 'ground-15-faq', title: 'Ground 15 FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-process', 'scotland-eviction-ground-14', 'scotland-eviction-ground-13'],
+    content: (
+      <>
+        <p className="lead">
+          Ground 15 allows Scottish landlords to seek eviction when the tenant associates
+          with a person who has behaved antisocially. This ground focuses on the tenant&apos;s
+          associations rather than their own behaviour.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Ground 15 Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Type:</strong> Discretionary ground</li>
+            <li><strong>Notice period:</strong> 28 days (regardless of tenancy length)</li>
+            <li><strong>Key requirement:</strong> Tenant associates with antisocial person at or near property</li>
+            <li><strong>Evidence:</strong> Antisocial behaviour evidence, association proof, impact evidence</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-antisocial-association.svg"
+          alt="Antisocial Association"
+          caption="Ground 15 covers tenant associations with antisocial individuals"
+        />
+
+        <h2 id="what-is-ground-15" className="scroll-mt-24">What Is Ground 15?</h2>
+
+        <p>
+          Ground 15 of Schedule 3 to the Private Housing (Tenancies) (Scotland) Act 2016
+          applies when the tenant associates at or near the let property with a person
+          who has a relevant conviction or who has engaged in relevant antisocial behaviour.
+        </p>
+
+        <p>
+          This ground recognises that tenants may not personally behave antisocially but
+          may still cause problems by associating with those who do. It&apos;s often used when:
+        </p>
+
+        <ul>
+          <li>Visitors repeatedly cause problems at the property</li>
+          <li>The tenant allows known troublemakers to use the property</li>
+          <li>Friends or associates of the tenant harass neighbours</li>
+          <li>The property becomes a gathering point for antisocial individuals</li>
+        </ul>
+
+        <p>
+          This is a <strong>discretionary ground</strong>. The Tribunal must consider
+          reasonableness even if the ground is proved.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="requirements" className="scroll-mt-24">Requirements</h2>
+
+        <p>To use Ground 15, you must prove:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Three Key Elements:</h4>
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>The tenant &quot;associates&quot; with another person</strong>
+                <p className="text-gray-600 text-sm">More than casual contact - a continuing relationship or regular interaction</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>That person has relevant conviction or antisocial behaviour</strong>
+                <p className="text-gray-600 text-sm">Either convicted of offence at/near the property, or engaged in antisocial behaviour there</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <div>
+                <strong>The association occurs at or near the property</strong>
+                <p className="text-gray-600 text-sm">The association happens at or in the locality of the let property</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <h3>What Is &quot;Association&quot;?</h3>
+
+        <p>
+          The legislation doesn&apos;t define association precisely, but it implies more than
+          fleeting contact. Examples include:
+        </p>
+
+        <ul>
+          <li>Regular visitors to the property</li>
+          <li>Friends who spend time at or near the property</li>
+          <li>Partners or family members who visit frequently</li>
+          <li>People the tenant socialises with locally</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Tenant&apos;s Knowledge</h4>
+          <p className="text-amber-800 mt-2">
+            The Tribunal will likely consider whether the tenant knew about the person&apos;s
+            behaviour when assessing reasonableness. A tenant who unwittingly associated
+            with someone may have a stronger defence.
+          </p>
+        </div>
+
+        <h2 id="evidence-needed" className="scroll-mt-24">Evidence Needed</h2>
+
+        <h3>Evidence of Antisocial Behaviour or Conviction</h3>
+        <ul>
+          <li>Conviction certificate for the associated person</li>
+          <li>Incident logs of antisocial behaviour</li>
+          <li>Police reports or crime references</li>
+          <li>Neighbour witness statements</li>
+          <li>Council antisocial behaviour team records</li>
+        </ul>
+
+        <h3>Evidence of Association</h3>
+        <ul>
+          <li>Witness statements describing regular visits</li>
+          <li>Your observations of the person at the property</li>
+          <li>CCTV footage if available</li>
+          <li>Records of incidents involving this person at the property</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-evidence-gathering.svg"
+          alt="Gathering Evidence"
+          caption="Document both the antisocial behaviour and the pattern of association"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="notice-requirements" className="scroll-mt-24">Notice Requirements</h2>
+
+        <h3>Notice Period</h3>
+        <p>
+          Ground 15 has a fixed 28-day notice period regardless of tenancy length:
+        </p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Tenancy Length</th>
+                <th className="border p-3 text-left font-semibold">Notice Period</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Any length</td>
+                <td className="border p-3">28 days</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="tribunal-process" className="scroll-mt-24">Tribunal Process</h2>
+
+        <h3>Application</h3>
+        <p>After the notice expires, apply to the First-tier Tribunal with:</p>
+        <ul>
+          <li>Application form</li>
+          <li>Notice to Leave and proof of service</li>
+          <li>Tenancy agreement</li>
+          <li>Evidence of the associate&apos;s behaviour/conviction</li>
+          <li>Evidence of the association</li>
+          <li>Statement on why eviction is reasonable</li>
+        </ul>
+
+        <h3>Reasonableness Factors</h3>
+
+        <h4>Favouring Eviction</h4>
+        <ul>
+          <li>Serious behaviour by the associate</li>
+          <li>Ongoing or repeated association</li>
+          <li>Tenant refused to stop contact</li>
+          <li>Significant impact on neighbours</li>
+          <li>Previous warnings ignored</li>
+        </ul>
+
+        <h4>Against Eviction</h4>
+        <ul>
+          <li>Tenant didn&apos;t know about the behaviour</li>
+          <li>Association has now ended</li>
+          <li>Tenant took steps to address the situation</li>
+          <li>Impact on tenant&apos;s family</li>
+        </ul>
+
+        <h2 id="ground-15-faq" className="scroll-mt-24">Ground 15 FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant ends the association?</h3>
+            <p className="text-gray-600">
+              If the tenant genuinely ends contact with the antisocial person before the
+              hearing, this significantly affects reasonableness. The Tribunal may decide
+              eviction is no longer reasonable.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about family members?</h3>
+            <p className="text-gray-600">
+              Family relationships don&apos;t exempt people from Ground 15, but the Tribunal
+              will consider this when assessing reasonableness.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How do I prove the association?</h3>
+            <p className="text-gray-600">
+              Document regular visits - dates, times, and what happened. Neighbour
+              statements are valuable. You don&apos;t need to prove the nature of the
+              relationship, just that regular association occurs.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is Ground 14 easier to use?</h3>
+            <p className="text-gray-600">
+              Ground 14 covers antisocial behaviour by visitors directly. If the visitor
+              is causing problems at the property, you might use Ground 14 instead.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use Ground 15 with other grounds?</h3>
+            <p className="text-gray-600">
+              Yes. Ground 15 often works alongside Ground 14 (antisocial behaviour) or
+              Ground 13 (criminal behaviour). Using multiple grounds can strengthen your
+              application.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Problems With Visitors at Your Property?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides guidance and templates for landlords dealing with
+            antisocial behaviour from tenants&apos; visitors and associates.
+          </p>
+          <Link
+            href="/products/eviction-notice"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Eviction Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 36: Scotland Simple Procedure (Rent Recovery)
+  {
+    slug: 'scotland-simple-procedure',
+    title: 'Simple Procedure Scotland - Recovering Rent Arrears Guide 2026',
+    description: 'Complete guide to using Simple Procedure in Scotland to recover rent arrears from tenants. Learn court fees, forms, and the step-by-step process.',
+    metaDescription: 'Scotland Simple Procedure guide for landlords. Recover rent arrears up to £5,000 through the Sheriff Court. Step-by-step process 2026.',
+    date: '2026-01-03',
+    readTime: '13 min read',
+    wordCount: 1620,
+    category: 'Scottish Law',
+    tags: ['Simple Procedure', 'rent arrears', 'Scotland', 'Sheriff Court', 'debt recovery', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-simple-procedure.svg',
+    heroImageAlt: 'Scotland Simple Procedure - Rent Recovery',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland simple procedure rent arrears',
+    secondaryKeywords: ['recover rent scotland', 'sheriff court rent claim', 'small claims scotland', 'landlord debt recovery scotland'],
+    tableOfContents: [
+      { id: 'what-is-simple-procedure', title: 'What Is Simple Procedure?', level: 2 },
+      { id: 'when-to-use', title: 'When to Use Simple Procedure', level: 2 },
+      { id: 'court-fees', title: 'Court Fees', level: 2 },
+      { id: 'step-by-step', title: 'Step-by-Step Process', level: 2 },
+      { id: 'forms-required', title: 'Forms Required', level: 2 },
+      { id: 'the-hearing', title: 'The Hearing', level: 2 },
+      { id: 'enforcement', title: 'Enforcing the Decision', level: 2 },
+      { id: 'simple-procedure-faq', title: 'Simple Procedure FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-eviction-ground-12', 'scotland-eviction-process', 'scotland-private-residential-tenancy'],
+    content: (
+      <>
+        <p className="lead">
+          Simple Procedure is Scotland&apos;s streamlined court process for claims up to £5,000.
+          It&apos;s the primary way landlords recover unpaid rent from current or former tenants
+          without needing a solicitor.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Simple Procedure Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Claim limit:</strong> Up to £5,000</li>
+            <li><strong>Court:</strong> Sheriff Court</li>
+            <li><strong>Fees:</strong> £19 to £104 depending on claim amount</li>
+            <li><strong>Timeline:</strong> Typically 8-12 weeks to decision</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-sheriff-court.svg"
+          alt="Sheriff Court Scotland"
+          caption="Simple Procedure claims are heard in the Sheriff Court"
+        />
+
+        <h2 id="what-is-simple-procedure" className="scroll-mt-24">What Is Simple Procedure?</h2>
+
+        <p>
+          Simple Procedure replaced the Small Claims procedure in Scotland in 2016. It&apos;s
+          designed to be accessible to people without legal representation, with simplified
+          forms and informal hearings.
+        </p>
+
+        <p>Key features:</p>
+        <ul>
+          <li>Claims up to £5,000</li>
+          <li>Streamlined court forms</li>
+          <li>Informal hearing process</li>
+          <li>Limited expenses awards (so losing rarely costs much)</li>
+          <li>No need for a solicitor</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="when-to-use" className="scroll-mt-24">When to Use Simple Procedure</h2>
+
+        <h3>Good for:</h3>
+        <ul>
+          <li>Recovering rent arrears from current tenants</li>
+          <li>Claiming unpaid rent from former tenants</li>
+          <li>Recovering property damage costs</li>
+          <li>Claiming deposit shortfalls (after scheme deductions)</li>
+          <li>Utility bills left unpaid</li>
+        </ul>
+
+        <h3>Not suitable for:</h3>
+        <ul>
+          <li>Evicting tenants (use First-tier Tribunal)</li>
+          <li>Claims over £5,000 (use Ordinary Cause)</li>
+          <li>Complex legal disputes</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900">Before Going to Court</h4>
+          <p className="text-amber-800 mt-2">
+            Send a letter before action giving the tenant 14-28 days to pay. This shows
+            you tried to resolve matters and is expected by the court. Keep a copy for
+            your evidence.
+          </p>
+        </div>
+
+        <h2 id="court-fees" className="scroll-mt-24">Court Fees</h2>
+
+        <p>Court fees depend on the amount you&apos;re claiming:</p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Claim Amount</th>
+                <th className="border p-3 text-left font-semibold">Court Fee</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Up to £200</td>
+                <td className="border p-3">£19</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£200.01 - £300</td>
+                <td className="border p-3">£34</td>
+              </tr>
+              <tr>
+                <td className="border p-3">£300.01 - £500</td>
+                <td className="border p-3">£50</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£500.01 - £1,500</td>
+                <td className="border p-3">£73</td>
+              </tr>
+              <tr>
+                <td className="border p-3">£1,500.01 - £3,000</td>
+                <td className="border p-3">£89</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£3,000.01 - £5,000</td>
+                <td className="border p-3">£104</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          You can usually add the court fee to your claim, so the tenant pays if you win.
+        </p>
+
+        <h2 id="step-by-step" className="scroll-mt-24">Step-by-Step Process</h2>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <ol className="space-y-4">
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">1</span>
+              <div>
+                <strong>Send Letter Before Action</strong>
+                <p className="text-gray-600 text-sm">Write to the tenant demanding payment within 14-28 days</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">2</span>
+              <div>
+                <strong>Complete Form 3A (Claim Form)</strong>
+                <p className="text-gray-600 text-sm">Fill in the claimant (you) and respondent (tenant) details, plus the amount claimed</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">3</span>
+              <div>
+                <strong>Submit to Sheriff Court</strong>
+                <p className="text-gray-600 text-sm">Submit online or in person at the court covering the tenant&apos;s address</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">4</span>
+              <div>
+                <strong>Court Serves the Claim</strong>
+                <p className="text-gray-600 text-sm">The court sends the claim to the tenant (respondent)</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">5</span>
+              <div>
+                <strong>Tenant Responds (or Doesn&apos;t)</strong>
+                <p className="text-gray-600 text-sm">The tenant has 21 days to respond. If they don&apos;t, you may get automatic judgment</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">6</span>
+              <div>
+                <strong>Discussion or Hearing</strong>
+                <p className="text-gray-600 text-sm">If disputed, a discussion or hearing is scheduled</p>
+              </div>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold flex-shrink-0">7</span>
+              <div>
+                <strong>Decision</strong>
+                <p className="text-gray-600 text-sm">The Sheriff makes a decision on the claim</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-court-forms.svg"
+          alt="Simple Procedure Forms"
+          caption="Forms can be completed online through the Scottish Courts website"
+        />
+
+        <BlogCTA variant="default" />
+
+        <h2 id="forms-required" className="scroll-mt-24">Forms Required</h2>
+
+        <h3>Main Forms</h3>
+        <ul>
+          <li><strong>Form 3A:</strong> Claim Form (you complete this)</li>
+          <li><strong>Form 4A:</strong> Response Form (tenant uses this)</li>
+        </ul>
+
+        <h3>Evidence to Prepare</h3>
+        <ul>
+          <li>Tenancy agreement</li>
+          <li>Rent statements showing arrears</li>
+          <li>Bank statements showing missed payments</li>
+          <li>Letter before action and proof of postage</li>
+          <li>Any relevant correspondence</li>
+          <li>Calculation of the amount claimed</li>
+        </ul>
+
+        <h2 id="the-hearing" className="scroll-mt-24">The Hearing</h2>
+
+        <h3>If the Tenant Doesn&apos;t Respond</h3>
+        <p>
+          If the tenant doesn&apos;t respond within 21 days, you can apply for a Decision
+          without a hearing (Form 10A). The Sheriff will grant your claim if it&apos;s properly
+          documented.
+        </p>
+
+        <h3>If the Tenant Disputes</h3>
+        <p>
+          If the tenant responds and disputes the claim, there will be a Discussion
+          (informal meeting with the Sheriff) or a Hearing (more formal).
+        </p>
+
+        <h3>At the Hearing</h3>
+        <ul>
+          <li>Arrive on time with all your documents</li>
+          <li>Dress appropriately</li>
+          <li>Address the Sheriff as &quot;Sheriff&quot;</li>
+          <li>Explain your case clearly and calmly</li>
+          <li>Have your evidence organised and ready</li>
+          <li>Answer questions honestly</li>
+        </ul>
+
+        <h2 id="enforcement" className="scroll-mt-24">Enforcing the Decision</h2>
+
+        <p>
+          If you win but the tenant doesn&apos;t pay, you can enforce the decision using:
+        </p>
+
+        <h3>Sheriff Officers</h3>
+        <ul>
+          <li><strong>Earnings Arrestment:</strong> Deductions from wages</li>
+          <li><strong>Bank Arrestment:</strong> Freeze and seize bank funds</li>
+          <li><strong>Attachment:</strong> Seize and sell goods</li>
+        </ul>
+
+        <p>
+          You&apos;ll need an Extract Decree (certified copy of the decision) from the court
+          to instruct Sheriff Officers.
+        </p>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Add Interest</h4>
+          <p className="text-green-800 mt-2">
+            You can claim interest on the debt at the judicial rate (currently 8%). This
+            continues to accrue until the debt is paid.
+          </p>
+        </div>
+
+        <h2 id="simple-procedure-faq" className="scroll-mt-24">Simple Procedure FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim more than £5,000?</h3>
+            <p className="text-gray-600">
+              Not through Simple Procedure. For claims over £5,000, you need to use the
+              Ordinary Cause procedure, which is more complex and usually requires a solicitor.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Which court do I use?</h3>
+            <p className="text-gray-600">
+              Use the Sheriff Court covering the area where the tenant lives (or lived,
+              if a former tenant). You can find the correct court on the Scottish Courts
+              website.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a solicitor?</h3>
+            <p className="text-gray-600">
+              No. Simple Procedure is designed for people to use without legal representation.
+              However, you can use a solicitor if you prefer - but costs are rarely awarded.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I can&apos;t find the tenant?</h3>
+            <p className="text-gray-600">
+              You can apply to the court for alternative service methods. The court may
+              allow service by advertisement or posting to the last known address.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim legal expenses?</h3>
+            <p className="text-gray-600">
+              In Simple Procedure, expenses are rarely awarded. You can add the court fee
+              to your claim, but don&apos;t expect to recover solicitor costs.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Need to Recover Rent Arrears?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides templates and guidance for recovering unpaid rent
+            through the Scottish courts.
+          </p>
+          <Link
+            href="/products/money-claim"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Money Claim Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
+
+  // Article 37: Scotland Deposit Protection
+  {
+    slug: 'scotland-deposit-protection',
+    title: 'Deposit Protection Scotland - Tenancy Deposit Schemes Guide 2026',
+    description: 'Complete guide to deposit protection in Scotland. Learn which schemes to use, deadlines, penalties for non-compliance, and how to handle deposit disputes.',
+    metaDescription: 'Scotland deposit protection guide for landlords. Tenancy deposit schemes, deadlines, penalties and disputes explained for 2026.',
+    date: '2026-01-03',
+    readTime: '14 min read',
+    wordCount: 1750,
+    category: 'Scottish Law',
+    tags: ['deposit protection', 'tenancy deposit', 'Scotland', 'landlord compliance', 'PRT', 'Scottish landlord'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-deposit-protection.svg',
+    heroImageAlt: 'Scotland Deposit Protection Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'scotland deposit protection tenancy',
+    secondaryKeywords: ['tenancy deposit scheme scotland', 'landlord deposit rules scotland', 'deposit dispute scotland', 'protecting tenant deposit'],
+    tableOfContents: [
+      { id: 'overview', title: 'Overview', level: 2 },
+      { id: 'schemes', title: 'Approved Schemes', level: 2 },
+      { id: 'deadlines', title: 'Protection Deadlines', level: 2 },
+      { id: 'tenant-information', title: 'Tenant Information Requirements', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'end-of-tenancy', title: 'End of Tenancy Process', level: 2 },
+      { id: 'disputes', title: 'Handling Disputes', level: 2 },
+      { id: 'deposit-faq', title: 'Deposit Protection FAQ', level: 2 },
+    ],
+    relatedPosts: ['scotland-private-residential-tenancy', 'scotland-eviction-process', 'scotland-landlord-registration'],
+    content: (
+      <>
+        <p className="lead">
+          Scottish landlords must protect tenant deposits in an approved tenancy deposit
+          scheme within 30 working days of receiving them. Failure to comply can result
+          in penalties up to three times the deposit amount.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900">Deposit Protection Key Points</h4>
+          <ul className="text-blue-800 mt-2 space-y-1">
+            <li><strong>Deadline:</strong> 30 working days from receiving deposit</li>
+            <li><strong>Schemes:</strong> 3 approved schemes in Scotland</li>
+            <li><strong>Penalty:</strong> Up to 3x deposit for non-compliance</li>
+            <li><strong>Maximum deposit:</strong> No statutory limit in Scotland (usually 1-2 months)</li>
+          </ul>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-deposit-schemes.svg"
+          alt="Tenancy Deposit Schemes"
+          caption="All Scottish landlords must use an approved deposit protection scheme"
+        />
+
+        <h2 id="overview" className="scroll-mt-24">Overview</h2>
+
+        <p>
+          The Tenancy Deposit Schemes (Scotland) Regulations 2011 require landlords to
+          protect deposits paid by tenants. This applies to:
+        </p>
+
+        <ul>
+          <li>Private Residential Tenancies (PRTs)</li>
+          <li>Assured tenancies</li>
+          <li>Short assured tenancies</li>
+          <li>Any tenancy where a deposit is taken</li>
+        </ul>
+
+        <p>
+          The deposit must be protected for the duration of the tenancy and only released
+          at the end, with any agreed deductions for damage or unpaid rent.
+        </p>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="schemes" className="scroll-mt-24">Approved Schemes</h2>
+
+        <p>There are three approved tenancy deposit schemes in Scotland:</p>
+
+        <div className="overflow-x-auto my-6">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border p-3 text-left font-semibold">Scheme</th>
+                <th className="border p-3 text-left font-semibold">Type</th>
+                <th className="border p-3 text-left font-semibold">Website</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">SafeDeposits Scotland</td>
+                <td className="border p-3">Custodial</td>
+                <td className="border p-3">safedepositsscotland.com</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Letting Protection Service Scotland</td>
+                <td className="border p-3">Insurance-based</td>
+                <td className="border p-3">lettingprotectionscotland.com</td>
+              </tr>
+              <tr>
+                <td className="border p-3">mydeposits Scotland</td>
+                <td className="border p-3">Insurance-based</td>
+                <td className="border p-3">mydepositsscotland.co.uk</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Custodial vs Insurance-Based</h3>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Custodial Schemes</h4>
+          <ul className="space-y-2">
+            <li>You pay the deposit to the scheme</li>
+            <li>The scheme holds the money</li>
+            <li>Usually free to use</li>
+            <li>SafeDeposits Scotland is the only custodial option</li>
+          </ul>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Insurance-Based Schemes</h4>
+          <ul className="space-y-2">
+            <li>You keep the deposit in your account</li>
+            <li>You pay a fee to the scheme</li>
+            <li>The scheme provides insurance protection</li>
+            <li>Good if you want to retain the deposit funds</li>
+          </ul>
+        </div>
+
+        <h2 id="deadlines" className="scroll-mt-24">Protection Deadlines</h2>
+
+        <p>
+          You must protect the deposit within <strong>30 working days</strong> of receiving
+          it. This means:
+        </p>
+
+        <ul>
+          <li>Count from the day you receive the deposit (not tenancy start)</li>
+          <li>Exclude weekends and Scottish public holidays</li>
+          <li>The deposit must be registered with the scheme by the deadline</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900">Don&apos;t Miss the Deadline</h4>
+          <p className="text-red-800 mt-2">
+            If you miss the 30 working day deadline, you&apos;re in breach of the regulations.
+            The tenant can apply to the First-tier Tribunal for a penalty even years later.
+            There&apos;s no way to &quot;fix&quot; late protection.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-calendar-deadline.svg"
+          alt="Deposit Protection Deadline"
+          caption="Mark your 30 working day deadline as soon as you receive a deposit"
+        />
+
+        <h2 id="tenant-information" className="scroll-mt-24">Tenant Information Requirements</h2>
+
+        <p>
+          Within 30 working days of receiving the deposit, you must provide the tenant
+          with specific information:
+        </p>
+
+        <ul>
+          <li>Confirmation that the deposit is protected</li>
+          <li>The name and contact details of the scheme used</li>
+          <li>How to apply for the deposit&apos;s return</li>
+          <li>What to do if there&apos;s a dispute</li>
+          <li>The scheme&apos;s dispute resolution process</li>
+        </ul>
+
+        <p>
+          Most schemes provide a certificate or letter that meets these requirements.
+          Keep proof that you gave this information to the tenant.
+        </p>
+
+        <BlogCTA variant="default" />
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <p>If you fail to protect a deposit or provide the required information:</p>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <h4 className="font-semibold text-gray-900 mb-4">Tenant Can Apply to Tribunal For:</h4>
+          <ul className="space-y-2">
+            <li><strong>Payment order:</strong> Up to 3x the deposit amount</li>
+            <li>This is a penalty, not compensation - the tenant keeps it</li>
+            <li>The tenant can also claim return of the deposit itself</li>
+          </ul>
+        </div>
+
+        <h3>When Penalties Apply</h3>
+        <ul>
+          <li>Deposit not protected at all</li>
+          <li>Protected late (after 30 working days)</li>
+          <li>Required information not given to tenant</li>
+          <li>Information given late</li>
+          <li>Wrong scheme used (unlikely but possible)</li>
+        </ul>
+
+        <h3>Tribunal Discretion</h3>
+        <p>
+          The Tribunal decides the penalty amount, up to 3x the deposit. Factors include:
+        </p>
+        <ul>
+          <li>How late the protection was</li>
+          <li>Whether it was deliberate or a mistake</li>
+          <li>Any harm to the tenant</li>
+          <li>The landlord&apos;s conduct overall</li>
+        </ul>
+
+        <h2 id="end-of-tenancy" className="scroll-mt-24">End of Tenancy Process</h2>
+
+        <h3>Step 1: Inspection</h3>
+        <p>
+          Conduct a thorough checkout inspection, comparing the property to the check-in
+          inventory. Note any damage beyond fair wear and tear.
+        </p>
+
+        <h3>Step 2: Deductions</h3>
+        <p>
+          If claiming deductions, provide the tenant with:
+        </p>
+        <ul>
+          <li>Itemised list of deductions</li>
+          <li>Photographs of damage</li>
+          <li>Quotes or invoices for repairs</li>
+          <li>Comparison to check-in inventory</li>
+        </ul>
+
+        <h3>Step 3: Agreement or Dispute</h3>
+        <p>
+          If the tenant agrees to deductions, both parties inform the scheme and the
+          deposit is released accordingly. If there&apos;s disagreement, use the scheme&apos;s
+          free dispute resolution service.
+        </p>
+
+        <h2 id="disputes" className="scroll-mt-24">Handling Disputes</h2>
+
+        <p>
+          All three Scottish schemes offer free Alternative Dispute Resolution (ADR):
+        </p>
+
+        <ol>
+          <li>Submit the dispute to the scheme</li>
+          <li>Provide your evidence (inventory, photos, invoices)</li>
+          <li>The tenant provides their evidence</li>
+          <li>An adjudicator makes a binding decision</li>
+          <li>The deposit is released according to the decision</li>
+        </ol>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-6">
+          <h4 className="font-semibold text-green-900">Tip: Good Inventories Win Disputes</h4>
+          <p className="text-green-800 mt-2">
+            Detailed check-in and check-out inventories with dated photographs are crucial.
+            Without them, it&apos;s very difficult to prove damage occurred during the tenancy.
+          </p>
+        </div>
+
+        <h2 id="deposit-faq" className="scroll-mt-24">Deposit Protection FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is there a maximum deposit in Scotland?</h3>
+            <p className="text-gray-600">
+              Unlike England (where it&apos;s capped at 5 weeks&apos; rent), Scotland has no
+              statutory maximum. However, most landlords take 1-2 months&apos; rent.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I forget to protect the deposit?</h3>
+            <p className="text-gray-600">
+              Protect it immediately. You&apos;re still in breach, but the Tribunal considers
+              how long the delay was. The tenant can still claim a penalty, but it may be
+              lower if you acted quickly once you realised.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need to re-protect if the tenancy changes?</h3>
+            <p className="text-gray-600">
+              If a Short Assured Tenancy becomes a PRT, you don&apos;t need to re-protect as long
+              as the original protection is still valid. The deposit remains protected.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use an English deposit scheme?</h3>
+            <p className="text-gray-600">
+              No. You must use one of the three approved Scottish schemes. English,
+              Welsh, and Northern Irish schemes are not valid in Scotland.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about deposits for HMO rooms?</h3>
+            <p className="text-gray-600">
+              The same rules apply. Each tenant&apos;s deposit must be protected within 30
+              working days of receipt, regardless of the property type.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Managing Tenancy Deposits?</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides templates and guidance for Scottish landlords
+            managing deposits and tenancy compliance.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View All Products →
+          </Link>
+        </div>
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
