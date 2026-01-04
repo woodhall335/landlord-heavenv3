@@ -30053,6 +30053,938 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 81: UK Money Claims Online Guide
+  {
+    slug: 'uk-money-claims-online-guide',
+    title: 'UK Money Claims Online - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to using Money Claims Online for UK landlords. Recover unpaid rent and damages through the courts efficiently.',
+    metaDescription: 'UK Money Claims Online guide for landlords 2026. Step-by-step process for claiming unpaid rent, court fees, enforcement options, and success tips.',
+    date: '2026-01-04',
+    readTime: '16 min read',
+    wordCount: 1850,
+    category: 'Legal Compliance',
+    tags: ['money claims online', 'county court claims', 'unpaid rent', 'debt recovery', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-money-claims.svg',
+    heroImageAlt: 'UK Money Claims Online Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'money claims online landlords',
+    secondaryKeywords: ['county court claim rent', 'landlord debt recovery', 'recover unpaid rent', 'MCOL landlords'],
+    tableOfContents: [
+      { id: 'what-is-mcol', title: 'What is Money Claims Online', level: 2 },
+      { id: 'when-to-use', title: 'When to Use MCOL', level: 2 },
+      { id: 'making-claim', title: 'Making a Claim', level: 2 },
+      { id: 'after-judgment', title: 'After Judgment', level: 2 },
+      { id: 'enforcement', title: 'Enforcement Options', level: 2 },
+      { id: 'mcol-faq', title: 'Money Claims FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-rent-arrears-guide', 'uk-deposit-protection-guide', 'uk-tenancy-agreements-guide'],
+    content: (
+      <>
+        <p className="lead">
+          When tenants leave owing rent or cause damage beyond the deposit, Money Claims
+          Online (MCOL) provides a streamlined way to pursue debt recovery through the
+          county court. This guide explains how UK landlords can use MCOL effectively.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-money-claims.svg"
+          alt="Money Claims Online court process"
+          caption="MCOL provides an accessible route to recover money owed by former tenants"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="what-is-mcol" className="scroll-mt-24">What is Money Claims Online?</h2>
+
+        <p>
+          Money Claims Online is a government service that allows you to make county court
+          claims for fixed amounts of money over the internet. It&apos;s faster and cheaper
+          than traditional paper-based claims.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">MCOL Advantages</h4>
+          <p className="text-blue-800">
+            Lower court fees than paper claims, 24/7 access, faster processing, easy
+            tracking of claim progress, and no need to attend court for undefended claims.
+          </p>
+        </div>
+
+        <h3>What You Can Claim For</h3>
+
+        <ul>
+          <li><strong>Unpaid rent</strong> - rent arrears at tenancy end</li>
+          <li><strong>Damage costs</strong> - beyond deposit amount held</li>
+          <li><strong>Cleaning costs</strong> - beyond deposit and fair wear</li>
+          <li><strong>Breach costs</strong> - losses from tenant breaches</li>
+          <li><strong>Interest</strong> - at 8% simple interest (statutory rate)</li>
+          <li><strong>Court fees</strong> - recoverable if successful</li>
+        </ul>
+
+        <h3>Claim Limits</h3>
+
+        <p>
+          MCOL can be used for claims up to £100,000. Claims over £10,000 are usually
+          allocated to the fast track or multi-track and may require court attendance.
+        </p>
+
+        <h2 id="when-to-use" className="scroll-mt-24">When to Use MCOL</h2>
+
+        <p>
+          Before pursuing a court claim, ensure it&apos;s the right approach for your
+          situation.
+        </p>
+
+        <h3>Prerequisites</h3>
+
+        <ul>
+          <li>Tenancy has ended</li>
+          <li>You have the tenant&apos;s current address</li>
+          <li>You&apos;ve exhausted deposit dispute processes</li>
+          <li>You&apos;ve sent a letter before action</li>
+          <li>The debt is clearly documented</li>
+          <li>The tenant hasn&apos;t declared bankruptcy</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900 mb-2">Letter Before Action</h4>
+          <p className="text-amber-800">
+            Courts expect you to send a &quot;letter before action&quot; giving the debtor 14-30
+            days to pay before issuing proceedings. This is part of the pre-action protocol
+            and failure to comply may affect costs awards.
+          </p>
+        </div>
+
+        <h3>Consider Alternatives First</h3>
+
+        <ul>
+          <li><strong>Payment plan</strong> - negotiate affordable installments</li>
+          <li><strong>Mediation</strong> - resolve disputes without court</li>
+          <li><strong>Debt collection</strong> - professional agencies may be cost-effective</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-letter-before-action.svg"
+          alt="Letter before action template"
+          caption="A proper letter before action is required before issuing court proceedings"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="making-claim" className="scroll-mt-24">Making a Claim</h2>
+
+        <p>
+          The MCOL process is straightforward but requires careful preparation.
+        </p>
+
+        <h3>Step 1: Register</h3>
+
+        <p>
+          Create an account at moneyclaims.service.gov.uk. You&apos;ll need:
+        </p>
+
+        <ul>
+          <li>Email address</li>
+          <li>Your name and address</li>
+          <li>Payment method (card or account)</li>
+        </ul>
+
+        <h3>Step 2: Prepare Your Claim</h3>
+
+        <p>
+          Before starting, gather:
+        </p>
+
+        <ul>
+          <li>Defendant&apos;s full name and current address</li>
+          <li>Exact amount claimed (calculated carefully)</li>
+          <li>Clear breakdown of the debt</li>
+          <li>Supporting evidence list</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h3>Step 3: Complete the Claim Form</h3>
+
+        <p>
+          The online form asks for:
+        </p>
+
+        <ol>
+          <li><strong>Claimant details</strong> - your name and address</li>
+          <li><strong>Defendant details</strong> - tenant&apos;s name and address</li>
+          <li><strong>Claim amount</strong> - debt plus interest and fees</li>
+          <li><strong>Particulars of claim</strong> - brief description of why money is owed</li>
+        </ol>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Claim Amount</th>
+                <th className="border p-3 text-left font-semibold">Court Fee (MCOL)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Up to £300</td>
+                <td className="border p-3">£35</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£300.01 - £500</td>
+                <td className="border p-3">£50</td>
+              </tr>
+              <tr>
+                <td className="border p-3">£500.01 - £1,000</td>
+                <td className="border p-3">£70</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£1,000.01 - £1,500</td>
+                <td className="border p-3">£80</td>
+              </tr>
+              <tr>
+                <td className="border p-3">£1,500.01 - £3,000</td>
+                <td className="border p-3">£115</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">£3,000.01 - £5,000</td>
+                <td className="border p-3">£205</td>
+              </tr>
+              <tr>
+                <td className="border p-3">£5,000.01 - £10,000</td>
+                <td className="border p-3">£455</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Step 4: Pay and Submit</h3>
+
+        <p>
+          Pay the court fee online. The claim is issued and sent to the defendant, who
+          has 14 days to respond (or 28 if they acknowledge but need time).
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-mcol-process.svg"
+          alt="Money Claims Online claim process steps"
+          caption="The MCOL process is designed to be user-friendly for claimants"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="after-judgment" className="scroll-mt-24">After Judgment</h2>
+
+        <p>
+          What happens after you submit your claim depends on how the defendant responds.
+        </p>
+
+        <h3>If They Don&apos;t Respond</h3>
+
+        <p>
+          After 14 days with no response, you can request &quot;judgment in default.&quot; The
+          court orders the defendant to pay. You can request:
+        </p>
+
+        <ul>
+          <li><strong>Immediate payment</strong> - full amount due now</li>
+          <li><strong>Payment by date</strong> - full amount by specified date</li>
+          <li><strong>Payment by installments</strong> - if they can&apos;t pay immediately</li>
+        </ul>
+
+        <h3>If They Defend the Claim</h3>
+
+        <p>
+          The case may proceed to a hearing. For small claims (under £10,000), this is
+          usually informal. Prepare your evidence and be ready to present your case.
+        </p>
+
+        <h3>If They Admit and Offer Payment</h3>
+
+        <p>
+          You can accept their offer or ask the court to decide on a payment schedule.
+        </p>
+
+        <h2 id="enforcement" className="scroll-mt-24">Enforcement Options</h2>
+
+        <p>
+          A judgment doesn&apos;t guarantee payment. If the defendant doesn&apos;t pay, you need
+          to enforce the judgment.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Method</th>
+                <th className="border p-3 text-left font-semibold">Description</th>
+                <th className="border p-3 text-left font-semibold">Cost</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-medium">Warrant of Control</td>
+                <td className="border p-3">Bailiffs seize goods to sell</td>
+                <td className="border p-3">£77+</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Attachment of Earnings</td>
+                <td className="border p-3">Deducted from wages</td>
+                <td className="border p-3">£110</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Third Party Debt Order</td>
+                <td className="border p-3">Freeze bank accounts</td>
+                <td className="border p-3">£110</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Charging Order</td>
+                <td className="border p-3">Secure against property</td>
+                <td className="border p-3">£110</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Debt Recovery Resources</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides letter before action templates, MCOL checklists,
+            and guidance documents to help you recover money owed efficiently.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Debt Recovery Tools →
+          </Link>
+        </div>
+
+        <h2 id="mcol-faq" className="scroll-mt-24">Money Claims Online FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long do I have to make a claim?</h3>
+            <p className="text-gray-600">
+              You have 6 years from when the debt became due to issue court proceedings.
+              However, it&apos;s best to act quickly while evidence is fresh and the debtor
+              is traceable.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if I don&apos;t know their new address?</h3>
+            <p className="text-gray-600">
+              You need a valid address to serve the claim. Consider using a tracing
+              service to find the debtor. Claims cannot proceed without a proper address.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is it worth claiming small amounts?</h3>
+            <p className="text-gray-600">
+              Consider whether the defendant has means to pay. Court fees and enforcement
+              costs can exceed small debts. For very small amounts, it may not be
+              economically viable.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I claim against guarantors?</h3>
+            <p className="text-gray-600">
+              Yes, if you have a valid guarantor agreement. You can claim against the
+              guarantor, the tenant, or both jointly. The guarantor&apos;s liability depends
+              on the agreement terms.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 82: UK Landlord Software Tools Guide
+  {
+    slug: 'uk-landlord-software-tools-guide',
+    title: 'UK Landlord Software & Tools - Complete Guide 2026',
+    description: 'Comprehensive guide to property management software and tools for UK landlords. Streamline your landlord business with the right technology.',
+    metaDescription: 'UK landlord software guide 2026. Property management tools, accounting software, tenant apps, inventory systems, and technology for efficient landlord operations.',
+    date: '2026-01-04',
+    readTime: '14 min read',
+    wordCount: 1650,
+    category: 'Property Management',
+    tags: ['landlord software', 'property management tools', 'landlord apps', 'property technology', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Tech Team',
+      role: 'Property Technology Specialists',
+    },
+    heroImage: '/images/blog/placeholder-software.svg',
+    heroImageAlt: 'UK Landlord Software Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord software UK',
+    secondaryKeywords: ['property management software', 'landlord apps', 'rental management tools', 'landlord technology'],
+    tableOfContents: [
+      { id: 'software-benefits', title: 'Benefits of Software', level: 2 },
+      { id: 'software-types', title: 'Types of Software', level: 2 },
+      { id: 'key-features', title: 'Key Features to Look For', level: 2 },
+      { id: 'implementation', title: 'Implementation Tips', level: 2 },
+      { id: 'software-faq', title: 'Software FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-property-inspections-guide', 'uk-landlord-tax-guide', 'uk-landlord-tenant-communication'],
+    content: (
+      <>
+        <p className="lead">
+          The right software tools can transform your landlord business, saving time,
+          reducing errors, and improving tenant relationships. This guide explores the
+          technology options available to UK landlords in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-software.svg"
+          alt="Property management software dashboard"
+          caption="Modern software streamlines every aspect of property management"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="software-benefits" className="scroll-mt-24">Benefits of Using Landlord Software</h2>
+
+        <p>
+          Technology investment pays dividends through efficiency gains and better
+          organization.
+        </p>
+
+        <h3>Time Savings</h3>
+
+        <ul>
+          <li><strong>Automated reminders</strong> - for rent, certificates, inspections</li>
+          <li><strong>Template generation</strong> - contracts, letters, notices</li>
+          <li><strong>Batch processing</strong> - multiple properties simultaneously</li>
+          <li><strong>Quick reporting</strong> - instant financial summaries</li>
+        </ul>
+
+        <h3>Improved Accuracy</h3>
+
+        <ul>
+          <li><strong>Calculation tools</strong> - rent increases, deposit splits</li>
+          <li><strong>Compliance tracking</strong> - never miss certificate renewals</li>
+          <li><strong>Audit trails</strong> - complete records of all activities</li>
+          <li><strong>Error reduction</strong> - automated data validation</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">ROI Consideration</h4>
+          <p className="text-blue-800">
+            Even for single-property landlords, the time saved on admin and reduced
+            risk of compliance mistakes often justifies software subscription costs.
+            Portfolio landlords see even greater returns.
+          </p>
+        </div>
+
+        <h2 id="software-types" className="scroll-mt-24">Types of Landlord Software</h2>
+
+        <p>
+          Different software solutions address different needs. Understanding the options
+          helps you choose appropriately.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Software Type</th>
+                <th className="border p-3 text-left font-semibold">Primary Functions</th>
+                <th className="border p-3 text-left font-semibold">Best For</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-medium">All-in-one platforms</td>
+                <td className="border p-3">Complete property management</td>
+                <td className="border p-3">Landlords wanting one solution</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Accounting software</td>
+                <td className="border p-3">Income, expenses, tax</td>
+                <td className="border p-3">Financial management focus</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Tenant portals</td>
+                <td className="border p-3">Communication, payments</td>
+                <td className="border p-3">Improving tenant experience</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Inventory apps</td>
+                <td className="border p-3">Check-in/out reports</td>
+                <td className="border p-3">Protecting deposits</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Maintenance tools</td>
+                <td className="border p-3">Repair tracking, contractors</td>
+                <td className="border p-3">Managing repairs efficiently</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-software-types.svg"
+          alt="Different types of landlord software"
+          caption="Choose software that matches your specific management needs"
+          aspectRatio="4:3"
+        />
+
+        <h2 id="key-features" className="scroll-mt-24">Key Features to Look For</h2>
+
+        <p>
+          When evaluating software options, prioritize features that address your
+          biggest pain points.
+        </p>
+
+        <h3>Essential Features</h3>
+
+        <ul>
+          <li><strong>Property database</strong> - store all property information centrally</li>
+          <li><strong>Tenant records</strong> - contact details, agreements, history</li>
+          <li><strong>Document storage</strong> - certificates, contracts, correspondence</li>
+          <li><strong>Rent tracking</strong> - payments, arrears, statements</li>
+          <li><strong>Compliance calendar</strong> - certificate expiry alerts</li>
+        </ul>
+
+        <BlogCTA variant="inline" />
+
+        <h3>Advanced Features</h3>
+
+        <ul>
+          <li><strong>Online rent collection</strong> - automated payment processing</li>
+          <li><strong>Tenant screening</strong> - integrated referencing</li>
+          <li><strong>E-signatures</strong> - digital contract signing</li>
+          <li><strong>Reporting suite</strong> - customizable analytics</li>
+          <li><strong>Mobile apps</strong> - manage on the go</li>
+          <li><strong>Contractor network</strong> - find and manage tradespeople</li>
+        </ul>
+
+        <h3>Integration Capabilities</h3>
+
+        <p>
+          Software that integrates with other tools multiplies efficiency:
+        </p>
+
+        <ul>
+          <li><strong>Banking integration</strong> - automatic transaction matching</li>
+          <li><strong>Accounting software</strong> - export to Xero, QuickBooks</li>
+          <li><strong>Rightmove/Zoopla</strong> - listing synchronization</li>
+          <li><strong>Reference agencies</strong> - seamless tenant checks</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-software-features.svg"
+          alt="Key landlord software features"
+          caption="Prioritize features that solve your biggest management challenges"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="implementation" className="scroll-mt-24">Implementation Tips</h2>
+
+        <p>
+          Getting the most from software requires proper setup and consistent use.
+        </p>
+
+        <h3>Getting Started</h3>
+
+        <ol>
+          <li><strong>Audit current processes</strong> - identify what needs improving</li>
+          <li><strong>List requirements</strong> - must-have vs nice-to-have features</li>
+          <li><strong>Trial multiple options</strong> - most offer free trials</li>
+          <li><strong>Check reviews</strong> - especially from UK landlords</li>
+          <li><strong>Consider support</strong> - UK-based help is valuable</li>
+        </ol>
+
+        <h3>Data Migration</h3>
+
+        <ul>
+          <li>Start with a clean database structure</li>
+          <li>Import property and tenant data carefully</li>
+          <li>Upload key documents systematically</li>
+          <li>Verify accuracy before going live</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
+          <h4 className="font-semibold text-amber-900 mb-2">GDPR Compliance</h4>
+          <p className="text-amber-800">
+            Ensure any software you use is GDPR compliant and has proper data protection
+            measures. Tenant data is sensitive and must be handled appropriately.
+          </p>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Landlord Tools & Templates</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides downloadable templates, checklists, and tools
+            that work alongside any software you choose to use.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Our Tools →
+          </Link>
+        </div>
+
+        <h2 id="software-faq" className="scroll-mt-24">Landlord Software FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How much should I expect to pay?</h3>
+            <p className="text-gray-600">
+              Basic tools start from free for limited use. Comprehensive platforms
+              typically cost £10-50 per month depending on portfolio size. Enterprise
+              solutions for larger portfolios may cost more.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use spreadsheets instead?</h3>
+            <p className="text-gray-600">
+              For one or two properties, spreadsheets can work. However, they lack
+              automation, compliance alerts, and document storage. The time savings
+              from proper software usually justify the cost.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What about data security?</h3>
+            <p className="text-gray-600">
+              Reputable software uses encryption and secure cloud storage. This is
+              often safer than local spreadsheets on an unsecured computer. Check
+              the provider&apos;s security certifications.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need different software for Scotland?</h3>
+            <p className="text-gray-600">
+              Some software is designed for specific UK regions due to legal differences.
+              Ensure the software you choose supports Scottish PRT tenancies if you
+              have Scottish properties, or Welsh contracts if applicable.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 83: UK Property Inventory Guide
+  {
+    slug: 'uk-property-inventory-guide',
+    title: 'UK Property Inventory - Complete Landlord Guide 2026',
+    description: 'Essential guide to property inventories for UK landlords. Protect your deposit claims with thorough documentation at check-in and checkout.',
+    metaDescription: 'UK property inventory guide for landlords 2026. Creating inventories, photography tips, check-in procedures, checkout comparisons, and deposit protection.',
+    date: '2026-01-04',
+    readTime: '15 min read',
+    wordCount: 1720,
+    category: 'Property Management',
+    tags: ['property inventory', 'inventory clerk', 'deposit protection', 'check-in report', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Property Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-inventory.svg',
+    heroImageAlt: 'UK Property Inventory Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'property inventory landlords',
+    secondaryKeywords: ['inventory report', 'check-in inventory', 'checkout report', 'inventory photography'],
+    tableOfContents: [
+      { id: 'inventory-importance', title: 'Why Inventories Matter', level: 2 },
+      { id: 'creating-inventory', title: 'Creating an Inventory', level: 2 },
+      { id: 'photography', title: 'Photography Best Practice', level: 2 },
+      { id: 'check-in-process', title: 'Check-In Process', level: 2 },
+      { id: 'checkout-comparison', title: 'Checkout Comparison', level: 2 },
+      { id: 'inventory-faq', title: 'Inventory FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-deposit-protection-guide', 'uk-end-of-tenancy-guide', 'uk-property-inspections-guide'],
+    content: (
+      <>
+        <p className="lead">
+          A comprehensive property inventory is your most important tool for protecting
+          deposit claims and resolving disputes fairly. This guide covers everything UK
+          landlords need to know about creating and using inventories effectively.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-inventory.svg"
+          alt="Property inventory documentation"
+          caption="Detailed inventories protect both landlords and tenants"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="inventory-importance" className="scroll-mt-24">Why Inventories Matter</h2>
+
+        <p>
+          The inventory is the foundation of any deposit claim. Without it, proving
+          property condition at tenancy start becomes extremely difficult.
+        </p>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
+          <h4 className="font-semibold text-red-900 mb-2">Deposit Dispute Reality</h4>
+          <p className="text-red-800">
+            In deposit disputes, landlords without proper inventories lose the majority
+            of cases. Adjudicators need evidence of original condition to compare against
+            checkout findings. No inventory often means no claim.
+          </p>
+        </div>
+
+        <h3>What a Good Inventory Provides</h3>
+
+        <ul>
+          <li><strong>Baseline condition</strong> - documented state at tenancy start</li>
+          <li><strong>Item confirmation</strong> - proof of what was provided</li>
+          <li><strong>Fair comparison</strong> - objective checkout assessment</li>
+          <li><strong>Dispute evidence</strong> - crucial for adjudication</li>
+          <li><strong>Tenant protection</strong> - prevents unfair claims against them</li>
+        </ul>
+
+        <h3>Legal Context</h3>
+
+        <p>
+          While inventories aren&apos;t legally required, deposit protection schemes strongly
+          recommend them. The burden of proof in disputes falls on the landlord - you
+          must prove damage occurred during the tenancy.
+        </p>
+
+        <h2 id="creating-inventory" className="scroll-mt-24">Creating a Comprehensive Inventory</h2>
+
+        <p>
+          A good inventory is detailed, systematic, and objective. Work through the
+          property methodically.
+        </p>
+
+        <h3>Structure and Format</h3>
+
+        <p>
+          Organize your inventory by room, covering:
+        </p>
+
+        <ul>
+          <li><strong>Room identification</strong> - clear naming system</li>
+          <li><strong>Ceiling</strong> - condition, light fittings</li>
+          <li><strong>Walls</strong> - decoration, condition, marks</li>
+          <li><strong>Doors and frames</strong> - condition, handles, locks</li>
+          <li><strong>Windows</strong> - frames, glass, locks, blinds/curtains</li>
+          <li><strong>Flooring</strong> - type, condition, wear patterns</li>
+          <li><strong>Fixtures</strong> - switches, sockets, radiators</li>
+          <li><strong>Furniture</strong> - each item, condition, marks</li>
+          <li><strong>Appliances</strong> - make, model, condition, functionality</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-inventory-checklist.svg"
+          alt="Property inventory checklist example"
+          caption="A systematic approach ensures nothing is missed"
+          aspectRatio="4:3"
+        />
+
+        <h3>Condition Descriptions</h3>
+
+        <p>
+          Use consistent, objective terminology:
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Term</th>
+                <th className="border p-3 text-left font-semibold">Meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3 font-medium">New</td>
+                <td className="border p-3">Unused, original condition</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Excellent</td>
+                <td className="border p-3">Like new, minimal use visible</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Good</td>
+                <td className="border p-3">Well maintained, minor wear</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3 font-medium">Fair</td>
+                <td className="border p-3">Average condition, visible wear</td>
+              </tr>
+              <tr>
+                <td className="border p-3 font-medium">Poor</td>
+                <td className="border p-3">Significant wear, needs attention</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="photography" className="scroll-mt-24">Photography Best Practice</h2>
+
+        <p>
+          Photos are essential evidence. A written description supported by photographs
+          is far stronger than either alone.
+        </p>
+
+        <h3>Photography Tips</h3>
+
+        <ul>
+          <li><strong>Use good lighting</strong> - natural light where possible</li>
+          <li><strong>Take overview shots</strong> - whole room from doorway</li>
+          <li><strong>Detail close-ups</strong> - existing marks, wear, damage</li>
+          <li><strong>Date stamp</strong> - ensure camera date is correct</li>
+          <li><strong>Be systematic</strong> - follow room order in inventory</li>
+          <li><strong>Include meter readings</strong> - photograph meters</li>
+        </ul>
+
+        <h3>What to Photograph</h3>
+
+        <ul>
+          <li>Every room from multiple angles</li>
+          <li>All appliances (exterior and interior)</li>
+          <li>Any existing damage or wear</li>
+          <li>Carpets and flooring</li>
+          <li>Kitchen and bathroom fixtures</li>
+          <li>Garden and outdoor areas</li>
+          <li>Windows and their condition</li>
+          <li>Keys and access devices</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-inventory-photography.svg"
+          alt="Property inventory photography examples"
+          caption="Comprehensive photography supports written descriptions"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="check-in-process" className="scroll-mt-24">Check-In Process</h2>
+
+        <p>
+          The check-in is when the inventory becomes a legal document. Handle it properly
+          to maximize its value.
+        </p>
+
+        <h3>Conducting Check-In</h3>
+
+        <ol>
+          <li>Walk through property with tenant</li>
+          <li>Review inventory room by room together</li>
+          <li>Allow tenant to note any disagreements</li>
+          <li>Add any items missed in original inventory</li>
+          <li>Take photographs of current condition</li>
+          <li>Both parties sign and date the inventory</li>
+          <li>Provide tenant with a copy</li>
+        </ol>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
+          <h4 className="font-semibold text-blue-900 mb-2">Tenant Signature</h4>
+          <p className="text-blue-800">
+            The tenant&apos;s signature on the inventory is powerful evidence of the property&apos;s
+            condition at check-in. If they refuse to sign, note this and consider having
+            an independent witness present.
+          </p>
+        </div>
+
+        <h2 id="checkout-comparison" className="scroll-mt-24">Checkout Comparison</h2>
+
+        <p>
+          At checkout, the inventory guides systematic comparison of current condition
+          against the documented starting point.
+        </p>
+
+        <h3>Checkout Process</h3>
+
+        <ol>
+          <li>Review original inventory before visit</li>
+          <li>Work through each room systematically</li>
+          <li>Note current condition of each item</li>
+          <li>Photograph any changes or damage</li>
+          <li>Distinguish fair wear from damage</li>
+          <li>Complete checkout report</li>
+          <li>Have tenant sign if present</li>
+        </ol>
+
+        <h3>Fair Wear and Tear</h3>
+
+        <p>
+          You cannot claim for normal deterioration from everyday use. Fair wear includes:
+        </p>
+
+        <ul>
+          <li>Fading from sunlight</li>
+          <li>Furniture indentations in carpet</li>
+          <li>Minor scuffs in high-traffic areas</li>
+          <li>Worn patches on carpets at doors</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Inventory Templates</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides comprehensive inventory templates, photo checklists,
+            and checkout comparison forms to protect your deposits.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Inventory Templates →
+          </Link>
+        </div>
+
+        <h2 id="inventory-faq" className="scroll-mt-24">Inventory FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I use a professional inventory clerk?</h3>
+            <p className="text-gray-600">
+              For furnished properties or high-value rentals, professional clerks provide
+              independent, detailed reports that carry weight in disputes. Costs typically
+              range from £80-200 depending on property size.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use photos only without a written inventory?</h3>
+            <p className="text-gray-600">
+              Photos alone are insufficient. You need written descriptions with conditions
+              noted. Photos support the written record but don&apos;t replace it. Use both
+              for maximum protection.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant won&apos;t sign the inventory?</h3>
+            <p className="text-gray-600">
+              Give them a reasonable period (typically 7 days) to review and return with
+              any amendments. If they don&apos;t respond, the inventory stands as accurate.
+              Document your attempts to get their agreement.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How detailed does the inventory need to be?</h3>
+            <p className="text-gray-600">
+              More detail is always better. Note specific marks, scratches, or wear on
+              individual items. Vague descriptions like &quot;good condition&quot; for everything
+              are less useful in disputes than specific observations.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
