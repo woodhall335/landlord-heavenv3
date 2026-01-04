@@ -15,16 +15,16 @@ export function BlogCTA({
 }: BlogCTAProps) {
   if (variant === 'urgency') {
     return (
-      <div className="my-10 bg-gradient-to-r from-primary to-primary/90 rounded-2xl p-8 text-white">
+      <div className="my-10 bg-gradient-to-r from-primary to-primary/90 rounded-2xl p-8">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
           <div>
-            <h3 className="text-2xl font-bold mb-2">Section 21 Ends 1 May 2026</h3>
+            <h3 className="text-2xl font-bold mb-2 text-white">Section 21 Ends 1 May 2026</h3>
             <p className="text-white/90">
               Time is running out to serve no-fault eviction notices. Don&apos;t wait until it&apos;s too late.
             </p>
           </div>
           <div className="flex flex-col items-center gap-4">
-            <Section21Countdown variant="large" className="[&_*]:text-white" />
+            <Section21Countdown variant="large" className="text-white" />
             <Link
               href="/products/notice-only"
               className="bg-white text-primary hover:bg-gray-100 font-semibold py-3 px-6 rounded-lg transition-colors whitespace-nowrap"
