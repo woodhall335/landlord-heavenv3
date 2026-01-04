@@ -130,15 +130,7 @@ export function productSchema(product: Product) {
       "hasMerchantReturnPolicy": {
         "@type": "MerchantReturnPolicy",
         "applicableCountry": "GB",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-        "merchantReturnDays": "14",
-        "returnMethod": "https://schema.org/ReturnByMail",
-        "returnFees": "https://schema.org/FreeReturn",
-        "returnPolicySeasonalOverride": {
-          "@type": "MerchantReturnPolicySeasonalOverride",
-          "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
-          "merchantReturnDays": "0"
-        }
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
       }
     },
     "aggregateRating": {
@@ -215,10 +207,7 @@ export function subscriptionProductSchema(product: Product) {
       "hasMerchantReturnPolicy": {
         "@type": "MerchantReturnPolicy",
         "applicableCountry": "GB",
-        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-        "merchantReturnDays": "14",
-        "returnMethod": "https://schema.org/ReturnByMail",
-        "returnFees": "https://schema.org/FreeReturn"
+        "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted"
       }
     }
   };
