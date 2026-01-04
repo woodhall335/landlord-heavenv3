@@ -33020,6 +33020,1137 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 90: UK Property Marketing Guide
+  {
+    slug: 'uk-property-marketing-guide',
+    title: 'UK Property Marketing - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to marketing rental properties in the UK. Learn photography tips, listing strategies, pricing tactics, and how to attract quality tenants faster.',
+    metaDescription: 'UK property marketing guide for landlords 2026. Photography tips, listing strategies, and proven tactics to find quality tenants faster.',
+    date: '2026-01-04',
+    readTime: '14 min read',
+    wordCount: 1560,
+    category: 'Property Management',
+    tags: ['property marketing', 'rental listings', 'tenant advertising', 'property photos', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-property-marketing.svg',
+    heroImageAlt: 'UK Property Marketing Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'property marketing UK landlord',
+    secondaryKeywords: ['rental listing tips', 'property photography', 'find tenants fast', 'advertise rental property'],
+    tableOfContents: [
+      { id: 'preparing-property', title: 'Preparing Your Property', level: 2 },
+      { id: 'photography-tips', title: 'Photography Tips', level: 2 },
+      { id: 'writing-listings', title: 'Writing Effective Listings', level: 2 },
+      { id: 'advertising-platforms', title: 'Advertising Platforms', level: 2 },
+      { id: 'pricing-strategy', title: 'Pricing Strategy', level: 2 },
+      { id: 'viewing-management', title: 'Managing Viewings', level: 2 },
+      { id: 'marketing-faq', title: 'Property Marketing FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-void-period-management-guide', 'uk-tenant-referencing-guide', 'uk-letting-agent-selection-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Effective property marketing reduces void periods and attracts quality tenants.
+          This guide covers everything UK landlords need to know about presenting,
+          advertising, and promoting their rental properties in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-property-marketing.svg"
+          alt="Marketing rental properties effectively"
+          caption="Professional marketing attracts better tenants and reduces void periods"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="preparing-property" className="scroll-mt-24">Preparing Your Property</h2>
+
+        <p>
+          First impressions matter enormously. Before any marketing, ensure your property
+          is ready to impress potential tenants.
+        </p>
+
+        <h3>Deep Clean</h3>
+
+        <p>
+          A professional clean before marketing makes a significant difference:
+        </p>
+
+        <ul>
+          <li>All surfaces cleaned and dusted</li>
+          <li>Windows cleaned inside and out</li>
+          <li>Carpets professionally cleaned</li>
+          <li>Kitchen appliances deep cleaned</li>
+          <li>Bathroom grout and seals cleaned or renewed</li>
+        </ul>
+
+        <h3>Minor Repairs and Touch-ups</h3>
+
+        <ul>
+          <li>Fill holes and repaint scuffed walls</li>
+          <li>Fix dripping taps and running toilets</li>
+          <li>Replace worn or damaged flooring</li>
+          <li>Ensure all lights work with matching bulbs</li>
+          <li>Oil squeaky doors and sticking locks</li>
+        </ul>
+
+        <h3>Declutter and Stage</h3>
+
+        <p>
+          Whether furnished or unfurnished, presentation matters:
+        </p>
+
+        <ul>
+          <li>Remove personal items and excess furniture</li>
+          <li>Create sense of space in each room</li>
+          <li>Add simple touches - fresh flowers, clean towels</li>
+          <li>Ensure good lighting throughout</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Kerb Appeal</h4>
+          <p className="text-blue-800">
+            Don&apos;t forget the exterior. Tidy gardens, clean windows, and a welcoming
+            entrance create positive first impressions before tenants even step inside.
+          </p>
+        </div>
+
+        <h2 id="photography-tips" className="scroll-mt-24">Photography Tips</h2>
+
+        <p>
+          Quality photos are the most important element of your listing. Poor photos
+          lose potential tenants before they even read the description.
+        </p>
+
+        <h3>Equipment and Settings</h3>
+
+        <ul>
+          <li><strong>Wide-angle lens</strong> - smartphone or camera with wide angle</li>
+          <li><strong>Tripod</strong> - ensures sharp, level images</li>
+          <li><strong>Natural light</strong> - shoot on bright, overcast days</li>
+          <li><strong>HDR mode</strong> - balances window light with interiors</li>
+        </ul>
+
+        <h3>Composition Tips</h3>
+
+        <ul>
+          <li>Shoot from corners to show maximum space</li>
+          <li>Keep camera level - avoid tilted horizons</li>
+          <li>Include floors and ceilings to show room height</li>
+          <li>Take multiple angles of each room</li>
+          <li>Photograph key features - fireplaces, views, storage</li>
+        </ul>
+
+        <h3>Photo Checklist</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Area</th>
+                <th className="border p-3 text-left font-semibold">Essential Shots</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Exterior</td>
+                <td className="border p-3">Front, garden, parking, building entrance</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Living areas</td>
+                <td className="border p-3">2-3 angles each room, feature details</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Kitchen</td>
+                <td className="border p-3">Wide shot, appliances, workspace, storage</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Bedrooms</td>
+                <td className="border p-3">Each bedroom from door and window angles</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Bathrooms</td>
+                <td className="border p-3">Full view, close-up of fixtures if modern</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-property-photos.svg"
+          alt="Professional property photography tips"
+          caption="Quality photography can double your enquiry rate"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="writing-listings" className="scroll-mt-24">Writing Effective Listings</h2>
+
+        <p>
+          Your listing description should inform and persuade while remaining accurate.
+        </p>
+
+        <h3>Title Formula</h3>
+
+        <p>
+          Include the key details tenants search for:
+        </p>
+
+        <ul>
+          <li>Number of bedrooms</li>
+          <li>Property type (flat, house, studio)</li>
+          <li>Key feature or location</li>
+          <li>Example: &quot;Spacious 2-Bed Flat with Garden, Islington&quot;</li>
+        </ul>
+
+        <h3>Description Structure</h3>
+
+        <ol>
+          <li><strong>Opening hook</strong> - key selling point in first line</li>
+          <li><strong>Room by room</strong> - describe each space with dimensions</li>
+          <li><strong>Features</strong> - highlight benefits (parking, garden, storage)</li>
+          <li><strong>Location</strong> - transport, shops, schools nearby</li>
+          <li><strong>Practicalities</strong> - available date, bills, furnished status</li>
+        </ol>
+
+        <h3>Words That Work</h3>
+
+        <ul>
+          <li>Spacious, bright, modern, well-maintained</li>
+          <li>Quiet, convenient, sought-after, characterful</li>
+          <li>Recently refurbished, newly decorated</li>
+          <li>Close to transport, walking distance</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Be Accurate</h4>
+          <p className="text-amber-800">
+            Never exaggerate or mislead. Disappointed viewers waste your time and theirs.
+            If there are limitations, be upfront - the right tenant won&apos;t mind, and
+            you&apos;ll avoid wasted viewings.
+          </p>
+        </div>
+
+        <h2 id="advertising-platforms" className="scroll-mt-24">Advertising Platforms</h2>
+
+        <p>
+          Different platforms suit different properties and landlord preferences:
+        </p>
+
+        <h3>Major Property Portals</h3>
+
+        <ul>
+          <li><strong>Rightmove</strong> - largest portal, essential for reach (agent access)</li>
+          <li><strong>Zoopla</strong> - second largest, good additional coverage</li>
+          <li><strong>OnTheMarket</strong> - growing platform, agent access</li>
+        </ul>
+
+        <h3>Direct Landlord Platforms</h3>
+
+        <ul>
+          <li><strong>OpenRent</strong> - list free, pay for Rightmove/Zoopla</li>
+          <li><strong>SpareRoom</strong> - excellent for rooms and house shares</li>
+          <li><strong>Gumtree</strong> - free, variable quality of enquiries</li>
+        </ul>
+
+        <h3>Social Media</h3>
+
+        <ul>
+          <li><strong>Facebook Marketplace</strong> - free, local reach</li>
+          <li><strong>Local community groups</strong> - neighbourhood focus</li>
+          <li><strong>Instagram</strong> - visual platform for premium properties</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-advertising-platforms.svg"
+          alt="Property advertising platform options"
+          caption="Choose platforms based on your property type and target tenants"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="pricing-strategy" className="scroll-mt-24">Pricing Strategy</h2>
+
+        <p>
+          Correct pricing is crucial for attracting tenants quickly while maximising returns.
+        </p>
+
+        <h3>Research the Market</h3>
+
+        <ul>
+          <li>Search similar properties in your area on Rightmove/Zoopla</li>
+          <li>Note asking prices and how long properties stay listed</li>
+          <li>Factor in property condition, features, location specifics</li>
+          <li>Check recent lettings (some agents share these)</li>
+        </ul>
+
+        <h3>Pricing Psychology</h3>
+
+        <ul>
+          <li>Price at exact figures tenants search (£1,000, £1,200, £1,500)</li>
+          <li>Consider £995 vs £1,000 - which search bracket does it appear in?</li>
+          <li>Slightly below round numbers can increase visibility</li>
+        </ul>
+
+        <h3>When to Adjust</h3>
+
+        <div className="bg-gray-50 rounded-lg p-6 my-6">
+          <p className="font-semibold mb-2">Signs you&apos;re overpriced:</p>
+          <ul className="text-gray-600 mt-2">
+            <li>Very few enquiries in first week</li>
+            <li>Viewings but no applications</li>
+            <li>Property on market 3+ weeks with no interest</li>
+          </ul>
+          <p className="text-gray-700 mt-4">
+            Consider reducing by 5-10% rather than waiting. Time on market costs money
+            in void periods.
+          </p>
+        </div>
+
+        <h2 id="viewing-management" className="scroll-mt-24">Managing Viewings</h2>
+
+        <p>
+          Efficient viewing management converts interest into applications:
+        </p>
+
+        <h3>Pre-Viewing Screening</h3>
+
+        <ul>
+          <li>Ask basic qualifying questions before arranging viewings</li>
+          <li>Employment status, household composition, move-in date</li>
+          <li>Pet ownership, smoking status if relevant</li>
+          <li>This saves time for both parties</li>
+        </ul>
+
+        <h3>Conducting Viewings</h3>
+
+        <ul>
+          <li>Arrive early to open windows and turn on lights</li>
+          <li>Let viewers explore while answering questions</li>
+          <li>Point out features and storage</li>
+          <li>Have application forms or links ready</li>
+          <li>Note viewer feedback for improvements</li>
+        </ul>
+
+        <h3>Open House vs Individual</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Open House</th>
+                <th className="border p-3 text-left font-semibold">Individual Viewings</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Time-efficient for busy landlords</td>
+                <td className="border p-3">More personal, build rapport</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Creates urgency through competition</td>
+                <td className="border p-3">Answer questions thoroughly</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Good for high-demand properties</td>
+                <td className="border p-3">Better for premium properties</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Marketing Templates</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides listing templates, photo checklists, and viewing
+            management tools to streamline your property marketing.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Marketing Resources →
+          </Link>
+        </div>
+
+        <h2 id="marketing-faq" className="scroll-mt-24">Property Marketing FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I use a professional photographer?</h3>
+            <p className="text-gray-600">
+              For premium properties, professional photography (£100-200) often pays for
+              itself through faster lettings. For standard properties, good smartphone
+              photos following proper techniques can work well.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long should I wait before reducing rent?</h3>
+            <p className="text-gray-600">
+              If getting minimal enquiries after 2 weeks, consider a reduction. Calculate
+              what a further week&apos;s void costs versus a monthly rent reduction - often
+              a small reduction saves money overall.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I market while tenants still live there?</h3>
+            <p className="text-gray-600">
+              Yes, with tenant cooperation. Give proper notice for viewings, work around
+              their schedule, and consider offering incentives for them to keep the
+              property tidy and accommodate viewings.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I offer video tours?</h3>
+            <p className="text-gray-600">
+              Video tours are increasingly expected, especially post-pandemic. They save
+              time by pre-qualifying viewers and help tenants unable to view in person.
+              Even a simple phone walkthrough video helps.
+            </p>
+          </div>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-successful-marketing.svg"
+          alt="Successful property marketing results"
+          caption="Effective marketing fills properties with quality tenants quickly"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 91: UK Tenant Move-In Checklist Guide
+  {
+    slug: 'uk-tenant-move-in-checklist-guide',
+    title: 'UK Tenant Move-In Checklist - Complete Landlord Guide 2026',
+    description: 'Comprehensive move-in checklist for UK landlords. Essential steps, documentation, and best practices for a smooth tenant handover process.',
+    metaDescription: 'UK tenant move-in checklist for landlords 2026. Essential documentation, key handover tips, and best practices for starting tenancies right.',
+    date: '2026-01-04',
+    readTime: '12 min read',
+    wordCount: 1480,
+    category: 'Property Management',
+    tags: ['move-in checklist', 'tenant handover', 'new tenancy', 'landlord checklist', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-move-in.svg',
+    heroImageAlt: 'UK Tenant Move-In Checklist',
+    showUrgencyBanner: false,
+    targetKeyword: 'tenant move in checklist UK',
+    secondaryKeywords: ['landlord handover checklist', 'new tenant checklist', 'tenancy start checklist', 'move in process'],
+    tableOfContents: [
+      { id: 'before-move-in', title: 'Before Move-In Day', level: 2 },
+      { id: 'move-in-day', title: 'Move-In Day Tasks', level: 2 },
+      { id: 'documentation', title: 'Essential Documentation', level: 2 },
+      { id: 'meter-readings', title: 'Meter Readings and Utilities', level: 2 },
+      { id: 'inventory-checkin', title: 'Inventory and Check-In', level: 2 },
+      { id: 'tenant-welcome', title: 'Tenant Welcome Pack', level: 2 },
+      { id: 'move-in-faq', title: 'Move-In FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-property-inventory-guide', 'uk-tenant-referencing-guide', 'uk-tenancy-agreements-guide'],
+    content: (
+      <>
+        <p className="lead">
+          A well-organised move-in process sets the foundation for a successful tenancy.
+          This guide provides UK landlords with a complete checklist for handling tenant
+          handovers professionally and legally in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-move-in.svg"
+          alt="Tenant move-in process for landlords"
+          caption="A smooth move-in creates a positive start to the tenancy relationship"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="before-move-in" className="scroll-mt-24">Before Move-In Day</h2>
+
+        <p>
+          Preparation in the days before move-in ensures a smooth handover:
+        </p>
+
+        <h3>One Week Before</h3>
+
+        <ul>
+          <li>Confirm move-in date and time with tenant</li>
+          <li>Verify all referencing complete and satisfactory</li>
+          <li>Prepare tenancy agreement and prescribed information</li>
+          <li>Arrange key cutting if additional sets needed</li>
+          <li>Book inventory clerk if using professional service</li>
+          <li>Check all compliance certificates are current</li>
+        </ul>
+
+        <h3>Day Before</h3>
+
+        <ul>
+          <li>Final property check - all works complete</li>
+          <li>Ensure property is clean and ready</li>
+          <li>Check all appliances work</li>
+          <li>Confirm meter readings can be accessed</li>
+          <li>Prepare welcome pack and all documentation</li>
+        </ul>
+
+        <h3>Compliance Checks</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Certificate</th>
+                <th className="border p-3 text-left font-semibold">Requirement</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Gas Safety Certificate</td>
+                <td className="border p-3">Copy to tenant before move-in</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">EPC</td>
+                <td className="border p-3">Minimum E rating, copy to tenant</td>
+              </tr>
+              <tr>
+                <td className="border p-3">EICR</td>
+                <td className="border p-3">Satisfactory report within 5 years</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">How to Rent Guide</td>
+                <td className="border p-3">Current version provided to tenant</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Deposit Protection</td>
+                <td className="border p-3">Within 30 days (arrange immediately)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">Critical: Right to Rent</h4>
+          <p className="text-red-800">
+            In England, you must verify the tenant&apos;s right to rent before they move in.
+            This applies to all adult occupiers. Keep copies of documents checked and
+            record the date checks were made.
+          </p>
+        </div>
+
+        <h2 id="move-in-day" className="scroll-mt-24">Move-In Day Tasks</h2>
+
+        <p>
+          On the day itself, follow a systematic process:
+        </p>
+
+        <h3>Meeting the Tenant</h3>
+
+        <ul>
+          <li>Allow adequate time - don&apos;t rush the handover</li>
+          <li>Walk through property room by room</li>
+          <li>Demonstrate appliances and systems</li>
+          <li>Show meter locations and how to read them</li>
+          <li>Explain heating and hot water controls</li>
+          <li>Point out stopcock, fuse box, and smoke alarms</li>
+        </ul>
+
+        <h3>Key Handover</h3>
+
+        <ul>
+          <li>Provide all sets of keys agreed in tenancy</li>
+          <li>Explain any alarm codes or fob systems</li>
+          <li>Note serial numbers of keys if applicable</li>
+          <li>Get tenant signature confirming receipt</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-key-handover.svg"
+          alt="Professional key handover process"
+          caption="Document keys provided and get tenant acknowledgment"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="documentation" className="scroll-mt-24">Essential Documentation</h2>
+
+        <p>
+          Provide and obtain signatures on all required documents:
+        </p>
+
+        <h3>Documents to Provide</h3>
+
+        <ul>
+          <li><strong>Tenancy Agreement</strong> - fully signed copy</li>
+          <li><strong>Gas Safety Certificate</strong> - current year&apos;s certificate</li>
+          <li><strong>EPC</strong> - current valid certificate</li>
+          <li><strong>EICR</strong> - electrical installation report</li>
+          <li><strong>How to Rent Guide</strong> - government checklist (England)</li>
+          <li><strong>Deposit prescribed information</strong> - scheme details</li>
+          <li><strong>Inventory</strong> - detailed property condition report</li>
+        </ul>
+
+        <h3>Signatures Required</h3>
+
+        <ul>
+          <li>Tenancy agreement (all parties)</li>
+          <li>Guarantor deed (if applicable)</li>
+          <li>Inventory acceptance or comments</li>
+          <li>Key receipt confirmation</li>
+          <li>Standing order mandate (if using)</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Keep Proof of Service</h4>
+          <p className="text-blue-800">
+            Document exactly when and how you provided each document. Email confirmations,
+            signed receipts, and dated records protect you if disputes arise later.
+          </p>
+        </div>
+
+        <h2 id="meter-readings" className="scroll-mt-24">Meter Readings and Utilities</h2>
+
+        <p>
+          Accurate meter readings prevent disputes and ensure correct billing:
+        </p>
+
+        <h3>Taking Readings</h3>
+
+        <ul>
+          <li>Read all meters together with tenant present</li>
+          <li>Photograph meter readings showing the date</li>
+          <li>Record gas, electricity, and water (if metered)</li>
+          <li>Both parties sign confirming readings</li>
+        </ul>
+
+        <h3>Utility Arrangements</h3>
+
+        <p>
+          Clarify responsibility for utilities:
+        </p>
+
+        <ul>
+          <li><strong>Tenant responsibility</strong> - they contact suppliers with readings</li>
+          <li><strong>Bills included</strong> - you notify suppliers of tenancy</li>
+          <li><strong>Council tax</strong> - tenant registers directly with council</li>
+        </ul>
+
+        <h3>Water Rates</h3>
+
+        <p>
+          Water billing varies by property:
+        </p>
+
+        <ul>
+          <li>Metered - readings required, tenant responsibility</li>
+          <li>Unmetered - rateable value basis, may be included or separate</li>
+          <li>Check whose name the account should be in</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-meter-readings.svg"
+          alt="Recording utility meter readings"
+          caption="Document meter readings with photos and written records"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="inventory-checkin" className="scroll-mt-24">Inventory and Check-In</h2>
+
+        <p>
+          A thorough check-in protects both landlord and tenant:
+        </p>
+
+        <h3>Professional vs DIY</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Professional Clerk</th>
+                <th className="border p-3 text-left font-semibold">DIY Inventory</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Independent, credible evidence</td>
+                <td className="border p-3">Lower cost</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Detailed, consistent format</td>
+                <td className="border p-3">Flexible timing</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Cost £80-150</td>
+                <td className="border p-3">Requires time and attention to detail</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Check-In Process</h3>
+
+        <ol>
+          <li>Walk through property systematically</li>
+          <li>Note condition of every item and surface</li>
+          <li>Photograph any existing damage or wear</li>
+          <li>Test all appliances and fixtures</li>
+          <li>Record cleanliness levels room by room</li>
+          <li>Get tenant to sign agreeing to inventory</li>
+        </ol>
+
+        <h2 id="tenant-welcome" className="scroll-mt-24">Tenant Welcome Pack</h2>
+
+        <p>
+          A welcome pack helps tenants settle in and reduces early questions:
+        </p>
+
+        <h3>Contents to Include</h3>
+
+        <ul>
+          <li><strong>Contact details</strong> - how to reach you for issues</li>
+          <li><strong>Emergency numbers</strong> - gas, water, electricity emergencies</li>
+          <li><strong>Maintenance reporting</strong> - how to report problems</li>
+          <li><strong>Appliance manuals</strong> - or links to online versions</li>
+          <li><strong>Bin collection days</strong> - recycling schedule</li>
+          <li><strong>Local information</strong> - shops, doctors, transport</li>
+          <li><strong>Property quirks</strong> - how to work tricky locks, boiler tips</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Move-In Checklist Templates</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides comprehensive move-in checklists, welcome pack
+            templates, and handover forms for professional tenant onboarding.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Move-In Resources →
+          </Link>
+        </div>
+
+        <h2 id="move-in-faq" className="scroll-mt-24">Move-In FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">When should I take the first month&apos;s rent?</h3>
+            <p className="text-gray-600">
+              Take rent and deposit before handing over keys. Many landlords collect
+              these a few days before move-in to ensure funds clear. Never hand over
+              keys until payment is confirmed in your account.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if the tenant finds problems after moving in?</h3>
+            <p className="text-gray-600">
+              Give tenants 7 days to report any issues not noted on inventory. Deal
+              with genuine maintenance issues promptly. For condition disputes, refer
+              to signed inventory and photos.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I do move-in remotely?</h3>
+            <p className="text-gray-600">
+              While possible using key safes and video calls, in-person handover is
+              preferable. You build rapport, can demonstrate property features, and
+              complete paperwork together. Use agents if you cannot attend.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How long should I protect the deposit?</h3>
+            <p className="text-gray-600">
+              You must protect the deposit within 30 days of receiving it and provide
+              prescribed information to the tenant. Do this immediately after move-in
+              to avoid missing the deadline.
+            </p>
+          </div>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-successful-move-in.svg"
+          alt="Successful tenant move-in completion"
+          caption="A thorough move-in process sets up both parties for success"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 92: UK Landlord Associations Guide
+  {
+    slug: 'uk-landlord-associations-guide',
+    title: 'UK Landlord Associations - Complete Membership Guide 2026',
+    description: 'Comprehensive guide to UK landlord associations and membership organisations. Compare benefits, costs, and find the right association for your needs.',
+    metaDescription: 'UK landlord associations guide 2026. Compare NRLA, RLA benefits, membership costs, and discover how associations can support your landlord business.',
+    date: '2026-01-04',
+    readTime: '11 min read',
+    wordCount: 1420,
+    category: 'Resources',
+    tags: ['landlord associations', 'NRLA', 'landlord support', 'membership benefits', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Industry Specialists',
+    },
+    heroImage: '/images/blog/placeholder-landlord-associations.svg',
+    heroImageAlt: 'UK Landlord Associations Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'landlord associations UK',
+    secondaryKeywords: ['NRLA membership', 'landlord support', 'landlord organisations', 'property associations'],
+    tableOfContents: [
+      { id: 'why-join', title: 'Why Join an Association?', level: 2 },
+      { id: 'major-associations', title: 'Major UK Associations', level: 2 },
+      { id: 'membership-benefits', title: 'Membership Benefits', level: 2 },
+      { id: 'local-associations', title: 'Local Landlord Associations', level: 2 },
+      { id: 'choosing-association', title: 'Choosing the Right Association', level: 2 },
+      { id: 'association-faq', title: 'Association FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-landlord-software-tools-guide', 'uk-landlord-insurance-guide', 'uk-landlord-tax-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Landlord associations provide valuable support, resources, and representation
+          for property investors. This guide helps UK landlords understand the main
+          associations and choose the right membership for their needs in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-landlord-associations.svg"
+          alt="UK landlord associations and organisations"
+          caption="Professional associations support landlords with advice and advocacy"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="why-join" className="scroll-mt-24">Why Join an Association?</h2>
+
+        <p>
+          Landlord associations offer multiple benefits that often outweigh membership costs:
+        </p>
+
+        <h3>Key Benefits</h3>
+
+        <ul>
+          <li><strong>Expert advice</strong> - helplines staffed by property specialists</li>
+          <li><strong>Legal updates</strong> - stay informed of regulatory changes</li>
+          <li><strong>Document templates</strong> - tenancy agreements, notices, letters</li>
+          <li><strong>Training</strong> - courses and CPD for professional development</li>
+          <li><strong>Lobbying</strong> - collective voice influencing government policy</li>
+          <li><strong>Discounts</strong> - savings on insurance, services, products</li>
+          <li><strong>Networking</strong> - connect with other landlords</li>
+        </ul>
+
+        <h3>Who Benefits Most?</h3>
+
+        <p>
+          Associations are particularly valuable for:
+        </p>
+
+        <ul>
+          <li>New landlords learning the ropes</li>
+          <li>Self-managing landlords without agent support</li>
+          <li>Landlords in complex situations (HMOs, disputes)</li>
+          <li>Those wanting to stay compliant with changing regulations</li>
+          <li>Portfolio landlords seeking professional development</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Return on Investment</h4>
+          <p className="text-blue-800">
+            One phone call to an advice line solving a tricky situation can justify
+            years of membership fees. The insurance discounts alone often cover
+            annual membership costs.
+          </p>
+        </div>
+
+        <h2 id="major-associations" className="scroll-mt-24">Major UK Associations</h2>
+
+        <p>
+          The UK has one main national landlord association following mergers:
+        </p>
+
+        <h3>NRLA (National Residential Landlords Association)</h3>
+
+        <p>
+          The NRLA was formed in 2020 from the merger of NLA and RLA, creating the
+          UK&apos;s largest landlord organisation with over 100,000 members.
+        </p>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Feature</th>
+                <th className="border p-3 text-left font-semibold">Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Membership Cost</td>
+                <td className="border p-3">From £89/year (2024 rates)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Advice Line</td>
+                <td className="border p-3">Unlimited calls, Mon-Fri 9-5</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Document Library</td>
+                <td className="border p-3">400+ templates and guides</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Training</td>
+                <td className="border p-3">Online courses, regional events</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Insurance</td>
+                <td className="border p-3">Member discounts available</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Propertymark (ARLA)</h3>
+
+        <p>
+          While primarily for letting agents, ARLA Propertymark membership indicates
+          professional standards. Landlords benefit by using ARLA-registered agents.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-nrla.svg"
+          alt="NRLA landlord association benefits"
+          caption="The NRLA is the UK's largest landlord membership organisation"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="membership-benefits" className="scroll-mt-24">Membership Benefits</h2>
+
+        <p>
+          Typical association membership includes:
+        </p>
+
+        <h3>Advice and Support</h3>
+
+        <ul>
+          <li>Telephone advice lines with specialist advisers</li>
+          <li>Email support for complex questions</li>
+          <li>Online knowledge base and FAQs</li>
+          <li>Forums to discuss issues with other landlords</li>
+        </ul>
+
+        <h3>Documents and Resources</h3>
+
+        <ul>
+          <li>Tenancy agreement templates (AST, Scotland PRT, Wales)</li>
+          <li>Section 21 and Section 8 notice templates</li>
+          <li>Inventory and check-in/out forms</li>
+          <li>Rent increase letters</li>
+          <li>Reference request forms</li>
+          <li>Compliance checklists</li>
+        </ul>
+
+        <h3>Training and Development</h3>
+
+        <ul>
+          <li>Online courses (legislation, best practice)</li>
+          <li>Webinars on topical issues</li>
+          <li>Regional meetings and conferences</li>
+          <li>Professional qualifications</li>
+          <li>CPD points for accreditation schemes</li>
+        </ul>
+
+        <h3>Discounts and Offers</h3>
+
+        <ul>
+          <li>Landlord insurance (typical 10-15% off)</li>
+          <li>Tenant referencing services</li>
+          <li>Legal expenses insurance</li>
+          <li>Inventory services</li>
+          <li>Property maintenance services</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Tax Deductible</h4>
+          <p className="text-green-800">
+            Landlord association membership fees are fully tax deductible as a
+            business expense. Keep your membership receipt for tax purposes.
+          </p>
+        </div>
+
+        <h2 id="local-associations" className="scroll-mt-24">Local Landlord Associations</h2>
+
+        <p>
+          Many areas have local landlord associations offering additional benefits:
+        </p>
+
+        <h3>Advantages of Local Associations</h3>
+
+        <ul>
+          <li>Local market knowledge and connections</li>
+          <li>Networking with landlords in your area</li>
+          <li>Relationships with local council housing teams</li>
+          <li>Knowledge of local licensing requirements</li>
+          <li>Lower membership costs (often £20-50/year)</li>
+          <li>Regular local meetings and events</li>
+        </ul>
+
+        <h3>Finding Local Associations</h3>
+
+        <ul>
+          <li>Search &quot;landlord association [your area]&quot;</li>
+          <li>Ask your local council housing team</li>
+          <li>Check NRLA regional groups</li>
+          <li>Look for Facebook groups for local landlords</li>
+        </ul>
+
+        <h3>Council Landlord Schemes</h3>
+
+        <p>
+          Many councils run landlord accreditation schemes:
+        </p>
+
+        <ul>
+          <li>Free or low-cost membership</li>
+          <li>Training and support</li>
+          <li>Recognition of good landlords</li>
+          <li>May offer rent guarantee schemes</li>
+          <li>Often required for council tenant referrals</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-local-associations.svg"
+          alt="Local landlord association meetings"
+          caption="Local associations provide networking and area-specific knowledge"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="choosing-association" className="scroll-mt-24">Choosing the Right Association</h2>
+
+        <p>
+          Consider these factors when choosing membership:
+        </p>
+
+        <h3>Questions to Ask</h3>
+
+        <ul>
+          <li>What advice services are included?</li>
+          <li>Which documents and templates are available?</li>
+          <li>What training is offered?</li>
+          <li>Are there insurance discounts?</li>
+          <li>Is there a trial period or guarantee?</li>
+          <li>What do reviews from other landlords say?</li>
+        </ul>
+
+        <h3>Comparing Options</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">If You Need...</th>
+                <th className="border p-3 text-left font-semibold">Consider...</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Comprehensive national support</td>
+                <td className="border p-3">NRLA membership</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Local networking and knowledge</td>
+                <td className="border p-3">Local landlord association</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Council relationship/referrals</td>
+                <td className="border p-3">Council accreditation scheme</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Maximum coverage</td>
+                <td className="border p-3">NRLA + local association</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Landlord Resources</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides comprehensive resources for self-managing landlords,
+            including templates, guides, and tools to complement association membership.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Landlord Resources →
+          </Link>
+        </div>
+
+        <h2 id="association-faq" className="scroll-mt-24">Association FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I join multiple associations?</h3>
+            <p className="text-gray-600">
+              Yes, many landlords join both a national association (NRLA) and a local
+              group. The benefits are complementary - national for advice and templates,
+              local for networking and area-specific knowledge.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Is association membership required?</h3>
+            <p className="text-gray-600">
+              No, association membership is voluntary. However, it&apos;s strongly
+              recommended for self-managing landlords who don&apos;t have agent support.
+              Some council schemes require membership for certain benefits.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What happened to the NLA and RLA?</h3>
+            <p className="text-gray-600">
+              The National Landlords Association (NLA) and Residential Landlords
+              Association (RLA) merged in 2020 to form the NRLA. Existing members
+              of either organisation automatically became NRLA members.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do associations help with legal disputes?</h3>
+            <p className="text-gray-600">
+              Associations provide advice and guidance but typically don&apos;t
+              represent landlords in court. However, many offer legal expenses
+              insurance as a member benefit that covers legal representation
+              when needed.
+            </p>
+          </div>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-landlord-support.svg"
+          alt="Landlord association support and advice"
+          caption="Association membership provides valuable ongoing support for landlords"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
