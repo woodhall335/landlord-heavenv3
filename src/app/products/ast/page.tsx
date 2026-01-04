@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { RelatedLinks } from "@/components/seo/RelatedLinks";
 import { productLinks, toolLinks, landingPageLinks } from "@/lib/seo/internal-links";
+import { StructuredData, productSchema, breadcrumbSchema } from "@/lib/seo/structured-data";
 
 export const metadata: Metadata = {
   title: "Tenancy Agreements - AST, PRT, NI | Landlord Heaven",
@@ -21,6 +22,19 @@ export const metadata: Metadata = {
 export default function ASTPage() {
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Structured Data for SEO */}
+      <StructuredData data={productSchema({
+        name: "Tenancy Agreements - AST, PRT, NI",
+        description: "Legally compliant tenancy agreements for UK landlords. Covers Assured Shorthold Tenancies (England & Wales), Private Residential Tenancies (Scotland), and Northern Ireland tenancies.",
+        price: "9.99",
+        url: "https://landlordheaven.co.uk/products/ast"
+      })} />
+      <StructuredData data={breadcrumbSchema([
+        { name: "Home", url: "https://landlordheaven.co.uk" },
+        { name: "Products", url: "https://landlordheaven.co.uk/pricing" },
+        { name: "Tenancy Agreements", url: "https://landlordheaven.co.uk/products/ast" }
+      ])} />
+
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50 pt-28 pb-16 md:pt-32 md:pb-36">
         <Container>

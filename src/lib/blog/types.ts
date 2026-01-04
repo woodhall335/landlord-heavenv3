@@ -1,5 +1,10 @@
 import React from 'react';
 
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
 export interface BlogPost {
   slug: string;
   title: string;
@@ -24,4 +29,5 @@ export interface BlogPost {
   targetKeyword: string;
   secondaryKeywords: string[];
   content: React.ReactNode;
+  faqs?: FAQItem[]; // Optional FAQ section for rich snippets
 }

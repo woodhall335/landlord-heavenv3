@@ -124,10 +124,25 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     ],
   };
 
+  // FAQ Schema for rich snippets (only if post has FAQs)
+  const faqSchema = post.faqs && post.faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: post.faqs.map(faq => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  } : null;
+
   return (
     <>
       <StructuredData data={articleSchema} />
       <StructuredData data={breadcrumbSchema} />
+      {faqSchema && <StructuredData data={faqSchema} />}
 
       <article className="min-h-screen">
         {/* Hero Section */}
@@ -222,6 +237,31 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <div className="prose prose-lg max-w-none prose-headings:scroll-mt-24 prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6 prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-p:text-gray-600 prose-p:leading-relaxed prose-li:text-gray-600 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-table:border-collapse prose-th:bg-gray-100 prose-th:p-3 prose-th:text-left prose-td:p-3 prose-td:border-b">
                 {post.content}
               </div>
+
+              {/* FAQ Section */}
+              {post.faqs && post.faqs.length > 0 && (
+                <section className="mt-12 pt-8 border-t border-gray-200">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h2>
+                  <div className="space-y-4">
+                    {post.faqs.map((faq, index) => (
+                      <details
+                        key={index}
+                        className="group bg-gray-50 rounded-lg border border-gray-200 overflow-hidden"
+                      >
+                        <summary className="flex items-center justify-between cursor-pointer p-4 font-medium text-gray-900 hover:bg-gray-100 transition-colors">
+                          {faq.question}
+                          <span className="ml-4 flex-shrink-0 text-gray-500 group-open:rotate-180 transition-transform">
+                            ▼
+                          </span>
+                        </summary>
+                        <div className="p-4 pt-0 text-gray-600 leading-relaxed">
+                          {faq.answer}
+                        </div>
+                      </details>
+                    ))}
+                  </div>
+                </section>
+              )}
 
               {/* Bottom CTA */}
               <BlogCTA variant="default" />
