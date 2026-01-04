@@ -16467,7 +16467,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-contract-overview.svg"
           alt="Wales Standard Occupation Contract Overview"
           caption="Standard Occupation Contracts replaced ASTs in Wales from December 2022"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="what-is-soc" className="scroll-mt-24">What is a Standard Occupation Contract?</h2>
@@ -16566,7 +16566,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-fundamental-terms.svg"
           alt="Fundamental Terms in Welsh Occupation Contracts"
           caption="Fundamental terms are set by law and protect both parties"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="supplementary-terms" className="scroll-mt-24">Supplementary Terms</h2>
@@ -16654,7 +16654,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-fitness-habitation.svg"
           alt="Fitness for Human Habitation Requirements Wales"
           caption="Properties must meet 29 fitness standards under Welsh law"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h3>Repair Obligations</h3>
@@ -16849,7 +16849,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-act-overview.svg"
           alt="Renting Homes Wales Act Overview"
           caption="The Renting Homes Act 2016 transformed Welsh tenancy law from December 2022"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="act-overview" className="scroll-mt-24">Overview of the Act</h2>
@@ -16947,7 +16947,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-written-statement.svg"
           alt="Written Statement Requirements Wales"
           caption="A written statement must be provided within 14 days of occupation"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h3>Rent Smart Wales Registration</h3>
@@ -17066,7 +17066,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-notice-periods.svg"
           alt="Notice Periods Under Renting Homes Wales Act"
           caption="Notice periods vary depending on the grounds for possession"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="deposit-rules" className="scroll-mt-24">Deposit Rules</h2>
@@ -17240,7 +17240,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-eviction-overview.svg"
           alt="Wales Eviction Process Overview"
           caption="Welsh eviction follows the Renting Homes Act procedures"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="eviction-overview" className="scroll-mt-24">Eviction in Wales Overview</h2>
@@ -17301,7 +17301,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-section-173.svg"
           alt="Section 173 Notice Requirements Wales"
           caption="Section 173 requires 6 months notice after an initial 6-month protected period"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h3>Section 173 Timeline</h3>
@@ -17442,7 +17442,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-possession-grounds.svg"
           alt="Possession Grounds Under Welsh Law"
           caption="Different grounds have different notice periods and court requirements"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h3>Estate Management Grounds</h3>
@@ -17676,7 +17676,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-deposit-overview.svg"
           alt="Wales Deposit Protection Overview"
           caption="All deposits in Wales must be protected within 30 days"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="deposit-overview" className="scroll-mt-24">Deposit Protection Overview</h2>
@@ -17760,7 +17760,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-deposit-timeline.svg"
           alt="Deposit Protection Timeline Wales"
           caption="The 30-day deadline starts from when you receive the deposit"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
@@ -17856,7 +17856,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-deposit-penalties.svg"
           alt="Penalties for Deposit Non-Compliance Wales"
           caption="Non-compliance can result in compensation of up to 3x the deposit"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -17976,7 +17976,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rsw-overview.svg"
           alt="Rent Smart Wales Overview"
           caption="Rent Smart Wales has been mandatory since November 2016"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="rsw-overview" className="scroll-mt-24">What is Rent Smart Wales?</h2>
@@ -18069,7 +18069,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rsw-license-activities.svg"
           alt="Rent Smart Wales Licensed Activities"
           caption="Any hands-on landlord activities require a licence"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
@@ -18202,7 +18202,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rsw-penalties.svg"
           alt="Rent Smart Wales Penalties"
           caption="Non-compliance can result in significant fines and loss of rent"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -18320,7 +18320,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-hmo-overview.svg"
           alt="Wales HMO Licensing Overview"
           caption="HMOs face stricter regulation due to higher occupancy and shared facilities"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="hmo-definition" className="scroll-mt-24">What is an HMO?</h2>
@@ -18379,7 +18379,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-hmo-mandatory.svg"
           alt="Mandatory HMO Licensing Criteria Wales"
           caption="The 5+ person threshold triggers mandatory licensing"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="additional-licensing" className="scroll-mt-24">Additional Licensing Schemes</h2>
@@ -18485,7 +18485,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-hmo-standards.svg"
           alt="HMO Standards and Requirements Wales"
           caption="HMOs must meet specific standards for fire safety, facilities, and room sizes"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="application-process" className="scroll-mt-24">How to Apply</h2>
@@ -18654,7 +18654,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-fitness-overview.svg"
           alt="Wales Fitness for Human Habitation Overview"
           caption="Properties must meet 29 specific fitness matters under Welsh law"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="fitness-overview" className="scroll-mt-24">Fitness Requirements Overview</h2>
@@ -18766,7 +18766,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-fitness-inspection.svg"
           alt="Property Inspection for Fitness Wales"
           caption="Regular inspections help identify and address fitness issues"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
@@ -18938,7 +18938,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-grounds-overview.svg"
           alt="Wales Possession Grounds Overview"
           caption="Different grounds have different requirements and notice periods"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="grounds-overview" className="scroll-mt-24">Possession Grounds Overview</h2>
@@ -19002,7 +19002,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-discretionary.svg"
           alt="Discretionary Grounds Wales"
           caption="Courts weigh up all circumstances with discretionary grounds"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h3>Breach of Contract (Ground 12)</h3>
@@ -19272,7 +19272,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-before-letting.svg"
           alt="Before Letting Checklist Wales"
           caption="Complete all pre-letting requirements before the tenant moves in"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="at-start" className="scroll-mt-24">At Start of Tenancy</h2>
@@ -19511,7 +19511,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-rent-overview.svg"
           alt="Wales Rent Increase Overview"
           caption="Rent increases must follow the Renting Homes Act procedures"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="rent-overview" className="scroll-mt-24">Rent Increase Rules Overview</h2>
@@ -19580,7 +19580,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-rent-timeline.svg"
           alt="Rent Increase Timeline Wales"
           caption="You can only increase rent once per year"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="tenant-rights" className="scroll-mt-24">Contract-Holder Rights</h2>
@@ -19710,7 +19710,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-abandoned-overview.svg"
           alt="Wales Abandoned Property Overview"
           caption="A formal process must be followed for abandoned properties"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="abandonment-overview" className="scroll-mt-24">Abandonment Overview</h2>
@@ -19797,7 +19797,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-belongings.svg"
           alt="Dealing with Abandoned Belongings Wales"
           caption="Store belongings safely and give reasonable time for collection"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -19897,7 +19897,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-joint-overview.svg"
           alt="Wales Joint Occupation Contracts Overview"
           caption="Joint contract-holders share rights and responsibilities equally"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="joint-overview" className="scroll-mt-24">Joint Contracts Overview</h2>
@@ -19969,7 +19969,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-joint-changes.svg"
           alt="Adding and Removing Contract-Holders Wales"
           caption="Changes to joint contracts require agreement from all parties"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="one-leaves" className="scroll-mt-24">When One Contract-Holder Leaves</h2>
@@ -20096,7 +20096,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-wales-safety-hero.svg"
           alt="Wales Gas and Electrical Safety Requirements"
           caption="Gas and electrical safety certificates are mandatory for Welsh landlords"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="safety-overview" className="scroll-mt-24">Safety Requirements Overview</h2>
@@ -20205,7 +20205,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-eicr-wales.svg"
           alt="EICR Requirements Wales"
           caption="EICRs must be obtained every 5 years or when specified"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h3>EICR Classification Codes</h3>
@@ -20297,7 +20297,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-safety-calendar.svg"
           alt="Safety Check Calendar Wales"
           caption="Set reminders to ensure safety certificates don't expire"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="certificate-requirements" className="scroll-mt-24">Certificate Requirements</h2>
@@ -20377,7 +20377,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-compliance-penalties.svg"
           alt="Non-Compliance Penalties Wales"
           caption="Penalties for non-compliance can be severe"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -20481,7 +20481,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-epc-hero.svg"
           alt="Wales EPC Requirements"
           caption="EPCs rate properties from A (most efficient) to G (least efficient)"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="epc-overview" className="scroll-mt-24">EPC Overview</h2>
@@ -20606,7 +20606,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-mees-wales.svg"
           alt="MEES Requirements Wales"
           caption="Properties must meet minimum energy efficiency standards"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h3>Penalties for Non-Compliance</h3>
@@ -20675,7 +20675,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-epc-exemptions.svg"
           alt="EPC Exemptions Wales"
           caption="Exemptions must be properly registered with supporting evidence"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="improving-rating" className="scroll-mt-24">Improving Your Rating</h2>
@@ -20837,7 +20837,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-asb-hero.svg"
           alt="Anti-Social Behaviour Eviction Wales"
           caption="ASB can be grounds for possession but requires proper evidence"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="asb-overview" className="scroll-mt-24">Anti-Social Behaviour Overview</h2>
@@ -20906,7 +20906,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-asb-grounds.svg"
           alt="ASB Possession Grounds Wales"
           caption="Multiple grounds may apply in ASB cases"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <BlogCTA variant="inline" />
@@ -21010,7 +21010,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-asb-notice.svg"
           alt="ASB Notice Requirements Wales"
           caption="Correct notice must be served before court proceedings"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="court-process" className="scroll-mt-24">Court Process</h2>
@@ -21100,7 +21100,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-serious-asb.svg"
           alt="Serious ASB Cases Wales"
           caption="Serious ASB cases may involve multiple agencies"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
@@ -21221,7 +21221,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-notice-periods-hero.svg"
           alt="Wales Landlord Notice Periods"
           caption="Different situations require different notice periods under Welsh law"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="notice-overview" className="scroll-mt-24">Notice Periods Overview</h2>
@@ -21307,7 +21307,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-section-173.svg"
           alt="Section 173 Notice Requirements"
           caption="Section 173 notices require 6 months notice and full compliance"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <BlogCTA variant="inline" />
@@ -21409,7 +21409,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ground-notices.svg"
           alt="Possession Ground Notice Periods"
           caption="Notice periods vary depending on the ground for possession"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="other-notices" className="scroll-mt-24">Other Important Notices</h2>
@@ -21501,7 +21501,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-serving-notices.svg"
           alt="Serving Notices Wales"
           caption="Keep proof of service for all notices"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -21604,7 +21604,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rights-hero.svg"
           alt="Contract-Holder Rights Wales"
           caption="Understanding rights helps landlords avoid disputes"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="rights-overview" className="scroll-mt-24">Rights Overview</h2>
@@ -21669,7 +21669,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-fundamental-terms.svg"
           alt="Fundamental Terms Wales"
           caption="Fundamental terms provide core protections that cannot be removed"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <BlogCTA variant="inline" />
@@ -21750,7 +21750,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-quiet-enjoyment.svg"
           alt="Right to Quiet Enjoyment"
           caption="Contract-holders have the right to enjoy their home without interference"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="security-tenure" className="scroll-mt-24">Security of Tenure</h2>
@@ -21844,7 +21844,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-avoiding-disputes.svg"
           alt="Avoiding Disputes Wales"
           caption="Clear communication and proper processes prevent most disputes"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
@@ -21956,7 +21956,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-tribunal-hero.svg"
           alt="Residential Property Tribunal Wales"
           caption="The RPT handles specific types of landlord-tenant disputes"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="tribunal-overview" className="scroll-mt-24">Tribunal Overview</h2>
@@ -22020,7 +22020,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-tribunal-cases.svg"
           alt="Types of Tribunal Cases"
           caption="The RPT handles various housing disputes"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <BlogCTA variant="inline" />
@@ -22111,7 +22111,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-hearing-process.svg"
           alt="Tribunal Hearing Process"
           caption="Tribunal hearings are less formal than court"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="costs" className="scroll-mt-24">Costs and Fees</h2>
@@ -22199,7 +22199,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-tribunal-appeals.svg"
           alt="Tribunal Appeals"
           caption="Appeals are limited to points of law"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -22311,7 +22311,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-pto-hero.svg"
           alt="Northern Ireland Private Tenancies Order"
           caption="The PTO sets out the legal framework for private lettings in NI"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="pto-overview" className="scroll-mt-24">Order Overview</h2>
@@ -22376,7 +22376,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-obligations.svg"
           alt="NI Landlord Obligations"
           caption="NI landlords have specific legal obligations under the PTO"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <BlogCTA variant="inline" />
@@ -22465,7 +22465,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-rent-book.svg"
           alt="NI Rent Book Requirements"
           caption="Written documentation must be provided within 28 days"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="fitness-standard" className="scroll-mt-24">Fitness Standard</h2>
@@ -22595,7 +22595,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-enforcement.svg"
           alt="NI Enforcement and Penalties"
           caption="Councils have significant enforcement powers under the PTO"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -22699,7 +22699,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-reg-hero.svg"
           alt="NI Landlord Registration"
           caption="Registration is mandatory for all NI landlords"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="registration-overview" className="scroll-mt-24">Registration Overview</h2>
@@ -22764,7 +22764,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-who-registers.svg"
           alt="Who Must Register NI"
           caption="Most private landlords must register with the scheme"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <BlogCTA variant="inline" />
@@ -22869,7 +22869,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-renewal.svg"
           alt="NI Registration Renewal"
           caption="Set reminders to renew registration before expiry"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="non-registration" className="scroll-mt-24">Non-Registration Consequences</h2>
@@ -23011,7 +23011,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-deposit-hero.svg"
           alt="NI Tenancy Deposit Protection"
           caption="Deposits must be protected in an approved scheme within 14 days"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="deposit-overview" className="scroll-mt-24">Deposit Protection Overview</h2>
@@ -23071,7 +23071,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-protect-deposit.svg"
           alt="How to Protect Deposit NI"
           caption="Follow the scheme process to protect deposits correctly"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <BlogCTA variant="inline" />
@@ -23151,7 +23151,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-returning-deposit.svg"
           alt="Returning Deposit NI"
           caption="Document property condition at start and end of tenancy"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="disputes" className="scroll-mt-24">Deposit Disputes</h2>
@@ -23304,7 +23304,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-eviction-hero.svg"
           alt="NI Eviction Process"
           caption="Follow the legal process carefully to avoid illegal eviction"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="eviction-overview" className="scroll-mt-24">Eviction Overview</h2>
@@ -23386,7 +23386,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-ntq.svg"
           alt="Notice to Quit NI"
           caption="Use the correct notice period and format"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <BlogCTA variant="inline" />
@@ -23474,7 +23474,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-ni-court.svg"
           alt="NI Court Process"
           caption="The court will decide whether to grant possession"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="enforcement" className="scroll-mt-24">Enforcement</h2>
@@ -23611,7 +23611,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-insurance-hero.svg"
           alt="UK Landlord Insurance"
           caption="Proper insurance protects your rental investment"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="insurance-overview" className="scroll-mt-24">Insurance Overview</h2>
@@ -23714,7 +23714,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-buildings-cover.svg"
           alt="Buildings Insurance Cover"
           caption="Buildings insurance covers the structure and fixtures"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h3>Rebuild Value</h3>
@@ -23797,7 +23797,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-rent-guarantee.svg"
           alt="Rent Guarantee Insurance"
           caption="RGI protects your income if tenants stop paying"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="legal-expenses" className="scroll-mt-24">Legal Expenses Cover</h2>
@@ -23933,7 +23933,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-tax-hero.svg"
           alt="UK Landlord Tax"
           caption="Understanding tax helps you maximize rental profits"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="tax-overview" className="scroll-mt-24">Tax Overview</h2>
@@ -24018,7 +24018,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-income-tax.svg"
           alt="Rental Income Tax"
           caption="Tax is calculated on rental profit after expenses"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <BlogCTA variant="inline" />
@@ -24100,7 +24100,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/placeholder-mortgage-interest.svg"
           alt="Mortgage Interest Relief"
           caption="Mortgage interest now gives a 20% tax credit"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="capital-gains" className="scroll-mt-24">Capital Gains Tax</h2>
@@ -24262,7 +24262,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/gas-safety-check.svg"
           alt="Gas Safe engineer conducting safety check"
           caption="Annual gas safety checks must be conducted by Gas Safe registered engineers"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
@@ -24337,7 +24337,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/cp12-certificate.svg"
           alt="Example Gas Safety Certificate CP12"
           caption="A valid CP12 certificate is essential documentation for landlords"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <p>
@@ -24387,7 +24387,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/gas-safe-id.svg"
           alt="Gas Safe Register ID card"
           caption="Always verify your engineer's Gas Safe credentials before any work"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
@@ -24544,7 +24544,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/gas-safety-compliance.svg"
           alt="Gas safety compliance checklist"
           caption="Stay compliant with regular checks and proper documentation"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -24658,7 +24658,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/electrical-inspection.svg"
           alt="Electrician conducting EICR inspection"
           caption="Electrical inspections must be conducted by qualified persons"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
@@ -24742,7 +24742,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/eicr-report.svg"
           alt="Example EICR report document"
           caption="An EICR report details the condition of all electrical installations"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="testing-frequency" className="scroll-mt-24">Testing Frequency</h2>
@@ -24869,7 +24869,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/eicr-codes.svg"
           alt="EICR classification codes explained"
           caption="Understanding EICR codes helps prioritize remedial work"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="remedial-work" className="scroll-mt-24">Remedial Work Requirements</h2>
@@ -25073,7 +25073,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/fire-safety-equipment.svg"
           alt="Fire safety equipment including smoke and CO alarms"
           caption="Proper fire safety equipment is essential in every rental property"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="legal-framework" className="scroll-mt-24">Legal Framework</h2>
@@ -25152,7 +25152,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/smoke-alarm-placement.svg"
           alt="Correct smoke alarm placement diagram"
           caption="Smoke alarms should be ceiling-mounted in optimal positions"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <p>
@@ -25261,7 +25261,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/furniture-label.svg"
           alt="Fire safety furniture label example"
           caption="Check for fire safety labels on all upholstered furniture"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="escape-routes" className="scroll-mt-24">Escape Routes</h2>
@@ -25354,7 +25354,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/hmo-fire-safety.svg"
           alt="HMO fire safety requirements diagram"
           caption="HMOs require comprehensive fire safety measures throughout"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="fire-risk-assessment" className="scroll-mt-24">Fire Risk Assessments</h2>
@@ -25503,7 +25503,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/tenant-referencing-process.svg"
           alt="Tenant referencing process flowchart"
           caption="A thorough referencing process protects landlords from problematic tenancies"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="why-reference" className="scroll-mt-24">Why Reference Tenants</h2>
@@ -25589,7 +25589,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/credit-check-report.svg"
           alt="Example credit check report elements"
           caption="Credit reports show financial history and payment behavior"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="overflow-x-auto my-8">
@@ -25674,7 +25674,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/landlord-reference.svg"
           alt="Landlord reference form example"
           caption="Previous landlord references reveal actual tenancy behavior"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
@@ -25790,7 +25790,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/gdpr-tenant-data.svg"
           alt="GDPR compliance for tenant data"
           caption="Handle tenant data responsibly under GDPR requirements"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -25904,7 +25904,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/right-to-rent-documents.svg"
           alt="Right to Rent acceptable documents"
           caption="Various documents can prove right to rent in the UK"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="what-is-right-to-rent" className="scroll-mt-24">What is Right to Rent</h2>
@@ -26010,7 +26010,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/document-verification.svg"
           alt="Document verification process"
           caption="Carefully verify all documents match the tenant"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="how-to-check" className="scroll-mt-24">How to Conduct Checks</h2>
@@ -26137,7 +26137,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/equal-treatment.svg"
           alt="Equal treatment in tenant screening"
           caption="Apply Right to Rent checks equally to all prospective tenants"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
@@ -26289,7 +26289,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/hmo-property.svg"
           alt="Typical HMO property layout"
           caption="HMOs require specific licensing and safety measures"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="what-is-hmo" className="scroll-mt-24">What is an HMO</h2>
@@ -26387,7 +26387,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/hmo-licensing-map.svg"
           alt="HMO licensing schemes vary by local authority"
           caption="Check your local council for additional licensing requirements"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <p>
@@ -26460,7 +26460,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/room-size-measurement.svg"
           alt="How to measure room sizes for HMO compliance"
           caption="Measure usable floor space for room size calculations"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <p>
@@ -26598,7 +26598,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/hmo-compliance-checklist.svg"
           alt="HMO compliance checklist"
           caption="Regular compliance checks help avoid penalties"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <p>
@@ -26728,7 +26728,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/deposit-protection-schemes.svg"
           alt="UK deposit protection schemes"
           caption="All AST deposits must be protected in a government-approved scheme"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
@@ -26811,7 +26811,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/deposit-protection-process.svg"
           alt="Deposit protection process steps"
           caption="Follow these steps to protect deposits correctly"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <ol className="list-decimal ml-6 space-y-3 my-4">
@@ -26905,7 +26905,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/deposit-timeline.svg"
           alt="Deposit protection timeline"
           caption="Key deadlines for deposit protection compliance"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="returning-deposits" className="scroll-mt-24">Returning Deposits</h2>
@@ -26979,7 +26979,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/deposit-penalties.svg"
           alt="Deposit protection penalties"
           caption="Non-compliance can result in penalties of 1-3x the deposit"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <p>
@@ -27098,7 +27098,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/rent-arrears-process.svg"
           alt="Rent arrears recovery process"
           caption="A structured approach helps resolve arrears efficiently"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="early-intervention" className="scroll-mt-24">Early Intervention</h2>
@@ -27173,7 +27173,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/tenant-communication.svg"
           alt="Professional tenant communication"
           caption="Document all communication about rent arrears"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="payment-plans" className="scroll-mt-24">Payment Plans</h2>
@@ -27270,7 +27270,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/section-8-notice.svg"
           alt="Section 8 notice form"
           caption="Section 8 notices require specific grounds to be cited"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="court-action" className="scroll-mt-24">Court Action</h2>
@@ -27358,7 +27358,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/rent-arrears-prevention.svg"
           alt="Preventing rent arrears"
           caption="Good tenant selection is the best arrears prevention"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
@@ -27473,7 +27473,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/tenancy-agreement-signing.svg"
           alt="Signing a tenancy agreement"
           caption="Written tenancy agreements protect both landlords and tenants"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="types-of-tenancy" className="scroll-mt-24">Types of Tenancy</h2>
@@ -27547,7 +27547,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/tenancy-essential-terms.svg"
           alt="Essential tenancy agreement terms"
           caption="Include all essential terms to create a valid agreement"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="key-clauses" className="scroll-mt-24">Key Clauses Explained</h2>
@@ -27643,7 +27643,7 @@ export const blogPosts: BlogPost[] = [
           src="/images/blog/fair-tenancy-terms.svg"
           alt="Fair vs unfair tenancy terms"
           caption="Ensure your agreement contains only fair, enforceable terms"
-          aspectRatio="video"
+          aspectRatio="16:9"
         />
 
         <h2 id="how-to-rent" className="scroll-mt-24">How to Rent Guide</h2>
@@ -28772,655 +28772,6 @@ export const blogPosts: BlogPost[] = [
               Address it promptly but calmly. The tenancy agreement should specify who
               can live there. Unauthorized occupants may breach the agreement and affect
               your insurance. Write to the tenant formally about the situation.
-            </p>
-          </div>
-        </div>
-
-        <BlogCTA variant="urgency" />
-      </>
-    ),
-  },
-
-  // Article 77: UK Landlord Insurance Guide
-  {
-    slug: 'uk-landlord-insurance-guide',
-    title: 'UK Landlord Insurance - Complete Guide 2026',
-    description: 'Comprehensive guide to landlord insurance in the UK. Understand coverage types, policy options, and how to protect your rental property investment.',
-    metaDescription: 'UK landlord insurance guide 2026. Essential coverage types, policy comparison, legal requirements, and tips for protecting your rental property investment.',
-    date: '2026-01-04',
-    readTime: '15 min read',
-    wordCount: 1760,
-    category: 'Property Management',
-    tags: ['landlord insurance', 'property insurance', 'rental insurance', 'insurance coverage', 'UK landlords'],
-    author: {
-      name: 'Landlord Heaven Property Team',
-      role: 'Property Management Specialists',
-    },
-    heroImage: '/images/blog/placeholder-insurance.svg',
-    heroImageAlt: 'UK Landlord Insurance Guide',
-    showUrgencyBanner: false,
-    targetKeyword: 'landlord insurance UK',
-    secondaryKeywords: ['rental property insurance', 'buy to let insurance', 'landlord buildings insurance', 'landlord contents insurance'],
-    tableOfContents: [
-      { id: 'why-insurance', title: 'Why Landlord Insurance', level: 2 },
-      { id: 'coverage-types', title: 'Coverage Types', level: 2 },
-      { id: 'policy-options', title: 'Policy Options', level: 2 },
-      { id: 'cost-factors', title: 'Cost Factors', level: 2 },
-      { id: 'claims-process', title: 'Claims Process', level: 2 },
-      { id: 'insurance-faq', title: 'Insurance FAQ', level: 2 },
-    ],
-    relatedPosts: ['uk-property-maintenance-obligations', 'uk-tenancy-agreements-guide', 'uk-deposit-protection-guide'],
-    content: (
-      <>
-        <p className="lead">
-          Landlord insurance protects your property investment from a wide range of risks
-          that standard home insurance doesn&apos;t cover. This guide explains everything UK
-          landlords need to know about protecting their rental properties in 2026.
-        </p>
-
-        <ImagePlaceholder
-          src="/images/blog/placeholder-insurance.svg"
-          alt="Landlord insurance policy documents"
-          caption="Proper insurance coverage protects your investment and provides peace of mind"
-          aspectRatio="16:9"
-        />
-
-        <h2 id="why-insurance" className="scroll-mt-24">Why You Need Landlord Insurance</h2>
-
-        <p>
-          Standard home insurance policies don&apos;t cover rental properties. When you let
-          a property, the risks change significantly, and you need specialized coverage.
-        </p>
-
-        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
-          <h4 className="font-semibold text-red-900 mb-2">Important Warning</h4>
-          <p className="text-red-800">
-            If you let a property on standard home insurance, your policy will likely be
-            invalid. Any claims could be rejected, leaving you financially exposed for
-            potentially devastating losses.
-          </p>
-        </div>
-
-        <h3>Key Risks for Landlords</h3>
-
-        <ul>
-          <li><strong>Property damage</strong> - fire, flood, storm, subsidence</li>
-          <li><strong>Tenant damage</strong> - malicious or accidental harm to property</li>
-          <li><strong>Rent loss</strong> - income lost during uninhabitable periods</li>
-          <li><strong>Legal liability</strong> - tenant or visitor injury claims</li>
-          <li><strong>Legal expenses</strong> - eviction proceedings, disputes</li>
-          <li><strong>Theft</strong> - contents or fixtures stolen by tenants</li>
-        </ul>
-
-        <h3>Legal Requirements</h3>
-
-        <p>
-          While landlord insurance isn&apos;t legally mandatory, if you have a buy-to-let
-          mortgage, your lender will almost certainly require buildings insurance as a
-          condition of the loan.
-        </p>
-
-        <ImagePlaceholder
-          src="/images/blog/placeholder-insurance-risks.svg"
-          alt="Common landlord risks requiring insurance"
-          caption="Understanding risks helps you choose appropriate coverage"
-          aspectRatio="4:3"
-        />
-
-        <h2 id="coverage-types" className="scroll-mt-24">Types of Coverage</h2>
-
-        <p>
-          Landlord insurance policies offer various types of coverage. Understanding each
-          helps you build a policy that matches your needs.
-        </p>
-
-        <div className="overflow-x-auto my-8">
-          <table className="min-w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-3 text-left font-semibold">Coverage Type</th>
-                <th className="border p-3 text-left font-semibold">What It Covers</th>
-                <th className="border p-3 text-left font-semibold">Recommended?</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border p-3 font-medium">Buildings insurance</td>
-                <td className="border p-3">Structure, fixtures, permanent fittings</td>
-                <td className="border p-3 text-green-600 font-medium">Essential</td>
-              </tr>
-              <tr className="bg-gray-50">
-                <td className="border p-3 font-medium">Contents insurance</td>
-                <td className="border p-3">Furniture, appliances, carpets you provide</td>
-                <td className="border p-3 text-green-600 font-medium">If furnished</td>
-              </tr>
-              <tr>
-                <td className="border p-3 font-medium">Liability insurance</td>
-                <td className="border p-3">Injury claims from tenants or visitors</td>
-                <td className="border p-3 text-green-600 font-medium">Essential</td>
-              </tr>
-              <tr className="bg-gray-50">
-                <td className="border p-3 font-medium">Rent guarantee</td>
-                <td className="border p-3">Lost rent if tenant defaults</td>
-                <td className="border p-3 text-amber-600 font-medium">Recommended</td>
-              </tr>
-              <tr>
-                <td className="border p-3 font-medium">Legal expenses</td>
-                <td className="border p-3">Eviction, disputes, tribunal costs</td>
-                <td className="border p-3 text-amber-600 font-medium">Recommended</td>
-              </tr>
-              <tr className="bg-gray-50">
-                <td className="border p-3 font-medium">Loss of rent</td>
-                <td className="border p-3">Income during repairs after insured event</td>
-                <td className="border p-3 text-green-600 font-medium">Essential</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <BlogCTA variant="inline" />
-
-        <h3>Buildings Insurance</h3>
-
-        <p>
-          Buildings insurance covers the structure itself - walls, roof, floors, windows,
-          doors, fitted kitchens, bathrooms, and permanent fixtures. It protects against:
-        </p>
-
-        <ul>
-          <li>Fire, lightning, explosion</li>
-          <li>Storm, flood, escape of water</li>
-          <li>Subsidence, landslip, heave</li>
-          <li>Impact damage (vehicles, aircraft)</li>
-          <li>Theft and vandalism damage</li>
-          <li>Malicious damage by tenants</li>
-        </ul>
-
-        <h3>Contents Insurance</h3>
-
-        <p>
-          If you provide furnishings, appliances, or other items, contents insurance
-          protects these against damage, theft, or destruction.
-        </p>
-
-        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
-          <h4 className="font-semibold text-blue-900 mb-2">Tenant&apos;s Belongings</h4>
-          <p className="text-blue-800">
-            Your landlord contents insurance does not cover your tenant&apos;s personal
-            belongings. Tenants should arrange their own contents insurance to protect
-            their possessions.
-          </p>
-        </div>
-
-        <ImagePlaceholder
-          src="/images/blog/placeholder-coverage-types.svg"
-          alt="Landlord insurance coverage breakdown"
-          caption="Choose coverage that matches your property and letting situation"
-          aspectRatio="16:9"
-        />
-
-        <h2 id="policy-options" className="scroll-mt-24">Policy Options and Add-Ons</h2>
-
-        <p>
-          Beyond standard coverage, various add-ons can enhance your protection.
-          Consider which are relevant to your situation.
-        </p>
-
-        <h3>Rent Guarantee Insurance</h3>
-
-        <p>
-          Covers lost rent if your tenant stops paying. Typically pays out for 6-12 months
-          while you pursue eviction and find new tenants.
-        </p>
-
-        <h3>Legal Expenses Cover</h3>
-
-        <p>
-          Covers legal costs for eviction proceedings, disputes with tenants, and tribunal
-          representation. Given rising legal costs, this is increasingly valuable.
-        </p>
-
-        <h3>Emergency Assistance</h3>
-
-        <p>
-          24/7 helpline for emergencies like boiler breakdown, burst pipes, or security
-          issues. Often includes call-out cover for emergency repairs.
-        </p>
-
-        <h2 id="cost-factors" className="scroll-mt-24">Factors Affecting Premium Cost</h2>
-
-        <p>
-          Understanding what affects your premium helps you shop smarter and potentially
-          reduce costs.
-        </p>
-
-        <div className="overflow-x-auto my-8">
-          <table className="min-w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-3 text-left font-semibold">Factor</th>
-                <th className="border p-3 text-left font-semibold">Impact</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border p-3">Property location</td>
-                <td className="border p-3">Higher crime/flood risk areas cost more</td>
-              </tr>
-              <tr className="bg-gray-50">
-                <td className="border p-3">Property value</td>
-                <td className="border p-3">Higher rebuild cost means higher premium</td>
-              </tr>
-              <tr>
-                <td className="border p-3">Property type</td>
-                <td className="border p-3">Flats, HMOs, older properties may cost more</td>
-              </tr>
-              <tr className="bg-gray-50">
-                <td className="border p-3">Tenant type</td>
-                <td className="border p-3">Students, DSS tenants may increase premium</td>
-              </tr>
-              <tr>
-                <td className="border p-3">Claims history</td>
-                <td className="border p-3">Previous claims increase future costs</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Insurance Comparison Tools</h3>
-          <p className="text-gray-700 mb-6">
-            Landlord Heaven provides insurance comparison guides, coverage checklists,
-            and resources to help you find the right policy for your portfolio.
-          </p>
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
-          >
-            View Insurance Resources →
-          </Link>
-        </div>
-
-        <h2 id="claims-process" className="scroll-mt-24">Making a Claim</h2>
-
-        <p>
-          If you need to claim, following the correct process ensures your claim isn&apos;t
-          rejected or delayed.
-        </p>
-
-        <ol>
-          <li><strong>Report immediately</strong> - notify your insurer as soon as possible</li>
-          <li><strong>Document everything</strong> - photos, receipts, witness statements</li>
-          <li><strong>Prevent further damage</strong> - take reasonable steps to limit loss</li>
-          <li><strong>Keep records</strong> - log all communications and expenses</li>
-          <li><strong>Get quotes</strong> - obtain repair estimates as required</li>
-          <li><strong>Cooperate fully</strong> - provide all requested information promptly</li>
-        </ol>
-
-        <ImagePlaceholder
-          src="/images/blog/placeholder-claims-process.svg"
-          alt="Insurance claims process steps"
-          caption="Following the correct process ensures smooth claim resolution"
-          aspectRatio="4:3"
-        />
-
-        <h2 id="insurance-faq" className="scroll-mt-24">Landlord Insurance FAQ</h2>
-
-        <div className="space-y-6 my-8">
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Can I use standard home insurance for a rental?</h3>
-            <p className="text-gray-600">
-              No. Standard home insurance excludes rental activities. If you let a property
-              on home insurance, your policy will be invalid and claims rejected.
-            </p>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Is landlord insurance tax deductible?</h3>
-            <p className="text-gray-600">
-              Yes. Landlord insurance premiums are an allowable expense and can be deducted
-              from your rental income for tax purposes.
-            </p>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">What if my property is unoccupied?</h3>
-            <p className="text-gray-600">
-              Most policies have void period limits (typically 30-60 days). If your property
-              will be empty longer, inform your insurer or risk voiding coverage.
-            </p>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Does insurance cover tenant damage?</h3>
-            <p className="text-gray-600">
-              Malicious damage by tenants is usually covered, but accidental damage or
-              &quot;fair wear and tear&quot; is not. Check your policy wording for exclusions.
-            </p>
-          </div>
-        </div>
-
-        <BlogCTA variant="urgency" />
-      </>
-    ),
-  },
-
-  // Article 78: UK Landlord Tax Guide
-  {
-    slug: 'uk-landlord-tax-guide',
-    title: 'UK Landlord Tax Guide - Complete Guide 2026',
-    description: 'Essential tax guide for UK landlords. Understand income tax, allowable expenses, capital gains, and tax-efficient strategies for rental properties.',
-    metaDescription: 'UK landlord tax guide 2026. Income tax on rent, allowable expenses, capital gains tax, mortgage interest relief changes, and tax planning strategies.',
-    date: '2026-01-04',
-    readTime: '17 min read',
-    wordCount: 1920,
-    category: 'Tax & Finance',
-    tags: ['landlord tax', 'rental income tax', 'property tax', 'capital gains', 'UK landlords'],
-    author: {
-      name: 'Landlord Heaven Finance Team',
-      role: 'Property Tax Specialists',
-    },
-    heroImage: '/images/blog/placeholder-tax.svg',
-    heroImageAlt: 'UK Landlord Tax Guide',
-    showUrgencyBanner: false,
-    targetKeyword: 'landlord tax UK',
-    secondaryKeywords: ['rental income tax', 'property tax landlord', 'landlord allowable expenses', 'capital gains tax property'],
-    tableOfContents: [
-      { id: 'income-tax', title: 'Income Tax on Rent', level: 2 },
-      { id: 'allowable-expenses', title: 'Allowable Expenses', level: 2 },
-      { id: 'mortgage-interest', title: 'Mortgage Interest Relief', level: 2 },
-      { id: 'capital-gains', title: 'Capital Gains Tax', level: 2 },
-      { id: 'tax-planning', title: 'Tax Planning Strategies', level: 2 },
-      { id: 'tax-faq', title: 'Tax FAQ', level: 2 },
-    ],
-    relatedPosts: ['uk-landlord-insurance-guide', 'uk-property-maintenance-obligations', 'uk-tenancy-agreements-guide'],
-    content: (
-      <>
-        <p className="lead">
-          Understanding your tax obligations as a UK landlord is essential for compliance
-          and maximizing your returns. This comprehensive guide covers everything you need
-          to know about landlord taxation in 2026.
-        </p>
-
-        <ImagePlaceholder
-          src="/images/blog/placeholder-tax.svg"
-          alt="Landlord tax documents and calculator"
-          caption="Proper tax planning helps maximize your rental property returns"
-          aspectRatio="16:9"
-        />
-
-        <h2 id="income-tax" className="scroll-mt-24">Income Tax on Rental Income</h2>
-
-        <p>
-          Rental income is taxable. You must declare all rent received from UK properties
-          to HMRC, regardless of whether you make a profit after expenses.
-        </p>
-
-        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-6">
-          <h4 className="font-semibold text-blue-900 mb-2">Taxable Rental Income</h4>
-          <p className="text-blue-800">
-            Taxable rental income includes: rent payments, fees for additional services
-            (parking, cleaning), any non-refundable deposits kept, and income from any
-            additional charges to tenants.
-          </p>
-        </div>
-
-        <h3>Tax Rates</h3>
-
-        <p>
-          Rental income is added to your other income and taxed at your marginal rate:
-        </p>
-
-        <div className="overflow-x-auto my-8">
-          <table className="min-w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-3 text-left font-semibold">Tax Band</th>
-                <th className="border p-3 text-left font-semibold">Taxable Income</th>
-                <th className="border p-3 text-left font-semibold">Rate</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border p-3">Personal Allowance</td>
-                <td className="border p-3">Up to £12,570</td>
-                <td className="border p-3">0%</td>
-              </tr>
-              <tr className="bg-gray-50">
-                <td className="border p-3">Basic Rate</td>
-                <td className="border p-3">£12,571 - £50,270</td>
-                <td className="border p-3">20%</td>
-              </tr>
-              <tr>
-                <td className="border p-3">Higher Rate</td>
-                <td className="border p-3">£50,271 - £125,140</td>
-                <td className="border p-3">40%</td>
-              </tr>
-              <tr className="bg-gray-50">
-                <td className="border p-3">Additional Rate</td>
-                <td className="border p-3">Over £125,140</td>
-                <td className="border p-3">45%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3>Self Assessment</h3>
-
-        <p>
-          If you earn more than £1,000 from property income, you must register for
-          Self Assessment and file a tax return each year. Key dates:
-        </p>
-
-        <ul>
-          <li><strong>5 October</strong> - deadline to register for first time</li>
-          <li><strong>31 October</strong> - paper return deadline</li>
-          <li><strong>31 January</strong> - online return and payment deadline</li>
-          <li><strong>31 July</strong> - second payment on account (if applicable)</li>
-        </ul>
-
-        <ImagePlaceholder
-          src="/images/blog/placeholder-self-assessment.svg"
-          alt="HMRC Self Assessment tax return"
-          caption="Self Assessment registration is required for landlords earning over £1,000"
-          aspectRatio="4:3"
-        />
-
-        <h2 id="allowable-expenses" className="scroll-mt-24">Allowable Expenses</h2>
-
-        <p>
-          You can deduct legitimate expenses from your rental income before calculating
-          tax. Keeping good records is essential for claiming all allowable expenses.
-        </p>
-
-        <h3>Deductible Expenses</h3>
-
-        <ul>
-          <li><strong>Letting agent fees</strong> - management charges, tenant finding</li>
-          <li><strong>Legal fees</strong> - evictions, contract drafting (not property purchase)</li>
-          <li><strong>Accountant fees</strong> - preparing rental accounts, tax returns</li>
-          <li><strong>Insurance</strong> - landlord buildings, contents, rent guarantee</li>
-          <li><strong>Repairs and maintenance</strong> - fixing, replacing like-for-like</li>
-          <li><strong>Utility bills</strong> - if you pay them (not recharged to tenant)</li>
-          <li><strong>Ground rent and service charges</strong> - leasehold properties</li>
-          <li><strong>Council tax</strong> - during void periods</li>
-          <li><strong>Advertising</strong> - for finding tenants</li>
-          <li><strong>Travel costs</strong> - to and from property for landlord duties</li>
-        </ul>
-
-        <BlogCTA variant="inline" />
-
-        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-6">
-          <h4 className="font-semibold text-amber-900 mb-2">Repairs vs Improvements</h4>
-          <p className="text-amber-800">
-            Only repairs are deductible as expenses. Improvements (upgrading a kitchen,
-            adding an extension) are capital expenditure - not deductible from income but
-            can reduce Capital Gains Tax when you sell.
-          </p>
-        </div>
-
-        <h2 id="mortgage-interest" className="scroll-mt-24">Mortgage Interest Relief Changes</h2>
-
-        <p>
-          The rules for mortgage interest relief changed significantly. Individual landlords
-          can no longer deduct mortgage interest as an expense.
-        </p>
-
-        <h3>How It Works Now</h3>
-
-        <p>
-          Instead of deducting mortgage interest from rental income, you receive a 20%
-          tax credit on your mortgage interest payments. This affects higher-rate taxpayers
-          significantly.
-        </p>
-
-        <div className="overflow-x-auto my-8">
-          <table className="min-w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="border p-3 text-left font-semibold">Scenario</th>
-                <th className="border p-3 text-left font-semibold">Old Rules</th>
-                <th className="border p-3 text-left font-semibold">Current Rules</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td className="border p-3">Rental Income</td>
-                <td className="border p-3">£15,000</td>
-                <td className="border p-3">£15,000</td>
-              </tr>
-              <tr className="bg-gray-50">
-                <td className="border p-3">Mortgage Interest</td>
-                <td className="border p-3">Deducted: -£8,000</td>
-                <td className="border p-3">Not deducted</td>
-              </tr>
-              <tr>
-                <td className="border p-3">Taxable Income</td>
-                <td className="border p-3">£7,000</td>
-                <td className="border p-3">£15,000</td>
-              </tr>
-              <tr className="bg-gray-50">
-                <td className="border p-3">Tax Credit</td>
-                <td className="border p-3">N/A</td>
-                <td className="border p-3">£8,000 × 20% = £1,600</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <ImagePlaceholder
-          src="/images/blog/placeholder-mortgage-tax.svg"
-          alt="Mortgage interest tax relief calculation"
-          caption="Understanding the new rules helps with tax planning"
-          aspectRatio="16:9"
-        />
-
-        <h2 id="capital-gains" className="scroll-mt-24">Capital Gains Tax</h2>
-
-        <p>
-          When you sell a rental property, you may owe Capital Gains Tax (CGT) on any
-          profit. Understanding the rules helps with planning.
-        </p>
-
-        <h3>CGT Rates for Property</h3>
-
-        <ul>
-          <li><strong>18%</strong> - basic rate taxpayers</li>
-          <li><strong>24%</strong> - higher and additional rate taxpayers</li>
-          <li><strong>Annual Exempt Amount</strong> - currently £3,000 (reduced from £12,300)</li>
-        </ul>
-
-        <h3>Reducing CGT</h3>
-
-        <p>
-          Legitimate ways to reduce your CGT liability include:
-        </p>
-
-        <ul>
-          <li><strong>Deduct purchase costs</strong> - stamp duty, legal fees, surveys</li>
-          <li><strong>Deduct selling costs</strong> - estate agent, legal, EPC</li>
-          <li><strong>Claim improvement costs</strong> - extensions, renovations (not repairs)</li>
-          <li><strong>Private Residence Relief</strong> - if you lived there at some point</li>
-          <li><strong>Lettings Relief</strong> - limited circumstances where property was let</li>
-        </ul>
-
-        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-6">
-          <h4 className="font-semibold text-red-900 mb-2">CGT Reporting Deadline</h4>
-          <p className="text-red-800">
-            You must report and pay CGT on UK property sales within 60 days of completion.
-            Late reporting results in penalties and interest charges.
-          </p>
-        </div>
-
-        <h2 id="tax-planning" className="scroll-mt-24">Tax Planning Strategies</h2>
-
-        <p>
-          Legitimate tax planning can significantly reduce your overall tax burden.
-          Consider these strategies with professional advice.
-        </p>
-
-        <h3>Limited Company Structure</h3>
-
-        <p>
-          Some landlords hold properties through a limited company. Benefits include:
-        </p>
-
-        <ul>
-          <li>Full mortgage interest deduction against profits</li>
-          <li>Lower corporation tax rate (currently 19-25%)</li>
-          <li>More control over when you extract profits</li>
-          <li>Potential for family salary/dividend planning</li>
-        </ul>
-
-        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Tax Planning Resources</h3>
-          <p className="text-gray-700 mb-6">
-            Landlord Heaven provides tax calculators, expense tracking templates, and
-            resources to help you understand and manage your tax obligations.
-          </p>
-          <Link
-            href="/products"
-            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
-          >
-            View Tax Tools →
-          </Link>
-        </div>
-
-        <h2 id="tax-faq" className="scroll-mt-24">Landlord Tax FAQ</h2>
-
-        <div className="space-y-6 my-8">
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Do I pay tax on the deposit?</h3>
-            <p className="text-gray-600">
-              No, deposits held in protection schemes are not taxable income. However,
-              if you keep part of the deposit (for damages), that retained amount may
-              be taxable as it offsets expenses.
-            </p>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Can I offset losses against other income?</h3>
-            <p className="text-gray-600">
-              Rental losses can only be carried forward against future rental profits from
-              the same property business. They cannot be offset against employment income.
-            </p>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">What records must I keep?</h3>
-            <p className="text-gray-600">
-              Keep all receipts, invoices, bank statements, tenancy agreements, and
-              correspondence for at least 5 years after the 31 January deadline for that
-              tax year. Digital records are acceptable.
-            </p>
-          </div>
-
-          <div className="bg-gray-50 rounded-lg p-6">
-            <h3 className="font-semibold text-gray-900 mb-2">Should I use an accountant?</h3>
-            <p className="text-gray-600">
-              For simple single-property situations, self-filing is manageable. As your
-              portfolio grows or if considering company structures, professional advice
-              is valuable and the fees are tax-deductible.
             </p>
           </div>
         </div>
