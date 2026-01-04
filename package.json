@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev --webpack -H 0.0.0.0 -p 5000",
     "build": "next build --webpack",
+    "postbuild": "node scripts/indexnow-submit.mjs",
     "start": "next start -H 0.0.0.0 -p 5000",
+    "indexnow": "node scripts/indexnow-submit.mjs",
     "lint": "eslint",
     "test": "vitest run",
     "test:pdf": "RUN_PDF_TESTS=true vitest run",
