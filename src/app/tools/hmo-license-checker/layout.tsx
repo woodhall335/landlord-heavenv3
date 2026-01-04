@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Free HMO License Checker | Do I Need an HMO License? | Landlord Heaven',
+  title: 'Free HMO License Checker | Landlord Heaven',
   description:
     'Check if your rental property needs HMO licensing. Free HMO checker for UK landlords. Get instant assessment and guidance on HMO requirements.',
   keywords: [
