@@ -6,7 +6,7 @@
  *
  * Features:
  * - Numbers only ever go UP on refresh (stored in localStorage)
- * - Gradual increase throughout the day (5000 base, grows to ~7500+ by evening)
+ * - Gradual increase throughout the day (500 base, grows to ~750+ by evening)
  * - Resets at midnight to new base
  *
  * Variants:
@@ -36,7 +36,7 @@ interface SocialProofCounterProps {
 const COUNTER_CONFIG = {
   today: {
     base: 0,
-    dailyGrowth: 5000, // Grows from 0 to ~5000 throughout the day
+    dailyGrowth: 500, // Grows from 0 to ~500 throughout the day
     text: 'landlords used this today',
     Icon: RiGroupLine,
   },
