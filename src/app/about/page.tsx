@@ -405,27 +405,28 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 md:py-20 bg-linear-to-br from-primary to-emerald-600">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-purple-50 via-purple-100 to-purple-50">
         <Container>
-          <div className="max-w-3xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
-            <p className="text-xl mb-8 text-white/90">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Ready to Get Started?</h2>
+            <p className="text-xl mb-8 text-gray-600">
               Join thousands of UK landlords who've saved time and money with Landlord Heaven.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/pricing"
-                className="inline-block bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                className="hero-btn-primary"
               >
-                View Pricing
+                View Pricing →
               </Link>
               <Link
                 href="/wizard"
-                className="inline-block bg-white/10 backdrop-blur-sm border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white/20 transition-colors"
+                className="hero-btn-secondary"
               >
-                Start Wizard
+                Start Wizard →
               </Link>
             </div>
+            <p className="mt-4 text-sm text-gray-600">Court-ready documents • AI-powered • 80% cheaper than solicitors</p>
           </div>
         </Container>
       </section>

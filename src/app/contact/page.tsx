@@ -4,13 +4,15 @@ import Link from "next/link";
 import { RiMailLine, RiTimeLine } from 'react-icons/ri';
 import {
   MessageCircle,
-  BadgePoundSterling,
+  Building2,
   Briefcase,
   ShieldCheck,
   Clock,
   Mail,
   FileText,
-  AlertTriangle
+  AlertTriangle,
+  MapPin,
+  Phone
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -77,32 +79,36 @@ export default function ContactPage() {
             </Link>
           </div>
 
-          {/* Refunds */}
+          {/* Address & Phone */}
           <div className="bg-white rounded-lg border-2 border-gray-200 p-8">
             <div className="w-14 h-14 bg-purple-100 rounded-xl flex items-center justify-center mb-4">
-              <BadgePoundSterling className="w-7 h-7 text-primary" />
+              <Building2 className="w-7 h-7 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-charcoal mb-3">Refunds</h2>
+            <h2 className="text-2xl font-bold text-charcoal mb-3">Our Office</h2>
             <p className="text-gray-700 mb-6">
-              Request a refund for technical errors, duplicate charges, or unauthorized transactions. Include your order number and email address.
+              Our registered business address and telephone number for general inquiries.
             </p>
             <div className="space-y-3 mb-6">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0 mt-0.5">
+                  <MapPin className="w-4 h-4 text-primary" />
+                </div>
+                <span className="text-gray-700">
+                  Bradford Chamber Business Park,<br />
+                  New Lane,<br />
+                  Bradford, BD4 8BX
+                </span>
+              </div>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
-                  <RiMailLine className="w-4 h-4 text-primary" />
+                  <Phone className="w-4 h-4 text-primary" />
                 </div>
                 <a
-                  href="mailto:refunds@landlordheaven.co.uk"
+                  href="tel:08712340832"
                   className="text-primary hover:underline font-semibold"
                 >
-                  refunds@landlordheaven.co.uk
+                  0871 234 0832
                 </a>
-              </div>
-              <div className="flex items-center gap-3 text-sm text-gray-600">
-                <div className="w-8 h-8 bg-purple-100 rounded-xl flex items-center justify-center shrink-0">
-                  <RiTimeLine className="w-4 h-4 text-primary" />
-                </div>
-                <span>Processing time: 5-7 business days</span>
               </div>
             </div>
             <Link
