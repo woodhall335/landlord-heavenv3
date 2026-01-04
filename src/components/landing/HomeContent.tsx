@@ -35,7 +35,7 @@ export default function HomeContent() {
         <Container>
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-block bg-primary/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-sm font-semibold text-primary">Trusted by 10,000+ UK Landlords</span>
+              <span className="text-sm font-semibold text-primary">Trusted by UK Landlords</span>
             </div>
 
             {/* Main Headline - Value-focused */}
@@ -382,7 +382,7 @@ export default function HomeContent() {
               Ready to Get Your Documents?
             </h2>
             <p className="text-xl text-gray-600 mb-8">
-              Join 10,000+ landlords saving time and money.
+              Join thousands of landlords saving time and money.
               <span className="font-semibold text-gray-800"> Start in under 2 minutes.</span>
             </p>
 

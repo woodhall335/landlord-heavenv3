@@ -17,7 +17,7 @@ import { HomeContent } from '@/components/landing';
 export const metadata: Metadata = {
   title: 'Landlord Heaven - Court-Ready Legal Documents for UK Landlords',
   description:
-    'Generate court-ready eviction notices, tenancy agreements, and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026 - act now. Trusted by 10,000+ UK landlords.',
+    'Generate court-ready eviction notices, tenancy agreements, and legal documents in minutes. Save 80%+ vs solicitors. Section 21 ends May 2026 - act now. Trusted by UK landlords.',
   keywords: [
     'section 21 notice',
     'section 8 notice',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Landlord Heaven - Court-Ready Legal Documents for UK Landlords',
     description:
-      'Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors. Trusted by 10,000+ UK landlords.',
+      'Generate court-ready eviction notices and legal documents in minutes. Save 80%+ vs solicitors. Trusted by UK landlords.',
     type: 'website',
     url: 'https://landlordheaven.co.uk',
   },
