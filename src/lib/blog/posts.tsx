@@ -34151,6 +34151,1046 @@ export const blogPosts: BlogPost[] = [
       </>
     ),
   },
+
+  // Article 93: UK Tenant Retention Guide
+  {
+    slug: 'uk-tenant-retention-guide',
+    title: 'UK Tenant Retention - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to retaining quality tenants in UK rental properties. Strategies, communication tips, and best practices for reducing tenant turnover.',
+    metaDescription: 'UK tenant retention guide for landlords 2026. Proven strategies to keep quality tenants, reduce turnover, and maintain consistent rental income.',
+    date: '2026-01-04',
+    readTime: '12 min read',
+    wordCount: 1480,
+    category: 'Property Management',
+    tags: ['tenant retention', 'reduce turnover', 'landlord tips', 'rental income', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Team',
+      role: 'Property Management Specialists',
+    },
+    heroImage: '/images/blog/placeholder-tenant-retention.svg',
+    heroImageAlt: 'UK Tenant Retention Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'tenant retention UK landlord',
+    secondaryKeywords: ['keep good tenants', 'reduce tenant turnover', 'landlord tenant relationship', 'rental retention'],
+    tableOfContents: [
+      { id: 'why-retention-matters', title: 'Why Retention Matters', level: 2 },
+      { id: 'building-relationships', title: 'Building Good Relationships', level: 2 },
+      { id: 'responsive-maintenance', title: 'Responsive Maintenance', level: 2 },
+      { id: 'rent-increases', title: 'Handling Rent Increases', level: 2 },
+      { id: 'renewal-strategies', title: 'Renewal Strategies', level: 2 },
+      { id: 'retention-faq', title: 'Tenant Retention FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-void-period-management-guide', 'uk-landlord-tenant-communication-guide', 'uk-property-maintenance-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Keeping good tenants is far more profitable than constantly finding new ones.
+          This guide provides UK landlords with proven strategies for tenant retention
+          that reduce void periods and maximise rental income in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-tenant-retention.svg"
+          alt="Retaining quality tenants in rental properties"
+          caption="Good tenant retention protects your income and reduces costs"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="why-retention-matters" className="scroll-mt-24">Why Retention Matters</h2>
+
+        <p>
+          Tenant turnover is expensive. Understanding the true costs helps justify
+          retention efforts:
+        </p>
+
+        <h3>Cost of Tenant Turnover</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Cost Item</th>
+                <th className="border p-3 text-left font-semibold">Typical Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Void period (3-4 weeks)</td>
+                <td className="border p-3">£750 - £1,500</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Advertising and marketing</td>
+                <td className="border p-3">£100 - £300</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Referencing costs</td>
+                <td className="border p-3">£30 - £100</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Cleaning and redecoration</td>
+                <td className="border p-3">£200 - £500</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Your time</td>
+                <td className="border p-3">10-20 hours</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3"><strong>Total</strong></td>
+                <td className="border p-3"><strong>£1,080 - £2,400+</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          A tenant who stays five years versus annual turnover could save you £5,000-10,000
+          in turnover costs alone, plus the value of consistent rental income.
+        </p>
+
+        <h3>Benefits of Long-Term Tenants</h3>
+
+        <ul>
+          <li>Consistent rental income without voids</li>
+          <li>Reduced letting and marketing costs</li>
+          <li>Tenants treat property as home, maintaining it better</li>
+          <li>Established relationship makes communication easier</li>
+          <li>Fewer references and checks to manage</li>
+          <li>Lower risk of problematic tenants</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">The 80/20 Rule</h4>
+          <p className="text-blue-800">
+            Focus retention efforts on your best tenants - those who pay on time and
+            look after the property. Investing in their satisfaction yields the best
+            return on your efforts.
+          </p>
+        </div>
+
+        <h2 id="building-relationships" className="scroll-mt-24">Building Good Relationships</h2>
+
+        <p>
+          The landlord-tenant relationship sets the foundation for retention:
+        </p>
+
+        <h3>Start Strong</h3>
+
+        <ul>
+          <li>Professional, thorough move-in process</li>
+          <li>Welcome pack with useful information</li>
+          <li>Clear communication channels established</li>
+          <li>Responsive to early questions and concerns</li>
+        </ul>
+
+        <h3>Ongoing Communication</h3>
+
+        <ul>
+          <li>Be accessible but not intrusive</li>
+          <li>Respond promptly to messages (within 24 hours)</li>
+          <li>Give proper notice for inspections</li>
+          <li>Keep tenants informed of any changes</li>
+          <li>Annual check-in to discuss any concerns</li>
+        </ul>
+
+        <h3>Respect and Professionalism</h3>
+
+        <ul>
+          <li>Treat tenants as valued customers</li>
+          <li>Respect their privacy and quiet enjoyment</li>
+          <li>Be fair and consistent with all tenants</li>
+          <li>Document agreements in writing</li>
+          <li>Never enter without proper notice</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-landlord-communication.svg"
+          alt="Good landlord-tenant communication"
+          caption="Strong communication builds lasting tenant relationships"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="responsive-maintenance" className="scroll-mt-24">Responsive Maintenance</h2>
+
+        <p>
+          How you handle maintenance is often the biggest factor in tenant satisfaction:
+        </p>
+
+        <h3>Response Standards</h3>
+
+        <ul>
+          <li><strong>Emergency</strong> - respond within 4 hours, fix within 24</li>
+          <li><strong>Urgent</strong> - respond within 24 hours, fix within 48</li>
+          <li><strong>Routine</strong> - respond within 48 hours, fix within 7 days</li>
+        </ul>
+
+        <h3>Best Practices</h3>
+
+        <ul>
+          <li>Acknowledge every maintenance request quickly</li>
+          <li>Provide realistic timeframes, then meet them</li>
+          <li>Use reliable, vetted contractors</li>
+          <li>Follow up to ensure work was completed satisfactorily</li>
+          <li>Consider tenant convenience when scheduling</li>
+        </ul>
+
+        <h3>Proactive Maintenance</h3>
+
+        <ul>
+          <li>Annual servicing of boilers and appliances</li>
+          <li>Regular safety checks (smoke alarms, CO detectors)</li>
+          <li>Address minor issues before they become major</li>
+          <li>Refresh decoration between tenancies</li>
+        </ul>
+
+        <div className="bg-green-50 border-l-4 border-green-500 p-6 my-8">
+          <h4 className="font-semibold text-green-900 mb-2">Under-Promise, Over-Deliver</h4>
+          <p className="text-green-800">
+            If a repair will take a week, tell the tenant it might take 10 days. When
+            you complete it in 7 days, they&apos;re pleased. Exceeding expectations
+            builds goodwill and loyalty.
+          </p>
+        </div>
+
+        <h2 id="rent-increases" className="scroll-mt-24">Handling Rent Increases</h2>
+
+        <p>
+          Rent increases are often when tenants consider leaving. Handle them carefully:
+        </p>
+
+        <h3>Timing Considerations</h3>
+
+        <ul>
+          <li>Annual increases are typical, but not mandatory</li>
+          <li>Consider market conditions - is it a good time?</li>
+          <li>Align with tenancy renewal discussions</li>
+          <li>Give plenty of notice (1 month minimum, 3 months preferred)</li>
+        </ul>
+
+        <h3>Amount Considerations</h3>
+
+        <ul>
+          <li>Research current market rents for comparison</li>
+          <li>Consider what good tenants are worth to you</li>
+          <li>Factor in void costs if they leave</li>
+          <li>Below-market increases may retain great tenants</li>
+        </ul>
+
+        <h3>Communication Tips</h3>
+
+        <ul>
+          <li>Explain the reasons for the increase</li>
+          <li>Reference market rates or your increased costs</li>
+          <li>Be open to discussion</li>
+          <li>Consider phased increases for large rises</li>
+          <li>Thank tenants for being good tenants</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Calculate the True Cost</h4>
+          <p className="text-amber-800">
+            A £50/month increase yields £600/year. But if the tenant leaves and you
+            face a 4-week void, you&apos;ve lost £1,000+ in rent alone, plus costs.
+            Sometimes modest increases or none preserve more value than aggressive rises.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-rent-discussion.svg"
+          alt="Discussing rent with tenants"
+          caption="Handle rent increases with sensitivity and clear communication"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="renewal-strategies" className="scroll-mt-24">Renewal Strategies</h2>
+
+        <p>
+          Proactive renewal management keeps good tenants:
+        </p>
+
+        <h3>Early Discussion</h3>
+
+        <ul>
+          <li>Start renewal conversations 3 months before end</li>
+          <li>Ask about their plans and any concerns</li>
+          <li>Address issues before they drive departure</li>
+        </ul>
+
+        <h3>Renewal Incentives</h3>
+
+        <ul>
+          <li>Modest rent increase or freeze for good tenants</li>
+          <li>Minor improvements (new appliance, redecoration)</li>
+          <li>Longer tenancy option with stability benefits</li>
+          <li>Flexibility on tenancy terms</li>
+        </ul>
+
+        <h3>Fixed Term vs Periodic</h3>
+
+        <ul>
+          <li>Some tenants prefer security of fixed terms</li>
+          <li>Others prefer flexibility of periodic</li>
+          <li>Ask what they prefer and accommodate where possible</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Tenant Retention Resources</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides tenant communication templates, renewal letter
+            examples, and retention strategy guides for successful landlording.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Retention Resources →
+          </Link>
+        </div>
+
+        <h2 id="retention-faq" className="scroll-mt-24">Tenant Retention FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How do I know if a tenant is likely to leave?</h3>
+            <p className="text-gray-600">
+              Warning signs include decreased communication, complaints about the
+              property or area, life changes (job relocation, family growth), and
+              mentions of looking at other properties. Regular check-ins help you
+              spot issues early.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Should I offer incentives to stay?</h3>
+            <p className="text-gray-600">
+              For good tenants, yes. Calculate the cost of them leaving versus the
+              incentive cost. A new appliance or decoration refresh costing £500
+              is much cheaper than a void period plus finding new tenants.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if good tenants ask to make changes?</h3>
+            <p className="text-gray-600">
+              Be open to reasonable requests like hanging pictures, minor decoration,
+              or pet considerations. Accommodating good tenants builds loyalty. Set
+              clear terms (making good at end) and get agreements in writing.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">How often should I contact tenants?</h3>
+            <p className="text-gray-600">
+              Balance is key. Too little and issues build up; too much feels intrusive.
+              Quarterly check-ins, maintenance responses, and annual formal reviews
+              work well for most tenancies.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 94: UK Right to Rent Guide
+  {
+    slug: 'uk-right-to-rent-guide',
+    title: 'UK Right to Rent Checks - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to Right to Rent checks for UK landlords. Legal requirements, document verification, and avoiding civil penalties.',
+    metaDescription: 'UK Right to Rent guide 2026. Complete landlord guide to immigration checks, document verification, and avoiding civil penalties in England.',
+    date: '2026-01-04',
+    readTime: '13 min read',
+    wordCount: 1540,
+    category: 'Legal',
+    tags: ['right to rent', 'immigration checks', 'landlord compliance', 'document verification', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Legal Team',
+      role: 'Property Law Specialists',
+    },
+    heroImage: '/images/blog/placeholder-right-to-rent.svg',
+    heroImageAlt: 'UK Right to Rent Checks Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'right to rent check UK',
+    secondaryKeywords: ['landlord immigration check', 'right to rent documents', 'tenant verification', 'civil penalty landlord'],
+    tableOfContents: [
+      { id: 'what-is-right-to-rent', title: 'What is Right to Rent?', level: 2 },
+      { id: 'who-must-check', title: 'Who Must Be Checked', level: 2 },
+      { id: 'acceptable-documents', title: 'Acceptable Documents', level: 2 },
+      { id: 'how-to-check', title: 'How to Conduct Checks', level: 2 },
+      { id: 'follow-up-checks', title: 'Follow-Up Checks', level: 2 },
+      { id: 'penalties', title: 'Penalties for Non-Compliance', level: 2 },
+      { id: 'right-to-rent-faq', title: 'Right to Rent FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-tenant-referencing-guide', 'uk-tenant-move-in-checklist-guide', 'uk-tenancy-agreements-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Right to Rent checks are a legal requirement for landlords in England. This
+          guide explains how to conduct proper checks, which documents to accept, and
+          how to avoid civil penalties that can reach £20,000 per tenant in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-right-to-rent.svg"
+          alt="Right to Rent document checking"
+          caption="Proper Right to Rent checks protect landlords from civil penalties"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="what-is-right-to-rent" className="scroll-mt-24">What is Right to Rent?</h2>
+
+        <p>
+          Right to Rent is a legal requirement introduced by the Immigration Act 2014
+          requiring landlords to verify that tenants have the right to be in the UK
+          before renting to them.
+        </p>
+
+        <h3>Where It Applies</h3>
+
+        <ul>
+          <li><strong>England</strong> - full scheme applies</li>
+          <li><strong>Scotland</strong> - does not apply</li>
+          <li><strong>Wales</strong> - does not apply</li>
+          <li><strong>Northern Ireland</strong> - does not apply</li>
+        </ul>
+
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 my-8">
+          <h4 className="font-semibold text-red-900 mb-2">England Only</h4>
+          <p className="text-red-800">
+            Right to Rent only applies in England. Landlords in Scotland, Wales, and
+            Northern Ireland are not required to conduct these checks, though many
+            choose to verify identity for other reasons.
+          </p>
+        </div>
+
+        <h3>When Checks Are Required</h3>
+
+        <ul>
+          <li>Before a new tenancy begins</li>
+          <li>Before any adult becomes an occupier</li>
+          <li>At renewal if previous check showed time-limited right</li>
+        </ul>
+
+        <h2 id="who-must-check" className="scroll-mt-24">Who Must Be Checked</h2>
+
+        <p>
+          You must check all adult occupiers, not just named tenants:
+        </p>
+
+        <h3>Included</h3>
+
+        <ul>
+          <li>All tenants aged 18 or over</li>
+          <li>Any adult living at the property as their only or main home</li>
+          <li>Adult lodgers</li>
+          <li>Adult family members of tenants</li>
+          <li>Partners of tenants who occupy the property</li>
+        </ul>
+
+        <h3>Excluded</h3>
+
+        <ul>
+          <li>Children under 18</li>
+          <li>Care home and hospital residents</li>
+          <li>Students in halls of residence</li>
+          <li>Hostels and refuges</li>
+          <li>Tied accommodation (tied to employment)</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-document-check.svg"
+          alt="Checking tenant documents for Right to Rent"
+          caption="All adult occupiers must have their right to rent verified"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="acceptable-documents" className="scroll-mt-24">Acceptable Documents</h2>
+
+        <p>
+          Documents fall into two lists. List A documents prove unlimited right to rent.
+          List B documents prove time-limited right requiring follow-up checks.
+        </p>
+
+        <h3>List A - Unlimited Right</h3>
+
+        <ul>
+          <li>UK or Irish passport (current or expired)</li>
+          <li>UK or Irish birth/adoption certificate plus National Insurance number</li>
+          <li>Certificate of registration/naturalisation as British citizen</li>
+          <li>EU Settlement Scheme share code showing settled status</li>
+          <li>Immigration status document showing indefinite leave</li>
+        </ul>
+
+        <h3>List B - Time-Limited Right</h3>
+
+        <ul>
+          <li>Passport with valid visa allowing limited leave</li>
+          <li>EU Settlement Scheme share code showing pre-settled status</li>
+          <li>Biometric Residence Permit showing limited leave</li>
+          <li>Frontier Worker Permit</li>
+          <li>Home Office positive verification service response</li>
+        </ul>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Document Type</th>
+                <th className="border p-3 text-left font-semibold">Follow-up Required?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">British passport</td>
+                <td className="border p-3">No</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Irish passport</td>
+                <td className="border p-3">No</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Settled status</td>
+                <td className="border p-3">No</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Pre-settled status</td>
+                <td className="border p-3">Yes, before expiry</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Limited leave visa</td>
+                <td className="border p-3">Yes, before expiry</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="how-to-check" className="scroll-mt-24">How to Conduct Checks</h2>
+
+        <p>
+          You have three options for conducting checks:
+        </p>
+
+        <h3>Option 1: Manual Document Check</h3>
+
+        <ol>
+          <li>Obtain original documents (not copies)</li>
+          <li>Check they are genuine, belong to the holder, and allow right to rent</li>
+          <li>Check photographs match the person</li>
+          <li>Check dates of birth match</li>
+          <li>Check documents haven&apos;t expired</li>
+          <li>Check any UK immigration stamps or endorsements</li>
+          <li>Make clear copies of all documents</li>
+          <li>Record the date the check was made</li>
+          <li>Keep copies for duration of tenancy plus 2 years</li>
+        </ol>
+
+        <h3>Option 2: Home Office Online Check</h3>
+
+        <p>
+          For people with share codes (EU Settlement Scheme, BRP holders):
+        </p>
+
+        <ol>
+          <li>Tenant provides share code and date of birth</li>
+          <li>Use the Home Office online checking service</li>
+          <li>View their status and right to rent</li>
+          <li>Keep a copy of the response</li>
+        </ol>
+
+        <h3>Option 3: Identity Verification Technology</h3>
+
+        <p>
+          Certified Identity Service Providers (IDSPs) can conduct digital checks on
+          British and Irish citizens using certified technology.
+        </p>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Statutory Excuse</h4>
+          <p className="text-blue-800">
+            Conducting checks properly gives you a &quot;statutory excuse&quot; against
+            civil penalties. If a tenant later proves to be an illegal immigrant but
+            you checked correctly, you&apos;re protected from penalties.
+          </p>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-online-check.svg"
+          alt="Using Home Office online checking service"
+          caption="Online checks are required for EU Settlement Scheme status holders"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="follow-up-checks" className="scroll-mt-24">Follow-Up Checks</h2>
+
+        <p>
+          For time-limited documents, follow-up checks maintain your statutory excuse:
+        </p>
+
+        <h3>When to Conduct</h3>
+
+        <ul>
+          <li>Before the current permission expires</li>
+          <li>If document expires before tenancy ends, check is needed</li>
+          <li>Check at least 28 days before expiry where possible</li>
+        </ul>
+
+        <h3>What If Status Not Yet Decided?</h3>
+
+        <p>
+          If a tenant has applied to extend their stay but hasn&apos;t received a decision:
+        </p>
+
+        <ul>
+          <li>Use the Employer Checking Service (also covers landlords)</li>
+          <li>Provide tenant details and they will verify status</li>
+          <li>A positive response maintains your statutory excuse for 6 months</li>
+        </ul>
+
+        <h2 id="penalties" className="scroll-mt-24">Penalties for Non-Compliance</h2>
+
+        <p>
+          Failing to conduct proper checks can result in significant penalties:
+        </p>
+
+        <h3>Civil Penalties</h3>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Offence</th>
+                <th className="border p-3 text-left font-semibold">First Breach</th>
+                <th className="border p-3 text-left font-semibold">Repeat Breach</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">Lodger (in own home)</td>
+                <td className="border p-3">Up to £5,000</td>
+                <td className="border p-3">Up to £10,000</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Tenant (other property)</td>
+                <td className="border p-3">Up to £10,000</td>
+                <td className="border p-3">Up to £20,000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Criminal Offences</h3>
+
+        <p>
+          In serious cases, criminal prosecution is possible:
+        </p>
+
+        <ul>
+          <li>Knowingly renting to illegal immigrants</li>
+          <li>Maximum penalty: 5 years imprisonment</li>
+          <li>Also applies if you had reasonable cause to believe illegal status</li>
+        </ul>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Right to Rent Checklists</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides Right to Rent checklists, document verification
+            guides, and record-keeping templates for compliant landlording.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Compliance Resources →
+          </Link>
+        </div>
+
+        <h2 id="right-to-rent-faq" className="scroll-mt-24">Right to Rent FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I refuse to rent to someone based on nationality?</h3>
+            <p className="text-gray-600">
+              No. Right to Rent checks must be conducted equally for all prospective
+              tenants regardless of nationality or perceived immigration status. Discriminating
+              based on nationality or ethnicity is illegal under the Equality Act.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What if a tenant can&apos;t provide documents?</h3>
+            <p className="text-gray-600">
+              Use the Home Office&apos;s Landlord Checking Service if the tenant has an
+              ongoing immigration case or can&apos;t provide standard documents. They will
+              verify status and provide a response you can rely on.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I check existing tenants if they renew?</h3>
+            <p className="text-gray-600">
+              Only if your original check showed time-limited permission that has now
+              expired or is about to. If you checked a British passport originally, no
+              repeat check is needed for renewals.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can letting agents do checks on my behalf?</h3>
+            <p className="text-gray-600">
+              Yes, you can delegate Right to Rent checks to a letting agent. However,
+              get written confirmation they will conduct compliant checks. Both landlord
+              and agent can be liable if checks aren&apos;t done properly.
+            </p>
+          </div>
+        </div>
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
+
+  // Article 95: UK Smoke and CO Alarm Regulations Guide
+  {
+    slug: 'uk-smoke-co-alarm-regulations-guide',
+    title: 'UK Smoke & CO Alarm Regulations - Complete Landlord Guide 2026',
+    description: 'Comprehensive guide to smoke and carbon monoxide alarm requirements for UK landlords. Legal obligations, installation rules, and compliance tips.',
+    metaDescription: 'UK smoke and CO alarm regulations for landlords 2026. Complete guide to legal requirements, testing obligations, and compliance across UK nations.',
+    date: '2026-01-04',
+    readTime: '11 min read',
+    wordCount: 1420,
+    category: 'Compliance',
+    tags: ['smoke alarms', 'carbon monoxide', 'fire safety', 'landlord compliance', 'UK landlords'],
+    author: {
+      name: 'Landlord Heaven Compliance Team',
+      role: 'Safety Compliance Specialists',
+    },
+    heroImage: '/images/blog/placeholder-smoke-alarm.svg',
+    heroImageAlt: 'UK Smoke and CO Alarm Regulations Guide',
+    showUrgencyBanner: false,
+    targetKeyword: 'smoke alarm regulations landlord UK',
+    secondaryKeywords: ['CO alarm requirements', 'carbon monoxide landlord', 'fire alarm regulations', 'landlord safety compliance'],
+    tableOfContents: [
+      { id: 'legal-requirements', title: 'Legal Requirements', level: 2 },
+      { id: 'smoke-alarm-rules', title: 'Smoke Alarm Rules', level: 2 },
+      { id: 'co-alarm-rules', title: 'Carbon Monoxide Alarm Rules', level: 2 },
+      { id: 'installation-tips', title: 'Installation Tips', level: 2 },
+      { id: 'testing-maintenance', title: 'Testing and Maintenance', level: 2 },
+      { id: 'alarm-faq', title: 'Alarm Regulations FAQ', level: 2 },
+    ],
+    relatedPosts: ['uk-gas-safety-guide', 'uk-electrical-safety-guide', 'uk-property-maintenance-guide'],
+    content: (
+      <>
+        <p className="lead">
+          Smoke and carbon monoxide alarms save lives. UK landlords have legal obligations
+          to install and maintain these essential safety devices. This guide explains
+          the requirements across all UK nations in 2026.
+        </p>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-smoke-alarm.svg"
+          alt="Smoke and CO alarm installations"
+          caption="Proper alarm installation is a legal requirement for UK landlords"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="legal-requirements" className="scroll-mt-24">Legal Requirements</h2>
+
+        <p>
+          Requirements vary slightly between UK nations but all require smoke alarms
+          and most require CO alarms in rental properties.
+        </p>
+
+        <h3>England</h3>
+
+        <p>
+          The Smoke and Carbon Monoxide Alarm (Amendment) Regulations 2022:
+        </p>
+
+        <ul>
+          <li>Smoke alarm on every floor with living accommodation</li>
+          <li>CO alarm in every room with a fixed combustion appliance (except gas cookers)</li>
+          <li>Alarms must be in working order at start of each tenancy</li>
+          <li>Applies to all tenancies (including existing ones)</li>
+        </ul>
+
+        <h3>Scotland</h3>
+
+        <p>
+          More stringent requirements apply:
+        </p>
+
+        <ul>
+          <li>Interlinked smoke alarms in living room and hallways/landings</li>
+          <li>Heat alarm in kitchen (interlinked)</li>
+          <li>CO alarm where there&apos;s a carbon-fuelled appliance</li>
+          <li>All alarms must be interlinked (wired or wireless)</li>
+        </ul>
+
+        <h3>Wales</h3>
+
+        <p>
+          Similar requirements to England:
+        </p>
+
+        <ul>
+          <li>Smoke alarm on every storey</li>
+          <li>CO alarm in rooms with solid fuel appliances</li>
+          <li>Part of Fitness for Human Habitation requirements</li>
+        </ul>
+
+        <h3>Northern Ireland</h3>
+
+        <p>
+          Under Building Regulations:
+        </p>
+
+        <ul>
+          <li>Smoke alarms required on every floor</li>
+          <li>CO alarm recommended where combustion appliances present</li>
+          <li>Check specific NIHE and council requirements</li>
+        </ul>
+
+        <div className="overflow-x-auto my-8">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="border p-3 text-left font-semibold">Nation</th>
+                <th className="border p-3 text-left font-semibold">Smoke Alarms</th>
+                <th className="border p-3 text-left font-semibold">CO Alarms</th>
+                <th className="border p-3 text-left font-semibold">Interlinked?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border p-3">England</td>
+                <td className="border p-3">Every floor</td>
+                <td className="border p-3">Combustion rooms</td>
+                <td className="border p-3">No (recommended)</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">Scotland</td>
+                <td className="border p-3">Living room + landings</td>
+                <td className="border p-3">Carbon fuel rooms</td>
+                <td className="border p-3">Yes (required)</td>
+              </tr>
+              <tr>
+                <td className="border p-3">Wales</td>
+                <td className="border p-3">Every storey</td>
+                <td className="border p-3">Solid fuel rooms</td>
+                <td className="border p-3">No</td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="border p-3">N. Ireland</td>
+                <td className="border p-3">Every floor</td>
+                <td className="border p-3">Recommended</td>
+                <td className="border p-3">No</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 id="smoke-alarm-rules" className="scroll-mt-24">Smoke Alarm Rules</h2>
+
+        <p>
+          Smoke alarms must be properly positioned and maintained:
+        </p>
+
+        <h3>Positioning</h3>
+
+        <ul>
+          <li>On the ceiling or high on wall (within 150-300mm of ceiling)</li>
+          <li>At least 300mm from walls if ceiling-mounted</li>
+          <li>Away from corners (dead air reduces effectiveness)</li>
+          <li>Not in kitchens or bathrooms (use heat alarms)</li>
+          <li>Ideally in hallways/landings near bedrooms</li>
+        </ul>
+
+        <h3>Types of Smoke Alarm</h3>
+
+        <ul>
+          <li><strong>Ionisation</strong> - best for fast-flaming fires, sensitive to cooking</li>
+          <li><strong>Optical</strong> - best for slow, smouldering fires</li>
+          <li><strong>Combined</strong> - offers protection from both types</li>
+        </ul>
+
+        <div className="bg-blue-50 border-l-4 border-blue-500 p-6 my-8">
+          <h4 className="font-semibold text-blue-900 mb-2">Best Practice</h4>
+          <p className="text-blue-800">
+            Install optical alarms in or near kitchens to reduce false alarms from
+            cooking. Interlinked systems (though only mandatory in Scotland) provide
+            the best protection across larger properties.
+          </p>
+        </div>
+
+        <BlogCTA variant="inline" />
+
+        <h2 id="co-alarm-rules" className="scroll-mt-24">Carbon Monoxide Alarm Rules</h2>
+
+        <p>
+          CO alarms protect against this deadly, odourless gas:
+        </p>
+
+        <h3>When Required</h3>
+
+        <ul>
+          <li>In England: any room with fixed combustion appliance (not gas cookers)</li>
+          <li>This includes gas boilers, gas fires, wood burners, oil heaters</li>
+          <li>Living rooms with a gas fire need CO alarm</li>
+          <li>Utility rooms with boilers need CO alarm</li>
+        </ul>
+
+        <h3>Positioning</h3>
+
+        <ul>
+          <li>Same room as combustion appliance</li>
+          <li>At head height (1-3 metres horizontally from appliance)</li>
+          <li>Not directly above the appliance</li>
+          <li>Not in humid areas like bathrooms</li>
+          <li>Not near doors or windows where air circulation could affect readings</li>
+        </ul>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-co-alarm.svg"
+          alt="Carbon monoxide alarm installation"
+          caption="CO alarms must be positioned correctly in rooms with combustion appliances"
+          aspectRatio="16:9"
+        />
+
+        <h2 id="installation-tips" className="scroll-mt-24">Installation Tips</h2>
+
+        <p>
+          Proper installation ensures alarms work when needed:
+        </p>
+
+        <h3>Alarm Selection</h3>
+
+        <ul>
+          <li>Choose alarms meeting British Standards (BS EN 14604 for smoke, BS EN 50291 for CO)</li>
+          <li>Look for Kitemark or equivalent certification</li>
+          <li>Consider 10-year sealed battery alarms (no battery changes needed)</li>
+          <li>For Scotland, choose interlinked wireless or wired systems</li>
+        </ul>
+
+        <h3>Installation Methods</h3>
+
+        <ul>
+          <li><strong>Wired</strong> - most reliable, connects to mains power</li>
+          <li><strong>Battery</strong> - easier to install, needs battery replacement</li>
+          <li><strong>Sealed 10-year</strong> - no maintenance, replace entire unit</li>
+          <li><strong>Wireless interlinked</strong> - all alarms sound together</li>
+        </ul>
+
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-6 my-8">
+          <h4 className="font-semibold text-amber-900 mb-2">Scotland Requirement</h4>
+          <p className="text-amber-800">
+            In Scotland, alarms must be interlinked. This means when one triggers, all
+            alarms sound. Wireless interlinked systems are the easiest retrofit option
+            for existing properties.
+          </p>
+        </div>
+
+        <h2 id="testing-maintenance" className="scroll-mt-24">Testing and Maintenance</h2>
+
+        <p>
+          Alarms must work when needed. Establish a maintenance routine:
+        </p>
+
+        <h3>Landlord Responsibilities</h3>
+
+        <ul>
+          <li>Test alarms work at the start of each new tenancy</li>
+          <li>Replace faulty alarms immediately</li>
+          <li>Keep records of checks conducted</li>
+          <li>Replace alarms when they reach end of life (typically 10 years)</li>
+        </ul>
+
+        <h3>Tenant Responsibilities</h3>
+
+        <ul>
+          <li>Test alarms regularly (weekly recommended)</li>
+          <li>Replace batteries if needed (unless sealed units)</li>
+          <li>Report any faults to landlord</li>
+          <li>Not to tamper with or remove alarms</li>
+        </ul>
+
+        <h3>Testing Process</h3>
+
+        <ol>
+          <li>Press and hold test button</li>
+          <li>Alarm should sound within seconds</li>
+          <li>If interlinked, check all units sound</li>
+          <li>If no sound or weak sound, replace batteries or unit</li>
+        </ol>
+
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-8 my-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-4">Safety Compliance Resources</h3>
+          <p className="text-gray-700 mb-6">
+            Landlord Heaven provides alarm testing checklists, installation guides, and
+            compliance documentation templates for all safety requirements.
+          </p>
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+          >
+            View Safety Resources →
+          </Link>
+        </div>
+
+        <h2 id="alarm-faq" className="scroll-mt-24">Alarm Regulations FAQ</h2>
+
+        <div className="space-y-6 my-8">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Do I need a CO alarm if I only have a gas cooker?</h3>
+            <p className="text-gray-600">
+              In England, gas cookers are specifically excluded from the CO alarm
+              requirement. However, installing one in the kitchen is still good practice.
+              Other combustion appliances (boilers, fires) do require CO alarms.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What happens if a tenant removes an alarm?</h3>
+            <p className="text-gray-600">
+              Include clear terms in the tenancy about not tampering with safety equipment.
+              If a tenant removes or disables alarms, you should reinstate them and may
+              need to address the breach through proper channels.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">Can I use combination smoke/CO alarms?</h3>
+            <p className="text-gray-600">
+              Combination alarms that detect both smoke and CO are available. These can
+              simplify installation and ensure you meet both requirements with fewer
+              devices. Ensure they meet British Standards for both functions.
+            </p>
+          </div>
+
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="font-semibold text-gray-900 mb-2">What are the penalties for non-compliance?</h3>
+            <p className="text-gray-600">
+              In England, local authorities can issue remedial notices. Failure to comply
+              can result in fines up to £5,000. More importantly, non-compliance risks
+              tenant safety and could lead to serious liability if incidents occur.
+            </p>
+          </div>
+        </div>
+
+        <ImagePlaceholder
+          src="/images/blog/placeholder-alarm-compliance.svg"
+          alt="Smoke and CO alarm compliance"
+          caption="Proper alarm installation protects tenants and ensures legal compliance"
+          aspectRatio="16:9"
+        />
+
+        <BlogCTA variant="urgency" />
+      </>
+    ),
+  },
 ];
 
 export function getBlogPost(slug: string): BlogPost | undefined {
